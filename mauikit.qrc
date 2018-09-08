@@ -1,0 +1,32 @@
+<RCC>
+    <qresource prefix="/maui/kit">
+        <file alias="ToolBar.qml">src/controls/ToolBar.qml</file>
+        <file alias="SideBar.qml">src/controls/SideBar.qml</file>
+        <file alias="ToolButton.qml">src/controls/ToolButton.qml</file>
+        <file alias="ApplicationWindow.qml">src/controls/ApplicationWindow.qml</file>
+        <file alias="Style.qml">src/controls/Style.qml</file>
+        <file alias="ShareDialog.qml">src/controls/ShareDialog.qml</file>
+        <file alias="PieButton.qml">src/controls/PieButton.qml</file>
+        <file alias="Page.qml">src/controls/Page.qml</file>
+        <file alias="private/PieButtonDelegate.qml">src/controls/private/PieButtonDelegate.qml</file>
+        <file alias="private/SideBarDelegate.qml">src/controls/private/SideBarDelegate.qml</file>
+        <file alias="Holder.qml">src/controls/Holder.qml</file>
+        <file alias="Drawer.qml">src/controls/Drawer.qml</file>
+        <file alias="ListDelegate.qml">src/controls/ListDelegate.qml</file>
+        <file alias="GlobalDrawer.qml">src/controls/GlobalDrawer.qml</file>
+        <file alias="SelectionBar.qml">src/controls/SelectionBar.qml</file>
+        <file alias="IconDelegate.qml">src/controls/IconDelegate.qml</file>
+        <file alias="LabelDelegate.qml">src/controls/LabelDelegate.qml</file>
+        <file alias="NewDialog.qml">src/controls/NewDialog.qml</file>
+        <file alias="TagsBar.qml">src/controls/TagsBar.qml</file>
+        <file alias="private/TagList.qml">src/controls/private/TagList.qml</file>
+        <file alias="private/TagDelegate.qml">src/controls/private/TagDelegate.qml</file>
+        <file>src/fm/script.sql</file>
+        <file alias="Browser.qml">src/controls/Browser.qml</file>
+        <file alias="FileDialog.qml">src/controls/FileDialog.qml</file>
+        <file alias="ListBrowser.qml">src/controls/ListBrowser.qml</file>
+        <file alias="PathBar.qml">src/controls/PathBar.qml</file>
+        <file alias="PathBarDelegate.qml">src/controls/PathBarDelegate.qml</file>
+        <file alias="GridBrowser.qml">src/controls/GridBrowser.qml</file>
+    </qresource>
+</RCC>

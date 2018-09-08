@@ -1,0 +1,35 @@
+module org.kde.mauikit
+plugin MauiKit
+classname MauiKit
+depends QtQuick.Controls 1.4
+depends QtQuick.Controls.Private 1.0
+depends QtQuick.Controls 2.0
+depends QtGraphicalEffects 1.0
+designersupported
+
+typeinfo plugins.qmltypes
+
+singleton Style 1.0 Style.qml
+
+ApplicationWindow 1.0 ApplicationWindow.qml
+ToolBar 1.0 ToolBar.qml
+ToolButton 1.0 ToolButton.qml
+Page 1.0 Page.qml
+ShareDialog 1.0 ShareDialog.qml
+PieButton 1.0 PieButton.qml
+SideBar 1.0 SideBar.qml
+GlobalDrawer 1.0 GlobalDrawer.qml
+ListDelegate 1.0 ListDelegate.qml
+SelectionBar 1.0 SelectionBar.qml
+IconDelegate 1.0 IconDelegate.qml
+LabelDelegate 1.0 LabelDelegate.qml
+NewDialog 1.0 NewDialog.qml
+TagsBar 1.0 TagsBar.qml
+Taglist 1.0 private/TagList.qml
+GridBrowser 1.0 GridBrowser.qml
+ListBrowser 1.0 ListBrowser.qml
+FileDialog 1.0 FileDialog.qml
+PathBar 1.0 PathBar.qml
+
+
+
