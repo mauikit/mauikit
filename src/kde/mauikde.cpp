@@ -30,6 +30,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KServiceGroup>
 #include <QDebug>
 #include <KFileItem>
+#include <KColorScheme>
+#include <KColorSchemeManager>
+#include <QModelIndex>
 
 #include "kdeconnect.h"
 
@@ -109,9 +112,14 @@ void MAUIKDE::attachEmail(const QStringList &urls)
 
     QFileInfo file(urls[0]);
 
-    KToolInvocation::invokeMailer("", "", "", file.baseName(), "Sent from Pix", "", urls);
+    KToolInvocation::invokeMailer("", "", "", file.baseName(), "Files shared... ", "", urls);
     //    QDesktopServices::openUrl(QUrl("mailto:?subject=test&body=test&attachment;="
     //    + url));
 }
 
+void MAUIKDE::setColorScheme(const QString &schemeName)
+{
+    KColorSchemeManager manager;
+    manager.activateScheme(manager.indexForScheme(schemeName));
+}
 

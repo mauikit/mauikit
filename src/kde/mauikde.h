@@ -1,5 +1,6 @@
+
 /***
-Pix  Copyright (C) 2018  Camilo Higuita
+MauiKit  Copyright (C) 2018  Camilo Higuita
 This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
 This is free software, and you are welcome to redistribute it
 under certain conditions; type `show c' for details.
@@ -32,12 +33,14 @@ public:
     ~MAUIKDE();
     Q_INVOKABLE static QVariantList services(const QUrl &url);
     Q_INVOKABLE static QVariantList devices();
-    Q_INVOKABLE static bool sendToDevice(const QString &device, const QString &id, const QStringList &urls);
+    Q_INVOKABLE static bool sendToDevice(const QString &device, const QString &id, const QStringList 
+&urls);
     Q_INVOKABLE static void openWithApp(const QString &exec, const QStringList &urls);
     Q_INVOKABLE static void attachEmail(const QStringList &urls);
-   signals:
+    Q_INVOKABLE static void setColorScheme(const QString &schemeName);
+signals:
 
-        public slots:
+public slots:
 };
 
 #endif // MAUIKDE_H

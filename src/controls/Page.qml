@@ -20,6 +20,7 @@ QQC2.Page
 
     property alias headBar: topToolBar
     property alias footBar: bottomToolBar
+    property alias headBarBG : headBarBG
 
     property int footBarAligment : Qt.AlignCenter
 
@@ -101,16 +102,22 @@ QQC2.Page
             background: Rectangle
             {
                 id: headBarBG
+                property alias border : headBarBorder.color
                 color: viewBackgroundColor
                 implicitHeight: toolBarHeightAlt
+                
                 Kirigami.Separator
                 {
-                    color: borderColor
+                    id: headBarBorder
+                    color:  Qt.tint(Kirigami.Theme.textColor, Qt.rgba(headBarBG.color.r, 
+headBarBG.color.g, headBarBG.color.b, 0.7))
+                    
                     anchors
                     {
                         left: parent.left
                         right: parent.right
-                        bottom:  topToolBar.position === ToolBar.Header ? parent.bottom : undefined
+                        bottom: altToolBars ? undefined : parent.bottom
+                        top: altToolBars ? parent.top : undefined
                     }
                 }
 
@@ -118,12 +125,11 @@ QQC2.Page
                 layer.effect: DropShadow
                 {
                     anchors.fill: headBarBG
-                    transparentBorder: true
                     horizontalOffset: 0
                     verticalOffset: altToolBars ? -1 : 1
-                    radius: 12
+                    radius: 8
                     samples: 25
-                    color: Qt.darker(headBarBG.color , 1.5)
+                    color: Qt.darker(headBarBG.color , 1.4)
                     source: headBarBG
                 }
             }

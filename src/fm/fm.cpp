@@ -13,7 +13,7 @@
 
 FM::FM(QObject *parent) : FMDB(parent)
 {
-    this->watcher = new QFileSystemWatcher();
+    this->watcher = new QFileSystemWatcher(this);
     connect(watcher, &QFileSystemWatcher::directoryChanged, [this](const QString &path)
     {
         qDebug()<< " path modified"+path;

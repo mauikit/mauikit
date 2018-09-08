@@ -20,8 +20,10 @@ Kirigami.AbstractApplicationWindow
     /***************************************************/
     /******************** ALIASES *********************/
     /*************************************************/
+    property alias page: page
     property alias footBar: page.footBar
     property alias headBar : page.headBar
+    property alias headBarBG : page.headBarBG
 
     default property alias content : page.content
     property alias pageStack: __pageStack
@@ -160,38 +162,7 @@ Kirigami.AbstractApplicationWindow
             color: bgColor
         }
 
-        headBar.background: Rectangle
-        {
-            id: headBarBG
-            color: backgroundColor
-
-            Kirigami.Separator
-            {
-                //                    visible: !altToolBars
-                color: borderColor
-                anchors
-                {
-                    left: parent.left
-                    right: parent.right
-                    bottom: altToolBars ? undefined : parent.bottom
-                    top: altToolBars ? parent.top : undefined
-                }
-            }
-
-            layer.enabled: true
-            layer.effect: DropShadow
-            {
-                anchors.fill: headBarBG
-                //                transparentBorder: true
-                horizontalOffset: 0
-                verticalOffset: altToolBars ? -1 : 1
-                radius: 8
-                samples: 25
-                color: Qt.darker(headBarBG.color , 1.4)
-                source: headBarBG
-            }
-
-        }
+        headBarBG.color: backgroundColor
 
         headBar.leftContent: Maui.ToolButton
         {

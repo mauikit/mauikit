@@ -8,7 +8,7 @@
 #include <QStorageInfo>
 #include "fmdb.h"
 
-#ifdef MAUIKIT_STATIC
+#ifndef MAUIKIT_STATIC
 #include "mauikit_export.h"
 #endif
 
@@ -22,7 +22,7 @@ class Tagging;
 class FM : public FMDB
 #else
 class MAUIKIT_EXPORT FM : public FMDB
-
+#endif
 {
     Q_OBJECT
 

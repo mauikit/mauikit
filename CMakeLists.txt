@@ -87,7 +87,7 @@ if(ANDROID)
         )
 else()
     find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications 
-Config Service KIO)
+Config Service KIO ConfigWidgets)
     set(mauikit_KDE_SRCS
         src/kde/mauikde.cpp
         src/kde/kdeconnect.cpp
@@ -97,6 +97,19 @@ Config Service KIO)
         src/kde/mauikde.h
         src/kde/kdeconnect.h
         )
+     
+    set(MAUIKDE_KF5LIBS 
+        KF5::ConfigCore
+        KF5::Notifications
+        KF5::I18n KF5::Service
+        KF5::KIOCore
+        KF5::KIOWidgets
+        KF5::KIOFileWidgets
+        KF5::Service
+        KF5::KIONTLM
+        KF5::ConfigWidgets
+        )
+        
         
     set(mauikit_KDE KF5::ConfigCore KF5::Notifications KF5::I18n KF5::Service 
 KF5::KIOCore KF5::KIOWidgets KF5::KIOFileWidgets KF5::KIONTLM)
@@ -147,14 +160,7 @@ target_link_libraries(MauiKit
     Qt5::QuickControls2
     Qt5::Svg
     Qt5::Gui
-    KF5::ConfigCore
-    KF5::Notifications
-    KF5::I18n KF5::Service
-    KF5::KIOCore
-    KF5::KIOWidgets
-    KF5::KIOFileWidgets
-    KF5::Service
-    KF5::KIONTLM
+    ${MAUIKDE_KF5LIBS}
     )
     
 generate_export_header(MauiKit BASE_NAME MauiKit)
