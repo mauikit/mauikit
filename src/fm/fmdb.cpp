@@ -43,7 +43,7 @@ void FMDB::prepareCollectionDB() const
 {
     QSqlQuery query(this->m_db);
 
-    QFile file(":/script.sql");
+    QFile file(":/fm/script.sql");
 
     if (!file.exists())
     {

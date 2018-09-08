@@ -294,13 +294,14 @@ Kirigami.AbstractApplicationWindow
         {
         case colorScheme.Default:
 
-            backgroundColor = Kirigami.Theme.backgroundColor
-            textColor = Kirigami.Theme.textColor
-            highlightColor = Kirigami.Theme.highlightColor
-            highlightedTextColor = Kirigami.Theme.highlightedTextColor
-            buttonBackgroundColor = Kirigami.Theme.buttonBackgroundColor
-            viewBackgroundColor = Kirigami.Theme.viewBackgroundColor
-            altColor = Kirigami.Theme.complementaryBackgroundColor
+            backgroundColor = Maui.Style.backgroundColor
+            textColor = Maui.Style.textColor
+            highlightColor = Maui.Style.highlightColor
+            highlightedTextColor = Maui.Style.highlightedTextColor
+            buttonBackgroundColor = Maui.Style.buttonBackgroundColor
+            viewBackgroundColor = Maui.Style.viewBackgroundColor
+            altColor = Maui.Style.altColor
+            borderColor = Maui.Style.borderColor
             if(isAndroid) Maui.Android.statusbarColor(backgroundColor, true)
             break
 
@@ -315,6 +316,7 @@ Kirigami.AbstractApplicationWindow
             altColor = darkDarkColor
             altColorText = darkAltColorText
             bgColor =darkBgColor
+            
             if(isAndroid) Maui.Android.statusbarColor(backgroundColor, false)
             break
 

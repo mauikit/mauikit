@@ -27,7 +27,8 @@ include($$PWD/src/utils/tagging/tagging.pri)
 
 RESOURCES += \
     $$PWD/mauikit.qrc \
-    $$PWD/assets.qrc
+    $$PWD/assets.qrc \
+    $$PWD/src/fm/fm.qrc
 
 HEADERS += \
     $$PWD/src/mauikit.h \

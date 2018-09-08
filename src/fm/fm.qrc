@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/fm">
+        <file>script.sql</file>
+    </qresource>
+</RCC>

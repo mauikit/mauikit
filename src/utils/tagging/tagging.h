@@ -5,6 +5,7 @@
 #include <QtGlobal>
 #include <sys/user.h>
 #include "tagdb.h"
+
 #include "mauikit_export.h"
 
 class MAUIKIT_EXPORT Tagging : public TAGDB

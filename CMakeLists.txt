@@ -104,10 +104,10 @@ endif()
 # set(CMAKE_AUTORCC ON)
 
 qt5_add_resources(mauikit_ASSETS ${CMAKE_CURRENT_SOURCE_DIR}/assets.qrc)
+qt5_add_resources(tagging_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/tagging/tagging.qrc)
+qt5_add_resources(fm_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/fm/fm.qrc)
 
 # qt5_add_resources(mauikit_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/mauikit.qrc)
-# qt5_add_resources(tagging_RESOURCES 
-# ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/tagging/tagging.qrc)
 
 add_library(MauiKit 
 ${mauikit_RESOURCES} 
@@ -116,6 +116,7 @@ ${tagging_HDRS}
 ${tagging_SRCS}
 ${fm_HDRS}
 ${fm_SRCS}
+${fm_RESOURCES}
 ${tagging_RESOURCES}
 ${mauikit_HDRS} 
 ${mauikit_SRCS} 
@@ -129,9 +130,9 @@ ${mauikit_KDE_SRCS})
 # add_definitions(-DMAUI_APP)
 
 target_link_libraries(MauiKit
-    PRIVATE
-    ${mauikit_RESOURCES}
-    ${tagging_RESOURCES}
+#     PRIVATE
+#     ${mauikit_RESOURCES}
+#     ${tagging_RESOURCES}
    
     PUBLIC
     Qt5::Core
