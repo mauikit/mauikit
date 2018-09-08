@@ -6,8 +6,13 @@
 #include <sys/user.h>
 #include "tagdb.h"
 
+#ifdef MAUIKIT_STATIC
 #include "mauikit_export.h"
+#endif
 
+#ifdef MAUIKIT_STATIC
+class Tagging : public TAGDB
+#else
 class MAUIKIT_EXPORT Tagging : public TAGDB
 {
     Q_OBJECT

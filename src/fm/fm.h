@@ -7,7 +7,10 @@
 #include <QFileSystemWatcher>
 #include <QStorageInfo>
 #include "fmdb.h"
+
+#ifdef MAUIKIT_STATIC
 #include "mauikit_export.h"
+#endif
 
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
@@ -15,7 +18,11 @@
 
 class Tagging;
 
+#ifdef MAUIKIT_STATIC
+class FM : public FMDB
+#else
 class MAUIKIT_EXPORT FM : public FMDB
+
 {
     Q_OBJECT
 
