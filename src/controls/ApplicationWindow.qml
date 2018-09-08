@@ -20,11 +20,13 @@ Kirigami.AbstractApplicationWindow
     /***************************************************/
     /******************** ALIASES *********************/
     /*************************************************/
-    property alias page: page
-    property alias footBar: page.footBar
+    property alias page : page
+    property alias footBar : page.footBar
     property alias headBar : page.headBar
     property alias headBarBG : page.headBarBG
-
+    property alias rightIcon : menuBtn
+    property alias leftIcon : searchBtn
+    
     default property alias content : page.content
     property alias pageStack: __pageStack
     property alias menuDrawer : menuDrawer

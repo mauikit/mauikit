@@ -109,8 +109,8 @@ QQC2.Page
                 Kirigami.Separator
                 {
                     id: headBarBorder
-                    color:  Qt.tint(Kirigami.Theme.textColor, Qt.rgba(headBarBG.color.r, 
-headBarBG.color.g, headBarBG.color.b, 0.7))
+                    color:  Qt.tint(Kirigami.Theme.textColor, 
+Qt.rgba(headBarBG.color.r, headBarBG.color.g, headBarBG.color.b, 0.7))
                     
                     anchors
                     {

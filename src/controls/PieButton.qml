@@ -21,13 +21,18 @@ Maui.ToolButton
     onClicked: pathView.visible ? close() : open()
 
     signal itemClicked (var item)
-    layer.enabled: false
+    layer.enabled: true
+
+    Popup
+    {
+        id: popup
+                parent: Overlay.overlay
 
    PathView
     {
         id: pathView
-        z: control.z +1
-        visible: false
+        z: control.z + 1
+        visible: true
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.top
         height: pieHeight
@@ -89,16 +94,16 @@ Maui.ToolButton
         //            z: pathView.z - 1
         //        }
     }
-
+    }
 
 
     function open()
     {
-        pathView.visible = true
+        popup.open()
     }
 
     function close()
     {
-        pathView.visible = false
+        popup.close()
     }
 }
