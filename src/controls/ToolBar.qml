@@ -27,6 +27,18 @@ ToolBar
     //    rightPadding: Kirigami.Units.smallSpacing*2
 
 
+      Flickable
+    {
+        id: mainFlickable
+
+        property int itemSpacing: space.medium
+
+        flickableDirection: Flickable.HorizontalFlick
+        anchors.fill: parent
+        interactive: layout.implicitWidth > control.width
+        contentWidth: layout.implicitWidth
+boundsBehavior: isMobile ? Flickable.DragOverBounds : Flickable.StopAtBounds
+
     RowLayout
     {
         id: layout
@@ -38,7 +50,7 @@ ToolBar
             id: leftRowContent
             Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
             Layout.leftMargin: leftContent.length > 0 ? margins : 0
-            spacing: flickable.itemSpacing
+            spacing: mainFlickable.itemSpacing
             Layout.minimumWidth: 0
             clip: true
         }
@@ -130,11 +142,14 @@ ToolBar
         {
             id: rightRowContent
             Layout.alignment: Qt.AlignRight
-            spacing: flickable.itemSpacing
+            spacing: mainFlickable.itemSpacing
             Layout.rightMargin: rightContent.length > 0 ? margins : 0
             Layout.minimumWidth: 0
             clip: true
 
         }
+    }
+                    ScrollBar.horizontal: ScrollBar { visible: false}
+
     }
 }
