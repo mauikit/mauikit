@@ -33,10 +33,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KColorScheme>
 #include <KColorSchemeManager>
 #include <QModelIndex>
+#include <QSettings>
+#include <QColor>
+#include <QVariantList>
+#include <KConfig>
+#include <KConfigGroup>
+
+#include "fmh.h"
+#include <MauiKit/utils.h>
 
 #include "kdeconnect.h"
 
-MAUIKDE::MAUIKDE(QObject *parent) : QObject(parent) {}
+Q_DECLARE_METATYPE(QList<int>)
+
+MAUIKDE::MAUIKDE(QObject *parent) : QObject(parent) 
+{
+}
 
 MAUIKDE::~MAUIKDE()
 {
@@ -117,9 +129,47 @@ void MAUIKDE::attachEmail(const QStringList &urls)
     //    + url));
 }
 
-void MAUIKDE::setColorScheme(const QString &schemeName)
+void MAUIKDE::setColorScheme(const QString &schemeName, const QString &bg, const QString &fg)
 {
-    KColorSchemeManager manager;
-    manager.activateScheme(manager.indexForScheme(schemeName));
-}
 
+    KColorSchemeManager manager;
+    auto schemeModel = manager.indexForScheme(schemeName);
+    if(schemeModel.isValid())
+    {
+        qDebug()<<"COLRO SCHEME IS VALID";
+        if(!bg.isEmpty() || !fg.isEmpty())
+        {
+            QString colorsFile = FMH::DataPath+"/color-schemes/"+schemeName+".colors";
+            
+            if(UTIL::fileExists(colorsFile))
+            {
+                qDebug()<<"COLRO SCHEME FILE EXISTS"<< colorsFile;
+                KConfig file(colorsFile);
+                auto group = file.group("WM");
+                QColor color;                               
+                
+                if(!bg.isEmpty())
+                { 
+                    color.setNamedColor(bg);
+                    QVariantList rgb = {color.red(), color.green(), color.blue()}; 
+                    group.writeEntry("activeBackground", QVariant::fromValue(rgb));
+                    group.writeEntry("inactiveBackground", QVariant::fromValue(rgb));
+                 
+                }                
+                
+                if(!fg.isEmpty())
+                { 
+                    color.setNamedColor(fg);
+                    QVariantList rgb = {color.red(), color.green(), color.blue()};
+                     group.writeEntry("activeForeground", QVariant::fromValue(rgb));
+                    group.writeEntry("inactiveForeground", QVariant::fromValue(rgb));                                 
+                }
+                
+            }else
+                qDebug()<<"COLRO SCHEME FILE DOESNT EXISTS"<< colorsFile;
+
+           
+        }
+            manager.activateScheme(schemeModel);
+    }
+}

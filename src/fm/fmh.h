@@ -125,6 +125,7 @@ namespace FMH
         {PATHTYPE_KEY::TAGS, "Tags"}
     };
 
+    const QString DataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
 
 #if defined(Q_OS_ANDROID)
     const QString PicturesPath = PATHS::PicturesPath;

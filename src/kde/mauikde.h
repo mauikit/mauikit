@@ -33,11 +33,11 @@ public:
     ~MAUIKDE();
     Q_INVOKABLE static QVariantList services(const QUrl &url);
     Q_INVOKABLE static QVariantList devices();
-    Q_INVOKABLE static bool sendToDevice(const QString &device, const QString &id, const QStringList 
-&urls);
+    Q_INVOKABLE static bool sendToDevice(const QString &device, const QString &id, const QStringList &urls);
     Q_INVOKABLE static void openWithApp(const QString &exec, const QStringList &urls);
     Q_INVOKABLE static void attachEmail(const QStringList &urls);
-    Q_INVOKABLE static void setColorScheme(const QString &schemeName);
+    Q_INVOKABLE static void setColorScheme(const QString &schemeName, const QString &bg =  QString(), const QString &fg = QString());
+    
 signals:
 
 public slots:
