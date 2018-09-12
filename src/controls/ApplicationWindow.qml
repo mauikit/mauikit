@@ -146,7 +146,7 @@ Kirigami.AbstractApplicationWindow
         if(!isAndroid && !isMobile && colorSchemeName.length > 0)
             Maui.KDE.setColorScheme(colorSchemeName, headBarBGColor, headBarFGColor)
         else if(isAndroid)
-            Maui.Android.statusbarColor(headBarBGColor, true)
+            Maui.Android.statusbarColor(headBarBGColor, false)
     }
     
     onHeadBarFGColorChanged: 
