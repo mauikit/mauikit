@@ -51,7 +51,8 @@ INCLUDEPATH += \
      $$PWD/src/fm
 
 DEFINES += \
-    MAUI_APP
+    MAUI_APP \
+    STATIC_MAUIKIT
 
 API_VER=1.0
 
