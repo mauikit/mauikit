@@ -7,15 +7,18 @@
 class MauiKit : public QQmlExtensionPlugin
 {
     Q_OBJECT
+
+#ifndef STATIC_MAUIKIT
     Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
-  
+#endif
+
 public:    
     void registerTypes(const char *uri) Q_DECL_OVERRIDE;
 
     static MauiKit& getInstance()
     {
-         static MauiKit instance;
-         return instance;
+        static MauiKit instance;
+        return instance;
     }
 
     static void registerTypes()
@@ -43,7 +46,7 @@ private:
         return baseUrl().toString() + QLatin1Char('/') + filePath;
 #endif
     }
-   
+
 signals:
 
 public slots:

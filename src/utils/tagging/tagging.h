@@ -6,11 +6,11 @@
 #include <sys/user.h>
 #include "tagdb.h"
 
-#ifndef MAUIKIT_STATIC
+#ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
 #endif
 
-#ifdef MAUIKIT_STATIC
+#ifdef STATIC_MAUIKIT
 class Tagging : public TAGDB
 #else
 class MAUIKIT_EXPORT Tagging : public TAGDB
