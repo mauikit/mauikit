@@ -145,6 +145,8 @@ Kirigami.AbstractApplicationWindow
     {
         if(!isAndroid && !isMobile && colorSchemeName.length > 0)
             Maui.KDE.setColorScheme(colorSchemeName, headBarBGColor, headBarFGColor)
+        else if(isAndroid)
+            Maui.Android.statusbarColor(headBarBGColor, true)
     }
     
     onHeadBarFGColorChanged: 
@@ -273,10 +275,10 @@ Kirigami.AbstractApplicationWindow
 //        bg: pageStack
     }
 
-    Component.onCompleted:
-    {
-        if(isAndroid) Maui.Android.statusbarColor(backgroundColor, true)
-    }
+//     Component.onCompleted:
+//     {
+//         if(isAndroid) Maui.Android.statusbarColor(backgroundColor, true)
+//     }
 
     function switchColorScheme(variant)
     {
