@@ -8,18 +8,21 @@ Item
 {
     id: control
 
+    property alias pathBarBG : pathBarBG
+    
     signal pathChanged(string path)
     signal homeClicked()
     signal placeClicked(string path)
 
     Rectangle
     {
+        id: pathBarBG
         anchors.fill: parent
         z:-1
         color: viewBackgroundColor
         radius: unit * 4
         opacity: 1
-        border.color: Qt.tint(textColor, Qt.rgba(backgroundColor.r, backgroundColor.g, backgroundColor.b, 0.7))
+        border.color: Qt.tint(textColor, Qt.rgba(color.r, color.g, color.b, 0.7))
         border.width: unit
     }
 
@@ -91,6 +94,7 @@ Item
         Kirigami.Separator
         {
             Layout.fillHeight: true
+            color: pathBarBG.border.color
         }
 
         ListView
@@ -114,7 +118,6 @@ Item
                 id: delegate
                 height: iconSizes.big - (Kirigami.Units.devicePixelRatio * 2)
                 width: iconSizes.big * 3
-
                 Connections
                 {
                     target: delegate

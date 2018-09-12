@@ -7,12 +7,12 @@ ItemDelegate
 {
     property bool isCurrentListItem : ListView.isCurrentItem
     property color labelColor : isCurrentListItem ? highlightColor : textColor
-    property color borderColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+   
     anchors.verticalCenter: parent.verticalCenter
 
     background: Rectangle
     {
-        color: isCurrentListItem ? buttonBackgroundColor : "transparent"
+        color: isCurrentListItem ? Qt.lighter(pathBarBG.color, 1.1) : "transparent"
 
         Kirigami.Separator
         {
@@ -22,7 +22,7 @@ ItemDelegate
                 bottom: parent.bottom
                 right: parent.right
             }
-            color: borderColor
+            color: pathBarBG.border.color
         }
     }
 

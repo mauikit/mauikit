@@ -88,7 +88,7 @@ QQC2.Page
             {
                 visible: headBarTitleVisible
                 text : headBarTitle
-                width: middleLayout.width
+                width: topToolBar.middleLayout.width
                 elide : Text.ElideRight
                 font.bold : false
                 font.weight: Font.Bold

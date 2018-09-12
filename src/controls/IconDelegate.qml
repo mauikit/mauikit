@@ -90,7 +90,7 @@ ItemDelegate
             clip: true
             source:  "file://"+model.thumbnail
             height: folderSize
-            width: folderSize
+            width: isDetails ? folderSize : control.width * 0.9
             sourceSize.width: width
             sourceSize.height: folderSize
             horizontalAlignment: Qt.AlignHCenter

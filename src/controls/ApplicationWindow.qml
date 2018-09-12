@@ -54,6 +54,8 @@ Kirigami.AbstractApplicationWindow
     readonly property var fontSizes: Maui.Style.fontSizes
     readonly property var space : Maui.Style.space
     readonly property var iconSizes : Maui.Style.iconSizes
+    
+    property string colorSchemeName : ""
 
     /***************************************************/
     /********************* COLORS *********************/
@@ -76,6 +78,7 @@ Kirigami.AbstractApplicationWindow
     property color altColorText: Maui.Style.altColorText
     property color accentColor : buttonBackgroundColor
     property color bgColor: viewBackgroundColor
+    property color headBarColor: backgroundColor
 
     readonly property string darkBorderColor: Qt.darker(darkBackgroundColor, 1.5)
     readonly property string darkBackgroundColor: "#303030"
@@ -137,6 +140,12 @@ Kirigami.AbstractApplicationWindow
     //        color: "transparent"
     //    }
 
+    onHeadBarColorChanged: 
+    {
+        if(!isAndroid && !isMobile && colorSchemeName.length > 0)
+            Maui.KDE.setColorScheme(colorSchemeName, headBarColor, altColorText)
+    }
+    
     background: Rectangle
     {
         color: bgColor
@@ -164,7 +173,7 @@ Kirigami.AbstractApplicationWindow
             color: bgColor
         }
 
-        headBarBG.color: backgroundColor
+        headBarBG.color: headBarColor
 
         headBar.leftContent: Maui.ToolButton
         {
