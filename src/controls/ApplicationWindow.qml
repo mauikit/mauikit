@@ -78,7 +78,8 @@ Kirigami.AbstractApplicationWindow
     property color altColorText: Maui.Style.altColorText
     property color accentColor : buttonBackgroundColor
     property color bgColor: viewBackgroundColor
-    property color headBarColor: backgroundColor
+    property color headBarBGColor: backgroundColor
+    property color headBarFGColor: textColor
 
     readonly property string darkBorderColor: Qt.darker(darkBackgroundColor, 1.5)
     readonly property string darkBackgroundColor: "#303030"
@@ -140,10 +141,16 @@ Kirigami.AbstractApplicationWindow
     //        color: "transparent"
     //    }
 
-    onHeadBarColorChanged: 
+    onHeadBarBGColorChanged: 
     {
         if(!isAndroid && !isMobile && colorSchemeName.length > 0)
-            Maui.KDE.setColorScheme(colorSchemeName, headBarColor, altColorText)
+            Maui.KDE.setColorScheme(colorSchemeName, headBarBGColor, headBarFGColor)
+    }
+    
+    onHeadBarFGColorChanged: 
+    {
+        if(!isAndroid && !isMobile && colorSchemeName.length > 0)
+            Maui.KDE.setColorScheme(colorSchemeName, headBarBGColor, headBarFGColor)
     }
     
     background: Rectangle
@@ -173,13 +180,13 @@ Kirigami.AbstractApplicationWindow
             color: bgColor
         }
 
-        headBarBG.color: headBarColor
+        headBarBG.color: headBarBGColor
 
         headBar.leftContent: Maui.ToolButton
         {
             id: menuBtn
             iconName: "application-menu"
-            iconColor: menuDrawer.visible ? highlightColor: textColor
+            iconColor: menuDrawer.visible ? highlightColor: headBarFGColor
             onClicked:
             {
                 menuButtonClicked()
@@ -192,6 +199,7 @@ Kirigami.AbstractApplicationWindow
         {
             id: searchBtn
             iconName: "edit-find"
+            iconColor: headBarFGColor
             onClicked: searchButtonClicked()
         }
 
