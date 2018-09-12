@@ -11,9 +11,10 @@ ToolButton
     property string iconName: ""
     property int size: iconSize
     property color iconColor: textColor
-    readonly property string defaultColor:  textColor
+    readonly property color defaultColor:  textColor
     property bool anim: false
-
+    property string tooltipText : ""
+    hoverEnabled: !isMobile
     height: size + space.medium
     width: display === ToolButton.TextBesideIcon ? implicitWidth : height
     icon.name:  iconName
@@ -26,7 +27,7 @@ ToolButton
     flat: true
     highlighted: !isMask
 
-    display:  ToolButton.IconOnly
+    display: ToolButton.IconOnly
     spacing: space.small
 
     contentItem: IconLabel
@@ -54,4 +55,9 @@ ToolButton
             duration: 500
         }
     }
+    
+    ToolTip.delay: 1000
+    ToolTip.timeout: 5000
+    ToolTip.visible: hovered && !isMobile
+    ToolTip.text: tooltipText
 }
