@@ -133,6 +133,7 @@ ToolBar
                 id: flickableItem
                 Layout.fillHeight: true
                 Layout.fillWidth: true
+//                 Layout.minimumWidth: control.width * 0.3
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
                 Layout.rightMargin: middleContent.length === 1 ? 0 : margins
                 Layout.leftMargin: middleContent.length === 1 ? 0 : margins
