@@ -40,7 +40,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KConfigGroup>
 
 #include "fmh.h"
-#include <MauiKit/utils.h>
+
+#include "utils.h"
 
 #include "kdeconnect.h"
 
@@ -132,17 +133,50 @@ void MAUIKDE::attachEmail(const QStringList &urls)
 void MAUIKDE::setColorScheme(const QString &schemeName, const QString &bg, const QString &fg)
 {
 
+    QString colorsFile = FMH::DataPath+"/color-schemes/"+schemeName+".colors";    
+    
+    if(!UTIL::fileExists(colorsFile))
+    {
+        QFile color_scheme_file(":/assets/maui-app.colors");
+        if(color_scheme_file.copy(colorsFile))
+        {
+            
+            qDebug()<< "COLROS FILE GOT COPIED" << colorsFile;
+            QFile copied_scheme_file(colorsFile);
+            copied_scheme_file.setPermissions(QFile::ReadOwner|QFile::WriteOwner|QFile::ExeOwner|QFile::ReadGroup|QFile::ExeGroup|QFile::ReadOther|QFile::ExeOther);
+qDebug()<< copied_scheme_file.permissions();
+            KConfig new_scheme_file(colorsFile);
+            qDebug() <<new_scheme_file.hasGroup("General");
+            auto new_scheme_name = new_scheme_file.group("General");
+            qDebug()<< new_scheme_name.hasKey("Name");
+            new_scheme_name.writeEntry("Name",  QVariant(schemeName));
+            new_scheme_name.writeEntry("ColorScheme",  QVariant(schemeName));
+
+        }            
+    } 
+   
     KColorSchemeManager manager;
-    auto schemeModel = manager.indexForScheme(schemeName);
+    auto schemeModel = manager.indexForScheme(schemeName); 
+    
+    if(!schemeModel.isValid() && UTIL::fileExists(colorsFile))
+    {
+        qDebug()<< "COLROS FILE EXISTS BUT IS INVALID";
+
+        KConfig scheme_file(colorsFile);
+        auto scheme_name = scheme_file.group("General");
+        scheme_name.writeEntry("Name", QVariant(schemeName));
+        scheme_name.writeEntry("ColorScheme",  QVariant(schemeName));
+    }   
+        
+      
+    schemeModel = manager.indexForScheme(schemeName);     
+    
     if(schemeModel.isValid())
     {
         qDebug()<<"COLRO SCHEME IS VALID";
         if(!bg.isEmpty() || !fg.isEmpty())
         {
-            QString colorsFile = FMH::DataPath+"/color-schemes/"+schemeName+".colors";
-            
-            if(UTIL::fileExists(colorsFile))
-            {
+           
                 qDebug()<<"COLRO SCHEME FILE EXISTS"<< colorsFile;
                 KConfig file(colorsFile);
                 auto group = file.group("WM");
@@ -164,12 +198,9 @@ void MAUIKDE::setColorScheme(const QString &schemeName, const QString &bg, const
                      group.writeEntry("activeForeground", QVariant::fromValue(rgb));
                     group.writeEntry("inactiveForeground", QVariant::fromValue(rgb));                                 
                 }
-                
-            }else
-                qDebug()<<"COLRO SCHEME FILE DOESNT EXISTS"<< colorsFile;
-
            
         }
-            manager.activateScheme(schemeModel);
-    }
+            manager.activateScheme(schemeModel);            
+    } 
+
 }
