@@ -139,19 +139,13 @@ void MAUIKDE::setColorScheme(const QString &schemeName, const QString &bg, const
     {
         QFile color_scheme_file(":/assets/maui-app.colors");
         if(color_scheme_file.copy(colorsFile))
-        {
-            
-            qDebug()<< "COLROS FILE GOT COPIED" << colorsFile;
+        {            
             QFile copied_scheme_file(colorsFile);
             copied_scheme_file.setPermissions(QFile::ReadOwner|QFile::WriteOwner|QFile::ExeOwner|QFile::ReadGroup|QFile::ExeGroup|QFile::ReadOther|QFile::ExeOther);
-qDebug()<< copied_scheme_file.permissions();
             KConfig new_scheme_file(colorsFile);
-            qDebug() <<new_scheme_file.hasGroup("General");
             auto new_scheme_name = new_scheme_file.group("General");
-            qDebug()<< new_scheme_name.hasKey("Name");
             new_scheme_name.writeEntry("Name",  QVariant(schemeName));
             new_scheme_name.writeEntry("ColorScheme",  QVariant(schemeName));
-
         }            
     } 
    
