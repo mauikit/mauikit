@@ -233,7 +233,7 @@ void MAUIAndroid::setAppInfo(const QString &appName, const QString &version, con
     auto serviceMetadata = serviceMetadataNode.at(1).toElement();
     serviceMetadata.setAttribute("android:value", appName);
     
-    if (!file.open(QIODevice::Truncate | QIODevice::WriteOnly))
+    if(!file.open(QIODevice::Truncate | QIODevice::WriteOnly))
     {
         qDebug("Basically, now we lost content of a file");
         return;

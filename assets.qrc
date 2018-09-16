@@ -4,6 +4,5 @@
         <file>assets/face-sleeping.svg</file>
         <file>assets/tag.svg</file>
         <file>assets/maui-app.colors</file>
-        <file>src/android/AndroidManifest.xml</file>
     </qresource>
 </RCC>
