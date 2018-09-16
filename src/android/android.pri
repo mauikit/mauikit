@@ -1,4 +1,4 @@
-QT += androidextras
+QT += androidextras xml
 
 HEADERS += \
     $$PWD/mauiandroid.h\

@@ -32,7 +32,7 @@ ToolBar
         height: iconSizes.tiny
         visible: !mainFlickable.atXEnd && mainFlickable.interactive
         rotation: 270
-        opacity: 0.25
+        opacity: 0.2
         anchors 
         {
             top: parent.top
@@ -63,7 +63,7 @@ ToolBar
         height: iconSizes.tiny
         visible: !mainFlickable.atXBeginning && mainFlickable.interactive
         rotation: 270
-        opacity: 0.25
+        opacity: 0.2
         anchors 
         {
             top: parent.top

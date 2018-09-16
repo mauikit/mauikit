@@ -4,9 +4,7 @@ QT +=  \
     quick \
     gui \
     svg \
-
-
-
+    
 CONFIG += c++11
 
 linux:unix:!android {

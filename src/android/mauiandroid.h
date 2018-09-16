@@ -26,6 +26,8 @@ public:
     Q_INVOKABLE static QStringList defaultPaths();
     Q_INVOKABLE static QString homePath();
     Q_INVOKABLE static QString sdDir();
+    void setIcons(const QString &lowDPI, const QString &mediumDPI, const QString &highDPI);
+    void setAppInfo(const QString &appName, const QString &version, const QString &uri);
     void handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data);
     void fileChooser();
 public slots:
