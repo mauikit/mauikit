@@ -113,8 +113,7 @@ Config Service KIO ConfigWidgets)
         KF5::Service
         KF5::KIONTLM
         KF5::ConfigWidgets
-        )
-        
+        )        
         
     set(mauikit_KDE KF5::ConfigCore KF5::Notifications KF5::I18n KF5::Service 
 KF5::KIOCore KF5::KIOWidgets KF5::KIOFileWidgets KF5::KIONTLM)
@@ -201,7 +200,9 @@ install(FILES
             ${CMAKE_CURRENT_BINARY_DIR}/mauikit_export.h
         DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit
         COMPONENT Devel)
-   
+        
+##INSTALL MAUI STYLE
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/maui-style DESTINATION ${KDE_INSTALL_QMLDIR}/QtQuick/Controls.2)   
    
 ##CMAKE PARTS   
    
