@@ -109,6 +109,7 @@ QQC2.Page
                 Kirigami.Separator
                 {
                     id: headBarBorder
+                    height: unit *1
                     color:  Qt.tint(Kirigami.Theme.textColor, 
 Qt.rgba(headBarBG.color.r, headBarBG.color.g, headBarBG.color.b, 0.7))
                     
