@@ -109,7 +109,7 @@ QQC2.Page
                 Kirigami.Separator
                 {
                     id: headBarBorder
-                    height: 1
+                    height: 0
                     color:  Qt.tint(Kirigami.Theme.textColor, 
 Qt.rgba(headBarBG.color.r, headBarBG.color.g, headBarBG.color.b, 0.7))
                     
@@ -243,6 +243,7 @@ Qt.rgba(headBarBG.color.r, headBarBG.color.g, headBarBG.color.b, 0.7))
                 {
                     visible: !floatingBar
                     color: borderColor
+                    height: 0
                     anchors
                     {
                         left: parent.left
