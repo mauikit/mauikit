@@ -100,7 +100,7 @@ Kirigami.AbstractApplicationWindow
     Material.theme: Material.Light
     Material.accent: highlightColor
     Material.background: viewBackgroundColor
-    Material.primary: backgroundColor
+    Material.primary: headBarBGColor
     Material.foreground: textColor
 
     /***************************************************/
