@@ -102,26 +102,9 @@ QQC2.Page
             background: Rectangle
             {
                 id: headBarBG
-                property alias border : headBarBorder.color
                 color: viewBackgroundColor
-                implicitHeight: toolBarHeightAlt
-                
-                Kirigami.Separator
-                {
-                    id: headBarBorder
-                    height: 0
-                    color:  Qt.tint(Kirigami.Theme.textColor, 
-Qt.rgba(headBarBG.color.r, headBarBG.color.g, headBarBG.color.b, 0.7))
-                    
-                    anchors
-                    {
-                        left: parent.left
-                        right: parent.right
-                        bottom: altToolBars ? undefined : parent.bottom
-                        top: altToolBars ? parent.top : undefined
-                    }
-                }
-
+                implicitHeight: toolBarHeightAlt                
+              
                 layer.enabled: dropShadow
                 layer.effect: DropShadow
                 {
@@ -239,18 +222,6 @@ Qt.rgba(headBarBG.color.r, headBarBG.color.g, headBarBG.color.b, 0.7))
                     source: footBarBg
                 }
 
-                Kirigami.Separator
-                {
-                    visible: !floatingBar
-                    color: borderColor
-                    height: 0
-                    anchors
-                    {
-                        left: parent.left
-                        right: parent.right
-                        top: parent.top
-                    }
-                }
             }
         }
     }
