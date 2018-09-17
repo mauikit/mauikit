@@ -204,9 +204,8 @@ Qt.rgba(headBarBG.color.r, headBarBG.color.g, headBarBG.color.b, 0.7))
 
             readonly property int _margins : footBarMargins
 
-
+//            implicitHeight: toolBarHeight * (floatingBar ? 0.8 : 1)
             height: implicitHeight
-            implicitHeight: toolBarHeight * (floatingBar ? 0.8 : 1)
 
             Layout.leftMargin: footBarAligment === Qt.AlignLeft ? _margins : space.small
             Layout.rightMargin: footBarAligment === Qt.AlignRight ? _margins : space.small
@@ -225,7 +224,7 @@ Qt.rgba(headBarBG.color.r, headBarBG.color.g, headBarBG.color.b, 0.7))
             background: Rectangle
             {
                 id: footBarBg
-                height: toolBarHeight * (floatingBar? 0.8 : 1)
+                height: bottomToolBar.implicitHeight
                 color: floatingBar ? accentColor : viewBackgroundColor
                 radius: floatingBar ? unit*6 : 0
                 border.color: floatingBar ? Qt.darker(accentColor, 1.2) : "transparent"

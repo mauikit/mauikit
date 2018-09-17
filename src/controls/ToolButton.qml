@@ -15,23 +15,23 @@ ToolButton
     property bool anim: false
     property string tooltipText : ""
     hoverEnabled: !isMobile
-//     height: size + space.medium
-    width: implicitWidth
+    height:  display === ToolButton.TextUnderIcon ? implicitHeight : size + space.medium
+    width: display === ToolButton.TextUnderIcon ? implicitWidth : height
     icon.name:  iconName
     icon.width:  size
     icon.height: size
-//     icon.height:  display === ToolButton.TextUnderIcon ? size * 2 : size
+    //     icon.height:  display === ToolButton.TextUnderIcon ? size * 2 : size
     icon.color: !isMask ? "transparent" : (down || pressed ? highlightColor : (iconColor || defaultColor))
 
     onClicked: if(anim) animIcon.running = true
-//                 anchors.verticalCenter: parent.verticalCenter
+    //                 anchors.verticalCenter: parent.verticalCenter
 
     flat: true
     highlighted: !isMask
-    font.pointSize:  display === ToolButton.TextUnderIcon ? fontSizes.small : undefined
+    font.pointSize: display === ToolButton.TextUnderIcon ? fontSizes.small : undefined
 
-    display: ToolButton.IconOnly
-    spacing: space.small
+    display: control.text ? (isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon) : ToolButton.IconOnly
+    spacing: space.tiny
 
     contentItem: IconLabel
     {

@@ -39,7 +39,7 @@ Kirigami.AbstractApplicationWindow
     /*********************** UI ***********************/
     /*************************************************/
 
-    property bool isWide : root.width >= Kirigami.Units.gridUnit * 50
+    property bool isWide : root.width >= Kirigami.Units.gridUnit * 50 || pageStack.wideMode
 
     property int iconSize : iconSizes.medium * (isMobile ? 0.95 : 1)
 
@@ -145,7 +145,7 @@ Kirigami.AbstractApplicationWindow
     {
         if(!isAndroid && !isMobile && colorSchemeName.length > 0)
             Maui.KDE.setColorScheme(colorSchemeName, headBarBGColor, headBarFGColor)
-        else if(isAndroid)
+        else if(isAndroid && !altToolBars)
             Maui.Android.statusbarColor(headBarBGColor, false)
     }
     
@@ -153,6 +153,8 @@ Kirigami.AbstractApplicationWindow
     {
         if(!isAndroid && !isMobile && colorSchemeName.length > 0)
             Maui.KDE.setColorScheme(colorSchemeName, headBarBGColor, headBarFGColor)
+        else if(isAndroid && !altToolBars)
+            Maui.Android.statusbarColor(headBarBGColor, false)
     }
     
     background: Rectangle
@@ -275,10 +277,10 @@ Kirigami.AbstractApplicationWindow
 //        bg: pageStack
     }
 
-//     Component.onCompleted:
-//     {
-//         if(isAndroid) Maui.Android.statusbarColor(backgroundColor, true)
-//     }
+     Component.onCompleted:
+     {
+         if(isAndroid && altToolBars) Maui.Android.statusbarColor(backgroundColor, true)
+     }
 
     function switchColorScheme(variant)
     {
