@@ -13,12 +13,19 @@ Popup
     modal: true
 
     height: grid.itemSize * 5
-    width: isMobile ? parent.width * 0.9 : parent.width * 0.4
+    width: isMobile ? parent.width * 0.9 : parent.width * 0.5
 
     parent: ApplicationWindow.overlay
 
     x: (parent.width / 2) - (width / 2)
     y: (parent.height) - (height *1.3)
+    
+    background: Rectangle
+    {
+        color: viewBackgroundColor
+        radius: unit * 6
+        border.color: borderColor
+    }
 
     ColumnLayout
     {
@@ -29,6 +36,7 @@ Popup
         Label
         {
             text: qsTr("Open with...")
+            color: textColor
             height: toolBarHeightAlt
             width: parent.width
             Layout.fillWidth: true

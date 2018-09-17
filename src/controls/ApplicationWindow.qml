@@ -67,7 +67,7 @@ Kirigami.AbstractApplicationWindow
                                             Dark: 3
                                         })
 
-    property color borderColor: Maui.Style.borderColor
+    property color borderColor: Qt.tint(textColor, Qt.rgba(backgroundColor.r, backgroundColor.g, backgroundColor.b, 0.7))
     property color backgroundColor: Maui.Style.backgroundColor
     property color textColor: Maui.Style.textColor
     property color highlightColor: Maui.Style.highlightColor
