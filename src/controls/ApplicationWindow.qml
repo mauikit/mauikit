@@ -99,8 +99,8 @@ Kirigami.AbstractApplicationWindow
 
     Material.theme: Material.Light
     Material.accent: highlightColor
-    Material.background: viewBackgroundColor
-    Material.primary: headBarBGColor
+    Material.background: headBarBGColor
+    Material.primary: headBarBG
     Material.foreground: textColor
 
     /***************************************************/
@@ -143,7 +143,7 @@ Kirigami.AbstractApplicationWindow
 
     onHeadBarBGColorChanged: 
     {
-        if(!isAndroid && !isMobile && colorSchemeName.length > 0)
+        if(!isAndroid && !isMobile && colorSchemeName.length > 0 && !altToolBars)
             Maui.KDE.setColorScheme(colorSchemeName, headBarBGColor, headBarFGColor)
         else if(isAndroid && !altToolBars)
             Maui.Android.statusbarColor(headBarBGColor, false)
@@ -151,7 +151,7 @@ Kirigami.AbstractApplicationWindow
     
     onHeadBarFGColorChanged: 
     {
-        if(!isAndroid && !isMobile && colorSchemeName.length > 0)
+        if(!isAndroid && !isMobile && colorSchemeName.length > 0 && !altToolBars)
             Maui.KDE.setColorScheme(colorSchemeName, headBarBGColor, headBarFGColor)
         else if(isAndroid && !altToolBars)
             Maui.Android.statusbarColor(headBarBGColor, false)

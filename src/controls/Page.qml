@@ -204,9 +204,9 @@ Qt.rgba(headBarBG.color.r, headBarBG.color.g, headBarBG.color.b, 0.7))
 
            implicitHeight: floatingBar ? toolBarHeightAlt : toolBarHeight
             height: implicitHeight
-
-            Layout.leftMargin: footBarAligment === Qt.AlignLeft ? _margins : space.small
-            Layout.rightMargin: footBarAligment === Qt.AlignRight ? _margins : space.small
+            width: floatingBar ?  implicitWidth : parent.width
+            Layout.leftMargin: footBarAligment === Qt.AlignLeft ? _margins : (floatingBar ? space.small : 0)
+            Layout.rightMargin: footBarAligment === Qt.AlignRight ? _margins : (floatingBar ? space.small : 0)
             Layout.bottomMargin: floatingBar ? _margins : 0
             Layout.alignment: footBarAligment
             Layout.fillWidth: true
@@ -226,15 +226,15 @@ Qt.rgba(headBarBG.color.r, headBarBG.color.g, headBarBG.color.b, 0.7))
                 color: floatingBar ? accentColor : viewBackgroundColor
                 radius: floatingBar ? unit*6 : 0
                 border.color: floatingBar ? Qt.darker(accentColor, 1.2) : "transparent"
-                layer.enabled: floatingBar
+                layer.enabled: dropShadow
                 layer.effect: DropShadow
                 {
                     anchors.fill: footBarBg
                     horizontalOffset: 0
-                    verticalOffset: 3
+                    verticalOffset: floatingBar ? 3 : -1
                     radius: 8
                     samples: 25
-                    color: Qt.darker(accentColor, 1.4)
+                    color: Qt.darker(altToolBars ? accentColor : backgroundColor, 1.4) 
                     source: footBarBg
                 }
 

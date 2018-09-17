@@ -26,7 +26,6 @@ Maui.ToolButton
     Popup
     {
         id: popup
-                parent: Overlay.overlay
 
    PathView
     {
