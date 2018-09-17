@@ -215,7 +215,7 @@ QQC2.Page
                 {
                     anchors.fill: footBarBg
                     horizontalOffset: 0
-                    verticalOffset: unit * (floatingBar ? 3 : -1)
+                    verticalOffset: unit * (floatingBar ? 2 : -1)
                     radius: 8
                     samples: 25
                     color: Qt.darker(altToolBars ? accentColor : backgroundColor, 1.4) 

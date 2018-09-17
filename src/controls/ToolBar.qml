@@ -17,7 +17,7 @@ ToolBar
     property alias layout : layout
     property int margins: space.medium
     property int count : leftContent.length + middleContent.length + rightContent.length
-    
+    property color fgColor : textColor
     property alias leftContent : leftRowContent.data
     property alias middleContent : middleRowContent.data
     property alias rightContent : rightRowContent.data
@@ -51,7 +51,7 @@ ToolBar
             GradientStop 
             {
                 position: 1.0
-                color: textColor
+                color: fgColor
             }
         }
         
@@ -77,7 +77,7 @@ ToolBar
             GradientStop
             {
                 position: 0.0
-                color: textColor
+                color: fgColor
             }
             
             GradientStop
@@ -126,7 +126,7 @@ ToolBar
                 width: unit
                 opacity: 0.2
                 visible: leftContent.length > 0 && flickable.interactive
-                color: headBarFGColor ?  headBarFGColor : textColor
+                color: fgColor
                 
                 gradient: Gradient
                 {
@@ -138,7 +138,7 @@ ToolBar
                     GradientStop 
                     {
                         position: 0.5
-                        color: headBarFGColor ?  headBarFGColor : textColor
+                        color: fgColor
                     }
                     
                     GradientStop 
@@ -221,7 +221,7 @@ ToolBar
                 width: unit
                 opacity: 0.2
                 visible: rightContent.length > 0 && flickable.interactive
-                color: headBarFGColor ?  headBarFGColor : textColor
+                color: fgColor
                 
                 gradient: Gradient
                 {
@@ -233,7 +233,7 @@ ToolBar
                     GradientStop 
                     {
                         position: 0.5
-                        color: headBarFGColor ?  headBarFGColor : textColor
+                        color: fgColor
                     }
                     
                     GradientStop 

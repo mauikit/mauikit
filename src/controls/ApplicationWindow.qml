@@ -185,6 +185,7 @@ Kirigami.AbstractApplicationWindow
         }
 
         headBarBG.color: headBarBGColor
+        headBar.fgColor: headBarFGColor
 
         headBar.leftContent: Maui.ToolButton
         {
