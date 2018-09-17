@@ -124,7 +124,7 @@ ToolBar
                 Layout.topMargin: space.big
                 Layout.bottomMargin: space.big
                 width: unit
-                opacity: 0.4
+                opacity: 0.2
                 visible: leftContent.length > 0 && flickable.interactive
                 color: headBarFGColor ?  headBarFGColor : textColor
                 
@@ -219,7 +219,7 @@ ToolBar
                 Layout.topMargin: space.big
                 Layout.bottomMargin: space.big
                 width: unit
-                opacity: 0.4
+                opacity: 0.2
                 visible: rightContent.length > 0 && flickable.interactive
                 color: headBarFGColor ?  headBarFGColor : textColor
                 
