@@ -15,8 +15,8 @@ ToolButton
     property bool anim: false
     property string tooltipText : ""
     hoverEnabled: !isMobile
-    height:  display === ToolButton.TextUnderIcon ? implicitHeight : size + space.medium
-    width: display === ToolButton.TextUnderIcon ? implicitWidth : height
+    height:  control.display === ToolButton.IconOnly ? size + space.medium : implicitHeight
+    width: control.display === ToolButton.IconOnly ? height : implicitWidth
     icon.name:  iconName
     icon.width:  size
     icon.height: size
@@ -28,14 +28,14 @@ ToolButton
 
     flat: true
     highlighted: !isMask
-    font.pointSize: display === ToolButton.TextUnderIcon ? fontSizes.small : undefined
+    font.pointSize: control.display === ToolButton.TextUnderIcon ? fontSizes.small : undefined
 
-    display: control.text ? (isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon) : ToolButton.IconOnly
+    display: control.text.length > 0 ? (isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon) : ToolButton.IconOnly
     spacing: space.tiny
 
     contentItem: IconLabel
     {
-        spacing:  display === ToolButton.TextUnderIcon ? space.tiny : control.spacing
+        spacing:  control.display === ToolButton.TextUnderIcon ? space.tiny : control.spacing
         mirrored: control.mirrored
         display: control.display
         icon: control.icon

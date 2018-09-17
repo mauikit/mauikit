@@ -39,7 +39,7 @@ Kirigami.AbstractApplicationWindow
     /*********************** UI ***********************/
     /*************************************************/
 
-    property bool isWide : root.width >= Kirigami.Units.gridUnit * 50 || pageStack.wideMode
+    property bool isWide : root.width >= Kirigami.Units.gridUnit * 30 || pageStack.wideMode
 
     property int iconSize : iconSizes.medium * (isMobile ? 0.95 : 1)
 

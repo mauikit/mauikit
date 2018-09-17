@@ -133,8 +133,6 @@ Qt.rgba(headBarBG.color.r, headBarBG.color.g, headBarBG.color.b, 0.7))
                     source: headBarBG
                 }
             }
-
-
         }
 
         Item
@@ -204,7 +202,7 @@ Qt.rgba(headBarBG.color.r, headBarBG.color.g, headBarBG.color.b, 0.7))
 
             readonly property int _margins : footBarMargins
 
-//            implicitHeight: toolBarHeight * (floatingBar ? 0.8 : 1)
+           implicitHeight: floatingBar ? toolBarHeightAlt : toolBarHeight
             height: implicitHeight
 
             Layout.leftMargin: footBarAligment === Qt.AlignLeft ? _margins : space.small
