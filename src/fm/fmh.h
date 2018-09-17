@@ -288,7 +288,7 @@ namespace FMH
             #if defined(Q_OS_ANDROID)
             QMimeDatabase mime;
             auto type = mime.mimeTypeForFile(path);
-            return type.genericIconName()
+            return type.genericIconName();
             #else
             KFileItem mime(path);
             return mime.iconName();
