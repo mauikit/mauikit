@@ -126,7 +126,28 @@ ToolBar
                 width: unit
                 opacity: 0.4
                 visible: leftContent.length > 0 && flickable.interactive
-                color: headBarFGColor
+                color: headBarFGColor ?  headBarFGColor : textColor
+                
+                gradient: Gradient
+                {
+                    GradientStop
+                    {
+                        position: 0.0
+                        color: "transparent"
+                    }
+                    GradientStop 
+                    {
+                        position: 0.5
+                        color: headBarFGColor ?  headBarFGColor : textColor
+                    }
+                    
+                    GradientStop 
+                    {
+                        position: 1.0
+                        color: "transparent"
+                    }
+                }
+                
             }
             
             Item
@@ -200,8 +221,28 @@ ToolBar
                 width: unit
                 opacity: 0.4
                 visible: rightContent.length > 0 && flickable.interactive
-                color: headBarFGColor
-
+                color: headBarFGColor ?  headBarFGColor : textColor
+                
+                gradient: Gradient
+                {
+                    GradientStop
+                    {
+                        position: 0.0
+                        color: "transparent"
+                    }
+                    GradientStop 
+                    {
+                        position: 0.5
+                        color: headBarFGColor ?  headBarFGColor : textColor
+                    }
+                    
+                    GradientStop 
+                    {
+                        position: 1.0
+                        color: "transparent"
+                    }
+                }
+                
             }
             
             Row
