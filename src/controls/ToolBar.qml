@@ -126,6 +126,7 @@ ToolBar
                 width: unit
                 opacity: 0.4
                 visible: leftContent.length > 0 && flickable.interactive
+                color: headBarFGColor
             }
             
             Item
@@ -199,6 +200,8 @@ ToolBar
                 width: unit
                 opacity: 0.4
                 visible: rightContent.length > 0 && flickable.interactive
+                color: headBarFGColor
+
             }
             
             Row
