@@ -218,7 +218,7 @@ QQC2.Page
                     verticalOffset: unit * (floatingBar ? 2 : -1)
                     radius: 8
                     samples: 25
-                    color: Qt.darker(altToolBars ? accentColor : backgroundColor, 1.4) 
+                    color: Qt.darker(floatingBar ? accentColor : backgroundColor, 1.4) 
                     source: footBarBg
                 }
 
