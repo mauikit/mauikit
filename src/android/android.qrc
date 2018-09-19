@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>AndroidManifest.xml</file>
+        <file>qtquickcontrols2.conf</file>
+    </qresource>
+</RCC>
