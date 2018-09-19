@@ -218,18 +218,9 @@ inline QVariantMap dirConf(const QString &path)
     file.endGroup();
 
     file.beginGroup(QString("MAUIFM"));
-    hidden = file.value("IconSize").toString();
-    file.endGroup();
-
-    file.beginGroup(QString("MAUIFM"));
+    iconsize =  file.value("IconSize").toString();
     detailview = file.value("DetailView").toString();
-    file.endGroup();
-
-    file.beginGroup(QString("MAUIFM"));
     showthumbnail = file.value("ShowThumbnail").toString();
-    file.endGroup();
-
-    file.beginGroup(QString("MAUIFM"));
     showterminal = file.value("ShowTerminal").toString();
     file.endGroup();
 
@@ -244,7 +235,7 @@ inline QVariantMap dirConf(const QString &path)
 
 #endif
 
-    return QVariantMap({
+    auto res = QVariantMap({
                            {FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], icon.isEmpty() ? "folder" : icon},
                            {FMH::MODEL_NAME[FMH::MODEL_KEY::ICONSIZE], iconsize},
                            {FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTERMINAL], showterminal.isEmpty() ? "false" : showterminal},
@@ -253,17 +244,18 @@ inline QVariantMap dirConf(const QString &path)
                            {FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN], hidden.isEmpty() ? false :
                             (hidden == "true" ? true : false)}
                        });
+
+    return res;
 }
 
 inline void setDirConf(const QString &path, const QString &group, const QString &key, const QString &value)
 {
-    qDebug()<< "CONFIG FOR"<< path << group << key<< value;
-
 #ifdef Q_OS_ANDROID
-    QSettings file(path, QSettings::Format::NativeFormat);
+    QSettings file(path, QSettings::Format::IniFormat);
     file.beginGroup(group);
     file.setValue(key, value);
     file.endGroup();
+    file.sync();
 #else
     KConfig file(path);
     auto kgroup = file.group(group);
