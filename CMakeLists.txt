@@ -86,6 +86,11 @@ if(ANDROID)
         src/android/mauiandroid.cpp
         )
         
+    qt5_add_resources(MauiAndroid_RESOURCES 
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/android/android.qrc
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/android/icons.qrc
+        )
+    
     set(MAUIANDROID_LIBS
         Qt5::Xml
         Qt5::AndroidExtras
@@ -142,6 +147,7 @@ ${mauikit_RESOURCES}
 ${mauikit_ASSETS}
 
 ${mauikit_Android_SRCS}
+${MauiAndroid_RESOURCES}
 
 ${mauikit_KDE_HDRS}
 ${mauikit_KDE_SRCS})

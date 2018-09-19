@@ -6,7 +6,6 @@
 #include <QMimeDatabase>
 #include <QDomDocument>
 #include <QFile>
-#include <QIcon>
 
 #include "utils.h"
 
@@ -19,8 +18,7 @@ public:
 
 MAUIAndroid::MAUIAndroid(QObject *parent) : QObject(parent)
 {
-    QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
-    QIcon::setThemeName("Luv");
+
 }
 
 MAUIAndroid::~MAUIAndroid()

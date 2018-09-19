@@ -6,6 +6,7 @@
 
 #ifdef Q_OS_ANDROID
 #include "mauiandroid.h"
+#include <QIcon>
 #else
 #include "mauikde.h"
 #endif
@@ -24,6 +25,10 @@ void MauiKit::registerTypes(const char *uri)
     Q_ASSERT(uri == QLatin1String("org.kde.mauikit"));
     const QString style = QQuickStyle::name();
 
+#ifdef Q_OS_ANDROID
+    QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
+    QIcon::setThemeName("Luv");
+#endif
 
     qmlRegisterSingletonType(componentUrl(QStringLiteral("Style.qml")), uri, 1, 0, "Style");
     qmlRegisterType(componentUrl(QStringLiteral("ToolBar.qml")), uri, 1, 0, "ToolBar");
