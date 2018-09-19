@@ -17,8 +17,9 @@ DISTFILES += \
     $$PWD/src/SendIntent.java \
     $$PWD/AndroidManifest.xml
 
-ANDROID_PACKAGE_SOURCE_DIR += $$PWD/
-
 RESOURCES += \
     $$PWD/android.qrc \
     $$PWD/icons.qrc
+
+ANDROID_PACKAGE_SOURCE_DIR += $$PWD/
+

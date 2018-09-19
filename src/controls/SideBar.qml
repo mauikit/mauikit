@@ -12,7 +12,7 @@ ListView
     property color bgColor: isCollapsed ? altColor : backgroundColor
     property color fgColor : isCollapsed ? altColorText : textColor
 
-    property int iconSize : isMobile && !isWide? (isCollapsed ? iconSizes.medium : iconSizes.big) :
+    property int iconSize : isMobile ? (isCollapsed || isWide ? iconSizes.medium : iconSizes.big) :
                                        iconSizes.small
     property bool collapsable : true
     property bool isCollapsed : false
