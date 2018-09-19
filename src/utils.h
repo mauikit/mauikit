@@ -7,7 +7,6 @@
 
 namespace UTIL
 {
-
     inline bool fileExists(const QString &url)
     {
         QFileInfo path(url);
