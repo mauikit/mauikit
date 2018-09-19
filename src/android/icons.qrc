@@ -1,4 +1,6 @@
 <RCC>
     <qresource prefix="/">
+        <file>icons/luv-icon-theme/Luv/index.theme</file>
+        <file>icons/luv-icon-theme/Luv/LICENSE</file>
     </qresource>
 </RCC>
