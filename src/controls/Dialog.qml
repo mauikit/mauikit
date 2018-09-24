@@ -78,11 +78,8 @@ Maui.Popup
                         text: title
                         font.weight: Font.Thin
                         font.bold: true
-                        font.pointSize: fontSizes.huge               
-                              
-
-                    }
-                    
+                        font.pointSize: fontSizes.huge 
+                    }                    
                 }        
                 
                 

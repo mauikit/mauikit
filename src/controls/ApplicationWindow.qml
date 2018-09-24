@@ -150,6 +150,9 @@ Kirigami.AbstractApplicationWindow
     property bool footBarOverlap : false
     property bool allowRiseContent: floatingBar && footBarOverlap
     property int footBarMargins: space.big
+    
+    property alias searchButton : searchBtn
+    property alias menuButton : menu
 
     /***************************************************/
     /******************** SIGNALS *********************/
@@ -284,7 +287,7 @@ Kirigami.AbstractApplicationWindow
             }
             focus: true
 
-            layer.enabled: true
+            layer.enabled: page.contentIsRised && floatingBar && footBarOverlap
             layer.effect: DropShadow
             {
                 anchors.fill: __pageStack
