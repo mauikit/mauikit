@@ -90,8 +90,8 @@ TextField
         
         implicitWidth: unit * 120
         implicitHeight: iconSizes.big
-        color: control.activeFocus ? Qt.lighter(bgColor, 1.4)
-        : (control.hovered ? Qt.lighter(bgColor, 1.2) : bgColor)
+        color: control.activeFocus ? Qt.lighter(bgColor, 1.6)
+        : (control.hovered ? Qt.lighter(bgColor, 1.2) : Qt.lighter(bgColor, 1.4))
         border.color: Qt.darker(color, 1.4)
         radius: radiusV
         
