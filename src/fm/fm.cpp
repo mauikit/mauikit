@@ -26,6 +26,7 @@
 #include <QDateTime>
 #include <QFileInfo>
 #include <QDesktopServices>
+#include <QUrl>
 
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
