@@ -31,6 +31,9 @@ TextField
 {
     id: control
     
+    property color bgColor : viewBackgroundColor
+    property color fgColor : textColor
+    
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
                             placeholderText ? placeholder.implicitWidth + leftPadding + rightPadding : 0)
     || contentWidth + leftPadding + rightPadding
@@ -39,7 +42,7 @@ TextField
     topPadding: space.tiny
     bottomPadding: space.tiny
     
-    color: enabled ? textColor : Qt.lighter(textColor, 1.4)
+    color: enabled ? fgColor : Qt.lighter(fgColor, 1.4)
     selectionColor: highlightColor
     selectedTextColor: highlightedTextColor
     verticalAlignment: TextInput.AlignVCenter
@@ -74,7 +77,7 @@ TextField
     
             text: control.placeholderText
             font: control.font
-            color: Kirigami.Theme.disabledTextColor
+            color: Qt.lighter(fgColor, 1.4)
             horizontalAlignment: control.horizontalAlignment
             verticalAlignment: control.verticalAlignment
             visible: !control.length && !control.preeditText && (!control.activeFocus || control.horizontalAlignment !== Qt.AlignHCenter)
@@ -87,8 +90,8 @@ TextField
         
         implicitWidth: unit * 120
         implicitHeight: iconSizes.big
-        color: control.activeFocus ? viewBackgroundColor
-        : (control.hovered ? "pink" : buttonBackgroundColor)
+        color: control.activeFocus ? Qt.lighter(bgColor, 1.4)
+        : (control.hovered ? Qt.lighter(bgColor, 1.2) : bgColor)
         border.color: Qt.darker(color, 1.4)
         radius: radiusV
         
