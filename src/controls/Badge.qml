@@ -36,15 +36,15 @@ Rectangle
     property string text : ""
     
     signal clicked()    
-      
+    
     Label
     {
-     height: parent.height
-     width: parent.width
-     text: control.text
-     font.weight: Font.Bold
-     font.bold: true
-     visible:control.text.length
+        height: parent.height
+        width: parent.width
+        text: control.text
+        font.weight: Font.Bold
+        font.bold: true
+        visible:control.text.length
         color: altColorText
         verticalAlignment: Qt.AlignVCenter
         horizontalAlignment: Qt.AlignHCenter
