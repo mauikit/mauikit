@@ -24,58 +24,71 @@ import QtQuick.Controls.Material 2.1
 import org.kde.kirigami 2.2 as Kirigami
 import QtQuick.Controls.impl 2.3
 import QtQuick.Controls.Material.impl 2.3
-import QtGraphicalEffects 1.0
+import org.kde.mauikit 1.0 as Maui
 
 
 TextField
 {
     id: control
-
+    
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
                             placeholderText ? placeholder.implicitWidth + leftPadding + rightPadding : 0)
-                            || contentWidth + leftPadding + rightPadding
+    || contentWidth + leftPadding + rightPadding
     implicitHeight:  iconSizes.big
-
+    
     topPadding: space.tiny
     bottomPadding: space.tiny
-
+    
     color: enabled ? textColor : Qt.lighter(textColor, 1.4)
     selectionColor: highlightColor
     selectedTextColor: highlightedTextColor
     verticalAlignment: TextInput.AlignVCenter
-
+    
     cursorDelegate: CursorDelegate { }
     
     horizontalAlignment: Text.AlignHCenter
-        selectByMouse: !isMobile
-        focus: true
-        wrapMode: TextEdit.Wrap
-
-    Label
+    selectByMouse: !isMobile
+    focus: true
+    wrapMode: TextEdit.Wrap
+    
+    Maui.ToolButton
     {
-        id: placeholder
-        x: control.leftPadding
-        y: control.topPadding
-        width: control.width - (control.leftPadding + control.rightPadding)
-        height: control.height - (control.topPadding + control.bottomPadding)
-
-        text: control.placeholderText
-        font: control.font
-        color: Kirigami.Theme.disabledTextColor
-        horizontalAlignment: control.horizontalAlignment
-        verticalAlignment: control.verticalAlignment
-        visible: !control.length && !control.preeditText && (!control.activeFocus || control.horizontalAlignment !== Qt.AlignHCenter)
-        elide: Text.ElideRight
+        visible: control.text.length
+        anchors.top: control.top
+        anchors.right: control.right
+        anchors.rightMargin: space.small
+        anchors.verticalCenter: parent.verticalCenter
+        iconName: "edit-clear"
+        iconColor: color   
+        onClicked: control.clear()
+        
     }
-
-
+    
+    //     Label
+    //     {
+    //         id: placeholder
+    //         x: control.leftPadding
+    //         y: control.topPadding
+    //         width: control.width - (control.leftPadding + control.rightPadding)
+    //         height: control.height - (control.topPadding + control.bottomPadding)
+    // 
+    //         text: control.placeholderText
+    //         font: control.font
+    //         color: Kirigami.Theme.disabledTextColor
+    //         horizontalAlignment: control.horizontalAlignment
+    //         verticalAlignment: control.verticalAlignment
+    //         visible: !control.length && !control.preeditText && (!control.activeFocus || control.horizontalAlignment !== Qt.AlignHCenter)
+    //         elide: Text.ElideRight
+    //     }
+    
+    
     background: Rectangle 
     {
         
         implicitWidth: unit * 120
         implicitHeight: iconSizes.big
         color: control.activeFocus ? viewBackgroundColor
-                                   : (control.hovered ? "pink" : buttonBackgroundColor)
+        : (control.hovered ? "pink" : buttonBackgroundColor)
         border.color: Qt.darker(color, 1.4)
         radius: radiusV
         

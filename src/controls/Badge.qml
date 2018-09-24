@@ -26,8 +26,8 @@ import org.kde.kirigami 2.2 as Kirigami
 Rectangle
 {
     id: control
-    height: iconSizes.medium
-    width: iconSizes.medium
+    height: iconSizes.small
+    width: height
     radius: Math.min(width, height)
     color: altColor
     border.color: Qt.darker(color, 1.4)

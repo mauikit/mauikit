@@ -86,13 +86,12 @@ ItemDelegate
         {
             visible: index === 6
             Layout.fillHeight: true
-            width: iconSizes.big+ space.small
+            width: iconSizes.big + space.small
             Layout.alignment: Qt.AlignRight
             Maui.Badge
             {
                 anchors.centerIn: parent
-                text: downloadBadget
-                
+                text: downloadBadget                
             }
         }
     }
