@@ -13,7 +13,6 @@ INCLUDEPATH += \
      $$PWD
 
 DISTFILES += \
-    $$PWD/src/MyService.java \
     $$PWD/src/SendIntent.java \
     $$PWD/AndroidManifest.xml
 
