@@ -152,7 +152,7 @@ Kirigami.AbstractApplicationWindow
     property int footBarMargins: space.big
     
     property alias searchButton : searchBtn
-    property alias menuButton : menu
+    property alias menuButton : menuBtn
 
     /***************************************************/
     /******************** SIGNALS *********************/
