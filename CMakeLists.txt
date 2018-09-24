@@ -87,6 +87,7 @@ set(tagging_HDRS
 
 #use dbus on linux, bsd etc, but not andoid and apple stuff
 if(ANDROID)
+
     find_package(Qt5 REQUIRED COMPONENTS AndroidExtras Xml)
     set(mauikit_Android Qt5::AndroidExtras)
     set(mauikit_Android_SRCS
@@ -104,8 +105,10 @@ if(ANDROID)
         Qt5::AndroidExtras
         )
 else()
+
     find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications 
 Config Service KIO ConfigWidgets)
+
     set(mauikit_KDE_SRCS
         src/kde/mauikde.cpp
         src/kde/kdeconnect.cpp
@@ -126,10 +129,7 @@ Config Service KIO ConfigWidgets)
         KF5::Service
         KF5::KIONTLM
         KF5::ConfigWidgets
-        )        
-        
-    set(mauikit_KDE KF5::ConfigCore KF5::Notifications KF5::I18n KF5::Service 
-KF5::KIOCore KF5::KIOWidgets KF5::KIOFileWidgets KF5::KIONTLM)
+        )          
 endif()
 # set(CMAKE_AUTORCC ON)
 

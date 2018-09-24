@@ -73,7 +73,7 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("TextField.qml")), uri, 1, 0, "TextField");
     qmlRegisterType(componentUrl(QStringLiteral("SearchBar.qml")), uri, 1, 0, "SearchBar");
     qmlRegisterType(componentUrl(QStringLiteral("TagsBar.qml")), uri, 1, 0, "TagsBar");
-    qmlRegisterType(componentUrl(QStringLiteral("Badget.qml")), uri, 1, 0, "Badget");
+    qmlRegisterType(componentUrl(QStringLiteral("Badge.qml")), uri, 1, 0, "Badge");
     qmlRegisterType(componentUrl(QStringLiteral("private/TagList.qml")), uri, 1, 0, "TagList");
 
     /** BROWSING CONTROLS **/

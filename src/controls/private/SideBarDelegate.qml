@@ -88,7 +88,7 @@ ItemDelegate
             Layout.fillHeight: true
             width: iconSizes.big+ space.small
             Layout.alignment: Qt.AlignRight
-            Maui.Badget
+            Maui.Badge
             {
                 anchors.centerIn: parent
                 text: downloadBadget
