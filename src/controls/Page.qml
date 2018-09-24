@@ -44,7 +44,9 @@ QQC2.Page
 
     property int footBarAligment : Qt.AlignCenter
 
-    property bool dropShadow: false
+    property bool dropShadow: isMobile
+    property bool drawBorder: !dropShadow
+    
     property bool altToolBars : false
     property int footBarMargins : space.large
     property bool floatingBar: false
@@ -127,6 +129,7 @@ QQC2.Page
               
                 Kirigami.Separator
                 {
+                    visible: drawBorder
                     id: headBarBorder
                     color:  Qt.tint(textColor, 
 Qt.rgba(headBarBG.color.r, headBarBG.color.g, headBarBG.color.b, 0.7))
@@ -248,7 +251,7 @@ Qt.rgba(headBarBG.color.r, headBarBG.color.g, headBarBG.color.b, 0.7))
                 
                  Kirigami.Separator
                 {
-                    visible: !floatingBar
+                    visible: !floatingBar && drawBorder
                     color: borderColor
                     anchors
                     {

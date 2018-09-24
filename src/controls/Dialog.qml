@@ -46,12 +46,15 @@ Maui.Popup
         widthHint: 0.9
         heightHint: 0.9
         
+        bottomPadding: space.big
+        
         Maui.Page
         {
             id: page
             headBarVisible: false
             anchors.fill: parent
             dropShadow: false
+            drawBorder: false
             margins: space.big
             footBarVisible: defaultButtons || footBar.count > 2
             

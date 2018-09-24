@@ -34,6 +34,7 @@ Rectangle
     clip: false
     property string iconName : ""
     property string text : ""
+    property color fgColor: altColorText
     
     signal clicked()    
     
@@ -44,8 +45,8 @@ Rectangle
         text: control.text
         font.weight: Font.Bold
         font.bold: true
-        visible:control.text.length
-        color: altColorText
+        visible: control.text.length
+        color: fgColor
         verticalAlignment: Qt.AlignVCenter
         horizontalAlignment: Qt.AlignHCenter
     }
@@ -55,7 +56,7 @@ Rectangle
         visible: iconName.length 
         anchors.centerIn: parent
         iconName: control.iconName
-        iconColor: altColorText
+        iconColor: fgColor
         size: iconSizes.small
         enabled: false
     }
