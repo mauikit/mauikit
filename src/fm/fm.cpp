@@ -1,3 +1,22 @@
+/*
+ *   Copyright 2018 Camilo Higuita <milo.h@aol.com>
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU Library General Public License as
+ *   published by the Free Software Foundation; either version 2, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details
+ *
+ *   You should have received a copy of the GNU Library General Public
+ *   License along with this program; if not, write to the
+ *   Free Software Foundation, Inc.,
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 #include "fm.h"
 #include "fmh.h"
 #include "utils.h"
@@ -6,6 +25,7 @@
 #include <QFlags>
 #include <QDateTime>
 #include <QFileInfo>
+#include <QDesktopServices>
 
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
@@ -392,7 +412,11 @@ bool FM::removeDir(const QString &path)
 
 bool FM::rename(const QString &path, const QString &name)
 {
-    return false;
+    QFile file(path);
+    auto url = QFileInfo(path).dir().absolutePath();
+        qDebug()<< "RENAME FILE TO:" << path << name << url;
+
+    return file.rename(url+"/"+name);
 }
 
 bool FM::createDir(const QString &path, const QString &name)
@@ -411,6 +435,11 @@ bool FM::createFile(const QString &path, const QString &name)
     }
 
     return false;
+}
+
+bool FM::openUrl(const QString &url)
+{
+        return QDesktopServices::openUrl(QUrl::fromUserInput(url));
 }
 
 QVariantMap FM::dirConf(const QString &path)

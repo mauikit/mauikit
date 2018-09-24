@@ -1,8 +1,28 @@
+/*
+ *   Copyright 2018 Camilo Higuita <milo.h@aol.com>
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU Library General Public License as
+ *   published by the Free Software Foundation; either version 2, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details
+ *
+ *   You should have received a copy of the GNU Library General Public
+ *   License along with this program; if not, write to the
+ *   Free Software Foundation, Inc.,
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 #include "mauikit.h"
 
 #include <QDebug>
 #include <QQuickStyle>
 #include "fm.h"
+#include "handy.h"
 
 #ifdef Q_OS_ANDROID
 #include "mauiandroid.h"
@@ -46,7 +66,14 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("IconDelegate.qml")), uri, 1, 0, "IconDelegate");
     qmlRegisterType(componentUrl(QStringLiteral("LabelDelegate.qml")), uri, 1, 0, "LabelDelegate");
     qmlRegisterType(componentUrl(QStringLiteral("NewDialog.qml")), uri, 1, 0, "NewDialog");
+    qmlRegisterType(componentUrl(QStringLiteral("Dialog.qml")), uri, 1, 0, "Dialog");
+    qmlRegisterType(componentUrl(QStringLiteral("Button.qml")), uri, 1, 0, "Button");
+    qmlRegisterType(componentUrl(QStringLiteral("AboutDialog.qml")), uri, 1, 0, "AboutDialog");
+    qmlRegisterType(componentUrl(QStringLiteral("Popup.qml")), uri, 1, 0, "Popup");
+    qmlRegisterType(componentUrl(QStringLiteral("TextField.qml")), uri, 1, 0, "TextField");
+    qmlRegisterType(componentUrl(QStringLiteral("SearchBar.qml")), uri, 1, 0, "SearchBar");
     qmlRegisterType(componentUrl(QStringLiteral("TagsBar.qml")), uri, 1, 0, "TagsBar");
+    qmlRegisterType(componentUrl(QStringLiteral("Badget.qml")), uri, 1, 0, "Badget");
     qmlRegisterType(componentUrl(QStringLiteral("private/TagList.qml")), uri, 1, 0, "TagList");
 
     /** BROWSING CONTROLS **/
@@ -76,6 +103,12 @@ void MauiKit::registerTypes(const char *uri)
                                       [](QQmlEngine*, QJSEngine*) -> QObject* {
        auto fm = new FM;
         return fm;
+    });
+    
+     qmlRegisterSingletonType<Handy>(uri, 1, 0, "Handy",
+                                      [](QQmlEngine*, QJSEngine*) -> QObject* {
+       auto handy = new Handy;
+        return handy;
     });
 
     qmlProtectModule(uri, 1);

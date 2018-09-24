@@ -7,28 +7,27 @@ import org.kde.mauikit 1.0 as Maui
 ItemDelegate
 {
     id: control
-
+    
     property bool isCurrentListItem :  ListView.isCurrentItem
     property bool labelsVisible : true
     property int sidebarIconSize : iconSizes.small
-
     property alias label: controlLabel.text
-
+    
     width: parent.width
     height: sidebarIconSize + Maui.Style.space.big
-
+    
     clip: true
-
+    
     property color itemFgColor : textColor
     property string labelColor: ListView.isCurrentItem ? highlightedTextColor :
-                                                         itemFgColor
-
+    itemFgColor
+    
     hoverEnabled: !Kirigami.Settings.isMobile
     ToolTip.delay: 1000
     ToolTip.timeout: 5000
     ToolTip.visible: hovered && isCollapsed
     ToolTip.text: qsTr(model.label)
-
+    
     background: Rectangle
     {
         anchors.fill: parent
@@ -36,17 +35,17 @@ ItemDelegate
         //                                   index % 2 === 0 ? Qt.lighter(backgroundColor,1.2) :
         //                                                     backgroundColor
     }
-
+    
     RowLayout
     {
         anchors.fill: parent
-
+        
         Item
         {
             Layout.fillHeight: true
             Layout.fillWidth: isCollapsed
             width: !isCollapsed ? parent.height : parent.width
-
+            
             Maui.ToolButton
             {
                 anchors.centerIn: parent
@@ -57,14 +56,14 @@ ItemDelegate
                 enabled: false
             }
         }
-
+        
         Item
         {
             visible: labelsVisible
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignVCenter
-
+            
             Label
             {
                 id: controlLabel
@@ -72,14 +71,28 @@ ItemDelegate
                 width: parent.width
                 verticalAlignment:  Qt.AlignVCenter
                 horizontalAlignment: Qt.AlignLeft
-
+                
                 text: model.label
                 font.bold: false
                 elide: Text.ElideRight
-
+                
                 font.pointSize: Kirigami.Settings.isMobile ? Maui.Style.fontSizes.big :
-                                                             Maui.Style.fontSizes.default
+                Maui.Style.fontSizes.default
                 color: labelColor
+            }
+        }
+        
+        Item
+        {
+            visible: index === 6
+            Layout.fillHeight: true
+            width: iconSizes.big+ space.small
+            Layout.alignment: Qt.AlignRight
+            Maui.Badget
+            {
+                anchors.centerIn: parent
+                text: downloadBadget
+                
             }
         }
     }

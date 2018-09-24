@@ -17,28 +17,28 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef NOTIFICATIONCLIENT_H
-#define NOTIFICATIONCLIENT_H
+#ifndef HANDY_H
+#define HANDY_H
 
 #include <QObject>
 
-class NotificationClient : public QObject
+#ifndef STATIC_MAUIKIT
+#include "mauikit_export.h"
+#endif
+
+#include <QVariantMap>
+
+#ifdef STATIC_MAUIKIT
+class Handy : public QObject
+#else
+class MAUIKIT_EXPORT Handy : public QObject
+#endif
 {
     Q_OBJECT
 public:
-    explicit NotificationClient(QObject *parent = 0);
-
-    void notify(const QString &notification);
-    QString notification() const;
-
-signals:
-    void notificationChanged();
-
-private slots:
-    void updateAndroidNotification();
-
-private:
-    QString m_notification;
+    Handy(QObject *parent = nullptr);
+    ~Handy();
+    Q_INVOKABLE static QVariantMap appInfo();    
 };
 
-#endif // NOTIFICATIONCLIENT_H
+#endif // HANDY_H

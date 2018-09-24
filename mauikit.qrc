@@ -28,5 +28,12 @@
         <file alias="PathBar.qml">src/controls/PathBar.qml</file>
         <file alias="PathBarDelegate.qml">src/controls/PathBarDelegate.qml</file>
         <file alias="GridBrowser.qml">src/controls/GridBrowser.qml</file>
+        <file alias="Dialog.qml">src/controls/Dialog.qml</file>
+        <file alias="AboutDialog.qml">src/controls/AboutDialog.qml</file>
+        <file alias="Popup.qml">src/controls/Popup.qml</file>
+        <file alias="Button.qml">src/controls/Button.qml</file>
+        <file alias="TextField.qml">src/controls/TextField.qml</file>
+        <file alias="SearchBar.qml">src/controls/SearchBar.qml</file>
+        <file alias="Badget.qml">src/controls/Badget.qml</file>
     </qresource>
 </RCC>

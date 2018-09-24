@@ -1,3 +1,4 @@
+
 /*
  *   Copyright 2018 Camilo Higuita <milo.h@aol.com>
  *
@@ -17,28 +18,40 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef NOTIFICATIONCLIENT_H
-#define NOTIFICATIONCLIENT_H
+import QtQuick 2.9
+import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.2
+import QtQuick.Controls.Material 2.1
+import org.kde.kirigami 2.2 as Kirigami
+import org.kde.mauikit 1.0 as Maui
 
-#include <QObject>
-
-class NotificationClient : public QObject
+Maui.ToolBar
 {
-    Q_OBJECT
-public:
-    explicit NotificationClient(QObject *parent = 0);
+    
+    id: control
+    height: 30
+    
+    width: 30
+    signal search(string query)
+    
+       leftContent:  Maui.ToolButton
+    {
+        iconName: "view-filter"
+    }
 
-    void notify(const QString &notification);
-    QString notification() const;
+    middleContent:  Maui.TextField
+    {
+        id: searchInput
+        placeholderText: qsTr("Search...")
+        width: footBar.middleLayout.width * 0.9
 
-signals:
-    void notificationChanged();
+        onAccepted: search(searchInput.text)
+    }
 
-private slots:
-    void updateAndroidNotification();
-
-private:
-    QString m_notification;
-};
-
-#endif // NOTIFICATIONCLIENT_H
+    rightContent : Maui.ToolButton
+    {
+        iconName: "edit-clear"
+        Layout.alignment: Qt.AlignRight
+        onClicked: searchInput.clear()
+    }
+}

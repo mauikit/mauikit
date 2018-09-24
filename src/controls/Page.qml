@@ -1,3 +1,22 @@
+/*
+ *   Copyright 2018 Camilo Higuita <milo.h@aol.com>
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU Library General Public License as
+ *   published by the Free Software Foundation; either version 2, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details
+ *
+ *   You should have received a copy of the GNU Library General Public
+ *   License along with this program; if not, write to the
+ *   Free Software Foundation, Inc.,
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 import QtQuick 2.9
 import QtQuick.Controls 2.2 as QQC2
 import QtQuick.Layouts 1.3
@@ -21,10 +40,11 @@ QQC2.Page
     property alias headBar: topToolBar
     property alias footBar: bottomToolBar
     property alias headBarBG : headBarBG
+    property alias footBarItem: bottomToolBar.data
 
     property int footBarAligment : Qt.AlignCenter
 
-    property bool dropShadow: true
+    property bool dropShadow: false
     property bool altToolBars : false
     property int footBarMargins : space.large
     property bool floatingBar: false
@@ -105,6 +125,21 @@ QQC2.Page
                 color: viewBackgroundColor
                 implicitHeight: toolBarHeightAlt                
               
+                Kirigami.Separator
+                {
+                    id: headBarBorder
+                    color:  Qt.tint(textColor, 
+Qt.rgba(headBarBG.color.r, headBarBG.color.g, headBarBG.color.b, 0.7))
+                    
+                    anchors
+                    {
+                        left: parent.left
+                        right: parent.right
+                        bottom: altToolBars ? undefined : parent.bottom
+                        top: altToolBars ? parent.top : undefined
+                    }
+}
+              
                 layer.enabled: dropShadow
                 layer.effect: DropShadow
                 {
@@ -172,8 +207,8 @@ QQC2.Page
                     width: container.width
                     height: contentIsRised ? container.height - (footBar.height + footBarMargins + space.big) :
                                              container.height
-                    y: contentIsRised ? flickable.contentY : 0
-
+                    y: contentIsRised ? flickable.contentY : 0                   
+                   
                 }
             }
         }
@@ -208,8 +243,21 @@ QQC2.Page
                 id: footBarBg
                 height: bottomToolBar.implicitHeight
                 color: floatingBar ? accentColor : viewBackgroundColor
-                radius: floatingBar ? unit * 6 : 0
+                radius: floatingBar ? radiusV : 0
                 border.color: floatingBar ? Qt.darker(accentColor, 1.2) : "transparent"
+                
+                 Kirigami.Separator
+                {
+                    visible: !floatingBar
+                    color: borderColor
+                    anchors
+                    {
+                        left: parent.left
+                        right: parent.right
+                        top: parent.top
+                    }
+}
+                
                 layer.enabled: dropShadow
                 layer.effect: DropShadow
                 {

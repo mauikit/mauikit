@@ -70,6 +70,9 @@ public:
     Q_INVOKABLE static bool rename(const QString &path, const QString &name);
     Q_INVOKABLE static bool createDir(const QString &path, const QString &name);
     Q_INVOKABLE static bool createFile(const QString &path, const QString &name);
+    
+    Q_INVOKABLE static bool openUrl(const QString &url);   
+    
 
 
 private:

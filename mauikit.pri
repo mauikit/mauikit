@@ -32,12 +32,14 @@ HEADERS += \
     $$PWD/src/mauikit.h \
     $$PWD/src/fm/fm.h \
     $$PWD/src/fm/fmh.h \
-    $$PWD/src/fm/fmdb.h
+    $$PWD/src/fm/fmdb.h \
+    $$PWD/src/utils/handy.h
 
 SOURCES += \
     $$PWD/src/mauikit.cpp \
     $$PWD/src/fm/fm.cpp \
-    $$PWD/src/fm/fmdb.cpp
+    $$PWD/src/fm/fmdb.cpp \
+    $$PWD/src/utils/handy.cpp
 
 DEPENDPATH += \
     $$PWD/src \
@@ -46,7 +48,8 @@ DEPENDPATH += \
 
 INCLUDEPATH += \
      $$PWD/src \
-     $$PWD/src/fm
+     $$PWD/src/fm \
+     $$PWD/src/utils
 
 DEFINES += \
     MAUI_APP \

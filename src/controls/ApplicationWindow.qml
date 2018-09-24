@@ -1,3 +1,22 @@
+/*
+ *   Copyright 2018 Camilo Higuita <milo.h@aol.com>
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU Library General Public License as
+ *   published by the Free Software Foundation; either version 2, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details
+ *
+ *   You should have received a copy of the GNU Library General Public
+ *   License along with this program; if not, write to the
+ *   Free Software Foundation, Inc.,
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.0
@@ -30,6 +49,7 @@ Kirigami.AbstractApplicationWindow
     default property alias content : page.content
     property alias pageStack: __pageStack
     property alias menuDrawer : menuDrawer
+    property alias about : aboutDialog
 
     //redefines here as here we can know a pointer to PageRow
     wideScreen: width >= applicationWindow().pageStack.defaultColumnWidth * 1.5
@@ -40,7 +60,8 @@ Kirigami.AbstractApplicationWindow
     /*************************************************/
 
     property bool isWide : root.width >= Kirigami.Units.gridUnit * 30 || pageStack.wideMode
-
+    
+    property int radiusV : unit * 4
     property int iconSize : iconSizes.medium * (isMobile ? 0.95 : 1)
 
     readonly property int unit : Maui.Style.unit
@@ -95,6 +116,11 @@ Kirigami.AbstractApplicationWindow
     readonly property color darkBgColor: darkBackgroundColor
 
 
+    property color warningColor : Maui.Style.warningColor
+    property color dangerColor : Maui.Style.dangerColor
+    property color infoColor : Maui.Style.infoColor
+    property color suggestedColor : Maui.Style.suggestedColor
+    
     /* ANDROID THEMING*/
 
     Material.theme: Material.Light
@@ -276,6 +302,12 @@ Kirigami.AbstractApplicationWindow
     {
         id: menuDrawer
 //        bg: pageStack
+    }
+    
+    
+    Maui.AboutDialog
+    {
+        id: aboutDialog  
     }
 
      Component.onCompleted:

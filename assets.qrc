@@ -4,5 +4,6 @@
         <file>assets/face-sleeping.svg</file>
         <file>assets/tag.svg</file>
         <file>assets/maui-app.colors</file>
+        <file>assets/mauikit-logo.png</file>
     </qresource>
 </RCC>

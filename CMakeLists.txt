@@ -39,6 +39,12 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/tagging
     ${CMAKE_CURRENT_BINARY_DIR}/src/utils/tagging
     
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils
+    ${CMAKE_CURRENT_BINARY_DIR}/src/utils
+    
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/syncing
+    ${CMAKE_CURRENT_BINARY_DIR}/src/utils/syncing
+    
     ${CMAKE_CURRENT_SOURCE_DIR}/src/fm
     ${CMAKE_CURRENT_BINARY_DIR}/src/fm
 
@@ -47,12 +53,14 @@ include_directories(
     )
 
 set(mauikit_SRCS
-    src/mauikit.cpp   
+    src/mauikit.cpp  
+    src/utils/handy.cpp
     )
     
 set(mauikit_HDRS
     src/mauikit.h
-    src/utils.h  
+    src/utils.h
+    src/utils/handy.h
     )
     
 set(fm_SRCS
@@ -189,7 +197,6 @@ ${CMAKE_BINARY_DIR}/bin/org/kde/mauikit/)
 
 add_dependencies(MauiKit copy)
 
-message(STATUS "Instralling controls to : " ${KDE_INSTALL_QMLDIR})
 install(DIRECTORY src/controls/ DESTINATION 
 ${KDE_INSTALL_QMLDIR}/org/kde/mauikit)
 

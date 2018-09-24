@@ -1,3 +1,22 @@
+/*
+ *   Copyright 2018 Camilo Higuita <milo.h@aol.com>
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU Library General Public License as
+ *   published by the Free Software Foundation; either version 2, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details
+ *
+ *   You should have received a copy of the GNU Library General Public
+ *   License along with this program; if not, write to the
+ *   Free Software Foundation, Inc.,
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 pragma Singleton
 
 import QtQuick 2.4
@@ -10,10 +29,10 @@ QtObject
     readonly property bool isAndroid: Qt.platform.os == "android"
     readonly property bool isMobile : Kirigami.Settings.isMobile
 
-    property color warningColor : "#fad980"
-    property color dangerColor : "#e59393"
-    property color inforColor : "#94bfa2"
-    property color suggestedColor : "#9bdaf1"
+    property color warningColor : "#FFB300"
+    property color dangerColor : "#D81B60"
+    property color infoColor : "#4caf50"
+    property color suggestedColor : "#039BE5"
 
     property int unit : Kirigami.Units.devicePixelRatio
 
@@ -52,7 +71,10 @@ QtObject
                                                                              defaultFontSize * 1.1),
 
                                           large: (isMobile ? defaultFontSize * 1.1 :
-                                                                               defaultFontSize * 1.2)
+                                                                               defaultFontSize * 1.2),
+                                      
+                                           huge: (isMobile ? defaultFontSize * 1.2 :
+                                                                               defaultFontSize * 1.3)
                                       })
 
     readonly property var space : ({
@@ -66,7 +88,7 @@ QtObject
                                    })
 
     readonly property var iconSizes : ({
-                                           tiny : Kirigami.Units.iconSizes.small*0.3,
+                                           tiny : Kirigami.Units.iconSizes.small*0.5,
 
                                            small :  (isMobile ? Kirigami.Units.iconSizes.small*0.5:
                                                                                   Kirigami.Units.iconSizes.small),
