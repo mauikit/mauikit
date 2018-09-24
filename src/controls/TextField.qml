@@ -64,22 +64,22 @@ TextField
         
     }
     
-    //     Label
-    //     {
-    //         id: placeholder
-    //         x: control.leftPadding
-    //         y: control.topPadding
-    //         width: control.width - (control.leftPadding + control.rightPadding)
-    //         height: control.height - (control.topPadding + control.bottomPadding)
-    // 
-    //         text: control.placeholderText
-    //         font: control.font
-    //         color: Kirigami.Theme.disabledTextColor
-    //         horizontalAlignment: control.horizontalAlignment
-    //         verticalAlignment: control.verticalAlignment
-    //         visible: !control.length && !control.preeditText && (!control.activeFocus || control.horizontalAlignment !== Qt.AlignHCenter)
-    //         elide: Text.ElideRight
-    //     }
+        Label
+        {
+            id: placeholder
+            x: control.leftPadding
+            y: control.topPadding
+            width: control.width - (control.leftPadding + control.rightPadding)
+            height: control.height - (control.topPadding + control.bottomPadding)
+    
+            text: control.placeholderText
+            font: control.font
+            color: Kirigami.Theme.disabledTextColor
+            horizontalAlignment: control.horizontalAlignment
+            verticalAlignment: control.verticalAlignment
+            visible: !control.length && !control.preeditText && (!control.activeFocus || control.horizontalAlignment !== Qt.AlignHCenter)
+            elide: Text.ElideRight
+        }
     
     
     background: Rectangle 

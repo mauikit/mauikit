@@ -76,7 +76,7 @@ Kirigami.AbstractApplicationWindow
     readonly property var space : Maui.Style.space
     readonly property var iconSizes : Maui.Style.iconSizes
     
-    property string colorSchemeName : ""
+    property string colorSchemeName : Qt.application.name
 
     /***************************************************/
     /********************* COLORS *********************/
