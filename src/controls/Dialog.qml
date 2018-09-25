@@ -36,6 +36,8 @@ Maui.Popup
     property alias textEntry : __textEntry
     default property alias content : page.content
         property alias footBar : page.footBar
+        property alias headBar: page.headBar
+        property alias headBarTitle: page.headBarTitle
         
         signal accepted()
         signal rejected()

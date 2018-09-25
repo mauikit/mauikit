@@ -27,7 +27,6 @@ Maui.Popup
 {
     property var itemUrls : []
 
-    padding: contentMargins
 
     modal: true
 
@@ -39,47 +38,28 @@ Maui.Popup
 verticalAlignment: Qt.AlignBottom
     
 
-    ColumnLayout
-    {
-        anchors.fill: parent
-        height: parent.height
-        width: parent.width
-
-        Label
-        {
-            text: qsTr("Open with...")
-            color: textColor
-            height: toolBarHeightAlt
-            width: parent.width
-            Layout.fillWidth: true
-            horizontalAlignment: Qt.AlignHCenter
-            elide: Qt.ElideRight
-            font.pointSize: fontSizes.big
-            padding: contentMargins
-            font.bold: true
-            font.weight: Font.Bold
-        }
-
-        Item
-        {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            Layout.margins: space.medium
-            Maui.GridBrowser
-            {
-                id: grid
-                showEmblem: false
-                centerContent: true
-
-                onItemClicked:
-                {
-                    grid.currentIndex = index
-                    triggerService(index)
-                }
-            }
-        }
-    }
-
+   Maui.Page
+   {
+	   anchors.fill: parent
+	   headBarTitle: qsTr("Open with...")
+	   headBarExit: false
+	   
+	  
+	   Maui.GridBrowser
+	   {
+		   id: grid
+		   anchors.fill: parent
+		   showEmblem: false
+		   centerContent: true
+		   
+		   onItemClicked:
+		   {
+			   grid.currentIndex = index
+			   triggerService(index)
+		   }
+	   }
+}
+    
 
     onOpened: populate()
 
