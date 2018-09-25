@@ -23,27 +23,76 @@ import org.kde.kirigami 2.0 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
+import "private"
 
 ToolBar
 {
-    id: control
+    id: control    
+    
+    /* Controlc color scheming */
+	ColorScheme {id: colorScheme}
+	property alias colorScheme : colorScheme
+	/***************************/
+    
     clip: true
     implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
-    implicitHeight: toolBarHeight
+	implicitHeight: floatingFootBar ? toolBarHeightAlt : toolBarHeight
+	
+	width: floatingFootBar ?  implicitWidth : parent.width
     height: implicitHeight
     
-    property alias middleLayout : flickableLayout
-    property alias layout : layout
-    property int margins: space.medium
-    property int count : leftContent.length + middleContent.length + rightContent.length
-    property color fgColor : textColor
-    property alias leftContent : leftRowContent.data
+	property alias leftContent : leftRowContent.data
     property alias middleContent : middleRowContent.data
     property alias rightContent : rightRowContent.data
-    padding: 0
+    property alias middleLayout : flickableLayout
+    property alias layout : layout
     
+    property int margins: space.medium
+    property int count : leftContent.length + middleContent.length + rightContent.length
+    
+    property bool dropShadow: false
+    property bool drawBorder: false
+    property bool floatingFootBar: isMobile
+ 
+    padding: 0    
     //    leftPadding: Kirigami.Units.smallSpacing*2
     //    rightPadding: Kirigami.Units.smallSpacing*2
+    
+    
+    background: Rectangle
+    {
+		id: headBarBG
+		color: colorScheme.backgroundColor
+		implicitHeight: toolBarHeightAlt  
+		radius: floatingFootBar ? radiusV : 0   
+		border.color: floatingFootBar ? colorScheme.borderColor : "transparent"
+		
+		Kirigami.Separator
+		{
+			visible: drawBorder
+			color: colorScheme.borderColor
+			
+			anchors
+			{
+				left: parent.left
+				right: parent.right
+				bottom: control.position == ToolBar.Footer ? undefined : parent.bottom
+				top: control.position == ToolBar.Footer ? parent.top : undefined
+			}
+		}
+		
+		layer.enabled: dropShadow
+		layer.effect: DropShadow
+		{
+			anchors.fill: headBarBG
+			horizontalOffset: 0
+			verticalOffset:  unit * (altToolBars ? -1 : 1)
+			radius: 8
+			samples: 25
+			color: Qt.darker(colorScheme.backgroundColor, 1.4)
+			source: headBarBG
+		}
+	}
     
     Rectangle
     {
@@ -70,7 +119,7 @@ ToolBar
             GradientStop 
             {
                 position: 1.0
-                color: fgColor
+                color: colorScheme.textColor
             }
         }
         
@@ -96,7 +145,7 @@ ToolBar
             GradientStop
             {
                 position: 0.0
-                color: fgColor
+                color: colorScheme.textColor
             }
             
             GradientStop
@@ -145,7 +194,7 @@ ToolBar
                 width: unit
                 opacity: 0.2
                 visible: leftContent.length > 0 && flickable.interactive
-                color: fgColor
+                color: colorScheme.textColor    
                 
                 gradient: Gradient
                 {
@@ -157,7 +206,7 @@ ToolBar
                     GradientStop 
                     {
                         position: 0.5
-                        color: fgColor
+                        color: colorScheme.textColor
                     }
                     
                     GradientStop 
@@ -240,7 +289,7 @@ ToolBar
                 width: unit
                 opacity: 0.2
                 visible: rightContent.length > 0 && flickable.interactive
-                color: fgColor
+                color: colorScheme.textColor
                 
                 gradient: Gradient
                 {
@@ -252,7 +301,7 @@ ToolBar
                     GradientStop 
                     {
                         position: 0.5
-                        color: fgColor
+                        color: colorScheme.textColor
                     }
                     
                     GradientStop 

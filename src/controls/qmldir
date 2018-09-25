@@ -38,6 +38,7 @@ TextField 1.0 TextField.qml
 SearchBar 1.0 SearchBar.qml
 Badge 1.0 Badge.qml
 GridView 1.0 GridView.qml
+Item 1.0 Item.qml
 
 
 

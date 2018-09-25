@@ -23,18 +23,25 @@ import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.2 as Kirigami
 
+import "private"
+
 Rectangle
 {
     id: control
+    
+    /* Controlc color scheming */
+	ColorScheme {id: colorScheme}
+	property alias colorScheme : colorScheme
+	/***************************/
+	
     height: iconSizes.small
     width: height
     radius: Math.min(width, height)
-    color: altColor
+	color: colorScheme.altColor
     border.color: Qt.darker(color, 1.4)
     clip: false
     property string iconName : ""
     property string text : ""
-    property color fgColor: altColorText
     
     signal clicked()    
     
@@ -46,7 +53,7 @@ Rectangle
         font.weight: Font.Bold
         font.bold: true
         visible: control.text.length
-        color: fgColor
+        color: colorScheme.altColorText
         verticalAlignment: Qt.AlignVCenter
         horizontalAlignment: Qt.AlignHCenter
     }
@@ -56,7 +63,7 @@ Rectangle
         visible: iconName.length 
         anchors.centerIn: parent
         iconName: control.iconName
-        iconColor: fgColor
+        iconColor: colorScheme.altColorText
         size: iconSizes.small
         enabled: false
     }

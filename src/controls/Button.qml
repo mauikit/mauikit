@@ -24,16 +24,17 @@ import QtQuick.Controls.impl 2.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.2 as Kirigami
 import QtGraphicalEffects 1.0
+import "private"
 
 Button
 {
     id: control
-    property color color: buttonBackgroundColor
 
-    property color fgColor : textColor
-    property color bgColor : control.color
-    property color borderColor : Qt.tint(fgColor, Qt.rgba(bgColor.r, bgColor.g, bgColor.b, 0.7))
-    
+    /* Controlc color scheming */
+    ColorScheme {id: colorScheme}
+    property alias colorScheme : colorScheme
+    /***************************/    
+  
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
                             contentItem.implicitWidth + leftPadding + rightPadding)
     implicitHeight: background.implicitHeight
@@ -46,8 +47,8 @@ Button
     {
         text: control.text
         font: control.font
-        color: !control.enabled ? Qt.lighter(fgColor, 1,2) :
-                control.highlighted || control.down ? Qt.lighter(bgColor, 1.4) : fgColor 
+        color: !control.enabled ? Qt.lighter(colorScheme.textColor, 1,2) :
+        control.highlighted || control.down ? Qt.lighter(colorScheme.backgroundColor, 1.4) : colorScheme.textColor 
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
@@ -56,14 +57,13 @@ Button
     background: Rectangle 
     {
         id: buttonBG
-        implicitWidth: iconSizes.medium *3
+		implicitWidth: iconSizes.medium *3
         
         implicitHeight: iconSizes.medium + space.small
      
-         color: !control.enabled ? viewBackgroundColor :
-                control.highlighted || control.down ? Qt.darker(bgColor, 1.4) : bgColor    
-                border.color: control.highlighted || control.down ? 
-Qt.darker(borderColor, 1.4) : borderColor
+		color: !control.enabled ? colorScheme.viewBackgroundColor : control.highlighted || control.down ? Qt.darker(colorScheme.backgroundColor, 1.4) : colorScheme.backgroundColor    
+		
+		border.color: control.highlighted || control.down ? Qt.darker(colorScheme.borderColor, 1.4) : colorScheme.borderColor
         
         border.width: unit
         radius: radiusV     

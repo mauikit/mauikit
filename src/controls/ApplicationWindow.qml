@@ -42,7 +42,7 @@ Kirigami.AbstractApplicationWindow
     property alias page : page
     property alias footBar : page.footBar
     property alias headBar : page.headBar
-    property alias headBarBG : page.headBarBG
+    
     property alias rightIcon : menuBtn
     property alias leftIcon : searchBtn
     
@@ -88,20 +88,8 @@ Kirigami.AbstractApplicationWindow
                                             Dark: 3
                                         })
 
-//     property var colorSet : ({        
-//         borderColor: Qt.tint(textColor, Qt.rgba(backgroundColor.r, backgroundColor.g, backgroundColor.b, 0.7)),
-//         backgroundColor:backgroundColor,
-//         textColor: textColor,
-//         highlightColor: highlightColor,
-//         highlightedTextColor: highlightedTextColor,
-//         buttonBackgroundColor: buttonBackgroundColor,
-//         viewBackgroundColor: viewBackgroundColor,
-//         altColor: altColor,
-//         altColorText: altColorText,
-//         accentColor : buttonBackgroundColor   
-//     })
-    
-    property color borderColor: Qt.tint(textColor, Qt.rgba(backgroundColor.r, backgroundColor.g, backgroundColor.b, 0.7))
+    property color borderColor: Qt.tint(textColor, Qt.rgba(backgroundColor.r, backgroundColor.g, 
+backgroundColor.b, 0.7))
     property color backgroundColor: Maui.Style.backgroundColor
     property color textColor: Maui.Style.textColor
     property color highlightColor: Maui.Style.highlightColor
@@ -111,6 +99,7 @@ Kirigami.AbstractApplicationWindow
     property color altColor: Maui.Style.altColor
     property color altColorText: Maui.Style.altColorText
     property color accentColor : buttonBackgroundColor
+    
     property color bgColor: viewBackgroundColor
     property color headBarBGColor: backgroundColor
     property color headBarFGColor: textColor
@@ -209,6 +198,7 @@ Kirigami.AbstractApplicationWindow
         id: page
         anchors.fill: parent
         margins: 0
+        
         headBar.height: toolBarHeight + space.small
         headBar.implicitHeight: toolBarHeight + space.small
 
@@ -226,8 +216,8 @@ Kirigami.AbstractApplicationWindow
             color: bgColor
         }
 
-        headBarBG.color: headBarBGColor
-        headBar.fgColor: headBarFGColor
+        headBar.colorScheme.backgroundColor: headBarBGColor
+        headBar.colorScheme.textColor: headBarFGColor
 
         headBar.leftContent: Maui.ToolButton
         {

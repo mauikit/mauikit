@@ -43,17 +43,11 @@ QQC2.Page
 	
     property alias headBar: topToolBar
     property alias footBar: bottomToolBar
-    property alias headBarBG : headBarBG
-    property alias footBarItem: bottomToolBar.data
+    property alias floatingBar: bottomToolBar.floatingFootBar
 
-    property int footBarAligment : Qt.AlignCenter
-
-    property bool dropShadow: isMobile
-    property bool drawBorder: !dropShadow
-    
+    property int footBarAligment : Qt.AlignCenter    
     property bool altToolBars : false
-    property int footBarMargins : space.large
-    property bool floatingBar: false
+    property int footBarMargins : space.large   
     property bool footBarOverlap: false
     property bool allowRiseContent: floatingBar && footBarOverlap
 
@@ -90,8 +84,11 @@ QQC2.Page
             Layout.fillWidth: true
             Layout.row: altToolBars ? 3 : 1
             Layout.column: 1
+            
             position: altToolBars ? ToolBar.Footer : ToolBar.Header
-
+            dropShadow: false
+            drawBorder: !dropShadow
+            
             width: parent.width
             height: toolBarHeightAlt
             implicitHeight: toolBarHeightAlt
@@ -122,41 +119,6 @@ QQC2.Page
                 font.pointSize: fontSizes.big
                 horizontalAlignment : Text.AlignHCenter
                 verticalAlignment :  Text.AlignVCenter
-            }
-
-
-            background: Rectangle
-            {
-                id: headBarBG
-                color: viewBackgroundColor
-                implicitHeight: toolBarHeightAlt                
-              
-                Kirigami.Separator
-                {
-                    visible: drawBorder
-                    id: headBarBorder
-                    color: Qt.tint(textColor, Qt.rgba(headBarBG.color.r, headBarBG.color.g, headBarBG.color.b, 0.7))
-                    
-                    anchors
-                    {
-                        left: parent.left
-                        right: parent.right
-                        bottom: altToolBars ? undefined : parent.bottom
-                        top: altToolBars ? parent.top : undefined
-                    }
-}
-              
-                layer.enabled: dropShadow
-                layer.effect: DropShadow
-                {
-                    anchors.fill: headBarBG
-                    horizontalOffset: 0
-                    verticalOffset:  unit * (altToolBars ? -1 : 1)
-                    radius: 8
-                    samples: 25
-                    color: Qt.darker(headBarBG.color , 1.4)
-                    source: headBarBG
-                }
             }
         }
 
@@ -230,59 +192,24 @@ QQC2.Page
 
             visible: footBarVisible && count > 0
 
-            readonly property int _margins : footBarMargins
-
-           implicitHeight: floatingBar ? toolBarHeightAlt : toolBarHeight
-            height: implicitHeight
-            width: floatingBar ?  implicitWidth : parent.width
-            Layout.leftMargin: footBarAligment === Qt.AlignLeft ? _margins : (floatingBar ? space.small : 0)
-            Layout.rightMargin: footBarAligment === Qt.AlignRight ? _margins : (floatingBar ? space.small : 0)
-            Layout.bottomMargin: floatingBar ? _margins : 0
+            readonly property int _margins : footBarMargins            
+            
+            Layout.leftMargin: footBarAligment === Qt.AlignLeft ? _margins : (floatingFootBar ? space.small : 0)
+			Layout.rightMargin: footBarAligment === Qt.AlignRight ? _margins : (floatingFootBar ? space.small : 0)
+			Layout.bottomMargin: floatingFootBar ? _margins : 0
             Layout.alignment: footBarAligment
             Layout.fillWidth: true
             Layout.preferredHeight: implicitHeight
             //            Layout.minimumWidth: parent.width * (floatingBar ? 0.4 :  1)
-            Layout.maximumWidth: floatingBar ? middleLayout.implicitWidth + layout.implicitWidth : parent.width
+            Layout.maximumWidth: floatingFootBar ? middleLayout.implicitWidth + layout.implicitWidth : parent.width
             Layout.row: altToolBars ? 2 : 3
             Layout.column: 1
             z: container.z +1
             position: ToolBar.Footer
             clip: false
 
-            background: Rectangle
-            {
-                id: footBarBg
-                height: bottomToolBar.implicitHeight
-                color: floatingBar ? accentColor : viewBackgroundColor
-                radius: floatingBar ? radiusV : 0
-                border.color: floatingBar ? Qt.darker(accentColor, 1.2) : "transparent"
-                
-                 Kirigami.Separator
-                {
-                    visible: !floatingBar && drawBorder
-                    color: borderColor
-                    anchors
-                    {
-                        left: parent.left
-                        right: parent.right
-                        top: parent.top
-                    }
-}
-                
-                layer.enabled: dropShadow
-                layer.effect: DropShadow
-                {
-                    anchors.fill: footBarBg
-                    horizontalOffset: 0
-                    verticalOffset: unit * (floatingBar ? 2 : -1)
-                    radius: 8
-                    samples: 25
-                    color: Qt.darker(floatingBar ? accentColor : backgroundColor, 1.4) 
-                    source: footBarBg
-                }
-
-            }
-        }
+            drawBorder: !floatingFootBar
+		}
     }
 
     function riseContent()

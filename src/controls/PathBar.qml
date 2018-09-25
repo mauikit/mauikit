@@ -24,14 +24,10 @@ import org.kde.kirigami 2.0 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import "private"
 
-Item
+Maui.Item
 {
-    id: control
-    
-    property color fgColor : textColor
-    property color bgColor : viewBackgroundColor
-    property color borderColor : Qt.tint(fgColor, Qt.rgba(bgColor.r, bgColor.g, bgColor.b, 0.7))
-    
+    id: control    
+      
     height: iconSizes.big
     signal pathChanged(string path)
     signal homeClicked()
@@ -42,10 +38,10 @@ Item
         id: pathBarBG
         anchors.fill: parent
         z:-1
-        color: bgColor
+        color: colorScheme.backgroundColor
         radius: radiusV
         opacity: 1
-        border.color: borderColor
+        border.color: colorScheme.borderColor
         border.width: unit
     }
     
@@ -65,7 +61,7 @@ Item
             Layout.leftMargin: contentMargins
             Layout.alignment: Qt.AlignVCenter
             verticalAlignment: Qt.AlignVCenter
-            color: fgColor
+            color: control.colorScheme.textColor
             onAccepted:
             {
                 pathChanged(text)
@@ -84,7 +80,7 @@ Item
             {
                 anchors.centerIn: parent
                 iconName: "go-next"
-                iconColor: fgColor
+                iconColor: control.colorScheme.textColor
                 onClicked:
                 {
                     pathChanged(entry.text)
@@ -111,7 +107,7 @@ Item
             {
                 anchors.centerIn: parent
                 iconName: "go-home"
-                iconColor: fgColor                
+                iconColor: control.colorScheme.textColor                
                 onClicked: homeClicked()
             }
         }
@@ -119,7 +115,7 @@ Item
         Kirigami.Separator
         {
             Layout.fillHeight: true
-            color: borderColor
+            color: colorScheme.borderColor
         }
         
         ListView
@@ -172,7 +168,7 @@ Item
             {
                 anchors.centerIn: parent
                 iconName: "filename-space-amarok"
-                iconColor: fgColor                
+                iconColor: control.colorScheme.textColor                
                 onClicked: showEntryBar()
             }
         }

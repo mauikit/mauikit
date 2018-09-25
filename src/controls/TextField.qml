@@ -25,16 +25,17 @@ import org.kde.kirigami 2.2 as Kirigami
 import QtQuick.Controls.impl 2.3
 import QtQuick.Controls.Material.impl 2.3
 import org.kde.mauikit 1.0 as Maui
-
+import "private"
 
 TextField
 {
-    id: control
-    
-    property color bgColor : buttonBackgroundColor
-    property color fgColor : textColor
-    property color borderColor : Qt.tint(fgColor, Qt.rgba(bgColor.r, bgColor.g, bgColor.b, 0.7))
-    
+    id: control    
+     
+	/* Controlc color scheming */
+	ColorScheme {id: colorScheme}
+	property alias colorScheme : colorScheme
+	/***************************/
+	
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
                             placeholderText ? placeholder.implicitWidth + leftPadding + rightPadding : 0)
     || contentWidth + leftPadding + rightPadding
@@ -43,7 +44,7 @@ TextField
     topPadding: space.tiny
     bottomPadding: space.tiny
     
-    color: enabled ? fgColor : Qt.lighter(fgColor, 1.4)
+    color: enabled ? colorScheme.textColor : Qt.lighter(colorScheme.textColor, 1.4)
     selectionColor: highlightColor
     selectedTextColor: highlightedTextColor
     verticalAlignment: TextInput.AlignVCenter
@@ -78,7 +79,7 @@ TextField
     
             text: control.placeholderText
             font: control.font
-            color: Qt.lighter(fgColor, 1.4)
+            color: Qt.lighter(colorScheme.textColor, 1.4)
             horizontalAlignment: control.horizontalAlignment
             verticalAlignment: control.verticalAlignment
             visible: !control.length && !control.preeditText && (!control.activeFocus || control.horizontalAlignment !== Qt.AlignHCenter)
@@ -87,13 +88,12 @@ TextField
     
     
     background: Rectangle 
-    {
-        
+    {        
         implicitWidth: unit * 120
         implicitHeight: iconSizes.big
-        color: control.activeFocus ? Qt.lighter(bgColor, 1.4)
-        : (control.hovered ? Qt.lighter(bgColor, 1.3) : bgColor)
-        border.color: borderColor
+        color: control.activeFocus ? Qt.lighter(colorScheme.backgroundColor, 1.4)
+        : (control.hovered ? Qt.lighter(colorScheme.backgroundColor, 1.3) : colorScheme.backgroundColor)
+        border.color: colorScheme.borderColor
         radius: radiusV
         
     }

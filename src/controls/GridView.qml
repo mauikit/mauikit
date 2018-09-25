@@ -41,6 +41,11 @@ Item
 	property alias currentIndex : gridView.currentIndex
 	property alias count : gridView.count
 	
+	property alias topMargin: gridView.topMargin
+	property alias bottomMargin: gridView.bottomMargin
+	property alias rightMargin: gridView.rightMargin
+	property alias leftMarging: gridView.leftMargin
+	
 	property bool centerContent: false
 	property bool adaptContent: false 
 			

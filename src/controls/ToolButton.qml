@@ -21,29 +21,35 @@ import QtQuick 2.6
 import QtQuick.Controls 2.2
 import QtQuick.Controls.impl 2.3
 import org.kde.kirigami 2.0 as Kirigami
+import "private"
 
 ToolButton
 {
     id: control
-    readonly property color defaultColor:  textColor
+    
+    /* Controlc color scheming */
+	ColorScheme {id: colorScheme}
+	property alias colorScheme : colorScheme
+	/***************************/
 
     property bool isMask:  true
     property string iconName: ""
     property int size: iconSize
-    property color iconColor: textColor
+    property color iconColor: colorScheme.textColor
     property bool anim: false
     property string tooltipText : ""
+	
     hoverEnabled: !isMobile
-    height:  control.display === ToolButton.IconOnly ? size + space.medium : implicitHeight
+    
+    height: control.display === ToolButton.IconOnly ? size + space.medium : implicitHeight
     width: control.display === ToolButton.IconOnly ? height : implicitWidth
+    
     icon.name:  iconName
     icon.width:  size
     icon.height: size
-    //     icon.height:  display === ToolButton.TextUnderIcon ? size * 2 : size
     icon.color: !isMask ? "transparent" : iconColor
 
     onClicked: if(anim) animIcon.running = true
-    //                 anchors.verticalCenter: parent.verticalCenter
 
     flat: true
     highlighted: !isMask
@@ -55,7 +61,7 @@ ToolButton
     background: Rectangle
     {
      color: /*(down || pressed || checked) */ checked && enabled  ? 
-Qt.lighter(highlightColor, 1.2) : "transparent"
+     Qt.lighter(colorScheme.highlightColor, 1.2) : "transparent"
      radius: unit * 3
      opacity: 0.5
     }
@@ -79,7 +85,7 @@ Qt.lighter(highlightColor, 1.2) : "transparent"
             target: control
             property: "icon.color"
             easing.type: Easing.InOutQuad
-            from: highlightColor
+            from: colorScheme.highlightColor
             to: iconColor
             duration: 500
         }
