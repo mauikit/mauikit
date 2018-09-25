@@ -66,7 +66,7 @@ Button
 Qt.darker(borderColor, 1.4) : borderColor
         
         border.width: unit
-        radius: unit * 3       
+        radius: radiusV     
      
     }
     
