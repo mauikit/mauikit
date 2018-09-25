@@ -35,8 +35,12 @@ QQC2.Page
     property string headBarExitIcon : "dialog-close"
     property string headBarTitle: ""
 
-    property int margins: contentMargins * 1.5
-
+	property int margins: contentMargins * 1.5
+	property int topMargin: margins
+	property int rightMargin: margins
+	property int leftMargin: margins
+	property int bottomMargin: margins
+	
     property alias headBar: topToolBar
     property alias footBar: bottomToolBar
     property alias headBarBG : headBarBG
@@ -162,7 +166,12 @@ QQC2.Page
 
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.margins: margins
+
+            Layout.topMargin: topMargin
+            Layout.bottomMargin: bottomMargin
+            Layout.rightMargin: rightMargin
+            Layout.leftMargin: leftMargin
+           
             Layout.row: altToolBars ? 1 : 2
             Layout.column: 1
 
