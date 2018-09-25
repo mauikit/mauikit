@@ -11,7 +11,7 @@
         <file alias="private/PieButtonDelegate.qml">src/controls/private/PieButtonDelegate.qml</file>
         <file alias="private/SideBarDelegate.qml">src/controls/private/SideBarDelegate.qml</file>
 		<file alias="private/PathBarDelegate.qml">src/controls/private/PathBarDelegate.qml</file>
-		<file alias="private/PathBarDelegate.qml">src/controls/private/ColorScheme.qml</file>
+		<file alias="private/ColorScheme.qml">src/controls/private/ColorScheme.qml</file>
 		<file alias="Holder.qml">src/controls/Holder.qml</file>
         <file alias="Drawer.qml">src/controls/Drawer.qml</file>
         <file alias="ListDelegate.qml">src/controls/ListDelegate.qml</file>
