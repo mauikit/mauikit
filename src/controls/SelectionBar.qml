@@ -23,10 +23,12 @@ import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.0 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
-Item
+Maui.Item
 {
     id: control
 
+    colorScheme.textColor : colorScheme.altColorText
+    
     property var selectedPaths: []
     property alias selectionList : selectionList
     property alias anim : anim
@@ -63,10 +65,10 @@ Item
         id: bg
         anchors.fill: parent
         z:-1
-        color: altColor
+        color: colorScheme.altColor
         radius: 4
         opacity: 0.6
-        border.color: Qt.darker(altColor, 1.6)
+        border.color: colorScheme.borderColor
 
         SequentialAnimation
         {
@@ -77,7 +79,7 @@ Item
                 property: "color"
                 easing.type: Easing.InOutQuad
                 from: animColor
-                to: Kirigami.Theme.complementaryBackgroundColor
+                to: Qt.lighter(colorScheme.altColor, 1.2)
                 duration: 500
             }
         }
@@ -111,7 +113,7 @@ Item
             height: iconSizes.medium
             width: iconSizes.medium
             radius: Math.min(width, height)
-            color: Maui.Style.dangerColor
+            color: dangerColor
             border.color: Qt.darker(color, 1.3)
 
             anchors.verticalCenter: parent.top
@@ -133,7 +135,7 @@ Item
             {
                 anchors.centerIn: parent
                 iconName: "window-close"
-                iconColor: altColorText
+				iconColor: control.colorScheme.textColor
                 size: iconSizes.small
                 flat: true
                 onClicked:
@@ -200,7 +202,7 @@ Item
                     emblemAdded: true
                     keepEmblemOverlay: true
                     showSelectionBackground: false
-                    labelColor: altColorText
+                    labelColor: colorScheme.textColor
                     showTooltip: true
                     showThumbnails: true
                     emblemSize: iconSizes.small
@@ -244,7 +246,7 @@ Item
                 visible: iconVisible
                 anchors.centerIn: parent
                 iconName: control.iconName
-                iconColor: altColorText
+                iconColor: control.colorScheme.textColor
                 onClicked: iconClicked()
             }
         }
@@ -254,7 +256,7 @@ Item
             height: iconSizes.medium
             width: iconSizes.medium
             radius: Math.min(width, height)
-            color: highlightColor
+			color: colorScheme.highlightColor
             border.color: Qt.darker(color, 1.3)
 
             anchors.verticalCenter: parent.top
@@ -281,7 +283,7 @@ Item
                 font.pointSize: fontSizes.default
                 font.weight: Font.Bold
                 font.bold: true
-                color: highlightedTextColor
+                color: colorScheme.highlightedTextColor
                 text: selectionList.count
             }
 
