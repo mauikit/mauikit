@@ -29,15 +29,15 @@ Button
 {
     id: control
     property color color: buttonBackgroundColor
-    property color fgColor : Qt.darker(control.color, 2)
+
+    property color fgColor : textColor
     property color bgColor : control.color
-    property alias buttonBG : buttonBG
+    property color borderColor : Qt.tint(fgColor, Qt.rgba(bgColor.r, bgColor.g, bgColor.b, 0.7))
     
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
                             contentItem.implicitWidth + leftPadding + rightPadding)
     implicitHeight: background.implicitHeight
-    hoverEnabled: !isMobile
-    
+    hoverEnabled: !isMobile    
     
     leftPadding: space.small
     rightPadding: leftPadding
@@ -62,7 +62,8 @@ Button
      
          color: !control.enabled ? viewBackgroundColor :
                 control.highlighted || control.down ? Qt.darker(bgColor, 1.4) : bgColor    
-        border.color: Qt.darker(color, 1.4)
+                border.color: control.highlighted || control.down ? 
+Qt.darker(borderColor, 1.4) : borderColor
         
         border.width: unit
         radius: unit * 3       

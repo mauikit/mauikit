@@ -22,35 +22,39 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.0 as Kirigami
 import org.kde.mauikit 1.0 as Maui
+import "private"
 
 Item
 {
     id: control
-
-    property alias pathBarBG : pathBarBG
+    
+    property color fgColor : textColor
+    property color bgColor : viewBackgroundColor
+    property color borderColor : Qt.tint(fgColor, Qt.rgba(bgColor.r, bgColor.g, bgColor.b, 0.7))
+    
     height: iconSizes.big
     signal pathChanged(string path)
     signal homeClicked()
     signal placeClicked(string path)
-
+    
     Rectangle
     {
         id: pathBarBG
         anchors.fill: parent
         z:-1
-        color: viewBackgroundColor
+        color: bgColor
         radius: radiusV
         opacity: 1
-        border.color: Qt.tint(textColor, Qt.rgba(color.r, color.g, color.b, 0.7))
+        border.color: borderColor
         border.width: unit
     }
-
+    
     RowLayout
     {
         id: pathEntry
         anchors.fill:  parent
         visible: false
-
+        
         TextInput
         {
             id: entry
@@ -61,25 +65,26 @@ Item
             Layout.leftMargin: contentMargins
             Layout.alignment: Qt.AlignVCenter
             verticalAlignment: Qt.AlignVCenter
-            color: textColor
+            color: fgColor
             onAccepted:
             {
                 pathChanged(text)
                 showEntryBar()
             }
         }
-
+        
         Item
         {
             Layout.fillHeight: true
             Layout.leftMargin: space.small
             Layout.rightMargin: space.small
             width: iconSize
-
+            
             Maui.ToolButton
             {
                 anchors.centerIn: parent
                 iconName: "go-next"
+                iconColor: fgColor
                 onClicked:
                 {
                     pathChanged(entry.text)
@@ -88,54 +93,55 @@ Item
             }
         }
     }
-
+    
     RowLayout
     {
         id: pathCrumbs
         anchors.fill: parent
         spacing: 0
-
+        
         Item
         {
             Layout.fillHeight: true
             Layout.leftMargin: space.small
             Layout.rightMargin: space.small
             width: iconSize
-
+            
             Maui.ToolButton
             {
                 anchors.centerIn: parent
                 iconName: "go-home"
+                iconColor: fgColor                
                 onClicked: homeClicked()
             }
         }
-
+        
         Kirigami.Separator
         {
             Layout.fillHeight: true
-            color: pathBarBG.border.color
+            color: borderColor
         }
-
+        
         ListView
         {
             id: pathBarList
             Layout.fillHeight: true
             Layout.fillWidth: true
-
+            
             orientation: ListView.Horizontal
             clip: true
             spacing: 0
-
+            
             focus: true
             interactive: true
             boundsBehavior: isMobile ?  Flickable.DragOverBounds : Flickable.StopAtBounds
-
+            
             model: ListModel{}
-
+            
             delegate: PathBarDelegate
             {
                 id: delegate
-                height: pathBar.height - (Kirigami.Units.devicePixelRatio * 2)
+                height: pathBar.height - (unit*2)
                 width: iconSizes.big * 3
                 Connections
                 {
@@ -147,7 +153,7 @@ Item
                     }
                 }
             }
-
+            
             MouseArea
             {
                 anchors.fill: parent
@@ -155,7 +161,7 @@ Item
                 z: -1
             }
         }
-
+        
         Item
         {
             Layout.fillHeight: true
@@ -166,21 +172,22 @@ Item
             {
                 anchors.centerIn: parent
                 iconName: "filename-space-amarok"
+                iconColor: fgColor                
                 onClicked: showEntryBar()
             }
         }
-
+        
         //        MouseArea
         //        {
         //            anchors.fill: parent
         //            propagateComposedEvents: true
         //            onClicked: showEntryBar()
         //        }
-
-
-
+        
+        
+        
     }
-
+    
     function append(path)
     {
         pathBarList.model.clear()
@@ -192,23 +199,23 @@ Item
             if(places[i].length > 1)
                 pathBarList.model.append({label : places[i], path: url})
         }
-
+        
         pathBarList.currentIndex = pathBarList.count-1
         pathBarList.positionViewAtEnd()
     }
-
+    
     function position(index)
     {
         //        rollList.currentIndex = index
         //        rollList.positionViewAtIndex(index, ListView.Center)
     }
-
+    
     function showEntryBar()
     {
         pathEntry.visible = !pathEntry.visible
         entry.text = browser.currentPath
         pathCrumbs.visible = !pathCrumbs.visible
     }
-
-
+    
+    
 }

@@ -25,44 +25,44 @@ import org.kde.mauikit 1.0 as Maui
 
 Maui.Dialog
 {
-    id: control
-    property var app : ({})
-    property string appName : Qt.application.name
-    property string appVersion : Qt.application.version
-    property string organizationName : Qt.application.organization
-    property string organizationDomain : Qt.application.domain
-    property string appDescription : ""
-    property string appLink: "www.maui-project.org"
-    property string appDonation: ""
-    property string appIcon: "qrc:/assets/mauikit-logo.png"
+	id: control
+	property var app : ({})
+	property string appName : Qt.application.name
+	property string appVersion : Qt.application.version
+	property string organizationName : Qt.application.organization
+	property string organizationDomain : Qt.application.domain
+	property string appDescription : ""
+	property string appLink: "www.maui-project.org"
+	property string appDonation: ""
+	property string appIcon: "qrc:/assets/mauikit-logo.png"
+	
+	defaultButtons: false
+	widthHint: 0.9
+	heightHint: 0.8
+		
+	maxWidth: unit * 400
+	maxHeight: unit * 250
 
-    defaultButtons: false
-    widthHint: 0.9
-    heightHint: 0.8
+    footBar.middleContent: Maui.ToolButton
+    {
+		iconName: "view-links"
+		onClicked: Maui.FM.openUrl(control.appLink)
+		
+	}
 
-    maxWidth: unit* 400
-    maxHeight: unit * 200
-
-    footBar.middleContent: [
-        Maui.ToolButton
-        {
-            iconName: "documentinfo"
-        },
-
-        Maui.ToolButton
-        {
-            iconName: "view-links"
-            onClicked: Maui.FM.openUrl(control.appLink)
-
-        },
-
-        Maui.ToolButton
-        {
-            iconName: "love"
-            onClicked: Maui.FM.openUrl(control.appDonation)
-
-        }
-    ]
+     footBar.rightContent: Maui.ToolButton
+     {
+		 iconName: "love"
+		 onClicked: Maui.FM.openUrl(control.appDonation)
+		 
+	 }
+	 
+	 footBar.leftContent: Maui.ToolButton
+	 {
+		 iconName: "documentinfo"
+	 }
+	 
+    
 
     GridLayout
     {

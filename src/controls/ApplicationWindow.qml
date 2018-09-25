@@ -88,6 +88,19 @@ Kirigami.AbstractApplicationWindow
                                             Dark: 3
                                         })
 
+//     property var colorSet : ({        
+//         borderColor: Qt.tint(textColor, Qt.rgba(backgroundColor.r, backgroundColor.g, backgroundColor.b, 0.7)),
+//         backgroundColor:backgroundColor,
+//         textColor: textColor,
+//         highlightColor: highlightColor,
+//         highlightedTextColor: highlightedTextColor,
+//         buttonBackgroundColor: buttonBackgroundColor,
+//         viewBackgroundColor: viewBackgroundColor,
+//         altColor: altColor,
+//         altColorText: altColorText,
+//         accentColor : buttonBackgroundColor   
+//     })
+    
     property color borderColor: Qt.tint(textColor, Qt.rgba(backgroundColor.r, backgroundColor.g, backgroundColor.b, 0.7))
     property color backgroundColor: Maui.Style.backgroundColor
     property color textColor: Maui.Style.textColor
@@ -220,7 +233,8 @@ Kirigami.AbstractApplicationWindow
         {
             id: menuBtn
             iconName: "application-menu"
-            iconColor: menuDrawer.visible ? highlightColor: headBarFGColor
+			iconColor: headBarFGColor
+            checked: menuDrawer.visible  
             onClicked:
             {
                 menuButtonClicked()

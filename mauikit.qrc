@@ -10,6 +10,7 @@
         <file alias="Page.qml">src/controls/Page.qml</file>
         <file alias="private/PieButtonDelegate.qml">src/controls/private/PieButtonDelegate.qml</file>
         <file alias="private/SideBarDelegate.qml">src/controls/private/SideBarDelegate.qml</file>
+        <file alias="private/PathBarDelegate.qml">src/controls/private/PathBarDelegate.qml</file>
         <file alias="Holder.qml">src/controls/Holder.qml</file>
         <file alias="Drawer.qml">src/controls/Drawer.qml</file>
         <file alias="ListDelegate.qml">src/controls/ListDelegate.qml</file>
@@ -26,7 +27,6 @@
         <file alias="FileDialog.qml">src/controls/FileDialog.qml</file>
         <file alias="ListBrowser.qml">src/controls/ListBrowser.qml</file>
         <file alias="PathBar.qml">src/controls/PathBar.qml</file>
-        <file alias="PathBarDelegate.qml">src/controls/PathBarDelegate.qml</file>
         <file alias="GridBrowser.qml">src/controls/GridBrowser.qml</file>
         <file alias="Dialog.qml">src/controls/Dialog.qml</file>
         <file alias="AboutDialog.qml">src/controls/AboutDialog.qml</file>

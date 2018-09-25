@@ -40,7 +40,7 @@ ToolButton
     icon.width:  size
     icon.height: size
     //     icon.height:  display === ToolButton.TextUnderIcon ? size * 2 : size
-    icon.color: !isMask ? "transparent" : (down || pressed ? highlightColor : (iconColor || defaultColor))
+    icon.color: !isMask ? "transparent" : iconColor
 
     onClicked: if(anim) animIcon.running = true
     //                 anchors.verticalCenter: parent.verticalCenter
@@ -51,6 +51,14 @@ ToolButton
 
     display: control.text.length > 0 ? (isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon) : ToolButton.IconOnly
     spacing: space.tiny
+    
+    background: Rectangle
+    {
+     color: /*(down || pressed || checked) */ checked && enabled  ? 
+Qt.lighter(highlightColor, 1.2) : "transparent"
+     radius: unit * 3
+     opacity: 0.5
+    }
 
     contentItem: IconLabel
     {

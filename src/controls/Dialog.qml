@@ -78,7 +78,9 @@ Maui.Popup
                         text: title
                         font.weight: Font.Thin
                         font.bold: true
-                        font.pointSize: fontSizes.huge 
+                        font.pointSize: fontSizes.huge
+//                         elide: Qt.ElideRight
+                        
                     }                    
                 }        
                 
@@ -138,7 +140,7 @@ Maui.Popup
                 Maui.Button
                 {
                     fgColor: dangerColor
-                    buttonBG.border.color: dangerColor
+                    borderColor: dangerColor
                     bgColor: viewBackgroundColor
                     text: rejectText
                     onClicked: 

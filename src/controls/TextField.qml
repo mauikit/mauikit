@@ -31,9 +31,9 @@ TextField
 {
     id: control
     
-    property color bgColor : viewBackgroundColor
+    property color bgColor : buttonBackgroundColor
     property color fgColor : textColor
-    property color borderColor : Qt.darker(bgColor, 1.4)
+    property color borderColor : Qt.tint(fgColor, Qt.rgba(bgColor.r, bgColor.g, bgColor.b, 0.7))
     
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
                             placeholderText ? placeholder.implicitWidth + leftPadding + rightPadding : 0)
@@ -92,7 +92,7 @@ TextField
         implicitWidth: unit * 120
         implicitHeight: iconSizes.big
         color: control.activeFocus ? Qt.lighter(bgColor, 1.4)
-        : (control.hovered ? Qt.lighter(bgColor, 1.3) : Qt.lighter(bgColor, 1.2))
+        : (control.hovered ? Qt.lighter(bgColor, 1.3) : bgColor)
         border.color: borderColor
         radius: radiusV
         
