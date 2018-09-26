@@ -1,4 +1,5 @@
 build/
+src/android/icons/luv-icon-theme/
 
 *.kdev4
 *.directory
