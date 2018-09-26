@@ -27,6 +27,7 @@
 #include <QFileInfo>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QLocale>
 
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
@@ -116,10 +117,15 @@ QVariantList FM::getPathContent(const QString &path, const bool &onlyDirs, const
         {
             auto url = it.next();
             QFileInfo file(url);
+			QLocale locale;
             auto item = QVariantMap {
             {FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], FMH::getIconName(url)},
             {FMH::MODEL_NAME[FMH::MODEL_KEY::MIME], FMH::getMime(url)},
             {FMH::MODEL_NAME[FMH::MODEL_KEY::LABEL], file.fileName()},
+            {FMH::MODEL_NAME[FMH::MODEL_KEY::DATE], file.birthTime().toString()},
+            {FMH::MODEL_NAME[FMH::MODEL_KEY::SIZE], locale.formattedDataSize(file.size())},            
+            {FMH::MODEL_NAME[FMH::MODEL_KEY::MODIFIED], file.lastModified().toString()},            
+            {FMH::MODEL_NAME[FMH::MODEL_KEY::SUFFIX], file.suffix()},            
             {FMH::MODEL_NAME[FMH::MODEL_KEY::PATH], url},
             {FMH::MODEL_NAME[FMH::MODEL_KEY::THUMBNAIL], url},
 

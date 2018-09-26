@@ -84,7 +84,7 @@ QQC2.Page
             Layout.fillWidth: true
             Layout.row: altToolBars ? 3 : 1
             Layout.column: 1
-            
+            colorScheme.backgroundColor: viewBackgroundColor
             position: altToolBars ? ToolBar.Footer : ToolBar.Header
             dropShadow: false
             drawBorder: !dropShadow
@@ -207,7 +207,8 @@ QQC2.Page
             z: container.z +1
             position: ToolBar.Footer
             clip: false
-
+            colorScheme.backgroundColor: viewBackgroundColor
+            
             drawBorder: !floatingFootBar
 		}
     }

@@ -52,7 +52,7 @@ ToolBar
     
     property bool dropShadow: false
     property bool drawBorder: false
-    property bool floatingFootBar: isMobile
+    property bool floatingFootBar: false
  
     padding: 0    
     //    leftPadding: Kirigami.Units.smallSpacing*2
