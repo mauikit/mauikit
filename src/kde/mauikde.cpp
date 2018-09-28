@@ -191,6 +191,25 @@ void MAUIKDE::setColorScheme(const QString &schemeName, const QString &bg, const
                      group.writeEntry("activeForeground", QVariant::fromValue(rgb));
                     group.writeEntry("inactiveForeground", QVariant::fromValue(rgb));                                 
                 }
+                
+                file.group("Colors:Window");
+				if(!bg.isEmpty())
+				{ 
+					color.setNamedColor(bg);
+					QVariantList rgb = {color.red(), color.green(), color.blue()}; 
+					group.writeEntry("BackgroundNormal", QVariant::fromValue(rgb));
+					group.writeEntry("BackgroundAlternate", QVariant::fromValue(rgb));
+					
+				}                
+				
+				if(!fg.isEmpty())
+				{ 
+					color.setNamedColor(fg);
+					QVariantList rgb = {color.red(), color.green(), color.blue()};
+					group.writeEntry("ForegroundActive", QVariant::fromValue(rgb));
+					group.writeEntry("ForegroundInactive", QVariant::fromValue(rgb));                                 
+				}
+				
            
         }
             manager.activateScheme(schemeModel);            

@@ -23,10 +23,21 @@ import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.1
 import org.kde.kirigami 2.2 as Kirigami
 import QtGraphicalEffects 1.0
+import "private"
 
 Popup
 {
     id: control
+    
+    /* Controlc color scheming */
+	ColorScheme
+	{
+		id: colorScheme
+		backgroundColor: viewBackgroundColor
+	}
+	property alias colorScheme : colorScheme
+	/***************************/
+	
     property int maxWidth : parent.width
     property int maxHeight : parent.height
     property double hint : 0.9
@@ -69,25 +80,14 @@ else
     rightMargin: control.margins
     leftMargin: control.margins
     topMargin: control.margins
-    bottomMargin: control.margins
-    
+    bottomMargin: control.margins    
 
     background: Rectangle
     {
         radius: unit * 2
-        color: viewBackgroundColor
-        border.color: Qt.rgba(textColor.r, textColor.g, textColor.b, 0.3)
-        layer.enabled: true
-        
-        layer.effect: DropShadow 
-        {
-            transparentBorder: true
-            radius: 8
-            samples: 16
-            horizontalOffset: 0
-            verticalOffset: unit * 4
-            color: Qt.rgba(0, 0, 0, 0.3)
-        }
+        color: colorScheme.backgroundColor
+        border.color: colorScheme.borderColor
+        layer.enabled: true    
     }
 
     enter: Transition
@@ -100,8 +100,8 @@ else
         NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; duration: 150 }
     }
 
-    Material.accent: accentColor
-    Material.background: backgroundColor
-    Material.primary: backgroundColor
-    Material.foreground: textColor
+    Material.accent: colorScheme.accentColor
+    Material.background: colorScheme.backgroundColor
+    Material.primary: colorScheme.backgroundColor
+    Material.foreground: colorScheme.textColor
 }

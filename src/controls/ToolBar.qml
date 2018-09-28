@@ -48,6 +48,7 @@ ToolBar
     property alias layout : layout
     
     property int margins: space.medium
+    spacing: space.medium
     property int count : leftContent.length + middleContent.length + rightContent.length
     
     property bool dropShadow: false
@@ -159,10 +160,8 @@ ToolBar
     
     Flickable
     {
-        id: mainFlickable
-        
-        property int itemSpacing: space.big
-        
+        id: mainFlickable       
+                
         flickableDirection: Flickable.HorizontalFlick
         anchors.fill: parent
         interactive: layout.implicitWidth > control.width
@@ -180,7 +179,7 @@ ToolBar
                 id: leftRowContent
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
                 Layout.leftMargin: leftContent.length > 0 ? margins : 0
-                spacing: mainFlickable.itemSpacing
+                spacing: leftContent.length > 0 ? control.spacing : 0
                 Layout.minimumWidth: 0
                 clip: true
             }
@@ -233,7 +232,6 @@ ToolBar
                 {
                     id: flickable
                     
-                    property int itemSpacing: space.medium
                     anchors.fill: parent
                     flickableDirection: Flickable.HorizontalFlick
                     
@@ -260,7 +258,7 @@ ToolBar
                         {
                             id: middleRowContent
                             
-                            spacing: middleContent.length === 1 ? 0 : flickable.itemSpacing
+                            spacing: middleContent.length === 1 ? 0 : control.spacing
                             
                             
                             //                Layout.maximumWidth: control.width - leftRowContent.implicitWidth - rightRowContent.implicitWidth
@@ -317,7 +315,7 @@ ToolBar
             {
                 id: rightRowContent
                 Layout.alignment: Qt.AlignRight
-                spacing: mainFlickable.itemSpacing
+                spacing: rightContent.length > 0 ? control.spacing : 0
                 Layout.rightMargin: rightContent.length > 0 ? margins : 0
                 Layout.minimumWidth: 0
                 clip: true

@@ -22,19 +22,28 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.2 as Kirigami
+import "private"
 
 Maui.Popup
 {
     id: control
-    
+    /* Controlc color scheming */
+	ColorScheme {id: colorScheme}
+	property alias colorScheme : colorScheme
+	/***************************/
     property string message : ""
     property string title: ""
+	
     property string acceptText: "Ok"
     property string rejectText: "No"
+	
     property bool defaultButtons: true
+    
     property bool entryField: false
+    
+	default property alias content : page.content
+
     property alias textEntry : __textEntry
-    default property alias content : page.content
 	property alias footBar : page.footBar
 	property alias headBar: page.headBar
 	property alias headBarTitle: page.headBarTitle
@@ -76,7 +85,7 @@ Maui.Popup
 				{
 					width: parent.width
 					height: parent.visible ? parent.height : 0
-					color: textColor
+					color: colorScheme.textColor
 					text: title
 					font.weight: Font.Thin
 					font.bold: true
@@ -106,7 +115,7 @@ Maui.Popup
 					enabled: false
 					text: message
 					textFormat : TextEdit.AutoText
-					color: textColor
+					color: colorScheme.textColor
 					font.pointSize: fontSizes.default
 					wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
 					

@@ -6,103 +6,76 @@ import "private"
 
 Maui.ToolButton
 {
-    id: control
-    z: 1
-    property alias delegate : pathView.delegate
-    property alias model : pathView.model
-    property alias count: pathView.count
-    property alias path : pathView
-
-    property int delegateSize : iconSize
-    property int pieHeight: Kirigami.Units.gridUnit * 10
-    property int pieWidth: pieHeight
-
-    iconColor: pathView.visible ? highlightColor : textColor
-    onClicked: pathView.visible ? close() : open()
-
-    signal itemClicked (var item)
-    layer.enabled: true
-
-    Popup
-    {
-        id: popup
-
-   PathView
-    {
-        id: pathView
-        z: control.z + 1
-        visible: true
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.top
-        height: pieHeight
-        width: pieWidth
-        pathItemCount: 3
-        preferredHighlightBegin: 0.5
-        preferredHighlightEnd: 0.5
-        focus: true
-        Keys.onLeftPressed: decrementCurrentIndex()
-        Keys.onRightPressed: incrementCurrentIndex()
-        //        offset: 1.5
-        snapMode: PathView.SnapOneItem
-
-        onActiveFocusChanged: if(!activeFocus || !focus) pathView.visible = false
-
-        model: ListModel {}
-        delegate: PieButtonDelegate
-        {
-            id: btnDelegate
-            height: delegateSize + space.big
-            width: height
-            size: delegateSize
-
-            Connections
-            {
-                target:btnDelegate
-                onClicked:
-                {
-                    pathView.currentIndex = index
-                    itemClicked(pathView.model.get(index))
-                    close()
-                }
-            }
-        }
-
-        path: Path
-        {
-            startX: 0; startY: pathView.height
-
-            PathArc
-            {
-                x: pathView.width
-                y: pathView.height
-                radiusX: pathView.width *.5; radiusY: radiusX
-                useLargeArc: false
-            }
-        }
-
-        //        Rectangle
-        //        {
-        //            id: overlayBg
-        //            parent: ApplicationWindow.overlay
-        //            color: altColor
-        //            opacity: 0.5
-        //            y: headBar.height
-        //            height: parent.height - headBar.height - footBar.height
-        //            width: parent.width
-        //            visible:pathView.visible
-        //            z: pathView.z - 1
-        //        }
-    }
-    }
-
-
-    function open()
-    {
-        popup.open()
-    }
-
-    function close()
-    {
-        popup.close()
-    }
+	id: control
+	z: 1
+	
+	/* Controlc color scheming */
+	ColorScheme 
+	{
+		id: colorScheme
+	}
+	
+	property alias colorScheme : colorScheme
+	/***************************/
+	
+	property int alignment : Qt.AlignLeft
+	property int position : Qt.Horizontal
+	
+	property int barHeight : 0
+	property int maxWidth : ApplicationWindow.overlay.width * 0.5
+	
+	property alias content : content.middleContent
+	
+	onClicked: popup.visible ? close(): open()
+	
+	layer.enabled: true
+	clip: true
+	
+	Popup
+	{
+		id: popup
+		height: barHeight
+		width: content.middleLayout.implicitWidth + space.big > maxWidth ? maxWidth : (content.middleLayout.implicitWidth > ApplicationWindow.overlay.width ? ApplicationWindow.overlay.width  : content.middleLayout.implicitWidth + space.big)		
+		
+		x: (control.x - width) - space.big
+		y:  parent.height / 2 - height / 2
+		
+		background: Rectangle
+		{
+			radius: radiusV
+			color: colorScheme.backgroundColor
+			border.color: colorScheme.borderColor
+		}
+		
+		onFocusChanged: !activeFocus || !focus ? close() : undefined
+	
+// 	enter: Transition 
+// 	{
+// 		NumberAnimation { property: "width"; from: 0.0; to: popup.implicitWidth }
+// 	}
+// 	exit: Transition 
+// 	{
+// 		NumberAnimation { property: "width"; from: popup.implicitWidth; to: 0.0 }
+// 	}
+	
+		Maui.ToolBar
+		{
+			id: content
+			anchors.fill: parent
+			spacing: space.enormous
+			colorScheme.backgroundColor: "transparent"
+		}
+	}
+	
+	
+	
+	function open()
+	{	
+		 popup.open()		
+	}
+	
+	function close()
+	{
+		popup.close()
+	}
 }

@@ -28,7 +28,12 @@ ToolButton
     id: control
     
     /* Controlc color scheming */
-	ColorScheme {id: colorScheme}
+	ColorScheme 
+	{
+		id: colorScheme
+		backgroundColor: "transparent"
+		borderColor: "transparent"
+	}
 	property alias colorScheme : colorScheme
 	/***************************/
 
@@ -61,9 +66,10 @@ ToolButton
     background: Rectangle
     {
      color: /*(down || pressed || checked) */ checked && enabled  ? 
-     Qt.lighter(colorScheme.highlightColor, 1.2) : "transparent"
+     Qt.lighter(colorScheme.highlightColor, 1.2) : colorScheme.backgroundColor
      radius: unit * 3
-     opacity: 0.5
+     opacity: (down || pressed || checked) && enabled  ?  0.5 : 1
+     border.color: colorScheme.borderColor
     }
 
     contentItem: IconLabel
