@@ -36,7 +36,8 @@ Maui.ToolButton
 		id: popup
 		height: barHeight
 		width: content.middleLayout.implicitWidth + space.big > maxWidth ? maxWidth : (content.middleLayout.implicitWidth > ApplicationWindow.overlay.width ? ApplicationWindow.overlay.width  : content.middleLayout.implicitWidth + space.big)		
-		
+		padding: 0
+		margins: 0
 		x: (control.x - width) - space.big
 		y:  parent.height / 2 - height / 2
 		
@@ -62,6 +63,7 @@ Maui.ToolButton
 		{
 			id: content
 			anchors.fill: parent
+			implicitHeight: parent.height
 			spacing: space.enormous
 			colorScheme.backgroundColor: "transparent"
 		}

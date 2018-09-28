@@ -48,7 +48,7 @@ ToolBar
     property alias layout : layout
     
     property int margins: space.medium
-    spacing: space.medium
+    spacing: space.big
     property int count : leftContent.length + middleContent.length + rightContent.length
     
     property bool dropShadow: false

@@ -46,6 +46,11 @@ ToolButton
 	
     hoverEnabled: !isMobile
     
+   implicitWidth: Math.max(background ? background.implicitWidth : 0,
+                            contentItem.implicitWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(background ? background.implicitHeight : 0,
+                             contentItem.implicitHeight + topPadding + bottomPadding)
+    
     height: control.display === ToolButton.IconOnly ? size + space.medium : implicitHeight
     width: control.display === ToolButton.IconOnly ? height : implicitWidth
     
