@@ -22,7 +22,7 @@ Maui.ToolButton
 	property int position : Qt.Horizontal
 	
 	property int barHeight : 0
-	property int maxWidth : ApplicationWindow.overlay.width * 0.5
+	property int maxWidth :  ApplicationWindow.overlay.width *( isMobile ? 1 : 0.5)
 	
 	property alias content : content.middleContent
 	
