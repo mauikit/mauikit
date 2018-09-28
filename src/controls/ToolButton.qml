@@ -57,7 +57,7 @@ ToolButton
     icon.name:  iconName
     icon.width:  size
     icon.height: size
-    icon.color: !isMask ? "transparent" : iconColor
+    icon.color: !isMask ? "transparent" :  (down || pressed) ? colorScheme.highlightColor : iconColor
 
     onClicked: if(anim) animIcon.running = true
 
