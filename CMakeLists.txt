@@ -182,6 +182,8 @@ if (ANDROID)
     kde_enable_exceptions(MauiKit PRIVATE)
     target_include_directories(MauiKit PRIVATE src/android)
     install(FILES src/android/mauiandroid.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit COMPONENT Devel)
+
+    install(DIRECTORY src/android/ DESTINATION ${KDE_INSTALL_DATAROOTDIR}/MauiKitAndroid COMPONENT Devel)
 endif()
 
 generate_export_header(MauiKit BASE_NAME MauiKit)
