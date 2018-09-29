@@ -189,10 +189,12 @@ ItemDelegate
 
         Item
         {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            Layout.maximumHeight: parent.height * (isDetails ? 1 : 0.3)
-
+			height: (unit *24) + space.small
+			Layout.fillWidth: true
+			Layout.maximumHeight: (isDetails ? parent.height : height)
+			Layout.minimumHeight: (isDetails ? parent.height : height)
+			Layout.preferredHeight: (isDetails ? parent.height : height)
+			
             Layout.row: isDetails ? 1 : 2
             Layout.column: isDetails ? 2 : 1
 
@@ -200,6 +202,7 @@ ItemDelegate
 
             Label
             {
+				id: label
                 visible: showLabel
                 text: model.label
                 width: parent.width
