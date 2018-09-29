@@ -56,6 +56,13 @@ Item
 	{
 		id: gridView
 		
+		anchors
+		{
+			left: parent.left
+			right: parent.right
+			leftMargin: scrollBar.visible ? 0 : scrollBar.width
+		}
+		
 		flow: GridView.FlowLeftToRight
 		clip: true
 		focus: true
@@ -65,7 +72,6 @@ Item
 										Math.floor(parent.width/cellWidth))*cellWidth :
 										parent.width
 		height: parent.height
-
 		cellWidth: control.cellWidth 
 		cellHeight: control.cellHeight
 		//        maximumFlickVelocity: albumSize*8
@@ -77,6 +83,7 @@ Item
 		
 		ScrollBar.vertical: ScrollBar{ id:scrollBar; visible: !isMobile}
 		onWidthChanged: adaptContent? control.adaptGrid() : undefined
+		
 	
 		MouseArea
 		{
