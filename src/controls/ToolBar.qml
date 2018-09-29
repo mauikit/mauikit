@@ -72,7 +72,7 @@ ToolBar
 		{
 			visible: drawBorder
 			color: colorScheme.borderColor
-			
+			height: 1			
 			anchors
 			{
 				left: parent.left
