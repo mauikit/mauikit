@@ -79,7 +79,7 @@ Item
 		snapMode: GridView.SnapToRow
 		highlightMoveDuration: 0
 		
-		ScrollBar.vertical: ScrollBar{ id:scrollBar; visible: !isMobile}
+		ScrollBar.vertical: ScrollBar{ id:scrollBar; visible: true}
 		onWidthChanged: adaptContent? control.adaptGrid() : undefined
 		
 	
