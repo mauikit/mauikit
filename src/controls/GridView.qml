@@ -58,8 +58,6 @@ Item
 		
 		anchors
 		{
-			left: parent.left
-			right: parent.right
 			leftMargin: scrollBar.visible ? 0 : scrollBar.width
 		}
 		

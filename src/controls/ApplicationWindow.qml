@@ -179,7 +179,7 @@ backgroundColor.b, 0.7))
         else if(isAndroid && !altToolBars)
             Maui.Android.statusbarColor(headBarBGColor, false)
 		else if(isAndroid && altToolBars)
-			Maui.Android.statusbarColor(viewBackgroundColor, false)			
+			Maui.Android.statusbarColor(viewBackgroundColor, true)
 				
     }
     
@@ -190,7 +190,7 @@ backgroundColor.b, 0.7))
         else if(isAndroid && !altToolBars)
             Maui.Android.statusbarColor(headBarBGColor, false)
 			else if(isAndroid && altToolBars)
-				Maui.Android.statusbarColor(viewBackgroundColor, false)		
+				Maui.Android.statusbarColor(viewBackgroundColor, true)
     }
     
     background: Rectangle
