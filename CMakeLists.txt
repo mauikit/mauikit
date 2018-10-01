@@ -142,13 +142,13 @@ qt5_add_resources(fm_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/fm/fm.qrc)
 
 add_library(MauiKit 
 
-${tagging_HDRS}
-${tagging_SRCS}
-${tagging_RESOURCES}
-
 ${fm_HDRS}
 ${fm_SRCS}
 ${fm_RESOURCES}
+
+${tagging_HDRS}
+${tagging_SRCS}
+${tagging_RESOURCES}
 
 ${mauikit_HDRS} 
 ${mauikit_SRCS} 
@@ -158,7 +158,8 @@ ${mauikit_ASSETS}
 ${mauikit_Android_SRCS}
 
 ${mauikit_KDE_HDRS}
-${mauikit_KDE_SRCS})
+${mauikit_KDE_SRCS}
+)
 
 # add_library(FM ${fm_SRCS})
 # add_library(Tagging ${tagging_SRCS})

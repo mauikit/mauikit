@@ -174,10 +174,13 @@ backgroundColor.b, 0.7))
 
     onHeadBarBGColorChanged: 
     {
-        if(!isAndroid && !isMobile && colorSchemeName.length > 0 && !altToolBars)
+        if(!isMobile && colorSchemeName.length > 0 && !altToolBars)
             Maui.KDE.setColorScheme(colorSchemeName, headBarBGColor, headBarFGColor)
         else if(isAndroid && !altToolBars)
             Maui.Android.statusbarColor(headBarBGColor, false)
+		else if(isAndroid && altToolBars)
+			Maui.Android.statusbarColor(viewBackgroundColor, false)			
+				
     }
     
     onHeadBarFGColorChanged: 
@@ -186,6 +189,8 @@ backgroundColor.b, 0.7))
             Maui.KDE.setColorScheme(colorSchemeName, headBarBGColor, headBarFGColor)
         else if(isAndroid && !altToolBars)
             Maui.Android.statusbarColor(headBarBGColor, false)
+			else if(isAndroid && altToolBars)
+				Maui.Android.statusbarColor(viewBackgroundColor, false)		
     }
     
     background: Rectangle
