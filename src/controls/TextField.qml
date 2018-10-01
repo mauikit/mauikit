@@ -41,6 +41,9 @@ TextField
     || contentWidth + leftPadding + rightPadding
     implicitHeight:  iconSizes.big
     
+    height: implicitHeight
+    width: implicitWidth
+    
     topPadding: space.tiny
     bottomPadding: space.tiny
     
