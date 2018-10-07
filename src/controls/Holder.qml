@@ -22,10 +22,15 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.0 as Kirigami
+import "private"
+
 Item
 {
     anchors.fill: parent
-
+    /* Controlc color scheming */
+	ColorScheme {id: colorScheme}
+	property alias colorScheme : colorScheme
+	/***************************/
     property string emoji : "qrc:/assets/face-sleeping.png"
     property string message
     property string title
@@ -78,7 +83,7 @@ Item
         textFormat: Text.RichText
         horizontalAlignment: Qt.AlignHCenter
         elide: Text.ElideRight
-        color: textColor
+        color: colorScheme.textColor
     }
 
     MouseArea
