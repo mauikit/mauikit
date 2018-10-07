@@ -167,12 +167,14 @@ ToolBar
         interactive: layout.implicitWidth > control.width
         contentWidth: layout.implicitWidth
         boundsBehavior: isMobile ? Flickable.DragOverBounds : Flickable.StopAtBounds
+        clip: true
         
         RowLayout
         {
             id: layout
             width: control.width
             height: control.height
+            clip: true 
             
             Row
             {
@@ -259,9 +261,7 @@ ToolBar
                             id: middleRowContent
                             
                             spacing: middleContent.length === 1 ? 0 : control.spacing
-                            
-                            
-                            //                Layout.maximumWidth: control.width - leftRowContent.implicitWidth - rightRowContent.implicitWidth
+//                             Layout.maximumWidth: control.width - leftRowContent.implicitWidth - rightRowContent.implicitWidth
                             
                         }
                         
@@ -314,12 +314,10 @@ ToolBar
             Row
             {
                 id: rightRowContent
-                Layout.alignment: Qt.AlignRight
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                 spacing: rightContent.length > 0 ? control.spacing : 0
                 Layout.rightMargin: rightContent.length > 0 ? margins : 0
                 Layout.minimumWidth: 0
-                clip: true
-                
             }
         }
         ScrollBar.horizontal: ScrollBar { visible: false}
