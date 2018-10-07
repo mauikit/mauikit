@@ -23,11 +23,21 @@ import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.2 as Kirigami
 import QtGraphicalEffects 1.0
+import "private"
 
 QQC2.Page
 {
     id: control
-
+    
+    /* Controlc color scheming */
+	ColorScheme 
+	{
+		id: colorScheme
+		backgroundColor: viewBackgroundColor		
+	}
+	property alias colorScheme : colorScheme
+	/***************************/
+	
     property bool headBarVisible : true
     property bool footBarVisible : true
     property bool headBarExit : true
@@ -44,6 +54,7 @@ QQC2.Page
     property alias headBar: topToolBar
     property alias footBar: bottomToolBar
     property alias floatingBar: bottomToolBar.floatingFootBar
+    property alias flickable: flickable
 
     property int footBarAligment : Qt.AlignCenter    
     property bool altToolBars : false
@@ -56,6 +67,7 @@ QQC2.Page
     signal exit();
 
     default property alias content : mainContainer.data
+	property alias backContain: backContainer.data
 
     clip: true
 
@@ -66,7 +78,7 @@ QQC2.Page
 
     background: Rectangle
     {
-        color: viewBackgroundColor
+        color: colorScheme.backgroundColor
     }
 
     GridLayout
@@ -84,7 +96,11 @@ QQC2.Page
             Layout.fillWidth: true
             Layout.row: altToolBars ? 3 : 1
             Layout.column: 1
-            colorScheme.backgroundColor: viewBackgroundColor
+            colorScheme
+            {
+				backgroundColor: control.colorScheme.backgroundColor
+				textColor : control.colorScheme.textColor
+			} 
             position: altToolBars ? ToolBar.Footer : ToolBar.Header
             dropShadow: false
             drawBorder: !dropShadow
@@ -115,7 +131,7 @@ QQC2.Page
                 elide : Text.ElideRight
                 font.bold : false
                 font.weight: Font.Bold
-                color : textColor
+                color : colorScheme.textColor
                 font.pointSize: fontSizes.big
                 horizontalAlignment : Text.AlignHCenter
                 verticalAlignment :  Text.AlignVCenter
@@ -172,17 +188,32 @@ QQC2.Page
                                                   parent.height
 
                 onContentYChanged: control.contentIsRised = contentY > 0
-
+                
+                
                 Item
                 {
-                    id: mainContainer
-                    z: container.z
-                    width: container.width
-                    height: contentIsRised ? container.height - (footBar.height + footBarMargins + space.big) :
-                                             container.height
-                    y: contentIsRised ? flickable.contentY : 0                   
-                   
-                }
+					id: mainContainer
+					z: container.z
+					width: container.width
+					height: contentIsRised ? container.height - (footBar.height + footBarMargins + space.big) :
+					container.height
+					y: contentIsRised ? flickable.contentY : 0					
+					
+					Item
+					{
+						id: backContainer
+						z: mainContainer.z - 1
+						width: container.width
+						height: footBar.height + footBarMargins + space.big
+						anchors
+						{
+							left: parent.left
+							right: parent.right
+							top: parent.bottom
+							margins: space.big
+						}						
+					}					
+				}				
             }
         }
 
@@ -207,8 +238,13 @@ QQC2.Page
             z: container.z +1
             position: ToolBar.Footer
             clip: false
-            colorScheme.backgroundColor: viewBackgroundColor
             
+            colorScheme
+            {
+				backgroundColor: control.colorScheme.backgroundColor
+				textColor : control.colorScheme.textColor
+			}
+			
             drawBorder: !floatingFootBar
 		}
     }
