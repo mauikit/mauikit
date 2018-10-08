@@ -39,15 +39,32 @@ Maui.Dialog
 	{
 		console.log("SERVER ADRESS", textEntry.text)
 		swipeView.currentIndex = 1
+		syncPopup.open()
+		
+	}
+	
+	Maui.Popup
+	{
+		id: syncPopup
 		
 	}
 	
 	swipeViewContent: 
 	[
 	
+	
+	Item{
+		SyncLinux
+		{
+			anchors.fill: parent
+		}
+	},
+	
 	Rectangle
 	{
 		color: "pink"
+		height: 200
+		width: 290
 		Loader
 	{
 		id: webViewer	
