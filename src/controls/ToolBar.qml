@@ -174,7 +174,6 @@ ToolBar
             id: layout
             width: control.width
             height: control.height
-            clip: true 
             
             Row
             {
@@ -228,7 +227,6 @@ ToolBar
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
                 Layout.rightMargin: middleContent.length === 1 ? 0 : margins
                 Layout.leftMargin: middleContent.length === 1 ? 0 : margins
-                clip: true
                 
                 Flickable
                 {
@@ -242,7 +240,7 @@ ToolBar
                     
                     boundsBehavior: isMobile ?  Flickable.DragOverBounds : Flickable.StopAtBounds
                     
-                    
+                    clip: true
                     RowLayout
                     {
                         id: flickableLayout
@@ -259,7 +257,7 @@ ToolBar
                         Row
                         {
                             id: middleRowContent
-                            
+                            clip: true
                             spacing: middleContent.length === 1 ? 0 : control.spacing
 //                             Layout.maximumWidth: control.width - leftRowContent.implicitWidth - rightRowContent.implicitWidth
                             
@@ -318,6 +316,7 @@ ToolBar
                 spacing: rightContent.length > 0 ? control.spacing : 0
                 Layout.rightMargin: rightContent.length > 0 ? margins : 0
                 Layout.minimumWidth: 0
+                clip: true
             }
         }
         ScrollBar.horizontal: ScrollBar { visible: false}
