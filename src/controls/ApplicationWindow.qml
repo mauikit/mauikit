@@ -48,7 +48,7 @@ Kirigami.AbstractApplicationWindow
     
     default property alias content : page.content
     property alias pageStack: __pageStack
-    property alias menuDrawer : menuDrawer
+    property alias mainMenu : mainMenu.content
     property alias about : aboutDialog
 
     //redefines here as here we can know a pointer to PageRow
@@ -229,13 +229,77 @@ backgroundColor.b, 0.7))
             id: menuBtn
             iconName: "application-menu"
 			iconColor: headBarFGColor
-            checked: menuDrawer.visible  
+            checked: mainMenu.visible  
             onClicked:
             {
                 menuButtonClicked()
-                menuDrawer.visible ? menuDrawer.close() : menuDrawer.open()
-
+				mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x, parent.height)
             }
+            
+            Maui.Menu
+            {
+				id: mainMenu
+				modal: true
+				
+				Item
+				{
+					height: unit * 120
+					
+					anchors
+					{
+						left: parent.left
+						right: parent.right
+						top: parent.top
+						margins: space.medium
+					}
+				
+					Column
+					{
+						anchors.fill: parent
+						spacing: space.small
+						Maui.ToolButton
+						{
+							iconName: "user-identity"
+							anchors.horizontalCenter: parent.horizontalCenter
+							size: iconSizes.big
+							enabled: false
+							isMask: false
+						}						
+						
+							Label
+						{
+							width: parent.width
+							horizontalAlignment: Qt.AlignHCenter
+							text: Maui.Handy.userInfo().name
+							font.pointSize: fontSizes.big
+							font.bold: true
+							font.weight: Font.Bold
+							
+						}
+						
+						Label
+						{
+							text: "Syncing..."
+							width: parent.width
+							font.pointSize: fontSizes.small
+							opacity: 0.5
+							horizontalAlignment: Qt.AlignHCenter
+							
+						}					
+						
+					}
+				}
+				
+				MenuSeparator {}
+				
+				MenuItem
+				{
+					text: qsTr("About")
+					onTriggered: aboutDialog.open()
+				}
+				MenuSeparator {}
+				
+			}			
         }
 
         headBar.rightContent: Maui.ToolButton
@@ -308,14 +372,7 @@ backgroundColor.b, 0.7))
                 source: __pageStack
             }
         }
-    }
-
-    globalDrawer : Maui.GlobalDrawer
-    {
-        id: menuDrawer
-//        bg: pageStack
-    }
-    
+    }  
     
     Maui.AboutDialog
     {

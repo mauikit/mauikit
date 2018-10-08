@@ -241,6 +241,7 @@ ToolBar
                     boundsBehavior: isMobile ?  Flickable.DragOverBounds : Flickable.StopAtBounds
                     
                     clip: true
+                    
                     RowLayout
                     {
                         id: flickableLayout

@@ -87,18 +87,21 @@ else
         radius: unit * 2
         color: colorScheme.backgroundColor
         border.color: colorScheme.borderColor
-        layer.enabled: true    
     }
 
-    enter: Transition
+    enter: Transition 
     {
-        NumberAnimation { property: "opacity"; from: 0.0; to: 1.0;  duration: 150 }
-    }
-
-    exit: Transition
-    {
-        NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; duration: 150 }
-    }
+		// grow_fade_in
+		NumberAnimation { property: "scale"; from: 0.9; to: 1.0; easing.type: Easing.OutQuint; duration: 220 }
+		NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; easing.type: Easing.OutCubic; duration: 150 }
+	}
+	
+	exit: Transition 
+	{
+		// shrink_fade_out
+		NumberAnimation { property: "scale"; from: 1.0; to: 0.9; easing.type: Easing.OutQuint; duration: 220 }
+		NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; easing.type: Easing.OutCubic; duration: 150 }
+	}
 
     Material.accent: colorScheme.accentColor
     Material.background: colorScheme.backgroundColor

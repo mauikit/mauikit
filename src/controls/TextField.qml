@@ -83,6 +83,7 @@ TextField
             text: control.placeholderText
             font: control.font
             color: Qt.lighter(colorScheme.textColor, 1.4)
+			opacity: 0.4
             horizontalAlignment: control.horizontalAlignment
             verticalAlignment: control.verticalAlignment
             visible: !control.length && !control.preeditText && (!control.activeFocus || control.horizontalAlignment !== Qt.AlignHCenter)

@@ -30,20 +30,27 @@ Rectangle
     id: control
     
     /* Controlc color scheming */
-	ColorScheme {id: colorScheme}
-	property alias colorScheme : colorScheme
+	ColorScheme 
+	{
+		id: colorScheme
+		borderColor: Qt.darker(backgroundColor, 1.4)		
+	}
+		property alias colorScheme : colorScheme
 	/***************************/
-	
-    height: iconSizes.small
-    width: height
-    radius: Math.min(width, height)
-	color: colorScheme.altColor
-    border.color: Qt.darker(color, 1.4)
-    clip: false
+    
+    property int size: iconSizes.small
     property string iconName : ""
     property string text : ""
     
     signal clicked()    
+
+	height: size + space.small
+	width: size + space.small
+	radius: Math.min(width, height)
+	color: colorScheme.altColor
+	border.color: colorScheme.boderColor
+	
+	clip: false
     
     Label
     {
@@ -64,7 +71,7 @@ Rectangle
         anchors.centerIn: parent
         iconName: control.iconName
         iconColor: colorScheme.altColorText
-        size: iconSizes.small
+        size: control.size
         enabled: false
     }
     

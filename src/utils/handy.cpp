@@ -20,7 +20,6 @@
 #include "handy.h"
 #include "utils.h"
 #include <QDebug>
-
 #include <QIcon>
 
 #ifdef Q_OS_ANDROID
@@ -60,4 +59,16 @@ qDebug() << "APP INFO" << res;
     
     return res;
     
+}
+
+QVariantMap Handy::userInfo()
+{
+	QString name = qgetenv("USER");
+	if (name.isEmpty())
+		name = qgetenv("USERNAME");
+	
+	auto res = QVariantMap({{"name", name}});
+	
+	return res;
+	
 }

@@ -17,30 +17,18 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef HANDY_H
-#define HANDY_H
+import QtQuick 2.0
+import QtWebEngine 1.5
 
-#include <QObject>
-
-#ifndef STATIC_MAUIKIT
-#include "mauikit_export.h"
-#endif
-
-#include <QVariantMap>
-
-#ifdef STATIC_MAUIKIT
-class Handy : public QObject
-#else
-class MAUIKIT_EXPORT Handy : public QObject
-#endif
+WebEngineView
 {
-    Q_OBJECT
-public:
-    Handy(QObject *parent = nullptr);
-    ~Handy();
-	Q_INVOKABLE static QVariantMap appInfo();  
-	Q_INVOKABLE static QVariantMap userInfo();  
+	id: webView
+	url: "https://nextcloud.webo.hosting/"
 	
-};
-
-#endif // HANDY_H
+	onLoadingChanged:
+	{
+		if (loadRequest.errorString)
+			console.error(loadRequest.errorString);
+	}
+	
+}

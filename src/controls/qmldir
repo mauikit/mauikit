@@ -39,6 +39,8 @@ SearchBar 1.0 SearchBar.qml
 Badge 1.0 Badge.qml
 GridView 1.0 GridView.qml
 Item 1.0 Item.qml
+Menu 1.0 Menu.qml
+SyncDialog 1.0 SyncDialog.qml
 
 
 
