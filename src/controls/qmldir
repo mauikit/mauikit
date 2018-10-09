@@ -41,6 +41,7 @@ GridView 1.0 GridView.qml
 Item 1.0 Item.qml
 Menu 1.0 Menu.qml
 SyncDialog 1.0 SyncDialog.qml
+SyncDialog 1.0 SyncDialogA.qml
 
 
 

@@ -43,7 +43,7 @@ Maui.Dialog
 			
 			swipeView.currentIndex = 1
 			webView.url = textEntry.text
-		
+			
 		}else
 		{
 			console.log("login")
@@ -68,10 +68,10 @@ Maui.Dialog
 	Item
 	{
 		
-		SyncLinux
+		SyncAndroid
 		{
 			id: webView
-			anchors.fill: parent
+			anchors.fill: parent			
 		}
 	}
 	

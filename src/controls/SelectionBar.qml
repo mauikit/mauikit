@@ -193,6 +193,12 @@ Maui.Item
                 delegate: Maui.IconDelegate
                 {
                     id: delegate
+                    Rectangle
+                    {
+						anchors.fill: parent
+						color: "pink"
+					}
+                    
                     anchors.verticalCenter: position === Qt.Horizontal ? parent.verticalCenter : undefined
                     anchors.horizontalCenter: position === Qt.Vertical ? parent.horizontalCenter : undefined
                     height:  iconSizes.big + (isMobile ? space.medium : space.big)
@@ -217,6 +223,7 @@ Maui.Item
 
             }
         }
+        
         Item
         {
             Layout.alignment: if(position === Qt.Horizontal)

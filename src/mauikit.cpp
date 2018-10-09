@@ -88,8 +88,11 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("PathBar.qml")), uri, 1, 0, "PathBar");
 	
 	/** SYNCING CONTROLS **/
+#ifdef Q_OS_ANDROID	
+	qmlRegisterType(componentUrl(QStringLiteral("SyncDialogA.qml")), uri, 1, 0, "SyncDialog");
+#else
 	qmlRegisterType(componentUrl(QStringLiteral("SyncDialog.qml")), uri, 1, 0, "SyncDialog");
-
+#endif
 
 #ifdef Q_OS_ANDROID
     qmlRegisterSingletonType<MAUIAndroid>(uri, 1, 0, "Android",
