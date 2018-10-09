@@ -5,7 +5,7 @@ import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.2 as Kirigami
 import "private"
 import QtQuick.Controls.Material 2.1
-import QtQuick.Window 2.11
+import QtQuick.Window 2.10
 
 Menu
 {

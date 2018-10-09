@@ -25,60 +25,75 @@ import "private"
 
 Maui.Dialog
 {
+	id: control
 	
 	title: qsTr("Sync...")
 	message: qsTr("Enter your server address to sync your information.")
 	entryField: true
-	acceptText: qsTr("Continue")
-	rejectText: qsTr("Cancel")
+	acceptText: swipeView.currentIndex === 0 ? qsTr("Continue") : qsTr("Finish")
+	rejectText: swipeView.currentIndex === 0 ? qsTr("Cancel") : qsTr("Return")
 	textEntry.placeholderText: "Server Address"
+	property alias webView: syncLoader.item
 	
-	property alias webView: webViewer.item
+	maxHeight: swipeView.currentIndex === 0 ? unit * 300 : unit * 600
+	maxWidth:swipeView.currentIndex === 0 ? unit * 300 : unit * 500
 	
-	onAccepted: 
+	onAccepted:
 	{
-		console.log("SERVER ADRESS", textEntry.text)
-		swipeView.currentIndex = 1
-		syncPopup.open()
+		if(swipeView.currentIndex === 0)
+		{
 		
+			webView.url = textEntry.text
+			swipeView.currentIndex = 1			
+		}else
+		{
+			console.log("login")
+		}
 	}
 	
-	Maui.Popup
+	onRejected:
 	{
-		id: syncPopup
-		
+		if(swipeView.currentIndex === 1)
+		{
+			swipeView.currentIndex = 0
+		}else
+		{
+			close()
+		}
 	}
-	
-	swipeViewContent: 
-	[
-	
-	
-	Item{
+
+	Component
+	{
+		id: linuxComponent
 		SyncLinux
 		{
 			anchors.fill: parent
 		}
-	},
-	
-	Rectangle
-	{
-		color: "pink"
-		height: 200
-		width: 290
-		Loader
-	{
-		id: webViewer	
-		height: parent.height
-		width: parent.width
-		source: isAndroid ? "qrc:/maui/kit/private/SyncAndroid.qml" :
-		"qrc:/maui/kit/private/SyncLinux.qml"
-		
-		onVisibleChanged:
-		{
-			if(!visible) webView.url = "about:blank"
-		}
 		
 	}
+
+	
+	Component
+	{
+		id: androidComponent
+		
+		SyncAndroid
+		{
+			anchors.fill: parent
+		}
+	}
+	swipeViewContent: 
+	[
+	
+	Item
+	{
+		
+		Loader
+		{
+			id: syncLoader
+			anchors.fill: parent
+			sourceComponent: isAndroid? androidComponent : linuxComponent
+		}
 	}
 	
 	]

@@ -39,52 +39,93 @@ Maui.Popup
 	
 	default property alias content : page.content
 		
-		property alias swipeViewContent : content.data
-		property alias swipeView : swipeView
+	property alias swipeViewContent : content.data
+	property alias swipeView : swipeView
+	
+	property alias acceptButton : _acceptButton
+	property alias rejectButton : _rejectButton		
+	property alias textEntry : _textEntry
+	property alias footBar : page.footBar
+	property alias headBar: page.headBar
+	property alias headBarTitle: page.headBarTitle
 		
-		property alias acceptButton : _acceptButton
-		property alias rejectButton : _rejectButton		
-		property alias textEntry : _textEntry
-		property alias footBar : page.footBar
-		property alias headBar: page.headBar
-		property alias headBarTitle: page.headBarTitle
-		
-		signal accepted()
-		signal rejected()
-		
-		maxWidth: unit * 300
-		maxHeight: unit * (message.length> 0? 250 : 200)
-		
-		widthHint: 0.9
-		heightHint: 0.9
-		
-		bottomPadding: space.big
-		clip: false
-		
-		Maui.Badge
+	signal accepted()
+	signal rejected()
+	
+	maxWidth: unit * 300
+	maxHeight: unit * (message.length> 0? 250 : 200)
+	
+	widthHint: 0.9
+	heightHint: 0.9
+	
+	bottomPadding: space.big
+	clip: false
+	
+	Maui.Badge
+	{
+		iconName: "window-close"
+		size: iconSizes.medium
+		anchors
 		{
-			iconName: "window-close"
-			size: iconSizes.medium
-			anchors
-			{
-				verticalCenter: parent.top
-				horizontalCenter: parent.left			
-			}
-			z: 999
-			
-			onClicked:
-			{
-				rejected()
-				close()
-			}
+			verticalCenter: parent.top
+			horizontalCenter: parent.left			
 		}
+		z: 999
 		
-		SwipeView
+		onClicked:
+		{
+			rejected()
+			close()
+		}
+	}
+	
+	
+	Maui.Page
+	{
+		id: page
+		headBarVisible: false
+		anchors.fill: parent
+		footBar.dropShadow: false
+		footBar.drawBorder: false
+		margins: space.big
+		clip: true
+		
+		footBarVisible: defaultButtons || footBar.count > 2
+		footBar.colorScheme.backgroundColor: "transparent"
+		footBar.margins: space.big
+		footBar.rightContent: Row
+		{
+			visible: defaultButtons
+			spacing: space.big
+			Maui.Button
+			{
+				id: _rejectButton
+				colorScheme.textColor: dangerColor
+				colorScheme.borderColor: dangerColor
+				colorScheme.backgroundColor: viewBackgroundColor
+				
+				text: rejectText
+				onClicked: rejected()
+				
+			}
+			
+			Maui.Button
+			{
+				id: _acceptButton			
+				colorScheme.backgroundColor: infoColor
+				colorScheme.textColor: "white"
+				text: acceptText
+				onClicked: accepted()
+			}
+		} 
+		
+		content: SwipeView
 		{
 			id: swipeView
 			anchors.fill: parent
 			interactive: false
-			contentItem: ListView
+			clip: true
+			contentItem: ListView 
 			{
 				id: content
 				implicitHeight: contentHeight
@@ -102,117 +143,77 @@ Maui.Popup
 			}
 			
 			Item
-			{	
-				Maui.Page
+			{				
+				ColumnLayout        
 				{
-					id: page
-					headBarVisible: false
-					anchors.fill: parent
-					footBar.dropShadow: false
-					footBar.drawBorder: false
-					margins: space.big
-					footBarVisible: defaultButtons || footBar.count > 2
-					footBar.colorScheme.backgroundColor: "transparent"
-					footBar.margins: space.big
-					footBar.rightContent: Row
+					id: _pageContent
+					anchors.fill: parent           
+					
+					Item
 					{
-						visible: defaultButtons
-						spacing: space.big
-						Maui.Button
-						{
-							id: _rejectButton
-							colorScheme.textColor: dangerColor
-							colorScheme.borderColor: dangerColor
-							colorScheme.backgroundColor: viewBackgroundColor
-							
-							text: rejectText
-							onClicked: 
-							{
-								rejected()
-								close()
-							}
-						}
+						visible: title.length > 0
+						Layout.fillWidth: visible            
+						Layout.margins: space.small
+						Layout.alignment: Qt.AlignLeft | Qt.AlignTop
 						
-						Maui.Button
+						Label
 						{
-							id: _acceptButton			
-							colorScheme.backgroundColor: infoColor
-							colorScheme.textColor: "white"
-							text: acceptText
-							onClicked: accepted()
+							width: parent.width
+							height: parent.visible ? parent.height : 0
+							color: colorScheme.textColor
+							text: title
+							font.weight: Font.Thin
+							font.bold: true
+							font.pointSize: fontSizes.huge
+							//                         elide: Qt.ElideRight					
+						}                    
+					}  
+					
+					ScrollView
+					{
+						visible: message.length > 0 
+						Layout.fillHeight: visible
+						Layout.fillWidth: visible           
+						Layout.margins: space.small
+						Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+						padding: 0                
+						
+						TextArea
+						{
+							id: body
+							padding: 0
+							
+							width: parent.width
+							height: parent.height
+							enabled: false
+							text: message
+							textFormat : TextEdit.AutoText
+							color: colorScheme.textColor
+							font.pointSize: fontSizes.default
+							wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+							
+							background: Rectangle
+							{
+								color: "transparent"
+							}
 						}
 					} 
 					
-					content: ColumnLayout        
+					Item
 					{
-						id: _pageContent
-						anchors.fill: parent           
+						Layout.fillWidth: entryField
+						height: entryField ?  iconSizes.big : 0
+						visible: entryField
 						
-						Item
+						Maui.TextField
 						{
-							visible: title.length > 0
-							Layout.fillWidth: visible            
-							Layout.margins: space.small
-							Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-							
-							Label
-							{
-								width: parent.width
-								height: parent.visible ? parent.height : 0
-								color: colorScheme.textColor
-								text: title
-								font.weight: Font.Thin
-								font.bold: true
-								font.pointSize: fontSizes.huge
-								//                         elide: Qt.ElideRight					
-							}                    
-						}  
-						
-						ScrollView
-						{
-							visible: message.length > 0 
-							Layout.fillHeight: visible
-							Layout.fillWidth: visible           
-							Layout.margins: space.small
-							Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-							padding: 0                
-							
-							TextArea
-							{
-								id: body
-								padding: 0
-								
-								width: parent.width
-								height: parent.height
-								enabled: false
-								text: message
-								textFormat : TextEdit.AutoText
-								color: colorScheme.textColor
-								font.pointSize: fontSizes.default
-								wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-								
-								background: Rectangle
-								{
-									color: "transparent"
-								}
-							}
-						} 
-						
-						Item
-						{
-							Layout.fillWidth: entryField
-							height: entryField ?  iconSizes.big : 0
-							visible: entryField
-							
-							Maui.TextField
-							{
-								id: _textEntry
-								anchors.fill: parent
-								onAccepted: control.accepted()					
-							}
-						}			
-					}				
-				}
-			}			
-		}
+							id: _textEntry
+							anchors.fill: parent
+							onAccepted: control.accepted()					
+						}
+					}			
+				}				
+			}
+		}			
+	}
 }
