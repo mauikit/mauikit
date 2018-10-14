@@ -188,7 +188,7 @@ ToolBar
             Kirigami.Separator
             {
                 Layout.fillHeight: true
-                Layout.margins: space.medium
+                Layout.margins: 0
                 Layout.topMargin: space.big
                 Layout.bottomMargin: space.big
                 width: unit
@@ -250,7 +250,7 @@ ToolBar
                         
                         Item
                         {
-                            Layout.fillWidth: true
+							Layout.fillWidth: !flickable.interactive
                             Layout.minimumHeight: 0
                             Layout.minimumWidth: 0
                         }
@@ -266,13 +266,13 @@ ToolBar
                         
                         Item
                         {
-                            Layout.fillWidth: true
-                            Layout.minimumHeight: 0
+							Layout.fillWidth: !flickable.interactive
+							Layout.minimumHeight: 0
                             Layout.minimumWidth: 0
                         }
                     }
                     
-                    ScrollBar.horizontal: ScrollBar { visible: false}
+                    ScrollBar.horizontal: ScrollBar { visible: false }
                 }
                 
             }
@@ -280,7 +280,7 @@ ToolBar
             Kirigami.Separator
             {
                 Layout.fillHeight: true
-                Layout.margins: space.medium
+                Layout.margins: 0
                 Layout.topMargin: space.big
                 Layout.bottomMargin: space.big
                 width: unit

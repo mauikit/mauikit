@@ -48,7 +48,7 @@ Button
         text: control.text
         font: control.font
         color: !control.enabled ? Qt.lighter(colorScheme.textColor, 1,2) :
-        control.highlighted || control.down ? Qt.lighter(colorScheme.backgroundColor, 1.4) : colorScheme.textColor 
+        control.highlighted || control.down ? Qt.lighter(colorScheme.textColor, 1.4) : colorScheme.textColor 
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight

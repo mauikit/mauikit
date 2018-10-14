@@ -24,6 +24,12 @@
 #include <QFileInfo>
 #include <QSettings>
 
+#ifdef Q_OS_ANDROID
+#include <QGuiApplication>
+#else
+#include <QApplication>
+#endif
+
 #define MAUIKIT_MAJOR_VERSION 0
 #define MAUIKIT_MINOR_VERSION 1
 #define MAUIKIT_PATCH_VERSION 0
@@ -32,6 +38,9 @@
 
 namespace UTIL
 {
+	
+	const auto app = QCoreApplication::instance();	
+	
     inline bool fileExists(const QString &url)
     {
         QFileInfo path(url);
@@ -48,19 +57,19 @@ namespace UTIL
 #endif
     }
 
-    inline void saveSettings(const QString &key, const QVariant &value, const QString &group)
+    inline void saveSettings(const QString &key, const QVariant &value, const QString &group, QString app = UTIL::app->applicationName(), const QString organization = UTIL::app->organizationName())
     {
-        QSettings setting("org.kde.maui","mauikit");
+        QSettings setting(organization.isEmpty() ?  QString("org.kde.maui") : organization, app);
         setting.beginGroup(group);
         setting.setValue(key,value);
         setting.endGroup();
     }
 
-    inline QVariant loadSettings(const QString &key, const QString &group, const QVariant &defaultValue)
+    inline QVariant loadSettings(const QString &key, const QString &group, const QVariant &defaultValue, const QString app = UTIL::app->applicationName(), const QString organization = UTIL::app->organizationName())
     {
         QVariant variant;
-        QSettings setting("org.kde.maui","mauikit");
-        setting.beginGroup(group);
+		QSettings setting(organization.isEmpty() ?  QString("org.kde.maui") : organization, app);
+		setting.beginGroup(group);
         variant = setting.value(key,defaultValue);
         setting.endGroup();
 

@@ -28,6 +28,8 @@
 
 #include <QVariantMap>
 
+#include "utils.h"
+
 #ifdef STATIC_MAUIKIT
 class Handy : public QObject
 #else
@@ -40,6 +42,12 @@ public:
     ~Handy();
 	Q_INVOKABLE static QVariantMap appInfo();  
 	Q_INVOKABLE static QVariantMap userInfo();  
+	
+	Q_INVOKABLE static bool saveSetting(const QString &key, const QVariant &value, const QString &group);
+	Q_INVOKABLE static QVariant loadSetting(const QString &key, const QString &group, const QVariant &defaultValue);
+	
+	Q_INVOKABLE static QString getClipboard();
+	Q_INVOKABLE static bool copyToClipboard(const QString &text);
 	
 };
 

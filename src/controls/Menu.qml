@@ -18,6 +18,7 @@ Menu
 	}	
 	property alias colorScheme : colorScheme
 	/***************************/
+	z: 999
 	
 	default property alias content : content.data
 	

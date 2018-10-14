@@ -77,6 +77,7 @@ void MauiKit::registerTypes(const char *uri)
 	qmlRegisterType(componentUrl(QStringLiteral("GridView.qml")), uri, 1, 0, "GridView");
 	qmlRegisterType(componentUrl(QStringLiteral("Item.qml")), uri, 1, 0, "Item");
 	qmlRegisterType(componentUrl(QStringLiteral("Menu.qml")), uri, 1, 0, "Menu");
+	qmlRegisterType(componentUrl(QStringLiteral("MenuItem.qml")), uri, 1, 0, "MenuItem");
 	qmlRegisterType(componentUrl(QStringLiteral("private/TagList.qml")), uri, 1, 0, "TagList");
 
     /** BROWSING CONTROLS **/

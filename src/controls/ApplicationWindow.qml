@@ -257,6 +257,7 @@ backgroundColor.b, 0.7))
 					{
 						anchors.fill: parent
 						spacing: space.small
+						
 						Maui.ToolButton
 						{
 							iconName: "user-identity"
@@ -266,7 +267,7 @@ backgroundColor.b, 0.7))
 							isMask: false
 						}						
 						
-							Label
+						Label
 						{
 							width: parent.width
 							horizontalAlignment: Qt.AlignHCenter
@@ -274,7 +275,7 @@ backgroundColor.b, 0.7))
 							font.pointSize: fontSizes.big
 							font.bold: true
 							font.weight: Font.Bold
-							
+							color: textColor
 						}
 						
 						Label
@@ -284,7 +285,7 @@ backgroundColor.b, 0.7))
 							font.pointSize: fontSizes.small
 							opacity: 0.5
 							horizontalAlignment: Qt.AlignHCenter
-							
+							color: textColor
 						}					
 						
 					}
@@ -292,7 +293,7 @@ backgroundColor.b, 0.7))
 				
 				MenuSeparator {}
 				
-				MenuItem
+				Maui.MenuItem
 				{
 					text: qsTr("About")
 					onTriggered: aboutDialog.open()

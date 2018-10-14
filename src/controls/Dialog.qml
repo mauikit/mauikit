@@ -45,6 +45,7 @@ Maui.Popup
 	property alias acceptButton : _acceptButton
 	property alias rejectButton : _rejectButton		
 	property alias textEntry : _textEntry
+	property alias page : page
 	property alias footBar : page.footBar
 	property alias headBar: page.headBar
 	property alias headBarTitle: page.headBarTitle
@@ -53,12 +54,11 @@ Maui.Popup
 	signal rejected()
 	
 	maxWidth: unit * 300
-	maxHeight: unit * (message.length> 0? 250 : 200)
+	maxHeight: _pageContent.implicitHeight + page.footBar.height + page.margins + space.huge
 	
 	widthHint: 0.9
 	heightHint: 0.9
-	
-	bottomPadding: space.big
+	z: 1
 	clip: false
 	
 	Maui.Badge
@@ -70,7 +70,8 @@ Maui.Popup
 			verticalCenter: parent.top
 			horizontalCenter: parent.left			
 		}
-		z: 999
+
+		z: control.z+1
 		
 		onClicked:
 		{
@@ -79,19 +80,19 @@ Maui.Popup
 		}
 	}
 	
-	
 	Maui.Page
 	{
 		id: page
-		headBarVisible: false
+		headBarVisible: headBar.count > 2
 		anchors.fill: parent
 		footBar.dropShadow: false
 		footBar.drawBorder: false
 		margins: space.big
 		clip: true
-		
+		headBarExit: false
+		colorScheme.backgroundColor : control.colorScheme.backgroundColor
 		footBarVisible: defaultButtons || footBar.count > 2
-		footBar.colorScheme.backgroundColor: "transparent"
+		footBar.colorScheme.backgroundColor: colorScheme.backgroundColor
 		footBar.margins: space.big
 		footBar.rightContent: Row
 		{
@@ -102,7 +103,7 @@ Maui.Popup
 				id: _rejectButton
 				colorScheme.textColor: dangerColor
 				colorScheme.borderColor: dangerColor
-				colorScheme.backgroundColor: viewBackgroundColor
+				colorScheme.backgroundColor: "transparent"
 				
 				text: rejectText
 				onClicked: rejected()
@@ -125,6 +126,12 @@ Maui.Popup
 			anchors.fill: parent
 			interactive: false
 			clip: true
+			
+			background: Rectangle
+			{
+				color: "transparent"
+			}
+			
 			contentItem: ListView 
 			{
 				id: content
@@ -147,36 +154,41 @@ Maui.Popup
 				ColumnLayout        
 				{
 					id: _pageContent
-					anchors.fill: parent           
+					anchors.centerIn: parent
+					width: parent.width
+					height: implicitHeight
+					spacing: space.medium
 					
-					Item
+				
+					Label
 					{
+						width: parent.width
+						height: visible ? implicitHeight : 0
+						
 						visible: title.length > 0
+						
 						Layout.fillWidth: visible            
-						Layout.margins: space.small
 						Layout.alignment: Qt.AlignLeft | Qt.AlignTop
 						
-						Label
-						{
-							width: parent.width
-							height: parent.visible ? parent.height : 0
-							color: colorScheme.textColor
-							text: title
-							font.weight: Font.Thin
-							font.bold: true
-							font.pointSize: fontSizes.huge
-							//                         elide: Qt.ElideRight					
-						}                    
-					}  
+						clip: true
+						color: colorScheme.textColor
+						text: title
+						font.weight: Font.Thin
+						font.bold: true
+						font.pointSize: fontSizes.huge
+						//                         elide: Qt.ElideRight					
+					}                    
+				
 					
 					ScrollView
 					{
 						visible: message.length > 0 
 						Layout.fillHeight: visible
 						Layout.fillWidth: visible           
-						Layout.margins: space.small
+
 						Layout.alignment: Qt.AlignLeft | Qt.AlignTop
 						padding: 0                
+						clip: true
 						
 						TextArea
 						{
@@ -204,6 +216,7 @@ Maui.Popup
 						Layout.fillWidth: entryField
 						height: entryField ?  iconSizes.big : 0
 						visible: entryField
+						clip: true
 						
 						Maui.TextField
 						{

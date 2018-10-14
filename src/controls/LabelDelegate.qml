@@ -21,9 +21,16 @@ import QtQuick 2.9
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import org.kde.kirigami 2.2 as Kirigami
+import "private"
 
 ItemDelegate
 {
+	id: control
+	/* Controlc color scheming */
+	ColorScheme {id: colorScheme}
+	property alias colorScheme : colorScheme
+	/***************************/
+	
     width: parent.width
     height: rowHeight
 
@@ -31,12 +38,12 @@ ItemDelegate
     property bool boldLabel : false
     property alias label: labelTxt.text
     property alias labelTxt : labelTxt
-    property string labelColor: ListView.isCurrentItem ? highlightedTextColor : textColor
+    property string labelColor: ListView.isCurrentItem ? colorScheme.highlightedTextColor : colorScheme.textColor
 
     Rectangle
     {
         anchors.fill: parent
-        color:  isSection ? viewBackgroundColor : (index % 2 === 0 ? Qt.darker(backgroundColor) : "transparent")
+        color:  isSection ? "transparent" : (index % 2 === 0 ? Qt.darker(colorScheme.backgroundColor) : "transparent")
         opacity: 0.1
     }
 

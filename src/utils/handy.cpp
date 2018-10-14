@@ -21,44 +21,41 @@
 #include "utils.h"
 #include <QDebug>
 #include <QIcon>
-
-#ifdef Q_OS_ANDROID
-#include <QGuiApplication>
-#else
-#include <QApplication>
-#endif
+#include <QClipboard>
+#include <QCoreApplication>
+#include <QMimeData>
 
 Handy::Handy(QObject *parent) : QObject(parent) 
 {
-    
+	
 }
 
 Handy::~Handy()
 {
-    
+	
 }
 
 QVariantMap Handy::appInfo()
 {
-    auto app =  QCoreApplication::instance();
-    
-    auto res = QVariantMap({{"name", app->applicationName()},
-                           {"version", app->applicationVersion()},
-                           {"organization", app->organizationName()},
-                           {"domain", app->organizationDomain()},
-                           {"mauikit", MAUIKIT_VERSION_STR},
-                           {"qt", QT_VERSION_STR} });
-    
-#ifdef Q_OS_ANDROID
-    res.insert("icon", QGuiApplication::windowIcon().name());
-#else
-    res.insert("icon", QApplication::windowIcon().name());
-#endif
-    
-qDebug() << "APP INFO" << res;
-    
-    return res;
-    
+	auto app =  UTIL::app;
+	
+	auto res = QVariantMap({{"name", app->applicationName()},
+						   {"version", app->applicationVersion()},
+						   {"organization", app->organizationName()},
+						   {"domain", app->organizationDomain()},
+						   {"mauikit", MAUIKIT_VERSION_STR},
+						{"qt", QT_VERSION_STR} });
+	
+	#ifdef Q_OS_ANDROID
+	res.insert("icon", QGuiApplication::windowIcon().name());
+	#else
+	res.insert("icon", QApplication::windowIcon().name());
+	#endif
+	
+	qDebug() << "APP INFO" << res;
+	
+	return res;
+	
 }
 
 QVariantMap Handy::userInfo()
@@ -71,4 +68,35 @@ QVariantMap Handy::userInfo()
 	
 	return res;
 	
+}
+
+bool Handy::saveSetting(const QString &key, const QVariant &value, const QString &group)
+{
+	UTIL::saveSettings(key, value, group);
+	return true;
+}
+
+QVariant Handy::loadSetting(const QString &key, const QString &group, const QVariant &defaultValue)
+{
+	return UTIL::loadSettings(key, group, defaultValue);
+}
+
+
+QString Handy::getClipboard()
+{
+	auto clipbopard = QApplication::clipboard();
+	auto mime = clipbopard->mimeData();
+	if(mime->hasText())
+		return clipbopard->text();
+	
+	return QString();
+}
+
+bool Handy::copyToClipboard(const QString &text)
+{
+	auto clipbopard = QApplication::clipboard();
+	
+	clipbopard->setText(text);
+	
+	return true;
 }

@@ -23,43 +23,32 @@ import QtQuick.Controls 2.2
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.0 as Kirigami
 
-Maui.Popup
+Maui.Dialog
 {
     property var itemUrls : []
 
-
-    modal: true
-
     widthHint: 0.9
     
-   maxHeight: grid.itemSize * 5
+	maxHeight: grid.itemSize * 5 + space.big
     maxWidth: unit * 500
 
-verticalAlignment: Qt.AlignBottom
+	verticalAlignment: Qt.AlignBottom
     
-
-   Maui.Page
-   {
-	   anchors.fill: parent
-	   headBarTitle: qsTr("Open with...")
-	   headBarExit: false
-	   
-	  
-	   Maui.GridBrowser
-	   {
-		   id: grid
-		   anchors.fill: parent
-		   showEmblem: false
-		   centerContent: true
-		   
-		   onItemClicked:
-		   {
-			   grid.currentIndex = index
-			   triggerService(index)
-		   }
-	   }
-}
+    defaultButtons: false
     
+    Maui.GridBrowser
+    {
+		id: grid
+		anchors.fill: parent
+		showEmblem: false
+		centerContent: true
+		
+		onItemClicked:
+		{
+			grid.currentIndex = index
+			triggerService(index)
+		}
+	}
 
     onOpened: populate()
 

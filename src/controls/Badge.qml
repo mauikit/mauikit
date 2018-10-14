@@ -33,7 +33,8 @@ Rectangle
 	ColorScheme 
 	{
 		id: colorScheme
-		borderColor: Qt.darker(backgroundColor, 1.4)		
+		textColor: altColorText
+		backgroundColor: altColor
 	}
 		property alias colorScheme : colorScheme
 	/***************************/
@@ -47,8 +48,8 @@ Rectangle
 	height: size + space.small
 	width: size + space.small
 	radius: Math.min(width, height)
-	color: colorScheme.altColor
-	border.color: colorScheme.boderColor
+	color: colorScheme.backgroundColor
+	border.color: colorScheme.borderColor
 	
 	clip: false
     
@@ -60,7 +61,7 @@ Rectangle
         font.weight: Font.Bold
         font.bold: true
         visible: control.text.length
-        color: colorScheme.altColorText
+        color: colorScheme.textColor
         verticalAlignment: Qt.AlignVCenter
         horizontalAlignment: Qt.AlignHCenter
     }
@@ -70,7 +71,7 @@ Rectangle
         visible: iconName.length 
         anchors.centerIn: parent
         iconName: control.iconName
-        iconColor: colorScheme.altColorText
+        iconColor: colorScheme.textColor
         size: control.size
         enabled: false
     }

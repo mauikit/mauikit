@@ -33,7 +33,7 @@ QQC2.Page
 	ColorScheme 
 	{
 		id: colorScheme
-		backgroundColor: viewBackgroundColor		
+		backgroundColor: viewBackgroundColor
 	}
 	property alias colorScheme : colorScheme
 	/***************************/

@@ -40,6 +40,7 @@ Badge 1.0 Badge.qml
 GridView 1.0 GridView.qml
 Item 1.0 Item.qml
 Menu 1.0 Menu.qml
+MenuItem 1.0 MenuItem.qml
 SyncDialog 1.0 SyncDialog.qml
 SyncDialog 1.0 SyncDialogA.qml
 

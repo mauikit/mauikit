@@ -26,7 +26,11 @@ import "private"
 
 ListView
 {
-    id: control
+	id: control
+	/* Controlc color scheming */
+	ColorScheme {id: colorScheme}
+	property alias colorScheme : colorScheme
+	/***************************/
 
     property color bgColor: isCollapsed ? altColor : backgroundColor
     property color fgColor : isCollapsed ? altColorText : textColor

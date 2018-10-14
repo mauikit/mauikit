@@ -43,5 +43,6 @@
 		<file alias="SyncDialog.qml">src/controls/SyncDialog.qml</file>
 		<file alias="SyncDialogA.qml">src/controls/SyncDialogA.qml</file>
 		<file alias="Menu.qml">src/controls/Menu.qml</file>
+		<file alias="MenuItem.qml">src/controls/MenuItem.qml</file>
 	</qresource>
 </RCC>
