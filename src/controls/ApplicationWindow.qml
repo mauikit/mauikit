@@ -233,7 +233,7 @@ backgroundColor.b, 0.7))
             onClicked:
             {
                 menuButtonClicked()
-				mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x, parent.height)
+				mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x,  altToolBars ? 0 : parent.height)
             }
             
             Maui.Menu

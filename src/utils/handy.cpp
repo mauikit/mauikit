@@ -84,7 +84,12 @@ QVariant Handy::loadSetting(const QString &key, const QString &group, const QVar
 
 QString Handy::getClipboard()
 {
+	#ifdef Q_OS_ANDROID
+	auto clipbopard = QGuiApplication::clipboard();
+	#else
 	auto clipbopard = QApplication::clipboard();
+	#endif
+
 	auto mime = clipbopard->mimeData();
 	if(mime->hasText())
 		return clipbopard->text();
@@ -94,7 +99,11 @@ QString Handy::getClipboard()
 
 bool Handy::copyToClipboard(const QString &text)
 {
+	#ifdef Q_OS_ANDROID
+	auto clipbopard = QGuiApplication::clipboard();
+	#else
 	auto clipbopard = QApplication::clipboard();
+	#endif
 	
 	clipbopard->setText(text);
 	

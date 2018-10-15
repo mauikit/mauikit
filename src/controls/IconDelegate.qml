@@ -190,11 +190,10 @@ ItemDelegate
 
         Item
         {
-			height: control.height - folderSize - space.tiny
 			Layout.fillWidth: true
-			Layout.maximumHeight: (isDetails ? parent.height : height)
-			Layout.minimumHeight: (isDetails ? parent.height : height)
-			Layout.preferredHeight: (isDetails ? parent.height : height)
+			Layout.maximumHeight: (isDetails ? parent.height :  fontSizes.default * 5)
+			Layout.minimumHeight: (isDetails ? parent.height :  fontSizes.default * 3)
+			Layout.preferredHeight: (isDetails ? parent.height : control.height - folderSize - space.tiny)
 			
             Layout.row: isDetails ? 1 : 2
             Layout.column: isDetails ? 2 : 1

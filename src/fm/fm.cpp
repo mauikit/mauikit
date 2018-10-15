@@ -151,24 +151,27 @@ QVariantList FM::getDevices()
 
 #if defined(Q_OS_ANDROID)
     drives << packItems({MAUIAndroid::sdDir()}, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES]);
+	return drives;
+#else	
+	return drives;
 #endif
 
-    auto devices = QStorageInfo::mountedVolumes();
-    for(auto device : devices)
-    {
-        if(device.isValid() && !device.isReadOnly())
-        {
-            QVariantMap drive =
-            {
-                {FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], "drive-harddisk"},
-                {FMH::MODEL_NAME[FMH::MODEL_KEY::LABEL], device.displayName()},
-                {FMH::MODEL_NAME[FMH::MODEL_KEY::PATH], device.rootPath()},
-                {FMH::MODEL_NAME[FMH::MODEL_KEY::TYPE], FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES]}
-            };
-
-            drives << drive;
-        }
-    }
+//     auto devices = QStorageInfo::mountedVolumes();
+//     for(auto device : devices)
+//     {
+//         if(device.isValid() && !device.isReadOnly())
+//         {
+//             QVariantMap drive =
+//             {
+//                 {FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], "drive-harddisk"},
+//                 {FMH::MODEL_NAME[FMH::MODEL_KEY::LABEL], device.displayName()},
+//                 {FMH::MODEL_NAME[FMH::MODEL_KEY::PATH], device.rootPath()},
+//                 {FMH::MODEL_NAME[FMH::MODEL_KEY::TYPE], FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES]}
+//             };
+// 
+//             drives << drive;
+//         }
+//     }
 
     //    for(auto device : QDir::drives())
     //    {

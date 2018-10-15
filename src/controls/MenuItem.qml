@@ -31,12 +31,13 @@ MenuItem
 	ColorScheme {id: colorScheme}
 	property alias colorScheme : colorScheme
 	/***************************/
-	
+	spacing: space.medium
+	font.pointSize: fontSizes.default
 	
 	contentItem: Label 
 	{
-		leftPadding: !control.mirrored ? (control.indicator ? control.indicator.width : 0) + control.spacing : 0
-		rightPadding: control.mirrored ? (control.indicator ? control.indicator.width : 0) + control.spacing : 0
+		leftPadding: control.spacing
+		rightPadding: control.spacing
 		
 		text: control.text
 		font: control.font
