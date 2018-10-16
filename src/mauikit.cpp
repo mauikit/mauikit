@@ -88,21 +88,17 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("FileDialog.qml")), uri, 1, 0, "FileDialog");
     qmlRegisterType(componentUrl(QStringLiteral("PathBar.qml")), uri, 1, 0, "PathBar");
 	
-	/** SYNCING CONTROLS **/
-#ifdef Q_OS_ANDROID	
-	qmlRegisterType(componentUrl(QStringLiteral("SyncDialogA.qml")), uri, 1, 0, "SyncDialog");
-#else
-	qmlRegisterType(componentUrl(QStringLiteral("SyncDialog.qml")), uri, 1, 0, "SyncDialog");
-#endif
-
 #ifdef Q_OS_ANDROID
+	qmlRegisterType(componentUrl(QStringLiteral("SyncDialogA.qml")), uri, 1, 0, "SyncDialog");	
     qmlRegisterSingletonType<MAUIAndroid>(uri, 1, 0, "Android",
                                           [](QQmlEngine*, QJSEngine*) -> QObject* {
         MAUIAndroid *android = new MAUIAndroid;
         return android;
     });
 #else
-    qmlRegisterSingletonType<MAUIKDE>(uri, 1, 0, "KDE",
+	qmlRegisterType(componentUrl(QStringLiteral("SyncDialog.qml")), uri, 1, 0, "SyncDialog");	
+	qmlRegisterType(componentUrl(QStringLiteral("Terminal.qml")), uri, 1, 0, "Terminal");	
+	qmlRegisterSingletonType<MAUIKDE>(uri, 1, 0, "KDE",
                                       [](QQmlEngine*, QJSEngine*) -> QObject* {
         MAUIKDE *kde = new MAUIKDE;
         return kde;

@@ -39,7 +39,7 @@ MenuItem
 		leftPadding: control.spacing
 		rightPadding: control.spacing
 		
-		text: control.text
+		text: control.action ? control.action.text : control.text
 		font: control.font
 		
 		color: control.hovered && !control.pressed ? colorScheme.highlightedTextColor : colorScheme.textColor

@@ -78,7 +78,7 @@ Item
 		flickableDirection: Flickable.AutoFlickDirection
 		snapMode: GridView.SnapToRow
 		highlightMoveDuration: 0
-		
+		interactive: true
 		ScrollBar.vertical: ScrollBar{ id:scrollBar; visible: true}
 		onWidthChanged: adaptContent? control.adaptGrid() : undefined
 		
