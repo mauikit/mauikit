@@ -66,7 +66,7 @@ Maui.Item
         anchors.fill: parent
         z:-1
         color: colorScheme.altColor
-        radius: 4
+        radius: radiusV
         opacity: 0.6
         border.color: colorScheme.borderColor
 

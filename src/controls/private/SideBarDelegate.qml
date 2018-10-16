@@ -14,7 +14,7 @@ ItemDelegate
     property alias label: controlLabel.text
     
     width: parent.width
-    height: sidebarIconSize + Maui.Style.space.big
+    height: Math.max(sidebarIconSize + space.big, rowHeight)
     
     clip: true
     

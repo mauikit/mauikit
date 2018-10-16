@@ -30,7 +30,8 @@ ItemDelegate
     property bool isCurrentListItem :  ListView.isCurrentItem
 
     property alias label: controlLabel.text
-
+	property int radius : 0
+	
     width: parent.width
     height: rowHeight
 
@@ -44,6 +45,7 @@ ItemDelegate
     {
         anchors.fill: parent
         color: isCurrentListItem ? highlightColor : "transparent"
+		radius: control.radius
         //                                   index % 2 === 0 ? Qt.lighter(backgroundColor,1.2) :
         //                                                     backgroundColor
     }

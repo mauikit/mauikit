@@ -192,7 +192,7 @@ ItemDelegate
         {
 			Layout.fillWidth: true
 			Layout.maximumHeight: (isDetails ? parent.height :  fontSizes.default * 5)
-			Layout.minimumHeight: (isDetails ? parent.height :  fontSizes.default * 3)
+			Layout.minimumHeight: (isDetails ? parent.height :  control.height - folderSize - space.tiny)
 			Layout.preferredHeight: (isDetails ? parent.height : control.height - folderSize - space.tiny)
 			
             Layout.row: isDetails ? 1 : 2
@@ -220,7 +220,7 @@ ItemDelegate
                     anchors.fill: parent
                     
                     z: -1
-                    radius: unit * 3
+                    radius: radiusV
                     color: hightlightedColor
                     opacity: hovered ? 0.25 : 0.5
                 }

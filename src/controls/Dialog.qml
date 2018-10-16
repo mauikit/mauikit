@@ -64,7 +64,7 @@ Maui.Popup
 	Maui.Badge
 	{
 		iconName: "window-close"
-		size: iconSizes.medium
+		colorScheme.backgroundColor: hovered ?  dangerColor : colorScheme.altColor
 		anchors
 		{
 			verticalCenter: parent.top
@@ -77,7 +77,7 @@ Maui.Popup
 		{
 			rejected()
 			close()
-		}
+		}		
 	}
 	
 	Maui.Page

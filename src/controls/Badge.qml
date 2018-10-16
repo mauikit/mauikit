@@ -36,15 +36,20 @@ Rectangle
 		textColor: altColorText
 		backgroundColor: altColor
 	}
-		property alias colorScheme : colorScheme
+	property alias colorScheme : colorScheme
 	/***************************/
+	
+	property bool hovered : false
     
     property int size: iconSizes.small
     property string iconName : ""
     property string text : ""
     
-    signal clicked()    
-
+	signal clicked()    
+	signal pressed()    
+	signal hovered()    
+	signal released()
+	
 	height: size + space.small
 	width: size + space.small
 	radius: Math.min(width, height)
@@ -78,8 +83,13 @@ Rectangle
     
     MouseArea
     {
+		id: mouseArea
         anchors.fill: parent
         onClicked: control.clicked() 
-        
+		onPressed: control.pressed() 
+		onReleased: control.released()
+		hoverEnabled: true
+		onEntered: hovered = true
+		onExited: hovered = false
     }
 }

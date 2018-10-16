@@ -72,8 +72,8 @@ else
     margins: unit 
     padding: unit
     
-    topPadding: control.padding
-    bottomPadding: control.padding
+    topPadding: radiusV
+    bottomPadding: radiusV
     leftPadding: control.padding
     rightPadding: control.padding
     
@@ -84,10 +84,11 @@ else
 
     background: Rectangle
     {
-        radius: unit * 2
+        radius: radiusV
         color: colorScheme.backgroundColor
-        border.color: colorScheme.borderColor
-    }
+        border.color: colorScheme.borderColor       
+        
+    }  
 
     enter: Transition 
     {
