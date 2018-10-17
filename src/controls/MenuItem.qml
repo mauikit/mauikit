@@ -19,7 +19,8 @@
 
 import QtQuick 2.9
 import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.3
+
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.0 as Kirigami
 import "private"
@@ -36,7 +37,8 @@ MenuItem
 	
 	contentItem: Label 
 	{
-		leftPadding: control.spacing
+		id: controlLabel
+		leftPadding: control.checkable ? control.indicator.width + control.spacing + space.tiny : control.spacing
 		rightPadding: control.spacing
 		
 		text: control.action ? control.action.text : control.text
@@ -49,6 +51,22 @@ MenuItem
 		horizontalAlignment: Text.AlignLeft
 		verticalAlignment: Text.AlignVCenter
 	}
+	
+	indicator: Rectangle
+	{
+		x: control.mirrored ? control.width - width - control.rightPadding : control.spacing
+		y: control.topPadding + (control.availableHeight - height) / 2
+		
+		height: iconSizes.small
+		width: height		
+	
+		visible: control.checkable
+		
+		color: control.checked ? control.colorScheme.highlightColor : control.colorScheme.viewBackgroundColor
+		border.color: control.colorScheme.borderColor
+		radius: radiusV
+	}
+	
 	
 
 	background: Item
