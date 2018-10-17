@@ -59,7 +59,7 @@ DEFINES += \
     MAUI_APP \
     STATIC_MAUIKIT
 
-API_VER=1.0
+API_VER = 1.0
 
 DISTFILES += \
     $$PWD/CMakeLists.txt

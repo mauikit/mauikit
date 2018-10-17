@@ -73,6 +73,7 @@ MenuItem
 	{
 		anchors.fill: parent
 		implicitWidth: Kirigami.Units.gridUnit * 8
+		implicitHeight: rowHeight
 		
 		Rectangle 
 		{
