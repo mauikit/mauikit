@@ -41,7 +41,7 @@ SOURCES += \
     $$PWD/src/mauikit.cpp \
     $$PWD/src/fm/fm.cpp \
     $$PWD/src/fm/fmdb.cpp \
-    $$PWD/src/fm/fmmmodel.cpp \
+    $$PWD/src/fm/fmmodel.cpp \
     $$PWD/src/fm/fmlist.cpp \
     $$PWD/src/utils/handy.cpp
 
