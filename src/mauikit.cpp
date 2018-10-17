@@ -21,7 +21,11 @@
 
 #include <QDebug>
 #include <QQuickStyle>
+
 #include "fm.h"
+#include "fmmodel.h"
+#include "fmlist.h"
+
 #include "handy.h"
 
 #ifdef Q_OS_ANDROID
@@ -104,10 +108,12 @@ void MauiKit::registerTypes(const char *uri)
         return kde;
     });
 #endif
-
+	
+	qmlRegisterType<FMModel>("FMModel", 1, 0, "FMModel");
+	qmlRegisterType<FMList>("FMList", 1, 0, "FMList");
     qmlRegisterSingletonType<FM>(uri, 1, 0, "FM",
                                       [](QQmlEngine*, QJSEngine*) -> QObject* {
-       auto fm = new FM;
+		auto fm = new FM;
         return fm;
     });
     

@@ -48,7 +48,8 @@ Maui.ToolButton
 	{
 		id: popup
 		height: barHeight
-		width: content.middleLayout.implicitWidth + space.big > maxWidth ? maxWidth : (content.middleLayout.implicitWidth > ApplicationWindow.overlay.width ? ApplicationWindow.overlay.width  : content.middleLayout.implicitWidth + space.big)		
+		implicitWidth: content.middleLayout.implicitWidth + space.big + space.small
+		width: implicitWidth > maxWidth ? maxWidth : (content.middleLayout.implicitWidth > ApplicationWindow.overlay.width ? ApplicationWindow.overlay.width  : implicitWidth)		
 		padding: 0
 		margins: 0
 		x: alignment === Qt.AlignLeft ? (control.x - width) - space.big : (control.x + control.width) + space.big

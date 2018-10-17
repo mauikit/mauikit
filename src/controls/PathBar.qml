@@ -37,7 +37,7 @@ Maui.Item
     {
         id: pathBarBG
         anchors.fill: parent
-        z:-1
+        z: -1
         color: pathEntry.visible ? colorScheme.viewBackgroundColor : colorScheme.backgroundColor
         radius: radiusV
         opacity: 1
@@ -213,6 +213,4 @@ Maui.Item
         entry.text = browser.currentPath
         pathCrumbs.visible = !pathCrumbs.visible
     }
-    
-    
 }

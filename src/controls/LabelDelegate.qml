@@ -40,9 +40,8 @@ ItemDelegate
     property alias labelTxt : labelTxt
     property string labelColor: ListView.isCurrentItem ? colorScheme.highlightedTextColor : colorScheme.textColor
 
-    Rectangle
+    background: Rectangle
     {
-        anchors.fill: parent
         color:  isSection ? "transparent" : (index % 2 === 0 ? Qt.darker(colorScheme.backgroundColor) : "transparent")
         opacity: 0.1
     }

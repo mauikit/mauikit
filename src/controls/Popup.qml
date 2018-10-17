@@ -72,8 +72,8 @@ else
     margins: unit 
     padding: unit
     
-    topPadding: radiusV
-    bottomPadding: radiusV
+    topPadding: popupBackground.radius
+    bottomPadding: popupBackground.radius
     leftPadding: control.padding
     rightPadding: control.padding
     
@@ -84,6 +84,7 @@ else
 
     background: Rectangle
     {
+		id: popupBackground
         radius: radiusV
         color: colorScheme.backgroundColor
         border.color: colorScheme.borderColor       

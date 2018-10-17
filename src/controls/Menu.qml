@@ -34,8 +34,8 @@ Menu
 		transformOrigin: !cascade ? Item.Top : (mirrored ? Item.TopRight : Item.TopLeft)
 		delegate: MenuItem { }
 
-	topPadding: control.padding
-	bottomPadding: control.padding
+	topPadding: menuBackground.radius
+	bottomPadding: menuBackground.radius
 	leftPadding: control.padding
 	rightPadding: control.padding
 	
@@ -48,7 +48,8 @@ Menu
 	focus: true
 	parent: ApplicationWindow.overlay
 	
-	contentItem: ListView {
+	contentItem: ListView
+	{
 		id: content
 		implicitHeight: contentHeight
 		
@@ -81,7 +82,8 @@ Menu
 	
 	background: Rectangle
 	{
-		radius: unit * 2
+		id: menuBackground 
+		radius: radiusV
 		color: colorScheme.backgroundColor
 		border.color: colorScheme.borderColor		
 		

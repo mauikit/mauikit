@@ -66,12 +66,16 @@ set(mauikit_HDRS
 set(fm_SRCS
     src/fm/fm.cpp
     src/fm/fmdb.cpp
+    src/fm/fmmodel.cpp
+    src/fm/fmlist.cpp
     )    
     
 set(fm_HDRS
     src/fm/fm.h
     src/fm/fmh.h
     src/fm/fmdb.h
+    src/fm/fmmodel.h
+    src/fm/fmlist.h
     )
     
 set(tagging_SRCS

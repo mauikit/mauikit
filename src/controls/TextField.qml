@@ -147,7 +147,7 @@ TextField
 		{
 			text: qsTr("Select all")
 			onTriggered: control.selectAll()
-			enabled: control.selectedText.length
+			enabled: control.text.length
 		}
 		
 		Maui.MenuItem
