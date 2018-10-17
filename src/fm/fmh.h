@@ -28,6 +28,7 @@
 #include <QMimeData>
 #include <QMimeDatabase>
 #include <QSettings>
+#include <QDateTime>
 
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
