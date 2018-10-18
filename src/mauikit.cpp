@@ -23,6 +23,7 @@
 #include <QQuickStyle>
 
 #include "fm.h"
+#include "fmh.h"
 #include "fmmodel.h"
 #include "fmlist.h"
 
@@ -109,6 +110,7 @@ void MauiKit::registerTypes(const char *uri)
     });
 #endif
 	
+	qmlRegisterUncreatableMetaObject(FMH::staticMetaObject, "FMH", 1, 0, "KEY", "Error");	
 	qmlRegisterType<FMModel>("FMModel", 1, 0, "FMModel");
 	qmlRegisterType<FMList>("FMList", 1, 0, "FMList");
     qmlRegisterSingletonType<FM>(uri, 1, 0, "FM",

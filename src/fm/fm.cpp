@@ -161,7 +161,7 @@ FMH::MODEL_LIST FM::getPathContent(const QString& path, const bool &hidden, cons
 				{FMH::MODEL_KEY::MIME, FMH::getMime(url)},
 				{FMH::MODEL_KEY::LABEL, file.fileName()},
 				{FMH::MODEL_KEY::DATE, file.birthTime().toString()},
-				{FMH::MODEL_KEY::SIZE, locale.formattedDataSize(file.size())},            
+				{FMH::MODEL_KEY::SIZE, QString::number(file.size()) /*locale.formattedDataSize(file.size())*/},            
 				{FMH::MODEL_KEY::MODIFIED, file.lastModified().toString()},            
 				{FMH::MODEL_KEY::SUFFIX, file.suffix()},            
 				{FMH::MODEL_KEY::PATH, url},

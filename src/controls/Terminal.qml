@@ -101,7 +101,7 @@ Item
 		onKeyPressedSignal: ksession.hasDarkBackground
 // 		terminalUsesMouse: true
 		
-		colorScheme: "DarkPastels"
+// 		colorScheme: "DarkPastels"
 		
 		session: QMLTermSession
 		{

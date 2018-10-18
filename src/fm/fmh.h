@@ -40,6 +40,8 @@
 
 namespace FMH
 {
+	Q_NAMESPACE
+	
 	inline bool isAndroid()
 	{
 		#if defined(Q_OS_ANDROID)
@@ -82,7 +84,7 @@ namespace FMH
 		DETAILVIEW,
 		SHOWTHUMBNAIL,
 		SHOWTERMINAL
-	};
+	}; Q_ENUM_NS(MODEL_KEY);
 	
 	static const QHash<MODEL_KEY, QString> MODEL_NAME =
 	{

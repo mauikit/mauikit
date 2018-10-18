@@ -41,7 +41,7 @@ Rectangle
 	
 	property bool hovered : false
     
-    property int size: iconSizes.small
+    property int size: isMobile ? iconSizes.medium : iconSizes.small
     property string iconName : ""
     property string text : ""
     

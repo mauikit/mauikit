@@ -29,7 +29,9 @@ FMList::FMList(QObject *parent) : QObject(parent)
 	});
 	
 	connect(this, &FMList::pathChanged, this, &FMList::reset);	
-	connect(this, &FMList::preListChanged, this, &FMList::setList);
+	connect(this, &FMList::hiddenChanged, this, &FMList::setList);
+	connect(this, &FMList::onlyDirsChanged, this, &FMList::setList);
+	connect(this, &FMList::filtersChanged, this, &FMList::setList);
 }
 
 FMList::~FMList()
@@ -39,7 +41,8 @@ FMList::~FMList()
 
 void FMList::setList()
 {
-	this->list = this->fm->getPathContent(this->path, this->hidden, this->onlyDirs, this->filters);	
+	this->list = this->fm->getPathContent(this->path, this->hidden, this->onlyDirs, this->filters);
+	this->sortList();
 }
 
 void FMList::reset()
@@ -59,6 +62,62 @@ FMH::MODEL_LIST FMList::items() const
 {
 	return this->list;
 }
+
+
+int FMList::getSortBy() const
+{
+	return this->sort;
+}
+
+void FMList::setSortBy(const int& key)
+{
+	emit this->preListChanged();
+	
+	if(this->sort == key)
+		return;
+	
+	this->sort = key;
+	this->sortList();
+	
+	emit this->sortByChanged();
+	emit this->postListChanged();
+}
+
+void FMList::sortList()
+{
+	auto key = this->sort;
+	qSort(this->list.begin(), this->list.end(), [key](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
+	{
+		auto role = static_cast<FMH::MODEL_KEY>(key); 
+		
+		switch(role)
+		{
+			case FMH::MIME:
+				if(e1[role] == "inode/directory")
+					return true;
+				break;
+			case FMH::SIZE:
+			{
+				QLocale l;
+				if(l.toDouble(e1[role]) > l.toDouble(e2[role]))
+					return true;
+				break;				
+			}
+			case FMH::MODIFIED:
+			case FMH::DATE:
+				if(e1[role] > e2[role])
+					return true;
+				break;
+			default:
+				if(e1[role] < e2[role])
+					return true;
+		}		
+		
+		return false;
+	});
+}
+
+
 
 QString FMList::getPath() const
 {
@@ -89,70 +148,70 @@ void FMList::setFilters(const QStringList &filters)
 	
 	emit this->preListChanged();
 	emit this->filtersChanged();
-	emit this->postListChanged();}
+	emit this->postListChanged();	
+}
+
+bool FMList::getHidden() const
+{
+	return this->hidden;
+}
+
+void FMList::setHidden(const bool &state)
+{
+	if(this->hidden == state)
+		return;
 	
-	bool FMList::getHidden() const
-	{
-		return this->hidden;
-	}
+	this->hidden = state;
+	FMH::setDirConf(this->path+"/.directory", "Settings", "HiddenFilesShown", this->hidden);
 	
-	void FMList::setHidden(const bool &state)
-	{
-		if(this->hidden == state)
-			return;
-		
-		this->hidden = state;
-		FMH::setDirConf(this->path+"/.directory", "Settings", "HiddenFilesShown", this->hidden);
-		
-		emit this->preListChanged();
-		emit this->hiddenChanged();
-		emit this->postListChanged();
-	}
+	emit this->preListChanged();
+	emit this->hiddenChanged();
+	emit this->postListChanged();
+}
+
+bool FMList::getPreview() const
+{
+	return this->preview;
+}
+
+void FMList::setPreview(const bool &state)
+{
+	if(this->preview == state)
+		return;
 	
-	bool FMList::getPreview() const
-	{
-		return this->preview;
-	}
+	this->preview = state;
+	FMH::setDirConf(this->path+"/.directory", "MAUIFM", "ShowThumbnail", this->preview);
 	
-	void FMList::setPreview(const bool &state)
-	{
-		if(this->preview == state)
-			return;
-		
-		this->preview = state;
-		FMH::setDirConf(this->path+"/.directory", "MAUIFM", "ShowThumbnail", this->preview);
-		
-		emit this->previewChanged();
-	}
+	emit this->previewChanged();
+}
+
+bool FMList::getOnlyDirs() const
+{
+	return this->onlyDirs;
+}
+
+void FMList::setOnlyDirs(const bool &state)
+{
+	if(this->onlyDirs == state)
+		return;
 	
-	bool FMList::getOnlyDirs() const
-	{
-		return this->onlyDirs;
-	}
+	this->onlyDirs = state;
 	
-	void FMList::setOnlyDirs(const bool &state)
-	{
-		if(this->onlyDirs == state)
-			return;
-		
-		this->onlyDirs = state;
-		
-		emit this->preListChanged();
-		emit this->onlyDirsChanged();
-		emit this->postListChanged();
-	}
+	emit this->preListChanged();
+	emit this->onlyDirsChanged();
+	emit this->postListChanged();
+}
+
+QVariantMap FMList::get(const int &index) const
+{
+	if(index >= this->list.size() || index < 0)
+		return QVariantMap();
 	
-	QVariantMap FMList::get(const int &index) const
-	{
-		if(index >= this->list.size() || index < 0)
-			return QVariantMap();
-		
-		QVariantMap res;
-		const auto model = this->list.at(index);
-		
-		for(auto key : model.keys())
-			res.insert(FMH::MODEL_NAME[key], model[key]);
-		
-		return res;
-	}
+	QVariantMap res;
+	const auto model = this->list.at(index);
 	
+	for(auto key : model.keys())
+		res.insert(FMH::MODEL_NAME[key], model[key]);
+	
+	return res;
+}

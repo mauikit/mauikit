@@ -39,8 +39,8 @@ Maui.GridView
 	signal itemClicked(int index)
 	signal itemDoubleClicked(int index)
 	
-	signal rightEmblemClicked(var item)
-	signal leftEmblemClicked(var item)
+	signal rightEmblemClicked(int index)
+	signal leftEmblemClicked(int index)
 	
 	signal itemRightClicked(int index)
 	
@@ -93,15 +93,13 @@ Maui.GridView
 			onRightEmblemClicked:
 			{
 				control.currentIndex = index
-				var item = control.model.get(index)
-				control.rightEmblemClicked(item)
+				control.rightEmblemClicked(index)
 			}
 			
 			onLeftEmblemClicked:
 			{
 				control.currentIndex = index
-				var item = control.model.get(index)
-				control.leftEmblemClicked(item)
+				control.leftEmblemClicked(index)
 			}
 		}
 	}

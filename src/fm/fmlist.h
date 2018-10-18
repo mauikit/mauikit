@@ -32,6 +32,7 @@ class FMList : public QObject
 	Q_PROPERTY(bool onlyDirs READ getOnlyDirs WRITE setOnlyDirs NOTIFY onlyDirsChanged())
 	Q_PROPERTY(bool preview READ getPreview WRITE setPreview NOTIFY previewChanged())
 	Q_PROPERTY(QStringList filters READ getFilters WRITE setFilters NOTIFY filtersChanged())
+	Q_PROPERTY(int sortBy READ getSortBy WRITE setSortBy NOTIFY sortByChanged())
 	
 public:
     
@@ -39,6 +40,9 @@ public:
     ~FMList();
 	
 	FMH::MODEL_LIST items() const;
+	
+	int getSortBy() const;
+	void setSortBy(const int &key);
 	
 	QString getPath() const;
 	void setPath(const QString &path);
@@ -60,13 +64,16 @@ private:
 	
 	void reset();
 	void setList();
-	
+	void sortList();
+	static bool sorting(const FMH::MODEL& e1, const FMH::MODEL &e2);
+
 	FMH::MODEL_LIST list = {{}};
 	QString path = QString();
 	QStringList filters = {};
 	bool onlyDirs = false;
 	bool hidden = false;
 	bool preview = false;
+	int sort = FMH::MODEL_KEY::MODIFIED;
 	
 public slots:
 	 QVariantMap get(const int &index) const;
@@ -77,6 +84,7 @@ signals:
 	void hiddenChanged();
 	void previewChanged();
 	void onlyDirsChanged();
+	void sortByChanged();
 	
 	void preItemAppended();
 	void postItemAppended();
