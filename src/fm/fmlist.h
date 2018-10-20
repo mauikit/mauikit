@@ -34,6 +34,9 @@ class FMList : public QObject
 	Q_PROPERTY(QStringList filters READ getFilters WRITE setFilters NOTIFY filtersChanged())
 	Q_PROPERTY(int sortBy READ getSortBy WRITE setSortBy NOTIFY sortByChanged())
 	
+	Q_PROPERTY(bool pathExists READ getPathExists NOTIFY pathExistsChanged())
+	Q_PROPERTY(bool pathEmpty READ getPathEmpty NOTIFY pathEmptyChanged())
+	
 	Q_PROPERTY(QString previousPath READ getPreviousPath)
 	Q_PROPERTY(QString posteriorPath READ getPosteriorPath)
 	Q_PROPERTY(QString parentPath READ getParentPath)
@@ -72,6 +75,9 @@ public:
 	QString getPosteriorPath();
 	void setPosteriorPath(const QString &path);
 	
+	bool getPathEmpty() const;
+	bool getPathExists() const;	
+		
 private:
 	FM *fm;
 	
@@ -80,12 +86,18 @@ private:
 	void sortList();
 
 	FMH::MODEL_LIST list = {{}};
+	
 	QString path = QString();
 	QStringList filters = {};
+	
 	bool onlyDirs = false;
 	bool hidden = false;
 	bool preview = false;
+	bool pathExists = false;
+	bool pathEmpty = true;
+	
 	int sort = FMH::MODEL_KEY::MODIFIED;
+	
 	QStringList prevHistory = {};
 	QStringList postHistory = {};
 	
@@ -99,6 +111,9 @@ signals:
 	void previewChanged();
 	void onlyDirsChanged();
 	void sortByChanged();
+	
+	void pathEmptyChanged();
+	void pathExistsChanged();
 	
 	void preItemAppended();
 	void postItemAppended();

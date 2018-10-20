@@ -42,6 +42,10 @@ FMList::~FMList()
 void FMList::setList()
 {
 	this->list = this->fm->getPathContent(this->path, this->hidden, this->onlyDirs, this->filters);
+	
+	this->pathEmpty = this->list.isEmpty() && this->fm->fileExists(this->path);
+	emit this->pathEmptyChanged();
+	
 	this->sortList();
 }
 
@@ -129,6 +133,10 @@ void FMList::setPath(const QString &path)
 	
 	this->path = path;
 	this->setPreviousPath(this->path);
+	
+	this->pathExists = this->fm->fileExists(path);
+	emit this->pathExistsChanged();
+	
 	this->fm->watchPath(this->path);
 	emit this->pathChanged();
 }
@@ -251,5 +259,16 @@ void FMList::setPreviousPath(const QString& path)
 {
 	this->prevHistory.append(path);
 }
+
+bool FMList::getPathEmpty() const
+{
+	return this->pathEmpty;
+}
+
+bool FMList::getPathExists() const
+{
+	return this->pathExists;
+}
+
 
 

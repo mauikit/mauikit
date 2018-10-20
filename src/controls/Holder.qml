@@ -26,71 +26,79 @@ import "private"
 
 Item
 {
-    anchors.fill: parent
-    /* Controlc color scheming */
+	id: control
+	anchors.fill: parent
+	/* Controlc color scheming */
 	ColorScheme {id: colorScheme}
 	property alias colorScheme : colorScheme
 	/***************************/
-    property string emoji : "qrc:/assets/face-sleeping.png"
-    property string message
-    property string title
-    property string body
-    property color fgColor : textColor
-    property bool isMask : true
-    property int emojiSize : iconSizes.large
+	property string emoji : "qrc:/assets/face-sleeping.png"
+	property string message
+	property string title
+	property string body
+	
+	property bool isMask : true
+	
+	property int emojiSize : iconSizes.large
+	
+	property bool enabled: true
+	
+	signal actionTriggered()
+	
+	clip: true
+	focus: true
+	
+	Image
+	{
+		id: imageHolder
+		
+		anchors.centerIn: parent
+		width: emojiSize
+		height: emojiSize
+		sourceSize.width: width
+		sourceSize.height: height
+		source: emoji
+		asynchronous: true
+		horizontalAlignment: Qt.AlignHCenter
+		
+		fillMode: Image.PreserveAspectFit
+	}
+	
+	HueSaturation
+	{
+		anchors.fill: imageHolder
+		source: imageHolder
+		saturation: -1
+		lightness: 0.3
+		visible: isMask
+	}
+	
+	Label
+	{
+		id: textHolder
+		width: parent.width
+		anchors.top: imageHolder.bottom
+		opacity: 0.5
+		text: message ? qsTr(message) : "<h3>"+title+"</h3><p>"+body+"</p>"
+		font.pointSize: fontSizes.default
+		
+		padding: space.medium
+		font.bold: true
+		textFormat: Text.RichText
+		horizontalAlignment: Qt.AlignHCenter
+		elide: Text.ElideRight
+		color: colorScheme.textColor
+		
+	
+		MouseArea
+		{
+			anchors.fill: parent
+			enabled: control.enabled
+			onClicked: actionTriggered()
+		}
+	}
+	
 
-    signal actionTriggered()
-
-    clip: true
-    focus: true
-
-    Image
-    {
-        id: imageHolder
-
-        anchors.centerIn: parent
-        width: emojiSize
-        height: emojiSize
-        sourceSize.width: width
-        sourceSize.height: height
-        source: emoji
-        asynchronous: true
-        horizontalAlignment: Qt.AlignHCenter
-
-        fillMode: Image.PreserveAspectFit
-    }
-
-    HueSaturation
-    {
-        anchors.fill: imageHolder
-        source: imageHolder
-        saturation: -1
-        lightness: 0.3
-        visible: isMask
-    }
-
-    Label
-    {
-        id: textHolder
-        width: parent.width
-        anchors.top: imageHolder.bottom
-        opacity: 0.5
-        text: message ? qsTr(message) : "<h3>"+title+"</h3><p>"+body+"</p>"
-        font.pointSize: fontSizes.default
-
-        padding: 10
-        font.bold: true
-        textFormat: Text.RichText
-        horizontalAlignment: Qt.AlignHCenter
-        elide: Text.ElideRight
-        color: colorScheme.textColor
-    }
-
-    MouseArea
-    {
-        anchors.fill: parent
-        onClicked: actionTriggered()
-    }
 }
 
 
