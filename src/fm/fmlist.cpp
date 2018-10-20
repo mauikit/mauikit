@@ -117,8 +117,6 @@ void FMList::sortList()
 	});
 }
 
-
-
 QString FMList::getPath() const
 {
 	return this->path;
@@ -130,6 +128,7 @@ void FMList::setPath(const QString &path)
 		return;
 	
 	this->path = path;
+	this->setPreviousPath(this->path);
 	this->fm->watchPath(this->path);
 	emit this->pathChanged();
 }
@@ -215,3 +214,42 @@ QVariantMap FMList::get(const int &index) const
 	
 	return res;
 }
+
+QString FMList::getParentPath() const
+{
+	return this->fm->parentDir(this->path);
+}
+
+QString FMList::getPosteriorPath()
+{
+	if(this->postHistory.isEmpty())
+		return this->path;
+	
+	return this->postHistory.takeAt(this->postHistory.length()-1);
+}
+
+void FMList::setPosteriorPath(const QString& path)
+{
+	this->postHistory.append(path);
+}
+
+QString FMList::getPreviousPath() 
+{	
+	if(this->prevHistory.isEmpty())
+		return this->path;
+	
+	if(this->prevHistory.length() < 2)
+		return this->prevHistory.at(0);
+	
+	auto post = this->prevHistory.takeAt(this->prevHistory.length()-1);
+	this->setPosteriorPath(post);
+	
+	return this->prevHistory.takeAt(this->prevHistory.length()-1);
+}
+
+void FMList::setPreviousPath(const QString& path)
+{
+	this->prevHistory.append(path);
+}
+
+

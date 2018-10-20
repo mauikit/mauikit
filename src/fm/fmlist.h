@@ -34,6 +34,11 @@ class FMList : public QObject
 	Q_PROPERTY(QStringList filters READ getFilters WRITE setFilters NOTIFY filtersChanged())
 	Q_PROPERTY(int sortBy READ getSortBy WRITE setSortBy NOTIFY sortByChanged())
 	
+	Q_PROPERTY(QString previousPath READ getPreviousPath)
+	Q_PROPERTY(QString posteriorPath READ getPosteriorPath)
+	Q_PROPERTY(QString parentPath READ getParentPath)
+	
+	
 public:
     
 	FMList(QObject *parent = nullptr);
@@ -59,13 +64,20 @@ public:
 	bool getOnlyDirs() const;
 	void setOnlyDirs(const bool &state);
 	
+	QString getParentPath() const;
+	
+	QString getPreviousPath();
+	void setPreviousPath(const QString &path);
+	
+	QString getPosteriorPath();
+	void setPosteriorPath(const QString &path);
+	
 private:
 	FM *fm;
 	
 	void reset();
 	void setList();
 	void sortList();
-	static bool sorting(const FMH::MODEL& e1, const FMH::MODEL &e2);
 
 	FMH::MODEL_LIST list = {{}};
 	QString path = QString();
@@ -74,6 +86,8 @@ private:
 	bool hidden = false;
 	bool preview = false;
 	int sort = FMH::MODEL_KEY::MODIFIED;
+	QStringList prevHistory = {};
+	QStringList postHistory = {};
 	
 public slots:
 	 QVariantMap get(const int &index) const;

@@ -30,9 +30,9 @@ Menu
 							 contentItem ? contentItem.implicitHeight : 0) + topPadding + bottomPadding
 	margins: unit 
 	padding: unit
-		cascade: true
-		transformOrigin: !cascade ? Item.Top : (mirrored ? Item.TopRight : Item.TopLeft)
-		delegate: MenuItem { }
+	cascade: true
+	transformOrigin: !cascade ? Item.Top : (mirrored ? Item.TopRight : Item.TopLeft)
+	delegate: MenuItem { }
 
 	topPadding: menuBackground.radius
 	bottomPadding: menuBackground.radius
@@ -46,7 +46,7 @@ Menu
 	
 	modal: isMobile
 	focus: true
-	parent: ApplicationWindow.overlay
+	parent: isMobile ? ApplicationWindow.overlay : undefined
 	
 	contentItem: ListView
 	{

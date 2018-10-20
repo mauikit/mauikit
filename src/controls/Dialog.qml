@@ -65,6 +65,7 @@ Maui.Popup
 	{
 		iconName: "window-close"
 		colorScheme.backgroundColor: hovered ?  dangerColor : colorScheme.altColor
+
 		anchors
 		{
 			verticalCenter: parent.top
