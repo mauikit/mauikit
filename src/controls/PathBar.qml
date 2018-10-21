@@ -29,10 +29,15 @@ Maui.Item
     id: control    
       
     height: iconSizes.big
+    
+    property string url : ""
+    
     signal pathChanged(string path)
     signal homeClicked()
     signal placeClicked(string path)
     
+	onUrlChanged: append()
+	
     Rectangle
     {
         id: pathBarBG
@@ -185,10 +190,10 @@ Maui.Item
         
     }
     
-    function append(path)
+    function append()
     {
         pathBarList.model.clear()
-        var places = path.split("/")
+        var places = control.url.split("/")
         var url = ""
         for(var i in places)
         {
