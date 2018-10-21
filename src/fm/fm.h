@@ -35,7 +35,7 @@ public:
     static QVariantList packItems(const QStringList &items, const QString &type);
 
     QVariantList get(const QString &queryTxt);
-    void watchPath(const QString &path, const bool &clear = true);	
+    void watchPath(const QString &path, const bool &clear = true);
 	FMH::MODEL_LIST getPathContent(const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList()) const;
 	
 // 	Q_INVOKABLE QVariantList getPathContent(const QString &path, const bool &onlyDirs = false, const QStringList &filters = QStringList());

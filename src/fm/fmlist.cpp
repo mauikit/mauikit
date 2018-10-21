@@ -25,6 +25,7 @@ FMList::FMList(QObject *parent) : QObject(parent)
 	connect(fm, &FM::pathModified, this, [this]()
 	{
 		emit this->preListChanged();
+		this->reset();
 		emit this->postListChanged();
 	});
 	
@@ -109,9 +110,17 @@ void FMList::sortList()
 			}
 			case FMH::MODIFIED:
 			case FMH::DATE:
-				if(e1[role] > e2[role])
+			{
+				auto currentTime = QDateTime::currentDateTime();
+				
+				auto date1 = QDateTime::fromString(e1[role], Qt::TextDate); 
+				auto date2 = QDateTime::fromString(e2[role], Qt::TextDate); 
+				
+				if(date1.secsTo(currentTime) <  date2.secsTo(currentTime))
 					return true;
 				break;
+			}
+			
 			default:
 				if(e1[role] < e2[role])
 					return true;

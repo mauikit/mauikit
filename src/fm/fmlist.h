@@ -27,7 +27,6 @@
 class FMList : public QObject
 {
 	Q_OBJECT
-	Q_ENUM(FMH::MODEL_KEY)
 
 	Q_PROPERTY(QString path READ getPath WRITE setPath NOTIFY pathChanged())
 	Q_PROPERTY(bool hidden READ getHidden WRITE setHidden NOTIFY hiddenChanged())
@@ -42,13 +41,10 @@ class FMList : public QObject
 	Q_PROPERTY(QString previousPath READ getPreviousPath)
 	Q_PROPERTY(QString posteriorPath READ getPosteriorPath)
 	Q_PROPERTY(QString parentPath READ getParentPath)
+	Q_ENUM(FMH::MODEL_KEY)
 	
-	/*
-	 *	Q_PROPERTY(FMH::MODEL_KEY key READ FMH::MODEL_KEY CONSTANT)
-	 */
 	
 	public:
-		
 		FMList(QObject *parent = nullptr);
 		~FMList();
 		
