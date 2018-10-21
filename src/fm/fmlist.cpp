@@ -68,12 +68,12 @@ FMH::MODEL_LIST FMList::items() const
 }
 
 
-int FMList::getSortBy() const
+FMH::MODEL_KEY FMList::getSortBy() const
 {
 	return this->sort;
 }
 
-void FMList::setSortBy(const int& key)
+void FMList::setSortBy(const FMH::MODEL_KEY& key)
 {
 	emit this->preListChanged();
 	
@@ -92,7 +92,7 @@ void FMList::sortList()
 	auto key = this->sort;
 	qSort(this->list.begin(), this->list.end(), [key](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
 	{
-		auto role = static_cast<FMH::MODEL_KEY>(key); 
+		auto role = key; 
 		
 		switch(role)
 		{
@@ -269,6 +269,3 @@ bool FMList::getPathExists() const
 {
 	return this->pathExists;
 }
-
-
-

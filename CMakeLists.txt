@@ -71,8 +71,8 @@ set(fm_SRCS
     )    
     
 set(fm_HDRS
-    src/fm/fm.h
     src/fm/fmh.h
+    src/fm/fm.h
     src/fm/fmdb.h
     src/fm/fmmodel.h
     src/fm/fmlist.h

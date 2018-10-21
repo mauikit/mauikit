@@ -26,13 +26,15 @@
  */
 class FMList : public QObject
 {
-    Q_OBJECT
-    Q_PROPERTY(QString path READ getPath WRITE setPath NOTIFY pathChanged())
+	Q_OBJECT
+	Q_ENUM(FMH::MODEL_KEY)
+
+	Q_PROPERTY(QString path READ getPath WRITE setPath NOTIFY pathChanged())
 	Q_PROPERTY(bool hidden READ getHidden WRITE setHidden NOTIFY hiddenChanged())
 	Q_PROPERTY(bool onlyDirs READ getOnlyDirs WRITE setOnlyDirs NOTIFY onlyDirsChanged())
 	Q_PROPERTY(bool preview READ getPreview WRITE setPreview NOTIFY previewChanged())
 	Q_PROPERTY(QStringList filters READ getFilters WRITE setFilters NOTIFY filtersChanged())
-	Q_PROPERTY(int sortBy READ getSortBy WRITE setSortBy NOTIFY sortByChanged())
+	Q_PROPERTY(FMH::MODEL_KEY sortBy READ getSortBy WRITE setSortBy NOTIFY sortByChanged())
 	
 	Q_PROPERTY(bool pathExists READ getPathExists NOTIFY pathExistsChanged())
 	Q_PROPERTY(bool pathEmpty READ getPathEmpty NOTIFY pathEmptyChanged())
@@ -41,42 +43,46 @@ class FMList : public QObject
 	Q_PROPERTY(QString posteriorPath READ getPosteriorPath)
 	Q_PROPERTY(QString parentPath READ getParentPath)
 	
+	/*
+	 *	Q_PROPERTY(FMH::MODEL_KEY key READ FMH::MODEL_KEY CONSTANT)
+	 */
 	
-public:
-    
-	FMList(QObject *parent = nullptr);
-    ~FMList();
-	
-	FMH::MODEL_LIST items() const;
-	
-	int getSortBy() const;
-	void setSortBy(const int &key);
-	
-	QString getPath() const;
-	void setPath(const QString &path);
-	
-	QStringList getFilters() const;
-	void setFilters(const QStringList &filters);
-	
-	bool getHidden() const;
-	void setHidden(const bool &state);
-	
-	bool getPreview() const;
-	void setPreview(const bool &state);
-	
-	bool getOnlyDirs() const;
-	void setOnlyDirs(const bool &state);
-	
-	QString getParentPath() const;
-	
-	QString getPreviousPath();
-	void setPreviousPath(const QString &path);
-	
-	QString getPosteriorPath();
-	void setPosteriorPath(const QString &path);
-	
-	bool getPathEmpty() const;
-	bool getPathExists() const;	
+	public:
+		
+		FMList(QObject *parent = nullptr);
+		~FMList();
+		
+		FMH::MODEL_LIST items() const;
+		
+		FMH::MODEL_KEY getSortBy() const;
+		void setSortBy(const FMH::MODEL_KEY &key);
+		
+		QString getPath() const;
+		void setPath(const QString &path);
+		
+		QStringList getFilters() const;
+		void setFilters(const QStringList &filters);
+		
+		bool getHidden() const;
+		void setHidden(const bool &state);
+		
+		bool getPreview() const;
+		void setPreview(const bool &state);
+		
+		bool getOnlyDirs() const;
+		void setOnlyDirs(const bool &state);
+		
+		QString getParentPath() const;
+		
+		QString getPreviousPath();
+		void setPreviousPath(const QString &path);
+		
+		QString getPosteriorPath();
+		void setPosteriorPath(const QString &path);
+		
+		bool getPathEmpty() const;
+		bool getPathExists() const;	
+		
 		
 private:
 	FM *fm;
@@ -84,7 +90,7 @@ private:
 	void reset();
 	void setList();
 	void sortList();
-
+	
 	FMH::MODEL_LIST list = {{}};
 	
 	QString path = QString();
@@ -96,14 +102,14 @@ private:
 	bool pathExists = false;
 	bool pathEmpty = true;
 	
-	int sort = FMH::MODEL_KEY::MODIFIED;
+	FMH::MODEL_KEY sort = FMH::MODEL_KEY::MODIFIED;
 	
 	QStringList prevHistory = {};
 	QStringList postHistory = {};
 	
 public slots:
-	 QVariantMap get(const int &index) const;
-	 
+	QVariantMap get(const int &index) const;
+	
 signals:
 	void pathChanged();
 	void filtersChanged();
@@ -122,7 +128,7 @@ signals:
 	void updateModel(int index, QVector<int> roles);
 	void preListChanged();
 	void postListChanged();
-
+	
 };
 
 #endif // FMLIST_H
