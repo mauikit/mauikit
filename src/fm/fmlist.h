@@ -43,10 +43,10 @@ class FMList : public QObject
 	Q_PROPERTY(QString previousPath READ getPreviousPath)
 	Q_PROPERTY(QString posteriorPath READ getPosteriorPath)
 	Q_PROPERTY(QString parentPath READ getParentPath)
-	Q_ENUM(FMH::MODEL_KEY)
-	
 	
 	public:
+		Q_ENUM(FMH::MODEL_KEY)
+		
 		FMList(QObject *parent = nullptr);
 		~FMList();
 		
