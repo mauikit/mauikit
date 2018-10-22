@@ -135,9 +135,10 @@ void FM::watchPath(const QString &path, const bool &clear)
 // return content;
 // }
 
-FMH::MODEL_LIST FM::getPathContent(const QString& path, const bool &hidden, const bool &onlyDirs, const QStringList& filters) const
+FMH::MODEL_LIST FM::getPathContent(const QString& path, const bool &hidden, const bool &onlyDirs, const QStringList& filters)
 {
 	FMH::MODEL_LIST content;
+	
 	if (QFileInfo(path).isDir())
 	{
 		QDir::Filters dirFilter;

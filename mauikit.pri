@@ -35,7 +35,7 @@ HEADERS += \
     $$PWD/src/fm/fmdb.h \
     $$PWD/src/fm/fmmodel.h \
     $$PWD/src/fm/fmlist.h \
-    $$PWD/src/utils/documenthandler.h \
+    $$PWD/src/utils/editor/documenthandler.h \
     $$PWD/src/utils/handy.h
 
 SOURCES += \
@@ -44,7 +44,7 @@ SOURCES += \
     $$PWD/src/fm/fmdb.cpp \
     $$PWD/src/fm/fmmodel.cpp \
     $$PWD/src/fm/fmlist.cpp \
-	$$PWD/src/utils/documenthandler.cpp \
+	$$PWD/src/utils//editor/documenthandler.cpp \
     $$PWD/src/utils/handy.cpp
 
 DEPENDPATH += \

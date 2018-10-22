@@ -50,6 +50,7 @@ Rectangle
 	signal hovered()    
 	signal released()
 	
+	z: parent.z+1
 	height: size + space.small
 	width: size + space.small
 	radius: Math.min(width, height)

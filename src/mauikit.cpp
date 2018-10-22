@@ -28,6 +28,7 @@
 #include "fmlist.h"
 
 #include "handy.h"
+#include "documenthandler.h"
 
 #ifdef Q_OS_ANDROID
 #include "mauiandroid.h"
@@ -93,6 +94,9 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("FileDialog.qml")), uri, 1, 0, "FileDialog");
     qmlRegisterType(componentUrl(QStringLiteral("PathBar.qml")), uri, 1, 0, "PathBar");
 	
+	/** EDITOR CONTROLS **/
+	qmlRegisterType(componentUrl(QStringLiteral("Editor.qml")), uri, 1, 0, "Editor");
+	
 #ifdef Q_OS_ANDROID
 	qmlRegisterType(componentUrl(QStringLiteral("SyncDialogA.qml")), uri, 1, 0, "SyncDialog");	
     qmlRegisterSingletonType<MAUIAndroid>(uri, 1, 0, "Android",
@@ -103,6 +107,7 @@ void MauiKit::registerTypes(const char *uri)
 #else
 	qmlRegisterType(componentUrl(QStringLiteral("SyncDialog.qml")), uri, 1, 0, "SyncDialog");	
 	qmlRegisterType(componentUrl(QStringLiteral("Terminal.qml")), uri, 1, 0, "Terminal");	
+	
 	qmlRegisterSingletonType<MAUIKDE>(uri, 1, 0, "KDE",
                                       [](QQmlEngine*, QJSEngine*) -> QObject* {
         MAUIKDE *kde = new MAUIKDE;
@@ -113,7 +118,9 @@ void MauiKit::registerTypes(const char *uri)
 // 	qmlRegisterUncreatableMetaObject(FMH::staticMetaObject, "FMH", 1, 0, "KEY", "Error");	
 	qmlRegisterType<FMModel>("FMModel", 1, 0, "FMModel");
 	qmlRegisterType<FMList>("FMList", 1, 0, "FMList");
-    qmlRegisterSingletonType<FM>(uri, 1, 0, "FM",
+	qmlRegisterType<DocumentHandler>("DocumentHandler", 1, 0, "DocumentHandler");
+	
+	qmlRegisterSingletonType<FM>(uri, 1, 0, "FM",
                                       [](QQmlEngine*, QJSEngine*) -> QObject* {
 		auto fm = new FM;
         return fm;

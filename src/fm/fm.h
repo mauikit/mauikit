@@ -31,21 +31,20 @@ public:
 
     FM(QObject *parent = nullptr);
     ~FM();
-
-    static QVariantList packItems(const QStringList &items, const QString &type);
-
+	
     QVariantList get(const QString &queryTxt);
     void watchPath(const QString &path, const bool &clear = true);
-	FMH::MODEL_LIST getPathContent(const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList()) const;
-	
-// 	Q_INVOKABLE QVariantList getPathContent(const QString &path, const bool &onlyDirs = false, const QStringList &filters = QStringList());
-	
+
 	Q_INVOKABLE QVariantList getTags(const int &limit = 5);
     Q_INVOKABLE QVariantList getBookmarks();
     Q_INVOKABLE QVariantList getTagContent(const QString &tag);
     Q_INVOKABLE bool bookmark(const QString &path);
 	
-	/* STATIC METHODS*/
+	/*** START STATIC METHODS ***/
+	static QVariantList packItems(const QStringList &items, const QString &type);
+	
+	FMH::MODEL_LIST static getPathContent(const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());	
+	
     Q_INVOKABLE static QVariantList getDefaultPaths();
 	Q_INVOKABLE static QString homePath();	
 	Q_INVOKABLE static QString parentDir(const QString &path);
@@ -77,7 +76,8 @@ public:
     Q_INVOKABLE static bool createFile(const QString &path, const QString &name);
     
     Q_INVOKABLE static bool openUrl(const QString &url);  
-
+	/*** END STATIC METHODS ***/
+	
 private:
     QFileSystemWatcher *watcher;
     Tagging *tag;

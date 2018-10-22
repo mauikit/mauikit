@@ -44,6 +44,7 @@ MenuItem 1.0 MenuItem.qml
 Terminal 1.0 Terminal.qml
 SyncDialog 1.0 SyncDialog.qml
 SyncDialog 1.0 SyncDialogA.qml
+Editor 1.0 Editor.qml
 
 
 

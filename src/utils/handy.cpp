@@ -81,7 +81,6 @@ QVariant Handy::loadSetting(const QString &key, const QString &group, const QVar
 	return UTIL::loadSettings(key, group, defaultValue);
 }
 
-
 QString Handy::getClipboard()
 {
 	#ifdef Q_OS_ANDROID

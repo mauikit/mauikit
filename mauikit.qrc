@@ -45,5 +45,6 @@
 		<file alias="Menu.qml">src/controls/Menu.qml</file>
 		<file alias="MenuItem.qml">src/controls/MenuItem.qml</file>
 		<file alias="Terminal.qml">src/controls/Terminal.qml</file>
+		<file alias="Editor.qml">src/controls/Editor.qml</file>
 	</qresource>
 </RCC>
