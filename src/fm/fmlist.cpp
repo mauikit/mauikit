@@ -278,4 +278,3 @@ bool FMList::getPathExists() const
 {
 	return this->pathExists;
 }
-

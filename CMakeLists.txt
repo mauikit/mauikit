@@ -63,6 +63,14 @@ set(mauikit_HDRS
     src/utils/handy.h
     )
     
+set(editor_SRCS
+    src/utils/documenthandler.cpp
+    )    
+    
+set(editor_HDRS
+    src/utils/documenthandler.cpp
+    )
+    
 set(fm_SRCS
     src/fm/fm.cpp
     src/fm/fmdb.cpp

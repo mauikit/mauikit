@@ -21,9 +21,11 @@
 
 #include <QObject>
 #include "fm.h"
+
 /**
  * @todo write docs
  */
+
 class FMList : public QObject
 {
 	Q_OBJECT
