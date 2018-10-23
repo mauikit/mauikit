@@ -10,14 +10,15 @@ Item
 	id: terminalContainer
 	
 	property size virtualResolution: Qt.size(kterminal.width, kterminal.height)
-	property alias mainTerminal: kterminal
-	property alias session: ksession
 	
 	property real fontWidth: 1.0
 	property real screenScaling: 1.0
 	property real scaleTexture: 1.0
+	
 	property alias title: ksession.title
 	property alias kterminal: kterminal
+	property alias session: ksession
+	property alias findBar : findBar
 	
 	property size terminalSize: kterminal.terminalSize
 	property size fontMetrics: kterminal.fontMetrics
@@ -37,11 +38,8 @@ Item
 		Maui.MenuItem
 		{
 			text: qsTr("Paste")
-			onTriggered: 
-			{
-				console.log("Pasting")
-				kterminal.pasteClipboard()
-			}			
+			onTriggered: kterminal.pasteClipboard()
+			
 		}
 		
 		
@@ -72,7 +70,7 @@ Item
 		kterminal.update();
 	}	
 	
-
+	
 	Maui.TextField
 	{
 		id: findBar
@@ -92,16 +90,16 @@ Item
 		id: kterminal	
 		anchors.bottomMargin: findBar.height 
 		anchors.fill: parent
-
+		
 		focus: true
 		smooth: true
 		
 		enableBold: true
 		fullCursorHeight: true
 		onKeyPressedSignal: ksession.hasDarkBackground
-// 		terminalUsesMouse: true
+		// 		terminalUsesMouse: true
 		
-// 		colorScheme: "DarkPastels"
+		// 		colorScheme: "DarkPastels"
 		
 		session: QMLTermSession
 		{
@@ -109,14 +107,14 @@ Item
 			initialWorkingDirectory: "$HOME"
 			onFinished: Qt.quit()
 			
-// 			onMatchFound: 
-// 			{
-// 				console.log("found at: %1 %2 %3 %4".arg(startColumn).arg(startLine).arg(endColumn).arg(endLine));
-// 			}
-// 			onNoMatchFound:
-// 			{
-// 				console.log("not found");
-// 			}
+			// 			onMatchFound: 
+			// 			{
+			// 				console.log("found at: %1 %2 %3 %4".arg(startColumn).arg(startLine).arg(endColumn).arg(endLine));
+			// 			}
+			// 			onNoMatchFound:
+			// 			{
+			// 				console.log("not found");
+			// 			}
 			function find(query)
 			{
 				ksession.search(query)
@@ -165,8 +163,8 @@ Item
 			{
 				if(mouse.button === Qt.RightButton)
 					terminalMenu.popup()
-				else if(mouse.button === Qt.LeftButton)
-					kterminal.forceActiveFocus()
+					else if(mouse.button === Qt.LeftButton)
+						kterminal.forceActiveFocus()
 			}
 			
 			onPressAndHold: terminalMenu.popup()
