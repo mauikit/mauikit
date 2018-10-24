@@ -27,9 +27,9 @@ import "private"
 
 Rectangle
 {
-    id: control
-    
-    /* Controlc color scheming */
+	id: control
+	
+	/* Controlc color scheming */
 	ColorScheme 
 	{
 		id: colorScheme
@@ -40,11 +40,11 @@ Rectangle
 	/***************************/
 	
 	property bool hovered : false
-    
-    property int size: isMobile ? iconSizes.medium : iconSizes.small
-    property string iconName : ""
-    property string text : ""
-    
+	
+	property int size: isMobile ? iconSizes.medium : iconSizes.small
+	property string iconName : ""
+	property string text : ""
+	
 	signal clicked()    
 	signal pressed()    
 	signal hovered()    
@@ -58,39 +58,53 @@ Rectangle
 	border.color: colorScheme.borderColor
 	
 	clip: false
-    
-    Label
-    {
-        height: parent.height
-        width: parent.width
-        text: control.text
-        font.weight: Font.Bold
-        font.bold: true
-        visible: control.text.length
-        color: colorScheme.textColor
-        verticalAlignment: Qt.AlignVCenter
-        horizontalAlignment: Qt.AlignHCenter
-    }
-    
-    Maui.ToolButton
-    {
-        visible: iconName.length 
-        anchors.centerIn: parent
-        iconName: control.iconName
-        iconColor: colorScheme.textColor
-        size: control.size
-        enabled: false
-    }
-    
-    MouseArea
-    {
+	
+	
+	Loader
+	{
+		anchors.fill: parent
+		sourceComponent: control.text.length && !control.iconName.length ? labelComponent : (!control.text.length && control.iconName.length ? iconComponent : undefined)
+	}
+	
+	Component
+	{
+		id: labelComponent
+		Label
+		{
+			height: parent.height
+			width: parent.width
+			text: control.text
+			font.weight: Font.Bold
+			font.bold: true
+			font.pointSize: fontSizes.default
+			color: colorScheme.textColor
+			verticalAlignment: Qt.AlignVCenter
+			horizontalAlignment: Qt.AlignHCenter
+		}
+	}	
+	
+	Component
+	{
+		id: iconComponent
+		Maui.ToolButton
+		{
+			anchors.centerIn: parent
+			iconName: control.iconName
+			iconColor: control.colorScheme.textColor
+			size: control.size
+			enabled: false
+		}
+	}
+	
+	MouseArea
+	{
 		id: mouseArea
-        anchors.fill: parent
-        onClicked: control.clicked() 
+		anchors.fill: parent
+		onClicked: control.clicked() 
 		onPressed: control.pressed() 
 		onReleased: control.released()
 		hoverEnabled: true
 		onEntered: hovered = true
 		onExited: hovered = false
-    }
+	}
 }

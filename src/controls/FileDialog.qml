@@ -23,12 +23,15 @@ import org.kde.kirigami 2.0 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import QtQuick.Layouts 1.3
 
-Maui.Popup
+
+Maui.Dialog
 {
 	id: control
 	maxHeight: unit * 500
 	maxWidth: unit * 700
-	
+	page.margins: 0
+	defaultButtons: false
+		
 	property string initPath
 	
 	property var filter: []
@@ -38,6 +41,7 @@ Maui.Popup
 	property bool openDialog : true
 	
 	property var callback : ({})
+	
 	signal placeClicked (string path)
 	signal selectionReady(var paths)
 	
@@ -57,11 +61,8 @@ Maui.Popup
 		rightPadding: leftPadding
 		topPadding: leftPadding
 		bottomPadding: leftPadding
-		headBarExit: true
-		onExit:
-		{
-			closeIt()
-		}
+		headBarExit: false
+		
 		headBarTitleVisible: false
 		headBar.height: headBar.implicitHeight * 1.1
 		
@@ -70,7 +71,7 @@ Maui.Popup
 			id: pathBar
 			height: iconSizes.big
 			width: page.headBar.middleLayout.width * 0.9
-			
+			url: browser.currentPath
 			onPathChanged: browser.openFolder(path)
 			onHomeClicked:
 			{
@@ -82,12 +83,7 @@ Maui.Popup
 			
 			onPlaceClicked: browser.openFolder(path)
 		}
-		
-		headBar.rightContent:  Maui.ToolButton
-		{
-			iconName: "overflow-menu"
-			onClicked: optionsMenu.visible ? optionsMenu.close() : optionsMenu.popup()
-		}
+	
 		
 		Kirigami.PageRow
 		{
@@ -141,7 +137,11 @@ Maui.Popup
 						
 						if(places.length > 0)
 							for(var i in places)
+							{	
+								console.log("SIODEBARPLACE: ", places[i].label)
 								sidebar.model.append(places[i])
+								
+							}
 								
 					}
 				}
@@ -154,15 +154,20 @@ Maui.Popup
 					topPadding: leftPadding
 					bottomPadding: leftPadding
 					margins: 0
-					
-					headBarVisible: false
-					footBar.leftContent:  Maui.ToolButton
+					floatingBar: true
+					footBarOverlap: true
+					headBarExit: false
+
+					headBar.leftContent: [
+						
+					Maui.ToolButton
 					{
 						id: viewBtn
 						iconName:  browser.detailsView ? "view-list-icons" : "view-list-details"
 						onClicked: browser.switchView()
 					}
 					
+					]					
 					
 					footBar.middleContent: Row
 					{
@@ -186,7 +191,7 @@ Maui.Popup
 						}
 					}
 					
-					footBar.rightContent:  [
+					headBar.rightContent:  [
 					
 					Maui.ToolButton
 					{
@@ -199,10 +204,17 @@ Maui.Popup
 							callback(browser.selectedPaths)
 							close()
 						}
+					},
+					Maui.ToolButton
+					{
+						iconName: "overflow-menu"
+						onClicked: optionsMenu.visible ? optionsMenu.close() : optionsMenu.popup()
 					}
+					
 					]
 					
-					Menu
+					
+					Maui.Menu
 					{
 						id: optionsMenu
 						x: parent.width / 2 - width / 2
@@ -213,13 +225,13 @@ Maui.Popup
 						margins: 1
 						padding: 2
 						
-						MenuItem
+						Maui.MenuItem
 						{
 							text: qsTr("Compact mode")
 							onTriggered: sidebar.isCollapsed = !sidebar.isCollapsed
 						}
 						
-						MenuItem
+						Maui.MenuItem
 						{
 							text: qsTr("New folder")
 							onTriggered: newFolderDialog.open()
@@ -235,7 +247,6 @@ Maui.Popup
 							id: browser
 							Layout.fillWidth: true
 							Layout.fillHeight: true
-							
 						}
 						
 						Maui.ToolBar

@@ -245,7 +245,7 @@ Maui.Item
         Maui.Badge
         {
 			colorScheme.backgroundColor: highlightColor			
-                text: selectionList.count
+			text: selectionList.count
 
             anchors.verticalCenter: parent.top
             anchors.horizontalCenter: parent.right

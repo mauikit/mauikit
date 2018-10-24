@@ -155,7 +155,7 @@ Maui.Page
 				Label
 				{
 					text: body.length + " / " + body.lineCount
-					color: Qt.darker(selectedColor,1.5)
+					color: textColor
 					opacity: 0.5
 					font.pointSize: fontSizes.medium
 				}
@@ -170,22 +170,20 @@ Maui.Page
 				Maui.MenuItem
 				{
 					text: qsTr("Copy")
-					onTriggered: Maui.Handy.copyToClipboard(body.selectedText)
+					onTriggered: body.copy()
 				}
 				
 				Maui.MenuItem
 				{
 					text: qsTr("Cut")
+					onTriggered: body.cut()					
 				}
 				
 				Maui.MenuItem
 				{
 					text: qsTr("Paste")
-					onTriggered:
-					{
-						var text = Maui.Handy.getClipboard()
-						body.insert(body.cursorPosition,text)
-					}
+					onTriggered: body.paste()
+					
 				}
 				
 				Maui.MenuItem

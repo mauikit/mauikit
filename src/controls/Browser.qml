@@ -22,18 +22,19 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.0 as Kirigami
 import org.kde.mauikit 1.0 as Maui
+import FMModel 1.0
+import FMList 1.0
 
 Maui.Page
 {
     property string currentPath: Maui.FM.homePath()
 
     property var selectedPaths : []
-    property var previousPath: []
-    property var nextPath: []
 
     property bool selectionMode : false
     property bool detailsView: Maui.FM.loadSettings("BROWSER_VIEW", "BROWSER", false) === "false" ? false: true
 
+    property alias list : fmList
     property alias selectionBar : selectionBar
     property alias grid : viewLoader.item
     //    property alias detailsDrawer: detailsDrawer
@@ -66,6 +67,7 @@ Maui.Page
         Maui.ListBrowser
         {
             showEmblem: !saveDialog
+            model: fmModel
         }
     }
 
@@ -76,6 +78,7 @@ Maui.Page
         Maui.GridBrowser
         {
             showEmblem: !saveDialog
+            model: fmModel
         }
     }
 
@@ -85,14 +88,14 @@ Maui.Page
         onItemClicked: openItem(index)
         onItemDoubleClicked:
         {
-            var item = viewLoader.item.model.get(index)
+			var item = list.get(index)
 
             if(Maui.FM.isDir(item.path))
                 browser.openFolder(item.path)
             else
                 browser.openFile(item.path)
         }
-        onItemRightClicked: itemMenu.show(viewLoader.item.model.get(index).path)
+        onItemRightClicked: itemMenu.show(list.get(index).path)
         onLeftEmblemClicked: addToSelection(item, true)
         onAreaClicked: if(!isMobile && mouse.button === Qt.RightButton)
                            browserMenu.show()
@@ -107,6 +110,17 @@ Maui.Page
         visible: viewLoader.item.count === 0
 
     }
+    
+    FMModel
+    {
+		id: fmModel
+		list: fmList
+	}
+	FMList
+	{
+		id:fmList
+		path: currentPath
+	}
 
     ColumnLayout
     {
@@ -157,7 +171,7 @@ Maui.Page
 
     function openItem(index)
     {
-        var item = viewLoader.item.model.get(index)
+		var item = list.get(index)
         if((selectionMode || multipleSelection) && !Maui.FM.isDir(item.path))
             addToSelection(item, true)
         else
@@ -173,11 +187,6 @@ Maui.Page
         }
     }
 
-    function clear()
-    {
-        viewLoader.item.model.clear()
-    }
-
     function launchApp(path)
     {
         inx.runApplication(path, "")
@@ -190,24 +199,16 @@ Maui.Page
 
     function openFolder(path)
     {
-        previousPath.push(currentPath)
         populate(path)
-
     }
 
     function populate(path)
     {
         currentPath = path
-        clear()
         /* should it really return the paths or just use the signal? */
-        var items = Maui.FM.getPathContent(path, onlyDirs, filter)
-
         for(var i=0; i < sidebar.count; i++)
             if(currentPath === sidebar.model.get(i).path)
                 sidebar.currentIndex = i
-
-        pathBar.append(currentPath)
-        Maui.FM.watchPath(currentPath)
     }
 
     function append(item)
@@ -217,19 +218,17 @@ Maui.Page
 
     function goBack()
     {
-        nextPath.push(currentPath)
-        populate(previousPath.pop())
+        populate(fmList.previousPath)
     }
 
     function goNext()
     {
-        openFolder(nextPath.pop())
-
+        openFolder(fmList.posteriorPath)
     }
 
     function goUp()
     {
-        openFolder(Maui.FM.parentDir(currentPath))
+        openFolder(fmList.parentPath)
     }
 
     function refresh()
