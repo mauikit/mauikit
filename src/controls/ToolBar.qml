@@ -72,7 +72,7 @@ ToolBar
 		{
 			visible: drawBorder
 			color: colorScheme.borderColor
-			height: 1			
+			height: unit
 			anchors
 			{
 				left: parent.left
@@ -122,8 +122,7 @@ ToolBar
                 position: 1.0
                 color: colorScheme.textColor
             }
-        }
-        
+        }        
     }
     
     Rectangle
@@ -306,8 +305,7 @@ ToolBar
                         position: 1.0
                         color: "transparent"
                     }
-                }
-                
+                }                
             }
             
             Row
@@ -320,7 +318,7 @@ ToolBar
                 clip: true
             }
         }
-        ScrollBar.horizontal: ScrollBar { visible: false}
         
+        ScrollBar.horizontal: ScrollBar { visible: false}        
     }
 }

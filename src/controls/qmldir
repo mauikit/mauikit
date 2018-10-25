@@ -28,6 +28,8 @@ TagsBar 1.0 TagsBar.qml
 Taglist 1.0 private/TagList.qml
 GridBrowser 1.0 GridBrowser.qml
 ListBrowser 1.0 ListBrowser.qml
+FileBrowser 1.0 FileBrowser.qml
+FilePreviewer 1.0 FilePreviewer.qml
 FileDialog 1.0 FileDialog.qml
 PathBar 1.0 PathBar.qml
 Dialog 1.0 Dialog.qml
@@ -45,6 +47,6 @@ Terminal 1.0 Terminal.qml
 SyncDialog 1.0 SyncDialog.qml
 SyncDialog 1.0 SyncDialogA.qml
 Editor 1.0 Editor.qml
-
+ColorsBar 1.0 ColorsBar.qml
 
 

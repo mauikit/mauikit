@@ -111,7 +111,7 @@ TextField
 		: (control.hovered ? Qt.lighter(colorScheme.backgroundColor, 1.3) : colorScheme.backgroundColor)
 		border.color: colorScheme.borderColor
 		radius: radiusV
-		
+		border.width: unit		
 	}
 	
 	Maui.Menu
@@ -121,14 +121,14 @@ TextField
 		Maui.MenuItem
 		{
 			text: qsTr("Copy")
-			onTriggered: Maui.Handy.copyToClipboard(control.selectedText)
+			onTriggered: control.copy()
 			enabled: control.selectedText.length
 		}
 		
 		Maui.MenuItem
 		{
 			text: qsTr("Cut")			
-			onTriggered: Maui.Handy.copyToClipboard(control.selectedText)
+			onTriggered: control.cut()
 			enabled: control.selectedText.length
 		}
 		
@@ -137,7 +137,7 @@ TextField
 			text: qsTr("Paste")
 			onTriggered:
 			{
-				var text = Maui.Handy.getClipboard()
+				var text = control.paste()
 				control.insert(control.cursorPosition, text)
 			}
 		}

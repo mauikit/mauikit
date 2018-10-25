@@ -14,6 +14,13 @@
 		<file alias="private/ColorScheme.qml">src/controls/private/ColorScheme.qml</file>
 		<file alias="private/SyncAndroid.qml">src/controls/private/SyncAndroid.qml</file>
 		<file alias="private/SyncLinux.qml">src/controls/private/SyncLinux.qml</file>
+		<file alias="private/BrowserMenu.qml">src/controls/private/BrowserMenu.qml</file>
+		<file alias="private/FileMenu.qml">src/controls/private/BrowserMenu.qml</file>
+		<file alias="private/AudioPreview.qml">src/controls/private/AudioPreview.qml</file>
+		<file alias="private/ImagePreview.qml">src/controls/private/ImagePreview.qml</file>
+		<file alias="private/TextPreview.qml">src/controls/private/TextPreview.qml</file>
+		<file alias="private/VideoPreview.qml">src/controls/private/VideoPreview.qml</file>
+		<file alias="private/DefaultPreview.qml">src/controls/private/DefaultPreview.qml</file>
 		<file alias="Holder.qml">src/controls/Holder.qml</file>
         <file alias="Drawer.qml">src/controls/Drawer.qml</file>
         <file alias="ListDelegate.qml">src/controls/ListDelegate.qml</file>
@@ -26,8 +33,10 @@
         <file alias="private/TagList.qml">src/controls/private/TagList.qml</file>
         <file alias="private/TagDelegate.qml">src/controls/private/TagDelegate.qml</file>
         <file>src/fm/script.sql</file>
-        <file alias="Browser.qml">src/controls/Browser.qml</file>
-        <file alias="FileDialog.qml">src/controls/FileDialog.qml</file>
+		<file alias="ColorsBar.qml">src/controls/ColorsBar.qml</file>
+		<file alias="FileBrowser.qml">src/controls/FileBrowser.qml</file>
+		<file alias="FilePreviewer.qml">src/controls/FilePreviewer.qml</file>
+		<file alias="FileDialog.qml">src/controls/FileDialog.qml</file>
         <file alias="ListBrowser.qml">src/controls/ListBrowser.qml</file>
         <file alias="PathBar.qml">src/controls/PathBar.qml</file>
         <file alias="GridBrowser.qml">src/controls/GridBrowser.qml</file>
