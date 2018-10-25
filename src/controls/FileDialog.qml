@@ -152,21 +152,59 @@ Maui.Dialog
 						Layout.fillWidth: true
 						Layout.fillHeight: true
 						
+						previewer.parent: ApplicationWindow.overlay
+						
+						selectionMode: control.openDialog && control.multipleSelection
 						list.onlyDirs: control.onlyDirs
 						list.filters: control.filters
 						list.sortBy: control.sortBy
+						
+						onItemClicked: 
+						{
+							if(control.openDialog && !control.multipleSelection)
+								callback([list.get(index).path])
+								
+							openItem(index)
+						}
 					}
 					
 					Maui.ToolBar
 					{
-						visible: saveDialog
+						id: _bottomBar
 						position: ToolBar.Footer
+						drawBorder: true
 						Layout.fillWidth: true
-						middleContent: TextField
+						leftContent: TextField
 						{
-							width: saveDialog.width
+							visible: saveDialog							
+							width: _bottomBar.middleLayout.width * 0.9
 							placeholderText: qsTr("File name")
 						}
+						
+						rightContent: Row
+						{
+							spacing: space.big
+							Maui.Button
+							{
+								id: _rejectButton
+								colorScheme.textColor: dangerColor
+								colorScheme.borderColor: dangerColor
+								colorScheme.backgroundColor: "transparent"
+								
+								text: rejectText
+								onClicked: control.closeIt()
+								
+							}
+							
+							Maui.Button
+							{
+								id: _acceptButton			
+								colorScheme.backgroundColor: infoColor
+								colorScheme.textColor: "white"
+								text: acceptText
+								onClicked: control.callback(browser.selectionBar.selectedPaths)
+							}
+						} 
 					}
 				}
 		}

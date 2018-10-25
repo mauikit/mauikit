@@ -102,10 +102,10 @@ Maui.Menu
 
     Maui.MenuItem
     {
-        text: qsTr("Info...")
+        text: qsTr("Preview...")
         onTriggered:
         {
-            browser.detailsDrawer.show(paths[0])
+            browser.previewer.show(paths[0])
             close()
         }
     }
@@ -140,7 +140,7 @@ Maui.Menu
         if(urls.length > 0 )
         {
             paths = urls
-            isDir = inx.isDir(paths[0])
+            isDir = Maui.FM.isDir(paths[0])
             popup()
         }
     }

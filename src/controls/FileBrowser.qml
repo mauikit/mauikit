@@ -14,6 +14,11 @@ Maui.Page
 {
 	id: control
 	
+	/* Controlc color scheming */
+	ColorScheme {id: colorScheme}
+	property alias colorScheme : colorScheme
+	/***************************/
+	
 	property string currentPath: Maui.FM.homePath()
 	
 	property var copyPaths : []
@@ -33,7 +38,9 @@ Maui.Page
 	property alias grid : viewLoader.item
 	
 	property alias previewer : previewer
-	property alias browserMenu : browserMenu
+	property alias menu : browserMenu.content
+	property alias itemMenu: itemMenu
+	property alias holder: holder
 	
 	property var pathType : ({
 		directory : 0,
@@ -45,8 +52,14 @@ Maui.Page
 	property int currentPathType : pathType.none
 	property int thumbnailsSize : iconSizes.large
 	
-	margins: 0
+	signal itemClicked(int index)
+	signal itemDoubleClicked(int index)
+	signal itemRightClicked(int index)
+	signal itemLeftEmblemClicked(int index)
+	signal itemRightEmblemClicked(int index)
+	signal rightClicked()
 	
+	margins: 0
 	
 	Maui.NewDialog
 	{
@@ -88,6 +101,7 @@ Maui.Page
 	Maui.FilePreviewer
 	{
 		id: previewer
+		parent: parent
 	}
 	
 	FMModel
@@ -201,7 +215,9 @@ Maui.Page
 	Connections
 	{
 		target: viewLoader.item
-		onItemClicked: openItem(index)
+		
+		onItemClicked: control.itemClicked(index)
+		
 		
 		onItemDoubleClicked:
 		{
@@ -209,22 +225,37 @@ Maui.Page
 			
 			if(Maui.FM.isDir(item.path))
 				browser.openFolder(item.path)
-				else
-					browser.openFile(item.path)
+			else
+				browser.openFile(item.path)
+				
+			control.itemClicked(index)
 		}
 		
-		onItemRightClicked: itemMenu.show([modelList.get(index).path])
+		onItemRightClicked: 
+		{
+			itemMenu.show([modelList.get(index).path])
+			control.itemRightClicked(index)
+		}
 		
-		onLeftEmblemClicked:  browser.addToSelection(modelList.get(index), true)
+		onLeftEmblemClicked: 
+		{
+			browser.addToSelection(modelList.get(index), true)
+			control.itemLeftEmblemClicked(index)
+		}
 		
-		onRightEmblemClicked: isAndroid ? Maui.Android.shareDialog([modelList.get(index).path]) :
-		shareDialog.show([modelList.get(index).path])
+		onRightEmblemClicked: 
+		{
+			isAndroid ? Maui.Android.shareDialog([modelList.get(index).path]) : shareDialog.show([modelList.get(index).path])
+			control.itemRightEmblemClicked(index)
+		}
+		
 		onAreaClicked:
 		{
 			if(!isMobile && mouse.button === Qt.RightButton)
 				browserMenu.show()
-				else
-					return
+			else return
+				
+			control.rightClicked()
 		}
 		
 		onAreaRightClicked: browserMenu.show()
@@ -376,8 +407,6 @@ Maui.Page
 	//        onClicked: browser.switchView()
 	//    }
 	
-	footBar.colorScheme.backgroundColor: accentColor
-	footBar.colorScheme.textColor: altColorText
 	footBar.middleContent: Row
 	{
 		
@@ -385,21 +414,21 @@ Maui.Page
 		Maui.ToolButton
 		{
 			iconName: "go-previous"
-			iconColor: floatingBar ? altColorText : textColor
+			iconColor: footBar.colorScheme.textColor
 			onClicked: browser.goBack()
 		}
 		
 		Maui.ToolButton
 		{
 			iconName: "go-up"
-			iconColor: floatingBar ? altColorText : textColor
+			iconColor: footBar.colorScheme.textColor
 			onClicked: browser.goUp()
 		}
 		
 		Maui.ToolButton
 		{
 			iconName: "go-next"
-			iconColor: floatingBar ? altColorText : textColor
+			iconColor: footBar.colorScheme.textColor
 			onClicked: browser.goNext()
 		}
 	}
@@ -460,23 +489,23 @@ Maui.Page
 		
 		if(selectionMode && !Maui.FM.isDir(item.path))
 			addToSelection(item, true)
+		else
+		{
+			var path = item.path
+			if(Maui.FM.isDir(path))
+				browser.openFolder(path)
+			else if(Maui.FM.isCustom(path))
+				browser.openFolder(path)
+			else if(Maui.FM.isApp(path))
+				browser.launchApp(path)
 			else
 			{
-				var path = item.path
-				if(Maui.FM.isDir(path))
-					browser.openFolder(path)
-					else if(Maui.FM.isCustom(path))
-						browser.openFolder(path)
-						else if(Maui.FM.isApp(path))
-							browser.launchApp(path)
-							else
-							{
-								if (isMobile)
-									previewer.show(path)
-									else
-										browser.openFile(path)
-							}
+				if (isMobile)
+					previewer.show(path)
+				else
+					browser.openFile(path)
 			}
+		}
 	}
 	
 	function launchApp(path)
@@ -693,16 +722,21 @@ Maui.Page
 		
 		switch(modelList.sortBy)
 		{
-			case KEY.LABEL: prop = "label"
+			case FMList.LABEL: 
+				prop = "label"
 				criteria = ViewSection.FirstCharacter
 				break;
-			case KEY.MIME: prop = "mime"
+			case FMList.MIME: 
+				prop = "mime"
 				break;
-			case KEY.SIZE: prop = "size"
+			case FMList.SIZE: 
+				prop = "size"
 				break;
-			case KEY.DATE: prop = "date"
+			case FMList.DATE: 
+				prop = "date"
 				break;
-			case KEY.MODIFIED: prop = "modified"
+			case FMList.MODIFIED: 
+				prop = "modified"
 				break;
 		}
 		
