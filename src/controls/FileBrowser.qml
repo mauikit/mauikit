@@ -218,18 +218,7 @@ Maui.Page
 		
 		onItemClicked: control.itemClicked(index)
 		
-		
-		onItemDoubleClicked:
-		{
-			var item = modelList.get(index)
-			
-			if(Maui.FM.isDir(item.path))
-				browser.openFolder(item.path)
-			else
-				browser.openFile(item.path)
-				
-			control.itemClicked(index)
-		}
+		onItemDoubleClicked: control.itemDoubleClicked(index)
 		
 		onItemRightClicked: 
 		{
@@ -309,6 +298,7 @@ Maui.Page
 		onClicked: bookmarkFolder([browser.currentPath])
 		tooltipText: qsTr("Bookmark...")
 	},
+	
 	Maui.ToolButton
 	{
 		iconName: "edit-select"
@@ -316,6 +306,7 @@ Maui.Page
 		onClicked: selectionMode = !selectionMode
 		iconColor: selectionMode ? highlightColor: textColor
 	},
+	
 	Maui.ToolButton
 	{
 		iconName: "overflow-menu"
@@ -494,10 +485,10 @@ Maui.Page
 			var path = item.path
 			if(Maui.FM.isDir(path))
 				browser.openFolder(path)
-			else if(Maui.FM.isCustom(path))
-				browser.openFolder(path)
-			else if(Maui.FM.isApp(path))
-				browser.launchApp(path)
+// 			else if(Maui.FM.isCustom(path))
+// 				browser.openFolder(path)
+// 			else if(Maui.FM.isApp(path))
+// 				browser.launchApp(path)
 			else
 			{
 				if (isMobile)

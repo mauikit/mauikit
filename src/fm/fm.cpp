@@ -149,12 +149,12 @@ FMH::MODEL_LIST FM::getPathContent(const QString& path, const bool &hidden, cons
 		if(hidden)
 			dirFilter = dirFilter | QDir::Hidden | QDir::System;
 		
-		QDirIterator it (path, filters,  dirFilter, QDirIterator::NoIteratorFlags);
+		QDirIterator it (path, filters, dirFilter, QDirIterator::NoIteratorFlags);
 		while (it.hasNext())
 		{
 			auto url = it.next();
 			
-			QFileInfo file(url);
+			auto file = it.fileInfo();
 			QLocale locale;
 			
 			auto item = FMH::MODEL {

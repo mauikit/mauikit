@@ -61,6 +61,24 @@ namespace FMH
 		#endif
 	}
 	
+	enum FILTER_TYPE : uint_fast8_t
+	{
+		AUDIO,
+		VIDEO,
+		TEXT,
+		IMAGE,
+		NONE
+	}; Q_ENUM_NS(FILTER_TYPE);
+	
+	static const QHash<FILTER_TYPE, QStringList> FILTER_LIST =
+	{
+		{FILTER_TYPE::AUDIO, {"*.mp3", "*.mp4", "*.wav", "*.ogg", "*.flac"}},
+		{FILTER_TYPE::VIDEO, {"*.mp4", "*.mkv", "*.mov", "*.avi", "*.flv"}},
+		{FILTER_TYPE::TEXT, {"*.txt", "*.cpp", "*.js", "*.doc", "*.h", "*.json", "*.html", "*.rtf"}},
+		{FILTER_TYPE::IMAGE, {"*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg"}},
+		{FILTER_TYPE::NONE, QStringList()}
+	};
+	
 	enum MODEL_KEY : uint_fast8_t
 	{
 		ICON,

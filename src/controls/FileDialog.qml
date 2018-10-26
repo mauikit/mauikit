@@ -37,6 +37,7 @@ Maui.Dialog
 	property var filters: []
 	property bool onlyDirs : false
 	property int sortBy: FMList.MODIFIED
+	property int filterType: FMList.NONE
 	
 	property bool multipleSelection: false
 	
@@ -158,6 +159,7 @@ Maui.Dialog
 						list.onlyDirs: control.onlyDirs
 						list.filters: control.filters
 						list.sortBy: control.sortBy
+						list.filterType: control.filterType
 						
 						onItemClicked: 
 						{

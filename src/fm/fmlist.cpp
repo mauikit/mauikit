@@ -167,6 +167,23 @@ void FMList::setFilters(const QStringList &filters)
 	emit this->postListChanged();	
 }
 
+FMH::FILTER_TYPE FMList::getFilterType() const
+{
+	return this->filterType;
+}
+
+void FMList::setFilterType(const FMH::FILTER_TYPE& type)
+{
+	this->filterType = type;
+	
+	this->filters = FMH::FILTER_LIST[this->filterType];	
+	
+	emit this->preListChanged();
+	emit this->filtersChanged();
+	emit this->filterTypeChanged();
+	emit this->postListChanged();	
+}
+
 bool FMList::getHidden() const
 {
 	return this->hidden;

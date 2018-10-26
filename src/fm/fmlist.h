@@ -35,6 +35,7 @@ class FMList : public QObject
 	Q_PROPERTY(bool onlyDirs READ getOnlyDirs WRITE setOnlyDirs NOTIFY onlyDirsChanged())
 	Q_PROPERTY(bool preview READ getPreview WRITE setPreview NOTIFY previewChanged())
 	Q_PROPERTY(QStringList filters READ getFilters WRITE setFilters NOTIFY filtersChanged())
+	Q_PROPERTY(FMH::FILTER_TYPE filterType READ getFilterType WRITE setFilterType NOTIFY filterTypeChanged())
 	Q_PROPERTY(FMH::MODEL_KEY sortBy READ getSortBy WRITE setSortBy NOTIFY sortByChanged())
 	
 	Q_PROPERTY(bool pathExists READ getPathExists NOTIFY pathExistsChanged())
@@ -46,6 +47,7 @@ class FMList : public QObject
 	
 	public:
 		Q_ENUM(FMH::MODEL_KEY)
+		Q_ENUM(FMH::FILTER_TYPE)
 		
 		FMList(QObject *parent = nullptr);
 		~FMList();
@@ -60,6 +62,9 @@ class FMList : public QObject
 		
 		QStringList getFilters() const;
 		void setFilters(const QStringList &filters);
+		
+		FMH::FILTER_TYPE getFilterType() const;
+		void setFilterType(const FMH::FILTER_TYPE &type);
 		
 		bool getHidden() const;
 		void setHidden(const bool &state);
@@ -79,7 +84,7 @@ class FMList : public QObject
 		void setPosteriorPath(const QString &path);
 		
 		bool getPathEmpty() const;
-		bool getPathExists() const;	
+		bool getPathExists() const;
 		
 		
 private:
@@ -101,6 +106,7 @@ private:
 	bool pathEmpty = true;
 	
 	FMH::MODEL_KEY sort = FMH::MODEL_KEY::MODIFIED;
+	FMH::FILTER_TYPE filterType = FMH::FILTER_TYPE::NONE;
 	
 	QStringList prevHistory = {};
 	QStringList postHistory = {};
@@ -111,6 +117,7 @@ public slots:
 signals:
 	void pathChanged();
 	void filtersChanged();
+	void filterTypeChanged();
 	void hiddenChanged();
 	void previewChanged();
 	void onlyDirsChanged();
