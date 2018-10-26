@@ -37,15 +37,18 @@ public:
 
 	Q_INVOKABLE QVariantList getTags(const int &limit = 5);
     Q_INVOKABLE QVariantList getBookmarks();
-    Q_INVOKABLE QVariantList getTagContent(const QString &tag);
+	FMH::MODEL_LIST getTagContent(const QString &tag);
     Q_INVOKABLE bool bookmark(const QString &path);
 	
 	/*** START STATIC METHODS ***/
 	static QVariantList packItems(const QStringList &items, const QString &type);
 	
-	FMH::MODEL_LIST static getPathContent(const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());	
+	FMH::MODEL_LIST static getPathContent(const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
 	
-    Q_INVOKABLE static QVariantList getDefaultPaths();
+	FMH::MODEL_LIST static getAppsContent(const QString &path);
+	
+	Q_INVOKABLE static QVariantList getDefaultPaths();
+	Q_INVOKABLE static QVariantList getCustomPaths();
 	Q_INVOKABLE static QString homePath();	
 	Q_INVOKABLE static QString parentDir(const QString &path);
 	
@@ -55,6 +58,7 @@ public:
 	
     Q_INVOKABLE static bool isDefaultPath(const QString &path);
     Q_INVOKABLE static bool isDir(const QString &path);
+	Q_INVOKABLE static bool isApp(const QString &path);	
 	Q_INVOKABLE static bool fileExists(const QString &path);
 	
 	/* SETTINGS */
@@ -75,7 +79,9 @@ public:
     Q_INVOKABLE static bool createDir(const QString &path, const QString &name);
     Q_INVOKABLE static bool createFile(const QString &path, const QString &name);
     
-    Q_INVOKABLE static bool openUrl(const QString &url);  
+    Q_INVOKABLE static bool openUrl(const QString &url);
+	Q_INVOKABLE static void runApplication(const QString &exec);
+	
 	/*** END STATIC METHODS ***/
 	
 private:

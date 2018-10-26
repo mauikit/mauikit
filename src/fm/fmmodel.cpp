@@ -91,11 +91,11 @@ void FMModel::setList(FMList *value)
 			emit this->dataChanged(this->index(index), this->index(index), roles);
 		});
 		
-		connect(this->fmlist, &FMList::pathChanged, this, [=]()
-		{
-			beginResetModel();
-			endResetModel();
-		});
+// 		connect(this->fmlist, &FMList::pathChanged, this, [=]()
+// 		{
+// 			beginResetModel();
+// 			endResetModel();
+// 		});
 		
 		connect(this->fmlist, &FMList::preListChanged, this, [=]()
 		{

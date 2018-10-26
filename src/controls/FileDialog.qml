@@ -35,22 +35,17 @@ Maui.Dialog
 	property string initPath
 	
 	property var filters: []
-	property bool onlyDirs : false
-	property int sortBy: FMList.MODIFIED
 	property int filterType: FMList.NONE
 	
+	property bool onlyDirs: false
+	property int sortBy: FMList.MODIFIED
+	
 	readonly property var modes : ({OPEN: 0, SAVE: 1})
-	property int mode : modes.OPEN
-	
-	property bool multipleSelection: false
-	
+	property int mode : modes.OPEN	
+
 	property var callback : ({})
 	
-	property alias textField: _textField
-	
-	signal placeClicked (string path)
-	signal selectionReady(var paths)
-	
+	property alias textField: _textField	
 	
 	Maui.Page
 	{
@@ -122,7 +117,6 @@ Maui.Dialog
 					onItemClicked:
 					{
 						browser.openFolder(item.path)
-						placeClicked(item.path)
 						
 						if(pageRow.currentIndex === 0 && !pageRow.wideMode)
 							pageRow.currentIndex = 1
@@ -135,13 +129,13 @@ Maui.Dialog
 						places.push(Maui.FM.getBookmarks())
 						places.push(Maui.FM.getDevices())
 						
+						if(control.mode == modes.OPEN)
+							places.push(Maui.FM.getTags())
+						
 						if(places.length > 0)
 							for(var i in places)
-							{	
-								console.log("SIODEBARPLACE: ", places[i].label)
 								sidebar.model.append(places[i])
 								
-							}
 					}
 				}
 				
@@ -157,7 +151,7 @@ Maui.Dialog
 						
 						previewer.parent: ApplicationWindow.overlay
 						
-						selectionMode: control.mode === modes.OPEN && control.multipleSelection
+						selectionMode: control.mode === modes.OPEN
 						list.onlyDirs: control.onlyDirs
 						list.filters: control.filters
 						list.sortBy: control.sortBy
@@ -168,13 +162,9 @@ Maui.Dialog
 							switch(control.mode)
 							{	
 								case modes.OPEN :
-							{
-								if(!control.multipleSelection)
-									callback([list.get(index).path])
-								else
-									openItem(index)	
-								break
-								
+							{								
+									openItem(index)
+									break
 							}
 								case modes.SAVE:
 							{
@@ -227,10 +217,8 @@ Maui.Dialog
 								text: acceptText
 								onClicked: 
 								{
-									if(control.mode === modes.OPEN && control.multipleSelection)
-										control.callback(browser.selectionBar.selectedPaths)
-									else if(control.mode === modes.OPEN && !control.multipleSelection)
-										control.callback([browser.list.get(browser.currentIndex).path])
+									if(control.mode === modes.OPEN)
+										control.callback(browser.selectionBar.selectedPaths.length ? browser.selectionBar.selectedPaths : browser.currentPath)
 									else if(control.mode === modes.SAVE)
 										control.callback(browser.currentPath)
 										
@@ -250,10 +238,10 @@ Maui.Dialog
 		
 		if(initPath)
 			browser.openFolder(initPath)
-			else
-				browser.openFolder(browser.currentPath)
+		else
+			browser.openFolder(browser.currentPath)
 				
-				open()
+		open()
 	}
 	
 	function closeIt()

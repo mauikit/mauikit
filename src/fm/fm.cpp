@@ -30,6 +30,8 @@
 
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
+#else
+#include "mauikde.h"
 #endif
 
 FM::FM(QObject *parent) : FMDB(parent)
@@ -89,6 +91,10 @@ void FM::watchPath(const QString &path, const bool &clear)
 {
 	if(!watcher->directories().isEmpty() && clear)
 		watcher->removePaths(watcher->directories());
+	
+	if(path.isEmpty())		
+		return;
+	
 	watcher->addPath(path);
 }
 
@@ -152,35 +158,49 @@ FMH::MODEL_LIST FM::getPathContent(const QString& path, const bool &hidden, cons
 		QDirIterator it (path, filters, dirFilter, QDirIterator::NoIteratorFlags);
 		while (it.hasNext())
 		{
-			auto url = it.next();
-			
-			auto file = it.fileInfo();
-			QLocale locale;
-			
-			auto item = FMH::MODEL {
-				{FMH::MODEL_KEY::ICON, FMH::getIconName(url)},
-				{FMH::MODEL_KEY::MIME, FMH::getMime(url)},
-				{FMH::MODEL_KEY::LABEL, file.fileName()},
-				{FMH::MODEL_KEY::DATE, file.birthTime().toString(Qt::TextDate)},
-				{FMH::MODEL_KEY::SIZE, QString::number(file.size()) /*locale.formattedDataSize(file.size())*/},            
-				{FMH::MODEL_KEY::MODIFIED, file.lastModified().toString(Qt::TextDate)},            
-				{FMH::MODEL_KEY::SUFFIX, file.suffix()},            
-				{FMH::MODEL_KEY::PATH, url},
-				{FMH::MODEL_KEY::THUMBNAIL, url}				
-			};
-			
-			content << item;
+			auto url = it.next();			
+			content << FMH::getFileInfoModel(url);
 		}
 	}
 	
 	return content;
 }
 
+FMH::MODEL_LIST FM::getAppsContent(const QString& path)
+{
+	FMH::MODEL_LIST res;
+	#if (defined (Q_OS_LINUX) && !defined (Q_OS_ANDROID))
+	if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/"))
+		return MAUIKDE::getApps(QString(path).replace(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/",""));
+	else
+		return MAUIKDE::getApps();
+	#endif
+	return res;
+}
+
 QVariantList FM::getDefaultPaths()
 {
 	QVariantList res;
-	res << packItems(FMH::defaultPaths, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::PLACES]);
+	res << packItems(FMH::defaultPaths, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::PLACES_PATH]);
+	qDebug()<< "DEFAULT PATHS" << res;
 	return res;
+}
+
+QVariantList FM::getCustomPaths()
+{
+	#ifdef Q_OS_ANDROID
+	return QVariantList();
+	#endif
+	return QVariantList
+	{
+		QVariantMap
+		{
+			{FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], "system-run"},
+			{FMH::MODEL_NAME[FMH::MODEL_KEY::LABEL], FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]},
+			{FMH::MODEL_NAME[FMH::MODEL_KEY::PATH], FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/"},
+			{FMH::MODEL_NAME[FMH::MODEL_KEY::TYPE], FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::PLACES_PATH]}
+		}
+	};
 }
 
 QVariantList FM::getDevices()
@@ -188,7 +208,7 @@ QVariantList FM::getDevices()
 	QVariantList drives;
 	
 	#if defined(Q_OS_ANDROID)
-	drives << packItems({MAUIAndroid::sdDir()}, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES]);
+	drives << packItems({MAUIAndroid::sdDir()}, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES_PATH]);
 	return drives;
 	#else	
 	return drives;
@@ -229,6 +249,8 @@ QVariantList FM::getDevices()
 
 QVariantList FM::getTags(const int &limit)
 {
+	Q_UNUSED(limit);
+	
 	QVariantList data;
 	qDebug()<< "getting TAGS";
 	if(this->tag)
@@ -242,7 +264,7 @@ QVariantList FM::getTags(const int &limit)
 				{FMH::MODEL_NAME[FMH::MODEL_KEY::PATH], label},
 				{FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], "tag"},
 				{FMH::MODEL_NAME[FMH::MODEL_KEY::LABEL], label},
-				{FMH::MODEL_NAME[FMH::MODEL_KEY::TYPE],  FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::TAGS]}
+				{FMH::MODEL_NAME[FMH::MODEL_KEY::TYPE],  FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::TAGS_PATH]}
 			};
 		}
 	}
@@ -256,27 +278,20 @@ QVariantList FM::getBookmarks()
 	for(auto bookmark : this->get("select * from bookmarks"))
 		bookmarks << bookmark.toMap().value(FMH::MODEL_NAME[FMH::MODEL_KEY::PATH]).toString();
 	
-	return packItems(bookmarks, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::BOOKMARKS]);
+	return packItems(bookmarks, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::BOOKMARKS_PATH]);
 }
 
-QVariantList FM::getTagContent(const QString &tag)
+FMH::MODEL_LIST FM::getTagContent(const QString &tag)
 {
-	QVariantList content;
+	FMH::MODEL_LIST content;
 	
 	for(auto data : this->tag->getUrls(tag, false))
 	{
 		auto url = data.toMap().value(TAG::KEYMAP[TAG::KEY::URL]).toString();
-		QFileInfo file(url);
 		
-		auto item = QVariantMap
-		{
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::MIME], FMH::getMime(url)},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::THUMBNAIL], url},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], FMH::getIconName(url)},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::LABEL], file.isDir() ? file.baseName() :
-				file.fileName()},
-				{FMH::MODEL_NAME[FMH::MODEL_KEY::PATH], url}
-		};
+		auto item = FMH::getFileInfoModel(url);
+		item.insert(FMH::MODEL_KEY::THUMBNAIL, url);
+		
 		content << item;
 	}
 	
@@ -307,8 +322,12 @@ QString FM::parentDir(const QString &path)
 
 bool FM::isDir(const QString &path)
 {
-	return QFileInfo(path).isDir();
-	
+	return QFileInfo(path).isDir();	
+}
+
+bool FM::isApp(const QString& path)
+{
+	return /*QFileInfo(path).isExecutable() ||*/ path.endsWith(".desktop");	
 }
 
 bool FM::bookmark(const QString &path)
@@ -492,6 +511,13 @@ bool FM::createFile(const QString &path, const QString &name)
 bool FM::openUrl(const QString &url)
 {
 	return QDesktopServices::openUrl(QUrl::fromUserInput(url));
+}
+
+void FM::runApplication(const QString& exec)
+{
+	#if (defined (Q_OS_LINUX) && !defined (Q_OS_ANDROID))
+	return  MAUIKDE::launchApp(exec);
+	#endif
 }
 
 QVariantMap FM::dirConf(const QString &path)

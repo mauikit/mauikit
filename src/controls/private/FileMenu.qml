@@ -17,7 +17,6 @@ Maui.Menu
     signal cutClicked(var paths)
     signal renameClicked(var paths)
     signal tagsClicked(var paths)
-    signal saveToClicked(var paths)
 
     Maui.MenuItem
     {
@@ -50,6 +49,8 @@ Maui.Menu
         }
     }
 
+    MenuSeparator{}
+    
     Maui.MenuItem
     {
         text: qsTr("Copy...")
@@ -80,17 +81,7 @@ Maui.Menu
         }
     }
 
-    Maui.MenuItem
-    {
-        text: qsTr("Save to...")
-        onTriggered:
-        {
-            saveToClicked(paths)
-            close()
-        }
-    }
-
-    Maui.MenuItem
+     Maui.MenuItem
     {
         text: qsTr("Remove...")
         onTriggered:
@@ -100,12 +91,14 @@ Maui.Menu
         }
     }
 
+    MenuSeparator{}
+    
     Maui.MenuItem
     {
         text: qsTr("Preview...")
         onTriggered:
         {
-            browser.previewer.show(paths[0])
+            previewer.show(paths[0])
             close()
         }
     }
@@ -113,7 +106,7 @@ Maui.Menu
     Maui.MenuItem
     {
         text: qsTr("Select")
-        onTriggered: browser.selectionBar.append(browser.list.get(browser.grid.currentIndex))
+        onTriggered: selectionBar.append(list.get(browser.currentIndex))
     }
 
     Maui.MenuItem
@@ -130,7 +123,7 @@ Maui.Menu
                 for(var i in control.paths)
                     Maui.FM.setDirConf(control.paths[i]+"/.directory", "Desktop Entry", "Icon", color)
 
-                browser.refresh()
+                refresh()
             }
         }
     }

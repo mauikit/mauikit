@@ -132,41 +132,24 @@ namespace FMH
 	typedef QHash<FMH::MODEL_KEY, QString> MODEL;
 	typedef QList<MODEL> MODEL_LIST;
 	
-	enum class CUSTOMPATH : uint_fast8_t
+	enum PATHTYPE_KEY : uint_fast8_t
 	{
-		APPS,
-		TAGS,
-		TRASH
-	};
+		PLACES_PATH,
+		DRIVES_PATH,
+		BOOKMARKS_PATH,
+		TAGS_PATH,
+		APPS_PATH,
+		TRASH_PATH
+	}; Q_ENUM_NS(PATHTYPE_KEY);
 	
-	static const QMap<CUSTOMPATH, QString> CUSTOMPATH_PATH =
+	static const QHash<PATHTYPE_KEY, QString> PATHTYPE_NAME =
 	{
-		{CUSTOMPATH::APPS, "#apps"},
-		{CUSTOMPATH::TAGS, "#tags"},
-		{CUSTOMPATH::TRASH, "#trash"}
-	};
-	
-	static const QMap<CUSTOMPATH, QString> CUSTOMPATH_NAME =
-	{
-		{CUSTOMPATH::APPS, "Apps"},
-		{CUSTOMPATH::TAGS, "Tags"},
-		{CUSTOMPATH::TRASH, "Trash"}
-	};
-	
-	enum class PATHTYPE_KEY : uint_fast8_t
-	{
-		PLACES,
-		DRIVES,
-		BOOKMARKS,
-		TAGS
-	};
-	
-	static const QMap<PATHTYPE_KEY, QString> PATHTYPE_NAME =
-	{
-		{PATHTYPE_KEY::PLACES, "Places"},
-		{PATHTYPE_KEY::DRIVES, "Drives"},
-		{PATHTYPE_KEY::BOOKMARKS, "Bookmarks"},
-		{PATHTYPE_KEY::TAGS, "Tags"}
+		{PATHTYPE_KEY::PLACES_PATH, "Places"},
+		{PATHTYPE_KEY::DRIVES_PATH, "Drives"},
+		{PATHTYPE_KEY::BOOKMARKS_PATH, "Bookmarks"},
+		{PATHTYPE_KEY::APPS_PATH, "Apps"},
+		{PATHTYPE_KEY::TRASH_PATH, "Trash"},
+		{PATHTYPE_KEY::TAGS_PATH, "Tags"}
 	};
 	
 	const QString DataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
@@ -197,8 +180,7 @@ namespace FMH
 		{HomePath, "user-home"},
 		{MusicPath, "folder-music"},
 		{VideosPath, "folder-videos"},
-	};
-	
+	};	
 	
 	#else
 	const QString PicturesPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
@@ -371,28 +353,46 @@ namespace FMH
 		return data;
 	}
 	
-	inline QVariantMap getFileInfo(const QString &path)
+	inline FMH::MODEL getFileInfoModel(const QString &path)
 	{
 		QFileInfo file(path);
-		if(!file.exists()) return QVariantMap();
+		if(!file.exists()) return FMH::MODEL();
 		
 		auto mime = FMH::getMime(path);
+// 		QLocale locale;
 		
-		QVariantMap res =
+		FMH::MODEL res =
 		{
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::GROUP], file.group()},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::OWNER], file.owner()},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::SUFFIX], file.completeSuffix()},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::LABEL], file.completeBaseName()},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::NAME], file.fileName()},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::DATE], file.birthTime().toString()},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::MODIFIED], file.lastModified().toString()},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::MIME], mime },
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], FMH::getIconName(path)}
+			{FMH::MODEL_KEY::GROUP, file.group()},
+			{FMH::MODEL_KEY::OWNER, file.owner()},
+			{FMH::MODEL_KEY::SUFFIX, file.completeSuffix()},
+			{FMH::MODEL_KEY::LABEL, /*file.isDir() ? file.baseName() :*/ file.fileName()},
+			{FMH::MODEL_KEY::NAME, file.fileName()},
+			{FMH::MODEL_KEY::DATE,  file.birthTime().toString(Qt::TextDate)},
+			{FMH::MODEL_KEY::MODIFIED, file.lastModified().toString(Qt::TextDate)},
+			{FMH::MODEL_KEY::MIME, mime },
+			{FMH::MODEL_KEY::ICON, FMH::getIconName(path)},
+			{FMH::MODEL_KEY::SIZE, QString::number(file.size()) /*locale.formattedDataSize(file.size())*/},
+			{FMH::MODEL_KEY::PATH, path},
+			{FMH::MODEL_KEY::THUMBNAIL, path}
 		};
 		
 		return res;
 	}	
+	
+	inline QVariantMap getFileInfo(const QString &path)
+	{
+		QFileInfo file(path);
+		if(!file.exists()) return QVariantMap();
+		auto data = FMH::getFileInfoModel(path);
+		QVariantMap res; 
+		for(auto key : data.keys())		
+			res.insert(FMH::MODEL_NAME[key], data[key]);
+		
+		return res;
+	}	
+	
+	
 }
 
 #endif // FMH_H

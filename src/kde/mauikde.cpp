@@ -38,10 +38,6 @@
 #include <KConfig>
 #include <KConfigGroup>
 
-#include "fmh.h"
-
-#include "utils.h"
-
 #include "kdeconnect.h"
 
 Q_DECLARE_METATYPE(QList<int>)
@@ -134,7 +130,7 @@ void MAUIKDE::setColorScheme(const QString &schemeName, const QString &bg, const
 
     QString colorsFile = FMH::DataPath+"/color-schemes/"+schemeName+".colors";    
     
-    if(!UTIL::fileExists(colorsFile))
+    if(!FMH::fileExists(colorsFile))
     {
         QFile color_scheme_file(":/assets/maui-app.colors");
         if(color_scheme_file.copy(colorsFile))
@@ -151,7 +147,7 @@ void MAUIKDE::setColorScheme(const QString &schemeName, const QString &bg, const
     KColorSchemeManager manager;
     auto schemeModel = manager.indexForScheme(schemeName); 
     
-    if(!schemeModel.isValid() && UTIL::fileExists(colorsFile))
+    if(!schemeModel.isValid() && FMH::fileExists(colorsFile))
     {
         qDebug()<< "COLROS FILE EXISTS BUT IS INVALID";
 
@@ -208,11 +204,102 @@ void MAUIKDE::setColorScheme(const QString &schemeName, const QString &bg, const
 					QVariantList rgb = {color.red(), color.green(), color.blue()};
 					group.writeEntry("ForegroundActive", QVariant::fromValue(rgb));
 					group.writeEntry("ForegroundInactive", QVariant::fromValue(rgb));                                 
-				}
-				
-           
+				}           
         }
             manager.activateScheme(schemeModel);            
     } 
+}
 
+
+FMH::MODEL_LIST MAUIKDE::getApps()
+{
+	FMH::MODEL_LIST res;
+	KServiceGroup::Ptr group = KServiceGroup::root();
+	
+	bool sortByGenericName = false;
+	
+	KServiceGroup::List list = group->entries(true /* sorted */, true /* excludeNoDisplay */,
+											  true /* allowSeparators */, sortByGenericName /* sortByGenericName */);
+	
+	for (KServiceGroup::List::ConstIterator it = list.constBegin(); it != list.constEnd(); it++)
+	{
+		const KSycocaEntry::Ptr p = (*it);
+		
+		if (p->isType(KST_KServiceGroup))
+		{
+			KServiceGroup::Ptr s(static_cast<KServiceGroup*>(p.data()));
+			
+			if (!s->noDisplay() && s->childCount() > 0)
+			{
+				qDebug()<< "Getting app"<<s->icon();
+				
+				res << FMH::MODEL
+				{
+					{FMH::MODEL_KEY::ICON, s->icon()},
+					{FMH::MODEL_KEY::LABEL, s->name()},
+					{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/"+s->entryPath()}
+				};
+			}
+		}
+	}
+	return res;
+}
+
+FMH::MODEL_LIST MAUIKDE::getApps(const QString &groupStr)
+{
+	if(groupStr.isEmpty()) return getApps();
+	
+	FMH::MODEL_LIST res;
+	//    const KServiceGroup::Ptr group(static_cast<KServiceGroup*>(groupStr));
+	auto group = new KServiceGroup(groupStr);
+	KServiceGroup::List list = group->entries(true /* sorted */,
+											  true /* excludeNoDisplay */,
+										   false /* allowSeparators */,
+										   true /* sortByGenericName */);
+	
+	for (KServiceGroup::List::ConstIterator it = list.constBegin(); it != list.constEnd(); it++)
+	{
+		const KSycocaEntry::Ptr p = (*it);
+		
+		if (p->isType(KST_KService))
+		{
+			const KService::Ptr s(static_cast<KService*>(p.data()));
+			
+			if (s->noDisplay())
+				continue;
+			
+			res << FMH::MODEL {
+				
+				{FMH::MODEL_KEY::ICON, s->icon()},
+				{FMH::MODEL_KEY::LABEL, s->name()},
+				{FMH::MODEL_KEY::PATH, s->entryPath()}
+			};
+			
+			
+		} else if (p->isType(KST_KServiceSeparator))
+		{
+			qDebug()<< "separator wtf";
+			
+		} else if (p->isType(KST_KServiceGroup))
+		{
+			const KServiceGroup::Ptr s(static_cast<KServiceGroup*>(p.data()));
+			
+			if (s->childCount() == 0)
+				continue;
+			
+			res <<  FMH::MODEL { 
+				{FMH::MODEL_KEY::ICON, s->icon()},
+				{FMH::MODEL_KEY::LABEL, s->name()},
+				{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/"+s->entryPath()}
+			};
+		}
+	}
+	
+	return res;
+}
+
+void MAUIKDE::launchApp(const QString &app)
+{
+	KService service(app);
+	KRun::runApplication(service,{}, nullptr);
 }

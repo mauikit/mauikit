@@ -24,9 +24,7 @@ FMList::FMList(QObject *parent) : QObject(parent)
 	
 	connect(fm, &FM::pathModified, this, [this]()
 	{
-		emit this->preListChanged();
 		this->reset();
-		emit this->postListChanged();
 	});
 	
 	connect(this, &FMList::pathChanged, this, &FMList::reset);	
@@ -41,8 +39,28 @@ FMList::~FMList()
 }
 
 void FMList::setList()
-{
-	this->list = this->fm->getPathContent(this->path, this->hidden, this->onlyDirs, this->filters);
+{	
+	switch(this->pathType)
+	{
+		case FMH::PATHTYPE_KEY::APPS_PATH:
+			this->list = this->fm->getAppsContent(this->path);
+			break;
+		case FMH::PATHTYPE_KEY::TAGS_PATH:
+			this->list = this->fm->getTagContent(this->path);
+			break;
+			break;
+		case FMH::PATHTYPE_KEY::PLACES_PATH:
+			
+			this->list = this->fm->getPathContent(this->path, this->hidden, this->onlyDirs, this->filters);			
+			break;
+			
+		case FMH::PATHTYPE_KEY::TRASH_PATH:
+		case FMH::PATHTYPE_KEY::DRIVES_PATH:			
+		case FMH::PATHTYPE_KEY::BOOKMARKS_PATH:	
+			this->list = FMH::MODEL_LIST();
+			break;		
+	}	
+	
 	
 	this->pathEmpty = this->list.isEmpty() && this->fm->fileExists(this->path);
 	emit this->pathEmptyChanged();
@@ -52,15 +70,48 @@ void FMList::setList()
 
 void FMList::reset()
 {
-	auto conf = FMH::dirConf(this->path+"/.directory");
+	emit this->preListChanged();
 	
-	this->hidden = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN]].toBool();
-	emit this->hiddenChanged();
-	
-	this->preview = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTHUMBNAIL]].toBool();
-	emit this->previewChanged();
+	switch(this->pathType)
+	{
+		case FMH::PATHTYPE_KEY::APPS_PATH:
+			this->hidden = false;
+			emit this->hiddenChanged();
+			
+			this->preview = false;
+			emit this->previewChanged();
+			break;
+			
+		case FMH::PATHTYPE_KEY::TAGS_PATH:
+			this->hidden = false;
+			emit this->hiddenChanged();
+			
+			this->preview = true;
+			emit this->previewChanged();
+			break;
+			
+		case FMH::PATHTYPE_KEY::PLACES_PATH:
+		{	
+			auto conf = FMH::dirConf(this->path+"/.directory");
+			
+			this->hidden = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN]].toBool();
+			emit this->hiddenChanged();
+			
+			this->preview = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTHUMBNAIL]].toBool();
+			emit this->previewChanged();
+			
+			break;			
+		}
+		
+		case FMH::PATHTYPE_KEY::TRASH_PATH:
+		case FMH::PATHTYPE_KEY::DRIVES_PATH:			
+		case FMH::PATHTYPE_KEY::BOOKMARKS_PATH:			
+			break;		
+	}	
 	
 	this->setList();
+	
+	emit this->postListChanged();
 }
 
 FMH::MODEL_LIST FMList::items() const
@@ -143,11 +194,39 @@ void FMList::setPath(const QString &path)
 	this->path = path;
 	this->setPreviousPath(this->path);
 	
-	this->pathExists = this->fm->fileExists(path);
-	emit this->pathExistsChanged();
+	if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/"))
+	{
+		this->pathExists = true;
+		this->pathType = FMH::PATHTYPE_KEY::APPS_PATH;
+		emit this->pathExistsChanged();
+		emit this->pathTypeChanged();
+		this->fm->watchPath(QString());
+		
+		
+	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::TAGS_PATH]+"/"))
+	{
+		this->pathExists = true;
+		this->pathType = FMH::PATHTYPE_KEY::TAGS_PATH;
+		emit this->pathExistsChanged();
+		emit this->pathTypeChanged();
+		this->fm->watchPath(QString());
+		
+	}else
+	{
+		this->fm->watchPath(this->path);
+		
+		this->pathExists = FMH::fileExists(this->path);
+		this->pathType = FMH::PATHTYPE_KEY::PLACES_PATH;
+		emit this->pathExistsChanged();
+		emit this->pathTypeChanged();
+	}	
 	
-	this->fm->watchPath(this->path);
 	emit this->pathChanged();
+}
+
+FMH::PATHTYPE_KEY FMList::getPathType() const
+{
+	return this->pathType;
 }
 
 QStringList FMList::getFilters() const
@@ -247,6 +326,11 @@ QVariantMap FMList::get(const int &index) const
 		res.insert(FMH::MODEL_NAME[key], model[key]);
 	
 	return res;
+}
+
+void FMList::refresh()
+{
+	emit this->pathChanged();
 }
 
 QString FMList::getParentPath() const

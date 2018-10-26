@@ -139,7 +139,7 @@ Maui.Dialog
 		function show(path)
 		{
 			control.currentUrl = path
-			control.iteminfo = inx.getFileInfo(path)
+			control.iteminfo = Maui.FM.getFileInfo(path)
 			control.mimetype = iteminfo.mime.slice(0, iteminfo.mime.indexOf("/"))
 			control.isDir = mimetype === "inode"
 			console.log("MIME TYPE FOR PREVEIWER", mimetype, iteminfo.icon)

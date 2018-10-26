@@ -37,6 +37,7 @@ class FMList : public QObject
 	Q_PROPERTY(QStringList filters READ getFilters WRITE setFilters NOTIFY filtersChanged())
 	Q_PROPERTY(FMH::FILTER_TYPE filterType READ getFilterType WRITE setFilterType NOTIFY filterTypeChanged())
 	Q_PROPERTY(FMH::MODEL_KEY sortBy READ getSortBy WRITE setSortBy NOTIFY sortByChanged())
+	Q_PROPERTY(FMH::PATHTYPE_KEY pathType READ getPathType NOTIFY pathTypeChanged())
 	
 	Q_PROPERTY(bool pathExists READ getPathExists NOTIFY pathExistsChanged())
 	Q_PROPERTY(bool pathEmpty READ getPathEmpty NOTIFY pathEmptyChanged())
@@ -48,6 +49,7 @@ class FMList : public QObject
 	public:
 		Q_ENUM(FMH::MODEL_KEY)
 		Q_ENUM(FMH::FILTER_TYPE)
+		Q_ENUM(FMH::PATHTYPE_KEY)
 		
 		FMList(QObject *parent = nullptr);
 		~FMList();
@@ -59,6 +61,8 @@ class FMList : public QObject
 		
 		QString getPath() const;
 		void setPath(const QString &path);
+		
+		FMH::PATHTYPE_KEY getPathType() const;
 		
 		QStringList getFilters() const;
 		void setFilters(const QStringList &filters);
@@ -107,15 +111,18 @@ private:
 	
 	FMH::MODEL_KEY sort = FMH::MODEL_KEY::MODIFIED;
 	FMH::FILTER_TYPE filterType = FMH::FILTER_TYPE::NONE;
+	FMH::PATHTYPE_KEY pathType = FMH::PATHTYPE_KEY::PLACES_PATH;
 	
 	QStringList prevHistory = {};
 	QStringList postHistory = {};
 	
 public slots:
 	QVariantMap get(const int &index) const;
+	void refresh();
 	
 signals:
 	void pathChanged();
+	void pathTypeChanged();
 	void filtersChanged();
 	void filterTypeChanged();
 	void hiddenChanged();

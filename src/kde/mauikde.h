@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <QVariantList>
+#include "fmh.h"
 
 class MAUIKDE : public QObject
 {
@@ -36,6 +37,10 @@ public:
     Q_INVOKABLE static void openWithApp(const QString &exec, const QStringList &urls);
     Q_INVOKABLE static void attachEmail(const QStringList &urls);
     Q_INVOKABLE static void setColorScheme(const QString &schemeName, const QString &bg =  QString(), const QString &fg = QString());
+	
+	static FMH::MODEL_LIST getApps();
+	static FMH::MODEL_LIST getApps(const QString &groupStr);
+	static void launchApp(const QString &app);
     
 signals:
 
