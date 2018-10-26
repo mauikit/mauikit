@@ -400,7 +400,6 @@ Maui.Page
 	
 	footBar.middleContent: Row
 	{
-		
 		spacing: space.medium
 		Maui.ToolButton
 		{

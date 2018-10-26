@@ -39,12 +39,14 @@ Maui.Dialog
 	property int sortBy: FMList.MODIFIED
 	property int filterType: FMList.NONE
 	
+	readonly property var modes : ({OPEN: 0, SAVE: 1})
+	property int mode : modes.OPEN
+	
 	property bool multipleSelection: false
 	
-	property bool saveDialog : false
-	property bool openDialog : true
-	
 	property var callback : ({})
+	
+	property alias textField: _textField
 	
 	signal placeClicked (string path)
 	signal selectionReady(var paths)
@@ -155,7 +157,7 @@ Maui.Dialog
 						
 						previewer.parent: ApplicationWindow.overlay
 						
-						selectionMode: control.openDialog && control.multipleSelection
+						selectionMode: control.mode === modes.OPEN && control.multipleSelection
 						list.onlyDirs: control.onlyDirs
 						list.filters: control.filters
 						list.sortBy: control.sortBy
@@ -163,10 +165,27 @@ Maui.Dialog
 						
 						onItemClicked: 
 						{
-							if(control.openDialog && !control.multipleSelection)
-								callback([list.get(index).path])
+							switch(control.mode)
+							{	
+								case modes.OPEN :
+							{
+								if(!control.multipleSelection)
+									callback([list.get(index).path])
+								else
+									openItem(index)	
+								break
 								
-							openItem(index)
+							}
+								case modes.SAVE:
+							{
+								if(Maui.FM.isDir(list.get(index).path))
+									openItem(index)
+								else
+									textField.text = list.get(index).label
+								break
+							}
+								
+							}
 						}
 					}
 					
@@ -176,11 +195,13 @@ Maui.Dialog
 						position: ToolBar.Footer
 						drawBorder: true
 						Layout.fillWidth: true
-						leftContent: TextField
+						middleContent: Maui.TextField
 						{
-							visible: saveDialog							
+							id: _textField
+							visible: control.mode === modes.SAVE
 							width: _bottomBar.middleLayout.width * 0.9
 							placeholderText: qsTr("File name")
+							
 						}
 						
 						rightContent: Row
@@ -204,7 +225,17 @@ Maui.Dialog
 								colorScheme.backgroundColor: infoColor
 								colorScheme.textColor: "white"
 								text: acceptText
-								onClicked: control.callback(browser.selectionBar.selectedPaths)
+								onClicked: 
+								{
+									if(control.mode === modes.OPEN && control.multipleSelection)
+										control.callback(browser.selectionBar.selectedPaths)
+									else if(control.mode === modes.OPEN && !control.multipleSelection)
+										control.callback([browser.list.get(browser.currentIndex).path])
+									else if(control.mode === modes.SAVE)
+										control.callback(browser.currentPath)
+										
+									control.closeIt()
+								}
 							}
 						} 
 					}
