@@ -285,6 +285,8 @@ FMH::MODEL_LIST FM::getTagContent(const QString &tag)
 {
 	FMH::MODEL_LIST content;
 	
+	qDebug()<< "TAG CONTENT FOR TAG"<< tag;
+	
 	for(auto data : this->tag->getUrls(tag, false))
 	{
 		auto url = data.toMap().value(TAG::KEYMAP[TAG::KEY::URL]).toString();

@@ -41,7 +41,7 @@ Maui.Dialog
 	property int sortBy: FMList.MODIFIED
 	
 	readonly property var modes : ({OPEN: 0, SAVE: 1})
-	property int mode : modes.OPEN	
+	property int mode : modes.OPEN
 
 	property var callback : ({})
 	
@@ -116,7 +116,10 @@ Maui.Dialog
 					
 					onItemClicked:
 					{
-						browser.openFolder(item.path)
+						if(item.type === "Tags")
+							browser.openFolder("Tags/"+item.path)
+						else
+							browser.openFolder(item.path)
 						
 						if(pageRow.currentIndex === 0 && !pageRow.wideMode)
 							pageRow.currentIndex = 1

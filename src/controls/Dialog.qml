@@ -34,7 +34,7 @@ Maui.Popup
 	property string rejectText: "No"
 	
 	property bool defaultButtons: true
-	
+	property bool confirmationDialog: false
 	property bool entryField: false
 	
 	default property alias content : page.content
@@ -60,6 +60,25 @@ Maui.Popup
 	heightHint: 0.9
 	z: 1
 	clip: false
+	
+	Maui.Popup
+	{
+		id: _confirmationDialog
+// 		title: qsTr("Are you sure?")
+// 		message: qsTr("Click Accept to finish or Cancel to abort.")
+// 		
+// 		onAccepted: 
+// 		{
+// 			control.accepted()
+// 			close()
+// 		}
+// 		
+// 		onRejected: 
+// 		{
+// 			close()
+// 			control.close()
+// 		}
+	}
 	
 	Maui.Badge
 	{
@@ -117,7 +136,13 @@ Maui.Popup
 				colorScheme.backgroundColor: infoColor
 				colorScheme.textColor: "white"
 				text: acceptText
-				onClicked: accepted()
+				onClicked: 
+				{
+					if(confirmationDialog)
+						_confirmationDialog.open()
+					else
+						accepted()
+				}
 			}
 		} 
 		

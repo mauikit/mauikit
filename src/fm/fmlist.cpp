@@ -45,12 +45,12 @@ void FMList::setList()
 		case FMH::PATHTYPE_KEY::APPS_PATH:
 			this->list = this->fm->getAppsContent(this->path);
 			break;
-		case FMH::PATHTYPE_KEY::TAGS_PATH:
-			this->list = this->fm->getTagContent(this->path);
-			break;
-			break;
-		case FMH::PATHTYPE_KEY::PLACES_PATH:
 			
+		case FMH::PATHTYPE_KEY::TAGS_PATH:
+			this->list = this->fm->getTagContent(QString(this->path).right(this->path.length()- 1 - this->path.lastIndexOf("/")));
+			break;
+			
+		case FMH::PATHTYPE_KEY::PLACES_PATH:			
 			this->list = this->fm->getPathContent(this->path, this->hidden, this->onlyDirs, this->filters);			
 			break;
 			
@@ -274,7 +274,9 @@ void FMList::setHidden(const bool &state)
 		return;
 	
 	this->hidden = state;
-	FMH::setDirConf(this->path+"/.directory", "Settings", "HiddenFilesShown", this->hidden);
+	
+	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH)
+		FMH::setDirConf(this->path+"/.directory", "Settings", "HiddenFilesShown", this->hidden);
 	
 	emit this->preListChanged();
 	emit this->hiddenChanged();
@@ -292,7 +294,9 @@ void FMList::setPreview(const bool &state)
 		return;
 	
 	this->preview = state;
-	FMH::setDirConf(this->path+"/.directory", "MAUIFM", "ShowThumbnail", this->preview);
+	
+	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH)
+		FMH::setDirConf(this->path+"/.directory", "MAUIFM", "ShowThumbnail", this->preview);
 	
 	emit this->previewChanged();
 }

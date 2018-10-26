@@ -19,6 +19,8 @@ Maui.Page
 	property alias colorScheme : colorScheme
 	/***************************/
 	
+	property bool trackChanges: true
+	
 	property string currentPath: Maui.FM.homePath()
 	
 	property var copyPaths : []
@@ -30,6 +32,7 @@ Maui.Page
 	property bool selectionMode : false
 	property bool group : false
 	property bool detailsView : false
+	property bool showEmblems: true
 	
 	property alias selectionBar : selectionBar
 	
@@ -53,6 +56,27 @@ Maui.Page
 	signal rightClicked()
 	
 	margins: 0
+	
+	Maui.Dialog
+	{
+		id: removeDialog
+		property var paths: []
+		
+		title: qsTr("Delete files?")
+		message: qsTr("If you are sure you want to delete the files click on Accept, otherwise click on Cancel")
+		onRejected: close()
+		onAccepted: 
+		{
+			if(paths.length > 0)
+			{
+				control.selectionBar.clear()
+				control.selectionBar.animate("red")
+			}
+			
+			control.remove(paths)
+			close()
+		}
+	}	
 	
 	Maui.NewDialog
 	{
@@ -83,8 +107,7 @@ Maui.Page
 	Maui.ShareDialog
 	{
 		id: shareDialog
-	}
-	
+	}	
 	
 	BrowserMenu
 	{
@@ -152,14 +175,10 @@ Maui.Page
 		//            })
 		//        }
 		
-		onRemoveClicked:
+		onRemoveClicked: 
 		{
-			if(paths.length > 0)
-			{
-				control.selectionBar.clear()
-				control.selectionBar.animate("red")
-			}
-			control.remove(paths)
+			removeDialog.paths = paths
+			removeDialog.open()
 		}
 		
 		onShareClicked: isAndroid ? Maui.Android.shareDialog(paths) :
@@ -172,10 +191,12 @@ Maui.Page
 		
 		Maui.ListBrowser
 		{
+
 			showPreviewThumbnails: modelList.preview
-			showEmblem: currentPathType !== FMList.APPS_PATH
+			showEmblem: currentPathType !== FMList.APPS_PATH && showEmblems
 			rightEmblem: isMobile ? "document-share" : ""
 			leftEmblem: "emblem-added"
+// 			itemSize: thumbnailsSize
 			model: folderModel
 			section.delegate: Maui.LabelDelegate
 			{
@@ -197,7 +218,7 @@ Maui.Page
 		Maui.GridBrowser
 		{
 			itemSize : thumbnailsSize + fontSizes.default
-			showEmblem: currentPathType !== FMList.APPS_PATH
+			showEmblem: currentPathType !== FMList.APPS_PATH && showEmblems
 			showPreviewThumbnails: modelList.preview
 			rightEmblem: isMobile ? "document-share" : ""
 			leftEmblem: "emblem-added"
@@ -521,7 +542,7 @@ Maui.Page
 	{
 		setPath(path)
 		
-		if(currentPathType === FMList.PLACES_PATH)
+		if(currentPathType === FMList.PLACES_PATH && trackChanges)
 		{
 			var iconsize = Maui.FM.dirConf(path+"/.directory")["iconsize"] ||  iconSizes.large
 			thumbnailsSize = parseInt(iconsize)
@@ -595,7 +616,7 @@ Maui.Page
 			Maui.FM.copy(copyPaths, currentPath)
 		else if(isCut)
 			if(Maui.FM.cut(cutPaths, currentPath))
-					clearSelection()
+				clearSelection()
 	}
 	
 	function remove(paths)
@@ -608,7 +629,8 @@ Maui.Page
 	function switchView(state)
 	{
 		detailsView = state ? state : !detailsView
-		Maui.FM.setDirConf(currentPath+"/.directory", "MAUIFM", "DetailView", detailsView)
+		if(trackChanges)
+			Maui.FM.setDirConf(currentPath+"/.directory", "MAUIFM", "DetailView", detailsView)
 	}
 	
 	function bookmarkFolder(paths)
@@ -679,7 +701,8 @@ Maui.Page
 	
 	onThumbnailsSizeChanged:
 	{
-		Maui.FM.setDirConf(currentPath+"/.directory", "MAUIFM", "IconSize", thumbnailsSize)
+		if(trackChanges)
+			Maui.FM.setDirConf(currentPath+"/.directory", "MAUIFM", "IconSize", thumbnailsSize)
 		
 		if(!control.detailsView)
 			browser.adaptGrid()

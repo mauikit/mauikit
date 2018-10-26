@@ -90,7 +90,6 @@ class FMList : public QObject
 		bool getPathEmpty() const;
 		bool getPathExists() const;
 		
-		
 private:
 	FM *fm;
 	
