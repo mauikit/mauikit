@@ -15,7 +15,7 @@
 		<file alias="private/SyncAndroid.qml">src/controls/private/SyncAndroid.qml</file>
 		<file alias="private/SyncLinux.qml">src/controls/private/SyncLinux.qml</file>
 		<file alias="private/BrowserMenu.qml">src/controls/private/BrowserMenu.qml</file>
-		<file alias="private/FileMenu.qml">src/controls/private/BrowserMenu.qml</file>
+		<file alias="private/FileMenu.qml">src/controls/private/FileMenu.qml</file>
 		<file alias="private/AudioPreview.qml">src/controls/private/AudioPreview.qml</file>
 		<file alias="private/ImagePreview.qml">src/controls/private/ImagePreview.qml</file>
 		<file alias="private/TextPreview.qml">src/controls/private/TextPreview.qml</file>

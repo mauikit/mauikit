@@ -54,7 +54,8 @@ DEPENDPATH += \
 INCLUDEPATH += \
      $$PWD/src \
      $$PWD/src/fm \
-     $$PWD/src/utils
+     $$PWD/src/utils \
+     $$PWD/src/utils/editor
 
 DEFINES += \
     MAUI_APP \

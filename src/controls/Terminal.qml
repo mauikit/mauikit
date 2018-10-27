@@ -19,6 +19,7 @@ Item
 	property alias kterminal: kterminal
 	property alias session: ksession
 	property alias findBar : findBar
+	property alias menu : terminalMenu.content
 	
 	property size terminalSize: kterminal.terminalSize
 	property size fontMetrics: kterminal.fontMetrics
