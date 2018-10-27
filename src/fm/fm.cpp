@@ -39,26 +39,25 @@ FM::FM(QObject *parent) : FMDB(parent)
 	this->watcher = new QFileSystemWatcher(this);
 	connect(watcher, &QFileSystemWatcher::directoryChanged, [this](const QString &path)
 	{
-		qDebug()<< " path modified"+path;
-		emit pathModified(path);
-		
+		emit pathModified(path);		
 	});
 	
 	this->tag = Tagging::getInstance("MAUIFM","1.0", "org.kde.maui","MauiKit File Manager");
 }
 
-FM::~FM()
-{
-	
-}
+FM::~FM() {}
 
-QVariantList FM::packItems(const QStringList &items, const QString &type)
+FMH::MODEL_LIST FM::packItems(const QStringList &items, const QString &type)
 {
-	QVariantList data;
+	FMH::MODEL_LIST data;
 	
 	for(auto path : items)
 		if(UTIL::fileExists(path))
-			data << getDirInfo(path, type);
+		{
+			auto model = FMH::getFileInfoModel(path);
+			model.insert(FMH::MODEL_KEY::TYPE, type);			
+			data << model;
+		}
 		
 		return data;
 }
@@ -178,34 +177,32 @@ FMH::MODEL_LIST FM::getAppsContent(const QString& path)
 	return res;
 }
 
-QVariantList FM::getDefaultPaths()
+FMH::MODEL_LIST FM::getDefaultPaths()
 {
-	QVariantList res;
-	res << packItems(FMH::defaultPaths, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::PLACES_PATH]);
-	qDebug()<< "DEFAULT PATHS" << res;
-	return res;
+	return packItems(FMH::defaultPaths, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::PLACES_PATH]);
 }
 
-QVariantList FM::getCustomPaths()
+FMH::MODEL_LIST FM::getCustomPaths()
 {
 	#ifdef Q_OS_ANDROID
-	return QVariantList();
+	return FMH::MODEL_LIST();
 	#endif
-	return QVariantList
+	
+	return FMH::MODEL_LIST
 	{
-		QVariantMap
+		FMH::MODEL
 		{
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], "system-run"},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::LABEL], FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::PATH], FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/"},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::TYPE], FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::PLACES_PATH]}
+			{FMH::MODEL_KEY::ICON, "system-run"},
+			{FMH::MODEL_KEY::LABEL, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]},
+			{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/"},
+			{FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::PLACES_PATH]}
 		}
 	};
 }
 
-QVariantList FM::getDevices()
+FMH::MODEL_LIST FM::getDevices()
 {
-	QVariantList drives;
+	FMH::MODEL_LIST drives;
 	
 	#if defined(Q_OS_ANDROID)
 	drives << packItems({MAUIAndroid::sdDir()}, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES_PATH]);
@@ -247,24 +244,24 @@ QVariantList FM::getDevices()
 	return drives;
 }
 
-QVariantList FM::getTags(const int &limit)
+FMH::MODEL_LIST FM::getTags(const int &limit)
 {
 	Q_UNUSED(limit);
 	
-	QVariantList data;
-	qDebug()<< "getting TAGS";
+	FMH::MODEL_LIST data;
+
 	if(this->tag)
 	{
 		for(auto tag : this->tag->getUrlsTags(false))
 		{
 			qDebug()<< "TAG << "<< tag;
 			auto label = tag.toMap().value(TAG::KEYMAP[TAG::KEY::TAG]).toString();
-			data << QVariantMap
+			data << FMH::MODEL
 			{
-				{FMH::MODEL_NAME[FMH::MODEL_KEY::PATH], label},
-				{FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], "tag"},
-				{FMH::MODEL_NAME[FMH::MODEL_KEY::LABEL], label},
-				{FMH::MODEL_NAME[FMH::MODEL_KEY::TYPE],  FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::TAGS_PATH]}
+				{FMH::MODEL_KEY::PATH, label},
+				{FMH::MODEL_KEY::ICON, "tag"},
+				{FMH::MODEL_KEY::LABEL, label},
+				{FMH::MODEL_KEY::TYPE,  FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::TAGS_PATH]}
 			};
 		}
 	}
@@ -272,7 +269,7 @@ QVariantList FM::getTags(const int &limit)
 	return data;
 }
 
-QVariantList FM::getBookmarks()
+FMH::MODEL_LIST FM::getBookmarks()
 {
 	QStringList bookmarks;
 	for(auto bookmark : this->get("select * from bookmarks"))

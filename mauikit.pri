@@ -35,6 +35,8 @@ HEADERS += \
     $$PWD/src/fm/fmdb.h \
     $$PWD/src/fm/fmmodel.h \
     $$PWD/src/fm/fmlist.h \
+    $$PWD/src/fm/placeslist.h \
+    $$PWD/src/fm/placesmodel.h \
     $$PWD/src/utils/editor/documenthandler.h \
     $$PWD/src/utils/handy.h
 
@@ -44,6 +46,8 @@ SOURCES += \
     $$PWD/src/fm/fmdb.cpp \
     $$PWD/src/fm/fmmodel.cpp \
     $$PWD/src/fm/fmlist.cpp \
+    $$PWD/src/fm/placeslist.cpp \    
+    $$PWD/src/fm/placesmodel.cpp \    
 	$$PWD/src/utils//editor/documenthandler.cpp \
     $$PWD/src/utils/handy.cpp
 

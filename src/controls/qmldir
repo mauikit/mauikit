@@ -31,6 +31,7 @@ ListBrowser 1.0 ListBrowser.qml
 FileBrowser 1.0 FileBrowser.qml
 FilePreviewer 1.0 FilePreviewer.qml
 FileDialog 1.0 FileDialog.qml
+PlacesSidebar 1.0 PlacesSidebar.qml
 PathBar 1.0 PathBar.qml
 Dialog 1.0 Dialog.qml
 Popup 1.0 Popup.qml

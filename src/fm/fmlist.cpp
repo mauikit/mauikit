@@ -17,6 +17,7 @@
  */
 
 #include "fmlist.h"
+#include "fm.h"
 
 FMList::FMList(QObject *parent) : QObject(parent)
 {

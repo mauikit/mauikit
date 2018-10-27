@@ -79,6 +79,8 @@ set(fm_SRCS
     src/fm/fmdb.cpp
     src/fm/fmmodel.cpp
     src/fm/fmlist.cpp
+	src/fm/placeslist.cpp
+	src/fm/placesmodel.cpp
     )    
     
 set(fm_HDRS
@@ -87,6 +89,8 @@ set(fm_HDRS
     src/fm/fmdb.h
     src/fm/fmmodel.h
     src/fm/fmlist.h
+    src/fm/placeslist.h
+    src/fm/placesmodel.h
     )
     
 set(tagging_SRCS

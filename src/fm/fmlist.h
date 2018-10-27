@@ -1,6 +1,6 @@
 /*
  * <one line to give the program's name and a brief idea of what it does.>
- * Copyright (C) 2018  camilo <email>
+ * Copyright (C) 2018  Camilo Higuita <email>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,9 @@
 #define FMLIST_H
 
 #include <QObject>
-#include "fm.h"
+#include "fmh.h"
 
-/**
- * @todo write docs
- */
-
+class FM;
 class FMList : public QObject
 {
 	Q_OBJECT
