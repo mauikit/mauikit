@@ -34,10 +34,15 @@ class FMList : public QObject
 	Q_PROPERTY(bool hidden READ getHidden WRITE setHidden NOTIFY hiddenChanged())
 	Q_PROPERTY(bool onlyDirs READ getOnlyDirs WRITE setOnlyDirs NOTIFY onlyDirsChanged())
 	Q_PROPERTY(bool preview READ getPreview WRITE setPreview NOTIFY previewChanged())
+	Q_PROPERTY(bool isBookmark READ getIsBookmark WRITE setIsBookmark NOTIFY isBookmarkChanged())
+	
 	Q_PROPERTY(QStringList filters READ getFilters WRITE setFilters NOTIFY filtersChanged())
 	Q_PROPERTY(FMH::FILTER_TYPE filterType READ getFilterType WRITE setFilterType NOTIFY filterTypeChanged())
+	
 	Q_PROPERTY(FMH::MODEL_KEY sortBy READ getSortBy WRITE setSortBy NOTIFY sortByChanged())
 	Q_PROPERTY(FMH::PATHTYPE_KEY pathType READ getPathType NOTIFY pathTypeChanged())
+	
+	Q_PROPERTY(bool trackChanges READ getTrackChanges WRITE setTrackChanges NOTIFY trackChangesChanged())
 	
 	Q_PROPERTY(bool pathExists READ getPathExists NOTIFY pathExistsChanged())
 	Q_PROPERTY(bool pathEmpty READ getPathEmpty NOTIFY pathEmptyChanged())
@@ -90,6 +95,12 @@ class FMList : public QObject
 		bool getPathEmpty() const;
 		bool getPathExists() const;
 		
+		bool getTrackChanges() const;
+		void setTrackChanges(const bool &value);
+		
+		bool getIsBookmark() const;
+		void setIsBookmark(const bool &value);
+		
 private:
 	FM *fm;
 	
@@ -107,6 +118,8 @@ private:
 	bool preview = false;
 	bool pathExists = false;
 	bool pathEmpty = true;
+	bool trackChanges = true;
+	bool isBookmark = false;
 	
 	FMH::MODEL_KEY sort = FMH::MODEL_KEY::MODIFIED;
 	FMH::FILTER_TYPE filterType = FMH::FILTER_TYPE::NONE;
@@ -128,6 +141,8 @@ signals:
 	void previewChanged();
 	void onlyDirsChanged();
 	void sortByChanged();
+	void trackChangesChanged();
+	void isBookmarkChanged();
 	
 	void pathEmptyChanged();
 	void pathExistsChanged();

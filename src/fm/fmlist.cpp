@@ -59,8 +59,7 @@ void FMList::setList()
 		case FMH::PATHTYPE_KEY::BOOKMARKS_PATH:	
 			this->list = FMH::MODEL_LIST();
 			break;		
-	}	
-	
+	}
 	
 	this->pathEmpty = this->list.isEmpty() && this->fm->fileExists(this->path);
 	emit this->pathEmptyChanged();
@@ -198,27 +197,32 @@ void FMList::setPath(const QString &path)
 	{
 		this->pathExists = true;
 		this->pathType = FMH::PATHTYPE_KEY::APPS_PATH;
+		this->isBookmark = false;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
+		emit this->isBookmarkChanged();
 		this->fm->watchPath(QString());
 		
 		
 	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::TAGS_PATH]+"/"))
 	{
 		this->pathExists = true;
+		this->isBookmark = false;
 		this->pathType = FMH::PATHTYPE_KEY::TAGS_PATH;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
+		emit this->isBookmarkChanged();
 		this->fm->watchPath(QString());
 		
 	}else
 	{
 		this->fm->watchPath(this->path);
-		
+		this->isBookmark = this->fm->isBookmark(this->path);
 		this->pathExists = FMH::fileExists(this->path);
 		this->pathType = FMH::PATHTYPE_KEY::PLACES_PATH;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
+		emit this->isBookmarkChanged();
 	}	
 	
 	emit this->pathChanged();
@@ -275,7 +279,7 @@ void FMList::setHidden(const bool &state)
 	
 	this->hidden = state;
 	
-	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH)
+	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH && this->trackChanges)
 		FMH::setDirConf(this->path+"/.directory", "Settings", "HiddenFilesShown", this->hidden);
 	
 	emit this->preListChanged();
@@ -295,7 +299,7 @@ void FMList::setPreview(const bool &state)
 	
 	this->preview = state;
 	
-	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH)
+	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH && this->trackChanges)
 		FMH::setDirConf(this->path+"/.directory", "MAUIFM", "ShowThumbnail", this->preview);
 	
 	emit this->previewChanged();
@@ -383,3 +387,41 @@ bool FMList::getPathExists() const
 {
 	return this->pathExists;
 }
+
+bool FMList::getTrackChanges() const
+{
+	return this->trackChanges;
+}
+
+void FMList::setTrackChanges(const bool& value)
+{
+	if(this->trackChanges == value)
+		return;
+	
+	this->trackChanges = value;
+	emit this->trackChangesChanged();
+}
+
+bool FMList::getIsBookmark() const
+{
+	return this->isBookmark;
+}
+
+void FMList::setIsBookmark(const bool& value)
+{
+	if(this->isBookmark == value)
+		return;
+	
+	if(this->pathType != FMH::PATHTYPE_KEY::PLACES_PATH)
+		return;
+	
+	this->isBookmark = value;
+	
+	if(value)
+		this->fm->bookmark(this->path);
+	else
+		this->fm->removeBookmark(this->path);
+	
+	emit this->isBookmarkChanged();
+}
+

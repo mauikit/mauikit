@@ -27,7 +27,7 @@ import FMList 1.0
 Maui.Dialog
 {
 	id: control
-	maxHeight: unit * 500
+	maxHeight: isMobile ? parent.height * 0.95 : unit * 500
 	maxWidth: unit * 700
 	page.margins: 0
 	defaultButtons: false
@@ -59,13 +59,13 @@ Maui.Dialog
 		headBarExit: false
 		
 		headBarTitleVisible: false
-		headBar.height: headBar.implicitHeight * 1.1
+		headBar.implicitHeight: pathBar.height + space.big
 		
 		headBar.middleContent: Maui.PathBar
 		{
 			id: pathBar
 			height: iconSizes.big
-			width: page.headBar.middleLayout.width * 0.9
+			width: page.headBar.middleLayout.width * 0.98
 			url: browser.currentPath
 			onPathChanged: browser.openFolder(path)
 			onHomeClicked:
@@ -138,7 +138,6 @@ Maui.Dialog
 						if(places.length > 0)
 							for(var i in places)
 								sidebar.model.append(places[i])
-								
 					}
 				}
 				
@@ -151,9 +150,9 @@ Maui.Dialog
 						id: browser
 						Layout.fillWidth: true
 						Layout.fillHeight: true
-						
+						altToolBars: false
 						previewer.parent: ApplicationWindow.overlay
-						
+						trackChanges: false
 						selectionMode: control.mode === modes.OPEN
 						list.onlyDirs: control.onlyDirs
 						list.filters: control.filters
@@ -179,6 +178,13 @@ Maui.Dialog
 							}
 								
 							}
+						}
+						
+						onCurrentPathChanged:
+						{
+							for(var i=0; i < sidebar.count; i++)
+								if(currentPath === sidebar.model.get(i).path)
+									sidebar.currentIndex = i
 						}
 					}
 					

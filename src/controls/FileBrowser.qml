@@ -19,7 +19,7 @@ Maui.Page
 	property alias colorScheme : colorScheme
 	/***************************/
 	
-	property bool trackChanges: true
+	property alias trackChanges: modelList.trackChanges
 	
 	property string currentPath: Maui.FM.homePath()
 	
@@ -300,7 +300,7 @@ Maui.Page
 		iconName: "visibility"
 		onClicked: modelList.hidden = !modelList.hidden
 		tooltipText: qsTr("Hidden files...")
-		iconColor: modelList.hidden ? highlightColor : textColor
+		iconColor: modelList.hidden ? colorScheme.highlightColor : colorScheme.textColor
 	},
 	
 	Maui.ToolButton
@@ -308,13 +308,14 @@ Maui.Page
 		iconName: "view-preview"
 		onClicked: modelList.preview = !modelList.preview
 		tooltipText: qsTr("Previews...")
-		iconColor: modelList.preview ? highlightColor : textColor
+		iconColor: modelList.preview ? colorScheme.highlightColor : colorScheme.textColor
 	},
 	
 	Maui.ToolButton
 	{
 		iconName: "bookmark-new"
-		onClicked: bookmarkFolder([control.currentPath])
+		iconColor: modelList.isBookmark ? colorScheme.highlightColor : colorScheme.textColor		
+		onClicked: modelList.isBookmark = !modelList.isBookmark
 		tooltipText: qsTr("Bookmark...")
 	},
 	
@@ -323,7 +324,7 @@ Maui.Page
 		iconName: "edit-select"
 		tooltipText: qsTr("Selection...")
 		onClicked: selectionMode = !selectionMode
-		iconColor: selectionMode ? highlightColor: textColor
+		iconColor: selectionMode ? colorScheme.highlightColor: colorScheme.textColor
 	},
 	
 	Maui.ToolButton
@@ -622,7 +623,7 @@ Maui.Page
 	function remove(paths)
 	{
 		for(var i in paths)
-			Maui.FM.remove(paths[i])
+			Maui.FM.removeFile(paths[i])
 	}
 	
 	
@@ -639,8 +640,9 @@ Maui.Page
 		{
 			for(var i in paths)
 			{
-				if(Maui.FM.isDefaultPath(paths[i])) continue
-					Maui.FM.bookmark(paths[i])
+				if(Maui.FM.isDefaultPath(paths[i])) 
+					continue
+				Maui.FM.bookmark(paths[i])
 			}
 		}
 	}

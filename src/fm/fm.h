@@ -38,7 +38,9 @@ public:
 	Q_INVOKABLE QVariantList getTags(const int &limit = 5);
     Q_INVOKABLE QVariantList getBookmarks();
 	FMH::MODEL_LIST getTagContent(const QString &tag);
-    Q_INVOKABLE bool bookmark(const QString &path);
+	Q_INVOKABLE bool bookmark(const QString &path);
+	Q_INVOKABLE bool removeBookmark(const QString &path);
+	Q_INVOKABLE bool isBookmark(const QString &path);
 	
 	/*** START STATIC METHODS ***/
 	static QVariantList packItems(const QStringList &items, const QString &type);
@@ -73,7 +75,7 @@ public:
     Q_INVOKABLE static bool copy(const QStringList &paths, const QString &where);
     static bool copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory);
     Q_INVOKABLE static bool cut(const QStringList &paths, const QString &where);
-    Q_INVOKABLE static bool remove(const QString &path);
+    Q_INVOKABLE static bool removeFile(const QString &path);
     static bool removeDir(const QString &path);
     Q_INVOKABLE static bool rename(const QString &path, const QString &name);
     Q_INVOKABLE static bool createDir(const QString &path, const QString &name);

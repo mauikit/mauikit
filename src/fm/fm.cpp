@@ -346,6 +346,17 @@ bool FM::bookmark(const QString &path)
 	return this->insert(FMH::TABLEMAP[FMH::TABLE::BOOKMARKS], bookmark_map);
 }
 
+bool FM::removeBookmark(const QString& path)
+{
+	FMH::DB data = {{FMH::MODEL_KEY::PATH, path}};
+	return this->remove(FMH::TABLEMAP[FMH::TABLE::BOOKMARKS], data);
+}
+
+bool FM::isBookmark(const QString& path)
+{
+	return this->checkExistance(QString("select * from bookmarks where path = '%1'").arg(path));
+}
+
 bool FM::fileExists(const QString &path)
 {
 	return FMH::fileExists(path);
@@ -447,7 +458,7 @@ bool FM::cut(const QStringList &paths, const QString &where)
 	return true;
 }
 
-bool FM::remove(const QString &path)
+bool FM::removeFile(const QString &path)
 {
 	if(QFileInfo(path).isDir())
 		return removeDir(path);
