@@ -51,8 +51,9 @@ QQC2.Page
 	property int leftMargin: margins
 	property int bottomMargin: margins
 	
-    property alias headBar: topToolBar
-    property alias footBar: bottomToolBar
+	property alias headBar: topToolBar
+	property alias headBarItem: topToolBar.data
+	property alias footBar: bottomToolBar
     property alias floatingBar: bottomToolBar.floatingFootBar
     property alias flickable: flickable
 
@@ -120,7 +121,6 @@ QQC2.Page
                 anim : true
                 iconName : headBarExitIcon
                 onClicked : exit()
-                //            isMask: false
             }
 
             middleContent: QQC2.Label

@@ -61,11 +61,12 @@ Maui.Dialog
 		headBarTitleVisible: false
 		headBar.implicitHeight: pathBar.height + space.big
 		
-		headBar.middleContent: Maui.PathBar
+		headBarItem: Maui.PathBar
 		{
 			id: pathBar
 			height: iconSizes.big
-			width: page.headBar.middleLayout.width * 0.98
+			width: parent.width - space.big
+			anchors.centerIn: parent
 			url: browser.currentPath
 			onPathChanged: browser.openFolder(path)
 			onHomeClicked:

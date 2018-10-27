@@ -46,13 +46,13 @@ ToolButton
 	
     hoverEnabled: !isMobile
     
-   implicitWidth: Math.max(background ? background.implicitWidth : 0,
+	implicitWidth: Math.max(background ? background.implicitWidth : 0,
                             contentItem.implicitWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(background ? background.implicitHeight : 0,
                              contentItem.implicitHeight + topPadding + bottomPadding)
     
-    height: control.display === ToolButton.IconOnly ? size + space.medium : implicitHeight
-    width: control.display === ToolButton.IconOnly ? height : implicitWidth
+    height: control.visible ? (control.display === ToolButton.IconOnly ? size + space.medium : implicitHeight) : 0
+    width: control.visible ? (control.display === ToolButton.IconOnly ? height : implicitWidth) : 0
     
     icon.name:  iconName
     icon.width:  size
@@ -70,6 +70,8 @@ ToolButton
     
     background: Rectangle
     {
+		implicitHeight: control.visible? control.size : 0
+		implicitWidth: control.visible? control.size : 0
      color: /*(down || pressed || checked) */ checked && enabled  ? 
      Qt.lighter(colorScheme.highlightColor, 1.2) : colorScheme.backgroundColor
      radius: unit * 3
