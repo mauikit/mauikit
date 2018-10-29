@@ -95,51 +95,13 @@ Maui.Dialog
 			defaultColumnWidth: sidebarWidth
 				interactive: currentIndex === 1
 				
-				Maui.SideBar
+				Maui.PlacesSidebar
 				{
 					id: sidebar
-					focus: true
 					width: isCollapsed ? iconSize*2 : parent.width
 					height: parent.height
-					section.property :  !sidebar.isCollapsed ? "type" : ""
-					section.criteria: ViewSection.FullString
-					
-					section.delegate: Maui.LabelDelegate
-					{
-						id: delegate
-						label: section
-						labelTxt.font.pointSize: fontSizes.big
 						
-						isSection: true
-						boldLabel: true
-						height: toolBarHeightAlt
-					}
-					
-					onItemClicked:
-					{
-						if(item.type === "Tags")
-							browser.openFolder("Tags/"+item.path)
-						else
-							browser.openFolder(item.path)
-						
-						if(pageRow.currentIndex === 0 && !pageRow.wideMode)
-							pageRow.currentIndex = 1
-					}
-					
-					function populate()
-					{
-						sidebar.model.clear()
-						var places = Maui.FM.getDefaultPaths()
-						places.push(Maui.FM.getBookmarks())
-						places.push(Maui.FM.getDevices())
-						
-						if(control.mode == modes.OPEN)
-							places.push(Maui.FM.getTags())
-						
-						if(places.length > 0)
-							for(var i in places)
-								sidebar.model.append(places[i])
-					}
+					onPlaceClicked: browser.openFolder(path)
 				}
 				
 				ColumnLayout
@@ -244,13 +206,10 @@ Maui.Dialog
 	function show(cb)
 	{
 		callback = cb
-		sidebar.populate()
-		
 		if(initPath)
 			browser.openFolder(initPath)
 		else
 			browser.openFolder(browser.currentPath)
-				
 		open()
 	}
 	

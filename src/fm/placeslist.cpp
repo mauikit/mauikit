@@ -29,6 +29,8 @@ PlacesList::PlacesList(QObject *parent) : QObject(parent)
 	});
 	
 	connect(this, &PlacesList::groupsChanged, this, &PlacesList::reset);
+	
+	this->setList();
 }
 
 PlacesList::~PlacesList()
@@ -41,7 +43,7 @@ FMH::MODEL_LIST PlacesList::items() const
 }
 
 void PlacesList::setList()
-{
+{		
 	if(this->groups.contains(FMH::PATHTYPE_KEY::PLACES_PATH))
 		this->list << this->fm->getDefaultPaths();
 	
@@ -61,20 +63,40 @@ void PlacesList::setList()
 void PlacesList::reset()
 {
 	emit this->preListChanged();
-	this->setList();
+	this->setList();	
 	emit this->postListChanged();
 }
 
-PlacesList::Group PlacesList::getGroups() const
+QList<int> PlacesList::getGroups() const
 {
 	return this->groups;
 }
 
-void PlacesList::setGroups(const PlacesList::Group& value)
+void PlacesList::setGroups(const QList<int> &value)
 {
 	if(this->groups == value)
 		return;
 	
 	this->groups = value;
+	
 	emit this->groupsChanged();
+}
+
+QVariantMap PlacesList::get(const int& index) const
+{
+	if(index >= this->list.size() || index < 0)
+		return QVariantMap();
+	
+	QVariantMap res;
+	const auto model = this->list.at(index);
+	
+	for(auto key : model.keys())
+		res.insert(FMH::MODEL_NAME[key], model[key]);
+	
+	return res;
+}
+
+void PlacesList::refresh()
+{
+	this->reset();
 }

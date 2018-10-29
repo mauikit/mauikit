@@ -40,7 +40,6 @@ QVariant PlacesModel::data(const QModelIndex &index, int role) const
 	if (!index.isValid() || !list)
 		return QVariant();
 	
-	
 	return list->items().at(index.row())[static_cast<FMH::MODEL_KEY>(role)];
 }
 
@@ -79,7 +78,7 @@ PlacesList *PlacesModel::getList() const
 void PlacesModel::setList(PlacesList *value)
 {
 	beginResetModel();
-	
+
 	if(list)
 		list->disconnect(this);
 	
@@ -125,7 +124,7 @@ void PlacesModel::setList(PlacesList *value)
 		});
 		
 		connect(this->list, &PlacesList::postListChanged, this, [=]()
-		{
+		{	
 			endResetModel();
 		});
 	}

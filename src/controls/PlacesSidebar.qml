@@ -3,16 +3,22 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 
+import FMList 1.0
+import PlacesModel 1.0
+import PlacesList 1.0
+
 Maui.SideBar
 {
-	id: placesList
+	id: control
 	
-	signal placeClicked (var item)
+	property alias list : placesList
+	
+	signal placeClicked (string path)
 	focus: true
 	clip: true
-	
+	model: placesModel
 	downloadBadget: "3"
-	section.property: !placesList.isCollapsed ? "type" : ""
+	section.property: !control.isCollapsed ? "type" : ""
 	section.criteria: ViewSection.FullString
 	section.delegate: Maui.LabelDelegate
 	{
@@ -27,31 +33,27 @@ Maui.SideBar
 	
 	onItemClicked:
 	{
-		placeClicked(item)
+		var item = list.get(index)
+		var path = item.path
+		
+		if(item.type === "Tags")
+			path ="Tags/"+path
+			
+		placeClicked(path)
 		
 		if(pageStack.currentIndex === 0 && !pageStack.wideMode)
 			pageStack.currentIndex = 1
 	}
 	
-	Component.onCompleted: populate()
-	
-	function populate()
+	PlacesModel
 	{
-		clear()
-		var places = Maui.FM.getDefaultPaths()
-		places.push(Maui.FM.getCustomPaths())
-		places.push(Maui.FM.getBookmarks())
-		places.push(Maui.FM.getDevices())
-		places.push(Maui.FM.getTags())
-		
-		if(places.length > 0)
-			for(var i in places)
-				placesList.model.append(places[i])
-				
+		id: placesModel
+		list: placesList
 	}
 	
-	function clear()
+	PlacesList
 	{
-		placesList.model.clear()
+		id: placesList
+		groups: [FMList.PLACES_PATH, FMList.APPS_PATH, FMList.BOOKMARKS_PATH, FMList.DRIVES_PATH, FMList.TAGS_PATH]
 	}
 }

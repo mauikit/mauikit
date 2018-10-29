@@ -41,7 +41,7 @@ ListView
     property bool collapsable : true
     property bool isCollapsed : false
 
-    signal itemClicked(var item)
+    signal itemClicked(int index)
 
     keyNavigationEnabled: true
     clip: true
@@ -75,7 +75,7 @@ ListView
             onClicked:
             {
                 control.currentIndex = index
-                itemClicked(control.model.get(index))
+                itemClicked(index)
             }
         }
     }
