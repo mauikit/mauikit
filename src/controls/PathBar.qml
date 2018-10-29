@@ -59,6 +59,7 @@ Maui.Item
         Maui.TextField
         {
             id: entry
+            text: control.url
             height: parent.height
             Layout.fillHeight: true
             Layout.fillWidth: true
@@ -215,7 +216,6 @@ Maui.Item
     function showEntryBar()
     {
         pathEntry.visible = !pathEntry.visible
-        entry.text = browser.currentPath
         pathCrumbs.visible = !pathCrumbs.visible
     }
 }

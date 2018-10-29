@@ -541,6 +541,9 @@ Maui.Page
 	
 	function populate(path)
 	{
+		if(!path.length)
+			return; 
+		
 		setPath(path)
 		
 		if(currentPathType === FMList.PLACES_PATH && trackChanges)

@@ -53,6 +53,7 @@ Item
 		id: imageHolder
 		
 		anchors.centerIn: parent
+		anchors.bottomMargin: textHolder.implicitHeight
 		width: emojiSize
 		height: emojiSize
 		sourceSize.width: width
@@ -88,17 +89,24 @@ Item
 		horizontalAlignment: Qt.AlignHCenter
 		elide: Text.ElideRight
 		color: colorScheme.textColor
-		
 	
 		MouseArea
 		{
 			anchors.fill: parent
 			enabled: control.enabled
 			onClicked: actionTriggered()
+			
+			hoverEnabled: true
+			
+			Rectangle
+			{
+				anchors.fill: parent
+				color: parent.hovered ? control.colorScheme.backgroundColor : "transparent"
+				radius: radiusV
+			}
+
 		}
 	}
-	
-
 }
 
 

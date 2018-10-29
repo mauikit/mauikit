@@ -127,26 +127,25 @@ Maui.Dialog
 							switch(control.mode)
 							{	
 								case modes.OPEN :
-							{								
+								{								
 									openItem(index)
 									break
-							}
+								}
 								case modes.SAVE:
-							{
-								if(Maui.FM.isDir(list.get(index).path))
-									openItem(index)
-								else
-									textField.text = list.get(index).label
-								break
-							}
-								
+								{
+									if(Maui.FM.isDir(list.get(index).path))
+										openItem(index)
+									else
+										textField.text = list.get(index).label
+									break
+								}				
 							}
 						}
 						
 						onCurrentPathChanged:
 						{
 							for(var i=0; i < sidebar.count; i++)
-								if(currentPath === sidebar.model.get(i).path)
+								if(currentPath === sidebar.list.get(i).path)
 									sidebar.currentIndex = i
 						}
 					}
@@ -218,5 +217,4 @@ Maui.Dialog
 		browser.clearSelection()
 		close()
 	}
-	
 }
