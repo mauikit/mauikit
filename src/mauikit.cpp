@@ -132,7 +132,7 @@ void MauiKit::registerTypes(const char *uri)
 	
 	qmlRegisterSingletonType<FM>(uri, 1, 0, "FM",
                                       [](QQmlEngine*, QJSEngine*) -> QObject* {
-		auto fm = new FM;
+		auto fm = FM::getInstance();
         return fm;
     });
     

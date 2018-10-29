@@ -180,22 +180,7 @@ Maui.Dialog
 								
 							}
 							
-							Maui.Button
-							{
-								id: _acceptButton			
-								colorScheme.backgroundColor: infoColor
-								colorScheme.textColor: "white"
-								text: acceptText
-								onClicked: 
-								{
-									if(control.mode === modes.OPEN)
-										control.callback(browser.selectionBar.selectedPaths.length ? browser.selectionBar.selectedPaths : browser.currentPath)
-									else if(control.mode === modes.SAVE)
-										control.callback(browser.currentPath)
-										
-									control.closeIt()
-								}
-							}
+							
 						} 
 					}
 				}

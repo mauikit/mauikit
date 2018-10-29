@@ -22,6 +22,7 @@
 #include <QObject>
 #include "fmh.h"
 
+class QFileSystemWatcher;
 class FM;
 class FMList : public QObject
 {
@@ -100,10 +101,12 @@ class FMList : public QObject
 		
 private:
 	FM *fm;
+	QFileSystemWatcher *watcher;
 	
 	void reset();
 	void setList();
 	void sortList();
+	void watchPath(const QString &path, const bool &clear = true);
 	
 	FMH::MODEL_LIST list = {{}};
 	
@@ -150,8 +153,7 @@ signals:
 	void postItemRemoved();
 	void updateModel(int index, QVector<int> roles);
 	void preListChanged();
-	void postListChanged();
-	
+	void postListChanged();	
 };
 
 #endif // FMLIST_H

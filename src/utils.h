@@ -38,7 +38,6 @@
 
 namespace UTIL
 {
-	
 	const auto app = QCoreApplication::instance();	
 	
     inline bool fileExists(const QString &url)

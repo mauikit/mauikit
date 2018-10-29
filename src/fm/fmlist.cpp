@@ -19,15 +19,20 @@
 #include "fmlist.h"
 #include "fm.h"
 
+#include <QFileSystemWatcher>
+
+
 FMList::FMList(QObject *parent) : QObject(parent)
 {
-	this->fm = new FM(this);
+	this->fm = FM::getInstance();
 	
-	connect(fm, &FM::pathModified, this, [this]()
+	this->watcher = new QFileSystemWatcher(this);
+	connect(watcher, &QFileSystemWatcher::directoryChanged, [this](const QString &path)
 	{
+		Q_UNUSED(path);
 		this->reset();
 	});
-	
+		
 	connect(this, &FMList::pathChanged, this, &FMList::reset);	
 	connect(this, &FMList::hiddenChanged, this, &FMList::setList);
 	connect(this, &FMList::onlyDirsChanged, this, &FMList::setList);
@@ -35,8 +40,17 @@ FMList::FMList(QObject *parent) : QObject(parent)
 }
 
 FMList::~FMList()
-{
+{}
+
+void FMList::watchPath(const QString& path, const bool& clear)
+{	
+	if(!this->watcher->directories().isEmpty() && clear)
+		this->watcher->removePaths(this->watcher->directories());
 	
+	if(path.isEmpty())		
+		return;
+	
+	this->watcher->addPath(path);
 }
 
 void FMList::setList()
@@ -44,7 +58,7 @@ void FMList::setList()
 	switch(this->pathType)
 	{
 		case FMH::PATHTYPE_KEY::APPS_PATH:
-			this->list = this->fm->getAppsContent(this->path);
+			this->list = FM::getAppsContent(this->path);
 			break;
 			
 		case FMH::PATHTYPE_KEY::TAGS_PATH:
@@ -52,7 +66,7 @@ void FMList::setList()
 			break;
 			
 		case FMH::PATHTYPE_KEY::PLACES_PATH:			
-			this->list = this->fm->getPathContent(this->path, this->hidden, this->onlyDirs, this->filters);			
+			this->list = FM::getPathContent(this->path, this->hidden, this->onlyDirs, this->filters);			
 			break;
 			
 		case FMH::PATHTYPE_KEY::TRASH_PATH:
@@ -62,7 +76,7 @@ void FMList::setList()
 			break;		
 	}
 	
-	this->pathEmpty = this->list.isEmpty() && this->fm->fileExists(this->path);
+	this->pathEmpty = this->list.isEmpty() && FM::fileExists(this->path);
 	emit this->pathEmptyChanged();
 	
 	this->sortList();
@@ -202,7 +216,7 @@ void FMList::setPath(const QString &path)
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		emit this->isBookmarkChanged();
-		this->fm->watchPath(QString());
+		this->watchPath(QString());
 		
 		
 	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::TAGS_PATH]+"/"))
@@ -213,11 +227,11 @@ void FMList::setPath(const QString &path)
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		emit this->isBookmarkChanged();
-		this->fm->watchPath(QString());
+		this->watchPath(QString());
 		
 	}else
 	{
-		this->fm->watchPath(this->path);
+		this->watchPath(this->path);
 		this->isBookmark = this->fm->isBookmark(this->path);
 		this->pathExists = FMH::fileExists(this->path);
 		this->pathType = FMH::PATHTYPE_KEY::PLACES_PATH;
@@ -344,7 +358,7 @@ void FMList::refresh()
 
 QString FMList::getParentPath() const
 {
-	return this->fm->parentDir(this->path);
+	return FM::parentDir(this->path);
 }
 
 QString FMList::getPosteriorPath()

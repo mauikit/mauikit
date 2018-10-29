@@ -26,7 +26,10 @@ Tagging::Tagging(const QString &app, const QString &version, const QString &uri,
     this->setApp(app, uri, version, comment);
 }
 
-Tagging::~Tagging() {}
+Tagging::~Tagging() 
+{
+	delete this->instance;
+}
 
 Tagging *Tagging::instance = nullptr;
 Tagging *Tagging::getInstance(const QString &app, const QString &version, const QString &uri, const QString &comment)

@@ -206,13 +206,7 @@ Maui.Item
         pathBarList.currentIndex = pathBarList.count-1
         pathBarList.positionViewAtEnd()
     }
-    
-    function position(index)
-    {
-        //        rollList.currentIndex = index
-        //        rollList.positionViewAtIndex(index, ListView.Center)
-    }
-    
+     
     function showEntryBar()
     {
         pathEntry.visible = !pathEntry.visible

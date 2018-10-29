@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QVariantList>
 #include <QStringList>
-#include <QFileSystemWatcher>
 #include <QStorageInfo>
 #include "fmdb.h"
 #include "fmh.h"
@@ -18,7 +17,7 @@
 #endif
 
 class Tagging;
-
+class QFileSystemWatcher;
 #ifdef STATIC_MAUIKIT
 class FM : public FMDB
 #else
@@ -27,17 +26,11 @@ class MAUIKIT_EXPORT FM : public FMDB
 {
     Q_OBJECT
 
-public:
-
-    FM(QObject *parent = nullptr);
-    ~FM();
+public:  
+	static FM *getInstance();
 	
-    QVariantList get(const QString &queryTxt);
-    void watchPath(const QString &path, const bool &clear = true);
-
 	FMH::MODEL_LIST  getTags(const int &limit = 5);	
-	FMH::MODEL_LIST getTagContent(const QString &tag);
-	
+	FMH::MODEL_LIST getTagContent(const QString &tag);	
 	FMH::MODEL_LIST  getBookmarks();
 	
 	/*** START STATIC METHODS ***/
@@ -58,10 +51,17 @@ public:
 private:
     QFileSystemWatcher *watcher;
     Tagging *tag;
+	static FM* instance;
+	
+	QVariantList get(const QString &queryTxt);
+	
+	FM(QObject *parent = nullptr);
+	~FM();
 
 signals:
-    void pathModified(QString path);
-
+	void bookmarkInserted(QString bookmark);
+	void bookmarkRemoved(QString bookmark);
+	
 public slots:	
 	bool bookmark(const QString &path);
 	bool removeBookmark(const QString &path);

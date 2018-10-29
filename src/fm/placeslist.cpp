@@ -21,12 +21,10 @@
 
 PlacesList::PlacesList(QObject *parent) : QObject(parent)
 {
-	this->fm = new FM(this);
+	this->fm = FM::getInstance();
 	
-	connect(fm, &FM::pathModified, this, [](QString path)
-	{
-		qDebug()<< "Path modified" << path;
-	});
+	connect(fm, &FM::bookmarkInserted, this, &PlacesList::reset);
+	connect(fm, &FM::bookmarkRemoved, this, &PlacesList::reset);
 	
 	connect(this, &PlacesList::groupsChanged, this, &PlacesList::reset);
 	
@@ -44,17 +42,19 @@ FMH::MODEL_LIST PlacesList::items() const
 
 void PlacesList::setList()
 {		
+	this->list.clear();
+	
 	if(this->groups.contains(FMH::PATHTYPE_KEY::PLACES_PATH))
-		this->list << this->fm->getDefaultPaths();
+		this->list << FM::getDefaultPaths();
 	
 	if(this->groups.contains(FMH::PATHTYPE_KEY::APPS_PATH))
-		this->list << this->fm->getCustomPaths();
+		this->list << FM::getCustomPaths();
 	
 	if(this->groups.contains(FMH::PATHTYPE_KEY::BOOKMARKS_PATH))
 		this->list << this->fm->getBookmarks();
 	
 	if(this->groups.contains(FMH::PATHTYPE_KEY::DRIVES_PATH))
-		this->list << this->fm->getDevices();
+		this->list << FM::getDevices();
 	
 	if(this->groups.contains(FMH::PATHTYPE_KEY::TAGS_PATH))
 		this->list << this->fm->getTags();
