@@ -101,7 +101,8 @@ namespace FMH
 		ICONSIZE,
 		DETAILVIEW,
 		SHOWTHUMBNAIL,
-		SHOWTERMINAL
+		SHOWTERMINAL,
+		COUNT
 	}; Q_ENUM_NS(MODEL_KEY);
 	
 	static const QHash<MODEL_KEY, QString> MODEL_NAME =
@@ -126,7 +127,8 @@ namespace FMH
 		{MODEL_KEY::HIDDEN, "hidden"},
 		{MODEL_KEY::DETAILVIEW, "detailview"},
 		{MODEL_KEY::SHOWTERMINAL, "showterminal"},
-		{MODEL_KEY::SHOWTHUMBNAIL, "showthumbnail"}
+		{MODEL_KEY::SHOWTHUMBNAIL, "showthumbnail"},
+		{MODEL_KEY::COUNT, "count"}
 	};
 	
 	typedef QHash<FMH::MODEL_KEY, QString> MODEL;
@@ -231,6 +233,7 @@ namespace FMH
 			return QVariantMap();
 		
 		QString icon, iconsize, hidden, detailview, showthumbnail, showterminal;
+		uint count = 0;
 		
 		#ifdef Q_OS_ANDROID
 		QSettings file(path, QSettings::Format::NativeFormat);
@@ -246,7 +249,8 @@ namespace FMH
 		iconsize =  file.value("IconSize").toString();
 		detailview = file.value("DetailView").toString();
 		showthumbnail = file.value("ShowThumbnail").toString();
-		showterminal = file.value("ShowTerminal").toString();
+		showterminal = file.value("ShowTerminal").toString();		
+		count = file.value("Count").toInt();
 		file.endGroup();
 		
 		#else
@@ -257,17 +261,17 @@ namespace FMH
 		detailview = file.entryMap(QString("MAUIFM"))["DetailView"];
 		showthumbnail = file.entryMap(QString("MAUIFM"))["ShowThumbnail"];
 		showterminal = file.entryMap(QString("MAUIFM"))["ShowTerminal"];
-		
+		count = file.entryMap(QString("MAUIFM"))["Count"].toInt();
 		#endif
 		
 		auto res = QVariantMap({
 			{FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], icon.isEmpty() ? "folder" : icon},
-							   {FMH::MODEL_NAME[FMH::MODEL_KEY::ICONSIZE], iconsize},
-						 {FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTERMINAL], showterminal.isEmpty() ? "false" : showterminal},
-							   {FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTHUMBNAIL], showthumbnail.isEmpty() ? "false" : showthumbnail},
-							   {FMH::MODEL_NAME[FMH::MODEL_KEY::DETAILVIEW], detailview.isEmpty() ? "false" : detailview},
-							   {FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN], hidden.isEmpty() ? false :
-								   (hidden == "true" ? true : false)}
+			{FMH::MODEL_NAME[FMH::MODEL_KEY::ICONSIZE], iconsize},
+			{FMH::MODEL_NAME[FMH::MODEL_KEY::COUNT], count},
+			{FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTERMINAL], showterminal.isEmpty() ? "false" : showterminal},
+			{FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTHUMBNAIL], showthumbnail.isEmpty() ? "false" : showthumbnail},
+			{FMH::MODEL_NAME[FMH::MODEL_KEY::DETAILVIEW], detailview.isEmpty() ? "false" : detailview},
+			{FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN], hidden.isEmpty() ? false : (hidden == "true" ? true : false)}
 		});
 		
 		return res;

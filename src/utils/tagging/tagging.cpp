@@ -28,7 +28,7 @@ Tagging::Tagging(const QString &app, const QString &version, const QString &uri,
 
 Tagging::~Tagging() 
 {
-	delete this->instance;
+// 	delete this->instance;
 }
 
 Tagging *Tagging::instance = nullptr;

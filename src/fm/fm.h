@@ -17,7 +17,6 @@
 #endif
 
 class Tagging;
-class QFileSystemWatcher;
 #ifdef STATIC_MAUIKIT
 class FM : public FMDB
 #else
@@ -49,7 +48,6 @@ public:
 	/*** END STATIC METHODS ***/
 	
 private:
-    QFileSystemWatcher *watcher;
     Tagging *tag;
 	static FM* instance;
 	

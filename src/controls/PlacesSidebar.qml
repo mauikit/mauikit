@@ -17,7 +17,6 @@ Maui.SideBar
 	focus: true
 	clip: true
 	model: placesModel
-	downloadBadget: "3"
 	section.property: !control.isCollapsed ? "type" : ""
 	section.criteria: ViewSection.FullString
 	section.delegate: Maui.LabelDelegate
@@ -35,6 +34,8 @@ Maui.SideBar
 	{
 		var item = list.get(index)
 		var path = item.path
+		
+		placesList.clearBadgeCount(index)
 		
 		if(item.type === "Tags")
 			path ="Tags/"+path

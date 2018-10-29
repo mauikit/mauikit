@@ -22,6 +22,7 @@
 #include <QObject>
 #include "fmh.h"
 
+class QFileSystemWatcher;
 class FM;
 class PlacesList : public QObject
 {
@@ -48,12 +49,19 @@ protected:
 public slots:
 	QVariantMap get(const int &index) const;
 	void refresh();
+	void clearBadgeCount(const int &index);
 	
 private:
 	FM *fm;
 	FMH::MODEL_LIST list;
-	
+	QHash<QString, int> count;
 	QList<int> groups;
+	
+	QFileSystemWatcher *watcher;
+	void watchPath(const QString &path);
+	
+	void setCount();
+	int indexOf(const QString &path);
 	
 signals:
 	void groupsChanged();

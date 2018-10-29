@@ -84,15 +84,21 @@ ItemDelegate
         
         Item
         {
-            visible: index === 6
+            visible: model.count && model.count > 0
             Layout.fillHeight: true
             width: iconSizes.big + space.small
             Layout.alignment: Qt.AlignRight
             Maui.Badge
             {
                 anchors.centerIn: parent
-                text: downloadBadget                
+                text: model.count                
             }
         }
     }
+    
+    function clearCount()
+	{
+		console.log("CLEANING SIDEBAR COUNT")
+		model.count = 0
+	}
 }

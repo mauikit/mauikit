@@ -21,7 +21,6 @@
 
 #include <QFileSystemWatcher>
 
-
 FMList::FMList(QObject *parent) : QObject(parent)
 {
 	this->fm = FM::getInstance();
@@ -47,7 +46,7 @@ void FMList::watchPath(const QString& path, const bool& clear)
 	if(!this->watcher->directories().isEmpty() && clear)
 		this->watcher->removePaths(this->watcher->directories());
 	
-	if(path.isEmpty())		
+	if(path.isEmpty() || !FMH::fileExists(path))
 		return;
 	
 	this->watcher->addPath(path);

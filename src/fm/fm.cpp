@@ -25,7 +25,6 @@
 #include <QDateTime>
 #include <QFileInfo>
 #include <QDesktopServices>
-#include <QFileSystemWatcher>
 #include <QUrl>
 #include <QLocale>
 
@@ -59,7 +58,10 @@ FM::FM(QObject *parent) : FMDB(parent)
 	
 }
 
-FM::~FM() {}
+FM::~FM() 
+{
+// 	delete this->instance;
+}
 
 FMH::MODEL_LIST FM::packItems(const QStringList &items, const QString &type)
 {
@@ -104,7 +106,7 @@ FMH::MODEL_LIST FM::getPathContent(const QString& path, const bool &hidden, cons
 {
 	FMH::MODEL_LIST content;
 	
-	if (QFileInfo(path).isDir())
+	if (FM::isDir(path))
 	{
 		QDir::Filters dirFilter;
 		
@@ -119,7 +121,7 @@ FMH::MODEL_LIST FM::getPathContent(const QString& path, const bool &hidden, cons
 		{
 			auto url = it.next();			
 			content << FMH::getFileInfoModel(url);
-		}
+		}		
 	}
 	
 	return content;
