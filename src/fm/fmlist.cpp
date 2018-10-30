@@ -217,6 +217,9 @@ void FMList::setPath(const QString &path)
 	
 	this->path = path;
 	this->setPreviousPath(this->path);
+	
+	qDebug()<< "Prev History" << this->prevHistory;
+	
 	if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::SEARCH_PATH]+"/"))
 	{
 		qDebug()<< "SEARCHIGN FOR 1"<< path;	
