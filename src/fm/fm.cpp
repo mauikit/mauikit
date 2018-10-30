@@ -60,7 +60,7 @@ FM::FM(QObject *parent) : FMDB(parent)
 
 FM::~FM() 
 {
-// 	delete this->instance;
+	// 	delete this->instance;
 }
 
 FMH::MODEL_LIST FM::packItems(const QStringList &items, const QString &type)
@@ -102,7 +102,7 @@ QVariantList FM::get(const QString &queryTxt)
 	return mapList;
 }
 
-FMH::MODEL_LIST FM::getPathContent(const QString& path, const bool &hidden, const bool &onlyDirs, const QStringList& filters)
+FMH::MODEL_LIST FM::getPathContent(const QString& path, const bool &hidden, const bool &onlyDirs, const QStringList& filters, const QDirIterator::IteratorFlags &iteratorFlags)
 {
 	FMH::MODEL_LIST content;
 	
@@ -116,7 +116,7 @@ FMH::MODEL_LIST FM::getPathContent(const QString& path, const bool &hidden, cons
 		if(hidden)
 			dirFilter = dirFilter | QDir::Hidden | QDir::System;
 		
-		QDirIterator it (path, filters, dirFilter, QDirIterator::NoIteratorFlags);
+		QDirIterator it (path, filters, dirFilter, iteratorFlags);
 		while (it.hasNext())
 		{
 			auto url = it.next();			
@@ -160,6 +160,35 @@ FMH::MODEL_LIST FM::getCustomPaths()
 			{FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::PLACES_PATH]}
 		}
 	};
+}
+
+FMH::MODEL_LIST FM::search(const QString& query, const QString &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)
+{
+	FMH::MODEL_LIST content;
+	
+	if (FM::isDir(path))
+	{
+		QDir::Filters dirFilter;
+		
+		dirFilter = (onlyDirs ? QDir::AllDirs | QDir::NoDotDot | QDir::NoDot :
+		QDir::Files | QDir::AllDirs | QDir::NoDotDot | QDir::NoDot);
+		
+		if(hidden)
+			dirFilter = dirFilter | QDir::Hidden | QDir::System;
+		
+		QDirIterator it (path, filters, dirFilter, QDirIterator::NoIteratorFlags);
+		while (it.hasNext())
+		{
+			auto url = it.next();
+			auto info = it.fileInfo();
+			qDebug()<< info.completeBaseName() <<  info.completeBaseName().contains(query);
+			if(info.completeBaseName().contains(query, Qt::CaseInsensitive))			
+				content << FMH::getFileInfoModel(url);
+		}		
+	}
+	
+	qDebug()<< content;
+	return content;
 }
 
 FMH::MODEL_LIST FM::getDevices()

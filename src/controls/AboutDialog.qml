@@ -155,15 +155,14 @@ Maui.Dialog
 				id: body
 				padding: 0
 				
-				width: parent.width
-				height: parent.height
+			
 				placeholderText: qsTr("App description")
 				enabled: false
 				text: appDescription
 				textFormat : TextEdit.AutoText
 				color: textColor
 				font.pointSize: fontSizes.default
-				wrapMode: TextEdit.WrapAnywhere
+				wrapMode: TextEdit.WordWrap
 				clip: true
 				background: Rectangle
 				{

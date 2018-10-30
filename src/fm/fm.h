@@ -33,13 +33,15 @@ public:
 	FMH::MODEL_LIST  getBookmarks();
 	
 	/*** START STATIC METHODS ***/
+	static FMH::MODEL_LIST search(const QString &query, const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
+	
 	static FMH::MODEL_LIST getDevices();	
 	static FMH::MODEL_LIST getDefaultPaths();
 	static FMH::MODEL_LIST getCustomPaths();	
 	
 	static FMH::MODEL_LIST packItems(const QStringList &items, const QString &type);
 	
-	FMH::MODEL_LIST static getPathContent(const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
+	FMH::MODEL_LIST static getPathContent(const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList(), const QDirIterator::IteratorFlags &iteratorFlags = QDirIterator::NoIteratorFlags);
 	
 	FMH::MODEL_LIST static getAppsContent(const QString &path);	
 

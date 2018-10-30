@@ -102,7 +102,8 @@ namespace FMH
 		DETAILVIEW,
 		SHOWTHUMBNAIL,
 		SHOWTERMINAL,
-		COUNT
+		COUNT,
+		SORTBY
 	}; Q_ENUM_NS(MODEL_KEY);
 	
 	static const QHash<MODEL_KEY, QString> MODEL_NAME =
@@ -128,7 +129,8 @@ namespace FMH
 		{MODEL_KEY::DETAILVIEW, "detailview"},
 		{MODEL_KEY::SHOWTERMINAL, "showterminal"},
 		{MODEL_KEY::SHOWTHUMBNAIL, "showthumbnail"},
-		{MODEL_KEY::COUNT, "count"}
+		{MODEL_KEY::COUNT, "count"},
+		{MODEL_KEY::SORTBY, "sortby"}
 	};
 	
 	typedef QHash<FMH::MODEL_KEY, QString> MODEL;
@@ -141,7 +143,8 @@ namespace FMH
 		BOOKMARKS_PATH,
 		TAGS_PATH,
 		APPS_PATH,
-		TRASH_PATH
+		TRASH_PATH,
+		SEARCH_PATH
 	}; Q_ENUM_NS(PATHTYPE_KEY);
 	
 	static const QHash<PATHTYPE_KEY, QString> PATHTYPE_NAME =
@@ -151,7 +154,8 @@ namespace FMH
 		{PATHTYPE_KEY::BOOKMARKS_PATH, "Bookmarks"},
 		{PATHTYPE_KEY::APPS_PATH, "Apps"},
 		{PATHTYPE_KEY::TRASH_PATH, "Trash"},
-		{PATHTYPE_KEY::TAGS_PATH, "Tags"}
+		{PATHTYPE_KEY::TAGS_PATH, "Tags"},
+		{PATHTYPE_KEY::SEARCH_PATH, "Search"}
 	};
 	
 	const QString DataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
@@ -233,7 +237,7 @@ namespace FMH
 			return QVariantMap();
 		
 		QString icon, iconsize, hidden, detailview, showthumbnail, showterminal;
-		uint count = 0;
+		uint count = 0, sortby = FMH::MODEL_KEY::MODIFIED;
 		
 		#ifdef Q_OS_ANDROID
 		QSettings file(path, QSettings::Format::NativeFormat);
@@ -251,6 +255,7 @@ namespace FMH
 		showthumbnail = file.value("ShowThumbnail").toString();
 		showterminal = file.value("ShowTerminal").toString();		
 		count = file.value("Count").toInt();
+		sortby = file.value("SortBy").toInt();
 		file.endGroup();
 		
 		#else
@@ -262,6 +267,7 @@ namespace FMH
 		showthumbnail = file.entryMap(QString("MAUIFM"))["ShowThumbnail"];
 		showterminal = file.entryMap(QString("MAUIFM"))["ShowTerminal"];
 		count = file.entryMap(QString("MAUIFM"))["Count"].toInt();
+		sortby = file.entryMap(QString("MAUIFM"))["SortBy"].toInt();
 		#endif
 		
 		auto res = QVariantMap({

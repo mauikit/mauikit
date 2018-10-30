@@ -29,6 +29,7 @@ class FMList : public QObject
 	Q_OBJECT
 
 	Q_PROPERTY(QString path READ getPath WRITE setPath NOTIFY pathChanged())
+
 	Q_PROPERTY(bool hidden READ getHidden WRITE setHidden NOTIFY hiddenChanged())
 	Q_PROPERTY(bool onlyDirs READ getOnlyDirs WRITE setOnlyDirs NOTIFY onlyDirsChanged())
 	Q_PROPERTY(bool preview READ getPreview WRITE setPreview NOTIFY previewChanged())
@@ -63,8 +64,8 @@ class FMList : public QObject
 		void setSortBy(const FMH::MODEL_KEY &key);
 		
 		QString getPath() const;
-		void setPath(const QString &path);
-		
+		void setPath(const QString &path);		
+	
 		FMH::PATHTYPE_KEY getPathType() const;
 		
 		QStringList getFilters() const;

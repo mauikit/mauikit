@@ -21,10 +21,10 @@ ColumnLayout
             anchors.centerIn: parent
             horizontalAlignment: Qt.AlignHCenter
             verticalAlignment: Qt.AlignVCenter
-            width: parent.width * 0.9
+            width: parent.width
             height: parent.height * 0.9
             source: "file://"+currentUrl
-            fillMode: Image.PreserveAspectFit
+            fillMode: Image.PreserveAspectCrop
             asynchronous: true
             sourceSize.height: height
             sourceSize.width: width

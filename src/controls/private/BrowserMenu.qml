@@ -51,7 +51,8 @@ Maui.Menu
         text: qsTr("New folder")
 		onTriggered: 
 		{
-			newFolderDialog.open()
+			dialogLoader.sourceComponent= newFolderDialogComponent
+			dialog.open()
 			close()
 		}
     }
@@ -61,7 +62,8 @@ Maui.Menu
         text: qsTr("New file")
 		onTriggered: 
 		{
-			newFileDialog.open()
+			dialogLoader.sourceComponent= newFileDialogComponent
+			dialog.open()
 			close()
 		}
     }

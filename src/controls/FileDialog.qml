@@ -179,8 +179,6 @@ Maui.Dialog
 								onClicked: control.closeIt()
 								
 							}
-							
-							
 						} 
 					}
 				}

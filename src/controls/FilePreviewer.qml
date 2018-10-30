@@ -26,7 +26,7 @@ Maui.Dialog
 			onClicked:
 			{
 				isAndroid ? Maui.Android.shareDialog(currentUrl) :
-				shareDialog.show(currentUrl)
+				shareDialog.show([currentUrl])
 				close()
 			}
 		}

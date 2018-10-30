@@ -33,9 +33,9 @@ FMList::FMList(QObject *parent) : QObject(parent)
 	});
 		
 	connect(this, &FMList::pathChanged, this, &FMList::reset);	
-	connect(this, &FMList::hiddenChanged, this, &FMList::setList);
-	connect(this, &FMList::onlyDirsChanged, this, &FMList::setList);
-	connect(this, &FMList::filtersChanged, this, &FMList::setList);
+// 	connect(this, &FMList::hiddenChanged, this, &FMList::setList);
+// 	connect(this, &FMList::onlyDirsChanged, this, &FMList::setList);
+// 	connect(this, &FMList::filtersChanged, this, &FMList::setList);
 }
 
 FMList::~FMList()
@@ -56,6 +56,10 @@ void FMList::setList()
 {	
 	switch(this->pathType)
 	{
+		case FMH::PATHTYPE_KEY::SEARCH_PATH:			
+			this->list = FM::search(QString(this->path).right(this->path.length()- 1 - this->path.lastIndexOf("/")), this->getPreviousPath());
+			break;
+			
 		case FMH::PATHTYPE_KEY::APPS_PATH:
 			this->list = FM::getAppsContent(this->path);
 			break;
@@ -95,6 +99,7 @@ void FMList::reset()
 			emit this->previewChanged();
 			break;
 			
+		case FMH::PATHTYPE_KEY::SEARCH_PATH:			
 		case FMH::PATHTYPE_KEY::TAGS_PATH:
 			this->hidden = false;
 			emit this->hiddenChanged();
@@ -106,6 +111,9 @@ void FMList::reset()
 		case FMH::PATHTYPE_KEY::PLACES_PATH:
 		{	
 			auto conf = FMH::dirConf(this->path+"/.directory");
+			
+// 			this->sort = static_cast<FMH::MODEL_KEY>(conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SORTBY]].toInt());
+// 			emit this->sortByChanged();
 			
 			this->hidden = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN]].toBool();
 			emit this->hiddenChanged();
@@ -139,14 +147,17 @@ FMH::MODEL_KEY FMList::getSortBy() const
 }
 
 void FMList::setSortBy(const FMH::MODEL_KEY& key)
-{
-	emit this->preListChanged();
-	
+{	
 	if(this->sort == key)
 		return;
 	
+	emit this->preListChanged();
+	
 	this->sort = key;
 	this->sortList();
+	
+// 	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH && this->trackChanges)
+// 		FMH::setDirConf(this->path+"/.directory", "MAUIFM", "SortBy", this->sort);
 	
 	emit this->sortByChanged();
 	emit this->postListChanged();
@@ -206,8 +217,19 @@ void FMList::setPath(const QString &path)
 	
 	this->path = path;
 	this->setPreviousPath(this->path);
-	
-	if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/"))
+	if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::SEARCH_PATH]+"/"))
+	{
+		qDebug()<< "SEARCHIGN FOR 1"<< path;	
+		
+		this->pathExists = true;
+		this->pathType = FMH::PATHTYPE_KEY::SEARCH_PATH;
+		this->isBookmark = false;
+		emit this->pathExistsChanged();
+		emit this->pathTypeChanged();
+		emit this->isBookmarkChanged();
+		this->watchPath(QString());
+		
+	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/"))
 	{
 		this->pathExists = true;
 		this->pathType = FMH::PATHTYPE_KEY::APPS_PATH;
@@ -216,7 +238,6 @@ void FMList::setPath(const QString &path)
 		emit this->pathTypeChanged();
 		emit this->isBookmarkChanged();
 		this->watchPath(QString());
-		
 		
 	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::TAGS_PATH]+"/"))
 	{
@@ -259,9 +280,8 @@ void FMList::setFilters(const QStringList &filters)
 	
 	this->filters = filters;
 	
-	emit this->preListChanged();
 	emit this->filtersChanged();
-	emit this->postListChanged();	
+	this->reset();
 }
 
 FMH::FILTER_TYPE FMList::getFilterType() const
@@ -296,9 +316,9 @@ void FMList::setHidden(const bool &state)
 	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH && this->trackChanges)
 		FMH::setDirConf(this->path+"/.directory", "Settings", "HiddenFilesShown", this->hidden);
 	
-	emit this->preListChanged();
+	
 	emit this->hiddenChanged();
-	emit this->postListChanged();
+	this->reset();
 }
 
 bool FMList::getPreview() const
@@ -331,9 +351,8 @@ void FMList::setOnlyDirs(const bool &state)
 	
 	this->onlyDirs = state;
 	
-	emit this->preListChanged();
 	emit this->onlyDirsChanged();
-	emit this->postListChanged();
+	this->reset();
 }
 
 QVariantMap FMList::get(const int &index) const
