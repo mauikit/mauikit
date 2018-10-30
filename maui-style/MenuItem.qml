@@ -52,15 +52,6 @@ T.MenuItem {
         verticalAlignment: Text.AlignVCenter
     }
 
-    indicator: CheckIndicator {
-        x: controlRoot.mirrored ? controlRoot.width - width - controlRoot.rightPadding : controlRoot.leftPadding
-        y: controlRoot.topPadding + (controlRoot.availableHeight - height) / 2
-
-        visible: controlRoot.checkable
-        on: controlRoot.checked
-        control: controlRoot
-    }
-
     background: Item {
         anchors.fill: parent
         implicitWidth: Kirigami.Units.gridUnit * 8

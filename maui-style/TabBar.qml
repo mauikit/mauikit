@@ -21,7 +21,6 @@
 
 
 import QtQuick 2.6
-import org.kde.qqc2desktopstyle.private 1.0 as StylePrivate
 import org.kde.kirigami 2.2 as Kirigami
 import QtQuick.Templates 2.3 as T
 
@@ -55,15 +54,15 @@ T.TabBar {
         preferredHighlightEnd: width - 40
     }
 
-    StylePrivate.StyleItem {
-        id: styleItem
-        control: controlRoot
-        visible: false
-        elementType: "tabframe"
-        properties: {
-            "orientation" : controlRoot.position == T.TabBar.Header ? "Top" : "Bottom"
-        }
-    }
+//    StylePrivate.StyleItem {
+//        id: styleItem
+//        control: controlRoot
+//        visible: false
+//        elementType: "tabframe"
+//        properties: {
+//            "orientation" : controlRoot.position == T.TabBar.Header ? "Top" : "Bottom"
+//        }
+//    }
 
     background: Item {
         Rectangle {

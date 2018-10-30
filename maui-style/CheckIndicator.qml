@@ -21,17 +21,9 @@
 
 
 import QtQuick 2.6
-import org.kde.qqc2desktopstyle.private 1.0 as StylePrivate
 
-StylePrivate.StyleItem {
+Item {
     id: styleitem
-    elementType: "checkbox"
-    sunken: control.pressed
-    on: control.checked || control.pressed
-    hover: control.hovered
-    enabled: control.enabled
-    properties: {"partiallyChecked": (control.checkState === Qt.PartiallyChecked) }
-    implicitWidth: pixelMetric("indicatorwidth") + 4
-    implicitHeight : implicitWidth
+
 }
 

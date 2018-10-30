@@ -21,7 +21,6 @@
 
 
 import QtQuick 2.6
-import org.kde.qqc2desktopstyle.private 1.0 as StylePrivate
 import QtQuick.Templates 2.3 as T
 import org.kde.kirigami 2.2 as Kirigami
 
@@ -38,22 +37,22 @@ T.Slider {
     
     snapMode: T.Slider.SnapOnRelease
 
-    background: StylePrivate.StyleItem {
-        control: controlRoot
-        elementType: "slider"
-        sunken: controlRoot.pressed
-        implicitWidth: 200
-        contentHeight: horizontal ? 22 : implicitWidth
-        contentWidth: horizontal ? implicitWidth : 22
+//    background: StylePrivate.StyleItem {
+//        control: controlRoot
+//        elementType: "slider"
+//        sunken: controlRoot.pressed
+//        implicitWidth: 200
+//        contentHeight: horizontal ? 22 : implicitWidth
+//        contentWidth: horizontal ? implicitWidth : 22
 
-        maximum: controlRoot.to*100
-        minimum: controlRoot.from*100
-        step: controlRoot.stepSize*100
-        value: (horizontal ? controlRoot.visualPosition : 1 - controlRoot.visualPosition)*controlRoot.to*100
-        horizontal: controlRoot.orientation === Qt.Horizontal
-        enabled: controlRoot.enabled
-        hasFocus: controlRoot.activeFocus
-        hover: controlRoot.hovered
-        activeControl: controlRoot.stepSize > 0 ? "ticks" : ""
-    }
+//        maximum: controlRoot.to*100
+//        minimum: controlRoot.from*100
+//        step: controlRoot.stepSize*100
+//        value: (horizontal ? controlRoot.visualPosition : 1 - controlRoot.visualPosition)*controlRoot.to*100
+//        horizontal: controlRoot.orientation === Qt.Horizontal
+//        enabled: controlRoot.enabled
+//        hasFocus: controlRoot.activeFocus
+//        hover: controlRoot.hovered
+//        activeControl: controlRoot.stepSize > 0 ? "ticks" : ""
+//    }
 }

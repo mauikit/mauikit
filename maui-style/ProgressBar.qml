@@ -21,7 +21,6 @@
 
 
 import QtQuick 2.6
-import org.kde.qqc2desktopstyle.private 1.0 as StylePrivate
 import QtQuick.Templates 2.3 as T
 
 T.ProgressBar {
@@ -34,20 +33,20 @@ T.ProgressBar {
 
     contentItem: Item {}
     
-    background: StylePrivate.StyleItem {
-        elementType: "progressbar"
+//    background: StylePrivate.StyleItem {
+//        elementType: "progressbar"
 
-        control: controlRoot
-        maximum: indeterminate ? 0 : controlRoot.to*100
-        minimum: indeterminate ? 0 : controlRoot.from*100
-        value: indeterminate ? 0 : ((!controlRoot.inverted ? controlRoot.visualPosition : 1 - controlRoot.visualPosition)*controlRoot.to*100)
-        horizontal: true
-        enabled: controlRoot.enabled
-        Timer {
-            interval: 50
-            running: controlRoot.indeterminate
-            repeat: true
-            onTriggered: parent.updateItem();
-        }
-    }
+//        control: controlRoot
+//        maximum: indeterminate ? 0 : controlRoot.to*100
+//        minimum: indeterminate ? 0 : controlRoot.from*100
+//        value: indeterminate ? 0 : ((!controlRoot.inverted ? controlRoot.visualPosition : 1 - controlRoot.visualPosition)*controlRoot.to*100)
+//        horizontal: true
+//        enabled: controlRoot.enabled
+//        Timer {
+//            interval: 50
+//            running: controlRoot.indeterminate
+//            repeat: true
+//            onTriggered: parent.updateItem();
+//        }
+//    }
 }

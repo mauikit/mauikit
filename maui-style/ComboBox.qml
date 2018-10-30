@@ -24,7 +24,6 @@ import QtQuick 2.6
 import QtQuick.Window 2.2
 import QtQuick.Templates 2.3 as T
 import QtQuick.Controls 2.3 as Controls
-import org.kde.qqc2desktopstyle.private 1.0 as StylePrivate
 import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.2 as Kirigami
 
@@ -89,23 +88,23 @@ T.ComboBox {
         }
     }
 
-    background: StylePrivate.StyleItem {
-        id: styleitem
-        control: controlRoot
-        elementType: "combobox"
-        anchors.fill: parent
-        hover: controlRoot.hovered
-        sunken: controlRoot.pressed
-        raised: !sunken
-        hasFocus: controlRoot.activeFocus
-        enabled: controlRoot.enabled
-        // contentHeight as in QComboBox magic numbers taken from QQC1 style
-        contentHeight: Math.max(Math.ceil(textHeight("")), 14) + 2
-        text: controlRoot.displayText
-        properties: {
-            "editable" : control.editable
-        }
-    }
+//    background: StylePrivate.StyleItem {
+//        id: styleitem
+//        control: controlRoot
+//        elementType: "combobox"
+//        anchors.fill: parent
+//        hover: controlRoot.hovered
+//        sunken: controlRoot.pressed
+//        raised: !sunken
+//        hasFocus: controlRoot.activeFocus
+//        enabled: controlRoot.enabled
+//        // contentHeight as in QComboBox magic numbers taken from QQC1 style
+//        contentHeight: Math.max(Math.ceil(textHeight("")), 14) + 2
+//        text: controlRoot.displayText
+//        properties: {
+//            "editable" : control.editable
+//        }
+//    }
 
     popup: T.Popup {
         y: controlRoot.height

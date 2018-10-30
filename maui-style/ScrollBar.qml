@@ -1,158 +1,88 @@
-/*
- * Copyright 2017 Marco Martin <mart@kde.org>
- * Copyright 2017 The Qt Company Ltd.
- *
- * GNU Lesser General Public License Usage
- * Alternatively, this file may be used under the terms of the GNU Lesser
- * General Public License version 3 as published by the Free Software
- * Foundation and appearing in the file LICENSE.LGPLv3 included in the
- * packaging of this file. Please review the following information to
- * ensure the GNU Lesser General Public License version 3 requirements
- * will be met: https://www.gnu.org/licenses/lgpl.html.
- *
- * GNU General Public License Usage
- * Alternatively, this file may be used under the terms of the GNU
- * General Public License version 2.0 or later as published by the Free
- * Software Foundation and appearing in the file LICENSE.GPL included in
- * the packaging of this file. Please review the following information to
- * ensure the GNU General Public License version 2.0 requirements will be
- * met: http://www.gnu.org/licenses/gpl-2.0.html.
- */
+/****************************************************************************
+**
+** Copyright (C) 2017 The Qt Company Ltd.
+** Contact: http://www.qt.io/licensing/
+**
+** This file is part of the Qt Quick Controls 2 module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:LGPL3$
+** Commercial License Usage
+** Licensees holding valid commercial Qt licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see http://www.qt.io/terms-conditions. For further
+** information use the contact form at http://www.qt.io/contact-us.
+**
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 3 as published by the Free Software
+** Foundation and appearing in the file LICENSE.LGPLv3 included in the
+** packaging of this file. Please review the following information to
+** ensure the GNU Lesser General Public License version 3 requirements
+** will be met: https://www.gnu.org/licenses/lgpl.html.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 2.0 or later as published by the Free
+** Software Foundation and appearing in the file LICENSE.GPL included in
+** the packaging of this file. Please review the following information to
+** ensure the GNU General Public License version 2.0 requirements will be
+** met: http://www.gnu.org/licenses/gpl-2.0.html.
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
 
-
-import QtQuick 2.6
-import org.kde.qqc2desktopstyle.private 1.0 as StylePrivate
-import QtQuick.Templates 2.3 as T
-import org.kde.kirigami 2.2 as Kirigami
+import QtQuick 2.9
+import QtQuick.Templates 2.2 as T
+import QtQuick.Controls.Material 2.3
 
 T.ScrollBar {
-    id: controlRoot
+    id: control
 
-    implicitWidth: background.implicitWidth
-    implicitHeight: background.implicitHeight
+    implicitWidth: Math.max(background ? background.implicitWidth : 0,
+                            contentItem.implicitWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(background ? background.implicitHeight : 0,
+                             contentItem.implicitHeight + topPadding + bottomPadding)
 
-    hoverEnabled: true
+    padding: control.interactive ? 1 : 2
+    visible: control.policy !== T.ScrollBar.AlwaysOff
 
-    visible: controlRoot.size < 1.0
+    contentItem: Rectangle {
+        implicitWidth: control.interactive ? 13 : 4
+        implicitHeight: control.interactive ? 13 : 4
 
-    background: MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        visible: controlRoot.size < 1.0
-        hoverEnabled: true
-        state: "inactive"
-        onPositionChanged: style.activeControl = style.hitTest(mouse.x, mouse.y)
-        onExited: style.activeControl = "groove";
-        onPressed: {
-            if (style.activeControl == "down") {
-                buttonTimer.increment = 0.02;
-                buttonTimer.running = true;
-                mouse.accepted = true
-            } else if (style.activeControl == "up") {
-                buttonTimer.increment = -0.02;
-                buttonTimer.running = true;
-                mouse.accepted = true
-            } else {
-                mouse.accepted = false
-            }
-        }
-        onReleased: {
-            buttonTimer.running = false;
-            mouse.accepted = false
-        }
-        onCanceled: buttonTimer.running = false;
-
-        implicitWidth: style.horizontal ? 200 : style.pixelMetric("scrollbarExtent")
-        implicitHeight: style.horizontal ? style.pixelMetric("scrollbarExtent") : 200
-
-        StylePrivate.StyleItem {
-            id: style
-            control: controlRoot
-            anchors.fill: parent
-            elementType: "scrollbar"
-            hover: activeControl != "none"
-            activeControl: "none"
-            sunken: controlRoot.pressed
-            minimum: 0
-            maximum: (controlRoot.height/controlRoot.size - controlRoot.height)
-            value: controlRoot.position * (controlRoot.height/controlRoot.size)
-            horizontal: controlRoot.orientation == Qt.Horizontal
-            enabled: controlRoot.enabled
-
-            visible: controlRoot.size < 1.0
-            opacity: 1
-
-            Timer {
-                id: buttonTimer
-                property real increment
-                repeat: true
-                interval: 150
-                onTriggered: {
-                    controlRoot.position += increment;
-                }
-            }
-        }
-        StylePrivate.StyleItem {
-            id: inactiveStyle
-            anchors.fill: parent
-            control: controlRoot
-            elementType: "scrollbar"
-            activeControl: "none"
-            sunken: false
-            minimum: 0
-            maximum: style.maximum
-            value: style.value
-            horizontal: style.horizontal
-            enabled: controlRoot.enabled
-
-            visible: controlRoot.size < 1.0
-            opacity: 1
-        }
-        states: [
-            State {
-                name: "hover"
-                when: mouseArea.containsMouse
-                PropertyChanges {
-                    target: style
-                    opacity: 1
-                }
-                PropertyChanges {
-                    target: inactiveStyle
-                    opacity: 0
-                }
-            },
-            State {
-                name: "inactive"
-                when: !mouseArea.containsMouse
-                PropertyChanges {
-                    target: style
-                    opacity: 0
-                }
-                PropertyChanges {
-                    target: inactiveStyle
-                    opacity: 1
-                }
-            }
-        ]
-        transitions: [
-            Transition {
-                ParallelAnimation {
-                    NumberAnimation {
-                        target: style
-                        property: "opacity"
-                        duration: Kirigami.Units.shortDuration
-                        easing.type: Easing.InOutQuad
-                    }
-                    NumberAnimation {
-                        target: inactiveStyle
-                        property: "opacity"
-                        duration: Kirigami.Units.shortDuration
-                        easing.type: Easing.InOutQuad
-                    }
-                }
-            }
-        ]
+        color: control.pressed ? control.Material.scrollBarPressedColor :
+               control.interactive && control.hovered ? control.Material.scrollBarHoveredColor : control.Material.scrollBarColor
+        opacity: 0.0
     }
 
-    contentItem: Item {}
+    background: Rectangle {
+        implicitWidth: control.interactive ? 16 : 4
+        implicitHeight: control.interactive ? 16 : 4
+        color: "#0e000000"
+        opacity: 0.0
+        visible: control.interactive
+    }
+
+    states: State {
+        name: "active"
+        when: control.policy === T.ScrollBar.AlwaysOn || (control.active && control.size < 1.0)
+    }
+
+    transitions: [
+        Transition {
+            to: "active"
+            NumberAnimation { targets: [contentItem, background]; property: "opacity"; to: 1.0 }
+        },
+        Transition {
+            from: "active"
+            SequentialAnimation {
+                PropertyAction{ targets: [contentItem, background]; property: "opacity"; value: 1.0 }
+                PauseAnimation { duration: 2450 }
+                NumberAnimation { targets: [contentItem, background]; property: "opacity"; to: 0.0 }
+            }
+        }
+    ]
 }

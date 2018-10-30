@@ -23,7 +23,6 @@
 import QtQuick 2.6
 import QtQuick.Templates 2.3 as T
 import org.kde.kirigami 2.2 as Kirigami
-import org.kde.qqc2desktopstyle.private 1.0 as StylePrivate
 
 T.SpinBox {
     id: controlRoot
@@ -89,20 +88,20 @@ T.SpinBox {
     }
 
 
-    background: StylePrivate.StyleItem {
-        id: styleitem
-        control: controlRoot
-        elementType: "spinbox"
-        anchors.fill: parent
-        hover: controlRoot.hovered
-        hasFocus: controlRoot.activeFocus
-        enabled: controlRoot.enabled
+//    background: StylePrivate.StyleItem {
+//        id: styleitem
+//        control: controlRoot
+//        elementType: "spinbox"
+//        anchors.fill: parent
+//        hover: controlRoot.hovered
+//        hasFocus: controlRoot.activeFocus
+//        enabled: controlRoot.enabled
 
-        value: (controlRoot.up.pressed ? 1 : 0) |
-                   (controlRoot.down.pressed ? 1<<1 : 0) |
-                   ( controlRoot.value != controlRoot.to ? (1<<2) : 0) |
-                   (controlRoot.value != controlRoot.from ? (1<<3) : 0) |
-                   (controlRoot.up.hovered ? 0x1 : 0) |
-                   (controlRoot.down.hovered ? (1<<1) : 0)
-    }
+//        value: (controlRoot.up.pressed ? 1 : 0) |
+//                   (controlRoot.down.pressed ? 1<<1 : 0) |
+//                   ( controlRoot.value != controlRoot.to ? (1<<2) : 0) |
+//                   (controlRoot.value != controlRoot.from ? (1<<3) : 0) |
+//                   (controlRoot.up.hovered ? 0x1 : 0) |
+//                   (controlRoot.down.hovered ? (1<<1) : 0)
+//    }
 }

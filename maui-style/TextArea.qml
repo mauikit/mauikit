@@ -24,7 +24,6 @@ import QtQuick 2.6
 import QtQuick.Window 2.1
 import QtQuick.Templates 2.3 as T
 import org.kde.kirigami 2.2 as Kirigami
-import org.kde.qqc2desktopstyle.private 1.0 as StylePrivate
 
 T.TextArea {
     id: controlRoot
@@ -65,16 +64,16 @@ T.TextArea {
         elide: Text.ElideRight
     }
 
-    background: StylePrivate.StyleItem {
-        id: style
-        control: controlRoot
-        visible: controlRoot.backgroundVisible
-        elementType: "edit"
-        implicitWidth: 200
-        implicitHeight: 22
+//    background: StylePrivate.StyleItem {
+//        id: style
+//        control: controlRoot
+//        visible: controlRoot.backgroundVisible
+//        elementType: "edit"
+//        implicitWidth: 200
+//        implicitHeight: 22
 
-        sunken: true
-        hasFocus: controlRoot.activeFocus
-        hover: controlRoot.hovered
-    }
+//        sunken: true
+//        hasFocus: controlRoot.activeFocus
+//        hover: controlRoot.hovered
+//    }
 }

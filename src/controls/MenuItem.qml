@@ -65,9 +65,7 @@ MenuItem
 		color: control.checked ? control.colorScheme.highlightColor : control.colorScheme.viewBackgroundColor
 		border.color: control.colorScheme.borderColor
 		radius: radiusV
-	}
-	
-	
+    }
 
 	background: Item
 	{
@@ -82,6 +80,5 @@ MenuItem
 			opacity: control.hovered && !control.pressed ? 1 : 0
 			Behavior on opacity { NumberAnimation { duration: 150 } }
 		}
-	}
-	
+	}	
 }

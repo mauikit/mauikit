@@ -24,7 +24,6 @@ import QtQuick 2.9
 import QtQuick.Controls 2.3
 import QtQuick.Templates 2.3 as T
 import org.kde.kirigami 2.2 as Kirigami
-import org.kde.qqc2desktopstyle.private 1.0 as StylePrivate
 
 T.ScrollView {
     id: controlRoot
@@ -119,17 +118,17 @@ T.ScrollView {
               * ScrollView {background.visible: true} must *not* work, becasue all  upstream styles don't have a background so applications using this would break with other styles
               * This is child of scrollHelper as it would break native scrollview finding of the flickable if it was a direct child
               */
-            Component {
-                id: backgroundComponent
-                StylePrivate.StyleItem {
-                    control: controlRoot
-                    elementType: "edit"
-                    visible: false
-                    sunken: true
-                    hasFocus: controlRoot.activeFocus || scrollHelper.flickableItem.activeFocus
-                    hover: controlRoot.hovered
-                }
-            }
+//            Component {
+//                id: backgroundComponent
+//                StylePrivate.StyleItem {
+//                    control: controlRoot
+//                    elementType: "edit"
+//                    visible: false
+//                    sunken: true
+//                    hasFocus: controlRoot.activeFocus || scrollHelper.flickableItem.activeFocus
+//                    hover: controlRoot.hovered
+//                }
+//            }
         }
     ]
     ScrollBar.vertical: ScrollBar {

@@ -21,7 +21,6 @@
 
 import QtQuick 2.6
 import QtQuick.Templates 2.3 as T
-import org.kde.qqc2desktopstyle.private 1.0 as StylePrivate
 import org.kde.kirigami 2.3 as Kirigami
 
 T.Button {

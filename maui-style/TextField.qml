@@ -25,7 +25,6 @@ import QtQuick.Window 2.1
 import QtQuick.Controls 2.3 as Controls
 import QtQuick.Templates 2.3 as T
 import org.kde.kirigami 2.2 as Kirigami
-import org.kde.qqc2desktopstyle.private 1.0 as StylePrivate
 
 T.TextField {
     id: controlRoot
@@ -65,14 +64,14 @@ T.TextField {
         elide: Text.ElideRight
     }
 
-    background: StylePrivate.StyleItem {
-        id: style
+//    background: StylePrivate.StyleItem {
+//        id: style
 
-        control: controlRoot
-        elementType: "edit"
+//        control: controlRoot
+//        elementType: "edit"
 
-        sunken: true
-        hasFocus: controlRoot.activeFocus
-        hover: controlRoot.hovered
-    }
+//        sunken: true
+//        hasFocus: controlRoot.activeFocus
+//        hover: controlRoot.hovered
+//    }
 }

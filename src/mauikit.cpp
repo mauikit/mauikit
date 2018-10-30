@@ -53,11 +53,13 @@ QUrl MauiKit::componentUrl(const QString &fileName) const
 void MauiKit::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.mauikit"));
-    const QString style = QQuickStyle::name();
 
 #ifdef Q_OS_ANDROID
     QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
     QIcon::setThemeName("Luv");
+    QQuickStyle::setStyle(":/style");
+#else
+    QQuickStyle::setStyle("maui-style");
 #endif
 
     qmlRegisterSingletonType(componentUrl(QStringLiteral("Style.qml")), uri, 1, 0, "Style");

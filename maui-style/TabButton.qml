@@ -24,7 +24,6 @@ import QtQuick 2.6
 import QtQml.Models 2.1
 //for TabBar.*
 import QtQuick.Controls 2.3
-import org.kde.qqc2desktopstyle.private 1.0 as StylePrivate
 import QtQuick.Templates 2.3 as T
 import org.kde.kirigami 2.2 as Kirigami
 
@@ -45,45 +44,45 @@ T.TabButton {
 
     contentItem: Item {}
 
-    background: StylePrivate.StyleItem {
-        id: styleitem
+//    background: StylePrivate.StyleItem {
+//        id: styleitem
 
-        TextMetrics {
-            id: textMetrics
-            font.capitalization: Kirigami.Theme.defaultFont.capitalization
-            font.family: Kirigami.Theme.defaultFont.family
-            font.italic: Kirigami.Theme.defaultFont.italic
-            font.letterSpacing: Kirigami.Theme.defaultFont.letterSpacing
-            font.pointSize: Kirigami.Theme.defaultFont.pointSize
-            font.strikeout: Kirigami.Theme.defaultFont.strikeout
-            font.underline: Kirigami.Theme.defaultFont.underline
-            font.weight: Kirigami.Theme.defaultFont.weight
-            font.wordSpacing: Kirigami.Theme.defaultFont.wordSpacing
-            text: controlRoot.text
-        }
+//        TextMetrics {
+//            id: textMetrics
+//            font.capitalization: Kirigami.Theme.defaultFont.capitalization
+//            font.family: Kirigami.Theme.defaultFont.family
+//            font.italic: Kirigami.Theme.defaultFont.italic
+//            font.letterSpacing: Kirigami.Theme.defaultFont.letterSpacing
+//            font.pointSize: Kirigami.Theme.defaultFont.pointSize
+//            font.strikeout: Kirigami.Theme.defaultFont.strikeout
+//            font.underline: Kirigami.Theme.defaultFont.underline
+//            font.weight: Kirigami.Theme.defaultFont.weight
+//            font.wordSpacing: Kirigami.Theme.defaultFont.wordSpacing
+//            text: controlRoot.text
+//        }
 
-        control: controlRoot
-        anchors.fill: parent
-        elementType: "tab"
-        paintMargins: 0
-        property Item tabBar: controlRoot.parent.parent.parent
+//        control: controlRoot
+//        anchors.fill: parent
+//        elementType: "tab"
+//        paintMargins: 0
+//        property Item tabBar: controlRoot.parent.parent.parent
 
-        property string orientation: tabBar.position == TabBar.Header ? "Top" : "Bottom"
-        property string selectedpos: tabBar.currentIndex == controlRoot.ObjectModel.index + 1 ? "next" :
-                                    tabBar.currentIndex == controlRoot.ObjectModel.index - 1 ? "previous" : ""
-        property string tabpos: tabBar.count === 1 ? "only" : controlRoot.ObjectModel.index === 0 ? "beginning" : controlRoot.ObjectModel.index === tabBar.count - 1 ? "end" : "middle"
+//        property string orientation: tabBar.position == TabBar.Header ? "Top" : "Bottom"
+//        property string selectedpos: tabBar.currentIndex == controlRoot.ObjectModel.index + 1 ? "next" :
+//                                    tabBar.currentIndex == controlRoot.ObjectModel.index - 1 ? "previous" : ""
+//        property string tabpos: tabBar.count === 1 ? "only" : controlRoot.ObjectModel.index === 0 ? "beginning" : controlRoot.ObjectModel.index === tabBar.count - 1 ? "end" : "middle"
 
-        properties: {
-            "hasFrame" : true,
-            "orientation": orientation,
-            "tabpos": tabpos,
-            "selectedpos": selectedpos
-        }
+//        properties: {
+//            "hasFrame" : true,
+//            "orientation": orientation,
+//            "tabpos": tabpos,
+//            "selectedpos": selectedpos
+//        }
 
-        enabled: controlRoot.enabled
-        selected: controlRoot.checked
-        text: controlRoot.text
-        hover: controlRoot.hovered
-        hasFocus: controlRoot.activeFocus
-    }
+//        enabled: controlRoot.enabled
+//        selected: controlRoot.checked
+//        text: controlRoot.text
+//        hover: controlRoot.hovered
+//        hasFocus: controlRoot.activeFocus
+//    }
 }
