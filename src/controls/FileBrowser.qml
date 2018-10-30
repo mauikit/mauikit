@@ -163,7 +163,9 @@ Maui.Page
 		{
 			if(paths.length)
 			{	
-				control.selectionBar.animate("#6fff80")				
+				if(control.selectionBar)
+					control.selectionBar.animate("#6fff80")				
+				
 				control.copy(paths)
 			}	
 		}
@@ -171,7 +173,9 @@ Maui.Page
 		{
 			if(paths.length)
 			{	
-				control.selectionBar.animate("#fff44f")				
+				if(control.selectionBar)
+					control.selectionBar.animate("#fff44f")				
+				
 				control.cut(paths)
 			}	
 		}
@@ -212,11 +216,11 @@ Maui.Page
 		{
 			if(isAndroid)
 				Maui.Android.shareDialog(paths)
-				else
-				{
-					dialogLoader.sourceComponent= shareDialogComponent
-					dialog.show(paths)
-				}
+			else
+			{
+				dialogLoader.sourceComponent= shareDialogComponent
+				dialog.show(paths)
+			}
 		}
 	}
 	
@@ -519,7 +523,7 @@ Maui.Page
 		{
 			id: selectionBarLoader
 			Layout.fillWidth: true
-			Layout.preferredHeight:  iconSizes.big + space.large + space.small
+			Layout.preferredHeight: control.selectionBar ? (control.selectionBar.visible ? iconSizes.big + space.large + space.small : 0) : 0
 			Layout.leftMargin: contentMargins*2
 			Layout.rightMargin: contentMargins*2
 			Layout.bottomMargin: contentMargins*2
