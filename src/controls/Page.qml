@@ -170,7 +170,7 @@ QQC2.Page
                           else
                               undefined
 
-            anchors.bottom: if(floatingBar && footBarOverlap && !altToolBars)
+                              anchors.bottom: if(floatingBar && footBarOverlap && !altToolBars && topToolBar.plegable)
                                 rootLayout.bottom
                             else if(floatingBar && footBarOverlap && altToolBars && headBarVisible)
                                 topToolBar.top
