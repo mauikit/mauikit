@@ -99,14 +99,15 @@ QQC2.Page
 			Layout.bottomMargin: plegable ? space.big : 0
 			Layout.topMargin: plegable ? space.big : 0
 			Layout.alignment: plegable ? Qt.AlignRight : undefined
-			
+		
             Layout.row: altToolBars ? 3 : 1
             Layout.column: 1
             colorScheme
             {
-				backgroundColor: control.colorScheme.backgroundColor
-				textColor : control.colorScheme.textColor
+				backgroundColor: folded ? altColor : control.colorScheme.backgroundColor
+				textColor : folded ? altColorText : control.colorScheme.textColor
 			} 
+			
             position: altToolBars ? ToolBar.Footer : ToolBar.Header
             dropShadow: false
             drawBorder: !dropShadow && !plegable
@@ -170,11 +171,13 @@ QQC2.Page
                           else
                               undefined
 
-                              anchors.bottom: if(floatingBar && footBarOverlap && !altToolBars && topToolBar.plegable)
+			anchors.bottom: if(floatingBar && footBarOverlap && !altToolBars)
                                 rootLayout.bottom
-                            else if(floatingBar && footBarOverlap && altToolBars && headBarVisible)
+							else if(floatingBar && footBarOverlap && altToolBars && headBarVisible && !topToolBar.plegable)
                                 topToolBar.top
-                            else if(floatingBar && footBarOverlap && altToolBars && !headBarVisible)
+							else if(floatingBar && footBarOverlap && altToolBars && headBarVisible && topToolBar.plegable)
+								topToolBar.top
+							else if(floatingBar && footBarOverlap && altToolBars && !headBarVisible && topToolBar.plegable)
                                 rootLayout.bottom
                             else
                                 undefined

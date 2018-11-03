@@ -340,6 +340,7 @@ ToolBar
 					checked: !folded
 					iconName: folded ? "go-previous" : "go-next"
 					onClicked: folded = !folded
+					iconColor: control.colorScheme.textColor
 				}
 			}
            
