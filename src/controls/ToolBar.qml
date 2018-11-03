@@ -61,6 +61,8 @@ ToolBar
     //    leftPadding: Kirigami.Units.smallSpacing*2
     //    rightPadding: Kirigami.Units.smallSpacing*2
     signal unfolded()
+	
+	onPlegableChanged: folded = plegable
     
     background: Rectangle
     {
@@ -69,6 +71,11 @@ ToolBar
 		implicitHeight: toolBarHeightAlt  
 		radius: floating || plegable ? radiusV : 0   
 		border.color: floating || plegable ? colorScheme.borderColor : "transparent"
+		
+		SequentialAnimation on radius
+		{
+			ColorAnimation { to: colorScheme.backgroundColor ; duration: 1000 }
+		}
 		
 		Kirigami.Separator
 		{
@@ -158,13 +165,17 @@ ToolBar
         }            
     }
     
-    
+    RowLayout
+    {
+		anchors.fill: parent
+		
     Flickable
     {
         id: mainFlickable       
-                
+        Layout.fillHeight: true
+        Layout.fillWidth: !folded
+        
         flickableDirection: Flickable.HorizontalFlick
-        anchors.fill: parent
         interactive: layout.implicitWidth > control.width
         contentWidth: layout.implicitWidth
         boundsBehavior: isMobile ? Flickable.DragOverBounds : Flickable.StopAtBounds
@@ -321,31 +332,37 @@ ToolBar
                 Layout.rightMargin: rightContent.length > 0 ? margins : 0
                 Layout.minimumWidth: 0
                 clip: true
-            }
-            
-            
-            Row
-            {
-				id: plegableButtonRow
-				visible: plegable
-				Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
-				spacing: control.spacing 
-				Layout.rightMargin: margins 
-				Layout.minimumWidth: 0
-				clip: true
-				
-				Maui.ToolButton
-				{
-					visible: plegable
-					checked: !folded
-					iconName: folded ? "go-previous" : "go-next"
-					onClicked: folded = !folded
-					iconColor: control.colorScheme.textColor
-				}
-			}
-           
+            }           
         }
         
         ScrollBar.horizontal: ScrollBar { visible: false}        
     }
+    
+    
+    Item
+    {
+		id: plegableButtonRow
+		visible: plegable
+		Layout.fillHeight: true
+		Layout.preferredWidth: control.height
+		Layout.fillWidth: folded
+		
+		Layout.alignment: Qt.AlignVCenter
+		Layout.rightMargin: margins 
+		clip: true
+		
+		Maui.ToolButton
+		{
+			id: _plegableButton
+			visible: plegable
+			checked:  !folded
+			iconName: folded ? "go-previous" : "go-next"
+			onClicked: folded = !folded
+			iconColor: control.colorScheme.textColor
+			anchors.centerIn: parent
+		}
+	}
+	
+	
+}
 }

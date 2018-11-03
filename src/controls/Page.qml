@@ -23,6 +23,8 @@ import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.2 as Kirigami
 import QtGraphicalEffects 1.0
+import QtQuick.Window 2.0
+
 import "private"
 
 QQC2.Page
@@ -117,7 +119,7 @@ QQC2.Page
             
             height: toolBarHeightAlt
             implicitHeight: toolBarHeightAlt
-
+            plegable: control.width < Kirigami.Units.gridUnit * 15
             visible: headBarVisible && count > 0
             clip: false
             z: container.z +1
@@ -166,17 +168,21 @@ QQC2.Page
             anchors.margins: floatingBar && footBarOverlap ? margins : 0
             anchors.top:  if(floatingBar && footBarOverlap && headBarVisible && !altToolBars && !topToolBar.plegable)
                               topToolBar.bottom
-                          else if((floatingBar && footBarOverlap || altToolBars) || topToolBar.plegable)
-                              rootLayout.top
+							else if(floatingBar && footBarOverlap && headBarVisible && !altToolBars && topToolBar.plegable)
+								  topToolBar.top
+                          else if(floatingBar && footBarOverlap && !topToolBar.plegable && altToolBars)
+							  rootLayout.top
+						else if(floatingBar && footBarOverlap && !topToolBar.plegable && !altToolBars)
+							rootLayout.bottom
                           else
                               undefined
 
 			anchors.bottom: if(floatingBar && footBarOverlap && !altToolBars)
                                 rootLayout.bottom
-							else if(floatingBar && footBarOverlap && altToolBars && headBarVisible && !topToolBar.plegable)
+							else if(floatingBar && footBarOverlap && altToolBars && headBarVisible)
                                 topToolBar.top
 							else if(floatingBar && footBarOverlap && altToolBars && headBarVisible && topToolBar.plegable)
-								topToolBar.top
+								topToolBar.bottom
 							else if(floatingBar && footBarOverlap && altToolBars && !headBarVisible && topToolBar.plegable)
                                 rootLayout.bottom
                             else

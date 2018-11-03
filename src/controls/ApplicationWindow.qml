@@ -203,7 +203,7 @@ backgroundColor.b, 0.7))
         id: page
         anchors.fill: parent
         margins: 0
-        
+        headBar.plegable: false
         headBar.height: toolBarHeight + space.small
         headBar.implicitHeight: toolBarHeight + space.small
 
