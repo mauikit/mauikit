@@ -36,7 +36,7 @@ Kirigami.AbstractApplicationWindow
     width: Screen.width * (isMobile ? 1 : 0.4)
     height: Screen.height * (isMobile ? 1 : 0.4)
 
-    /***************************************************/
+	/***************************************************/
     /******************** ALIASES *********************/
     /*************************************************/
     property alias page : page

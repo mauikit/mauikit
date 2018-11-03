@@ -57,7 +57,7 @@ void FMList::setList()
 	switch(this->pathType)
 	{
 		case FMH::PATHTYPE_KEY::SEARCH_PATH:			
-			this->list = FM::search(QString(this->path).right(this->path.length()- 1 - this->path.lastIndexOf("/")), this->getPreviousPath());
+			this->list = FM::search(QString(this->path).right(this->path.length()- 1 - this->path.lastIndexOf("/")), this->prevHistory.length() > 1 ? this->prevHistory[this->prevHistory.length()-2] : this->path);
 			break;
 			
 		case FMH::PATHTYPE_KEY::APPS_PATH:

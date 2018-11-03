@@ -36,11 +36,11 @@ ToolBar
     
     clip: true
     implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
-	implicitHeight: floatingFootBar ? toolBarHeightAlt : toolBarHeight
+	implicitHeight: floating || plegable ? toolBarHeightAlt : toolBarHeight
 	
-	width: floatingFootBar ?  implicitWidth : parent.width
-    height: implicitHeight
-    
+	width: floating || plegable ? implicitWidth : parent.width
+    height: implicitHeight    
+  
 	property alias leftContent : leftRowContent.data
     property alias middleContent : middleRowContent.data
     property alias rightContent : rightRowContent.data
@@ -53,20 +53,22 @@ ToolBar
     
     property bool dropShadow: false
     property bool drawBorder: false
-    property bool floatingFootBar: false
- 
+    property bool floating: false
+    property bool plegable: false
+    property bool folded : plegable
+    
     padding: 0    
     //    leftPadding: Kirigami.Units.smallSpacing*2
     //    rightPadding: Kirigami.Units.smallSpacing*2
-    
+    signal unfolded()
     
     background: Rectangle
     {
 		id: headBarBG
 		color: colorScheme.backgroundColor
 		implicitHeight: toolBarHeightAlt  
-		radius: floatingFootBar ? radiusV : 0   
-		border.color: floatingFootBar ? colorScheme.borderColor : "transparent"
+		radius: floating || plegable ? radiusV : 0   
+		border.color: floating || plegable ? colorScheme.borderColor : "transparent"
 		
 		Kirigami.Separator
 		{
@@ -177,6 +179,7 @@ ToolBar
             Row
             {
                 id: leftRowContent
+                visible: !folded
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
                 Layout.leftMargin: leftContent.length > 0 ? margins : 0
                 spacing: leftContent.length > 0 ? control.spacing : 0
@@ -226,6 +229,7 @@ ToolBar
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
                 Layout.rightMargin: middleContent.length === 1 ? 0 : margins
                 Layout.leftMargin: middleContent.length === 1 ? 0 : margins
+                visible: !folded
                 
                 Flickable
                 {
@@ -311,12 +315,34 @@ ToolBar
             Row
             {
                 id: rightRowContent
+                visible: !folded
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                 spacing: rightContent.length > 0 ? control.spacing : 0
                 Layout.rightMargin: rightContent.length > 0 ? margins : 0
                 Layout.minimumWidth: 0
                 clip: true
             }
+            
+            
+            Row
+            {
+				id: plegableButtonRow
+				visible: plegable
+				Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+				spacing: control.spacing 
+				Layout.rightMargin: margins 
+				Layout.minimumWidth: 0
+				clip: true
+				
+				Maui.ToolButton
+				{
+					visible: plegable
+					checked: !folded
+					iconName: folded ? "go-previous" : "go-next"
+					onClicked: folded = !folded
+				}
+			}
+           
         }
         
         ScrollBar.horizontal: ScrollBar { visible: false}        

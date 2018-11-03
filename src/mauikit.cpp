@@ -54,14 +54,6 @@ void MauiKit::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.mauikit"));
 
-#ifdef Q_OS_ANDROID
-    QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
-    QIcon::setThemeName("Luv");
-    QQuickStyle::setStyle(":/style");
-#else
-    QQuickStyle::setStyle("maui-style");
-#endif
-
     qmlRegisterSingletonType(componentUrl(QStringLiteral("Style.qml")), uri, 1, 0, "Style");
     qmlRegisterType(componentUrl(QStringLiteral("ToolBar.qml")), uri, 1, 0, "ToolBar");
     qmlRegisterType(componentUrl(QStringLiteral("ToolButton.qml")), uri, 1, 0, "ToolButton");
@@ -142,8 +134,16 @@ void MauiKit::registerTypes(const char *uri)
                                       [](QQmlEngine*, QJSEngine*) -> QObject* {
        auto handy = new Handy;
         return handy;
-    });
-
+    });	 
+	 
+	 #ifdef Q_OS_ANDROID
+	 QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
+	 QIcon::setThemeName("Luv");
+	 QQuickStyle::setStyle(":/style");
+// 	 #else
+// 	 QQuickStyle::setStyle("maui-style");
+	 #endif
+	 
     qmlProtectModule(uri, 1);
 }
 

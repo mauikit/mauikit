@@ -54,7 +54,7 @@ QQC2.Page
 	property alias headBar: topToolBar
 	property alias headBarItem: topToolBar.data
 	property alias footBar: bottomToolBar
-    property alias floatingBar: bottomToolBar.floatingFootBar
+    property alias floatingBar: bottomToolBar.floating
     property alias flickable: flickable
 
     property int footBarAligment : Qt.AlignCenter    
@@ -93,8 +93,13 @@ QQC2.Page
         Maui.ToolBar
         {
             id: topToolBar
-
-            Layout.fillWidth: true
+            Layout.fillWidth: !folded
+            Layout.rightMargin: plegable ? space.big : (floating ? space.small : 0)
+			Layout.leftMargin: plegable ? space.big : (floating ? space.small : 0)
+			Layout.bottomMargin: plegable ? space.big : 0
+			Layout.topMargin: plegable ? space.big : 0
+			Layout.alignment: plegable ? Qt.AlignRight : undefined
+			
             Layout.row: altToolBars ? 3 : 1
             Layout.column: 1
             colorScheme
@@ -104,9 +109,11 @@ QQC2.Page
 			} 
             position: altToolBars ? ToolBar.Footer : ToolBar.Header
             dropShadow: false
-            drawBorder: !dropShadow
+            drawBorder: !dropShadow && !plegable
             
-            width: parent.width
+            width: folded ? height : implicitWidth
+            implicitWidth: width
+            
             height: toolBarHeightAlt
             implicitHeight: toolBarHeightAlt
 
@@ -135,7 +142,7 @@ QQC2.Page
                 font.pointSize: fontSizes.big
                 horizontalAlignment : Text.AlignHCenter
                 verticalAlignment :  Text.AlignVCenter
-            }
+            }                      
         }
 
         Item
@@ -156,9 +163,9 @@ QQC2.Page
             clip: false
 
             anchors.margins: floatingBar && footBarOverlap ? margins : 0
-            anchors.top:  if(floatingBar && footBarOverlap && headBarVisible && !altToolBars)
+            anchors.top:  if(floatingBar && footBarOverlap && headBarVisible && !altToolBars && !topToolBar.plegable)
                               topToolBar.bottom
-                          else if(floatingBar && footBarOverlap || altToolBars)
+                          else if((floatingBar && footBarOverlap || altToolBars) || topToolBar.plegable)
                               rootLayout.top
                           else
                               undefined
@@ -225,14 +232,14 @@ QQC2.Page
 
             readonly property int _margins : footBarMargins            
             
-            Layout.leftMargin: footBarAligment === Qt.AlignLeft ? _margins : (floatingFootBar ? space.small : 0)
-			Layout.rightMargin: footBarAligment === Qt.AlignRight ? _margins : (floatingFootBar ? space.small : 0)
-			Layout.bottomMargin: floatingFootBar ? _margins : 0
+            Layout.leftMargin: footBarAligment === Qt.AlignLeft ? _margins : (floating ? space.small : 0)
+			Layout.rightMargin: footBarAligment === Qt.AlignRight ? _margins : (floating ? space.small : 0)
+			Layout.bottomMargin: floating ? _margins : 0
             Layout.alignment: footBarAligment
             Layout.fillWidth: true
             Layout.preferredHeight: implicitHeight
             //            Layout.minimumWidth: parent.width * (floatingBar ? 0.4 :  1)
-            Layout.maximumWidth: floatingFootBar ? middleLayout.implicitWidth + layout.implicitWidth : parent.width
+            Layout.maximumWidth: floating ? middleLayout.implicitWidth + layout.implicitWidth : parent.width
             Layout.row: altToolBars ? 2 : 3
             Layout.column: 1
             z: container.z +1
@@ -245,7 +252,7 @@ QQC2.Page
 				textColor : control.colorScheme.textColor
 			}
 			
-            drawBorder: !floatingFootBar
+            drawBorder: !floating
 		}
     }
 
@@ -259,6 +266,5 @@ QQC2.Page
     {
         if(allowRiseContent)
             flickable.flick(0, flickable.contentHeight* 2)
-
     }
 }

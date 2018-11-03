@@ -93,7 +93,7 @@ Maui.Dialog
 			separatorVisible: wideMode
 			initialPage: [sidebar, content]
 			defaultColumnWidth: sidebarWidth
-				interactive: currentIndex === 1
+			interactive: currentIndex === 1
 				
 				Maui.PlacesSidebar
 				{

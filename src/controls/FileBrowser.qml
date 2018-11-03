@@ -332,7 +332,7 @@ Maui.Page
 	headBarExit: false
 	headBarVisible: currentPathType !== FMList.APPS_PATH
 	altToolBars: isMobile
-	
+	headBar.plegable: true
 	headBar.rightContent: [
 	
 	Maui.ToolButton
