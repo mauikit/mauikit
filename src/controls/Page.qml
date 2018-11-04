@@ -98,8 +98,8 @@ QQC2.Page
             Layout.fillWidth: !folded
             Layout.rightMargin: plegable ? space.big : (floating ? space.small : 0)
 			Layout.leftMargin: plegable ? space.big : (floating ? space.small : 0)
-			Layout.bottomMargin: plegable ? space.big : 0
-			Layout.topMargin: plegable ? space.big : 0
+            Layout.bottomMargin: plegable ? space.big : 0
+            Layout.topMargin: plegable && !altToolBars ? space.big : 0
 			Layout.alignment: plegable ? Qt.AlignRight : undefined
 		
             Layout.row: altToolBars ? 3 : 1
@@ -119,7 +119,7 @@ QQC2.Page
             
             height: toolBarHeightAlt
             implicitHeight: toolBarHeightAlt
-            plegable: control.width < Kirigami.Units.gridUnit * 15
+            plegable: control.width < Kirigami.Units.gridUnit * 20
             visible: headBarVisible && count > 0
             clip: false
             z: container.z +1
@@ -170,6 +170,8 @@ QQC2.Page
                               topToolBar.bottom
 							else if(floatingBar && footBarOverlap && headBarVisible && !altToolBars && topToolBar.plegable)
 								  topToolBar.top
+                          else if(floatingBar && footBarOverlap && headBarVisible && altToolBars && topToolBar.plegable)
+                                rootLayout.top
                           else if(floatingBar && footBarOverlap && !topToolBar.plegable && altToolBars)
 							  rootLayout.top
 						else if(floatingBar && footBarOverlap && !topToolBar.plegable && !altToolBars)
@@ -179,7 +181,7 @@ QQC2.Page
 
 			anchors.bottom: if(floatingBar && footBarOverlap && !altToolBars)
                                 rootLayout.bottom
-							else if(floatingBar && footBarOverlap && altToolBars && headBarVisible)
+                            else if(floatingBar && footBarOverlap && altToolBars && headBarVisible && !topToolBar.plegable)
                                 topToolBar.top
 							else if(floatingBar && footBarOverlap && altToolBars && headBarVisible && topToolBar.plegable)
 								topToolBar.bottom
@@ -243,7 +245,7 @@ QQC2.Page
             
             Layout.leftMargin: footBarAligment === Qt.AlignLeft ? _margins : (floating ? space.small : 0)
 			Layout.rightMargin: footBarAligment === Qt.AlignRight ? _margins : (floating ? space.small : 0)
-			Layout.bottomMargin: floating ? _margins : 0
+            Layout.bottomMargin: floating ? _margins : 0
             Layout.alignment: footBarAligment
             Layout.fillWidth: true
             Layout.preferredHeight: implicitHeight

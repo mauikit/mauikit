@@ -75,27 +75,26 @@ ItemDelegate
         }
     }
 
-    Maui.ToolButton
+    Maui.Badge
     {
         id: leftEmblemIcon
-        isMask: false
-        size: emblemSize
         iconName: leftEmblem
         visible: (isHovered || keepEmblemOverlay) && showEmblem && leftEmblem
         z: 999
         anchors.top: parent.top
         anchors.left: parent.left
         onClicked: leftEmblemClicked(index)
+        Component.onCompleted: leftEmblemIcon.item.isMask = false
+        size: iconSizes.small
     }
 
-    Maui.ToolButton
+    Maui.Badge
     {
         id: rightEmblemIcon
-        isMask: false
-        size: emblemSize
         iconName: rightEmblem
         visible: (isHovered || keepEmblemOverlay) && showEmblem && rightEmblem
         z: 999
+        size: iconSizes.medium
         anchors.top: parent.top
         anchors.right: parent.right
         onClicked: rightEmblemClicked(index)
@@ -177,7 +176,7 @@ ItemDelegate
                 id: loader
                 anchors.centerIn: parent
                 sourceComponent: model.mime ? (model.mime.indexOf("image") > -1 && showThumbnails ? imgComponent :
-                                                                    iconComponent) : iconComponent
+                                                                                                    iconComponent) : iconComponent
 
             }
 
@@ -190,11 +189,11 @@ ItemDelegate
 
         Item
         {
-			Layout.fillWidth: true
-			Layout.maximumHeight: (isDetails ? parent.height :  fontSizes.default * 5)
-			Layout.minimumHeight: (isDetails ? parent.height :  control.height - folderSize - space.tiny)
-			Layout.preferredHeight: (isDetails ? parent.height : control.height - folderSize - space.tiny)
-			
+            Layout.fillWidth: true
+            Layout.maximumHeight: (isDetails ? parent.height :  fontSizes.default * 5)
+            Layout.minimumHeight: (isDetails ? parent.height :  control.height - folderSize - space.tiny)
+            Layout.preferredHeight: (isDetails ? parent.height : control.height - folderSize - space.tiny)
+
             Layout.row: isDetails ? 1 : 2
             Layout.column: isDetails ? 2 : 1
 
@@ -202,7 +201,7 @@ ItemDelegate
 
             Label
             {
-				id: label
+                id: label
                 visible: showLabel
                 text: model.label
                 width: parent.width

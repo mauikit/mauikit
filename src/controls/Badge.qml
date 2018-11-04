@@ -38,7 +38,7 @@ Rectangle
 	}
 	property alias colorScheme : colorScheme
 	/***************************/
-	
+    property alias item : loader.item
 	property bool hovered : false
 	
 	property int size: isMobile ? iconSizes.medium : iconSizes.small
@@ -57,11 +57,11 @@ Rectangle
 	color: colorScheme.backgroundColor
 	border.color: colorScheme.borderColor
 	
-	clip: false
-	
+    clip: false
 	
 	Loader
 	{
+        id: loader
 		anchors.fill: parent
 		sourceComponent: control.text.length && !control.iconName.length ? labelComponent : (!control.text.length && control.iconName.length ? iconComponent : undefined)
 	}

@@ -56,6 +56,7 @@ T.ScrollBar {
         color: control.pressed ? control.Material.scrollBarPressedColor :
                control.interactive && control.hovered ? control.Material.scrollBarHoveredColor : control.Material.scrollBarColor
         opacity: 0.0
+        radius: Math.min(control.width, control.height)
     }
 
     background: Rectangle {
@@ -64,6 +65,8 @@ T.ScrollBar {
         color: "#0e000000"
         opacity: 0.0
         visible: control.interactive
+        radius: Math.min(control.width, control.height)
+
     }
 
     states: State {

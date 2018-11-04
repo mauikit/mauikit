@@ -522,10 +522,10 @@ Maui.Page
 		{
 			id: selectionBarLoader
 			Layout.fillWidth: true
-			Layout.preferredHeight: control.selectionBar ? (control.selectionBar.visible ? iconSizes.big + space.large + space.small : 0) : 0
-			Layout.leftMargin: contentMargins*2
-			Layout.rightMargin: contentMargins*2
-			Layout.bottomMargin: contentMargins*2
+            Layout.preferredHeight: control.selectionBar ? (control.selectionBar.visible ? control.selectionBar.barHeight : 0) : 0
+            Layout.leftMargin:  contentMargins * (isMobile ? 3 : 2)
+            Layout.rightMargin: contentMargins * (isMobile ? 3 : 2)
+            Layout.bottomMargin: contentMargins*2
 			z: holder.z +1
 		}
 	}

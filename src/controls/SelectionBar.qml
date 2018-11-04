@@ -32,9 +32,10 @@ Maui.Item
     property var selectedPaths: []
     property alias selectionList : selectionList
     property alias anim : anim
-    property int barHeight : iconSizes.big + space.large + space.small
+    property int barHeight : itemHeight + space.large
     property color animColor : "black"
-
+    property int itemHeight: iconSizes.big + space.big
+    property int itemWidth:  iconSizes.big + (isMobile? space.big : space.large) + space.big
     property int position: Qt.Horizontal
     property string iconName : "overflow-menu"
     property bool iconVisible: true
@@ -185,8 +186,8 @@ Maui.Item
                     
                     anchors.verticalCenter: position === Qt.Horizontal ? parent.verticalCenter : undefined
                     anchors.horizontalCenter: position === Qt.Vertical ? parent.horizontalCenter : undefined
-                    height:  iconSizes.big + (isMobile ? space.medium : space.big)
-                    width: iconSizes.big + (isMobile? space.big : space.large) + space.big
+                    height:  itemHeight
+                    width: itemWidth
                     folderSize: iconSizes.big
                     showLabel: true
                     emblemAdded: true
