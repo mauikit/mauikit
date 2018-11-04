@@ -119,7 +119,7 @@ QQC2.Page
             
             height: toolBarHeightAlt
             implicitHeight: toolBarHeightAlt
-            plegable: control.width < Kirigami.Units.gridUnit * 20
+            plegable: control.width < Kirigami.Units.gridUnit * 15
             visible: headBarVisible && count > 0
             clip: false
             z: container.z +1
@@ -174,6 +174,8 @@ QQC2.Page
                                 rootLayout.top
                           else if(floatingBar && footBarOverlap && !topToolBar.plegable && altToolBars)
 							  rootLayout.top
+                          else if(!floatingBar && !footBarOverlap && topToolBar.plegable && !altToolBars)
+                              rootLayout.top
 						else if(floatingBar && footBarOverlap && !topToolBar.plegable && !altToolBars)
 							rootLayout.bottom
                           else
@@ -183,6 +185,8 @@ QQC2.Page
                                 rootLayout.bottom
                             else if(floatingBar && footBarOverlap && altToolBars && headBarVisible && !topToolBar.plegable)
                                 topToolBar.top
+                            else if(!floatingBar && !footBarOverlap && topToolBar.plegable && !altToolBars )
+                                rootLayout.bottom
 							else if(floatingBar && footBarOverlap && altToolBars && headBarVisible && topToolBar.plegable)
 								topToolBar.bottom
 							else if(floatingBar && footBarOverlap && altToolBars && !headBarVisible && topToolBar.plegable)
