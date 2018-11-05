@@ -40,15 +40,15 @@ T.CheckBox {
 
     hoverEnabled: true
 
-    indicator: CheckIndicator {
-        LayoutMirroring.enabled: controlRoot.mirrored
-        LayoutMirroring.childrenInherit: true
-        anchors {
-            left: parent.left
-            verticalCenter: parent.verticalCenter
-        }
-        control: controlRoot
-    }
+//    indicator: CheckIndicator {
+//        LayoutMirroring.enabled: controlRoot.mirrored
+//        LayoutMirroring.childrenInherit: true
+//        anchors {
+//            left: parent.left
+//            verticalCenter: parent.verticalCenter
+//        }
+//        control: controlRoot
+//    }
 
     contentItem: Label {
         leftPadding: controlRoot.indicator && !controlRoot.mirrored ? controlRoot.indicator.width + controlRoot.spacing : 0
