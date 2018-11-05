@@ -131,7 +131,7 @@ ItemDelegate
                         anchors.centerIn: parent
                         width: img.sourceSize.width
                         height: img.sourceSize.height
-                        radius: Kirigami.Units.devicePixelRatio * 3
+                        radius: radiusV
                     }
                 }
             }
