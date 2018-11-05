@@ -355,7 +355,7 @@ backgroundColor.b, 0.7))
             Shortcut
             {
                 sequence: "Forward"
-                onActivated: __pageStack.goForward();
+                onActivated: goFowardTriggered();
             }
             
             Shortcut

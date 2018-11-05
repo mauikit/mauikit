@@ -26,7 +26,7 @@ import "private"
 ToolButton
 {
     id: control
-    
+    focusPolicy: Qt.NoFocus
     /* Controlc color scheming */
 	ColorScheme 
 	{

@@ -40,12 +40,12 @@ T.ScrollView {
     Kirigami.Theme.inherit: !background || !background.visible
 
     //create a background only after Component.onCompleted, see on the component creation below for explanation
-    Component.onCompleted: {
-        if (!controlRoot.background) {
-            controlRoot.background = backgroundComponent.createObject(controlRoot);
-            print(controlRoot.background.width);
-        }
-    }
+//    Component.onCompleted: {
+//        if (!controlRoot.background) {
+//            controlRoot.background = backgroundComponent.createObject(controlRoot);
+//            print(controlRoot.background.width);
+//        }
+//    }
 
     onChildrenChanged: {
         if (controlRoot.children[controlRoot.children.length - 1].hasOwnProperty("contentY")) {

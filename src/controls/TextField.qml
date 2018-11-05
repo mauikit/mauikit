@@ -38,7 +38,9 @@ TextField
 	
 	property alias menu : entryMenu
 	signal cleared()
-	
+    signal goBackTriggered();
+    signal goFowardTriggered();
+
 	implicitWidth: Math.max(background ? background.implicitWidth : 0,
 							placeholderText ? placeholder.implicitWidth + leftPadding + rightPadding : 0)
 	|| contentWidth + leftPadding + rightPadding
@@ -72,6 +74,30 @@ TextField
 			entryMenu.popup()
 	}
 	
+    Keys.onBackPressed:
+    {
+        goBackTriggered();
+        event.accepted = true
+    }
+
+    Shortcut
+    {
+        sequence: "Forward"
+        onActivated: goFowardTriggered();
+    }
+
+    Shortcut
+    {
+        sequence: StandardKey.Forward
+        onActivated: goFowardTriggered();
+    }
+
+    Shortcut
+    {
+        sequence: StandardKey.Back
+        onActivated: goBackTriggered();
+    }
+
 	Maui.ToolButton
 	{
 		id: clearButton

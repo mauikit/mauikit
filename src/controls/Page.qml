@@ -120,7 +120,7 @@ QQC2.Page
 
             height: toolBarHeightAlt
             implicitHeight: toolBarHeightAlt
-            plegable: control.width < Kirigami.Units.gridUnit * 15
+            plegable: control.width < Kirigami.Units.gridUnit * 17
             visible: headBarVisible && count > 0
             clip: false
             z: container.z +1

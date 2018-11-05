@@ -59,7 +59,7 @@ Maui.Popup
 	widthHint: 0.9
 	heightHint: 0.9
 	z: 1
-	clip: false
+    clip: false
 	
 	Maui.Popup
 	{
@@ -176,7 +176,7 @@ Maui.Popup
 			}
 			
 			Item
-			{				
+            {
 				ColumnLayout        
 				{
 					id: _pageContent
@@ -184,7 +184,7 @@ Maui.Popup
 					width: parent.width
 					height: implicitHeight
 					spacing: space.medium
-					
+
 				
 					Label
 					{

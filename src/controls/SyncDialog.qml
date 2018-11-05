@@ -25,7 +25,7 @@ import "private"
 Maui.Dialog
 {
 	id: control
-	
+    clip: true
 	title: qsTr("Sync...")
 	message: qsTr("Enter your server address to sync your information.")
 	entryField: true
