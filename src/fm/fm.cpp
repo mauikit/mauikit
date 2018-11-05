@@ -176,14 +176,18 @@ FMH::MODEL_LIST FM::search(const QString& query, const QString &path, const bool
 		if(hidden)
 			dirFilter = dirFilter | QDir::Hidden | QDir::System;
 		
-		QDirIterator it (path, filters, dirFilter, QDirIterator::NoIteratorFlags);
+		QDirIterator it (path, filters, dirFilter, QDirIterator::Subdirectories);
 		while (it.hasNext())
 		{
 			auto url = it.next();
 			auto info = it.fileInfo();
 			qDebug()<< info.completeBaseName() <<  info.completeBaseName().contains(query);
 			if(info.completeBaseName().contains(query, Qt::CaseInsensitive))			
+			{
+				
 				content << FMH::getFileInfoModel(url);
+				
+			}
 		}		
 	}
 	

@@ -161,7 +161,9 @@ backgroundColor.b, 0.7))
     /*************************************************/
     signal menuButtonClicked();
     signal searchButtonClicked();
-
+	signal goBackTriggered();
+	signal goFowardTriggered();
+	
     //    overlay.modal: Rectangle
     //    {
     //        color: Color.transparent(altColor, 0.5)
@@ -319,46 +321,62 @@ backgroundColor.b, 0.7))
             //FIXME
             onCurrentIndexChanged: root.reachableMode = false;
 
-            function goBack() {
-                //NOTE: drawers are handling the back button by themselves
-                var backEvent = {accepted: false}
-                if (root.pageStack.currentIndex >= 1) {
-                    root.pageStack.currentItem.backRequested(backEvent);
-                    if (!backEvent.accepted) {
-                        root.pageStack.flickBack();
-                        backEvent.accepted = true;
-                    }
-                }
-
-                if (Kirigami.Settings.isMobile && !backEvent.accepted && Qt.platform.os !== "ios") {
-                    Qt.quit();
-                }
-            }
-            function goForward() {
-                root.pageStack.currentIndex = Math.min(root.pageStack.depth-1, root.pageStack.currentIndex + 1);
-            }
-            Keys.onBackPressed: {
-                goBack();
+//             function goBack() 
+// 			{
+//                 //NOTE: drawers are handling the back button by themselves
+//                 var backEvent = {accepted: false}
+//                 if (root.pageStack.currentIndex >= 1)
+// 				{
+//                     root.pageStack.currentItem.backRequested(backEvent);
+//                     if (!backEvent.accepted)
+// 					{
+//                         root.pageStack.flickBack();
+//                         backEvent.accepted = true;
+//                     }
+//                 }
+// 
+//                 if (Kirigami.Settings.isMobile && !backEvent.accepted && Qt.platform.os !== "ios") 
+// 				{
+//                     Qt.quit();
+//                 }
+//             }
+//             
+//             function goForward()
+// 			{
+//                 root.pageStack.currentIndex = Math.min(root.pageStack.depth-1, root.pageStack.currentIndex + 1);
+//             }
+            
+            Keys.onBackPressed:
+            {
+                goBackTriggered();
                 event.accepted = true
             }
-            Shortcut {
+            
+            Shortcut
+            {
                 sequence: "Forward"
                 onActivated: __pageStack.goForward();
             }
-            Shortcut {
+            
+            Shortcut
+            {
                 sequence: StandardKey.Forward
-                onActivated: __pageStack.goForward();
+                onActivated: goFowardTriggered();
             }
-            Shortcut {
+            
+            Shortcut
+            {
                 sequence: StandardKey.Back
-                onActivated: __pageStack.goBack();
+                onActivated: goBackTriggered();
             }
 
-            Rectangle {
+            Rectangle 
+            {
                 z: -1
                 anchors.fill: parent
                 color: Kirigami.Theme.backgroundColor
             }
+            
             focus: true
 
             layer.enabled: page.contentIsRised && floatingBar && footBarOverlap

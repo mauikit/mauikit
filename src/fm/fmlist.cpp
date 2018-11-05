@@ -56,9 +56,10 @@ void FMList::setList()
 {	
 	switch(this->pathType)
 	{
-		case FMH::PATHTYPE_KEY::SEARCH_PATH:			
-			this->list = FM::search(QString(this->path).right(this->path.length()- 1 - this->path.lastIndexOf("/")), this->prevHistory.length() > 1 ? this->prevHistory[this->prevHistory.length()-2] : this->path);
-			break;
+		case FMH::PATHTYPE_KEY::SEARCH_PATH:
+			this->list.clear();
+			this->search(QString(this->path).right(this->path.length()- 1 - this->path.lastIndexOf("/")), this->prevHistory.length() > 1 ? this->prevHistory[this->prevHistory.length()-2] : this->path);
+			return;
 			
 		case FMH::PATHTYPE_KEY::APPS_PATH:
 			this->list = FM::getAppsContent(this->path);
@@ -459,5 +460,34 @@ void FMList::setIsBookmark(const bool& value)
 		this->fm->removeBookmark(this->path);
 	
 	emit this->isBookmarkChanged();
+}
+
+void FMList::search(const QString& query, const QString &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)
+{
+	FMH::MODEL_LIST content;
+	
+	if (FM::isDir(path))
+	{
+		QDir::Filters dirFilter;
+		
+		dirFilter = (onlyDirs ? QDir::AllDirs | QDir::NoDotDot | QDir::NoDot :
+		QDir::Files | QDir::AllDirs | QDir::NoDotDot | QDir::NoDot);
+		
+		if(hidden)
+			dirFilter = dirFilter | QDir::Hidden | QDir::System;
+		
+		QDirIterator it (path, filters, dirFilter, QDirIterator::Subdirectories);
+		while (it.hasNext())
+		{
+			auto url = it.next();
+			auto info = it.fileInfo();
+			if(info.completeBaseName().contains(query, Qt::CaseInsensitive))			
+			{
+				emit preItemAppended();
+				this->list << FMH::getFileInfoModel(url);
+				emit postItemAppended();
+			}
+		}		
+	}
 }
 

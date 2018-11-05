@@ -68,6 +68,7 @@ void FMModel::setList(FMList *value)
 		connect(this->fmlist, &FMList::preItemAppended, this, [=]()
 		{
 			const int index = fmlist->items().size();
+			qDebug()<< "Inserting new item";
 			beginInsertRows(QModelIndex(), index, index);
 		});
 		
