@@ -34,7 +34,7 @@ public:
     FMH::MODEL_LIST  getBookmarks();
 
     /** Syncing **/
-    void  getCloudServerContent(const QString &server);
+    void getCloudServerContent(const QString &server);
     FMH::MODEL_LIST getCloudAccounts();
 
 	/*** START STATIC METHODS ***/

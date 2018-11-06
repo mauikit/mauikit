@@ -19,16 +19,10 @@
 
 #include "fm.h"
 #include "utils.h"
-
-
-#include <QObject>
-#ifdef Q_OS_ANDROID
 #include "tagging.h"
 #include "syncing/syncing.h"
-#else
-#include <MauiKit/tagging.h>
-#include <MauiKit/syncing.h>
-#endif
+
+#include <QObject>
 
 #include <QFlags>
 #include <QDateTime>

@@ -28,7 +28,7 @@ include(ECMQtDeclareLoggingCategory)
 include(ECMAddQch)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 
-find_package(webdavclient REQUIRED)
+# find_package(webdavclient REQUIRED)
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Qml 
     Sql Core Quick Gui Svg QuickControls2 Network DBus)
 ecm_find_qmlmodule(QtGraphicalEffects 1.0)
