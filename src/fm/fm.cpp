@@ -19,8 +19,16 @@
 
 #include "fm.h"
 #include "utils.h"
+
+
+#include <QObject>
+#ifdef Q_OS_ANDROID
 #include "tagging.h"
 #include "syncing/syncing.h"
+#else
+#include <MauiKit/tagging.h>
+#include <MauiKit/syncing.h>
+#endif
 
 #include <QFlags>
 #include <QDateTime>
@@ -32,7 +40,7 @@
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
 #else
-#include "mauikde.h"
+#include <MauiKit/mauikde.h>
 #endif
 
 

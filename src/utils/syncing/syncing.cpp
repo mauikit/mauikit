@@ -3,9 +3,15 @@
 #include "WebDAVClient.hpp"
 #include "WebDAVItem.hpp"
 #include "WebDAVReply.hpp"
+#include "fm.h"
+#else
+#include <libwebdavclient/WebDAVClient.hpp>
+#include <libwebdavclient/WebDAVItem.hpp>
+#include <libwebdavclient/WebDAVReply.hpp>
+#include <MauiKit/fm.h>
 #endif
 
-#include "fm.h"
+
 
 Syncing::Syncing(QObject *parent) : QObject(parent)
 {

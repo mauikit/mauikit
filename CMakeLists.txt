@@ -14,7 +14,7 @@ project(mauikit VERSION ${MAUIKIT_VERSION})
 
 find_package(ECM 5.45.0 NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} 
-${ECM_KDE_MODULE_DIR})
+    ${ECM_KDE_MODULE_DIR})
 
 include(GenerateExportHeader)
 include(ECMSetupVersion)
@@ -28,19 +28,20 @@ include(ECMQtDeclareLoggingCategory)
 include(ECMAddQch)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 
+find_package(webdavclient REQUIRED)
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Qml 
-Sql Core Quick Gui Svg QuickControls2 Network DBus)
+    Sql Core Quick Gui Svg QuickControls2 Network DBus)
 ecm_find_qmlmodule(QtGraphicalEffects 1.0)
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_BINARY_DIR}/src
-        
+
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils
     ${CMAKE_CURRENT_BINARY_DIR}/src/utils
     
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/tagging
-    ${CMAKE_CURRENT_BINARY_DIR}/src/utils/tagging 
+    ${CMAKE_CURRENT_BINARY_DIR}/src/utils/tagging
     
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/editor
     ${CMAKE_CURRENT_BINARY_DIR}/src/utils/editor
@@ -56,33 +57,33 @@ include_directories(
     )
 
 set(mauikit_SRCS
-    src/mauikit.cpp  
+    src/mauikit.cpp
     src/utils/handy.cpp
     )
-    
+
 set(mauikit_HDRS
     src/mauikit.h
     src/utils.h
     src/utils/handy.h
     )
-    
+
 set(editor_SRCS
     src/utils/editor/documenthandler.cpp
-    )    
-    
+    )
+
 set(editor_HDRS
     src/utils/editor/documenthandler.cpp
     )
-    
+
 set(fm_SRCS
     src/fm/fm.cpp
     src/fm/fmdb.cpp
     src/fm/fmmodel.cpp
     src/fm/fmlist.cpp
-	src/fm/placeslist.cpp
-	src/fm/placesmodel.cpp
-    )    
-    
+    src/fm/placeslist.cpp
+    src/fm/placesmodel.cpp
+    )
+
 set(fm_HDRS
     src/fm/fmh.h
     src/fm/fm.h
@@ -92,17 +93,26 @@ set(fm_HDRS
     src/fm/placeslist.h
     src/fm/placesmodel.h
     )
-    
+
 set(tagging_SRCS
     src/utils/tagging/tagging.cpp
     src/utils/tagging/tagdb.cpp
     )
-    
+
 set(tagging_HDRS
     src/utils/tagging/tagging.h
     src/utils/tagging/tagdb.h
     src/utils/tagging/tag.h
     )
+
+set(syncing_SRCS
+    src/utils/syncing/syncing.cpp
+    )
+
+set(syncing_HDRS
+    src/utils/syncing/syncing.h
+    )
+
 
 #use dbus on linux, bsd etc, but not andoid and apple stuff
 if(ANDROID)
@@ -126,21 +136,21 @@ if(ANDROID)
         ${MauiAndroid_icons_RESOURCES}
         )
 else()
-	find_package(Qt5 REQUIRED COMPONENTS WebEngine)
-    find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications 
-Config Service KIO ConfigWidgets)
+    find_package(Qt5 REQUIRED COMPONENTS WebEngine)
+    find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications
+        Config Service KIO ConfigWidgets)
 
     set(mauikit_KDE_SRCS
         src/kde/mauikde.cpp
         src/kde/kdeconnect.cpp
         )
-        
+
     set(mauikit_KDE_HDRS
         src/kde/mauikde.h
         src/kde/kdeconnect.h
         )
-     
-    set(MAUIKDE_KF5LIBS 
+
+    set(MAUIKDE_KF5LIBS
         KF5::ConfigCore
         KF5::Notifications
         KF5::I18n KF5::Service
@@ -151,7 +161,7 @@ Config Service KIO ConfigWidgets)
         KF5::KIONTLM
         KF5::ConfigWidgets
         Qt5::WebEngine
-        )          
+        )
 endif()
 # set(CMAKE_AUTORCC ON)
 
@@ -163,27 +173,30 @@ qt5_add_resources(fm_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/fm/fm.qrc)
 
 add_library(MauiKit 
 
-${fm_HDRS}
-${fm_SRCS}
-${fm_RESOURCES}
+    ${fm_HDRS}
+    ${fm_SRCS}
+    ${fm_RESOURCES}
 
-${editor_HDRS}
-${editor_SRCS}
+    ${editor_HDRS}
+    ${editor_SRCS}
 
-${tagging_HDRS}
-${tagging_SRCS}
-${tagging_RESOURCES}
+    ${syncing_HDRS}
+    ${syncing_SRCS}
 
-${mauikit_HDRS} 
-${mauikit_SRCS} 
-${mauikit_RESOURCES} 
-${mauikit_ASSETS}
+    ${tagging_HDRS}
+    ${tagging_SRCS}
+    ${tagging_RESOURCES}
 
-${mauikit_Android_SRCS}
+    ${mauikit_HDRS}
+    ${mauikit_SRCS}
+    ${mauikit_RESOURCES}
+    ${mauikit_ASSETS}
 
-${mauikit_KDE_HDRS}
-${mauikit_KDE_SRCS}
-)
+    ${mauikit_Android_SRCS}
+
+    ${mauikit_KDE_HDRS}
+    ${mauikit_KDE_SRCS}
+    )
 
 target_link_libraries(MauiKit
     PUBLIC
@@ -197,6 +210,7 @@ target_link_libraries(MauiKit
     Qt5::Network
     ${MAUIKDE_KF5LIBS}
     ${MAUIANDROID_LIBS}
+    webdavclient
     )
 
 if (ANDROID)
@@ -211,37 +225,37 @@ generate_export_header(MauiKit BASE_NAME MauiKit)
 install(TARGETS MauiKit EXPORT MauiKitTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_include_directories(MauiKit 
-INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/MauiKit>")
+    INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/MauiKit>")
 
 add_custom_target(copy)
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/org/kde/mauikit)
 add_custom_command(TARGET copy PRE_BUILD COMMAND ${CMAKE_COMMAND} 
--E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/src/controls 
-${CMAKE_BINARY_DIR}/bin/org/kde/mauikit/)
+    -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/src/controls
+    ${CMAKE_BINARY_DIR}/bin/org/kde/mauikit/)
 
 add_dependencies(MauiKit copy)
 
 install(DIRECTORY src/controls/ DESTINATION 
-${KDE_INSTALL_QMLDIR}/org/kde/mauikit)
+    ${KDE_INSTALL_QMLDIR}/org/kde/mauikit)
 
 install(TARGETS MauiKit DESTINATION 
-${KDE_INSTALL_QMLDIR}/org/kde/mauikit)
+    ${KDE_INSTALL_QMLDIR}/org/kde/mauikit)
 
 install(FILES
-            ${mauikit_HDRS} 
-            ${mauikit_KDE_HDRS}
-            ${tagging_HDRS}
-            ${fm_HDRS}
-            ${CMAKE_CURRENT_BINARY_DIR}/mauikit_export.h
-        DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit
-        COMPONENT Devel)
-        
+    ${mauikit_HDRS}
+    ${mauikit_KDE_HDRS}
+    ${tagging_HDRS}
+    ${fm_HDRS}
+    ${CMAKE_CURRENT_BINARY_DIR}/mauikit_export.h
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit
+    COMPONENT Devel)
+
 ##INSTALL MAUI STYLE
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/maui-style DESTINATION ${KDE_INSTALL_QMLDIR}/QtQuick/Controls.2)   
-   
+
 ##CMAKE PARTS   
-   
+
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/MauiKit")
 
 ecm_setup_version(${MAUIKIT_VERSION}
@@ -249,23 +263,23 @@ ecm_setup_version(${MAUIKIT_VERSION}
     VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/mauikit_version.h"
     PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/MauiKitConfigVersion.cmake"
     SOVERSION 5
-)
+    )
 
 configure_package_config_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/MauiKitConfig.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/MauiKitConfig.cmake"
     INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
     PATH_VARS  KF5_INCLUDE_INSTALL_DIR CMAKE_INSTALL_PREFIX
-)
+    )
 
 install(FILES
     "${CMAKE_CURRENT_BINARY_DIR}/MauiKitConfig.cmake"
     "${CMAKE_CURRENT_BINARY_DIR}/MauiKitConfigVersion.cmake"
     DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
     COMPONENT Devel
-)
+    )
 
 install(EXPORT MauiKitTargets
     DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
     FILE MauiKitTargets.cmake
-)
+    )

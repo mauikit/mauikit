@@ -17,8 +17,12 @@
  */
 
 #include "fmlist.h"
+#include <QObject>
+#ifdef Q_OS_ANDROID
 #include "fm.h"
-
+#else
+#include <MauiKit/fm.h>
+#endif
 #include <QFileSystemWatcher>
 
 FMList::FMList(QObject *parent) : QObject(parent)
