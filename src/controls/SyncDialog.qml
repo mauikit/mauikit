@@ -21,60 +21,62 @@ import QtQuick 2.0
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
-import "private"
+
 Maui.Dialog
 {
 	id: control
-    clip: true
-	title: qsTr("Sync...")
-	message: qsTr("Enter your server address to sync your information.")
-	entryField: true
-	acceptText: swipeView.currentIndex === 0 ? qsTr("Continue") : qsTr("Finish")
-	rejectText: swipeView.currentIndex === 0 ? qsTr("Cancel") : qsTr("Return")
-	textEntry.placeholderText: "Server Address"
-	
-	maxHeight: swipeView.currentIndex === 0 ? unit * 300 : unit * 600
-	maxWidth:swipeView.currentIndex === 0 ? unit * 300 : unit * 500
-	
+
+    acceptText: qsTr("Signin")
+    rejectText: qsTr("Cancel")
+
+    maxHeight: unit * 300
+    maxWidth: maxHeight
+
 	onAccepted:
-	{
-		if(swipeView.currentIndex === 0)
-		{
-			
-			swipeView.currentIndex = 1
-			webView.url = textEntry.text
-		
-		}else
-		{
-			console.log("login")
-		}
+    {
+        var server = serverField.text
+        var user = userField.text
+        var password = passwordField.text
+
+        if(server.length && user.length && password.length)
+            Maui.FM.addCloudAccount(server, user, password);
 	}
 	
-	onRejected:
-	{
-		if(swipeView.currentIndex === 1)
-		{
-			swipeView.currentIndex = 0
-		}else
-		{
-			close()
-		}
-	}
-	
-	
-	swipeViewContent: 
-	[
-	
-	Item
-	{
-		
-		SyncLinux
-		{
-			id: webView
-			anchors.fill: parent
-		}
-	}
-	
-	]
-	
+    onRejected:	close()
+
+    Item
+    {
+        anchors.fill: parent
+
+        ColumnLayout
+        {
+            anchors.centerIn: parent
+            width: parent.width
+            Maui.TextField
+            {
+                id: serverField
+                Layout.fillWidth: true
+                placeholderText: qsTr("Server address...")
+                text: "https://cloud.opendesktop.cc/remote.php/webdav/"
+            }
+
+            Maui.TextField
+            {
+                id: userField
+                Layout.fillWidth: true
+                placeholderText: qsTr("User name...")
+                inputMethodHints: Qt.ImhNoAutoUppercase
+            }
+
+            Maui.TextField
+            {
+                id: passwordField
+                Layout.fillWidth: true
+                placeholderText: qsTr("User password...")
+                echoMode: TextInput.PasswordEchoOnEdit
+                inputMethodHints: Qt.ImhNoAutoUppercase
+
+            }
+        }
+    }
 }

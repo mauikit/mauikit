@@ -26,14 +26,10 @@ class QFileSystemWatcher;
 class FM;
 class PlacesList : public QObject
 {
-    Q_OBJECT    
-//     typedef QList<int> Group;
-	
+    Q_OBJECT
 	Q_PROPERTY(QList<int> groups READ getGroups WRITE setGroups NOTIFY groupsChanged())	
 
 public:  
-// 	Q_ENUMS(FMH::PATHTYPE_KEY)
-	
 	PlacesList(QObject *parent = nullptr);
     ~PlacesList();
 	
@@ -61,7 +57,7 @@ private:
 	void watchPath(const QString &path);
 	
 	void setCount();
-	int indexOf(const QString &path);
+    int indexOf(const QString &path);
 	
 signals:
 	void groupsChanged();

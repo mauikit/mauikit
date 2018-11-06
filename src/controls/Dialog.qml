@@ -184,7 +184,6 @@ Maui.Popup
 					width: parent.width
 					height: implicitHeight
 					spacing: space.medium
-
 				
 					Label
 					{
@@ -203,8 +202,7 @@ Maui.Popup
 						font.bold: true
 						font.pointSize: fontSizes.huge
 						//                         elide: Qt.ElideRight					
-					}                    
-				
+                    }
 					
 					ScrollView
 					{
@@ -215,7 +213,8 @@ Maui.Popup
 						Layout.alignment: Qt.AlignLeft | Qt.AlignTop
 						padding: 0                
 						clip: true
-						
+                        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+
 						TextArea
 						{
 							id: body

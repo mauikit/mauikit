@@ -1,7 +1,15 @@
 CREATE TABLE IF NOT EXISTS BOOKMARKS (
 path TEXT PRIMARY KEY,
 label TEXT,
-date DATE
+date DATE,
+test TEXT
+);
+
+CREATE TABLE IF NOT EXISTS CLOUDS (
+server TEXT,
+user TEXT,
+password TEXT,
+PRIMARY KEY(server, user)
 );
 
 COMMIT;

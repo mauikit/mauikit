@@ -16,6 +16,8 @@ linux:unix:!android {
 
     message(Building Maui helpers for Android)
     include($$PWD/src/android/android.pri)
+    include($$PWD/src/utils/syncing/openssl/openssl.pri)
+    include($$PWD/src/utils/syncing/libwebdavclient/webdavclient.pri)
 
 } else {
     message("Unknown configuration")
@@ -39,7 +41,8 @@ HEADERS += \
     $$PWD/src/fm/placeslist.h \
     $$PWD/src/fm/placesmodel.h \
     $$PWD/src/utils/editor/documenthandler.h \
-    $$PWD/src/utils/handy.h
+    $$PWD/src/utils/handy.h \
+    $$PWD/src/utils/syncing/syncing.h
 
 SOURCES += \
     $$PWD/src/mauikit.cpp \
@@ -49,8 +52,9 @@ SOURCES += \
     $$PWD/src/fm/fmlist.cpp \
     $$PWD/src/fm/placeslist.cpp \    
     $$PWD/src/fm/placesmodel.cpp \    
-	$$PWD/src/utils//editor/documenthandler.cpp \
-    $$PWD/src/utils/handy.cpp
+    $$PWD/src/utils//editor/documenthandler.cpp \
+    $$PWD/src/utils/handy.cpp \
+    $$PWD/src/utils/syncing/syncing.cpp
 
 DEPENDPATH += \
     $$PWD/src \

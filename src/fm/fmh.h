@@ -103,7 +103,10 @@ namespace FMH
 		SHOWTHUMBNAIL,
 		SHOWTERMINAL,
 		COUNT,
-		SORTBY
+        SORTBY,
+        USER,
+        PASSWORD,
+        SERVER
 	}; Q_ENUM_NS(MODEL_KEY);
 	
 	static const QHash<MODEL_KEY, QString> MODEL_NAME =
@@ -130,8 +133,11 @@ namespace FMH
 		{MODEL_KEY::SHOWTERMINAL, "showterminal"},
 		{MODEL_KEY::SHOWTHUMBNAIL, "showthumbnail"},
 		{MODEL_KEY::COUNT, "count"},
-		{MODEL_KEY::SORTBY, "sortby"}
-	};
+        {MODEL_KEY::SORTBY, "sortby"},
+        {MODEL_KEY::USER, "user"},
+        {MODEL_KEY::PASSWORD, "password"},
+        {MODEL_KEY::SERVER, "server"}
+    };
 	
 	typedef QHash<FMH::MODEL_KEY, QString> MODEL;
 	typedef QList<MODEL> MODEL_LIST;
@@ -144,7 +150,8 @@ namespace FMH
 		TAGS_PATH,
 		APPS_PATH,
 		TRASH_PATH,
-		SEARCH_PATH
+        SEARCH_PATH,
+        CLOUD_PATH
 	}; Q_ENUM_NS(PATHTYPE_KEY);
 	
 	static const QHash<PATHTYPE_KEY, QString> PATHTYPE_NAME =
@@ -155,7 +162,8 @@ namespace FMH
 		{PATHTYPE_KEY::APPS_PATH, "Apps"},
 		{PATHTYPE_KEY::TRASH_PATH, "Trash"},
 		{PATHTYPE_KEY::TAGS_PATH, "Tags"},
-		{PATHTYPE_KEY::SEARCH_PATH, "Search"}
+        {PATHTYPE_KEY::SEARCH_PATH, "Search"},
+        {PATHTYPE_KEY::CLOUD_PATH, "Cloud"}
 	};
 	
 	const QString DataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
@@ -333,13 +341,15 @@ namespace FMH
 	
 	enum class TABLE : uint8_t
 	{
-		BOOKMARKS
+        BOOKMARKS,
+        CLOUDS
 	};
 	
 	static const QMap<FMH::TABLE, QString> TABLEMAP =
 	{
-		{TABLE::BOOKMARKS, "bookmarks"}
-	};
+        {TABLE::BOOKMARKS, "bookmarks"},
+        {TABLE::CLOUDS, "clouds"}
+    };
 	
 	typedef QMap<FMH::MODEL_KEY, QString> DB;
 	

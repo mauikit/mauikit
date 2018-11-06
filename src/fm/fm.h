@@ -16,6 +16,7 @@
 #include "mauiandroid.h"
 #endif
 
+class Syncing;
 class Tagging;
 #ifdef STATIC_MAUIKIT
 class FM : public FMDB
@@ -30,8 +31,12 @@ public:
 	
 	FMH::MODEL_LIST  getTags(const int &limit = 5);	
 	FMH::MODEL_LIST getTagContent(const QString &tag);	
-	FMH::MODEL_LIST  getBookmarks();
-	
+    FMH::MODEL_LIST  getBookmarks();
+
+    /** Syncing **/
+    void  getCloudServerContent(const QString &server);
+    FMH::MODEL_LIST getCloudAccounts();
+
 	/*** START STATIC METHODS ***/
 	static FMH::MODEL_LIST search(const QString &query, const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
 	
@@ -51,8 +56,10 @@ public:
 	
 private:
     Tagging *tag;
+    Syncing *sync;
 	static FM* instance;
 	
+    void init();
 	QVariantList get(const QString &queryTxt);
 	
 	FM(QObject *parent = nullptr);
@@ -61,12 +68,19 @@ private:
 signals:
 	void bookmarkInserted(QString bookmark);
 	void bookmarkRemoved(QString bookmark);
+
+    void cloudAccountInserted(QString user);
+    void cloudAccountRemoved(QString user);
+
+    void cloudServerContentReady(FMH::MODEL_LIST list);
 	
 public slots:	
 	bool bookmark(const QString &path);
 	bool removeBookmark(const QString &path);
 	bool isBookmark(const QString &path);
-	
+
+    void addCloudAccount(const QString &server, const QString &user, const QString &password);
+
 	static QString homePath();	
 	static QString parentDir(const QString &path);
 	
