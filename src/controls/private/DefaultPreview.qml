@@ -13,7 +13,6 @@ Item
 
         Item
         {
-
             Layout.fillWidth: true
             height: parent.width *0.3
             Layout.margins: contentMargins
@@ -67,14 +66,22 @@ Item
 
                 Label
                 {
+                    text: qsTr("Icon: ")+ iteminfo.icon
+
+                    elide: Qt.ElideRight
+                    wrapMode: Text.Wrap
+                    font.pointSize: fontSizes.default
+                }
+
+                Label
+                {
                     text: qsTr("Type: ")+ iteminfo.mime
 
                     elide: Qt.ElideRight
                     wrapMode: Text.Wrap
                     font.pointSize: fontSizes.default
-
-
                 }
+
                 Label
                 {
                     text: qsTr("Date: ")+ iteminfo.date
@@ -82,9 +89,8 @@ Item
                     elide: Qt.ElideRight
                     wrapMode: Text.Wrap
                     font.pointSize: fontSizes.default
-
-
                 }
+
                 Label
                 {
                     text: qsTr("Modified: ")+ iteminfo.modified
@@ -92,9 +98,8 @@ Item
                     elide: Qt.ElideRight
                     wrapMode: Text.Wrap
                     font.pointSize: fontSizes.default
-
-
                 }
+
                 Label
                 {
                     text: qsTr("Owner: ")+ iteminfo.owner
@@ -102,9 +107,8 @@ Item
                     elide: Qt.ElideRight
                     wrapMode: Text.Wrap
                     font.pointSize: fontSizes.default
-
-
                 }
+
                 Label
                 {
                     text: qsTr("Tags: ")+ iteminfo.tags
@@ -112,9 +116,8 @@ Item
                     elide: Qt.ElideRight
                     wrapMode: Text.Wrap
                     font.pointSize: fontSizes.default
-
-
                 }
+
                 Label
                 {
                     text: qsTr("Permisions: ")+ iteminfo.permissions
@@ -122,8 +125,6 @@ Item
                     elide: Qt.ElideRight
                     wrapMode: Text.Wrap
                     font.pointSize: fontSizes.default
-
-
                 }
             }
         }

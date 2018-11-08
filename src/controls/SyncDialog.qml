@@ -40,6 +40,8 @@ Maui.Dialog
 
         if(server.length && user.length && password.length)
             Maui.FM.addCloudAccount(server, user, password);
+
+        close();
 	}
 	
     onRejected:	close()

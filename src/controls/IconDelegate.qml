@@ -145,6 +145,7 @@ ItemDelegate
         Maui.ToolButton
         {
             iconName: model.icon
+            iconFallback: "qrc:/assets/application-x-zerosize.svg"
             isMask: folderSize <= iconSizes.medium
             iconColor: labelColor
             size: folderSize

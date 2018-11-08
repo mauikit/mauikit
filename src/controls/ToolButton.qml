@@ -39,6 +39,7 @@ ToolButton
 
     property bool isMask:  true
     property string iconName: ""
+    property string iconFallback: ""
     property int size: iconSize
     property color iconColor: colorScheme.textColor
     property bool anim: false
@@ -54,10 +55,11 @@ ToolButton
     height: control.visible ? (control.display === ToolButton.IconOnly ? size + space.medium : implicitHeight) : 0
     width: control.visible ? (control.display === ToolButton.IconOnly ? height : implicitWidth) : 0
     
-    icon.name:  iconName
-    icon.width:  size
-    icon.height: size
-    icon.color: !isMask ? "transparent" :  (down || pressed) ? colorScheme.highlightColor : iconColor
+    icon.name:  control.iconName
+    icon.source: control.iconFallback
+    icon.width:  control.size
+    icon.height: control.size
+    icon.color: !control.isMask ? "transparent" :  (down || pressed) ? colorScheme.highlightColor : iconColor
 
     onClicked: if(anim) animIcon.running = true
 

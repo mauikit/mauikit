@@ -182,7 +182,8 @@ void FMList::setSortBy(const FMH::MODEL_KEY& key)
 void FMList::sortList()
 {
     auto key = this->sort;
-    std::sort(this->list.begin(), this->list.end(), [key](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
+    auto foldersFirst = this->foldersFirst;
+    std::sort(this->list.begin(), this->list.end(), [key, foldersFirst](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
     {
         auto role = key;
 
@@ -195,8 +196,19 @@ void FMList::sortList()
         case FMH::SIZE:
         {
             QLocale l;
-            if(l.toDouble(e1[role]) > l.toDouble(e2[role]))
-                return true;
+
+            if(foldersFirst)
+            {
+                if((l.toDouble(e1[role]) < l.toDouble(e2[role])) && (e1[FMH::MODEL_KEY::MIME] == "inode/directory"))
+                    return true;
+            }
+            else
+            {
+                if(l.toDouble(e1[role]) > l.toDouble(e2[role]))
+                    return true;
+            }
+
+
             break;
         }
         case FMH::MODIFIED:
@@ -206,15 +218,28 @@ void FMList::sortList()
 
             auto date1 = QDateTime::fromString(e1[role], Qt::TextDate);
             auto date2 = QDateTime::fromString(e2[role], Qt::TextDate);
-
-            if(date1.secsTo(currentTime) <  date2.secsTo(currentTime))
-                return true;
+            if(foldersFirst)
+            {
+                if((date1.secsTo(currentTime) <  date2.secsTo(currentTime)) && (e1[FMH::MODEL_KEY::MIME] == "inode/directory"))
+                    return true;
+            }else
+            {
+                if(date1.secsTo(currentTime) <  date2.secsTo(currentTime))
+                    return true;
+            }
             break;
         }
 
         default:
-            if(e1[role] < e2[role])
-                return true;
+            if(foldersFirst)
+            {
+                if((e1[role] < e2[role]) && (e1[FMH::MODEL_KEY::MIME] == "inode/directory"))
+                    return true;
+            }else
+            {
+                if(e1[role] < e2[role])
+                    return true;
+            }
         }
 
         return false;
@@ -485,6 +510,25 @@ void FMList::setIsBookmark(const bool& value)
     emit this->isBookmarkChanged();
 }
 
+bool FMList::getFoldersFirst() const
+{
+    return this->foldersFirst;
+}
+
+void FMList::setFoldersFirst(const bool &value)
+{
+    if(this->foldersFirst == value)
+        return;
+
+    emit this->preListChanged();
+    this->foldersFirst = value;
+
+    this->sortList();
+
+    emit this->foldersFirstChanged();
+    emit this->postListChanged();
+}
+
 void FMList::search(const QString& query, const QString &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)
 {
     FMH::MODEL_LIST content;
@@ -499,7 +543,7 @@ void FMList::search(const QString& query, const QString &path, const bool &hidde
         if(hidden)
             dirFilter = dirFilter | QDir::Hidden | QDir::System;
 
-        QDirIterator it (path, filters, dirFilter, QDirIterator::Subdirectories);
+        QDirIterator it (path, filters, dirFilter, QDirIterator::NoIteratorFlags);
         while (it.hasNext())
         {
             auto url = it.next();

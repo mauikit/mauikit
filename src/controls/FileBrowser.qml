@@ -407,6 +407,16 @@ Maui.Page
 
                 Maui.MenuItem
                 {
+                    text: qsTr("Folders first")
+                    checkable: true
+                    checked: modelList.foldersFirst
+                    onTriggered: modelList.foldersFirst = !modelList.foldersFirst
+                }
+
+                MenuSeparator{}
+
+                Maui.MenuItem
+                {
                     text: qsTr("Type")
                     checkable: true
                     checked: modelList.sortBy === FMList.MIME

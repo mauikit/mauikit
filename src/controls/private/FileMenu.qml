@@ -108,7 +108,11 @@ Maui.Menu
 	Maui.MenuItem
 	{
 		text: qsTr("Select")
-		onTriggered: selectionBar.append(list.get(browser.currentIndex))
+        onTriggered:
+        {
+
+            addToSelection(list.get(browser.currentIndex))
+        }
 	}
 	
 	Maui.MenuItem
