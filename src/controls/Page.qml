@@ -40,8 +40,6 @@ QQC2.Page
     property alias colorScheme : colorScheme
     /***************************/
 
-    property bool headBarVisible : true
-    property bool footBarVisible : true
     property bool headBarExit : true
     property bool headBarTitleVisible: headBarTitle
     property string headBarExitIcon : "dialog-close"
@@ -121,7 +119,7 @@ QQC2.Page
             height: toolBarHeightAlt
             implicitHeight: toolBarHeightAlt
             plegable: control.width < Kirigami.Units.gridUnit * 17
-            visible: headBarVisible && count > 0
+            visible: count > 0
             clip: false
             z: container.z +1
 
@@ -167,33 +165,43 @@ QQC2.Page
             clip: false
 
             anchors.margins: floatingBar && footBarOverlap ? margins : 0
-            anchors.top:  if(floatingBar && footBarOverlap && headBarVisible && !altToolBars && !topToolBar.plegable)
-                              topToolBar.bottom
-                          else if(floatingBar && footBarOverlap && headBarVisible && !altToolBars && topToolBar.plegable)
-                              topToolBar.top
-                          else if(floatingBar && footBarOverlap && headBarVisible && altToolBars && topToolBar.plegable)
-                              rootLayout.top
-                          else if(floatingBar && footBarOverlap && !topToolBar.plegable && altToolBars)
-                              rootLayout.top
-                          else if(!floatingBar && !footBarOverlap && topToolBar.plegable && !altToolBars)
-                              rootLayout.top
-                          else if(floatingBar && footBarOverlap && !topToolBar.plegable && !altToolBars)
-                              rootLayout.bottom
-                          else
-                              undefined
-
-            anchors.bottom: if(floatingBar && footBarOverlap && !altToolBars)
-                                rootLayout.bottom
-                            else if(floatingBar && footBarOverlap && altToolBars && headBarVisible && !topToolBar.plegable)
-                                topToolBar.top
-                            else if(!floatingBar && !footBarOverlap && topToolBar.plegable && !altToolBars )
-                                rootLayout.bottom
-                            else if(floatingBar && footBarOverlap && altToolBars && headBarVisible && topToolBar.plegable)
-                                topToolBar.bottom
-                            else if(floatingBar && footBarOverlap && altToolBars && !headBarVisible && topToolBar.plegable)
-                                rootLayout.bottom
-                            else
-                                undefined
+            anchors.top: if(!floatingBar && !topToolBar.plegable)
+								undefined
+						else
+						{
+							if(!altToolBars && headBar.visible && !topToolBar.plegable)
+								topToolBar.bottom
+								
+							else if(!altToolBars && headBar.visible && topToolBar.plegable)
+								topToolBar.top
+									
+							else if(altToolBars && headBar.visible)
+								rootLayout.top
+						}
+								
+			anchors.bottom: if(!floatingBar && !topToolBar.plegable)
+								undefined
+							else
+							{
+								if(altToolBars && headBar.visible && (footBarOverlap && floatingBar && footBar.visible) && !topToolBar.plegable)
+									topToolBar.top/*.bottom*/
+									
+								else if(altToolBars && headBar.visible && (!footBarOverlap && floatingBar && footBar.visible) && !topToolBar.plegable)
+									bottomToolBar.verticalCenter/*.bottom*/
+									
+								else if(altToolBars && headBar.visible && (footBarOverlap && floatingBar && footBar.visible) && topToolBar.plegable)
+									topToolBar.bottom
+								
+								else if(altToolBars && headBar.visible && !footBar.visible && topToolBar.plegable)
+									topToolBar.verticalCenter
+									
+								else if(!footBarOverlap && !floatingBar && footBar.visible)
+									bottomToolBar.top
+									
+								else if(!altToolBars && floatingBar && footBarOverlap && footBar.visible)
+									rootLayout.bottom								
+								
+							}
             z: 1
 
             Flickable
@@ -244,7 +252,7 @@ QQC2.Page
         {
             id: bottomToolBar
 
-            visible: footBarVisible && count > 0
+            visible: footBar.visible && count > 0
 
             readonly property int _margins : footBarMargins
 

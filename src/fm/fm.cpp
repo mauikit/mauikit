@@ -34,7 +34,7 @@
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
 #else
-#include <MauiKit/mauikde.h>
+#include "mauikde.h"
 #endif
 
 

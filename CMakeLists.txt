@@ -28,9 +28,8 @@ include(ECMQtDeclareLoggingCategory)
 include(ECMAddQch)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 
-find_package(webdavclient REQUIRED)
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Qml 
-    Sql Core Quick Gui Svg QuickControls2 Network DBus)
+    Sql Core Quick Gui Svg QuickControls2 Network DBus Xml)
 ecm_find_qmlmodule(QtGraphicalEffects 1.0)
 
 include_directories(
@@ -48,6 +47,10 @@ include_directories(
     
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/syncing
     ${CMAKE_CURRENT_BINARY_DIR}/src/utils/syncing
+    
+	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/syncing/libwebdavclient/lib
+	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/syncing/libwebdavclient/lib/utils
+	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/syncing/libwebdavclient/lib/dto
     
     ${CMAKE_CURRENT_SOURCE_DIR}/src/fm
     ${CMAKE_CURRENT_BINARY_DIR}/src/fm
@@ -107,22 +110,35 @@ set(tagging_HDRS
 
 set(syncing_SRCS
     src/utils/syncing/syncing.cpp
+    src/utils/syncing/libwebdavclient/lib/WebDAVClient.cpp
+    src/utils/syncing/libwebdavclient/lib/dto/WebDAVItem.cpp
+    src/utils/syncing/libwebdavclient/lib/utils/Environment.cpp
+    src/utils/syncing/libwebdavclient/lib/utils/NetworkHelper.cpp
+    src/utils/syncing/libwebdavclient/lib/utils/WebDAVReply.cpp
+    src/utils/syncing/libwebdavclient/lib/utils/XMLHelper.cpp
     )
 
 set(syncing_HDRS
     src/utils/syncing/syncing.h
+    src/utils/syncing/libwebdavclient/lib/WebDAVClient.hpp
+    src/utils/syncing/libwebdavclient/lib/dto/WebDAVItem.hpp
+    src/utils/syncing/libwebdavclient/lib/utils/Environment.hpp
+    src/utils/syncing/libwebdavclient/lib/utils/NetworkHelper.hpp
+    src/utils/syncing/libwebdavclient/lib/utils/WebDAVReply.hpp
+    src/utils/syncing/libwebdavclient/lib/utils/XMLHelper.hpp
     )
 
 
 #use dbus on linux, bsd etc, but not andoid and apple stuff
 if(ANDROID)
 
-    find_package(Qt5 REQUIRED COMPONENTS AndroidExtras Xml WebView)
+    find_package(Qt5 REQUIRED COMPONENTS AndroidExtras Xml WebView Network)
     qt5_add_resources(MauiAndroid_RESOURCES src/android/android.qrc src/android/icons.qrc)
     
     set(MAUIANDROID_LIBS
         Qt5::Xml
         Qt5::AndroidExtras
+        Qt5::Network
         Qt5::WebView
         )
 
@@ -208,6 +224,7 @@ target_link_libraries(MauiKit
     Qt5::Svg
     Qt5::Gui
     Qt5::Network
+    Qt5::Xml
     ${MAUIKDE_KF5LIBS}
     ${MAUIANDROID_LIBS}
 # #     webdavclient
@@ -247,6 +264,7 @@ install(FILES
     ${mauikit_KDE_HDRS}
     ${tagging_HDRS}
     ${fm_HDRS}
+    ${syncing_HDRS}
     ${CMAKE_CURRENT_BINARY_DIR}/mauikit_export.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit
     COMPONENT Devel)

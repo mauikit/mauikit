@@ -103,7 +103,7 @@ Maui.Popup
 	Maui.Page
 	{
 		id: page
-		headBarVisible: headBar.count > 2
+		headBar.visible: headBar.count > 2
 		anchors.fill: parent
 		footBar.dropShadow: false
 		footBar.drawBorder: false
@@ -111,7 +111,7 @@ Maui.Popup
 		clip: true
 		headBarExit: false
 		colorScheme.backgroundColor : control.colorScheme.backgroundColor
-		footBarVisible: defaultButtons || footBar.count > 2
+		footBar.visible: defaultButtons || footBar.count > 2
 		footBar.colorScheme.backgroundColor: colorScheme.backgroundColor
 		footBar.margins: space.big
 		footBar.rightContent: Row
