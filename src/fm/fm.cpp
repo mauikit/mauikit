@@ -63,6 +63,11 @@ void FM::init()
     {
         emit this->cloudServerContentReady(list);
     });
+	
+	connect(this->sync, &Syncing::itemReady, [this](const FMH::MODEL item)
+	{
+		this->openUrl(item[FMH::MODEL_KEY::PATH]);
+	});
 }
 
 FM::FM(QObject *parent) : FMDB(parent) {}
@@ -310,6 +315,16 @@ FMH::MODEL_LIST FM::getCloudAccounts()
         {FMH::MODEL_KEY::TYPE,  FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]}};
 }
 return res;
+}
+
+void FM::openCloudItem(const QVariantMap &item)
+{
+	qDebug()<< item;
+	FMH::MODEL data;
+	for(auto key : item.keys())
+		data.insert(FMH::MODEL_NAME_KEY[key], item[key].toString());
+	
+	this->sync->resolveFile(data);
 }
 
 void FM::addCloudAccount(const QString &server, const QString &user, const QString &password)

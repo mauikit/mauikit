@@ -84,7 +84,7 @@ class FMList : public QObject
 		bool getOnlyDirs() const;
 		void setOnlyDirs(const bool &state);
 		
-		QString getParentPath() const;
+		QString getParentPath();
 		
 		QString getPreviousPath();
 		void setPreviousPath(const QString &path);

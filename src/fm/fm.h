@@ -73,6 +73,7 @@ signals:
     void cloudAccountRemoved(QString user);
 
     void cloudServerContentReady(FMH::MODEL_LIST list);
+	void cloudItemReady(FMH::MODEL item);
 	
 public slots:	
 	bool bookmark(const QString &path);
@@ -80,7 +81,8 @@ public slots:
 	bool isBookmark(const QString &path);
 
     void addCloudAccount(const QString &server, const QString &user, const QString &password);
-
+	void openCloudItem(const QVariantMap &item);	
+	
 	static QString homePath();	
 	static QString parentDir(const QString &path);
 	

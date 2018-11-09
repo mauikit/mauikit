@@ -104,7 +104,10 @@ ItemDelegate
     {
         id: imgComponent
 
-        Image
+        Item
+        {
+			anchors.fill: parent
+			  Image
         {
             id: img
             clip: true
@@ -136,6 +139,16 @@ ItemDelegate
                 }
             }
         }
+        
+        Loader
+        {
+			anchors.centerIn: parent
+			
+			sourceComponent: img.status === Image.Ready ? undefined : iconComponent
+		}
+		}
+      
+		
     }
 
     Component

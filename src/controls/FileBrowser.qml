@@ -556,6 +556,8 @@ Maui.Page
         case FMList.CLOUD_PATH:
             if(item.mime === "inode/directory")
                 control.openFolder(path)
+			else
+				Maui.FM.openCloudItem(item)
             break;
         default:
             if(selectionMode && !Maui.FM.isDir(item.path))

@@ -11,7 +11,6 @@ linux:unix:!android {
 
     message(Building Maui helpers for Linux KDE)
     include($$PWD/src/kde/kde.pri)
-    LIBS += -llibwebdavclient
 } else:android {
 
     message(Building Maui helpers for Android)

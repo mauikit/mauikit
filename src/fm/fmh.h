@@ -70,7 +70,7 @@ namespace FMH
 		NONE
 	}; Q_ENUM_NS(FILTER_TYPE);
 	
-	static const QHash<FILTER_TYPE, QStringList> FILTER_LIST =
+	static const QHash<FMH::FILTER_TYPE, QStringList> FILTER_LIST =
 	{
 		{FILTER_TYPE::AUDIO, {"*.mp3", "*.mp4", "*.wav", "*.ogg", "*.flac"}},
 		{FILTER_TYPE::VIDEO, {"*.mp4", "*.mkv", "*.mov", "*.avi", "*.flv"}},
@@ -109,7 +109,7 @@ namespace FMH
         SERVER
 	}; Q_ENUM_NS(MODEL_KEY);
 	
-	static const QHash<MODEL_KEY, QString> MODEL_NAME =
+	static const QHash<FMH::MODEL_KEY, QString> MODEL_NAME =
 	{
 		{MODEL_KEY::ICON, "icon"},
 		{MODEL_KEY::LABEL, "label"},
@@ -139,6 +139,36 @@ namespace FMH
         {MODEL_KEY::SERVER, "server"}
     };
 	
+	static const QHash<QString, FMH::MODEL_KEY> MODEL_NAME_KEY =
+	{
+		{MODEL_NAME[MODEL_KEY::ICON], MODEL_KEY::ICON},
+		{MODEL_NAME[MODEL_KEY::LABEL], MODEL_KEY::LABEL},
+		{MODEL_NAME[MODEL_KEY::PATH], MODEL_KEY::PATH},
+		{MODEL_NAME[MODEL_KEY::URL], MODEL_KEY::URL},
+		{MODEL_NAME[MODEL_KEY::TYPE], MODEL_KEY::TYPE},
+		{MODEL_NAME[MODEL_KEY::GROUP], MODEL_KEY::GROUP},
+		{MODEL_NAME[MODEL_KEY::OWNER], MODEL_KEY::OWNER},
+		{MODEL_NAME[MODEL_KEY::SUFFIX], MODEL_KEY::SUFFIX},
+		{MODEL_NAME[MODEL_KEY::NAME], MODEL_KEY::NAME},
+		{MODEL_NAME[MODEL_KEY::DATE], MODEL_KEY::DATE},
+		{MODEL_NAME[MODEL_KEY::MODIFIED], MODEL_KEY::MODIFIED},
+		{MODEL_NAME[MODEL_KEY::MIME], MODEL_KEY::MIME},
+		{MODEL_NAME[MODEL_KEY::SIZE], MODEL_KEY::SIZE,},
+		{MODEL_NAME[MODEL_KEY::TAGS], MODEL_KEY::TAGS},
+		{MODEL_NAME[MODEL_KEY::PERMISSIONS], MODEL_KEY::PERMISSIONS},
+		{MODEL_NAME[MODEL_KEY::THUMBNAIL], MODEL_KEY::THUMBNAIL},
+		{MODEL_NAME[MODEL_KEY::ICONSIZE], MODEL_KEY::ICONSIZE},
+		{MODEL_NAME[MODEL_KEY::HIDDEN], MODEL_KEY::HIDDEN},
+		{MODEL_NAME[MODEL_KEY::DETAILVIEW], MODEL_KEY::DETAILVIEW},
+		{MODEL_NAME[MODEL_KEY::SHOWTERMINAL], MODEL_KEY::SHOWTERMINAL},
+		{MODEL_NAME[MODEL_KEY::SHOWTHUMBNAIL], MODEL_KEY::SHOWTHUMBNAIL},
+		{MODEL_NAME[MODEL_KEY::COUNT], MODEL_KEY::COUNT},
+		{MODEL_NAME[MODEL_KEY::SORTBY], MODEL_KEY::SORTBY},
+		{MODEL_NAME[MODEL_KEY::USER], MODEL_KEY::USER},
+		{MODEL_NAME[MODEL_KEY::PASSWORD], MODEL_KEY::PASSWORD},
+		{MODEL_NAME[MODEL_KEY::SERVER], MODEL_KEY::SERVER}
+	};
+	
 	typedef QHash<FMH::MODEL_KEY, QString> MODEL;
 	typedef QList<MODEL> MODEL_LIST;
 	
@@ -167,6 +197,7 @@ namespace FMH
 	};
 	
 	const QString DataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+	const QString CloudCachePath = FMH::DataPath+"/Cloud/";
 	
 	#if defined(Q_OS_ANDROID)
 	const QString PicturesPath = PATHS::PicturesPath;
@@ -230,7 +261,7 @@ namespace FMH
 		{RootPath, "folder-root"}
 	};
 	
-	#endif
+	#endif	
 	
 	inline bool fileExists(const QString &url)
 	{
