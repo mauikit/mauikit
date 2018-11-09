@@ -27,11 +27,13 @@ FMList::FMList(QObject *parent) : QObject(parent)
 	this->fm = FM::getInstance();
 	connect(this->fm, &FM::cloudServerContentReady, [this](const FMH::MODEL_LIST list)
 	{
-		emit this->preListChanged();
+		this->pre();
+		
 		this->list = list;
 		this->pathEmpty = this->list.isEmpty();
 		emit this->pathEmptyChanged();
-		emit this->postListChanged();
+		this->pos();
+		this->setContentReady(true);		
 	});
 	
 	this->watcher = new QFileSystemWatcher(this);
@@ -50,6 +52,18 @@ FMList::FMList(QObject *parent) : QObject(parent)
 FMList::~FMList()
 {}
 
+void FMList::pre()
+{
+	emit this->preListChanged();
+// 	this->setContentReady(false);
+}
+
+void FMList::pos()
+{
+// 	this->setContentReady(true);
+	emit this->postListChanged();
+}
+
 void FMList::watchPath(const QString& path, const bool& clear)
 {	
 	if(!this->watcher->directories().isEmpty() && clear)
@@ -63,6 +77,7 @@ void FMList::watchPath(const QString& path, const bool& clear)
 
 void FMList::setList()
 {	
+	this->setContentReady(true);
 	switch(this->pathType)
 	{
 		case FMH::PATHTYPE_KEY::SEARCH_PATH:
@@ -85,7 +100,8 @@ void FMList::setList()
 		case FMH::PATHTYPE_KEY::CLOUD_PATH:
 			this->list.clear();
 			this->fm->getCloudServerContent(this->path);
-			break;
+			this->setContentReady(false);
+			return;
 			
 		case FMH::PATHTYPE_KEY::TRASH_PATH:
 		case FMH::PATHTYPE_KEY::DRIVES_PATH:
@@ -102,41 +118,48 @@ void FMList::setList()
 
 void FMList::reset()
 {
-	emit this->preListChanged();
+	this->pre();
 	
 	switch(this->pathType)
 	{
 		case FMH::PATHTYPE_KEY::APPS_PATH:
-			this->hidden = false;
-			emit this->hiddenChanged();
 			
-			this->preview = false;
-			emit this->previewChanged();
+			if(this->saveDirProps)
+			{
+				this->hidden = false;
+				emit this->hiddenChanged();
+				
+				this->preview = false;
+				emit this->previewChanged();
+			}
+			
 			break;
 			
 		case FMH::PATHTYPE_KEY::CLOUD_PATH:			
 		case FMH::PATHTYPE_KEY::SEARCH_PATH:
 		case FMH::PATHTYPE_KEY::TAGS_PATH:
-			this->hidden = false;
-			emit this->hiddenChanged();
-			
-			this->preview = true;
-			emit this->previewChanged();
+			if(this->saveDirProps)
+			{
+				this->hidden = false;
+				emit this->hiddenChanged();
+				
+				this->preview = true;
+				emit this->previewChanged();
+			}
 			break;
 			
 		case FMH::PATHTYPE_KEY::PLACES_PATH:
 		{
-			auto conf = FMH::dirConf(this->path+"/.directory");
-			
-			// 			this->sort = static_cast<FMH::MODEL_KEY>(conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SORTBY]].toInt());
-			// 			emit this->sortByChanged();
-			
-			this->hidden = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN]].toBool();
-			emit this->hiddenChanged();
-			
-			this->preview = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTHUMBNAIL]].toBool();
-			emit this->previewChanged();
-			
+			if(this->saveDirProps)
+			{
+				auto conf = FMH::dirConf(this->path+"/.directory");
+				
+				this->hidden = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN]].toBool();
+				emit this->hiddenChanged();
+				
+				this->preview = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTHUMBNAIL]].toBool();
+				emit this->previewChanged();
+			}			
 			break;
 		}
 		
@@ -146,9 +169,8 @@ void FMList::reset()
 			break;
 	}
 	
-	this->setList();
-	
-	emit this->postListChanged();
+	this->setList();	
+	this->pos();
 }
 
 FMH::MODEL_LIST FMList::items() const
@@ -167,7 +189,7 @@ void FMList::setSortBy(const FMH::MODEL_KEY& key)
 	if(this->sort == key)
 		return;
 	
-	emit this->preListChanged();
+	this->pre();
 	
 	this->sort = key;
 	this->sortList();
@@ -176,7 +198,8 @@ void FMList::setSortBy(const FMH::MODEL_KEY& key)
 	// 		FMH::setDirConf(this->path+"/.directory", "MAUIFM", "SortBy", this->sort);
 	
 	emit this->sortByChanged();
-	emit this->postListChanged();
+	
+	this->pos();
 }
 
 void FMList::sortList()
@@ -189,11 +212,12 @@ void FMList::sortList()
 		
 		switch(role)
 		{
-			case FMH::MIME:
+			case FMH::MODEL_KEY::MIME:
 				if(e1[role] == "inode/directory")
 					return true;
 				break;
-			case FMH::SIZE:
+				
+			case FMH::MODEL_KEY::SIZE:
 			{
 				QLocale l;
 				
@@ -211,8 +235,9 @@ void FMList::sortList()
 				
 				break;
 			}
-			case FMH::MODIFIED:
-			case FMH::DATE:
+			
+			case FMH::MODEL_KEY::MODIFIED:
+			case FMH::MODEL_KEY::DATE:
 			{
 				auto currentTime = QDateTime::currentDateTime();
 				
@@ -225,6 +250,23 @@ void FMList::sortList()
 				}else
 				{
 					if(date1.secsTo(currentTime) <  date2.secsTo(currentTime))
+						return true;
+				}
+				break;
+			}
+			
+			case FMH::MODEL_KEY::LABEL:
+			{
+				const auto str1 = QString(e1[role]).toLower();
+				const auto str2 = QString(e2[role]).toLower();
+				
+				if(foldersFirst)
+				{
+					if((str1 < str2) && (e1[FMH::MODEL_KEY::MIME] == "inode/directory"))
+						return true;
+				}else
+				{
+					if(str1 < str2)
 						return true;
 				}
 				break;
@@ -344,13 +386,12 @@ FMH::FILTER_TYPE FMList::getFilterType() const
 void FMList::setFilterType(const FMH::FILTER_TYPE& type)
 {
 	this->filterType = type;
-	
 	this->filters = FMH::FILTER_LIST[this->filterType];
 	
-	emit this->preListChanged();
 	emit this->filtersChanged();
 	emit this->filterTypeChanged();
-	emit this->postListChanged();
+	
+	this->reset();
 }
 
 bool FMList::getHidden() const
@@ -365,7 +406,7 @@ void FMList::setHidden(const bool &state)
 	
 	this->hidden = state;
 	
-	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH && this->trackChanges)
+	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH && this->trackChanges && this->saveDirProps)
 		FMH::setDirConf(this->path+"/.directory", "Settings", "HiddenFilesShown", this->hidden);
 	
 	
@@ -385,7 +426,7 @@ void FMList::setPreview(const bool &state)
 	
 	this->preview = state;
 	
-	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH && this->trackChanges)
+	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH && this->trackChanges && this->saveDirProps)
 		FMH::setDirConf(this->path+"/.directory", "MAUIFM", "ShowThumbnail", this->preview);
 	
 	emit this->previewChanged();
@@ -527,13 +568,39 @@ void FMList::setFoldersFirst(const bool &value)
 	if(this->foldersFirst == value)
 		return;
 	
-	emit this->preListChanged();
-	this->foldersFirst = value;
+	this->pre();
 	
+	this->foldersFirst = value;
+	emit this->foldersFirstChanged();
+
 	this->sortList();
 	
-	emit this->foldersFirstChanged();
-	emit this->postListChanged();
+	this->pos();
+}
+
+void FMList::setSaveDirProps(const bool& value)
+{
+	if(this->saveDirProps == value)
+		return;
+	
+	this->saveDirProps = value;
+	emit this->saveDirPropsChanged();
+}
+
+bool FMList::getSaveDirProps() const
+{
+	return this->saveDirProps;
+}
+
+void FMList::setContentReady(const bool& value)
+{
+	this->contentReady = value;
+	emit this->contentReadyChanged();
+}
+
+bool FMList::getContentReady() const
+{
+	return this->contentReady;
 }
 
 void FMList::search(const QString& query, const QString &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)

@@ -65,7 +65,7 @@ void FM::init()
     });
 	
 	connect(this->sync, &Syncing::itemReady, [this](const FMH::MODEL item)
-	{
+	{		
 		this->openUrl(item[FMH::MODEL_KEY::PATH]);
 	});
 }

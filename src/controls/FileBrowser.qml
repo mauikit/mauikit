@@ -19,8 +19,9 @@ Maui.Page
     property alias colorScheme : colorScheme
     /***************************/
 
-    property alias trackChanges: modelList.trackChanges
-
+	property alias trackChanges: modelList.trackChanges
+	property alias saveDirProps: modelList.saveDirProps
+	
     property string currentPath: Maui.FM.homePath()
 
     property var copyPaths : []
@@ -153,6 +154,7 @@ Maui.Page
         id: modelList
         path: currentPath
         onSortByChanged: if(group) groupBy()
+		onContentReadyChanged: console.log("CONTENT READY?", contentReady)
     }
 
     FileMenu
@@ -310,18 +312,39 @@ Maui.Page
         id: holder
         anchors.fill : parent
         z: -1
-        visible: !modelList.pathExists || modelList.pathEmpty
-        emoji: modelList.pathExists ? "qrc:/assets/MoonSki.png" : "qrc:/assets/ElectricPlug.png"
+        visible: !modelList.pathExists || modelList.pathEmpty || !modelList.contentReady
+        emoji: if(modelList.pathExists && modelList.pathEmpty)
+					"qrc:/assets/MoonSki.png" 
+				else if(!modelList.pathExists)
+					"qrc:/assets/ElectricPlug.png"
+				else if(!modelList.contentReady)
+					"qrc:/assets/animat-rocket-color.gif"
+		isGif: !modelList.contentReady			
         isMask: false
-        title : modelList.pathExists && modelList.pathEmpty ?  "Folder is empty!" : "Folder doesn't exists!"
-        body: modelList.pathExists && modelList.pathEmpty? "You can add new files to it" : "Create Folder?"
+        title : if(modelList.pathExists && modelList.pathEmpty)
+					"Folder is empty!"
+				else if(!modelList.pathExists)
+					"Folder doesn't exists!"
+				else if(!modelList.contentReady)
+					"Loading content!"
+				
+         
+		body: if(modelList.pathExists && modelList.pathEmpty)
+					"You can add new files to it"
+				else if(!modelList.pathExists)
+					"Create Folder?"
+				else if(!modelList.contentReady)
+					"Almost ready!"        
+        
         emojiSize: iconSizes.huge
 
         onActionTriggered:
         {
-            Maui.FM.createDir(control.currentPath.slice(0, control.currentPath.lastIndexOf("/")), control.currentPath.split("/").pop())
-
-            control.openFolder(modelList.parentPath)
+			if(!modelList.pathExists)
+            {
+				Maui.FM.createDir(control.currentPath.slice(0, control.currentPath.lastIndexOf("/")), control.currentPath.split("/").pop())
+				control.openFolder(modelList.parentPath)				
+			}
         }
     }
 
@@ -606,7 +629,7 @@ Maui.Page
 
         setPath(path)
 
-        if(currentPathType === FMList.PLACES_PATH && trackChanges)
+        if(currentPathType === FMList.PLACES_PATH && trackChanges && saveDirProps)
         {
             var iconsize = Maui.FM.dirConf(path+"/.directory")["iconsize"] ||  iconSizes.large
             thumbnailsSize = parseInt(iconsize)

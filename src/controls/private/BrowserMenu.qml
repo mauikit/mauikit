@@ -17,6 +17,14 @@ Maui.Menu
         onTriggered: selectionMode = !selectionMode
     }
 
+    Maui.MenuItem
+    {
+		checkable: true
+		checked: saveDirProps
+		text: qsTr("Per dir props")
+		onTriggered: saveDirProps = !saveDirProps
+	}
+	
     MenuSeparator { }
 
   

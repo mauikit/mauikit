@@ -38,7 +38,7 @@ Item
 	property string body
 	
 	property bool isMask : true
-	
+	property bool isGif : false
 	property int emojiSize : iconSizes.large
 	
 	property bool enabled: true
@@ -47,38 +47,63 @@ Item
 	
 	clip: true
 	focus: true
-	
-	Image
+
+	Component
 	{
-		id: imageHolder
+		id: imgComponent
 		
-		anchors.centerIn: parent
-		anchors.bottomMargin: textHolder.implicitHeight
-		width: emojiSize
-		height: emojiSize
-		sourceSize.width: width
-		sourceSize.height: height
-		source: emoji
-		asynchronous: true
-		horizontalAlignment: Qt.AlignHCenter
-		
-		fillMode: Image.PreserveAspectFit
+		Image
+		{
+			id: imageHolder
+			
+			width: emojiSize
+			height: emojiSize
+			sourceSize.width: width
+			sourceSize.height: height
+			source: emoji
+			asynchronous: true
+			horizontalAlignment: Qt.AlignHCenter
+			
+			fillMode: Image.PreserveAspectFit
+			
+			
+			HueSaturation
+			{
+				anchors.fill: parent
+				source: parent
+				saturation: -1
+				lightness: 0.3
+				visible: isMask
+			}
+		}
 	}
 	
-	HueSaturation
+	Component
 	{
-		anchors.fill: imageHolder
-		source: imageHolder
-		saturation: -1
-		lightness: 0.3
-		visible: isMask
+		id: animComponent
+		AnimatedImage
+		{ 
+			id: animation; 
+			source: emoji			
+		}
+	}
+	
+	Loader
+	{
+		id: loader
+		anchors.centerIn: parent
+		anchors.bottomMargin: textHolder.implicitHeight
+		height: emojiSize
+		width: emojiSize
+		
+		sourceComponent: isGif ? animComponent : imgComponent
 	}
 	
 	Label
 	{
 		id: textHolder
 		width: parent.width
-		anchors.top: imageHolder.bottom
+		anchors.top: loader.bottom
 		opacity: 0.5
 		text: message ? qsTr(message) : "<h3>"+title+"</h3><p>"+body+"</p>"
 		font.pointSize: fontSizes.default
