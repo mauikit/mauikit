@@ -2,11 +2,7 @@
 #define SYNCING_H
 
 #include <QObject>
-#ifdef Q_OS_ANDROID
 #include "fmh.h"
-#else
-#include <MauiKit/fmh.h>
-#endif
 
 class WebDAVClient;
 class WebDAVReply;
