@@ -107,7 +107,6 @@ void FMList::reset()
 	switch(this->pathType)
 	{
 		case FMH::PATHTYPE_KEY::APPS_PATH:
-		case FMH::PATHTYPE_KEY::CLOUD_PATH:
 			this->hidden = false;
 			emit this->hiddenChanged();
 			
@@ -115,6 +114,7 @@ void FMList::reset()
 			emit this->previewChanged();
 			break;
 			
+		case FMH::PATHTYPE_KEY::CLOUD_PATH:			
 		case FMH::PATHTYPE_KEY::SEARCH_PATH:
 		case FMH::PATHTYPE_KEY::TAGS_PATH:
 			this->hidden = false;

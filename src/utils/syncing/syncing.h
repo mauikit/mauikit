@@ -33,6 +33,8 @@ private:
 	void saveTo(const QByteArray &array, const QString& path);
 	QString getCacheFile(const QString &path);
 
+	QString currentPath;
+	
 signals:
     void listReady(FMH::MODEL_LIST data);
 	void itemDownloaded(FMH::MODEL item);

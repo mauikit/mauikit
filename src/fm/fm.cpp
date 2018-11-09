@@ -285,8 +285,7 @@ FMH::MODEL_LIST FM::getBookmarks()
 void FM::getCloudServerContent(const QString &path)
 {
     auto user = path.split("/")[1];
-    qDebug()<< "GETTIGN SERVER CONTENT"<< path << user << QString(path).replace("Cloud/"+user+"/", "");
-
+   
     auto data = this->get(QString("select * from clouds where user = '%1'").arg(user));
 
     if(data.isEmpty())
@@ -298,7 +297,7 @@ void FM::getCloudServerContent(const QString &path)
     auto password = map[FMH::MODEL_NAME[FMH::MODEL_KEY::PASSWORD]].toString();
     this->sync->setCredentials(server, user, password);
 
-    this->sync->listContent(QString(path).replace("Cloud/"+user, ""));
+    this->sync->listContent(path);
 }
 
 FMH::MODEL_LIST FM::getCloudAccounts()
