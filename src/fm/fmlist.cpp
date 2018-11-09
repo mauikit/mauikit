@@ -19,6 +19,7 @@
 #include "fmlist.h"
 #include <QObject>
 #include "fm.h"
+#include "utils.h"
 
 #include <QFileSystemWatcher>
 
@@ -47,6 +48,8 @@ FMList::FMList(QObject *parent) : QObject(parent)
 	// 	connect(this, &FMList::hiddenChanged, this, &FMList::setList);
 	// 	connect(this, &FMList::onlyDirsChanged, this, &FMList::setList);
 	// 	connect(this, &FMList::filtersChanged, this, &FMList::setList);
+	auto value = UTIL::loadSettings("SaveDirProps", "SETTINGS", this->saveDirProps).toBool();
+	this->setSaveDirProps(value);	
 }
 
 FMList::~FMList()
@@ -152,14 +155,16 @@ void FMList::reset()
 		{
 			if(this->saveDirProps)
 			{
-				auto conf = FMH::dirConf(this->path+"/.directory");
-				
-				this->hidden = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN]].toBool();
-				emit this->hiddenChanged();
-				
+				auto conf = FMH::dirConf(this->path+"/.directory");				
+				this->hidden = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN]].toBool();				
 				this->preview = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTHUMBNAIL]].toBool();
-				emit this->previewChanged();
-			}			
+			}else
+			{
+				this->hidden = UTIL::loadSettings("HiddenFilesShown", "SETTINGS", this->hidden).toBool();				
+				this->preview = UTIL::loadSettings("ShowThumbnail", "SETTINGS", this->preview).toBool();	
+			}
+			emit this->previewChanged();			
+			emit this->hiddenChanged();
 			break;
 		}
 		
@@ -408,7 +413,8 @@ void FMList::setHidden(const bool &state)
 	
 	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH && this->trackChanges && this->saveDirProps)
 		FMH::setDirConf(this->path+"/.directory", "Settings", "HiddenFilesShown", this->hidden);
-	
+	else
+		UTIL::saveSettings("HiddenFilesShown", this->preview, "SETTINGS");
 	
 	emit this->hiddenChanged();
 	this->reset();
@@ -428,6 +434,8 @@ void FMList::setPreview(const bool &state)
 	
 	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH && this->trackChanges && this->saveDirProps)
 		FMH::setDirConf(this->path+"/.directory", "MAUIFM", "ShowThumbnail", this->preview);
+	else
+		UTIL::saveSettings("ShowThumbnail", this->preview, "SETTINGS");
 	
 	emit this->previewChanged();
 }
@@ -583,7 +591,9 @@ void FMList::setSaveDirProps(const bool& value)
 	if(this->saveDirProps == value)
 		return;
 	
-	this->saveDirProps = value;
+	this->saveDirProps = value;	
+	UTIL::saveSettings("SaveDirProps", this->saveDirProps, "SETTINGS");
+	
 	emit this->saveDirPropsChanged();
 }
 
