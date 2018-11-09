@@ -417,7 +417,7 @@ namespace FMH
 			{FMH::MODEL_KEY::GROUP, file.group()},
 			{FMH::MODEL_KEY::OWNER, file.owner()},
 			{FMH::MODEL_KEY::SUFFIX, file.completeSuffix()},
-			{FMH::MODEL_KEY::LABEL, /*file.isDir() ? file.baseName() :*/ file.fileName()},
+			{FMH::MODEL_KEY::LABEL, /*file.isDir() ? file.baseName() :*/ path == FMH::HomePath ? QStringLiteral("Home") : file.fileName()},
 			{FMH::MODEL_KEY::NAME, file.fileName()},
 			{FMH::MODEL_KEY::DATE,  file.birthTime().toString(Qt::TextDate)},
 			{FMH::MODEL_KEY::MODIFIED, file.lastModified().toString(Qt::TextDate)},

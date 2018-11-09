@@ -166,8 +166,7 @@ void Syncing::resolveFile(const FMH::MODEL& item)
 		if(dateCloudFile >  dateCacheFile)
 			this->download(file);
 		
-		emit this->itemReady(cacheFile);
-		
+		emit this->itemReady(cacheFile);		
 	}
 	else
 		this->download(file);
