@@ -29,6 +29,8 @@ ItemDelegate
 {
 	id: control
 	property bool isDetails : false
+	property bool showDetailsInfo: false
+	
 	property int folderSize : iconSize
 	property int emblemSize: iconSizes.medium
 	property bool isHovered :  hovered
@@ -177,7 +179,6 @@ ItemDelegate
 			Label
 			{
 				id: label
-				visible: showLabel
 				text: model.label
 				width: parent.width
 				height: parent.height
@@ -202,12 +203,102 @@ ItemDelegate
 		}
 	}
 	
+	Component
+	{
+		id: detailsComponent
+		
+		RowLayout
+		{
+			anchors.fill: parent			
+			
+			ColumnLayout
+			{
+				Layout.fillHeight: true
+				Layout.fillWidth: false
+				Layout.alignment: Qt.AlignRight
+				
+				Label
+				{
+					Layout.alignment: Qt.AlignRight
+					
+					Layout.fillWidth: true
+					Layout.fillHeight: true
+					text: model.mime
+					horizontalAlignment: Qt.AlignRight
+					verticalAlignment: Qt.AlignBottom
+					elide: Qt.ElideRight
+					wrapMode: Text.Wrap
+					font.pointSize: fontSizes.small
+					color: labelColor
+					opacity: isCurrentListItem ? 1 : 0.5
+				}
+				
+				Label
+				{
+					Layout.alignment: Qt.AlignRight
+					
+					Layout.fillWidth: true
+					Layout.fillHeight: true
+					text: model.date
+					horizontalAlignment: Qt.AlignRight
+					verticalAlignment: Qt.AlignTop
+					elide: Qt.ElideRight
+					wrapMode: Text.Wrap
+					font.pointSize: fontSizes.small
+					color: labelColor
+					opacity: isCurrentListItem ? 1 : 0.5
+				}
+			}
+			
+			ColumnLayout
+			{
+				Layout.fillHeight: true
+				Layout.fillWidth: false
+				Layout.alignment: Qt.AlignRight
+				
+				Label
+				{
+					Layout.alignment: Qt.AlignRight
+					
+					Layout.fillWidth: true
+					Layout.fillHeight: true
+					text: model.count && model.count !== "0" ? model.count + qsTr(" items") : ""
+					horizontalAlignment: Qt.AlignRight
+					verticalAlignment: Qt.AlignBottom
+					elide: Qt.ElideRight
+					wrapMode: Text.Wrap
+					font.pointSize: fontSizes.small
+					color: labelColor
+					opacity: isCurrentListItem ? 1 : 0.5
+				}
+				
+				Label
+				{
+					Layout.alignment: Qt.AlignRight
+					
+					Layout.fillWidth: true
+					Layout.fillHeight: true
+					text: Maui.FM.formatSize(model.size)
+					horizontalAlignment: Qt.AlignRight
+					verticalAlignment: Qt.AlignTop
+					elide: Qt.ElideRight
+					wrapMode: Text.Wrap
+					font.pointSize: fontSizes.small
+					color: labelColor
+					opacity: isCurrentListItem ? 1 : 0.5
+				}
+			}
+			
+		}
+		
+	}
+	
 	GridLayout
 	{
 		id: delegatelayout
 		anchors.fill: parent
 		rows: isDetails ? 1 : 2
-		columns: isDetails ? 2 : 1
+		columns: isDetails && showDetailsInfo ? 3 : (isDetails && !showDetailsInfo ? 2 : 1)
 		rowSpacing: space.tiny
 		columnSpacing: space.tiny
 		
@@ -249,7 +340,23 @@ ItemDelegate
 			
 			Layout.leftMargin: isDetails ? space.medium : 0
 			
-			sourceComponent: model.label && model.label.length ? labelComponent : undefined			
+			sourceComponent: model.label && model.label.length && showLabel? labelComponent : undefined			
+		}
+		
+		
+		Loader
+		{
+			id: detailsInfoLoader
+			sourceComponent: isDetails && showDetailsInfo ? detailsComponent : undefined
+			Layout.fillWidth: isDetails && showDetailsInfo
+			Layout.maximumHeight: ( isDetails && showDetailsInfo ? parent.height :  fontSizes.default * 5)
+			Layout.minimumHeight: ( isDetails && showDetailsInfo ? parent.height :  control.height - folderSize - space.tiny)
+			Layout.preferredHeight: ( isDetails && showDetailsInfo ? parent.height : control.height - folderSize - space.tiny)
+			Layout.maximumWidth: control.width * (isMobile ? 0.5 : 0.3)
+			Layout.row:  isDetails && showDetailsInfo ? 1 : 2
+			Layout.column: isDetails && showDetailsInfo ? 3 : 0
+			Layout.rightMargin: space.medium
+			// 			Layout.leftMargin: isDetails ? space.medium : 0
 		}
 		
 		

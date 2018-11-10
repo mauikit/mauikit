@@ -72,8 +72,10 @@ ToolButton
     
     background: Rectangle
     {
-		implicitHeight: control.visible? control.size : 0
-		implicitWidth: control.visible? control.size : 0
+		implicitHeight: control.visible? iconSizes.medium : 0
+		implicitWidth: control.visible? iconSizes.medium : 0
+		
+		anchors.centerIn: control
      color: /*(down || pressed || checked) */ checked && enabled  ? 
      Qt.lighter(colorScheme.highlightColor, 1.2) : colorScheme.backgroundColor
      radius: unit * 3

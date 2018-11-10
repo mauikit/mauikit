@@ -445,6 +445,12 @@ QVariant FM::loadSettings(const QString &key, const QString &group, const QVaria
     return UTIL::loadSettings(key, group, defaultValue);
 }
 
+QString FM::formatSize(const int &size)
+{
+	QLocale locale;
+	return locale.formattedDataSize(size);
+}
+
 QString FM::homePath()
 {
     return FMH::HomePath;

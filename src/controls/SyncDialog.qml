@@ -26,9 +26,11 @@ Maui.Dialog
 {
 	id: control
 
-    acceptText: qsTr("Signin")
+	property bool customServer: false
+    acceptText: qsTr("Sign In")
     rejectText: qsTr("Cancel")
-
+	rejectButton.visible: false
+	
     maxHeight: unit * 300
     maxWidth: maxHeight
 
@@ -44,6 +46,15 @@ Maui.Dialog
         close();
 	}
 	
+	footBar.leftContent: Maui.ToolButton
+	{
+		iconName: "filename-space-amarok"
+// 		text: qsTr("Custom server")
+		checkable: true
+		checked: customServer
+		onClicked: customServer = !customServer
+	}
+	
     onRejected:	close()
 
     Item
@@ -54,9 +65,27 @@ Maui.Dialog
         {
             anchors.centerIn: parent
             width: parent.width
+            
+            Image
+            {
+				visible: !customServer
+				Layout.alignment: Qt.AlignCenter | Qt.ALignTop
+				Layout.preferredWidth: width
+				Layout.preferredHeight: height
+				Layout.margins: space.big
+				
+				width: iconSizes.huge
+				height: width
+				sourceSize.width: width
+				sourceSize.height: height
+				
+				source: "qrc:/assets/opendesktop.png"
+			}
+            
             Maui.TextField
             {
                 id: serverField
+                visible: customServer
                 Layout.fillWidth: true
                 placeholderText: qsTr("Server address...")
                 text: "https://cloud.opendesktop.cc/remote.php/webdav/"

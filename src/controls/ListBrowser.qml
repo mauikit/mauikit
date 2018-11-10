@@ -31,6 +31,7 @@ ListView
     property string rightEmblem
     property string leftEmblem
 
+    property bool showDetailsInfo : false
     property bool showPreviewThumbnails: true
 
     signal itemClicked(int index)
@@ -62,6 +63,7 @@ ListView
         width: parent.width
         height: itemSize + space.big
 
+        showDetailsInfo: control.showDetailsInfo
         folderSize : itemSize
         showTooltip: true
         showEmblem: control.showEmblem

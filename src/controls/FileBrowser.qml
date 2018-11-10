@@ -237,6 +237,7 @@ Maui.Page
 			showEmblem: currentPathType !== FMList.APPS_PATH && showEmblems
 			rightEmblem: isMobile ? "document-share" : ""
 			leftEmblem: "emblem-added"
+			showDetailsInfo: true
 			// 			itemSize: thumbnailsSize
 			model: folderModel
 			section.delegate: Maui.LabelDelegate
@@ -650,7 +651,7 @@ Maui.Page
 			}else
 			{
 				thumbnailsSize = parseInt(Maui.FM.loadSettings("IconSize", "SETTINGS", thumbnailsSize))			
-				detailsView = Maui.FM.loadSettings("DetailsView", "SETTINGS", detailsView) === "true" ? true : false
+				detailsView = Maui.FM.loadSettings("DetailsView", "SETTINGS", detailsView)
 			}
 		}
 		

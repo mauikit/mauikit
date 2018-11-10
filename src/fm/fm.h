@@ -83,6 +83,7 @@ public slots:
     void addCloudAccount(const QString &server, const QString &user, const QString &password);
 	void openCloudItem(const QVariantMap &item);	
 	
+	static QString formatSize(const int &size);
 	static QString homePath();	
 	static QString parentDir(const QString &path);
 	
