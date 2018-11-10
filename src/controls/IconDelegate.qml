@@ -239,7 +239,7 @@ ItemDelegate
 					
 					Layout.fillWidth: true
 					Layout.fillHeight: true
-					text: model.date
+					text: model.modified
 					horizontalAlignment: Qt.AlignRight
 					verticalAlignment: Qt.AlignTop
 					elide: Qt.ElideRight
