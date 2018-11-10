@@ -239,7 +239,7 @@ ItemDelegate
 					
 					Layout.fillWidth: true
 					Layout.fillHeight: true
-					text: model.modified
+					text: Maui.FM.formatDate(model.modified)
 					horizontalAlignment: Qt.AlignRight
 					verticalAlignment: Qt.AlignTop
 					elide: Qt.ElideRight

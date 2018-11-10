@@ -451,6 +451,12 @@ QString FM::formatSize(const int &size)
 	return locale.formattedDataSize(size);
 }
 
+QString FM::formatDate(const QString &dateStr, const QString &format)
+{
+	const auto date = QDateTime::fromString(dateStr, Qt::TextDate);
+	return date.toString(format);
+}
+
 QString FM::homePath()
 {
     return FMH::HomePath;

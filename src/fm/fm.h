@@ -84,6 +84,7 @@ public slots:
 	void openCloudItem(const QVariantMap &item);	
 	
 	static QString formatSize(const int &size);
+	static QString formatDate(const QString &dateStr, const QString &format = "dd/MM/yyyy");
 	static QString homePath();	
 	static QString parentDir(const QString &path);
 	
