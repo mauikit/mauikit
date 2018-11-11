@@ -676,6 +676,7 @@ Maui.Page
 		populate(modelList.previousPath)
 		console.log("INDEX HISTORY"<< indexHistory)
 		browser.currentIndex = indexHistory.pop()
+		browser.positionViewAtIndex(browser.currentIndex, ListView.Center)
 	}
 	
 	function goNext()
