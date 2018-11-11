@@ -222,11 +222,9 @@ ItemDelegate
 				
 				Label
 				{
-					Layout.alignment: Qt.AlignRight
-					
+					Layout.alignment: Qt.AlignRight					
 					Layout.fillWidth: true
 					Layout.fillHeight: true
-					text: Maui.FM.formatDate(model.modified)
 					horizontalAlignment: Qt.AlignRight
 					verticalAlignment: Qt.AlignBottom
 					elide: Qt.ElideRight
@@ -234,6 +232,7 @@ ItemDelegate
 					font.pointSize: fontSizes.small
 					color: labelColor
 					opacity: isCurrentListItem ? 1 : 0.5
+					text: model.mime === "inode/directory" ? model.count + qsTr(" items") : Maui.FM.formatSize(model.size)
 				}
 				
 				Label
@@ -242,7 +241,8 @@ ItemDelegate
 					
 					Layout.fillWidth: true
 					Layout.fillHeight: true
-					text: model.mime === "inode/directory" ? model.count + qsTr(" items") : Maui.FM.formatSize(model.size)
+					
+					text: Maui.FM.formatDate(model.modified)
 					
 					horizontalAlignment: Qt.AlignRight
 					verticalAlignment: Qt.AlignTop
