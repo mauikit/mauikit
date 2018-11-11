@@ -34,7 +34,7 @@ Maui.Page
 	
 	property bool selectionMode : false
 	property bool group : false
-	property bool detailsView : false
+	property bool detailsView : Maui.FM.loadSettings("DetailsView", "SETTINGS", detailsView)
 	property bool showEmblems: true
 	
 	property alias selectionBar : selectionBarLoader.item
