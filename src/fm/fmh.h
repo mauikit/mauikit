@@ -426,7 +426,7 @@ namespace FMH
 			{FMH::MODEL_KEY::SIZE, QString::number(file.size()) /*locale.formattedDataSize(file.size())*/},
 			{FMH::MODEL_KEY::PATH, path},
 			{FMH::MODEL_KEY::THUMBNAIL, path},
-			{FMH::MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path).count()) : "0"}
+			{FMH::MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path).count() - 2) : "0"}
 			
 		};
 		

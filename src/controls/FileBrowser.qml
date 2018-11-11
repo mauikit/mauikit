@@ -27,6 +27,8 @@ Maui.Page
 	property var copyPaths : []
 	property var cutPaths : []
 	
+	property var indexHistory : []
+	
 	property bool isCopy : false
 	property bool isCut : false
 	
@@ -232,7 +234,6 @@ Maui.Page
 		
 		Maui.ListBrowser
 		{
-			
 			showPreviewThumbnails: modelList.preview
 			showEmblem: currentPathType !== FMList.APPS_PATH && showEmblems
 			rightEmblem: isMobile ? "document-share" : ""
@@ -272,9 +273,19 @@ Maui.Page
 	{
 		target: browser
 		
-		onItemClicked: control.itemClicked(index)
+		onItemClicked: 
+		{		
+			browser.currentIndex = index
+			indexHistory.push(index)
+			control.itemClicked(index)
+		}
 		
-		onItemDoubleClicked: control.itemDoubleClicked(index)
+		onItemDoubleClicked: 
+		{
+			browser.currentIndex = index	
+			indexHistory.push(index)
+			control.itemDoubleClicked(index)
+		}
 		
 		onItemRightClicked:
 		{
@@ -636,7 +647,8 @@ Maui.Page
 	{
 		if(!path.length)
 			return;
-		
+	
+		browser.currentIndex = 0
 		setPath(path)
 		
 		if(currentPathType === FMList.PLACES_PATH)
@@ -662,6 +674,8 @@ Maui.Page
 	function goBack()
 	{
 		populate(modelList.previousPath)
+		console.log("INDEX HISTORY"<< indexHistory)
+		browser.currentIndex = indexHistory.pop()
 	}
 	
 	function goNext()
