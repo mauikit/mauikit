@@ -48,7 +48,7 @@ ItemDelegate
 	property color hightlightedColor : GridView.isCurrentItem || hovered || (keepEmblemOverlay && emblemAdded) ? highlightColor : "transparent"
 	
 	property string rightEmblem
-	property string leftEmblem : "emblem-added"
+	property string leftEmblem : "list-add"
 	
 	signal rightClicked()
 	signal emblemClicked(int index)
@@ -86,7 +86,7 @@ ItemDelegate
 		anchors.top: parent.top
 		anchors.left: parent.left
 		onClicked: leftEmblemClicked(index)
-		Component.onCompleted: leftEmblemIcon.item.isMask = false
+// 		Component.onCompleted: leftEmblemIcon.item.isMask = false
 		size: iconSizes.small
 	}
 	

@@ -93,7 +93,8 @@ public slots:
 	
 	static bool isDefaultPath(const QString &path);
 	static bool isDir(const QString &path);
-	static bool isApp(const QString &path);	
+	static bool isApp(const QString &path);
+	static bool isCloud(const QString &path);
 	static bool fileExists(const QString &path);
 	
 	/* SETTINGS */
@@ -104,7 +105,7 @@ public slots:
 	static void setDirConf(const QString &path, const QString &group, const QString &key, const QVariant &value);
 	
 	/* ACTIONS */	
-	static bool copy(const QStringList &paths, const QString &where);
+	bool copy(const QVariantList &data, const QString &where);
 	static bool cut(const QStringList &paths, const QString &where);
 	static bool removeFile(const QString &path);
 	static bool rename(const QString &path, const QString &name);

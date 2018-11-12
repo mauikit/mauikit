@@ -9,16 +9,16 @@ Maui.Menu
 	id: control
 	implicitWidth: colorBar.implicitWidth + space.big
 	
-	property var paths : []
+	property var items : []
 	property bool isDir : false
 	
-	signal bookmarkClicked(var paths)
-	signal removeClicked(var paths)
-	signal shareClicked(var paths)
-	signal copyClicked(var paths)
-	signal cutClicked(var paths)
-	signal renameClicked(var paths)
-	signal tagsClicked(var paths)
+	signal bookmarkClicked(var items)
+	signal removeClicked(var items)
+	signal shareClicked(var items)
+	signal copyClicked(var items)
+	signal cutClicked(var items)
+	signal renameClicked(var items)
+	signal tagsClicked(var items)
 	
 	Maui.MenuItem
 	{
@@ -26,7 +26,7 @@ Maui.Menu
 		enabled: isDir
 		onTriggered:
 		{
-			bookmarkClicked(paths)
+			bookmarkClicked(control.items)
 			close()
 		}
 	}
@@ -36,7 +36,7 @@ Maui.Menu
 		text: qsTr("Tags...")
 		onTriggered:
 		{
-			tagsClicked(paths)
+			tagsClicked(control.items)
 			close()
 		}
 	}
@@ -46,7 +46,7 @@ Maui.Menu
 		text: qsTr("Share...")
 		onTriggered:
 		{
-			shareClicked(paths)
+			shareClicked(control.items)
 			close()
 		}
 	}
@@ -58,7 +58,7 @@ Maui.Menu
 		text: qsTr("Copy...")
 		onTriggered:
 		{
-			copyClicked(paths)
+			copyClicked(control.items)
 			close()
 		}
 	}
@@ -68,7 +68,7 @@ Maui.Menu
 		text: qsTr("Cut...")
 		onTriggered:
 		{
-			cutClicked(paths)
+			cutClicked(control.items)
 			close()
 		}
 	}
@@ -78,7 +78,7 @@ Maui.Menu
 		text: qsTr("Rename...")
 		onTriggered:
 		{
-			renameClicked(paths)
+			renameClicked(control.items)
 			close()
 		}
 	}
@@ -88,7 +88,7 @@ Maui.Menu
 		text: qsTr("Remove...")
 		onTriggered:
 		{
-			removeClicked(paths)
+			removeClicked(control.items)
 			close()
 		}
 	}
@@ -100,7 +100,7 @@ Maui.Menu
 		text: qsTr("Preview...")
 		onTriggered:
 		{
-			previewer.show(paths[0])
+			previewer.show(control.items[0].path)
 			close()
 		}
 	}
@@ -126,20 +126,22 @@ Maui.Menu
 			size:  iconSize
 			onColorPicked:
 			{
-				for(var i in control.paths)
-					Maui.FM.setDirConf(control.paths[i]+"/.directory", "Desktop Entry", "Icon", color)
+				for(var i in control.items)
+					Maui.FM.setDirConf(control.items[i].path+"/.directory", "Desktop Entry", "Icon", color)
 					
 					refresh()
 			}
 		}
 	}
 	
-	function show(urls)
+	function show(items)
 	{
-		if(urls.length > 0 )
+		if(items.length > 0 )
 		{
-			paths = urls
-			isDir = Maui.FM.isDir(paths[0])
+			if(items.length == 1)
+				isDir = Maui.FM.isDir(items[0].path)
+			
+			control.items = items
 			popup()
 		}
 	}

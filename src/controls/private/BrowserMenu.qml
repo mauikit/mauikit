@@ -128,9 +128,9 @@ Maui.Menu
 			|| currentPathType === FMList.TAGS_PATH)
         {
             if(isCopy)
-                pasteFiles = copyPaths.length
+                pasteFiles = copyItems.length
             else if(isCut)
-                pasteFiles = cutPaths.length
+                pasteFiles = cutItems.length
 
             popup()
         }

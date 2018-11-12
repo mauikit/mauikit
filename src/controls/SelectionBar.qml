@@ -30,8 +30,11 @@ Maui.Item
     colorScheme.textColor : colorScheme.altColorText
     
     property var selectedPaths: []
+    property var selectedItems: []
+    
     property alias selectionList : selectionList
     property alias anim : anim
+
     property int barHeight : itemHeight + space.large
     property color animColor : "black"
     property int itemHeight: iconSizes.big + space.big
@@ -197,7 +200,7 @@ Maui.Item
                     showTooltip: true
                     showThumbnails: true
                     emblemSize: iconSizes.small
-                    leftEmblem: "emblem-remove"
+                    leftEmblem: "list-remove"
 
                     Connections
                     {
@@ -286,6 +289,7 @@ Maui.Item
     function clear()
     {
         selectedPaths = []
+        selectedItems = []
         selectionList.model.clear()
     }
 
@@ -295,6 +299,7 @@ Maui.Item
         if(selectedPaths.indexOf(path) > -1)
         {
             selectedPaths.splice(index, 1)
+			selectedItems.splice(index, 1)
             selectionList.model.remove(index)
         }
     }
@@ -303,19 +308,21 @@ Maui.Item
     {
         if(selectedPaths.indexOf(item.path) < 0)
         {
+			selectedItems.push(item)
             selectedPaths.push(item.path)
 
-            for(var i = 0; i < selectionList.count ; i++ )
-                if(selectionList.model.get(i).path === item.path)
-                {
-                    selectionList.model.remove(i)
-                    return
-                }
+//             for(var i = 0; i < selectionList.count ; i++ )
+//                 if(selectionList.model.get(i).path === item.path)
+//                 {
+//                     selectionList.model.remove(i)
+//                     return
+//                 }
 
             selectionList.model.append(item)
             selectionList.positionViewAtEnd()
 
             if(position === Qt.Vertical) return
+				
             if(typeof(riseContent) === "undefined") return
 
             riseContent()
@@ -326,7 +333,5 @@ Maui.Item
     {
         animColor = color
         anim.running = true
-    }
-    
-    
+    }    
 }

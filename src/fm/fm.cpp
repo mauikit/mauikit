@@ -68,6 +68,18 @@ void FM::init()
 	{		
 		this->openUrl(item[FMH::MODEL_KEY::PATH]);
 	});
+	
+	connect(this->sync, &Syncing::readyCopy, [this](const FMH::MODEL item)
+	{		
+		qDebug()<< "item ready to be copy to :"<< this->sync->getCopyTo() << item[FMH::MODEL_KEY::PATH];
+// 		
+		QVariantMap data;
+		for(auto key : item.keys())
+			data.insert(FMH::MODEL_NAME[key], item[key]);
+		
+		
+		this->copy(QVariantList {data}, this->sync->getCopyTo());
+	});
 }
 
 FM::FM(QObject *parent) : FMDB(parent) {}
@@ -389,6 +401,11 @@ bool FM::isApp(const QString& path)
     return /*QFileInfo(path).isExecutable() ||*/ path.endsWith(".desktop");
 }
 
+bool FM::isCloud(const QString &path)
+{
+	return path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]);
+}
+
 bool FM::bookmark(const QString &path)
 {
     if(FMH::defaultPaths.contains(path))
@@ -462,19 +479,38 @@ QString FM::homePath()
     return FMH::HomePath;
 }
 
-bool FM::copy(const QStringList &paths, const QString &where)
+bool FM::copy(const QVariantList &data, const QString &where)
 {
-    for(auto path : paths)
+	FMH::MODEL_LIST items;
+	
+	for(auto k : data)
+	{	
+		auto map = k.toMap();
+		FMH::MODEL model;
+		
+		for(auto key : map.keys())
+			model.insert(FMH::MODEL_NAME_KEY[key], map[key].toString());				
+		
+		items << model;
+	}
+	
+    for(auto item : items)
     {
-        if(QFileInfo(path).isDir())
+		auto path = item[FMH::MODEL_KEY::PATH];
+        if(this->isDir(path))
         {
             auto state = copyPath(path, where+"/"+QFileInfo(path).fileName(), false);
             if(!state) return false;
 
-        }else
+        }else if(this->isCloud(path))
+		{
+			this->sync->setCopyTo(where);			
+			this->sync->resolveFile(item, Syncing::SIGNAL_TYPE::COPY);
+			
+		}else if(UTIL::fileExists(path))
         {
             QFile file(path);
-            qDebug()<< paths << "is a file";
+            qDebug()<< path << "is a file";
 
             auto state = file.copy(where+"/"+QFileInfo(path).fileName());
             if(!state) return false;

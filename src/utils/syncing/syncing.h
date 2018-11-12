@@ -17,7 +17,11 @@ public:
 		DOWNLOAD,
 		COPY,
 		SAVE,
-		CUT
+		CUT,
+		DELETE,
+		RENAME,
+		MOVE,
+		UPLOAD
 	};
     explicit Syncing(QObject *parent = nullptr);
     void listContent(const QString &path);
@@ -25,7 +29,9 @@ public:
 	void download(const QString &path);
 	void upload(const QString &path);
 	void resolveFile(const FMH::MODEL &item, const Syncing::SIGNAL_TYPE &signalType);
-	
+	void setCopyTo(const QString &path);
+	QString getCopyTo() const;	
+
 protected:
 	void emitSignal(const FMH::MODEL &item);
 
@@ -40,6 +46,7 @@ private:
 	QString getCacheFile(const QString &path);
 
 	QString currentPath;
+	QString copyTo;
 	
 	SIGNAL_TYPE signalType;
 	
@@ -48,6 +55,7 @@ signals:
 
 	void readyOpen(FMH::MODEL item);
 	void readyDownload(FMH::MODEL item);
+	void readyCopy(FMH::MODEL item);
 	
 public slots:
 };
