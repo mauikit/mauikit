@@ -44,7 +44,7 @@ Maui.Dialog
 			{
 				if(typeof(previewLoader.item.player) !== "undefined")
 					previewLoader.item.player.stop()
-					browser.openFile(currentUrl)
+					openFile(currentUrl)
 			}
 		}
 		]
@@ -55,7 +55,7 @@ Maui.Dialog
 			onClicked:
 			{
 				close()
-				browser.remove([currentUrl])
+				remove([currentUrl])
 			}
 		}
 		
