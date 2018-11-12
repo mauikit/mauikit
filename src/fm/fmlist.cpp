@@ -206,8 +206,73 @@ void FMList::setSortBy(const FMH::MODEL_KEY& key)
 void FMList::sortList()
 {
 	auto key = this->sort;
-	auto foldersFirst = this->foldersFirst;
-	std::sort(this->list.begin(), this->list.end(), [key, foldersFirst](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
+	auto index = 0;
+	
+	if(this->foldersFirst)
+	{
+		qSort(this->list.begin(), this->list.end(), [](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
+		{
+			const auto key = FMH::MODEL_KEY::MIME;
+			if(e1[key] == "inode/directory")
+				return true;
+			
+			return false;
+		});
+		
+		
+		for(auto item : this->list)
+			if(item[FMH::MODEL_KEY::MIME] == "inode/directory")
+				index++;
+			
+		qDebug()<< "folders start at:" << index;
+		
+		qSort(this->list.begin(),this->list.begin() + index, [key](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
+		{
+			auto role = key;
+			
+			switch(role)
+			{				
+				case FMH::MODEL_KEY::SIZE:
+				{				
+					if(e1[role].toDouble() > e2[role].toDouble())
+						return true;
+					break;
+				}
+				
+				case FMH::MODEL_KEY::MODIFIED:
+				case FMH::MODEL_KEY::DATE:
+				{
+					auto currentTime = QDateTime::currentDateTime();
+					
+					auto date1 = QDateTime::fromString(e1[role], Qt::TextDate);
+					auto date2 = QDateTime::fromString(e2[role], Qt::TextDate);
+					
+					if(date1.secsTo(currentTime) <  date2.secsTo(currentTime))
+						return true;
+					
+					break;
+				}
+				
+				case FMH::MODEL_KEY::LABEL:
+				{
+					const auto str1 = QString(e1[role]).toLower();
+					const auto str2 = QString(e2[role]).toLower();
+					
+					if(str1 < str2)
+						return true;				
+					break;
+				}
+				
+				default:
+					if(e1[role] < e2[role])
+						return true;
+			}
+			
+			return false;
+		});
+	}
+	
+	qSort(this->list.begin() + index, this->list.end(), [key](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
 	{
 		auto role = key;
 		
@@ -244,28 +309,14 @@ void FMList::sortList()
 				const auto str1 = QString(e1[role]).toLower();
 				const auto str2 = QString(e2[role]).toLower();
 				
-				if(foldersFirst)
-				{
-					if((str1 < str2) && (e1[FMH::MODEL_KEY::MIME] == "inode/directory"))
-						return true;
-				}else
-				{
-					if(str1 < str2)
-						return true;
-				}
+				if(str1 < str2)
+					return true;				
 				break;
 			}
 			
 			default:
-				if(foldersFirst)
-				{
-					if((e1[role] < e2[role]) && (e1[FMH::MODEL_KEY::MIME] == "inode/directory"))
-						return true;
-				}else
-				{
-					if(e1[role] < e2[role])
-						return true;
-				}
+				if(e1[role] < e2[role])
+					return true;
 		}
 		
 		return false;

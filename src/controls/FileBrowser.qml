@@ -484,7 +484,7 @@ Maui.Page
 			{
 				text: qsTr("Name")
 				checkable: true
-				checked: modelList.sortBy === FMList.NAME
+				checked: modelList.sortBy === FMList.LABEL
 				onTriggered: modelList.sortBy = FMList.LABEL
 			}
 			
