@@ -34,7 +34,7 @@ Maui.Page
 	
 	property bool selectionMode : false
 	property bool group : false
-	property bool detailsView : Maui.FM.loadSettings("DetailsView", "SETTINGS", detailsView)
+	property bool detailsView : Maui.FM.loadSettings("DetailsView", "SETTINGS", detailsView) == "true" ? true: false
 	property bool showEmblems: true
 	
 	property alias selectionBar : selectionBarLoader.item
@@ -663,7 +663,7 @@ Maui.Page
 			}else
 			{
 				thumbnailsSize = parseInt(Maui.FM.loadSettings("IconSize", "SETTINGS", thumbnailsSize))			
-				detailsView = Maui.FM.loadSettings("DetailsView", "SETTINGS", detailsView)
+				detailsView =  Maui.FM.loadSettings("DetailsView", "SETTINGS", detailsView) == "true" ? true: false
 			}
 		}
 		

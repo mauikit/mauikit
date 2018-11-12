@@ -64,7 +64,7 @@ void FM::init()
         emit this->cloudServerContentReady(list);
     });
 	
-	connect(this->sync, &Syncing::itemReady, [this](const FMH::MODEL item)
+	connect(this->sync, &Syncing::readyOpen, [this](const FMH::MODEL item)
 	{		
 		this->openUrl(item[FMH::MODEL_KEY::PATH]);
 	});
@@ -323,7 +323,7 @@ void FM::openCloudItem(const QVariantMap &item)
 	for(auto key : item.keys())
 		data.insert(FMH::MODEL_NAME_KEY[key], item[key].toString());
 	
-	this->sync->resolveFile(data);
+	this->sync->resolveFile(data, Syncing::SIGNAL_TYPE::OPEN);
 }
 
 void FM::addCloudAccount(const QString &server, const QString &user, const QString &password)

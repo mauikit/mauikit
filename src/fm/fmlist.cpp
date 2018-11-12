@@ -158,6 +158,10 @@ void FMList::reset()
 				auto conf = FMH::dirConf(this->path+"/.directory");				
 				this->hidden = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN]].toBool();				
 				this->preview = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTHUMBNAIL]].toBool();
+			}else
+			{
+				this->hidden = UTIL::loadSettings("HiddenFilesShown", "SETTINGS", this->hidden).toBool();
+				this->preview = UTIL::loadSettings("ShowThumbnail", "SETTINGS", this->preview).toBool();
 			}
 			emit this->previewChanged();			
 			emit this->hiddenChanged();
@@ -219,13 +223,11 @@ void FMList::sortList()
 			return false;
 		});
 		
-		
 		for(auto item : this->list)
 			if(item[FMH::MODEL_KEY::MIME] == "inode/directory")
 				index++;
+			else break;
 			
-		qDebug()<< "folders start at:" << index;
-		
 		qSort(this->list.begin(),this->list.begin() + index, [key](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
 		{
 			auto role = key;

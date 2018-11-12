@@ -146,12 +146,14 @@ void Syncing::saveTo(const QByteArray &array, const QString& path)
 	file.write(array);
 	file.close();
 	
-	emit this->itemDownloaded(FMH::getFileInfoModel(path));
-	emit this->itemReady(FMH::getFileInfoModel(path));
+	this->emitSignal(FMH::getFileInfoModel(path));
+// 	emit this->itemReady(FMH::getFileInfoModel(path));
 }
 
-void Syncing::resolveFile(const FMH::MODEL& item)
-{
+void Syncing::resolveFile(const FMH::MODEL& item, const Syncing::SIGNAL_TYPE &signalType)
+{	
+	this->signalType = signalType;
+	
 	const auto file = this->getCacheFile(item[FMH::MODEL_KEY::URL]);	
 	
 	if(FMH::fileExists(file))
@@ -166,9 +168,24 @@ void Syncing::resolveFile(const FMH::MODEL& item)
 		if(dateCloudFile >  dateCacheFile)
 			this->download(file);
 		
-		emit this->itemReady(cacheFile);		
+		this->emitSignal(cacheFile);
 	}
 	else
 		this->download(file);
+}
+
+
+void Syncing::emitSignal(const FMH::MODEL &item)
+{
+	switch(this->signalType)
+	{
+		case SIGNAL_TYPE::OPEN:
+			emit this->readyOpen(item);
+			break;
+		
+		case SIGNAL_TYPE::DOWNLOAD:
+			emit this->readyDownload(item);
+			break;
+	}
 }
 
