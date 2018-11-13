@@ -106,7 +106,8 @@ namespace FMH
         SORTBY,
         USER,
         PASSWORD,
-        SERVER
+        SERVER,
+		FOLDERSFIRST
 	}; Q_ENUM_NS(MODEL_KEY);
 	
 	static const QHash<FMH::MODEL_KEY, QString> MODEL_NAME =
@@ -136,8 +137,9 @@ namespace FMH
         {MODEL_KEY::SORTBY, "sortby"},
         {MODEL_KEY::USER, "user"},
         {MODEL_KEY::PASSWORD, "password"},
-        {MODEL_KEY::SERVER, "server"}
-    };
+		{MODEL_KEY::SERVER, "server"},
+		{MODEL_KEY::FOLDERSFIRST, "foldersfirst"}
+	};
 	
 	static const QHash<QString, FMH::MODEL_KEY> MODEL_NAME_KEY =
 	{
@@ -277,6 +279,7 @@ namespace FMH
 		
 		QString icon, iconsize, hidden, detailview, showthumbnail, showterminal;
 		uint count = 0, sortby = FMH::MODEL_KEY::MODIFIED;
+		bool foldersFirst = false;
 		
 		#ifdef Q_OS_ANDROID
 		QSettings file(path, QSettings::Format::NativeFormat);
@@ -295,6 +298,7 @@ namespace FMH
 		showterminal = file.value("ShowTerminal").toString();		
 		count = file.value("Count").toInt();
 		sortby = file.value("SortBy").toInt();
+		foldersFirst = file.value("FoldersFirst").toBool();
 		file.endGroup();
 		
 		#else
@@ -307,6 +311,7 @@ namespace FMH
 		showterminal = file.entryMap(QString("MAUIFM"))["ShowTerminal"];
 		count = file.entryMap(QString("MAUIFM"))["Count"].toInt();
 		sortby = file.entryMap(QString("MAUIFM"))["SortBy"].toInt();
+		foldersFirst = file.entryMap(QString("MAUIFM"))["FoldersFirst"] == "true" ? true : false;
 		#endif
 		
 		auto res = QVariantMap({
@@ -316,7 +321,9 @@ namespace FMH
 			{FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTERMINAL], showterminal.isEmpty() ? "false" : showterminal},
 			{FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTHUMBNAIL], showthumbnail.isEmpty() ? "false" : showthumbnail},
 			{FMH::MODEL_NAME[FMH::MODEL_KEY::DETAILVIEW], detailview.isEmpty() ? "false" : detailview},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN], hidden.isEmpty() ? false : (hidden == "true" ? true : false)}
+			{FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN], hidden.isEmpty() ? false : (hidden == "true" ? true : false)},
+			{FMH::MODEL_NAME[FMH::MODEL_KEY::SORTBY], sortby},
+			{FMH::MODEL_NAME[FMH::MODEL_KEY::FOLDERSFIRST], foldersFirst}
 		});
 		
 		return res;

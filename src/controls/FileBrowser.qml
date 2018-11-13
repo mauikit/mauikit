@@ -155,6 +155,7 @@ Maui.Page
 	{
 		id: modelList
 		path: currentPath
+		foldersFirst: true
 		onSortByChanged: if(group) groupBy()
 		onContentReadyChanged: console.log("CONTENT READY?", contentReady)
 	}

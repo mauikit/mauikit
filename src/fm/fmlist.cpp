@@ -158,10 +158,14 @@ void FMList::reset()
 				auto conf = FMH::dirConf(this->path+"/.directory");				
 				this->hidden = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN]].toBool();				
 				this->preview = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTHUMBNAIL]].toBool();
+				this->sort = static_cast<FMH::MODEL_KEY>(conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SORTBY]].toInt());
+				this->foldersFirst = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::FOLDERSFIRST]].toBool();
 			}else
 			{
 				this->hidden = UTIL::loadSettings("HiddenFilesShown", "SETTINGS", this->hidden).toBool();
 				this->preview = UTIL::loadSettings("ShowThumbnail", "SETTINGS", this->preview).toBool();
+				this->sort = static_cast<FMH::MODEL_KEY>(UTIL::loadSettings("SortBy", "SETTINGS", this->sort).toInt());
+				this->foldersFirst = UTIL::loadSettings("FoldersFirst", "SETTINGS", this->foldersFirst).toBool();
 			}
 			emit this->previewChanged();			
 			emit this->hiddenChanged();
@@ -199,8 +203,10 @@ void FMList::setSortBy(const FMH::MODEL_KEY& key)
 	this->sort = key;
 	this->sortList();
 	
-	// 	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH && this->trackChanges)
-	// 		FMH::setDirConf(this->path+"/.directory", "MAUIFM", "SortBy", this->sort);
+	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH && this->trackChanges && this->saveDirProps)
+		FMH::setDirConf(this->path+"/.directory", "MAUIFM", "SortBy", this->sort);
+	else
+		UTIL::saveSettings("SortBy", this->sort, "SETTINGS");
 	
 	emit this->sortByChanged();
 	
@@ -446,7 +452,7 @@ void FMList::setHidden(const bool &state)
 	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH && this->trackChanges && this->saveDirProps)
 		FMH::setDirConf(this->path+"/.directory", "Settings", "HiddenFilesShown", this->hidden);
 	else
-		UTIL::saveSettings("HiddenFilesShown", this->preview, "SETTINGS");
+		UTIL::saveSettings("HiddenFilesShown", this->hidden, "SETTINGS");
 	
 	emit this->hiddenChanged();
 	this->reset();
@@ -611,6 +617,12 @@ void FMList::setFoldersFirst(const bool &value)
 	this->pre();
 	
 	this->foldersFirst = value;
+	
+	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH && this->trackChanges && this->saveDirProps)
+		FMH::setDirConf(this->path+"/.directory", "MAUIFM", "FoldersFirst", this->foldersFirst);
+	else
+		UTIL::saveSettings("FoldersFirst", this->foldersFirst, "SETTINGS");
+	
 	emit this->foldersFirstChanged();
 	
 	this->sortList();
