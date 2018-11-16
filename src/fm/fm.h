@@ -80,7 +80,7 @@ public slots:
 	bool removeBookmark(const QString &path);
 	bool isBookmark(const QString &path);
 
-    void addCloudAccount(const QString &server, const QString &user, const QString &password);
+    bool addCloudAccount(const QString &server, const QString &user, const QString &password);
 	void openCloudItem(const QVariantMap &item);	
 	
 	static QString formatSize(const int &size);

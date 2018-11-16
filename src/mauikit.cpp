@@ -31,6 +31,9 @@
 #include "placeslist.h"
 #include "placesmodel.h"
 
+#include "syncingmodel.h"
+#include "syncinglist.h"
+
 #include "handy.h"
 #include "documenthandler.h"
 
@@ -121,6 +124,10 @@ void MauiKit::registerTypes(const char *uri)
 	qmlRegisterType<PlacesModel>("PlacesModel", 1, 0, "PlacesModel");
 	qmlRegisterType<FMModel>("FMModel", 1, 0, "FMModel");
 	qmlRegisterType<FMList>("FMList", 1, 0, "FMList");
+	
+	qmlRegisterType<SyncingList>("SyncingList", 1, 0, "SyncingList");
+	qmlRegisterType<SyncingModel>("SyncingModel", 1, 0, "SyncingModel");
+	
 	qmlRegisterType<DocumentHandler>("DocumentHandler", 1, 0, "DocumentHandler");
 	
 	qmlRegisterSingletonType<FM>(uri, 1, 0, "FM",

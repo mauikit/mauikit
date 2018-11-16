@@ -29,6 +29,8 @@ import org.kde.mauikit 1.0 as Maui
 
 import QtQuick.Controls.Material 2.1
 
+import "private"
+
 Kirigami.AbstractApplicationWindow
 {
     id: root
@@ -42,6 +44,7 @@ Kirigami.AbstractApplicationWindow
     property alias page : page
     property alias footBar : page.footBar
     property alias headBar : page.headBar
+    property alias dialog: dialogLoader.item
     
     property alias rightIcon : menuBtn
     property alias leftIcon : searchBtn
@@ -292,6 +295,15 @@ backgroundColor.b, 0.7))
 						
 					}
 				}
+				Maui.MenuItem
+				{
+					text: qsTr("Acounts")
+					onTriggered: 
+					{
+						dialogLoader.sourceComponent = accountsDialogComponent
+						dialog.open()
+					}
+				}
 				
 				MenuSeparator {}
 				
@@ -300,6 +312,7 @@ backgroundColor.b, 0.7))
 					text: qsTr("About")
 					onTriggered: aboutDialog.open()
 				}
+				
 				MenuSeparator {}
 				
 			}			
@@ -393,10 +406,22 @@ backgroundColor.b, 0.7))
         }
     }  
     
+    
     Maui.AboutDialog
     {
         id: aboutDialog  
     }
+    
+    Component
+    {
+		id: accountsDialogComponent		
+		AccountsHelper {}
+	}
+	
+	Loader
+	{
+		id: dialogLoader
+	}    
 
      Component.onCompleted:
      {

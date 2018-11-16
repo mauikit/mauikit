@@ -20,6 +20,51 @@ Maui.Menu
 	signal renameClicked(var items)
 	signal tagsClicked(var items)
 	
+	
+	
+	Maui.MenuItem
+	{
+		text: qsTr("Select")
+		onTriggered:
+		{
+			
+			addToSelection(list.get(browser.currentIndex))
+		}
+	}
+	
+	MenuSeparator{}
+	Maui.MenuItem
+	{
+		text: qsTr("Copy...")
+		onTriggered:
+		{
+			copyClicked(control.items)
+			close()
+		}
+	}
+	
+	Maui.MenuItem
+	{
+		text: qsTr("Cut...")
+		onTriggered:
+		{
+			cutClicked(control.items)
+			close()
+		}
+	}
+	
+	Maui.MenuItem
+	{
+		text: qsTr("Rename...")
+		onTriggered:
+		{
+			renameClicked(control.items)
+			close()
+		}
+	}	
+	
+	MenuSeparator{}
+	
 	Maui.MenuItem
 	{
 		text: qsTr("Bookmark")
@@ -51,49 +96,6 @@ Maui.Menu
 		}
 	}
 	
-	MenuSeparator{}
-	
-	Maui.MenuItem
-	{
-		text: qsTr("Copy...")
-		onTriggered:
-		{
-			copyClicked(control.items)
-			close()
-		}
-	}
-	
-	Maui.MenuItem
-	{
-		text: qsTr("Cut...")
-		onTriggered:
-		{
-			cutClicked(control.items)
-			close()
-		}
-	}
-	
-	Maui.MenuItem
-	{
-		text: qsTr("Rename...")
-		onTriggered:
-		{
-			renameClicked(control.items)
-			close()
-		}
-	}
-	
-	Maui.MenuItem
-	{
-		text: qsTr("Remove...")
-		onTriggered:
-		{
-			removeClicked(control.items)
-			close()
-		}
-	}
-	
-	MenuSeparator{}
 	
 	Maui.MenuItem
 	{
@@ -105,15 +107,21 @@ Maui.Menu
 		}
 	}
 	
+	MenuSeparator{}
+	
 	Maui.MenuItem
 	{
-		text: qsTr("Select")
-        onTriggered:
-        {
-
-            addToSelection(list.get(browser.currentIndex))
-        }
+		text: qsTr("Remove...")
+		colorScheme.textColor: dangerColor
+		
+		onTriggered:
+		{
+			removeClicked(control.items)
+			close()
+		}
 	}
+	
+	MenuSeparator{}	
 	
 	Maui.MenuItem
 	{
@@ -134,15 +142,16 @@ Maui.Menu
 		}
 	}
 	
+	
 	function show(items)
 	{
 		if(items.length > 0 )
 		{
 			if(items.length == 1)
 				isDir = Maui.FM.isDir(items[0].path)
-			
-			control.items = items
-			popup()
+				
+				control.items = items
+				popup()
 		}
 	}
 }

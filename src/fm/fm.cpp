@@ -338,7 +338,7 @@ void FM::openCloudItem(const QVariantMap &item)
 	this->sync->resolveFile(data, Syncing::SIGNAL_TYPE::OPEN);
 }
 
-void FM::addCloudAccount(const QString &server, const QString &user, const QString &password)
+bool FM::addCloudAccount(const QString &server, const QString &user, const QString &password)
 {
     QVariantMap account = {
         {FMH::MODEL_NAME[FMH::MODEL_KEY::SERVER], server},
@@ -347,7 +347,12 @@ void FM::addCloudAccount(const QString &server, const QString &user, const QStri
     };
 
     if(this->insert(FMH::TABLEMAP[FMH::TABLE::CLOUDS], account))
-        emit this->cloudAccountInserted(user);
+    {
+		emit this->cloudAccountInserted(user);
+		return true;
+	}
+	
+	return false;
 }
 
 FMH::MODEL_LIST FM::getTagContent(const QString &tag)

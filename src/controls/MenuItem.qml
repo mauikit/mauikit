@@ -34,7 +34,7 @@ MenuItem
 	/***************************/
 	spacing: space.medium
 	font.pointSize: fontSizes.default
-	
+		
 	contentItem: Label 
 	{
 		id: controlLabel

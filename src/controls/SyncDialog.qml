@@ -31,20 +31,12 @@ Maui.Dialog
     rejectText: qsTr("Cancel")
 	rejectButton.visible: false
 	
+	property alias serverField: serverField
+	property alias userField: userField
+	property alias passwordField: passwordField
+	
     maxHeight: unit * 300
-    maxWidth: maxHeight
-
-	onAccepted:
-    {
-        var server = serverField.text
-        var user = userField.text
-        var password = passwordField.text
-
-        if(server.length && user.length && password.length)
-            Maui.FM.addCloudAccount(server, user, password);
-
-        close();
-	}
+    maxWidth: maxHeight	
 	
 	footBar.leftContent: Maui.ToolButton
 	{

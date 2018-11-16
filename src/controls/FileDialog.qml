@@ -33,6 +33,7 @@ Maui.Dialog
 	defaultButtons: false
 		
 	property string initPath
+	property string suggestedFileName : ""
 	
 	property var filters: []
 	property int filterType: FMList.NONE
@@ -102,6 +103,7 @@ Maui.Dialog
 					height: parent.height
 						
 					onPlaceClicked: browser.openFolder(path)
+					list.groups: control.mode === modes.OPEN ? [FMList.PLACES_PATH, FMList.BOOKMARKS_PATH, FMList.CLOUD_PATH, FMList.DRIVES_PATH, FMList.TAGS_PATH] : [FMList.PLACES_PATH, FMList.BOOKMARKS_PATH, FMList.CLOUD_PATH, FMList.DRIVES_PATH]
 				}
 				
 				ColumnLayout
@@ -121,6 +123,7 @@ Maui.Dialog
 						list.filters: control.filters
 						list.sortBy: control.sortBy
 						list.filterType: control.filterType
+						footBar.visible: true
 						
 						onItemClicked: 
 						{
@@ -162,6 +165,7 @@ Maui.Dialog
 							visible: control.mode === modes.SAVE
 							width: _bottomBar.middleLayout.width * 0.9
 							placeholderText: qsTr("File name")
+							text: suggestedFileName
 							
 						}
 						
@@ -170,13 +174,19 @@ Maui.Dialog
 							spacing: space.big
 							Maui.Button
 							{
-								id: _rejectButton
-								colorScheme.textColor: dangerColor
-								colorScheme.borderColor: dangerColor
-								colorScheme.backgroundColor: "transparent"
+								id: _acceptButton
+								colorScheme.textColor: "white"
+								colorScheme.backgroundColor: suggestedColor
 								
-								text: rejectText
-								onClicked: control.closeIt()
+								text: qsTr("Accept")
+								onClicked: 
+								{
+									var paths = browser.selectionBar && browser.selectionBar.visible ? browser.selectionBar.selectedPaths : browser.currentPath
+									
+									callback(paths)
+									
+									control.closeIt()
+								}
 								
 							}
 						} 

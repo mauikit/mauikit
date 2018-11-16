@@ -42,7 +42,9 @@ HEADERS += \
     $$PWD/src/fm/placesmodel.h \
     $$PWD/src/utils/editor/documenthandler.h \
     $$PWD/src/utils/handy.h \
-    $$PWD/src/utils/syncing/syncing.h
+    $$PWD/src/utils/syncing/syncing.h \
+	$$PWD/src/utils/syncing/syncinglist.h \
+    $$PWD/src/utils/syncing/syncingmodel.h
 
 SOURCES += \
     $$PWD/src/mauikit.cpp \
@@ -54,7 +56,9 @@ SOURCES += \
     $$PWD/src/fm/placesmodel.cpp \    
     $$PWD/src/utils//editor/documenthandler.cpp \
     $$PWD/src/utils/handy.cpp \
-    $$PWD/src/utils/syncing/syncing.cpp
+    $$PWD/src/utils/syncing/syncing.cpp \
+    $$PWD/src/utils/syncing/syncinglist.cpp \
+    $$PWD/src/utils/syncing/syncingmodel.cpp
 
 DEPENDPATH += \
     $$PWD/src \

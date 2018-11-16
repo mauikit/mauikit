@@ -19,6 +19,7 @@
         <file alias="private/TextPreview.qml">src/controls/private/TextPreview.qml</file>
         <file alias="private/VideoPreview.qml">src/controls/private/VideoPreview.qml</file>
         <file alias="private/DefaultPreview.qml">src/controls/private/DefaultPreview.qml</file>
+		<file alias="private/AccountsHelper.qml">src/controls/private/AccountsHelper.qml</file>
         <file alias="Holder.qml">src/controls/Holder.qml</file>
         <file alias="Drawer.qml">src/controls/Drawer.qml</file>
         <file alias="ListDelegate.qml">src/controls/ListDelegate.qml</file>

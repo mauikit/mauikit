@@ -23,9 +23,7 @@
 #include <QAbstractListModel>
 #include <QList>
 
-/**
- * @todo write docs
- */
+
 class FMList;
 class FMModel : public QAbstractListModel
 {

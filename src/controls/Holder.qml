@@ -114,6 +114,7 @@ Item
 		horizontalAlignment: Qt.AlignHCenter
 		elide: Text.ElideRight
 		color: colorScheme.textColor
+		wrapMode: Text.Wrap
 	
 		MouseArea
 		{

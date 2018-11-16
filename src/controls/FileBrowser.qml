@@ -59,6 +59,7 @@ Maui.Page
 	signal itemRightEmblemClicked(int index)
 	signal rightClicked()
 	
+	
 	margins: 0
 	
 	Loader
@@ -222,13 +223,13 @@ Maui.Page
 		
 		onShareClicked:
 		{
-// 			if(isAndroid)
-// 				Maui.Android.shareDialog(paths)
-// 				else
-// 				{
-// 					dialogLoader.sourceComponent= shareDialogComponent
-// 					dialog.show(paths)
-// 				}
+			// 			if(isAndroid)
+			// 				Maui.Android.shareDialog(paths)
+			// 				else
+			// 				{
+			// 					dialogLoader.sourceComponent= shareDialogComponent
+			// 					dialog.show(paths)
+			// 				}
 		}
 	}
 	
@@ -581,11 +582,11 @@ Maui.Page
 	{
 		if(trackChanges && saveDirProps)
 			Maui.FM.setDirConf(currentPath+"/.directory", "MAUIFM", "IconSize", thumbnailsSize)
-		else 
-			Maui.FM.saveSettings("IconSize", thumbnailsSize, "SETTINGS")
+			else 
+				Maui.FM.saveSettings("IconSize", thumbnailsSize, "SETTINGS")
 				
-		if(!control.detailsView)
-			browser.adaptGrid()
+				if(!control.detailsView)
+					browser.adaptGrid()
 	}
 	
 	function openItem(index)
@@ -651,7 +652,7 @@ Maui.Page
 	{
 		if(!path.length)
 			return;
-	
+		
 		browser.currentIndex = 0
 		setPath(path)
 		
@@ -718,7 +719,9 @@ Maui.Page
 		copyItems = []
 		cutItems = []
 		browserMenu.pasteFiles = 0
-		selectionBar.clear()
+		
+		if(control.selectionBar && control.selectionBar.visible)
+			selectionBar.clear()
 	}
 	
 	function copy(items)
@@ -739,9 +742,9 @@ Maui.Page
 	{
 		if(isCopy)
 			Maui.FM.copy(copyItems, currentPath)
-		else if(isCut)
-			if(Maui.FM.cut(cutItems, currentPath))
-				clearSelection()
+			else if(isCut)
+				if(Maui.FM.cut(cutItems, currentPath))
+					clearSelection()
 	}
 	
 	function remove(paths)
@@ -756,8 +759,8 @@ Maui.Page
 		detailsView = state ? state : !detailsView
 		if(trackChanges && saveDirProps)
 			Maui.FM.setDirConf(currentPath+"/.directory", "MAUIFM", "DetailView", detailsView)
-		else
-			Maui.FM.saveSettings("DetailsView", detailsView, "SETTINGS")
+			else
+				Maui.FM.saveSettings("DetailsView", detailsView, "SETTINGS")
 	}
 	
 	function bookmarkFolder(paths)

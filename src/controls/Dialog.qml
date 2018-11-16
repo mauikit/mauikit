@@ -111,16 +111,16 @@ Maui.Popup
 		clip: true
 		headBarExit: false
 		colorScheme.backgroundColor : control.colorScheme.backgroundColor
-		footBar.visible: defaultButtons || footBar.count > 2
+		footBar.visible: footBar.count > 1
 		footBar.colorScheme.backgroundColor: colorScheme.backgroundColor
 		footBar.margins: space.big
 		footBar.rightContent: Row
-		{
-			visible: defaultButtons
+		{			
 			spacing: space.big
 			Maui.Button
 			{
 				id: _rejectButton
+				visible: defaultButtons
 				colorScheme.textColor: dangerColor
 				colorScheme.borderColor: dangerColor
 				colorScheme.backgroundColor: "transparent"
@@ -132,7 +132,8 @@ Maui.Popup
 			
 			Maui.Button
 			{
-				id: _acceptButton			
+				id: _acceptButton	
+				visible: defaultButtons
 				colorScheme.backgroundColor: infoColor
 				colorScheme.textColor: "white"
 				text: acceptText

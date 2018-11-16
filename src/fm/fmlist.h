@@ -22,8 +22,8 @@
 #include <QObject>
 #include "fmh.h"
 
-class QFileSystemWatcher;
 class FM;
+class QFileSystemWatcher;
 class FMList : public QObject
 {
 	Q_OBJECT
