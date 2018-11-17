@@ -37,7 +37,6 @@ class MAUIKIT_EXPORT Tagging : public TAGDB
 {
     Q_OBJECT
 public:
-    static Tagging *getInstance(const QString &app, const QString &version, const QString &uri, const QString &comment = QString());
     static Tagging *getInstance();
 
     Q_INVOKABLE QVariantList get(const QString &query);
@@ -73,10 +72,10 @@ public:
     static QString id();
 
 private:
-    Tagging(const QString &app, const QString &version, const QString &uri, const QString &comment = QString(), QObject *parent = nullptr);
+    Tagging(QObject *parent = nullptr);
     ~Tagging();
     static Tagging* instance;
-    void setApp(const QString &app, const QString &uri, const QString &version, const QString &comment = QString());
+    void setApp();
 
     QString application = QString();
     QString version = QString();

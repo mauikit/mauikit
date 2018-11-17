@@ -21,9 +21,11 @@
 #include <QMimeDatabase>
 #include <QNetworkInterface>
 
-Tagging::Tagging(const QString &app, const QString &version, const QString &uri, const QString &comment, QObject *parent) : TAGDB(parent)
+#include "utils.h"
+
+Tagging::Tagging(QObject *parent) : TAGDB(parent)
 {
-    this->setApp(app, uri, version, comment);
+    this->setApp();
 }
 
 Tagging::~Tagging() 
@@ -32,11 +34,11 @@ Tagging::~Tagging()
 }
 
 Tagging *Tagging::instance = nullptr;
-Tagging *Tagging::getInstance(const QString &app, const QString &version, const QString &uri, const QString &comment)
+Tagging *Tagging::getInstance()
 {
     if(!instance)
     {
-        instance = new Tagging(app, version, uri, comment);
+        instance = new Tagging();
         qDebug() << "getInstance(): First instance\n";
         return instance;
     } else
@@ -44,11 +46,6 @@ Tagging *Tagging::getInstance(const QString &app, const QString &version, const 
         qDebug()<< "getInstance(): previous instance\n";
         return instance;
     }
-}
-
-Tagging *Tagging::getInstance()
-{
-    return instance;
 }
 
 QVariantList Tagging::get(const QString &queryTxt)
@@ -77,18 +74,18 @@ QVariantList Tagging::get(const QString &queryTxt)
 
 bool Tagging::tagExists(const QString &tag, const bool &strict)
 {
-    return !strict ? this->checkExistance(TAG::TABLEMAP[TAG::TABLE::TAGS], TAG::KEYMAP[TAG::KEY::TAG], tag) :
+    return !strict ? this->checkExistance(TAG::TABLEMAP[TAG::TABLE::TAGS], TAG::KEYMAP[TAG::KEYS::TAG], tag) :
             this->checkExistance(QString("select t.tag from TAGS t inner join TAGS_USERS tu on t.tag = tu.tag inner join APPS_USERS au on au.mac = tu.mac "
             "where au.app = '%1' and au.uri = '%2' and t.tag = '%3'").arg(this->application, this->uri, tag));
 }
 
 
-void Tagging::setApp(const QString &app, const QString &uri, const QString &version, const QString &comment)
+void Tagging::setApp()
 {
-    this->application = app;
-    this->version = version;
-    this->comment = comment;
-    this->uri = uri;
+    this->application = UTIL::app->applicationName();
+	this->version = UTIL::app->applicationVersion();
+    this->comment = QString();
+	this->uri = UTIL::app->organizationName().isEmpty() ? QString("org.maui.%1").arg(this->application) : UTIL::app->organizationName();
     this->app();
 }
 
@@ -98,18 +95,18 @@ bool Tagging::tag(const QString &tag, const QString &color, const QString &comme
 
     QVariantMap tag_map
     {
-        {TAG::KEYMAP[TAG::KEY::TAG], tag},
-        {TAG::KEYMAP[TAG::KEY::COLOR], color},
-        {TAG::KEYMAP[TAG::KEY::ADD_DATE], QDateTime::currentDateTime()},
-        {TAG::KEYMAP[TAG::KEY::COMMENT], comment},
+        {TAG::KEYMAP[TAG::KEYS::TAG], tag},
+        {TAG::KEYMAP[TAG::KEYS::COLOR], color},
+        {TAG::KEYMAP[TAG::KEYS::ADD_DATE], QDateTime::currentDateTime()},
+        {TAG::KEYMAP[TAG::KEYS::COMMENT], comment},
     };
 
     this->insert(TAG::TABLEMAP[TAG::TABLE::TAGS], tag_map);
 
     QVariantMap tag_user_map
     {
-        {TAG::KEYMAP[TAG::KEY::TAG], tag},
-        {TAG::KEYMAP[TAG::KEY::MAC], this->id()}
+        {TAG::KEYMAP[TAG::KEYS::TAG], tag},
+        {TAG::KEYMAP[TAG::KEYS::MAC], this->id()}
     };
 
     if(this->insert(TAG::TABLEMAP[TAG::TABLE::TAGS_USERS], tag_user_map))
@@ -132,12 +129,12 @@ bool Tagging::tagUrl(const QString &url, const QString &tag, const QString &colo
 
     QVariantMap tag_url_map
     {
-        {TAG::KEYMAP[TAG::KEY::URL], url},
-        {TAG::KEYMAP[TAG::KEY::TAG], myTag},
-        {TAG::KEYMAP[TAG::KEY::TITLE], QFileInfo(url).baseName()},
-        {TAG::KEYMAP[TAG::KEY::MIME], mime.name()},
-        {TAG::KEYMAP[TAG::KEY::ADD_DATE], QDateTime::currentDateTime()},
-        {TAG::KEYMAP[TAG::KEY::COMMENT], comment}
+        {TAG::KEYMAP[TAG::KEYS::URL], url},
+        {TAG::KEYMAP[TAG::KEYS::TAG], myTag},
+        {TAG::KEYMAP[TAG::KEYS::TITLE], QFileInfo(url).baseName()},
+        {TAG::KEYMAP[TAG::KEYS::MIME], mime.name()},
+        {TAG::KEYMAP[TAG::KEYS::ADD_DATE], QDateTime::currentDateTime()},
+        {TAG::KEYMAP[TAG::KEYS::COMMENT], comment}
     };
 
     emit this->urlTagged(url, myTag);
@@ -151,13 +148,13 @@ bool Tagging::tagAbstract(const QString &tag, const QString &key, const QString 
 
     QVariantMap tag_abstract_map
     {
-        {TAG::KEYMAP[TAG::KEY::APP], this->application},
-        {TAG::KEYMAP[TAG::KEY::URI], this->uri},
-        {TAG::KEYMAP[TAG::KEY::TAG], tag},
-        {TAG::KEYMAP[TAG::KEY::KEY], key},
-        {TAG::KEYMAP[TAG::KEY::LOT], lot},
-        {TAG::KEYMAP[TAG::KEY::ADD_DATE], QDateTime::currentDateTime()},
-        {TAG::KEYMAP[TAG::KEY::COMMENT], comment},
+        {TAG::KEYMAP[TAG::KEYS::APP], this->application},
+        {TAG::KEYMAP[TAG::KEYS::URI], this->uri},
+        {TAG::KEYMAP[TAG::KEYS::TAG], tag},
+        {TAG::KEYMAP[TAG::KEYS::KEY], key},
+        {TAG::KEYMAP[TAG::KEYS::LOT], lot},
+        {TAG::KEYMAP[TAG::KEYS::ADD_DATE], QDateTime::currentDateTime()},
+        {TAG::KEYMAP[TAG::KEYS::COMMENT], comment},
     };
 
     emit this->abstractTagged(key, lot, tag);
@@ -240,9 +237,9 @@ bool Tagging::removeUrlTags(const QString &url)
 {
     for(auto map : this->getUrlTags(url))
     {
-        auto tag = map.toMap().value(TAG::KEYMAP[TAG::KEY::TAG]).toString();
+        auto tag = map.toMap().value(TAG::KEYMAP[TAG::KEYS::TAG]).toString();
 
-        TAG::DB data {{TAG::KEY::URL, url}, {TAG::KEY::TAG, tag}};
+        TAG::DB data {{TAG::KEYS::URL, url}, {TAG::KEYS::TAG, tag}};
         this->remove(TAG::TABLEMAP[TAG::TABLE::TAGS_URLS], data);
     }
 
@@ -279,11 +276,11 @@ bool Tagging::app()
     qDebug()<<"REGISTER APP" << this->application<< this->uri<< this->version<< this->comment;
     QVariantMap app_map
     {
-        {TAG::KEYMAP[TAG::KEY::APP], this->application},
-        {TAG::KEYMAP[TAG::KEY::URI], this->uri},
-        {TAG::KEYMAP[TAG::KEY::VERSION], this->version},
-        {TAG::KEYMAP[TAG::KEY::ADD_DATE], QDateTime::currentDateTime()},
-        {TAG::KEYMAP[TAG::KEY::COMMENT], this->comment},
+        {TAG::KEYMAP[TAG::KEYS::APP], this->application},
+        {TAG::KEYMAP[TAG::KEYS::URI], this->uri},
+        {TAG::KEYMAP[TAG::KEYS::VERSION], this->version},
+        {TAG::KEYMAP[TAG::KEYS::ADD_DATE], QDateTime::currentDateTime()},
+        {TAG::KEYMAP[TAG::KEYS::COMMENT], this->comment},
     };
 
     this->insert(TAG::TABLEMAP[TAG::TABLE::APPS], app_map);
@@ -292,10 +289,10 @@ bool Tagging::app()
 
     QVariantMap users_apps_map
     {
-        {TAG::KEYMAP[TAG::KEY::APP], this->application},
-        {TAG::KEYMAP[TAG::KEY::URI], this->uri},
-        {TAG::KEYMAP[TAG::KEY::MAC], this->id()},
-        {TAG::KEYMAP[TAG::KEY::ADD_DATE], QDateTime::currentDateTime()},
+        {TAG::KEYMAP[TAG::KEYS::APP], this->application},
+        {TAG::KEYMAP[TAG::KEYS::URI], this->uri},
+        {TAG::KEYMAP[TAG::KEYS::MAC], this->id()},
+        {TAG::KEYMAP[TAG::KEYS::ADD_DATE], QDateTime::currentDateTime()},
     };
 
     return this->insert(TAG::TABLEMAP[TAG::TABLE::APPS_USERS], users_apps_map);
@@ -306,11 +303,11 @@ bool Tagging::user()
 {
     QVariantMap user_map
     {
-        {TAG::KEYMAP[TAG::KEY::MAC], this->id()},
-        {TAG::KEYMAP[TAG::KEY::NAME], UTIL::whoami()},
-        {TAG::KEYMAP[TAG::KEY::LAST_SYNC], QDateTime::currentDateTime()},
-        {TAG::KEYMAP[TAG::KEY::ADD_DATE], QDateTime::currentDateTime()},
-        {TAG::KEYMAP[TAG::KEY::DEVICE], this->device()},
+        {TAG::KEYMAP[TAG::KEYS::MAC], this->id()},
+        {TAG::KEYMAP[TAG::KEYS::NAME], UTIL::whoami()},
+        {TAG::KEYMAP[TAG::KEYS::LAST_SYNC], QDateTime::currentDateTime()},
+        {TAG::KEYMAP[TAG::KEYS::ADD_DATE], QDateTime::currentDateTime()},
+        {TAG::KEYMAP[TAG::KEYS::DEVICE], this->device()},
     };
 
     return this->insert(TAG::TABLEMAP[TAG::TABLE::USERS], user_map);
@@ -320,12 +317,12 @@ bool Tagging::abstract(const QString &key, const QString &lot, const QString &co
 {
     QVariantMap abstract_map
     {
-        {TAG::KEYMAP[TAG::KEY::APP], this->application},
-        {TAG::KEYMAP[TAG::KEY::URI], this->uri},
-        {TAG::KEYMAP[TAG::KEY::KEY], key},
-        {TAG::KEYMAP[TAG::KEY::LOT], lot},
-        {TAG::KEYMAP[TAG::KEY::ADD_DATE], QDateTime::currentDateTime()},
-        {TAG::KEYMAP[TAG::KEY::COMMENT], comment},
+        {TAG::KEYMAP[TAG::KEYS::APP], this->application},
+        {TAG::KEYMAP[TAG::KEYS::URI], this->uri},
+        {TAG::KEYMAP[TAG::KEYS::KEY], key},
+        {TAG::KEYMAP[TAG::KEYS::LOT], lot},
+        {TAG::KEYMAP[TAG::KEYS::ADD_DATE], QDateTime::currentDateTime()},
+        {TAG::KEYMAP[TAG::KEYS::COMMENT], comment},
     };
 
     return this->insert(TAG::TABLEMAP[TAG::TABLE::ABSTRACT], abstract_map);

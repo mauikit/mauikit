@@ -5,11 +5,15 @@ QT += \
 HEADERS += \
     $$PWD/tagging.h \
     $$PWD/tagdb.h \
-    $$PWD/tag.h
+    $$PWD/tag.h \
+    $$PWD/tagsmodel.h \
+    $$PWD/tagslist.h
 
 SOURCES += \
     $$PWD/tagging.cpp \
     $$PWD/tagdb.cpp \
+    $$PWD/tagsmodel.cpp \
+    $$PWD/tagslist.cpp 
 
 DEPENDPATH += \
     $$PWD

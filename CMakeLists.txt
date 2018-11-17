@@ -100,12 +100,16 @@ set(fm_HDRS
 set(tagging_SRCS
     src/utils/tagging/tagging.cpp
     src/utils/tagging/tagdb.cpp
+    src/utils/tagging/tagsmodel.cpp
+    src/utils/tagging/tagslist.cpp
     )
 
 set(tagging_HDRS
     src/utils/tagging/tagging.h
     src/utils/tagging/tagdb.h
     src/utils/tagging/tag.h
+    src/utils/tagging/tagsmodel.h
+    src/utils/tagging/tagslist.h
     )
 
 set(syncing_SRCS
