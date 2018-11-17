@@ -34,6 +34,9 @@
 #include "syncingmodel.h"
 #include "syncinglist.h"
 
+#include "tagsmodel.h"
+#include "tagslist.h"
+
 #include "handy.h"
 #include "documenthandler.h"
 
@@ -122,11 +125,15 @@ void MauiKit::registerTypes(const char *uri)
 // 	qmlRegisterUncreatableMetaObject(FMH::staticMetaObject, "FMH", 1, 0, "KEY", "Error");	
 	qmlRegisterType<PlacesList>("PlacesList", 1, 0, "PlacesList");
 	qmlRegisterType<PlacesModel>("PlacesModel", 1, 0, "PlacesModel");
+	
 	qmlRegisterType<FMModel>("FMModel", 1, 0, "FMModel");
 	qmlRegisterType<FMList>("FMList", 1, 0, "FMList");
 	
 	qmlRegisterType<SyncingList>("SyncingList", 1, 0, "SyncingList");
 	qmlRegisterType<SyncingModel>("SyncingModel", 1, 0, "SyncingModel");
+	
+	qmlRegisterType<TagsList>("TagsList", 1, 0, "TagsList");
+	qmlRegisterType<TagsModel>("TagsModel", 1, 0, "TagsModel");
 	
 	qmlRegisterType<DocumentHandler>("DocumentHandler", 1, 0, "DocumentHandler");
 	

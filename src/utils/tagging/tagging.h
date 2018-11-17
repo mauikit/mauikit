@@ -50,7 +50,6 @@ public:
     Q_INVOKABLE bool tagAbstract(const QString &tag, const QString &key, const QString &lot, const QString &color = QString(), const QString &comment=QString());
 
     /* UPDATES */
-
     Q_INVOKABLE bool updateUrlTags(const QString &url, const QStringList &tags);
 
     /* QUERIES */

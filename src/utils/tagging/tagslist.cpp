@@ -25,51 +25,54 @@ TAG::DB_LIST TagsList::toModel(const QVariantList& data)
 
 void TagsList::setList()
 {
-    emit this->preListChanged();
-
+	emit this->preListChanged();
 	
-	if(this->strict)
+	
+	if(this->abstract)
 	{
-		if(this->abstract)
-		{
-			this->list = this->toModel(this->tag->getAbstractsTags());
-		}else
-		{
-			
-		}
-		
+		this->list = this->toModel(this->tag->getAbstractsTags(this->strict));
 	}else
 	{
-		
+		this->list = this->toModel(this->tag->getAllTags(this->strict));
 	}
 	
 	qDebug()<< "TAGGING LIST"<< list;
-
-    emit this->postListChanged();
+	
+	emit this->postListChanged();
 }
 
 QVariantMap TagsList::get(const int &index) const
 {
-    if(index >= this->list.size() || index < 0)
-        return QVariantMap();
-
-    const auto folder = this->list.at(index);
-
-    QVariantMap res;
-    for(auto key : folder.keys())
-        res.insert(TAG::KEYMAP[key], folder[key]);
-
-    return res;
+	if(index >= this->list.size() || index < 0)
+		return QVariantMap();
+	
+	const auto folder = this->list.at(index);
+	
+	QVariantMap res;
+	for(auto key : folder.keys())
+		res.insert(TAG::KEYMAP[key], folder[key]);
+	
+	return res;
 }
 
 void TagsList::refresh()
 {
-    this->setList();
+	this->setList();
 }
 
-void TagsList::insert(const QVariantMap& data)
+void TagsList::insert(const QString &tag)
 {	
+	qDebug() << "trying to insert tag "<< tag;
 	
+	if(this->tag->tag(tag))
+	{
+		emit this->preItemAppended();
+		
+		qDebug()<< "tag inserted";
+		this->list << TAG::DB {{TAG::KEYS::TAG, tag}};
+		
+		emit this->postItemAppended();
+	}
 }
 
 void TagsList::remove(const int& index)

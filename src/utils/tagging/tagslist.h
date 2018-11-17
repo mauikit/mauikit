@@ -67,7 +67,7 @@ signals:
 
 public slots:    
     QVariantMap get(const int &index) const;
-	void insert(const QVariantMap &data);
+	void insert(const QString &tag);
 	void remove(const int &index);
     void refresh();
 
