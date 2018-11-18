@@ -233,17 +233,27 @@ QVariantList Tagging::getAbstractTags(const QString &key, const QString &lot, co
     return res;
 }
 
+bool Tagging::removeAbstractTag(const QString& key, const QString& lot, const QString &tag)
+{
+	TAG::DB data {{TAG::KEYS::KEY, key}, {TAG::KEYS::LOT, lot}, {TAG::KEYS::TAG, tag}};
+	return this->remove(TAG::TABLEMAP[TAG::TABLE::TAGS_ABSTRACT], data);		
+}
+
 bool Tagging::removeUrlTags(const QString &url)
 {
     for(auto map : this->getUrlTags(url))
     {
         auto tag = map.toMap().value(TAG::KEYMAP[TAG::KEYS::TAG]).toString();
-
-        TAG::DB data {{TAG::KEYS::URL, url}, {TAG::KEYS::TAG, tag}};
-        this->remove(TAG::TABLEMAP[TAG::TABLE::TAGS_URLS], data);
+        this->removeUrlTag(url, tag);
     }
 
     return true;
+}
+
+bool Tagging::removeUrlTag(const QString& url, const QString& tag)
+{	
+	TAG::DB data {{TAG::KEYS::URL, url}, {TAG::KEYS::TAG, tag}};
+	return this->remove(TAG::TABLEMAP[TAG::TABLE::TAGS_URLS], data);	
 }
 
 QString Tagging::mac()

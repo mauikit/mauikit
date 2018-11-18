@@ -2,6 +2,9 @@ import QtQuick 2.0
 import QtQuick.Controls 2.2
 import "."
 
+import TagsList 1.0 
+import TagsModel 1.0
+
 ListView
 {
     id: control
@@ -12,9 +15,23 @@ ListView
     signal tagClicked(int index)
     boundsBehavior: isMobile ?  Flickable.DragOverBounds : Flickable.StopAtBounds
 
+    property alias list : _tagsList
     property bool showPlaceHolder:  true
     property bool showDeleteIcon: true
-
+    
+    TagsModel
+    {
+		id: _tagsModel
+		list: _tagsList
+	}
+	
+	TagsList
+	{
+		id: _tagsList
+	}
+	
+	model: _tagsModel
+	
     Label
     {
         height: parent.height
@@ -26,8 +43,6 @@ ListView
         color: textColor
         font.pointSize: fontSizes.default
     }
-
-    model: ListModel{}
 
     delegate: TagDelegate
     {

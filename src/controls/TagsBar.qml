@@ -23,16 +23,19 @@ import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import "private"
 
+
 Item
 {
     id: control
     clip : true
     width: parent.width
     height: rowHeight
-    property alias tagsList : tagsList
+    property alias listView : tagsList
+    property alias count : tagsList.count
     property color bgColor: "transparent"
     property bool editMode : false
     property bool allowEditMode : false
+    property alias list : tagsList.list
 
     signal addClicked()
     signal tagRemovedClicked(int index)
@@ -44,8 +47,8 @@ Item
         anchors.fill: parent
         color: bgColor
         z: -1
-    }
-
+    }     
+	
     RowLayout
     {
         anchors.fill: parent
@@ -80,7 +83,7 @@ Item
                     showDeleteIcon: allowEditMode
                     onTagRemoved: tagRemovedClicked(index)
                     onTagClicked: control.tagClicked(tagsList.model.get(index).tag)
-
+										
                     MouseArea
                     {
                         anchors.fill: parent
@@ -138,14 +141,14 @@ Item
 
     function clear()
     {
-        tagsList.model.clear()
+//         tagsList.model.clear()
     }
 
     function goEditMode()
     {
         var currentTags = []
         for(var i = 0 ; i < tagsList.count; i++)
-            currentTags.push(tagsList.model.get(i).tag)
+            currentTags.push(list.get(i).tag)
 
         editTagsEntry.text = currentTags.join(", ")
         editMode = true
@@ -157,20 +160,7 @@ Item
         tagsEdited(getTags())
         editMode = false
     }
-
-    function populate(tags)
-    {
-        clear()
-        for(var i in tags)
-            append(tags[i])
-
-    }
-
-    function append(tag)
-    {
-        tagsList.model.append(tag)
-    }
-
+   
     function getTags()
     {
         var tags = []

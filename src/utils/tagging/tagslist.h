@@ -67,8 +67,12 @@ signals:
 
 public slots:    
     QVariantMap get(const int &index) const;
-	void insert(const QString &tag);
-	void remove(const int &index);
+	void append(const QString &tag);
+	bool insert(const QString &tag);
+	bool remove(const int &index);
+	void removeFrom(const int &index, const QString &url);
+	void removeFrom(const int &index, const QString &key, const QString &lot);
+	void erase(const int &index);
     void refresh();
 
 };

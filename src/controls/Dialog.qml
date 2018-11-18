@@ -111,7 +111,7 @@ Maui.Popup
 		clip: true
 		headBarExit: false
 		colorScheme.backgroundColor : control.colorScheme.backgroundColor
-		footBar.visible: footBar.count > 1
+		footBar.visible: defaultButtons || footBar.count > 1
 		footBar.colorScheme.backgroundColor: colorScheme.backgroundColor
 		footBar.margins: space.big
 		footBar.rightContent: Row

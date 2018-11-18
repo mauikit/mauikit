@@ -30,10 +30,21 @@ void TagsList::setList()
 	
 	if(this->abstract)
 	{
-		this->list = this->toModel(this->tag->getAbstractsTags(this->strict));
+		if(this->lot.isEmpty() || this->key.isEmpty())			
+			this->list = this->toModel(this->tag->getAbstractsTags(this->strict));
+		else  
+			this->list = this->toModel(this->tag->getAbstractTags(this->key, this->lot, this->strict));
+		
 	}else
 	{
-		this->list = this->toModel(this->tag->getAllTags(this->strict));
+		if(this->urls.isEmpty())
+			this->list = this->toModel(this->tag->getAllTags(this->strict));
+		else
+		{
+			this->list.clear();
+			for(auto url : this->urls)
+				this->list << this->toModel(this->tag->getUrlTags(url, this->strict));
+		}
 	}
 	
 	qDebug()<< "TAGGING LIST"<< list;
@@ -60,26 +71,62 @@ void TagsList::refresh()
 	this->setList();
 }
 
-void TagsList::insert(const QString &tag)
+bool TagsList::insert(const QString &tag)
 {	
 	qDebug() << "trying to insert tag "<< tag;
 	
-	if(this->tag->tag(tag))
+	auto _tag = tag.trimmed();
+	
+	if(this->tag->tag(_tag))
 	{
 		emit this->preItemAppended();
 		
 		qDebug()<< "tag inserted";
-		this->list << TAG::DB {{TAG::KEYS::TAG, tag}};
+		this->list << TAG::DB {{TAG::KEYS::TAG, _tag}};
 		
 		emit this->postItemAppended();
+		return true;
 	}
+	
+	return false;
 }
 
-void TagsList::remove(const int& index)
+bool TagsList::remove(const int& index)
 {	
 	if(index >= this->list.size() || index < 0)
+		return false;
+	
+	emit this->preItemRemoved(index);
+	this->list.removeAt(index);
+	emit this->postItemRemoved();
+	
+	return true;
+}
+
+void TagsList::removeFrom(const int& index, const QString& key, const QString& lot)
+{
+	if(index >= this->list.size() || index < 0)
 		return;
-	//todo
+	
+	emit this->preItemRemoved(index);
+	auto item = this->list.takeAt(index);
+	this->tag->removeAbstractTag(key, lot, item[TAG::KEYS::TAG]);
+	emit this->postItemRemoved();
+}
+
+void TagsList::removeFrom(const int& index, const QString& url)
+{
+	if(index >= this->list.size() || index < 0)
+			return;
+		
+		emit this->preItemRemoved(index);
+	auto item = this->list.takeAt(index);
+	this->tag->removeUrlTag(url, item[TAG::KEYS::TAG]);
+	emit this->postItemRemoved();
+}
+
+void TagsList::erase(const int& index)
+{
 }
 
 TAG::DB_LIST TagsList::items() const
@@ -160,4 +207,19 @@ void TagsList::setUrls(const QStringList& value)
 	this->urls = value;
 	this->setList();
 	emit this->urlsChanged();
+}
+
+void TagsList::append(const QString &tag)
+{
+	qDebug() << "trying to append tag "<< tag;	
+	
+	if(!this->insert(tag))
+	{
+		emit this->preItemAppended();
+		this->list << TAG::DB {{TAG::KEYS::TAG, tag}};
+		emit this->postItemAppended();
+		qDebug() << "done appending tag "<< tag;	
+		
+	}
+		
 }

@@ -62,8 +62,11 @@ public:
     Q_INVOKABLE QVariantList getAbstractTags(const QString &key, const QString &lot, const bool &strict = true);
 
     /* DELETES */
-    Q_INVOKABLE bool removeUrlTags(const QString &url);
-
+	Q_INVOKABLE bool removeAbstractTag(const QString &key, const QString &lot, const QString &tag);
+	
+	Q_INVOKABLE bool removeUrlTags(const QString &url);
+	Q_INVOKABLE bool removeUrlTag(const QString &url, const QString &tag);
+	
     /*STATIC METHODS*/
 
     static QString mac();
