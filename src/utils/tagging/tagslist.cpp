@@ -106,12 +106,14 @@ bool TagsList::remove(const int& index)
 void TagsList::removeFrom(const int& index, const QString& key, const QString& lot)
 {
 	if(index >= this->list.size() || index < 0)
-		return;
+		return;	
 	
-	emit this->preItemRemoved(index);
-	auto item = this->list.takeAt(index);
-	this->tag->removeAbstractTag(key, lot, item[TAG::KEYS::TAG]);
-	emit this->postItemRemoved();
+	if(this->tag->removeAbstractTag(key, lot, this->list[index][TAG::KEYS::TAG]))
+	{
+		emit this->preItemRemoved(index);
+		this->list.removeAt(index);
+		emit this->postItemRemoved();	 
+	}
 }
 
 void TagsList::removeFrom(const int& index, const QString& url)
