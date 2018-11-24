@@ -136,11 +136,38 @@ void TagsList::updateToAbstract(const QStringList& tags)
 
 void TagsList::removeFromAbstract(const int& index)
 {
+	if(index >= this->list.size() || index < 0)
+		return;
+	
+	if(this->key.isEmpty() || this->lot.isEmpty())
+		return;
 
+	const auto tag =  this->list[index][TAG::KEYS::TAG];	
+	if(this->tag->removeAbstractTag(this->key, this->lot, tag))
+	{	
+		emit this->preItemRemoved(index);
+		this->list.removeAt(index);
+		emit this->postItemRemoved();
+		
+	}
 }
 
 void TagsList::removeFromUrls(const int& index)
 {
+	if(index >= this->list.size() || index < 0)
+		return;
+	
+	if(this->urls.isEmpty())
+		return;
+	
+	const auto tag =  this->list[index][TAG::KEYS::TAG];
+	for(auto url : this->urls)
+		this->tag->removeUrlTag(url, tag);
+	
+	emit this->preItemRemoved(index);
+	this->list.removeAt(index);
+	emit this->postItemRemoved();
+	
 }
 
 bool TagsList::remove(const int& index)
@@ -172,11 +199,13 @@ void TagsList::removeFrom(const int& index, const QString& url)
 {
 	if(index >= this->list.size() || index < 0)
 			return;
-		
+	
+	if(this->tag->removeUrlTag(url, this->list[index][TAG::KEYS::TAG]))
+	{
 		emit this->preItemRemoved(index);
-	auto item = this->list.takeAt(index);
-	this->tag->removeUrlTag(url, item[TAG::KEYS::TAG]);
-	emit this->postItemRemoved();
+		this->list.removeAt(index);
+		emit this->postItemRemoved();
+	}
 }
 
 void TagsList::erase(const int& index)

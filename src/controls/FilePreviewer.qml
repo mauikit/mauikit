@@ -135,7 +135,7 @@ Maui.Dialog
 				list.urls: [control.currentUrl]
 				allowEditMode: true
 				
-				onTagRemovedClicked: list.removeFrom(index, control.currentUrl)
+				onTagRemovedClicked: list.removeFromUrls(index)
 				onTagsEdited: list.updateToUrls(tags)
 				
 			}

@@ -173,8 +173,9 @@ bool Tagging::updateUrlTags(const QString &url, const QStringList &tags)
 bool Tagging::updateAbstractTags(const QString &key, const QString &lot, const QStringList &tags)
 {
 	this->removeAbstractTags(key, lot);
+	
 	for(auto tag : tags)
-		this->tagAbstract(key, lot, tag);
+		this->tagAbstract(tag, key, lot);
 	
 	return true;
 }
