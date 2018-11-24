@@ -125,7 +125,7 @@ Maui.Menu
 	Maui.MenuItem
 	{
 		width: parent.width
-		
+		visible: isDir
 		Maui.ColorsBar
 		{
 			anchors.centerIn: parent

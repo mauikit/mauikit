@@ -142,8 +142,7 @@ Maui.Page
 		{
 			onTagsReady: composerList.updateToUrls(tags)
 		}
-	}
-	
+	}	
 	
 	BrowserMenu
 	{
