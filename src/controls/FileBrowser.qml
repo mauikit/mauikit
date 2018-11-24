@@ -191,14 +191,14 @@ Maui.Page
 		{
 			if(items.length)
 			{
-			dialogLoader.sourceComponent = tagsDialogComponent
-			
-			if(items.length > 1 && control.selectionBar)			
-				dialog.composerList.urls = control.selectionBar.selectedPaths			
-			else  
-				dialog.composerList.urls = items[0].path
+				dialogLoader.sourceComponent = tagsDialogComponent
 				
-			dialog.open()
+				if(items.length > 1 && control.selectionBar)			
+					dialog.composerList.urls = control.selectionBar.selectedPaths			
+					else  
+						dialog.composerList.urls = items[0].path
+						
+						dialog.open()
 			}
 		}
 		
@@ -246,13 +246,27 @@ Maui.Page
 		
 		onShareClicked:
 		{
-			// 			if(isAndroid)
-			// 				Maui.Android.shareDialog(paths)
-			// 				else
-			// 				{
-			// 					dialogLoader.sourceComponent= shareDialogComponent
-			// 					dialog.show(paths)
-			// 				}
+			
+			if(items.length)
+			{
+				if(isAndroid)
+				{
+					if(items.length > 1 && control.selectionBar)			
+						Maui.Android.shareDialog(control.selectionBar.selectedPaths)		
+					else  
+						Maui.Android.shareDialog([items[0].path])
+				}
+				else
+				{
+					dialogLoader.sourceComponent= shareDialogComponent
+					if(items.length > 1 && control.selectionBar)			
+						dialog.show(control.selectionBar.selectedPath)		
+					else  
+						dialog.show([items[0].path])
+					
+					dialog.open()
+				}
+			}
 		}
 	}
 	
