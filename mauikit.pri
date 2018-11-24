@@ -68,7 +68,8 @@ INCLUDEPATH += \
      $$PWD/src \
      $$PWD/src/fm \
      $$PWD/src/utils \
-     $$PWD/src/utils/editor
+     $$PWD/src/utils/editor \
+     $$PWD/src/utils/syncing
 
 DEFINES += \
     MAUI_APP \

@@ -251,10 +251,10 @@ Maui.Page
 			{
 				if(isAndroid)
 				{
-					if(items.length > 1 && control.selectionBar)			
-						Maui.Android.shareDialog(control.selectionBar.selectedPaths)		
-					else  
-						Maui.Android.shareDialog([items[0].path])
+// 					if(items.length > 1 && control.selectionBar)			
+// 						Maui.Android.shareDialog(control.selectionBar.selectedPaths)		
+// 					else  
+						Maui.Android.shareDialog(items[0].path)
 				}
 				else
 				{
