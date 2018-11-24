@@ -50,8 +50,9 @@ public:
     Q_INVOKABLE bool tagAbstract(const QString &tag, const QString &key, const QString &lot, const QString &color = QString(), const QString &comment=QString());
 
     /* UPDATES */
-    Q_INVOKABLE bool updateUrlTags(const QString &url, const QStringList &tags);
-
+	Q_INVOKABLE bool updateUrlTags(const QString &url, const QStringList &tags);
+	Q_INVOKABLE bool updateAbstractTags(const QString &key, const QString &lot, const QStringList &tags);
+	
     /* QUERIES */
 
     Q_INVOKABLE QVariantList getUrlsTags(const bool &strict = true);
@@ -63,6 +64,7 @@ public:
 
     /* DELETES */
 	Q_INVOKABLE bool removeAbstractTag(const QString &key, const QString &lot, const QString &tag);
+	Q_INVOKABLE bool removeAbstractTags(const QString &key, const QString &lot);
 	
 	Q_INVOKABLE bool removeUrlTags(const QString &url);
 	Q_INVOKABLE bool removeUrlTag(const QString &url, const QString &tag);

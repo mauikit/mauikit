@@ -69,9 +69,18 @@ public slots:
     QVariantMap get(const int &index) const;
 	void append(const QString &tag);
 	bool insert(const QString &tag);
+	void insertToUrls(const QString &tag);
+	void insertToAbstract(const QString &tag);
+	void updateToUrls(const QStringList &tags);
+	void updateToAbstract(const QStringList &tags);
+	
 	bool remove(const int &index);
 	void removeFrom(const int &index, const QString &url);
 	void removeFrom(const int &index, const QString &key, const QString &lot);
+	
+	void removeFromUrls(const int &index);
+	void removeFromAbstract(const int &index);
+	
 	void erase(const int &index);
     void refresh();
 

@@ -96,19 +96,16 @@ Maui.Dialog
 			}
 		}
 		
-		ScrollView
+		ColumnLayout
 		{
-			id: scrollView
-			anchors.fill:parent
-			contentHeight: previewLoader.item.height
-			
-			clip: true
+			anchors.fill: parent			
+			spacing: 0
 			
 			Loader
 			{
 				id: previewLoader
-				height : control.height
-				width: control.width
+				Layout.fillWidth: true
+				Layout.fillHeight: true
 				sourceComponent: switch(mimetype)
 				{
 					case "audio" :
@@ -127,6 +124,20 @@ Maui.Dialog
 					default:
 						defaultPreview
 				}
+			}
+			
+			Maui.TagsBar
+			{
+				id: _tagsBar
+				Layout.fillWidth: true
+				Layout.margins: 0
+// 				height: 64
+				list.urls: [control.currentUrl]
+				allowEditMode: true
+				
+				onTagRemovedClicked: list.removeFrom(index, control.currentUrl)
+				onTagsEdited: list.updateToUrls(tags)
+				
 			}
 		}
 		

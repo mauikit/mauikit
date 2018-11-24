@@ -170,6 +170,15 @@ bool Tagging::updateUrlTags(const QString &url, const QStringList &tags)
     return true;
 }
 
+bool Tagging::updateAbstractTags(const QString &key, const QString &lot, const QStringList &tags)
+{
+	this->removeAbstractTags(key, lot);
+	for(auto tag : tags)
+		this->tagAbstract(key, lot, tag);
+	
+	return true;
+}
+
 QVariantList Tagging::getUrlsTags(const bool &strict)
 {
     auto query = QString("select distinct t.* from TAGS t inner join TAGS_USERS tu on t.tag = tu.tag "
@@ -237,6 +246,17 @@ bool Tagging::removeAbstractTag(const QString& key, const QString& lot, const QS
 {
 	TAG::DB data {{TAG::KEYS::KEY, key}, {TAG::KEYS::LOT, lot}, {TAG::KEYS::TAG, tag}};
 	return this->remove(TAG::TABLEMAP[TAG::TABLE::TAGS_ABSTRACT], data);		
+}
+
+bool Tagging::removeAbstractTags(const QString& key, const QString& lot)
+{
+	for(auto map : this->getAbstractTags(key, lot))
+	{
+		auto tag = map.toMap().value(TAG::KEYMAP[TAG::KEYS::TAG]).toString();
+		this->removeAbstractTag(key, lot, tag);
+	}
+	
+	return true;
 }
 
 bool Tagging::removeUrlTags(const QString &url)

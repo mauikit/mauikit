@@ -91,6 +91,58 @@ bool TagsList::insert(const QString &tag)
 	return false;
 }
 
+void TagsList::insertToUrls(const QString& tag)
+{	
+	if(this->urls.isEmpty())
+		return;
+	
+	for(auto url : this->urls)
+	{
+		this->tag->tagUrl(url, tag);
+	}
+	
+	this->refresh();
+}
+
+void TagsList::insertToAbstract(const QString& tag)
+{
+	if(this->key.isEmpty() || this->lot.isEmpty())
+		return;
+	
+	if(this->tag->tagAbstract(tag, this->key, this->lot))
+		this->refresh();
+}
+
+void TagsList::updateToUrls(const QStringList& tags)
+{
+	if(this->urls.isEmpty())
+		return;
+	
+	for(auto url : this->urls)
+		this->tag->updateUrlTags(url, tags);
+	
+	this->refresh();
+}
+
+void TagsList::updateToAbstract(const QStringList& tags)
+{
+	if(this->key.isEmpty() || this->lot.isEmpty())
+		return;
+	
+	this->tag->updateAbstractTags(this->key, this->lot, tags);
+	
+	this->refresh();
+}
+
+void TagsList::removeFromAbstract(const int& index)
+{
+
+}
+
+void TagsList::removeFromUrls(const int& index)
+{
+}
+
 bool TagsList::remove(const int& index)
 {	
 	if(index >= this->list.size() || index < 0)
@@ -213,8 +265,6 @@ void TagsList::setUrls(const QStringList& value)
 
 void TagsList::append(const QString &tag)
 {
-	qDebug() << "trying to append tag "<< tag;	
-	
 	if(!this->insert(tag))
 	{
 		emit this->preItemAppended();

@@ -7,16 +7,15 @@ ColumnLayout
     id: layout
     anchors.fill: parent
 
-    Item
-    {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        Layout.margins: contentMargins
-        Layout.maximumHeight: unit * 400
-        Layout.preferredHeight: unit * 200
-        Layout.minimumHeight: unit * 200
-
-        Image
+           Item
+        {
+			Layout.fillWidth: true
+			Layout.fillHeight: true
+			Layout.margins: 0
+			Layout.maximumHeight: parent.height * 0.7
+			Layout.preferredHeight: parent.height * 0.7
+			Layout.minimumHeight: parent.height * 0.7
+			Image
         {
             anchors.centerIn: parent
             horizontalAlignment: Qt.AlignHCenter
@@ -29,88 +28,90 @@ ColumnLayout
             sourceSize.height: height
             sourceSize.width: width
         }
-    }
-
-    Label
+        
+       
+		}
+         
+    ScrollView
     {
-        Layout.fillWidth: true
-        Layout.preferredHeight: rowHeight
-        Layout.margins: contentMargins
-
-        text: iteminfo.name
-
-        horizontalAlignment: Qt.AlignHCenter
-        verticalAlignment: Qt.AlignVCenter
-        elide: Qt.ElideRight
-        wrapMode: Text.Wrap
-        font.pointSize: fontSizes.big
-        font.weight: Font.Bold
-        font.bold: true
-    }
-
-    Label
-    {
-        Layout.fillWidth: true
-        Layout.preferredHeight: rowHeight
-        text: qsTr("Type: ")+ iteminfo.mime
-        elide: Qt.ElideRight
-        wrapMode: Text.Wrap
-        font.pointSize: fontSizes.default
-    }
-
-    Label
-    {
-        Layout.fillWidth: true
-        Layout.preferredHeight: rowHeight
-        text: qsTr("Date: ")+ iteminfo.date
-
-        elide: Qt.ElideRight
-        wrapMode: Text.Wrap
-        font.pointSize: fontSizes.default
-    }
-
-    Label
-    {
-        Layout.fillWidth: true
-        Layout.preferredHeight: rowHeight
-        text: qsTr("Modified: ")+ iteminfo.modified
-
-        elide: Qt.ElideRight
-        wrapMode: Text.Wrap
-        font.pointSize: fontSizes.default
-    }
-
-    Label
-    {
-        Layout.fillWidth: true
-        Layout.preferredHeight: rowHeight
-        text: qsTr("Owner: ")+ iteminfo.owner
-
-        elide: Qt.ElideRight
-        wrapMode: Text.Wrap
-        font.pointSize: fontSizes.default
-    }
-
-    Label
-    {
-        Layout.fillWidth: true
-        Layout.preferredHeight: rowHeight
-        text: qsTr("Tags: ")+ iteminfo.tags
-
-        elide: Qt.ElideRight
-        wrapMode: Text.Wrap
-        font.pointSize: fontSizes.default
-    }
-
-    Label
-    {
-        Layout.fillWidth: true
-        Layout.preferredHeight: rowHeight
-        text: qsTr("Permisions: ")+ iteminfo.permissions
-
-        elide: Qt.ElideRight
-        wrapMode: Text.Wrap
-        font.pointSize: fontSizes.default
-    }
+		Layout.fillWidth: true
+		Layout.fillHeight: true
+		
+		contentHeight: children.implicitHeight
+		
+		Column
+		{
+			id: _columnInfo
+// 			spacing: rowHeight
+			Label
+			{				
+				text: iteminfo.name
+				
+				horizontalAlignment: Qt.AlignHCenter
+				verticalAlignment: Qt.AlignVCenter
+				elide: Qt.ElideRight
+				wrapMode: Text.Wrap
+				font.pointSize: fontSizes.big
+				font.weight: Font.Bold
+				font.bold: true
+			}
+			
+			Label
+			{
+			
+				text: qsTr("Type: ")+ iteminfo.mime
+				elide: Qt.ElideRight
+				wrapMode: Text.Wrap
+				font.pointSize: fontSizes.default
+			}
+			
+			Label
+			{
+				text: qsTr("Date: ")+ iteminfo.date
+				
+				elide: Qt.ElideRight
+				wrapMode: Text.Wrap
+				font.pointSize: fontSizes.default
+			}
+			
+			Label
+			{
+				text: qsTr("Modified: ")+ iteminfo.modified
+				
+				elide: Qt.ElideRight
+				wrapMode: Text.Wrap
+				font.pointSize: fontSizes.default
+			}
+			
+			Label
+			{
+				text: qsTr("Owner: ")+ iteminfo.owner
+				
+				elide: Qt.ElideRight
+				wrapMode: Text.Wrap
+				font.pointSize: fontSizes.default
+			}
+			
+			Label
+			{
+				text: qsTr("Tags: ")+ iteminfo.tags
+				
+				elide: Qt.ElideRight
+				wrapMode: Text.Wrap
+				font.pointSize: fontSizes.default
+			}
+			
+			Label
+			{
+				text: qsTr("Permisions: ")+ iteminfo.permissions
+				
+				elide: Qt.ElideRight
+				wrapMode: Text.Wrap
+				font.pointSize: fontSizes.default
+			}
+		}
+		
+	}
+   
 }
 
