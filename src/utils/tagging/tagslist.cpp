@@ -220,8 +220,5 @@ void TagsList::append(const QString &tag)
 		emit this->preItemAppended();
 		this->list << TAG::DB {{TAG::KEYS::TAG, tag}};
 		emit this->postItemAppended();
-		qDebug() << "done appending tag "<< tag;	
-		
 	}
-		
 }
