@@ -236,6 +236,8 @@ Maui.Item
                             3
                         else
                             undefined
+                            
+			Layout.margins: space.big 
             Maui.ToolButton
             {
                 visible: iconVisible

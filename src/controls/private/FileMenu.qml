@@ -81,7 +81,7 @@ Maui.Menu
 		text: qsTr("Tags...")
 		onTriggered:
 		{
-			tagsClicked(control.items)
+			previewer.show(control.items[0].path)
 			close()
 		}
 	}
@@ -95,8 +95,7 @@ Maui.Menu
 			close()
 		}
 	}
-	
-	
+		
 	Maui.MenuItem
 	{
 		text: qsTr("Preview...")

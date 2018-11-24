@@ -25,6 +25,7 @@ IconDelegate 1.0 IconDelegate.qml
 LabelDelegate 1.0 LabelDelegate.qml
 NewDialog 1.0 NewDialog.qml
 TagsBar 1.0 TagsBar.qml
+TagsDialog 1.0 TagsDialog.qml
 Taglist 1.0 private/TagList.qml
 GridBrowser 1.0 GridBrowser.qml
 ListBrowser 1.0 ListBrowser.qml

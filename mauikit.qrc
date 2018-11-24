@@ -28,8 +28,9 @@
         <file alias="IconDelegate.qml">src/controls/IconDelegate.qml</file>
         <file alias="LabelDelegate.qml">src/controls/LabelDelegate.qml</file>
         <file alias="NewDialog.qml">src/controls/NewDialog.qml</file>
-        <file alias="TagsBar.qml">src/controls/TagsBar.qml</file>
-        <file alias="private/TagList.qml">src/controls/private/TagList.qml</file>
+		<file alias="TagsBar.qml">src/controls/TagsBar.qml</file>
+		<file alias="TagsDialog.qml">src/controls/TagsDialog.qml</file>
+		<file alias="private/TagList.qml">src/controls/private/TagList.qml</file>
         <file alias="private/TagDelegate.qml">src/controls/private/TagDelegate.qml</file>
         <file alias="ColorsBar.qml">src/controls/ColorsBar.qml</file>
         <file alias="FileBrowser.qml">src/controls/FileBrowser.qml</file>

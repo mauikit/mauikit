@@ -148,7 +148,6 @@ void TagsList::removeFromAbstract(const int& index)
 		emit this->preItemRemoved(index);
 		this->list.removeAt(index);
 		emit this->postItemRemoved();
-		
 	}
 }
 
@@ -257,6 +256,7 @@ void TagsList::setKey(const QString& value)
 	if(this->key == value)
 		return;
 	
+	this->urls.clear();	
 	this->key = value;
 	this->setList();
 	emit this->keyChanged();
@@ -272,6 +272,7 @@ void TagsList::setLot(const QString& value)
 	if(this->lot == value)
 		return;
 	
+	this->urls.clear();
 	this->lot = value;
 	this->setList();
 	emit this->lotChanged();
@@ -286,6 +287,9 @@ void TagsList::setUrls(const QStringList& value)
 {
 	if(this->urls == value)
 		return;
+	
+	this->key.clear();
+	this->lot.clear();
 	
 	this->urls = value;
 	this->setList();
