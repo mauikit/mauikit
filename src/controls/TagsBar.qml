@@ -23,7 +23,6 @@ import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import "private"
 
-
 Item
 {
     id: control

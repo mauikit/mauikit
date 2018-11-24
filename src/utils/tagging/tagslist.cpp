@@ -47,9 +47,49 @@ void TagsList::setList()
 		}
 	}
 	
-	qDebug()<< "TAGGING LIST"<< list;
-	
+	this->sortList();
 	emit this->postListChanged();
+}
+
+void TagsList::sortList()
+{
+	const auto key = this->sortBy;
+	qSort(this->list.begin(), this->list.end(), [key](const TAG::DB & e1, const TAG::DB & e2) -> bool
+	{
+		auto role = key;
+		
+		switch(role)
+		{
+			case TAG::KEYS::ADD_DATE:
+			{
+				auto currentTime = QDateTime::currentDateTime();
+				
+				auto date1 = QDateTime::fromString(e1[role], Qt::TextDate);
+				auto date2 = QDateTime::fromString(e2[role], Qt::TextDate);
+				
+				if(date1.secsTo(currentTime) <  date2.secsTo(currentTime))
+					return true;
+				
+				break;
+			}
+			
+			case TAG::KEYS::TAG:
+			{
+				const auto str1 = QString(e1[role]).toLower();
+				const auto str2 = QString(e2[role]).toLower();
+				
+				if(str1 < str2)
+					return true;				
+				break;
+			}
+			
+			default:
+				if(e1[role] < e2[role])
+					return true;
+		}
+		
+		return false;
+	});
 }
 
 QVariantMap TagsList::get(const int &index) const
@@ -73,17 +113,13 @@ void TagsList::refresh()
 
 bool TagsList::insert(const QString &tag)
 {	
-	qDebug() << "trying to insert tag "<< tag;
-	
 	auto _tag = tag.trimmed();
 	
 	if(this->tag->tag(_tag))
 	{
-		emit this->preItemAppended();
-		
-		qDebug()<< "tag inserted";
+		emit this->preItemAppended();		
 		this->list << TAG::DB {{TAG::KEYS::TAG, _tag}};
-		
+// 		this->sortList();		
 		emit this->postItemAppended();
 		return true;
 	}
@@ -216,6 +252,25 @@ TAG::DB_LIST TagsList::items() const
 	return this->list;
 }
 
+TAG::KEYS TagsList::getSortBy() const
+{
+	return this->sortBy;
+}
+
+void TagsList::setSortBy(const TAG::KEYS &key)
+{
+	if(this->sortBy == key)
+		return;
+	
+	this->sortBy = key;
+	
+	emit this->preListChanged();
+	this->sortList();
+	emit this->sortByChanged();
+	emit this->postListChanged();
+}
+
+
 bool TagsList::getAbstract() const
 {
 	return this->abstract;
@@ -302,6 +357,7 @@ void TagsList::append(const QString &tag)
 	{
 		emit this->preItemAppended();
 		this->list << TAG::DB {{TAG::KEYS::TAG, tag}};
+		this->sortList();
 		emit this->postItemAppended();
 	}
 }

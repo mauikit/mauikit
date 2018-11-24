@@ -138,6 +138,13 @@ Maui.Dialog
 				onTagRemovedClicked: list.removeFromUrls(index)
 				onTagsEdited: list.updateToUrls(tags)
 				
+				onAddClicked: 
+				{
+					dialogLoader.sourceComponent = tagsDialogComponent					
+					dialog.composerList.urls = [control.currentUrl]
+					dialog.open()
+				}
+				
 			}
 		}
 		

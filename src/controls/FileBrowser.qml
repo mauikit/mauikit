@@ -135,6 +135,16 @@ Maui.Page
 		Maui.ShareDialog {}
 	}
 	
+	Component
+	{
+		id: tagsDialogComponent
+		Maui.TagsDialog
+		{
+			onTagsReady: composerList.updateToUrls(tags)
+		}
+	}
+	
+	
 	BrowserMenu
 	{
 		id: browserMenu
@@ -178,6 +188,21 @@ Maui.Page
 			}
 		}
 		
+		onTagsClicked:
+		{
+			if(items.length)
+			{
+			dialogLoader.sourceComponent = tagsDialogComponent
+			
+			if(items.length > 1 && control.selectionBar)			
+				dialog.composerList.urls = control.selectionBar.selectedPaths			
+			else  
+				dialog.composerList.urls = items[0].path
+				
+			dialog.open()
+			}
+		}
+		
 		onCutClicked:
 		{
 			if(items.length)
@@ -196,7 +221,6 @@ Maui.Page
 				dialogLoader.sourceComponent = renameDialogComponent
 				dialog.open()
 			}
-			
 		}
 		
 		//        onSaveToClicked:

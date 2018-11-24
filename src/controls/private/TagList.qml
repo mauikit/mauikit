@@ -15,6 +15,7 @@ ListView
     signal tagClicked(int index)
     boundsBehavior: isMobile ?  Flickable.DragOverBounds : Flickable.StopAtBounds
 
+    property string placeholderText: "Add tags..."
     property alias list : _tagsList
     property bool showPlaceHolder:  true
     property bool showDeleteIcon: true
@@ -37,7 +38,7 @@ ListView
         height: parent.height
         width: parent.width
         verticalAlignment: Qt.AlignVCenter
-        text: qsTr("Add tags...")
+        text: qsTr(control.placeholderText)
         opacity: 0.7
         visible: count === 0 && showPlaceHolder
         color: textColor

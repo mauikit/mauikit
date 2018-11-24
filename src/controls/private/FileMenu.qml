@@ -81,7 +81,7 @@ Maui.Menu
 		text: qsTr("Tags...")
 		onTriggered:
 		{
-			previewer.show(control.items[0].path)
+			tagsClicked(control.items)
 			close()
 		}
 	}
