@@ -32,8 +32,9 @@ signals:
 public slots:    
     QVariantMap get(const int &index) const;
 	void insert(const QVariantMap &data);
-	void remove(const int &index);
-    void refresh();
+	void removeAccount(const QString &server, const QString &user);
+	void removeAccountAndFiles(const QString &server, const QString &user);
+	void refresh();
 
 };
 

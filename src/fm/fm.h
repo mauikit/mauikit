@@ -34,7 +34,7 @@ public:
     FMH::MODEL_LIST  getBookmarks();
 
     /** Syncing **/
-    void getCloudServerContent(const QString &server);
+    bool getCloudServerContent(const QString &server);
     FMH::MODEL_LIST getCloudAccounts();
 
 	/*** START STATIC METHODS ***/
@@ -52,6 +52,9 @@ public:
 
 	static bool copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory);
 	static bool removeDir(const QString &path);	
+	
+	static QString resolveUserCloudCachePath(const QString &server, const QString &user);
+	
 	/*** END STATIC METHODS ***/
 	
 private:
@@ -80,7 +83,8 @@ public slots:
 	bool removeBookmark(const QString &path);
 	bool isBookmark(const QString &path);
 
-    bool addCloudAccount(const QString &server, const QString &user, const QString &password);
+	bool addCloudAccount(const QString &server, const QString &user, const QString &password);
+	bool removeCloudAccount(const QString &server, const QString &user);
 	void openCloudItem(const QVariantMap &item);	
 	
 	static QString formatSize(const int &size);

@@ -61,7 +61,7 @@ Maui.Dialog
             Image
             {
 				visible: !customServer
-				Layout.alignment: Qt.AlignCenter | Qt.ALignTop
+				Layout.alignment: Qt.AlignCenter
 				Layout.preferredWidth: width
 				Layout.preferredHeight: height
 				Layout.margins: space.big

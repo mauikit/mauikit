@@ -32,6 +32,8 @@ ItemDelegate
     property alias label: controlLabel.text
 	property int radius : 0
 	
+	signal rightClicked()
+	
     width: parent.width
     height: rowHeight
 
@@ -40,7 +42,18 @@ ItemDelegate
     property string labelColor: ListView.isCurrentItem ? highlightedTextColor :
                                                          textColor
 
-
+	
+	MouseArea
+	{
+		anchors.fill: parent
+		acceptedButtons:  Qt.RightButton
+		onClicked:
+		{
+			if(!isMobile && mouse.button === Qt.RightButton)
+				rightClicked()
+		}
+	}
+														 
     background: Rectangle
     {
         anchors.fill: parent

@@ -48,12 +48,24 @@ void SyncingList::insert(const QVariantMap& data)
 	}	
 }
 
-void SyncingList::remove(const int& index)
+void SyncingList::removeAccount(const QString &server, const QString &user)
+{		
+	if(this->fm->removeCloudAccount(server, user))
+	{
+		this->refresh();
+	}	
+}
+
+void SyncingList::removeAccountAndFiles(const QString &server, const QString &user)
 {	
-	if(index >= this->list.size() || index < 0)
-		return;
 	
-	//todo
+	
+	if(this->fm->removeCloudAccount(server, user))
+	{
+		this->refresh();
+	}	
+	
+	this->fm->removeDir(FM::resolveUserCloudCachePath(server, user));
 }
 
 FMH::MODEL_LIST SyncingList::items() const

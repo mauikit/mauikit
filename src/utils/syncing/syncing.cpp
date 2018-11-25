@@ -73,7 +73,7 @@ void Syncing::listDirOutputHandler(WebDAVReply *reply)
 
 QString Syncing::getCacheFile(const QString& path)
 {	
-	const auto directory = FMH::CloudCachePath+"opendesktop/"+this->user;
+	const auto directory = FM::resolveUserCloudCachePath(this->host, this->user);
 	const auto file = directory + QString(path).replace("remote.php/webdav/", "");	
 	
 	qDebug()<< "resolving file"<< file;
@@ -82,7 +82,6 @@ QString Syncing::getCacheFile(const QString& path)
 		return file;
 	else return path;
 }
-
 
 void Syncing::download(const QString& path)
 {

@@ -32,7 +32,7 @@ Item
 	ColorScheme {id: colorScheme}
 	property alias colorScheme : colorScheme
 	/***************************/
-	property string emoji : "qrc:/assets/face-sleeping.png"
+	property string emoji
 	property string message
 	property string title
 	property string body
@@ -88,51 +88,60 @@ Item
 		}
 	}
 	
-	Loader
+	Column
 	{
-		id: loader
 		anchors.centerIn: parent
-		anchors.bottomMargin: textHolder.implicitHeight
-		height: emojiSize
-		width: emojiSize
+		height: parent.height * 0.5
+		width: parent.width * 0.7
 		
-		sourceComponent: isGif ? animComponent : imgComponent
-	}
-	
-	Label
-	{
-		id: textHolder
-		width: parent.width
-		anchors.top: loader.bottom
-		opacity: 0.5
-		text: message ? qsTr(message) : "<h3>"+title+"</h3><p>"+body+"</p>"
-		font.pointSize: fontSizes.default
-		
-		padding: space.medium
-		font.bold: true
-		textFormat: Text.RichText
-		horizontalAlignment: Qt.AlignHCenter
-		elide: Text.ElideRight
-		color: colorScheme.textColor
-		wrapMode: Text.Wrap
-	
-		MouseArea
+		Loader
 		{
-			anchors.fill: parent
-			enabled: control.enabled
-			onClicked: actionTriggered()
+			id: loader			
+			height: control.emoji ? emojiSize : 0
+			width: height
+			anchors.horizontalCenter: parent.horizontalCenter
+		
+			sourceComponent: control.emoji ? (isGif ? animComponent : imgComponent) : undefined
+		}
+		
+		
+		Label
+		{
+			id: textHolder
+			width: parent.width
+		
+			opacity: 0.5
+			text: message ? qsTr(message) : "<h3>"+title+"</h3><p>"+body+"</p>"
+			font.pointSize: fontSizes.default
 			
-			hoverEnabled: true
+			padding: space.medium
+			font.bold: true
+			textFormat: Text.RichText
+			horizontalAlignment: Qt.AlignHCenter
+			elide: Text.ElideRight
+			color: colorScheme.textColor
+			wrapMode: Text.Wrap
 			
-			Rectangle
+			MouseArea
 			{
 				anchors.fill: parent
-				color: parent.hovered ? control.colorScheme.backgroundColor : "transparent"
-				radius: radiusV
+				enabled: control.enabled
+				onClicked: actionTriggered()
+				
+				hoverEnabled: true
+				
+				Rectangle
+				{
+					anchors.fill: parent
+					color: parent.hovered ? control.colorScheme.backgroundColor : "transparent"
+					radius: radiusV
+				}
+				
 			}
-
 		}
 	}
+	
+	
 }
 
 

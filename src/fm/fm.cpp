@@ -294,14 +294,15 @@ FMH::MODEL_LIST FM::getBookmarks()
     return packItems(bookmarks, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::BOOKMARKS_PATH]);
 }
 
-void FM::getCloudServerContent(const QString &path)
+bool FM::getCloudServerContent(const QString &path)
 {
     auto user = path.split("/")[1];
    
     auto data = this->get(QString("select * from clouds where user = '%1'").arg(user));
 
     if(data.isEmpty())
-        return;
+        return false;
+	
     auto map = data.first().toMap();
 
     user = map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString();
@@ -310,6 +311,7 @@ void FM::getCloudServerContent(const QString &path)
     this->sync->setCredentials(server, user, password);
 
     this->sync->listContent(path);
+	return true;
 }
 
 FMH::MODEL_LIST FM::getCloudAccounts()
@@ -322,8 +324,10 @@ FMH::MODEL_LIST FM::getCloudAccounts()
         res << FMH::MODEL {
         {FMH::MODEL_KEY::PATH, QStringLiteral("Cloud/")+map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString()},
         {FMH::MODEL_KEY::ICON, "folder-cloud"},
-        {FMH::MODEL_KEY::LABEL, map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString()},
-        {FMH::MODEL_KEY::TYPE,  FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]}};
+		{FMH::MODEL_KEY::LABEL, map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString()},
+		{FMH::MODEL_KEY::USER, map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString()},
+		{FMH::MODEL_KEY::SERVER, map[FMH::MODEL_NAME[FMH::MODEL_KEY::SERVER]].toString()},
+		{FMH::MODEL_KEY::TYPE,  FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]}};
 }
 return res;
 }
@@ -353,6 +357,27 @@ bool FM::addCloudAccount(const QString &server, const QString &user, const QStri
 	}
 	
 	return false;
+}
+
+bool FM::removeCloudAccount(const QString &server, const QString &user)
+{
+	FMH::DB account = {
+		{FMH::MODEL_KEY::SERVER, server},
+		{FMH::MODEL_KEY::USER, user},
+	};
+	
+	if(this->remove(FMH::TABLEMAP[FMH::TABLE::CLOUDS], account))
+	{
+		emit this->cloudAccountRemoved(user);
+		return true;
+	}
+	
+	return false;
+}
+
+QString FM::resolveUserCloudCachePath(const QString &server, const QString &user)
+{
+	return FMH::CloudCachePath+"opendesktop/"+user;
 }
 
 FMH::MODEL_LIST FM::getTagContent(const QString &tag)
