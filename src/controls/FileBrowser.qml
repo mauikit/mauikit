@@ -73,7 +73,7 @@ Maui.Page
 		
 		Maui.Dialog
 		{
-			property var paths: []
+			property var items: []
 			
 			title: qsTr("Delete files?")
 			message: qsTr("If you are sure you want to delete the files click on Accept, otherwise click on Cancel")
@@ -86,7 +86,7 @@ Maui.Page
 					control.selectionBar.animate("red")
 				}
 				
-				control.remove(paths)
+				control.remove(items)
 				close()
 			}
 		}
@@ -240,7 +240,7 @@ Maui.Page
 		onRemoveClicked:
 		{
 			dialogLoader.sourceComponent= removeDialogComponent
-			dialog.paths = paths
+			dialog.items = items
 			dialog.open()
 		}
 		
@@ -784,10 +784,10 @@ Maui.Page
 					clearSelection()
 	}
 	
-	function remove(paths)
+	function remove(items)
 	{
-		for(var i in paths)
-			Maui.FM.removeFile(paths[i])
+		for(var i in items)
+			Maui.FM.removeFile(items[i].path)
 	}
 	
 	
