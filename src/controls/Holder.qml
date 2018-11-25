@@ -91,7 +91,7 @@ Item
 	Column
 	{
 		anchors.centerIn: parent
-		height: parent.height * 0.5
+		height: implicitHeight
 		width: parent.width * 0.7
 		
 		Loader

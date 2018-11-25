@@ -59,26 +59,34 @@ void FM::init()
 {
     this->tag = Tagging::getInstance();
     this->sync = new Syncing(this);
-    connect(this->sync, &Syncing::listReady, [this](const FMH::MODEL_LIST list)
+    connect(this->sync, &Syncing::listReady, [this](const FMH::MODEL_LIST &list)
     {
         emit this->cloudServerContentReady(list);
     });
 	
-	connect(this->sync, &Syncing::readyOpen, [this](const FMH::MODEL item)
+	connect(this->sync, &Syncing::readyOpen, [this](const FMH::MODEL &item)
 	{		
 		this->openUrl(item[FMH::MODEL_KEY::PATH]);
 	});
 	
-	connect(this->sync, &Syncing::readyCopy, [this](const FMH::MODEL item)
+	connect(this->sync, &Syncing::readyCopy, [this](const FMH::MODEL &item)
 	{		
-		qDebug()<< "item ready to be copy to :"<< this->sync->getCopyTo() << item[FMH::MODEL_KEY::PATH];
-// 		
 		QVariantMap data;
 		for(auto key : item.keys())
 			data.insert(FMH::MODEL_NAME[key], item[key]);
 		
 		
 		this->copy(QVariantList {data}, this->sync->getCopyTo());
+	});
+	
+	connect(this->sync, &Syncing::error, [this](const QString &message)
+	{		
+		emit this->warningMessage(message);
+	});
+	
+	connect(this->sync, &Syncing::progress, [this](const int &percent)
+	{		
+		emit this->loadProgress(percent);
 	});
 }
 

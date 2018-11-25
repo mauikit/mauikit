@@ -78,6 +78,9 @@ signals:
     void cloudServerContentReady(FMH::MODEL_LIST list);
 	void cloudItemReady(FMH::MODEL item);
 	
+	void warningMessage(QString message);
+	void loadProgress(int percent);
+	
 public slots:	
 	bool bookmark(const QString &path);
 	bool removeBookmark(const QString &path);

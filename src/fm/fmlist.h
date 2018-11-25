@@ -175,6 +175,9 @@ signals:
 	void updateModel(int index, QVector<int> roles);
 	void preListChanged();
 	void postListChanged();	
+	
+	void warning(QString message);
+	void progress(int percent);
 };
 
 #endif // FMLIST_H

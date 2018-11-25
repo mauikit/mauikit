@@ -131,6 +131,19 @@ Maui.Page
 	
 	Component
 	{
+		id: notificationDialogComponent
+		
+		Maui.Dialog
+		{
+			defaultButtons: false
+			maxWidth: unit * 300
+			colorScheme.textColor: warningColor
+			colorScheme.backgroundColor: altColor
+		}
+	}
+	
+	Component
+	{
 		id: shareDialogComponent
 		Maui.ShareDialog {}
 	}
@@ -168,7 +181,24 @@ Maui.Page
 		foldersFirst: true
 		onSortByChanged: if(group) groupBy()
 		onContentReadyChanged: console.log("CONTENT READY?", contentReady)
+		onWarning:
+		{
+			dialogLoader.sourceComponent = notificationDialogComponent
+			dialog.title = "An error happened"
+			dialog.message = message
+			dialog.open()
+		}
+		
+		onProgress:
+		{
+			if(percent === 100)
+				_progressBar.value = 0
+			else
+				_progressBar.value = percent/100
+		}
 	}
+	
+	
 	
 	FileMenu
 	{
@@ -613,6 +643,17 @@ Maui.Page
 			Layout.bottomMargin: contentMargins*2
 			z: holder.z +1
 		}
+		
+		
+		ProgressBar
+		{
+			id: _progressBar
+			Layout.fillWidth: true
+			Layout.alignment: Qt.AlignBottom
+			height: iconSizes.medium
+			visible: value > 0
+		}
+		
 	}
 	
 	onThumbnailsSizeChanged:

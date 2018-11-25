@@ -57,6 +57,9 @@ signals:
 	void readyDownload(FMH::MODEL item);
 	void readyCopy(FMH::MODEL item);
 	
+	void error(QString message);
+	void progress(int percent);
+	
 public slots:
 };
 
