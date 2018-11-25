@@ -137,6 +137,90 @@ WebDAVReply* WebDAVClient::uploadTo(QString path, QString filename,
   return reply;
 }
 
+WebDAVReply* WebDAVClient::createDir(QString path, QString dirName) {
+  WebDAVReply* reply = new WebDAVReply();
+  QMap<QString, QString> headers;
+  QNetworkReply* createDirReply;
+
+  createDirReply =
+      this->networkHelper->makeRequest("MKCOL", path + "/" + dirName, headers);
+
+  connect(createDirReply, &QNetworkReply::finished,
+          [=]() { reply->sendDirCreatedResponseSignal(createDirReply); });
+
+  connect(createDirReply,
+          QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
+          [=](QNetworkReply::NetworkError err) {
+            this->errorReplyHandler(reply, err);
+          });
+
+  return reply;
+}
+
+WebDAVReply* WebDAVClient::copy(QString source, QString destination) {
+  WebDAVReply* reply = new WebDAVReply();
+  QMap<QString, QString> headers;
+  QNetworkReply* copyReply;
+
+  headers.insert("Destination", destination);
+
+  copyReply = this->networkHelper->makeRequest("COPY", source, headers);
+
+  connect(copyReply, &QNetworkReply::finished,
+          [=]() { reply->sendCopyResponseSignal(copyReply); });
+
+  connect(copyReply,
+          QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
+          [=](QNetworkReply::NetworkError err) {
+            this->errorReplyHandler(reply, err);
+          });
+
+  return reply;
+}
+
+WebDAVReply* WebDAVClient::move(QString source, QString destination,
+                                bool overwrite) {
+  WebDAVReply* reply = new WebDAVReply();
+  QMap<QString, QString> headers;
+  QNetworkReply* moveReply;
+  QString overwriteVal = overwrite ? "T" : "F";
+
+  headers.insert("Destination", destination);
+  headers.insert("Overwrite", overwriteVal);
+
+  moveReply = this->networkHelper->makeRequest("MOVE", source, headers);
+
+  connect(moveReply, &QNetworkReply::finished,
+          [=]() { reply->sendMoveResponseSignal(moveReply); });
+
+  connect(moveReply,
+          QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
+          [=](QNetworkReply::NetworkError err) {
+            this->errorReplyHandler(reply, err);
+          });
+
+  return reply;
+}
+
+WebDAVReply* WebDAVClient::remove(QString path) {
+  WebDAVReply* reply = new WebDAVReply();
+  QMap<QString, QString> headers;
+  QNetworkReply* removeReply;
+
+  removeReply = this->networkHelper->makeRequest("DELETE", path, headers);
+
+  connect(removeReply, &QNetworkReply::finished,
+          [=]() { reply->sendRemoveResponseSignal(removeReply); });
+
+  connect(removeReply,
+          QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
+          [=](QNetworkReply::NetworkError err) {
+            this->errorReplyHandler(reply, err);
+          });
+
+  return reply;
+}
+
 void WebDAVClient::errorReplyHandler(WebDAVReply* reply,
                                      QNetworkReply::NetworkError err) {
   reply->sendError(err);

@@ -21,6 +21,10 @@ class WebDAVItem
   WebDAVReply* download();
   WebDAVReply* listDir();
   WebDAVReply* upload(QString filename, QIODevice* file);
+  WebDAVReply* createDir(QString dirName);
+  WebDAVReply* copy(QString destination);
+  WebDAVReply* move(QString destination, bool overwrite = false);
+  WebDAVReply* remove();
 
   QString toString();
 

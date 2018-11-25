@@ -35,6 +35,22 @@ WebDAVReply* WebDAVItem::upload(QString filename, QIODevice* file) {
   return this->webdavClient->uploadTo(this->href, filename, file);
 }
 
+WebDAVReply* WebDAVItem::createDir(QString dirName) {
+  return this->webdavClient->createDir(this->href, dirName);
+}
+
+WebDAVReply* WebDAVItem::copy(QString destination) {
+  return this->webdavClient->copy(this->href, destination);
+}
+
+WebDAVReply* WebDAVItem::move(QString destination, bool overwrite) {
+  return this->webdavClient->move(this->href, destination, overwrite);
+}
+
+WebDAVReply* WebDAVItem::remove() {
+  return this->webdavClient->remove(this->href);
+}
+
 WebDAVReply* WebDAVItem::listDir() {
   return this->webdavClient->listDir(this->href);
 }

@@ -124,8 +124,7 @@ Maui.Menu
 
     function show()
     {
-        if(currentPathType === FMList.PLACES_PATH
-			|| currentPathType === FMList.TAGS_PATH)
+		if(currentPathType === FMList.PLACES_PATH || currentPathType === FMList.TAGS_PATH || currentPathType === FMList.CLOUD_PATH)
         {
             if(isCopy)
                 pasteFiles = copyItems.length

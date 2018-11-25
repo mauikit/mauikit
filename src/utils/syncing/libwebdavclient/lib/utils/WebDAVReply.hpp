@@ -27,6 +27,10 @@ class MAUIKIT_EXPORT WebDAVReply : public QObject
   void sendDownloadProgressResponseSignal(qint64 bytesReceived,
                                           qint64 bytesTotal);
   void sendUploadFinishedResponseSignal(QNetworkReply* uploadReply);
+  void sendDirCreatedResponseSignal(QNetworkReply* createDirReply);
+  void sendCopyResponseSignal(QNetworkReply* copyReply);
+  void sendMoveResponseSignal(QNetworkReply* moveReply);
+  void sendRemoveResponseSignal(QNetworkReply* removeReply);
   void sendError(QNetworkReply::NetworkError err);
 
  signals:
@@ -34,6 +38,10 @@ class MAUIKIT_EXPORT WebDAVReply : public QObject
   void downloadResponse(QNetworkReply* downloadReply);
   void downloadProgressResponse(qint64 bytesReceived, qint64 bytesTotal);
   void uploadFinished(QNetworkReply* uploadReply);
+  void createDirFinished(QNetworkReply* createDirReply);
+  void copyFinished(QNetworkReply* copyReply);
+  void moveFinished(QNetworkReply* moveReply);
+  void removeFinished(QNetworkReply* removeReply);
   void error(QNetworkReply::NetworkError err);
 };
 

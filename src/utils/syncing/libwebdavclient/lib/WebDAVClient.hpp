@@ -37,6 +37,15 @@ class MAUIKIT_EXPORT WebDAVClient : public QObject
 
   WebDAVReply* uploadTo(QString path, QString filename, QIODevice* file);
 
+  WebDAVReply* createDir(QString path, QString dirName);
+
+  WebDAVReply* copy(QString source, QString destination);
+
+  WebDAVReply* move(QString source, QString destination,
+                    bool overwrite = false);
+
+  WebDAVReply* remove(QString path);
+
   ~WebDAVClient();
 
  private:
