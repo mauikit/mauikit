@@ -99,11 +99,7 @@ Maui.Page
 		Maui.NewDialog
 		{
 			title: qsTr("Create new folder")
-			onFinished: 
-			{
-					list.createDir(text)
-				
-			}
+			onFinished: list.createDir(text)
 		}
 	}
 	
@@ -750,8 +746,8 @@ Maui.Page
 				detailsView = conf["detailview"] === "true" ? true : false
 			}else
 			{
-				thumbnailsSize = parseInt(Maui.FM.loadSettings("IconSize", "SETTINGS", thumbnailsSize))			
-				detailsView =  Maui.FM.loadSettings("DetailsView", "SETTINGS", detailsView) == "true" ? true: false
+				thumbnailsSize = parseInt(Maui.FM.loadSettings("IconSize", "SETTINGS", thumbnailsSize))		
+				detailsView =  Maui.FM.loadSettings("DetailsView", "SETTINGS", detailsView)
 			}
 		}
 		
@@ -840,10 +836,11 @@ Maui.Page
 	function switchView(state)
 	{
 		detailsView = state ? state : !detailsView
+		
 		if(trackChanges && saveDirProps)
 			Maui.FM.setDirConf(currentPath+"/.directory", "MAUIFM", "DetailView", detailsView)
-			else
-				Maui.FM.saveSettings("DetailsView", detailsView, "SETTINGS")
+		else
+			Maui.FM.saveSettings("DetailsView", detailsView, "SETTINGS")
 	}
 	
 	function bookmarkFolder(paths)
