@@ -98,8 +98,12 @@ Maui.Page
 		
 		Maui.NewDialog
 		{
-			title: "Create new folder"
-			onFinished: Maui.FM.createDir(control.currentPath, text)
+			title: qsTr("Create new folder")
+			onFinished: 
+			{
+					list.createDir(text)
+				
+			}
 		}
 	}
 	
@@ -109,7 +113,7 @@ Maui.Page
 		
 		Maui.NewDialog
 		{
-			title: "Create new file"
+			title: qsTr("Create new file")
 			onFinished: Maui.FM.createFile(control.currentPath, text)
 		}
 	}
@@ -184,7 +188,7 @@ Maui.Page
 		onWarning:
 		{
 			dialogLoader.sourceComponent = notificationDialogComponent
-			dialog.title = "An error happened"
+			dialog.title = qsTr("An error happened")
 			dialog.message = message
 			dialog.open()
 		}
@@ -398,37 +402,38 @@ Maui.Page
 		z: -1
 		visible: !modelList.pathExists || modelList.pathEmpty || !modelList.contentReady
 		emoji: if(modelList.pathExists && modelList.pathEmpty)
-		"qrc:/assets/MoonSki.png" 
-		else if(!modelList.pathExists)
-			"qrc:/assets/ElectricPlug.png"
-			else if(!modelList.contentReady)
-				"qrc:/assets/animat-rocket-color.gif"
-				isGif: !modelList.contentReady			
-				isMask: false
-				title : if(modelList.pathExists && modelList.pathEmpty)
-				"Folder is empty!"
+					"qrc:/assets/MoonSki.png" 
 				else if(!modelList.pathExists)
-					"Folder doesn't exists!"
-					else if(!modelList.contentReady)
-						"Loading content!"
+					"qrc:/assets/ElectricPlug.png"
+				else if(!modelList.contentReady)
+					"qrc:/assets/animat-rocket-color.gif"
+					
+		isGif: !modelList.contentReady			
+		isMask: false
+		title : if(modelList.pathExists && modelList.pathEmpty)
+					qsTr("Folder is empty!")
+				else if(!modelList.pathExists)
+					qsTr("Folder doesn't exists!")
+				else if(!modelList.contentReady)
+					qsTr("Loading content!")
+				
+		body: if(modelList.pathExists && modelList.pathEmpty)
+					qsTr("You can add new files to it")
+				else if(!modelList.pathExists)
+					qsTr("Create Folder?")
+				else if(!modelList.contentReady)
+					qsTr("Almost ready!")
 						
-						body: if(modelList.pathExists && modelList.pathEmpty)
-						"You can add new files to it"
-						else if(!modelList.pathExists)
-							"Create Folder?"
-							else if(!modelList.contentReady)
-								"Almost ready!"        
-								
-								emojiSize: iconSizes.huge
-								
-								onActionTriggered:
-								{
-									if(!modelList.pathExists)
-									{
-										Maui.FM.createDir(control.currentPath.slice(0, control.currentPath.lastIndexOf("/")), control.currentPath.split("/").pop())
-										control.openFolder(modelList.parentPath)				
-									}
-								}
+		emojiSize: iconSizes.huge
+						
+		onActionTriggered:
+		{
+			if(!modelList.pathExists)
+			{
+				Maui.FM.createDir(control.currentPath.slice(0, control.currentPath.lastIndexOf("/")), control.currentPath.split("/").pop())
+				control.openFolder(modelList.parentPath)				
+			}
+		}
 	}
 	
 	Keys.onSpacePressed: previewer.show(modelList.get(browser.currentIndex).path)

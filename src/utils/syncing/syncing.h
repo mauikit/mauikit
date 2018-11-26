@@ -2,6 +2,7 @@
 #define SYNCING_H
 
 #include <QObject>
+#include <QNetworkReply>
 #include "fmh.h"
 
 class WebDAVClient;
@@ -28,9 +29,12 @@ public:
     void setCredentials(const QString &server, const QString &user, const QString &password);
 	void download(const QString &path);
 	void upload(const QString &path);
+	void createDir(const QString &path, const QString &name);
 	void resolveFile(const FMH::MODEL &item, const Syncing::SIGNAL_TYPE &signalType);
 	void setCopyTo(const QString &path);
 	QString getCopyTo() const;	
+	
+	QString getUser() const;
 
 protected:
 	void emitSignal(const FMH::MODEL &item);
@@ -48,6 +52,8 @@ private:
 	QString currentPath;
 	QString copyTo;
 	
+	void emitError(const QNetworkReply::NetworkError &err);
+	
 	SIGNAL_TYPE signalType;
 	
 signals:
@@ -56,7 +62,7 @@ signals:
 	void readyOpen(FMH::MODEL item);
 	void readyDownload(FMH::MODEL item);
 	void readyCopy(FMH::MODEL item);
-	
+	void dirCreated();
 	void error(QString message);
 	void progress(int percent);
 	

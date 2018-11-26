@@ -68,99 +68,7 @@ void Syncing::listDirOutputHandler(WebDAVReply *reply)
 			});
 	connect(reply, &WebDAVReply::error, [=](QNetworkReply::NetworkError err) {
 		qDebug() << "ERROR" << err;
-		switch(err)
-		{
-			case QNetworkReply::AuthenticationRequiredError: 
-				emit this->error("The remote server requires authentication to serve the content but the credentials provided were not accepted (if any)");
-				break;
-				
-			case QNetworkReply::ConnectionRefusedError: 
-				emit this->error("the remote server refused the connection (the server is not accepting requests)");
-				break;
-				
-			case QNetworkReply::RemoteHostClosedError: 
-				emit this->error("the remote server closed the connection prematurely, before the entire reply was received and processed");
-				break;
-				
-			case QNetworkReply::HostNotFoundError: 
-				emit this->error("the remote host name was not found (invalid hostname)");
-				break;
-				
-			case QNetworkReply::TimeoutError: 
-				emit this->error("the connection to the remote server timed out");
-				break;
-				
-			case QNetworkReply::OperationCanceledError: 
-				emit this->error("the operation was canceled via calls to abort() or close() before it was finished.");
-				break;
-				
-			case QNetworkReply::SslHandshakeFailedError: 
-				emit this->error("the SSL/TLS handshake failed and the encrypted channel could not be established. The sslErrors() signal should have been emitted.");
-				break;
-				
-			case QNetworkReply::TemporaryNetworkFailureError: 
-				emit this->error("the connection was broken due to disconnection from the network, however the system has initiated roaming to another access point. The request should be resubmitted and will be processed as soon as the connection is re-established.");
-				break;
-				
-			case QNetworkReply::NetworkSessionFailedError: 
-				emit this->error("the connection was broken due to disconnection from the network or failure to start the network.");
-				break;
-				
-				
-			case QNetworkReply::BackgroundRequestNotAllowedError: 
-				emit this->error("the background request is not currently allowed due to platform policy.");
-				break;
-				
-			case QNetworkReply::TooManyRedirectsError: 
-				emit this->error("while following redirects, the maximum limit was reached. The limit is by default set to 50 or as set by QNetworkRequest::setMaxRedirectsAllowed(). (This value was introduced in 5.6.)");
-				break;
-				
-			case QNetworkReply::InsecureRedirectError: 
-				emit this->error("while following redirects, the network access API detected a redirect from a encrypted protocol (https) to an unencrypted one (http).");
-				break;
-				
-			case QNetworkReply::ProxyConnectionRefusedError: 
-				emit this->error("the connection to the proxy server was refused (the proxy server is not accepting requests)");
-				break;
-				
-			case QNetworkReply::ProxyConnectionClosedError: 
-				emit this->error("the proxy server closed the connection prematurely, before the entire reply was received and processed");
-				break;
-				
-			case QNetworkReply::ProxyNotFoundError: 
-				emit this->error("the proxy host name was not found (invalid proxy hostname)");
-				break;
-				
-			case QNetworkReply::ProxyTimeoutError: 
-				emit this->error("the connection to the proxy timed out or the proxy did not reply in time to the request sent");
-				break;
-				
-			case QNetworkReply::ProxyAuthenticationRequiredError: 
-				emit this->error("the proxy requires authentication in order to honour the request but did not accept any credentials offered (if any)");
-				break;
-				
-			case QNetworkReply::ContentAccessDenied: 
-				emit this->error("the access to the remote content was denied (similar to HTTP error 403)");
-				break;
-				
-			case QNetworkReply::ContentOperationNotPermittedError: 
-				emit this->error("the operation requested on the remote content is not permitted");
-				break;
-				
-			case QNetworkReply::ContentNotFoundError:
-				emit this->error("the remote content was not found at the server (similar to HTTP error 404)");
-				break;
-				
-			case QNetworkReply::ContentReSendError: 
-				emit this->error("the request needed to be sent again, but this failed for example because the upload data could not be read a second time.");
-				break;
-				
-			case QNetworkReply::ServiceUnavailableError: 
-				emit this->error("the server is unable to handle the request at this time.");
-				break;
-				
-			default: emit this->error("There was an unkown error with the remote server or your internet connection.");
-		}
+		this->emitError(err);
 	});
 }
 
@@ -220,9 +128,131 @@ void Syncing::download(const QString& path)
 	});
 }
 
-void Syncing::upload(const QString& path)
+void Syncing::upload(const QString &path)
 {
 }
+
+void Syncing::createDir(const QString &path, const QString &name)
+{
+
+	WebDAVReply *reply = this->client->createDir(path, name);
+	
+	connect(reply, &WebDAVReply::createDirFinished, [=](QNetworkReply *reply) 
+	{
+		if (!reply->error()) {
+			qDebug() << "\nDir Created"
+			<< "\nURL  :" << reply->url();
+			emit this->dirCreated();
+		} else {
+			qDebug() << "ERROR(CREATE DIR)" << reply->error();
+			emit this->error(reply->errorString());
+		}
+	});
+	
+	connect(reply, &WebDAVReply::error, [=](QNetworkReply::NetworkError err) 
+	{
+		qDebug() << "ERROR" << err;
+		this->emitError(err);
+	});
+}
+
+void Syncing::emitError(const QNetworkReply::NetworkError &err)
+{
+	
+	switch(err)
+	{
+		case QNetworkReply::AuthenticationRequiredError: 
+			emit this->error("The remote server requires authentication to serve the content but the credentials provided were not accepted (if any)");
+			break;
+			
+		case QNetworkReply::ConnectionRefusedError: 
+			emit this->error("the remote server refused the connection (the server is not accepting requests)");
+			break;
+			
+		case QNetworkReply::RemoteHostClosedError: 
+			emit this->error("the remote server closed the connection prematurely, before the entire reply was received and processed");
+			break;
+			
+		case QNetworkReply::HostNotFoundError: 
+			emit this->error("the remote host name was not found (invalid hostname)");
+			break;
+			
+		case QNetworkReply::TimeoutError: 
+			emit this->error("the connection to the remote server timed out");
+			break;
+			
+		case QNetworkReply::OperationCanceledError: 
+			emit this->error("the operation was canceled via calls to abort() or close() before it was finished.");
+			break;
+			
+		case QNetworkReply::SslHandshakeFailedError: 
+			emit this->error("the SSL/TLS handshake failed and the encrypted channel could not be established. The sslErrors() signal should have been emitted.");
+			break;
+			
+		case QNetworkReply::TemporaryNetworkFailureError: 
+			emit this->error("the connection was broken due to disconnection from the network, however the system has initiated roaming to another access point. The request should be resubmitted and will be processed as soon as the connection is re-established.");
+			break;
+			
+		case QNetworkReply::NetworkSessionFailedError: 
+			emit this->error("the connection was broken due to disconnection from the network or failure to start the network.");
+			break;				
+			
+		case QNetworkReply::BackgroundRequestNotAllowedError: 
+			emit this->error("the background request is not currently allowed due to platform policy.");
+			break;
+			
+		case QNetworkReply::TooManyRedirectsError: 
+			emit this->error("while following redirects, the maximum limit was reached. The limit is by default set to 50 or as set by QNetworkRequest::setMaxRedirectsAllowed(). (This value was introduced in 5.6.)");
+			break;
+			
+		case QNetworkReply::InsecureRedirectError: 
+			emit this->error("while following redirects, the network access API detected a redirect from a encrypted protocol (https) to an unencrypted one (http).");
+			break;
+			
+		case QNetworkReply::ProxyConnectionRefusedError: 
+			emit this->error("the connection to the proxy server was refused (the proxy server is not accepting requests)");
+			break;
+			
+		case QNetworkReply::ProxyConnectionClosedError: 
+			emit this->error("the proxy server closed the connection prematurely, before the entire reply was received and processed");
+			break;
+			
+		case QNetworkReply::ProxyNotFoundError: 
+			emit this->error("the proxy host name was not found (invalid proxy hostname)");
+			break;
+			
+		case QNetworkReply::ProxyTimeoutError: 
+			emit this->error("the connection to the proxy timed out or the proxy did not reply in time to the request sent");
+			break;
+			
+		case QNetworkReply::ProxyAuthenticationRequiredError: 
+			emit this->error("the proxy requires authentication in order to honour the request but did not accept any credentials offered (if any)");
+			break;
+			
+		case QNetworkReply::ContentAccessDenied: 
+			emit this->error("the access to the remote content was denied (similar to HTTP error 403)");
+			break;
+			
+		case QNetworkReply::ContentOperationNotPermittedError: 
+			emit this->error("the operation requested on the remote content is not permitted");
+			break;
+			
+		case QNetworkReply::ContentNotFoundError:
+			emit this->error("the remote content was not found at the server (similar to HTTP error 404)");
+			break;
+			
+		case QNetworkReply::ContentReSendError: 
+			emit this->error("the request needed to be sent again, but this failed for example because the upload data could not be read a second time.");
+			break;
+			
+		case QNetworkReply::ServiceUnavailableError: 
+			emit this->error("the server is unable to handle the request at this time.");
+			break;
+			
+		default: emit this->error("There was an unknown error with the remote server or your internet connection.");
+	}
+}
+
 
 void Syncing::saveTo(const QByteArray &array, const QString& path)
 {
@@ -302,4 +332,9 @@ void Syncing::setCopyTo(const QString &path)
 QString Syncing::getCopyTo() const
 {
 	return this->copyTo;
+}
+
+QString Syncing::getUser() const
+{
+	return this->user;
 }

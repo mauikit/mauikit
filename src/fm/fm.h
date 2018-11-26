@@ -28,6 +28,7 @@ class MAUIKIT_EXPORT FM : public FMDB
 
 public:  
 	static FM *getInstance();
+	Syncing *sync;
 	
 	FMH::MODEL_LIST  getTags(const int &limit = 5);	
 	FMH::MODEL_LIST getTagContent(const QString &tag);	
@@ -36,6 +37,8 @@ public:
     /** Syncing **/
     bool getCloudServerContent(const QString &server);
     FMH::MODEL_LIST getCloudAccounts();
+	Q_INVOKABLE void createCloudDir(const QString &path, const QString &name);
+	
 
 	/*** START STATIC METHODS ***/
 	static FMH::MODEL_LIST search(const QString &query, const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
@@ -59,7 +62,6 @@ public:
 	
 private:
     Tagging *tag;
-    Syncing *sync;
 	static FM* instance;
 	
     void init();
@@ -80,6 +82,8 @@ signals:
 	
 	void warningMessage(QString message);
 	void loadProgress(int percent);
+	
+	void dirCreated();
 	
 public slots:	
 	bool bookmark(const QString &path);

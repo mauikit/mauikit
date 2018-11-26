@@ -88,6 +88,11 @@ void FM::init()
 	{		
 		emit this->loadProgress(percent);
 	});
+	
+	connect(this->sync, &Syncing::dirCreated, [this]()
+	{		
+		emit this->dirCreated();
+	});
 }
 
 FM::FM(QObject *parent) : FMDB(parent) {}
@@ -338,6 +343,12 @@ FMH::MODEL_LIST FM::getCloudAccounts()
 		{FMH::MODEL_KEY::TYPE,  FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]}};
 }
 return res;
+}
+
+void FM::createCloudDir(const QString &path, const QString &name)
+{
+	qDebug()<< "trying to create folder at"<< path;
+	this->sync->createDir(path, name);
 }
 
 void FM::openCloudItem(const QVariantMap &item)

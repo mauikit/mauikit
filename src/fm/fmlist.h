@@ -150,6 +150,8 @@ public slots:
 	QVariantMap get(const int &index) const;
 	void refresh();
 	
+	void createDir(const QString &name);
+	
 signals:
 	void pathChanged();
 	void pathTypeChanged();

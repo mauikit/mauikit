@@ -22,6 +22,7 @@
 #include "utils.h"
 
 #include <QFileSystemWatcher>
+#include <syncing.h>
 
 FMList::FMList(QObject *parent) : QObject(parent)
 {
@@ -53,6 +54,8 @@ FMList::FMList(QObject *parent) : QObject(parent)
 		Q_UNUSED(path);
 		this->reset();
 	});
+	
+	connect(this->fm, &FM::dirCreated, this, &FMList::refresh);	
 	
 	connect(this, &FMList::pathChanged, this, &FMList::reset);
 	// 	connect(this, &FMList::hiddenChanged, this, &FMList::setList);
@@ -523,6 +526,16 @@ QVariantMap FMList::get(const int &index) const
 void FMList::refresh()
 {
 	emit this->pathChanged();
+}
+
+void FMList::createDir(const QString& name)
+{
+	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH)
+		this->fm->createDir(this->path, name);	
+	else if(this->pathType == FMH::PATHTYPE_KEY::CLOUD_PATH)		
+	{
+		this->fm->createCloudDir(QString(this->path).replace(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]+"/"+this->fm->sync->getUser(), ""), name);
+	}
 }
 
 QString FMList::getParentPath()
