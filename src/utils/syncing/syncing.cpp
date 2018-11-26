@@ -131,25 +131,29 @@ void Syncing::download(const QString& path)
 void Syncing::upload(const QString &path, const QString &filePath)
 {
 	
-// 	if(!FMH::fileExists(filePath))
-// 		return;
-// 	
-	qDebug()<< "Copy to cloud. File exists";
+	if(!FMH::fileExists(filePath))
+		return;
 	
-	QFile file("/home/camilo/Coding/qml/mauikit-kde/assets.qrc");
-	if(file.open(QIODevice::ReadOnly))
+	qDebug()<< "Copy to cloud. File exists" << path << filePath;
+	
+	this->mFile.setFileName(filePath);
+
+	if(this->mFile.open(QIODevice::ReadOnly))
 	{
 		
 		qDebug()<< "Copy to cloud. File could be opened";
 		
-	WebDAVReply *reply = this->client->uploadTo("/remote.php/webdav", file.fileName(), &file);
-		
+		WebDAVReply *reply = this->client->uploadTo(path, QFileInfo(filePath).fileName(), &this->mFile);	
 	connect(reply, &WebDAVReply::uploadFinished, [=](QNetworkReply *reply)
 	{
 		if (!reply->error())
 		{
 			qDebug() << "\nUpload Success"
 			<< "\nURL  :" << reply->url() << "\nSize :" << reply->size();
+			auto item = FMH::getFileInfoModel(filePath);
+			item[FMH::MODEL_KEY::PATH] =  this->currentPath+"/"+QFileInfo(filePath).fileName()+"/";
+			
+			emit this->uploadReady(item, this->currentPath);
 		} else
 		{
 			qDebug() << "ERROR(UPLOAD)" << reply->error();
@@ -181,7 +185,7 @@ void Syncing::createDir(const QString &path, const QString &name)
 		 {FMH::MODEL_KEY::ICON, "folder"},
 		 {FMH::MODEL_KEY::PATH, this->currentPath+"/"+name+"/"}
 			};
-			emit this->dirCreated(dir);
+			emit this->dirCreated(dir, this->currentPath);
 		} else 
 		{
 			qDebug() << "ERROR(CREATE DIR)" << reply->error();
@@ -348,15 +352,15 @@ void Syncing::emitSignal(const FMH::MODEL &item)
 	switch(this->signalType)
 	{
 		case SIGNAL_TYPE::OPEN:
-			emit this->readyOpen(item);
+			emit this->readyOpen(item, this->currentPath);
 			break;
 			
 		case SIGNAL_TYPE::DOWNLOAD:
-			emit this->readyDownload(item);
+			emit this->readyDownload(item, this->currentPath);
 			break;
 			
 		case SIGNAL_TYPE::COPY:
-			emit this->readyCopy(item);
+			emit this->readyCopy(item, this->currentPath);
 			break;		
 	}
 }

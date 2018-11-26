@@ -58,12 +58,16 @@ FMList::FMList(QObject *parent) : QObject(parent)
 		this->reset();
 	});
 	
-	connect(this->fm, &FM::dirCreated, [this] (const FMH::MODEL &dir)
+	connect(this->fm, &FM::newItem, [this] (const FMH::MODEL &item, const QString &url)
 	{
-		emit this->preItemAppended();
-		this->list << dir;		
-		emit this->postListChanged();
-		
+		if(this->path == url)
+		{
+			emit this->preItemAppended();
+			this->list << item;		
+			this->pathEmpty = this->list.isEmpty();
+			emit this->pathEmptyChanged();
+			emit this->postListChanged();
+		}
 	});	
 	
 	connect(this, &FMList::pathChanged, this, &FMList::reset);

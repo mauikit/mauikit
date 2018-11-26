@@ -64,12 +64,12 @@ void FM::init()
         emit this->cloudServerContentReady(list, url);
     });
 	
-	connect(this->sync, &Syncing::readyOpen, [this](const FMH::MODEL &item)
+	connect(this->sync, &Syncing::readyOpen, [this](const FMH::MODEL &item, const QString &url)
 	{		
 		this->openUrl(item[FMH::MODEL_KEY::PATH]);
 	});
 	
-	connect(this->sync, &Syncing::readyCopy, [this](const FMH::MODEL &item)
+	connect(this->sync, &Syncing::readyCopy, [this](const FMH::MODEL &item, const QString &url)
 	{		
 		QVariantMap data;
 		for(auto key : item.keys())
@@ -89,9 +89,14 @@ void FM::init()
 		emit this->loadProgress(percent);
 	});
 	
-	connect(this->sync, &Syncing::dirCreated, [this](const FMH::MODEL &dir)
+	connect(this->sync, &Syncing::dirCreated, [this](const FMH::MODEL &dir, const QString &url)
 	{		
-		emit this->dirCreated(dir);
+		emit this->newItem(dir, url);
+	});
+	
+	connect(this->sync, &Syncing::uploadReady, [this](const FMH::MODEL &item, const QString &url)
+	{		
+		emit this->newItem(item, url);
 	});
 }
 

@@ -84,6 +84,7 @@ signals:
 	void loadProgress(int percent);
 	
 	void dirCreated(FMH::MODEL dir);
+	void newItem(FMH::MODEL item, QString path);
 	
 public slots:	
 	bool bookmark(const QString &path);

@@ -61,8 +61,7 @@ Maui.Page
 	
 	Component.onCompleted:
 	{
-		control.detailsView =  Maui.FM.loadSettings("DetailsView", "SETTINGS", detailsView) == "true" ? true : false
-		console.log("INIT DETAILSVIEW STATE ", control.detailsView, Maui.FM.loadSettings("DetailsView", "SETTINGS", detailsView) )
+		control.detailsView =  Maui.FM.loadSettings("DetailsView", "SETTINGS", detailsView)
 	}
 	
 	margins: 0
