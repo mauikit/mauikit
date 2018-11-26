@@ -34,7 +34,7 @@ Maui.Page
 	
 	property bool selectionMode : false
 	property bool group : false
-	property bool detailsView : Maui.FM.loadSettings("DetailsView", "SETTINGS", detailsView) == "true" ? true: false
+	property bool detailsView : false
 	property bool showEmblems: true
 	
 	property alias selectionBar : selectionBarLoader.item
@@ -59,6 +59,11 @@ Maui.Page
 	signal itemRightEmblemClicked(int index)
 	signal rightClicked()
 	
+	Component.onCompleted:
+	{
+		control.detailsView =  Maui.FM.loadSettings("DetailsView", "SETTINGS", detailsView) == "true" ? true : false
+		console.log("INIT DETAILSVIEW STATE ", control.detailsView, Maui.FM.loadSettings("DetailsView", "SETTINGS", detailsView) )
+	}
 	
 	margins: 0
 	
@@ -160,6 +165,8 @@ Maui.Page
 	BrowserMenu
 	{
 		id: browserMenu
+		width: unit *200
+		
 	}
 	
 	Maui.FilePreviewer
@@ -203,6 +210,7 @@ Maui.Page
 	FileMenu
 	{
 		id: itemMenu
+		width: unit *200
 		onBookmarkClicked: control.bookmarkFolder(paths)
 		onCopyClicked:
 		{
@@ -820,10 +828,12 @@ Maui.Page
 	function paste()
 	{
 		if(isCopy)
-			Maui.FM.copy(copyItems, currentPath)
-			else if(isCut)
-				if(Maui.FM.cut(cutItems, currentPath))
-					clearSelection()
+			list.copyInto(copyItems, currentPath)
+		else if(isCut)
+		{
+			list.cutInto(cutItems, currentPath)
+			clearSelection()			
+		}
 	}
 	
 	function remove(items)

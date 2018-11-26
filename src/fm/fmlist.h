@@ -151,6 +151,8 @@ public slots:
 	void refresh();
 	
 	void createDir(const QString &name);
+	void copyInto(const QVariantList &files);
+	void cutInto(const QVariantList &files);
 	
 signals:
 	void pathChanged();

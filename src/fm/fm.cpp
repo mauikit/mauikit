@@ -59,9 +59,9 @@ void FM::init()
 {
     this->tag = Tagging::getInstance();
     this->sync = new Syncing(this);
-    connect(this->sync, &Syncing::listReady, [this](const FMH::MODEL_LIST &list)
+    connect(this->sync, &Syncing::listReady, [this](const FMH::MODEL_LIST &list, const QString &url)
     {
-        emit this->cloudServerContentReady(list);
+        emit this->cloudServerContentReady(list, url);
     });
 	
 	connect(this->sync, &Syncing::readyOpen, [this](const FMH::MODEL &item)
@@ -89,9 +89,9 @@ void FM::init()
 		emit this->loadProgress(percent);
 	});
 	
-	connect(this->sync, &Syncing::dirCreated, [this]()
+	connect(this->sync, &Syncing::dirCreated, [this](const FMH::MODEL &dir)
 	{		
-		emit this->dirCreated();
+		emit this->dirCreated(dir);
 	});
 }
 
@@ -399,6 +399,11 @@ QString FM::resolveUserCloudCachePath(const QString &server, const QString &user
 	return FMH::CloudCachePath+"opendesktop/"+user;
 }
 
+QString FM::resolveLocalCloudPath(const QString& path)
+{
+	return QString(path).replace(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]+"/"+this->sync->getUser(), "");
+}
+
 FMH::MODEL_LIST FM::getTagContent(const QString &tag)
 {
     FMH::MODEL_LIST content;
@@ -558,8 +563,15 @@ bool FM::copy(const QVariantList &data, const QString &where)
             QFile file(path);
             qDebug()<< path << "is a file";
 
-            auto state = file.copy(where+"/"+QFileInfo(path).fileName());
-            if(!state) return false;
+			if(this->isCloud(where))
+			{	
+				qDebug()<< path << "is a file and "<< where << " is a claoud path"<< this->resolveLocalCloudPath(where);
+				
+				this->sync->upload(this->resolveLocalCloudPath(where), path);
+				
+			}
+			else
+				return file.copy(where+"/"+QFileInfo(path).fileName());
         }
     }
 
@@ -570,26 +582,19 @@ bool FM::copyPath(QString sourceDir, QString destinationDir, bool overWriteDirec
 {
     QDir originDirectory(sourceDir);
 
-    if (! originDirectory.exists())
-    {
+    if (!originDirectory.exists())    
         return false;
-    }
-
+    
     QDir destinationDirectory(destinationDir);
 
-    if(destinationDirectory.exists() && !overWriteDirectory)
-    {
-        return false;
-    }
-    else if(destinationDirectory.exists() && overWriteDirectory)
-    {
-        destinationDirectory.removeRecursively();
-    }
+    if(destinationDirectory.exists() && !overWriteDirectory)    
+        return false;    
+    else if(destinationDirectory.exists() && overWriteDirectory)    
+        destinationDirectory.removeRecursively();    
 
     originDirectory.mkpath(destinationDir);
 
-    foreach (QString directoryName, originDirectory.entryList(QDir::Dirs | \
-                                                              QDir::NoDotAndDotDot))
+    foreach(QString directoryName, originDirectory.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
     {
         QString destinationPath = destinationDir + "/" + directoryName;
         originDirectory.mkpath(destinationPath);
@@ -605,18 +610,30 @@ bool FM::copyPath(QString sourceDir, QString destinationDir, bool overWriteDirec
     QDir finalDestination(destinationDir);
     finalDestination.refresh();
 
-    if(finalDestination.exists())
-    {
-        return true;
-    }
+    if(finalDestination.exists())    
+        return true;    
 
     return false;
 }
 
-bool FM::cut(const QStringList &paths, const QString &where)
-{
-    for(auto path : paths)
-    {
+bool FM::cut(const QVariantList &data, const QString &where)
+{	
+	FMH::MODEL_LIST items;
+	
+	for(auto k : data)
+	{	
+		auto map = k.toMap();
+		FMH::MODEL model;
+		
+		for(auto key : map.keys())
+			model.insert(FMH::MODEL_NAME_KEY[key], map[key].toString());				
+		
+		items << model;
+	}
+	
+	for(auto item : items)
+	{
+		auto path = item[FMH::MODEL_KEY::PATH];    
         QFile file(path);
         auto state = file.rename(where+"/"+QFileInfo(path).fileName());
         if(!state) return false;

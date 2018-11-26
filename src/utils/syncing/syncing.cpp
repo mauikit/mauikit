@@ -63,7 +63,7 @@ void Syncing::listDirOutputHandler(WebDAVReply *reply)
 		 {FMH::MODEL_KEY::THUMBNAIL, item.getContentType().isEmpty() ? url : this->getCacheFile(url)}
 					};
 				}
-				emit this->listReady(list);
+				emit this->listReady(list, this->currentPath);
 				
 			});
 	connect(reply, &WebDAVReply::error, [=](QNetworkReply::NetworkError err) {
@@ -128,22 +128,59 @@ void Syncing::download(const QString& path)
 	});
 }
 
-void Syncing::upload(const QString &path)
+void Syncing::upload(const QString &path, const QString &filePath)
 {
+	
+	if(!FMH::fileExists(filePath))
+		return;
+	
+	qDebug()<< "Copy to cloud. File exists";
+	
+	QFile file(filePath);
+	file.open(QIODevice::ReadOnly);
+	
+	WebDAVReply *reply = this->client->uploadTo(path, file.fileName(), &file);
+	
+	connect(reply, &WebDAVReply::uploadFinished, [=](QNetworkReply *reply)
+	{
+		if (!reply->error())
+		{
+			qDebug() << "\nUpload Success"
+			<< "\nURL  :" << reply->url() << "\nSize :" << reply->size();
+		} else
+		{
+			qDebug() << "ERROR(UPLOAD)" << reply->error();
+			emit this->error(reply->errorString());
+		}
+	});
+	
+	connect(reply, &WebDAVReply::error, [=](QNetworkReply::NetworkError err)
+	{
+		qDebug() << "ERROR" << err;
+		this->emitError(err);
+	});
 }
 
 void Syncing::createDir(const QString &path, const QString &name)
 {
-
 	WebDAVReply *reply = this->client->createDir(path, name);
 	
 	connect(reply, &WebDAVReply::createDirFinished, [=](QNetworkReply *reply) 
 	{
-		if (!reply->error()) {
+		if (!reply->error())
+		{
 			qDebug() << "\nDir Created"
 			<< "\nURL  :" << reply->url();
-			emit this->dirCreated();
-		} else {
+			FMH::MODEL dir = {
+				{FMH::MODEL_KEY::LABEL, name},
+		 {FMH::MODEL_KEY::DATE, QDateTime::currentDateTime().toString(Qt::TextDate)},
+			{FMH::MODEL_KEY::MIME, "inode/directory"},
+		 {FMH::MODEL_KEY::ICON, "folder"},
+		 {FMH::MODEL_KEY::PATH, this->currentPath+"/"+name+"/"}
+			};
+			emit this->dirCreated(dir);
+		} else 
+		{
 			qDebug() << "ERROR(CREATE DIR)" << reply->error();
 			emit this->error(reply->errorString());
 		}
@@ -265,7 +302,8 @@ void Syncing::saveTo(const QByteArray &array, const QString& path)
 		auto newPath = QString(path).right(cut);
 		dir.mkdir(QString(path).replace(newPath, ""));
 		qDebug()<< newPath << cut;
-	}else{
+	}else
+	{
 		file.remove();
 	}
 	
@@ -297,8 +335,7 @@ void Syncing::resolveFile(const FMH::MODEL& item, const Syncing::SIGNAL_TYPE &si
 			this->download(url);
 		else
 			this->emitSignal(cacheFile);
-	}
-	else
+	} else
 		this->download(url);
 }
 

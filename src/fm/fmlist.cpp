@@ -27,15 +27,18 @@
 FMList::FMList(QObject *parent) : QObject(parent)
 {
 	this->fm = FM::getInstance();
-	connect(this->fm, &FM::cloudServerContentReady, [this](const FMH::MODEL_LIST &list)
+	connect(this->fm, &FM::cloudServerContentReady, [this](const FMH::MODEL_LIST &list, const QString &url)
 	{
-		this->pre();
-		
-		this->list = list;
-		this->pathEmpty = this->list.isEmpty();
-		emit this->pathEmptyChanged();
-		this->pos();
-		this->setContentReady(true);		
+		if(this->path == url)
+		{			
+			this->pre();		
+			this->list = list;
+			this->pathEmpty = this->list.isEmpty();
+			emit this->pathEmptyChanged();
+			this->pos();
+			this->setContentReady(true);	
+			
+		}	
 	});
 	
 	connect(this->fm, &FM::warningMessage, [this](const QString &message)
@@ -55,7 +58,13 @@ FMList::FMList(QObject *parent) : QObject(parent)
 		this->reset();
 	});
 	
-	connect(this->fm, &FM::dirCreated, this, &FMList::refresh);	
+	connect(this->fm, &FM::dirCreated, [this] (const FMH::MODEL &dir)
+	{
+		emit this->preItemAppended();
+		this->list << dir;		
+		emit this->postListChanged();
+		
+	});	
 	
 	connect(this, &FMList::pathChanged, this, &FMList::reset);
 	// 	connect(this, &FMList::hiddenChanged, this, &FMList::setList);
@@ -536,6 +545,22 @@ void FMList::createDir(const QString& name)
 	{
 		this->fm->createCloudDir(QString(this->path).replace(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]+"/"+this->fm->sync->getUser(), ""), name);
 	}
+}
+
+void FMList::copyInto(const QVariantList& files)
+{
+	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH ||  this->pathType == FMH::PATHTYPE_KEY::CLOUD_PATH)
+		this->fm->copy(files, this->path);		
+}
+
+void FMList::cutInto(const QVariantList& files)
+{
+	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH)
+		this->fm->cut(files, this->path);	
+// 	else if(this->pathType == FMH::PATHTYPE_KEY::CLOUD_PATH)		
+// 	{
+// 		this->fm->createCloudDir(QString(this->path).replace(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]+"/"+this->fm->sync->getUser(), ""), name);
+// 	}
 }
 
 QString FMList::getParentPath()

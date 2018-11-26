@@ -28,7 +28,7 @@ public:
     void listContent(const QString &path);
     void setCredentials(const QString &server, const QString &user, const QString &password);
 	void download(const QString &path);
-	void upload(const QString &path);
+	void upload(const QString &path, const QString &filePath);
 	void createDir(const QString &path, const QString &name);
 	void resolveFile(const FMH::MODEL &item, const Syncing::SIGNAL_TYPE &signalType);
 	void setCopyTo(const QString &path);
@@ -57,12 +57,12 @@ private:
 	SIGNAL_TYPE signalType;
 	
 signals:
-    void listReady(FMH::MODEL_LIST data);
+    void listReady(FMH::MODEL_LIST data, const QString &url);
 
 	void readyOpen(FMH::MODEL item);
 	void readyDownload(FMH::MODEL item);
 	void readyCopy(FMH::MODEL item);
-	void dirCreated();
+	void dirCreated(FMH::MODEL item);
 	void error(QString message);
 	void progress(int percent);
 	

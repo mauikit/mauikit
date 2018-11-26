@@ -57,7 +57,7 @@ public:
 	static bool removeDir(const QString &path);	
 	
 	static QString resolveUserCloudCachePath(const QString &server, const QString &user);
-	
+	QString resolveLocalCloudPath(const QString &path);
 	/*** END STATIC METHODS ***/
 	
 private:
@@ -77,13 +77,13 @@ signals:
     void cloudAccountInserted(QString user);
     void cloudAccountRemoved(QString user);
 
-    void cloudServerContentReady(FMH::MODEL_LIST list);
+    void cloudServerContentReady(FMH::MODEL_LIST list, const QString &url);
 	void cloudItemReady(FMH::MODEL item);
 	
 	void warningMessage(QString message);
 	void loadProgress(int percent);
 	
-	void dirCreated();
+	void dirCreated(FMH::MODEL dir);
 	
 public slots:	
 	bool bookmark(const QString &path);
@@ -117,7 +117,7 @@ public slots:
 	
 	/* ACTIONS */	
 	bool copy(const QVariantList &data, const QString &where);
-	static bool cut(const QStringList &paths, const QString &where);
+	static bool cut(const QVariantList &data, const QString &where);
 	static bool removeFile(const QString &path);
 	static bool rename(const QString &path, const QString &name);
 	static bool createDir(const QString &path, const QString &name);
