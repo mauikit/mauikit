@@ -139,7 +139,7 @@ void Syncing::upload(const QString &path, const QString &filePath)
 	QFile file(filePath);
 	file.open(QIODevice::ReadOnly);
 	
-	WebDAVReply *reply = this->client->uploadTo(path, file.fileName(), &file);
+	WebDAVReply *reply = this->client->uploadTo("/remote.php/webdav/", file.fileName(), &file);
 	
 	connect(reply, &WebDAVReply::uploadFinished, [=](QNetworkReply *reply)
 	{
