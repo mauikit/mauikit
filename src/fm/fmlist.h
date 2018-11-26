@@ -154,6 +154,8 @@ public slots:
 	void copyInto(const QVariantList &files);
 	void cutInto(const QVariantList &files);
 	
+	void test();
+	
 signals:
 	void pathChanged();
 	void pathTypeChanged();

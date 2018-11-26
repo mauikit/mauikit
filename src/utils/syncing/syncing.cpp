@@ -131,16 +131,19 @@ void Syncing::download(const QString& path)
 void Syncing::upload(const QString &path, const QString &filePath)
 {
 	
-	if(!FMH::fileExists(filePath))
-		return;
-	
+// 	if(!FMH::fileExists(filePath))
+// 		return;
+// 	
 	qDebug()<< "Copy to cloud. File exists";
 	
-	QFile file(filePath);
-	file.open(QIODevice::ReadOnly);
-	
-	WebDAVReply *reply = this->client->uploadTo("/remote.php/webdav/", file.fileName(), &file);
-	
+	QFile file("/home/camilo/Coding/qml/mauikit-kde/assets.qrc");
+	if(file.open(QIODevice::ReadOnly))
+	{
+		
+		qDebug()<< "Copy to cloud. File could be opened";
+		
+	WebDAVReply *reply = this->client->uploadTo("/remote.php/webdav", file.fileName(), &file);
+		
 	connect(reply, &WebDAVReply::uploadFinished, [=](QNetworkReply *reply)
 	{
 		if (!reply->error())
@@ -158,7 +161,7 @@ void Syncing::upload(const QString &path, const QString &filePath)
 	{
 		qDebug() << "ERROR" << err;
 		this->emitError(err);
-	});
+	});}
 }
 
 void Syncing::createDir(const QString &path, const QString &name)
