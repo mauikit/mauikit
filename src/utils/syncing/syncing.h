@@ -47,6 +47,7 @@ private:
     void listDirOutputHandler(WebDAVReply *reply);
 	
 	void saveTo(const QByteArray &array, const QString& path);
+	QString saveToCache(const QString& file, const QString &where);
 	QString getCacheFile(const QString &path);
 
 	QString currentPath;

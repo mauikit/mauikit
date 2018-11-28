@@ -60,7 +60,7 @@ Maui.Page
 	signal rightClicked()
 	
 	Component.onCompleted:
-	{
+	{	
 		control.detailsView =  Maui.FM.loadSettings("DetailsView", "SETTINGS", detailsView)
 	}
 	
@@ -765,7 +765,6 @@ Maui.Page
 	function goBack()
 	{
 		populate(modelList.previousPath)
-		console.log("INDEX HISTORY"<< indexHistory)
 		browser.currentIndex = indexHistory.pop()
 		browser.positionViewAtIndex(browser.currentIndex, ListView.Center)
 	}
@@ -839,8 +838,7 @@ Maui.Page
 	{
 		for(var i in items)
 			Maui.FM.removeFile(items[i].path)
-	}
-	
+	}	
 	
 	function switchView(state)
 	{
@@ -864,37 +862,10 @@ Maui.Page
 			}
 		}
 	}
-	
-	function populateTags(myTag)
-	{
-		Maui.FM.getTagContent(myTag)
-		setPath(myTag, pathType.tags)
-	}
-	
+
 	function zoomIn()
-	{
-		
-		control.thumbnailsSize = control.thumbnailsSize + 8
-		/*switch(thumbnailsSize)
-		 *		{
-		 *			case iconSizes.tiny: thumbnailsSize = iconSizes.small
-		 *				break
-		 *			case iconSizes.small: thumbnailsSize = iconSizes.medium
-		 *				break
-		 *			case iconSizes.medium: thumbnailsSize = iconSizes.big
-		 *				break
-		 *			case iconSizes.big: thumbnailsSize = iconSizes.large
-		 *				break
-		 *			case iconSizes.large: thumbnailsSize = iconSizes.huge
-		 *				break
-		 *			case iconSizes.huge: thumbnailsSize = iconSizes.enormous
-		 *				break
-		 *			case iconSizes.enormous: thumbnailsSize = iconSizes.enormous
-		 *				break
-		 *			default:
-		 *				thumbnailsSize = iconSizes.large
-		 *
-	}*/
+	{		
+		control.thumbnailsSize = control.thumbnailsSize + 8		
 	}
 	
 	function zoomOut()
@@ -903,29 +874,7 @@ Maui.Page
 		
 		if(newSize >= iconSizes.small)
 			control.thumbnailsSize = newSize
-			// 		switch(thumbnailsSize)
-			// 		{
-			// 			case iconSizes.tiny: thumbnailsSize = iconSizes.tiny
-			// 				break
-			// 			case iconSizes.small: thumbnailsSize = iconSizes.tiny
-			// 				break
-			// 			case iconSizes.medium: thumbnailsSize = iconSizes.small
-			// 				break
-			// 			case iconSizes.big: thumbnailsSize = iconSizes.medium
-			// 				break
-			// 			case iconSizes.large: thumbnailsSize = iconSizes.big
-			// 				break
-			// 			case iconSizes.huge: thumbnailsSize = iconSizes.large
-			// 				break
-			// 			case iconSizes.enormous: thumbnailsSize = iconSizes.huge
-			// 				break
-			// 			default:
-			// 				thumbnailsSize = iconSizes.large
-			//
-			// 		}
-	}
-	
-	
+	}	
 	
 	function groupBy()
 	{

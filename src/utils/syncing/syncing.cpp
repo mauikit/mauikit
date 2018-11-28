@@ -42,8 +42,10 @@ void Syncing::listDirOutputHandler(WebDAVReply *reply)
 				{
 					
 					auto url = QUrl(item.getHref()).toString();
-					auto displayName = QString(url).replace("/remote.php/webdav/", "").replace("/", "");
+					
 					auto path =  QString("Cloud/"+this->user+"/")+QString(url).replace("/remote.php/webdav/", "");
+					
+					auto displayName =  item.getContentType().isEmpty() ? QString(url).replace("/remote.php/webdav/", "").replace("/", "") :  QString(path).right(path.length()-path.lastIndexOf("/")-1);
 					
 					qDebug()<< "PATHS:" << path << this->currentPath;
 					
@@ -150,8 +152,11 @@ void Syncing::upload(const QString &path, const QString &filePath)
 		{
 			qDebug() << "\nUpload Success"
 			<< "\nURL  :" << reply->url() << "\nSize :" << reply->size();
-			auto item = FMH::getFileInfoModel(filePath);
-			item[FMH::MODEL_KEY::PATH] =  this->currentPath+"/"+QFileInfo(filePath).fileName()+"/";
+			
+			auto cachePath = this->saveToCache(filePath, path);
+			
+			auto item = FMH::getFileInfoModel(cachePath);
+// 			item[FMH::MODEL_KEY::PATH] =  this->currentPath+"/"+QFileInfo(filePath).fileName()+"/";
 			
 			emit this->uploadReady(item, this->currentPath);
 		} else
@@ -322,6 +327,23 @@ void Syncing::saveTo(const QByteArray &array, const QString& path)
 	// 	emit this->itemReady(FMH::getFileInfoModel(path));
 }
 
+QString Syncing::saveToCache(const QString& file, const QString &where)
+{
+	auto directory = FMH::CloudCachePath+"opendesktop/"+this->user+"/"+where;
+	
+	QDir dir(directory);
+	
+	if (!dir.exists())
+		dir.mkpath(".");
+	
+	const auto newPath = directory+"/"+QFileInfo(file).fileName();
+	
+	if(QFile::copy(file, newPath))
+		return newPath;
+	
+	return QString();
+}
+
 void Syncing::resolveFile(const FMH::MODEL& item, const Syncing::SIGNAL_TYPE &signalType)
 {	
 	this->signalType = signalType;
@@ -338,9 +360,9 @@ void Syncing::resolveFile(const FMH::MODEL& item, const Syncing::SIGNAL_TYPE &si
 		
 		qDebug()<<"FILE EXISTS ON CACHE" << dateCacheFile << dateCloudFile<< QString(item[FMH::MODEL_KEY::MODIFIED]).replace("GMT", "").simplified()<< file;
 		
-		if(dateCloudFile >  dateCacheFile)
-			this->download(url);
-		else
+// 		if(dateCloudFile >  dateCacheFile)
+// 			this->download(url);
+// 		else
 			this->emitSignal(cacheFile);
 	} else
 		this->download(url);
