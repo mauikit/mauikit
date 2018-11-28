@@ -458,7 +458,7 @@ Maui.Page
 	
 	Maui.ToolButton
 	{
-		iconName: "view-preview"
+		iconName: "image-preview"
 		onClicked: modelList.preview = !modelList.preview
 		tooltipText: qsTr("Previews...")
 		iconColor: modelList.preview ? colorScheme.highlightColor : colorScheme.textColor
@@ -474,7 +474,7 @@ Maui.Page
 	
 	Maui.ToolButton
 	{
-		iconName: "edit-select"
+		iconName: "item-select"
 		tooltipText: qsTr("Selection...")
 		onClicked: selectionMode = !selectionMode
 		iconColor: selectionMode ? colorScheme.highlightColor: colorScheme.textColor
