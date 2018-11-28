@@ -59,6 +59,8 @@ private:
 	
 	QFile mFile;
 	
+	QStringList queue;
+	
 signals:
     void listReady(FMH::MODEL_LIST data, QString url);
 

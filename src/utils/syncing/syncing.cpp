@@ -360,9 +360,9 @@ void Syncing::resolveFile(const FMH::MODEL& item, const Syncing::SIGNAL_TYPE &si
 		
 		qDebug()<<"FILE EXISTS ON CACHE" << dateCacheFile << dateCloudFile<< QString(item[FMH::MODEL_KEY::MODIFIED]).replace("GMT", "").simplified()<< file;
 		
-// 		if(dateCloudFile >  dateCacheFile)
-// 			this->download(url);
-// 		else
+		if(dateCloudFile >  dateCacheFile)
+			this->download(url);
+		else
 			this->emitSignal(cacheFile);
 	} else
 		this->download(url);
