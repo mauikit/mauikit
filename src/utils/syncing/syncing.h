@@ -24,6 +24,10 @@ public:
 		MOVE,
 		UPLOAD
 	};
+	
+	QStringList uploadQueue;
+	
+	
     explicit Syncing(QObject *parent = nullptr);
     void listContent(const QString &path);
     void setCredentials(const QString &server, const QString &user, const QString &password);
@@ -36,6 +40,7 @@ public:
 	
 	QString getUser() const;
 
+	void setUploadQueue(const QStringList &list); 
 protected:
 	void emitSignal(const FMH::MODEL &item);
 
@@ -59,7 +64,6 @@ private:
 	
 	QFile mFile;
 	
-	QStringList queue;
 	
 signals:
     void listReady(FMH::MODEL_LIST data, QString url);

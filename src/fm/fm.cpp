@@ -535,6 +535,40 @@ QString FM::homePath()
     return FMH::HomePath;
 }
 
+bool FM::cut(const QVariantList &data, const QString &where)
+{	
+	FMH::MODEL_LIST items;
+	
+	for(auto k : data)
+	{	
+		auto map = k.toMap();
+		FMH::MODEL model;
+		
+		for(auto key : map.keys())
+			model.insert(FMH::MODEL_NAME_KEY[key], map[key].toString());				
+		
+		items << model;
+	}
+	
+	for(auto item : items)
+	{
+		auto path = item[FMH::MODEL_KEY::PATH];
+		
+		if(this->isCloud(path))
+		{
+			this->sync->setCopyTo(where);			
+			this->sync->resolveFile(item, Syncing::SIGNAL_TYPE::COPY);
+			
+		}else if(UTIL::fileExists(path))
+		{
+			QFile file(path);
+			return file.rename(where+"/"+QFileInfo(path).fileName());
+		}
+	}
+	
+	return true;
+}
+
 bool FM::copy(const QVariantList &data, const QString &where)
 {
 	FMH::MODEL_LIST items;
@@ -549,6 +583,8 @@ bool FM::copy(const QVariantList &data, const QString &where)
 		
 		items << model;
 	}
+	
+	QStringList cloudPaths;
 	
     for(auto item : items)
     {
@@ -568,17 +604,21 @@ bool FM::copy(const QVariantList &data, const QString &where)
             QFile file(path);
             qDebug()<< path << "is a file";
 
-			if(this->isCloud(where))
-			{	
-				qDebug()<< path << "is a file and "<< where << " is a claoud path"<< this->resolveLocalCloudPath(where);
-				
-				this->sync->upload(this->resolveLocalCloudPath(where), path);
-				
-			}
+			if(this->isCloud(where))				
+				cloudPaths << path;				
 			else
 				return file.copy(where+"/"+QFileInfo(path).fileName());
         }
     }
+    
+    if(!cloudPaths.isEmpty())
+	{
+		qDebug()<<"UPLOAD QUEUE" << cloudPaths;
+		
+		const auto firstPath = cloudPaths.takeLast();
+		this->sync->setUploadQueue(cloudPaths);
+		this->sync->upload(this->resolveLocalCloudPath(where), firstPath);		
+	}
 
     return true;
 }
@@ -619,32 +659,6 @@ bool FM::copyPath(QString sourceDir, QString destinationDir, bool overWriteDirec
         return true;    
 
     return false;
-}
-
-bool FM::cut(const QVariantList &data, const QString &where)
-{	
-	FMH::MODEL_LIST items;
-	
-	for(auto k : data)
-	{	
-		auto map = k.toMap();
-		FMH::MODEL model;
-		
-		for(auto key : map.keys())
-			model.insert(FMH::MODEL_NAME_KEY[key], map[key].toString());				
-		
-		items << model;
-	}
-	
-	for(auto item : items)
-	{
-		auto path = item[FMH::MODEL_KEY::PATH];    
-        QFile file(path);
-        auto state = file.rename(where+"/"+QFileInfo(path).fileName());
-        if(!state) return false;
-    }
-
-    return true;
 }
 
 bool FM::removeFile(const QString &path)

@@ -150,8 +150,6 @@ ItemDelegate
 				sourceComponent: img.status === Image.Ready ? undefined : iconComponent
 			}
 		}
-		
-		
 	}
 	
 	Component
@@ -232,7 +230,7 @@ ItemDelegate
 					font.pointSize: fontSizes.small
 					color: labelColor
 					opacity: isCurrentListItem ? 1 : 0.5
-					text: model.mime === "inode/directory" ? model.count + qsTr(" items") : Maui.FM.formatSize(model.size)
+					text: model.mime === "inode/directory" ? (model.count ? model.count + qsTr(" items") : "") : Maui.FM.formatSize(model.size)
 				}
 				
 				Label

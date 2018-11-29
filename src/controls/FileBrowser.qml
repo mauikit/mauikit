@@ -215,12 +215,21 @@ Maui.Page
 		{
 			if(items.length)
 			{
-				if(control.selectionBar)
-				{
+				if(control.selectionBar)				
 					control.selectionBar.animate("#6fff80")
-					console.log(control.selectionBar.selectedPaths)
-				}					
+								
 				control.copy(items)
+			}
+		}
+		
+		onCutClicked:
+		{
+			if(items.length)
+			{
+				if(control.selectionBar)
+					control.selectionBar.animate("#fff44f")
+					
+				control.cut(items)
 			}
 		}
 		
@@ -236,17 +245,6 @@ Maui.Page
 						dialog.composerList.urls = items[0].path
 						
 						dialog.open()
-			}
-		}
-		
-		onCutClicked:
-		{
-			if(items.length)
-			{
-				if(control.selectionBar)
-					control.selectionBar.animate("#fff44f")
-					
-					control.cut(items)
 			}
 		}
 		
@@ -818,7 +816,7 @@ Maui.Page
 	
 	function cut(items)
 	{
-		cutItems = paths
+		cutItems = items
 		isCut = true
 		isCopy = false
 	}

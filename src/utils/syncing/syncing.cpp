@@ -2,6 +2,8 @@
 #include "fm.h"
 
 #include <QFile>
+#include <QTimer>
+#include <QEventLoop>
 
 #include "WebDAVClient.hpp"
 #include "WebDAVItem.hpp"
@@ -135,18 +137,18 @@ void Syncing::upload(const QString &path, const QString &filePath)
 	
 	if(!FMH::fileExists(filePath))
 		return;
-	
+		
 	qDebug()<< "Copy to cloud. File exists" << path << filePath;
 	
 	this->mFile.setFileName(filePath);
 
 	if(this->mFile.open(QIODevice::ReadOnly))
-	{
-		
+	{		
 		qDebug()<< "Copy to cloud. File could be opened";
 		
 		WebDAVReply *reply = this->client->uploadTo(path, QFileInfo(filePath).fileName(), &this->mFile);	
-	connect(reply, &WebDAVReply::uploadFinished, [=](QNetworkReply *reply)
+	
+		connect(reply, &WebDAVReply::uploadFinished, [=](QNetworkReply *reply)
 	{
 		if (!reply->error())
 		{
@@ -164,6 +166,24 @@ void Syncing::upload(const QString &path, const QString &filePath)
 			qDebug() << "ERROR(UPLOAD)" << reply->error();
 			emit this->error(reply->errorString());
 		}
+		
+		if(!this->uploadQueue.isEmpty())
+		{
+// 			QEventLoop loop;
+// 			QTimer timer;
+// 			connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+// 			
+// 			timer.setSingleShot(true);
+// 			timer.setInterval(3000);
+			
+			qDebug()<<"UPLOAD QUEUE" << this->uploadQueue;
+			this->upload(path, this->uploadQueue.takeLast());		
+// 			/*
+// 			timer.start();
+// 			loop.exec();
+// 			timer.stop();*/
+		}
+			
 	});
 	
 	connect(reply, &WebDAVReply::error, [=](QNetworkReply::NetworkError err)
@@ -403,4 +423,9 @@ QString Syncing::getCopyTo() const
 QString Syncing::getUser() const
 {
 	return this->user;
+}
+
+void Syncing::setUploadQueue(const QStringList& list)
+{
+	this->uploadQueue = list;
 }

@@ -118,7 +118,7 @@ public slots:
 	
 	/* ACTIONS */	
 	bool copy(const QVariantList &data, const QString &where);
-	static bool cut(const QVariantList &data, const QString &where);
+	bool cut(const QVariantList &data, const QString &where);
 	static bool removeFile(const QString &path);
 	static bool rename(const QString &path, const QString &name);
 	static bool createDir(const QString &path, const QString &name);
