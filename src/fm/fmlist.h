@@ -33,6 +33,8 @@ class FMList : public QObject
 	Q_PROPERTY(bool hidden READ getHidden WRITE setHidden NOTIFY hiddenChanged())
 	Q_PROPERTY(bool onlyDirs READ getOnlyDirs WRITE setOnlyDirs NOTIFY onlyDirsChanged())
 	Q_PROPERTY(bool preview READ getPreview WRITE setPreview NOTIFY previewChanged())
+	Q_PROPERTY(FMList::VIEW_TYPE viewType READ getViewType WRITE setViewType NOTIFY viewTypeChanged())
+	
 	Q_PROPERTY(bool isBookmark READ getIsBookmark WRITE setIsBookmark NOTIFY isBookmarkChanged())
 	Q_PROPERTY(bool contentReady READ getContentReady NOTIFY contentReadyChanged())
 	
@@ -57,6 +59,13 @@ class FMList : public QObject
 		Q_ENUM(FMH::MODEL_KEY)
 		Q_ENUM(FMH::FILTER_TYPE)
 		Q_ENUM(FMH::PATHTYPE_KEY)
+		
+		enum VIEW_TYPE : uint_fast8_t
+		{
+			ICON_VIEW,
+			LIST_VIEW,
+			MILLERS_VIEW
+		}; Q_ENUM(VIEW_TYPE)
 		
 		FMList(QObject *parent = nullptr);
 		~FMList();
@@ -112,6 +121,9 @@ class FMList : public QObject
 		bool getContentReady() const;
 		void setContentReady(const bool &value);
 		
+		VIEW_TYPE getViewType() const;
+		void setViewType(const VIEW_TYPE &value);
+		
 private:
 	FM *fm;
 	QFileSystemWatcher *watcher;
@@ -139,6 +151,7 @@ private:
 	bool saveDirProps = false;
 	bool contentReady = false;
 	
+	VIEW_TYPE viewType = VIEW_TYPE::ICON_VIEW;
 	FMH::MODEL_KEY sort = FMH::MODEL_KEY::MODIFIED;
 	FMH::FILTER_TYPE filterType = FMH::FILTER_TYPE::NONE;
 	FMH::PATHTYPE_KEY pathType = FMH::PATHTYPE_KEY::PLACES_PATH;
@@ -170,6 +183,7 @@ signals:
     void foldersFirstChanged();
 	void saveDirPropsChanged();
 	void contentReadyChanged();
+	void viewTypeChanged();
 	
 	void pathEmptyChanged();
 	void pathExistsChanged();

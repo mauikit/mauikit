@@ -34,7 +34,6 @@ Maui.Page
 	
 	property bool selectionMode : false
 	property bool group : false
-	property bool detailsView : false
 	property bool showEmblems: true
 	
 	property alias selectionBar : selectionBarLoader.item
@@ -58,12 +57,7 @@ Maui.Page
 	signal itemLeftEmblemClicked(int index)
 	signal itemRightEmblemClicked(int index)
 	signal rightClicked()
-	
-	Component.onCompleted:
-	{	
-		control.detailsView =  Maui.FM.loadSettings("DetailsView", "SETTINGS", detailsView)
-	}
-	
+
 	margins: 0
 	
 	Loader
@@ -491,7 +485,7 @@ Maui.Page
 	Maui.ToolButton
 	{
 		id: viewBtn
-		iconName: control.detailsView ? "view-list-icons" : "view-list-details"
+		iconName: list.viewType == FMList.ICON_VIEW ? "view-list-icons" : "view-list-details"
 		onClicked: control.switchView()
 	},
 	
@@ -631,9 +625,9 @@ Maui.Page
 		{
 			id: viewLoader
 			z: holder.z + 1
-			sourceComponent: detailsView ? listViewBrowser : gridViewBrowser
+			sourceComponent: list.viewType == FMList.ICON_VIEW  ?  gridViewBrowser :  listViewBrowser
 			
-			Layout.margins: detailsView ? unit : contentMargins * 2
+			Layout.margins: list.viewType == FMList.LIST_VIEW ? unit : contentMargins * 2
 			
 			Layout.fillWidth: true
 			Layout.fillHeight: true
@@ -666,11 +660,11 @@ Maui.Page
 	{
 		if(trackChanges && saveDirProps)
 			Maui.FM.setDirConf(currentPath+"/.directory", "MAUIFM", "IconSize", thumbnailsSize)
-			else 
-				Maui.FM.saveSettings("IconSize", thumbnailsSize, "SETTINGS")
+		else 
+			Maui.FM.saveSettings("IconSize", thumbnailsSize, "SETTINGS")
 				
-				if(!control.detailsView)
-					browser.adaptGrid()
+		if(list.viewType == FMList.ICON_VIEW)
+			browser.adaptGrid()
 	}
 	
 	function openItem(index)
@@ -746,17 +740,14 @@ Maui.Page
 			{
 				var conf = Maui.FM.dirConf(path+"/.directory")
 				var iconsize = conf["iconsize"] ||  iconSizes.large
-				thumbnailsSize = parseInt(iconsize)
-				
-				detailsView = conf["detailview"] === "true" ? true : false
+				thumbnailsSize = parseInt(iconsize)				
 			}else
 			{
 				thumbnailsSize = parseInt(Maui.FM.loadSettings("IconSize", "SETTINGS", thumbnailsSize))		
-				detailsView =  Maui.FM.loadSettings("DetailsView", "SETTINGS", detailsView)
 			}
 		}
 		
-		if(!detailsView)
+		if(list.viewType == FMList.ICON_VIEW)
 			browser.adaptGrid()
 	}
 	
@@ -838,14 +829,9 @@ Maui.Page
 			Maui.FM.removeFile(items[i].path)
 	}	
 	
-	function switchView(state)
-	{
-		detailsView = state ? state : !detailsView
-		
-		if(trackChanges && saveDirProps)
-			Maui.FM.setDirConf(currentPath+"/.directory", "MAUIFM", "DetailView", detailsView)
-		else
-			Maui.FM.saveSettings("DetailsView", detailsView, "SETTINGS")
+	function switchView()
+	{	
+		list.viewType = list.viewType ===  FMList.ICON_VIEW ? FMList.LIST_VIEW : FMList.ICON_VIEW
 	}
 	
 	function bookmarkFolder(paths)

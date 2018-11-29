@@ -155,28 +155,16 @@ void FMList::reset()
 	{
 		case FMH::PATHTYPE_KEY::APPS_PATH:
 			
-			if(this->saveDirProps)
-			{
-				this->hidden = false;
-				emit this->hiddenChanged();
-				
-				this->preview = false;
-				emit this->previewChanged();
-			}
-			
+			this->hidden = false;			
+			this->preview = false;
 			break;
 			
 		case FMH::PATHTYPE_KEY::CLOUD_PATH:			
 		case FMH::PATHTYPE_KEY::SEARCH_PATH:
 		case FMH::PATHTYPE_KEY::TAGS_PATH:
-			if(this->saveDirProps)
-			{
-				this->hidden = false;
-				emit this->hiddenChanged();
-				
-				this->preview = true;
-				emit this->previewChanged();
-			}
+			
+			this->hidden = false;			
+			this->preview = true;
 			break;
 			
 		case FMH::PATHTYPE_KEY::PLACES_PATH:
@@ -186,17 +174,14 @@ void FMList::reset()
 				auto conf = FMH::dirConf(this->path+"/.directory");				
 				this->hidden = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN]].toBool();				
 				this->preview = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTHUMBNAIL]].toBool();
-				this->sort = static_cast<FMH::MODEL_KEY>(conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SORTBY]].toInt());
 				this->foldersFirst = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::FOLDERSFIRST]].toBool();
 			}else
 			{
 				this->hidden = UTIL::loadSettings("HiddenFilesShown", "SETTINGS", this->hidden).toBool();
 				this->preview = UTIL::loadSettings("ShowThumbnail", "SETTINGS", this->preview).toBool();
-				this->sort = static_cast<FMH::MODEL_KEY>(UTIL::loadSettings("SortBy", "SETTINGS", this->sort).toInt());
 				this->foldersFirst = UTIL::loadSettings("FoldersFirst", "SETTINGS", this->foldersFirst).toBool();
 			}
-			emit this->previewChanged();			
-			emit this->hiddenChanged();
+		
 			break;
 		}
 		
@@ -205,6 +190,23 @@ void FMList::reset()
 		case FMH::PATHTYPE_KEY::BOOKMARKS_PATH:
 			break;
 	}
+	
+	if(this->saveDirProps)
+	{
+		auto conf = FMH::dirConf(this->path+"/.directory");	
+		this->sort = static_cast<FMH::MODEL_KEY>(conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SORTBY]].toInt());		
+		this->viewType = static_cast<FMList::VIEW_TYPE>(conf[FMH::MODEL_NAME[FMH::MODEL_KEY::VIEWTYPE]].toInt());		
+	}else
+	{	
+		this->sort = static_cast<FMH::MODEL_KEY>(UTIL::loadSettings("SortBy", "SETTINGS", this->sort).toInt());
+		this->viewType = static_cast<FMList::VIEW_TYPE>(UTIL::loadSettings("ViewType", "SETTINGS", this->viewType).toInt());
+	}
+	
+	emit this->sortByChanged();
+	emit this->viewTypeChanged();
+	emit this->hiddenChanged();
+	emit this->previewChanged();			
+	
 	
 	this->setList();	
 	this->pos();
@@ -714,6 +716,26 @@ void FMList::setContentReady(const bool& value)
 bool FMList::getContentReady() const
 {
 	return this->contentReady;
+}
+
+FMList::VIEW_TYPE FMList::getViewType() const
+{
+	return this->viewType;
+}
+
+void FMList::setViewType(const FMList::VIEW_TYPE& value)
+{
+	if(this->viewType == value)
+		return;
+	
+	this->viewType = value;
+	
+	if(this->trackChanges && this->saveDirProps)
+		FMH::setDirConf(this->path+"/.directory", "MAUIFM", "ViewType", this->viewType);
+	else
+		UTIL::saveSettings("ViewType", this->viewType, "SETTINGS");
+	
+	emit this->viewTypeChanged();
 }
 
 void FMList::search(const QString& query, const QString &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)

@@ -107,7 +107,8 @@ namespace FMH
         USER,
         PASSWORD,
         SERVER,
-		FOLDERSFIRST
+		FOLDERSFIRST,
+		VIEWTYPE
 	}; Q_ENUM_NS(MODEL_KEY);
 	
 	static const QHash<FMH::MODEL_KEY, QString> MODEL_NAME =
@@ -138,7 +139,8 @@ namespace FMH
         {MODEL_KEY::USER, "user"},
         {MODEL_KEY::PASSWORD, "password"},
 		{MODEL_KEY::SERVER, "server"},
-		{MODEL_KEY::FOLDERSFIRST, "foldersfirst"}
+		{MODEL_KEY::FOLDERSFIRST, "foldersfirst"},
+		{MODEL_KEY::VIEWTYPE, "viewtype"}
 	};
 	
 	static const QHash<QString, FMH::MODEL_KEY> MODEL_NAME_KEY =
@@ -168,7 +170,8 @@ namespace FMH
 		{MODEL_NAME[MODEL_KEY::SORTBY], MODEL_KEY::SORTBY},
 		{MODEL_NAME[MODEL_KEY::USER], MODEL_KEY::USER},
 		{MODEL_NAME[MODEL_KEY::PASSWORD], MODEL_KEY::PASSWORD},
-		{MODEL_NAME[MODEL_KEY::SERVER], MODEL_KEY::SERVER}
+		{MODEL_NAME[MODEL_KEY::SERVER], MODEL_KEY::SERVER},
+		{MODEL_NAME[MODEL_KEY::VIEWTYPE], MODEL_KEY::VIEWTYPE}
 	};
 	
 	typedef QHash<FMH::MODEL_KEY, QString> MODEL;
@@ -278,7 +281,7 @@ namespace FMH
 			return QVariantMap();
 		
 		QString icon, iconsize, hidden, detailview, showthumbnail, showterminal;
-		uint count = 0, sortby = FMH::MODEL_KEY::MODIFIED;
+		uint count = 0, sortby = FMH::MODEL_KEY::MODIFIED, viewType = 0;
 		bool foldersFirst = false;
 		
 		#ifdef Q_OS_ANDROID
@@ -299,6 +302,7 @@ namespace FMH
 		count = file.value("Count").toInt();
 		sortby = file.value("SortBy").toInt();
 		foldersFirst = file.value("FoldersFirst").toBool();
+		viewType = file.value("ViewType").toInt();
 		file.endGroup();
 		
 		#else
@@ -312,6 +316,7 @@ namespace FMH
 		count = file.entryMap(QString("MAUIFM"))["Count"].toInt();
 		sortby = file.entryMap(QString("MAUIFM"))["SortBy"].toInt();
 		foldersFirst = file.entryMap(QString("MAUIFM"))["FoldersFirst"] == "true" ? true : false;
+		viewType = file.entryMap(QString("MAUIFM"))["ViewType"].toInt();
 		#endif
 		
 		auto res = QVariantMap({
@@ -323,7 +328,8 @@ namespace FMH
 			{FMH::MODEL_NAME[FMH::MODEL_KEY::DETAILVIEW], detailview.isEmpty() ? "false" : detailview},
 			{FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN], hidden.isEmpty() ? false : (hidden == "true" ? true : false)},
 			{FMH::MODEL_NAME[FMH::MODEL_KEY::SORTBY], sortby},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::FOLDERSFIRST], foldersFirst}
+			{FMH::MODEL_NAME[FMH::MODEL_KEY::FOLDERSFIRST], foldersFirst},
+			{FMH::MODEL_NAME[FMH::MODEL_KEY::VIEWTYPE], viewType}
 		});
 		
 		return res;
