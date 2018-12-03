@@ -34,6 +34,7 @@ class FMList : public QObject
 	Q_PROPERTY(bool onlyDirs READ getOnlyDirs WRITE setOnlyDirs NOTIFY onlyDirsChanged())
 	Q_PROPERTY(bool preview READ getPreview WRITE setPreview NOTIFY previewChanged())
 	Q_PROPERTY(FMList::VIEW_TYPE viewType READ getViewType WRITE setViewType NOTIFY viewTypeChanged())
+	Q_PROPERTY(int cloudDepth READ getCloudDepth WRITE setCloudDepth NOTIFY cloudDepthChanged())
 	
 	Q_PROPERTY(bool isBookmark READ getIsBookmark WRITE setIsBookmark NOTIFY isBookmarkChanged())
 	Q_PROPERTY(bool contentReady READ getContentReady NOTIFY contentReadyChanged())
@@ -124,6 +125,9 @@ class FMList : public QObject
 		VIEW_TYPE getViewType() const;
 		void setViewType(const VIEW_TYPE &value);
 		
+		int getCloudDepth() const;
+		void setCloudDepth(const int &value);
+		
 private:
 	FM *fm;
 	QFileSystemWatcher *watcher;
@@ -150,6 +154,7 @@ private:
     bool foldersFirst = false;
 	bool saveDirProps = false;
 	bool contentReady = false;
+	int cloudDepth = 1;
 	
 	VIEW_TYPE viewType = VIEW_TYPE::ICON_VIEW;
 	FMH::MODEL_KEY sort = FMH::MODEL_KEY::MODIFIED;
@@ -184,6 +189,7 @@ signals:
 	void saveDirPropsChanged();
 	void contentReadyChanged();
 	void viewTypeChanged();
+	void cloudDepthChanged();
 	
 	void pathEmptyChanged();
 	void pathExistsChanged();

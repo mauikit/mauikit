@@ -312,7 +312,7 @@ FMH::MODEL_LIST FM::getBookmarks()
     return packItems(bookmarks, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::BOOKMARKS_PATH]);
 }
 
-bool FM::getCloudServerContent(const QString &path, const QStringList &filters)
+bool FM::getCloudServerContent(const QString &path, const QStringList &filters, const int &depth)
 {
     auto user = path.split("/")[1];
    
@@ -328,7 +328,7 @@ bool FM::getCloudServerContent(const QString &path, const QStringList &filters)
     auto password = map[FMH::MODEL_NAME[FMH::MODEL_KEY::PASSWORD]].toString();
     this->sync->setCredentials(server, user, password);
 
-    this->sync->listContent(path, filters);
+    this->sync->listContent(path, filters, depth);
 	return true;
 }
 

@@ -14,12 +14,12 @@ Syncing::Syncing(QObject *parent) : QObject(parent)
 	this->setCredentials(this->host, this->user, this->password);
 }
 
-void Syncing::listContent(const QString &path, const QStringList &filters)
+void Syncing::listContent(const QString &path, const QStringList &filters, const int &depth)
 {
 	this->currentPath = path;
 	
 	auto url = QString(path).replace("Cloud/"+user, "");
-	this->listDirOutputHandler(this->client->listDir(url, ListDepthEnum::One), filters);
+	this->listDirOutputHandler(this->client->listDir(url, static_cast<ListDepthEnum>(depth)), filters);
 }
 
 void Syncing::setCredentials(const QString &server, const QString &user, const QString &password)

@@ -38,7 +38,7 @@ public:
 	
 	
     explicit Syncing(QObject *parent = nullptr);
-	void listContent(const QString &path, const QStringList &filters);
+	void listContent(const QString &path, const QStringList &filters, const int &depth = 1);
     void setCredentials(const QString &server, const QString &user, const QString &password);
 	void download(const QString &path);
 	void upload(const QString &path, const QString &filePath);

@@ -35,7 +35,7 @@ public:
     FMH::MODEL_LIST  getBookmarks();
 
     /** Syncing **/
-	bool getCloudServerContent(const QString &server, const QStringList &filters= QStringList());
+	bool getCloudServerContent(const QString &server, const QStringList &filters= QStringList(), const int &depth = 0);
     FMH::MODEL_LIST getCloudAccounts();
 	Q_INVOKABLE void createCloudDir(const QString &path, const QString &name);
 	

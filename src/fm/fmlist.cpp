@@ -128,7 +128,7 @@ void FMList::setList()
 			
 		case FMH::PATHTYPE_KEY::CLOUD_PATH:
 			this->list.clear();
-			if(this->fm->getCloudServerContent(this->path, this->filters))
+			if(this->fm->getCloudServerContent(this->path, this->filters, this->cloudDepth))
 			{	
 				this->setContentReady(false);				
 				return;			
@@ -765,5 +765,21 @@ void FMList::search(const QString& query, const QString &path, const bool &hidde
 			}
 		}
 	}
+}
+
+int FMList::getCloudDepth() const
+{
+	return this->cloudDepth;
+}
+
+void FMList::setCloudDepth(const int& value)
+{
+	if(this->cloudDepth == value)
+		return;
+	
+	this->cloudDepth = value;
+	
+	emit this->cloudDepthChanged();
+	this->reset();
 }
 
