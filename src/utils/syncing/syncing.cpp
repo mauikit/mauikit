@@ -14,12 +14,12 @@ Syncing::Syncing(QObject *parent) : QObject(parent)
 	this->setCredentials(this->host, this->user, this->password);
 }
 
-void Syncing::listContent(const QString &path)
+void Syncing::listContent(const QString &path, const QStringList &filters)
 {
 	this->currentPath = path;
 	
 	auto url = QString(path).replace("Cloud/"+user, "");
-	this->listDirOutputHandler(this->client->listDir(url, ListDepthEnum::One));
+	this->listDirOutputHandler(this->client->listDir(url, ListDepthEnum::One), filters);
 }
 
 void Syncing::setCredentials(const QString &server, const QString &user, const QString &password)
@@ -31,13 +31,13 @@ void Syncing::setCredentials(const QString &server, const QString &user, const Q
 	this->client = new WebDAVClient(this->host, this->user, this->password);
 }
 
-void Syncing::listDirOutputHandler(WebDAVReply *reply)
+void Syncing::listDirOutputHandler(WebDAVReply *reply, const QStringList &filters)
 {
 	connect(reply, &WebDAVReply::listDirResponse, [=](QNetworkReply *listDirReply, QList<WebDAVItem> items) 
 	{
 // 		qDebug() << "URL :" << listDirReply->url();
 // 		qDebug() << "Received List of" << items.length() << "items";
-		qDebug() << endl << "---------------------------------------";
+// 		qDebug() << endl << "---------------------------------------";
 		FMH::MODEL_LIST list;
 		for (WebDAVItem item : items)
 		{
@@ -51,6 +51,10 @@ void Syncing::listDirOutputHandler(WebDAVReply *reply)
 // 			qDebug()<< "PATHS:" << path << this->currentPath;
 			
 			if(QString(url).replace("/remote.php/webdav/", "").isEmpty() || path == this->currentPath)
+				continue;
+			
+// 			qDebug()<< "FILTERING "<< filters << QString(displayName).right(displayName.length() - displayName.lastIndexOf("."));
+			if(!filters.isEmpty() && !filters.contains("*"+QString(displayName).right(displayName.length() -  displayName.lastIndexOf("."))))
 				continue;
 			
 			list << FMH::MODEL {

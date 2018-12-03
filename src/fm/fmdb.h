@@ -19,7 +19,15 @@
 
 #include "fmh.h"
 
+#ifndef STATIC_MAUIKIT
+#include "mauikit_export.h"
+#endif
+
+#ifdef STATIC_MAUIKIT
 class FMDB : public QObject
+#else
+class MAUIKIT_EXPORT FMDB : public QObject
+#endif
 {
     Q_OBJECT
 

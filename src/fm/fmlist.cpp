@@ -128,7 +128,7 @@ void FMList::setList()
 			
 		case FMH::PATHTYPE_KEY::CLOUD_PATH:
 			this->list.clear();
-			if(this->fm->getCloudServerContent(this->path))
+			if(this->fm->getCloudServerContent(this->path, this->filters))
 			{	
 				this->setContentReady(false);				
 				return;			

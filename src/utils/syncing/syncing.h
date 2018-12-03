@@ -38,7 +38,7 @@ public:
 	
 	
     explicit Syncing(QObject *parent = nullptr);
-    void listContent(const QString &path);
+	void listContent(const QString &path, const QStringList &filters);
     void setCredentials(const QString &server, const QString &user, const QString &password);
 	void download(const QString &path);
 	void upload(const QString &path, const QString &filePath);
@@ -58,7 +58,7 @@ private:
     QString host = "https://cloud.opendesktop.cc/remote.php/webdav/";
     QString user = "mauitest";
     QString password = "mauitest";
-    void listDirOutputHandler(WebDAVReply *reply);
+	void listDirOutputHandler(WebDAVReply *reply, const QStringList &filters = QStringList());
 	
 	void saveTo(const QByteArray &array, const QString& path);
 	QString saveToCache(const QString& file, const QString &where);
