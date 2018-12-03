@@ -17,6 +17,9 @@ Maui.Dialog
 		maxHeight: 300* unit
 		maxWidth: maxHeight
 		
+		property alias model : _syncingModel
+		property alias list : _syncingList
+		
 		Maui.SyncDialog
 		{
 			id: _syncDialog

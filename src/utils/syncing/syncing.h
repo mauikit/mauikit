@@ -5,9 +5,18 @@
 #include <QNetworkReply>
 #include "fmh.h"
 
+#ifndef STATIC_MAUIKIT
+#include "mauikit_export.h"
+#endif
+
 class WebDAVClient;
 class WebDAVReply;
+
+#ifdef STATIC_MAUIKIT
 class Syncing : public QObject
+#else
+class MAUIKIT_EXPORT Syncing : public QObject
+#endif
 {
     Q_OBJECT
 	

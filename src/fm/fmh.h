@@ -498,9 +498,8 @@ namespace FMH
 			res.insert(FMH::MODEL_NAME[key], data[key]);
 		
 		return res;
-	}	
-	
-	
+	}
 }
+
 
 #endif // FMH_H

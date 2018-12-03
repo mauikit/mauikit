@@ -91,6 +91,7 @@ public slots:
 	bool removeBookmark(const QString &path);
 	bool isBookmark(const QString &path);
 
+	QVariantList getCloudAccountsList();	
 	bool addCloudAccount(const QString &server, const QString &user, const QString &password);
 	bool removeCloudAccount(const QString &server, const QString &user);
 	void openCloudItem(const QVariantMap &item);	

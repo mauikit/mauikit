@@ -33,29 +33,28 @@ void Syncing::setCredentials(const QString &server, const QString &user, const Q
 
 void Syncing::listDirOutputHandler(WebDAVReply *reply)
 {
-	connect(reply, &WebDAVReply::listDirResponse,
-			[=](QNetworkReply *listDirReply, QList<WebDAVItem> items) 
-			{
-				qDebug() << "URL :" << listDirReply->url();
-				qDebug() << "Received List of" << items.length() << "items";
-				qDebug() << endl << "---------------------------------------";
-				FMH::MODEL_LIST list;
-				for (WebDAVItem item : items)
-				{
-					
-					auto url = QUrl(item.getHref()).toString();
-					
-					auto path =  QString("Cloud/"+this->user+"/")+QString(url).replace("/remote.php/webdav/", "");
-					
-					auto displayName =  item.getContentType().isEmpty() ? QString(url).replace("/remote.php/webdav/", "").replace("/", "") :  QString(path).right(path.length()-path.lastIndexOf("/")-1);
-					
-					qDebug()<< "PATHS:" << path << this->currentPath;
-					
-					if(QString(url).replace("/remote.php/webdav/", "").isEmpty() || path == this->currentPath)
-						continue;
-					
-					list << FMH::MODEL {
-						{FMH::MODEL_KEY::LABEL, displayName},
+	connect(reply, &WebDAVReply::listDirResponse, [=](QNetworkReply *listDirReply, QList<WebDAVItem> items) 
+	{
+// 		qDebug() << "URL :" << listDirReply->url();
+// 		qDebug() << "Received List of" << items.length() << "items";
+		qDebug() << endl << "---------------------------------------";
+		FMH::MODEL_LIST list;
+		for (WebDAVItem item : items)
+		{
+			
+			auto url = QUrl(item.getHref()).toString();
+			
+			auto path =  QString("Cloud/"+this->user+"/")+QString(url).replace("/remote.php/webdav/", "");
+			
+			auto displayName =  item.getContentType().isEmpty() ? QString(url).replace("/remote.php/webdav/", "").replace("/", "") :  QString(path).right(path.length()-path.lastIndexOf("/")-1);
+			
+// 			qDebug()<< "PATHS:" << path << this->currentPath;
+			
+			if(QString(url).replace("/remote.php/webdav/", "").isEmpty() || path == this->currentPath)
+				continue;
+			
+			list << FMH::MODEL {
+				{FMH::MODEL_KEY::LABEL, displayName},
 		 {FMH::MODEL_KEY::NAME, item.getDisplayName()},
 			{FMH::MODEL_KEY::DATE, item.getCreationDate().toString(Qt::TextDate)},
 			{FMH::MODEL_KEY::MODIFIED, item.getLastModified()},
@@ -65,13 +64,13 @@ void Syncing::listDirOutputHandler(WebDAVReply *reply)
 			{FMH::MODEL_KEY::PATH, path},
 		 {FMH::MODEL_KEY::URL, url},
 		 {FMH::MODEL_KEY::THUMBNAIL, item.getContentType().isEmpty() ? url : this->getCacheFile(url)}
-					};
-				}
-				emit this->listReady(list, this->currentPath);
-				
-			});
+			};
+		}
+		emit this->listReady(list, this->currentPath);
+		
+	});
 	connect(reply, &WebDAVReply::error, [=](QNetworkReply::NetworkError err) {
-		qDebug() << "ERROR" << err;
+// 		qDebug() << "ERROR" << err;
 		this->emitError(err);
 	});
 }

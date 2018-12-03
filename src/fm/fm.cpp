@@ -20,7 +20,7 @@
 #include "fm.h"
 #include "utils.h"
 #include "tagging.h"
-#include "syncing/syncing.h"
+#include "syncing.h"
 
 #include <QObject>
 
@@ -364,6 +364,25 @@ void FM::openCloudItem(const QVariantMap &item)
 		data.insert(FMH::MODEL_NAME_KEY[key], item[key].toString());
 	
 	this->sync->resolveFile(data, Syncing::SIGNAL_TYPE::OPEN);
+}
+
+QVariantList FM::getCloudAccountsList()
+{
+	QVariantList res;
+	
+	auto data = this->getCloudAccounts();
+	
+	for(auto item : data)
+	{
+		QVariantMap map;
+		
+		for(auto key : item.keys())
+			map.insert(FMH::MODEL_NAME[key], item[key]);
+		
+		res << map;		
+	}
+	
+	return res;
 }
 
 bool FM::addCloudAccount(const QString &server, const QString &user, const QString &password)
