@@ -31,6 +31,9 @@ import QtQuick.Controls.Material 2.1
 
 import "private"
 
+import SyncingModel 1.0 
+import SyncingList 1.0
+
 Kirigami.AbstractApplicationWindow
 {
     id: root
@@ -53,6 +56,7 @@ Kirigami.AbstractApplicationWindow
     property alias pageStack: __pageStack
     property alias mainMenu : mainMenu.content
     property alias about : aboutDialog
+    property alias accounts: accountsDialog
 
     //redefines here as here we can know a pointer to PageRow
     wideScreen: width >= applicationWindow().pageStack.defaultColumnWidth * 1.5
@@ -300,8 +304,7 @@ backgroundColor.b, 0.7))
 					text: qsTr("Acounts")
 					onTriggered: 
 					{
-						dialogLoader.sourceComponent = accountsDialogComponent
-						dialog.open()
+						accountsDialog.open()
 					}
 				}
 				
@@ -412,11 +415,11 @@ backgroundColor.b, 0.7))
         id: aboutDialog  
     }
     
-    Component
-    {
-		id: accountsDialogComponent		
-		AccountsHelper {}
-	}
+
+	AccountsHelper
+	{
+		id: accountsDialog
+	}	
 	
 	Loader
 	{
