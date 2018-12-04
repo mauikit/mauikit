@@ -50,5 +50,6 @@ SyncDialog 1.0 SyncDialog.qml
 SyncDialog 1.0 SyncDialogA.qml
 Editor 1.0 Editor.qml
 ColorsBar 1.0 ColorsBar.qml
+ComboBox 1.0 ComboBox.qml
 
 

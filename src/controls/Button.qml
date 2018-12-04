@@ -57,8 +57,7 @@ Button
     background: Rectangle 
     {
         id: buttonBG
-		implicitWidth: iconSizes.medium *3
-        
+		implicitWidth: iconSizes.medium * 3        
         implicitHeight: iconSizes.medium + space.small
      
 		color: !control.enabled ? colorScheme.viewBackgroundColor : control.highlighted || control.down ? Qt.darker(colorScheme.backgroundColor, 1.4) : colorScheme.backgroundColor    
