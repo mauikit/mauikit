@@ -5,7 +5,7 @@ src/android/icons/luv-icon-theme/
 *.directory
 *.*~
 *.properties
-.*
+#.*
 *.*~
 ~*.*
 ~.*
