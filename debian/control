@@ -1,0 +1,72 @@
+Source: mauikit
+Section: libs
+Priority: optional
+Maintainer: Jonah Brüchert <jbb@kaidan.im>
+Build-Depends: cmake,
+               debhelper (>= 11),
+               extra-cmake-modules,
+               libkf5i18n-dev,
+               libkf5kio-dev,
+               libkf5notifications-dev,
+               libkf5solid-dev,
+               libqt5svg5-dev,
+               ninja-build,
+               qtbase5-dev,
+               qtdeclarative5-dev,
+               qtquickcontrols2-5-dev,
+               qtwebengine5-dev
+Standards-Version: 4.2.1
+Homepage: https://maui-project.org/
+Vcs-Git: https://gitlab.com/debian-pm/libs/mauikit.git
+Vcs-Browser: https://gitlab.com/debian-pm/libs/mauikit
+
+Package: libmauikit
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Kit for developing MAUI Apps.
+ A set of templated controls and tools based off QQC2 and Kirigami
+ shared among the Maui set of applications
+ .
+ Maui Kit helps to quickly build UIs that follow the Maui HIG
+ and bring ready to go tools for different platforms,
+ such as Android and Linux
+ .
+ This package contains the mauikit shared library
+ .
+
+Package: mauikit-dev
+Architecture: any
+Depends: libmauikit,
+         qml-module-org-kde-mauikit,
+         ${misc:Depends},
+         ${shlibs:Depends}
+Description: Kit for developing MAUI Apps.
+ A set of templated controls and tools based off QQC2 and Kirigami
+ shared among the Maui set of applications
+ .
+ Maui Kit helps to quickly build UIs that follow the Maui HIG
+ and bring ready to go tools for different platforms,
+ such as Android and Linux
+ .
+ This package contains mauikit development files
+ .
+
+Package: qml-module-org-kde-mauikit
+Architecture: any
+Depends: libmauikit,
+         qml-module-org-kde-kirigami2,
+         qml-module-qmltermwidget,
+         qml-module-qtquick-controls2,
+         qml-module-qtwebengine,
+         ${misc:Depends},
+         ${shlibs:Depends}
+Description: Kit for developing MAUI Apps.
+ A set of templated controls and tools based off QQC2 and Kirigami
+ shared among the Maui set of applications
+ .
+ Maui Kit helps to quickly build UIs that follow the Maui HIG
+ and bring ready to go tools for different platforms,
+ such as Android and Linux
+ .
+ This package contains the mauikit qml module
+ .
