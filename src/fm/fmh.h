@@ -68,7 +68,7 @@ namespace FMH
 		TEXT,
 		IMAGE,
 		NONE
-	}; Q_ENUM_NS(FILTER_TYPE);
+	}; 
 	
 	static const QHash<FMH::FILTER_TYPE, QStringList> FILTER_LIST =
 	{
@@ -123,7 +123,7 @@ namespace FMH
 		COMMENT,
 		SOURCE,
 		TITLE
-	}; Q_ENUM_NS(MODEL_KEY);
+	}; 
 	
 	static const QHash<FMH::MODEL_KEY, QString> MODEL_NAME =
 	{
@@ -230,7 +230,7 @@ namespace FMH
 		TRASH_PATH,
         SEARCH_PATH,
         CLOUD_PATH
-	}; Q_ENUM_NS(PATHTYPE_KEY);
+	};
 	
 	static const QHash<PATHTYPE_KEY, QString> PATHTYPE_NAME =
 	{

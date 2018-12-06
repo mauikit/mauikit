@@ -109,24 +109,24 @@ void FMList::setList()
 	this->setContentReady(true);
 	switch(this->pathType)
 	{
-		case FMH::PATHTYPE_KEY::SEARCH_PATH:
+		case FMList::PATHTYPE::SEARCH_PATH:
 			this->list.clear();
 			this->search(QString(this->path).right(this->path.length()- 1 - this->path.lastIndexOf("/")), this->prevHistory.length() > 1 ? this->prevHistory[this->prevHistory.length()-2] : this->path);
 			return;
 			
-		case FMH::PATHTYPE_KEY::APPS_PATH:
+		case FMList::PATHTYPE::APPS_PATH:
 			this->list = FM::getAppsContent(this->path);
 			break;
 			
-		case FMH::PATHTYPE_KEY::TAGS_PATH:
+		case FMList::PATHTYPE::TAGS_PATH:
 			this->list = this->fm->getTagContent(QString(this->path).right(this->path.length()- 1 - this->path.lastIndexOf("/")));
 			break;
 			
-		case FMH::PATHTYPE_KEY::PLACES_PATH:
+		case FMList::PATHTYPE::PLACES_PATH:
 			this->list = FM::getPathContent(this->path, this->hidden, this->onlyDirs, this->filters);
 			break;
 			
-		case FMH::PATHTYPE_KEY::CLOUD_PATH:
+		case FMList::PATHTYPE::CLOUD_PATH:
 			this->list.clear();
 			if(this->fm->getCloudServerContent(this->path, this->filters, this->cloudDepth))
 			{	
@@ -134,9 +134,9 @@ void FMList::setList()
 				return;			
 			}else break;
 			
-		case FMH::PATHTYPE_KEY::TRASH_PATH:
-		case FMH::PATHTYPE_KEY::DRIVES_PATH:
-		case FMH::PATHTYPE_KEY::BOOKMARKS_PATH:
+		case FMList::PATHTYPE::TRASH_PATH:
+		case FMList::PATHTYPE::DRIVES_PATH:
+		case FMList::PATHTYPE::BOOKMARKS_PATH:
 			this->list = FMH::MODEL_LIST();
 			break;
 	}
@@ -153,21 +153,21 @@ void FMList::reset()
 	
 	switch(this->pathType)
 	{
-		case FMH::PATHTYPE_KEY::APPS_PATH:
+		case FMList::PATHTYPE::APPS_PATH:
 			
 			this->hidden = false;			
 			this->preview = false;
 			break;
 			
-		case FMH::PATHTYPE_KEY::CLOUD_PATH:			
-		case FMH::PATHTYPE_KEY::SEARCH_PATH:
-		case FMH::PATHTYPE_KEY::TAGS_PATH:
+		case FMList::PATHTYPE::CLOUD_PATH:			
+		case FMList::PATHTYPE::SEARCH_PATH:
+		case FMList::PATHTYPE::TAGS_PATH:
 			
 			this->hidden = false;			
 			this->preview = true;
 			break;
 			
-		case FMH::PATHTYPE_KEY::PLACES_PATH:
+		case FMList::PATHTYPE::PLACES_PATH:
 		{
 			if(this->saveDirProps)
 			{
@@ -185,20 +185,20 @@ void FMList::reset()
 			break;
 		}
 		
-		case FMH::PATHTYPE_KEY::TRASH_PATH:
-		case FMH::PATHTYPE_KEY::DRIVES_PATH:
-		case FMH::PATHTYPE_KEY::BOOKMARKS_PATH:
+		case FMList::PATHTYPE::TRASH_PATH:
+		case FMList::PATHTYPE::DRIVES_PATH:
+		case FMList::PATHTYPE::BOOKMARKS_PATH:
 			break;
 	}
 	
 	if(this->saveDirProps)
 	{
 		auto conf = FMH::dirConf(this->path+"/.directory");	
-		this->sort = static_cast<FMH::MODEL_KEY>(conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SORTBY]].toInt());		
+		this->sort = static_cast<FMList::SORTBY>(conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SORTBY]].toInt());		
 		this->viewType = static_cast<FMList::VIEW_TYPE>(conf[FMH::MODEL_NAME[FMH::MODEL_KEY::VIEWTYPE]].toInt());		
 	}else
 	{	
-		this->sort = static_cast<FMH::MODEL_KEY>(UTIL::loadSettings("SortBy", "SETTINGS", this->sort).toInt());
+		this->sort = static_cast<FMList::SORTBY>(UTIL::loadSettings("SortBy", "SETTINGS", this->sort).toInt());
 		this->viewType = static_cast<FMList::VIEW_TYPE>(UTIL::loadSettings("ViewType", "SETTINGS", this->viewType).toInt());
 	}
 	
@@ -218,12 +218,12 @@ FMH::MODEL_LIST FMList::items() const
 }
 
 
-FMH::MODEL_KEY FMList::getSortBy() const
+FMList::SORTBY FMList::getSortBy() const
 {
 	return this->sort;
 }
 
-void FMList::setSortBy(const FMH::MODEL_KEY& key)
+void FMList::setSortBy(const FMList::SORTBY &key)
 {	
 	if(this->sort == key)
 		return;
@@ -233,7 +233,7 @@ void FMList::setSortBy(const FMH::MODEL_KEY& key)
 	this->sort = key;
 	this->sortList();
 	
-	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH && this->trackChanges && this->saveDirProps)
+	if(this->pathType == FMList::PATHTYPE::PLACES_PATH && this->trackChanges && this->saveDirProps)
 		FMH::setDirConf(this->path+"/.directory", "MAUIFM", "SortBy", this->sort);
 	else
 		UTIL::saveSettings("SortBy", this->sort, "SETTINGS");
@@ -245,7 +245,7 @@ void FMList::setSortBy(const FMH::MODEL_KEY& key)
 
 void FMList::sortList()
 {
-	auto key = this->sort;
+	FMH::MODEL_KEY key = static_cast<FMH::MODEL_KEY>(this->sort);
 	auto index = 0;
 	
 	if(this->foldersFirst)
@@ -379,7 +379,7 @@ void FMList::setPath(const QString &path)
 	if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::SEARCH_PATH]+"/"))
 	{
 		this->pathExists = true;
-		this->pathType = FMH::PATHTYPE_KEY::SEARCH_PATH;
+		this->pathType = FMList::PATHTYPE::SEARCH_PATH;
 		this->isBookmark = false;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
@@ -389,7 +389,7 @@ void FMList::setPath(const QString &path)
 	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]+"/"))
 	{
 		this->pathExists = true;
-		this->pathType = FMH::PATHTYPE_KEY::CLOUD_PATH;
+		this->pathType = FMList::PATHTYPE::CLOUD_PATH;
 		this->isBookmark = false;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
@@ -399,7 +399,7 @@ void FMList::setPath(const QString &path)
 	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/"))
 	{
 		this->pathExists = true;
-		this->pathType = FMH::PATHTYPE_KEY::APPS_PATH;
+		this->pathType = FMList::PATHTYPE::APPS_PATH;
 		this->isBookmark = false;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
@@ -410,7 +410,7 @@ void FMList::setPath(const QString &path)
 	{
 		this->pathExists = true;
 		this->isBookmark = false;
-		this->pathType = FMH::PATHTYPE_KEY::TAGS_PATH;
+		this->pathType = FMList::PATHTYPE::TAGS_PATH;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		emit this->isBookmarkChanged();
@@ -421,7 +421,7 @@ void FMList::setPath(const QString &path)
 		this->watchPath(this->path);
 		this->isBookmark = this->fm->isBookmark(this->path);
 		this->pathExists = FMH::fileExists(this->path);
-		this->pathType = FMH::PATHTYPE_KEY::PLACES_PATH;
+		this->pathType = FMList::PATHTYPE::PLACES_PATH;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		emit this->isBookmarkChanged();
@@ -430,7 +430,7 @@ void FMList::setPath(const QString &path)
 	emit this->pathChanged();
 }
 
-FMH::PATHTYPE_KEY FMList::getPathType() const
+FMList::PATHTYPE FMList::getPathType() const
 {
 	return this->pathType;
 }
@@ -451,15 +451,15 @@ void FMList::setFilters(const QStringList &filters)
 	this->reset();
 }
 
-FMH::FILTER_TYPE FMList::getFilterType() const
+FMList::FILTER FMList::getFilterType() const
 {
 	return this->filterType;
 }
 
-void FMList::setFilterType(const FMH::FILTER_TYPE& type)
+void FMList::setFilterType(const FMList::FILTER &type)
 {
 	this->filterType = type;
-	this->filters = FMH::FILTER_LIST[this->filterType];
+	this->filters = FMH::FILTER_LIST[static_cast<FMH::FILTER_TYPE>(this->filterType)];
 	
 	emit this->filtersChanged();
 	emit this->filterTypeChanged();
@@ -479,7 +479,7 @@ void FMList::setHidden(const bool &state)
 	
 	this->hidden = state;
 	
-	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH && this->trackChanges && this->saveDirProps)
+	if(this->pathType == FMList::PATHTYPE::PLACES_PATH && this->trackChanges && this->saveDirProps)
 		FMH::setDirConf(this->path+"/.directory", "Settings", "HiddenFilesShown", this->hidden);
 	else
 		UTIL::saveSettings("HiddenFilesShown", this->hidden, "SETTINGS");
@@ -500,7 +500,7 @@ void FMList::setPreview(const bool &state)
 	
 	this->preview = state;
 	
-	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH && this->trackChanges && this->saveDirProps)
+	if(this->pathType == FMList::PATHTYPE::PLACES_PATH && this->trackChanges && this->saveDirProps)
 		FMH::setDirConf(this->path+"/.directory", "MAUIFM", "ShowThumbnail", this->preview);
 	else
 		UTIL::saveSettings("ShowThumbnail", this->preview, "SETTINGS");
@@ -545,9 +545,9 @@ void FMList::refresh()
 
 void FMList::createDir(const QString& name)
 {
-	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH)
+	if(this->pathType == FMList::PATHTYPE::PLACES_PATH)
 		this->fm->createDir(this->path, name);	
-	else if(this->pathType == FMH::PATHTYPE_KEY::CLOUD_PATH)		
+	else if(this->pathType == FMList::PATHTYPE::CLOUD_PATH)		
 	{
 		this->fm->createCloudDir(QString(this->path).replace(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]+"/"+this->fm->sync->getUser(), ""), name);
 	}
@@ -555,7 +555,7 @@ void FMList::createDir(const QString& name)
 
 void FMList::copyInto(const QVariantList& files)
 {
-	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH ||  this->pathType == FMH::PATHTYPE_KEY::CLOUD_PATH)
+	if(this->pathType == FMList::PATHTYPE::PLACES_PATH ||  this->pathType == FMList::PATHTYPE::CLOUD_PATH)
 		this->fm->copy(files, this->path);		
 }
 
@@ -566,11 +566,11 @@ void FMList::test()
 
 void FMList::cutInto(const QVariantList& files)
 {
-	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH)
+	if(this->pathType == FMList::PATHTYPE::PLACES_PATH)
 		this->fm->cut(files, this->path);	
-// 	else if(this->pathType == FMH::PATHTYPE_KEY::CLOUD_PATH)		
+// 	else if(this->pathType == FMList::PATHTYPE::CLOUD_PATH)		
 // 	{
-// 		this->fm->createCloudDir(QString(this->path).replace(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]+"/"+this->fm->sync->getUser(), ""), name);
+// 		this->fm->createCloudDir(QString(this->path).replace(FMH::PATHTYPE_NAME[FMList::PATHTYPE::CLOUD_PATH]+"/"+this->fm->sync->getUser(), ""), name);
 // 	}
 }
 
@@ -578,7 +578,7 @@ QString FMList::getParentPath()
 {
 	switch(this->pathType)
 	{		
-		case FMH::PATHTYPE_KEY::PLACES_PATH:
+		case FMList::PATHTYPE::PLACES_PATH:
 			return FM::parentDir(this->path);
 		default:
 			return this->getPreviousPath();
@@ -652,7 +652,7 @@ void FMList::setIsBookmark(const bool& value)
 	if(this->isBookmark == value)
 		return;
 	
-	if(this->pathType != FMH::PATHTYPE_KEY::PLACES_PATH)
+	if(this->pathType != FMList::PATHTYPE::PLACES_PATH)
 		return;
 	
 	this->isBookmark = value;
@@ -679,7 +679,7 @@ void FMList::setFoldersFirst(const bool &value)
 	
 	this->foldersFirst = value;
 	
-	if(this->pathType == FMH::PATHTYPE_KEY::PLACES_PATH && this->trackChanges && this->saveDirProps)
+	if(this->pathType == FMList::PATHTYPE::PLACES_PATH && this->trackChanges && this->saveDirProps)
 		FMH::setDirConf(this->path+"/.directory", "MAUIFM", "FoldersFirst", this->foldersFirst);
 	else
 		UTIL::saveSettings("FoldersFirst", this->foldersFirst, "SETTINGS");

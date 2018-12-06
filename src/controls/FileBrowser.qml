@@ -196,9 +196,7 @@ Maui.Page
 			else
 				_progressBar.value = percent/100
 		}
-	}
-	
-	
+	}	
 	
 	FileMenu
 	{
@@ -514,8 +512,8 @@ Maui.Page
 			{
 				text: qsTr("Folders first")
 				checkable: true
-				checked: modelList.foldersFirst
-				onTriggered: modelList.foldersFirst = !modelList.foldersFirst
+				checked: list.foldersFirst
+				onTriggered: list.foldersFirst = !list.foldersFirst
 			}
 			
 			MenuSeparator{}
@@ -524,40 +522,40 @@ Maui.Page
 			{
 				text: qsTr("Type")
 				checkable: true
-				checked: modelList.sortBy === FMList.MIME
-				onTriggered: modelList.sortBy = FMList.MIME
+				checked: list.sortBy === FMList.MIME
+				onTriggered: list.sortBy = FMList.MIME
 			}
 			
 			Maui.MenuItem
 			{
 				text: qsTr("Date")
 				checkable: true
-				checked: modelList.sortBy === FMList.DATE
-				onTriggered: modelList.sortBy = FMList.DATE
+				checked: list.sortBy === FMList.DATE
+				onTriggered: list.sortBy = FMList.DATE
 			}
 			
 			Maui.MenuItem
 			{
 				text: qsTr("Modified")
 				checkable: true
-				checked: modelList.sortBy === FMList.MODIFIED
-				onTriggered: modelList.sortBy = FMList.MODIFIED
+				checked: list.sortBy === FMList.MODIFIED
+				onTriggered: list.sortBy = FMList.MODIFIED
 			}
 			
 			Maui.MenuItem
 			{
 				text: qsTr("Size")
 				checkable: true
-				checked: modelList.sortBy === FMList.SIZE
-				onTriggered: modelList.sortBy = FMList.SIZE
+				checked: list.sortBy === FMList.SIZE
+				onTriggered: list.sortBy = FMList.SIZE
 			}
 			
 			Maui.MenuItem
 			{
 				text: qsTr("Name")
 				checkable: true
-				checked: modelList.sortBy === FMList.LABEL
-				onTriggered: modelList.sortBy = FMList.LABEL
+				checked: list.sortBy === FMList.LABEL
+				onTriggered: list.sortBy = FMList.LABEL
 			}
 			
 			MenuSeparator {}

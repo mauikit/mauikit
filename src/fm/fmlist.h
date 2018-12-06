@@ -40,11 +40,11 @@ class FMList : public QObject
 	Q_PROPERTY(bool contentReady READ getContentReady NOTIFY contentReadyChanged())
 	
 	Q_PROPERTY(QStringList filters READ getFilters WRITE setFilters NOTIFY filtersChanged())
-	Q_PROPERTY(FMH::FILTER_TYPE filterType READ getFilterType WRITE setFilterType NOTIFY filterTypeChanged())
+	Q_PROPERTY(FMList::FILTER filterType READ getFilterType WRITE setFilterType NOTIFY filterTypeChanged())
 	
-    Q_PROPERTY(FMH::MODEL_KEY sortBy READ getSortBy WRITE setSortBy NOTIFY sortByChanged())
+	Q_PROPERTY(FMList::SORTBY sortBy READ getSortBy WRITE setSortBy NOTIFY sortByChanged())
     Q_PROPERTY(bool foldersFirst READ getFoldersFirst WRITE setFoldersFirst NOTIFY foldersFirstChanged())
-    Q_PROPERTY(FMH::PATHTYPE_KEY pathType READ getPathType NOTIFY pathTypeChanged())
+    Q_PROPERTY(FMList::PATHTYPE pathType READ getPathType NOTIFY pathTypeChanged())
 	
 	Q_PROPERTY(bool trackChanges READ getTrackChanges WRITE setTrackChanges NOTIFY trackChangesChanged())
 	Q_PROPERTY(bool saveDirProps READ getSaveDirProps WRITE setSaveDirProps NOTIFY saveDirPropsChanged())	
@@ -57,15 +57,46 @@ class FMList : public QObject
 	Q_PROPERTY(QString parentPath READ getParentPath)
 	
 	public:
-		Q_ENUM(FMH::MODEL_KEY)
-		Q_ENUM(FMH::FILTER_TYPE)
-		Q_ENUM(FMH::PATHTYPE_KEY)
+		
+		enum SORTBY : uint_fast8_t
+		{
+			SIZE = FMH::MODEL_KEY::SIZE,
+			MODIFIED = FMH::MODEL_KEY::MODIFIED,
+			DATE = FMH::MODEL_KEY::DATE,
+			LABEL = FMH::MODEL_KEY::LABEL,
+			MIME = FMH::MODEL_KEY::MIME		
+			
+		}; Q_ENUM(SORTBY)
+		
+		enum FILTER : uint_fast8_t
+		{
+			AUDIO = FMH::FILTER_TYPE::AUDIO,
+			VIDEO= FMH::FILTER_TYPE::VIDEO,
+			TEXT = FMH::FILTER_TYPE::TEXT,
+			IMAGE = FMH::FILTER_TYPE::IMAGE,
+			NONE = FMH::FILTER_TYPE::NONE
+			
+		}; Q_ENUM(FILTER)
+		
+		enum PATHTYPE : uint_fast8_t
+		{
+			PLACES_PATH = FMH::PATHTYPE_KEY::PLACES_PATH,
+			DRIVES_PATH = FMH::PATHTYPE_KEY::DRIVES_PATH,
+			BOOKMARKS_PATH = FMH::PATHTYPE_KEY::BOOKMARKS_PATH,
+			TAGS_PATH = FMH::PATHTYPE_KEY::TAGS_PATH,
+			APPS_PATH = FMH::PATHTYPE_KEY::APPS_PATH,
+			TRASH_PATH = FMH::PATHTYPE_KEY::TRASH_PATH,
+			SEARCH_PATH = FMH::PATHTYPE_KEY::SEARCH_PATH,
+			CLOUD_PATH = FMH::PATHTYPE_KEY::CLOUD_PATH
+			
+		}; Q_ENUM(PATHTYPE)
 		
 		enum VIEW_TYPE : uint_fast8_t
 		{
 			ICON_VIEW,
 			LIST_VIEW,
 			MILLERS_VIEW
+			
 		}; Q_ENUM(VIEW_TYPE)
 		
 		FMList(QObject *parent = nullptr);
@@ -73,19 +104,19 @@ class FMList : public QObject
 		
 		FMH::MODEL_LIST items() const;
 		
-		FMH::MODEL_KEY getSortBy() const;
-		void setSortBy(const FMH::MODEL_KEY &key);
+		FMList::SORTBY getSortBy() const;
+		void setSortBy(const FMList::SORTBY &key);
 		
 		QString getPath() const;
 		void setPath(const QString &path);		
 	
-		FMH::PATHTYPE_KEY getPathType() const;
+		FMList::PATHTYPE getPathType() const;
 		
 		QStringList getFilters() const;
 		void setFilters(const QStringList &filters);
 		
-		FMH::FILTER_TYPE getFilterType() const;
-		void setFilterType(const FMH::FILTER_TYPE &type);
+		FMList::FILTER getFilterType() const;
+		void setFilterType(const FMList::FILTER &type);
 		
 		bool getHidden() const;
 		void setHidden(const bool &state);
@@ -157,9 +188,9 @@ private:
 	int cloudDepth = 1;
 	
 	VIEW_TYPE viewType = VIEW_TYPE::ICON_VIEW;
-	FMH::MODEL_KEY sort = FMH::MODEL_KEY::MODIFIED;
-	FMH::FILTER_TYPE filterType = FMH::FILTER_TYPE::NONE;
-	FMH::PATHTYPE_KEY pathType = FMH::PATHTYPE_KEY::PLACES_PATH;
+	FMList::SORTBY sort = FMList::SORTBY::MODIFIED;
+	FMList::FILTER filterType = FMList::FILTER::NONE;
+	FMList::PATHTYPE pathType = FMList::PATHTYPE::PLACES_PATH;
 	
 	QStringList prevHistory = {};
 	QStringList postHistory = {};
