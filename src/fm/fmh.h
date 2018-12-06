@@ -40,7 +40,6 @@
 
 namespace FMH
 {
-	Q_NAMESPACE
 	
 	inline bool isAndroid()
 	{
@@ -500,6 +499,5 @@ namespace FMH
 		return res;
 	}
 }
-
 
 #endif // FMH_H
