@@ -17,7 +17,7 @@ dpkg -i qml-module-qmltermwidget_0.1%2Bgit20180903-1_amd64.deb
 mk-build-deps -i -t "apt-get --yes" -r
 
 ### Build Deb
-mkdir source
-mv ./* source/ # Hack for debuild
-cd source
+#mkdir source
+#mv ./* source/ # Hack for debuild
+#cd source
 debuild -b -uc -us

@@ -18,8 +18,8 @@ script:
 
 branches:
   only:
-    - gh-pages
-    - /.*/
+#    - gh-pages
+#    - /.*/
     - master
     - development
 
