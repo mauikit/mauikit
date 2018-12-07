@@ -80,14 +80,13 @@ signals:
     void cloudAccountRemoved(QString user);
 
     void cloudServerContentReady(FMH::MODEL_LIST list, const QString &url);
-	void cloudItemReady(FMH::MODEL item);
-	
+	void cloudItemReady(FMH::MODEL item, QString path); //when a item is downloaded and ready
+
 	void warningMessage(QString message);
 	void loadProgress(int percent);
 	
 	void dirCreated(FMH::MODEL dir);
-	void newItem(FMH::MODEL item, QString path);
-	void cloudItemReady(FMH::MODEL item, const QString &path);
+	void newItem(FMH::MODEL item, QString path); // when a new item is created
 	
 public slots:	
 	bool bookmark(const QString &path);
@@ -101,7 +100,7 @@ public slots:
 	void getCloudItem(const QVariantMap &item);	
 	
 	static QString formatSize(const int &size);
-	static QString formatDate(const QString &dateStr, const QString &format = "dd/MM/yyyy");
+	static QString formatDate(const QString &dateStr, const QString &format = QString("dd/MM/yyyy"));
 	static QString homePath();	
 	static QString parentDir(const QString &path);
 	
