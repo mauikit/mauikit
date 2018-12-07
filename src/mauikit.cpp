@@ -124,7 +124,6 @@ void MauiKit::registerTypes(const char *uri)
     });
 #endif
 	
-	qmlRegisterUncreatableMetaObject(FMH::staticMetaObject, "FMH", 1, 0, "KEY", "Error");	
 	qmlRegisterType<PlacesList>("PlacesList", 1, 0, "PlacesList");
 	qmlRegisterType<PlacesModel>("PlacesModel", 1, 0, "PlacesModel");
 	

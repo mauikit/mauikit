@@ -30,9 +30,9 @@ public:
 	static FM *getInstance();
 	Syncing *sync;
 	
-	FMH::MODEL_LIST  getTags(const int &limit = 5);	
+	FMH::MODEL_LIST getTags(const int &limit = 5);	
 	FMH::MODEL_LIST getTagContent(const QString &tag);	
-    FMH::MODEL_LIST  getBookmarks();
+    FMH::MODEL_LIST getBookmarks();
 
     /** Syncing **/
 	bool getCloudServerContent(const QString &server, const QStringList &filters= QStringList(), const int &depth = 0);
@@ -58,8 +58,10 @@ public:
 	
 	static QString resolveUserCloudCachePath(const QString &server, const QString &user);
 	QString resolveLocalCloudPath(const QString &path);
+		static QVariantMap toMap(const FMH::MODEL &model);
+
 	/*** END STATIC METHODS ***/
-	
+
 private:
     Tagging *tag;
 	static FM* instance;
@@ -85,6 +87,7 @@ signals:
 	
 	void dirCreated(FMH::MODEL dir);
 	void newItem(FMH::MODEL item, QString path);
+	void cloudItemReady(FMH::MODEL item, const QString &path);
 	
 public slots:	
 	bool bookmark(const QString &path);
@@ -95,6 +98,7 @@ public slots:
 	bool addCloudAccount(const QString &server, const QString &user, const QString &password);
 	bool removeCloudAccount(const QString &server, const QString &user);
 	void openCloudItem(const QVariantMap &item);	
+	void getCloudItem(const QVariantMap &item);	
 	
 	static QString formatSize(const int &size);
 	static QString formatDate(const QString &dateStr, const QString &format = "dd/MM/yyyy");

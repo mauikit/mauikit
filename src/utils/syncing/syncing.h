@@ -50,8 +50,6 @@ public:
 	QString getUser() const;
 
 	void setUploadQueue(const QStringList &list); 
-protected:
-	void emitSignal(const FMH::MODEL &item);
 
 private:
     WebDAVClient *client;
@@ -76,10 +74,7 @@ private:
 	
 signals:
     void listReady(FMH::MODEL_LIST data, QString url);
-
-	void readyOpen(FMH::MODEL item, QString url);
-	void readyDownload(FMH::MODEL item, QString url);
-	void readyCopy(FMH::MODEL item, QString url);
+	void itemReady(FMH::MODEL item, QString url, Syncing::SIGNAL_TYPE &signalType);	
 	void dirCreated(FMH::MODEL item, QString url);
 	void uploadReady(FMH::MODEL item, QString url);
 	void error(QString message);

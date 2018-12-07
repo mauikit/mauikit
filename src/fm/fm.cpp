@@ -64,19 +64,29 @@ void FM::init()
         emit this->cloudServerContentReady(list, url);
     });
 	
-	connect(this->sync, &Syncing::readyOpen, [this](const FMH::MODEL &item, const QString &url)
+	connect(this->sync, &Syncing::itemReady, [this](const FMH::MODEL &item, const QString &url, const Syncing::SIGNAL_TYPE &signalType)
 	{		
-		this->openUrl(item[FMH::MODEL_KEY::PATH]);
-	});
-	
-	connect(this->sync, &Syncing::readyCopy, [this](const FMH::MODEL &item, const QString &url)
-	{		
-		QVariantMap data;
-		for(auto key : item.keys())
-			data.insert(FMH::MODEL_NAME[key], item[key]);
-		
-		
-		this->copy(QVariantList {data}, this->sync->getCopyTo());
+		switch(signalType)
+		{
+			case Syncing::SIGNAL_TYPE::OPEN:
+				this->openUrl(item[FMH::MODEL_KEY::PATH]);
+				break;
+				
+			case Syncing::SIGNAL_TYPE::DOWNLOAD:
+				emit this->cloudItemReady(item, url);
+				break;
+				
+			case Syncing::SIGNAL_TYPE::COPY:
+			{
+				QVariantMap data;
+				for(auto key : item.keys())
+					data.insert(FMH::MODEL_NAME[key], item[key]);				
+				
+				this->copy(QVariantList {data}, this->sync->getCopyTo());
+				break;	
+			}	
+			default: return;
+		}
 	});
 	
 	connect(this->sync, &Syncing::error, [this](const QString &message)
@@ -103,6 +113,15 @@ void FM::init()
 FM::FM(QObject *parent) : FMDB(parent) {}
 
 FM::~FM() {}
+
+QVariantMap FM::toMap(const FMH::MODEL& model)
+{
+	QVariantMap map;
+	for(auto key : model.keys())
+		map.insert(FMH::MODEL_NAME[key], model[key]);
+	
+	return map;		
+}
 
 FMH::MODEL_LIST FM::packItems(const QStringList &items, const QString &type)
 {
@@ -364,6 +383,16 @@ void FM::openCloudItem(const QVariantMap &item)
 		data.insert(FMH::MODEL_NAME_KEY[key], item[key].toString());
 	
 	this->sync->resolveFile(data, Syncing::SIGNAL_TYPE::OPEN);
+}
+
+void FM::getCloudItem(const QVariantMap &item)
+{
+	qDebug()<< item;
+	FMH::MODEL data;
+	for(auto key : item.keys())
+		data.insert(FMH::MODEL_NAME_KEY[key], item[key].toString());
+	
+	this->sync->resolveFile(data, Syncing::SIGNAL_TYPE::DOWNLOAD);
 }
 
 QVariantList FM::getCloudAccountsList()
