@@ -171,22 +171,10 @@ void Syncing::upload(const QString &path, const QString &filePath)
 		}
 		
 		if(!this->uploadQueue.isEmpty())
-		{
-// 			QEventLoop loop;
-// 			QTimer timer;
-// 			connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
-// 			
-// 			timer.setSingleShot(true);
-// 			timer.setInterval(3000);
-			
+		{			
 			qDebug()<<"UPLOAD QUEUE" << this->uploadQueue;
-			this->upload(path, this->uploadQueue.takeLast());		
-// 			/*
-// 			timer.start();
-// 			loop.exec();
-// 			timer.stop();*/
+			this->upload(path, this->uploadQueue.takeLast());
 		}
-			
 	});
 	
 	connect(reply, &WebDAVReply::error, [=](QNetworkReply::NetworkError err)
@@ -337,10 +325,8 @@ void Syncing::saveTo(const QByteArray &array, const QString& path)
 		auto newPath = QString(path).right(cut);
 		dir.mkdir(QString(path).replace(newPath, ""));
 		qDebug()<< newPath << cut;
-	}else
-	{
-		file.remove();
-	}
+		
+	}else file.remove();	
 	
 	file.open(QIODevice::WriteOnly);
 	file.write(array);
@@ -414,3 +400,9 @@ void Syncing::setUploadQueue(const QStringList& list)
 {
 	this->uploadQueue = list;
 }
+
+QString Syncing::localToAbstractCloudPath(const QString& url)
+{
+	return QString(url).replace(FMH::CloudCachePath+"opendesktop", FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]);
+}
+

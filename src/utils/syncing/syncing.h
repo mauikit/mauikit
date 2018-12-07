@@ -50,6 +50,8 @@ public:
 	QString getUser() const;
 
 	void setUploadQueue(const QStringList &list); 
+	
+	QString localToAbstractCloudPath(const QString &url);
 
 private:
     WebDAVClient *client;
