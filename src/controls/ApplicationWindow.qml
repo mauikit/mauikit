@@ -180,7 +180,17 @@ backgroundColor.b, 0.7))
     //    overlay.modeless: Rectangle {
     //        color: "transparent"
     //    }
-
+	
+	property bool isPortrait: Screen.primaryOrientation === Qt.PortraitOrientation || Screen.primaryOrientation === Qt.InvertedPortraitOrientation	
+	onIsPortraitChanged: 
+	{
+		if(isPortrait)
+		{
+			width: Screen.width * (isMobile ? 1 : 0.4)
+			height: Screen.height * (isMobile ? 1 : 0.4)
+		}
+	}
+	
     onHeadBarBGColorChanged: 
     {
         if(!isMobile && colorSchemeName.length > 0 && !altToolBars)
