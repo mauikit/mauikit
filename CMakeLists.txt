@@ -136,6 +136,14 @@ set(syncing_HDRS
     src/utils/syncing/libwebdavclient/lib/utils/XMLHelper.hpp
     )
 
+set(store_SRCS
+    src/utils/store/store.cpp
+    )
+
+set(store_HDRS
+    src/utils/store/store.h
+    )
+
 
 #use dbus on linux, bsd etc, but not andoid and apple stuff
 if(ANDROID)
