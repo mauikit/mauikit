@@ -1,5 +1,6 @@
 build/
 src/android/icons/luv-icon-theme/
+src/utils/store/attica/
 
 *.kdev4
 *.directory
