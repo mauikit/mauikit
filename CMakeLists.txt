@@ -46,7 +46,10 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}/src/utils/editor
     
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/syncing
-    ${CMAKE_CURRENT_BINARY_DIR}/src/utils/syncing
+    ${CMAKE_CURRENT_BINARY_DIR}/src/utils/syncing 
+    
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/store
+    ${CMAKE_CURRENT_BINARY_DIR}/src/utils/store
     
 	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/syncing/libwebdavclient/lib
 	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/syncing/libwebdavclient/lib/utils
@@ -170,7 +173,7 @@ if(ANDROID)
 else()
     find_package(Qt5 REQUIRED COMPONENTS WebEngine)
     find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications
-        Config Service KIO ConfigWidgets)
+        Config Service KIO ConfigWidgets Attica)
 
     set(mauikit_KDE_SRCS
         src/kde/mauikde.cpp
@@ -192,6 +195,7 @@ else()
         KF5::Service
         KF5::KIONTLM
         KF5::ConfigWidgets
+        KF5::Attica
         Qt5::WebEngine
         )
 endif()

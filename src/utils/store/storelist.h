@@ -16,34 +16,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef STORE_H
-#define STORE_H
+#ifndef STORELIST_H
+#define STORELIST_H
 
 #include <QObject>
+#include "fmh.h"
 
-namespace Attica
-{
-	class Provider;
-	class Providermanager;
-}
-
-class Store : public QObject
+class Store;
+class StoreList : public QObject
 {
     Q_OBJECT
 
-public:  
-    Store(QObject *parent = nullptr);   
-    ~Store();
-	
-	void searchFor(const QString &query);
-	
-public slots:
-	void providersChanged();
+public:    
+	StoreList(QObject *parent = nullptr);   
+	FMH::MODEL_LIST items() const;
 	
 private:
-	Attica::ProviderManager m_manager;
-	// A provider that we will ask for data from openDesktop.org
-	Attica::Provider m_provider;
+	FMH::MODEL_LIST list;
+	Store *store;
+	
+signals:
+	void preItemAppended();
+	void postItemAppended();
+	void preItemRemoved(int index);
+	void postItemRemoved();
+	void updateModel(int index, QVector<int> roles);
+	void preListChanged();
+	void postListChanged();
+
 };
 
-#endif // STORE_H
+#endif // STORELIST_H

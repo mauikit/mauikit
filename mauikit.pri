@@ -45,7 +45,10 @@ HEADERS += \
     $$PWD/src/utils/handy.h \
     $$PWD/src/utils/syncing/syncing.h \
 	$$PWD/src/utils/syncing/syncinglist.h \
-    $$PWD/src/utils/syncing/syncingmodel.h
+    $$PWD/src/utils/syncing/syncingmodel.h \
+	$$PWD/src/utils/store/store.h \
+    $$PWD/src/utils/store/storemodel.h \
+    $$PWD/src/utils/store/storelist.h
 
 SOURCES += \
     $$PWD/src/mauikit.cpp \
@@ -59,7 +62,10 @@ SOURCES += \
     $$PWD/src/utils/handy.cpp \
     $$PWD/src/utils/syncing/syncing.cpp \
     $$PWD/src/utils/syncing/syncinglist.cpp \
-    $$PWD/src/utils/syncing/syncingmodel.cpp
+    $$PWD/src/utils/syncing/syncingmodel.cpp \
+    $$PWD/src/utils/store/store.cpp \
+    $$PWD/src/utils/store/storemodel.cpp \
+    $$PWD/src/utils/store/storelist.cpp
 
 DEPENDPATH += \
     $$PWD/src \
@@ -70,7 +76,8 @@ INCLUDEPATH += \
      $$PWD/src/fm \
      $$PWD/src/utils \
      $$PWD/src/utils/editor \
-     $$PWD/src/utils/syncing
+     $$PWD/src/utils/syncing \
+     $$PWD/src/utils/store
 
 DEFINES += \
     MAUI_APP \
