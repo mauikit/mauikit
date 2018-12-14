@@ -20,10 +20,6 @@
 #include "storelist.h"
 #include "fmh.h"
 
-StoreModel::StoreModel(QObject * parent) : QAbstractListModel(parent)
-{
-}
-
 StoreModel::StoreModel(QObject *parent)
 : QAbstractListModel(parent),
 mList(nullptr)
@@ -69,12 +65,12 @@ QHash<int, QByteArray> StoreModel::roleNames() const
 	return names;
 }
 
-SyncingList *StoreModel::getList() const
+StoreList *StoreModel::getList() const
 {
 	return this->mList;
 }
 
-void StoreModel::setList(SyncingList *value)
+void StoreModel::setList(StoreList *value)
 {
 	beginResetModel();
 	
@@ -85,38 +81,38 @@ void StoreModel::setList(SyncingList *value)
 	
 	if(mList)
 	{
-		connect(this->mList, &SyncingList::preItemAppended, this, [=]()
+		connect(this->mList, &StoreList::preItemAppended, this, [=]()
 		{
 			const int index = mList->items().size();
 			beginInsertRows(QModelIndex(), index, index);
 		});
 		
-		connect(this->mList, &SyncingList::postItemAppended, this, [=]()
+		connect(this->mList, &StoreList::postItemAppended, this, [=]()
 		{
 			endInsertRows();
 		});
 		
-		connect(this->mList, &SyncingList::preItemRemoved, this, [=](int index)
+		connect(this->mList, &StoreList::preItemRemoved, this, [=](int index)
 		{
 			beginRemoveRows(QModelIndex(), index, index);
 		});
 		
-		connect(this->mList, &SyncingList::postItemRemoved, this, [=]()
+		connect(this->mList, &StoreList::postItemRemoved, this, [=]()
 		{
 			endRemoveRows();
 		});
 		
-		connect(this->mList, &SyncingList::updateModel, this, [=](int index, QVector<int> roles)
+		connect(this->mList, &StoreList::updateModel, this, [=](int index, QVector<int> roles)
 		{
 			emit this->dataChanged(this->index(index), this->index(index), roles);
 		});
 		
-		connect(this->mList, &SyncingList::preListChanged, this, [=]()
+		connect(this->mList, &StoreList::preListChanged, this, [=]()
 		{
 			beginResetModel();
 		});
 		
-		connect(this->mList, &SyncingList::postListChanged, this, [=]()
+		connect(this->mList, &StoreList::postListChanged, this, [=]()
 		{
 			endResetModel();
 		});

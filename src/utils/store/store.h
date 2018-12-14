@@ -21,11 +21,17 @@
 
 #include <QObject>
 
-namespace Attica
-{
-	class Provider;
-	class Providermanager;
-}
+#ifdef STATIC_MAUIKIT
+
+#else
+#include <Attica/ProviderManager>
+#include <Attica/Provider>
+#include <Attica/ListJob>
+#include <Attica/Content>
+#include <Attica/DownloadItem>
+#include <Attica/AccountBalance>
+#include <Attica/Person>
+#endif
 
 class Store : public QObject
 {

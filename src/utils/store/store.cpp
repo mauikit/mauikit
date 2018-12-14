@@ -18,23 +18,12 @@
 
 #include "store.h"
 
-#ifdef STATIC_MAUIKIT
-
-#else
-#include <Attica/ProviderManager>
-#include <Attica/Provider>
-#include <Attica/ListJob>
-#include <Attica/Content>
-#include <Attica/DownloadItem>
-#include <Attica/AccountBalance>
-#include <Attica/Person>
-#endif
-
-
 Store::Store(QObject *parent) : QObject(parent)
 {	
+	qDebug()<< "Setting up Store backend";
 	connect(&m_manager, SIGNAL(defaultProvidersLoaded()), SLOT(providersChanged()));
 	// tell it to get the default Providers
+	m_manager.addProviderFileToDefaultProviders(QUrl("qrc:/store/providers.xml"));
 	m_manager.loadDefaultProviders();
 }
 
@@ -50,14 +39,20 @@ void Store::providersChanged()
 {
 	if (!m_manager.providers().isEmpty())
 	{
+		qDebug()<< "Providers names:";
+		for(auto prov : m_manager.providers())
+			qDebug() << prov.name();
+		
 		m_provider = m_manager.providerByUrl(QUrl("https://api.opendesktop.org/v1/"));
 		
 		if (!m_provider.isValid())
 		{
 			qDebug() << "Could not find opendesktop.org provider.";
 			return;
-		}		
+		}	
+		
+		qDebug()<< "Found the Store provider";
 	}
 }
 
-#include "store.moc"
+// #include "store.moc"

@@ -37,6 +37,9 @@
 #include "tagsmodel.h"
 #include "tagslist.h"
 
+#include "storemodel.h"
+#include "storelist.h"
+
 #include "handy.h"
 #include "documenthandler.h"
 
@@ -135,6 +138,9 @@ void MauiKit::registerTypes(const char *uri)
 	
 	qmlRegisterType<TagsList>("TagsList", 1, 0, "TagsList");
 	qmlRegisterType<TagsModel>("TagsModel", 1, 0, "TagsModel");
+	
+	qmlRegisterType<StoreList>("StoreList", 1, 0, "StoreList");
+	qmlRegisterType<StoreModel>("StoreModel", 1, 0, "StoreModel");
 	
 	qmlRegisterType<DocumentHandler>("DocumentHandler", 1, 0, "DocumentHandler");
 	

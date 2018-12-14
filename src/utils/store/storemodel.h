@@ -49,6 +49,7 @@ public:
 	
 private:
 	StoreList *mList;
+	
 signals:
 	void listChanged();
 
