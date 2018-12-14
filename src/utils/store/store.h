@@ -22,7 +22,8 @@
 #include <QObject>
 
 #ifdef STATIC_MAUIKIT
-
+#include "providermanager.h"
+#include "provider.h"
 #else
 #include <Attica/ProviderManager>
 #include <Attica/Provider>
