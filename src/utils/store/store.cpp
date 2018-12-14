@@ -17,14 +17,28 @@
  */
 
 #include "store.h"
+#include "fmh.h"
+#include <QFile>
 
 Store::Store(QObject *parent) : QObject(parent)
 {	
 	qDebug()<< "Setting up Store backend";
+	
+	if(!FMH::fileExists(FMH::DataPath+"/Store/providers.xml"))
+	{
+		QDir store_dir(FMH::DataPath+"/Store/");
+		if (!store_dir.exists())
+			store_dir.mkpath(".");
+		
+		QFile providersFile(":/store/providers.xml");
+		providersFile.copy(FMH::DataPath+"/Store/providers.xml");
+		
+	}
 	connect(&m_manager, SIGNAL(defaultProvidersLoaded()), SLOT(providersChanged()));
 	// tell it to get the default Providers
-	m_manager.addProviderFileToDefaultProviders(QUrl("qrc:/store/providers.xml"));
-	m_manager.loadDefaultProviders();
+	qDebug()<< "provider local file exists?"<< FMH::fileExists(FMH::DataPath+"/Store/providers.xml");
+	m_manager.addProviderFile(QUrl::fromLocalFile(FMH::DataPath+"/Store/providers.xml"));
+	//	m_manager.loadDefaultProviders();
 }
 
 Store::~Store()
@@ -53,6 +67,9 @@ void Store::providersChanged()
 		
 		qDebug()<< "Found the Store provider";
 	}
+	
+	qDebug() << "Could not find any provider.";
+	
 }
 
 // #include "store.moc"

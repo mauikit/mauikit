@@ -18,7 +18,7 @@ linux:unix:!android {
     include($$PWD/src/android/android.pri)
     include($$PWD/src/utils/syncing/openssl/openssl.pri)
     include($$PWD/src/utils/syncing/libwebdavclient/webdavclient.pri)
-	include($$PWD/src/utils/store/attica.pri)
+    include($$PWD/src/utils/store/attica.pri)
 	
 } else {
     message("Unknown configuration")
@@ -30,6 +30,7 @@ RESOURCES += \
     $$PWD/mauikit.qrc \
     $$PWD/assets.qrc \
     $$PWD/src/fm/fm.qrc \
+    $$PWD/src/utils/store/store.qrc \
     $$PWD/maui-style/style.qrc
 
 HEADERS += \
