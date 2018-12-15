@@ -48,6 +48,7 @@ public:
 	
 public slots:
 	void providersChanged();
+    void categoryListResult(Attica::BaseJob* j);
 	
 	void getPersonInfo(const QString &nick);
 	

@@ -71,22 +71,51 @@ void Store::providersChanged()
 			qDebug()<< "Has content service" << m_provider.hasContentService();
 			
 			Attica::ListJob<Attica::Category> *job = m_provider.requestCategories();
-			
-			connect(job,  &Attica::BaseJob::finished, [](Attica::BaseJob* doneJob)
-			{
-				Attica::ListJob<Attica::Category> *categories = static_cast< Attica::ListJob<Attica::Category> * >( doneJob );
-				
-				
-				qDebug()<< "CATEGORIES";
-				for(auto act : categories->itemList())
-					qDebug() << act.name();
-			});
-			
-			job->start();
+            
+            connect(job, SIGNAL(finished(Attica::BaseJob*)), SLOT(categoryListResult(Attica::BaseJob*)));
+            job->start();
+            
 		}
 		
 	}else qDebug() << "Could not find any provider.";
 	
+}
+
+void Store::categoryListResult(Attica::BaseJob* j)
+{
+     qDebug() << "Category list job returned";
+    QString output = QLatin1String("<b>Categories:</b>");
+
+    if (j->metadata().error() == Attica::Metadata::NoError) 
+    {
+        Attica::ListJob<Attica::Category> *listJob = static_cast<Attica::ListJob<Attica::Category> *>(j);
+        qDebug() << "Yay, no errors ...";
+        QStringList projectIds;
+
+        foreach (const Attica::Category &p, listJob->itemList()) 
+        {
+            qDebug() << "New Category:" << p.id() << p.name();
+            output.append(QString(QLatin1String("<br />%1 (%2)")).arg(p.name(), p.id()));
+            projectIds << p.id();            
+        }
+        
+        if (listJob->itemList().isEmpty())
+        {
+            output.append(QLatin1String("No Categories found."));
+        }
+        
+    } else if (j->metadata().error() == Attica::Metadata::OcsError)
+    {
+        output.append(QString(QLatin1String("OCS Error: %1")).arg(j->metadata().message()));
+        
+    } else if (j->metadata().error() == Attica::Metadata::NetworkError)
+    {
+        output.append(QString(QLatin1String("Network Error: %1")).arg(j->metadata().message()));
+    } else
+    {
+        output.append(QString(QLatin1String("Unknown Error: %1")).arg(j->metadata().message()));
+    }
+    qDebug() << output;
 }
 
 void Store::getPersonInfo(const QString& nick)
