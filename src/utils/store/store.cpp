@@ -20,6 +20,7 @@
 #include "fmh.h"
 #include <QFile>
 
+
 Store::Store(QObject *parent) : QObject(parent)
 {	
 	qDebug()<< "Setting up Store backend";
@@ -38,7 +39,7 @@ Store::Store(QObject *parent) : QObject(parent)
 	// tell it to get the default Providers
 	qDebug()<< "provider local file exists?"<< FMH::fileExists(FMH::DataPath+"/Store/providers.xml");
 	m_manager.addProviderFile(QUrl::fromLocalFile(FMH::DataPath+"/Store/providers.xml"));
-	//	m_manager.loadDefaultProviders();
+// 	m_manager.loadDefaultProviders();
 }
 
 Store::~Store()
@@ -55,7 +56,7 @@ void Store::providersChanged()
 	{
 		qDebug()<< "Providers names:";
 		for(auto prov : m_manager.providers())
-			qDebug() << prov.name();
+			qDebug() << prov.name() << prov.baseUrl();
 		
 		m_provider = m_manager.providerByUrl(QUrl("https://api.opendesktop.org/v1/"));
 		
@@ -63,13 +64,53 @@ void Store::providersChanged()
 		{
 			qDebug() << "Could not find opendesktop.org provider.";
 			return;
-		}	
+			
+		}else 
+		{
+			qDebug()<< "Found the Store provider opendesktop";
+			qDebug()<< "Has content service" << m_provider.hasContentService();
+			
+			Attica::ListJob<Attica::Category> *job = m_provider.requestCategories();
+			
+			connect(job,  &Attica::BaseJob::finished, [](Attica::BaseJob* doneJob)
+			{
+				Attica::ListJob<Attica::Category> *categories = static_cast< Attica::ListJob<Attica::Category> * >( doneJob );
+				
+				
+				qDebug()<< "CATEGORIES";
+				for(auto act : categories->itemList())
+					qDebug() << act.name();
+			});
+			
+			job->start();
+		}
 		
-		qDebug()<< "Found the Store provider";
-	}
+	}else qDebug() << "Could not find any provider.";
 	
-	qDebug() << "Could not find any provider.";
-	
+}
+
+void Store::getPersonInfo(const QString& nick)
+{
+	Attica::ItemJob<Attica::Person>* job = m_provider.requestPerson(nick);
+	// connect that job
+	connect(job, &Attica::BaseJob::finished, [](Attica::BaseJob* doneJob)
+	{
+		Attica::ItemJob<Attica::Person> *personJob = static_cast< Attica::ItemJob<Attica::Person> * >( doneJob );
+		// check if the request actually worked
+		if( personJob->metadata().error() == Attica::Metadata::NoError )
+		{
+			// use the data to fill the labels
+			Attica::Person p(personJob->result());
+			qDebug() << (p.firstName() + ' ' + p.lastName());
+			qDebug() << p.city();
+		} else
+		{
+			qDebug() << ("Could not fetch information.");
+		}
+		
+	});
+	// start the job
+	job->start();
 }
 
 // #include "store.moc"

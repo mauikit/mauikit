@@ -24,6 +24,7 @@
 #ifdef STATIC_MAUIKIT
 #include "providermanager.h"
 #include "provider.h"
+#include "category.h"
 #else
 #include <Attica/ProviderManager>
 #include <Attica/Provider>
@@ -32,6 +33,7 @@
 #include <Attica/DownloadItem>
 #include <Attica/AccountBalance>
 #include <Attica/Person>
+#include <Attica/Category>
 #endif
 
 class Store : public QObject
@@ -46,6 +48,8 @@ public:
 	
 public slots:
 	void providersChanged();
+	
+	void getPersonInfo(const QString &nick);
 	
 private:
 	Attica::ProviderManager m_manager;

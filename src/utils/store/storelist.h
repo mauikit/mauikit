@@ -31,6 +31,9 @@ public:
 	StoreList(QObject *parent = nullptr);   
 	FMH::MODEL_LIST items() const;
 	
+public slots:
+	void getPersonInfo(const QString &nick);	
+	
 private:
 	FMH::MODEL_LIST list;
 	Store *store;

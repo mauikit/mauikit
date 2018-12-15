@@ -28,3 +28,8 @@ FMH::MODEL_LIST StoreList::items() const
 {
 	return this->list;
 }
+
+void StoreList::getPersonInfo(const QString& nick)
+{
+	this->store->getPersonInfo(nick);
+}
