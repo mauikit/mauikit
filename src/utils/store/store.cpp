@@ -36,18 +36,83 @@ Store::Store(QObject *parent) : QObject(parent)
 		
 	}
 	connect(&m_manager, SIGNAL(defaultProvidersLoaded()), SLOT(providersChanged()));
-	// tell it to get the default Providers
-	qDebug()<< "provider local file exists?"<< FMH::fileExists(FMH::DataPath+"/Store/providers.xml");
-	m_manager.addProviderFile(QUrl::fromLocalFile(FMH::DataPath+"/Store/providers.xml"));
-// 	m_manager.loadDefaultProviders();
+// 	qDebug()<< "provider local file exists?"<< FMH::fileExists(FMH::DataPath+"/Store/providers.xml");
+// 	m_manager.addProviderFile(QUrl::fromLocalFile(FMH::DataPath+"/Store/providers.xml"));
+	m_manager.loadDefaultProviders();
 }
 
 Store::~Store()
 {
 }
 
-void Store::searchFor(const QString& query)
+void Store::searchFor(const STORE::CATEGORY_KEY &categoryKey, const QString &query, const int &limit)
 {
+	
+	qDebug()<< "STORE SEARCHING"<< categoryKey;
+	Attica::Category::List categories;
+	
+	for(auto cat : STORE::CATEGORIES[categoryKey])
+	{
+		Attica::Category category;
+		category.setId("307");
+		category.setName(cat);
+		category.setDisplayName(cat);
+		categories << category;
+		qDebug()<< category.name();
+	}
+	
+	Attica::ListJob<Attica::Content> *job = this->m_provider.searchContents(categories, query, Attica::Provider::SortMode::Rating, 0, limit);
+	
+	connect(job, SIGNAL(finished(Attica::BaseJob*)), SLOT(contentListResult(Attica::BaseJob*)));	
+	job->start();
+}
+
+void Store::contentListResult(Attica::BaseJob* j)
+{
+	qDebug() << "Content list job returned";
+	
+	FMH::MODEL_LIST list;
+	
+	if (j->metadata().error() == Attica::Metadata::NoError) 
+	{
+		Attica::ListJob<Attica::Content> *listJob = static_cast<Attica::ListJob<Attica::Content> *>(j);
+		
+		foreach (const Attica::Content &p, listJob->itemList()) 
+		{
+			const auto att = p.attributes();
+			list << FMH::MODEL {
+				{FMH::MODEL_KEY::ID, p.id()},
+				{FMH::MODEL_KEY::URL, att[STORE::ATTRIBUTE[STORE::ATTRIBUTE_KEY::DOWNLOAD_LINK]]},
+				{FMH::MODEL_KEY::THUMBNAIL, att[STORE::ATTRIBUTE[STORE::ATTRIBUTE_KEY::PREVIEW_1]]},
+				{FMH::MODEL_KEY::LABEL, p.name()},
+				{FMH::MODEL_KEY::OWNER, p.author()},
+				{FMH::MODEL_KEY::LICENSE, p.license()},
+				{FMH::MODEL_KEY::DESCRIPTION, p.description()},
+				{FMH::MODEL_KEY::RATE, QString::number(p.rating())},
+				{FMH::MODEL_KEY::DATE, p.created().toString()},
+				{FMH::MODEL_KEY::MODIFIED, p.updated().toString()},
+				{FMH::MODEL_KEY::TAG, p.tags().join(",")}	
+			}; 
+		}
+		
+		emit this->contentReady(list);
+		
+		if (listJob->itemList().isEmpty())
+		{
+			emit this->warning(QLatin1String("No Content found."));
+		}
+		
+	} else if (j->metadata().error() == Attica::Metadata::OcsError)
+	{
+		emit this->warning(QString(QLatin1String("OCS Error: %1")).arg(j->metadata().message()));
+		
+	} else if (j->metadata().error() == Attica::Metadata::NetworkError)
+	{
+		emit this->warning(QString(QLatin1String("Network Error: %1")).arg(j->metadata().message()));
+	} else
+	{
+		emit this->warning(QString(QLatin1String("Unknown Error: %1")).arg(j->metadata().message()));
+	}
 }
 
 void Store::providersChanged()
@@ -58,7 +123,7 @@ void Store::providersChanged()
 		for(auto prov : m_manager.providers())
 			qDebug() << prov.name() << prov.baseUrl();
 		
-		m_provider = m_manager.providerByUrl(QUrl("https://api.opendesktop.org/v1/"));
+		m_provider = m_manager.providerByUrl(QUrl("https://api.kde-look.org/ocs/v1/"));
 		
 		if (!m_provider.isValid())
 		{
@@ -67,14 +132,9 @@ void Store::providersChanged()
 			
 		}else 
 		{
-			qDebug()<< "Found the Store provider opendesktop";
-			qDebug()<< "Has content service" << m_provider.hasContentService();
-			
-			Attica::ListJob<Attica::Category> *job = m_provider.requestCategories();
-            
-            connect(job, SIGNAL(finished(Attica::BaseJob*)), SLOT(categoryListResult(Attica::BaseJob*)));
-            job->start();
-            
+			qDebug()<< "Found the Store provider for" << m_provider.name();
+			qDebug()<< "Has content service" << m_provider.hasContentService(); 
+			emit this->storeReady();
 		}
 		
 	}else qDebug() << "Could not find any provider.";
@@ -140,6 +200,55 @@ void Store::getPersonInfo(const QString& nick)
 	});
 	// start the job
 	job->start();
+}
+
+void Store::listProjects()
+{
+	Attica::ListJob<Attica::Project> *job = m_provider.requestProjects();
+	connect(job, SIGNAL(finished(Attica::BaseJob*)), SLOT(projectListResult(Attica::BaseJob*)));
+	job->start();
+}
+
+void Store::listCategories()
+{	
+	Attica::ListJob<Attica::Category> *job = m_provider.requestCategories();
+	connect(job, SIGNAL(finis*hed(Attica::BaseJob*)), SLOT(categoryListResult(Attica::BaseJob*)));
+	job->start();          
+}
+
+void Store::projectListResult(Attica::BaseJob *j)
+{
+	qDebug() << "Project list job returned";
+	QString output = QLatin1String("<b>Projects:</b>");
+	
+	if (j->metadata().error() == Attica::Metadata::NoError) 
+	{
+		Attica::ListJob<Attica::Project> *listJob = static_cast<Attica::ListJob<Attica::Project> *>(j);
+		qDebug() << "Yay, no errors ...";
+		QStringList projectIds;
+		
+		foreach (const Attica::Project &p, listJob->itemList()) 
+		{
+			qDebug() << "New project:" << p.id() << p.name();
+			output.append(QString(QLatin1String("<br />%1 (%2)")).arg(p.name(), p.id()));
+			projectIds << p.id();
+			// TODO: start project jobs here
+		}
+		if (listJob->itemList().isEmpty())
+		{
+			output.append(QLatin1String("No Projects found."));
+		}
+	} else if (j->metadata().error() == Attica::Metadata::OcsError)
+	{
+		output.append(QString(QLatin1String("OCS Error: %1")).arg(j->metadata().message()));
+	} else if (j->metadata().error() == Attica::Metadata::NetworkError) 
+	{
+		output.append(QString(QLatin1String("Network Error: %1")).arg(j->metadata().message()));
+	} else 
+	{
+		output.append(QString(QLatin1String("Unknown Error: %1")).arg(j->metadata().message()));
+	}
+	qDebug() << output;
 }
 
 // #include "store.moc"

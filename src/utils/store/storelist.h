@@ -21,22 +21,65 @@
 
 #include <QObject>
 #include "fmh.h"
+#include "store.h"
 
-class Store;
 class StoreList : public QObject
 {
-    Q_OBJECT
-
+	Q_OBJECT
+	Q_PROPERTY(StoreList::CATEGORY category READ getCategory WRITE setCategory NOTIFY categoryChanged)
+	Q_PROPERTY(int limit READ getLimit WRITE setLimit NOTIFY limitChanged)
+	Q_PROPERTY(QString query READ getQuery WRITE setQuery NOTIFY queryChanged)
+	Q_PROPERTY(StoreList::ORDER order READ getOrder WRITE setOrder NOTIFY orderChanged)
+	
 public:    
 	StoreList(QObject *parent = nullptr);   
 	FMH::MODEL_LIST items() const;
 	
+	enum CATEGORY : uint_fast8_t
+	{
+		WALLPAPERS = STORE::CATEGORY_KEY::WALLPAPERS,
+		IMAGES = STORE::CATEGORY_KEY::IMAGES,
+		COMICS = STORE::CATEGORY_KEY::COMICS,
+		AUDIO = STORE::CATEGORY_KEY::AUDIO,
+		ART = STORE::CATEGORY_KEY::ART,
+		CLIPS = STORE::CATEGORY_KEY::CLIPS,
+		MOVIES= STORE::CATEGORY_KEY::MOVIES
+	}; Q_ENUM(CATEGORY)
+	
+	enum ORDER : uint_fast8_t
+	{		
+		Newest = Attica::Provider::SortMode::Newest,
+		Alphabetical = Attica::Provider::SortMode::Alphabetical,
+		Rating = Attica::Provider::SortMode::Rating,
+		Downloads = Attica::Provider::SortMode::Downloads	
+	};Q_ENUM(ORDER)
+	
+	void setCategory(const StoreList::CATEGORY &value);
+	StoreList::CATEGORY getCategory() const;
+	
+	void setLimit(const int &value);
+	int getLimit() const;
+	
+	void setQuery(const QString &value);
+	QString getQuery() const;
+	
+	void setOrder(const StoreList::ORDER &value);
+	StoreList::ORDER getOrder() const;
+	
+	
 public slots:
-	void getPersonInfo(const QString &nick);	
+	void getPersonInfo(const QString &nick);
 	
 private:
 	FMH::MODEL_LIST list;
 	Store *store;
+	
+	void setList();
+	
+	CATEGORY category;
+	int limit = 10;
+	QString query;
+	ORDER order;	
 	
 signals:
 	void preItemAppended();
@@ -46,7 +89,12 @@ signals:
 	void updateModel(int index, QVector<int> roles);
 	void preListChanged();
 	void postListChanged();
-
+	
+	void categoryChanged();
+	void limitChanged();
+	void queryChanged();
+	void orderChanged();
+	
 };
 
 #endif // STORELIST_H

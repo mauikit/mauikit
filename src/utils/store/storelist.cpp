@@ -17,11 +17,20 @@
  */
 
 #include "storelist.h"
-#include "store.h"
 
 StoreList::StoreList(QObject *parent) : QObject(parent)
 {
 	this->store = new Store(this);
+	
+	connect(this->store, &Store::contentReady, [this](const FMH::MODEL_LIST &list)
+	{
+		emit this->preListChanged();
+		this->list =list; 
+		qDebug()<< "STORE LIST READY" << list;
+		emit this->postListChanged();
+	});
+	
+	connect(this->store, &Store::storeReady, this, &StoreList::setList);
 }
 
 FMH::MODEL_LIST StoreList::items() const
@@ -33,3 +42,65 @@ void StoreList::getPersonInfo(const QString& nick)
 {
 	this->store->getPersonInfo(nick);
 }
+
+void StoreList::setList()
+{
+	this->store->searchFor(STORE::CATEGORY_KEY::WALLPAPERS);	
+}
+
+StoreList::CATEGORY StoreList::getCategory() const
+{
+	return this->category;
+}
+
+void StoreList::setCategory(const StoreList::CATEGORY& value) 
+{
+	if(this->category == value)
+		return;
+	
+	this->category = value;
+	emit this->categoryChanged();
+}
+
+int StoreList::getLimit() const
+{
+	return this->limit;
+}
+
+void StoreList::setLimit(const int& value) 
+{
+	if(this->limit == value)
+		return;
+	
+	this->limit = value;
+	emit this->limitChanged();
+}
+
+StoreList::ORDER StoreList::getOrder() const
+{
+	return this->order;
+}
+
+void StoreList::setOrder(const StoreList::ORDER& value) 
+{
+	if(this->order == value)
+		return;
+	
+	this->order = value;
+	emit this->orderChanged();
+}
+
+QString StoreList::getQuery() const
+{
+	return this->query;
+}
+
+void StoreList::setQuery(const QString& value) 
+{
+	if(this->query == value)
+		return;
+	
+	this->query = value;
+	emit this->queryChanged();
+}
+
