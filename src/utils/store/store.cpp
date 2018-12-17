@@ -58,29 +58,37 @@ void Store::searchFor(const STORE::CATEGORY_KEY& categoryKey, const QString &que
 	this->query = query;
 	this->limit = limit;	
 	
-	connect(this, &Store::categoryIDsReady, [this]()
+	if(this->m_category == categoryKey)		
 	{
-		Attica::Category::List categories;
-		qDebug()<< "GOT THE CATEGORY IDS" << this->categoryID;
+		this->perfomSearch();
+		return;
+	}
 		
-		for(auto key : this->categoryID.keys())
-		{
-			Attica::Category category;
-			category.setId(this->categoryID[key]);
-			category.setName(key);
-			category.setDisplayName(key);
-			categories << category;
-			qDebug()<< category.name() << this->categoryID[key];
-		}
-		
-		Attica::ListJob<Attica::Content> *job = this->m_provider.searchContents(categories, this->query, Attica::Provider::SortMode::Rating, 0, this->limit);
-		
-		connect(job, SIGNAL(finished(Attica::BaseJob*)), SLOT(contentListResult(Attica::BaseJob*)));	
-		job->start();
-	});	
-	
+	connect(this, &Store::categoryIDsReady, this, &Store::perfomSearch);		
 	this->setCategory(categoryKey);
 }
+
+void Store::perfomSearch()
+{
+	Attica::Category::List categories;
+	qDebug()<< "GOT THE CATEGORY IDS" << this->categoryID;
+	
+	for(auto key : this->categoryID.keys())
+	{
+		Attica::Category category;
+		category.setId(this->categoryID[key]);
+		category.setName(key);
+		category.setDisplayName(key);
+		categories << category;
+		qDebug()<< category.name() << this->categoryID[key];
+	}
+	
+	Attica::ListJob<Attica::Content> *job = this->m_provider.searchContents(categories, this->query, Attica::Provider::SortMode::Rating, 0, this->limit);
+	
+	connect(job, SIGNAL(finished(Attica::BaseJob*)), SLOT(contentListResult(Attica::BaseJob*)));	
+	job->start();
+}
+
 
 void Store::contentListResult(Attica::BaseJob* j)
 {

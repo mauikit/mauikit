@@ -26,6 +26,10 @@
 #include "providermanager.h"
 #include "provider.h"
 #include "category.h"
+#include "content.h"
+#include "listjob.h"
+#include "person.h"
+#include "project.h"
 #else
 #include <Attica/ProviderManager>
 #include <Attica/Provider>
@@ -148,6 +152,8 @@ public slots:
 	void contentListResult(Attica::BaseJob *j);
 	
 	void getPersonInfo(const QString &nick);
+	
+	void perfomSearch();
 	
 private:
 	Attica::ProviderManager m_manager;
