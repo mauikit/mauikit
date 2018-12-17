@@ -76,10 +76,10 @@ private:
 	
 	void setList();
 	
-	CATEGORY category;
+	StoreList::CATEGORY category;
 	int limit = 10;
 	QString query;
-	ORDER order;	
+	StoreList::ORDER order;	
 	
 signals:
 	void preItemAppended();

@@ -40,6 +40,9 @@
 
 namespace STORE
 {
+	const QString OPENDESKTOP_API = "https://api.opendesktop.org/v1/";
+	const QString KDELOOK_API = "https://api.kde-look.org/ocs/v1/";
+	
 	enum CATEGORY_KEY : uint_fast8_t
 	{
 		WALLPAPERS,
@@ -71,50 +74,54 @@ namespace STORE
 		{STORE::ATTRIBUTE_KEY::XDG_TYPE, QString("xdg_type")} 
 	};
 	
+	const QStringList WALLPAPERS_LIST = QStringList
+	{
+		"wallpapers", 
+		"wallpapers", 
+		"Wallpaper", 
+		"Wallpapers",
+		"Wallpaper 800x600",
+		"Wallpaper 1024x768", 
+		"Wallpaper 1280x1024",
+		"Wallpaper 1440x900", 
+		"Wallpaper 1600x1200",
+		"Wallpaper (other)",
+		"KDE Wallpaper 800x600",
+		"KDE Wallpaper 1024x768", 
+		"KDE Wallpaper 1280x1024",
+		"KDE Wallpaper 1440x900", 
+		"KDE Wallpaper 1600x1200",
+		"KDE Wallpaper (other)"			
+	};
+	
+	const QStringList COMICS_LIST = QStringList
+	{
+		"comics", 
+		"Comics", 
+		"comic", 
+		"Comic"		
+	};	
+	
+	const QStringList ART_LIST = QStringList
+	{
+		"art", 
+		"drawings", 
+		"Art", 
+		"Wallpapers", 
+		"Drawings", 
+		"Paintings", 
+		"paintings"	
+	};
+	
 	static const QHash<CATEGORY_KEY, QStringList> CATEGORIES =
 	{
-		{CATEGORY_KEY::WALLPAPERS, QStringList
-			{
-				"wallpapers", 
-				"wallpapers", 
-				"Wallpaper", 
-				"Wallpapers",
-				"Wallpaper 800x600",
-				"Wallpaper 1024x768", 
-				"Wallpaper 1280x1024",
-				"Wallpaper 1440x900", 
-				"Wallpaper 1600x1200",
-				"Wallpaper (other)",
-				"KDE Wallpaper 800x600",
-				"KDE Wallpaper 1024x768", 
-				"KDE Wallpaper 1280x1024",
-				"KDE Wallpaper 1440x900", 
-				"KDE Wallpaper 1600x1200",
-				"KDE Wallpaper (other)"			
-			}			
-		},
+		{CATEGORY_KEY::WALLPAPERS, QStringList() << STORE::WALLPAPERS_LIST},
 		
-		{CATEGORY_KEY::COMICS, QStringList
-			{
-				"comics", 
-				"Comics", 
-				"comic", 
-				"Comic"
-				
-			}			
-		},
+		{CATEGORY_KEY::COMICS, QStringList() << STORE::COMICS_LIST},
 		
-		{CATEGORY_KEY::ART, QStringList
-			{
-				"art", 
-				"drawings", 
-				"Art", 
-				"Wallpapers", 
-				"Drawings", 
-				"Paintings", 
-				"paintings"	
-			}
-		}
+		{CATEGORY_KEY::ART, QStringList () << STORE::ART_LIST},
+		
+		{CATEGORY_KEY::IMAGES, QStringList () << STORE::WALLPAPERS_LIST << STORE::COMICS_LIST << STORE::ART_LIST}		
 	};
 }
 
@@ -128,7 +135,9 @@ public:
 	Store(QObject *parent = nullptr);   
 	~Store();
 	
-	void searchFor(const STORE::CATEGORY_KEY &categoryKey, const QString &query = QString(), const int &limit = 10);
+	void setCategory(const STORE::CATEGORY_KEY &categoryKey);
+	
+	void searchFor(const STORE::CATEGORY_KEY& categoryKey, const QString &query = QString(), const int &limit = 10);
 	void listProjects();
 	void listCategories();
 	
@@ -144,11 +153,17 @@ private:
 	Attica::ProviderManager m_manager;
 	// A provider that we will ask for data from openDesktop.org
 	Attica::Provider m_provider;
+	QHash<QString, QString> categoryID;
+	STORE::CATEGORY_KEY m_category;
+	QString query;
+	int limit;
+	int page;
 	
 signals:
 	void storeReady();
 	void contentReady(FMH::MODEL_LIST list);
 	void warning(QString warning);
+	void categoryIDsReady();
 };
 
 

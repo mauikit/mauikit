@@ -45,7 +45,7 @@ void StoreList::getPersonInfo(const QString& nick)
 
 void StoreList::setList()
 {
-	this->store->searchFor(STORE::CATEGORY_KEY::WALLPAPERS);	
+	this->store->searchFor(static_cast<STORE::CATEGORY_KEY>(this->category), this->query, this->limit);	
 }
 
 StoreList::CATEGORY StoreList::getCategory() const
@@ -60,6 +60,7 @@ void StoreList::setCategory(const StoreList::CATEGORY& value)
 	
 	this->category = value;
 	emit this->categoryChanged();
+	this->setList();
 }
 
 int StoreList::getLimit() const
@@ -102,5 +103,6 @@ void StoreList::setQuery(const QString& value)
 	
 	this->query = value;
 	emit this->queryChanged();
+	this->setList();
 }
 

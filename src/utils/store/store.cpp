@@ -37,34 +37,49 @@ Store::Store(QObject *parent) : QObject(parent)
 	}
 	connect(&m_manager, SIGNAL(defaultProvidersLoaded()), SLOT(providersChanged()));
 // 	qDebug()<< "provider local file exists?"<< FMH::fileExists(FMH::DataPath+"/Store/providers.xml");
-// 	m_manager.addProviderFile(QUrl::fromLocalFile(FMH::DataPath+"/Store/providers.xml"));
-	m_manager.loadDefaultProviders();
+	m_manager.addProviderFile(QUrl::fromLocalFile(FMH::DataPath+"/Store/providers.xml"));
+	m_manager.addProviderFile(QUrl("https://autoconfig.kde.org/ocs/providers.xml"));
+// 		m_manager.loadDefaultProviders();
 }
 
 Store::~Store()
 {
 }
 
-void Store::searchFor(const STORE::CATEGORY_KEY &categoryKey, const QString &query, const int &limit)
+void Store::setCategory(const STORE::CATEGORY_KEY& categoryKey)
 {
+	qDebug()<< "SETTING CATEGORY OFR STORE";
+	this->m_category = categoryKey;
+	this->listCategories();
+}
+
+void Store::searchFor(const STORE::CATEGORY_KEY& categoryKey, const QString &query, const int &limit)
+{	
+	this->query = query;
+	this->limit = limit;	
 	
-	qDebug()<< "STORE SEARCHING"<< categoryKey;
-	Attica::Category::List categories;
-	
-	for(auto cat : STORE::CATEGORIES[categoryKey])
+	connect(this, &Store::categoryIDsReady, [this]()
 	{
-		Attica::Category category;
-		category.setId("307");
-		category.setName(cat);
-		category.setDisplayName(cat);
-		categories << category;
-		qDebug()<< category.name();
-	}
+		Attica::Category::List categories;
+		qDebug()<< "GOT THE CATEGORY IDS" << this->categoryID;
+		
+		for(auto key : this->categoryID.keys())
+		{
+			Attica::Category category;
+			category.setId(this->categoryID[key]);
+			category.setName(key);
+			category.setDisplayName(key);
+			categories << category;
+			qDebug()<< category.name() << this->categoryID[key];
+		}
+		
+		Attica::ListJob<Attica::Content> *job = this->m_provider.searchContents(categories, this->query, Attica::Provider::SortMode::Rating, 0, this->limit);
+		
+		connect(job, SIGNAL(finished(Attica::BaseJob*)), SLOT(contentListResult(Attica::BaseJob*)));	
+		job->start();
+	});	
 	
-	Attica::ListJob<Attica::Content> *job = this->m_provider.searchContents(categories, query, Attica::Provider::SortMode::Rating, 0, limit);
-	
-	connect(job, SIGNAL(finished(Attica::BaseJob*)), SLOT(contentListResult(Attica::BaseJob*)));	
-	job->start();
+	this->setCategory(categoryKey);
 }
 
 void Store::contentListResult(Attica::BaseJob* j)
@@ -83,7 +98,10 @@ void Store::contentListResult(Attica::BaseJob* j)
 			list << FMH::MODEL {
 				{FMH::MODEL_KEY::ID, p.id()},
 				{FMH::MODEL_KEY::URL, att[STORE::ATTRIBUTE[STORE::ATTRIBUTE_KEY::DOWNLOAD_LINK]]},
-				{FMH::MODEL_KEY::THUMBNAIL, att[STORE::ATTRIBUTE[STORE::ATTRIBUTE_KEY::PREVIEW_1]]},
+				{FMH::MODEL_KEY::THUMBNAIL, att[STORE::ATTRIBUTE[STORE::ATTRIBUTE_KEY::PREVIEW_SMALL_1]]},
+				{FMH::MODEL_KEY::THUMBNAIL_1, att[STORE::ATTRIBUTE[STORE::ATTRIBUTE_KEY::PREVIEW_1]]},
+				{FMH::MODEL_KEY::THUMBNAIL_2, att[STORE::ATTRIBUTE[STORE::ATTRIBUTE_KEY::PREVIEW_2]]},
+				{FMH::MODEL_KEY::THUMBNAIL_3, att[STORE::ATTRIBUTE[STORE::ATTRIBUTE_KEY::DOWNLOAD_LINK]]},
 				{FMH::MODEL_KEY::LABEL, p.name()},
 				{FMH::MODEL_KEY::OWNER, p.author()},
 				{FMH::MODEL_KEY::LICENSE, p.license()},
@@ -123,7 +141,8 @@ void Store::providersChanged()
 		for(auto prov : m_manager.providers())
 			qDebug() << prov.name() << prov.baseUrl();
 		
-		m_provider = m_manager.providerByUrl(QUrl("https://api.kde-look.org/ocs/v1/"));
+		m_provider = m_manager.providerByUrl(QUrl(STORE::KDELOOK_API));
+// 		m_provider = m_manager.providerByUrl(QUrl(STORE::OPENDESKTOP_API));
 		
 		if (!m_provider.isValid())
 		{
@@ -155,6 +174,10 @@ void Store::categoryListResult(Attica::BaseJob* j)
         foreach (const Attica::Category &p, listJob->itemList()) 
         {
             qDebug() << "New Category:" << p.id() << p.name();
+			
+			if(STORE::CATEGORIES[this->m_category].contains(p.name()))
+				this->categoryID[p.name()] = p.id();			
+			
             output.append(QString(QLatin1String("<br />%1 (%2)")).arg(p.name(), p.id()));
             projectIds << p.id();            
         }
@@ -175,7 +198,10 @@ void Store::categoryListResult(Attica::BaseJob* j)
     {
         output.append(QString(QLatin1String("Unknown Error: %1")).arg(j->metadata().message()));
     }
-    qDebug() << output;
+    
+    qDebug()<< "CATEGORY IDS " << this->categoryID;
+	emit this->categoryIDsReady();
+	
 }
 
 void Store::getPersonInfo(const QString& nick)
@@ -212,7 +238,7 @@ void Store::listProjects()
 void Store::listCategories()
 {	
 	Attica::ListJob<Attica::Category> *job = m_provider.requestCategories();
-	connect(job, SIGNAL(finis*hed(Attica::BaseJob*)), SLOT(categoryListResult(Attica::BaseJob*)));
+	connect(job, SIGNAL(finished(Attica::BaseJob*)), SLOT(categoryListResult(Attica::BaseJob*)));
 	job->start();          
 }
 
