@@ -57,6 +57,8 @@ Kirigami.AbstractApplicationWindow
     property alias mainMenu : mainMenu.content
     property alias about : aboutDialog
     property alias accounts: accountsDialog
+    property alias currentAccount: _accountCombobox.currentText
+    
 
     //redefines here as here we can know a pointer to PageRow
     wideScreen: width >= applicationWindow().pageStack.defaultColumnWidth * 1.5
@@ -252,7 +254,7 @@ backgroundColor.b, 0.7))
             onClicked:
             {
                 menuButtonClicked()
-				mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x,  altToolBars ? 0 : parent.height)
+				mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x ,  altToolBars ? 0 : parent.height+ space.medium)
             }
             
             Maui.Menu
@@ -260,9 +262,11 @@ backgroundColor.b, 0.7))
 				id: mainMenu
 				modal: true
 				
+				width: unit * 200
+				
 				Item
 				{
-					height: unit * 120
+					height: unit * 90
 					
 					anchors
 					{
@@ -271,50 +275,20 @@ backgroundColor.b, 0.7))
 						top: parent.top
 						margins: space.medium
 					}
-				
-					Column
+					
+					Maui.ComboBox
 					{
-						anchors.fill: parent
-						spacing: space.small
-						
-						Maui.ToolButton
-						{
-							iconName: "user-identity"
-							anchors.horizontalCenter: parent.horizontalCenter
-							size: iconSizes.big
-							enabled: false
-							isMask: false
-						}						
-						
-						Label
-						{
-							width: parent.width
-							horizontalAlignment: Qt.AlignHCenter
-							text: Maui.Handy.userInfo().name
-							font.pointSize: fontSizes.big
-							font.bold: true
-							font.weight: Font.Bold
-							color: textColor
-						}
-						
-						Label
-						{
-							text: "Syncing..."
-							width: parent.width
-							font.pointSize: fontSizes.small
-							opacity: 0.5
-							horizontalAlignment: Qt.AlignHCenter
-							color: textColor
-						}					
-						
-					}
-				}
-				Maui.MenuItem
-				{
-					text: qsTr("Acounts")
-					onTriggered: 
-					{
-						accountsDialog.open()
+						id: _accountCombobox
+						anchors.centerIn: parent
+						parent: mainMenu
+						popup.z: 999
+						width: parent.width
+						visible: count > 1
+						textRole: "user"
+						flat: true
+						model: accounts.model
+						iconButton.iconName: "user-identity"
+						iconButton.isMask: false
 					}
 				}
 				
@@ -322,7 +296,18 @@ backgroundColor.b, 0.7))
 				
 				Maui.MenuItem
 				{
+					text: qsTr("Acounts")
+					icon.name: "list-add-user"
+					onTriggered: 
+					{
+						accountsDialog.open()
+					}
+				}				
+				
+				Maui.MenuItem
+				{
 					text: qsTr("About")
+					icon.name: "documentinfo"
 					onTriggered: aboutDialog.open()
 				}
 				

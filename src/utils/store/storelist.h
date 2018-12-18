@@ -43,7 +43,8 @@ public:
 		AUDIO = STORE::CATEGORY_KEY::AUDIO,
 		ART = STORE::CATEGORY_KEY::ART,
 		CLIPS = STORE::CATEGORY_KEY::CLIPS,
-		MOVIES= STORE::CATEGORY_KEY::MOVIES
+		MOVIES= STORE::CATEGORY_KEY::MOVIES,
+		NONE= STORE::CATEGORY_KEY::NONE
 	}; Q_ENUM(CATEGORY)
 	
 	enum ORDER : uint_fast8_t
@@ -69,6 +70,7 @@ public:
 	
 public slots:
 	void getPersonInfo(const QString &nick);
+	QVariantList getCategoryList();
 	
 private:
 	FMH::MODEL_LIST list;

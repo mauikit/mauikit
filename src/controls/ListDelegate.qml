@@ -30,6 +30,7 @@ ItemDelegate
     property bool isCurrentListItem :  ListView.isCurrentItem
 
     property alias label: controlLabel.text
+    property alias iconName: controlIcon.iconName
 	property int radius : 0
 	
 	signal rightClicked()

@@ -55,7 +55,8 @@ namespace STORE
 		AUDIO,
 		ART,
 		CLIPS,
-		MOVIES
+		MOVIES,
+		NONE
 	};
 	
 	enum ATTRIBUTE_KEY : uint_fast8_t
@@ -145,6 +146,8 @@ public:
 	void listProjects();
 	void listCategories();
 	
+	QHash<QString, QString> getCategoryIDs();
+	
 public slots:
 	void providersChanged();
 	void categoryListResult(Attica::BaseJob* j);
@@ -160,7 +163,7 @@ private:
 	// A provider that we will ask for data from openDesktop.org
 	Attica::Provider m_provider;
 	QHash<QString, QString> categoryID;
-	STORE::CATEGORY_KEY m_category;
+	STORE::CATEGORY_KEY m_category = STORE::CATEGORY_KEY::NONE;
 	QString query;
 	int limit;
 	int page;

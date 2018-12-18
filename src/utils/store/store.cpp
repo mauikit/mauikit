@@ -36,10 +36,10 @@ Store::Store(QObject *parent) : QObject(parent)
 		
 	}
 	connect(&m_manager, SIGNAL(defaultProvidersLoaded()), SLOT(providersChanged()));
-// 	qDebug()<< "provider local file exists?"<< FMH::fileExists(FMH::DataPath+"/Store/providers.xml");
+	// 	qDebug()<< "provider local file exists?"<< FMH::fileExists(FMH::DataPath+"/Store/providers.xml");
 	m_manager.addProviderFile(QUrl::fromLocalFile(FMH::DataPath+"/Store/providers.xml"));
 	m_manager.addProviderFile(QUrl("https://autoconfig.kde.org/ocs/providers.xml"));
-// 		m_manager.loadDefaultProviders();
+	// 		m_manager.loadDefaultProviders();
 }
 
 Store::~Store()
@@ -58,12 +58,13 @@ void Store::searchFor(const STORE::CATEGORY_KEY& categoryKey, const QString &que
 	this->query = query;
 	this->limit = limit;	
 	
-	if(this->m_category == categoryKey)		
+	if(this->m_category == categoryKey)
 	{
+		qDebug()<< "SEARCHIGN WITHIN SAME CATEGORY" << this->m_category;
 		this->perfomSearch();
 		return;
 	}
-		
+	
 	connect(this, &Store::categoryIDsReady, this, &Store::perfomSearch);		
 	this->setCategory(categoryKey);
 }
@@ -150,7 +151,7 @@ void Store::providersChanged()
 			qDebug() << prov.name() << prov.baseUrl();
 		
 		m_provider = m_manager.providerByUrl(QUrl(STORE::KDELOOK_API));
-// 		m_provider = m_manager.providerByUrl(QUrl(STORE::OPENDESKTOP_API));
+		// 		m_provider = m_manager.providerByUrl(QUrl(STORE::OPENDESKTOP_API));
 		
 		if (!m_provider.isValid())
 		{
@@ -170,44 +171,44 @@ void Store::providersChanged()
 
 void Store::categoryListResult(Attica::BaseJob* j)
 {
-     qDebug() << "Category list job returned";
-    QString output = QLatin1String("<b>Categories:</b>");
-
-    if (j->metadata().error() == Attica::Metadata::NoError) 
-    {
-        Attica::ListJob<Attica::Category> *listJob = static_cast<Attica::ListJob<Attica::Category> *>(j);
-        qDebug() << "Yay, no errors ...";
-        QStringList projectIds;
-
-        foreach (const Attica::Category &p, listJob->itemList()) 
-        {
-            qDebug() << "New Category:" << p.id() << p.name();
+	qDebug() << "Category list job returned";
+	QString output = QLatin1String("<b>Categories:</b>");
+	
+	if (j->metadata().error() == Attica::Metadata::NoError) 
+	{
+		Attica::ListJob<Attica::Category> *listJob = static_cast<Attica::ListJob<Attica::Category> *>(j);
+		qDebug() << "Yay, no errors ...";
+		QStringList projectIds;
+		
+		foreach (const Attica::Category &p, listJob->itemList()) 
+		{
+			qDebug() << "New Category:" << p.id() << p.name();
 			
 			if(STORE::CATEGORIES[this->m_category].contains(p.name()))
 				this->categoryID[p.name()] = p.id();			
 			
-            output.append(QString(QLatin1String("<br />%1 (%2)")).arg(p.name(), p.id()));
-            projectIds << p.id();            
-        }
-        
-        if (listJob->itemList().isEmpty())
-        {
-            output.append(QLatin1String("No Categories found."));
-        }
-        
-    } else if (j->metadata().error() == Attica::Metadata::OcsError)
-    {
-        output.append(QString(QLatin1String("OCS Error: %1")).arg(j->metadata().message()));
-        
-    } else if (j->metadata().error() == Attica::Metadata::NetworkError)
-    {
-        output.append(QString(QLatin1String("Network Error: %1")).arg(j->metadata().message()));
-    } else
-    {
-        output.append(QString(QLatin1String("Unknown Error: %1")).arg(j->metadata().message()));
-    }
-    
-    qDebug()<< "CATEGORY IDS " << this->categoryID;
+			output.append(QString(QLatin1String("<br />%1 (%2)")).arg(p.name(), p.id()));
+			projectIds << p.id();            
+		}
+		
+		if (listJob->itemList().isEmpty())
+		{
+			output.append(QLatin1String("No Categories found."));
+		}
+		
+	} else if (j->metadata().error() == Attica::Metadata::OcsError)
+	{
+		output.append(QString(QLatin1String("OCS Error: %1")).arg(j->metadata().message()));
+		
+	} else if (j->metadata().error() == Attica::Metadata::NetworkError)
+	{
+		output.append(QString(QLatin1String("Network Error: %1")).arg(j->metadata().message()));
+	} else
+	{
+		output.append(QString(QLatin1String("Unknown Error: %1")).arg(j->metadata().message()));
+	}
+	
+	qDebug()<< "CATEGORY IDS " << this->categoryID;
 	emit this->categoryIDsReady();
 	
 }
@@ -283,6 +284,11 @@ void Store::projectListResult(Attica::BaseJob *j)
 		output.append(QString(QLatin1String("Unknown Error: %1")).arg(j->metadata().message()));
 	}
 	qDebug() << output;
+}
+
+QHash<QString, QString> Store::getCategoryIDs()
+{
+	return this->categoryID;
 }
 
 // #include "store.moc"

@@ -32,25 +32,63 @@ MenuItem
 	ColorScheme {id: colorScheme}
 	property alias colorScheme : colorScheme
 	/***************************/
+	
+	width: parent.width
+	height: rowHeight
 	spacing: space.medium
 	font.pointSize: fontSizes.default
 		
-	contentItem: Label 
-	{
-		id: controlLabel
-		leftPadding: control.checkable ? control.indicator.width + control.spacing + space.tiny : control.spacing
-		rightPadding: control.spacing
+		icon.width: iconSizes.medium
+		icon.height: iconSizes.medium
 		
-		text: control.action ? control.action.text : control.text
-		font: control.font
-		
-		color: control.hovered && !control.pressed ? colorScheme.highlightedTextColor : colorScheme.textColor
-		
-		elide: Text.ElideRight
-		visible: control.text
-		horizontalAlignment: Text.AlignLeft
-		verticalAlignment: Text.AlignVCenter
-	}
+		contentItem: RowLayout
+		{
+			width: control.width			
+			
+			Item
+			{
+				Layout.fillHeight: true
+				visible: control.icon.name.length
+				width: control.icon.name.length ? control.icon.width : 0
+				
+				Maui.ToolButton
+				{
+					id: _controlIcon
+					visible: parent.visible
+					anchors.centerIn: parent
+					iconName: control.icon.name
+					size: control.icon.width
+					//                isMask: !isMobile
+					iconColor: _controlLabel.color
+					enabled: false
+				}
+			}
+			
+			Item
+			{
+				Layout.fillHeight: true
+				Layout.fillWidth: true
+				Layout.alignment: Qt.AlignVCenter
+				Layout.leftMargin: _controlIcon.visible ? space.medium : 0
+				
+				Label
+				{
+					id: _controlLabel
+					visible: control.text
+					height: parent.height
+					width: parent.width
+					verticalAlignment:  Qt.AlignVCenter
+					horizontalAlignment: Qt.AlignLeft
+					
+					text: control.action ? control.action.text : control.text
+					font: control.font
+					elide: Text.ElideRight
+					
+					color: control.hovered && !control.pressed ? colorScheme.highlightedTextColor : colorScheme.textColor
+				}
+			}
+		}
+	
 	
 	indicator: Rectangle
 	{

@@ -45,6 +45,9 @@ void StoreList::getPersonInfo(const QString& nick)
 
 void StoreList::setList()
 {
+	if(this->category == StoreList::CATEGORY::NONE)
+		return;
+	
 	this->store->searchFor(static_cast<STORE::CATEGORY_KEY>(this->category), this->query, this->limit);	
 }
 
@@ -105,4 +108,16 @@ void StoreList::setQuery(const QString& value)
 	emit this->queryChanged();
 	this->setList();
 }
+
+QVariantList StoreList::getCategoryList()
+{
+	QVariantList res;
+	auto data = STORE::CATEGORIES[static_cast<STORE::CATEGORY_KEY>(this->category)];
+	
+	for(auto category : data)
+		res << QVariantMap {{FMH::MODEL_NAME[FMH::MODEL_KEY::LABEL], category}};
+	
+	return res;		
+}
+
 
