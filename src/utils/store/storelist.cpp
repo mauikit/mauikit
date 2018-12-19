@@ -25,9 +25,12 @@ StoreList::StoreList(QObject *parent) : QObject(parent)
 	connect(this->store, &Store::contentReady, [this](const FMH::MODEL_LIST &list)
 	{
 		emit this->preListChanged();
-		this->list =list; 
+		this->list = list; 
 		qDebug()<< "STORE LIST READY" << list;
 		emit this->postListChanged();
+		
+		this->contentReady = true;
+		emit this->contentReadyChanged();
 	});
 	
 	connect(this->store, &Store::storeReady, this, &StoreList::setList);
@@ -45,10 +48,14 @@ void StoreList::getPersonInfo(const QString& nick)
 
 void StoreList::setList()
 {
-	if(this->category == StoreList::CATEGORY::NONE)
-		return;
+	emit this->preListChanged();
+	this->list.clear();
+	emit this->postListChanged();
 	
-	this->store->searchFor(static_cast<STORE::CATEGORY_KEY>(this->category), this->query, this->limit);	
+	this->contentReady = false;
+	emit this->contentReadyChanged();
+	
+	this->store->searchFor(static_cast<STORE::CATEGORY_KEY>(this->category), this->query, this->limit, this->page);	
 }
 
 StoreList::CATEGORY StoreList::getCategory() const
@@ -78,6 +85,22 @@ void StoreList::setLimit(const int& value)
 	
 	this->limit = value;
 	emit this->limitChanged();
+	this->setList();
+}
+
+int StoreList::getPage() const
+{
+	return this->page;
+}
+
+void StoreList::setPage(const int& value) 
+{
+	if(this->page == value)
+		return;
+	
+	this->page = value;
+	emit this->pageChanged();
+	this->setList();
 }
 
 StoreList::ORDER StoreList::getOrder() const
@@ -120,4 +143,8 @@ QVariantList StoreList::getCategoryList()
 	return res;		
 }
 
+bool StoreList::getContentReady() const
+{
+	return this->contentReady;
+}
 

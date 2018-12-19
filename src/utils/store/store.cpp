@@ -39,7 +39,7 @@ Store::Store(QObject *parent) : QObject(parent)
 	// 	qDebug()<< "provider local file exists?"<< FMH::fileExists(FMH::DataPath+"/Store/providers.xml");
 	m_manager.addProviderFile(QUrl::fromLocalFile(FMH::DataPath+"/Store/providers.xml"));
 	m_manager.addProviderFile(QUrl("https://autoconfig.kde.org/ocs/providers.xml"));
-	// 		m_manager.loadDefaultProviders();
+	// 		m_manager.loadDefaultProviders();	
 }
 
 Store::~Store()
@@ -53,18 +53,20 @@ void Store::setCategory(const STORE::CATEGORY_KEY& categoryKey)
 	this->listCategories();
 }
 
-void Store::searchFor(const STORE::CATEGORY_KEY& categoryKey, const QString &query, const int &limit)
+void Store::searchFor(const STORE::CATEGORY_KEY& categoryKey, const QString &query, const int &limit, const int &page)
 {	
 	this->query = query;
 	this->limit = limit;	
+	this->page = page;
 	
-	if(this->m_category == categoryKey)
-	{
-		qDebug()<< "SEARCHIGN WITHIN SAME CATEGORY" << this->m_category;
-		this->perfomSearch();
-		return;
-	}
-	
+	qDebug() << "CATEGORY LIST" << STORE::CATEGORIES[this->m_category];
+// 	if(this->m_category == categoryKey)
+// 	{
+// 		qDebug()<< "SEARCHIGN WITHIN SAME CATEGORY" << this->m_category;
+// 		this->perfomSearch();
+// 		return;
+// 	}
+// 	
 	connect(this, &Store::categoryIDsReady, this, &Store::perfomSearch);		
 	this->setCategory(categoryKey);
 }
@@ -84,7 +86,7 @@ void Store::perfomSearch()
 		qDebug()<< category.name() << this->categoryID[key];
 	}
 	
-	Attica::ListJob<Attica::Content> *job = this->m_provider.searchContents(categories, this->query, Attica::Provider::SortMode::Rating, 0, this->limit);
+	Attica::ListJob<Attica::Content> *job = this->m_provider.searchContents(categories, this->query, Attica::Provider::SortMode::Rating, this->page, this->limit);
 	
 	connect(job, SIGNAL(finished(Attica::BaseJob*)), SLOT(contentListResult(Attica::BaseJob*)));	
 	job->start();

@@ -142,7 +142,7 @@ public:
 	
 	void setCategory(const STORE::CATEGORY_KEY &categoryKey);
 	
-	void searchFor(const STORE::CATEGORY_KEY& categoryKey, const QString &query = QString(), const int &limit = 10);
+	void searchFor(const STORE::CATEGORY_KEY& categoryKey, const QString &query = QString(), const int &limit = 10, const int &page = 1);
 	void listProjects();
 	void listCategories();
 	
@@ -165,8 +165,8 @@ private:
 	QHash<QString, QString> categoryID;
 	STORE::CATEGORY_KEY m_category = STORE::CATEGORY_KEY::NONE;
 	QString query;
-	int limit;
-	int page;
+	int limit = 10;
+	int page = 0;
 	
 signals:
 	void storeReady();

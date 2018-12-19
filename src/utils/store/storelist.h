@@ -28,8 +28,10 @@ class StoreList : public QObject
 	Q_OBJECT
 	Q_PROPERTY(StoreList::CATEGORY category READ getCategory WRITE setCategory NOTIFY categoryChanged)
 	Q_PROPERTY(int limit READ getLimit WRITE setLimit NOTIFY limitChanged)
+	Q_PROPERTY(int page READ getPage WRITE setPage NOTIFY pageChanged)
 	Q_PROPERTY(QString query READ getQuery WRITE setQuery NOTIFY queryChanged)
 	Q_PROPERTY(StoreList::ORDER order READ getOrder WRITE setOrder NOTIFY orderChanged)
+	Q_PROPERTY(bool contentReady READ getContentReady NOTIFY contentReadyChanged)
 	
 public:    
 	StoreList(QObject *parent = nullptr);   
@@ -61,12 +63,16 @@ public:
 	void setLimit(const int &value);
 	int getLimit() const;
 	
+	void setPage(const int &value);
+	int getPage() const;
+	
 	void setQuery(const QString &value);
 	QString getQuery() const;
 	
 	void setOrder(const StoreList::ORDER &value);
 	StoreList::ORDER getOrder() const;
 	
+	bool getContentReady() const;	
 	
 public slots:
 	void getPersonInfo(const QString &nick);
@@ -80,8 +86,10 @@ private:
 	
 	StoreList::CATEGORY category;
 	int limit = 10;
+	int page = 0;
 	QString query;
 	StoreList::ORDER order;	
+	bool contentReady = false;
 	
 signals:
 	void preItemAppended();
@@ -96,6 +104,8 @@ signals:
 	void limitChanged();
 	void queryChanged();
 	void orderChanged();
+	void pageChanged();
+	void contentReadyChanged();
 	
 };
 

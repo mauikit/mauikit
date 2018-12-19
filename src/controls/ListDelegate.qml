@@ -43,6 +43,7 @@ ItemDelegate
     property string labelColor: ListView.isCurrentItem ? highlightedTextColor :
                                                          textColor
 
+	hoverEnabled: !isMobile
 	
 	MouseArea
 	{
@@ -58,8 +59,9 @@ ItemDelegate
     background: Rectangle
     {
         anchors.fill: parent
-        color: isCurrentListItem ? highlightColor : "transparent"
+        color: isCurrentListItem || hovered ? highlightColor : "transparent"
 		radius: control.radius
+		opacity: hovered ? 0.3 : 1
         //                                   index % 2 === 0 ? Qt.lighter(backgroundColor,1.2) :
         //                                                     backgroundColor
     }
