@@ -31,9 +31,26 @@ StoreList::StoreList(QObject *parent) : QObject(parent)
 		
 		this->contentReady = true;
 		emit this->contentReadyChanged();
+		
+		this->contentEmpty = this->list.isEmpty();
+		emit this->contentEmptyChanged();
 	});
 	
 	connect(this->store, &Store::storeReady, this, &StoreList::setList);
+}
+
+QVariantMap StoreList::get(const int& index) const
+{	
+	if(index >= this->list.size() || index < 0)
+		return QVariantMap();
+	
+	QVariantMap res;
+	const auto model = this->list.at(index);
+	
+	for(auto key : model.keys())
+		res.insert(FMH::MODEL_NAME[key], model[key]);
+	
+	return res;
 }
 
 FMH::MODEL_LIST StoreList::items() const
@@ -51,6 +68,9 @@ void StoreList::setList()
 	emit this->preListChanged();
 	this->list.clear();
 	emit this->postListChanged();
+	
+	this->contentEmpty = this->list.isEmpty();
+	emit this->contentEmptyChanged();
 	
 	this->contentReady = false;
 	emit this->contentReadyChanged();
@@ -129,6 +149,10 @@ void StoreList::setQuery(const QString& value)
 	
 	this->query = value;
 	emit this->queryChanged();
+	
+	this->page = 0;
+	emit this->pageChanged();
+	
 	this->setList();
 }
 
@@ -147,4 +171,10 @@ bool StoreList::getContentReady() const
 {
 	return this->contentReady;
 }
+
+bool StoreList::getContentEmpty() const
+{
+	return this->contentEmpty;
+}
+
 

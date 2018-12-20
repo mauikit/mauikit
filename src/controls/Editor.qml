@@ -100,6 +100,11 @@ Maui.Page
 			body.text = message
 			body.visible = true
 		}
+		
+		onLoaded:
+		{
+			body.text = text
+		}
 	}
 	
 	ScrollView

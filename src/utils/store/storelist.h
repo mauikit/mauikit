@@ -32,6 +32,7 @@ class StoreList : public QObject
 	Q_PROPERTY(QString query READ getQuery WRITE setQuery NOTIFY queryChanged)
 	Q_PROPERTY(StoreList::ORDER order READ getOrder WRITE setOrder NOTIFY orderChanged)
 	Q_PROPERTY(bool contentReady READ getContentReady NOTIFY contentReadyChanged)
+	Q_PROPERTY(bool contentEmpty READ getContentEmpty NOTIFY contentEmptyChanged)
 	
 public:    
 	StoreList(QObject *parent = nullptr);   
@@ -73,10 +74,13 @@ public:
 	StoreList::ORDER getOrder() const;
 	
 	bool getContentReady() const;	
+	bool getContentEmpty() const;
 	
 public slots:
 	void getPersonInfo(const QString &nick);
 	QVariantList getCategoryList();
+	
+	QVariantMap get(const int &index) const;
 	
 private:
 	FMH::MODEL_LIST list;
@@ -90,6 +94,7 @@ private:
 	QString query;
 	StoreList::ORDER order;	
 	bool contentReady = false;
+	bool contentEmpty = true;
 	
 signals:
 	void preItemAppended();
@@ -106,6 +111,7 @@ signals:
 	void orderChanged();
 	void pageChanged();
 	void contentReadyChanged();
+	void contentEmptyChanged();
 	
 };
 
