@@ -56,6 +56,6 @@
 		<file alias="PlacesSidebar.qml">src/controls/PlacesSidebar.qml</file>
 		<file alias="ComboBox.qml">src/controls/ComboBox.qml</file>
 		<file alias="Store.qml">src/controls/Store.qml</file>
-		<file alias="private/StoreDelegate.qml">src/controls/StoreDelegate.qml</file>
+		<file alias="private/StoreDelegate.qml">src/controls/private/StoreDelegate.qml</file>
 	</qresource>
 </RCC>
