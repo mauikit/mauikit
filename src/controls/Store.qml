@@ -119,6 +119,44 @@ Maui.Page
 	{
 		id:_sortButton
 		iconName: "view-sort"
+		
+		onClicked: sortMenu.popup()
+		
+		Maui.Menu
+		{
+			id: sortMenu			
+			Maui.MenuItem
+			{
+				text: qsTr("Title")
+				checkable: true
+				checked: _storeList.sortBy === StoreList.LABEL
+				onTriggered: _storeList.sortBy = StoreList.LABEL
+			}
+			
+			Maui.MenuItem
+			{
+				text: qsTr("Rating")
+				checkable: true
+				checked: _storeList.sortBy === StoreList.RATE
+				onTriggered: _storeList.sortBy = StoreList.RATE
+			}
+			
+			Maui.MenuItem
+			{
+				text: qsTr("Downloads")
+				checkable: true
+				checked: _storeList.sortBy === StoreList.COUNT
+				onTriggered: _storeList.sortBy = StoreList.COUNT
+			}
+			
+			Maui.MenuItem
+			{
+				text: qsTr("Newest")
+				checkable: true
+				checked: _storeList.sortBy === StoreList.DATE
+				onTriggered: _storeList.sortBy = StoreList.DATE
+			}			
+		}
 	}
 	]
 	
@@ -272,21 +310,43 @@ Maui.Page
 	Maui.Dialog
 	{
 		id: _previewerDialog
-		maxHeight: unit * 500
-		maxWidth: maxHeight
+		
+		property var currentItem : ({})
+		
+		maxHeight: parent.height
+		maxWidth: unit * 800
+		page.margins: 0
+		
+		acceptButton.text: qsTr("Download")
+		rejectButton.visible: false
+		
+		footBar.leftContent: [
+			Maui.ToolButton
+			{
+				id: _linkButton
+				iconName: "view-links"
+				onClicked: Maui.FM.openUrl(_previewerDialog.currentItem.source)
+			}
+			
+		]
+		
+		onAccepted:
+		{
+			_storeList.download(layout.currentIndex)
+		}
+		
 		
 		ColumnLayout
 		{
 			anchors.fill: parent
+			spacing: 0
 			
 			ListView
 			{
-				id: _previewerList
-				
-				
-				
+				id: _previewerList	
 				Layout.fillWidth: true
 				Layout.preferredHeight: parent.height * 0.5
+				Layout.margins: 0
 				
 				orientation: ListView.Horizontal
 				clip: true
@@ -309,20 +369,29 @@ Maui.Page
 					height: _previewerList.height
 					width: _previewerList.width
 					
+					
+					background: Rectangle
+					{
+						
+					}
+					
 					Image
 					{
 						clip: true
-					anchors.centerIn: parent
-					source: model.thumbnail
-					height: Math.min( parent.height, sourceSize.height)
-					width: Math.min( parent.width, sourceSize.width)
-// 					sourceSize.width: Math.min(width, sourceSize.width)
-// 					sourceSize.height:  Math.min(height, sourceSize.height)
-					horizontalAlignment: Qt.AlignHCenter
-					verticalAlignment: Qt.AlignVCenter
-					fillMode: Image.PreserveAspectCrop
-					cache: false
-					asynchronous: true		
+						anchors.top: parent.top
+						anchors.horizontalCenter: parent.horizontalCenter
+						anchors.verticalCenter: parent.verticalCenter
+						
+						source: model.thumbnail
+						height: Math.min( parent.height, sourceSize.height)
+						width: Math.min( parent.width, sourceSize.width)
+						// 					sourceSize.width: Math.min(width, sourceSize.width)
+						// 					sourceSize.height:  Math.min(height, sourceSize.height)
+						horizontalAlignment: Qt.AlignHCenter
+						verticalAlignment: Qt.AlignVCenter
+						fillMode: Image.PreserveAspectCrop
+						cache: false
+						asynchronous: true		
 					}
 					
 					Rectangle
@@ -347,18 +416,140 @@ Maui.Page
 							verticalAlignment: Qt.AlignVCenter
 							color: textColor
 							font.bold: true
-							font.weight: bold
+							font.weight: Font.bold
 							font.pointSize: fontSizes.big
 						}
 					}
 								
 				}
 			}
+			
+			Label
+			{
+				Layout.fillWidth: true
+				Layout.preferredHeight: rowHeight
+				wrapMode: Text.Wrap
+				elide: Qt.ElideRight
+				text: _previewerDialog.currentItem.label
+				horizontalAlignment: Qt.AlignHCenter
+				verticalAlignment: Qt.AlignVCenter
+				color: textColor
+				font.bold: true
+				font.weight: Font.bold
+				font.pointSize: fontSizes.big				
+			}
+			
+			Label
+			{
+				Layout.fillWidth: true
+				Layout.preferredHeight: rowHeightAlt
+				wrapMode: Text.Wrap
+				elide: Qt.ElideRight
+				text: _previewerDialog.currentItem.owner
+				horizontalAlignment: Qt.AlignHCenter
+				verticalAlignment: Qt.AlignVCenter
+				color: textColor
+				font.pointSize: fontSizes.small
+				opacity: 0.5
+			}
+			
+			Label
+			{
+				Layout.fillWidth: true
+				Layout.leftMargin: space.big
+				
+				Layout.preferredHeight: rowHeightAlt
+				wrapMode: Text.Wrap
+				elide: Qt.ElideRight
+				text: qsTr("Rating: ") + _previewerDialog.currentItem.rate
+				horizontalAlignment: Qt.AlignLeft
+				verticalAlignment: Qt.AlignVCenter
+				color: textColor
+				font.pointSize: fontSizes.small		
+			}
+			
+			Label
+			{
+				Layout.fillWidth: true
+				Layout.leftMargin: space.big
+				
+				Layout.preferredHeight: rowHeightAlt
+				wrapMode: Text.Wrap
+				elide: Qt.ElideRight
+				text: qsTr("Downloads: ") + _previewerDialog.currentItem.count
+				horizontalAlignment: Qt.AlignLeft
+				verticalAlignment: Qt.AlignVCenter
+				color: textColor
+				font.pointSize: fontSizes.small				
+			}
+			
+// 			Label
+// 			{
+// 				Layout.fillWidth: true
+// 				Layout.leftMargin: space.big
+// 				
+// 				Layout.preferredHeight: rowHeightAlt
+// 				wrapMode: Text.Wrap
+// 				elide: Qt.ElideRight
+// 				text: qsTr("License: ") + _previewerDialog.currentItem.license
+// 				horizontalAlignment: Qt.AlignLeft
+// 				verticalAlignment: Qt.AlignVCenter
+// 				color: textColor
+// 				font.pointSize: fontSizes.small				
+// 			}
+			
+			Label
+			{
+				Layout.fillWidth: true
+				Layout.leftMargin: space.big
+				
+				Layout.preferredHeight: rowHeightAlt
+				wrapMode: Text.Wrap
+				elide: Qt.ElideRight
+				text: qsTr("Date: ") + _previewerDialog.currentItem.date
+				horizontalAlignment: Qt.AlignLeft
+				verticalAlignment: Qt.AlignVCenter
+				color: textColor
+				font.pointSize: fontSizes.small				
+			}
+			
+			Label
+			{
+				Layout.fillWidth: true
+				Layout.preferredHeight: rowHeightAlt
+				Layout.leftMargin: space.big
+				
+				wrapMode: Text.Wrap
+				elide: Qt.ElideRight
+				text: qsTr("Tags: ") + _previewerDialog.currentItem.tag
+				horizontalAlignment: Qt.AlignLeft
+				verticalAlignment: Qt.AlignVCenter
+				color: textColor
+				font.pointSize: fontSizes.small				
+			}
+			
+			Label
+			{
+				Layout.fillWidth: true
+				Layout.fillHeight: true
+				Layout.leftMargin: space.big
+				text: _previewerDialog.currentItem.description
+				horizontalAlignment: Qt.AlignLeft
+				verticalAlignment: Qt.AlignVCenter
+				color: textColor
+				wrapMode: Text.Wrap
+				elide: Qt.ElideRight
+				font.pointSize: fontSizes.default
+			}
+			
 		}
 		
 		onOpened:
 		{
-			var item = _storeList.get(layout.currentIndex)			
+			var item = _storeList.get(layout.currentIndex)	
+			
+			_previewerDialog.currentItem = item
+			
 			var list = [item.url, item.thumbnail, item.thumbnail_1, item.thumbnail_2 , item.thumbnail_3]
 			_previewerModel.clear()
 			

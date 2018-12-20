@@ -33,10 +33,20 @@ class StoreList : public QObject
 	Q_PROPERTY(StoreList::ORDER order READ getOrder WRITE setOrder NOTIFY orderChanged)
 	Q_PROPERTY(bool contentReady READ getContentReady NOTIFY contentReadyChanged)
 	Q_PROPERTY(bool contentEmpty READ getContentEmpty NOTIFY contentEmptyChanged)
+	Q_PROPERTY(StoreList::SORTBY sortBy READ getSortBy WRITE setSortBy NOTIFY sortByChanged())
+	
 	
 public:    
 	StoreList(QObject *parent = nullptr);   
 	FMH::MODEL_LIST items() const;
+	
+	enum SORTBY : uint_fast8_t
+	{
+		RATE = Attica::Provider::SortMode::Rating,
+		DATE = Attica::Provider::SortMode::Newest,
+		LABEL = Attica::Provider::SortMode::Alphabetical,
+		COUNT = Attica::Provider::SortMode::Downloads		
+	}; Q_ENUM(SORTBY)
 	
 	enum CATEGORY : uint_fast8_t
 	{
@@ -76,17 +86,22 @@ public:
 	bool getContentReady() const;	
 	bool getContentEmpty() const;
 	
+	StoreList::SORTBY getSortBy() const;
+	void setSortBy(const StoreList::SORTBY &key);
+	
 public slots:
 	void getPersonInfo(const QString &nick);
 	QVariantList getCategoryList();
 	
 	QVariantMap get(const int &index) const;
+	void download(const int &index);
 	
 private:
 	FMH::MODEL_LIST list;
 	Store *store;
 	
 	void setList();
+	void sortList();
 	
 	StoreList::CATEGORY category;
 	int limit = 10;
@@ -95,6 +110,7 @@ private:
 	StoreList::ORDER order;	
 	bool contentReady = false;
 	bool contentEmpty = true;
+	StoreList::SORTBY sortBy = StoreList::SORTBY::DATE;
 	
 signals:
 	void preItemAppended();
@@ -112,6 +128,7 @@ signals:
 	void pageChanged();
 	void contentReadyChanged();
 	void contentEmptyChanged();
+	void sortByChanged();
 	
 };
 

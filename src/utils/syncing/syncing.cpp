@@ -104,7 +104,7 @@ void Syncing::download(const QString& path)
 			qDebug() << "\nDownload Success"
 			<< "\nURL  :" << reply->url() << "\nSize :" << reply->size();
 			auto file = reply->readAll();
-			auto directory = FMH::CloudCachePath+"opendesktop/"+this->user;
+			const auto directory = FMH::CloudCachePath+"opendesktop/"+this->user;
 			
 			QDir dir(directory);
 			

@@ -19,7 +19,7 @@
 #include "store.h"
 #include "fmh.h"
 #include <QFile>
-
+#include <QEventLoop>
 
 Store::Store(QObject *parent) : QObject(parent)
 {	
@@ -53,20 +53,21 @@ void Store::setCategory(const STORE::CATEGORY_KEY& categoryKey)
 	this->listCategories();
 }
 
-void Store::searchFor(const STORE::CATEGORY_KEY& categoryKey, const QString &query, const int &limit, const int &page)
+void Store::searchFor(const STORE::CATEGORY_KEY& categoryKey, const QString &query, const int &limit, const int &page, const Attica::Provider::SortMode &sortBy)
 {	
 	this->query = query;
 	this->limit = limit;	
 	this->page = page;
+	this->sortBy = sortBy;
 	
 	qDebug() << "CATEGORY LIST" << STORE::CATEGORIES[this->m_category];
-// 	if(this->m_category == categoryKey)
-// 	{
-// 		qDebug()<< "SEARCHIGN WITHIN SAME CATEGORY" << this->m_category;
-// 		this->perfomSearch();
-// 		return;
-// 	}
-// 	
+	// 	if(this->m_category == categoryKey)
+	// 	{
+	// 		qDebug()<< "SEARCHIGN WITHIN SAME CATEGORY" << this->m_category;
+	// 		this->perfomSearch();
+	// 		return;
+	// 	}
+	// 	
 	connect(this, &Store::categoryIDsReady, this, &Store::perfomSearch);		
 	this->setCategory(categoryKey);
 }
@@ -86,7 +87,7 @@ void Store::perfomSearch()
 		qDebug()<< category.name() << this->categoryID[key];
 	}
 	
-	Attica::ListJob<Attica::Content> *job = this->m_provider.searchContents(categories, this->query, Attica::Provider::SortMode::Rating, this->page, this->limit);
+	Attica::ListJob<Attica::Content> *job = this->m_provider.searchContents(categories, this->query, this->sortBy, this->page, this->limit);
 	
 	connect(job, SIGNAL(finished(Attica::BaseJob*)), SLOT(contentListResult(Attica::BaseJob*)));	
 	job->start();
@@ -120,7 +121,9 @@ void Store::contentListResult(Attica::BaseJob* j)
 				{FMH::MODEL_KEY::RATE, QString::number(p.rating())},
 				{FMH::MODEL_KEY::DATE, p.created().toString()},
 				{FMH::MODEL_KEY::MODIFIED, p.updated().toString()},
-				{FMH::MODEL_KEY::TAG, p.tags().join(",")}	
+				{FMH::MODEL_KEY::TAG, p.tags().join(",")},	
+				{FMH::MODEL_KEY::COUNT, QString::number(p.downloads())},	
+				{FMH::MODEL_KEY::SOURCE, p.detailpage().toString()}	
 			}; 
 		}
 		
@@ -174,7 +177,6 @@ void Store::providersChanged()
 void Store::categoryListResult(Attica::BaseJob* j)
 {
 	qDebug() << "Category list job returned";
-	QString output = QLatin1String("<b>Categories:</b>");
 	
 	if (j->metadata().error() == Attica::Metadata::NoError) 
 	{
@@ -183,36 +185,31 @@ void Store::categoryListResult(Attica::BaseJob* j)
 		QStringList projectIds;
 		
 		foreach (const Attica::Category &p, listJob->itemList()) 
-		{
-			qDebug() << "New Category:" << p.id() << p.name();
-			
+		{		
 			if(STORE::CATEGORIES[this->m_category].contains(p.name()))
-				this->categoryID[p.name()] = p.id();			
-			
-			output.append(QString(QLatin1String("<br />%1 (%2)")).arg(p.name(), p.id()));
+				this->categoryID[p.name()] = p.id();				
 			projectIds << p.id();            
 		}
 		
 		if (listJob->itemList().isEmpty())
 		{
-			output.append(QLatin1String("No Categories found."));
+			emit this->warning(QLatin1String("No Categories found."));
 		}
 		
 	} else if (j->metadata().error() == Attica::Metadata::OcsError)
 	{
-		output.append(QString(QLatin1String("OCS Error: %1")).arg(j->metadata().message()));
+		emit this->warning(QString(QLatin1String("OCS Error: %1")).arg(j->metadata().message()));
 		
 	} else if (j->metadata().error() == Attica::Metadata::NetworkError)
 	{
-		output.append(QString(QLatin1String("Network Error: %1")).arg(j->metadata().message()));
+		emit this->warning(QString(QLatin1String("Network Error: %1")).arg(j->metadata().message()));
 	} else
 	{
-		output.append(QString(QLatin1String("Unknown Error: %1")).arg(j->metadata().message()));
+		emit this->warning(QString(QLatin1String("Unknown Error: %1")).arg(j->metadata().message()));
 	}
 	
 	qDebug()<< "CATEGORY IDS " << this->categoryID;
-	emit this->categoryIDsReady();
-	
+	emit this->categoryIDsReady();	
 }
 
 void Store::getPersonInfo(const QString& nick)
@@ -251,6 +248,135 @@ void Store::listCategories()
 	Attica::ListJob<Attica::Category> *job = m_provider.requestCategories();
 	connect(job, SIGNAL(finished(Attica::BaseJob*)), SLOT(categoryListResult(Attica::BaseJob*)));
 	job->start();          
+}
+
+void Store::download(const QString& id)
+{
+	Attica::ItemJob<Attica::DownloadItem> *job = m_provider.downloadLink(id);
+	connect(job, SIGNAL(finished(Attica::BaseJob*)), SLOT(contentDownloadReady(Attica::BaseJob*)));
+	job->start();  
+}
+
+void Store::download(const FMH::MODEL &item)
+{
+	this->downloadLink(item[FMH::MODEL_KEY::URL], item[FMH::MODEL_KEY::LABEL]); 
+}
+
+void Store::contentDownloadReady(Attica::BaseJob* j)
+{
+	if (j->metadata().error() == Attica::Metadata::NoError) 
+	{
+		Attica::ItemJob<Attica::DownloadItem> *res = static_cast<Attica::ItemJob<Attica::DownloadItem> *>(j);
+		auto job  = res->result();
+		auto url = job.url().toString();
+		auto fileName = job.packageName();
+		
+		this->downloadLink(url, fileName);
+		
+	} else if (j->metadata().error() == Attica::Metadata::OcsError)
+	{
+		emit this->warning(QString(QLatin1String("OCS Error: %1")).arg(j->metadata().message()));
+		
+	} else if (j->metadata().error() == Attica::Metadata::NetworkError)
+	{
+		emit this->warning(QString(QLatin1String("Network Error: %1")).arg(j->metadata().message()));
+	} else
+	{
+		emit this->warning(QString(QLatin1String("Unknown Error: %1")).arg(j->metadata().message()));
+	}
+}
+
+void Store::downloadLink(const QString& url, const QString &fileName)
+{	
+		
+	auto _fileName = fileName;
+// 	qDebug()<< "TRYING TO DOWONLOAD" << url << _fileName;
+// 	
+// 	if(_fileName.isEmpty())
+// 	{
+// 		QStringList filePathList = url.split('/');
+// 		_fileName = filePathList.at(filePathList.count() - 1);
+// 	}
+	
+	QStringList filePathList = url.split('/');
+	_fileName = filePathList.at(filePathList.count() - 1);
+	
+	if(!url.isEmpty())
+	{
+		QUrl mURL(url);
+		mURL.toEncoded(QUrl::FullyEncoded);
+		QNetworkAccessManager manager;
+		QNetworkRequest request (mURL);					
+		
+		QNetworkReply *reply =  manager.get(request);
+		QEventLoop loop;
+		connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+		
+		connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), &loop,
+				SLOT(quit()));
+		
+		loop.exec();
+		
+		
+		qDebug()<< "TRYING TO DOWONLOAD TO" << FMH::DownloadsPath + _fileName;
+		
+		if(reply->bytesAvailable() && !reply->error())
+		{
+			qDebug() << "DOWNLOAD FINISHED";
+			
+			auto array = reply->readAll();
+			
+			if(!array.isNull() && !array.isEmpty())
+			{					
+				const auto path = FMH::DownloadsPath + "/" + _fileName;
+				QFile file(path);						
+				
+				file.open(QIODevice::WriteOnly);
+				file.write(array);
+				file.close();
+				
+				emit this->downloadReady(FMH::getFileInfoModel(path));
+				
+			}else qDebug()<<"array is empty";
+		}
+		
+		// 			connect(&manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(saveFile(QNetworkReply*)));
+		// 			
+		// 			connect(reply, &QNetworkReply::finished, [&, reply]()
+		// 			{
+		// 				qDebug() << "DOWNLOAD FINISHED";
+		// 				
+		// 			});
+		// 			
+		// 			connect(reply, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [this]()
+		// 			{
+		// 				emit this->warning("There was an error downloading the image");
+		// 			});	
+	}
+}
+
+void Store::saveFile(QNetworkReply* reply)
+{
+	
+	qDebug() << "DOWNLOAD FINISHED";
+	if(reply->bytesAvailable() && !reply->error())
+	{
+		auto array = reply->readAll();
+		
+		if(!array.isNull() && !array.isEmpty())
+		{					
+			const auto path = FMH::DownloadsPath + "/test.jpg";
+			QFile file(path);						
+			
+			file.open(QIODevice::WriteOnly);
+			file.write(array);
+			file.close();
+			
+			emit this->downloadReady(FMH::getFileInfoModel(path));
+			
+		}else qDebug()<<"array is empty";
+	}
+	
 }
 
 void Store::projectListResult(Attica::BaseJob *j)

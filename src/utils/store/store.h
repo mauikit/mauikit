@@ -22,6 +22,9 @@
 #include <QObject>
 #include "fmh.h"
 
+#include <QNetworkReply>
+#include <QNetworkAccessManager>
+
 #ifdef STATIC_MAUIKIT
 #include "providermanager.h"
 #include "provider.h"
@@ -30,6 +33,7 @@
 #include "listjob.h"
 #include "person.h"
 #include "project.h"
+#include "downloaditem.h"
 #else
 #include <Attica/ProviderManager>
 #include <Attica/Provider>
@@ -38,8 +42,8 @@
 #include <Attica/DownloadItem>
 #include <Attica/AccountBalance>
 #include <Attica/Person>
-#include <Attica/Category>
 #include <Attica/Project>
+#include <Attica/Category>
 #endif
 
 namespace STORE
@@ -142,9 +146,12 @@ public:
 	
 	void setCategory(const STORE::CATEGORY_KEY &categoryKey);
 	
-	void searchFor(const STORE::CATEGORY_KEY& categoryKey, const QString &query = QString(), const int &limit = 10, const int &page = 1);
+	void searchFor(const STORE::CATEGORY_KEY& categoryKey, const QString &query = QString(), const int &limit = 10, const int &page = 1, const Attica::Provider::SortMode &sortBy = Attica::Provider::SortMode::Rating);
 	void listProjects();
 	void listCategories();
+	
+	void download(const QString &id);
+	void download(const FMH::MODEL &item);
 	
 	QHash<QString, QString> getCategoryIDs();
 	
@@ -153,10 +160,12 @@ public slots:
 	void categoryListResult(Attica::BaseJob* j);
 	void projectListResult(Attica::BaseJob *j);
 	void contentListResult(Attica::BaseJob *j);
-	
+	void contentDownloadReady(Attica::BaseJob *j);
 	void getPersonInfo(const QString &nick);
 	
 	void perfomSearch();
+	
+	void saveFile(QNetworkReply* reply);
 	
 private:
 	Attica::ProviderManager m_manager;
@@ -167,10 +176,14 @@ private:
 	QString query;
 	int limit = 10;
 	int page = 0;
+	Attica::Provider::SortMode sortBy = Attica::Provider::SortMode::Rating;
+	
+	void downloadLink(const QString &url, const QString &fileName);
 	
 signals:
 	void storeReady();
 	void contentReady(FMH::MODEL_LIST list);
+	void downloadReady(FMH::MODEL item);
 	void warning(QString warning);
 	void categoryIDsReady();
 };
