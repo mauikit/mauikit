@@ -516,6 +516,28 @@ namespace FMH
 		
 		return res;
 	}
+	
+	
+	class Downloader : public QObject
+	{
+		Q_OBJECT
+	public:
+		explicit Downloader(QObject *parent = 0);
+		virtual ~Downloader();
+		void setFile(QString fileURL);
+		
+	private:
+		QNetworkAccessManager *manager;
+		QNetworkReply *reply;
+		QFile *file;
+		
+	private slots:
+		void onDownloadProgress(qint64,qint64);
+		void onFinished(QNetworkReply*);
+		void onReadyRead();
+		void onReplyFinished();
+	};
+	
 }
 
 #endif // FMH_H
