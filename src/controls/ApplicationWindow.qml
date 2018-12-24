@@ -58,6 +58,7 @@ Kirigami.AbstractApplicationWindow
     property alias about : aboutDialog
     property alias accounts: accountsDialog
     property alias currentAccount: _accountCombobox.currentText
+    property alias notifyDIalog: _notify
     
 
     //redefines here as here we can know a pointer to PageRow
@@ -431,7 +432,7 @@ backgroundColor.b, 0.7))
 		Timer 
 		{
 			id: _notifyTimer
-			interval: 1000
+			interval: 2500
 			
 			onTriggered: _notify.close()
 		}
@@ -567,9 +568,9 @@ backgroundColor.b, 0.7))
     
     function notify(icon, title, body, callback)
 	{
-		_notifyIcon.iconName = icon
-		_notifyTitle.text = qsTr(title)
-		_notifyBody.text = qsTr(body)
+		_notifyIcon.iconName = icon 
+		_notifyTitle.text = title
+		_notifyBody.text = body
 		_notify.show(callback) 
 	}
     

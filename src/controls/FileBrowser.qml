@@ -129,19 +129,6 @@ Maui.Page
 	
 	Component
 	{
-		id: notificationDialogComponent
-		
-		Maui.Dialog
-		{
-			defaultButtons: false
-			maxWidth: unit * 300
-			colorScheme.textColor: warningColor
-			colorScheme.backgroundColor: altColor
-		}
-	}
-	
-	Component
-	{
 		id: shareDialogComponent
 		Maui.ShareDialog {}
 	}
@@ -182,11 +169,8 @@ Maui.Page
 		onSortByChanged: if(group) groupBy()
 		onContentReadyChanged: console.log("CONTENT READY?", contentReady)
 		onWarning:
-		{
-			dialogLoader.sourceComponent = notificationDialogComponent
-			dialog.title = qsTr("An error happened")
-			dialog.message = message
-			dialog.open()
+		{			
+			notify("dialog-information", "An error happened", message)
 		}
 		
 		onProgress:

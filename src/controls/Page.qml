@@ -252,7 +252,7 @@ QQC2.Page
         {
             id: bottomToolBar
 
-            visible: footBar.visible && count > 0
+            visible: count > 0
 
             readonly property int _margins : footBarMargins
 
