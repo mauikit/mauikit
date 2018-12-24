@@ -42,6 +42,7 @@ Maui.Page
 	{
 		id: _storeModel
 		list: _storeList
+		
 	}
 	
 	StoreList
@@ -49,6 +50,14 @@ Maui.Page
 		id: _storeList
 		limit : 20
 		category: StoreList.WALLPAPERS
+		
+		onDownloadReady:
+		{
+			notify("dialog-information", "Download ready...", item.label + " is ready to use.\nFile has been saved in your machine at:\n"+item.path, function()
+			{
+				Maui.FM.openUrl(item.path)
+			})
+		}
 	}
 	
 	footBar.middleContent: [
@@ -262,14 +271,15 @@ Maui.Page
 	}
 	
 	
-	Maui.Popup
+	Maui.Drawer
 	{
 		id: _filterDrawer
-		parent: control
-		height: unit * 500
-		width: 200
-		x: _filterButton.x
-		y: _filterButton.y
+		y: 0
+// 		height: parent.height - footBar.implicitHeight - headBar.implicitHeight
+		edge: Qt.RightEdge
+		bg: control
+// 		parent: control
+		height: parent.height - (footBar.height)
 		ListView
 		{
 			id: _filterList
@@ -333,6 +343,7 @@ Maui.Page
 		onAccepted:
 		{
 			_storeList.download(layout.currentIndex)
+			_previewerDialog.close()
 		}
 		
 		

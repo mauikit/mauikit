@@ -45,6 +45,10 @@ Store::Store(QObject *parent) : QObject(parent)
 Store::~Store()
 {
 }
+void Store::setProvider(const STORE::PROVIDER &provider)
+{
+	this->provider = provider;
+}
 
 void Store::setCategory(const STORE::CATEGORY_KEY& categoryKey)
 {
@@ -288,95 +292,31 @@ void Store::contentDownloadReady(Attica::BaseJob* j)
 
 void Store::downloadLink(const QString& url, const QString &fileName)
 {	
+		const auto downloader = new FMH::Downloader;
+		QString _fileName = fileName;
 		
-	auto _fileName = fileName;
-// 	qDebug()<< "TRYING TO DOWONLOAD" << url << _fileName;
-// 	
-// 	if(_fileName.isEmpty())
-// 	{
-// 		QStringList filePathList = url.split('/');
-// 		_fileName = filePathList.at(filePathList.count() - 1);
-// 	}
-	
-	QStringList filePathList = url.split('/');
-	_fileName = filePathList.at(filePathList.count() - 1);
-	
-	if(!url.isEmpty())
-	{
-		QUrl mURL(url);
-		mURL.toEncoded(QUrl::FullyEncoded);
-		QNetworkAccessManager manager;
-		QNetworkRequest request (mURL);					
-		
-		QNetworkReply *reply =  manager.get(request);
-		QEventLoop loop;
-		connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-		
-		connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), &loop,
-				SLOT(quit()));
-		
-		loop.exec();
-		
-		
-		qDebug()<< "TRYING TO DOWONLOAD TO" << FMH::DownloadsPath + _fileName;
-		
-		if(reply->bytesAvailable() && !reply->error())
+		if(_fileName.isEmpty())
 		{
-			qDebug() << "DOWNLOAD FINISHED";
-			
-			auto array = reply->readAll();
-			
-			if(!array.isNull() && !array.isEmpty())
-			{					
-				const auto path = FMH::DownloadsPath + "/" + _fileName;
-				QFile file(path);						
-				
-				file.open(QIODevice::WriteOnly);
-				file.write(array);
-				file.close();
-				
-				emit this->downloadReady(FMH::getFileInfoModel(path));
-				
-			}else qDebug()<<"array is empty";
+			QStringList filePathList = _fileName.split('/');
+			_fileName = filePathList.at(filePathList.count() - 1);
 		}
 		
-		// 			connect(&manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(saveFile(QNetworkReply*)));
-		// 			
-		// 			connect(reply, &QNetworkReply::finished, [&, reply]()
-		// 			{
-		// 				qDebug() << "DOWNLOAD FINISHED";
-		// 				
-		// 			});
-		// 			
-		// 			connect(reply, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [this]()
-		// 			{
-		// 				emit this->warning("There was an error downloading the image");
-		// 			});	
-	}
-}
-
-void Store::saveFile(QNetworkReply* reply)
-{
-	
-	qDebug() << "DOWNLOAD FINISHED";
-	if(reply->bytesAvailable() && !reply->error())
-	{
-		auto array = reply->readAll();
+		connect(downloader, &FMH::Downloader::warning, [this](const QString &warning)
+		{
+			emit this->warning(warning);
+		});
 		
-		if(!array.isNull() && !array.isEmpty())
-		{					
-			const auto path = FMH::DownloadsPath + "/test.jpg";
-			QFile file(path);						
-			
-			file.open(QIODevice::WriteOnly);
-			file.write(array);
-			file.close();
-			
-			emit this->downloadReady(FMH::getFileInfoModel(path));
-			
-		}else qDebug()<<"array is empty";
-	}
-	
+		connect(downloader, &FMH::Downloader::fileSaved, [this](const QString &fileName)
+		{
+			emit this->downloadReady(FMH::getFileInfoModel(fileName));
+		});
+		
+// 		connect(downloader, &FMH::Downloader::downloadReady, [this]()
+// 		{
+// 			
+// 		});
+// 		
+		downloader->setFile(url, FMH::DownloadsPath  + "/" + _fileName);		
 }
 
 void Store::projectListResult(Attica::BaseJob *j)

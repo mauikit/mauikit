@@ -58,7 +58,8 @@ public:
 	
 	static QString resolveUserCloudCachePath(const QString &server, const QString &user);
 	QString resolveLocalCloudPath(const QString &path);
-		static QVariantMap toMap(const FMH::MODEL &model);
+	
+	static QVariantMap toMap(const FMH::MODEL &model);
 
 	/*** END STATIC METHODS ***/
 
@@ -129,6 +130,7 @@ public slots:
 	static bool createFile(const QString &path, const QString &name);
 	
 	static bool openUrl(const QString &url);
+	static void openLocation(const QStringList &urls);	
 	static void runApplication(const QString &exec);	
 };
 

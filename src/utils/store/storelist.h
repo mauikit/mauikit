@@ -130,6 +130,9 @@ signals:
 	void contentEmptyChanged();
 	void sortByChanged();
 	
+	void warning(QString warning);
+	void downloadReady(QVariantMap item);
+	
 };
 
 #endif // STORELIST_H

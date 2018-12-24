@@ -17,6 +17,7 @@
  */
 
 #include "storelist.h"
+#include "fm.h"
 
 StoreList::StoreList(QObject *parent) : QObject(parent)
 {
@@ -35,6 +36,16 @@ StoreList::StoreList(QObject *parent) : QObject(parent)
 		
 		this->contentEmpty = this->list.isEmpty();
 		emit this->contentEmptyChanged();
+	});
+	
+	connect(this->store, &Store::warning, [this](const QString warning)
+	{
+		emit this->warning(warning); 
+	});
+	
+	connect(this->store, &Store::downloadReady, [this] (const FMH::MODEL &item)
+	{
+		emit this->downloadReady(FM::toMap(item));
 	});
 	
 	connect(this->store, &Store::storeReady, this, &StoreList::setList);
@@ -59,7 +70,7 @@ void StoreList::download(const int& index)
 	if(index >= this->list.size() || index < 0)
 		return;
 	
-// 	this->store->download(this->list[index][FMH::MODEL_KEY::ID]);
+	// 	this->store->download(this->list[index][FMH::MODEL_KEY::ID]);
 	this->store->download(this->list[index]);
 }
 
@@ -198,7 +209,7 @@ void StoreList::setSortBy(const StoreList::SORTBY& key)
 		return;
 	
 	this->sortBy = key;
-
+	
 	emit this->sortByChanged();	
 	this->setList();
 }

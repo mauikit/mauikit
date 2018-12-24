@@ -777,6 +777,12 @@ bool FM::openUrl(const QString &url)
     return QDesktopServices::openUrl(QUrl::fromUserInput(url));
 }
 
+void FM::openLocation(const QStringList &urls)
+{
+	for(auto url : urls)
+		QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(url).dir().absolutePath()));
+}
+
 void FM::runApplication(const QString& exec)
 {
 #if (defined (Q_OS_LINUX) && !defined (Q_OS_ANDROID))

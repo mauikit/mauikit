@@ -29,6 +29,9 @@
 #include <QMimeDatabase>
 #include <QSettings>
 #include <QDateTime>
+#include <QNetworkReply>
+#include <QNetworkAccessManager>
+#include <QString>
 
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
@@ -522,20 +525,91 @@ namespace FMH
 	{
 		Q_OBJECT
 	public:
-		explicit Downloader(QObject *parent = 0);
-		virtual ~Downloader();
-		void setFile(QString fileURL);
+		explicit Downloader(QObject *parent = 0) : QObject(parent)
+		{
+			this->manager = new QNetworkAccessManager;
+		}
+		
+		virtual ~Downloader()
+		{
+			this->manager->deleteLater();
+		}
+		
+		void setFile(const QString &fileURL, const QString &fileName = QString())
+		{
+			QString filePath = fileURL;
+			
+			if(fileName .isEmpty() || fileURL.isEmpty())			
+				return;
+			
+			QNetworkRequest request;
+			request.setUrl(QUrl(fileURL));
+			reply = manager->get(request);
+			
+			file = new QFile;
+			file->setFileName(fileName);
+			file->open(QIODevice::WriteOnly);
+			
+			connect(reply,SIGNAL(downloadProgress(qint64,qint64)),this,SLOT(onDownloadProgress(qint64,qint64)));
+			connect(manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(onFinished(QNetworkReply*)));
+			connect(reply,SIGNAL(readyRead()),this,SLOT(onReadyRead()));
+			connect(reply,SIGNAL(finished()),this,SLOT(onReplyFinished()));
+		}
 		
 	private:
 		QNetworkAccessManager *manager;
 		QNetworkReply *reply;
 		QFile *file;
 		
+	signals:
+		void progress(int percent);
+		void downloadReady();
+		void fileSaved(QString path);
+		void warning(QString warning);
+		
 	private slots:
-		void onDownloadProgress(qint64,qint64);
-		void onFinished(QNetworkReply*);
-		void onReadyRead();
-		void onReplyFinished();
+		void onDownloadProgress(qint64 bytesRead, qint64 bytesTotal)
+		{			
+			emit this->progress((bytesRead * bytesTotal) / 100);
+		}
+		
+		void onFinished(QNetworkReply* reply)
+		{
+			switch(reply->error())
+			{
+				case QNetworkReply::NoError:
+				{
+					qDebug("file is downloaded successfully.");
+					emit this->downloadReady();
+				}break;
+				default:{
+					emit this->warning(reply->errorString());
+				};
+			}
+			
+			if(file->isOpen())
+			{
+				file->close();
+				emit this->fileSaved(file->fileName());			
+				file->deleteLater();
+			}
+		}
+		
+		void onReadyRead()
+		{
+			file->write(reply->readAll());
+			emit this->fileSaved(file->fileName());			
+		}
+		
+		void onReplyFinished()
+		{
+			if(file->isOpen())
+			{
+				file->close();
+				emit this->fileSaved(file->fileName());
+				file->deleteLater();
+			}
+		}
 	};
 	
 }

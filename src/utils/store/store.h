@@ -22,9 +22,6 @@
 #include <QObject>
 #include "fmh.h"
 
-#include <QNetworkReply>
-#include <QNetworkAccessManager>
-
 #ifdef STATIC_MAUIKIT
 #include "providermanager.h"
 #include "provider.h"
@@ -48,8 +45,11 @@
 
 namespace STORE
 {
-	const QString OPENDESKTOP_API = "https://api.opendesktop.org/v1/";
-	const QString KDELOOK_API = "https://api.kde-look.org/ocs/v1/";
+	
+	typedef QString PROVIDER;
+	
+	const PROVIDER OPENDESKTOP_API = "https://api.opendesktop.org/v1/";
+	const PROVIDER KDELOOK_API = "https://api.kde-look.org/ocs/v1/";
 	
 	enum CATEGORY_KEY : uint_fast8_t
 	{
@@ -144,6 +144,7 @@ public:
 	Store(QObject *parent = nullptr);   
 	~Store();
 	
+	void setProvider(const STORE::PROVIDER &provider);
 	void setCategory(const STORE::CATEGORY_KEY &categoryKey);
 	
 	void searchFor(const STORE::CATEGORY_KEY& categoryKey, const QString &query = QString(), const int &limit = 10, const int &page = 1, const Attica::Provider::SortMode &sortBy = Attica::Provider::SortMode::Rating);
@@ -163,19 +164,20 @@ public slots:
 	void contentDownloadReady(Attica::BaseJob *j);
 	void getPersonInfo(const QString &nick);
 	
-	void perfomSearch();
-	
-	void saveFile(QNetworkReply* reply);
+	void perfomSearch();	
 	
 private:
 	Attica::ProviderManager m_manager;
-	// A provider that we will ask for data from openDesktop.org
 	Attica::Provider m_provider;
 	QHash<QString, QString> categoryID;
 	STORE::CATEGORY_KEY m_category = STORE::CATEGORY_KEY::NONE;
+	
+	STORE::PROVIDER provider = STORE::KDELOOK_API;
+	
 	QString query;
 	int limit = 10;
 	int page = 0;
+	
 	Attica::Provider::SortMode sortBy = Attica::Provider::SortMode::Rating;
 	
 	void downloadLink(const QString &url, const QString &fileName);

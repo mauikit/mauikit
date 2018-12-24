@@ -416,6 +416,110 @@ backgroundColor.b, 0.7))
 		id: accountsDialog
 	}	
 	
+	Maui.Dialog
+	{
+		id: _notify
+		property var cb : ({})
+		verticalAlignment: Qt.AlignTop
+		defaultButtons: false
+		colorScheme.backgroundColor: altColor
+		colorScheme.textColor: altColorText
+		
+		maxHeight: unit * 100
+		maxWidth: isMobile ? parent.width * 0.9 : unit * 500
+		
+		Timer 
+		{
+			id: _notifyTimer
+			interval: 1000
+			
+			onTriggered: _notify.close()
+		}
+		
+		
+		MouseArea
+		{
+			anchors.fill: parent
+			onClicked: 
+			{
+				if(_notify.cb)
+					_notify.cb()
+					
+				_notify.close()
+			}
+		}
+	
+		GridLayout
+		{
+			anchors.fill: parent
+			
+			columns: 2
+			rows: 1
+			
+			Item
+			{
+				Layout.fillHeight: true
+				Layout.preferredWidth: iconSizes.huge + space.big
+				Layout.row: 1
+				Layout.column: 1
+				
+				Maui.ToolButton
+				{
+					id: _notifyIcon
+					size: iconSizes.huge
+					
+					anchors.centerIn: parent
+					isMask: false
+				}				
+			}
+			
+			Item
+			{
+				Layout.fillHeight: true
+				Layout.fillWidth: true	
+				Layout.row: 1
+				Layout.column: 2
+				
+				ColumnLayout
+				{
+					anchors.fill: parent
+					
+					Label
+					{
+						id: _notifyTitle
+						Layout.fillHeight: true
+						Layout.fillWidth: true
+						font.weight: Font.Bold
+						font.bold: true
+						font.pointSize: fontSizes.big
+						color: _notify.colorScheme.textColor
+						elide: Qt.ElideRight
+						wrapMode: Text.Wrap
+					}
+					
+					Label
+					{
+						id: _notifyBody
+						Layout.fillHeight: true
+						Layout.fillWidth: true
+						font.pointSize: fontSizes.default	
+						color: _notify.colorScheme.textColor
+						elide: Qt.ElideRight
+						wrapMode: Text.Wrap
+					}
+				}
+			}
+		}
+		
+		function show(callback)
+		{
+			_notify.cb = callback
+			_notifyTimer.start()
+
+			_notify.open()
+		}
+	}
+	
 	Loader
 	{
 		id: dialogLoader
@@ -460,6 +564,15 @@ backgroundColor.b, 0.7))
 
         }
     }
+    
+    function notify(icon, title, body, callback)
+	{
+		_notifyIcon.iconName = icon
+		_notifyTitle.text = qsTr(title)
+		_notifyBody.text = qsTr(body)
+		_notify.show(callback) 
+	}
+    
     /** FUNCTIONS **/
     //    function riseContent()
     //    {
