@@ -202,6 +202,8 @@ Maui.Popup
 						font.weight: Font.Thin
 						font.bold: true
 						font.pointSize: fontSizes.huge
+						elide: Qt.ElideRight
+						wrapMode: Text.Wrap
 						//                         elide: Qt.ElideRight					
                     }
 					

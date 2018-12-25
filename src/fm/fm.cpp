@@ -650,12 +650,12 @@ bool FM::copy(const QVariantList &data, const QString &where)
 		}else if(UTIL::fileExists(path))
         {
             QFile file(path);
-            qDebug()<< path << "is a file";
+            qDebug()<< path << "is a file" << where;
 
 			if(this->isCloud(where))				
 				cloudPaths << path;				
 			else
-				return file.copy(where+"/"+QFileInfo(path).fileName());
+				return file.copy(where);
         }
     }
     

@@ -426,7 +426,7 @@ backgroundColor.b, 0.7))
 		colorScheme.backgroundColor: altColor
 		colorScheme.textColor: altColorText
 		
-		maxHeight: unit * 100
+		maxHeight: Math.max(unit * 120, (_notifyLayout.implicitHeight))
 		maxWidth: isMobile ? parent.width * 0.9 : unit * 500
 		
 		Timer 
@@ -467,7 +467,7 @@ backgroundColor.b, 0.7))
 				Maui.ToolButton
 				{
 					id: _notifyIcon
-					size: iconSizes.huge
+					size: iconSizes.large
 					
 					anchors.centerIn: parent
 					isMask: false
@@ -484,6 +484,7 @@ backgroundColor.b, 0.7))
 				ColumnLayout
 				{
 					anchors.fill: parent
+					id: _notifyLayout
 					
 					Label
 					{

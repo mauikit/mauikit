@@ -598,7 +598,7 @@ namespace FMH
 		void onReadyRead()
 		{
 			file->write(reply->readAll());
-			emit this->fileSaved(file->fileName());			
+// 			emit this->fileSaved(file->fileName());			
 		}
 		
 		void onReplyFinished()
@@ -606,7 +606,7 @@ namespace FMH
 			if(file->isOpen())
 			{
 				file->close();
-				emit this->fileSaved(file->fileName());
+// 				emit this->fileSaved(file->fileName());
 				file->deleteLater();
 			}
 		}
