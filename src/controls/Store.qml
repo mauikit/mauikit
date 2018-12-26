@@ -104,6 +104,7 @@ Maui.Page
 		width: headBar.middleLayout.width * 0.8
 		placeholderText: qsTr("Search...")
 		onAccepted: _storeList.query = text
+		onCleared: _storeList.query = ""
 	}
 	
 	footBar.rightContent: [

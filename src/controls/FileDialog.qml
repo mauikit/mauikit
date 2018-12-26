@@ -118,7 +118,12 @@ Maui.Dialog
 					width: isCollapsed ? iconSize*2 : parent.width
 					height: parent.height
 						
-					onPlaceClicked: browser.openFolder(path)
+					onPlaceClicked: 
+					{
+						pageRow.currentIndex = 1
+						browser.openFolder(path)
+					}
+					
 					list.groups: control.mode === modes.OPEN ? [FMList.PLACES_PATH, FMList.BOOKMARKS_PATH, FMList.CLOUD_PATH, FMList.DRIVES_PATH, FMList.TAGS_PATH] : [FMList.PLACES_PATH, FMList.BOOKMARKS_PATH, FMList.CLOUD_PATH, FMList.DRIVES_PATH]
 				}
 				
