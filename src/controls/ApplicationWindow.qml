@@ -437,6 +437,7 @@ backgroundColor.b, 0.7))
 			onTriggered: _notify.close()
 		}
 		
+		onClosed: _notifyTimer.stop()
 		
 		MouseArea
 		{
