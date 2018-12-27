@@ -34,11 +34,18 @@ class StoreList : public QObject
 	Q_PROPERTY(bool contentReady READ getContentReady NOTIFY contentReadyChanged)
 	Q_PROPERTY(bool contentEmpty READ getContentEmpty NOTIFY contentEmptyChanged)
 	Q_PROPERTY(StoreList::SORTBY sortBy READ getSortBy WRITE setSortBy NOTIFY sortByChanged())
-	
+	Q_PROPERTY(StoreList::PROVIDER provider READ getProvider WRITE setProvider NOTIFY providerChanged)
 	
 public:    
 	StoreList(QObject *parent = nullptr);   
 	FMH::MODEL_LIST items() const;
+	
+	enum PROVIDER : uint_fast8_t
+	{
+		OPENDESKTOP,
+		KDELOOK,
+		KRITA
+	};Q_ENUM(PROVIDER)
 	
 	enum SORTBY : uint_fast8_t
 	{
@@ -89,6 +96,9 @@ public:
 	StoreList::SORTBY getSortBy() const;
 	void setSortBy(const StoreList::SORTBY &key);
 	
+	StoreList::PROVIDER getProvider() const;
+	void setProvider(const StoreList::PROVIDER &key);
+	
 public slots:
 	void getPersonInfo(const QString &nick);
 	QVariantList getCategoryList();
@@ -111,6 +121,7 @@ private:
 	bool contentReady = false;
 	bool contentEmpty = true;
 	StoreList::SORTBY sortBy = StoreList::SORTBY::DATE;
+	StoreList::PROVIDER provider = StoreList::PROVIDER::KDELOOK;
 	
 signals:
 	void preItemAppended();
@@ -129,6 +140,7 @@ signals:
 	void contentReadyChanged();
 	void contentEmptyChanged();
 	void sortByChanged();
+	void providerChanged();
 	
 	void warning(QString warning);
 	void downloadReady(QVariantMap item);

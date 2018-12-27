@@ -48,9 +48,7 @@ Maui.Page
 	StoreList
 	{
 		id: _storeList
-		limit : 20
-		category: StoreList.WALLPAPERS
-		
+		limit : 20	
 		onDownloadReady:
 		{
 			notify("dialog-information", "Download ready...", item.label + " is ready to use.\nFile has been saved in your machine at:\n"+item.path, function()

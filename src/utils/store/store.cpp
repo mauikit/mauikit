@@ -23,6 +23,15 @@
 
 Store::Store(QObject *parent) : QObject(parent)
 {	
+	
+}
+
+Store::~Store()
+{
+}
+
+void Store::start()
+{
 	qDebug()<< "Setting up Store backend";
 	
 	if(!FMH::fileExists(FMH::DataPath+"/Store/providers.xml"))
@@ -39,12 +48,10 @@ Store::Store(QObject *parent) : QObject(parent)
 	// 	qDebug()<< "provider local file exists?"<< FMH::fileExists(FMH::DataPath+"/Store/providers.xml");
 	m_manager.addProviderFile(QUrl::fromLocalFile(FMH::DataPath+"/Store/providers.xml"));
 	m_manager.addProviderFile(QUrl("https://autoconfig.kde.org/ocs/providers.xml"));
+	m_manager.addProviderFile(QUrl("https://share.krita.org/ocs/providers.xml"));
 	// 		m_manager.loadDefaultProviders();	
 }
 
-Store::~Store()
-{
-}
 void Store::setProvider(const STORE::PROVIDER &provider)
 {
 	this->provider = provider;
@@ -159,12 +166,12 @@ void Store::providersChanged()
 		for(auto prov : m_manager.providers())
 			qDebug() << prov.name() << prov.baseUrl();
 		
-		m_provider = m_manager.providerByUrl(QUrl(STORE::KDELOOK_API));
+		m_provider = m_manager.providerByUrl(QUrl(this->provider));
 		// 		m_provider = m_manager.providerByUrl(QUrl(STORE::OPENDESKTOP_API));
 		
 		if (!m_provider.isValid())
 		{
-			qDebug() << "Could not find opendesktop.org provider.";
+			qDebug() << "Could not find "<< this->provider << "provider.";
 			return;
 			
 		}else 
@@ -192,7 +199,9 @@ void Store::categoryListResult(Attica::BaseJob* j)
 		{		
 			if(STORE::CATEGORIES[this->m_category].contains(p.name()))
 				this->categoryID[p.name()] = p.id();				
-			projectIds << p.id();            
+			projectIds << p.id();   
+			
+			qDebug()<< p.name() << p.id();
 		}
 		
 		if (listJob->itemList().isEmpty())

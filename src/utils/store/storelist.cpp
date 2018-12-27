@@ -22,6 +22,8 @@
 StoreList::StoreList(QObject *parent) : QObject(parent)
 {
 	this->store = new Store(this);
+	this->store->setProvider(STORE::KDELOOK_API);
+	this->store->start();
 	
 	connect(this->store, &Store::contentReady, [this](const FMH::MODEL_LIST &list)
 	{
@@ -267,4 +269,36 @@ void StoreList::sortList()
 		return false;
 	});
 }
+
+StoreList::PROVIDER StoreList::getProvider() const
+{
+	return this->provider;
+}
+
+void StoreList::setProvider(const StoreList::PROVIDER &key)
+{
+	if(this->provider == key)
+		return;
+	
+	this->provider = key;
+	STORE::PROVIDER value;
+	
+	switch(this->provider)
+	{
+		case StoreList::PROVIDER::KDELOOK:
+			value = STORE::KDELOOK_API;
+			break;
+		case StoreList::PROVIDER::OPENDESKTOP:
+			value = STORE::OPENDESKTOP_API;
+			break;
+		case StoreList::PROVIDER::KRITA:
+			value = STORE::KRITA_API;
+			break;
+	}
+	
+	this->store->setProvider(value);
+	emit this->providerChanged();	
+}
+
+
 

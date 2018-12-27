@@ -50,6 +50,7 @@ namespace STORE
 	
 	const PROVIDER OPENDESKTOP_API = "https://api.opendesktop.org/v1/";
 	const PROVIDER KDELOOK_API = "https://api.kde-look.org/ocs/v1/";
+	const PROVIDER KRITA_API = "https://share.krita.org/ocs/v1/";
 	
 	enum CATEGORY_KEY : uint_fast8_t
 	{
@@ -119,7 +120,8 @@ namespace STORE
 		"Wallpapers", 
 		"Drawings", 
 		"Paintings", 
-		"paintings"	
+		"paintings",
+		"Drawings/Paintings"
 	};
 	
 	static const QHash<CATEGORY_KEY, QStringList> CATEGORIES =
@@ -144,6 +146,7 @@ public:
 	Store(QObject *parent = nullptr);   
 	~Store();
 	
+	void start();
 	void setProvider(const STORE::PROVIDER &provider);
 	void setCategory(const STORE::CATEGORY_KEY &categoryKey);
 	
