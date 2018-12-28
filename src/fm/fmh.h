@@ -69,6 +69,7 @@ namespace FMH
 		VIDEO,
 		TEXT,
 		IMAGE,
+		DOCUMENT,
 		NONE
 	}; 
 	
@@ -77,6 +78,7 @@ namespace FMH
 		{FILTER_TYPE::AUDIO, QStringList {"*.mp3", "*.mp4", "*.wav", "*.ogg", "*.flac"}},
 		{FILTER_TYPE::VIDEO, QStringList {"*.mp4", "*.mkv", "*.mov", "*.avi", "*.flv"}},
 		{FILTER_TYPE::TEXT, QStringList {"*.txt", "*.cpp", "*.js", "*.doc", "*.h", "*.json", "*.html", "*.rtf"}},
+		{FILTER_TYPE::DOCUMENT, QStringList {"*.pdf", "*.cbz", "*.cbr", "*.epub", "*.cbt", "*.cba", "*.cb7"}},
 		{FILTER_TYPE::IMAGE, QStringList {"*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg", "*.bmp"}},
 		{FILTER_TYPE::NONE, QStringList()}
 	};
@@ -130,7 +132,8 @@ namespace FMH
 		TITLE,
 		ID,
 		LICENSE,
-		DESCRIPTION
+		DESCRIPTION,
+		BOOKMARK
 	}; 
 	
 	static const QHash<FMH::MODEL_KEY, QString> MODEL_NAME =
@@ -182,7 +185,8 @@ namespace FMH
 		{MODEL_KEY::TITLE, "title"},	
 		{MODEL_KEY::ID, "id"},	
 		{MODEL_KEY::LICENSE, "license"},	
-		{MODEL_KEY::DESCRIPTION, "description"}	
+		{MODEL_KEY::DESCRIPTION, "description"},
+		{MODEL_KEY::BOOKMARK, "bookmark"}	
 	};
 	
 	static const QHash<QString, FMH::MODEL_KEY> MODEL_NAME_KEY =
@@ -234,7 +238,8 @@ namespace FMH
 		{MODEL_NAME[MODEL_KEY::TITLE], MODEL_KEY::TITLE},		
 		{MODEL_NAME[MODEL_KEY::ID], MODEL_KEY::ID},		
 		{MODEL_NAME[MODEL_KEY::LICENSE], MODEL_KEY::LICENSE},
-		{MODEL_NAME[MODEL_KEY::DESCRIPTION], MODEL_KEY::DESCRIPTION}		
+		{MODEL_NAME[MODEL_KEY::DESCRIPTION], MODEL_KEY::DESCRIPTION},		
+		{MODEL_NAME[MODEL_KEY::BOOKMARK], MODEL_KEY::BOOKMARK}		
 	};
 	
 	typedef QHash<FMH::MODEL_KEY, QString> MODEL;

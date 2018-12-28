@@ -291,6 +291,9 @@ void StoreList::setProvider(const StoreList::PROVIDER &key)
 		case StoreList::PROVIDER::OPENDESKTOP:
 			value = STORE::OPENDESKTOP_API;
 			break;
+		case StoreList::PROVIDER::OPENDESKTOPCC:
+			value = STORE::OPENDESKTOPCC_API;
+			break;
 		case StoreList::PROVIDER::KRITA:
 			value = STORE::KRITA_API;
 			break;

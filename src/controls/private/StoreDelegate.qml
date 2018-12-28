@@ -43,6 +43,8 @@ ItemDelegate
 	property bool keepEmblemOverlay : false
 	property bool isCurrentListItem :  ListView.isCurrentItem
 	
+	property bool fitImage : true
+	
 	property color labelColor : (isCurrentListItem || GridView.isCurrentItem || (keepEmblemOverlay && emblemAdded)) && !hovered && showSelectionBackground ? highlightedTextColor : textColor
 	property color hightlightedColor : GridView.isCurrentItem || hovered || (keepEmblemOverlay && emblemAdded) ? highlightColor : "transparent"
 	
@@ -120,7 +122,7 @@ ItemDelegate
 				sourceSize.height: height
 				horizontalAlignment: Qt.AlignHCenter
 				verticalAlignment: Qt.AlignVCenter
-				fillMode: Image.PreserveAspectCrop
+				fillMode: fitImage ? Image.PreserveAspectFit : Image.PreserveAspectCrop
 				cache: true
 				asynchronous: true
 				
@@ -310,8 +312,8 @@ ItemDelegate
 			sourceComponent: isDetails && showDetailsInfo ? detailsComponent : undefined
 			Layout.fillWidth: isDetails && showDetailsInfo
 			Layout.maximumHeight: ( isDetails && showDetailsInfo ? parent.height :  fontSizes.default * 5)
-			Layout.minimumHeight: ( isDetails && showDetailsInfo ? parent.height :  control.height - folderSize - space.tiny)
-			Layout.preferredHeight: ( isDetails && showDetailsInfo ? parent.height : control.height - folderSize - space.tiny)
+			Layout.minimumHeight: ( isDetails && showDetailsInfo ? parent.height :  control.height -  space.tiny)
+			Layout.preferredHeight: ( isDetails && showDetailsInfo ? parent.height : control.height -  space.tiny)
 			Layout.maximumWidth: control.width * (isMobile ? 0.5 : 0.3)
 			Layout.row:  isDetails && showDetailsInfo ? 1 : 2
 			Layout.column: isDetails && showDetailsInfo ? 3 : 0

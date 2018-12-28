@@ -51,6 +51,7 @@ namespace STORE
 	const PROVIDER OPENDESKTOP_API = "https://api.opendesktop.org/v1/";
 	const PROVIDER KDELOOK_API = "https://api.kde-look.org/ocs/v1/";
 	const PROVIDER KRITA_API = "https://share.krita.org/ocs/v1/";
+	const PROVIDER OPENDESKTOPCC_API = "https://opendesktop.cc/ocs/v1/";
 	
 	enum CATEGORY_KEY : uint_fast8_t
 	{
@@ -61,6 +62,7 @@ namespace STORE
 		ART,
 		CLIPS,
 		MOVIES,
+		EBOOKS,
 		NONE
 	};
 	
@@ -124,6 +126,62 @@ namespace STORE
 		"Drawings/Paintings"
 	};
 	
+	const QStringList EBOOKS_LIST = QStringList
+	{
+		"Books", 
+		"Books/ Arts & Photography", 
+		"Books/ Biographies & Memoirs", 
+		"Books/ Business & Investing", 
+		"Books/ Calendars", 
+		"Books/ Comics & Graphic Novels", 
+		"Books/ Computers & Technology",
+		"Books/ Cookbooks, Food & Wine",
+		"Books/ Fun",
+		"Books/ Gutenberg",
+		"Gutenberg/ Adventure",
+		"Gutenberg/ African American Writers",
+		"Gutenberg/ American Revolutionary War",
+		"Gutenberg/ Arthurian Legends",
+		"Gutenberg/ Banned Books from Anne Haight's list",
+		"Gutenberg/ Best Books Ever Listings",
+		"Gutenberg/ Bestsellers, American, 1895-1923",
+		"Gutenberg/ Canada",
+		"Gutenberg/ Children's Literature",
+		"Gutenberg/ Christianity",
+		"Gutenberg/ Christmas",
+		"Gutenberg/ CIA World Factbooks"
+		"Gutenberg/ Contemporary Reviews",
+		"Gutenberg/ Fantasy",
+		"Gutenberg/ Gothic Fiction",
+		"Gutenberg/ Harvard Classics",
+		"Gutenberg/ Historical Fiction",
+		"Gutenberg/ Horror" "137",
+		"Gutenberg/ Latter Day Saints",
+		"Gutenberg/ Mathematics",
+		"Gutenberg/ Movie Books",
+		"Gutenberg/ Native America",
+		"Gutenberg/ No Category",
+		"Gutenberg/ Opera",
+		"Gutenberg/ Philosophy",
+		"Gutenberg/ Plays",
+		"Gutenberg/ Poetry",
+		"Gutenberg/ Politics",
+		"Gutenberg/ Precursors of Science Fiction",
+		"Gutenberg/ Reference",
+		"Gutenberg/ Science Fiction",
+		"Gutenberg/ Science Fiction by Women",
+		"Gutenberg/ Slavery",
+		"Gutenberg/ United States",
+		"Gutenberg/ United States Law",
+		"Gutenberg/ US Civil War",
+		"Books/ Health, Fitness & Dieting",
+		"Books/ Literature & Fiction",
+		"Books/ Mystery, Thriller & Suspense",
+		"Books/ Sports & Outdoors",
+		"Books/ Travel"
+		
+	};
+	
 	static const QHash<CATEGORY_KEY, QStringList> CATEGORIES =
 	{
 		{CATEGORY_KEY::WALLPAPERS, QStringList() << STORE::WALLPAPERS_LIST},
@@ -131,6 +189,8 @@ namespace STORE
 		{CATEGORY_KEY::COMICS, QStringList() << STORE::COMICS_LIST},
 		
 		{CATEGORY_KEY::ART, QStringList () << STORE::ART_LIST},
+		
+		{CATEGORY_KEY::EBOOKS, QStringList () << STORE::EBOOKS_LIST},
 		
 		{CATEGORY_KEY::IMAGES, QStringList () << STORE::WALLPAPERS_LIST << STORE::COMICS_LIST << STORE::ART_LIST}		
 	};

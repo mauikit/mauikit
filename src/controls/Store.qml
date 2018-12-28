@@ -205,6 +205,7 @@ Maui.Page
 			showLabel: control.showLabels
 			height: control.detailsView ? control.itemSize * 0.5 : layout.cellHeight * 0.9
 			width: control.detailsView ? control.width : layout.cellWidth * 0.9
+			fitImage: control.fitPreviews
 			
 			Connections
 			{
