@@ -29,6 +29,9 @@ Maui.Page
 	property alias layout : _layoutLoader.item
 	
 	/*signals*/
+	signal openFile(string filePath)
+	
+	
 	floatingBar: false
 	footBarOverlap: false
 	footBar.drawBorder: false
@@ -329,16 +332,26 @@ Maui.Page
 		
 		acceptButton.text: qsTr("Download")
 		rejectButton.visible: false
+	
+		
+		footBar.rightContent: Maui.Button
+		{
+			id: _openButton
+			text: qsTr("Open...")
+			onClicked: openFile(_storeList.itemLocalPath(layout.currentIndex))
+		}
 		
 		footBar.leftContent: [
+		
+		
 			Maui.ToolButton
 			{
 				id: _linkButton
 				iconName: "view-links"
 				onClicked: Maui.FM.openUrl(_previewerDialog.currentItem.source)
-			}
-			
+			}			
 		]
+		
 		
 		onAccepted:
 		{
@@ -556,7 +569,9 @@ Maui.Page
 		}
 		
 		onOpened:
-		{
+		{			
+			_openButton.visible = _storeList.fileExists(layout.currentIndex)
+			
 			var item = _storeList.get(layout.currentIndex)	
 			
 			_previewerDialog.currentItem = item

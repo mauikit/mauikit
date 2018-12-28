@@ -302,13 +302,14 @@ void Store::contentDownloadReady(Attica::BaseJob* j)
 void Store::downloadLink(const QString& url, const QString &fileName)
 {	
 		const auto downloader = new FMH::Downloader;
-		QString _fileName = fileName;
+// 		QString _fileName = fileName;
 		
-		if(_fileName.isEmpty())
-		{
-			QStringList filePathList = _fileName.split('/');
-			_fileName = filePathList.at(filePathList.count() - 1);
-		}
+		qDebug()<< "DOWNLOADING CONTENT FROM "<< url << fileName;
+		
+	
+			QStringList filePathList = url.split('/');
+			auto _fileName = filePathList.at(filePathList.count() - 1);
+		
 		
 		connect(downloader, &FMH::Downloader::warning, [this](const QString &warning)
 		{

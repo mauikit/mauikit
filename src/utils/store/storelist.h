@@ -108,6 +108,9 @@ public slots:
 	QVariantMap get(const int &index) const;
 	void download(const int &index);
 	
+	bool fileExists(const int &index);
+	QString itemLocalPath(const int &index);
+	
 private:
 	FMH::MODEL_LIST list;
 	Store *store;

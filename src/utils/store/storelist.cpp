@@ -303,5 +303,32 @@ void StoreList::setProvider(const StoreList::PROVIDER &key)
 	emit this->providerChanged();	
 }
 
+bool StoreList::fileExists(const int &index)
+{
+	if(index >= this->list.size() || index < 0)
+		return false;
+	
+	const auto url = this->list[index][FMH::MODEL_KEY::URL];
+	
+	const QStringList filePathList = url.split('/');
+	const auto fileName = filePathList.at(filePathList.count() - 1);
+	
+	qDebug() << "Check if file exists" << FMH::DownloadsPath+"/"+fileName;
+	
+	return FMH::fileExists(FMH::DownloadsPath+"/"+fileName);
+		
+}
 
+QString StoreList::itemLocalPath(const int &index)
+{
+	if(!this->fileExists(index))
+		return QString();
+	
+	const auto url = this->list[index][FMH::MODEL_KEY::URL];
+	
+	const QStringList filePathList = url.split('/');
+	const auto fileName = filePathList.at(filePathList.count() - 1);
+	
+	return FMH::DownloadsPath+"/"+fileName;
+}
 
