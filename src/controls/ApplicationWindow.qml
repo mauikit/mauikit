@@ -281,7 +281,7 @@ backgroundColor.b, 0.7))
 					{
 						id: _accountCombobox
 						anchors.centerIn: parent
-						parent: mainMenu
+// 						parent: mainMenu
 						popup.z: 999
 						width: parent.width
 						visible: count > 1

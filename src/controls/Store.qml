@@ -30,7 +30,7 @@ Maui.Page
 	
 	/*signals*/
 	signal openFile(string filePath)
-	
+	signal fileReady(var item)
 	
 	floatingBar: false
 	footBarOverlap: false
@@ -56,8 +56,10 @@ Maui.Page
 		{
 			notify("dialog-information", "Download ready...", item.label + " is ready to use.\nFile has been saved in your machine at:\n"+item.path, function()
 			{
-				Maui.FM.openUrl(item.path)
+				openFile(item.path)
 			})
+			
+			fileReady(item)
 		}
 	}
 	
