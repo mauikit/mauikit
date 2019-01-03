@@ -78,7 +78,7 @@ namespace FMH
 		{FILTER_TYPE::AUDIO, QStringList {"*.mp3", "*.mp4", "*.wav", "*.ogg", "*.flac"}},
 		{FILTER_TYPE::VIDEO, QStringList {"*.mp4", "*.mkv", "*.mov", "*.avi", "*.flv"}},
 		{FILTER_TYPE::TEXT, QStringList {"*.txt", "*.cpp", "*.js", "*.doc", "*.h", "*.json", "*.html", "*.rtf"}},
-		{FILTER_TYPE::DOCUMENT, QStringList {"*.pdf", "*.cbz", "*.cbr", "*.epub", "*.cbt", "*.cba", "*.cb7"}},
+		{FILTER_TYPE::DOCUMENT, QStringList {"*.pdf", "*.cbz", "*.cbr", "*.epub", "*.cbt", "*.cba", "*.cb7", ".txt"}},
 		{FILTER_TYPE::IMAGE, QStringList {"*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg", "*.bmp"}},
 		{FILTER_TYPE::NONE, QStringList()}
 	};

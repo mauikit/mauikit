@@ -23,6 +23,7 @@ Maui.Page
 	
 	
 	headBarExit: false
+	headBar.visible: !body.readOnly
 
 	headBar.leftContent: [	
 	
@@ -181,14 +182,15 @@ Maui.Page
 				Maui.MenuItem
 				{
 					text: qsTr("Cut")
-					onTriggered: body.cut()					
+					onTriggered: body.cut()	
+					enabled: !body.readOnly
 				}
 				
 				Maui.MenuItem
 				{
 					text: qsTr("Paste")
 					onTriggered: body.paste()
-					
+					enabled: !body.readOnly					
 				}
 				
 				Maui.MenuItem

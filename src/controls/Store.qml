@@ -340,7 +340,11 @@ Maui.Page
 		{
 			id: _openButton
 			text: qsTr("Open...")
-			onClicked: openFile(_storeList.itemLocalPath(layout.currentIndex))
+			onClicked:
+			{
+				openFile(_storeList.itemLocalPath(layout.currentIndex))
+				_previewerDialog.close()
+			}
 		}
 		
 		footBar.leftContent: [
