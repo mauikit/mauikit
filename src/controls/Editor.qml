@@ -139,7 +139,8 @@ Maui.Page
 				color: "transparent"
 			}
 			
-			onPressAndHold: isMobile ? documentMenu.popup() : undefined
+// 			onPressAndHold: isMobile ? documentMenu.popup() : undefined
+			
 			onPressed:
 			{
 				if(!isMobile && event.button === Qt.RightButton)
@@ -177,13 +178,14 @@ Maui.Page
 				{
 					text: qsTr("Copy")
 					onTriggered: body.copy()
+					enabled: body.selectedText.length
 				}
 				
 				Maui.MenuItem
 				{
 					text: qsTr("Cut")
 					onTriggered: body.cut()	
-					enabled: !body.readOnly
+					enabled: !body.readOnly && body.selectedText.length					
 				}
 				
 				Maui.MenuItem
@@ -203,6 +205,8 @@ Maui.Page
 				{
 					text: qsTr("Web search")
 					onTriggered: Maui.FM.openUrl("https://www.google.com/search?q="+body.selectedText)
+					enabled: body.selectedText.length
+					
 				}
 			}
 		}
