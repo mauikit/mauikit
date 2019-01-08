@@ -60,6 +60,7 @@
 #include <QTextCodec>
 #include <QTextDocument>
 #include <QDebug>
+#include <QUrl>
 
 DocumentHandler::DocumentHandler(QObject *parent)
     : QObject(parent)
@@ -240,6 +241,14 @@ void DocumentHandler::setUnderline(bool underline)
     format.setFontUnderline(underline);
     mergeFormatOnWordOrSelection(format);
     emit underlineChanged();
+}
+
+bool DocumentHandler::isRich() const
+{
+    const QString filePath = fileUrl().fileName();
+    const bool isRtf = QFileInfo(filePath).suffix().contains(QLatin1String("rtf"));
+
+    return isRtf;
 }
 
 int DocumentHandler::fontSize() const
