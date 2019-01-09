@@ -184,6 +184,19 @@ backgroundColor.b, 0.7))
     //        color: "transparent"
     //    }
 	
+	onClosing:
+	{
+		if(!isMobile)
+		{	
+			var height = root.height
+			var width = root.width
+			var x = root.x
+			var y = root.y		
+			Maui.FM.saveSettings("GEOMETRY", Qt.rect(x, y, width, height), "WINDOW")
+			
+		}		
+	}
+	
 	property bool isPortrait: Screen.primaryOrientation === Qt.PortraitOrientation || Screen.primaryOrientation === Qt.InvertedPortraitOrientation	
 	onIsPortraitChanged: 
 	{
@@ -530,7 +543,19 @@ backgroundColor.b, 0.7))
 
      Component.onCompleted:
      {
-         if(isAndroid && altToolBars) Maui.Android.statusbarColor(backgroundColor, true)
+         if(isAndroid && altToolBars)
+			 Maui.Android.statusbarColor(backgroundColor, true)			 
+			 
+			 if(!isMobile)
+			 {	
+				 var rect = Maui.FM.loadSettings("GEOMETRY", "WINDOW", Qt.rect(root.x, root.y, root.width, root.height))
+				 root.x = rect.x
+				 root.y = rect.y
+				 root.width = rect.width
+				 root.height = rect.height
+				 
+			 }
+		
      }
 
     function switchColorScheme(variant)

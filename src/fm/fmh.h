@@ -173,7 +173,7 @@ namespace FMH
 		{MODEL_KEY::FAV, "fav"},
 		{MODEL_KEY::COLOR, "color"},
 		{MODEL_KEY::RATE, "rate"},
-		{MODEL_KEY::FORMAT, "fav"},
+		{MODEL_KEY::FORMAT, "format"},
 		{MODEL_KEY::PLACE, "place"},
 		{MODEL_KEY::LOCATION, "location"},
 		{MODEL_KEY::ALBUM, "album"},
