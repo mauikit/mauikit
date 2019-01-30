@@ -27,7 +27,12 @@ ItemDelegate
 {
 	id: control
 	/* Controlc color scheming */
-	ColorScheme {id: colorScheme}
+	ColorScheme 
+	{
+		id: colorScheme
+		
+		backgroundColor: isSection ? "transparent" : (index % 2 === 0 ? Qt.darker(backgroundColor) : "transparent")				
+	}
 	property alias colorScheme : colorScheme
 	/***************************/
 	
@@ -42,7 +47,7 @@ ItemDelegate
 
     background: Rectangle
     {
-        color:  isSection ? "transparent" : (index % 2 === 0 ? Qt.darker(colorScheme.backgroundColor) : "transparent")
+		color: colorScheme.backgroundColor
         opacity: 0.1
     }
 
