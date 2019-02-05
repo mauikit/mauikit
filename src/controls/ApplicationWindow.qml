@@ -280,7 +280,7 @@ backgroundColor.b, 0.7))
 				
 				Item
 				{
-					height: unit * 90
+					height: _accountCombobox.visible ? unit * 90 : 0
 					
 					anchors
 					{
@@ -306,7 +306,10 @@ backgroundColor.b, 0.7))
 					}
 				}
 				
-				MenuSeparator {}
+				MenuSeparator
+				{
+                    visible: _accountCombobox.visible
+                }
 				
 				Maui.MenuItem
 				{
