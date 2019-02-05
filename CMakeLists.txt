@@ -108,9 +108,9 @@ set(tagging_SRCS
     )
 
 set(tagging_HDRS
+    src/utils/tagging/tag.h
     src/utils/tagging/tagging.h
     src/utils/tagging/tagdb.h
-    src/utils/tagging/tag.h
     src/utils/tagging/tagsmodel.h
     src/utils/tagging/tagslist.h
     )

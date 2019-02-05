@@ -19,7 +19,25 @@ class TagsList : public QObject
 	
  
 public:   
-	Q_ENUM(TAG::KEYS)
+    enum KEYS : uint_fast8_t
+    {
+        URL = TAG::URL,
+        APP = TAG::APP,
+        URI = TAG::URI,
+        MAC = TAG::MAC,
+        LAST_SYNC = TAG::LAST_SYNC,
+        NAME = TAG::NAME,
+        VERSION = TAG::VERSION,
+        LOT = TAG::LOT,
+        TAG = TAG::TAG,
+        COLOR = TAG::COLOR,
+        ADD_DATE = TAG::ADD_DATE,
+        COMMENT = TAG::COMMENT,
+        MIME = TAG::MIME,
+        TITLE = TAG::TITLE,
+        DEVICE = TAG::DEVICE,
+		KEY = TAG::KEY
+    }; Q_ENUM(TagsList::KEYS)
 	
     explicit TagsList(QObject *parent = nullptr);
 	TAG::DB_LIST items() const;

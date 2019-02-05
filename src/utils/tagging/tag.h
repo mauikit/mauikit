@@ -32,8 +32,6 @@
 
 namespace TAG
 {
-	Q_NAMESPACE
-	
     enum class TABLE : uint8_t
     {
         USERS,
