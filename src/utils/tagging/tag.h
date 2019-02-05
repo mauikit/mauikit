@@ -77,7 +77,7 @@ namespace TAG
         TITLE,
         DEVICE,
 		KEY
-    }; Q_ENUM_NS(KEYS);
+    };/* Q_ENUM_NS(KEYS);*/
 
 	typedef QHash<TAG::KEYS, QString> DB;
 	typedef QList<DB> DB_LIST;
