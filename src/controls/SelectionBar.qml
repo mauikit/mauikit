@@ -63,6 +63,27 @@ Maui.Item
 
 
     visible: selectionList.count > 0
+    
+    
+    Drag.keys: control.selectedPaths
+    
+    
+    Drag.active: _mouseArea.drag.active
+        Drag.dragType: Drag.Automatic
+        Drag.supportedActions: Qt.CopyAction
+       
+     MouseArea
+        {
+            id: _mouseArea
+            anchors.fill: parent
+            onClicked: riseContent()
+            drag.target: parent
+            onPressed: selectionList.grabToImage(function(result)
+        {
+            console.log("PRESSED SELECTIONBOX", control.selectedPaths.join(","))
+                            parent.Drag.imageSource = result.url
+            })
+        }
 
     Rectangle
     {
@@ -86,13 +107,7 @@ Maui.Item
                 to: Qt.lighter(colorScheme.altColor, 1.2)
                 duration: 500
             }
-        }
-
-        MouseArea
-        {
-            anchors.fill: parent
-            onClicked: riseContent()
-        }
+        }       
     }
 
     GridLayout
@@ -335,5 +350,11 @@ Maui.Item
     {
         animColor = color
         anim.running = true
-    }    
+    }  
+    
+    function getSelectedPathsString()
+    {
+        var paths = ""+selectedPaths.join(",")
+        return paths
+    }
 }
