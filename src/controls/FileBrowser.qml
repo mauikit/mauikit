@@ -47,6 +47,7 @@ Maui.Page
 	property alias itemMenu: itemMenu
 	property alias holder: holder
 	property alias dialog : dialogLoader.item
+	property alias goUpButton : goUpButton
 	
 	property alias currentPathType : modelList.pathType
 	property int thumbnailsSize : iconSizes.large
@@ -571,6 +572,8 @@ Maui.Page
 		
 		Maui.ToolButton
 		{
+            id: goUpButton
+            visible: false
 			iconName: "go-up"
 			iconColor: footBar.colorScheme.textColor
 			onClicked: control.goUp()
