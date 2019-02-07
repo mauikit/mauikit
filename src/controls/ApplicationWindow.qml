@@ -313,7 +313,7 @@ backgroundColor.b, 0.7))
 				
 				Maui.MenuItem
 				{
-					text: qsTr("Acounts")
+					text: qsTr("Accounts")
 					icon.name: "list-add-user"
 					onTriggered: 
 					{

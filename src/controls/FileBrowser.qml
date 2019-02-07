@@ -590,6 +590,29 @@ Maui.Page
 		
 	}
 	
+	PinchArea
+	{
+        anchors.fill: parent
+        
+        property real initialWidth
+        property real initialHeight
+
+        onPinchStarted:
+        {
+            console.log("pinch started")
+        }
+
+        onPinchUpdated:
+        {
+            console.log(pinch.scale)
+        }
+
+        onPinchFinished:
+        {
+            console.log("pinch finished")
+        }
+    }
+	
 	onThumbnailsSizeChanged:
 	{
 		if(trackChanges && saveDirProps)

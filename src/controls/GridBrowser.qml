@@ -27,7 +27,7 @@ Maui.GridView
 	id: control
 	
 	itemSize : iconSizes.large
-    spacing: isMobile ? itemSize * 0.5 : itemSize * 0.8
+    spacing: isMobile ? itemSize * 0.7 : itemSize * 0.8
 	property bool showEmblem : true
 	property string rightEmblem
 	property string leftEmblem
@@ -44,7 +44,7 @@ Maui.GridView
 	
 	signal itemRightClicked(int index)
 	
-	cellWidth: itemSize + spacing
+	cellWidth: itemSize +  (spacing * 2)
     cellHeight: itemSize + (spacing * 1.5)
 	
 	model: ListModel { id: gridModel  }

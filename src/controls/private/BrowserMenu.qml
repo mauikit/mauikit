@@ -19,13 +19,13 @@ Maui.Menu
         onTriggered: selectionMode = !selectionMode
     }
 
-    Maui.MenuItem
+   /* Maui.MenuItem
     {
 		checkable: true
 		checked: saveDirProps
 		text: qsTr("Per dir props")
 		onTriggered: saveDirProps = !saveDirProps
-	}
+	}*/
 	
     MenuSeparator { }
 
@@ -33,7 +33,7 @@ Maui.Menu
     Maui.MenuItem
     {
         icon.name: "image-preview"
-        text: qsTr("Show previews")
+        text: qsTr("Previews")
 		checkable: true
 		checked: list.preview
         onTriggered:
@@ -47,7 +47,7 @@ Maui.Menu
     {
         icon.name: "visibility"
 
-        text: qsTr("Show hidden files")
+        text: qsTr("Hidden files")
 		checkable: true
 		checked: list.hidden
         onTriggered:
@@ -56,6 +56,21 @@ Maui.Menu
             close()
         }
     }
+    
+    Maui.MenuItem
+    {
+        icon.name: "bookmark-new"
+        text: qsTr("Bookmark")
+        checkable: true
+        checked: modelList.isBookmark 
+        
+		onTriggered: 
+		{
+    modelList.isBookmark = !modelList.isBookmark
+    close()
+		}
+    }
+
 
     MenuSeparator { }
 
@@ -82,21 +97,7 @@ Maui.Menu
 			close()
 		}
     }
-
-    Maui.MenuItem
-    {
-        icon.name: "bookmark-new"
-        text: qsTr("Bookmark")
-        checkable: true
-        checked: modelList.isBookmark 
-        
-		onTriggered: 
-		{
-    modelList.isBookmark = !modelList.isBookmark
-    close()
-		}
-    }
-
+    
     MenuSeparator { }
     
     Maui.MenuItem
@@ -108,7 +109,7 @@ Maui.Menu
     
     MenuSeparator { }
     
-    Maui.MenuItem
+   /* Maui.MenuItem
     {
         width: parent.width
 
@@ -131,7 +132,7 @@ Maui.Menu
                 onClicked: zoomOut()
             }
         }
-    }
+    }*/
 
     function show()
     {
