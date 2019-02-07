@@ -77,7 +77,7 @@ ItemDelegate
 	{
         id: _mouseArea
 		anchors.fill: parent
-		//acceptedButtons:  Qt.RightButton
+		acceptedButtons:  Qt.RightButton
 		drag.target: parent
 		onClicked:
 		{
