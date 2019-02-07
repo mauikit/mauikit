@@ -11,6 +11,8 @@ Maui.Menu
 
     Maui.MenuItem
     {
+        icon.name: "item-select"
+
 		checkable: true
 		checked: selectionMode
 		text: qsTr("Selection mode")
@@ -30,6 +32,7 @@ Maui.Menu
   
     Maui.MenuItem
     {
+        icon.name: "image-preview"
         text: qsTr("Show previews")
 		checkable: true
 		checked: list.preview
@@ -42,6 +45,8 @@ Maui.Menu
 
     Maui.MenuItem
     {
+        icon.name: "visibility"
+
         text: qsTr("Show hidden files")
 		checkable: true
 		checked: list.hidden
@@ -56,6 +61,7 @@ Maui.Menu
 
     Maui.MenuItem
     {
+        icon.name: "folder-add"
         text: qsTr("New folder")
 		onTriggered: 
 		{
@@ -67,6 +73,7 @@ Maui.Menu
 
     Maui.MenuItem
     {
+        icon.name: "document-new"
         text: qsTr("New file")
 		onTriggered: 
 		{
@@ -78,11 +85,15 @@ Maui.Menu
 
     Maui.MenuItem
     {
+        icon.name: "bookmark-new"
         text: qsTr("Bookmark")
+        checkable: true
+        checked: modelList.isBookmark 
+        
 		onTriggered: 
 		{
-			bookmarkFolder([currentPath])
-			close()
+    modelList.isBookmark = !modelList.isBookmark
+    close()
 		}
     }
 
