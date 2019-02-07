@@ -289,7 +289,7 @@ Maui.Page
 		Maui.ListBrowser
 		{
 			showPreviewThumbnails: modelList.preview
-			showEmblem: currentPathType !== FMList.APPS_PATH && showEmblems
+			showEmblem: (currentPathType !== FMList.APPS_PATH && showEmblems) || selectionMode
 			rightEmblem: isMobile ? "document-share" : ""
 			leftEmblem: "list-add"
 			showDetailsInfo: true
@@ -315,7 +315,7 @@ Maui.Page
 		Maui.GridBrowser
 		{
 			itemSize : thumbnailsSize + fontSizes.default
-			showEmblem: currentPathType !== FMList.APPS_PATH && showEmblems
+			showEmblem: (currentPathType !== FMList.APPS_PATH && showEmblems) || selectionMode
 			showPreviewThumbnails: modelList.preview
 			rightEmblem: isMobile ? "document-share" : ""
 			leftEmblem: "list-add"
