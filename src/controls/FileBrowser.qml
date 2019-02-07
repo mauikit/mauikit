@@ -467,7 +467,7 @@ Maui.Page
 	Maui.ToolButton
 	{
 		id: viewBtn
-		iconName: list.viewType == FMList.ICON_VIEW ? "view-list-icons" : "view-list-details"
+		iconName: list.viewType == FMList.ICON_VIEW ?  "view-list-details" : "view-list-icons"
 		onClicked: control.switchView()
 	},
 	
