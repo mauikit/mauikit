@@ -61,7 +61,7 @@ QQC2.Page
     property bool altToolBars : false
     property int footBarMargins : space.large
     property bool footBarOverlap: false
-    property bool allowRiseContent: floatingBar && footBarOverlap
+    property bool allowRiseContent: floatingBar && footBarOverlap && footBar.visible
 
     property bool contentIsRised: false
 

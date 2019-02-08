@@ -44,7 +44,7 @@ Maui.GridView
 	
 	signal itemRightClicked(int index)
 	
-	cellWidth: itemSize +  (spacing * 2)
+	cellWidth: itemSize + spacing
     cellHeight: itemSize + (spacing * 1.5)
 	
 	model: ListModel { id: gridModel  }
