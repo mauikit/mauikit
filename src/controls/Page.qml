@@ -116,8 +116,8 @@ QQC2.Page
             width: folded ? height : implicitWidth
             implicitWidth: width
 
-            height: toolBarHeightAlt
-            implicitHeight: toolBarHeightAlt
+            Layout.preferredHeight: implicitHeight
+            implicitHeight: topToolBar.visible ? toolBarHeightAlt : 0
             plegable: control.width < Kirigami.Units.gridUnit * 17
             visible: count > 0
             clip: false
