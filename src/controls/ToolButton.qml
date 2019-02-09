@@ -70,7 +70,7 @@ ToolButton
     highlighted: !isMask
     font.pointSize: control.display === ToolButton.TextUnderIcon ? fontSizes.small : undefined
 
-    display: control.text.length > 0 ? (isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon) : ToolButton.IconOnly
+    display: control.text.length > 0 ? (isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon) : ToolButton.IconOnlyS
     spacing: space.tiny
    
  

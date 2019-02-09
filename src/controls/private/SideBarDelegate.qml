@@ -46,14 +46,14 @@ ItemDelegate
             Layout.fillWidth: isCollapsed
             width: !isCollapsed ? parent.height : parent.width
             
-            Maui.ToolButton
+            Kirigami.Icon
             {
                 anchors.centerIn: parent
-                iconName: model.icon ? model.icon : ""
-                size: sidebarIconSize
+                source: model.icon ? model.icon : ""
+                width: sidebarIconSize
+                height: width
                 isMask: !Kirigami.Settings.isMobile
-                iconColor: labelColor
-                enabled: false
+                color: labelColor
             }
         }
         

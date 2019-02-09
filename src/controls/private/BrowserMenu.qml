@@ -102,6 +102,8 @@ Maui.Menu
     
     Maui.MenuItem
     {
+        
+        visible: enabled
         text: qsTr("Paste ")+"["+pasteFiles+"]"
         enabled: pasteFiles > 0
         onTriggered: paste()
