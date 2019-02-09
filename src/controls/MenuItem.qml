@@ -38,7 +38,7 @@ MenuItem
 	spacing: space.medium
 	font.pointSize: fontSizes.default
 	
-	icon.width: iconSizes.small
+	icon.width: iconSizes.medium
 	icon.height: iconSizes.medium
 	
 	contentItem: RowLayout
