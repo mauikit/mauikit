@@ -39,7 +39,7 @@ MenuItem
 	font.pointSize: fontSizes.default
 	
 	icon.width: iconSizes.small
-	icon.height: iconSizes.small
+	icon.height: iconSizes.medium
 	
 	contentItem: RowLayout
 	{
