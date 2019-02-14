@@ -99,7 +99,7 @@ QQC2.Page
             Layout.leftMargin: plegable ? space.big : (floating ? space.small : 0)
             Layout.bottomMargin: plegable ? space.big : 0
             Layout.topMargin: plegable && !altToolBars ? space.big : 0
-            Layout.alignment: plegable ? Qt.AlignRight : undefined
+            Layout.alignment: plegable ? Qt.AlignRight : Qt.AlignCenter
 
             Layout.row: altToolBars ? 3 : 1
             Layout.column: 1
