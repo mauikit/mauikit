@@ -466,8 +466,7 @@ namespace FMH
 	typedef QMap<FMH::MODEL_KEY, QString> DB;
 	
 	const QString FMPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/maui/fm/";
-	const QString DBName = "fm.db";
-	
+	const QString DBName = "fm.db";	
 	
 	inline QVariantMap getDirInfo(const QString &path, const QString &type = QString())
 	{
