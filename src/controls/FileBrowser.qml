@@ -47,6 +47,7 @@ Maui.Page
 	property alias itemMenu: itemMenu
 	property alias holder: holder
 	property alias dialog : dialogLoader.item
+	property alias goUpButton : goUpButton
 	
 	property alias currentPathType : modelList.pathType
 	property int thumbnailsSize : iconSizes.large
@@ -145,8 +146,7 @@ Maui.Page
 	BrowserMenu
 	{
 		id: browserMenu
-		width: unit *200
-		
+		width: unit *200		
 	}
 	
 	Maui.FilePreviewer
@@ -288,7 +288,7 @@ Maui.Page
 		Maui.ListBrowser
 		{
 			showPreviewThumbnails: modelList.preview
-			showEmblem: currentPathType !== FMList.APPS_PATH && showEmblems
+			showEmblem: (currentPathType !== FMList.APPS_PATH && showEmblems) || selectionMode
 			rightEmblem: isMobile ? "document-share" : ""
 			leftEmblem: "list-add"
 			showDetailsInfo: true
@@ -314,7 +314,7 @@ Maui.Page
 		Maui.GridBrowser
 		{
 			itemSize : thumbnailsSize + fontSizes.default
-			showEmblem: currentPathType !== FMList.APPS_PATH && showEmblems
+			showEmblem: (currentPathType !== FMList.APPS_PATH && showEmblems) || selectionMode
 			showPreviewThumbnails: modelList.preview
 			rightEmblem: isMobile ? "document-share" : ""
 			leftEmblem: "list-add"
@@ -415,71 +415,16 @@ Maui.Page
 	
 	Keys.onSpacePressed: previewer.show(modelList.get(browser.currentIndex).path)
 	
-	floatingBar: true
-	footBarOverlap: true
 	headBarExit: false
 	headBar.visible: currentPathType !== FMList.APPS_PATH
 	altToolBars: isMobile
 	headBar.rightContent: [
-	
-	Maui.ToolButton
-	{
-		iconName: "visibility"
-		onClicked: modelList.hidden = !modelList.hidden
-		tooltipText: qsTr("Hidden files...")
-		iconColor: modelList.hidden ? colorScheme.highlightColor : colorScheme.textColor
-	},
-	
-	Maui.ToolButton
-	{
-		iconName: "image-preview"
-		onClicked: modelList.preview = !modelList.preview
-		tooltipText: qsTr("Previews...")
-		iconColor: modelList.preview ? colorScheme.highlightColor : colorScheme.textColor
-	},
-	
-	Maui.ToolButton
-	{
-		iconName: "bookmark-new"
-		iconColor: modelList.isBookmark ? colorScheme.highlightColor : colorScheme.textColor
-		onClicked: modelList.isBookmark = !modelList.isBookmark
-		tooltipText: qsTr("Bookmark...")
-	},
-	
-	Maui.ToolButton
-	{
-		iconName: "item-select"
-		tooltipText: qsTr("Selection...")
-		onClicked: selectionMode = !selectionMode
-		iconColor: selectionMode ? colorScheme.highlightColor: colorScheme.textColor
-	},
-	
-	Maui.ToolButton
-	{
-		iconName: "overflow-menu"
-		onClicked: browserMenu.show()
-		tooltipText: qsTr("Menu...")
-	}
-	]
-	
-	headBar.leftContent: [
-	
-	Maui.ToolButton
+		
+		Maui.ToolButton
 	{
 		id: viewBtn
-		iconName: list.viewType == FMList.ICON_VIEW ? "view-list-icons" : "view-list-details"
+		iconName: list.viewType == FMList.ICON_VIEW ?  "view-list-details" : "view-list-icons"
 		onClicked: control.switchView()
-	},
-	
-	Maui.ToolButton
-	{
-		iconName: "folder-add"
-		onClicked:
-		{
-			dialogLoader.sourceComponent= newFolderDialogComponent
-			dialog.open()
-		}
-		tooltipText: qsTr("New folder...")
 	},
 	
 	Maui.ToolButton
@@ -556,33 +501,40 @@ Maui.Page
 				}
 			}
 		}
+	},
+		
+	Maui.ToolButton
+	{
+		iconName: "overflow-menu"
+		onClicked: browserMenu.show()
+		tooltipText: qsTr("Menu...")
 	}
 	]
 	
-	footBar.middleContent: Row
-	{
-		spacing: space.medium
-		Maui.ToolButton
+	headBar.leftContent: [
+	Maui.ToolButton
 		{
 			iconName: "go-previous"
-			iconColor: footBar.colorScheme.textColor
 			onClicked: control.goBack()
-		}
+		},
 		
 		Maui.ToolButton
 		{
+            id: goUpButton
+            visible: false
 			iconName: "go-up"
-			iconColor: footBar.colorScheme.textColor
 			onClicked: control.goUp()
-		}
+		},
 		
 		Maui.ToolButton
 		{
 			iconName: "go-next"
-			iconColor: footBar.colorScheme.textColor
 			onClicked: control.goNext()
-		}
-	}
+		}	
+	]
+	
+	footBar.visible: false
+	
 	
 	Component
 	{
@@ -637,6 +589,29 @@ Maui.Page
 		}
 		
 	}
+	
+	PinchArea
+	{
+        anchors.fill: parent
+        
+        property real initialWidth
+        property real initialHeight
+
+        onPinchStarted:
+        {
+            console.log("pinch started")
+        }
+
+        onPinchUpdated:
+        {
+            console.log(pinch.scale)
+        }
+
+        onPinchFinished:
+        {
+            console.log("pinch finished")
+        }
+    }
 	
 	onThumbnailsSizeChanged:
 	{

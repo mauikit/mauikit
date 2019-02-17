@@ -20,7 +20,7 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.2
 import QtQuick.Controls.impl 2.3
-import org.kde.kirigami 2.0 as Kirigami
+import org.kde.kirigami 2.4 as Kirigami
 import "private"
 
 ToolButton
@@ -47,19 +47,22 @@ ToolButton
 	
     hoverEnabled: !isMobile
     
-	implicitWidth: Math.max(background ? background.implicitWidth : 0,
-                            contentItem.implicitWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(background ? background.implicitHeight : 0,
-                             contentItem.implicitHeight + topPadding + bottomPadding)
+// 	implicitWidth: Math.max(background ? background.implicitWidth : 0,
+//                             contentItem.implicitWidth + leftPadding + rightPadding)
+//     implicitHeight: Math.max(background ? background.implicitHeight : 0,
+//                              contentItem.implicitHeight + topPadding + bottomPadding)
     
     height: control.visible ? (control.display === ToolButton.IconOnly ? size + space.medium : implicitHeight) : 0
-    width: control.visible ? (control.display === ToolButton.IconOnly ? height : implicitWidth) : 0
+    width: control.visible ? (control.display === ToolButton.IconOnly ? height : implicitWidth + space.small) : 0
     
     icon.name:  control.iconName
     icon.source: control.iconFallback
     icon.width:  control.size
     icon.height: control.size
     icon.color: !control.isMask ? "transparent" :  (down || pressed) ? colorScheme.highlightColor : iconColor
+    
+    Kirigami.Theme.inherit: false
+    Kirigami.Theme.textColor: icon.color
 
     onClicked: if(anim) animIcon.running = true
 
@@ -69,30 +72,31 @@ ToolButton
 
     display: control.text.length > 0 ? (isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon) : ToolButton.IconOnly
     spacing: space.tiny
-    
-    background: Rectangle
-    {
-		implicitHeight: control.visible? iconSizes.medium : 0
-		implicitWidth: control.visible? iconSizes.medium : 0
-		
-		anchors.centerIn: control
-     color: /*(down || pressed || checked) */ checked && enabled  ? 
-     Qt.lighter(colorScheme.highlightColor, 1.2) : colorScheme.backgroundColor
-     radius: unit * 3
-     opacity: (down || pressed || checked) && enabled  ?  0.5 : 1
-     border.color: colorScheme.borderColor
-    }
+   
+ 
+//     background: Rectangle
+//     {
+// 		implicitHeight: control.visible? iconSizes.medium : 0
+// 		implicitWidth: control.visible? iconSizes.medium : 0
+// 		
+// 		anchors.centerIn: control
+//      color: /*(down || pressed || checked) */ checked && enabled  ? 
+//      Qt.lighter(colorScheme.highlightColor, 1.2) : colorScheme.backgroundColor
+//      radius: unit * 3
+//      opacity: (down || pressed || checked) && enabled  ?  0.5 : 1
+//      border.color: colorScheme.borderColor
+//     }
 
-    contentItem: IconLabel
-    {
-        spacing:  control.display === ToolButton.TextUnderIcon ? space.tiny : control.spacing
-        mirrored: control.mirrored
-        display: control.display
-        icon: control.icon
-        text: control.text
-        font: control.font
-        color: control.iconColor
-    }
+//     contentItem: IconLabel
+//     {
+//         spacing:  control.display === ToolButton.TextUnderIcon ? space.tiny : control.spacing
+//         mirrored: control.mirrored
+//         display: control.display
+//         icon: control.icon
+//         text: control.text
+//         font: control.font
+//         color: control.iconColor
+//     }
 
     SequentialAnimation
     {

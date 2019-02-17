@@ -144,7 +144,6 @@ Maui.Dialog
 						list.filters: control.filters
 						list.sortBy: control.sortBy
 						list.filterType: control.filterType
-						footBar.visible: true
 						
 						onItemClicked: 
 						{

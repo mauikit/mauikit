@@ -54,16 +54,16 @@ MenuItem
 			visible: control.icon.name.length
 			width: control.icon.name.length ? control.icon.width : 0
 			
-			Maui.ToolButton
+			Kirigami.Icon
 			{
 				id: _controlIcon
 				visible: parent.visible
 				anchors.centerIn: parent
-				iconName: control.icon.name
-				size: control.icon.width
-				//                isMask: !isMobile
-				iconColor: _controlLabel.color
-				enabled: false
+				source: control.icon.name
+				height: control.icon.height
+				width: control.icon.width
+				isMask: true
+				color: _controlLabel.color
 			}
 		}
 		

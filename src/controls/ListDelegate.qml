@@ -30,7 +30,7 @@ ItemDelegate
     property bool isCurrentListItem :  ListView.isCurrentItem
 
     property alias label: controlLabel.text
-    property alias iconName: controlIcon.iconName
+    property alias iconName: controlIcon.source
 	property int radius : 0
 	
 	signal rightClicked()
@@ -76,14 +76,15 @@ ItemDelegate
             visible: model.icon !== typeof("undefined")
             width: model.icon ? parent.height : 0
 
-            Maui.ToolButton
+            Kirigami.Icon
             {
                 id:controlIcon
                 anchors.centerIn: parent
-                iconName: model.icon ? model.icon : ""
-//                isMask: !isMobile
-                iconColor: labelColor
-                enabled: false
+                source: model.icon ? model.icon : ""
+               isMask: true
+                color: labelColor
+                height: iconSizes.medium
+                width: height
             }
         }
 

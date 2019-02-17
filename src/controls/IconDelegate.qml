@@ -62,19 +62,33 @@ ItemDelegate
 	background: Rectangle
 	{
 		color: !isDetails? "transparent" : (isCurrentListItem ? highlightColor :
-		index % 2 === 0 ? Qt.lighter(backgroundColor,1.2) : backgroundColor)
-		
+		index % 2 === 0 ? Qt.lighter(backgroundColor,1.2) : backgroundColor)		
 	}
+	
+	Drag.active: _mouseArea.drag.active
+        Drag.dragType: Drag.Automatic
+        Drag.supportedActions: Qt.CopyAction
+        Drag.mimeData:
+        {
+            "text/uri-list": model.path
+        }
 	
 	MouseArea
 	{
+        id: _mouseArea
 		anchors.fill: parent
 		acceptedButtons:  Qt.RightButton
+		drag.target: parent
 		onClicked:
 		{
 			if(!isMobile && mouse.button === Qt.RightButton)
 				rightClicked()
 		}
+		
+		onPressed: parent.grabToImage(function(result)
+        {
+                parent.Drag.imageSource = result.url
+            })
 	}
 	
 	Maui.Badge
@@ -156,14 +170,16 @@ ItemDelegate
 	{
 		id: iconComponent
 		
-		Maui.ToolButton
+		Kirigami.Icon
 		{
-			iconName: model.icon
-			iconFallback: "qrc:/assets/application-x-zerosize.svg"
-			isMask: folderSize <= iconSizes.medium
-			iconColor: labelColor
-			size: folderSize
-			enabled: false
+			source: model.icon
+// 			iconFallback: "qrc:/assets/application-x-zerosize.svg"
+// 			isMask: folderSize <= iconSizes.medium
+// 			color: "transparent"
+isMask: false
+            
+			height: folderSize
+			width: folderSize
 		}
 	}
 	

@@ -13,6 +13,7 @@ Maui.Page
 	
 	property alias body : body
 	property alias document : document
+	property alias scrollView: _scrollView
 	
 	property alias text: body.text
 	property alias uppercase: document.uppercase
@@ -110,6 +111,7 @@ Maui.Page
 	
 	ScrollView
 	{
+		id: _scrollView
 		anchors.fill: parent
 		
 		TextArea

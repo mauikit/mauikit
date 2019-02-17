@@ -25,11 +25,14 @@ import org.kde.kirigami 2.0 as Kirigami
 
 Maui.Dialog
 {
+    id: control 
     property var itemUrls : []
 
     widthHint: 0.9
     
-	maxHeight: grid.itemSize * 5 + space.big
+	maxHeight: (Math.ceil(grid.count / (control.width / (grid.itemSize + grid.spacing))) * (grid.itemSize + grid.spacing + space.enormous)) + space.huge
+    
+	
     maxWidth: unit * 500
 
 	verticalAlignment: Qt.AlignBottom
