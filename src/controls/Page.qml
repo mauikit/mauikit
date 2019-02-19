@@ -54,6 +54,7 @@ QQC2.Page
     property alias headBar: topToolBar
     property alias headBarItem: topToolBar.data
     property alias footBar: bottomToolBar
+    property alias footBarItem: bottomToolBar.data
     property alias floatingBar: bottomToolBar.floating
     property alias flickable: flickable
 

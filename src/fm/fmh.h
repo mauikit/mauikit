@@ -555,7 +555,16 @@ namespace FMH
 	}
 	
 	
+	
+	#ifndef STATIC_MAUIKIT
+	#include "mauikit_export.h"
+	#endif
+	
+	#ifdef STATIC_MAUIKIT
 	class Downloader : public QObject
+	#else
+	class MAUIKIT_EXPORT Downloader : public QObject
+	#endif	
 	{
 		Q_OBJECT
 	public:
@@ -590,6 +599,42 @@ namespace FMH
 			connect(reply,SIGNAL(finished()),this,SLOT(onReplyFinished()));
 		}
 		
+		void getArray(const QString &fileURL, const QMap<QString, QString> &headers = {})
+		{		
+			if(fileURL.isEmpty())			
+				return;
+			
+			qDebug()<< "request from" << fileURL;
+			
+			QNetworkRequest request;
+			request.setUrl(QUrl(fileURL));
+			if(!headers.isEmpty())
+				for(auto key: headers.keys())
+					request.setRawHeader(key.toLocal8Bit(), headers[key].toLocal8Bit());				
+			
+			reply = manager->get(request);			
+			
+			connect(manager, &QNetworkAccessManager::finished, [this](QNetworkReply* reply)
+			{
+				switch(reply->error())
+				{
+					case QNetworkReply::NoError:
+					{
+						qDebug("file is downloaded successfully.");
+						emit this->dataReady(reply->readAll());
+						break;
+					}
+					
+					default:
+					{
+						qDebug() << reply->errorString();						
+						emit this->warning(reply->errorString());
+						
+					};
+				}
+			});			
+		}
+		
 	private:
 		QNetworkAccessManager *manager;
 		QNetworkReply *reply;
@@ -600,6 +645,7 @@ namespace FMH
 		void downloadReady();
 		void fileSaved(QString path);
 		void warning(QString warning);
+		void dataReady(QByteArray array);
 		
 	private slots:
 		void onDownloadProgress(qint64 bytesRead, qint64 bytesTotal)
@@ -615,8 +661,11 @@ namespace FMH
 				{
 					qDebug("file is downloaded successfully.");
 					emit this->downloadReady();
-				}break;
-				default:{
+					break;
+				}
+				
+				default:
+				{
 					emit this->warning(reply->errorString());
 				};
 			}

@@ -34,7 +34,7 @@ MenuItem
 	/***************************/
 	
 	width: parent.width
-	height: rowHeight
+	height: control.visible ? rowHeight : 0
 	spacing: space.medium
 	font.pointSize: fontSizes.default
 	
@@ -44,7 +44,7 @@ MenuItem
 	contentItem: RowLayout
 	{
 		anchors.fill: control
-		anchors.leftMargin: control.checkable ? control.indicator.width + control.spacing + space.medium : control.spacing
+		anchors.leftMargin: control.checkable ? control.indicator.width + control.spacing + space.big : control.spacing
 		anchors.rightMargin: control.spacing
 		
 		Item
@@ -54,16 +54,16 @@ MenuItem
 			visible: control.icon.name.length
 			width: control.icon.name.length ? control.icon.width : 0
 			
-			Kirigami.Icon
+			Maui.ToolButton
 			{
 				id: _controlIcon
 				visible: parent.visible
 				anchors.centerIn: parent
-				source: control.icon.name
-				height: control.icon.height
-				width: control.icon.width
+				iconName: control.icon.name
+				size: control.icon.height
 				isMask: true
-				color: _controlLabel.color
+				enabled: false
+				iconColor: _controlLabel.color
 			}
 		}
 		
@@ -97,7 +97,7 @@ MenuItem
 		x: control.mirrored ? control.width - width - control.rightPadding : control.spacing
 		y: control.topPadding + (control.availableHeight - height) / 2
 		
-		height: iconSizes.small
+		height: iconSizes.medium
 		width: height		
 	
 		visible: control.checkable

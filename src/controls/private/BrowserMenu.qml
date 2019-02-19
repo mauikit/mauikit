@@ -98,11 +98,11 @@ Maui.Menu
 		}
     }
     
-    MenuSeparator { }
+    MenuSeparator { visible : pasteItem.enabled}
     
     Maui.MenuItem
     {
-        
+		id: pasteItem
         visible: enabled
         text: qsTr("Paste ")+"["+pasteFiles+"]"
         enabled: pasteFiles > 0
