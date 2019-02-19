@@ -128,7 +128,7 @@ void FMList::setList()
 			
 		case FMList::PATHTYPE::CLOUD_PATH:
 			this->list.clear();
-			if(this->fm->getCloudServerContent(this->path, this->filters, this->cloudDepth))
+			if(this->fm->getCloudServerContent(this->path, QStringList(), this->cloudDepth))
 			{	
 				this->setContentReady(false);				
 				return;			
