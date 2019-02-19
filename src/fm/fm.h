@@ -30,6 +30,9 @@ public:
 	static FM *getInstance();
 	Syncing *sync;
 	
+	FM(QObject *parent = nullptr);
+	~FM();
+	
 	FMH::MODEL_LIST getTags(const int &limit = 5);	
 	FMH::MODEL_LIST getTagContent(const QString &tag);	
     FMH::MODEL_LIST getBookmarks();
@@ -68,10 +71,7 @@ private:
 	static FM* instance;
 	
     void init();
-	QVariantList get(const QString &queryTxt);
-	
-	FM(QObject *parent = nullptr);
-	~FM();
+	QVariantList get(const QString &queryTxt);	
 
 signals:
 	void bookmarkInserted(QString bookmark);
