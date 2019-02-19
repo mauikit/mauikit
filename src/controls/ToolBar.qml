@@ -45,6 +45,8 @@ ToolBar
     property alias middleContent : middleRowContent.data
     property alias rightContent : rightRowContent.data
     property alias middleLayout : flickableLayout
+    property alias leftLayout : leftRowContent
+    property alias rightLayout : rightRowContent
     property alias layout : layout
     
     property int margins: space.medium

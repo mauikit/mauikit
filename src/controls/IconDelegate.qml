@@ -170,14 +170,15 @@ ItemDelegate
 	{
 		id: iconComponent
 		
-		Kirigami.Icon
+		Maui.ToolButton
 		{
-			source: model.icon
-// 			iconFallback: "qrc:/assets/application-x-zerosize.svg"
-// 			isMask: folderSize <= iconSizes.medium
-// 			color: "transparent"
-isMask: false
-            
+			iconName: model.icon
+			iconFallback: "qrc:/assets/application-x-zerosize.svg"
+			isMask: folderSize <= iconSizes.medium
+			// 			color: "transparent"
+			//isMask: false
+			enabled: false
+			size: folderSize
 			height: folderSize
 			width: folderSize
 		}
