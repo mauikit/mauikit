@@ -521,7 +521,7 @@ Maui.Page
 		Maui.ToolButton
 		{
             id: goUpButton
-            visible: false
+            visible: isAndroid
 			iconName: "go-up"
 			onClicked: control.goUp()
 		},
