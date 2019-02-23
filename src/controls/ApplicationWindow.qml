@@ -560,6 +560,14 @@ backgroundColor.b, 0.7))
 			 }
 		
      }
+     
+     Connections
+     {
+		 target: Maui.FM
+		 
+		 onNewItem: notify("dialog-information", qsTr("File uploaded"), "Your file has been uploaded to your account /n"+path)
+		 onWarningMessage: notify("dialog-information", "Oops!", message)
+	}
 
     function switchColorScheme(variant)
     {

@@ -30,6 +30,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QLocale>
+#include <QRegularExpression>
 
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
@@ -37,7 +38,7 @@
 #include "mauikde.h"
 #endif
 
-
+/*
 FM *FM::instance = nullptr;
 
 FM* FM::getInstance()
@@ -53,7 +54,7 @@ FM* FM::getInstance()
         qDebug()<< "getInstance(): previous instance\n";
         return instance;
     }
-}
+}*/
 
 void FM::init()
 {
@@ -110,7 +111,10 @@ void FM::init()
 	});
 }
 
-FM::FM(QObject *parent) : FMDB(parent) {}
+FM::FM(QObject *parent) : FMDB(parent) 
+{
+	this->init();
+}
 
 FM::~FM() {}
 
@@ -665,7 +669,17 @@ bool FM::copy(const QVariantList &data, const QString &where)
 		
 		const auto firstPath = cloudPaths.takeLast();
 		this->sync->setUploadQueue(cloudPaths);
-		this->sync->upload(this->resolveLocalCloudPath(where), firstPath);		
+		
+		if(where.split("/").last().contains("."))		
+		{
+			QStringList whereList = where.split("/");
+			whereList.removeLast();
+			auto whereDir = whereList.join("/");			
+			qDebug()<< "Trying ot copy to cloud" << where << whereDir;
+			
+			this->sync->upload(this->resolveLocalCloudPath(whereDir), firstPath);
+		} else
+			this->sync->upload(this->resolveLocalCloudPath(where), firstPath);		
 	}
 
     return true;

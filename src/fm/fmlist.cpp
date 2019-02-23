@@ -26,7 +26,7 @@
 
 FMList::FMList(QObject *parent) : QObject(parent)
 {
-	this->fm = FM::getInstance();
+	this->fm = new FM(this);
 	connect(this->fm, &FM::cloudServerContentReady, [this](const FMH::MODEL_LIST &list, const QString &url)
 	{
 		if(this->path == url)

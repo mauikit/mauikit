@@ -25,7 +25,7 @@
 
 PlacesList::PlacesList(QObject *parent) : QObject(parent)
 {
-    this->fm = FM::getInstance();
+    this->fm = new FM(this);
     this->watcher = new QFileSystemWatcher(this);
     connect(watcher, &QFileSystemWatcher::directoryChanged, [this](const QString &path)
     {

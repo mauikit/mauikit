@@ -27,7 +27,7 @@ class MAUIKIT_EXPORT FM : public FMDB
     Q_OBJECT
 
 public:  
-	static FM *getInstance();
+// 	static FM *getInstance();
 	Syncing *sync;
 	
 	FM(QObject *parent = nullptr);
@@ -68,7 +68,7 @@ public:
 
 private:
     Tagging *tag;
-	static FM* instance;
+// 	static FM* instance;
 	
     void init();
 	QVariantList get(const QString &queryTxt);	
