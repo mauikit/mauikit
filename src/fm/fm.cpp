@@ -20,7 +20,7 @@
 #include "fm.h"
 #include "utils.h"
 #include "tagging.h"
-#include "syncing/syncing.h"
+#include "syncing.h"
 
 #include <QObject>
 
@@ -30,6 +30,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QLocale>
+#include <QRegularExpression>
 
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
@@ -37,7 +38,7 @@
 #include "mauikde.h"
 #endif
 
-
+/*
 FM *FM::instance = nullptr;
 
 FM* FM::getInstance()
@@ -53,7 +54,7 @@ FM* FM::getInstance()
         qDebug()<< "getInstance(): previous instance\n";
         return instance;
     }
-}
+}*/
 
 void FM::init()
 {
@@ -64,19 +65,29 @@ void FM::init()
         emit this->cloudServerContentReady(list, url);
     });
 	
-	connect(this->sync, &Syncing::readyOpen, [this](const FMH::MODEL &item, const QString &url)
+	connect(this->sync, &Syncing::itemReady, [this](const FMH::MODEL &item, const QString &url, const Syncing::SIGNAL_TYPE &signalType)
 	{		
-		this->openUrl(item[FMH::MODEL_KEY::PATH]);
-	});
-	
-	connect(this->sync, &Syncing::readyCopy, [this](const FMH::MODEL &item, const QString &url)
-	{		
-		QVariantMap data;
-		for(auto key : item.keys())
-			data.insert(FMH::MODEL_NAME[key], item[key]);
-		
-		
-		this->copy(QVariantList {data}, this->sync->getCopyTo());
+		switch(signalType)
+		{
+			case Syncing::SIGNAL_TYPE::OPEN:
+				this->openUrl(item[FMH::MODEL_KEY::PATH]);
+				break;
+				
+			case Syncing::SIGNAL_TYPE::DOWNLOAD:
+				emit this->cloudItemReady(item, url);
+				break;
+				
+			case Syncing::SIGNAL_TYPE::COPY:
+			{
+				QVariantMap data;
+				for(auto key : item.keys())
+					data.insert(FMH::MODEL_NAME[key], item[key]);				
+				
+				this->copy(QVariantList {data}, this->sync->getCopyTo());
+				break;	
+			}	
+			default: return;
+		}
 	});
 	
 	connect(this->sync, &Syncing::error, [this](const QString &message)
@@ -100,9 +111,21 @@ void FM::init()
 	});
 }
 
-FM::FM(QObject *parent) : FMDB(parent) {}
+FM::FM(QObject *parent) : FMDB(parent) 
+{
+	this->init();
+}
 
 FM::~FM() {}
+
+QVariantMap FM::toMap(const FMH::MODEL& model)
+{
+	QVariantMap map;
+	for(auto key : model.keys())
+		map.insert(FMH::MODEL_NAME[key], model[key]);
+	
+	return map;		
+}
 
 FMH::MODEL_LIST FM::packItems(const QStringList &items, const QString &type)
 {
@@ -312,7 +335,7 @@ FMH::MODEL_LIST FM::getBookmarks()
     return packItems(bookmarks, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::BOOKMARKS_PATH]);
 }
 
-bool FM::getCloudServerContent(const QString &path)
+bool FM::getCloudServerContent(const QString &path, const QStringList &filters, const int &depth)
 {
     auto user = path.split("/")[1];
    
@@ -328,7 +351,7 @@ bool FM::getCloudServerContent(const QString &path)
     auto password = map[FMH::MODEL_NAME[FMH::MODEL_KEY::PASSWORD]].toString();
     this->sync->setCredentials(server, user, password);
 
-    this->sync->listContent(path);
+    this->sync->listContent(path, filters, depth);
 	return true;
 }
 
@@ -364,6 +387,35 @@ void FM::openCloudItem(const QVariantMap &item)
 		data.insert(FMH::MODEL_NAME_KEY[key], item[key].toString());
 	
 	this->sync->resolveFile(data, Syncing::SIGNAL_TYPE::OPEN);
+}
+
+void FM::getCloudItem(const QVariantMap &item)
+{
+	qDebug()<< item;
+	FMH::MODEL data;
+	for(auto key : item.keys())
+		data.insert(FMH::MODEL_NAME_KEY[key], item[key].toString());
+	
+	this->sync->resolveFile(data, Syncing::SIGNAL_TYPE::DOWNLOAD);
+}
+
+QVariantList FM::getCloudAccountsList()
+{
+	QVariantList res;
+	
+	auto data = this->getCloudAccounts();
+	
+	for(auto item : data)
+	{
+		QVariantMap map;
+		
+		for(auto key : item.keys())
+			map.insert(FMH::MODEL_NAME[key], item[key]);
+		
+		res << map;		
+	}
+	
+	return res;
 }
 
 bool FM::addCloudAccount(const QString &server, const QString &user, const QString &password)
@@ -535,6 +587,40 @@ QString FM::homePath()
     return FMH::HomePath;
 }
 
+bool FM::cut(const QVariantList &data, const QString &where)
+{	
+	FMH::MODEL_LIST items;
+	
+	for(auto k : data)
+	{	
+		auto map = k.toMap();
+		FMH::MODEL model;
+		
+		for(auto key : map.keys())
+			model.insert(FMH::MODEL_NAME_KEY[key], map[key].toString());				
+		
+		items << model;
+	}
+	
+	for(auto item : items)
+	{
+		auto path = item[FMH::MODEL_KEY::PATH];
+		
+		if(this->isCloud(path))
+		{
+			this->sync->setCopyTo(where);			
+			this->sync->resolveFile(item, Syncing::SIGNAL_TYPE::COPY);
+			
+		}else if(UTIL::fileExists(path))
+		{
+			QFile file(path);
+			return file.rename(where+"/"+QFileInfo(path).fileName());
+		}
+	}
+	
+	return true;
+}
+
 bool FM::copy(const QVariantList &data, const QString &where)
 {
 	FMH::MODEL_LIST items;
@@ -549,6 +635,8 @@ bool FM::copy(const QVariantList &data, const QString &where)
 		
 		items << model;
 	}
+	
+	QStringList cloudPaths;
 	
     for(auto item : items)
     {
@@ -566,19 +654,33 @@ bool FM::copy(const QVariantList &data, const QString &where)
 		}else if(UTIL::fileExists(path))
         {
             QFile file(path);
-            qDebug()<< path << "is a file";
+            qDebug()<< path << "is a file" << where;
 
-			if(this->isCloud(where))
-			{	
-				qDebug()<< path << "is a file and "<< where << " is a claoud path"<< this->resolveLocalCloudPath(where);
-				
-				this->sync->upload(this->resolveLocalCloudPath(where), path);
-				
-			}
+			if(this->isCloud(where))				
+				cloudPaths << path;				
 			else
-				return file.copy(where+"/"+QFileInfo(path).fileName());
+				return file.copy(where);
         }
     }
+    
+    if(!cloudPaths.isEmpty())
+	{
+		qDebug()<<"UPLOAD QUEUE" << cloudPaths;
+		
+		const auto firstPath = cloudPaths.takeLast();
+		this->sync->setUploadQueue(cloudPaths);
+		
+		if(where.split("/").last().contains("."))		
+		{
+			QStringList whereList = where.split("/");
+			whereList.removeLast();
+			auto whereDir = whereList.join("/");			
+			qDebug()<< "Trying ot copy to cloud" << where << whereDir;
+			
+			this->sync->upload(this->resolveLocalCloudPath(whereDir), firstPath);
+		} else
+			this->sync->upload(this->resolveLocalCloudPath(where), firstPath);		
+	}
 
     return true;
 }
@@ -619,32 +721,6 @@ bool FM::copyPath(QString sourceDir, QString destinationDir, bool overWriteDirec
         return true;    
 
     return false;
-}
-
-bool FM::cut(const QVariantList &data, const QString &where)
-{	
-	FMH::MODEL_LIST items;
-	
-	for(auto k : data)
-	{	
-		auto map = k.toMap();
-		FMH::MODEL model;
-		
-		for(auto key : map.keys())
-			model.insert(FMH::MODEL_NAME_KEY[key], map[key].toString());				
-		
-		items << model;
-	}
-	
-	for(auto item : items)
-	{
-		auto path = item[FMH::MODEL_KEY::PATH];    
-        QFile file(path);
-        auto state = file.rename(where+"/"+QFileInfo(path).fileName());
-        if(!state) return false;
-    }
-
-    return true;
 }
 
 bool FM::removeFile(const QString &path)
@@ -713,6 +789,12 @@ bool FM::createFile(const QString &path, const QString &name)
 bool FM::openUrl(const QString &url)
 {
     return QDesktopServices::openUrl(QUrl::fromUserInput(url));
+}
+
+void FM::openLocation(const QStringList &urls)
+{
+	for(auto url : urls)
+		QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(url).dir().absolutePath()));
 }
 
 void FM::runApplication(const QString& exec)

@@ -46,7 +46,10 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}/src/utils/editor
     
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/syncing
-    ${CMAKE_CURRENT_BINARY_DIR}/src/utils/syncing
+    ${CMAKE_CURRENT_BINARY_DIR}/src/utils/syncing 
+    
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/store
+    ${CMAKE_CURRENT_BINARY_DIR}/src/utils/store
     
 	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/syncing/libwebdavclient/lib
 	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/syncing/libwebdavclient/lib/utils
@@ -105,9 +108,9 @@ set(tagging_SRCS
     )
 
 set(tagging_HDRS
+    src/utils/tagging/tag.h
     src/utils/tagging/tagging.h
     src/utils/tagging/tagdb.h
-    src/utils/tagging/tag.h
     src/utils/tagging/tagsmodel.h
     src/utils/tagging/tagslist.h
     )
@@ -136,6 +139,18 @@ set(syncing_HDRS
     src/utils/syncing/libwebdavclient/lib/utils/XMLHelper.hpp
     )
 
+set(store_SRCS
+    src/utils/store/store.cpp
+    src/utils/store/storemodel.cpp
+    src/utils/store/storelist.cpp
+    )
+
+set(store_HDRS
+    src/utils/store/store.h    
+    src/utils/store/storemodel.h
+    src/utils/store/storelist.h
+    )
+
 
 #use dbus on linux, bsd etc, but not andoid and apple stuff
 if(ANDROID)
@@ -162,7 +177,7 @@ if(ANDROID)
 else()
     find_package(Qt5 REQUIRED COMPONENTS WebEngine)
     find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications
-        Config Service KIO ConfigWidgets)
+        Config Service KIO ConfigWidgets Attica)
 
     set(mauikit_KDE_SRCS
         src/kde/mauikde.cpp
@@ -184,6 +199,7 @@ else()
         KF5::Service
         KF5::KIONTLM
         KF5::ConfigWidgets
+        KF5::Attica
         Qt5::WebEngine
         )
 endif()
@@ -192,6 +208,7 @@ endif()
 qt5_add_resources(mauikit_ASSETS ${CMAKE_CURRENT_SOURCE_DIR}/assets.qrc)
 qt5_add_resources(tagging_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/tagging/tagging.qrc)
 qt5_add_resources(fm_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/fm/fm.qrc)
+qt5_add_resources(store_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/store/store.qrc)
 
 # qt5_add_resources(mauikit_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/mauikit.qrc)
 
@@ -206,7 +223,11 @@ add_library(MauiKit
 
     ${syncing_HDRS}
     ${syncing_SRCS}
-
+    
+    ${store_SRCS}
+    ${store_HDRS}
+	${store_RESOURCES}
+    
     ${tagging_HDRS}
     ${tagging_SRCS}
     ${tagging_RESOURCES}
@@ -273,6 +294,7 @@ install(FILES
     ${tagging_HDRS}
     ${fm_HDRS}
     ${syncing_HDRS}
+    ${store_HDRS}
     ${CMAKE_CURRENT_BINARY_DIR}/mauikit_export.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit
     COMPONENT Devel)

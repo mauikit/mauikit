@@ -40,6 +40,7 @@ Item
 	property alias contentY: gridView.contentY
 	property alias currentIndex : gridView.currentIndex
 	property alias count : gridView.count
+	property alias cacheBuffer : gridView.cacheBuffer
 	
 	property alias topMargin: gridView.topMargin
 	property alias bottomMargin: gridView.bottomMargin

@@ -34,7 +34,6 @@ Maui.Page
 	
 	property bool selectionMode : false
 	property bool group : false
-	property bool detailsView : false
 	property bool showEmblems: true
 	
 	property alias selectionBar : selectionBarLoader.item
@@ -48,6 +47,7 @@ Maui.Page
 	property alias itemMenu: itemMenu
 	property alias holder: holder
 	property alias dialog : dialogLoader.item
+	property alias goUpButton : goUpButton
 	
 	property alias currentPathType : modelList.pathType
 	property int thumbnailsSize : iconSizes.large
@@ -58,11 +58,6 @@ Maui.Page
 	signal itemLeftEmblemClicked(int index)
 	signal itemRightEmblemClicked(int index)
 	signal rightClicked()
-	
-	Component.onCompleted:
-	{
-		control.detailsView =  Maui.FM.loadSettings("DetailsView", "SETTINGS", detailsView)
-	}
 	
 	margins: 0
 	
@@ -135,19 +130,6 @@ Maui.Page
 	
 	Component
 	{
-		id: notificationDialogComponent
-		
-		Maui.Dialog
-		{
-			defaultButtons: false
-			maxWidth: unit * 300
-			colorScheme.textColor: warningColor
-			colorScheme.backgroundColor: altColor
-		}
-	}
-	
-	Component
-	{
 		id: shareDialogComponent
 		Maui.ShareDialog {}
 	}
@@ -164,8 +146,7 @@ Maui.Page
 	BrowserMenu
 	{
 		id: browserMenu
-		width: unit *200
-		
+		width: unit *200		
 	}
 	
 	Maui.FilePreviewer
@@ -188,23 +169,18 @@ Maui.Page
 		onSortByChanged: if(group) groupBy()
 		onContentReadyChanged: console.log("CONTENT READY?", contentReady)
 		onWarning:
-		{
-			dialogLoader.sourceComponent = notificationDialogComponent
-			dialog.title = qsTr("An error happened")
-			dialog.message = message
-			dialog.open()
+		{			
+			notify("dialog-information", "An error happened", message)
 		}
 		
 		onProgress:
 		{
 			if(percent === 100)
 				_progressBar.value = 0
-			else
-				_progressBar.value = percent/100
+				else
+					_progressBar.value = percent/100
 		}
-	}
-	
-	
+	}	
 	
 	FileMenu
 	{
@@ -215,12 +191,21 @@ Maui.Page
 		{
 			if(items.length)
 			{
-				if(control.selectionBar)
-				{
+				if(control.selectionBar)				
 					control.selectionBar.animate("#6fff80")
-					console.log(control.selectionBar.selectedPaths)
-				}					
-				control.copy(items)
+					
+					control.copy(items)
+			}
+		}
+		
+		onCutClicked:
+		{
+			if(items.length)
+			{
+				if(control.selectionBar)
+					control.selectionBar.animate("#fff44f")
+					
+					control.cut(items)
 			}
 		}
 		
@@ -236,17 +221,6 @@ Maui.Page
 						dialog.composerList.urls = items[0].path
 						
 						dialog.open()
-			}
-		}
-		
-		onCutClicked:
-		{
-			if(items.length)
-			{
-				if(control.selectionBar)
-					control.selectionBar.animate("#fff44f")
-					
-					control.cut(items)
 			}
 		}
 		
@@ -288,20 +262,20 @@ Maui.Page
 			{
 				if(isAndroid)
 				{
-// 					if(items.length > 1 && control.selectionBar)			
-// 						Maui.Android.shareDialog(control.selectionBar.selectedPaths)		
-// 					else  
-						Maui.Android.shareDialog(items[0].path)
+					// 					if(items.length > 1 && control.selectionBar)			
+					// 						Maui.Android.shareDialog(control.selectionBar.selectedPaths)		
+					// 					else  
+					Maui.Android.shareDialog(items[0].path)
 				}
 				else
 				{
 					dialogLoader.sourceComponent= shareDialogComponent
 					if(items.length > 1 && control.selectionBar)			
 						dialog.show(control.selectionBar.selectedPath)		
-					else  
-						dialog.show([items[0].path])
-					
-					dialog.open()
+						else  
+							dialog.show([items[0].path])
+							
+							dialog.open()
 				}
 			}
 		}
@@ -314,7 +288,7 @@ Maui.Page
 		Maui.ListBrowser
 		{
 			showPreviewThumbnails: modelList.preview
-			showEmblem: currentPathType !== FMList.APPS_PATH && showEmblems
+			showEmblem: (currentPathType !== FMList.APPS_PATH && showEmblems) || selectionMode
 			rightEmblem: isMobile ? "document-share" : ""
 			leftEmblem: "list-add"
 			showDetailsInfo: true
@@ -340,7 +314,7 @@ Maui.Page
 		Maui.GridBrowser
 		{
 			itemSize : thumbnailsSize + fontSizes.default
-			showEmblem: currentPathType !== FMList.APPS_PATH && showEmblems
+			showEmblem: (currentPathType !== FMList.APPS_PATH && showEmblems) || selectionMode
 			showPreviewThumbnails: modelList.preview
 			rightEmblem: isMobile ? "document-share" : ""
 			leftEmblem: "list-add"
@@ -405,44 +379,42 @@ Maui.Page
 		z: -1
 		visible: !modelList.pathExists || modelList.pathEmpty || !modelList.contentReady
 		emoji: if(modelList.pathExists && modelList.pathEmpty)
-					"qrc:/assets/MoonSki.png" 
-				else if(!modelList.pathExists)
-					"qrc:/assets/ElectricPlug.png"
-				else if(!modelList.contentReady)
-					"qrc:/assets/animat-rocket-color.gif"
-					
-		isGif: !modelList.contentReady			
-		isMask: false
-		title : if(modelList.pathExists && modelList.pathEmpty)
-					qsTr("Folder is empty!")
+		"qrc:/assets/MoonSki.png" 
+		else if(!modelList.pathExists)
+			"qrc:/assets/ElectricPlug.png"
+			else if(!modelList.contentReady)
+				"qrc:/assets/animat-rocket-color.gif"
+				
+				isGif: !modelList.contentReady			
+				isMask: false
+				title : if(modelList.pathExists && modelList.pathEmpty)
+				qsTr("Folder is empty!")
 				else if(!modelList.pathExists)
 					qsTr("Folder doesn't exists!")
-				else if(!modelList.contentReady)
-					qsTr("Loading content!")
-				
-		body: if(modelList.pathExists && modelList.pathEmpty)
-					qsTr("You can add new files to it")
-				else if(!modelList.pathExists)
-					qsTr("Create Folder?")
-				else if(!modelList.contentReady)
-					qsTr("Almost ready!")
+					else if(!modelList.contentReady)
+						qsTr("Loading content!")
 						
-		emojiSize: iconSizes.huge
-						
-		onActionTriggered:
-		{
-			if(!modelList.pathExists)
-			{
-				Maui.FM.createDir(control.currentPath.slice(0, control.currentPath.lastIndexOf("/")), control.currentPath.split("/").pop())
-				control.openFolder(modelList.parentPath)				
-			}
-		}
+						body: if(modelList.pathExists && modelList.pathEmpty)
+						qsTr("You can add new files to it")
+						else if(!modelList.pathExists)
+							qsTr("Create Folder?")
+							else if(!modelList.contentReady)
+								qsTr("Almost ready!")
+								
+								emojiSize: iconSizes.huge
+								
+								onActionTriggered:
+								{
+									if(!modelList.pathExists)
+									{
+										Maui.FM.createDir(control.currentPath.slice(0, control.currentPath.lastIndexOf("/")), control.currentPath.split("/").pop())
+										control.openFolder(modelList.parentPath)				
+									}
+								}
 	}
 	
 	Keys.onSpacePressed: previewer.show(modelList.get(browser.currentIndex).path)
 	
-	floatingBar: true
-	footBarOverlap: true
 	headBarExit: false
 	headBar.visible: currentPathType !== FMList.APPS_PATH
 	altToolBars: isMobile
@@ -450,62 +422,9 @@ Maui.Page
 	
 	Maui.ToolButton
 	{
-		iconName: "visibility"
-		onClicked: modelList.hidden = !modelList.hidden
-		tooltipText: qsTr("Hidden files...")
-		iconColor: modelList.hidden ? colorScheme.highlightColor : colorScheme.textColor
-	},
-	
-	Maui.ToolButton
-	{
-		iconName: "image-preview"
-		onClicked: modelList.preview = !modelList.preview
-		tooltipText: qsTr("Previews...")
-		iconColor: modelList.preview ? colorScheme.highlightColor : colorScheme.textColor
-	},
-	
-	Maui.ToolButton
-	{
-		iconName: "bookmark-new"
-		iconColor: modelList.isBookmark ? colorScheme.highlightColor : colorScheme.textColor
-		onClicked: modelList.isBookmark = !modelList.isBookmark
-		tooltipText: qsTr("Bookmark...")
-	},
-	
-	Maui.ToolButton
-	{
-		iconName: "item-select"
-		tooltipText: qsTr("Selection...")
-		onClicked: selectionMode = !selectionMode
-		iconColor: selectionMode ? colorScheme.highlightColor: colorScheme.textColor
-	},
-	
-	Maui.ToolButton
-	{
-		iconName: "overflow-menu"
-		onClicked: browserMenu.show()
-		tooltipText: qsTr("Menu...")
-	}
-	]
-	
-	headBar.leftContent: [
-	
-	Maui.ToolButton
-	{
 		id: viewBtn
-		iconName: control.detailsView ? "view-list-icons" : "view-list-details"
+		iconName: list.viewType == FMList.ICON_VIEW ?  "view-list-details" : "view-list-icons"
 		onClicked: control.switchView()
-	},
-	
-	Maui.ToolButton
-	{
-		iconName: "folder-add"
-		onClicked:
-		{
-			dialogLoader.sourceComponent= newFolderDialogComponent
-			dialog.open()
-		}
-		tooltipText: qsTr("New folder...")
 	},
 	
 	Maui.ToolButton
@@ -522,8 +441,8 @@ Maui.Page
 			{
 				text: qsTr("Folders first")
 				checkable: true
-				checked: modelList.foldersFirst
-				onTriggered: modelList.foldersFirst = !modelList.foldersFirst
+				checked: list.foldersFirst
+				onTriggered: list.foldersFirst = !list.foldersFirst
 			}
 			
 			MenuSeparator{}
@@ -532,40 +451,40 @@ Maui.Page
 			{
 				text: qsTr("Type")
 				checkable: true
-				checked: modelList.sortBy === FMList.MIME
-				onTriggered: modelList.sortBy = FMList.MIME
+				checked: list.sortBy === FMList.MIME
+				onTriggered: list.sortBy = FMList.MIME
 			}
 			
 			Maui.MenuItem
 			{
 				text: qsTr("Date")
 				checkable: true
-				checked: modelList.sortBy === FMList.DATE
-				onTriggered: modelList.sortBy = FMList.DATE
+				checked: list.sortBy === FMList.DATE
+				onTriggered: list.sortBy = FMList.DATE
 			}
 			
 			Maui.MenuItem
 			{
 				text: qsTr("Modified")
 				checkable: true
-				checked: modelList.sortBy === FMList.MODIFIED
-				onTriggered: modelList.sortBy = FMList.MODIFIED
+				checked: list.sortBy === FMList.MODIFIED
+				onTriggered: list.sortBy = FMList.MODIFIED
 			}
 			
 			Maui.MenuItem
 			{
 				text: qsTr("Size")
 				checkable: true
-				checked: modelList.sortBy === FMList.SIZE
-				onTriggered: modelList.sortBy = FMList.SIZE
+				checked: list.sortBy === FMList.SIZE
+				onTriggered: list.sortBy = FMList.SIZE
 			}
 			
 			Maui.MenuItem
 			{
 				text: qsTr("Name")
 				checkable: true
-				checked: modelList.sortBy === FMList.LABEL
-				onTriggered: modelList.sortBy = FMList.LABEL
+				checked: list.sortBy === FMList.LABEL
+				onTriggered: list.sortBy = FMList.LABEL
 			}
 			
 			MenuSeparator {}
@@ -582,33 +501,40 @@ Maui.Page
 				}
 			}
 		}
+	},
+	
+	Maui.ToolButton
+	{
+		iconName: "overflow-menu"
+		onClicked: browserMenu.show()
+		tooltipText: qsTr("Menu...")
 	}
 	]
 	
-	footBar.middleContent: Row
+	headBar.leftContent: [
+	Maui.ToolButton
 	{
-		spacing: space.medium
-		Maui.ToolButton
-		{
-			iconName: "go-previous"
-			iconColor: footBar.colorScheme.textColor
-			onClicked: control.goBack()
-		}
-		
-		Maui.ToolButton
-		{
-			iconName: "go-up"
-			iconColor: footBar.colorScheme.textColor
-			onClicked: control.goUp()
-		}
-		
-		Maui.ToolButton
-		{
-			iconName: "go-next"
-			iconColor: footBar.colorScheme.textColor
-			onClicked: control.goNext()
-		}
-	}
+		iconName: "go-previous"
+		onClicked: control.goBack()
+	},
+	
+	Maui.ToolButton
+	{
+		id: goUpButton
+		visible: isAndroid
+		iconName: "go-up"
+		onClicked: control.goUp()
+	},
+	
+	Maui.ToolButton
+	{
+		iconName: "go-next"
+		onClicked: control.goNext()
+	}	
+	]
+	
+	footBar.visible: false
+	
 	
 	Component
 	{
@@ -633,9 +559,9 @@ Maui.Page
 		{
 			id: viewLoader
 			z: holder.z + 1
-			sourceComponent: detailsView ? listViewBrowser : gridViewBrowser
+			sourceComponent: list.viewType == FMList.ICON_VIEW  ?  gridViewBrowser :  listViewBrowser
 			
-			Layout.margins: detailsView ? unit : contentMargins * 2
+			Layout.margins: list.viewType == FMList.LIST_VIEW ? unit : contentMargins * 2
 			
 			Layout.fillWidth: true
 			Layout.fillHeight: true
@@ -664,6 +590,29 @@ Maui.Page
 		
 	}
 	
+	// 	PinchArea
+	// 	{
+	//         anchors.fill: parent
+	//         
+	//         property real initialWidth
+	//         property real initialHeight
+	// 
+	//         onPinchStarted:
+	//         {
+	//             console.log("pinch started")
+	//         }
+	// 
+	//         onPinchUpdated:
+	//         {
+	//             console.log(pinch.scale)
+	//         }
+	// 
+	//         onPinchFinished:
+	//         {
+	//             console.log("pinch finished")
+	//         }
+	//     }
+	
 	onThumbnailsSizeChanged:
 	{
 		if(trackChanges && saveDirProps)
@@ -671,7 +620,7 @@ Maui.Page
 			else 
 				Maui.FM.saveSettings("IconSize", thumbnailsSize, "SETTINGS")
 				
-				if(!control.detailsView)
+				if(list.viewType == FMList.ICON_VIEW)
 					browser.adaptGrid()
 	}
 	
@@ -748,24 +697,20 @@ Maui.Page
 			{
 				var conf = Maui.FM.dirConf(path+"/.directory")
 				var iconsize = conf["iconsize"] ||  iconSizes.large
-				thumbnailsSize = parseInt(iconsize)
-				
-				detailsView = conf["detailview"] === "true" ? true : false
+				thumbnailsSize = parseInt(iconsize)				
 			}else
 			{
 				thumbnailsSize = parseInt(Maui.FM.loadSettings("IconSize", "SETTINGS", thumbnailsSize))		
-				detailsView =  Maui.FM.loadSettings("DetailsView", "SETTINGS", detailsView)
 			}
 		}
 		
-		if(!detailsView)
+		if(list.viewType == FMList.ICON_VIEW)
 			browser.adaptGrid()
 	}
 	
 	function goBack()
 	{
 		populate(modelList.previousPath)
-		console.log("INDEX HISTORY"<< indexHistory)
 		browser.currentIndex = indexHistory.pop()
 		browser.positionViewAtIndex(browser.currentIndex, ListView.Center)
 	}
@@ -819,7 +764,7 @@ Maui.Page
 	
 	function cut(items)
 	{
-		cutItems = paths
+		cutItems = items
 		isCut = true
 		isCopy = false
 	}
@@ -828,28 +773,22 @@ Maui.Page
 	{
 		if(isCopy)
 			list.copyInto(copyItems, currentPath)
-		else if(isCut)
-		{
-			list.cutInto(cutItems, currentPath)
-			clearSelection()			
-		}
+			else if(isCut)
+			{
+				list.cutInto(cutItems, currentPath)
+				clearSelection()			
+			}
 	}
 	
 	function remove(items)
 	{
 		for(var i in items)
 			Maui.FM.removeFile(items[i].path)
-	}
+	}	
 	
-	
-	function switchView(state)
-	{
-		detailsView = state ? state : !detailsView
-		
-		if(trackChanges && saveDirProps)
-			Maui.FM.setDirConf(currentPath+"/.directory", "MAUIFM", "DetailView", detailsView)
-		else
-			Maui.FM.saveSettings("DetailsView", detailsView, "SETTINGS")
+	function switchView()
+	{	
+		list.viewType = list.viewType ===  FMList.ICON_VIEW ? FMList.LIST_VIEW : FMList.ICON_VIEW
 	}
 	
 	function bookmarkFolder(paths)
@@ -865,36 +804,9 @@ Maui.Page
 		}
 	}
 	
-	function populateTags(myTag)
-	{
-		Maui.FM.getTagContent(myTag)
-		setPath(myTag, pathType.tags)
-	}
-	
 	function zoomIn()
-	{
-		
-		control.thumbnailsSize = control.thumbnailsSize + 8
-		/*switch(thumbnailsSize)
-		 *		{
-		 *			case iconSizes.tiny: thumbnailsSize = iconSizes.small
-		 *				break
-		 *			case iconSizes.small: thumbnailsSize = iconSizes.medium
-		 *				break
-		 *			case iconSizes.medium: thumbnailsSize = iconSizes.big
-		 *				break
-		 *			case iconSizes.big: thumbnailsSize = iconSizes.large
-		 *				break
-		 *			case iconSizes.large: thumbnailsSize = iconSizes.huge
-		 *				break
-		 *			case iconSizes.huge: thumbnailsSize = iconSizes.enormous
-		 *				break
-		 *			case iconSizes.enormous: thumbnailsSize = iconSizes.enormous
-		 *				break
-		 *			default:
-		 *				thumbnailsSize = iconSizes.large
-		 *
-	}*/
+	{		
+		control.thumbnailsSize = control.thumbnailsSize + 8		
 	}
 	
 	function zoomOut()
@@ -903,29 +815,7 @@ Maui.Page
 		
 		if(newSize >= iconSizes.small)
 			control.thumbnailsSize = newSize
-			// 		switch(thumbnailsSize)
-			// 		{
-			// 			case iconSizes.tiny: thumbnailsSize = iconSizes.tiny
-			// 				break
-			// 			case iconSizes.small: thumbnailsSize = iconSizes.tiny
-			// 				break
-			// 			case iconSizes.medium: thumbnailsSize = iconSizes.small
-			// 				break
-			// 			case iconSizes.big: thumbnailsSize = iconSizes.medium
-			// 				break
-			// 			case iconSizes.large: thumbnailsSize = iconSizes.big
-			// 				break
-			// 			case iconSizes.huge: thumbnailsSize = iconSizes.large
-			// 				break
-			// 			case iconSizes.enormous: thumbnailsSize = iconSizes.huge
-			// 				break
-			// 			default:
-			// 				thumbnailsSize = iconSizes.large
-			//
-			// 		}
-	}
-	
-	
+	}	
 	
 	function groupBy()
 	{

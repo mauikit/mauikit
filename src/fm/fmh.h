@@ -29,6 +29,9 @@
 #include <QMimeDatabase>
 #include <QSettings>
 #include <QDateTime>
+#include <QNetworkReply>
+#include <QNetworkAccessManager>
+#include <QString>
 
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
@@ -40,7 +43,6 @@
 
 namespace FMH
 {
-	Q_NAMESPACE
 	
 	inline bool isAndroid()
 	{
@@ -67,15 +69,17 @@ namespace FMH
 		VIDEO,
 		TEXT,
 		IMAGE,
+		DOCUMENT,
 		NONE
-	}; Q_ENUM_NS(FILTER_TYPE);
+	}; 
 	
 	static const QHash<FMH::FILTER_TYPE, QStringList> FILTER_LIST =
 	{
-		{FILTER_TYPE::AUDIO, {"*.mp3", "*.mp4", "*.wav", "*.ogg", "*.flac"}},
-		{FILTER_TYPE::VIDEO, {"*.mp4", "*.mkv", "*.mov", "*.avi", "*.flv"}},
-		{FILTER_TYPE::TEXT, {"*.txt", "*.cpp", "*.js", "*.doc", "*.h", "*.json", "*.html", "*.rtf"}},
-		{FILTER_TYPE::IMAGE, {"*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg", "*.bmp"}},
+		{FILTER_TYPE::AUDIO, QStringList {"*.mp3", "*.mp4", "*.wav", "*.ogg", "*.flac"}},
+		{FILTER_TYPE::VIDEO, QStringList {"*.mp4", "*.mkv", "*.mov", "*.avi", "*.flv"}},
+		{FILTER_TYPE::TEXT, QStringList {"*.txt", "*.cpp", "*.js", "*.doc", "*.h", "*.json", "*.html", "*.rtf"}},
+		{FILTER_TYPE::DOCUMENT, QStringList {"*.pdf", "*.txt", "*.cbz", "*.cbr", "*.epub", "*.cbt", "*.cba", "*.cb7"}},
+		{FILTER_TYPE::IMAGE, QStringList {"*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg", "*.bmp"}},
 		{FILTER_TYPE::NONE, QStringList()}
 	};
 	
@@ -94,9 +98,12 @@ namespace FMH
 		SIZE,
 		MODIFIED,
 		MIME,
-		TAGS,
+		TAG,
 		PERMISSIONS,
 		THUMBNAIL,
+		THUMBNAIL_1,
+		THUMBNAIL_2,
+		THUMBNAIL_3,
 		HIDDEN,
 		ICONSIZE,
 		DETAILVIEW,
@@ -107,8 +114,38 @@ namespace FMH
         USER,
         PASSWORD,
         SERVER,
-		FOLDERSFIRST
-	}; Q_ENUM_NS(MODEL_KEY);
+		FOLDERSFIRST,
+		VIEWTYPE,
+		ADDDATE,
+		FAV,
+		COLOR,
+		RATE,
+		FORMAT,
+		PLACE,
+		LOCATION,
+		ALBUM,
+		ARTIST,
+		TRACK,
+		DURATION,
+		ARTWORK,
+		PLAYLIST,
+		LYRICS,
+		WIKI,
+		MOOD,
+		SOURCETYPE,
+		GENRE,
+		NOTE,
+		COMMENT,
+		CONTEXT,
+		SOURCE,
+		TITLE,
+		ID,
+		RELEASEDATE,
+		LICENSE,
+		DESCRIPTION,
+		BOOKMARK
+		
+	}; 
 	
 	static const QHash<FMH::MODEL_KEY, QString> MODEL_NAME =
 	{
@@ -125,9 +162,12 @@ namespace FMH
 		{MODEL_KEY::MODIFIED, "modified"},
 		{MODEL_KEY::MIME, "mime"},
 		{MODEL_KEY::SIZE, "size"},
-		{MODEL_KEY::TAGS, "tags"},
+		{MODEL_KEY::TAG, "tag"},
 		{MODEL_KEY::PERMISSIONS, "permissions"},
 		{MODEL_KEY::THUMBNAIL, "thumbnail"},
+		{MODEL_KEY::THUMBNAIL_1, "thumbnail_1"},
+		{MODEL_KEY::THUMBNAIL_2, "thumbnail_2"},
+		{MODEL_KEY::THUMBNAIL_3, "thumbnail_3"},
 		{MODEL_KEY::ICONSIZE, "iconsize"},
 		{MODEL_KEY::HIDDEN, "hidden"},
 		{MODEL_KEY::DETAILVIEW, "detailview"},
@@ -138,7 +178,36 @@ namespace FMH
         {MODEL_KEY::USER, "user"},
         {MODEL_KEY::PASSWORD, "password"},
 		{MODEL_KEY::SERVER, "server"},
-		{MODEL_KEY::FOLDERSFIRST, "foldersfirst"}
+		{MODEL_KEY::FOLDERSFIRST, "foldersfirst"},
+		{MODEL_KEY::VIEWTYPE, "viewtype"},
+		{MODEL_KEY::ADDDATE, "adddate"},
+		{MODEL_KEY::FAV, "fav"},
+		{MODEL_KEY::COLOR, "color"},
+		{MODEL_KEY::RATE, "rate"},
+		{MODEL_KEY::FORMAT, "format"},
+		{MODEL_KEY::PLACE, "place"},
+		{MODEL_KEY::LOCATION, "location"},
+		{MODEL_KEY::ALBUM, "album"},
+		{MODEL_KEY::DURATION, "duration"},
+		{MODEL_KEY::RELEASEDATE, "releasedate"},
+		{MODEL_KEY::ARTIST, "artist"},
+		{MODEL_KEY::LYRICS, "lyrics"},
+		{MODEL_KEY::TRACK, "track"},
+		{MODEL_KEY::GENRE, "genre"},	
+		{MODEL_KEY::WIKI, "wiki"},	
+		{MODEL_KEY::CONTEXT, "context"},	
+		{MODEL_KEY::SOURCETYPE, "sourcetype"},	
+		{MODEL_KEY::ARTWORK, "artwork"},	
+		{MODEL_KEY::NOTE, "note"},	
+		{MODEL_KEY::MOOD, "mood"},	
+		{MODEL_KEY::COMMENT, "comment"},	
+		{MODEL_KEY::PLAYLIST, "playlist"},	
+		{MODEL_KEY::SOURCE, "source"},
+		{MODEL_KEY::TITLE, "title"},	
+		{MODEL_KEY::ID, "id"},	
+		{MODEL_KEY::LICENSE, "license"},	
+		{MODEL_KEY::DESCRIPTION, "description"},
+		{MODEL_KEY::BOOKMARK, "bookmark"}
 	};
 	
 	static const QHash<QString, FMH::MODEL_KEY> MODEL_NAME_KEY =
@@ -156,9 +225,12 @@ namespace FMH
 		{MODEL_NAME[MODEL_KEY::MODIFIED], MODEL_KEY::MODIFIED},
 		{MODEL_NAME[MODEL_KEY::MIME], MODEL_KEY::MIME},
 		{MODEL_NAME[MODEL_KEY::SIZE], MODEL_KEY::SIZE,},
-		{MODEL_NAME[MODEL_KEY::TAGS], MODEL_KEY::TAGS},
+		{MODEL_NAME[MODEL_KEY::TAG], MODEL_KEY::TAG},
 		{MODEL_NAME[MODEL_KEY::PERMISSIONS], MODEL_KEY::PERMISSIONS},
 		{MODEL_NAME[MODEL_KEY::THUMBNAIL], MODEL_KEY::THUMBNAIL},
+		{MODEL_NAME[MODEL_KEY::THUMBNAIL_1], MODEL_KEY::THUMBNAIL_1},
+		{MODEL_NAME[MODEL_KEY::THUMBNAIL_2], MODEL_KEY::THUMBNAIL_2},
+		{MODEL_NAME[MODEL_KEY::THUMBNAIL_3], MODEL_KEY::THUMBNAIL_3},
 		{MODEL_NAME[MODEL_KEY::ICONSIZE], MODEL_KEY::ICONSIZE},
 		{MODEL_NAME[MODEL_KEY::HIDDEN], MODEL_KEY::HIDDEN},
 		{MODEL_NAME[MODEL_KEY::DETAILVIEW], MODEL_KEY::DETAILVIEW},
@@ -168,7 +240,36 @@ namespace FMH
 		{MODEL_NAME[MODEL_KEY::SORTBY], MODEL_KEY::SORTBY},
 		{MODEL_NAME[MODEL_KEY::USER], MODEL_KEY::USER},
 		{MODEL_NAME[MODEL_KEY::PASSWORD], MODEL_KEY::PASSWORD},
-		{MODEL_NAME[MODEL_KEY::SERVER], MODEL_KEY::SERVER}
+		{MODEL_NAME[MODEL_KEY::SERVER], MODEL_KEY::SERVER},
+		{MODEL_NAME[MODEL_KEY::VIEWTYPE], MODEL_KEY::VIEWTYPE},
+		{MODEL_NAME[MODEL_KEY::ADDDATE], MODEL_KEY::ADDDATE},
+		{MODEL_NAME[MODEL_KEY::FAV], MODEL_KEY::FAV},
+		{MODEL_NAME[MODEL_KEY::COLOR], MODEL_KEY::COLOR},
+		{MODEL_NAME[MODEL_KEY::RATE], MODEL_KEY::RATE},
+		{MODEL_NAME[MODEL_KEY::FORMAT], MODEL_KEY::FORMAT},
+		{MODEL_NAME[MODEL_KEY::PLACE], MODEL_KEY::PLACE},
+		{MODEL_NAME[MODEL_KEY::LOCATION], MODEL_KEY::LOCATION},
+		{MODEL_NAME[MODEL_KEY::ALBUM], MODEL_KEY::ALBUM},
+		{MODEL_NAME[MODEL_KEY::ARTIST], MODEL_KEY::ARTIST},
+		{MODEL_NAME[MODEL_KEY::DURATION], MODEL_KEY::DURATION},
+		{MODEL_NAME[MODEL_KEY::TRACK], MODEL_KEY::TRACK},
+		{MODEL_NAME[MODEL_KEY::GENRE], MODEL_KEY::GENRE},
+		{MODEL_NAME[MODEL_KEY::LYRICS], MODEL_KEY::LYRICS},
+		{MODEL_NAME[MODEL_KEY::RELEASEDATE], MODEL_KEY::RELEASEDATE},
+		{MODEL_NAME[MODEL_KEY::FORMAT], MODEL_KEY::FORMAT},
+		{MODEL_NAME[MODEL_KEY::WIKI], MODEL_KEY::WIKI},
+		{MODEL_NAME[MODEL_KEY::SOURCETYPE], MODEL_KEY::SOURCETYPE},
+		{MODEL_NAME[MODEL_KEY::ARTWORK], MODEL_KEY::ARTWORK},
+		{MODEL_NAME[MODEL_KEY::NOTE], MODEL_KEY::NOTE},
+		{MODEL_NAME[MODEL_KEY::MOOD], MODEL_KEY::MOOD},
+		{MODEL_NAME[MODEL_KEY::COMMENT], MODEL_KEY::COMMENT},
+		{MODEL_NAME[MODEL_KEY::CONTEXT], MODEL_KEY::CONTEXT},
+		{MODEL_NAME[MODEL_KEY::SOURCE], MODEL_KEY::SOURCE},		
+		{MODEL_NAME[MODEL_KEY::TITLE], MODEL_KEY::TITLE},		
+		{MODEL_NAME[MODEL_KEY::ID], MODEL_KEY::ID},		
+		{MODEL_NAME[MODEL_KEY::LICENSE], MODEL_KEY::LICENSE},
+		{MODEL_NAME[MODEL_KEY::DESCRIPTION], MODEL_KEY::DESCRIPTION},		
+		{MODEL_NAME[MODEL_KEY::BOOKMARK], MODEL_KEY::BOOKMARK}
 	};
 	
 	typedef QHash<FMH::MODEL_KEY, QString> MODEL;
@@ -184,7 +285,7 @@ namespace FMH
 		TRASH_PATH,
         SEARCH_PATH,
         CLOUD_PATH
-	}; Q_ENUM_NS(PATHTYPE_KEY);
+	};
 	
 	static const QHash<PATHTYPE_KEY, QString> PATHTYPE_NAME =
 	{
@@ -278,7 +379,7 @@ namespace FMH
 			return QVariantMap();
 		
 		QString icon, iconsize, hidden, detailview, showthumbnail, showterminal;
-		uint count = 0, sortby = FMH::MODEL_KEY::MODIFIED;
+		uint count = 0, sortby = FMH::MODEL_KEY::MODIFIED, viewType = 0;
 		bool foldersFirst = false;
 		
 		#ifdef Q_OS_ANDROID
@@ -299,6 +400,7 @@ namespace FMH
 		count = file.value("Count").toInt();
 		sortby = file.value("SortBy").toInt();
 		foldersFirst = file.value("FoldersFirst").toBool();
+		viewType = file.value("ViewType").toInt();
 		file.endGroup();
 		
 		#else
@@ -312,6 +414,7 @@ namespace FMH
 		count = file.entryMap(QString("MAUIFM"))["Count"].toInt();
 		sortby = file.entryMap(QString("MAUIFM"))["SortBy"].toInt();
 		foldersFirst = file.entryMap(QString("MAUIFM"))["FoldersFirst"] == "true" ? true : false;
+		viewType = file.entryMap(QString("MAUIFM"))["ViewType"].toInt();
 		#endif
 		
 		auto res = QVariantMap({
@@ -323,7 +426,8 @@ namespace FMH
 			{FMH::MODEL_NAME[FMH::MODEL_KEY::DETAILVIEW], detailview.isEmpty() ? "false" : detailview},
 			{FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN], hidden.isEmpty() ? false : (hidden == "true" ? true : false)},
 			{FMH::MODEL_NAME[FMH::MODEL_KEY::SORTBY], sortby},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::FOLDERSFIRST], foldersFirst}
+			{FMH::MODEL_NAME[FMH::MODEL_KEY::FOLDERSFIRST], foldersFirst},
+			{FMH::MODEL_NAME[FMH::MODEL_KEY::VIEWTYPE], viewType}
 		});
 		
 		return res;
@@ -392,8 +496,7 @@ namespace FMH
 	typedef QMap<FMH::MODEL_KEY, QString> DB;
 	
 	const QString FMPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/maui/fm/";
-	const QString DBName = "fm.db";
-	
+	const QString DBName = "fm.db";	
 	
 	inline QVariantMap getDirInfo(const QString &path, const QString &type = QString())
 	{
@@ -449,8 +552,148 @@ namespace FMH
 			res.insert(FMH::MODEL_NAME[key], data[key]);
 		
 		return res;
-	}	
+	}
 	
+	
+	
+	#ifndef STATIC_MAUIKIT
+	#include "mauikit_export.h"
+	#endif
+	
+	#ifdef STATIC_MAUIKIT
+	class Downloader : public QObject
+	#else
+	class MAUIKIT_EXPORT Downloader : public QObject
+	#endif	
+	{
+		Q_OBJECT
+	public:
+		explicit Downloader(QObject *parent = 0) : QObject(parent)
+		{
+			this->manager = new QNetworkAccessManager;
+		}
+		
+		virtual ~Downloader()
+		{
+			this->manager->deleteLater();
+		}
+		
+		void setFile(const QString &fileURL, const QString &fileName = QString())
+		{
+			QString filePath = fileURL;
+			
+			if(fileName.isEmpty() || fileURL.isEmpty())			
+				return;
+			
+			QNetworkRequest request;
+			request.setUrl(QUrl(fileURL));
+			reply = manager->get(request);
+			
+			file = new QFile;
+			file->setFileName(fileName);
+			file->open(QIODevice::WriteOnly);
+			
+			connect(reply,SIGNAL(downloadProgress(qint64,qint64)),this,SLOT(onDownloadProgress(qint64,qint64)));
+			connect(manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(onFinished(QNetworkReply*)));
+			connect(reply,SIGNAL(readyRead()),this,SLOT(onReadyRead()));
+			connect(reply,SIGNAL(finished()),this,SLOT(onReplyFinished()));
+		}
+		
+		void getArray(const QString &fileURL, const QMap<QString, QString> &headers = {})
+		{		
+			if(fileURL.isEmpty())			
+				return;
+			
+			qDebug()<< "request from" << fileURL;
+			
+			QNetworkRequest request;
+			request.setUrl(QUrl(fileURL));
+			if(!headers.isEmpty())
+				for(auto key: headers.keys())
+					request.setRawHeader(key.toLocal8Bit(), headers[key].toLocal8Bit());				
+			
+			reply = manager->get(request);			
+			
+			connect(manager, &QNetworkAccessManager::finished, [this](QNetworkReply* reply)
+			{
+				switch(reply->error())
+				{
+					case QNetworkReply::NoError:
+					{
+						qDebug("file is downloaded successfully.");
+						emit this->dataReady(reply->readAll());
+						break;
+					}
+					
+					default:
+					{
+						qDebug() << reply->errorString();						
+						emit this->warning(reply->errorString());
+						
+					};
+				}
+			});			
+		}
+		
+	private:
+		QNetworkAccessManager *manager;
+		QNetworkReply *reply;
+		QFile *file;
+		
+	signals:
+		void progress(int percent);
+		void downloadReady();
+		void fileSaved(QString path);
+		void warning(QString warning);
+		void dataReady(QByteArray array);
+		
+	private slots:
+		void onDownloadProgress(qint64 bytesRead, qint64 bytesTotal)
+		{			
+			emit this->progress((bytesRead * bytesTotal) / 100);
+		}
+		
+		void onFinished(QNetworkReply* reply)
+		{
+			switch(reply->error())
+			{
+				case QNetworkReply::NoError:
+				{
+					qDebug("file is downloaded successfully.");
+					emit this->downloadReady();
+					break;
+				}
+				
+				default:
+				{
+					emit this->warning(reply->errorString());
+				};
+			}
+			
+			if(file->isOpen())
+			{
+				file->close();
+				emit this->fileSaved(file->fileName());			
+				file->deleteLater();
+			}
+		}
+		
+		void onReadyRead()
+		{
+			file->write(reply->readAll());
+// 			emit this->fileSaved(file->fileName());			
+		}
+		
+		void onReplyFinished()
+		{
+			if(file->isOpen())
+			{
+				file->close();
+// 				emit this->fileSaved(file->fileName());
+				file->deleteLater();
+			}
+		}
+	};
 	
 }
 

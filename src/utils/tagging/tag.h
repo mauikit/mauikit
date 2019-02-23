@@ -32,8 +32,6 @@
 
 namespace TAG
 {
-	Q_NAMESPACE
-	
     enum class TABLE : uint8_t
     {
         USERS,
@@ -77,7 +75,7 @@ namespace TAG
         TITLE,
         DEVICE,
 		KEY
-    }; Q_ENUM_NS(KEYS);
+    };/* Q_ENUM_NS(KEYS);*/
 
 	typedef QHash<TAG::KEYS, QString> DB;
 	typedef QList<DB> DB_LIST;

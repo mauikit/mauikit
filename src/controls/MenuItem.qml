@@ -32,32 +32,72 @@ MenuItem
 	ColorScheme {id: colorScheme}
 	property alias colorScheme : colorScheme
 	/***************************/
+	
+	width: parent.width
+	height: control.visible ? rowHeight : 0
 	spacing: space.medium
 	font.pointSize: fontSizes.default
-		
-	contentItem: Label 
+	
+	icon.width: iconSizes.medium
+	icon.height: iconSizes.medium
+	
+	contentItem: RowLayout
 	{
-		id: controlLabel
-		leftPadding: control.checkable ? control.indicator.width + control.spacing + space.tiny : control.spacing
-		rightPadding: control.spacing
+		anchors.fill: control
+		anchors.leftMargin: control.checkable ? control.indicator.width + control.spacing + space.big : control.spacing
+		anchors.rightMargin: control.spacing
 		
-		text: control.action ? control.action.text : control.text
-		font: control.font
+		Item
+		{
+			Layout.fillHeight: true
+			Layout.alignment: Qt.AlignVCenter
+			visible: control.icon.name.length
+			width: control.icon.name.length ? control.icon.width : 0
+			
+			Maui.ToolButton
+			{
+				id: _controlIcon
+				visible: parent.visible
+				anchors.centerIn: parent
+				iconName: control.icon.name
+				size: control.icon.height
+				isMask: true
+				enabled: false
+				iconColor: _controlLabel.color
+			}
+		}
 		
-		color: control.hovered && !control.pressed ? colorScheme.highlightedTextColor : colorScheme.textColor
-		
-		elide: Text.ElideRight
-		visible: control.text
-		horizontalAlignment: Text.AlignLeft
-		verticalAlignment: Text.AlignVCenter
-	}
+		Item
+		{
+			Layout.fillHeight: true
+			Layout.fillWidth: true
+			Layout.alignment: Qt.AlignVCenter
+			Layout.leftMargin: _controlIcon.visible ? space.medium : 0
+			
+			Label
+			{
+				id: _controlLabel
+				visible: control.text
+				height: parent.height
+				width: parent.width
+				verticalAlignment:  Qt.AlignVCenter
+				horizontalAlignment: Qt.AlignLeft
+				
+				text: control.action ? control.action.text : control.text
+				font: control.font
+				elide: Text.ElideRight
+				
+				color: control.hovered && !control.pressed ? colorScheme.highlightedTextColor : colorScheme.textColor
+			}
+		}
+	}	
 	
 	indicator: Rectangle
 	{
 		x: control.mirrored ? control.width - width - control.rightPadding : control.spacing
 		y: control.topPadding + (control.availableHeight - height) / 2
 		
-		height: iconSizes.small
+		height: iconSizes.medium
 		width: height		
 	
 		visible: control.checkable

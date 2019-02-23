@@ -53,6 +53,9 @@
         <file alias="MenuItem.qml">src/controls/MenuItem.qml</file>
         <file alias="Terminal.qml">src/controls/Terminal.qml</file>
         <file alias="Editor.qml">src/controls/Editor.qml</file>
-        <file alias="PlacesSidebar.qml">src/controls/PlacesSidebar.qml</file>
-    </qresource>
+		<file alias="PlacesSidebar.qml">src/controls/PlacesSidebar.qml</file>
+		<file alias="ComboBox.qml">src/controls/ComboBox.qml</file>
+		<file alias="Store.qml">src/controls/Store.qml</file>
+		<file alias="private/StoreDelegate.qml">src/controls/private/StoreDelegate.qml</file>
+	</qresource>
 </RCC>

@@ -18,7 +18,8 @@ linux:unix:!android {
     include($$PWD/src/android/android.pri)
     include($$PWD/src/utils/syncing/openssl/openssl.pri)
     include($$PWD/src/utils/syncing/libwebdavclient/webdavclient.pri)
-
+    include($$PWD/src/utils/store/attica.pri)
+	
 } else {
     message("Unknown configuration")
 }
@@ -29,6 +30,7 @@ RESOURCES += \
     $$PWD/mauikit.qrc \
     $$PWD/assets.qrc \
     $$PWD/src/fm/fm.qrc \
+    $$PWD/src/utils/store/store.qrc \
     $$PWD/maui-style/style.qrc
 
 HEADERS += \
@@ -44,7 +46,10 @@ HEADERS += \
     $$PWD/src/utils/handy.h \
     $$PWD/src/utils/syncing/syncing.h \
 	$$PWD/src/utils/syncing/syncinglist.h \
-    $$PWD/src/utils/syncing/syncingmodel.h
+    $$PWD/src/utils/syncing/syncingmodel.h \
+	$$PWD/src/utils/store/store.h \
+    $$PWD/src/utils/store/storemodel.h \
+    $$PWD/src/utils/store/storelist.h
 
 SOURCES += \
     $$PWD/src/mauikit.cpp \
@@ -58,7 +63,10 @@ SOURCES += \
     $$PWD/src/utils/handy.cpp \
     $$PWD/src/utils/syncing/syncing.cpp \
     $$PWD/src/utils/syncing/syncinglist.cpp \
-    $$PWD/src/utils/syncing/syncingmodel.cpp
+    $$PWD/src/utils/syncing/syncingmodel.cpp \
+    $$PWD/src/utils/store/store.cpp \
+    $$PWD/src/utils/store/storemodel.cpp \
+    $$PWD/src/utils/store/storelist.cpp
 
 DEPENDPATH += \
     $$PWD/src \
@@ -69,7 +77,8 @@ INCLUDEPATH += \
      $$PWD/src/fm \
      $$PWD/src/utils \
      $$PWD/src/utils/editor \
-     $$PWD/src/utils/syncing
+     $$PWD/src/utils/syncing \
+     $$PWD/src/utils/store
 
 DEFINES += \
     MAUI_APP \

@@ -54,6 +54,7 @@ QQC2.Page
     property alias headBar: topToolBar
     property alias headBarItem: topToolBar.data
     property alias footBar: bottomToolBar
+    property alias footBarItem: bottomToolBar.data
     property alias floatingBar: bottomToolBar.floating
     property alias flickable: flickable
 
@@ -61,7 +62,7 @@ QQC2.Page
     property bool altToolBars : false
     property int footBarMargins : space.large
     property bool footBarOverlap: false
-    property bool allowRiseContent: floatingBar && footBarOverlap
+    property bool allowRiseContent: floatingBar && footBarOverlap && footBar.visible
 
     property bool contentIsRised: false
 
@@ -99,7 +100,7 @@ QQC2.Page
             Layout.leftMargin: plegable ? space.big : (floating ? space.small : 0)
             Layout.bottomMargin: plegable ? space.big : 0
             Layout.topMargin: plegable && !altToolBars ? space.big : 0
-            Layout.alignment: plegable ? Qt.AlignRight : undefined
+            Layout.alignment: plegable ? Qt.AlignRight : Qt.AlignCenter
 
             Layout.row: altToolBars ? 3 : 1
             Layout.column: 1
@@ -116,8 +117,8 @@ QQC2.Page
             width: folded ? height : implicitWidth
             implicitWidth: width
 
-            height: toolBarHeightAlt
-            implicitHeight: toolBarHeightAlt
+            Layout.preferredHeight: implicitHeight
+            implicitHeight: topToolBar.visible ? toolBarHeightAlt : 0
             plegable: control.width < Kirigami.Units.gridUnit * 17
             visible: count > 0
             clip: false
@@ -252,7 +253,7 @@ QQC2.Page
         {
             id: bottomToolBar
 
-            visible: footBar.visible && count > 0
+            visible: count > 0
 
             readonly property int _margins : footBarMargins
 

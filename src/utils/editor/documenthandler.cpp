@@ -60,6 +60,7 @@
 #include <QTextCodec>
 #include <QTextDocument>
 #include <QDebug>
+#include <QUrl>
 
 DocumentHandler::DocumentHandler(QObject *parent)
     : QObject(parent)
@@ -242,6 +243,14 @@ void DocumentHandler::setUnderline(bool underline)
     emit underlineChanged();
 }
 
+bool DocumentHandler::isRich() const
+{
+    const QString filePath = fileUrl().fileName();
+    const bool isRtf = QFileInfo(filePath).suffix().contains(QLatin1String("rtf"));
+
+    return isRtf;
+}
+
 int DocumentHandler::fontSize() const
 {
     QTextCursor cursor = textCursor();
@@ -293,6 +302,8 @@ QUrl DocumentHandler::fileUrl() const
 
 void DocumentHandler::load(const QUrl &fileUrl)
 {
+	
+	qDebug()<< "TRYING TO LOAD FILE << " << fileUrl;
     if (fileUrl == m_fileUrl)
         return;
 
@@ -304,9 +315,18 @@ void DocumentHandler::load(const QUrl &fileUrl)
 
     const QUrl path = QQmlFileSelector::get(engine)->selector()->select(fileUrl);
     const QString fileName = QQmlFile::urlToLocalFileOrQrc(path);
-    if (QFile::exists(fileName)) {
+	
+    if (QFile::exists(fileName))
+	{
+		
+		qDebug()<< "LOAD FILE EXISTS << ";
+		
         QFile file(fileName);
-        if (file.open(QFile::ReadOnly)) {
+        if (file.open(QFile::ReadOnly))
+		{
+			
+			qDebug()<< "LOAD FILE OPENDED << ";
+			
             QByteArray data = file.readAll();
             QTextCodec *codec = QTextCodec::codecForHtml(data);
             if (QTextDocument *doc = textDocument())

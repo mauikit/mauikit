@@ -31,6 +31,9 @@ import QtQuick.Controls.Material 2.1
 
 import "private"
 
+import SyncingModel 1.0 
+import SyncingList 1.0
+
 Kirigami.AbstractApplicationWindow
 {
     id: root
@@ -53,6 +56,10 @@ Kirigami.AbstractApplicationWindow
     property alias pageStack: __pageStack
     property alias mainMenu : mainMenu.content
     property alias about : aboutDialog
+    property alias accounts: accountsDialog
+    property alias currentAccount: _accountCombobox.currentText
+    property alias notifyDIalog: _notify
+    
 
     //redefines here as here we can know a pointer to PageRow
     wideScreen: width >= applicationWindow().pageStack.defaultColumnWidth * 1.5
@@ -176,7 +183,30 @@ backgroundColor.b, 0.7))
     //    overlay.modeless: Rectangle {
     //        color: "transparent"
     //    }
-
+	
+	onClosing:
+	{
+		if(!isMobile)
+		{	
+			var height = root.height
+			var width = root.width
+			var x = root.x
+			var y = root.y		
+			Maui.FM.saveSettings("GEOMETRY", Qt.rect(x, y, width, height), "WINDOW")
+			
+		}		
+	}
+	
+	property bool isPortrait: Screen.primaryOrientation === Qt.PortraitOrientation || Screen.primaryOrientation === Qt.InvertedPortraitOrientation	
+	onIsPortraitChanged: 
+	{
+		if(isPortrait)
+		{
+			width: Screen.width * (isMobile ? 1 : 0.4)
+			height: Screen.height * (isMobile ? 1 : 0.4)
+		}
+	}
+	
     onHeadBarBGColorChanged: 
     {
         if(!isMobile && colorSchemeName.length > 0 && !altToolBars)
@@ -238,7 +268,7 @@ backgroundColor.b, 0.7))
             onClicked:
             {
                 menuButtonClicked()
-				mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x,  altToolBars ? 0 : parent.height)
+				mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x ,  altToolBars ? 0 : parent.height+ space.medium)
             }
             
             Maui.Menu
@@ -246,9 +276,11 @@ backgroundColor.b, 0.7))
 				id: mainMenu
 				modal: true
 				
+				width: unit * 200
+				
 				Item
 				{
-					height: unit * 120
+					height: _accountCombobox.visible ? unit * 90 : 0
 					
 					anchors
 					{
@@ -257,59 +289,42 @@ backgroundColor.b, 0.7))
 						top: parent.top
 						margins: space.medium
 					}
-				
-					Column
+					
+					Maui.ComboBox
 					{
-						anchors.fill: parent
-						spacing: space.small
-						
-						Maui.ToolButton
-						{
-							iconName: "user-identity"
-							anchors.horizontalCenter: parent.horizontalCenter
-							size: iconSizes.big
-							enabled: false
-							isMask: false
-						}						
-						
-						Label
-						{
-							width: parent.width
-							horizontalAlignment: Qt.AlignHCenter
-							text: Maui.Handy.userInfo().name
-							font.pointSize: fontSizes.big
-							font.bold: true
-							font.weight: Font.Bold
-							color: textColor
-						}
-						
-						Label
-						{
-							text: "Syncing..."
-							width: parent.width
-							font.pointSize: fontSizes.small
-							opacity: 0.5
-							horizontalAlignment: Qt.AlignHCenter
-							color: textColor
-						}					
-						
+						id: _accountCombobox
+						anchors.centerIn: parent
+// 						parent: mainMenu
+						popup.z: 999
+						width: parent.width
+						visible: count > 1
+						textRole: "user"
+						flat: true
+						model: accounts.model
+						iconButton.iconName: "user-identity"
+						iconButton.isMask: false
 					}
 				}
+				
+				MenuSeparator
+				{
+                    visible: _accountCombobox.visible
+                }
+				
 				Maui.MenuItem
 				{
-					text: qsTr("Acounts")
+					text: qsTr("Accounts")
+					icon.name: "list-add-user"
 					onTriggered: 
 					{
-						dialogLoader.sourceComponent = accountsDialogComponent
-						dialog.open()
+						accountsDialog.open()
 					}
-				}
-				
-				MenuSeparator {}
+				}				
 				
 				Maui.MenuItem
 				{
 					text: qsTr("About")
+					icon.name: "documentinfo"
 					onTriggered: aboutDialog.open()
 				}
 				
@@ -412,10 +427,116 @@ backgroundColor.b, 0.7))
         id: aboutDialog  
     }
     
-    Component
-    {
-		id: accountsDialogComponent		
-		AccountsHelper {}
+
+	AccountsHelper
+	{
+		id: accountsDialog
+	}	
+	
+	Maui.Dialog
+	{
+		id: _notify
+		property var cb : ({})
+		verticalAlignment: Qt.AlignTop
+		defaultButtons: false
+		colorScheme.backgroundColor: altColor
+		colorScheme.textColor: altColorText
+		
+		maxHeight: Math.max(unit * 120, (_notifyLayout.implicitHeight))
+		maxWidth: isMobile ? parent.width * 0.9 : unit * 500
+		
+		Timer 
+		{
+			id: _notifyTimer
+			interval: 2500
+			
+			onTriggered: _notify.close()
+		}
+		
+		onClosed: _notifyTimer.stop()
+		
+		MouseArea
+		{
+			anchors.fill: parent
+			onClicked: 
+			{
+				if(_notify.cb)
+					_notify.cb()
+					
+				_notify.close()
+			}
+		}
+	
+		GridLayout
+		{
+			anchors.fill: parent
+			
+			columns: 2
+			rows: 1
+			
+			Item
+			{
+				Layout.fillHeight: true
+				Layout.preferredWidth: iconSizes.huge + space.big
+				Layout.row: 1
+				Layout.column: 1
+				
+				Maui.ToolButton
+				{
+					id: _notifyIcon
+					size: iconSizes.large
+					
+					anchors.centerIn: parent
+					isMask: false
+				}				
+			}
+			
+			Item
+			{
+				Layout.fillHeight: true
+				Layout.fillWidth: true	
+				Layout.row: 1
+				Layout.column: 2
+				
+				ColumnLayout
+				{
+					anchors.fill: parent
+					id: _notifyLayout
+					
+					Label
+					{
+						id: _notifyTitle
+						Layout.fillHeight: true
+						Layout.fillWidth: true
+						font.weight: Font.Bold
+						font.bold: true
+						font.pointSize: fontSizes.big
+						color: _notify.colorScheme.textColor
+						elide: Qt.ElideRight
+						wrapMode: Text.Wrap
+					}
+					
+					Label
+					{
+						id: _notifyBody
+						Layout.fillHeight: true
+						Layout.fillWidth: true
+						font.pointSize: fontSizes.default	
+						color: _notify.colorScheme.textColor
+						elide: Qt.ElideRight
+						wrapMode: Text.Wrap
+					}
+				}
+			}
+		}
+		
+		function show(callback)
+		{
+			_notify.cb = callback
+			_notifyTimer.start()
+
+			_notify.open()
+		}
 	}
 	
 	Loader
@@ -425,8 +546,28 @@ backgroundColor.b, 0.7))
 
      Component.onCompleted:
      {
-         if(isAndroid && altToolBars) Maui.Android.statusbarColor(backgroundColor, true)
+         if(isAndroid && altToolBars)
+			 Maui.Android.statusbarColor(backgroundColor, true)			 
+			 
+			 if(!isMobile)
+			 {	
+				 var rect = Maui.FM.loadSettings("GEOMETRY", "WINDOW", Qt.rect(root.x, root.y, root.width, root.height))
+				 root.x = rect.x
+				 root.y = rect.y
+				 root.width = rect.width
+				 root.height = rect.height
+				 
+			 }
+		
      }
+     
+     Connections
+     {
+		 target: Maui.FM
+		 
+		 onNewItem: notify("dialog-information", qsTr("File uploaded"), "Your file has been uploaded to your account /n"+path)
+		 onWarningMessage: notify("dialog-information", "Oops!", message)
+	}
 
     function switchColorScheme(variant)
     {
@@ -462,6 +603,15 @@ backgroundColor.b, 0.7))
 
         }
     }
+    
+    function notify(icon, title, body, callback)
+	{
+		_notifyIcon.iconName = icon 
+		_notifyTitle.text = title
+		_notifyBody.text = body
+		_notify.show(callback) 
+	}
+    
     /** FUNCTIONS **/
     //    function riseContent()
     //    {

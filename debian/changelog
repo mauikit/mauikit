@@ -1,0 +1,11 @@
+mauikit (0+git20181114-1) UNRELEASED; urgency=medium
+
+  * New snapshot
+
+ -- Jonah Brüchert <jbb@kaidan.im>  Wed, 14 Nov 2018 15:42:19 +0100
+
+mauikit (0+git20180904-1) unstable; urgency=medium
+
+  * Initial release
+
+ -- Jonah Brüchert <jbb@kaidan.im>  Tue, 04 Sep 2018 19:57:31 +0200

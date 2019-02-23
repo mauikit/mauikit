@@ -37,6 +37,9 @@
 #include "tagsmodel.h"
 #include "tagslist.h"
 
+#include "storemodel.h"
+#include "storelist.h"
+
 #include "handy.h"
 #include "documenthandler.h"
 
@@ -90,8 +93,13 @@ void MauiKit::registerTypes(const char *uri)
 	qmlRegisterType(componentUrl(QStringLiteral("Menu.qml")), uri, 1, 0, "Menu");
 	qmlRegisterType(componentUrl(QStringLiteral("MenuItem.qml")), uri, 1, 0, "MenuItem");
 	qmlRegisterType(componentUrl(QStringLiteral("ColorsBar.qml")), uri, 1, 0, "ColorsBar");
+	qmlRegisterType(componentUrl(QStringLiteral("ComboBox.qml")), uri, 1, 0, "ComboBox");
 	qmlRegisterType(componentUrl(QStringLiteral("private/TagList.qml")), uri, 1, 0, "TagList");
-
+	
+	/** STORE CONTROLS **/
+	qmlRegisterType(componentUrl(QStringLiteral("private/StoreDelegate.qml")), uri, 1, 0, "StoreDelegate");	
+	qmlRegisterType(componentUrl(QStringLiteral("Store.qml")), uri, 1, 0, "Store");
+	
     /** BROWSING CONTROLS **/
 	qmlRegisterType(componentUrl(QStringLiteral("ListBrowser.qml")), uri, 1, 0, "ListBrowser");
 	qmlRegisterType(componentUrl(QStringLiteral("GridBrowser.qml")), uri, 1, 0, "GridBrowser");
@@ -123,7 +131,6 @@ void MauiKit::registerTypes(const char *uri)
     });
 #endif
 	
-// 	qmlRegisterUncreatableMetaObject(FMH::staticMetaObject, "FMH", 1, 0, "KEY", "Error");	
 	qmlRegisterType<PlacesList>("PlacesList", 1, 0, "PlacesList");
 	qmlRegisterType<PlacesModel>("PlacesModel", 1, 0, "PlacesModel");
 	
@@ -136,11 +143,14 @@ void MauiKit::registerTypes(const char *uri)
 	qmlRegisterType<TagsList>("TagsList", 1, 0, "TagsList");
 	qmlRegisterType<TagsModel>("TagsModel", 1, 0, "TagsModel");
 	
+	qmlRegisterType<StoreList>("StoreList", 1, 0, "StoreList");
+	qmlRegisterType<StoreModel>("StoreModel", 1, 0, "StoreModel");
+	
 	qmlRegisterType<DocumentHandler>("DocumentHandler", 1, 0, "DocumentHandler");
 	
 	qmlRegisterSingletonType<FM>(uri, 1, 0, "FM",
                                       [](QQmlEngine*, QJSEngine*) -> QObject* {
-		auto fm = FM::getInstance();
+		auto fm = new FM();
         return fm;
     });
     

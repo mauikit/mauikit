@@ -3,7 +3,7 @@
 
 SyncingList::SyncingList(QObject *parent) : QObject(parent)
 {
-	this->fm = FM::getInstance();
+	this->fm = new FM(this);
 	this->setList();
 }
 

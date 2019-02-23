@@ -27,15 +27,18 @@ class MAUIKIT_EXPORT FM : public FMDB
     Q_OBJECT
 
 public:  
-	static FM *getInstance();
+// 	static FM *getInstance();
 	Syncing *sync;
 	
-	FMH::MODEL_LIST  getTags(const int &limit = 5);	
+	FM(QObject *parent = nullptr);
+	~FM();
+	
+	FMH::MODEL_LIST getTags(const int &limit = 5);	
 	FMH::MODEL_LIST getTagContent(const QString &tag);	
-    FMH::MODEL_LIST  getBookmarks();
+    FMH::MODEL_LIST getBookmarks();
 
     /** Syncing **/
-    bool getCloudServerContent(const QString &server);
+	bool getCloudServerContent(const QString &server, const QStringList &filters= QStringList(), const int &depth = 0);
     FMH::MODEL_LIST getCloudAccounts();
 	Q_INVOKABLE void createCloudDir(const QString &path, const QString &name);
 	
@@ -58,17 +61,17 @@ public:
 	
 	static QString resolveUserCloudCachePath(const QString &server, const QString &user);
 	QString resolveLocalCloudPath(const QString &path);
-	/*** END STATIC METHODS ***/
 	
+	static QVariantMap toMap(const FMH::MODEL &model);
+
+	/*** END STATIC METHODS ***/
+
 private:
     Tagging *tag;
-	static FM* instance;
+// 	static FM* instance;
 	
     void init();
-	QVariantList get(const QString &queryTxt);
-	
-	FM(QObject *parent = nullptr);
-	~FM();
+	QVariantList get(const QString &queryTxt);	
 
 signals:
 	void bookmarkInserted(QString bookmark);
@@ -78,25 +81,27 @@ signals:
     void cloudAccountRemoved(QString user);
 
     void cloudServerContentReady(FMH::MODEL_LIST list, const QString &url);
-	void cloudItemReady(FMH::MODEL item);
-	
+	void cloudItemReady(FMH::MODEL item, QString path); //when a item is downloaded and ready
+
 	void warningMessage(QString message);
 	void loadProgress(int percent);
 	
 	void dirCreated(FMH::MODEL dir);
-	void newItem(FMH::MODEL item, QString path);
+	void newItem(FMH::MODEL item, QString path); // when a new item is created
 	
 public slots:	
 	bool bookmark(const QString &path);
 	bool removeBookmark(const QString &path);
 	bool isBookmark(const QString &path);
 
+	QVariantList getCloudAccountsList();	
 	bool addCloudAccount(const QString &server, const QString &user, const QString &password);
 	bool removeCloudAccount(const QString &server, const QString &user);
 	void openCloudItem(const QVariantMap &item);	
+	void getCloudItem(const QVariantMap &item);	
 	
 	static QString formatSize(const int &size);
-	static QString formatDate(const QString &dateStr, const QString &format = "dd/MM/yyyy");
+	static QString formatDate(const QString &dateStr, const QString &format = QString("dd/MM/yyyy"));
 	static QString homePath();	
 	static QString parentDir(const QString &path);
 	
@@ -118,13 +123,14 @@ public slots:
 	
 	/* ACTIONS */	
 	bool copy(const QVariantList &data, const QString &where);
-	static bool cut(const QVariantList &data, const QString &where);
+	bool cut(const QVariantList &data, const QString &where);
 	static bool removeFile(const QString &path);
 	static bool rename(const QString &path, const QString &name);
 	static bool createDir(const QString &path, const QString &name);
 	static bool createFile(const QString &path, const QString &name);
 	
 	static bool openUrl(const QString &url);
+	static void openLocation(const QStringList &urls);	
 	static void runApplication(const QString &exec);	
 };
 

@@ -78,6 +78,7 @@ class DocumentHandler : public QObject
     Q_PROPERTY(bool uppercase READ uppercase WRITE setUppercase NOTIFY uppercaseChanged)
     Q_PROPERTY(bool italic READ italic WRITE setItalic NOTIFY italicChanged)
     Q_PROPERTY(bool underline READ underline WRITE setUnderline NOTIFY underlineChanged)
+    Q_PROPERTY(bool isRich READ isRich NOTIFY isRichChanged)
 
     Q_PROPERTY(int fontSize READ fontSize WRITE setFontSize NOTIFY fontSizeChanged)
 
@@ -121,6 +122,8 @@ public:
     bool underline() const;
     void setUnderline(bool underline);
 
+    bool isRich() const;
+
     int fontSize() const;
     void setFontSize(int size);
 
@@ -146,6 +149,7 @@ Q_SIGNALS:
     void uppercaseChanged();
     void italicChanged();
     void underlineChanged();
+    void isRichChanged();
 
     void fontSizeChanged();
 

@@ -385,7 +385,6 @@
         <file>icons/luv-icon-theme/Luv/places/48/folder-videos.svg</file>
         <file>icons/luv-icon-theme/Luv/places/48/folder.svg</file>
         <file>icons/luv-icon-theme/Luv/places/48/network-workgroup.svg</file>
-        <file>icons/luv-icon-theme/Luv/places/48/start-here.svg</file>
         <file>icons/luv-icon-theme/Luv/places/48/user-desktop.svg</file>
         <file>icons/luv-icon-theme/Luv/places/48/user-home.svg</file>
         <file>icons/luv-icon-theme/Luv/places/48/user-trash-full.svg</file>
@@ -406,7 +405,6 @@
         <file>icons/luv-icon-theme/Luv/places/64/folder-videos.svg</file>
         <file>icons/luv-icon-theme/Luv/places/64/folder.svg</file>
         <file>icons/luv-icon-theme/Luv/places/64/network-workgroup.svg</file>
-        <file>icons/luv-icon-theme/Luv/places/64/start-here.svg</file>
         <file>icons/luv-icon-theme/Luv/places/64/user-desktop.svg</file>
         <file>icons/luv-icon-theme/Luv/places/64/user-home.svg</file>
         <file>icons/luv-icon-theme/Luv/places/64/user-trash-full.svg</file>
@@ -446,5 +444,27 @@
         <file>icons/luv-icon-theme/Luv/status/64/dialog-information.svg</file>
         <file>icons/luv-icon-theme/Luv/status/128/dialog-information.svg</file>
         <file>icons/luv-icon-theme/Luv/status/128/user-identity.svg</file>
+        <file>icons/luv-icon-theme/Luv/apps/22/nx-software-center.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/checkbox.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/configure-toolbars.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/draw-star.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/edit-link.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/go-bottom.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/go-jump.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/go-top.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/handle-sort.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/image-preview.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/item-select.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/list-add-user.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/ok-apply.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/settings-configure.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/view-calendar.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/view-media-video.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/zoom-fit-height.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/zoom-fit-width.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/zoom-in.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/zoom-original.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/zoom-out.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/zoom.svg</file>
     </qresource>
 </RCC>

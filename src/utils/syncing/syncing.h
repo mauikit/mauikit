@@ -5,9 +5,18 @@
 #include <QNetworkReply>
 #include "fmh.h"
 
+#ifndef STATIC_MAUIKIT
+#include "mauikit_export.h"
+#endif
+
 class WebDAVClient;
 class WebDAVReply;
+
+#ifdef STATIC_MAUIKIT
 class Syncing : public QObject
+#else
+class MAUIKIT_EXPORT Syncing : public QObject
+#endif
 {
     Q_OBJECT
 	
@@ -24,8 +33,12 @@ public:
 		MOVE,
 		UPLOAD
 	};
+	
+	QStringList uploadQueue;
+	
+	
     explicit Syncing(QObject *parent = nullptr);
-    void listContent(const QString &path);
+	void listContent(const QString &path, const QStringList &filters, const int &depth = 1);
     void setCredentials(const QString &server, const QString &user, const QString &password);
 	void download(const QString &path);
 	void upload(const QString &path, const QString &filePath);
@@ -36,17 +49,19 @@ public:
 	
 	QString getUser() const;
 
-protected:
-	void emitSignal(const FMH::MODEL &item);
+	void setUploadQueue(const QStringList &list); 
+	
+	QString localToAbstractCloudPath(const QString &url);
 
 private:
     WebDAVClient *client;
     QString host = "https://cloud.opendesktop.cc/remote.php/webdav/";
     QString user = "mauitest";
     QString password = "mauitest";
-    void listDirOutputHandler(WebDAVReply *reply);
+	void listDirOutputHandler(WebDAVReply *reply, const QStringList &filters = QStringList());
 	
 	void saveTo(const QByteArray &array, const QString& path);
+	QString saveToCache(const QString& file, const QString &where);
 	QString getCacheFile(const QString &path);
 
 	QString currentPath;
@@ -58,12 +73,10 @@ private:
 	
 	QFile mFile;
 	
+	
 signals:
     void listReady(FMH::MODEL_LIST data, QString url);
-
-	void readyOpen(FMH::MODEL item, QString url);
-	void readyDownload(FMH::MODEL item, QString url);
-	void readyCopy(FMH::MODEL item, QString url);
+	void itemReady(FMH::MODEL item, QString url, Syncing::SIGNAL_TYPE &signalType);	
 	void dirCreated(FMH::MODEL item, QString url);
 	void uploadReady(FMH::MODEL item, QString url);
 	void error(QString message);

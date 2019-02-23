@@ -2,6 +2,8 @@
 #include "fm.h"
 
 #include <QFile>
+#include <QTimer>
+#include <QEventLoop>
 
 #include "WebDAVClient.hpp"
 #include "WebDAVItem.hpp"
@@ -12,12 +14,12 @@ Syncing::Syncing(QObject *parent) : QObject(parent)
 	this->setCredentials(this->host, this->user, this->password);
 }
 
-void Syncing::listContent(const QString &path)
+void Syncing::listContent(const QString &path, const QStringList &filters, const int &depth)
 {
 	this->currentPath = path;
 	
 	auto url = QString(path).replace("Cloud/"+user, "");
-	this->listDirOutputHandler(this->client->listDir(url, ListDepthEnum::One));
+	this->listDirOutputHandler(this->client->listDir(url, static_cast<ListDepthEnum>(depth)), filters);
 }
 
 void Syncing::setCredentials(const QString &server, const QString &user, const QString &password)
@@ -29,29 +31,34 @@ void Syncing::setCredentials(const QString &server, const QString &user, const Q
 	this->client = new WebDAVClient(this->host, this->user, this->password);
 }
 
-void Syncing::listDirOutputHandler(WebDAVReply *reply)
+void Syncing::listDirOutputHandler(WebDAVReply *reply, const QStringList &filters)
 {
-	connect(reply, &WebDAVReply::listDirResponse,
-			[=](QNetworkReply *listDirReply, QList<WebDAVItem> items) 
-			{
-				qDebug() << "URL :" << listDirReply->url();
-				qDebug() << "Received List of" << items.length() << "items";
-				qDebug() << endl << "---------------------------------------";
-				FMH::MODEL_LIST list;
-				for (WebDAVItem item : items)
-				{
-					
-					auto url = QUrl(item.getHref()).toString();
-					auto displayName = QString(url).replace("/remote.php/webdav/", "").replace("/", "");
-					auto path =  QString("Cloud/"+this->user+"/")+QString(url).replace("/remote.php/webdav/", "");
-					
-					qDebug()<< "PATHS:" << path << this->currentPath;
-					
-					if(QString(url).replace("/remote.php/webdav/", "").isEmpty() || path == this->currentPath)
-						continue;
-					
-					list << FMH::MODEL {
-						{FMH::MODEL_KEY::LABEL, displayName},
+	connect(reply, &WebDAVReply::listDirResponse, [=](QNetworkReply *listDirReply, QList<WebDAVItem> items) 
+	{
+// 		qDebug() << "URL :" << listDirReply->url();
+// 		qDebug() << "Received List of" << items.length() << "items";
+// 		qDebug() << endl << "---------------------------------------";
+		FMH::MODEL_LIST list;
+		for (WebDAVItem item : items)
+		{
+			
+			auto url = QUrl(item.getHref()).toString();
+			
+			auto path =  QString("Cloud/"+this->user+"/")+QString(url).replace("/remote.php/webdav/", "");
+			
+			auto displayName =  item.getContentType().isEmpty() ? QString(url).replace("/remote.php/webdav/", "").replace("/", "") :  QString(path).right(path.length()-path.lastIndexOf("/")-1);
+			
+// 			qDebug()<< "PATHS:" << path << this->currentPath;
+			
+			if(QString(url).replace("/remote.php/webdav/", "").isEmpty() || path == this->currentPath)
+				continue;
+			
+// 			qDebug()<< "FILTERING "<< filters << QString(displayName).right(displayName.length() - displayName.lastIndexOf("."));
+			if(!filters.isEmpty() && !filters.contains("*"+QString(displayName).right(displayName.length() -  displayName.lastIndexOf("."))))
+				continue;
+			
+			list << FMH::MODEL {
+				{FMH::MODEL_KEY::LABEL, displayName},
 		 {FMH::MODEL_KEY::NAME, item.getDisplayName()},
 			{FMH::MODEL_KEY::DATE, item.getCreationDate().toString(Qt::TextDate)},
 			{FMH::MODEL_KEY::MODIFIED, item.getLastModified()},
@@ -61,13 +68,13 @@ void Syncing::listDirOutputHandler(WebDAVReply *reply)
 			{FMH::MODEL_KEY::PATH, path},
 		 {FMH::MODEL_KEY::URL, url},
 		 {FMH::MODEL_KEY::THUMBNAIL, item.getContentType().isEmpty() ? url : this->getCacheFile(url)}
-					};
-				}
-				emit this->listReady(list, this->currentPath);
-				
-			});
+			};
+		}
+		emit this->listReady(list, this->currentPath);
+		
+	});
 	connect(reply, &WebDAVReply::error, [=](QNetworkReply::NetworkError err) {
-		qDebug() << "ERROR" << err;
+// 		qDebug() << "ERROR" << err;
 		this->emitError(err);
 	});
 }
@@ -97,7 +104,7 @@ void Syncing::download(const QString& path)
 			qDebug() << "\nDownload Success"
 			<< "\nURL  :" << reply->url() << "\nSize :" << reply->size();
 			auto file = reply->readAll();
-			auto directory = FMH::CloudCachePath+"opendesktop/"+this->user;
+			const auto directory = FMH::CloudCachePath+"opendesktop/"+this->user;
 			
 			QDir dir(directory);
 			
@@ -133,31 +140,40 @@ void Syncing::upload(const QString &path, const QString &filePath)
 	
 	if(!FMH::fileExists(filePath))
 		return;
-	
+		
 	qDebug()<< "Copy to cloud. File exists" << path << filePath;
 	
 	this->mFile.setFileName(filePath);
 
 	if(this->mFile.open(QIODevice::ReadOnly))
-	{
-		
+	{		
 		qDebug()<< "Copy to cloud. File could be opened";
 		
 		WebDAVReply *reply = this->client->uploadTo(path, QFileInfo(filePath).fileName(), &this->mFile);	
-	connect(reply, &WebDAVReply::uploadFinished, [=](QNetworkReply *reply)
+	
+		connect(reply, &WebDAVReply::uploadFinished, [=](QNetworkReply *reply)
 	{
 		if (!reply->error())
 		{
 			qDebug() << "\nUpload Success"
 			<< "\nURL  :" << reply->url() << "\nSize :" << reply->size();
-			auto item = FMH::getFileInfoModel(filePath);
-			item[FMH::MODEL_KEY::PATH] =  this->currentPath+"/"+QFileInfo(filePath).fileName()+"/";
+			
+			auto cachePath = this->saveToCache(filePath, path);
+			
+			auto item = FMH::getFileInfoModel(cachePath);
+// 			item[FMH::MODEL_KEY::PATH] =  this->currentPath+"/"+QFileInfo(filePath).fileName()+"/";
 			
 			emit this->uploadReady(item, this->currentPath);
 		} else
 		{
 			qDebug() << "ERROR(UPLOAD)" << reply->error();
 			emit this->error(reply->errorString());
+		}
+		
+		if(!this->uploadQueue.isEmpty())
+		{			
+			qDebug()<<"UPLOAD QUEUE" << this->uploadQueue;
+			this->upload(path, this->uploadQueue.takeLast());
 		}
 	});
 	
@@ -309,17 +325,32 @@ void Syncing::saveTo(const QByteArray &array, const QString& path)
 		auto newPath = QString(path).right(cut);
 		dir.mkdir(QString(path).replace(newPath, ""));
 		qDebug()<< newPath << cut;
-	}else
-	{
-		file.remove();
-	}
+		
+	}else file.remove();	
 	
 	file.open(QIODevice::WriteOnly);
 	file.write(array);
 	file.close();
 	
-	this->emitSignal(FMH::getFileInfoModel(path));
+	emit this->itemReady(FMH::getFileInfoModel(path), this->currentPath, this->signalType);
 	// 	emit this->itemReady(FMH::getFileInfoModel(path));
+}
+
+QString Syncing::saveToCache(const QString& file, const QString &where)
+{
+	auto directory = FMH::CloudCachePath+"opendesktop/"+this->user+"/"+where;
+	
+	QDir dir(directory);
+	
+	if (!dir.exists())
+		dir.mkpath(".");
+	
+	const auto newPath = directory+"/"+QFileInfo(file).fileName();
+	
+	if(QFile::copy(file, newPath))
+		return newPath;
+	
+	return QString();
 }
 
 void Syncing::resolveFile(const FMH::MODEL& item, const Syncing::SIGNAL_TYPE &signalType)
@@ -341,28 +372,10 @@ void Syncing::resolveFile(const FMH::MODEL& item, const Syncing::SIGNAL_TYPE &si
 		if(dateCloudFile >  dateCacheFile)
 			this->download(url);
 		else
-			this->emitSignal(cacheFile);
+			emit this->itemReady(cacheFile, this->currentPath, this->signalType);
+		
 	} else
 		this->download(url);
-}
-
-
-void Syncing::emitSignal(const FMH::MODEL &item)
-{
-	switch(this->signalType)
-	{
-		case SIGNAL_TYPE::OPEN:
-			emit this->readyOpen(item, this->currentPath);
-			break;
-			
-		case SIGNAL_TYPE::DOWNLOAD:
-			emit this->readyDownload(item, this->currentPath);
-			break;
-			
-		case SIGNAL_TYPE::COPY:
-			emit this->readyCopy(item, this->currentPath);
-			break;		
-	}
 }
 
 void Syncing::setCopyTo(const QString &path)
@@ -382,3 +395,14 @@ QString Syncing::getUser() const
 {
 	return this->user;
 }
+
+void Syncing::setUploadQueue(const QStringList& list)
+{
+	this->uploadQueue = list;
+}
+
+QString Syncing::localToAbstractCloudPath(const QString& url)
+{
+	return QString(url).replace(FMH::CloudCachePath+"opendesktop", FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]);
+}
+

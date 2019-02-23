@@ -46,7 +46,23 @@ Maui.Dialog
 
 	property var callback : ({})
 	
-	property alias textField: _textField	
+	property alias textField: _textField
+	
+	Maui.Dialog
+	{
+		id: _confirmationDialog
+		
+// 		anchors.centerIn: parent
+
+		acceptButton.text: qsTr("Accept")
+		rejectButton.text: qsTr("Cancel")
+			
+		title: qsTr(textField.text+" already exists!")
+		message: qsTr("If you are sure you want to replace the existing file click on Accept, otherwise click on cancel and change the name of the file to something different...")	
+		
+		onAccepted: control.done()
+		onRejected: close()
+	}
 	
 	Maui.Page
 	{
@@ -58,7 +74,7 @@ Maui.Dialog
 		topPadding: leftPadding
 		bottomPadding: leftPadding
 		headBarExit: false
-		
+		headBar.plegable: false
 		headBarTitleVisible: false
 		headBar.implicitHeight: pathBar.height + space.big
 		
@@ -102,8 +118,13 @@ Maui.Dialog
 					width: isCollapsed ? iconSize*2 : parent.width
 					height: parent.height
 						
-					onPlaceClicked: browser.openFolder(path)
-					list.groups: control.mode === modes.OPEN ? [FMList.PLACES_PATH, FMList.BOOKMARKS_PATH, FMList.CLOUD_PATH, FMList.DRIVES_PATH, FMList.TAGS_PATH] : [FMList.PLACES_PATH, FMList.BOOKMARKS_PATH, FMList.CLOUD_PATH, FMList.DRIVES_PATH]
+					onPlaceClicked: 
+					{
+						pageRow.currentIndex = 1
+						browser.openFolder(path)
+					}
+					
+					list.groups: control.mode === modes.OPEN ? [FMList.PLACES_PATH, FMList.BOOKMARKS_PATH, FMList.CLOUD_PATH, FMList.DRIVES_PATH, FMList.TAGS_PATH] : [FMList.PLACES_PATH, FMList.CLOUD_PATH, FMList.DRIVES_PATH]
 				}
 				
 				ColumnLayout
@@ -123,7 +144,6 @@ Maui.Dialog
 						list.filters: control.filters
 						list.sortBy: control.sortBy
 						list.filterType: control.filterType
-						footBar.visible: true
 						
 						onItemClicked: 
 						{
@@ -180,12 +200,15 @@ Maui.Dialog
 								
 								text: qsTr("Accept")
 								onClicked: 
-								{
-									var paths = browser.selectionBar && browser.selectionBar.visible ? browser.selectionBar.selectedPaths : browser.currentPath
-									
-									callback(paths)
-									
-									control.closeIt()
+								{									
+									console.log("CURRENT PATHb", browser.currentPath+"/"+textField.text)
+									if(control.mode === modes.SAVE && Maui.FM.fileExists(browser.currentPath+"/"+textField.text))
+									{
+										_confirmationDialog.open()
+									}else
+									{
+										done()
+									}
 								}
 								
 							}
@@ -209,5 +232,25 @@ Maui.Dialog
 	{
 		browser.clearSelection()
 		close()
+	}
+	
+	function done()
+	{
+		var paths = browser.selectionBar && browser.selectionBar.visible ? browser.selectionBar.selectedPaths : browser.currentPath
+		
+		if(control.mode === modes.SAVE)
+		{
+			if (typeof paths == 'string')
+			{
+				paths = paths + "/" + textField.text
+			}else
+			{
+				for(var i in paths)
+					paths[i] = paths[i] + "/" + textField.text
+			}
+		}
+		
+		callback(paths)		
+		control.closeIt()
 	}
 }

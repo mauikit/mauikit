@@ -56,7 +56,7 @@ Popup
     y: if(verticalAlignment === Qt.AlignVCenter) 
         parent.height / 2 - height / 2
         else if(verticalAlignment === Qt.AlignTop)
-			parent.height / 2 + (height + space.huge)
+			(height + space.huge)
                 else if(verticalAlignment === Qt.AlignBottom)
                     (parent.height) - (height + space.huge)
 else

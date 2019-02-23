@@ -13,6 +13,7 @@ Maui.Page
 	
 	property alias body : body
 	property alias document : document
+	property alias scrollView: _scrollView
 	
 	property alias text: body.text
 	property alias uppercase: document.uppercase
@@ -23,6 +24,7 @@ Maui.Page
 	
 	
 	headBarExit: false
+	headBar.visible: !body.readOnly
 
 	headBar.leftContent: [	
 	
@@ -100,10 +102,16 @@ Maui.Page
 			body.text = message
 			body.visible = true
 		}
+		
+		onLoaded:
+		{
+			body.text = text
+		}
 	}
 	
 	ScrollView
 	{
+		id: _scrollView
 		anchors.fill: parent
 		
 		TextArea
@@ -133,7 +141,8 @@ Maui.Page
 				color: "transparent"
 			}
 			
-			onPressAndHold: isMobile ? documentMenu.popup() : undefined
+// 			onPressAndHold: isMobile ? documentMenu.popup() : undefined
+			
 			onPressed:
 			{
 				if(!isMobile && event.button === Qt.RightButton)
@@ -171,19 +180,21 @@ Maui.Page
 				{
 					text: qsTr("Copy")
 					onTriggered: body.copy()
+					enabled: body.selectedText.length
 				}
 				
 				Maui.MenuItem
 				{
 					text: qsTr("Cut")
-					onTriggered: body.cut()					
+					onTriggered: body.cut()	
+					enabled: !body.readOnly && body.selectedText.length					
 				}
 				
 				Maui.MenuItem
 				{
 					text: qsTr("Paste")
 					onTriggered: body.paste()
-					
+					enabled: !body.readOnly					
 				}
 				
 				Maui.MenuItem
@@ -196,6 +207,8 @@ Maui.Page
 				{
 					text: qsTr("Web search")
 					onTriggered: Maui.FM.openUrl("https://www.google.com/search?q="+body.selectedText)
+					enabled: body.selectedText.length
+					
 				}
 			}
 		}

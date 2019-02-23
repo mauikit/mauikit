@@ -42,14 +42,17 @@ Drawer
         height: parent.height
         width: parent.width
         radius: 90
-        opacity: 0.5
+        opacity: 0.25
         source: ShaderEffectSource
         {
             sourceItem: bg
-            sourceRect:Qt.rect(bg.width-(control.position * control.width),
+            sourceRect: control.edge === Qt.LeftEdge ? Qt.rect(0,
                                0,
-                               control.width,
-                               control.height)
+							   control.position * control.width,
+                               control.height) : Qt.rect(bg.width-(control.position * control.width),
+									   0,
+									   control.position * control.width,
+									   control.height)
         }
     }
 

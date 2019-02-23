@@ -22,7 +22,7 @@ ItemDelegate
     property string labelColor: ListView.isCurrentItem ? highlightedTextColor :
     itemFgColor
     
-    hoverEnabled: !Kirigami.Settings.isMobile
+    hoverEnabled: !isMobile
     ToolTip.delay: 1000
     ToolTip.timeout: 5000
     ToolTip.visible: hovered && isCollapsed
@@ -50,8 +50,10 @@ ItemDelegate
             {
                 anchors.centerIn: parent
                 iconName: model.icon ? model.icon : ""
-                size: sidebarIconSize
-                isMask: !Kirigami.Settings.isMobile
+               size: sidebarIconSize
+				width: sidebarIconSize
+                height: width
+                isMask: !isMobile
                 iconColor: labelColor
                 enabled: false
             }
@@ -76,7 +78,7 @@ ItemDelegate
                 font.bold: false
                 elide: Text.ElideRight
                 
-                font.pointSize: Kirigami.Settings.isMobile ? Maui.Style.fontSizes.big :
+                font.pointSize: isMobile ? Maui.Style.fontSizes.big :
                 Maui.Style.fontSizes.default
                 color: labelColor
             }

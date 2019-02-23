@@ -11,26 +11,29 @@ Maui.Menu
 
     Maui.MenuItem
     {
+        icon.name: "item-select"
+
 		checkable: true
 		checked: selectionMode
 		text: qsTr("Selection mode")
         onTriggered: selectionMode = !selectionMode
     }
 
-    Maui.MenuItem
+   /* Maui.MenuItem
     {
 		checkable: true
 		checked: saveDirProps
 		text: qsTr("Per dir props")
 		onTriggered: saveDirProps = !saveDirProps
-	}
+	}*/
 	
     MenuSeparator { }
 
   
     Maui.MenuItem
     {
-        text: qsTr("Show previews")
+        icon.name: "image-preview"
+        text: qsTr("Previews")
 		checkable: true
 		checked: list.preview
         onTriggered:
@@ -42,7 +45,9 @@ Maui.Menu
 
     Maui.MenuItem
     {
-        text: qsTr("Show hidden files")
+        icon.name: "visibility"
+
+        text: qsTr("Hidden files")
 		checkable: true
 		checked: list.hidden
         onTriggered:
@@ -51,11 +56,27 @@ Maui.Menu
             close()
         }
     }
+    
+    Maui.MenuItem
+    {
+        icon.name: "bookmark-new"
+        text: qsTr("Bookmark")
+        checkable: true
+        checked: modelList.isBookmark 
+        
+		onTriggered: 
+		{
+    modelList.isBookmark = !modelList.isBookmark
+    close()
+		}
+    }
+
 
     MenuSeparator { }
 
     Maui.MenuItem
     {
+        icon.name: "folder-add"
         text: qsTr("New folder")
 		onTriggered: 
 		{
@@ -67,6 +88,7 @@ Maui.Menu
 
     Maui.MenuItem
     {
+        icon.name: "document-new"
         text: qsTr("New file")
 		onTriggered: 
 		{
@@ -75,21 +97,13 @@ Maui.Menu
 			close()
 		}
     }
-
-    Maui.MenuItem
-    {
-        text: qsTr("Bookmark")
-		onTriggered: 
-		{
-			bookmarkFolder([currentPath])
-			close()
-		}
-    }
-
-    MenuSeparator { }
+    
+    MenuSeparator { visible : pasteItem.enabled}
     
     Maui.MenuItem
     {
+		id: pasteItem
+        visible: enabled
         text: qsTr("Paste ")+"["+pasteFiles+"]"
         enabled: pasteFiles > 0
         onTriggered: paste()
@@ -97,7 +111,7 @@ Maui.Menu
     
     MenuSeparator { }
     
-    Maui.MenuItem
+   /* Maui.MenuItem
     {
         width: parent.width
 
@@ -120,7 +134,7 @@ Maui.Menu
                 onClicked: zoomOut()
             }
         }
-    }
+    }*/
 
     function show()
     {

@@ -30,6 +30,7 @@ ItemDelegate
     property bool isCurrentListItem :  ListView.isCurrentItem
 
     property alias label: controlLabel.text
+    property alias iconName: controlIcon.source
 	property int radius : 0
 	
 	signal rightClicked()
@@ -42,6 +43,7 @@ ItemDelegate
     property string labelColor: ListView.isCurrentItem ? highlightedTextColor :
                                                          textColor
 
+	hoverEnabled: !isMobile
 	
 	MouseArea
 	{
@@ -57,8 +59,9 @@ ItemDelegate
     background: Rectangle
     {
         anchors.fill: parent
-        color: isCurrentListItem ? highlightColor : "transparent"
+        color: isCurrentListItem || hovered ? highlightColor : "transparent"
 		radius: control.radius
+		opacity: hovered ? 0.3 : 1
         //                                   index % 2 === 0 ? Qt.lighter(backgroundColor,1.2) :
         //                                                     backgroundColor
     }
@@ -73,14 +76,15 @@ ItemDelegate
             visible: model.icon !== typeof("undefined")
             width: model.icon ? parent.height : 0
 
-            Maui.ToolButton
+            Kirigami.Icon
             {
                 id:controlIcon
                 anchors.centerIn: parent
-                iconName: model.icon ? model.icon : ""
-//                isMask: !isMobile
-                iconColor: labelColor
-                enabled: false
+                source: model.icon ? model.icon : ""
+               isMask: true
+                color: labelColor
+                height: iconSizes.medium
+                width: height
             }
         }
 
