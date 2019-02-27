@@ -48,166 +48,170 @@ MAUIKDE::MAUIKDE(QObject *parent) : QObject(parent)
 
 MAUIKDE::~MAUIKDE()
 {
-
+	
 }
 
 static QVariantMap createActionItem(const QString &label, const QString &actionId, const QVariant &argument = QVariant())
 {
-    QVariantMap map;
-
-    map["label"] = label;
-    map["actionId"] = actionId;
-
-    if (argument.isValid())
-        map["actionArgument"] = argument;
-
-
-    return map;
+	QVariantMap map;
+	
+	map["label"] = label;
+	map["actionId"] = actionId;
+	
+	if (argument.isValid())
+		map["actionArgument"] = argument;
+	
+	
+	return map;
 }
 
 QVariantList MAUIKDE::services(const QUrl &url)
 {
-    qDebug()<<"trying to get mimes";
-    QVariantList list;
-
-    if (url.isValid())
-    {
-        auto fileItem = new KFileItem(url);
-        fileItem->determineMimeType();
-
-        KService::List services = KMimeTypeTrader::self()->query(fileItem->mimetype(), "Application");
-
-        if (!services.isEmpty())
-            foreach (const KService::Ptr service, services)
-            {
-                const QString text = service->name().replace('&', "&&");
-                QVariantMap item = createActionItem(text, "_kicker_fileItem_openWith", service->entryPath());
-                item["icon"] = service->icon();
-                item["serviceExec"] = service->exec();
-
-                list << item;
-            }
-
-
-        list << createActionItem(i18n("Properties"), "_kicker_fileItem_properties");
-
-        return list;
-    } else return list;
+	qDebug()<<"trying to get mimes";
+	QVariantList list;
+	
+	if (url.isValid())
+	{
+		auto fileItem = new KFileItem(url);
+		fileItem->determineMimeType();
+		
+		KService::List services = KMimeTypeTrader::self()->query(fileItem->mimetype(), "Application");
+		
+		if (!services.isEmpty())
+			foreach (const KService::Ptr service, services)
+			{
+				const QString text = service->name().replace('&', "&&");
+				QVariantMap item = createActionItem(text, "_kicker_fileItem_openWith", service->entryPath());
+				item["icon"] = service->icon();
+				item["serviceExec"] = service->exec();
+				
+				list << item;
+			}
+			
+			
+			list << createActionItem(i18n("Properties"), "_kicker_fileItem_properties");
+			
+			return list;
+	} else return list;
 }
 
 bool MAUIKDE::sendToDevice(const QString &device, const QString &id, const QStringList &urls)
 {
-    for(auto url : urls)
-        KdeConnect::sendToDevice(device, id, url);
-
-    return true;
+	for(auto url : urls)
+		KdeConnect::sendToDevice(device, id, url);
+	
+	return true;
 }
 
 QVariantList MAUIKDE::devices()
 {
-    return KdeConnect::getDevices();
+	return KdeConnect::getDevices();
 }
 
 void MAUIKDE::openWithApp(const QString &exec, const QStringList &urls)
 {
-    KService service(exec);
-    KRun::runApplication(service, QUrl::fromStringList(urls), nullptr);
+	KService service(exec);
+	KRun::runApplication(service, QUrl::fromStringList(urls), nullptr);
 }
 
 void MAUIKDE::attachEmail(const QStringList &urls)
 {
-    if(urls.isEmpty()) return;
-
-    QFileInfo file(urls[0]);
-
-    KToolInvocation::invokeMailer("", "", "", file.baseName(), "Files shared... ", "", urls);
-    //    QDesktopServices::openUrl(QUrl("mailto:?subject=test&body=test&attachment;="
-    //    + url));
+	if(urls.isEmpty()) return;
+	
+	QFileInfo file(urls[0]);
+	
+	KToolInvocation::invokeMailer("", "", "", file.baseName(), "Files shared... ", "", urls);
+	//    QDesktopServices::openUrl(QUrl("mailto:?subject=test&body=test&attachment;="
+	//    + url));
 }
 
 void MAUIKDE::setColorScheme(const QString &schemeName, const QString &bg, const QString &fg)
 {
-
-    QString colorsFile = FMH::DataPath+"/color-schemes/"+schemeName+".colors";    
-    
-    if(!FMH::fileExists(colorsFile))
-    {
-        QFile color_scheme_file(":/assets/maui-app.colors");
-        if(color_scheme_file.copy(colorsFile))
-        {            
-            QFile copied_scheme_file(colorsFile);
-            copied_scheme_file.setPermissions(QFile::ReadOwner|QFile::WriteOwner|QFile::ExeOwner|QFile::ReadGroup|QFile::ExeGroup|QFile::ReadOther|QFile::ExeOther);
-            KConfig new_scheme_file(colorsFile);
-            auto new_scheme_name = new_scheme_file.group("General");
-            new_scheme_name.writeEntry("Name",  QVariant(schemeName));
-            new_scheme_name.writeEntry("ColorScheme",  QVariant(schemeName));
-        }            
-    } 
-   
-    KColorSchemeManager manager;
-    auto schemeModel = manager.indexForScheme(schemeName); 
-    
-    if(!schemeModel.isValid() && FMH::fileExists(colorsFile))
-    {
-        qDebug()<< "COLROS FILE EXISTS BUT IS INVALID";
-
-        KConfig scheme_file(colorsFile);
-        auto scheme_name = scheme_file.group("General");
-        scheme_name.writeEntry("Name", QVariant(schemeName));
-        scheme_name.writeEntry("ColorScheme",  QVariant(schemeName));
-    }   
-        
-      
-    schemeModel = manager.indexForScheme(schemeName);     
-    
-    if(schemeModel.isValid())
-    {
-        qDebug()<<"COLRO SCHEME IS VALID";
-        if(!bg.isEmpty() || !fg.isEmpty())
-        {
-           
-                qDebug()<<"COLRO SCHEME FILE EXISTS"<< colorsFile;
-                KConfig file(colorsFile);
-                auto group = file.group("WM");
-                QColor color;                               
-                
-                if(!bg.isEmpty())
-                { 
-                    color.setNamedColor(bg);
-                    QVariantList rgb = {color.red(), color.green(), color.blue()}; 
-                    group.writeEntry("activeBackground", QVariant::fromValue(rgb));
-                    group.writeEntry("inactiveBackground", QVariant::fromValue(rgb));
-                 
-                }                
-                
-                if(!fg.isEmpty())
-                { 
-                    color.setNamedColor(fg);
-                    QVariantList rgb = {color.red(), color.green(), color.blue()};
-                     group.writeEntry("activeForeground", QVariant::fromValue(rgb));
-                    group.writeEntry("inactiveForeground", QVariant::fromValue(rgb));                                 
-                }
-                
-                file.group("Colors:Window");
-				if(!bg.isEmpty())
-				{ 
-					color.setNamedColor(bg);
-					QVariantList rgb = {color.red(), color.green(), color.blue()}; 
-					group.writeEntry("BackgroundNormal", QVariant::fromValue(rgb));
-					group.writeEntry("BackgroundAlternate", QVariant::fromValue(rgb));
-					
-				}                
+	const QString colorSchemeDir = FMH::DataPath+"/color-schemes/";
+	
+	const QString colorsFile = colorSchemeDir+schemeName+".colors";    
+	
+	if(!FMH::fileExists(colorSchemeDir))
+		QDir(colorSchemeDir).mkpath(".");
+	
+	if(!FMH::fileExists(colorsFile))
+	{
+		QFile color_scheme_file(":/assets/maui-app.colors");
+		if(color_scheme_file.copy(colorsFile))
+		{            
+			QFile copied_scheme_file(colorsFile);
+			copied_scheme_file.setPermissions(QFile::ReadOwner|QFile::WriteOwner|QFile::ExeOwner|QFile::ReadGroup|QFile::ExeGroup|QFile::ReadOther|QFile::ExeOther);
+			KConfig new_scheme_file(colorsFile);
+			auto new_scheme_name = new_scheme_file.group("General");
+			new_scheme_name.writeEntry("Name",  QVariant(schemeName));
+			new_scheme_name.writeEntry("ColorScheme",  QVariant(schemeName));
+		}            
+	} 
+	
+	KColorSchemeManager manager;
+	auto schemeModel = manager.indexForScheme(schemeName); 
+	
+	if(!schemeModel.isValid() && FMH::fileExists(colorsFile))
+	{
+		qDebug()<< "COLROS FILE EXISTS BUT IS INVALID";
+		
+		KConfig scheme_file(colorsFile);
+		auto scheme_name = scheme_file.group("General");
+		scheme_name.writeEntry("Name", QVariant(schemeName));
+		scheme_name.writeEntry("ColorScheme",  QVariant(schemeName));
+	}   
+	
+	
+	schemeModel = manager.indexForScheme(schemeName);     
+	
+	if(schemeModel.isValid())
+	{
+		qDebug()<<"COLRO SCHEME IS VALID";
+		if(!bg.isEmpty() || !fg.isEmpty())
+		{
+			
+			qDebug()<<"COLRO SCHEME FILE EXISTS"<< colorsFile;
+			KConfig file(colorsFile);
+			auto group = file.group("WM");
+			QColor color;                               
+			
+			if(!bg.isEmpty())
+			{ 
+				color.setNamedColor(bg);
+				QVariantList rgb = {color.red(), color.green(), color.blue()}; 
+				group.writeEntry("activeBackground", QVariant::fromValue(rgb));
+				group.writeEntry("inactiveBackground", QVariant::fromValue(rgb));
 				
-				if(!fg.isEmpty())
-				{ 
-					color.setNamedColor(fg);
-					QVariantList rgb = {color.red(), color.green(), color.blue()};
-					group.writeEntry("ForegroundActive", QVariant::fromValue(rgb));
-					group.writeEntry("ForegroundInactive", QVariant::fromValue(rgb));                                 
-				}           
-        }
-            manager.activateScheme(schemeModel);            
-    } 
+			}                
+			
+			if(!fg.isEmpty())
+			{ 
+				color.setNamedColor(fg);
+				QVariantList rgb = {color.red(), color.green(), color.blue()};
+				group.writeEntry("activeForeground", QVariant::fromValue(rgb));
+				group.writeEntry("inactiveForeground", QVariant::fromValue(rgb));                                 
+			}
+			
+			file.group("Colors:Window");
+			if(!bg.isEmpty())
+			{ 
+				color.setNamedColor(bg);
+				QVariantList rgb = {color.red(), color.green(), color.blue()}; 
+				group.writeEntry("BackgroundNormal", QVariant::fromValue(rgb));
+				group.writeEntry("BackgroundAlternate", QVariant::fromValue(rgb));
+				
+			}                
+			
+			if(!fg.isEmpty())
+			{ 
+				color.setNamedColor(fg);
+				QVariantList rgb = {color.red(), color.green(), color.blue()};
+				group.writeEntry("ForegroundActive", QVariant::fromValue(rgb));
+				group.writeEntry("ForegroundInactive", QVariant::fromValue(rgb));                                 
+			}           
+		}
+		manager.activateScheme(schemeModel);            
+	} 
 }
 
 
