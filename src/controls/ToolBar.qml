@@ -71,7 +71,7 @@ ToolBar
 		id: headBarBG
 		color: colorScheme.backgroundColor
 		implicitHeight: toolBarHeightAlt  
-		radius: floating || plegable ? radiusV : 0   
+		radius: (floating || plegable) && drawBorder? radiusV : 0   
 		border.color: floating || plegable ? colorScheme.borderColor : "transparent"
 		
 		SequentialAnimation on radius
