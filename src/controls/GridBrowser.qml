@@ -54,9 +54,9 @@ Maui.GridView
 		id: delegate
 	
 		isDetails: false
-		width: cellWidth * 0.9
-		height: cellHeight * 0.9
-		folderSize : itemSize
+		width: control.cellWidth * 0.9
+		height: control.cellHeight * 0.9
+		folderSize : control.itemSize
 		showTooltip: true
 		showEmblem: control.showEmblem
 		showThumbnails: control.showPreviewThumbnails
