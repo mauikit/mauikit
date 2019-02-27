@@ -24,10 +24,19 @@ import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.2 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import QtGraphicalEffects 1.0
+import "private"
 
 ItemDelegate
 {
 	id: control
+	/* Controlc color scheming */
+	ColorScheme 
+	{
+		id: colorScheme
+	}
+	property alias colorScheme : colorScheme
+	/***************************/
+	
 	property bool isDetails : false
 	property bool showDetailsInfo: false
 	
@@ -44,8 +53,8 @@ ItemDelegate
 	property bool keepEmblemOverlay : false
 	property bool isCurrentListItem :  ListView.isCurrentItem
 	
-	property color labelColor : (isCurrentListItem || GridView.isCurrentItem || (keepEmblemOverlay && emblemAdded)) && !hovered && showSelectionBackground ? highlightedTextColor : textColor
-	property color hightlightedColor : GridView.isCurrentItem || hovered || (keepEmblemOverlay && emblemAdded) ? highlightColor : "transparent"
+	property color labelColor : (isCurrentListItem || GridView.isCurrentItem || (keepEmblemOverlay && emblemAdded)) && !hovered && showSelectionBackground ?  highlightedTextColor :  control.colorScheme.textColor
+	property color hightlightedColor : GridView.isCurrentItem || hovered || (keepEmblemOverlay && emblemAdded) ?  control.colorScheme.highlightColor : "transparent"
 	
 	property string rightEmblem
 	property string leftEmblem : "list-add"
@@ -61,8 +70,8 @@ ItemDelegate
 	
 	background: Rectangle
 	{
-		color: !isDetails? "transparent" : (isCurrentListItem ? highlightColor :
-		index % 2 === 0 ? Qt.lighter(backgroundColor,1.2) : backgroundColor)		
+		color: !isDetails? "transparent" : (isCurrentListItem ? control.colorScheme.highlightColor :
+		index % 2 === 0 ? Qt.lighter( control.colorScheme.backgroundColor,1.2) :  control.colorScheme.backgroundColor)		
 	}
 	
 	Drag.active: _mouseArea.drag.active
@@ -102,6 +111,7 @@ ItemDelegate
 		onClicked: leftEmblemClicked(index)
 // 		Component.onCompleted: leftEmblemIcon.item.isMask = false
 		size: iconSizes.small
+		colorScheme.backgroundColor: control.colorScheme.accentColor
 	}
 	
 	Maui.Badge
@@ -114,6 +124,7 @@ ItemDelegate
 		anchors.top: parent.top
 		anchors.right: parent.right
 		onClicked: rightEmblemClicked(index)
+		colorScheme.backgroundColor: control.colorScheme.accentColor
 	}
 	
 	Component

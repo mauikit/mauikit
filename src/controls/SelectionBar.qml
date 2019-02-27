@@ -28,6 +28,8 @@ Maui.Item
     id: control
 
     colorScheme.textColor : colorScheme.altColorText
+    colorScheme.backgroundColor: colorScheme.altColor
+    colorScheme.accentColor: "#29B6F6"
     
     property var selectedPaths: []
     property var selectedItems: []
@@ -90,9 +92,9 @@ Maui.Item
         id: bg
         anchors.fill: parent
         z:-1
-        color: colorScheme.altColor
+        color: colorScheme.backgroundColor
         radius: radiusV
-        opacity: 0.6
+        opacity: 1
         border.color: colorScheme.borderColor
 
         SequentialAnimation
@@ -216,6 +218,8 @@ Maui.Item
                     showThumbnails: true
                     emblemSize: iconSizes.small
                     leftEmblem: "list-remove"
+					colorScheme.accentColor: control.colorScheme.accentColor
+					colorScheme.textColor: control.colorScheme.textColor
 
                     Connections
                     {
