@@ -50,7 +50,6 @@
 #include "mauikde.h"
 #endif
 
-#define MAUIKIT_VERSION "1.0.2"
 
 QUrl MauiKit::componentUrl(const QString &fileName) const
 {
