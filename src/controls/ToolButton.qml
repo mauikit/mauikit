@@ -20,6 +20,8 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.2
 import QtQuick.Controls.impl 2.3
+import QtQuick.Layouts 1.3
+
 import org.kde.kirigami 2.4 as Kirigami
 import "private"
 
@@ -60,7 +62,7 @@ ToolButton
 	icon.width:  control.size
 	icon.height: control.size
 	icon.color: !control.isMask ? "transparent" :  (down || pressed) ? colorScheme.highlightColor : iconColor
-
+	
 	onClicked: if(anim) animIcon.running = true
 	
 	flat: true
@@ -69,6 +71,7 @@ ToolButton
 	
 	display: control.text.length > 0 ? (isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon) : ToolButton.IconOnly
 	spacing: space.tiny
+	
 	
 	
 	background: Rectangle
@@ -94,6 +97,65 @@ ToolButton
 		font: control.font
 		color: control.iconColor
 	}
+	
+	
+// 		background: Rectangle
+// 		{
+// 			implicitHeight: control.visible? control.height : 0
+// 			implicitWidth: control.visible? control.width : 0
+// 			
+// 			anchors.centerIn: control
+// 			color: /*(down || pressed || checked) */ checked && enabled  ?
+// 			Qt.lighter(colorScheme.highlightColor, 1.2) : colorScheme.backgroundColor
+// 			radius: unit * 3
+// 			opacity: (down || pressed || checked) && enabled  ?  0.5 : 1
+// 			border.color: colorScheme.borderColor
+// 		}
+// 		
+// 		contentItem: GridLayout
+// 		{
+// 			anchors.fill: control
+// 			id: _contentLayout
+// 			
+// 			columns: (control.display === ToolButton.TextUnderIcon) || (control.display === ToolButton.IconOnly)? 1 : 2
+// 			rows: (control.display === ToolButton.TextUnderIcon) ? 2 : 1
+// 			
+// 			Item
+// 			{
+// 				Layout.fillWidth: true
+// 				Layout.fillHeight: true
+// 				Layout.row: 1
+// 				Layout.column: 1
+// 				
+// 				Kirigami.Icon
+// 				{
+// 					anchors.centerIn: parent
+// 					source: control.iconName
+// 					isMask: control.isMask	
+// 					height: size
+// 					width: height
+// 					color: control.iconColor
+// 				}
+// 			}
+// 			
+// 			Item
+// 			{
+// 				visible: control.text.length && control.text
+// 				Layout.fillWidth: true
+// 				Layout.fillHeight: true
+// 				Layout.row: (control.display === ToolButton.TextUnderIcon) ? 2 : 1
+// 				Layout.column: (control.display === ToolButton.TextUnderIcon) || (control.display === ToolButton.IconOnly)? 1 : 2
+// 				
+// 				Label
+// 				{
+// 					anchors.fill: parent
+// 					font: control.font
+// 					text: control.text
+// 					horizontalAlignment: Qt.AlignHCenter
+// 					verticalAlignment: Qt.AlignVCenter
+// 				}
+// 			}
+// 		}
 	
 	SequentialAnimation
 	{

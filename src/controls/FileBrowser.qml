@@ -99,6 +99,7 @@ Maui.Page
 		{
 			title: qsTr("Create new folder")
 			onFinished: list.createDir(text)
+			rejectButton.visible: false
 		}
 	}
 	
@@ -110,6 +111,7 @@ Maui.Page
 		{
 			title: qsTr("Create new file")
 			onFinished: Maui.FM.createFile(control.currentPath, text)
+			rejectButton.visible: false			
 		}
 	}
 	
