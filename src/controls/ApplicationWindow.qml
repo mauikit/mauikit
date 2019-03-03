@@ -40,6 +40,10 @@ Kirigami.AbstractApplicationWindow
     visible: true
     width: Screen.width * (isMobile ? 1 : 0.4)
     height: Screen.height * (isMobile ? 1 : 0.4)
+	
+	contentItem.anchors.leftMargin: 0
+	contentItem.anchors.rightMargin: 0
+	contentItem.anchors.margins: 0
 
 	/***************************************************/
     /******************** ALIASES *********************/
@@ -232,11 +236,18 @@ backgroundColor.b, 0.7))
     {
         color: bgColor
     }
+    
+  
+// 		globalDrawer.height: root.height - headBar.height
+// 		globalDrawer.y: headBar.height
+	
 
     Maui.Page
     {
         id: page
         anchors.fill: parent
+        leftMargin: root.globalDrawer && (root.globalDrawer.modal === false) ? root.globalDrawer.contentItem.width * root.globalDrawer.position : 0
+        
         margins: 0
         headBar.plegable: false
         headBar.height: toolBarHeight + space.small
@@ -341,11 +352,15 @@ backgroundColor.b, 0.7))
             onClicked: searchButtonClicked()
         }
 
+       
+        
+        
         content: Kirigami.PageRow
         {
             id: __pageStack
             //            clip: true
             anchors.fill: parent
+            anchors.leftMargin: 100
             //FIXME
             onCurrentIndexChanged: root.reachableMode = false;
 

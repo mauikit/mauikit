@@ -30,30 +30,23 @@ Kirigami.GlobalDrawer
 
     z: 999
     handleVisible: false
-    y: altToolBars ? 0 : headBar.height
-    height: parent.height - (floatingBar && altToolBars ? 0 : headBar.height)
-    modal: true
+//     y: altToolBars ? 0 : headBar.height
+//     height: parent.height - (floatingBar && altToolBars ? 0 : headBar.height)
+//     modal: true
+    
+    height: root.height - headBar.height - footBar.height
+    y: headBar.height
 
     topPadding: 0
     bottomPadding: 0
     leftPadding: 0
-    rightPadding: 0
-
-    actions: [
-
-        Column
-        {
-            id: drawerActionsColumn
-
-        },
-
-        Kirigami.Action
-        {
-            text: "About..."
-            iconName: "documentinfo"
-            onTriggered: about.open()
-        }
-    ]
+    rightPadding: 0 
+    
+    onModalChanged:
+    {
+		if(!modal)
+			visible = true
+	}
 
     FastBlur
     {
