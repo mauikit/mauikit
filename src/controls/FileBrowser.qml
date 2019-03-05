@@ -507,6 +507,15 @@ Maui.Page
 	
 	Maui.ToolButton
 	{
+		iconName: "select-item"
+		checkable: true
+		checked: selectionMode		
+		onClicked: selectionMode = !selectionMode
+		
+	},
+	
+	Maui.ToolButton
+	{
 		iconName: "overflow-menu"
 		onClicked: browserMenu.show()
 		tooltipText: qsTr("Menu...")

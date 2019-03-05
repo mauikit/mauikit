@@ -36,10 +36,10 @@ ToolBar
 	
 	clip: true
 	implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
-	implicitHeight: floating || plegable ? toolBarHeightAlt : toolBarHeight 
+	implicitHeight: visible ? (floating || plegable ? toolBarHeightAlt : toolBarHeight) : 0
 	
 	width: floating || plegable ? implicitWidth : parent.width
-	height: visible ? implicitHeight : 0
+	height:  implicitHeight 
 	
 	property alias leftContent : leftRowContent.data
 	property alias middleContent : middleRowContent.data

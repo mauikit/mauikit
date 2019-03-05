@@ -9,15 +9,7 @@ Maui.Menu
 { 
     property int pasteFiles : 0
 
-    Maui.MenuItem
-    {
-        icon.name: "item-select"
-
-		checkable: true
-		checked: selectionMode
-		text: qsTr("Selection mode")
-        onTriggered: selectionMode = !selectionMode
-    }
+  
 
    /* Maui.MenuItem
     {
@@ -27,9 +19,7 @@ Maui.Menu
 		onTriggered: saveDirProps = !saveDirProps
 	}*/
 	
-    MenuSeparator { }
-
-  
+ 
     Maui.MenuItem
     {
         icon.name: "image-preview"
@@ -109,7 +99,6 @@ Maui.Menu
         onTriggered: paste()
     }
     
-    MenuSeparator { }
     
    /* Maui.MenuItem
     {
