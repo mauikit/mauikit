@@ -507,7 +507,7 @@ Maui.Page
 	
 	Maui.ToolButton
 	{
-		iconName: "select-item"
+		iconName: "item-select"
 		checkable: true
 		checked: selectionMode		
 		onClicked: selectionMode = !selectionMode
