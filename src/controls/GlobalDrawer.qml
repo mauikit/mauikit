@@ -19,14 +19,28 @@
 
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import org.kde.kirigami 2.0 as Kirigami
+import org.kde.kirigami 2.2 as Kirigami
+import org.kde.mauikit 1.0 as Maui
+
 import QtGraphicalEffects 1.0
+import "private"
 
 Kirigami.GlobalDrawer
 {
     id: control
-
+    
+    /* Controlc color scheming */
+	ColorScheme 
+	{
+		id: colorScheme
+		backgroundColor: viewBackgroundColor
+	}	
+	property alias colorScheme : colorScheme
+	/***************************/
+	
     property Item bg
+    
+//     property alias handleButton : _handleButton
 
     z: 999
     handleVisible: false
@@ -34,8 +48,8 @@ Kirigami.GlobalDrawer
 //     height: parent.height - (floatingBar && altToolBars ? 0 : headBar.height)
 //     modal: true
     
-    height: root.height - headBar.height - footBar.height
-    y: headBar.height
+    height: root.height - root.headBar.implicitHeight - root.footBar.implicitHeight
+    y: root.headBar.height
 
     topPadding: 0
     bottomPadding: 0
@@ -64,4 +78,76 @@ Kirigami.GlobalDrawer
                                control.height)
         }
     }
+    
+//     background: Rectangle 
+//     {
+// 		color: control.colorScheme.backgroundColor
+// 		
+// 		Item
+// 		{
+// 			parent: control.handle
+// 			anchors.fill: parent
+// 			anchors.margins: space.huge
+// 			
+// 			DropShadow 
+// 			{
+// 				anchors.fill: handleGraphics
+// 				horizontalOffset: 0
+// 				verticalOffset: Kitrigami.Units.devicePixelRatio
+// 				radius: Kitrigami.Units.gridUnit /2
+// 				samples: 16
+// 				color: Qt.rgba(0, 0, 0, control.handle.pressed ? 0.6 : 0.4)
+// 				source: handleGraphics
+// 			}
+// 			
+// 			Rectangle
+// 			{
+// 				id: handleGraphics
+// 				anchors.centerIn: parent
+// 				
+// 				color: control.handle.pressed ? control.colorScheme.highlightColor : control.colorScheme.accentColor
+// 				width: iconSizes.medium + space.medium * 2
+// 				height: width
+// 				radius: radiusV
+// 				
+// 				Maui.ToolButton
+// 				{
+// 					id: _handleButton
+// 					anchors.centerIn: parent
+// 					size: iconSizes.medium
+// 				}
+// 				
+// 				Behavior on color
+// 				{
+// 					ColorAnimation {
+// 						duration: Kirigami.Units.longDuration
+// 						easing.type: Easing.InOutQuad
+// 					}
+// 				}
+// 			}
+// 		}
+// 		
+// 		
+// 		EdgeShadow
+// 		{
+// 			z: -2
+// 			edge: control.edge
+// 			anchors
+// 			{
+// 				right: control.edge == Qt.RightEdge ? parent.left : (control.edge == Qt.LeftEdge ? undefined : parent.right)
+// 				left: control.edge == Qt.LeftEdge ? parent.right : (control.edge == Qt.RightEdge ? undefined : parent.left)
+// 				top: control.edge == Qt.TopEdge ? parent.bottom : (control.edge == Qt.BottomEdge ? undefined : parent.top)
+// 				bottom: control.edge == Qt.BottomEdge ? parent.top : (control.edge == Qt.TopEdge ? undefined : parent.bottom)
+// 			}
+// 			
+// 			opacity: control.position == 0 ? 0 : 1
+// 			
+// 			Behavior on opacity {
+// 				NumberAnimation {
+// 					duration: Units.longDuration
+// 					easing.type: Easing.InOutQuad
+// 				}
+// 			}
+// 		}
+// 	}
 }

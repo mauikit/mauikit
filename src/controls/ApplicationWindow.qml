@@ -44,6 +44,8 @@ Kirigami.AbstractApplicationWindow
 	contentItem.anchors.leftMargin: 0
 	contentItem.anchors.rightMargin: 0
 	contentItem.anchors.margins: 0
+	
+	property bool showAccounts : true
 
 	/***************************************************/
     /******************** ALIASES *********************/
@@ -60,7 +62,7 @@ Kirigami.AbstractApplicationWindow
     property alias pageStack: __pageStack
     property alias mainMenu : mainMenu.content
     property alias about : aboutDialog
-    property alias accounts: accountsDialog
+    property alias accounts: _accountsDialogLoader.item
     property alias currentAccount: _accountCombobox.currentText
     property alias notifyDIalog: _notify
     
@@ -308,7 +310,7 @@ backgroundColor.b, 0.7))
 // 						parent: mainMenu
 						popup.z: 999
 						width: parent.width
-						visible: count > 1
+						visible: (count > 1) && showAccounts
 						textRole: "user"
 						flat: true
 						model: accounts.model
@@ -325,10 +327,12 @@ backgroundColor.b, 0.7))
 				Maui.MenuItem
 				{
 					text: qsTr("Accounts")
+					visible: root.showAccounts
 					icon.name: "list-add-user"
 					onTriggered: 
 					{
-						accountsDialog.open()
+						if(root.accounts)
+							accounts.open()
 					}
 				}				
 				
@@ -434,18 +438,23 @@ backgroundColor.b, 0.7))
                 source: __pageStack
             }
         }
-    }  
-    
+    }      
     
     Maui.AboutDialog
     {
         id: aboutDialog  
-    }
-    
+    }    
 
-	AccountsHelper
+    Loader
+    {
+		id: _accountsDialogLoader
+		sourceComponent: root.showAccounts ? _accountsDialogComponent : undefined
+	}
+	
+	Component
 	{
-		id: accountsDialog
+		id: _accountsDialogComponent
+		AccountsHelper {}	
 	}	
 	
 	Maui.Dialog

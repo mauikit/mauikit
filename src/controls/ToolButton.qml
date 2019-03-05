@@ -61,7 +61,7 @@ ToolButton
 	icon.source: control.iconFallback
 	icon.width:  control.size
 	icon.height: control.size
-	icon.color: !control.isMask ? "transparent" :  (down || pressed) ? colorScheme.highlightColor : iconColor
+	icon.color: !control.isMask ? "transparent" :  (down || pressed || checked) ? colorScheme.highlightColor : iconColor
 	
 	onClicked: if(anim) animIcon.running = true
 	
