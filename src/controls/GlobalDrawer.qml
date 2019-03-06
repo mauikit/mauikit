@@ -48,7 +48,9 @@ Kirigami.GlobalDrawer
 //     height: parent.height - (floatingBar && altToolBars ? 0 : headBar.height)
 //     modal: true
     
-    height: root.height - root.headBar.implicitHeight - root.footBar.implicitHeight
+    
+    implicitHeight: root.height - root.headBar.implicitHeight - root.footBar.implicitHeight
+    height: implicitHeight
     y: root.headBar.height
 
     topPadding: 0
