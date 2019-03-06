@@ -13,7 +13,8 @@ Maui.Menu
 
    /* Maui.MenuItem
     {
-		checkable: true
+		che
+		ckable: true
 		checked: saveDirProps
 		text: qsTr("Per dir props")
 		onTriggered: saveDirProps = !saveDirProps
@@ -57,6 +58,7 @@ Maui.Menu
 		onTriggered: 
 		{
     modelList.isBookmark = !modelList.isBookmark
+    newBookmark()
     close()
 		}
     }

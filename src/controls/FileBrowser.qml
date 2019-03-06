@@ -58,6 +58,7 @@ Maui.Page
 	signal itemLeftEmblemClicked(int index)
 	signal itemRightEmblemClicked(int index)
 	signal rightClicked()
+	signal newBookmark()
 	
 	margins: 0
 	
@@ -188,7 +189,7 @@ Maui.Page
 	{
 		id: itemMenu
 		width: unit *200
-		onBookmarkClicked: control.bookmarkFolder(paths)
+		onBookmarkClicked: control.bookmarkFolder([items[0].path])
 		onCopyClicked:
 		{
 			if(items.length)
@@ -848,7 +849,10 @@ Maui.Page
 					continue
 					Maui.FM.bookmark(paths[i])
 			}
+			newBookmark()
 		}
+		
+		
 	}
 	
 	function zoomIn()
