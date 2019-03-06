@@ -614,7 +614,7 @@ bool FM::cut(const QVariantList &data, const QString &where)
 		}else if(UTIL::fileExists(path))
 		{
 			QFile file(path);
-			return file.rename(where+"/"+QFileInfo(path).fileName());
+			file.rename(where+"/"+QFileInfo(path).fileName());
 		}
 	}
 	
@@ -634,8 +634,8 @@ bool FM::copy(const QVariantList &data, const QString &where)
 			model.insert(FMH::MODEL_NAME_KEY[key], map[key].toString());				
 		
 		items << model;
-	}
-	
+	}	
+
 	QStringList cloudPaths;
 	
     for(auto item : items)
@@ -659,8 +659,8 @@ bool FM::copy(const QVariantList &data, const QString &where)
 			if(this->isCloud(where))				
 				cloudPaths << path;				
 			else
-				return file.copy(where);
-        }
+				file.copy(where+"/"+FMH::getFileInfoModel(path)[FMH::MODEL_KEY::LABEL]);			
+		}
     }
     
     if(!cloudPaths.isEmpty())

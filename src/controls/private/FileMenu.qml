@@ -18,9 +18,7 @@ Maui.Menu
 	signal copyClicked(var items)
 	signal cutClicked(var items)
 	signal renameClicked(var items)
-	signal tagsClicked(var items)
-	
-	
+	signal tagsClicked(var items)	
 	
 	Maui.MenuItem
 	{

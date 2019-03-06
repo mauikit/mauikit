@@ -192,23 +192,13 @@ Maui.Page
 		onCopyClicked:
 		{
 			if(items.length)
-			{
-				if(control.selectionBar)				
-					control.selectionBar.animate("#6fff80")
-					
-					control.copy(items)
-			}
+				control.copy(items)			
 		}
 		
 		onCutClicked:
 		{
 			if(items.length)
-			{
-				if(control.selectionBar)
-					control.selectionBar.animate("#fff44f")
-					
-					control.cut(items)
-			}
+				control.cut(items)			
 		}
 		
 		onTagsClicked:
@@ -554,8 +544,54 @@ Maui.Page
 		Maui.SelectionBar
 		{
 			anchors.fill: parent
-			onIconClicked: itemMenu.show(selectedItems)
+			onIconClicked: _selectionBarmenu.popup()
 			onExitClicked: clearSelection()
+			
+			Maui.Menu
+			{
+				id: _selectionBarmenu
+				Maui.MenuItem
+				{
+					text: qsTr("Copy...")
+					onTriggered:
+					{
+						if(control.selectionBar)				
+							control.selectionBar.animate("#6fff80")
+						control.copy(selectedItems)		
+						console.log(selectedItems)
+						_selectionBarmenu.close()
+					}
+				}
+				
+				Maui.MenuItem
+				{
+					text: qsTr("Cut...")
+					onTriggered:
+					{
+						if(control.selectionBar)
+							control.selectionBar.animate("#fff44f")
+						control.cut(selectedItems)
+						
+						_selectionBarmenu.close()
+					}
+				}
+				
+				MenuSeparator{}
+				
+				Maui.MenuItem
+				{
+					text: qsTr("Remove...")
+					colorScheme.textColor: dangerColor
+					
+					onTriggered:
+					{
+						dialogLoader.sourceComponent= removeDialogComponent
+						dialog.items = selectedItems
+						dialog.open()
+						_selectionBarmenu.close()
+					}
+				}
+			}
 		}
 	}
 	
@@ -784,11 +820,11 @@ Maui.Page
 	{
 		if(isCopy)
 			list.copyInto(copyItems, currentPath)
-			else if(isCut)
-			{
-				list.cutInto(cutItems, currentPath)
-				clearSelection()			
-			}
+		else if(isCut)
+		{
+			list.cutInto(cutItems, currentPath)
+			clearSelection()			
+		}
 	}
 	
 	function remove(items)
