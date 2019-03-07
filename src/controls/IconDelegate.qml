@@ -44,7 +44,7 @@ ItemDelegate
 	property int emblemSize: iconSizes.medium
 	property bool isHovered :  hovered
 	property bool showLabel : true
-	property bool showEmblem : true
+	property bool showEmblem : false
 	property bool showSelectionBackground : true
 	property bool showTooltip : false
 	property bool showThumbnails : false
@@ -74,37 +74,37 @@ ItemDelegate
 		index % 2 === 0 ? Qt.lighter( control.colorScheme.backgroundColor,1.2) :  control.colorScheme.backgroundColor)		
 	}
 	
-	Drag.active: _mouseArea.drag.active
-        Drag.dragType: Drag.Automatic
-        Drag.supportedActions: Qt.CopyAction
-        Drag.mimeData:
-        {
-            "text/uri-list": model.path
-        }
+// 	Drag.active: _mouseArea.drag.active
+//         Drag.dragType: Drag.Automatic
+//         Drag.supportedActions: Qt.CopyAction
+//         Drag.mimeData:
+//         {
+//             "text/uri-list": model.path
+//         }
 	
 	MouseArea
 	{
         id: _mouseArea
 		anchors.fill: parent
 		acceptedButtons:  Qt.RightButton
-		drag.target: parent
+// 		drag.target: parent
 		onClicked:
 		{
 			if(!isMobile && mouse.button === Qt.RightButton)
 				rightClicked()
 		}
 		
-		onPressed: parent.grabToImage(function(result)
-        {
-                parent.Drag.imageSource = result.url
-            })
+// 		onPressed: parent.grabToImage(function(result)
+//         {
+//                 parent.Drag.imageSource = result.url
+//             })
 	}
 	
 	Maui.Badge
 	{
 		id: leftEmblemIcon
 		iconName: leftEmblem
-		visible: (isHovered || keepEmblemOverlay) && showEmblem && leftEmblem
+		visible: (isHovered && leftEmblem) || showEmblem
 		z: 999
 		anchors.top: parent.top
 		anchors.left: parent.left

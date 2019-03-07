@@ -167,6 +167,7 @@ Maui.Page
 	FMList
 	{
 		id: modelList
+		preview: true
 		path: currentPath
 		foldersFirst: true
 		onSortByChanged: if(group) groupBy()
@@ -307,7 +308,7 @@ Maui.Page
 		Maui.GridBrowser
 		{
 			itemSize : thumbnailsSize + fontSizes.default
-			showEmblem: (currentPathType !== FMList.APPS_PATH && showEmblems) || selectionMode
+			showEmblem: selectionMode
 			showPreviewThumbnails: modelList.preview
 			rightEmblem: isMobile ? "document-share" : ""
 			leftEmblem: "list-add"
