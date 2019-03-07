@@ -313,7 +313,7 @@ backgroundColor.b, 0.7))
 						visible: (count > 1) && showAccounts
 						textRole: "user"
 						flat: true
-						model: accounts.model
+						model: showAccounts ? accounts.model : undefined
 						iconButton.iconName: "user-identity"
 						iconButton.isMask: false
 					}
