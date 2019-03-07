@@ -80,7 +80,11 @@ Maui.Item
 					{
 						id: _mouseArea
 						anchors.fill: parent
-						onClicked: riseContent()
+						onClicked: 
+						{
+							if(typeof(riseContent) !== "undefined") 
+								riseContent()
+						}
 						drag.target: parent
 						onPressed: selectionList.grabToImage(function(result)
 						{
