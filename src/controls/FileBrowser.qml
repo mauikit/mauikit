@@ -282,7 +282,7 @@ Maui.Page
 		Maui.ListBrowser
 		{
 			showPreviewThumbnails: modelList.preview
-			showEmblem: (currentPathType !== FMList.APPS_PATH && showEmblems) || selectionMode
+			showEmblem: selectionMode
 			rightEmblem: isMobile ? "document-share" : ""
 			leftEmblem: "list-add"
 			showDetailsInfo: true
