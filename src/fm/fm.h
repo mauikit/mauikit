@@ -63,7 +63,8 @@ public:
 	QString resolveLocalCloudPath(const QString &path);
 	
 	static QVariantMap toMap(const FMH::MODEL &model);
-
+	static FMH::MODEL toModel(const QVariantMap &map);
+	
 	/*** END STATIC METHODS ***/
 
 private:

@@ -127,6 +127,15 @@ QVariantMap FM::toMap(const FMH::MODEL& model)
 	return map;		
 }
 
+FMH::MODEL FM::toModel(const QVariantMap& map)
+{
+	FMH::MODEL model;
+	for(auto key : map.keys())
+		model.insert(FMH::MODEL_NAME_KEY[key], map[key].toString());
+	
+	return model;		
+}
+
 FMH::MODEL_LIST FM::packItems(const QStringList &items, const QString &type)
 {
     FMH::MODEL_LIST data;
