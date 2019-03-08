@@ -88,6 +88,23 @@ Item
 		}
 	}
 	
+	MouseArea
+	{
+		anchors.fill: parent
+		enabled: control.enabled
+		onClicked: actionTriggered()
+		
+		hoverEnabled: true
+		
+		Rectangle
+		{
+			anchors.fill: parent
+			color: parent.hovered ? control.colorScheme.backgroundColor : "transparent"
+			radius: radiusV
+		}
+		
+	}
+	
 	Column
 	{
 		anchors.centerIn: parent
@@ -120,24 +137,8 @@ Item
 			horizontalAlignment: Qt.AlignHCenter
 			elide: Text.ElideRight
 			color: colorScheme.textColor
-			wrapMode: Text.Wrap
+			wrapMode: Text.Wrap		
 			
-			MouseArea
-			{
-				anchors.fill: parent
-				enabled: control.enabled
-				onClicked: actionTriggered()
-				
-				hoverEnabled: true
-				
-				Rectangle
-				{
-					anchors.fill: parent
-					color: parent.hovered ? control.colorScheme.backgroundColor : "transparent"
-					radius: radiusV
-				}
-				
-			}
 		}
 	}
 	

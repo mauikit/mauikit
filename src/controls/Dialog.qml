@@ -95,7 +95,7 @@ Maui.Popup
 		
 		onClicked:
 		{
-			rejected()
+// 			rejected()
 			close()
 		}		
 	}
