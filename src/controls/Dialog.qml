@@ -49,6 +49,7 @@ Maui.Popup
 	property alias footBar : page.footBar
 	property alias headBar: page.headBar
 	property alias headBarTitle: page.headBarTitle
+	property alias closeButton: _closeButton
 		
 	signal accepted()
 	signal rejected()
@@ -82,6 +83,7 @@ Maui.Popup
 	
 	Maui.Badge
 	{
+		id: _closeButton
 		iconName: "window-close"
 		colorScheme.backgroundColor: hovered ?  dangerColor : colorScheme.altColor
 
