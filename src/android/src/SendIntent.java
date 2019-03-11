@@ -25,10 +25,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import java.io.File;
+import android.provider.ContactsContract;
+import android.database.Cursor;
 
 public class SendIntent
 {
     private static final int READ_REQUEST_CODE = 42;
+	private static final int CONTACT_PICKER_RESULT = 1001;
 
     public static void sendText(Activity context, String text)
     {
@@ -85,5 +88,4 @@ public class SendIntent
              intent.setType("audio/*");
              context.startActivityForResult(intent, READ_REQUEST_CODE);
       }
-
 }

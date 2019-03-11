@@ -45,6 +45,14 @@ MAUIAndroid::~MAUIAndroid()
     
 }
 
+QString MAUIAndroid::getContacts()
+{	
+	QAndroidJniObject str = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union", "getContacts", "(Landroid/content/Context;)Ljava/lang/String;", QtAndroid::androidActivity().object<jobject>());
+	
+	qDebug() << "Value from java is " << str.toString();
+	return str.toString();	
+}
+
 void MAUIAndroid::statusbarColor(const QString &bg, const bool &light)
 {
     QtAndroid::runOnAndroidThread([=]() {
@@ -269,11 +277,20 @@ void MAUIAndroid::handleActivityResult(int receiverRequestCode, int resultCode, 
 {
     qDebug()<< "ACTIVITY RESULTS";
     jint RESULT_OK = QAndroidJniObject::getStaticField<jint>("android/app/Activity", "RESULT_OK");
+	
     if (receiverRequestCode == 42 && resultCode == RESULT_OK)
     {
         QString url = data.callObjectMethod("getData", "()Landroid/net/Uri;").callObjectMethod("getPath", "()Ljava/lang/String;").toString();
         emit folderPicked(url);
     }
+    
+    if (receiverRequestCode == 1001 && resultCode == RESULT_OK)
+	{
+		Uri result = data.getData();
+		QString result = data.callObjectMethod("getData", "()Landroid/net/Uri;");
+		String id = result.getLastPathSegment();
+		
+	}
 }
 
 void MAUIAndroid::fileChooser()

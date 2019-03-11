@@ -14,6 +14,7 @@ INCLUDEPATH += \
 
 DISTFILES += \
     $$PWD/src/SendIntent.java \
+    $$PWD/src/Union.java \
     $$PWD/AndroidManifest.xml
 
 RESOURCES += \
