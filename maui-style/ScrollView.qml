@@ -65,7 +65,7 @@ T.ScrollView {
             property Flickable flickableItem
             onFlickableItemChanged: {
                 flickableItem.parent = scrollHelper;
-                flickableItem.boundsBehavior = scrollHelper.isMobile ? Flickable.DragAndOvershootBounds : Flickable.StopAtBounds;
+                flickableItem.boundsBehavior = /*scrollHelper.isMobile ? Flickable.DragAndOvershootBounds :*/ Flickable.StopAtBounds;
 
                 flickableItem.anchors.fill = scrollHelper;
                 //don't make the scrolling items overlap the background borders.

@@ -4,6 +4,10 @@ import android.provider.ContactsContract;
 import android.content.Context;
 import android.database.Cursor;
 
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
+
 public class Union extends org.qtproject.qt5.android.bindings.QtActivity
 {
 
@@ -11,21 +15,19 @@ public class Union extends org.qtproject.qt5.android.bindings.QtActivity
     {
     }
     
-       public static void call(String tel)
+       public void call(String tel)
       {
 			Intent callIntent = new Intent(Intent.ACTION_CALL);
-			callIntent.setData(Uri.parse(“tel:”+tel));
+                        callIntent.setData(Uri.parse("tel:"+tel));
 
 			startActivity(callIntent);
       }
 
-      public static void contacts()
-      {
-			Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
-			ContactsContract.Contacts.CONTENT_URI);
-			startActivityForResult(contactPickerIntent,
-			CONTACT_PICKER_RESULT);
-      }
+//      public static void contacts()
+//      {
+//                        Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+//                        startActivityForResult(contactPickerIntent, CONTACT_PICKER_RESULT);
+//      }
 
     public static String getContacts(Context c) 
     {

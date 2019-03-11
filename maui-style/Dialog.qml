@@ -66,7 +66,7 @@ T.Dialog {
         property color borderColor: Kirigami.Theme.textColor
         border.color: Qt.rgba(borderColor.r, borderColor.g, borderColor.b, 0.3)
         layer.enabled: true
-        
+
         layer.effect: DropShadow {
             transparentBorder: true
             radius: 8

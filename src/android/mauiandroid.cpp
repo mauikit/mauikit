@@ -283,14 +283,6 @@ void MAUIAndroid::handleActivityResult(int receiverRequestCode, int resultCode, 
         QString url = data.callObjectMethod("getData", "()Landroid/net/Uri;").callObjectMethod("getPath", "()Ljava/lang/String;").toString();
         emit folderPicked(url);
     }
-    
-    if (receiverRequestCode == 1001 && resultCode == RESULT_OK)
-	{
-		Uri result = data.getData();
-		QString result = data.callObjectMethod("getData", "()Landroid/net/Uri;");
-		String id = result.getLastPathSegment();
-		
-	}
 }
 
 void MAUIAndroid::fileChooser()
