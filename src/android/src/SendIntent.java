@@ -88,4 +88,11 @@ public class SendIntent
              intent.setType("audio/*");
              context.startActivityForResult(intent, READ_REQUEST_CODE);
       }
+
+  public static void call(Activity context, String tel)
+  {
+      String phone = tel;
+      Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+      context.startActivity(intent);
+  }
 }

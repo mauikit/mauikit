@@ -47,6 +47,8 @@ public:
     Q_INVOKABLE static QString sdDir();
 	
 	QString getContacts();
+    Q_INVOKABLE static void call(const QString &tel);
+
     void setAppIcons(const QString &lowDPI, const QString &mediumDPI, const QString &highDPI);
     void setAppInfo(const QString &appName, const QString &version, const QString &uri);
     void handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data);

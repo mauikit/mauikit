@@ -3,24 +3,25 @@ package com.kde.maui.tools;
 import android.provider.ContactsContract;
 import android.content.Context;
 import android.database.Cursor;
+import android.app.Activity;
 
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 
-public class Union extends org.qtproject.qt5.android.bindings.QtActivity
+public class Union
 {
 
     public Union()
     {
     }
     
-       public void call(String tel)
+       public static void call(Activity context, String tel)
       {
 			Intent callIntent = new Intent(Intent.ACTION_CALL);
                         callIntent.setData(Uri.parse("tel:"+tel));
 
-			startActivity(callIntent);
+                        context.startActivity(callIntent);
       }
 
 //      public static void contacts()
@@ -38,8 +39,9 @@ public class Union extends org.qtproject.qt5.android.bindings.QtActivity
 
 		while (phones.moveToNext()) {
 			String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-			String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-			fetch+="<item><name>"+name+"</name><number>"+phoneNumber+"</number></item>";
+                        String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        String email = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS));
+                        fetch += "<item><n>"+name+"</n><tel>"+phoneNumber+"</tel><email>"+email+"</email></item>";
 		}
 		fetch+="</root>";
 		return fetch;

@@ -47,15 +47,45 @@ MAUIAndroid::~MAUIAndroid()
 
 QString MAUIAndroid::getContacts()
 {	
-	QAndroidJniObject str = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union", "getContacts", "(Landroid/content/Context;)Ljava/lang/String;", QtAndroid::androidActivity().object<jobject>());
-	
-	qDebug() << "Value from java is " << str.toString();
-	return str.toString();	
+    QAndroidJniObject str = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union", "getContacts", "(Landroid/content/Context;)Ljava/lang/String;", QtAndroid::androidActivity().object<jobject>());
+
+    qDebug() << "Value from java is " << str.toString();
+    return str.toString();
+}
+
+void MAUIAndroid::call(const QString &tel)
+{
+
+    QAndroidJniEnvironment _env;
+    QAndroidJniObject activity = QAndroidJniObject::callStaticObjectMethod("org/qtproject/qt5/android/QtNative", "activity", "()Landroid/app/Activity;");   //activity is valid
+    if (_env->ExceptionCheck()) {
+        _env->ExceptionClear();
+        throw InterfaceConnFailedException();
+    }
+    if ( activity.isValid() )
+    {
+        qDebug()<< "trying to call from senitents" << tel;
+
+        QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/SendIntent",
+                                                  "call",
+                                                  "(Landroid/app/Activity;Ljava/lang/String;)V",
+                                                  activity.object<jobject>(),
+                                                  QAndroidJniObject::fromString(tel).object<jstring>());
+
+
+        if (_env->ExceptionCheck()) {
+            _env->ExceptionClear();
+            throw InterfaceConnFailedException();
+        }
+    }else
+        throw InterfaceConnFailedException();
+
 }
 
 void MAUIAndroid::statusbarColor(const QString &bg, const bool &light)
 {
-    QtAndroid::runOnAndroidThread([=]() {
+    QtAndroid::runOnAndroidThread([=]()
+    {
         QAndroidJniObject window = QtAndroid::androidActivity().callObjectMethod("getWindow", "()Landroid/view/Window;");
         window.callMethod<void>("addFlags", "(I)V", 0x80000000);
         window.callMethod<void>("clearFlags", "(I)V", 0x04000000);
@@ -277,7 +307,7 @@ void MAUIAndroid::handleActivityResult(int receiverRequestCode, int resultCode, 
 {
     qDebug()<< "ACTIVITY RESULTS";
     jint RESULT_OK = QAndroidJniObject::getStaticField<jint>("android/app/Activity", "RESULT_OK");
-	
+
     if (receiverRequestCode == 42 && resultCode == RESULT_OK)
     {
         QString url = data.callObjectMethod("getData", "()Landroid/net/Uri;").callObjectMethod("getPath", "()Ljava/lang/String;").toString();
