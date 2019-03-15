@@ -85,9 +85,9 @@ else
     background: Rectangle
     {
 		id: popupBackground
-        radius: radiusV
+        radius: control.width === control.parent.width && control.height === control.parent.height ? 0 : radiusV
         color: colorScheme.backgroundColor
-        border.color: colorScheme.borderColor       
+        border.color: control.width === control.parent.width && control.height === control.parent.height ? "transparent" : colorScheme.borderColor       
         
     }  
 

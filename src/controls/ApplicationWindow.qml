@@ -55,8 +55,8 @@ Kirigami.AbstractApplicationWindow
     property alias headBar : page.headBar
     property alias dialog: dialogLoader.item
     
-    property alias rightIcon : menuBtn
-    property alias leftIcon : searchBtn
+    property alias leftIcon : menuBtn
+    property alias rightIcon : searchBtn
     
     default property alias content : page.content
     property alias pageStack: __pageStack
