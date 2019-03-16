@@ -10,4 +10,10 @@ Item
 	property alias colorScheme : colorScheme
 	/***************************/
 	
+	Rectangle
+	{
+		anchors.fill: parent
+		color: control.colorScheme.backgroundColor
+	}
+	
 }
