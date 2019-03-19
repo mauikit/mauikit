@@ -41,6 +41,17 @@ public class SendIntent
         sendIntent.setType("text/plain");
         context.startActivity(Intent.createChooser(sendIntent, text));
     }
+    
+    public void sendSMS(Activity context, String tel, String subject, String message)
+    {
+		Intent intent = new Intent(Intent.ACTION_SEND);
+		intent.setData(Uri.parse("smsto:"+tel));  // This ensures only SMS apps respond
+		intent.putExtra("sms_subject", subject);
+		intent.putExtra("sms_body", message);
+// 		intent.putExtra(Intent.EXTRA_STREAM, attachment);
+		context.startActivity(intent);		
+	}
+
 
     public static void sendUrl(Activity context, String text)
     {

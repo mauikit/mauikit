@@ -178,6 +178,34 @@ void MAUIAndroid::shareLink(const QString &link)
         throw InterfaceConnFailedException();
 }
 
+void MAUIAndroid::sendSMS(const QString &tel,const QString &subject, const QString &message )
+{
+	qDebug()<< "trying to send sms text";
+	QAndroidJniEnvironment _env;
+	QAndroidJniObject activity = QAndroidJniObject::callStaticObjectMethod("org/qtproject/qt5/android/QtNative", "activity", "()Landroid/app/Activity;");   //activity is valid
+	if (_env->ExceptionCheck()) {
+		_env->ExceptionClear();
+		throw InterfaceConnFailedException();
+	}
+	if ( activity.isValid() )
+	{
+		QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/SendIntent",
+												  "sendSMS",
+											"(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",
+												  activity.object<jobject>(),
+												  QAndroidJniObject::fromString(tel).object<jstring>(),
+												  QAndroidJniObject::fromString(subject).object<jstring>(),
+												  QAndroidJniObject::fromString(message).object<jstring>());
+		
+		
+		if (_env->ExceptionCheck()) {
+			_env->ExceptionClear();
+			throw InterfaceConnFailedException();
+		}
+	}else
+		throw InterfaceConnFailedException();
+}
+
 void MAUIAndroid::openWithApp(const QString &url)
 {
     
