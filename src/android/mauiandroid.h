@@ -40,6 +40,7 @@ public:
     Q_INVOKABLE void statusbarColor(const QString &bg, const bool &light);
     Q_INVOKABLE void shareDialog(const QString &url);
     Q_INVOKABLE void shareText(const QString &text);
+	Q_INVOKABLE void sendSMS(const QString &tel,const QString &subject, const QString &message);	
     Q_INVOKABLE void shareLink(const QString &link);
     Q_INVOKABLE void openWithApp(const QString &url);
     Q_INVOKABLE static QStringList defaultPaths();
