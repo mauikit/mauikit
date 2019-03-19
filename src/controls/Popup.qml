@@ -37,7 +37,7 @@ Popup
 	}
 	property alias colorScheme : colorScheme
 	/***************************/
-	
+	property alias backgroudItem: popupBackground.data
     property int maxWidth : parent.width
     property int maxHeight : parent.height
     property double hint : 0.9

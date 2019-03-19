@@ -39,6 +39,8 @@ ToolButton
 	property alias colorScheme : colorScheme
 	/***************************/
 	
+	property alias backgroundRec: _background
+	
 	property bool isMask:  true
 	property string iconName: ""
 	property string iconFallback: ""
@@ -46,6 +48,7 @@ ToolButton
 	property color iconColor: colorScheme.textColor
 	property bool anim: false
 	property string tooltipText : ""
+	property bool showIndicator: false
 	
 	hoverEnabled: !isMobile
 	
@@ -76,6 +79,7 @@ ToolButton
 	
 	background: Rectangle
 	{
+		id: _background
 		implicitHeight: control.visible? iconSizes.medium : 0
 		implicitWidth: control.visible? iconSizes.medium : 0
 		
@@ -85,6 +89,18 @@ ToolButton
 		radius: unit * 3
 		opacity: (down || pressed || checked) && enabled  ?  0.5 : 1
 		border.color: colorScheme.borderColor
+		
+		Rectangle
+		{
+			id: _indicator
+			color: control.colorScheme.highlightColor
+			height: unit * 5
+			width: size * 2
+			
+			anchors.bottom: parent.bottom
+			anchors.horizontalCenter: parent.horizontalCenter
+			visible: control.showIndicator
+		}
 	}
 	
 	contentItem: IconLabel

@@ -61,6 +61,7 @@ Maui.Popup
 	heightHint: 0.9
 	z: 1
     clip: false
+    
 	
 	Maui.Popup
 	{
