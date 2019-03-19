@@ -36,6 +36,8 @@ public:
     Q_INVOKABLE static bool sendToDevice(const QString &device, const QString &id, const QStringList &urls);
     Q_INVOKABLE static void openWithApp(const QString &exec, const QStringList &urls);
     Q_INVOKABLE static void attachEmail(const QStringList &urls);
+	Q_INVOKABLE static void email(const QString &to = "", const QString &cc = "", const QString &bcc = "", const QString &subject = "",const QString &body = "", const QString &messageFile ="", const QStringList &urls = QStringList());
+	
     Q_INVOKABLE static void setColorScheme(const QString &schemeName, const QString &bg =  QString(), const QString &fg = QString());
 	
 	static FMH::MODEL_LIST getApps();

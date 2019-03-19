@@ -125,6 +125,13 @@ void MAUIKDE::attachEmail(const QStringList &urls)
 	//    + url));
 }
 
+void MAUIKDE::email(const QString &to, const QString &cc, const QString &bcc, const QString &subject,  const QString &body, const QString &messageFile, const QStringList &urls)
+{
+	KToolInvocation::invokeMailer(to, cc, bcc, subject, body, messageFile, urls);
+	//    QDesktopServices::openUrl(QUrl("mailto:?subject=test&body=test&attachment;="
+	//    + url));
+}
+
 void MAUIKDE::setColorScheme(const QString &schemeName, const QString &bg, const QString &fg)
 {
 	const QString colorSchemeDir = FMH::DataPath+"/color-schemes/";
