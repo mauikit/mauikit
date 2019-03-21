@@ -52,7 +52,16 @@ public class Union
 		return fetch;
     }
 
-    public static void addContact(Context c, String name, String tel, String tel2, String tel3, String email, String title, String org)
+    public static void addContact(Context c,
+    String name,
+    String tel,
+    String tel2,
+    String tel3,
+    String email,
+    String title,
+    String org,
+    String accountName,
+    String accountType)
     {
 
         String DisplayName = name;
@@ -67,8 +76,8 @@ public class Union
 
          ops.add(ContentProviderOperation.newInsert(
          ContactsContract.RawContacts.CONTENT_URI)
-             .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
-             .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
+             .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, accountType)
+             .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, accountName)
              .build());
 
          //------------------------------------------------------ Names

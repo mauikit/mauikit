@@ -61,12 +61,22 @@ QString MAUIAndroid::getContacts()
     return str.toString();
 }
 
-void MAUIAndroid::addContact(const QString &name, const QString &tel, const QString &tel2, const QString &tel3, const QString &email, const QString &title, const QString &org)
+void MAUIAndroid::addContact(const QString &name,
+                             const QString &tel,
+                             const QString &tel2,
+                             const QString &tel3,
+                             const QString &email,
+                             const QString &title,
+                             const QString &org,
+                             const QString &account,
+                             const QString &accountType)
 {
     qDebug()<< "Adding new contact to android";
     QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/Union",
                                               "addContact",
                                               "(Landroid/content/Context;"
+                                              "Ljava/lang/String;"
+                                              "Ljava/lang/String;"
                                               "Ljava/lang/String;"
                                               "Ljava/lang/String;"
                                               "Ljava/lang/String;"
@@ -81,7 +91,9 @@ void MAUIAndroid::addContact(const QString &name, const QString &tel, const QStr
                                               QAndroidJniObject::fromString(tel3).object<jstring>(),
                                               QAndroidJniObject::fromString(email).object<jstring>(),
                                               QAndroidJniObject::fromString(title).object<jstring>(),
-                                              QAndroidJniObject::fromString(org).object<jstring>() );
+                                              QAndroidJniObject::fromString(org).object<jstring>(),
+                                              QAndroidJniObject::fromString(account).object<jstring>(),
+                                              QAndroidJniObject::fromString(accountType).object<jstring>() );
 }
 
 void MAUIAndroid::call(const QString &tel)
