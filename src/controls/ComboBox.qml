@@ -55,6 +55,7 @@ ComboBox
 	Maui.ToolButton
 	{
 		id: _iconButton
+		visible: iconName.length
 		size: iconSizes.medium
 		enabled: false
 		iconColor: control.pressed || control.down ? control.colorScheme.highlightedTextColor : control.colorScheme.textColor
