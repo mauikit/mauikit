@@ -45,6 +45,14 @@ MAUIAndroid::~MAUIAndroid()
     
 }
 
+QString MAUIAndroid::getAccounts()
+{
+    QAndroidJniObject str = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union", "getAccounts", "(Landroid/content/Context;)Ljava/lang/String;", QtAndroid::androidActivity().object<jobject>());
+
+    return str.toString();
+}
+
+
 QString MAUIAndroid::getContacts()
 {	
     QAndroidJniObject str = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union", "getContacts", "(Landroid/content/Context;)Ljava/lang/String;", QtAndroid::androidActivity().object<jobject>());
@@ -260,15 +268,6 @@ QString MAUIAndroid::sdDir()
         return "/mnt/ext_sdcard";
     else
         return "/mnt/";
-}
-
-QStringList MAUIAndroid::getAccounts()
-{
-    QAndroidJniObject str = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union", "getAccounts", "(Landroid/content/Context;)Ljava/lang/String;", QtAndroid::androidActivity().object<jobject>());
-
-    qDebug() << "Account values from java is " << str.toString();
-    return str.toString().split("AND");
-
 }
 
 void MAUIAndroid::setAppIcons(const QString &lowDPI, const QString &mediumDPI, const QString &highDPI)
