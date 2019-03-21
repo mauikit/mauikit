@@ -156,8 +156,9 @@ namespace FMH
 		ORG,
 		PROFILE,
 		TZ,
-		TEL
-		
+		TEL,
+		TEL_2,
+		TEL_3		
 	}; 
 	
 	static const QHash<FMH::MODEL_KEY, QString> MODEL_NAME =
@@ -233,7 +234,9 @@ namespace FMH
 		{MODEL_KEY::ORG, "org"},
 		{MODEL_KEY::PROFILE, "profile"},
 		{MODEL_KEY::TZ, "tz"},
-		{MODEL_KEY::TEL, "tel"}
+		{MODEL_KEY::TEL, "tel"},
+		{MODEL_KEY::TEL_2, "tel2"},
+		{MODEL_KEY::TEL_3, "tel3"}
 		
 		
 	};
@@ -310,7 +313,9 @@ namespace FMH
 		{MODEL_NAME[MODEL_KEY::ORG], MODEL_KEY::ORG},
 		{MODEL_NAME[MODEL_KEY::PROFILE], MODEL_KEY::PROFILE},
 		{MODEL_NAME[MODEL_KEY::TZ], MODEL_KEY::TZ},
-		{MODEL_NAME[MODEL_KEY::TEL], MODEL_KEY::TEL}
+		{MODEL_NAME[MODEL_KEY::TEL], MODEL_KEY::TEL},
+		{MODEL_NAME[MODEL_KEY::TEL_2], MODEL_KEY::TEL_2},
+		{MODEL_NAME[MODEL_KEY::TEL_3], MODEL_KEY::TEL_3}
 		
 	};
 	
