@@ -27,6 +27,7 @@ import android.net.Uri;
 import java.io.File;
 import android.provider.ContactsContract;
 import android.database.Cursor;
+import android.telephony.gsm.SmsManager;
 
 public class SendIntent
 {
@@ -42,14 +43,10 @@ public class SendIntent
         context.startActivity(Intent.createChooser(sendIntent, text));
     }
     
-    public void sendSMS(Activity context, String tel, String subject, String message)
+    public static void sendSMS(Activity context, String tel, String subject, String message)
     {
-		Intent intent = new Intent(Intent.ACTION_SEND);
-		intent.setData(Uri.parse("smsto:"+tel));  // This ensures only SMS apps respond
-		intent.putExtra("sms_subject", subject);
-		intent.putExtra("sms_body", message);
-// 		intent.putExtra(Intent.EXTRA_STREAM, attachment);
-		context.startActivity(intent);		
+        SmsManager smsManager = SmsManager.getDefault();
+                smsManager.sendTextMessage(tel, null, message, null, null);
 	}
 
 

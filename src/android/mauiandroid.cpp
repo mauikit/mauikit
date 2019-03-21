@@ -53,6 +53,15 @@ QString MAUIAndroid::getContacts()
     return str.toString();
 }
 
+void MAUIAndroid::addContact(/*const FMH::MODEL &contact*/)
+{
+    qDebug()<< "Adding new contact to android";
+     QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/Union",
+                                                    "addContact",
+                                                    "(Landroid/content/Context;)V",
+                                                    QtAndroid::androidActivity().object<jobject>());
+}
+
 void MAUIAndroid::call(const QString &tel)
 {
 

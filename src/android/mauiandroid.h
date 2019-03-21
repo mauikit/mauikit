@@ -47,7 +47,8 @@ public:
     Q_INVOKABLE static QString homePath();
     Q_INVOKABLE static QString sdDir();
 	
-	QString getContacts();
+    QString getContacts();
+    void addContact();
     Q_INVOKABLE static void call(const QString &tel);
 
     void setAppIcons(const QString &lowDPI, const QString &mediumDPI, const QString &highDPI);
