@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import java.util.ArrayList;
+import android.accounts.AccountManager;
+import android.accounts.Account;
 
 public class Union
 {
@@ -38,12 +40,14 @@ public class Union
 
 		Cursor phones = c.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
 
-		while (phones.moveToNext()) {
+                while (phones.moveToNext())
+                {
 			String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                         String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                         String email = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS));
                         fetch += "<item><n>"+name+"</n><tel>"+phoneNumber+"</tel><email>"+email+"</email></item>";
 		}
+
 		fetch+="</root>";
 		return fetch;
     }
@@ -151,4 +155,23 @@ public class Union
 //             Toast.makeText(myContext, "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
          }
      }
+
+ public static String getAccounts(Context c)
+ {
+     Account[] accountList = AccountManager.get(c).getAccounts();
+
+     String accountSelection = "<root>";
+
+     for(int i = 0 ; i < accountList.length ; i++)
+     {
+        String accountName = accountList[i].name;
+        String accountType =  accountList[i].type;
+
+       accountSelection += "<account><name>"+accountName+"</name><type>"+accountType+"</type></account>";
+
+     }
+
+ accountSelection += "</root>";
+    return accountSelection;
+  }
  }
