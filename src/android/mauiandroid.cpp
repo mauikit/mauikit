@@ -53,13 +53,27 @@ QString MAUIAndroid::getContacts()
     return str.toString();
 }
 
-void MAUIAndroid::addContact(/*const FMH::MODEL &contact*/)
+void MAUIAndroid::addContact(const QString &name, const QString &tel, const QString &tel2, const QString &tel3, const QString &email, const QString &title, const QString &org)
 {
     qDebug()<< "Adding new contact to android";
-     QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/Union",
-                                                    "addContact",
-                                                    "(Landroid/content/Context;)V",
-                                                    QtAndroid::androidActivity().object<jobject>());
+    QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/Union",
+                                              "addContact",
+                                              "(Landroid/content/Context;"
+                                              "Ljava/lang/String;"
+                                              "Ljava/lang/String;"
+                                              "Ljava/lang/String;"
+                                              "Ljava/lang/String;"
+                                              "Ljava/lang/String;"
+                                              "Ljava/lang/String;"
+                                              "Ljava/lang/String;)V",
+                                              QtAndroid::androidActivity().object<jobject>(),
+                                              QAndroidJniObject::fromString(name).object<jstring>(),
+                                              QAndroidJniObject::fromString(tel).object<jstring>(),
+                                              QAndroidJniObject::fromString(tel2).object<jstring>(),
+                                              QAndroidJniObject::fromString(tel3).object<jstring>(),
+                                              QAndroidJniObject::fromString(email).object<jstring>(),
+                                              QAndroidJniObject::fromString(title).object<jstring>(),
+                                              QAndroidJniObject::fromString(org).object<jstring>() );
 }
 
 void MAUIAndroid::call(const QString &tel)
@@ -189,30 +203,30 @@ void MAUIAndroid::shareLink(const QString &link)
 
 void MAUIAndroid::sendSMS(const QString &tel,const QString &subject, const QString &message )
 {
-	qDebug()<< "trying to send sms text";
-	QAndroidJniEnvironment _env;
-	QAndroidJniObject activity = QAndroidJniObject::callStaticObjectMethod("org/qtproject/qt5/android/QtNative", "activity", "()Landroid/app/Activity;");   //activity is valid
-	if (_env->ExceptionCheck()) {
-		_env->ExceptionClear();
-		throw InterfaceConnFailedException();
-	}
-	if ( activity.isValid() )
-	{
-		QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/SendIntent",
-												  "sendSMS",
-											"(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",
-												  activity.object<jobject>(),
-												  QAndroidJniObject::fromString(tel).object<jstring>(),
-												  QAndroidJniObject::fromString(subject).object<jstring>(),
-												  QAndroidJniObject::fromString(message).object<jstring>());
-		
-		
-		if (_env->ExceptionCheck()) {
-			_env->ExceptionClear();
-			throw InterfaceConnFailedException();
-		}
-	}else
-		throw InterfaceConnFailedException();
+    qDebug()<< "trying to send sms text";
+    QAndroidJniEnvironment _env;
+    QAndroidJniObject activity = QAndroidJniObject::callStaticObjectMethod("org/qtproject/qt5/android/QtNative", "activity", "()Landroid/app/Activity;");   //activity is valid
+    if (_env->ExceptionCheck()) {
+        _env->ExceptionClear();
+        throw InterfaceConnFailedException();
+    }
+    if ( activity.isValid() )
+    {
+        QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/SendIntent",
+                                                  "sendSMS",
+                                                  "(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",
+                                                  activity.object<jobject>(),
+                                                  QAndroidJniObject::fromString(tel).object<jstring>(),
+                                                  QAndroidJniObject::fromString(subject).object<jstring>(),
+                                                  QAndroidJniObject::fromString(message).object<jstring>());
+
+
+        if (_env->ExceptionCheck()) {
+            _env->ExceptionClear();
+            throw InterfaceConnFailedException();
+        }
+    }else
+        throw InterfaceConnFailedException();
 }
 
 void MAUIAndroid::openWithApp(const QString &url)

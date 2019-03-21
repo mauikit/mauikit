@@ -48,16 +48,16 @@ public class Union
 		return fetch;
     }
 
-    public static void addContact(Context c)
+    public static void addContact(Context c, String name, String tel, String tel2, String tel3, String email, String title, String org)
     {
 
-        String DisplayName = "XYZ";
-         String MobileNumber = "123456";
-         String HomeNumber = "1111";
-         String WorkNumber = "2222";
-         String emailID = "email@nomail.com";
-         String company = "bad";
-         String jobTitle = "abcd";
+        String DisplayName = name;
+         String MobileNumber = tel;
+         String HomeNumber = tel2;
+         String WorkNumber = tel3;
+         String emailID = email;
+         String company = org;
+         String jobTitle = title;
 
          ArrayList < ContentProviderOperation > ops = new ArrayList < ContentProviderOperation > ();
 
