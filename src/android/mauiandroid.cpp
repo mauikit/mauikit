@@ -68,6 +68,7 @@ void MAUIAndroid::addContact(const QString &name,
                              const QString &email,
                              const QString &title,
                              const QString &org,
+                             const QString &photo,
                              const QString &account,
                              const QString &accountType)
 {
@@ -75,6 +76,7 @@ void MAUIAndroid::addContact(const QString &name,
     QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/Union",
                                               "addContact",
                                               "(Landroid/content/Context;"
+                                              "Ljava/lang/String;"
                                               "Ljava/lang/String;"
                                               "Ljava/lang/String;"
                                               "Ljava/lang/String;"
@@ -92,6 +94,7 @@ void MAUIAndroid::addContact(const QString &name,
                                               QAndroidJniObject::fromString(email).object<jstring>(),
                                               QAndroidJniObject::fromString(title).object<jstring>(),
                                               QAndroidJniObject::fromString(org).object<jstring>(),
+                                              QAndroidJniObject::fromString(photo).object<jstring>(),
                                               QAndroidJniObject::fromString(account).object<jstring>(),
                                               QAndroidJniObject::fromString(accountType).object<jstring>() );
 }

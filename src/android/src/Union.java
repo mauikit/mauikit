@@ -60,6 +60,7 @@ public class Union
     String email,
     String title,
     String org,
+    String photoUrl,
     String accountName,
     String accountType)
     {
@@ -71,6 +72,7 @@ public class Union
          String emailID = email;
          String company = org;
          String jobTitle = title;
+         String photo = photoUrl;
 
          ArrayList < ContentProviderOperation > ops = new ArrayList < ContentProviderOperation > ();
 
@@ -92,6 +94,19 @@ public class Union
              ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,
              DisplayName).build());
          }
+
+     //------------------------------------------------------ Photo
+     if (photo != null)
+     {
+         ops.add(ContentProviderOperation.newInsert(
+         ContactsContract.Data.CONTENT_URI)
+             .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+             .withValue(ContactsContract.Data.MIMETYPE,
+         ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+             .withValue(
+         ContactsContract.CommonDataKinds.Photo.PHOTO,
+         photo).build());
+     }
 
          //------------------------------------------------------ Mobile Number
          if (MobileNumber != null)
