@@ -113,6 +113,7 @@ ComboBox
 // 		implicitWidth: 100 * unit
 		implicitHeight: contentItem.implicitHeight + space.small
 		padding: unit * 2
+		z: control.parent.z + 1
 		
 		contentItem: ListView 
 		{
