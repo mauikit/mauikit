@@ -52,7 +52,17 @@ public class Union
 		return fetch;
     }
 
-    public static void addContact(Context c, String name, String tel, String tel2, String tel3, String email, String title, String org)
+    public static void addContact(Context c,
+    String name,
+    String tel,
+    String tel2,
+    String tel3,
+    String email,
+    String title,
+    String org,
+    String photoUrl,
+    String accountName,
+    String accountType)
     {
 
         String DisplayName = name;
@@ -62,13 +72,14 @@ public class Union
          String emailID = email;
          String company = org;
          String jobTitle = title;
+         String photo = photoUrl;
 
          ArrayList < ContentProviderOperation > ops = new ArrayList < ContentProviderOperation > ();
 
          ops.add(ContentProviderOperation.newInsert(
          ContactsContract.RawContacts.CONTENT_URI)
-             .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
-             .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
+             .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, accountType)
+             .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, accountName)
              .build());
 
          //------------------------------------------------------ Names
@@ -83,6 +94,19 @@ public class Union
              ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,
              DisplayName).build());
          }
+
+     //------------------------------------------------------ Photo
+     if (photo != null)
+     {
+         ops.add(ContentProviderOperation.newInsert(
+         ContactsContract.Data.CONTENT_URI)
+             .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+             .withValue(ContactsContract.Data.MIMETYPE,
+         ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+             .withValue(
+         ContactsContract.CommonDataKinds.Photo.PHOTO,
+         photo).build());
+     }
 
          //------------------------------------------------------ Mobile Number
          if (MobileNumber != null)

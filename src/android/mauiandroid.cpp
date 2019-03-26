@@ -45,6 +45,14 @@ MAUIAndroid::~MAUIAndroid()
     
 }
 
+QString MAUIAndroid::getAccounts()
+{
+    QAndroidJniObject str = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union", "getAccounts", "(Landroid/content/Context;)Ljava/lang/String;", QtAndroid::androidActivity().object<jobject>());
+
+    return str.toString();
+}
+
+
 QString MAUIAndroid::getContacts()
 {	
     QAndroidJniObject str = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union", "getContacts", "(Landroid/content/Context;)Ljava/lang/String;", QtAndroid::androidActivity().object<jobject>());
@@ -53,12 +61,24 @@ QString MAUIAndroid::getContacts()
     return str.toString();
 }
 
-void MAUIAndroid::addContact(const QString &name, const QString &tel, const QString &tel2, const QString &tel3, const QString &email, const QString &title, const QString &org)
+void MAUIAndroid::addContact(const QString &name,
+                             const QString &tel,
+                             const QString &tel2,
+                             const QString &tel3,
+                             const QString &email,
+                             const QString &title,
+                             const QString &org,
+                             const QString &photo,
+                             const QString &account,
+                             const QString &accountType)
 {
     qDebug()<< "Adding new contact to android";
     QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/Union",
                                               "addContact",
                                               "(Landroid/content/Context;"
+                                              "Ljava/lang/String;"
+                                              "Ljava/lang/String;"
+                                              "Ljava/lang/String;"
                                               "Ljava/lang/String;"
                                               "Ljava/lang/String;"
                                               "Ljava/lang/String;"
@@ -73,7 +93,10 @@ void MAUIAndroid::addContact(const QString &name, const QString &tel, const QStr
                                               QAndroidJniObject::fromString(tel3).object<jstring>(),
                                               QAndroidJniObject::fromString(email).object<jstring>(),
                                               QAndroidJniObject::fromString(title).object<jstring>(),
-                                              QAndroidJniObject::fromString(org).object<jstring>() );
+                                              QAndroidJniObject::fromString(org).object<jstring>(),
+                                              QAndroidJniObject::fromString(photo).object<jstring>(),
+                                              QAndroidJniObject::fromString(account).object<jstring>(),
+                                              QAndroidJniObject::fromString(accountType).object<jstring>() );
 }
 
 void MAUIAndroid::call(const QString &tel)
@@ -260,15 +283,6 @@ QString MAUIAndroid::sdDir()
         return "/mnt/ext_sdcard";
     else
         return "/mnt/";
-}
-
-QStringList MAUIAndroid::getAccounts()
-{
-    QAndroidJniObject str = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union", "getAccounts", "(Landroid/content/Context;)Ljava/lang/String;", QtAndroid::androidActivity().object<jobject>());
-
-    qDebug() << "Account values from java is " << str.toString();
-    return str.toString().split("AND");
-
 }
 
 void MAUIAndroid::setAppIcons(const QString &lowDPI, const QString &mediumDPI, const QString &highDPI)
