@@ -67,7 +67,7 @@ public class Union
 
             while (mainCursor.moveToNext())
             {
-                fetch += "<item>;
+                fetch += "<item>";
 
                 String id = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts._ID));
                 String displayName = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
@@ -76,7 +76,7 @@ public class Union
                 Uri displayPhotoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.DISPLAY_PHOTO);
 
                 //ADD ID, NAME AND CONTACT PHOTO DATA...
-                fetch += "<id>" + id + "</id><n>" + displayName + "</n><photo>" + displayPhotoUri.toString() + "</photo>";
+                fetch += "<id>" + id + "</id><n>" + displayName + "</n>";
 
 
                 if (Integer.parseInt(mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0)
@@ -90,23 +90,17 @@ public class Union
 
                     if (phoneCursor != null)
                     {
-                        int i = 0;
-                        while (phoneCursor.moveToNext())
+                        if(phoneCursor.moveToFirst())
                         {
-                            if(i > 2) break;
                             String tel = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                            if(i == 0)
                                 fetch += "<tel>" + tel + "</tel>";
-                            else
-                                fetch += "<tel"+Integer.toString(i)+">" + tel + "</tel>";
 
-                            i++;
                         }
                     }
 
                     if (phoneCursor != null)
-                         phoneCursor.close();
+                        phoneCursor.close();
 
 
                     //ADD E-MAIL DATA...
@@ -117,79 +111,81 @@ public class Union
 
                     if (emailCursor != null)
                     {
-                         int i = 0;
-                        while (emailCursor.moveToNext())
+                        if (emailCursor.moveToFirst())
                         {
-                            if(i > 2) break;
                             String email = emailCursor.getString(emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-
-                            if(i == 0)
-                                fetch += "<email>" + email + "</email>";
-                            else
-                                fetch += "<email"+Integer.toString(i)+">" + email + "</email>";
-
-                            i++;
+                            fetch += "<email>" + email + "</email>";
                         }
                     }
 
                     if (emailCursor != null)
-                       emailCursor.close();
+                        emailCursor.close();
 
-                       //ADD ORG DATA...
-                       Cursor orgCursor = cr.query(ContactsContract.CommonDataKinds.Organization.CONTENT_URI,
-                               null, ContactsContract.CommonDataKinds.Organization.CONTACT_ID + " = ?",
-                               new String[]{id},
-                               null);
+                    //ADD ORG DATA...
 
-                       if (orgCursor != null)
-                       {
-                            int i = 0;
-                           while (orgCursor.moveToNext())
-                           {
-                               String title = orgCursor.getString(orgCursor.getColumnIndex(ContactsContract.CommonDataKinds.Organization.TITLE));
-                               String org = orgCursor.getString(orgCursor.getColumnIndex(ContactsContract.CommonDataKinds.Organization.COMPANY));
+//                    String orgWhere = ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?";
+//                    String[] orgWhereParams = new String[]{id, ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE};
+//                    Cursor orgCur = cr.query(ContactsContract.Data.CONTENT_URI, null, orgWhere, orgWhereParams, null);
+//                    if (orgCur.moveToFirst())
+//                    {
+//                        String org = orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Organization.DATA));
+//                        String title = orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Organization.TITLE));
 
-                                   fetch += "<org>" + org + "</org><title>"+ title + "</title>;
-                           }
-                       }
+//                        fetch += "<org>" + org + "</org><title>" + title + "</title>";
+//                    }
 
-                       if (orgCursor != null)
-                          orgCursor.close();
+//                    orgCur.close();
 
+//                    //ADD ADDRESS DATA...
+//                    Cursor addrCursor = c.getContentResolver().query(ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI,
+//                            null, ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID + " = ?",
+//                            new String[]{id},
+//                            null);
 
-                    //ADD ADDRESS DATA...
-                    Cursor addrCursor = getContentResolver().query(ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI,
-                            null, ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID + " = ?",
-                            new String[]{id},
-                            null);
+//                    if (addrCursor != null)
+//                    {
+//                        int i = 0;
 
-                    if (addrCursor != null)
-                    {
-                        int i = 0;
+//                        while (addrCursor.moveToNext())
+//                        {
+//                            if (i > 2) break;
 
-                        while (addrCursor.moveToNext())
-                        {
-                            if(i > 2) break;
+//                            String city = addrCursor.getString(addrCursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.CITY));
+//                            String state = addrCursor.getString(addrCursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.REGION));
+//                            String country = addrCursor.getString(addrCursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.COUNTRY));
 
-                            String city = addrCursor.getString(addrCursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.CITY));
-                            String state = addrCursor.getString(addrCursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.REGION));
-                            String country = addrCursor.getString(addrCursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.COUNTRY));
+//                            if (i == 0)
+//                                fetch += "<adr><city>" + city + "</city><state>" + state + "</state><country>" + country + "</country></adr>";
+//                            else
+//                                fetch += "<adr" + Integer.toString(i) + "><city>" + city + "</city><state>" + state + "</state><country>" + country + "</country></adr>";
 
-                            if(i == 0)
-                                fetch += "<adr><city>" + city + "</city><state>"+ state +"</state><country>"+ country +"</country></adr>";
-                            else
-                                fetch += "<adr"+Integer.toString(i)+"><city>" + city + "</city><state>"+ state +"</state><country>"+ country +"</country></adr>";
+//                            i++;
+//                        }
+//                    }
 
-                            i++;
-                        }
-                    }
+//                    if (addrCursor != null)
+//                        addrCursor.close();
 
-                    if (addrCursor != null)
-                        addrCursor.close();
+                    // Get Instant Messenger.........
+//                    String imWhere = ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?";
+//                    String[] imWhereParams = new String[]{id, ContactsContract.CommonDataKinds.Im.CONTENT_ITEM_TYPE};
+//                    Cursor imCur = cr.query(ContactsContract.Data.CONTENT_URI, null, imWhere, imWhereParams, null);
+
+//                    if (imCur.moveToFirst())
+//                    {
+//                        String imName = imCur.getString(imCur.getColumnIndex(ContactsContract.CommonDataKinds.Im.DATA));
+//                        String imType;
+//                        imType = imCur.getString(imCur.getColumnIndex(ContactsContract.CommonDataKinds.Im.TYPE));
+
+//                        fetch += "<im><nickname>" + imName + "</nickname><type>" + imType + "</type></im>";
+
+//                    }
+//                    imCur.close();
 
                 }
 
-                fetch += "</item>;
+                fetch += "</item>";
+//                System.out.println(fetch);
             }
         }
 
@@ -197,6 +193,8 @@ public class Union
         {
             mainCursor.close();
         }
+
+    fetch += "</root>";
 
         return fetch;
 
