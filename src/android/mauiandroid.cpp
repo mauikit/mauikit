@@ -55,10 +55,42 @@ QString MAUIAndroid::getAccounts()
 
 QString MAUIAndroid::getContacts()
 {	
-    QAndroidJniObject str = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union", "getContacts", "(Landroid/content/Context;)Ljava/lang/String;", QtAndroid::androidActivity().object<jobject>());
 
-    qDebug() << "Value from java is " << str.toString();
-    return str.toString();
+
+
+    QAndroidJniEnvironment env;
+    QAndroidJniObject contactsArrayJniObject = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union", "getContacts", "(Landroid/content/Context;)[[Ljava/lang/String;",  QtAndroid::androidActivity().object<jobject>());
+    jobjectArray contactsJniArray = contactsArrayJniObject.object<jobjectArray>();
+    int len = env->GetArrayLength(contactsJniArray);
+
+    qDebug() << "doSync: getContacts Length :" << len;
+
+    for (int i = 0; i < len; i++)
+    {
+        jobjectArray stringArr = static_cast<jobjectArray>(env->GetObjectArrayElement(contactsJniArray, i));
+        jstring e_vCard =
+                static_cast<jstring>(env->GetObjectArrayElement(stringArr, 0));
+        jstring e_cTag =
+                static_cast<jstring>(env->GetObjectArrayElement(stringArr, 1));
+        jstring e_url =
+                static_cast<jstring>(env->GetObjectArrayElement(stringArr, 2));
+        jstring e_rawContactId =
+                static_cast<jstring>(env->GetObjectArrayElement(stringArr, 3));
+
+        const char *vCard = env->GetStringUTFChars(e_vCard, 0);
+        const char *cTag = env->GetStringUTFChars(e_cTag, 0);
+        const char *url = env->GetStringUTFChars(e_url, 0);
+        const char *rawContactId = env->GetStringUTFChars(e_rawContactId, 0);
+
+        qDebug() << "doSync: Syncing Contact :" << cTag << url << rawContactId
+                 << vCard;
+
+
+    }
+
+
+
+    return "";
 }
 
 void MAUIAndroid::addContact(const QString &name,

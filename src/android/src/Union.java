@@ -21,13 +21,10 @@ import android.content.ContentUris;
 
 public class Union
 {
-    List<Map<String, String>> contacts;
-    Context context;
 
-    public Union(Context c)
+
+    public Union()
     {
-        context = c;
-        getContacts();
     }
 
     public static void call(Activity context, String tel)
@@ -38,15 +35,6 @@ public class Union
         context.startActivity(callIntent);
     }
 
-public String getField(int index, String key)
-{
-    return contacts.get(index).get(key);
-    }
-
-public int count()
-{
-return contacts.size();
-    }
 
 //      public static void contacts()
 //      {
@@ -54,7 +42,7 @@ return contacts.size();
 //                        startActivityForResult(contactPickerIntent, CONTACT_PICKER_RESULT);
 //      }
 
-    private void getContacts()
+    public static String[][] getContacts(Context c)
     {
         //ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_CONTACTS},1);
 //        String fetch = "<root>";
@@ -74,7 +62,10 @@ return contacts.size();
         //////////////////////////////////////////////////////
         /////////////////////////////////////////////////////
         ////////////////////////////////////////////////////
-        ContentResolver cr = context.getContentResolver();
+
+         List<String[]> serializedData = new ArrayList<>();
+
+        ContentResolver cr = c.getContentResolver();
         Cursor mainCursor = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 
         if (mainCursor != null)
@@ -192,15 +183,8 @@ return contacts.size();
 //            fetch += "<item><id>" + id + "</id><n>" + displayName + "</n><email>" + email + "</email><tel>" + tel + "</tel><org>" + org + "</org><title>" + title + "</title></item>";
 //            fetch += "<item><n>" + displayName + "</n><tel>" + tel + "</tel></item>";
 
-            Map<String, String> map = new HashMap<String,String>();
-            map.put("id", id);
-            map.put("n", displayName);
-            map.put("tel", tel);
-            map.put("email", email);
-            map.put("org", org);
-            map.put("title", title);
-//            map.put("adr", displayName);
-contacts.add(map);
+
+            serializedData.add(new String[]{id, displayName, tel, email, org, title});
             System.out.println(i);
                 i++;
 
@@ -217,6 +201,8 @@ contacts.add(map);
 //    System.out.println(fetch);
 
 //        return fetch;
+
+return serializedData.toArray(new String[0][0]);
 
     }
 
