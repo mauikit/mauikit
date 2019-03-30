@@ -10,6 +10,9 @@ import android.content.IntentFilter;
 import android.net.Uri;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
 
 import android.accounts.AccountManager;
 import android.accounts.Account;
@@ -18,9 +21,13 @@ import android.content.ContentUris;
 
 public class Union
 {
+    List<Map<String, String>> contacts;
+    Context context;
 
-    public Union()
+    public Union(Context c)
     {
+        context = c;
+        getContacts();
     }
 
     public static void call(Activity context, String tel)
@@ -31,13 +38,23 @@ public class Union
         context.startActivity(callIntent);
     }
 
+public String getField(int index, String key)
+{
+    return contacts.get(index).get(key);
+    }
+
+public int count()
+{
+return contacts.size();
+    }
+
 //      public static void contacts()
 //      {
 //                        Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
 //                        startActivityForResult(contactPickerIntent, CONTACT_PICKER_RESULT);
 //      }
 
-    public static String getContacts(Context c)
+    private void getContacts()
     {
         //ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_CONTACTS},1);
 //        String fetch = "<root>";
@@ -57,26 +74,24 @@ public class Union
         //////////////////////////////////////////////////////
         /////////////////////////////////////////////////////
         ////////////////////////////////////////////////////
-        ContentResolver cr = c.getContentResolver();
+        ContentResolver cr = context.getContentResolver();
         Cursor mainCursor = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-
-        String fetch = "<root>";
 
         if (mainCursor != null)
         {
 
+            int i = 0;
             while (mainCursor.moveToNext())
             {
-                fetch += "<item>";
 
                 String id = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts._ID));
                 String displayName = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                String tel= "", email= "", org= "", title = "";
 
-                Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.parseLong(id));
-                Uri displayPhotoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.DISPLAY_PHOTO);
+//                Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.parseLong(id));
+//                Uri displayPhotoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.DISPLAY_PHOTO);
 
                 //ADD ID, NAME AND CONTACT PHOTO DATA...
-                fetch += "<id>" + id + "</id><n>" + displayName + "</n>";
 
 
                 if (Integer.parseInt(mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0)
@@ -89,15 +104,9 @@ public class Union
                             null);
 
                     if (phoneCursor != null)
-                    {
                         if(phoneCursor.moveToFirst())
-                        {
-                            String tel = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                             tel = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                                fetch += "<tel>" + tel + "</tel>";
-
-                        }
-                    }
 
                     if (phoneCursor != null)
                         phoneCursor.close();
@@ -110,31 +119,26 @@ public class Union
                             null);
 
                     if (emailCursor != null)
-                    {
                         if (emailCursor.moveToFirst())
-                        {
-                            String email = emailCursor.getString(emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-                            fetch += "<email>" + email + "</email>";
-                        }
-                    }
+                            email = emailCursor.getString(emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+
 
                     if (emailCursor != null)
                         emailCursor.close();
 
                     //ADD ORG DATA...
 
-//                    String orgWhere = ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?";
-//                    String[] orgWhereParams = new String[]{id, ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE};
-//                    Cursor orgCur = cr.query(ContactsContract.Data.CONTENT_URI, null, orgWhere, orgWhereParams, null);
-//                    if (orgCur.moveToFirst())
-//                    {
-//                        String org = orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Organization.DATA));
-//                        String title = orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Organization.TITLE));
+                    String orgWhere = ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?";
+                    String[] orgWhereParams = new String[]{id, ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE};
+                    Cursor orgCur = cr.query(ContactsContract.Data.CONTENT_URI, null, orgWhere, orgWhereParams, null);
+                    if (orgCur.moveToFirst())
+                    {
+                        org = orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Organization.DATA));
+                        title = orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Organization.TITLE));
+                    }
 
-//                        fetch += "<org>" + org + "</org><title>" + title + "</title>";
-//                    }
-
-//                    orgCur.close();
+                if (orgCur != null)
+                    orgCur.close();
 
 //                    //ADD ADDRESS DATA...
 //                    Cursor addrCursor = c.getContentResolver().query(ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI,
@@ -180,23 +184,39 @@ public class Union
 //                        fetch += "<im><nickname>" + imName + "</nickname><type>" + imType + "</type></im>";
 
 //                    }
+
+//                if (imCur != null)
 //                    imCur.close();
 
                 }
+//            fetch += "<item><id>" + id + "</id><n>" + displayName + "</n><email>" + email + "</email><tel>" + tel + "</tel><org>" + org + "</org><title>" + title + "</title></item>";
+//            fetch += "<item><n>" + displayName + "</n><tel>" + tel + "</tel></item>";
 
-                fetch += "</item>";
-//                System.out.println(fetch);
+            Map<String, String> map = new HashMap<String,String>();
+            map.put("id", id);
+            map.put("n", displayName);
+            map.put("tel", tel);
+            map.put("email", email);
+            map.put("org", org);
+            map.put("title", title);
+//            map.put("adr", displayName);
+contacts.add(map);
+            System.out.println(i);
+                i++;
+
             }
         }
 
+//     fetch += "</root>";
+
         if (mainCursor != null)
-        {
             mainCursor.close();
-        }
 
-    fetch += "</root>";
 
-        return fetch;
+
+//    System.out.println(fetch);
+
+//        return fetch;
 
     }
 
