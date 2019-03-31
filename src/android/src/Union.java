@@ -70,11 +70,8 @@ public class Union
 
         if (mainCursor != null)
         {
-
-            int i = 0;
             while (mainCursor.moveToNext())
             {
-
                 String id = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts._ID));
                 String displayName = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                 String tel= "", email= "", org= "", title = "";
@@ -83,8 +80,6 @@ public class Union
 //                Uri displayPhotoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.DISPLAY_PHOTO);
 
                 //ADD ID, NAME AND CONTACT PHOTO DATA...
-
-
                 if (Integer.parseInt(mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0)
                 {
                     //ADD PHONE DATA...
@@ -184,10 +179,12 @@ public class Union
 //            fetch += "<item><n>" + displayName + "</n><tel>" + tel + "</tel></item>";
 
 
-            serializedData.add(new String[]{id, displayName, tel, email, org, title});
-            System.out.println(i);
-                i++;
-
+            serializedData.add(new String[]{id,
+                displayName,
+                tel,
+                email,
+                org,
+                title});
             }
         }
 

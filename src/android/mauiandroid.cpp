@@ -53,11 +53,9 @@ QString MAUIAndroid::getAccounts()
 }
 
 
-QString MAUIAndroid::getContacts()
-{	
-
-
-
+QVariantList MAUIAndroid::getContacts()
+{
+    QVariantList res;
     QAndroidJniEnvironment env;
     QAndroidJniObject contactsArrayJniObject = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union", "getContacts", "(Landroid/content/Context;)[[Ljava/lang/String;",  QtAndroid::androidActivity().object<jobject>());
     jobjectArray contactsJniArray = contactsArrayJniObject.object<jobjectArray>();
@@ -68,29 +66,34 @@ QString MAUIAndroid::getContacts()
     for (int i = 0; i < len; i++)
     {
         jobjectArray stringArr = static_cast<jobjectArray>(env->GetObjectArrayElement(contactsJniArray, i));
-        jstring e_vCard =
-                static_cast<jstring>(env->GetObjectArrayElement(stringArr, 0));
-        jstring e_cTag =
-                static_cast<jstring>(env->GetObjectArrayElement(stringArr, 1));
-        jstring e_url =
-                static_cast<jstring>(env->GetObjectArrayElement(stringArr, 2));
-        jstring e_rawContactId =
-                static_cast<jstring>(env->GetObjectArrayElement(stringArr, 3));
 
-        const char *vCard = env->GetStringUTFChars(e_vCard, 0);
-        const char *cTag = env->GetStringUTFChars(e_cTag, 0);
-        const char *url = env->GetStringUTFChars(e_url, 0);
-        const char *rawContactId = env->GetStringUTFChars(e_rawContactId, 0);
+        jstring id_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 0));
+        jstring n_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 1));
+        jstring tel_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 2));
+        jstring email_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 3));
+        jstring org_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 4));
+        jstring title_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 5));
 
-        qDebug() << "doSync: Syncing Contact :" << cTag << url << rawContactId
-                 << vCard;
+        const char *id = env->GetStringUTFChars(id_js, 0);
+        const char *n = env->GetStringUTFChars(n_js, 0);
+        const char *tel = env->GetStringUTFChars(tel_js, 0);
+        const char *email = env->GetStringUTFChars(email_js, 0);
+        const char *org = env->GetStringUTFChars(org_js, 0);
+        const char *title = env->GetStringUTFChars(title_js, 0);
 
+        if(QString(n).isEmpty())
+            continue;
 
+        res << QVariantMap {
+        {"id", QString(id)},
+        {"n", QString(n)},
+        {"tel", QString(tel)},
+        {"email", QString(email)},
+        {"org", QString(org)},
+        {"title", QString(title)}};
     }
 
-
-
-    return "";
+    return res;
 }
 
 void MAUIAndroid::addContact(const QString &name,
