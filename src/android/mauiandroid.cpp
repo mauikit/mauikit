@@ -74,6 +74,9 @@ QVariantList MAUIAndroid::getContacts()
         jstring org_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 4));
         jstring title_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 5));
         jstring fav_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 6));
+        jstring photo_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 7));
+        jstring accountName_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 8));
+        jstring accountType_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 9));
 
         const char *id = env->GetStringUTFChars(id_js, 0);
         const char *n = env->GetStringUTFChars(n_js, 0);
@@ -82,6 +85,9 @@ QVariantList MAUIAndroid::getContacts()
         const char *org = env->GetStringUTFChars(org_js, 0);
         const char *title = env->GetStringUTFChars(title_js, 0);
         const char *fav = env->GetStringUTFChars(fav_js, 0);
+        const char *photo = env->GetStringUTFChars(photo_js, 0);
+        const char *accountName = env->GetStringUTFChars(accountName_js, 0);
+        const char *accountType = env->GetStringUTFChars(accountType_js, 0);
 
         if(QString(n).isEmpty())
             continue;
@@ -91,8 +97,11 @@ QVariantList MAUIAndroid::getContacts()
         {"fav", QString(fav)},
         {"n", QString(n)},
         {"tel", QString(tel)},
-        {"email", QString(email)},
+       {"email", QString(email)},
         {"org", QString(org)},
+        {"photo", QString(photo)},
+        {"account", QString(accountName)},
+        {"type", QString(accountType)},
         {"title", QString(title)}};
     }
 
