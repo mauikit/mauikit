@@ -73,6 +73,7 @@ QVariantList MAUIAndroid::getContacts()
         jstring email_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 3));
         jstring org_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 4));
         jstring title_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 5));
+        jstring fav_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 6));
 
         const char *id = env->GetStringUTFChars(id_js, 0);
         const char *n = env->GetStringUTFChars(n_js, 0);
@@ -80,12 +81,14 @@ QVariantList MAUIAndroid::getContacts()
         const char *email = env->GetStringUTFChars(email_js, 0);
         const char *org = env->GetStringUTFChars(org_js, 0);
         const char *title = env->GetStringUTFChars(title_js, 0);
+        const char *fav = env->GetStringUTFChars(fav_js, 0);
 
         if(QString(n).isEmpty())
             continue;
 
         res << QVariantMap {
         {"id", QString(id)},
+        {"fav", QString(fav)},
         {"n", QString(n)},
         {"tel", QString(tel)},
         {"email", QString(email)},

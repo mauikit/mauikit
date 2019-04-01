@@ -68,6 +68,8 @@ public class Union
         ContentResolver cr = c.getContentResolver();
         Cursor mainCursor = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 
+//         Cursor contacts = cr.query(ContactsContract.RawContacts.CONTENT_URI, null, RAW_CONTACT_SELECTION, null, null);
+
         if (mainCursor != null)
         {
             while (mainCursor.moveToNext())
@@ -75,6 +77,11 @@ public class Union
                 String id = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts._ID));
                 String displayName = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                 String tel= "", email= "", org= "", title = "";
+//                String accountType = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_TYPE));
+//                String accountName = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_NAME));
+String fav = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.STARRED));
+String photo = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
+//String modified = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.CONTACT_STATUS_TIMESTAMP));
 
 //                Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.parseLong(id));
 //                Uri displayPhotoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.DISPLAY_PHOTO);
@@ -184,7 +191,8 @@ public class Union
                 tel,
                 email,
                 org,
-                title});
+                title,
+                fav});
             }
         }
 
