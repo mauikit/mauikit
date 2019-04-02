@@ -1,12 +1,9 @@
 package com.kde.maui.tools;
 
 import android.provider.ContactsContract;
-import android.content.Context;
 import android.database.Cursor;
 import android.app.Activity;
-import android.content.ContentProviderOperation;
-import android.content.Intent;
-import android.content.IntentFilter;
+
 import android.net.Uri;
 
 import java.util.ArrayList;
@@ -18,6 +15,11 @@ import android.accounts.AccountManager;
 import android.accounts.Account;
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.ContentProviderOperation;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.Context;
 
 public class Union
 {
@@ -63,7 +65,7 @@ public class Union
         /////////////////////////////////////////////////////
         ////////////////////////////////////////////////////
 
-         List<String[]> serializedData = new ArrayList<>();
+        List<String[]> serializedData = new ArrayList<>();
 
         ContentResolver cr = c.getContentResolver();
         Cursor mainCursor = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
@@ -74,12 +76,12 @@ public class Union
         {
             while (mainCursor.moveToNext())
             {
-                String id= "", displayName = "", fav ="", photo = "", tel= "", email= "", org= "", title = "", accountType = "", accountName = "";
+                String id = "", displayName = "", fav = "", photo = "", tel = "", email = "", org = "", title = "", accountType = "", accountName = "";
 
-                 id = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts._ID)) == null ? "" : mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts._ID)) ;
-                 displayName = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)) == null ? "" : mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
- fav = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.STARRED)) == null ? "" : mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.STARRED));
- photo = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI)) == null ? "" : mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
+                id = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts._ID)) == null ? "" : mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts._ID));
+                displayName = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)) == null ? "" : mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                fav = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.STARRED)) == null ? "" : mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.STARRED));
+                photo = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI)) == null ? "" : mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
 
 //                Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.parseLong(id));
 //                Uri displayPhotoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.DISPLAY_PHOTO);
@@ -91,61 +93,61 @@ public class Union
 //                System.out.println(mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.CONTACT_STATUS_TIMESTAMP)));
 
 
-                    //ADD ACCOUNT DATA...
-                    Cursor accountCursor = cr.query(ContactsContract.RawContacts.CONTENT_URI,
-                            null,
-                            ContactsContract.RawContacts.CONTACT_ID + " = ?",
-                            new String[]{id},
-                            null);
+                //ADD ACCOUNT DATA...
+                Cursor accountCursor = cr.query(ContactsContract.RawContacts.CONTENT_URI,
+                        null,
+                        ContactsContract.RawContacts.CONTACT_ID + " = ?",
+                        new String[]{id},
+                        null);
 
-                    if (accountCursor != null)
-                        if(accountCursor.moveToFirst())
-                        {
-                            accountName = accountCursor.getString(accountCursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_NAME));
-                            accountType = accountCursor.getString(accountCursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_TYPE));
-                            }
-
-
-                    if (accountCursor != null)
-                        accountCursor.close();
-
-                    //ADD PHONE DATA...
-                    Cursor phoneCursor = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null,
-                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                            new String[]{id},
-                            null);
-
-                    if (phoneCursor != null)
-                        if(phoneCursor.moveToFirst())
-                             tel = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                if (accountCursor != null)
+                    if (accountCursor.moveToFirst())
+                    {
+                        accountName = accountCursor.getString(accountCursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_NAME));
+                        accountType = accountCursor.getString(accountCursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_TYPE));
+                    }
 
 
-                    if (phoneCursor != null)
-                        phoneCursor.close();
+                if (accountCursor != null)
+                    accountCursor.close();
+
+                //ADD PHONE DATA...
+                Cursor phoneCursor = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                        null,
+                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                        new String[]{id},
+                        null);
+
+                if (phoneCursor != null)
+                    if (phoneCursor.moveToFirst())
+                        tel = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
 
-                    //ADD E-MAIL DATA...
-                    Cursor emailCursor = cr.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-                            null, ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
-                            new String[]{id},
-                            null);
-
-                    if (emailCursor != null)
-                        if (emailCursor.moveToFirst())
-                            email = emailCursor.getString(emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+                if (phoneCursor != null)
+                    phoneCursor.close();
 
 
-                    if (emailCursor != null)
-                        emailCursor.close();
+                //ADD E-MAIL DATA...
+                Cursor emailCursor = cr.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                        null, ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
+                        new String[]{id},
+                        null);
 
-                    //ADD ORG DATA...
-                    Cursor orgCur = cr.query(ContactsContract.Data.CONTENT_URI,
-                            null, ContactsContract.Data.CONTACT_ID + " = ?",
-                            new String[]{id},
-                            null);
+                if (emailCursor != null)
+                    if (emailCursor.moveToFirst())
+                        email = emailCursor.getString(emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
 
-                    if (orgCur != null)
+
+                if (emailCursor != null)
+                    emailCursor.close();
+
+                //ADD ORG DATA...
+                Cursor orgCur = cr.query(ContactsContract.Data.CONTENT_URI,
+                        null, ContactsContract.Data.CONTACT_ID + " = ?",
+                        new String[]{id},
+                        null);
+
+                if (orgCur != null)
                     if (orgCur.moveToFirst())
                     {
                         org = orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Organization.DATA)) == null ? "" : orgCur.getString(orgCur.getColumnIndex(ContactsContract.CommonDataKinds.Organization.DATA));
@@ -182,7 +184,7 @@ public class Union
 //                    if (addrCursor != null)
 //                        addrCursor.close();
 
-                    // Get Instant Messenger.........
+                // Get Instant Messenger.........
 //                    String imWhere = ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?";
 //                    String[] imWhereParams = new String[]{id, ContactsContract.CommonDataKinds.Im.CONTENT_ITEM_TYPE};
 //                    Cursor imCur = cr.query(ContactsContract.Data.CONTENT_URI, null, imWhere, imWhereParams, null);
@@ -201,24 +203,24 @@ public class Union
 //                    imCur.close();
 
 
-            serializedData.add(new String[]{id,
-                displayName,
-                tel,
-                email,
-                org,
-                title,
-                fav,
-                photo,
-                accountName,
-                accountType});
+                serializedData.add(new String[]{id,
+                        displayName,
+                        tel,
+                        email,
+                        org,
+                        title,
+                        fav,
+                        photo,
+                        accountName,
+                        accountType});
 
-                }
+            }
         }
 
         if (mainCursor != null)
             mainCursor.close();
 
-return serializedData.toArray(new String[0][0]);
+        return serializedData.toArray(new String[0][0]);
 
     }
 
@@ -353,6 +355,45 @@ return serializedData.toArray(new String[0][0]);
             e.printStackTrace();
 //             Toast.makeText(myContext, "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public static void updateContact(Context c, String id, String field, String value)
+    {
+        ContentValues contentValues = new ContentValues();
+
+        // Put new phone number value.
+
+        ///HERE WE NEED A SWITCH STATMENET BASE ON THE FIELD TYPE
+        contentValues.put(ContactsContract.CommonDataKinds.Phone.NUMBER, value);
+
+        // Create query condition, query with the raw contact id.
+        StringBuffer whereClauseBuf = new StringBuffer();
+
+        // Specify the update contact id.
+        whereClauseBuf.append(ContactsContract.Data.RAW_CONTACT_ID);
+        whereClauseBuf.append("=");
+        whereClauseBuf.append(id);
+
+        // Specify the row data mimetype to phone mimetype( vnd.android.cursor.item/phone_v2 )
+        whereClauseBuf.append(" and ");
+        whereClauseBuf.append(ContactsContract.Data.MIMETYPE);
+        whereClauseBuf.append(" = '");
+        String mimetype = ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE;
+        whereClauseBuf.append(mimetype);
+        whereClauseBuf.append("'");
+
+        // Specify phone type.
+        whereClauseBuf.append(" and ");
+        whereClauseBuf.append(ContactsContract.CommonDataKinds.Phone.TYPE);
+        whereClauseBuf.append(" = ");
+        whereClauseBuf.append(field);
+
+        // Update phone info through Data uri.Otherwise it may throw java.lang.UnsupportedOperationException.
+        Uri dataUri = ContactsContract.Data.CONTENT_URI;
+
+        // Get update data count.
+        int updateCount = c.getContentResolver().update(dataUri, contentValues, whereClauseBuf.toString(), null);
+
     }
 
     public static String getAccounts(Context c)
