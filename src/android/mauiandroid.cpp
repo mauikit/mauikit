@@ -146,6 +146,20 @@ void MAUIAndroid::addContact(const QString &name,
                                               QAndroidJniObject::fromString(accountType).object<jstring>() );
 }
 
+void MAUIAndroid::updateContact(const QString &id, const QString &field, const QString &value)
+{
+    QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/Union",
+                                              "updateContact",
+                                              "(Landroid/content/Context;"
+                                              "Ljava/lang/String;"
+                                              "Ljava/lang/String;"
+                                              "Ljava/lang/String;)V",
+                                              QtAndroid::androidActivity().object<jobject>(),
+                                              QAndroidJniObject::fromString(id).object<jstring>(),
+                                              QAndroidJniObject::fromString(field).object<jstring>(),
+                                              QAndroidJniObject::fromString(value).object<jstring>() );
+}
+
 void MAUIAndroid::call(const QString &tel)
 {
 

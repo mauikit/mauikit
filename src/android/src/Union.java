@@ -76,7 +76,7 @@ public class Union
         {
             while (mainCursor.moveToNext())
             {
-                String id = "", displayName = "", fav = "", photo = "", tel = "", email = "", org = "", title = "", accountType = "", accountName = "";
+                String id = "", displayName = "", fav = "", photo = "", tel = "", email = "", org = "", title = "", accountType = "", accountName = "", modified = "";
 
                 id = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts._ID)) == null ? "" : mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts._ID));
                 displayName = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)) == null ? "" : mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
@@ -105,6 +105,7 @@ public class Union
                     {
                         accountName = accountCursor.getString(accountCursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_NAME));
                         accountType = accountCursor.getString(accountCursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_TYPE));
+                        modified = accountCursor.getString(accountCursor.getColumnIndex(ContactsContract.RawContacts.VERSION));
                     }
 
 
@@ -359,12 +360,28 @@ public class Union
 
     public static void updateContact(Context c, String id, String field, String value)
     {
+
+        String mimetype = "";
+        int typeName = 0, typeValue = 0;
         ContentValues contentValues = new ContentValues();
 
         // Put new phone number value.
 
         ///HERE WE NEED A SWITCH STATMENET BASE ON THE FIELD TYPE
-        contentValues.put(ContactsContract.CommonDataKinds.Phone.NUMBER, value);
+
+        switch(field)
+        {
+            case "tel":
+            {
+                contentValues.put(ContactsContract.CommonDataKinds.Phone.NUMBER, value);
+                mimetype = ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE;
+                typeName = ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE;
+                typeValue = ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE;
+                break;
+                }
+
+            default: return;
+            }
 
         // Create query condition, query with the raw contact id.
         StringBuffer whereClauseBuf = new StringBuffer();
@@ -378,15 +395,14 @@ public class Union
         whereClauseBuf.append(" and ");
         whereClauseBuf.append(ContactsContract.Data.MIMETYPE);
         whereClauseBuf.append(" = '");
-        String mimetype = ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE;
         whereClauseBuf.append(mimetype);
         whereClauseBuf.append("'");
 
         // Specify phone type.
         whereClauseBuf.append(" and ");
-        whereClauseBuf.append(ContactsContract.CommonDataKinds.Phone.TYPE);
+        whereClauseBuf.append(typeName);
         whereClauseBuf.append(" = ");
-        whereClauseBuf.append(field);
+        whereClauseBuf.append(typeValue);
 
         // Update phone info through Data uri.Otherwise it may throw java.lang.UnsupportedOperationException.
         Uri dataUri = ContactsContract.Data.CONTENT_URI;
