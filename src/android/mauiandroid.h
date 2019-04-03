@@ -29,6 +29,7 @@
 #include <QtAndroid>
 #include <QStringList>
 #include <QString>
+#include <QVariantList>
 
 class MAUIAndroid : public QObject
 {
@@ -48,8 +49,9 @@ public:
     Q_INVOKABLE static QString sdDir();
 	
     static QString getAccounts();
-    static QString getContacts();
+    static QVariantList getContacts();
     static void addContact(const QString &name, const QString &tel, const QString &tel2, const QString &tel3, const QString &email, const QString &title, const QString &org, const QString &photo, const QString &account, const QString &accountType);
+   static void updateContact(const QString &id, const QString &field, const QString &value);
     Q_INVOKABLE static void call(const QString &tel);
 
     void setAppIcons(const QString &lowDPI, const QString &mediumDPI, const QString &highDPI);

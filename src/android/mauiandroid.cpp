@@ -53,12 +53,59 @@ QString MAUIAndroid::getAccounts()
 }
 
 
-QString MAUIAndroid::getContacts()
-{	
-    QAndroidJniObject str = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union", "getContacts", "(Landroid/content/Context;)Ljava/lang/String;", QtAndroid::androidActivity().object<jobject>());
+QVariantList MAUIAndroid::getContacts()
+{
+    QVariantList res;
+    QAndroidJniEnvironment env;
+    QAndroidJniObject contactsArrayJniObject = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union", "getContacts", "(Landroid/content/Context;)[[Ljava/lang/String;",  QtAndroid::androidActivity().object<jobject>());
+    jobjectArray contactsJniArray = contactsArrayJniObject.object<jobjectArray>();
+    int len = env->GetArrayLength(contactsJniArray);
 
-    qDebug() << "Value from java is " << str.toString();
-    return str.toString();
+    qDebug() << "doSync: getContacts Length :" << len;
+
+    for (int i = 0; i < len; i++)
+    {
+        jobjectArray stringArr = static_cast<jobjectArray>(env->GetObjectArrayElement(contactsJniArray, i));
+
+        jstring id_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 0));
+        jstring n_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 1));
+        jstring tel_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 2));
+        jstring email_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 3));
+        jstring org_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 4));
+        jstring title_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 5));
+        jstring fav_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 6));
+        jstring photo_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 7));
+        jstring accountName_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 8));
+        jstring accountType_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 9));
+
+        const char *id = env->GetStringUTFChars(id_js, 0);
+        const char *n = env->GetStringUTFChars(n_js, 0);
+        const char *tel = env->GetStringUTFChars(tel_js, 0);
+        const char *email = env->GetStringUTFChars(email_js, 0);
+        const char *org = env->GetStringUTFChars(org_js, 0);
+        const char *title = env->GetStringUTFChars(title_js, 0);
+        const char *fav = env->GetStringUTFChars(fav_js, 0);
+        const char *photo = env->GetStringUTFChars(photo_js, 0);
+        const char *accountName = env->GetStringUTFChars(accountName_js, 0);
+        const char *accountType = env->GetStringUTFChars(accountType_js, 0);
+
+        if(QString(n).isEmpty())
+            continue;
+
+        res << QVariantMap {
+        {"id", QString(id)},
+        {"fav", QString(fav)},
+        {"n", QString(n)},
+        {"tel", QString(tel)},
+       {"email", QString(email)},
+        {"org", QString(org)},
+        {"photo", QString(photo)},
+        {"account", QString(accountName)},
+        {"type", QString(accountType)},
+        {"title", QString(title)}};
+    }
+
+    return res;
 }
 
 void MAUIAndroid::addContact(const QString &name,
@@ -97,6 +144,20 @@ void MAUIAndroid::addContact(const QString &name,
                                               QAndroidJniObject::fromString(photo).object<jstring>(),
                                               QAndroidJniObject::fromString(account).object<jstring>(),
                                               QAndroidJniObject::fromString(accountType).object<jstring>() );
+}
+
+void MAUIAndroid::updateContact(const QString &id, const QString &field, const QString &value)
+{
+    QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/Union",
+                                              "updateContact",
+                                              "(Landroid/content/Context;"
+                                              "Ljava/lang/String;"
+                                              "Ljava/lang/String;"
+                                              "Ljava/lang/String;)V",
+                                              QtAndroid::androidActivity().object<jobject>(),
+                                              QAndroidJniObject::fromString(id).object<jstring>(),
+                                              QAndroidJniObject::fromString(field).object<jstring>(),
+                                              QAndroidJniObject::fromString(value).object<jstring>() );
 }
 
 void MAUIAndroid::call(const QString &tel)
