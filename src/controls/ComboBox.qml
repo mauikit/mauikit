@@ -52,6 +52,8 @@ ComboBox
 	leftPadding: padding + (!control.mirrored || !indicator || !indicator.visible ? 0 : indicator.width + spacing)
 	rightPadding: padding + (control.mirrored || !indicator || !indicator.visible ? 0 : indicator.width + spacing)
 	
+	
+	
 	Maui.ToolButton
 	{
 		id: _iconButton
@@ -90,7 +92,8 @@ ComboBox
 		text: control.displayText
 		font: control.font
 		color: control.pressed || control.down ? control.colorScheme.highlightedTextColor : control.colorScheme.textColor
-		verticalAlignment: Text.AlignVCenter
+		verticalAlignment: TextInput.AlignVCenter
+		horizontalAlignment: Text.AlignHCenter
 		elide: Text.ElideRight
 	}
 	

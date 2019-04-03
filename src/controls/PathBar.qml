@@ -27,7 +27,13 @@ import "private"
 Maui.Item
 {
     id: control    
-      
+    /* Controlc color scheming */
+	ColorScheme 
+	{
+		id: colorScheme
+	}
+	property alias colorScheme : colorScheme
+	/***************************/
     height: iconSizes.big
     
     property string url : ""
@@ -42,7 +48,7 @@ Maui.Item
     {
         id: pathBarBG
         anchors.fill: parent
-        z: -1
+//         z: -1
         color: pathEntry.visible ? colorScheme.viewBackgroundColor : colorScheme.backgroundColor
         radius: radiusV
         opacity: 1

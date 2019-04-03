@@ -164,6 +164,7 @@ namespace FMH
 		TEL,
 		TEL_2,
 		TEL_3,
+		IM,
 
 		/** other keys **/
 		CITY,
@@ -238,6 +239,7 @@ namespace FMH
 		
 		/** ccdav keys **/
 		{MODEL_KEY::N, "n"},
+		{MODEL_KEY::IM, "im"},
 		{MODEL_KEY::PHOTO, "photo"},
 		{MODEL_KEY::GENDER, "gender"},
 		{MODEL_KEY::ADR, "adr"},
@@ -327,6 +329,7 @@ namespace FMH
 		
 		/** ccdav keys **/
 		{MODEL_NAME[MODEL_KEY::N], MODEL_KEY::N},
+		{MODEL_NAME[MODEL_KEY::IM], MODEL_KEY::IM},
 		{MODEL_NAME[MODEL_KEY::PHOTO], MODEL_KEY::PHOTO},
 		{MODEL_NAME[MODEL_KEY::GENDER], MODEL_KEY::GENDER},
 		{MODEL_NAME[MODEL_KEY::ADR], MODEL_KEY::ADR},
