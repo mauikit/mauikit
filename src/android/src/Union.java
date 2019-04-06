@@ -373,6 +373,7 @@ public class Union
         {
             case "tel":
             {
+                System.out.println("UPDATING TEL");
                 contentValues.put(ContactsContract.CommonDataKinds.Phone.NUMBER, value);
                 mimetype = ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE;
                 typeName = ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE;
