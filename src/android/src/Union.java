@@ -17,6 +17,7 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.ContentProviderOperation;
+import android.content.ContentProviderOperation.Builder;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.Context;
@@ -225,6 +226,8 @@ public class Union
 
     }
 
+
+
     public static void addContact(Context c,
                                   String name,
                                   String tel,
@@ -361,54 +364,93 @@ public class Union
     public static void updateContact(Context c, String id, String field, String value)
     {
 
-        String mimetype = "";
-        int typeName = 0, typeValue = 0;
-        ContentValues contentValues = new ContentValues();
+        ContentResolver cr = c.getContentResolver();
 
-        // Put new phone number value.
+              String firstname = "Contact's first name";
+              String lastname = "Last name";
+              String number = "000 000 000";
 
-        ///HERE WE NEED A SWITCH STATMENET BASE ON THE FIELD TYPE
+              ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
 
-        switch(field)
-        {
-            case "tel":
-            {
-                contentValues.put(ContactsContract.CommonDataKinds.Phone.NUMBER, value);
-                mimetype = ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE;
-                typeName = ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE;
-                typeValue = ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE;
-                break;
-                }
+              Builder builder;
+              switch(field)
+              {
 
-            default: return;
-            }
+                  case "tel" :
+                  {
+     // Number
+                      builder = ContentProviderOperation.newUpdate(ContactsContract.Data.CONTENT_URI);
+                      builder.withSelection(ContactsContract.Data.CONTACT_ID + "=?" + " AND " + ContactsContract.Data.MIMETYPE + "=?"+ " AND " + ContactsContract.CommonDataKinds.Organization.TYPE + "=?", new String[]{id, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE, String.valueOf(ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)});
+                      builder.withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, value);
+                      ops.add(builder.build());
+                      break;
+                      }
 
-        // Create query condition, query with the raw contact id.
-        StringBuffer whereClauseBuf = new StringBuffer();
+                  case "n":
+                  {
+   // Name
+                      builder = ContentProviderOperation.newUpdate(ContactsContract.Data.CONTENT_URI);
+                      builder.withSelection(ContactsContract.Data.CONTACT_ID + "=?" + " AND " + ContactsContract.Data.MIMETYPE + "=?", new String[]{id, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE});
+                      builder.withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, value);
+                      ops.add(builder.build());
+                      break;
 
-        // Specify the update contact id.
-        whereClauseBuf.append(ContactsContract.Data.RAW_CONTACT_ID);
-        whereClauseBuf.append("=");
-        whereClauseBuf.append(id);
+                      }
 
-        // Specify the row data mimetype to phone mimetype( vnd.android.cursor.item/phone_v2 )
-        whereClauseBuf.append(" and ");
-        whereClauseBuf.append(ContactsContract.Data.MIMETYPE);
-        whereClauseBuf.append(" = '");
-        whereClauseBuf.append(mimetype);
-        whereClauseBuf.append("'");
+                  case "email":
+                  {
+   // Name
+                      builder = ContentProviderOperation.newUpdate(ContactsContract.Data.CONTENT_URI);
+                      builder.withSelection(ContactsContract.Data.CONTACT_ID + "=?" + " AND " + ContactsContract.Data.MIMETYPE + "=?", new String[]{id, ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE});
+                      builder.withValue(ContactsContract.CommonDataKinds.Email.DATA, value);
+                      ops.add(builder.build());
+                      break;
 
-        // Specify phone type.
-        whereClauseBuf.append(" and ");
-        whereClauseBuf.append(typeName);
-        whereClauseBuf.append(" = ");
-        whereClauseBuf.append(typeValue);
+                      }
 
-        // Update phone info through Data uri.Otherwise it may throw java.lang.UnsupportedOperationException.
-        Uri dataUri = ContactsContract.Data.CONTENT_URI;
+                  case "fav":
+                  {
 
-        // Get update data count.
-        int updateCount = c.getContentResolver().update(dataUri, contentValues, whereClauseBuf.toString(), null);
+                      System.out.println("UPDATING CONTACT FAV " + field + " " + value);
+   // Name
+                      builder = ContentProviderOperation.newUpdate(ContactsContract.Contacts.CONTENT_URI);
+                      builder.withSelection(ContactsContract.Contacts._ID + "=?", new String[]{id});
+                      builder.withValue(ContactsContract.Contacts.STARRED, value);
+                      ops.add(builder.build());
+                      break;
+
+                      }
+
+
+
+                  default: return;
+
+                  }
+
+              // Update
+              try
+              {
+                  cr.applyBatch(ContactsContract.AUTHORITY, ops);
+              }
+              catch (Exception e)
+              {
+                  e.printStackTrace();
+              }
+    }
+
+public static void shareContact(Context c, String id)
+{
+    String lookupKey = id;
+    System.out.println("SHARING COINTACT WITH ID "+id);
+    final Uri shareUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey);
+        final Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType(ContactsContract.Contacts.CONTENT_VCARD_TYPE);
+        intent.putExtra(Intent.EXTRA_STREAM, shareUri);
+
+
+            c.startActivity(Intent.createChooser(intent, "Share contact"));
+
+
 
     }
 
