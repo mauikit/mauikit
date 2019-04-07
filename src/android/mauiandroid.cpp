@@ -285,6 +285,17 @@ void MAUIAndroid::shareLink(const QString &link)
         throw InterfaceConnFailedException();
 }
 
+void MAUIAndroid::shareContact(const QString &id)
+{
+    QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/Union",
+                                              "shareContact",
+                                              "(Landroid/content/Context;"
+                                              "Ljava/lang/String;)V",
+                                              QtAndroid::androidActivity().object<jobject>(),
+                                              QAndroidJniObject::fromString(id).object<jstring>());
+
+}
+
 void MAUIAndroid::sendSMS(const QString &tel,const QString &subject, const QString &message )
 {
     qDebug()<< "trying to send sms text";

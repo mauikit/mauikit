@@ -43,6 +43,7 @@ public:
     Q_INVOKABLE void shareText(const QString &text);
 	Q_INVOKABLE void sendSMS(const QString &tel,const QString &subject, const QString &message);	
     Q_INVOKABLE void shareLink(const QString &link);
+    Q_INVOKABLE void shareContact(const QString &id);
     Q_INVOKABLE void openWithApp(const QString &url);
     Q_INVOKABLE static QStringList defaultPaths();
     Q_INVOKABLE static QString homePath();
