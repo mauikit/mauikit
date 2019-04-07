@@ -64,7 +64,7 @@ Kirigami.AbstractApplicationWindow
     property alias about : aboutDialog
     property alias accounts: _accountsDialogLoader.item
     property alias currentAccount: _accountCombobox.currentText
-    property alias notifyDIalog: _notify
+    property alias notifyDialog: _notify
     
 
     //redefines here as here we can know a pointer to PageRow
