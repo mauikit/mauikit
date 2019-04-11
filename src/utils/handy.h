@@ -30,6 +30,9 @@
 
 #include "utils.h"
 
+/*!
+ * \brief The Handy class contains useful static methods to be used as an attached property to the Maui application
+ */
 #ifdef STATIC_MAUIKIT
 class Handy : public QObject
 #else
@@ -43,15 +46,44 @@ public:
     ~Handy();
 
 public slots:
+
+    /*!
+     * \brief Returns the major version of the current OS
+     *
+     * This function is static.
+     * \return Major OS version
+     */
     static int version();
 
+    /*!
+     * \brief Returns a QVariantMap containing basic information about the current app
+     *
+     * The pairs keys for the information returned are:
+     * "name", "version", "org", "domain", "mauikit_version" and "qt_version"
+     * \return QVariantMap with app info
+     */
     static QVariantMap appInfo();
+
+    /*!
+     * \brief Returns a QVariantMap containing basic information about the current user
+     *
+     * The pairs keys for the information returned are:
+     * "name"
+     * \return QVariantMap with user info
+     */
     static QVariantMap userInfo();
 
-    static bool saveSetting(const QString &key, const QVariant &value, const QString &group);
-    static QVariant loadSetting(const QString &key, const QString &group, const QVariant &defaultValue);
-
+    /*!
+     * \brief Returns the text contained in the clipboard
+     * \return QString containing clipboard text
+     */
     static QString getClipboard();
+
+    /*!
+     * \brief Copies text to the clipboard
+     * \param text text to be copied to the clipboard
+     * \return
+     */
     static bool copyToClipboard(const QString &text);
 };
 
