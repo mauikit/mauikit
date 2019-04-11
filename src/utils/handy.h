@@ -37,19 +37,22 @@ class MAUIKIT_EXPORT Handy : public QObject
 #endif
 {
     Q_OBJECT
+
 public:
     Handy(QObject *parent = nullptr);
     ~Handy();
-	Q_INVOKABLE static QVariantMap appInfo();  
-	Q_INVOKABLE static QVariantMap userInfo();  
-	
-	Q_INVOKABLE static bool saveSetting(const QString &key, const QVariant &value, const QString &group);
-	Q_INVOKABLE static QVariant loadSetting(const QString &key, const QString &group, const QVariant &defaultValue);
-	
-	Q_INVOKABLE static QString getClipboard();
-	Q_INVOKABLE static bool copyToClipboard(const QString &text);
+
 public slots:
     static int version();
+
+    static QVariantMap appInfo();
+    static QVariantMap userInfo();
+
+    static bool saveSetting(const QString &key, const QVariant &value, const QString &group);
+    static QVariant loadSetting(const QString &key, const QString &group, const QVariant &defaultValue);
+
+    static QString getClipboard();
+    static bool copyToClipboard(const QString &text);
 };
 
 #endif // HANDY_H
