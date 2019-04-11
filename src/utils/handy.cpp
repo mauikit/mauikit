@@ -24,6 +24,8 @@
 #include <QClipboard>
 #include <QCoreApplication>
 #include <QMimeData>
+#include <QOperatingSystemVersion>
+
 
 Handy::Handy(QObject *parent) : QObject(parent) 
 {
@@ -106,5 +108,11 @@ bool Handy::copyToClipboard(const QString &text)
 	
 	clipbopard->setText(text);
 	
-	return true;
+    return true;
+}
+
+int Handy::version()
+{
+    auto current = QOperatingSystemVersion::current();
+    return current.majorVersion();
 }

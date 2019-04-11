@@ -48,7 +48,8 @@ public:
 	
 	Q_INVOKABLE static QString getClipboard();
 	Q_INVOKABLE static bool copyToClipboard(const QString &text);
-	
+public slots:
+    static int version();
 };
 
 #endif // HANDY_H

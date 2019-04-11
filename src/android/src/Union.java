@@ -3,6 +3,7 @@ package com.kde.maui.tools;
 import android.provider.ContactsContract;
 import android.database.Cursor;
 import android.app.Activity;
+import android.os.Build;
 
 import android.net.Uri;
 
@@ -77,7 +78,7 @@ public class Union
         {
             while (mainCursor.moveToNext())
             {
-                String id = "", displayName = "", fav = "", photo = "", tel = "", email = "", org = "", title = "", accountType = "", accountName = "", modified = "";
+                String id = "", displayName = "", fav = "", photo = "", tel = "", email = "", org = "", title = "", accountType = "", accountName = "", modified = "", count = "";
 
                 id = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts._ID)) == null ? "" : mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts._ID));
                 displayName = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)) == null ? "" : mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
@@ -142,6 +143,22 @@ public class Union
 
                 if (emailCursor != null)
                     emailCursor.close();
+
+                    if(APIVersion() < 17)
+{
+                    int oneDay = (1000 * 60 * 60 * 24);
+                                                long last24h = (System.currentTimeMillis() - oneDay);
+                    //ADD count DATA...
+                    Cursor countCursor = cr.query(ContactsContract.Contacts.CONTENT_URI,new String[] { ContactsContract.Contacts._ID },  ContactsContract.Contacts.LAST_TIME_CONTACTED + ">" + last24h, null, ContactsContract.Contacts.LAST_TIME_CONTACTED + " DESC");
+
+
+                    if (countCursor != null)
+                        if (countCursor.moveToFirst())
+                        count= "1";
+
+                    if (countCursor != null)
+                        countCursor.close();
+}
 
                 //ADD ORG DATA...
                 Cursor orgCur = cr.query(ContactsContract.Data.CONTENT_URI,
@@ -214,7 +231,8 @@ public class Union
                         fav,
                         photo,
                         accountName,
-                        accountType});
+                        accountType,
+                        count});
 
             }
         }
@@ -223,6 +241,12 @@ public class Union
             mainCursor.close();
 
         return serializedData.toArray(new String[0][0]);
+
+    }
+
+public static int APIVersion()
+{
+       return Build.VERSION.SDK_INT;
 
     }
 
