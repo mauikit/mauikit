@@ -25,7 +25,6 @@
 #include <QMimeDatabase>
 #include <QDomDocument>
 #include <QFile>
-
 #include "utils.h"
 
 class InterfaceConnFailedException : public QException
@@ -61,8 +60,6 @@ QVariantList MAUIAndroid::getContacts()
     jobjectArray contactsJniArray = contactsArrayJniObject.object<jobjectArray>();
     int len = env->GetArrayLength(contactsJniArray);
 
-    qDebug() << "doSync: getContacts Length :" << len;
-
     for (int i = 0; i < len; i++)
     {
         jobjectArray stringArr = static_cast<jobjectArray>(env->GetObjectArrayElement(contactsJniArray, i));
@@ -77,6 +74,7 @@ QVariantList MAUIAndroid::getContacts()
         jstring photo_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 7));
         jstring accountName_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 8));
         jstring accountType_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 9));
+        jstring count_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 10));
 
         const char *id = env->GetStringUTFChars(id_js, 0);
         const char *n = env->GetStringUTFChars(n_js, 0);
@@ -88,8 +86,9 @@ QVariantList MAUIAndroid::getContacts()
         const char *photo = env->GetStringUTFChars(photo_js, 0);
         const char *accountName = env->GetStringUTFChars(accountName_js, 0);
         const char *accountType = env->GetStringUTFChars(accountType_js, 0);
+        const char *count = env->GetStringUTFChars(count_js, 0);
 
-        if(QString(n).isEmpty())
+        if(QString(n).isEmpty() && QString(tel).isEmpty() && QString(email).isEmpty())
             continue;
 
         res << QVariantMap {
@@ -97,12 +96,14 @@ QVariantList MAUIAndroid::getContacts()
         {"fav", QString(fav)},
         {"n", QString(n)},
         {"tel", QString(tel)},
-       {"email", QString(email)},
+        {"email", QString(email)},
         {"org", QString(org)},
         {"photo", QString(photo)},
         {"account", QString(accountName)},
         {"type", QString(accountType)},
-        {"title", QString(title)}};
+        {"title", QString(title)},
+        {"count", QString(count)}
+    };
     }
 
     return res;
@@ -283,6 +284,17 @@ void MAUIAndroid::shareLink(const QString &link)
         }
     }else
         throw InterfaceConnFailedException();
+}
+
+void MAUIAndroid::shareContact(const QString &id)
+{
+    QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/Union",
+                                              "shareContact",
+                                              "(Landroid/content/Context;"
+                                              "Ljava/lang/String;)V",
+                                              QtAndroid::androidActivity().object<jobject>(),
+                                              QAndroidJniObject::fromString(id).object<jstring>());
+
 }
 
 void MAUIAndroid::sendSMS(const QString &tel,const QString &subject, const QString &message )

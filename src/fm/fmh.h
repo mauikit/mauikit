@@ -145,6 +145,8 @@ namespace FMH
 		DESCRIPTION,
 		BOOKMARK,
 		ACCOUNT,
+        VERSION,
+        DOMAIN,
 		
 		/** ccdav keys **/
 		N,
@@ -234,8 +236,10 @@ namespace FMH
 		{MODEL_KEY::LICENSE, "license"},	
 		{MODEL_KEY::DESCRIPTION, "description"},
 		{MODEL_KEY::BOOKMARK, "bookmark"},
-		{MODEL_KEY::ACCOUNT, "account"},
-		
+        {MODEL_KEY::ACCOUNT, "account"},
+        {MODEL_KEY::VERSION, "version"},
+        {MODEL_KEY::DOMAIN, "domain"},
+
 		
 		/** ccdav keys **/
 		{MODEL_KEY::N, "n"},
@@ -325,8 +329,10 @@ namespace FMH
 		{MODEL_NAME[MODEL_KEY::LICENSE], MODEL_KEY::LICENSE},
 		{MODEL_NAME[MODEL_KEY::DESCRIPTION], MODEL_KEY::DESCRIPTION},		
 		{MODEL_NAME[MODEL_KEY::BOOKMARK], MODEL_KEY::BOOKMARK},
-		{MODEL_NAME[MODEL_KEY::ACCOUNT], MODEL_KEY::ACCOUNT},
-		
+        {MODEL_NAME[MODEL_KEY::ACCOUNT], MODEL_KEY::ACCOUNT},
+        {MODEL_NAME[MODEL_KEY::VERSION], MODEL_KEY::VERSION},
+        {MODEL_NAME[MODEL_KEY::DOMAIN], MODEL_KEY::DOMAIN},
+
 		/** ccdav keys **/
 		{MODEL_NAME[MODEL_KEY::N], MODEL_KEY::N},
 		{MODEL_NAME[MODEL_KEY::IM], MODEL_KEY::IM},

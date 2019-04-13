@@ -14,11 +14,27 @@ Maui.Dialog
 	property var iteminfo : ({})
 	property bool isDir : false
 	property string mimetype : ""
+	property bool showInfo: true
+	
 	maxHeight: unit * 800
 	maxWidth: unit * 500
 	defaultButtons: false
 		
 		footBar.leftContent: Maui.ToolButton
+		{
+			
+			iconName: "document-open"
+			onClicked:
+			{
+				if(typeof(previewLoader.item.player) !== "undefined")
+					previewLoader.item.player.stop()
+					openFile(currentUrl)
+			}
+		}
+		
+		footBar.middleContent: [		
+		
+		Maui.ToolButton
 		{
 			visible: !isDir
 			
@@ -29,23 +45,19 @@ Maui.Dialog
 				shareDialog.show([currentUrl])
 				close()
 			}
-		}
+		},
 		
-		footBar.middleContent:   [
 		Maui.ToolButton
 		{
 			iconName: "love"
 		},
+		
 		Maui.ToolButton
 		{
-			
-			iconName: "document-open"
-			onClicked:
-			{
-				if(typeof(previewLoader.item.player) !== "undefined")
-					previewLoader.item.player.stop()
-					openFile(currentUrl)
-			}
+			iconName: "documentinfo"
+			checkable: true
+			checked: showInfo
+			onClicked: showInfo = !showInfo
 		}
 		]
 		
@@ -100,6 +112,7 @@ Maui.Dialog
 		{
 			anchors.fill: parent			
 			spacing: 0
+			clip: true
 			
 			Loader
 			{
@@ -134,7 +147,7 @@ Maui.Dialog
 // 				height: 64
 				list.urls: [control.currentUrl]
 				allowEditMode: true
-				
+				clip: true
 				onTagRemovedClicked: list.removeFromUrls(index)
 				onTagsEdited: list.updateToUrls(tags)
 				
@@ -160,6 +173,9 @@ Maui.Dialog
 			control.iteminfo = Maui.FM.getFileInfo(path)
 			control.mimetype = iteminfo.mime.slice(0, iteminfo.mime.indexOf("/"))
 			control.isDir = mimetype === "inode"
+			
+			showInfo = mimetype === "image" || mimetype === "video" ? false : true
+			
 			console.log("MIME TYPE FOR PREVEIWER", mimetype, iteminfo.icon)
 			open()
 		}

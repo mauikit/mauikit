@@ -14,7 +14,7 @@ Item
         Item
         {
             Layout.fillWidth: true
-            height: parent.width *0.3
+            Layout.preferredHeight: iconSizes.huge + space.big
             Layout.margins: contentMargins
 
             Maui.ToolButton
@@ -29,104 +29,190 @@ Item
 
         Item
         {
-            Layout.fillWidth: true
-            height: rowHeight
-            width: parent.width* 0.8
-
-            Layout.margins: contentMargins
-
-            Label
-            {
-                text: iteminfo.name
-                width: parent.width
-                height: parent.height
-                horizontalAlignment: Qt.AlignHCenter
-                verticalAlignment: Qt.AlignVCenter
-                elide: Qt.ElideRight
-                wrapMode: Text.Wrap
-                font.pointSize: fontSizes.big
-                font.weight: Font.Bold
-                font.bold: true
-
-
-            }
-        }
-
-        Item
-        {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.margins: contentMargins
-
-            Column
-            {
-                spacing: space.small
-                width: parent.width
-                height: parent.height
-
-                Label
-                {
-                    text: qsTr("Icon: ")+ iteminfo.icon
-
-                    elide: Qt.ElideRight
-                    wrapMode: Text.Wrap
-                    font.pointSize: fontSizes.default
-                }
-
-                Label
-                {
-                    text: qsTr("Type: ")+ iteminfo.mime
-
-                    elide: Qt.ElideRight
-                    wrapMode: Text.Wrap
-                    font.pointSize: fontSizes.default
-                }
-
-                Label
-                {
-                    text: qsTr("Date: ")+ iteminfo.date
-
-                    elide: Qt.ElideRight
-                    wrapMode: Text.Wrap
-                    font.pointSize: fontSizes.default
-                }
-
-                Label
-                {
-                    text: qsTr("Modified: ")+ iteminfo.modified
-
-                    elide: Qt.ElideRight
-                    wrapMode: Text.Wrap
-                    font.pointSize: fontSizes.default
-                }
-
-                Label
-                {
-                    text: qsTr("Owner: ")+ iteminfo.owner
-
-                    elide: Qt.ElideRight
-                    wrapMode: Text.Wrap
-                    font.pointSize: fontSizes.default
-                }
-
-                Label
-                {
-                    text: qsTr("Tags: ")+ iteminfo.tags
-
-                    elide: Qt.ElideRight
-                    wrapMode: Text.Wrap
-                    font.pointSize: fontSizes.default
-                }
-
-                Label
-                {
-                    text: qsTr("Permisions: ")+ iteminfo.permissions
-
-                    elide: Qt.ElideRight
-                    wrapMode: Text.Wrap
-                    font.pointSize: fontSizes.default
-                }
-            }
-        }
+			Layout.fillWidth: true
+			Layout.fillHeight: true
+			
+			ScrollView
+			{
+				anchors.fill: parent
+				
+				contentHeight: _columnInfo.implicitHeight
+				
+				ColumnLayout
+				{
+					id: _columnInfo
+					width: parent.width
+					spacing: space.large
+					// 			spacing: rowHeight
+					Label
+					{				
+						text: iteminfo.name
+						Layout.fillWidth: true
+						horizontalAlignment: Qt.AlignHCenter
+						verticalAlignment: Qt.AlignVCenter
+						elide: Qt.ElideRight
+						wrapMode: Text.Wrap
+						font.pointSize: fontSizes.big
+						font.weight: Font.Bold
+						font.bold: true
+					}
+					
+					Column
+					{
+						Layout.fillWidth: true
+						spacing: space.small
+						Label
+						{
+							visible: iteminfo.mime
+							text: qsTr("Type")
+							font.pointSize: fontSizes.default
+							font.weight: Font.Light
+							
+						}
+						
+						Label
+						{							 
+							horizontalAlignment: Qt.AlignHCenter
+							verticalAlignment: Qt.AlignVCenter
+							elide: Qt.ElideRight
+							wrapMode: Text.Wrap
+							font.pointSize: fontSizes.big
+							font.weight: Font.Bold
+							font.bold: true
+							text: iteminfo.mime
+						}
+					}
+					
+					Column
+					{
+						Layout.fillWidth: true
+						spacing: space.small
+						Label
+						{
+							visible: iteminfo.date						
+							text: qsTr("Date")
+							font.pointSize: fontSizes.default
+							font.weight: Font.Light						
+						}
+						
+						Label
+						{							 
+							horizontalAlignment: Qt.AlignHCenter
+							verticalAlignment: Qt.AlignVCenter
+							elide: Qt.ElideRight
+							wrapMode: Text.Wrap
+							font.pointSize: fontSizes.big
+							font.weight: Font.Bold
+							font.bold: true
+							text: iteminfo.date
+						}
+					}
+					
+					
+					Column
+					{
+						Layout.fillWidth: true
+						spacing: space.small
+						Label
+						{
+							visible: iteminfo.modified						
+							text: qsTr("Modified")
+							font.pointSize: fontSizes.default
+							font.weight: Font.Light
+							
+						}
+						
+						Label
+						{							 
+							horizontalAlignment: Qt.AlignHCenter
+							verticalAlignment: Qt.AlignVCenter
+							elide: Qt.ElideRight
+							wrapMode: Text.Wrap
+							font.pointSize: fontSizes.big
+							font.weight: Font.Bold
+							font.bold: true
+							text: iteminfo.modified
+						}
+					}
+					
+					Column
+					{
+						Layout.fillWidth: true
+						spacing: space.small
+						Label
+						{
+							visible: iteminfo.owner						
+							text: qsTr("Owner")
+							font.pointSize: fontSizes.default
+							font.weight: Font.Light
+							
+						}
+						
+						Label
+						{							 
+							horizontalAlignment: Qt.AlignHCenter
+							verticalAlignment: Qt.AlignVCenter
+							elide: Qt.ElideRight
+							wrapMode: Text.Wrap
+							font.pointSize: fontSizes.big
+							font.weight: Font.Bold
+							font.bold: true
+							text: iteminfo.owner
+						}
+					}
+					
+					Column
+					{
+						Layout.fillWidth: true
+						spacing: space.small
+						Label
+						{
+							visible: iteminfo.tags
+							text: qsTr("Tags")
+							font.pointSize: fontSizes.default
+							font.weight: Font.Light
+						}
+						
+						Label
+						{							 
+							horizontalAlignment: Qt.AlignHCenter
+							verticalAlignment: Qt.AlignVCenter
+							elide: Qt.ElideRight
+							wrapMode: Text.Wrap
+							font.pointSize: fontSizes.big
+							font.weight: Font.Bold
+							font.bold: true
+							text: iteminfo.tags
+						}
+					}
+					
+					Column
+					{
+						Layout.fillWidth: true
+						spacing: space.small
+						Label
+						{
+							visible: iteminfo.permissions						
+							text: qsTr("Permissions")
+							font.pointSize: fontSizes.default
+							font.weight: Font.Light
+						}
+						
+						Label
+						{							 
+							horizontalAlignment: Qt.AlignHCenter
+							verticalAlignment: Qt.AlignVCenter
+							elide: Qt.ElideRight
+							wrapMode: Text.Wrap
+							font.pointSize: fontSizes.big
+							font.weight: Font.Bold
+							font.bold: true
+							text: iteminfo.permissions
+						}
+					}
+				}
+				
+			}
+		}        
     }
 }

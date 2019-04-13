@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import org.kde.mauikit 1.0 as Maui
 
 ColumnLayout
 {
@@ -15,26 +16,26 @@ ColumnLayout
 		Layout.maximumHeight: parent.height * 0.7
 		Layout.preferredHeight: parent.height * 0.7
 		Layout.minimumHeight: parent.height * 0.7
-		Image
+		
+		Maui.ImageViewer
 		{
-			anchors.centerIn: parent
-			horizontalAlignment: Qt.AlignHCenter
-			verticalAlignment: Qt.AlignVCenter
+// 			anchors.centerIn: parent
+// 			horizontalAlignment: Qt.AlignHCenter
+// 			verticalAlignment: Qt.AlignVCenter
 			width: parent.width
-			height: parent.height * 0.9
-			source: "file://"+currentUrl
-			fillMode: Image.PreserveAspectCrop
-			asynchronous: true
-			sourceSize.height: height
-			sourceSize.width: width
+			height: parent.height
+			image.source: "file://"+currentUrl
+// 			fillMode: Image.PreserveAspectCrop
+// 			asynchronous: true
+// 			sourceSize.height: height
+// 			sourceSize.width: width
 		}
-		
-		
 	}
 	
 	
 	Item
 	{
+		visible: showInfo
 		Layout.fillWidth: true
 		Layout.fillHeight: true
 		
@@ -69,6 +70,7 @@ ColumnLayout
 					spacing: space.small
 					Label
 					{
+						visible: iteminfo.mime
 						text: qsTr("Type")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
@@ -94,10 +96,10 @@ ColumnLayout
 					spacing: space.small
 					Label
 					{
+						visible: iteminfo.date						
 						text: qsTr("Date")
 						font.pointSize: fontSizes.default
-						font.weight: Font.Light
-						
+						font.weight: Font.Light						
 					}
 					
 					Label
@@ -120,6 +122,7 @@ ColumnLayout
 					spacing: space.small
 					Label
 					{
+						visible: iteminfo.modified						
 						text: qsTr("Modified")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
@@ -145,6 +148,7 @@ ColumnLayout
 					spacing: space.small
 					Label
 					{
+						visible: iteminfo.owner						
 						text: qsTr("Owner")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
@@ -170,10 +174,10 @@ ColumnLayout
 					spacing: space.small
 					Label
 					{
+						visible: iteminfo.tags
 						text: qsTr("Tags")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
-						
 					}
 					
 					Label
@@ -195,6 +199,7 @@ ColumnLayout
 					spacing: space.small
 					Label
 					{
+						visible: iteminfo.permissions						
 						text: qsTr("Permissions")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light

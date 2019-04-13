@@ -24,38 +24,31 @@
 #include <QClipboard>
 #include <QCoreApplication>
 #include <QMimeData>
+#include <QOperatingSystemVersion>
+#include "fmh.h"
 
-Handy::Handy(QObject *parent) : QObject(parent) 
-{
-	
-}
+Handy::Handy(QObject *parent) : QObject(parent) {}
 
-Handy::~Handy()
-{
-	
-}
+Handy::~Handy() {}
 
 QVariantMap Handy::appInfo()
 {
 	auto app =  UTIL::app;
 	
-	auto res = QVariantMap({{"name", app->applicationName()},
-						   {"version", app->applicationVersion()},
-						   {"organization", app->organizationName()},
-						   {"domain", app->organizationDomain()},
-						   {"mauikit", MAUIKIT_VERSION_STR},
-						{"qt", QT_VERSION_STR} });
+    auto res = QVariantMap({{FMH::MODEL_NAME[FMH::MODEL_KEY::NAME], app->applicationName()},
+                           {FMH::MODEL_NAME[FMH::MODEL_KEY::VERSION], app->applicationVersion()},
+                           {FMH::MODEL_NAME[FMH::MODEL_KEY::ORG], app->organizationName()},
+                           {FMH::MODEL_NAME[FMH::MODEL_KEY::DOMAIN], app->organizationDomain()},
+                           {"mauikit_version", MAUIKIT_VERSION_STR},
+                           {"qt_version", QT_VERSION_STR} });
 	
 	#ifdef Q_OS_ANDROID
-	res.insert("icon", QGuiApplication::windowIcon().name());
+    res.insert(FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], QGuiApplication::windowIcon().name());
 	#else
-	res.insert("icon", QApplication::windowIcon().name());
-	#endif
+    res.insert(FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], QApplication::windowIcon().name());
+	#endif	
 	
-	qDebug() << "APP INFO" << res;
-	
-	return res;
-	
+    return res;
 }
 
 QVariantMap Handy::userInfo()
@@ -64,22 +57,12 @@ QVariantMap Handy::userInfo()
 	if (name.isEmpty())
 		name = qgetenv("USERNAME");
 	
-	auto res = QVariantMap({{"name", name}});
+    auto res = QVariantMap({{FMH::MODEL_NAME[FMH::MODEL_KEY::NAME], name}});
 	
 	return res;
 	
 }
 
-bool Handy::saveSetting(const QString &key, const QVariant &value, const QString &group)
-{
-	UTIL::saveSettings(key, value, group);
-	return true;
-}
-
-QVariant Handy::loadSetting(const QString &key, const QString &group, const QVariant &defaultValue)
-{
-	return UTIL::loadSettings(key, group, defaultValue);
-}
 
 QString Handy::getClipboard()
 {
@@ -106,5 +89,11 @@ bool Handy::copyToClipboard(const QString &text)
 	
 	clipbopard->setText(text);
 	
-	return true;
+    return true;
+}
+
+int Handy::version()
+{
+    auto current = QOperatingSystemVersion::current();
+    return current.majorVersion();
 }
