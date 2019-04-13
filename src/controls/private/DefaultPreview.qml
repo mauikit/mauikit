@@ -44,19 +44,8 @@ Item
 					width: parent.width
 					spacing: space.large
 					// 			spacing: rowHeight
-					Label
-					{				
-						text: iteminfo.name
-						Layout.fillWidth: true
-						horizontalAlignment: Qt.AlignHCenter
-						verticalAlignment: Qt.AlignVCenter
-						elide: Qt.ElideRight
-						wrapMode: Text.Wrap
-						font.pointSize: fontSizes.big
-						font.weight: Font.Bold
-						font.bold: true
-					}
 					
+										
 					Column
 					{
 						Layout.fillWidth: true
@@ -67,6 +56,8 @@ Item
 							text: qsTr("Type")
 							font.pointSize: fontSizes.default
 							font.weight: Font.Light
+							color: colorScheme.textColor
+							
 							
 						}
 						
@@ -80,6 +71,8 @@ Item
 							font.weight: Font.Bold
 							font.bold: true
 							text: iteminfo.mime
+							color: colorScheme.textColor
+							
 						}
 					}
 					
@@ -92,7 +85,9 @@ Item
 							visible: iteminfo.date						
 							text: qsTr("Date")
 							font.pointSize: fontSizes.default
-							font.weight: Font.Light						
+							font.weight: Font.Light	
+							color: colorScheme.textColor
+							
 						}
 						
 						Label
@@ -105,6 +100,8 @@ Item
 							font.weight: Font.Bold
 							font.bold: true
 							text: iteminfo.date
+							color: colorScheme.textColor
+							
 						}
 					}
 					
@@ -119,6 +116,8 @@ Item
 							text: qsTr("Modified")
 							font.pointSize: fontSizes.default
 							font.weight: Font.Light
+							color: colorScheme.textColor
+							
 							
 						}
 						
@@ -132,6 +131,8 @@ Item
 							font.weight: Font.Bold
 							font.bold: true
 							text: iteminfo.modified
+							color: colorScheme.textColor
+							
 						}
 					}
 					
@@ -145,6 +146,8 @@ Item
 							text: qsTr("Owner")
 							font.pointSize: fontSizes.default
 							font.weight: Font.Light
+							color: colorScheme.textColor
+							
 							
 						}
 						
@@ -158,6 +161,8 @@ Item
 							font.weight: Font.Bold
 							font.bold: true
 							text: iteminfo.owner
+							color: colorScheme.textColor
+							
 						}
 					}
 					
@@ -171,6 +176,8 @@ Item
 							text: qsTr("Tags")
 							font.pointSize: fontSizes.default
 							font.weight: Font.Light
+							color: colorScheme.textColor
+							
 						}
 						
 						Label
@@ -183,6 +190,8 @@ Item
 							font.weight: Font.Bold
 							font.bold: true
 							text: iteminfo.tags
+							color: colorScheme.textColor
+							
 						}
 					}
 					
@@ -196,6 +205,8 @@ Item
 							text: qsTr("Permissions")
 							font.pointSize: fontSizes.default
 							font.weight: Font.Light
+							color: colorScheme.textColor
+							
 						}
 						
 						Label
@@ -208,6 +219,8 @@ Item
 							font.weight: Font.Bold
 							font.bold: true
 							text: iteminfo.permissions
+							color: colorScheme.textColor
+							
 						}
 					}
 				}

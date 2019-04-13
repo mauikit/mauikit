@@ -5,6 +5,14 @@ import org.kde.mauikit 1.0 as Maui
 
 ItemDelegate
 {
+	
+	id: control
+	
+	/* Controlc color scheming */
+	ColorScheme {id: colorScheme}
+	property alias colorScheme : colorScheme
+	/***************************/
+	
     clip: true
 
     property int tagWidth: iconSizes.medium * 5
@@ -50,7 +58,7 @@ ItemDelegate
                 horizontalAlignment: Qt.AlignHCenter
                 elide: Qt.ElideRight
                 font.pointSize: fontSizes.medium
-                color: textColor
+                color: colorScheme.textColor
             }
         }
 
@@ -68,6 +76,7 @@ ItemDelegate
                 iconName: "window-close"
                 size: iconSizes.small
                 onClicked: removeTag(index)
+				iconColor: colorScheme.textColor
 
             }
         }

@@ -23,7 +23,7 @@ import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import "private"
 
-Item
+Maui.Item
 {
     id: control
     clip : true
@@ -68,7 +68,7 @@ Item
                     visible: allowEditMode
                     iconName: "list-add"
                     onClicked: addClicked()
-                    iconColor: textColor
+                    iconColor: control.colorScheme.textColor
                 }
 
                 TagList
@@ -82,7 +82,8 @@ Item
                     showDeleteIcon: allowEditMode
                     onTagRemoved: tagRemovedClicked(index)
                     onTagClicked: control.tagClicked(tagsList.model.get(index).tag)
-										
+					colorScheme.textColor: control.colorScheme.textColor
+					colorScheme.backgroundColor: control.colorScheme.backgroundColor					
                     MouseArea
                     {
                         anchors.fill: parent
@@ -120,7 +121,7 @@ Item
                         selectByMouse: !isMobile
                         focus: true
                         wrapMode: TextEdit.Wrap
-                        color: textColor
+                        color: colorScheme.textColor
                         selectionColor: highlightColor
                         selectedTextColor: highlightedTextColor
                         onFocusChanged: editMode = false
