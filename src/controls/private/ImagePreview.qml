@@ -30,13 +30,12 @@ ColumnLayout
 // 			sourceSize.height: height
 // 			sourceSize.width: width
 		}
-		
-		
 	}
 	
 	
 	Item
 	{
+		visible: showInfo
 		Layout.fillWidth: true
 		Layout.fillHeight: true
 		

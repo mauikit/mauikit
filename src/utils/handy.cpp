@@ -70,16 +70,16 @@ QVariantMap Handy::userInfo()
 	
 }
 
-bool Handy::saveSetting(const QString &key, const QVariant &value, const QString &group)
-{
-	UTIL::saveSettings(key, value, group);
-	return true;
-}
-
-QVariant Handy::loadSetting(const QString &key, const QString &group, const QVariant &defaultValue)
-{
-	return UTIL::loadSettings(key, group, defaultValue);
-}
+// bool Handy::saveSetting(const QString &key, const QVariant &value, const QString &group)
+// {
+// 	UTIL::saveSettings(key, value, group);
+// 	return true;
+// }
+// 
+// QVariant Handy::loadSetting(const QString &key, const QString &group, const QVariant &defaultValue)
+// {
+// 	return UTIL::loadSettings(key, group, defaultValue);
+// }
 
 QString Handy::getClipboard()
 {
