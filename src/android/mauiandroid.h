@@ -59,7 +59,8 @@ public:
     void setAppInfo(const QString &appName, const QString &version, const QString &uri);
     void handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data);
     void fileChooser();
-public slots:
+
+
 
 signals:
     void folderPicked(QString path);
