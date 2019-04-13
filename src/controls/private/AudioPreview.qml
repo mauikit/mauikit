@@ -85,19 +85,7 @@ ColumnLayout
 				width: parent.width
 				spacing: space.large
 				// 			spacing: rowHeight
-				Label
-				{				
-					text: iteminfo.name
-					Layout.fillWidth: true
-					horizontalAlignment: Qt.AlignHCenter
-					verticalAlignment: Qt.AlignVCenter
-					elide: Qt.ElideRight
-					wrapMode: Text.Wrap
-					font.pointSize: fontSizes.big
-					font.weight: Font.Bold
-					font.bold: true
-				}
-				
+								
 				Column
 				{
 					Layout.fillWidth: true
@@ -108,7 +96,7 @@ ColumnLayout
 						text: qsTr("Title")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
-						
+						color: colorScheme.textColor
 					}
 					
 					Label
@@ -121,6 +109,7 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: player.metaData.title
+						color: colorScheme.textColor
 					}
 				}
 				
@@ -133,7 +122,8 @@ ColumnLayout
 						visible: iteminfo.date						
 						text: qsTr("Artist")
 						font.pointSize: fontSizes.default
-						font.weight: Font.Light						
+						font.weight: Font.Light
+						color: colorScheme.textColor
 					}
 					
 					Label
@@ -146,6 +136,7 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: player.metaData.albumArtist
+						color: colorScheme.textColor
 					}
 				}
 				
@@ -160,6 +151,8 @@ ColumnLayout
 						text: qsTr("Album")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
+						
 						
 					}
 					
@@ -173,6 +166,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: player.metaData.albumTitle
+						color: colorScheme.textColor
+						
 					}
 				}
 				
@@ -186,6 +181,8 @@ ColumnLayout
 						text: qsTr("Author")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
+						
 						
 					}
 					
@@ -199,6 +196,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: player.metaData.author
+						color: colorScheme.textColor
+						
 					}
 				}
 				
@@ -212,6 +211,8 @@ ColumnLayout
 						text: qsTr("Codec")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
+						
 					}
 					
 					Label
@@ -224,6 +225,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: player.metaData.audioCodec
+						color: colorScheme.textColor
+						
 					}
 				}
 				
@@ -237,6 +240,8 @@ ColumnLayout
 						text: qsTr("Copyright")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
+						
 					}
 					
 					Label
@@ -249,6 +254,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: player.metaData.copyright
+						color: colorScheme.textColor
+						
 					}
 				}
 				
@@ -262,6 +269,8 @@ ColumnLayout
 						text: qsTr("Duration")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
+						
 					}
 					
 					Label
@@ -274,6 +283,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: player.metaData.duration
+						color: colorScheme.textColor
+						
 					}
 				}
 				
@@ -287,6 +298,8 @@ ColumnLayout
 						text: qsTr("Track")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
+						
 					}
 					
 					Label
@@ -299,6 +312,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: player.metaData.trackNumber
+						color: colorScheme.textColor
+						
 					}
 				}
 				
@@ -312,6 +327,8 @@ ColumnLayout
 						text: qsTr("Year")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
+						
 					}
 					
 					Label
@@ -324,6 +341,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: player.metaData.year
+						color: colorScheme.textColor
+						
 					}
 				}
 				
@@ -337,6 +356,8 @@ ColumnLayout
 						text: qsTr("Rating")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
+						
 					}
 					
 					Label
@@ -349,6 +370,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: player.metaData.userRating
+						color: colorScheme.textColor
+						
 					}
 				}
 				

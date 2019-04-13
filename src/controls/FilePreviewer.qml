@@ -10,6 +10,9 @@ Maui.Dialog
 {
 	id: control
 	
+	colorScheme.backgroundColor: "#2d2d2d"
+	colorScheme.textColor: "#fafafa"
+	
 	property string currentUrl: ""
 	property var iteminfo : ({})
 	property bool isDir : false
@@ -22,7 +25,7 @@ Maui.Dialog
 		
 		footBar.leftContent: Maui.ToolButton
 		{
-			
+			iconColor: control.colorScheme.textColor
 			iconName: "document-open"
 			onClicked:
 			{
@@ -32,12 +35,12 @@ Maui.Dialog
 			}
 		}
 		
-		footBar.middleContent: [		
+		footBar.middleContent: [
 		
 		Maui.ToolButton
 		{
 			visible: !isDir
-			
+			iconColor: control.colorScheme.textColor
 			iconName: "document-share"
 			onClicked:
 			{
@@ -50,6 +53,8 @@ Maui.Dialog
 		Maui.ToolButton
 		{
 			iconName: "love"
+			iconColor: control.colorScheme.textColor
+			
 		},
 		
 		Maui.ToolButton
@@ -58,12 +63,16 @@ Maui.Dialog
 			checkable: true
 			checked: showInfo
 			onClicked: showInfo = !showInfo
+			iconColor: control.colorScheme.textColor
+			
 		}
 		]
 		
 		footBar.rightContent:  Maui.ToolButton
 		{
 			iconName: "archive-remove"
+			iconColor: control.colorScheme.textColor
+			
 			onClicked:
 			{
 				close()
@@ -110,9 +119,27 @@ Maui.Dialog
 		
 		ColumnLayout
 		{
-			anchors.fill: parent			
+			anchors.fill: parent
 			spacing: 0
 			clip: true
+			
+			
+				Label
+				{		
+					Layout.fillWidth: true
+					Layout.margins: space.medium
+					horizontalAlignment: Qt.AlignHCenter
+					verticalAlignment: Qt.AlignVCenter
+					elide: Qt.ElideRight
+					wrapMode: Text.Wrap
+					font.pointSize: fontSizes.big
+					font.weight: Font.Bold
+					font.bold: true
+					text: iteminfo.name
+					color: colorScheme.textColor
+					
+				}
+			
 			
 			Loader
 			{
@@ -144,16 +171,18 @@ Maui.Dialog
 				id: _tagsBar
 				Layout.fillWidth: true
 				Layout.margins: 0
-// 				height: 64
+				// 				height: 64
 				list.urls: [control.currentUrl]
 				allowEditMode: true
 				clip: true
 				onTagRemovedClicked: list.removeFromUrls(index)
 				onTagsEdited: list.updateToUrls(tags)
-				
-				onAddClicked: 
+// 				colorScheme: control.colorScheme
+				colorScheme.textColor: control.colorScheme.textColor
+				colorScheme.backgroundColor: control.colorScheme.backgroundColor
+				onAddClicked:
 				{
-					dialogLoader.sourceComponent = tagsDialogComponent					
+					dialogLoader.sourceComponent = tagsDialogComponent
 					dialog.composerList.urls = [control.currentUrl]
 					dialog.open()
 				}
@@ -171,7 +200,9 @@ Maui.Dialog
 		{
 			control.currentUrl = path
 			control.iteminfo = Maui.FM.getFileInfo(path)
+			if(iteminfo.mime.indexOf("/"))
 			control.mimetype = iteminfo.mime.slice(0, iteminfo.mime.indexOf("/"))
+			else control.mimetype = ""
 			control.isDir = mimetype === "inode"
 			
 			showInfo = mimetype === "image" || mimetype === "video" ? false : true

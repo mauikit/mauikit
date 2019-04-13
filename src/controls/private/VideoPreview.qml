@@ -82,18 +82,7 @@ ColumnLayout
 				width: parent.width
 				spacing: space.large
 				// 			spacing: rowHeight
-				Label
-				{				
-					text: iteminfo.name
-					Layout.fillWidth: true
-					horizontalAlignment: Qt.AlignHCenter
-					verticalAlignment: Qt.AlignVCenter
-					elide: Qt.ElideRight
-					wrapMode: Text.Wrap
-					font.pointSize: fontSizes.big
-					font.weight: Font.Bold
-					font.bold: true
-				}
+				
 				
 				Column
 				{
@@ -105,6 +94,8 @@ ColumnLayout
 						text: qsTr("Camera")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
+						
 						
 					}
 					
@@ -118,6 +109,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: player.metaData.cameraModel
+						color: colorScheme.textColor
+						
 					}
 				}
 				
@@ -130,7 +123,9 @@ ColumnLayout
 						visible: iteminfo.date						
 						text: qsTr("Zoom ratio")
 						font.pointSize: fontSizes.default
-						font.weight: Font.Light						
+						font.weight: Font.Light			
+						color: colorScheme.textColor
+						
 					}
 					
 					Label
@@ -143,6 +138,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: player.metaData.digitalZoomRatio
+						color: colorScheme.textColor
+						
 					}
 				}
 				
@@ -157,6 +154,8 @@ ColumnLayout
 						text: qsTr("Author")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
+						
 						
 					}
 					
@@ -170,6 +169,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: player.metaData.author
+						color: colorScheme.textColor
+						
 					}
 				}
 				
@@ -183,6 +184,8 @@ ColumnLayout
 						text: qsTr("Codec")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
+						
 						
 					}
 					
@@ -196,6 +199,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: player.metaData.videoCodec
+						color: colorScheme.textColor
+						
 					}
 				}
 				
@@ -209,6 +214,8 @@ ColumnLayout
 						text: qsTr("Copyright")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
+						
 					}
 					
 					Label
@@ -221,6 +228,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: player.metaData.copyright
+						color: colorScheme.textColor
+						
 					}
 				}
 				
@@ -234,6 +243,8 @@ ColumnLayout
 						text: qsTr("Duration")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
+						
 					}
 					
 					Label
@@ -246,6 +257,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: player.metaData.duration
+						color: colorScheme.textColor
+						
 					}
 				}
 				
@@ -259,6 +272,8 @@ ColumnLayout
 						text: qsTr("Frame rate")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
+						
 					}
 					
 					Label
@@ -271,6 +286,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: player.metaData.videoFrameRate
+						color: colorScheme.textColor
+						
 					}
 				}
 				
@@ -284,6 +301,8 @@ ColumnLayout
 						text: qsTr("Year")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
+						
 					}
 					
 					Label
@@ -296,6 +315,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: player.metaData.year
+						color: colorScheme.textColor
+						
 					}
 				}
 				
@@ -309,6 +330,8 @@ ColumnLayout
 						text: qsTr("Aspect ratio")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
+						
 					}
 					
 					Label
@@ -321,6 +344,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: player.metaData.pixelAspectRatio
+						color: colorScheme.textColor
+						
 					}
 				}
 				
@@ -334,6 +359,8 @@ ColumnLayout
 						text: qsTr("Resolution")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
+						
 					}
 					
 					Label
@@ -346,6 +373,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: player.metaData.resolution
+						color: colorScheme.textColor
+						
 					}
 				}
 			}			

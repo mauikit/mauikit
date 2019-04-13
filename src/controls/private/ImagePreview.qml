@@ -51,18 +51,7 @@ ColumnLayout
 				width: parent.width
 				spacing: space.large
 				// 			spacing: rowHeight
-				Label
-				{				
-					text: iteminfo.name
-					Layout.fillWidth: true
-					horizontalAlignment: Qt.AlignHCenter
-					verticalAlignment: Qt.AlignVCenter
-					elide: Qt.ElideRight
-					wrapMode: Text.Wrap
-					font.pointSize: fontSizes.big
-					font.weight: Font.Bold
-					font.bold: true
-				}
+				
 				
 				Column
 				{
@@ -74,6 +63,7 @@ ColumnLayout
 						text: qsTr("Type")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
 						
 					}
 					
@@ -87,6 +77,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: iteminfo.mime
+						color: colorScheme.textColor
+						
 					}
 				}
 				
@@ -99,7 +91,9 @@ ColumnLayout
 						visible: iteminfo.date						
 						text: qsTr("Date")
 						font.pointSize: fontSizes.default
-						font.weight: Font.Light						
+						font.weight: Font.Light	
+						color: colorScheme.textColor
+						
 					}
 					
 					Label
@@ -112,6 +106,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: iteminfo.date
+						color: colorScheme.textColor
+						
 					}
 				}
 				
@@ -126,6 +122,7 @@ ColumnLayout
 						text: qsTr("Modified")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
 						
 					}
 					
@@ -139,6 +136,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: iteminfo.modified
+						color: colorScheme.textColor
+						
 					}
 				}
 				
@@ -152,6 +151,7 @@ ColumnLayout
 						text: qsTr("Owner")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
 						
 					}
 					
@@ -165,6 +165,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: iteminfo.owner
+						color: colorScheme.textColor
+						
 					}
 				}
 				
@@ -178,6 +180,8 @@ ColumnLayout
 						text: qsTr("Tags")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
+						
 					}
 					
 					Label
@@ -190,6 +194,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: iteminfo.tags
+						color: colorScheme.textColor
+						
 					}
 				}
 				
@@ -203,6 +209,8 @@ ColumnLayout
 						text: qsTr("Permissions")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
+						color: colorScheme.textColor
+						
 					}
 					
 					Label
@@ -215,6 +223,8 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: iteminfo.permissions
+						color: colorScheme.textColor
+						
 					}
 				}
 			}

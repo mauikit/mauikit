@@ -8,6 +8,12 @@ import TagsModel 1.0
 ListView
 {
     id: control
+    
+    /* Controlc color scheming */
+	ColorScheme {id: colorScheme}
+	property alias colorScheme : colorScheme
+	/***************************/
+    
     orientation: ListView.Horizontal
     clip: true
     spacing: contentMargins
@@ -41,7 +47,7 @@ ListView
         text: qsTr(control.placeholderText)
         opacity: 0.7
         visible: count === 0 && showPlaceHolder
-        color: textColor
+        color: colorScheme.textColor
         font.pointSize: fontSizes.default
     }
 
@@ -49,6 +55,7 @@ ListView
     {
         id: delegate
         showDeleteIcon: control.showDeleteIcon
+        colorScheme.textColor: control.colorScheme.textColor
         Connections
         {
             target: delegate
