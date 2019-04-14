@@ -12,8 +12,8 @@ ColumnLayout
     Item
     {
         Layout.fillWidth: true
-        Layout.preferredHeight: parent.width * 0.5
-        Layout.margins: contentMargins
+        Layout.fillHeight: true
+        Layout.margins: 0
 
         Maui.ToolButton
         {
@@ -31,8 +31,8 @@ ColumnLayout
             anchors.fill: parent
             source: "file://"+currentUrl
             autoLoad: true
+            autoPlay: true
             
-            Component.onCompleted: player.play()
         }
 
         MouseArea
@@ -50,8 +50,7 @@ ColumnLayout
 			
 			color: "black"
 			
-			anchors.horizontalCenter: parent.horizontalCenter
-			anchors.bottom: parent.bottom
+            anchors.centerIn: parent
 			
 			Maui.ToolButton
 			{
@@ -65,10 +64,10 @@ ColumnLayout
     
     Item
     {
-		visible: showInfo
-		
-		Layout.fillWidth: true
-		Layout.fillHeight: true
+        visible: showInfo
+        Layout.fillWidth: visible
+        Layout.fillHeight: visible
+        Layout.minimumHeight: control.height * 0.3
 		
 		ScrollView
 		{

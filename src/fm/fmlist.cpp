@@ -24,6 +24,11 @@
 #include <QFileSystemWatcher>
 #include <syncing.h>
 
+#include <QtConcurrent>
+#include <QtConcurrent/QtConcurrentRun>
+#include <QFuture>
+#include <QThread>
+
 FMList::FMList(QObject *parent) : QObject(parent)
 {
 	this->fm = new FM(this);
@@ -740,31 +745,46 @@ void FMList::setViewType(const FMList::VIEW_TYPE& value)
 
 void FMList::search(const QString& query, const QString &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)
 {
-	FMH::MODEL_LIST content;
-	
-	if (FM::isDir(path))
-	{
-		QDir::Filters dirFilter;
-		
-		dirFilter = (onlyDirs ? QDir::AllDirs | QDir::NoDotDot | QDir::NoDot :
-		QDir::Files | QDir::AllDirs | QDir::NoDotDot | QDir::NoDot);
-		
-		if(hidden)
-			dirFilter = dirFilter | QDir::Hidden | QDir::System;
-		
-		QDirIterator it (path, filters, dirFilter, QDirIterator::NoIteratorFlags);
-		while (it.hasNext())
-		{
-			auto url = it.next();
-			auto info = it.fileInfo();
-			if(info.completeBaseName().contains(query, Qt::CaseInsensitive))
-			{
-				emit preItemAppended();
-				this->list << FMH::getFileInfoModel(url);
-				emit postItemAppended();
-			}
-		}
-	}
+
+    QFutureWatcher<FMH::MODEL_LIST> *watcher = new QFutureWatcher<FMH::MODEL_LIST>;
+    connect(watcher, &QFutureWatcher<FMH::MODEL_LIST>::finished, [this, watcher]()
+    {
+      const auto res = watcher->future().result();
+      emit this->preListChanged();
+      this->list = res;
+      emit this->postListChanged();
+      emit this->searchResultReady();
+    });
+
+    QFuture<FMH::MODEL_LIST> t1 = QtConcurrent::run([=]() -> FMH::MODEL_LIST
+    {
+        FMH::MODEL_LIST content;
+
+        if (FM::isDir(path))
+        {
+            QDir::Filters dirFilter;
+
+            dirFilter = (onlyDirs ? QDir::AllDirs | QDir::NoDotDot | QDir::NoDot :
+            QDir::Files | QDir::AllDirs | QDir::NoDotDot | QDir::NoDot);
+
+            if(hidden)
+                dirFilter = dirFilter | QDir::Hidden | QDir::System;
+
+            QDirIterator it (path, filters, dirFilter, QDirIterator::Subdirectories);
+            while (it.hasNext())
+            {
+                auto url = it.next();
+                auto info = it.fileInfo();
+
+                if(info.completeBaseName().contains(query, Qt::CaseInsensitive))
+                    content << FMH::getFileInfoModel(url);
+
+            }
+        }
+
+        return content;
+    });
+    watcher->setFuture(t1);
 }
 
 int FMList::getCloudDepth() const

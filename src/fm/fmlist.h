@@ -173,7 +173,7 @@ private:
 	void setList();
 	void sortList();
 	void watchPath(const QString &path, const bool &clear = true);
-	void search(const QString &query, const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
+    void search(const QString &query, const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
 	FMH::MODEL_LIST list = {{}};
 	
 	QString path = QString();
@@ -239,6 +239,8 @@ signals:
 	
 	void warning(QString message);
 	void progress(int percent);
+
+    void searchResultReady();
 };
 
 #endif // FMLIST_H

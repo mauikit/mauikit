@@ -13,9 +13,9 @@ ColumnLayout
 		Layout.fillWidth: true
 		Layout.fillHeight: true
 		Layout.margins: 0
-		Layout.maximumHeight: parent.height * 0.7
-		Layout.preferredHeight: parent.height * 0.7
-		Layout.minimumHeight: parent.height * 0.7
+//		Layout.maximumHeight: parent.height * 0.7
+//		Layout.preferredHeight: parent.height * 0.7
+//		Layout.minimumHeight: parent.height * 0.7
 		
 		Maui.ImageViewer
 		{
@@ -36,8 +36,9 @@ ColumnLayout
 	Item
 	{
 		visible: showInfo
-		Layout.fillWidth: true
-		Layout.fillHeight: true
+        Layout.fillWidth: visible
+        Layout.fillHeight: visible
+        Layout.minimumHeight: control.height * 0.3
 		
 		ScrollView
 		{

@@ -77,7 +77,9 @@ Maui.Page
 			
 			title: qsTr("Delete files?")
 			message: qsTr("If you are sure you want to delete the files click on Accept, otherwise click on Cancel")
-			onRejected: close()
+            rejectButton.text: qsTr("Cancel")
+            acceptButton.text: qsTr("Accept")
+            onRejected: close()
 			onAccepted:
 			{
 				if(control.selectionBar && control.selectionBar.visible)
@@ -98,7 +100,9 @@ Maui.Page
 		
 		Maui.NewDialog
 		{
-			title: qsTr("Create new folder")
+            title: qsTr("New folder")
+            message: qsTr("Create a new folder with a custom name")
+            acceptButton.text: qsTr("Create")
 			onFinished: list.createDir(text)
 			rejectButton.visible: false
 		}
@@ -110,7 +114,9 @@ Maui.Page
 		
 		Maui.NewDialog
 		{
-			title: qsTr("Create new file")
+            title: qsTr("New file")
+            message: qsTr("Create a new file with a custom name and extension")
+            acceptButton.text: qsTr("Create")
 			onFinished: Maui.FM.createFile(control.currentPath, text)
 			rejectButton.visible: false			
 		}
@@ -122,10 +128,11 @@ Maui.Page
 		Maui.NewDialog
 		{
 			title: qsTr("Rename file")
+            message: qsTr("Rename a file or folder to a new custom name")
 			textEntry.text: list.get(browser.currentIndex).label
 			textEntry.placeholderText: qsTr("New name...")
 			onFinished: Maui.FM.rename(itemMenu.items[0].path, textEntry.text)
-			
+            onRejected: close()
 			acceptText: qsTr("Rename")
 			rejectText: qsTr("Cancel")
 		}
@@ -761,7 +768,7 @@ Maui.Page
 	{
 		populate(modelList.previousPath)
 		browser.currentIndex = indexHistory.pop()
-		browser.positionViewAtIndex(browser.currentIndex, ListView.Center)
+//		browser.positionViewAtIndex(browser.currentIndex, ListView.Center)
 	}
 	
 	function goNext()

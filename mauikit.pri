@@ -4,6 +4,7 @@ QT +=  \
     quick \
     gui \
     svg \
+    concurrent
     
 CONFIG += c++11
 

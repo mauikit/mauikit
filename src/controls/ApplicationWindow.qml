@@ -190,6 +190,31 @@ backgroundColor.b, 0.7))
     //        color: "transparent"
     //    }
 	
+    Keys.onBackPressed:
+    {
+        goBackTriggered();
+        console.log("GO BACK CLICKED")
+        event.accepted = true
+    }
+
+    Shortcut
+    {
+        sequence: "Forward"
+        onActivated: goFowardTriggered();
+    }
+
+    Shortcut
+    {
+        sequence: StandardKey.Forward
+        onActivated: goFowardTriggered();
+    }
+
+    Shortcut
+    {
+        sequence: StandardKey.Back
+        onActivated: goBackTriggered();
+    }
+
 	onClosing:
 	{
 		if(!isMobile)
@@ -198,8 +223,7 @@ backgroundColor.b, 0.7))
 			var width = root.width
 			var x = root.x
 			var y = root.y		
-			Maui.FM.saveSettings("GEOMETRY", Qt.rect(x, y, width, height), "WINDOW")
-			
+			Maui.FM.saveSettings("GEOMETRY", Qt.rect(x, y, width, height), "WINDOW")			
 		}		
 	}
 	
@@ -208,8 +232,9 @@ backgroundColor.b, 0.7))
 	{
 		if(isPortrait)
 		{
-			width: Screen.width * (isMobile ? 1 : 0.4)
-			height: Screen.height * (isMobile ? 1 : 0.4)
+            console.log("PORTARIT MODE CHANGED")
+            width: Screen.width
+            height: Screen.height
 		}
 	}
 	
@@ -393,29 +418,7 @@ backgroundColor.b, 0.7))
 //                 root.pageStack.currentIndex = Math.min(root.pageStack.depth-1, root.pageStack.currentIndex + 1);
 //             }
             
-            Keys.onBackPressed:
-            {
-                goBackTriggered();
-                event.accepted = true
-            }
-            
-            Shortcut
-            {
-                sequence: "Forward"
-                onActivated: goFowardTriggered();
-            }
-            
-            Shortcut
-            {
-                sequence: StandardKey.Forward
-                onActivated: goFowardTriggered();
-            }
-            
-            Shortcut
-            {
-                sequence: StandardKey.Back
-                onActivated: goBackTriggered();
-            }
+
 
             Rectangle 
             {

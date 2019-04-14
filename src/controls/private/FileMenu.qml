@@ -125,9 +125,9 @@ Maui.Menu
 		width: parent.width
 		visible: isDir
 		Maui.ColorsBar
-		{
-			anchors.centerIn: parent
-			id: colorBar
+        {
+            anchors.centerIn: parent
+            id: colorBar
 			size:  iconSize
 			onColorPicked:
 			{
