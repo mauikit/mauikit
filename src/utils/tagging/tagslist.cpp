@@ -53,7 +53,7 @@ void TagsList::setList()
 
 void TagsList::sortList()
 {
-	const auto key = this->sortBy;
+    const auto key = static_cast<TAG::KEYS>(this->sortBy);
 	qSort(this->list.begin(), this->list.end(), [key](const TAG::DB & e1, const TAG::DB & e2) -> bool
 	{
 		auto role = key;
@@ -252,12 +252,12 @@ TAG::DB_LIST TagsList::items() const
 	return this->list;
 }
 
-TAG::KEYS TagsList::getSortBy() const
+TagsList::KEYS TagsList::getSortBy() const
 {
 	return this->sortBy;
 }
 
-void TagsList::setSortBy(const TAG::KEYS &key)
+void TagsList::setSortBy(const TagsList::KEYS &key)
 {
 	if(this->sortBy == key)
 		return;

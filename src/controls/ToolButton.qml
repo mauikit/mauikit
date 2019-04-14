@@ -83,7 +83,7 @@ ToolButton
 		implicitHeight: control.visible? iconSizes.medium : 0
 		implicitWidth: control.visible? iconSizes.medium : 0
 		
-		anchors.centerIn: control
+        anchors.centerIn: control.icon
 		color: /*(down || pressed || checked) */ checked && enabled  ?
 		Qt.lighter(colorScheme.highlightColor, 1.2) : colorScheme.backgroundColor
 		radius: unit * 3
@@ -107,6 +107,7 @@ ToolButton
 	
 	contentItem: IconLabel
 	{
+        id: _iconLabel
 		spacing:  control.display === ToolButton.TextUnderIcon ? space.tiny : control.spacing
 		mirrored: control.mirrored
 		display: control.display

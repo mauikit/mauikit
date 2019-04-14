@@ -27,6 +27,7 @@ Maui.Dialog
 		{
 			iconColor: control.colorScheme.textColor
 			iconName: "document-open"
+            text: qsTr("Open")
 			onClicked:
 			{
 				if(typeof(previewLoader.item.player) !== "undefined")
@@ -42,6 +43,8 @@ Maui.Dialog
 			visible: !isDir
 			iconColor: control.colorScheme.textColor
 			iconName: "document-share"
+                text: qsTr("Share")
+
 			onClicked:
 			{
 				isAndroid ? Maui.Android.shareDialog(currentUrl) :
@@ -54,32 +57,26 @@ Maui.Dialog
 		{
 			iconName: "love"
 			iconColor: control.colorScheme.textColor
+                text: qsTr("Fav")
+
 			
-		},
+        }
 		
-		Maui.ToolButton
-		{
-			iconName: "documentinfo"
-			checkable: true
-			checked: showInfo
-			onClicked: showInfo = !showInfo
-			iconColor: control.colorScheme.textColor
-			
-		}
+
 		]
 		
-		footBar.rightContent:  Maui.ToolButton
-		{
-			iconName: "archive-remove"
-			iconColor: control.colorScheme.textColor
-			
-			onClicked:
-			{
-				close()
-				remove([currentUrl])
-			}
-		}
-		
+        footBar.rightContent:  Maui.ToolButton
+        {
+            iconName: "documentinfo"
+            text: qsTr("Info")
+
+            checkable: true
+            checked: showInfo
+            onClicked: showInfo = !showInfo
+            iconColor: control.colorScheme.textColor
+
+        }
+
 		Component
 		{
 			id: imagePreview

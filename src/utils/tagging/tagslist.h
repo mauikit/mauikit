@@ -15,7 +15,7 @@ class TagsList : public QObject
 	Q_PROPERTY(QString lot READ getLot WRITE setLot NOTIFY lotChanged)
 	Q_PROPERTY(QString key READ getKey WRITE setKey NOTIFY keyChanged)
 	
-	Q_PROPERTY(TAG::KEYS sortBy READ getSortBy WRITE setSortBy NOTIFY sortByChanged())
+    Q_PROPERTY(TagsList::KEYS sortBy READ getSortBy WRITE setSortBy NOTIFY sortByChanged())
 	
  
 public:   
@@ -37,13 +37,13 @@ public:
         TITLE = TAG::TITLE,
         DEVICE = TAG::DEVICE,
 		KEY = TAG::KEY
-    }; Q_ENUM(TagsList::KEYS)
+    }; Q_ENUM(KEYS)
 	
     explicit TagsList(QObject *parent = nullptr);
 	TAG::DB_LIST items() const;
 	
-	TAG::KEYS getSortBy() const;
-	void setSortBy(const TAG::KEYS &key);
+    TagsList::KEYS getSortBy() const;
+    void setSortBy(const TagsList::KEYS &key);
 	
 	bool getAbstract() const;
 	void setAbstract(const bool &value);	
@@ -74,7 +74,7 @@ private:
 	QStringList urls = QStringList();
 	QString lot;
 	QString key;
-	TAG::KEYS sortBy = TAG::KEYS::ADD_DATE;
+    TagsList::KEYS sortBy = TagsList::KEYS::ADD_DATE;
 	
 protected:
 
