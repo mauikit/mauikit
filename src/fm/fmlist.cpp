@@ -116,6 +116,7 @@ void FMList::setList()
 	{
 		case FMList::PATHTYPE::SEARCH_PATH:
 			this->list.clear();
+			this->setContentReady(false);
 			this->search(QString(this->path).right(this->path.length()- 1 - this->path.lastIndexOf("/")), this->prevHistory.length() > 1 ? this->prevHistory[this->prevHistory.length()-2] : this->path);
 			return;
 			
@@ -754,6 +755,7 @@ void FMList::search(const QString& query, const QString &path, const bool &hidde
       this->list = res;
       emit this->postListChanged();
       emit this->searchResultReady();
+	  this->setContentReady(true);
     });
 
     QFuture<FMH::MODEL_LIST> t1 = QtConcurrent::run([=]() -> FMH::MODEL_LIST
