@@ -750,6 +750,9 @@ void FMList::search(const QString& query, const QString &path, const bool &hidde
     QFutureWatcher<FMH::MODEL_LIST> *watcher = new QFutureWatcher<FMH::MODEL_LIST>;
     connect(watcher, &QFutureWatcher<FMH::MODEL_LIST>::finished, [this, watcher]()
     {
+		if(this->pathType != FMList::PATHTYPE::SEARCH_PATH)
+			return;
+		
       const auto res = watcher->future().result();
       emit this->preListChanged();
       this->list = res;

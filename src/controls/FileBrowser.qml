@@ -383,6 +383,8 @@ Maui.Page
 		"qrc:/assets/MoonSki.png" 
 		else if(!modelList.pathExists)
 			"qrc:/assets/ElectricPlug.png"
+			else if(!modelList.contentReady && currentPathType === FMList.SEARCH_PATH)
+				"qrc:/assets/animat-search-color.gif"
 			else if(!modelList.contentReady)
 				"qrc:/assets/animat-rocket-color.gif"
 				
@@ -392,15 +394,22 @@ Maui.Page
 				qsTr("Folder is empty!")
 				else if(!modelList.pathExists)
 					qsTr("Folder doesn't exists!")
-					else if(!modelList.contentReady)
-						qsTr("Loading content!")
+					else if(!modelList.contentReady && currentPathType === FMList.SEARCH_PATH)
+						qsTr("Searching for content!")
+						else if(!modelList.contentReady)
+							qsTr("Loading content!")					
+						
 						
 						body: if(modelList.pathExists && modelList.pathEmpty)
 						qsTr("You can add new files to it")
 						else if(!modelList.pathExists)
 							qsTr("Create Folder?")
-							else if(!modelList.contentReady)
-								qsTr("Almost ready!")
+							else if(!modelList.contentReady && currentPathType === FMList.SEARCH_PATH)
+								qsTr("This might take a while!")
+								else if(!modelList.contentReady)
+									qsTr("Almost ready!")	
+							
+								
 								
 								emojiSize: iconSizes.huge
 								

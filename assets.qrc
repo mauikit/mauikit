@@ -11,6 +11,7 @@
         <file>assets/application-x-zerosize.svg</file>
 		<file>assets/animat-rocket-color.gif</file>
 		<file>assets/animat-diamond-color.gif</file>		
-		<file>assets/opendesktop.png</file>		
+		<file>assets/animat-search-color.gif</file>		
+		<file>assets/opendesktop.png</file>			
 	</qresource>
 </RCC>
