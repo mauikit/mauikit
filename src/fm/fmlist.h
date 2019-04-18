@@ -190,6 +190,7 @@ private:
 	bool saveDirProps = false;
 	bool contentReady = false;
 	int cloudDepth = 1;
+	QString searchPath;
 	
 	VIEW_TYPE viewType = VIEW_TYPE::ICON_VIEW;
 	FMList::SORTBY sort = FMList::SORTBY::MODIFIED;

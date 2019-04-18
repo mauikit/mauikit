@@ -116,8 +116,9 @@ void FMList::setList()
 	{
 		case FMList::PATHTYPE::SEARCH_PATH:
 			this->list.clear();
-			this->setContentReady(false);
-			this->search(QString(this->path).right(this->path.length()- 1 - this->path.lastIndexOf("/")), this->prevHistory.length() > 1 ? this->prevHistory[this->prevHistory.length()-2] : this->path);
+			this->setContentReady(false);			
+			
+			this->search(QString(this->path).right(this->path.length()- 1 - this->path.lastIndexOf("/")), this->searchPath);
 			return;
 			
 		case FMList::PATHTYPE::APPS_PATH:
@@ -376,6 +377,9 @@ void FMList::setPath(const QString &path)
 {
 	if(this->path == path)
 		return;
+	
+	if(this->pathType == FMList::PATHTYPE::PLACES_PATH)
+		this->searchPath = this->path;
 	
 	this->path = path;
 	this->setPreviousPath(this->path);
