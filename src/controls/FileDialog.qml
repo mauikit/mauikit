@@ -40,6 +40,7 @@ Maui.Dialog
 	
 	property bool onlyDirs: false
 	property int sortBy: FMList.MODIFIED
+	property bool searchBar : false
 	
 	readonly property var modes : ({OPEN: 0, SAVE: 1})
 	property int mode : modes.OPEN
@@ -78,12 +79,12 @@ Maui.Dialog
 		headBarTitleVisible: false
 		headBar.implicitHeight: pathBar.height + space.big
 		
-		headBarItem: Maui.PathBar
+		headBar.middleContent: Maui.PathBar
 		{
 			id: pathBar
 			height: iconSizes.big
-			width: parent.width - space.big
-			anchors.centerIn: parent
+			width: page.headBar.middleLayout.width * 0.9
+			// 				anchors.centerIn: parent
 			url: browser.currentPath
 			onPathChanged: browser.openFolder(path)
 			onHomeClicked:
@@ -95,6 +96,31 @@ Maui.Dialog
 			}
 			
 			onPlaceClicked: browser.openFolder(path)
+			
+			Maui.TextField
+			{
+				id: searchField
+				anchors.fill: parent
+				visible: searchBar
+				focus: visible
+				z: pathBar.z+1
+				placeholderText: qsTr("Search... ")
+				onAccepted: browser.openFolder("Search/"+text)
+				//            onCleared: browser.goBack()
+				onGoBackTriggered:
+				{
+					searchBar = false
+					searchField.clear()
+				}
+			}
+		}
+		
+		headBar.rightContent: Maui.ToolButton
+		{
+			id: searchButton
+			iconName: "edit-find"
+			onClicked: searchBar = !searchBar
+			iconColor: searchBar ? searchButton.colorScheme.highlightColor : searchButton.colorScheme.textColor
 		}
 	
 		
