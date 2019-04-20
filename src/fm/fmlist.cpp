@@ -760,8 +760,8 @@ void FMList::search(const QString& query, const QString &path, const bool &hidde
 		
 		const auto res = watcher->future().result();
 		
-		if(res.path != this->path)
-			return;
+// 		if(res.path != this->path)
+// 			return;
 		
 		emit this->preListChanged();
 		this->list = res.content;
