@@ -117,7 +117,7 @@ void FMList::setList()
 		case FMList::PATHTYPE::PLACES_PATH:
 			this->list.clear();
 			this->setContentReady(false);
-// 			this->getPathContent();
+			this->getPathContent();
 			return; //ASYNC
 			
 		case FMList::PATHTYPE::SEARCH_PATH:
@@ -376,69 +376,69 @@ QString FMList::getPath() const
 
 void FMList::setPath(const QString &path)
 {
-// 	if(this->path == path)
-// 		return;
-// 	
-// 	if(this->pathType == FMList::PATHTYPE::PLACES_PATH)
-// 		this->searchPath = this->path;
-// 	
-// 	this->path = path;
-// 	this->setPreviousPath(this->path);
-// 	
-// 	qDebug()<< "Prev History" << this->prevHistory;
-// 	
-// 	if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::SEARCH_PATH]+"/"))
-// 	{
-// 		this->pathExists = true;
-// 		this->pathType = FMList::PATHTYPE::SEARCH_PATH;
-// 		this->isBookmark = false;
-// 		emit this->pathExistsChanged();
-// 		emit this->pathTypeChanged();
-// 		emit this->isBookmarkChanged();
-// 		this->watchPath(QString());
-// 		
-// 	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]+"/"))
-// 	{
-// 		this->pathExists = true;
-// 		this->pathType = FMList::PATHTYPE::CLOUD_PATH;
-// 		this->isBookmark = false;
-// 		emit this->pathExistsChanged();
-// 		emit this->pathTypeChanged();
-// 		emit this->isBookmarkChanged();
-// 		this->watchPath(QString());
-// 		
-// 	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/"))
-// 	{
-// 		this->pathExists = true;
-// 		this->pathType = FMList::PATHTYPE::APPS_PATH;
-// 		this->isBookmark = false;
-// 		emit this->pathExistsChanged();
-// 		emit this->pathTypeChanged();
-// 		emit this->isBookmarkChanged();
-// 		this->watchPath(QString());
-// 		
-// 	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::TAGS_PATH]+"/"))
-// 	{
-// 		this->pathExists = true;
-// 		this->isBookmark = false;
-// 		this->pathType = FMList::PATHTYPE::TAGS_PATH;
-// 		emit this->pathExistsChanged();
-// 		emit this->pathTypeChanged();
-// 		emit this->isBookmarkChanged();
-// 		this->watchPath(QString());
-// 		
-// 	}else
-// 	{
-// 		this->watchPath(this->path);
-// 		this->isBookmark = this->fm->isBookmark(this->path);
-// 		this->pathExists = FMH::fileExists(this->path);
-// 		this->pathType = FMList::PATHTYPE::PLACES_PATH;
-// 		emit this->pathExistsChanged();
-// 		emit this->pathTypeChanged();
-// 		emit this->isBookmarkChanged();
-// 	}
-// 	
-// 	emit this->pathChanged();
+	if(this->path == path)
+		return;
+	
+	if(this->pathType == FMList::PATHTYPE::PLACES_PATH)
+		this->searchPath = this->path;
+	
+	this->path = path;
+	this->setPreviousPath(this->path);
+	
+	qDebug()<< "Prev History" << this->prevHistory;
+	
+	if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::SEARCH_PATH]+"/"))
+	{
+		this->pathExists = true;
+		this->pathType = FMList::PATHTYPE::SEARCH_PATH;
+		this->isBookmark = false;
+		emit this->pathExistsChanged();
+		emit this->pathTypeChanged();
+		emit this->isBookmarkChanged();
+		this->watchPath(QString());
+		
+	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]+"/"))
+	{
+		this->pathExists = true;
+		this->pathType = FMList::PATHTYPE::CLOUD_PATH;
+		this->isBookmark = false;
+		emit this->pathExistsChanged();
+		emit this->pathTypeChanged();
+		emit this->isBookmarkChanged();
+		this->watchPath(QString());
+		
+	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/"))
+	{
+		this->pathExists = true;
+		this->pathType = FMList::PATHTYPE::APPS_PATH;
+		this->isBookmark = false;
+		emit this->pathExistsChanged();
+		emit this->pathTypeChanged();
+		emit this->isBookmarkChanged();
+		this->watchPath(QString());
+		
+	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::TAGS_PATH]+"/"))
+	{
+		this->pathExists = true;
+		this->isBookmark = false;
+		this->pathType = FMList::PATHTYPE::TAGS_PATH;
+		emit this->pathExistsChanged();
+		emit this->pathTypeChanged();
+		emit this->isBookmarkChanged();
+		this->watchPath(QString());
+		
+	}else
+	{
+		this->watchPath(this->path);
+		this->isBookmark = this->fm->isBookmark(this->path);
+		this->pathExists = FMH::fileExists(this->path);
+		this->pathType = FMList::PATHTYPE::PLACES_PATH;
+		emit this->pathExistsChanged();
+		emit this->pathTypeChanged();
+		emit this->isBookmarkChanged();
+	}
+	
+	emit this->pathChanged();
 }
 
 FMList::PATHTYPE FMList::getPathType() const
