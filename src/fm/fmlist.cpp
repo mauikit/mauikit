@@ -114,12 +114,17 @@ void FMList::setList()
 	this->setContentReady(true);
 	switch(this->pathType)
 	{
+		case FMList::PATHTYPE::PLACES_PATH:
+			this->list.clear();
+			this->setContentReady(false);
+// 			this->getPathContent();
+			return; //ASYNC
+			
 		case FMList::PATHTYPE::SEARCH_PATH:
 			this->list.clear();
-			this->setContentReady(false);			
-			
+			this->setContentReady(false);
 			this->search(QString(this->path).right(this->path.length()- 1 - this->path.lastIndexOf("/")), this->searchPath);
-			return;
+			return; //ASYNC
 			
 		case FMList::PATHTYPE::APPS_PATH:
 			this->list = FM::getAppsContent(this->path);
@@ -127,11 +132,7 @@ void FMList::setList()
 			
 		case FMList::PATHTYPE::TAGS_PATH:
 			this->list = this->fm->getTagContent(QString(this->path).right(this->path.length()- 1 - this->path.lastIndexOf("/")));
-			break;
-			
-		case FMList::PATHTYPE::PLACES_PATH:
-			this->list = FM::getPathContent(this->path, this->hidden, this->onlyDirs, this->filters);
-			break;
+			break;		
 			
 		case FMList::PATHTYPE::CLOUD_PATH:
 			this->list.clear();
@@ -375,69 +376,69 @@ QString FMList::getPath() const
 
 void FMList::setPath(const QString &path)
 {
-	if(this->path == path)
-		return;
-	
-	if(this->pathType == FMList::PATHTYPE::PLACES_PATH)
-		this->searchPath = this->path;
-	
-	this->path = path;
-	this->setPreviousPath(this->path);
-	
-	qDebug()<< "Prev History" << this->prevHistory;
-	
-	if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::SEARCH_PATH]+"/"))
-	{
-		this->pathExists = true;
-		this->pathType = FMList::PATHTYPE::SEARCH_PATH;
-		this->isBookmark = false;
-		emit this->pathExistsChanged();
-		emit this->pathTypeChanged();
-		emit this->isBookmarkChanged();
-		this->watchPath(QString());
-		
-	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]+"/"))
-	{
-		this->pathExists = true;
-		this->pathType = FMList::PATHTYPE::CLOUD_PATH;
-		this->isBookmark = false;
-		emit this->pathExistsChanged();
-		emit this->pathTypeChanged();
-		emit this->isBookmarkChanged();
-		this->watchPath(QString());
-		
-	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/"))
-	{
-		this->pathExists = true;
-		this->pathType = FMList::PATHTYPE::APPS_PATH;
-		this->isBookmark = false;
-		emit this->pathExistsChanged();
-		emit this->pathTypeChanged();
-		emit this->isBookmarkChanged();
-		this->watchPath(QString());
-		
-	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::TAGS_PATH]+"/"))
-	{
-		this->pathExists = true;
-		this->isBookmark = false;
-		this->pathType = FMList::PATHTYPE::TAGS_PATH;
-		emit this->pathExistsChanged();
-		emit this->pathTypeChanged();
-		emit this->isBookmarkChanged();
-		this->watchPath(QString());
-		
-	}else
-	{
-		this->watchPath(this->path);
-		this->isBookmark = this->fm->isBookmark(this->path);
-		this->pathExists = FMH::fileExists(this->path);
-		this->pathType = FMList::PATHTYPE::PLACES_PATH;
-		emit this->pathExistsChanged();
-		emit this->pathTypeChanged();
-		emit this->isBookmarkChanged();
-	}
-	
-	emit this->pathChanged();
+// 	if(this->path == path)
+// 		return;
+// 	
+// 	if(this->pathType == FMList::PATHTYPE::PLACES_PATH)
+// 		this->searchPath = this->path;
+// 	
+// 	this->path = path;
+// 	this->setPreviousPath(this->path);
+// 	
+// 	qDebug()<< "Prev History" << this->prevHistory;
+// 	
+// 	if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::SEARCH_PATH]+"/"))
+// 	{
+// 		this->pathExists = true;
+// 		this->pathType = FMList::PATHTYPE::SEARCH_PATH;
+// 		this->isBookmark = false;
+// 		emit this->pathExistsChanged();
+// 		emit this->pathTypeChanged();
+// 		emit this->isBookmarkChanged();
+// 		this->watchPath(QString());
+// 		
+// 	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]+"/"))
+// 	{
+// 		this->pathExists = true;
+// 		this->pathType = FMList::PATHTYPE::CLOUD_PATH;
+// 		this->isBookmark = false;
+// 		emit this->pathExistsChanged();
+// 		emit this->pathTypeChanged();
+// 		emit this->isBookmarkChanged();
+// 		this->watchPath(QString());
+// 		
+// 	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/"))
+// 	{
+// 		this->pathExists = true;
+// 		this->pathType = FMList::PATHTYPE::APPS_PATH;
+// 		this->isBookmark = false;
+// 		emit this->pathExistsChanged();
+// 		emit this->pathTypeChanged();
+// 		emit this->isBookmarkChanged();
+// 		this->watchPath(QString());
+// 		
+// 	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::TAGS_PATH]+"/"))
+// 	{
+// 		this->pathExists = true;
+// 		this->isBookmark = false;
+// 		this->pathType = FMList::PATHTYPE::TAGS_PATH;
+// 		emit this->pathExistsChanged();
+// 		emit this->pathTypeChanged();
+// 		emit this->isBookmarkChanged();
+// 		this->watchPath(QString());
+// 		
+// 	}else
+// 	{
+// 		this->watchPath(this->path);
+// 		this->isBookmark = this->fm->isBookmark(this->path);
+// 		this->pathExists = FMH::fileExists(this->path);
+// 		this->pathType = FMList::PATHTYPE::PLACES_PATH;
+// 		emit this->pathExistsChanged();
+// 		emit this->pathTypeChanged();
+// 		emit this->isBookmarkChanged();
+// 	}
+// 	
+// 	emit this->pathChanged();
 }
 
 FMList::PATHTYPE FMList::getPathType() const
@@ -750,50 +751,103 @@ void FMList::setViewType(const FMList::VIEW_TYPE& value)
 
 void FMList::search(const QString& query, const QString &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)
 {
-
-    QFutureWatcher<FMH::MODEL_LIST> *watcher = new QFutureWatcher<FMH::MODEL_LIST>;
-    connect(watcher, &QFutureWatcher<FMH::MODEL_LIST>::finished, [this, watcher]()
-    {
+	
+	QFutureWatcher<PathContent> *watcher = new QFutureWatcher<PathContent>;
+	connect(watcher, &QFutureWatcher<FMH::MODEL_LIST>::finished, [this, watcher]()
+	{
 		if(this->pathType != FMList::PATHTYPE::SEARCH_PATH)
 			return;
 		
-      const auto res = watcher->future().result();
-      emit this->preListChanged();
-      this->list = res;
-      emit this->postListChanged();
-      emit this->searchResultReady();
-	  this->setContentReady(true);
-    });
+		const auto res = watcher->future().result();
+		
+		if(res.path != this->path)
+			return;
+		
+		emit this->preListChanged();
+		this->list = res.content;
+		emit this->postListChanged();
+		emit this->searchResultReady();
+		
+		this->pathEmpty = this->list.isEmpty() && FM::fileExists(this->path);
+		emit this->pathEmptyChanged();
+		
+		this->sortList();
+		
+		this->setContentReady(true);
+	});
+	
+	QFuture<PathContent> t1 = QtConcurrent::run([=]() -> PathContent
+	{		
+		PathContent res;
+		res.path = path;
+		
+		FMH::MODEL_LIST content;
+		
+		if (FM::isDir(path))
+		{
+			QDir::Filters dirFilter;
+			
+			dirFilter = (onlyDirs ? QDir::AllDirs | QDir::NoDotDot | QDir::NoDot :
+			QDir::Files | QDir::AllDirs | QDir::NoDotDot | QDir::NoDot);
+			
+			if(hidden)
+				dirFilter = dirFilter | QDir::Hidden | QDir::System;
+			
+			QDirIterator it (path, filters, dirFilter, QDirIterator::Subdirectories);
+			while (it.hasNext())
+			{
+				auto url = it.next();
+				auto info = it.fileInfo();
+				
+				if(info.completeBaseName().contains(query, Qt::CaseInsensitive))
+					content << FMH::getFileInfoModel(url);
+				
+			}
+		}
+		
+		res.content = content;
+		
+		return res;
+	});
+	watcher->setFuture(t1);
+}
 
-    QFuture<FMH::MODEL_LIST> t1 = QtConcurrent::run([=]() -> FMH::MODEL_LIST
-    {
-        FMH::MODEL_LIST content;
-
-        if (FM::isDir(path))
-        {
-            QDir::Filters dirFilter;
-
-            dirFilter = (onlyDirs ? QDir::AllDirs | QDir::NoDotDot | QDir::NoDot :
-            QDir::Files | QDir::AllDirs | QDir::NoDotDot | QDir::NoDot);
-
-            if(hidden)
-                dirFilter = dirFilter | QDir::Hidden | QDir::System;
-
-            QDirIterator it (path, filters, dirFilter, QDirIterator::Subdirectories);
-            while (it.hasNext())
-            {
-                auto url = it.next();
-                auto info = it.fileInfo();
-
-                if(info.completeBaseName().contains(query, Qt::CaseInsensitive))
-                    content << FMH::getFileInfoModel(url);
-
-            }
-        }
-
-        return content;
-    });
-    watcher->setFuture(t1);
+void FMList::getPathContent()
+{
+	
+	qDebug()<< "Getting async path contents";
+	QFutureWatcher<PathContent> *watcher = new QFutureWatcher<PathContent>;
+	connect(watcher, &QFutureWatcher<PathContent>::finished, [this, watcher]()
+	{
+		if(this->pathType != FMList::PATHTYPE::PLACES_PATH)
+			return;
+		
+		const auto res = watcher->future().result();
+		
+		if(res.path != this->path)
+			return;
+		
+		emit this->preListChanged();
+		this->list = res.content;
+		
+		this->pathEmpty = this->list.isEmpty() && FM::fileExists(this->path);
+		emit this->pathEmptyChanged();
+		
+		this->sortList();		
+		
+		emit this->postListChanged();
+		this->setContentReady(true);
+		
+	});
+	
+	QFuture<PathContent> t1 = QtConcurrent::run([=]() -> PathContent
+	{		
+		PathContent res;
+		res.path = this->path;
+		res.content = FM::getPathContent(this->path, this->hidden, this->onlyDirs, this->filters);	
+		return res;
+	});
+	watcher->setFuture(t1);
 }
 
 int FMList::getCloudDepth() const
