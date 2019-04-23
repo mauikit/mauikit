@@ -24,6 +24,7 @@ import QtQuick 2.6
 import QtQuick.Templates 2.3 as T
 import QtQuick.Controls 2.3
 import org.kde.kirigami 2.2 as Kirigami
+import "private"
 
 T.CheckBox {
     id: controlRoot
@@ -40,15 +41,10 @@ T.CheckBox {
 
     hoverEnabled: true
 
-//    indicator: CheckIndicator {
-//        LayoutMirroring.enabled: controlRoot.mirrored
-//        LayoutMirroring.childrenInherit: true
-//        anchors {
-//            left: parent.left
-//            verticalCenter: parent.verticalCenter
-//        }
-//        control: controlRoot
-//    }
+   indicator: CheckIndicator
+   {       
+       root: controlRoot
+   }
 
     contentItem: Label {
         leftPadding: controlRoot.indicator && !controlRoot.mirrored ? controlRoot.indicator.width + controlRoot.spacing : 0

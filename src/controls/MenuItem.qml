@@ -92,19 +92,10 @@ MenuItem
 		}
 	}	
 	
-	indicator: Rectangle
+	indicator: CheckIndicator
 	{
-		x: control.mirrored ? control.width - width - control.rightPadding : control.spacing
-		y: control.topPadding + (control.availableHeight - height) / 2
-		
-		height: iconSizes.medium
-		width: height		
-	
-		visible: control.checkable
-		
-		color: control.checked ? control.colorScheme.highlightColor : control.colorScheme.viewBackgroundColor
-		border.color: control.colorScheme.borderColor
-		radius: radiusV
+		id: _checkIndicator
+		root: control
     }
 
 	background: Item
