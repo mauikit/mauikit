@@ -2,8 +2,9 @@
     <qresource prefix="/maui/kit">
         <file alias="ToolBar.qml">src/controls/ToolBar.qml</file>
         <file alias="SideBar.qml">src/controls/SideBar.qml</file>
-        <file alias="ToolButton.qml">src/controls/ToolButton.qml</file>
-        <file alias="ApplicationWindow.qml">src/controls/ApplicationWindow.qml</file>
+		<file alias="ToolButton.qml">src/controls/ToolButton.qml</file>
+		<file alias="ToolButton2.qml">src/controls/ToolButton2.qml</file>
+		<file alias="ApplicationWindow.qml">src/controls/ApplicationWindow.qml</file>
         <file alias="Style.qml">src/controls/Style.qml</file>
         <file alias="ShareDialog.qml">src/controls/ShareDialog.qml</file>
         <file alias="PieButton.qml">src/controls/PieButton.qml</file>
