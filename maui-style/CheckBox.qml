@@ -46,7 +46,8 @@ T.CheckBox {
        root: controlRoot
    }
 
-    contentItem: Label {
+    contentItem: Label 
+    {
         leftPadding: controlRoot.indicator && !controlRoot.mirrored ? controlRoot.indicator.width + controlRoot.spacing : 0
         rightPadding: controlRoot.indicator && controlRoot.mirrored ? controlRoot.indicator.width + controlRoot.spacing : 0
         opacity: controlRoot.enabled ? 1 : 0.6

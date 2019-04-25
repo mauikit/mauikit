@@ -42,22 +42,20 @@ ItemDelegate
         
         Item
         {
-            Layout.fillHeight: true
-            Layout.fillWidth: isCollapsed
-            width: !isCollapsed ? parent.height : parent.width
-            
-            Maui.ToolButton
-            {
-                anchors.centerIn: parent
-                iconName: model.icon ? model.icon : ""
-               size: sidebarIconSize
+			Layout.fillHeight: true
+			Layout.fillWidth: isCollapsed
+			width: !isCollapsed ? parent.height : parent.width
+			
+			Kirigami.Icon
+			{
+				anchors.centerIn: parent
+				source: model.icon ? model.icon : ""
 				width: sidebarIconSize
-                height: width
-                isMask: !isMobile
-                iconColor: labelColor
-                enabled: false
-            }
-        }
+				height: width
+				isMask: !isMobile
+				color: labelColor
+			}
+		}
         
         Item
         {

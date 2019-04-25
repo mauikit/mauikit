@@ -49,15 +49,15 @@ MenuItem
 		{
 			anchors.fill: parent
 			
-			Maui.ToolButton
+			Kirigami.Icon
 			{
 				id: _controlIcon
 				anchors.centerIn: parent
-				iconName: control.icon.name
-				size: control.icon.height
+				source: control.icon.name
+				height: control.icon.height
+				width: control.icon.width
 				isMask: true
-				enabled: false
-				iconColor: _controlLabel.color
+				color: _controlLabel.color
 			}
 		}
 	}

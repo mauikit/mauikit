@@ -22,6 +22,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.3
 import QtQml 2.12
 
+import org.kde.kirigami 2.4 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
 Rectangle
@@ -49,13 +50,14 @@ Rectangle
 		z: -1
 	}
 	
-	Maui.ToolButton
+	Kirigami.Icon
 	{
 		visible: root.checked
-		enabled: false
-		iconName: "checkbox"
-		iconColor: root.colorScheme.textColor
-		size: parent.height * 0.8
+		source: "checkbox"
+		color: root.colorScheme.textColor
+		isMask: true
+		height: parent.height * 0.8
+		width: height
 		anchors.centerIn: parent
 	}
 	

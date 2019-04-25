@@ -98,7 +98,7 @@ ToolButton
 		id: _indicator
 		color: control.colorScheme.highlightColor
 		height: unit * 5
-		width: size * 2
+		width: control.width - space.small
 		
 		anchors.bottom: parent.bottom
 		anchors.horizontalCenter: parent.horizontalCenter
@@ -118,63 +118,69 @@ ToolButton
 // 	}
 	
 	
-	// 		background: Rectangle
-	// 		{
-	// 			implicitHeight: control.visible? control.height : 0
-	// 			implicitWidth: control.visible? control.width : 0
-	// 			
-	// 			anchors.centerIn: control
-	// 			color: /*(down || pressed || checked) */ checked && enabled  ?
-	// 			Qt.lighter(colorScheme.highlightColor, 1.2) : colorScheme.backgroundColor
-	// 			radius: unit * 3
-	// 			opacity: (down || pressed || checked) && enabled  ?  0.5 : 1
-	// 			border.color: colorScheme.borderColor
-	// 		}
+			background: Rectangle
+			{
+				implicitHeight: control.visible? control.height : 0
+				implicitWidth: control.visible? control.width : 0
+				
+				anchors.centerIn: control
+				color: /*(down || pressed || checked) */ checked && enabled  ?
+				Qt.lighter(colorScheme.highlightColor, 1.2) : colorScheme.backgroundColor
+				radius: unit * 3
+				opacity: (down || pressed || checked) && enabled  ?  0.5 : 1
+				border.color: colorScheme.borderColor
+			}
 	// 		
-	// 		contentItem: GridLayout
-	// 		{
-	// 			anchors.fill: control
-	// 			id: _contentLayout
-	// 			
-	// 			columns: (control.display === ToolButton.TextUnderIcon) || (control.display === ToolButton.IconOnly)? 1 : 2
-	// 			rows: (control.display === ToolButton.TextUnderIcon) ? 2 : 1
-	// 			
-	// 			Item
-	// 			{
-	// 				Layout.fillWidth: true
-	// 				Layout.fillHeight: true
-	// 				Layout.row: 1
-	// 				Layout.column: 1
-	// 				
-	// 				Kirigami.Icon
-	// 				{
-	// 					anchors.centerIn: parent
-	// 					source: control.iconName
-	// 					isMask: control.isMask	
-	// 					height: size
-	// 					width: height
-	// 					color: control.iconColor
-	// 				}
-	// 			}
-	// 			
-	// 			Item
-	// 			{
-	// 				visible: control.text.length && control.text
-	// 				Layout.fillWidth: true
-	// 				Layout.fillHeight: true
-	// 				Layout.row: (control.display === ToolButton.TextUnderIcon) ? 2 : 1
-	// 				Layout.column: (control.display === ToolButton.TextUnderIcon) || (control.display === ToolButton.IconOnly)? 1 : 2
-	// 				
-	// 				Label
-	// 				{
-	// 					anchors.fill: parent
-	// 					font: control.font
-	// 					text: control.text
-	// 					horizontalAlignment: Qt.AlignHCenter
-	// 					verticalAlignment: Qt.AlignVCenter
-	// 				}
-	// 			}
-	// 		}
+			contentItem: GridLayout
+			{
+				id: _contentLayout
+				anchors.fill: control
+				
+				columns: (control.display === ToolButton.TextUnderIcon) || (control.display === ToolButton.IconOnly)? 1 : 2
+				rows: (control.display === ToolButton.TextUnderIcon) ? 2 : 1
+				
+				columnSpacing: 0
+				rowSpacing: 0
+				
+				Item
+				{
+					Layout.fillWidth: true
+					Layout.fillHeight: true
+					Layout.row: 1
+					Layout.column: 1
+					Layout.alignment: Qt.AlignBottom
+					
+					Kirigami.Icon
+					{
+						anchors.centerIn: parent
+						source: control.iconName
+						isMask: control.isMask	
+						height: size
+						width: height
+						color: isMask ? control.iconColor : "transparent"
+					}
+				}
+				
+				Item
+				{
+					visible: control.text.length && control.text
+					Layout.fillWidth: true
+					Layout.fillHeight: true
+					Layout.row: (control.display === ToolButton.TextUnderIcon) ? 2 : 1
+					Layout.column: (control.display === ToolButton.TextUnderIcon) || (control.display === ToolButton.IconOnly)? 1 : 2
+					Layout.alignment: Qt.AlignTop
+					
+					Label
+					{
+						anchors.fill: parent
+						font: control.font
+						text: control.text
+						color: control.iconColor
+						horizontalAlignment: Qt.AlignHCenter
+						verticalAlignment: Qt.AlignVCenter
+					}
+				}
+			}
 	
 	SequentialAnimation
 	{
