@@ -83,7 +83,7 @@ MenuItem
 			Layout.fillHeight: true
 			Layout.fillWidth: true
 			Layout.alignment: Qt.AlignVCenter
-			Layout.leftMargin: _controlIcon.visible ? space.medium : 0
+			Layout.leftMargin: control.icon.name.length ? space.medium : 0
 			
 			Label
 			{
