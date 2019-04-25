@@ -41,23 +41,17 @@ MenuItem
 	icon.width: iconSizes.medium
 	icon.height: iconSizes.medium
 	
-	contentItem: RowLayout
+	Component
 	{
-		anchors.fill: control
-		anchors.leftMargin: control.checkable ? control.indicator.width + control.spacing + space.big : control.spacing
-		anchors.rightMargin: control.spacing
+		id: _iconComponent
 		
 		Item
 		{
-			Layout.fillHeight: true
-			Layout.alignment: Qt.AlignVCenter
-			visible: control.icon.name.length
-			width: control.icon.name.length ? control.icon.width : 0
+			anchors.fill: parent
 			
 			Maui.ToolButton
 			{
 				id: _controlIcon
-				visible: parent.visible
 				anchors.centerIn: parent
 				iconName: control.icon.name
 				size: control.icon.height
@@ -65,6 +59,23 @@ MenuItem
 				enabled: false
 				iconColor: _controlLabel.color
 			}
+		}
+	}
+	
+	contentItem: RowLayout
+	{
+		anchors.fill: control
+		anchors.leftMargin: control.checkable ? control.indicator.width + control.spacing + space.big : control.spacing
+		anchors.rightMargin: control.spacing
+		
+		Loader
+		{
+			id: _iconLoader	
+			Layout.fillHeight: true
+			Layout.preferredWidth: control.icon.name.length ? control.icon.width + space.medium : 0
+			Layout.alignment: Qt.AlignVCenter
+			
+			sourceComponent: control.icon.name.length ? _iconComponent : undefined			
 		}
 		
 		Item

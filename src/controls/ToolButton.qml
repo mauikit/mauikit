@@ -21,7 +21,7 @@ import QtQuick 2.6
 import QtQuick.Controls 2.2
 import QtQuick.Controls.impl 2.3
 import QtQuick.Layouts 1.3
-
+import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.4 as Kirigami
 import "private"
 
@@ -39,7 +39,7 @@ ToolButton
 	property alias colorScheme : colorScheme
 	/***************************/
 	
-	property alias backgroundRec: _background
+// 	property alias backgroundRec: _background
 	
 	property bool isMask:  true
 	property string iconName: ""
@@ -77,104 +77,122 @@ ToolButton
 	
 	
 	
-	background: Rectangle
-	{
-		id: _background
-		implicitHeight: control.visible? iconSizes.medium : 0
-		implicitWidth: control.visible? iconSizes.medium : 0
-		
-        anchors.centerIn: control.icon
-		color: /*(down || pressed || checked) */ checked && enabled  ?
-		Qt.lighter(colorScheme.highlightColor, 1.2) : colorScheme.backgroundColor
-		radius: unit * 3
-		opacity: (down || pressed || checked) && enabled  ?  0.5 : 1
-		border.color: colorScheme.borderColor
-		
-		
-	}
-	
-	Rectangle
-	{
-		id: _indicator
-		color: control.colorScheme.highlightColor
-		height: unit * 5
-		width: size * 2
-		
-		anchors.bottom: parent.bottom
-		anchors.horizontalCenter: parent.horizontalCenter
-		visible: control.showIndicator
-	}
-	
-	contentItem: IconLabel
-	{
-        id: _iconLabel
-		spacing:  control.display === ToolButton.TextUnderIcon ? space.tiny : control.spacing
-		mirrored: control.mirrored
-		display: control.display
-		icon: control.icon
-		text: control.text
-		font: control.font
-		color: control.iconColor
-	}
-	
-	
-	// 		background: Rectangle
+	// 	background: Loader
+	// 	{
+	// 		id: _backgroundLoader
+	// 		sourceComponent: Maui.Handy.appInfo().qt_version === "5.12.0" ?  _backgroundComponent : undefined
+	// 	}
+	// 	
+	// 	Rectangle
+	// 	{
+	// 		id: _indicator
+	// 		color: control.colorScheme.highlightColor
+	// 		height: unit * 5
+	// 		width: size * 2
+	// 		
+	// 		anchors.bottom: parent.bottom
+	// 		anchors.horizontalCenter: parent.horizontalCenter
+	// 		visible: control.showIndicator
+	// 	}
+	// 	
+	// 	contentItem: Loader	
+	// 	{
+	// 		sourceComponent: Maui.Handy.appInfo().qt_version === "5.12.0" ?  _iconLabelComponent : undefined
+	// 	}
+	// 	
+	// 	
+	// 	Component
+	// 	{
+	// 		id: _iconLabelComponent
+	// 		
+	// 		IconLabel
 	// 		{
-	// 			implicitHeight: control.visible? control.height : 0
-	// 			implicitWidth: control.visible? control.width : 0
+	// 			spacing:  control.display === ToolButton.TextUnderIcon ? space.tiny : control.spacing
+	// 			mirrored: control.mirrored
+	// 			display: control.display
+	// 			icon: control.icon
+	// 			text: control.text
+	// 			font: control.font
+	// 			color: control.iconColor
+	// 		}		
+	// 	}
+	// 	
+	// 	Component
+	// 	{
+	// 		id: _backgroundComponent
+	// 		
+	// 		Rectangle
+	// 		{
+	// 			implicitHeight: control.visible? iconSizes.medium : 0
+	// 			implicitWidth: control.visible? iconSizes.medium : 0
 	// 			
-	// 			anchors.centerIn: control
+	// 			anchors.centerIn: control.icon
 	// 			color: /*(down || pressed || checked) */ checked && enabled  ?
 	// 			Qt.lighter(colorScheme.highlightColor, 1.2) : colorScheme.backgroundColor
 	// 			radius: unit * 3
 	// 			opacity: (down || pressed || checked) && enabled  ?  0.5 : 1
-	// 			border.color: colorScheme.borderColor
+	// 			border.color: colorScheme.borderColor			
 	// 		}
-	// 		
-	// 		contentItem: GridLayout
-	// 		{
-	// 			anchors.fill: control
-	// 			id: _contentLayout
-	// 			
-	// 			columns: (control.display === ToolButton.TextUnderIcon) || (control.display === ToolButton.IconOnly)? 1 : 2
-	// 			rows: (control.display === ToolButton.TextUnderIcon) ? 2 : 1
-	// 			
-	// 			Item
-	// 			{
-	// 				Layout.fillWidth: true
-	// 				Layout.fillHeight: true
-	// 				Layout.row: 1
-	// 				Layout.column: 1
-	// 				
-	// 				Kirigami.Icon
-	// 				{
-	// 					anchors.centerIn: parent
-	// 					source: control.iconName
-	// 					isMask: control.isMask	
-	// 					height: size
-	// 					width: height
-	// 					color: control.iconColor
-	// 				}
-	// 			}
-	// 			
-	// 			Item
-	// 			{
-	// 				visible: control.text.length && control.text
-	// 				Layout.fillWidth: true
-	// 				Layout.fillHeight: true
-	// 				Layout.row: (control.display === ToolButton.TextUnderIcon) ? 2 : 1
-	// 				Layout.column: (control.display === ToolButton.TextUnderIcon) || (control.display === ToolButton.IconOnly)? 1 : 2
-	// 				
-	// 				Label
-	// 				{
-	// 					anchors.fill: parent
-	// 					font: control.font
-	// 					text: control.text
-	// 					horizontalAlignment: Qt.AlignHCenter
-	// 					verticalAlignment: Qt.AlignVCenter
-	// 				}
-	// 			}
-	// 		}
+	// 	}
+	
+// 	background: Rectangle
+// 	{
+// 		id: _background
+// 		implicitHeight: control.visible? control.height : 0
+// 		implicitWidth: control.visible? control.width : 0
+// 		
+// 		anchors.centerIn: control
+// 		color: /*(down || pressed || checked) */ checked && enabled  ?
+// 		Qt.lighter(colorScheme.highlightColor, 1.2) : colorScheme.backgroundColor
+// 		radius: unit * 3
+// 		opacity: (down || pressed || checked) && enabled  ?  0.5 : 1
+// 		border.color: colorScheme.borderColor
+// 	}
+// 	
+// 	contentItem: GridLayout
+// 	{
+// 		anchors.fill: control
+// 		id: _contentLayout
+// 		
+// 		columns: (control.display === ToolButton.TextUnderIcon) || (control.display === ToolButton.IconOnly)? 1 : 2
+// 		rows: (control.display === ToolButton.TextUnderIcon) ? 2 : 1
+// 		
+// 		Item
+// 		{
+// 			Layout.fillWidth: true
+// 			Layout.fillHeight: true
+// 			Layout.row: 1
+// 			Layout.column: 1
+// 			
+// 			Kirigami.Icon
+// 			{
+// 				anchors.centerIn: parent
+// 				source: control.iconName
+// 				isMask: control.isMask	
+// 				height: size
+// 				width: height
+// 				color: control.iconColor
+// 			}
+// 		}
+// 		
+// 		Item
+// 		{
+// 			visible: control.text.length && control.text
+// 			Layout.fillWidth: true
+// 			Layout.fillHeight: true
+// 			Layout.row: (control.display === ToolButton.TextUnderIcon) ? 2 : 1
+// 			Layout.column: (control.display === ToolButton.TextUnderIcon) || (control.display === ToolButton.IconOnly)? 1 : 2
+// 			
+// 			Label
+// 			{
+// 				anchors.fill: parent
+// 				font: control.font
+// 				text: control.text
+// 				horizontalAlignment: Qt.AlignHCenter
+// 				verticalAlignment: Qt.AlignVCenter
+// 			}
+// 		}
+// 	}
 	
 	SequentialAnimation
 	{
