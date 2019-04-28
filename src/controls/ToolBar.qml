@@ -44,7 +44,7 @@ ToolBar
 	property alias leftContent : leftRowContent.data
 	property alias middleContent : middleRowContent.data
 	property alias rightContent : rightRowContent.data
-	property alias middleLayout : flickableLayout
+	property alias middleLayout : middleRowContent
 	property alias leftLayout : leftRowContent
 	property alias rightLayout : rightRowContent
 	property alias layout : layout
@@ -58,6 +58,7 @@ ToolBar
 	property bool floating: false
 	property bool plegable: false
 	property bool folded : plegable
+	property bool flickable: true
 	
 	padding: 0    
 	//    leftPadding: Kirigami.Units.smallSpacing*2
@@ -186,7 +187,7 @@ ToolBar
 			Layout.fillWidth: !folded
 			
 			flickableDirection: Flickable.HorizontalFlick
-			interactive: layout.implicitWidth > control.width
+			interactive: contentWidth > control.width
 			contentWidth: layout.implicitWidth
 			boundsBehavior: isMobile ? Flickable.DragOverBounds : Flickable.StopAtBounds
 			clip: true
@@ -197,151 +198,62 @@ ToolBar
 				width: control.width
 				height: control.height
 				
-				Row
+				RowLayout
 				{
 					id: leftRowContent
 					visible: !folded
 					Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
 					Layout.leftMargin: leftContent.length > 0 ? margins : 0
 					spacing: leftContent.length > 0 ? control.spacing : 0
-					Layout.minimumWidth: 0
+					Layout.minimumWidth: control.flickable ? implicitWidth : 0
 					clip: true
+// 					Layout.fillWidth: true
+// 					Layout.fillHeight: true
 				}
 				
-				Kirigami.Separator
+				
+				
+				Item
 				{
-					Layout.fillHeight: true
-					Layout.margins: 0
-					Layout.topMargin: space.big
-					Layout.bottomMargin: space.big
-					width: unit
-					opacity: 0.2
-					visible: leftContent.length > 0 && flickable.interactive
-					color: colorScheme.textColor    
+					Layout.fillWidth: true
+					Layout.minimumHeight: 0
+					Layout.minimumWidth: 0
+				}
+				
+				RowLayout
+				{
+					id: middleRowContent
+					Layout.alignment: Qt.AlignCenter
 					
-					gradient: Gradient
-					{
-						GradientStop
-						{
-							position: 0.0
-							color: "transparent"
-						}
-						GradientStop 
-						{
-							position: 0.5
-							color: colorScheme.textColor
-						}
-						
-						GradientStop 
-						{
-							position: 1.0
-							color: "transparent"
-						}
-					}
-					
+					clip: true
+					spacing: middleContent.length === 1 ? 0 : control.spacing
+					//                             Layout.maximumWidth: control.width - leftRowContent.implicitWidth - rightRowContent.implicitWidth
+// 					Layout.fillWidth: true
+// 					Layout.fillHeight: true
 				}
 				
 				Item
 				{
-					id: flickableItem
-					Layout.fillHeight: true
 					Layout.fillWidth: true
-					//                 Layout.minimumWidth: control.width * 0.3
-					Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-					Layout.rightMargin: middleContent.length === 1 ? 0 : margins
-					Layout.leftMargin: middleContent.length === 1 ? 0 : margins
-					visible: !folded
-					
-					Flickable
-					{
-						id: flickable
-						
-						anchors.fill: parent
-						flickableDirection: Flickable.HorizontalFlick
-						
-						interactive: middleRowContent.implicitWidth > width
-						contentWidth: middleRowContent.implicitWidth
-						
-						boundsBehavior: isMobile ?  Flickable.DragOverBounds : Flickable.StopAtBounds
-						
-						clip: true
-						
-						RowLayout
-						{
-							id: flickableLayout
-							width: flickableItem.width
-							height: flickableItem.height
-							
-							Item
-							{
-								Layout.fillWidth: !flickable.interactive
-								Layout.minimumHeight: 0
-								Layout.minimumWidth: 0
-							}
-							
-							Row
-							{
-								id: middleRowContent
-								clip: true
-								spacing: middleContent.length === 1 ? 0 : control.spacing
-								//                             Layout.maximumWidth: control.width - leftRowContent.implicitWidth - rightRowContent.implicitWidth
-								
-							}
-							
-							Item
-							{
-								Layout.fillWidth: !flickable.interactive
-								Layout.minimumHeight: 0
-								Layout.minimumWidth: 0
-							}
-						}
-						
-						ScrollBar.horizontal: ScrollBar { visible: false }
-					}
-					
+					Layout.minimumHeight: 0
+					Layout.minimumWidth: 0
 				}
-				
-				Kirigami.Separator
-				{
-					Layout.fillHeight: true
-					Layout.margins: 0
-					Layout.topMargin: space.big
-					Layout.bottomMargin: space.big
-					width: unit
-					opacity: 0.2
-					visible: rightContent.length > 0 && flickable.interactive
-					color: colorScheme.textColor
-					
-					gradient: Gradient
-					{
-						GradientStop
-						{
-							position: 0.0
-							color: "transparent"
-						}
-						GradientStop 
-						{
-							position: 0.5
-							color: colorScheme.textColor
-						}
 						
-						GradientStop 
-						{
-							position: 1.0
-							color: "transparent"
-						}
-					}                
-				}
+						
 				
-				Row
+				
+				
+				RowLayout
 				{
 					id: rightRowContent
 					visible: !folded
 					Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
 					spacing: rightContent.length > 0 ? control.spacing : 0
 					Layout.rightMargin: rightContent.length > 0 ? margins : 0
-					Layout.minimumWidth: 0
-					clip: true
+					Layout.minimumWidth: control.flickable ? implicitWidth : 0
+					clip: true					
+// 					Layout.fillWidth: true
+// 					Layout.fillHeight: true
 				}           
 			}
 			
