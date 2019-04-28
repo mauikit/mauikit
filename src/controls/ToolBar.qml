@@ -41,12 +41,17 @@ ToolBar
 	width: floating || plegable ? implicitWidth : parent.width
 	height:  implicitHeight 
 	
+	property alias stickyRightContent : rightRowContent.sticky
+	property alias stickyLeftContent : leftRowContent.sticky
+	
 	property alias leftContent : leftRowContent.data
 	property alias middleContent : middleRowContent.data
 	property alias rightContent : rightRowContent.data
+	
 	property alias middleLayout : middleRowContent
 	property alias leftLayout : leftRowContent
 	property alias rightLayout : rightRowContent
+	
 	property alias layout : layout
 	
 	property int margins: space.medium
@@ -187,8 +192,8 @@ ToolBar
 			Layout.fillWidth: !folded
 			
 			flickableDirection: Flickable.HorizontalFlick
-			interactive: contentWidth > control.width
-			contentWidth: layout.implicitWidth
+			interactive: (contentWidth > control.width) && control.flickable
+			contentWidth: ((control.margins * 2) + layout.spacing + space.big) + leftRowContent.implicitWidth + middleRowContent.implicitWidth + (control.stickyRightContent ? rightRowContent.width : rightRowContent.implicitWidth)
 			boundsBehavior: isMobile ? Flickable.DragOverBounds : Flickable.StopAtBounds
 			clip: true
 			
@@ -201,11 +206,13 @@ ToolBar
 				RowLayout
 				{
 					id: leftRowContent
+					property bool sticky : false
+					
 					visible: !folded
 					Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
 					Layout.leftMargin: leftContent.length > 0 ? margins : 0
 					spacing: leftContent.length > 0 ? control.spacing : 0
-					Layout.minimumWidth: control.flickable ? implicitWidth : 0
+					Layout.minimumWidth: sticky ? undefined : implicitWidth
 					clip: true
 // 					Layout.fillWidth: true
 // 					Layout.fillHeight: true
@@ -222,7 +229,8 @@ ToolBar
 				
 				RowLayout
 				{
-					id: middleRowContent
+					id: middleRowContent				
+					
 					Layout.alignment: Qt.AlignCenter
 					
 					clip: true
@@ -246,11 +254,13 @@ ToolBar
 				RowLayout
 				{
 					id: rightRowContent
+					
+					property bool sticky : false
 					visible: !folded
 					Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
 					spacing: rightContent.length > 0 ? control.spacing : 0
 					Layout.rightMargin: rightContent.length > 0 ? margins : 0
-					Layout.minimumWidth: control.flickable ? implicitWidth : 0
+					Layout.minimumWidth: sticky ? undefined : implicitWidth
 					clip: true					
 // 					Layout.fillWidth: true
 // 					Layout.fillHeight: true
