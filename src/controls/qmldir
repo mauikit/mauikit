@@ -53,5 +53,6 @@ ColorsBar 1.0 ColorsBar.qml
 ComboBox 1.0 ComboBox.qml
 Holder 1.0 Holder.qml
 ImageViewer 1.0 ImageViewer.qml
+ActionBar 1.0 ActionBar.qml
 
 

@@ -60,6 +60,7 @@
 		<file alias="ComboBox.qml">src/controls/ComboBox.qml</file>
 		<file alias="Store.qml">src/controls/Store.qml</file>
 		<file alias="ImageViewer.qml">src/controls/ImageViewer.qml</file>
+		<file alias="ActionBar.qml">src/controls/ActionBar.qml</file>
 		<file alias="private/StoreDelegate.qml">src/controls/private/StoreDelegate.qml</file>
 	</qresource>
 </RCC>
