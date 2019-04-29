@@ -43,6 +43,7 @@ ToolBar
 	
 	property alias stickyRightContent : rightRowContent.sticky
 	property alias stickyLeftContent : leftRowContent.sticky
+	property alias stickyMiddleContent : middleRowContent.sticky
 	
 	property alias leftContent : leftRowContent.data
 	property alias middleContent : middleRowContent.data
@@ -193,7 +194,12 @@ ToolBar
 			
 			flickableDirection: Flickable.HorizontalFlick
 			interactive: (contentWidth > control.width) && control.flickable
-			contentWidth: ((control.margins * 2) + layout.spacing + space.big) + leftRowContent.implicitWidth + middleRowContent.implicitWidth + (control.stickyRightContent ? rightRowContent.width : rightRowContent.implicitWidth)
+			contentWidth: ((control.margins * 2) + space.big) 
+			+ (control.stickyLeftContent ? leftRowContent.width : leftRowContent.implicitWidth) 
+			+ (control.stickyMiddleContent ? middleRowContent.width : middleRowContent.implicitWidth) 
+			+ (control.stickyRightContent ? rightRowContent.width : rightRowContent.implicitWidth)
+			
+			
 			boundsBehavior: isMobile ? Flickable.DragOverBounds : Flickable.StopAtBounds
 			clip: true
 			
@@ -230,11 +236,14 @@ ToolBar
 				RowLayout
 				{
 					id: middleRowContent				
+					property bool sticky : false
 					
 					Layout.alignment: Qt.AlignCenter
 					
 					clip: true
 					spacing: middleContent.length === 1 ? 0 : control.spacing
+					Layout.minimumWidth: sticky ? undefined : implicitWidth
+					
 					//                             Layout.maximumWidth: control.width - leftRowContent.implicitWidth - rightRowContent.implicitWidth
 // 					Layout.fillWidth: true
 // 					Layout.fillHeight: true
