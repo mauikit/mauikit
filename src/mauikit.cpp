@@ -102,7 +102,7 @@ void MauiKit::registerTypes(const char *uri)
 	qmlRegisterType(componentUrl(QStringLiteral("ColorsBar.qml")), uri, 1, 0, "ColorsBar");
 	qmlRegisterType(componentUrl(QStringLiteral("ComboBox.qml")), uri, 1, 0, "ComboBox");
 	qmlRegisterType(componentUrl(QStringLiteral("ImageViewer.qml")), uri, 1, 0, "ImageViewer");
-	qmlRegisterType(componentUrl(QStringLiteral("ActionBar.qml")), uri, 1, 0, "ImageViewer");
+	qmlRegisterType(componentUrl(QStringLiteral("ActionBar.qml")), uri, 1, 0, "ActionBar");
 	qmlRegisterType(componentUrl(QStringLiteral("private/TagList.qml")), uri, 1, 0, "TagList");
 	
 	/** STORE CONTROLS **/

@@ -9,7 +9,7 @@ Flickable
 {
 	id: flick
 
-	property alias image: image
+	property alias image: img
 	
 	signal rightClicked();
 	signal pressAndHold();
@@ -114,7 +114,7 @@ Flickable
 		
 		Image
 		{
-			id: image
+			id: img
 			width: flick.contentWidth
 			height: flick.contentHeight
 			fillMode: Image.PreserveAspectFit

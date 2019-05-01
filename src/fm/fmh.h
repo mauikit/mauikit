@@ -110,10 +110,10 @@ namespace FMH
 		SHOWTHUMBNAIL,
 		SHOWTERMINAL,
 		COUNT,
-        SORTBY,
-        USER,
-        PASSWORD,
-        SERVER,
+		SORTBY,
+		USER,
+		PASSWORD,
+		SERVER,
 		FOLDERSFIRST,
 		VIEWTYPE,
 		ADDDATE,
@@ -145,8 +145,8 @@ namespace FMH
 		DESCRIPTION,
 		BOOKMARK,
 		ACCOUNT,
-        VERSION,
-        DOMAIN,
+		VERSION,
+		DOMAIN,
 		
 		/** ccdav keys **/
 		N,
@@ -167,7 +167,7 @@ namespace FMH
 		TEL_2,
 		TEL_3,
 		IM,
-
+		
 		/** other keys **/
 		CITY,
 		STATE,
@@ -202,9 +202,9 @@ namespace FMH
 		{MODEL_KEY::SHOWTERMINAL, "showterminal"},
 		{MODEL_KEY::SHOWTHUMBNAIL, "showthumbnail"},
 		{MODEL_KEY::COUNT, "count"},
-        {MODEL_KEY::SORTBY, "sortby"},
-        {MODEL_KEY::USER, "user"},
-        {MODEL_KEY::PASSWORD, "password"},
+		{MODEL_KEY::SORTBY, "sortby"},
+		{MODEL_KEY::USER, "user"},
+		{MODEL_KEY::PASSWORD, "password"},
 		{MODEL_KEY::SERVER, "server"},
 		{MODEL_KEY::FOLDERSFIRST, "foldersfirst"},
 		{MODEL_KEY::VIEWTYPE, "viewtype"},
@@ -236,10 +236,10 @@ namespace FMH
 		{MODEL_KEY::LICENSE, "license"},	
 		{MODEL_KEY::DESCRIPTION, "description"},
 		{MODEL_KEY::BOOKMARK, "bookmark"},
-        {MODEL_KEY::ACCOUNT, "account"},
-        {MODEL_KEY::VERSION, "version"},
-        {MODEL_KEY::DOMAIN, "domain"},
-
+		{MODEL_KEY::ACCOUNT, "account"},
+		{MODEL_KEY::VERSION, "version"},
+		{MODEL_KEY::DOMAIN, "domain"},
+		
 		
 		/** ccdav keys **/
 		{MODEL_KEY::N, "n"},
@@ -329,10 +329,10 @@ namespace FMH
 		{MODEL_NAME[MODEL_KEY::LICENSE], MODEL_KEY::LICENSE},
 		{MODEL_NAME[MODEL_KEY::DESCRIPTION], MODEL_KEY::DESCRIPTION},		
 		{MODEL_NAME[MODEL_KEY::BOOKMARK], MODEL_KEY::BOOKMARK},
-        {MODEL_NAME[MODEL_KEY::ACCOUNT], MODEL_KEY::ACCOUNT},
-        {MODEL_NAME[MODEL_KEY::VERSION], MODEL_KEY::VERSION},
-        {MODEL_NAME[MODEL_KEY::DOMAIN], MODEL_KEY::DOMAIN},
-
+		{MODEL_NAME[MODEL_KEY::ACCOUNT], MODEL_KEY::ACCOUNT},
+		{MODEL_NAME[MODEL_KEY::VERSION], MODEL_KEY::VERSION},
+		{MODEL_NAME[MODEL_KEY::DOMAIN], MODEL_KEY::DOMAIN},
+		
 		/** ccdav keys **/
 		{MODEL_NAME[MODEL_KEY::N], MODEL_KEY::N},
 		{MODEL_NAME[MODEL_KEY::IM], MODEL_KEY::IM},
@@ -369,8 +369,8 @@ namespace FMH
 		TAGS_PATH,
 		APPS_PATH,
 		TRASH_PATH,
-        SEARCH_PATH,
-        CLOUD_PATH
+		SEARCH_PATH,
+		CLOUD_PATH
 	};
 	
 	static const QHash<PATHTYPE_KEY, QString> PATHTYPE_NAME =
@@ -381,8 +381,8 @@ namespace FMH
 		{PATHTYPE_KEY::APPS_PATH, "Apps"},
 		{PATHTYPE_KEY::TRASH_PATH, "Trash"},
 		{PATHTYPE_KEY::TAGS_PATH, "Tags"},
-        {PATHTYPE_KEY::SEARCH_PATH, "Search"},
-        {PATHTYPE_KEY::CLOUD_PATH, "Cloud"}
+		{PATHTYPE_KEY::SEARCH_PATH, "Search"},
+		{PATHTYPE_KEY::CLOUD_PATH, "Cloud"}
 	};
 	
 	const QString DataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
@@ -505,15 +505,15 @@ namespace FMH
 		
 		auto res = QVariantMap({
 			{FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], icon.isEmpty() ? "folder" : icon},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::ICONSIZE], iconsize},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::COUNT], count},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTERMINAL], showterminal.isEmpty() ? "false" : showterminal},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTHUMBNAIL], showthumbnail.isEmpty() ? "false" : showthumbnail},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::DETAILVIEW], detailview.isEmpty() ? "false" : detailview},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN], hidden.isEmpty() ? false : (hidden == "true" ? true : false)},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::SORTBY], sortby},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::FOLDERSFIRST], foldersFirst},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::VIEWTYPE], viewType}
+							   {FMH::MODEL_NAME[FMH::MODEL_KEY::ICONSIZE], iconsize},
+						 {FMH::MODEL_NAME[FMH::MODEL_KEY::COUNT], count},
+						 {FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTERMINAL], showterminal.isEmpty() ? "false" : showterminal},
+							   {FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTHUMBNAIL], showthumbnail.isEmpty() ? "false" : showthumbnail},
+							   {FMH::MODEL_NAME[FMH::MODEL_KEY::DETAILVIEW], detailview.isEmpty() ? "false" : detailview},
+							   {FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN], hidden.isEmpty() ? false : (hidden == "true" ? true : false)},
+							   {FMH::MODEL_NAME[FMH::MODEL_KEY::SORTBY], sortby},
+						 {FMH::MODEL_NAME[FMH::MODEL_KEY::FOLDERSFIRST], foldersFirst},
+						 {FMH::MODEL_NAME[FMH::MODEL_KEY::VIEWTYPE], viewType}
 		});
 		
 		return res;
@@ -551,7 +551,7 @@ namespace FMH
 			#if defined(Q_OS_ANDROID)
 			QMimeDatabase mime;
 			auto type = mime.mimeTypeForFile(path);
-            return type.iconName();
+			return type.iconName();
 			#else
 			KFileItem mime(path);
 			return mime.iconName();
@@ -569,15 +569,15 @@ namespace FMH
 	
 	enum class TABLE : uint8_t
 	{
-        BOOKMARKS,
-        CLOUDS
+		BOOKMARKS,
+		CLOUDS
 	};
 	
 	static const QMap<FMH::TABLE, QString> TABLEMAP =
 	{
-        {TABLE::BOOKMARKS, "bookmarks"},
-        {TABLE::CLOUDS, "clouds"}
-    };
+		{TABLE::BOOKMARKS, "bookmarks"},
+		{TABLE::CLOUDS, "clouds"}
+	};
 	
 	typedef QMap<FMH::MODEL_KEY, QString> DB;
 	
@@ -606,7 +606,7 @@ namespace FMH
 		if(!file.exists()) return FMH::MODEL();
 		
 		auto mime = FMH::getMime(path);
-// 		QLocale locale;
+		// 		QLocale locale;
 		
 		FMH::MODEL res =
 		{
@@ -661,6 +661,7 @@ namespace FMH
 		
 		virtual ~Downloader()
 		{
+			qDebug()<< "DELETEING DOWNLOADER";
 			this->manager->deleteLater();
 		}
 		
@@ -695,18 +696,19 @@ namespace FMH
 			QNetworkRequest request;
 			request.setUrl(QUrl(fileURL));
 			if(!headers.isEmpty())
+			{	
 				for(auto key: headers.keys())
 					request.setRawHeader(key.toLocal8Bit(), headers[key].toLocal8Bit());				
-			
+			}
+				
 			reply = manager->get(request);			
 			
-			connect(manager, &QNetworkAccessManager::finished, [this](QNetworkReply* reply)
+			connect(reply, &QNetworkReply::readyRead, [this]()
 			{
 				switch(reply->error())
 				{
 					case QNetworkReply::NoError:
-					{
-						qDebug("file is downloaded successfully.");
+					{						
 						emit this->dataReady(reply->readAll());
 						break;
 					}
@@ -718,7 +720,16 @@ namespace FMH
 						
 					};
 				}
-			});			
+				
+			});
+			
+			connect(reply, &QNetworkReply::finished, [this]()
+			{
+				emit this->done();				
+				
+			});
+			
+			
 		}
 		
 	private:
@@ -732,6 +743,7 @@ namespace FMH
 		void fileSaved(QString path);
 		void warning(QString warning);
 		void dataReady(QByteArray array);
+		void done();
 		
 	private slots:
 		void onDownloadProgress(qint64 bytesRead, qint64 bytesTotal)
@@ -761,13 +773,13 @@ namespace FMH
 				file->close();
 				emit this->fileSaved(file->fileName());			
 				file->deleteLater();
-			}
+			}			
 		}
 		
 		void onReadyRead()
 		{
 			file->write(reply->readAll());
-// 			emit this->fileSaved(file->fileName());			
+			// 			emit this->fileSaved(file->fileName());			
 		}
 		
 		void onReplyFinished()
@@ -775,9 +787,11 @@ namespace FMH
 			if(file->isOpen())
 			{
 				file->close();
-// 				emit this->fileSaved(file->fileName());
+				// 				emit this->fileSaved(file->fileName());
 				file->deleteLater();
 			}
+			
+			emit done();
 		}
 	};
 	

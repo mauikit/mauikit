@@ -306,9 +306,9 @@ void Store::downloadLink(const QString& url, const QString &fileName)
 		
 		qDebug()<< "DOWNLOADING CONTENT FROM "<< url << fileName;
 		
-	
-			QStringList filePathList = url.split('/');
-			auto _fileName = filePathList.at(filePathList.count() - 1);
+		
+		QStringList filePathList = url.split('/');
+		auto _fileName = filePathList.at(filePathList.count() - 1);
 		
 		
 		connect(downloader, &FMH::Downloader::warning, [this](const QString &warning)
@@ -319,6 +319,11 @@ void Store::downloadLink(const QString& url, const QString &fileName)
 		connect(downloader, &FMH::Downloader::fileSaved, [this](const QString &fileName)
 		{
 			emit this->downloadReady(FMH::getFileInfoModel(fileName));
+		});
+		
+		connect(downloader, &FMH::Downloader::done, [=]()
+		{
+			downloader->deleteLater();
 		});
 		
 // 		connect(downloader, &FMH::Downloader::downloadReady, [this]()
