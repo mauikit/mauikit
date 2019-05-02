@@ -690,9 +690,7 @@ namespace FMH
 		{		
 			if(fileURL.isEmpty())			
 				return;
-			
-			qDebug()<< "request from" << fileURL;
-			
+						
 			QNetworkRequest request;
 			request.setUrl(QUrl(fileURL));
 			if(!headers.isEmpty())
@@ -708,8 +706,8 @@ namespace FMH
 				switch(reply->error())
 				{
 					case QNetworkReply::NoError:
-					{						
-						emit this->dataReady(reply->readAll());
+					{					
+                        this->array = reply->readAll();
 						break;
 					}
 					
@@ -723,8 +721,12 @@ namespace FMH
 				
 			});
 			
-			connect(reply, &QNetworkReply::finished, [this]()
+			connect(reply, &QNetworkReply::finished, [=]()
 			{
+                
+                qDebug() << "Array reply is now finished";
+                emit this->dataReady(this->array);
+
 				emit this->done();				
 				
 			});
@@ -736,6 +738,7 @@ namespace FMH
 		QNetworkAccessManager *manager;
 		QNetworkReply *reply;
 		QFile *file;
+        QByteArray array;
 		
 	signals:
 		void progress(int percent);
