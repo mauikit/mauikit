@@ -49,8 +49,7 @@ public:
     Q_INVOKABLE static QString homePath();
     Q_INVOKABLE static QString sdDir();
 	
-    static QString getAccounts();
-    static QVariantList getContacts();
+
     static void addContact(const QString &name, const QString &tel, const QString &tel2, const QString &tel3, const QString &email, const QString &title, const QString &org, const QString &photo, const QString &account, const QString &accountType);
    static void updateContact(const QString &id, const QString &field, const QString &value);
     Q_INVOKABLE static void call(const QString &tel);
@@ -60,7 +59,10 @@ public:
     void handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data);
     void fileChooser();
 
-
+public slots:
+    static QString getAccounts();
+    static QVariantList getContacts();
+    static QString getContacts2();
 
 signals:
     void folderPicked(QString path);
