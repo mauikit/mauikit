@@ -93,74 +93,12 @@ QVariantList MAUIAndroid::getContacts()
 
             for(auto i =0 ; i < size; i++)
             {
-
                 res << QVariantMap {
                 {"n", get(i, "n")},
                 {"id", get(i, "id")},
                 {"fav", get(i, "fav")}
-                                                                 /*{"fav", QString(fav)},
-                                                                 {"tel", QString(tel)},
-                                                                 {"email", QString(email)},
-                                                                 {"org", QString(org)},
-                                                                 {"photo", QString(photo)},
-                                                                 {"account", QString(accountName)},
-                                                                 {"type", QString(accountType)},
-                                                                 {"title", QString(title)},
-                                                                 {"count", QString(count)}*/
             };
             }
-
-
-            //            jobjectArray contactsJniArray = contactsArrayJniObject.object<jobjectArray>();
-            //            int len = _env->GetArrayLength(contactsJniArray);
-            //            qDebug()<< "CONCTS ARRAY LIST SIZE" << len;
-            //            for (int i = 0; i < len; i++)
-            //            {
-            //                jobjectArray stringArr = static_cast<jobjectArray>(_env->GetObjectArrayElement(contactsJniArray, i));
-
-            //                jstring id_js = static_cast<jstring>(_env->GetObjectArrayElement(stringArr, 0));
-            //                jstring n_js = static_cast<jstring>(_env->GetObjectArrayElement(stringArr, 1));
-            //                //        jstring tel_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 2));
-            //                //        jstring email_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 3));
-            //                //        jstring org_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 4));
-            //                //        jstring title_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 5));
-            //                //        jstring fav_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 6));
-            //                //        jstring photo_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 7));
-            //                //        jstring accountName_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 8));
-            //                //        jstring accountType_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 9));
-            //                //        jstring count_js = static_cast<jstring>(env->GetObjectArrayElement(stringArr, 10));
-
-            //                const char *id = _env->GetStringUTFChars(id_js, 0);
-            //                const char *n = _env->GetStringUTFChars(n_js, 0);
-            //                //        const char *tel = env->GetStringUTFChars(tel_js, 0);
-            //                //        const char *email = env->GetStringUTFChars(email_js, 0);
-            //                //        const char *org = env->GetStringUTFChars(org_js, 0);
-            //                //        const char *title = env->GetStringUTFChars(title_js, 0);
-            //                //        const char *fav = env->GetStringUTFChars(fav_js, 0);
-            //                //        const char *photo = env->GetStringUTFChars(photo_js, 0);
-            //                //        const char *accountName = env->GetStringUTFChars(accountName_js, 0);
-            //                //        const char *accountType = env->GetStringUTFChars(accountType_js, 0);
-            //                //        const char *count = env->GetStringUTFChars(count_js, 0);
-
-            //                //        if(QString(n).isEmpty() && QString(tel).isEmpty() && QString(email).isEmpty())
-            //                //            continue;
-            //                if(QString(n).isEmpty())
-            //                    continue;
-            //                res << QVariantMap {
-            //                {"id", QString(id)},
-            //                {"n", QString(n)}/*,
-            //                       {"fav", QString(fav)},
-            //                       {"tel", QString(tel)},
-            //                       {"email", QString(email)},
-            //                       {"org", QString(org)},
-            //                       {"photo", QString(photo)},
-            //                       {"account", QString(accountName)},
-            //                       {"type", QString(accountType)},
-            //                       {"title", QString(title)},
-            //                       {"count", QString(count)}*/
-            //            };
-            //            }
-
         }
     }else
         throw InterfaceConnFailedException();
@@ -168,9 +106,9 @@ QVariantList MAUIAndroid::getContacts()
     return res;
 }
 
-QString MAUIAndroid::getContacts2()
+QVariantMap MAUIAndroid::getContact(const QString &id)
 {
-    QString res;
+    QVariantMap res;
     QAndroidJniEnvironment _env;
     QAndroidJniObject activity = QAndroidJniObject::callStaticObjectMethod("org/qtproject/qt5/android/QtNative", "activity", "()Landroid/app/Activity;");   //activity is valid
     if (_env->ExceptionCheck()) {
@@ -179,38 +117,52 @@ QString MAUIAndroid::getContacts2()
     }
     if ( activity.isValid() )
     {
+        //        auto contact = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union",
+        //                                                                 "getContact",
+        //                                                                 "(Landroid/content/Context;Ljava/lang/String)Ljava/lang/Object;",
+        //                                                                 activity.object<jobject>(),
+        //                                                                 QAndroidJniObject::fromString(id).object<jstring>());
 
         auto contacts = QAndroidJniObject("com/kde/maui/tools/Union",
                                           "(Landroid/content/Context;)V",
                                           activity.object<jobject>());
 
-        contacts.callMethod<void>("fetchContacts");
-
-        auto size = contacts.callMethod<jint>("size");
-
-
-        auto test = contacts.callObjectMethod( "getField",
-                                               "(Ljava/lang/String;I)Ljava/lang/String;",
-                                               QAndroidJniObject::fromString(QString("n")).object<jstring>(), 2);
-
-        qDebug()<< "CONTACTS LIST SIZE" << size << test.toString();
-
-
 
         if (_env->ExceptionCheck())
         {
             _env->ExceptionClear();
-            res.append(" Got an exception error");
-
             throw InterfaceConnFailedException();
         }else
         {
-            res.append("Got the contacts sucessfully >> "+ QString::number(size));
+
+            contacts.callMethod<void>("getContact",
+                                      "(Ljava/lang/String;)V",
+                                      QAndroidJniObject::fromString(id).object<jstring>());
+
+            const auto get = [&contacts](QString key) -> QString
+            {
+                auto value = contacts.callObjectMethod( "getContactField",
+                                                        "(Ljava/lang/String;)Ljava/lang/String;",
+                                                        QAndroidJniObject::fromString(key).object<jstring>());
+
+                return value.toString();
+
+            };
+
+            res = QVariantMap {
+            {"tel", get("tel")},
+            {"account", get("account")},
+            {"type", get("type")},
+            {"org", get("org")},
+            {"title", get("title")},
+            {"email", get("email")}
+        };
         }
     }else
         throw InterfaceConnFailedException();
 
-    return res.append("\nFinished requesting contacts");
+    qDebug() << res;
+    return res;
 }
 
 void MAUIAndroid::addContact(const QString &name,

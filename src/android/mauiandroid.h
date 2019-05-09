@@ -62,8 +62,7 @@ public:
 public slots:
     static QString getAccounts();
     static QVariantList getContacts();
-    static QString getContacts2();
-
+    static QVariantMap getContact(const QString &id);
 signals:
     void folderPicked(QString path);
 };
