@@ -52,10 +52,10 @@ ToolButton
 	
 	hoverEnabled: !isMobile
 	
-	implicitWidth: Math.max(background ? background.implicitWidth : 0,
-							contentItem.implicitWidth + leftPadding + rightPadding)
-	implicitHeight: Math.max(background ? background.implicitHeight : 0,
-							 contentItem.implicitHeight + topPadding + bottomPadding)
+	implicitWidth: control.visible ? Math.max(background ? background.implicitWidth : 0,
+							contentItem.implicitWidth + leftPadding + rightPadding) : 0
+	implicitHeight: control.visible ? Math.max(background ? background.implicitHeight : 0,
+							 contentItem.implicitHeight + topPadding + bottomPadding) : 0
 	
 	height: control.visible ? (control.display === ToolButton.IconOnly ? size + space.medium : implicitHeight) : 0
 	width: control.visible ? (control.display === ToolButton.IconOnly ? height : implicitWidth + space.small) : 0
@@ -80,8 +80,8 @@ ToolButton
 	background: Rectangle
 	{
 		id: _background
-		implicitHeight: control.visible? iconSizes.medium : 0
-		implicitWidth: control.visible? iconSizes.medium : 0
+		implicitHeight: control.visible ? iconSizes.medium : 0
+		implicitWidth: control.visible ? iconSizes.medium : 0
 		
 		anchors.centerIn: control.icon
 		color: /*(down || pressed || checked) */ checked && enabled  ?
@@ -96,6 +96,7 @@ ToolButton
 	Rectangle
 	{
 		id: _indicator
+		visible: control.visible
 		color: control.colorScheme.highlightColor
 		height: unit * 5
 		width: control.width - space.small
@@ -108,6 +109,7 @@ ToolButton
 	contentItem: IconLabel
 	{
 		id: _iconLabel
+		visible: control.visible
 		spacing:  control.display === ToolButton.TextUnderIcon ? space.tiny : control.spacing
 		mirrored: control.mirrored
 		display: control.display

@@ -36,9 +36,9 @@ ToolBar
 	
 	clip: true
 	implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
-	implicitHeight: visible ? (floating || plegable ? toolBarHeightAlt : toolBarHeight) : 0
+	implicitHeight: visible ? (floating ? toolBarHeightAlt : toolBarHeight) : 0
 	
-	width: floating || plegable ? implicitWidth : parent.width
+	width: floating ? implicitWidth : parent.width
 	height:  implicitHeight 
 	
 	property alias stickyRightContent : rightRowContent.sticky
@@ -63,7 +63,7 @@ ToolBar
 	property bool drawBorder: false
 	property bool floating: false
 	property bool plegable: false
-	property bool folded : plegable
+	property bool folded : false
 	property bool flickable: true
 	
 	padding: 0    
@@ -71,7 +71,7 @@ ToolBar
 	//    rightPadding: Kirigami.Units.smallSpacing*2
 	signal unfolded()
 	
-	onPlegableChanged: folded = plegable
+// 	onPlegableChanged: folded = plegable
 // 	onVisibleChanged: 
 // 	{
 // 		if(control.visible)
@@ -86,8 +86,8 @@ ToolBar
 		id: headBarBG
 		color: colorScheme.backgroundColor
 		implicitHeight: toolBarHeightAlt  
-		radius: floating || plegable ? radiusV : 0   
-		border.color: floating || plegable ? colorScheme.borderColor : "transparent"
+		radius: floating ? radiusV : 0   
+		border.color: floating ? colorScheme.borderColor : "transparent"
 		
 		SequentialAnimation on radius
 		{
@@ -182,22 +182,20 @@ ToolBar
 		}            
 	}
 	
-	RowLayout
-	{
-		anchors.fill: parent
-		
+	
 		Flickable
 		{
 			id: mainFlickable       
-			Layout.fillHeight: true
-			Layout.fillWidth: !folded
+			anchors.fill: parent
+			anchors.leftMargin: margins
+			anchors.rightMargin: margins
 			
 			flickableDirection: Flickable.HorizontalFlick
 			interactive: (contentWidth > control.width) && control.flickable
-			contentWidth: ((control.margins * 2) + space.big) 
-			+ (control.stickyLeftContent ? leftRowContent.width : leftRowContent.implicitWidth) 
-			+ (control.stickyMiddleContent ? middleRowContent.width : middleRowContent.implicitWidth) 
-			+ (control.stickyRightContent ? rightRowContent.width : rightRowContent.implicitWidth)
+			contentWidth: ((control.margins * 2) + space.medium) 
+			+ (control.stickyLeftContent ? leftRowContent.implicitWidth : leftRowContent.width) 
+			+ (control.stickyMiddleContent ? middleRowContent.implicitWidth : middleRowContent.width) 
+			+ (control.stickyRightContent ? rightRowContent.implicitWidth : rightRowContent.width)
 			
 			
 			boundsBehavior: isMobile ? Flickable.DragOverBounds : Flickable.StopAtBounds
@@ -206,19 +204,18 @@ ToolBar
 			RowLayout
 			{
 				id: layout
-				width: control.width
-				height: control.height
+				width: mainFlickable.width
+				height: mainFlickable.height
 				
 				RowLayout
 				{
 					id: leftRowContent
 					property bool sticky : false
 					
-					visible: !folded
 					Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-					Layout.leftMargin: leftContent.length > 0 ? margins : 0
+// 					Layout.leftMargin: leftContent.length > 0 ? margins : 0
 					spacing: leftContent.length > 0 ? control.spacing : 0
-					Layout.minimumWidth: sticky ? undefined : implicitWidth
+					Layout.minimumWidth: !sticky ? undefined : implicitWidth
 					clip: true
 // 					Layout.fillWidth: true
 // 					Layout.fillHeight: true
@@ -228,7 +225,7 @@ ToolBar
 				
 				Item
 				{
-					Layout.fillWidth: true
+					Layout.fillWidth: leftRowContent.implicitWidth
 					Layout.minimumHeight: 0
 					Layout.minimumWidth: 0
 				}
@@ -242,7 +239,7 @@ ToolBar
 					
 					clip: true
 					spacing: middleContent.length === 1 ? 0 : control.spacing
-					Layout.minimumWidth: sticky ? undefined : implicitWidth
+					Layout.minimumWidth: !sticky ? undefined : implicitWidth
 					
 					//                             Layout.maximumWidth: control.width - leftRowContent.implicitWidth - rightRowContent.implicitWidth
 // 					Layout.fillWidth: true
@@ -251,57 +248,27 @@ ToolBar
 				
 				Item
 				{
-					Layout.fillWidth: true
+					Layout.fillWidth: rightRowContent.implicitWidth
 					Layout.minimumHeight: 0
 					Layout.minimumWidth: 0
-				}
-						
-						
-				
-				
+				}				
 				
 				RowLayout
 				{
 					id: rightRowContent
 					
 					property bool sticky : false
-					visible: !folded
 					Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
 					spacing: rightContent.length > 0 ? control.spacing : 0
-					Layout.rightMargin: rightContent.length > 0 ? margins : 0
-					Layout.minimumWidth: sticky ? undefined : implicitWidth
+					// 					Layout.rightMargin: rightContent.length > 0 ? margins : 0
+					Layout.minimumWidth: !sticky ? undefined : implicitWidth
 					clip: true					
-// 					Layout.fillWidth: true
+					// 					Layout.fillWidth: true
 // 					Layout.fillHeight: true
 				}           
 			}
 			
 			ScrollBar.horizontal: ScrollBar { visible: false}        
-		}
-		
-		
-		Item
-		{
-			id: plegableButtonRow
-			visible: plegable
-			Layout.fillHeight: true
-			Layout.preferredWidth: control.height
-			Layout.fillWidth: folded
-			
-			Layout.alignment: Qt.AlignVCenter
-			Layout.rightMargin: margins 
-			clip: true
-			
-			Maui.ToolButton
-			{
-				id: _plegableButton
-				visible: plegable
-				checked:  !folded
-				iconName: folded ? "go-previous" : "go-next"
-				onClicked: folded = !folded
-				iconColor: control.colorScheme.textColor
-				anchors.centerIn: parent
-			}
 		}		
-	}
+	
 }

@@ -97,12 +97,13 @@ Kirigami.AbstractApplicationWindow
     /***************************************************/
     /********************* COLORS *********************/
     /*************************************************/
-
-    readonly property var colorScheme: ({
-                                            Default : 1,
-                                            Light : 2,
-                                            Dark: 3
-                                        })
+	
+	readonly property var colorScheme: ({
+		Default : 1,
+		Light : 2,
+		Dark: 3,
+		Custom: 4
+	})
 
     property color borderColor: Qt.tint(textColor, Qt.rgba(backgroundColor.r, backgroundColor.g, 
 backgroundColor.b, 0.7))
@@ -626,8 +627,7 @@ backgroundColor.b, 0.7))
             bgColor =darkBgColor
             
             if(isAndroid) Maui.Android.statusbarColor(backgroundColor, false)
-            break
-
+            break         
         }
     }
     

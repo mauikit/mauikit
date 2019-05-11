@@ -53,7 +53,7 @@ ToolButton
 	hoverEnabled: !isMobile
 	
 	implicitWidth: Math.max(background ? background.implicitWidth : 0,
-							contentItem.implicitWidth + leftPadding + rightPadding)
+							contentItem.implicitWidth + leftPadding + rightPadding) 
 	implicitHeight: Math.max(background ? background.implicitHeight : 0,
 							 contentItem.implicitHeight + topPadding + bottomPadding)
 	
@@ -97,12 +97,12 @@ ToolButton
 	{
 		id: _indicator
 		color: control.colorScheme.highlightColor
-		height: unit * 5
-		width: control.width - space.small
+		height: visible ? unit * 5 : 0
+		width: visible ? (control.width - space.small) : 0
 		
 		anchors.bottom: parent.bottom
 		anchors.horizontalCenter: parent.horizontalCenter
-		visible: control.showIndicator
+		visible: control.showIndicator && control.visible
 	}
 	
 	// 	contentItem: IconLabel
@@ -120,8 +120,8 @@ ToolButton
 	
 	background: Rectangle
 	{
-		implicitHeight: control.visible? control.height : 0
-		implicitWidth: control.visible? control.width : 0
+		implicitHeight: control.visible ? control.height : 0
+		implicitWidth: control.visible ? control.width : 0
 		
 		anchors.centerIn: control
 		color: /*(down || pressed || checked) */ checked && enabled  ?
