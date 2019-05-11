@@ -96,7 +96,9 @@ QVariantList MAUIAndroid::getContacts()
                 res << QVariantMap {
                 {"n", get(i, "n")},
                 {"id", get(i, "id")},
-                {"fav", get(i, "fav")}
+                {"fav", get(i, "fav")},
+                {"account", get(i, "account")},
+                {"type", get(i, "type")}
             };
             }
         }
@@ -151,8 +153,6 @@ QVariantMap MAUIAndroid::getContact(const QString &id)
 
             res = QVariantMap {
             {"tel", get("tel")},
-            {"account", get("account")},
-            {"type", get("type")},
             {"org", get("org")},
             {"title", get("title")},
             {"email", get("email")}

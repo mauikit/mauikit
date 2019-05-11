@@ -95,27 +95,10 @@ public class Union
 
     public void getContact(String id)
     {
-        String tel = "", email = "", accountType = "", accountName = "", org = "", title = "";
+        String tel = "", email = "", org = "", title = "";
 
         ContentResolver cr = this.c.getContentResolver();
 
-        //ADD ACCOUNT DATA...
-        Cursor accountCursor = cr.query(ContactsContract.RawContacts.CONTENT_URI,
-                null,
-                ContactsContract.RawContacts.CONTACT_ID + " = ?",
-                new String[]{id},
-                null);
-
-        if (accountCursor != null)
-            if (accountCursor.moveToFirst())
-            {
-                accountName = accountCursor.getString(accountCursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_NAME));
-                accountType = accountCursor.getString(accountCursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_TYPE));
-            }
-
-
-        if (accountCursor != null)
-            accountCursor.close();
 
         //ADD PHONE DATA...
         Cursor phoneCursor = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
@@ -211,8 +194,6 @@ public class Union
 
         this.contact.put("tel", tel == null ? "" : tel);
         this.contact.put("email", email == null ? "" : email);
-        this.contact.put("account", accountName == null ? "" : accountName);
-        this.contact.put("type", accountType == null ? "" : accountType);
         this.contact.put("org", org == null ? "" : org);
         this.contact.put("title", title == null ? "" : title);
     }
@@ -228,12 +209,30 @@ public class Union
         {
             while (mainCursor.moveToNext())
             {
-                String id = "", name  = "", fav = "", photo = "";
+                String id = "", name  = "", fav = "", photo = "", accountType= "", accountName = "";
 
                 id = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts._ID));
                 name = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                 fav = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.STARRED));
                 photo = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
+
+                //ADD ACCOUNT DATA...
+                Cursor accountCursor = cr.query(ContactsContract.RawContacts.CONTENT_URI,
+                        null,
+                        ContactsContract.RawContacts.CONTACT_ID + " = ?",
+                        new String[]{id},
+                        null);
+
+                if (accountCursor != null)
+                    if (accountCursor.moveToFirst())
+                    {
+                        accountName = accountCursor.getString(accountCursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_NAME));
+                        accountType = accountCursor.getString(accountCursor.getColumnIndex(ContactsContract.RawContacts.ACCOUNT_TYPE));
+                    }
+
+
+                if (accountCursor != null)
+                    accountCursor.close();
 
 
                 Map<String, String> contact = new HashMap<String, String>();
@@ -241,6 +240,8 @@ public class Union
                 contact.put("id", id == null ? "" : id);
                 contact.put("fav", fav == null ? "" : fav);
                 contact.put("photo", photo == null ? "" : photo);
+                contact.put("account", accountName == null ? "" : accountName);
+                contact.put("type", accountType == null ? "" : accountType);
 
                 this.contacts.add(contact);
             }
