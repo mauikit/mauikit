@@ -53,9 +53,18 @@ public class Union
 
     public static void call(Activity context, String tel)
     {
-        Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse("tel:" + tel));
+//        Intent callIntent = new Intent(Intent.ACTION_CALL);
+//        callIntent.setData(Uri.parse("tel:" + tel));
 
+//        context.startActivity(callIntent);
+
+
+
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+//        callIntent.setPackage("com.android.phone");          // force native dialer  (Android < 5)
+        callIntent.setPackage("com.android.server.telecom"); // force native dialer  (Android >= 5)
+        callIntent.setData(Uri.parse("tel:" + tel));
+        callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(callIntent);
     }
 

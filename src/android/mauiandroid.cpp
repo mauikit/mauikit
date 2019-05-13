@@ -91,10 +91,15 @@ QVariantList MAUIAndroid::getContacts()
 
             };
 
+
             for(auto i =0 ; i < size; i++)
             {
+                const auto name = get(i, "n");
+                if(name.isEmpty())
+                    continue;
+
                 res << QVariantMap {
-                {"n", get(i, "n")},
+                {"n", name},
                 {"id", get(i, "id")},
                 {"fav", get(i, "fav")},
                 {"account", get(i, "account")},
