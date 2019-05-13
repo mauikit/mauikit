@@ -6,6 +6,12 @@ src/utils/store/attica/
 *.directory
 *.*~
 *.properties
+
+
+#android stuff
+src/android/AndroidManifest.xml
+src/android/res/*
+
 #.*
 *.*~
 ~*.*
