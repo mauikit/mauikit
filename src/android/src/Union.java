@@ -4,13 +4,17 @@ import android.provider.ContactsContract;
 import android.database.Cursor;
 import android.app.Activity;
 import android.os.Build;
-
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 
 import android.accounts.AccountManager;
 import android.accounts.Account;
@@ -207,6 +211,23 @@ public class Union
         this.contact.put("title", title == null ? "" : title);
     }
 
+public static Bitmap loadContactPhoto(Context c, String id)
+{
+    System.out.println("GETTIGN CONTACT IMAGE " + id);
+    ContentResolver cr = c.getContentResolver();
+    Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.parseLong(id));
+    InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(cr, uri);
+    if (input == null) {
+        System.out.println("GETTIGN CONTACT IMAGE: NO IMAGE");
+
+         return null;
+     }
+
+ System.out.println("GETTIGN CONTACT IMAGE: GOT IMAGE");
+
+    return BitmapFactory.decodeStream(input);
+}
+
     public void fetchContacts()
     {
         System.out.println("FETCHING CONTACTS");
@@ -218,8 +239,8 @@ public class Union
         {
             while (mainCursor.moveToNext())
             {
-                String id = "", name  = "", fav = "", photo = "", accountType= "", accountName = "";
-
+                String id = "", name  = "", fav = "", accountType= "", accountName = "", photo = "";
+//ByteArrayInputStream photo = null;
                 id = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts._ID));
                 name = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                 fav = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.STARRED));

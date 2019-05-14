@@ -25,7 +25,11 @@
 #include <QMimeDatabase>
 #include <QDomDocument>
 #include <QFile>
+#include <QImage>
+
 #include "utils.h"
+
+#include <android/bitmap.h>
 
 class InterfaceConnFailedException : public QException
 {
@@ -54,6 +58,52 @@ QString MAUIAndroid::getAccounts()
     return str.toString();
 }
 
+QImage toImage(const QAndroidJniObject &bitmap)
+{
+    QAndroidJniEnvironment env;
+    AndroidBitmapInfo info;
+    if (AndroidBitmap_getInfo(env, bitmap.object(), &info) != ANDROID_BITMAP_RESULT_SUCCESS)
+        return QImage();
+
+    QImage::Format format;
+    switch (info.format) {
+        case ANDROID_BITMAP_FORMAT_RGBA_8888:
+            format = QImage::Format_RGBA8888;
+            break;
+        case ANDROID_BITMAP_FORMAT_RGB_565:
+            format = QImage::Format_RGB16;
+            break;
+        case ANDROID_BITMAP_FORMAT_RGBA_4444:
+            format = QImage::Format_ARGB4444_Premultiplied;
+            break;
+        case ANDROID_BITMAP_FORMAT_A_8:
+            format = QImage::Format_Alpha8;
+            break;
+        default:
+            return QImage();
+    }
+
+    void *pixels;
+    if (AndroidBitmap_lockPixels(env, bitmap.object(), &pixels) != ANDROID_BITMAP_RESULT_SUCCESS)
+        return QImage();
+
+    QImage image(info.width, info.height, format);
+
+    if (info.stride == uint32_t(image.bytesPerLine())) {
+        memcpy((void*)image.constBits(), pixels, info.stride * info.height);
+    } else {
+        uchar *bmpPtr = static_cast<uchar *>(pixels);
+        const unsigned width = std::min(info.width, (uint)image.width());
+        const unsigned height = std::min(info.height, (uint)image.height());
+        for (unsigned y = 0; y < height; y++, bmpPtr += info.stride)
+            memcpy((void*)image.constScanLine(y), bmpPtr, width);
+    }
+
+    if (AndroidBitmap_unlockPixels(env, bitmap.object()) != ANDROID_BITMAP_RESULT_SUCCESS)
+        return QImage();
+
+    return image;
+}
 
 QVariantList MAUIAndroid::getContacts()
 {
@@ -98,13 +148,19 @@ QVariantList MAUIAndroid::getContacts()
                 if(name.isEmpty())
                     continue;
 
-                res << QVariantMap {
-                {"n", name},
-                {"id", get(i, "id")},
-                {"fav", get(i, "fav")},
-                {"account", get(i, "account")},
-                {"type", get(i, "type")}
-            };
+                QVariantMap map  = {
+                    {"n", name},
+                    {"id",  get(i, "id")},
+                    {"fav", get(i, "fav")},
+                    {"account", get(i, "account")},
+                    {"type", get(i, "type")}
+                };
+
+                const auto photo = get(i, "photo");
+                if(!photo.isEmpty())
+                    map.insert("photo", photo);
+
+                res << map;
             }
         }
     }else
@@ -112,6 +168,7 @@ QVariantList MAUIAndroid::getContacts()
 
     return res;
 }
+
 
 QVariantMap MAUIAndroid::getContact(const QString &id)
 {
@@ -418,6 +475,20 @@ QString MAUIAndroid::sdDir()
         return "/mnt/ext_sdcard";
     else
         return "/mnt/";
+}
+
+QImage MAUIAndroid::contactPhoto(const QString &id)
+{
+    QImage photo;
+    QAndroidJniObject bitmap = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union",
+                                                                         "loadContactPhoto",
+                                                                         "(Landroid/content/Context;Ljava/lang/String;)Landroid/graphics/Bitmap;",
+                                                                         QtAndroid::androidActivity().object<jobject>(),
+                                                                         QAndroidJniObject::fromString(id).object<jstring>());
+    if(bitmap != NULL)
+        photo = toImage(bitmap);
+
+    return photo;
 }
 
 void MAUIAndroid::setAppIcons(const QString &lowDPI, const QString &mediumDPI, const QString &highDPI)
