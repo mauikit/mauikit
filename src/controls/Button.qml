@@ -42,8 +42,8 @@ Button
     
     leftPadding: space.small
     rightPadding: leftPadding
-
-
+    
+    property alias bg : _buttonBG
     
     contentItem: RowLayout
     {
@@ -82,7 +82,7 @@ Button
     
     background: Rectangle
     {
-        id: buttonBG
+        id: _buttonBG
         implicitWidth: _icon.visible ? ( (control.text ? (iconSizes.medium * 3) : 0 ) + _icon.width + space.small) : iconSizes.medium * 3
         implicitHeight: iconSizes.medium + space.small
 
