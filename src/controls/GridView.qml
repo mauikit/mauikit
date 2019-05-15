@@ -46,6 +46,7 @@ Item
 	property alias bottomMargin: gridView.bottomMargin
 	property alias rightMargin: gridView.rightMargin
 	property alias leftMarging: gridView.leftMargin
+	property alias header : gridView.header 
 	
 	property bool centerContent: false
 	property bool adaptContent: false 

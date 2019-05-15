@@ -74,7 +74,10 @@ QtObject
                                                                                defaultFontSize * 1.2),
                                       
                                            huge: (isMobile ? defaultFontSize * 1.2 :
-                                                                               defaultFontSize * 1.3)
+                                                                               defaultFontSize * 1.3),
+									  
+									  enormous: (isMobile ? defaultFontSize * 1.3 :
+									  defaultFontSize * 1.4)
                                       })
 
     readonly property var space : ({
