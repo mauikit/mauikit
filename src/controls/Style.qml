@@ -91,25 +91,13 @@ QtObject
                                    })
 
     readonly property var iconSizes : ({
-                                           tiny : Kirigami.Units.iconSizes.small*0.5,
-
-                                           small :  (isMobile ? Kirigami.Units.iconSizes.small*0.5:
-                                                                                  Kirigami.Units.iconSizes.small),
-
-                                           medium : (isMobile ? Kirigami.Units.iconSizes.small :
-                                                                                  Kirigami.Units.iconSizes.smallMedium),
-
-                                           big:  (isMobile ? Kirigami.Units.iconSizes.smallMedium :
-                                                                               Kirigami.Units.iconSizes.medium),
-
-                                           large: (isMobile ? Kirigami.Units.iconSizes.medium :
-                                                                                Kirigami.Units.iconSizes.large),
-
-                                           huge: (isMobile ? Kirigami.Units.iconSizes.large :
-                                                                               Kirigami.Units.iconSizes.huge),
-
-                                           enormous: (isMobile ? Kirigami.Units.iconSizes.huge :
-                                                                                   Kirigami.Units.iconSizes.enormous)
+                                           tiny : 8,
+                                           small :  16,
+                                           medium : 22,
+                                           big:  32,
+                                           large: 48,
+                                           huge: 64,
+                                           enormous: 128
 
                                        })
 }
