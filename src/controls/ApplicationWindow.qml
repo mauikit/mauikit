@@ -59,7 +59,6 @@ Kirigami.AbstractApplicationWindow
     property alias rightIcon : searchBtn
     
     default property alias content : page.content
-    property alias pageStack: __pageStack
     property alias mainMenu : mainMenu.content
     property alias about : aboutDialog
     property alias accounts: _accountsDialogLoader.item
@@ -75,7 +74,7 @@ Kirigami.AbstractApplicationWindow
     /*********************** UI ***********************/
     /*************************************************/
 
-    property bool isWide : root.width >= Kirigami.Units.gridUnit * 30 || pageStack.wideMode
+    property bool isWide : root.width >= Kirigami.Units.gridUnit * 30
     
     property int radiusV : unit * 4
     property int iconSize : iconSizes.medium * (isMobile ? 0.95 : 1)
@@ -274,6 +273,7 @@ backgroundColor.b, 0.7))
     {
         id: page
         anchors.fill: parent
+        
         leftMargin: root.globalDrawer && (root.globalDrawer.modal === false) ? root.globalDrawer.contentItem.width * root.globalDrawer.position : 0
         
         margins: 0
@@ -380,67 +380,6 @@ backgroundColor.b, 0.7))
             iconName: "edit-find"
             iconColor: headBarFGColor
             onClicked: searchButtonClicked()
-        }
-
-       
-        
-        
-        content: Kirigami.PageRow
-        {
-            id: __pageStack
-            //            clip: true
-            anchors.fill: parent
-            anchors.leftMargin: 100
-            //FIXME
-            onCurrentIndexChanged: root.reachableMode = false;
-
-//             function goBack() 
-// 			{
-//                 //NOTE: drawers are handling the back button by themselves
-//                 var backEvent = {accepted: false}
-//                 if (root.pageStack.currentIndex >= 1)
-// 				{
-//                     root.pageStack.currentItem.backRequested(backEvent);
-//                     if (!backEvent.accepted)
-// 					{
-//                         root.pageStack.flickBack();
-//                         backEvent.accepted = true;
-//                     }
-//                 }
-// 
-//                 if (Kirigami.Settings.isMobile && !backEvent.accepted && Qt.platform.os !== "ios") 
-// 				{
-//                     Qt.quit();
-//                 }
-//             }
-//             
-//             function goForward()
-// 			{
-//                 root.pageStack.currentIndex = Math.min(root.pageStack.depth-1, root.pageStack.currentIndex + 1);
-//             }
-            
-
-
-            Rectangle 
-            {
-                z: -1
-                anchors.fill: parent
-                color: Kirigami.Theme.backgroundColor
-            }
-            
-            focus: true
-
-            layer.enabled: page.contentIsRised && floatingBar && footBarOverlap
-            layer.effect: DropShadow
-            {
-                anchors.fill: __pageStack
-                horizontalOffset: 0
-                verticalOffset: 3
-                radius: 12
-                samples: 25
-                color: Qt.darker(viewBackgroundColor, 1.5)
-                source: __pageStack
-            }
         }
     }      
     

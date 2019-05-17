@@ -62,9 +62,13 @@ ToolBar
 	property bool dropShadow: false
 	property bool drawBorder: false
 	property bool floating: false
-	property bool plegable: false
-	property bool folded : false
+	property bool plegable: false //deprecrated
+	property bool folded : false //deprecrated
 	property bool flickable: true
+	property bool strech : true
+	property bool leftSretch: strech
+	property bool rightSretch: strech
+	property bool middleStrech: strech
 	
 	padding: 0    
 	//    leftPadding: Kirigami.Units.smallSpacing*2
@@ -204,31 +208,26 @@ ToolBar
 			RowLayout
 			{
 				id: layout
-				width: mainFlickable.width
 				height: mainFlickable.height
+				width: mainFlickable.width
+
 				
 				RowLayout
 				{
 					id: leftRowContent
 					property bool sticky : false
-					
+					Layout.leftMargin: rightRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.leftSretch ? rightRowContent.implicitWidth : undefined
 					Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-// 					Layout.leftMargin: leftContent.length > 0 ? margins : 0
 					spacing: leftContent.length > 0 ? control.spacing : 0
 					Layout.minimumWidth: !sticky ? undefined : implicitWidth
 					clip: true
-// 					Layout.fillWidth: true
-// 					Layout.fillHeight: true
-				}
+					Layout.fillWidth: control.leftSretch && implicitWidth
+					Layout.fillHeight: true
+
+				}				
 				
+			
 				
-				
-				Item
-				{
-					Layout.fillWidth: leftRowContent.implicitWidth
-					Layout.minimumHeight: 0
-					Layout.minimumWidth: 0
-				}
 				
 				RowLayout
 				{
@@ -242,29 +241,23 @@ ToolBar
 					Layout.minimumWidth: !sticky ? undefined : implicitWidth
 					
 					//                             Layout.maximumWidth: control.width - leftRowContent.implicitWidth - rightRowContent.implicitWidth
-// 					Layout.fillWidth: true
-// 					Layout.fillHeight: true
+					Layout.fillWidth: control.middleStrech
+					Layout.fillHeight: true
 				}
 				
-				Item
-				{
-					Layout.fillWidth: rightRowContent.implicitWidth
-					Layout.minimumHeight: 0
-					Layout.minimumWidth: 0
-				}				
 				
 				RowLayout
 				{
 					id: rightRowContent
 					
 					property bool sticky : false
+					Layout.rightMargin: leftRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.rightSretch ? leftRowContent.implicitWidth : undefined
 					Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
 					spacing: rightContent.length > 0 ? control.spacing : 0
-					// 					Layout.rightMargin: rightContent.length > 0 ? margins : 0
 					Layout.minimumWidth: !sticky ? undefined : implicitWidth
 					clip: true					
-					// 					Layout.fillWidth: true
-// 					Layout.fillHeight: true
+					Layout.fillWidth: implicitWidth
+					Layout.fillHeight: true
 				}           
 			}
 			

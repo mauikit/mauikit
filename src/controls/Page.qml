@@ -96,11 +96,10 @@ QQC2.Page
         {
             id: topToolBar
             Layout.fillWidth: !folded
-            Layout.rightMargin: plegable ? space.big : (floating ? space.small : 0)
-            Layout.leftMargin: plegable ? space.big : (floating ? space.small : 0)
-            Layout.bottomMargin: plegable ? space.big : 0
-            Layout.topMargin: plegable && !altToolBars ? space.big : 0
-            Layout.alignment: plegable ? Qt.AlignRight : Qt.AlignCenter
+            Layout.rightMargin: floating ? space.small : 0
+            Layout.leftMargin: floating ? space.small : 0
+            Layout.bottomMargin: 0
+            Layout.topMargin: 0
 
             Layout.row: altToolBars ? 3 : 1
             Layout.column: 1
@@ -112,14 +111,13 @@ QQC2.Page
 
             position: altToolBars ? ToolBar.Footer : ToolBar.Header
             dropShadow: false
-            drawBorder: !dropShadow && !plegable
+            drawBorder: !dropShadow
 
             width: folded ? height : implicitWidth
             implicitWidth: width
 
             Layout.preferredHeight: implicitHeight
             implicitHeight: topToolBar.visible ? toolBarHeightAlt : 0
-            plegable: control.width < Kirigami.Units.gridUnit * 17
             visible: count > 0
             clip: false
             z: container.z +1
