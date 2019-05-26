@@ -910,7 +910,7 @@ Maui.Page
 				break;
 		}
 		
-		detailsView = true
+		list.viewType = FMList.LIST_VIEW 
 		
 		if(!prop)
 		{

@@ -96,14 +96,13 @@ ToolButton
 	Rectangle
 	{
 		id: _indicator
-		visible: control.visible
+		visible: control.visible && control.showIndicator
 		color: control.colorScheme.highlightColor
 		height: unit * 5
 		width: control.width - space.small
 		
 		anchors.bottom: parent.bottom
 		anchors.horizontalCenter: parent.horizontalCenter
-		visible: control.showIndicator
 	}
 	
 	contentItem: IconLabel
