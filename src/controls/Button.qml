@@ -52,6 +52,7 @@ Button
         {
             id: _icon
             visible: icon && icon.name.length > 0
+            Layout.leftMargin: space.small
             Layout.fillHeight: visible
             Layout.preferredWidth: visible ? iconSizes.medium : 0
             Layout.alignment: Qt.AlignCenter
