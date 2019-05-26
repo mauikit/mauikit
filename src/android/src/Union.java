@@ -14,7 +14,8 @@ import java.util.Map;
 import java.util.List;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import android.accounts.AccountManager;
 import android.accounts.Account;
@@ -26,6 +27,8 @@ import android.content.ContentProviderOperation.Builder;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.Context;
+import android.provider.CallLog.Calls;
+import android.provider.CallLog;
 
 public class Union
 {
@@ -533,4 +536,62 @@ public static Bitmap loadContactPhoto(Context c, String id)
         accountSelection += "</root>";
         return accountSelection;
     }
+
+    public static List<HashMap<String, String>> callLogs(Context c)
+    {
+
+        System.out.println("GETTING CALL LOGS");
+        List<HashMap<String,String>> res =  new ArrayList<HashMap<String, String>>();
+        String[] projection = new String[] {
+                        CallLog.Calls.CACHED_NAME,
+                        CallLog.Calls.NUMBER,
+                        CallLog.Calls.TYPE,
+                        CallLog.Calls.DATE
+                };
+        // String sortOrder = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
+
+         Cursor cursor =  c.getContentResolver().query(CallLog.Calls.CONTENT_URI, projection, null, null, null);
+         while (cursor.moveToNext())
+         {
+            String name = cursor.getString(0);
+            String tel = cursor.getString(1);
+            String type = cursor.getString(2); // https://developer.android.com/reference/android/provider/CallLog.Calls.html#TYPE
+            long seconds = cursor.getLong(cursor.getColumnIndex(CallLog.Calls.DATE)); // epoch time - https://developer.android.com/reference/java/text/DateFormat.html#parse(java.lang.String
+//            long duration = cursor.getLong(cursor.getColumnIndex(CallLog.Calls.DURATION)); // epoch time - https://developer.android.com/reference/java/text/DateFormat.html#parse(java.lang.String
+        String dir = null;
+                    switch (Integer.parseInt(type))
+                    {
+                        case CallLog.Calls.OUTGOING_TYPE:
+                            dir = "OUTGOING";
+                            break;
+
+                        case CallLog.Calls.INCOMING_TYPE:
+                            dir = "INCOMING";
+                            break;
+
+                        case CallLog.Calls.MISSED_TYPE:
+                            dir = "MISSED";
+                            break;
+                    }
+
+
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yy HH:mm");
+                    String time = formatter.format(new Date(seconds));
+
+            HashMap map = new HashMap<String, String>();
+            map.put("n", name == null ? (tel == null ? "" : tel): name);
+            map.put("tel", tel == null ? "" : tel);
+            map.put("type", dir == null ? "" : dir);
+//            map.put("duration", Long.toString(duration));
+            map.put("date", time == null ? "" : time);
+
+
+
+            res.add(map);
+            }
+        cursor.close();
+
+        return res;
+        }
+
 }

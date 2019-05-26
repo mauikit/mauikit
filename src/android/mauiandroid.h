@@ -62,6 +62,7 @@ public:
 
 public slots:
     static QString getAccounts();
+    static QVariantList getCallLogs();
     static QVariantList getContacts();
     static QVariantMap getContact(const QString &id);
 signals:

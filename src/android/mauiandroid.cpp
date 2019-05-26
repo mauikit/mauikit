@@ -58,6 +58,41 @@ QString MAUIAndroid::getAccounts()
     return str.toString();
 }
 
+QVariantList MAUIAndroid::getCallLogs()
+{
+    QVariantList res;
+    QAndroidJniObject logsObj = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union",
+                                                                          "callLogs",
+                                                                          "(Landroid/content/Context;)Ljava/util/List;",
+                                                                          QtAndroid::androidActivity().object<jobject>());
+
+    auto size = logsObj.callMethod<jint>("size", "()I");
+
+    const auto get = [&logsObj](const int &index, const QString &key)  -> QString
+    {
+        QAndroidJniObject mapObj = logsObj.callObjectMethod("get", "(I)Ljava/lang/Object;", index);
+        QAndroidJniObject value = mapObj.callObjectMethod("get",
+                                                          "(Ljava/lang/Object;)Ljava/lang/Object;",
+                                                          QAndroidJniObject::fromString(key).object<jstring>());
+        return value.toString();
+    };
+
+    for(auto i = 0; i<size; i++)
+    {
+        res << QVariantMap {
+        {"n", get(i, "n")},
+        {"tel", get(i, "tel")},
+        {"date", get(i, "date")},
+        {"type", get(i, "type")},
+//        {"duration", get(i, "duration")}
+    };
+
+    }
+
+    return res;
+
+}
+
 QImage toImage(const QAndroidJniObject &bitmap)
 {
     QAndroidJniEnvironment env;
