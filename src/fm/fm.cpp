@@ -585,9 +585,13 @@ QString FM::formatSize(const int &size)
 	return locale.formattedDataSize(size);
 }
 
-QString FM::formatDate(const QString &dateStr, const QString &format)
+QString FM::formatDate(const QString &dateStr, const QString &format, const QString &initFormat)
 {
-	const auto date = QDateTime::fromString(dateStr, Qt::TextDate);
+	QDateTime date;
+	if( initFormat.isEmpty() )
+		date = QDateTime::fromString(dateStr, Qt::TextDate);
+	else
+		date = QDateTime::fromString(dateStr, initFormat);
 	return date.toString(format);
 }
 
