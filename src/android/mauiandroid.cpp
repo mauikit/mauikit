@@ -66,30 +66,7 @@ QVariantList MAUIAndroid::getCallLogs()
                                                                           "(Landroid/content/Context;)Ljava/util/List;",
                                                                           QtAndroid::androidActivity().object<jobject>());
 
-    auto size = logsObj.callMethod<jint>("size", "()I");
-
-    const auto get = [&logsObj](const int &index, const QString &key)  -> QString
-    {
-        QAndroidJniObject mapObj = logsObj.callObjectMethod("get", "(I)Ljava/lang/Object;", index);
-        QAndroidJniObject value = mapObj.callObjectMethod("get",
-                                                          "(Ljava/lang/Object;)Ljava/lang/Object;",
-                                                          QAndroidJniObject::fromString(key).object<jstring>());
-        return value.toString();
-    };
-
-    for(auto i = 0; i<size; i++)
-    {
-        res << QVariantMap {
-        {"n", get(i, "n")},
-        {"tel", get(i, "tel")},
-        {"date", get(i, "date")},
-        {"type", get(i, "type")},
-//        {"duration", get(i, "duration")}
-    };
-
-    }
-
-    return res;
+    return MAUIAndroid::transform(logsObj);
 
 }
 
@@ -143,123 +120,24 @@ QImage toImage(const QAndroidJniObject &bitmap)
 QVariantList MAUIAndroid::getContacts()
 {
     QVariantList res;
-    QAndroidJniEnvironment _env;
-    QAndroidJniObject activity = QAndroidJniObject::callStaticObjectMethod("org/qtproject/qt5/android/QtNative", "activity", "()Landroid/app/Activity;");   //activity is valid
-    if (_env->ExceptionCheck()) {
-        _env->ExceptionClear();
-        throw InterfaceConnFailedException();
-    }
-    if ( activity.isValid() )
-    {
+    QAndroidJniObject logsObj = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union",
+                                                                          "fetchContacts",
+                                                                          "(Landroid/content/Context;)Ljava/util/List;",
+                                                                          QtAndroid::androidActivity().object<jobject>());
 
-        auto contacts = QAndroidJniObject("com/kde/maui/tools/Union",
-                                          "(Landroid/content/Context;)V",
-                                          activity.object<jobject>());
-
-        contacts.callMethod<void>("fetchContacts");
-
-        if (_env->ExceptionCheck())
-        {
-            _env->ExceptionClear();
-            throw InterfaceConnFailedException();
-        }else
-        {
-            auto size = contacts.callMethod<jint>("size");
-
-            const auto get = [&contacts](int index, QString key) -> QString
-            {
-                auto value = contacts.callObjectMethod( "getField",
-                                                        "(Ljava/lang/String;I)Ljava/lang/String;",
-                                                        QAndroidJniObject::fromString(key).object<jstring>(), index);
-
-                return value.toString();
-
-            };
-
-
-            for(auto i =0 ; i < size; i++)
-            {
-                const auto name = get(i, "n");
-                if(name.isEmpty())
-                    continue;
-
-                QVariantMap map  = {
-                    {"n", name},
-                    {"id",  get(i, "id")},
-                    {"fav", get(i, "fav")},
-                    {"account", get(i, "account")},
-                    {"type", get(i, "type")}
-                };
-
-                const auto photo = get(i, "photo");
-                if(!photo.isEmpty())
-                    map.insert("photo", photo);
-
-                res << map;
-            }
-        }
-    }else
-        throw InterfaceConnFailedException();
-
-    return res;
+    return MAUIAndroid::transform(logsObj);
 }
 
 
 QVariantMap MAUIAndroid::getContact(const QString &id)
 {
-    QVariantMap res;
-    QAndroidJniEnvironment _env;
-    QAndroidJniObject activity = QAndroidJniObject::callStaticObjectMethod("org/qtproject/qt5/android/QtNative", "activity", "()Landroid/app/Activity;");   //activity is valid
-    if (_env->ExceptionCheck()) {
-        _env->ExceptionClear();
-        throw InterfaceConnFailedException();
-    }
-    if ( activity.isValid() )
-    {
-        //        auto contact = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union",
-        //                                                                 "getContact",
-        //                                                                 "(Landroid/content/Context;Ljava/lang/String)Ljava/lang/Object;",
-        //                                                                 activity.object<jobject>(),
-        //                                                                 QAndroidJniObject::fromString(id).object<jstring>());
+    QAndroidJniObject contactObj = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union",
+                                                                             "getContact",
+                                                                             "(Landroid/content/Context;Ljava/lang/String;)Ljava/util/HashMap;",
+                                                                             QtAndroid::androidActivity().object<jobject>(),
+                                                                             QAndroidJniObject::fromString(id).object<jstring>());
 
-        auto contacts = QAndroidJniObject("com/kde/maui/tools/Union",
-                                          "(Landroid/content/Context;)V",
-                                          activity.object<jobject>());
-
-
-        if (_env->ExceptionCheck())
-        {
-            _env->ExceptionClear();
-            throw InterfaceConnFailedException();
-        }else
-        {
-
-            contacts.callMethod<void>("getContact",
-                                      "(Ljava/lang/String;)V",
-                                      QAndroidJniObject::fromString(id).object<jstring>());
-
-            const auto get = [&contacts](QString key) -> QString
-            {
-                auto value = contacts.callObjectMethod( "getContactField",
-                                                        "(Ljava/lang/String;)Ljava/lang/String;",
-                                                        QAndroidJniObject::fromString(key).object<jstring>());
-
-                return value.toString();
-
-            };
-
-            res = QVariantMap {
-            {"tel", get("tel")},
-            {"org", get("org")},
-            {"title", get("title")},
-            {"email", get("email")}
-        };
-        }
-    }else
-        throw InterfaceConnFailedException();
-
-    qDebug() << res;
-    return res;
+    return MAUIAndroid::createVariantMap(contactObj.object<jobject>());
 }
 
 void MAUIAndroid::addContact(const QString &name,
@@ -650,6 +528,96 @@ void MAUIAndroid::fileChooser()
         }
     }else
         throw InterfaceConnFailedException();
+}
+
+QVariantList MAUIAndroid::transform(const QAndroidJniObject &obj)
+{
+    QVariantList res;
+    auto size = obj.callMethod<jint>("size", "()I");
+
+    const auto get = [&obj](const int &index)  -> QVariant
+    {
+
+        QAndroidJniObject hashObj = obj.callObjectMethod("get", "(I)Ljava/lang/Object;", index);
+        return createVariantMap(hashObj.object<jobject>());
+    };
+
+    for(auto i = 0; i<size; i++)
+    {
+        res << get(i);
+    }
+
+    return res;
+}
+
+QVariantMap MAUIAndroid::createVariantMap(jobject data)
+{
+    QVariantMap res;
+
+    QAndroidJniEnvironment env;
+    /* Reference : https://community.oracle.com/thread/1549999 */
+
+    // Get the HashMap Class
+    jclass jclass_of_hashmap = (env)->GetObjectClass(data);
+
+    // Get link to Method "entrySet"
+    jmethodID entrySetMethod = (env)->GetMethodID(jclass_of_hashmap, "entrySet", "()Ljava/util/Set;");
+
+    // Invoke the "entrySet" method on the HashMap object
+    jobject jobject_of_entryset = env->CallObjectMethod(data, entrySetMethod);
+
+    // Get the Set Class
+    jclass jclass_of_set = (env)->FindClass("java/util/Set"); // Problem during compilation !!!!!
+
+    if (jclass_of_set == 0) {
+        qWarning() << "java/util/Set lookup failed\n";
+        return res;
+    }
+
+    // Get link to Method "iterator"
+    jmethodID iteratorMethod = env->GetMethodID(jclass_of_set, "iterator", "()Ljava/util/Iterator;");
+
+    // Invoke the "iterator" method on the jobject_of_entryset variable of type Set
+    jobject jobject_of_iterator = env->CallObjectMethod(jobject_of_entryset, iteratorMethod);
+
+    // Get the "Iterator" class
+    jclass jclass_of_iterator = (env)->FindClass("java/util/Iterator");
+
+    // Get link to Method "hasNext"
+    jmethodID hasNextMethod = env->GetMethodID(jclass_of_iterator, "hasNext", "()Z");
+
+    jmethodID nextMethod = env->GetMethodID(jclass_of_iterator, "next", "()Ljava/lang/Object;");
+
+    while (env->CallBooleanMethod(jobject_of_iterator, hasNextMethod) ) {
+        jobject jEntry = env->CallObjectMethod(jobject_of_iterator,nextMethod);
+        QAndroidJniObject entry = QAndroidJniObject(jEntry);
+        QAndroidJniObject key = entry.callObjectMethod("getKey","()Ljava/lang/Object;");
+        QAndroidJniObject value = entry.callObjectMethod("getValue","()Ljava/lang/Object;");
+        QString k = key.toString();
+
+        QVariant v = value.toString();
+
+        env->DeleteLocalRef(jEntry);
+
+        if (v.isNull()) {
+            continue;
+        }
+
+        res[k] = v;
+    }
+
+    if (env->ExceptionOccurred()) {
+        env->ExceptionDescribe();
+        env->ExceptionClear();
+    }
+
+    env->DeleteLocalRef(jclass_of_hashmap);
+    env->DeleteLocalRef(jobject_of_entryset);
+    env->DeleteLocalRef(jclass_of_set);
+    env->DeleteLocalRef(jobject_of_iterator);
+    env->DeleteLocalRef(jclass_of_iterator);
+
+    return res;
 }
 
 QStringList MAUIAndroid::defaultPaths()

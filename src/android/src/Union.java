@@ -47,16 +47,7 @@ public class Union
         NICK
     }
 
-    List<Map<String, String>> contacts;
-    Map<String, String> contact;
-    Context c;
-
-    public Union(Context context)
-    {
-        this.c = context;
-        this.contacts = new ArrayList<Map<String, String>>();
-        this.contact = new HashMap<String, String>();
-    }
+    public Union() {}
 
     public static void call(Activity context, String tel)
     {
@@ -81,40 +72,14 @@ public class Union
 //                        startActivityForResult(contactPickerIntent, CONTACT_PICKER_RESULT);
 //      }
 
-    public int size()
+
+    public static HashMap<String, String> getContact(Context c, String id)
     {
-        return this.contacts.size();
-    }
+        HashMap<String, String> res = new HashMap<String, String>();
 
-    public String getField(String key, int index)
-    {
-        String res = "";
-        if(index < 0 || index >=  this.size())
-            return res;
-
-        final Map<String, String> map = this.contacts.get(index);
-        if(map.containsKey(key))
-            res = map.get(key);
-
-        return res;
-    }
-
-    public String getContactField(String key)
-    {
-        String res = "";
-
-        if(this.contact.containsKey(key))
-            res = this.contact.get(key);
-
-        return res;
-        }
-
-    public void getContact(String id)
-    {
         String tel = "", email = "", org = "", title = "";
 
-        ContentResolver cr = this.c.getContentResolver();
-
+        ContentResolver cr = c.getContentResolver();
 
         //ADD PHONE DATA...
         Cursor phoneCursor = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
@@ -208,35 +173,45 @@ public class Union
 //                    imCur.close();
 
 
-        this.contact.put("tel", tel == null ? "" : tel);
-        this.contact.put("email", email == null ? "" : email);
-        this.contact.put("org", org == null ? "" : org);
-        this.contact.put("title", title == null ? "" : title);
+        res.put("tel", tel == null ? "" : tel);
+        res.put("email", email == null ? "" : email);
+        res.put("org", org == null ? "" : org);
+        res.put("title", title == null ? "" : title);
+
+        return res;
     }
 
-public static Bitmap loadContactPhoto(Context c, String id)
-{
-    System.out.println("GETTIGN CONTACT IMAGE " + id);
-    ContentResolver cr = c.getContentResolver();
-    Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.parseLong(id));
-    InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(cr, uri);
-    if (input == null) {
-        System.out.println("GETTIGN CONTACT IMAGE: NO IMAGE");
+    public static Bitmap loadContactPhoto(Context c, String id)
+    {
+        System.out.println("GETTIGN CONTACT IMAGE " + id);
+        ContentResolver cr = c.getContentResolver();
+        Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.parseLong(id));
+        InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(cr, uri);
+        if (input == null) {
+            System.out.println("GETTIGN CONTACT IMAGE: NO IMAGE");
 
-         return null;
-     }
+            return null;
+        }
 
- System.out.println("GETTIGN CONTACT IMAGE: GOT IMAGE");
+        System.out.println("GETTIGN CONTACT IMAGE: GOT IMAGE");
 
-    return BitmapFactory.decodeStream(input);
-}
+        return BitmapFactory.decodeStream(input);
+    }
 
-    public void fetchContacts()
+    public static List<HashMap<String, String>> fetchContacts(Context c)
     {
         System.out.println("FETCHING CONTACTS");
+        List<HashMap<String,String>> res =  new ArrayList<HashMap<String, String>>();
 
-        ContentResolver cr = this.c.getContentResolver();
-        Cursor mainCursor = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        String[] projection = new String[] {
+               ContactsContract.Contacts._ID,
+               ContactsContract.Contacts.DISPLAY_NAME,
+                ContactsContract.Contacts.STARRED,
+               ContactsContract.Contacts.PHOTO_URI
+        };
+
+        ContentResolver cr = c.getContentResolver();
+        Cursor mainCursor = cr.query(ContactsContract.Contacts.CONTENT_URI, projection, null, null, null);
 
         if (mainCursor != null)
         {
@@ -250,8 +225,13 @@ public static Bitmap loadContactPhoto(Context c, String id)
                 photo = mainCursor.getString(mainCursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
 
                 //ADD ACCOUNT DATA...
+
+                String[] accountProjection = new String[] {
+                       ContactsContract.RawContacts.ACCOUNT_NAME,
+                       ContactsContract.RawContacts.ACCOUNT_TYPE
+                };
                 Cursor accountCursor = cr.query(ContactsContract.RawContacts.CONTENT_URI,
-                        null,
+                        accountProjection,
                         ContactsContract.RawContacts.CONTACT_ID + " = ?",
                         new String[]{id},
                         null);
@@ -268,20 +248,21 @@ public static Bitmap loadContactPhoto(Context c, String id)
                     accountCursor.close();
 
 
-                Map<String, String> contact = new HashMap<String, String>();
+                HashMap<String, String> contact = new HashMap<String, String>();
                 contact.put("n", name == null ? "" : name);
                 contact.put("id", id == null ? "" : id);
                 contact.put("fav", fav == null ? "" : fav);
                 contact.put("photo", photo == null ? "" : photo);
                 contact.put("account", accountName == null ? "" : accountName);
                 contact.put("type", accountType == null ? "" : accountType);
-
-                this.contacts.add(contact);
+                res.add(contact);
             }
         }
 
         if (mainCursor != null)
             mainCursor.close();
+
+            return res;
     }
 
     public static int APIVersion()
@@ -543,55 +524,57 @@ public static Bitmap loadContactPhoto(Context c, String id)
         System.out.println("GETTING CALL LOGS");
         List<HashMap<String,String>> res =  new ArrayList<HashMap<String, String>>();
         String[] projection = new String[] {
-                        CallLog.Calls.CACHED_NAME,
-                        CallLog.Calls.NUMBER,
-                        CallLog.Calls.TYPE,
-                        CallLog.Calls.DATE
-                };
+                CallLog.Calls.CACHED_NAME,
+                CallLog.Calls.NUMBER,
+                CallLog.Calls.TYPE,
+                CallLog.Calls.DATE,
+                CallLog.Calls.DURATION,
+                CallLog.Calls._ID,
+
+        };
         // String sortOrder = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
 
-         Cursor cursor =  c.getContentResolver().query(CallLog.Calls.CONTENT_URI, projection, null, null, null);
-         while (cursor.moveToNext())
-         {
-            String name = cursor.getString(0);
-            String tel = cursor.getString(1);
-            String type = cursor.getString(2); // https://developer.android.com/reference/android/provider/CallLog.Calls.html#TYPE
+        Cursor cursor =  c.getContentResolver().query(CallLog.Calls.CONTENT_URI, projection, null, null, null);
+        while (cursor.moveToNext())
+        {
+            String name = cursor.getString(cursor.getColumnIndex(CallLog.Calls.CACHED_NAME));
+            String tel = cursor.getString(cursor.getColumnIndex(CallLog.Calls.NUMBER));
+            String type = cursor.getString(cursor.getColumnIndex(CallLog.Calls.TYPE)); // https://developer.android.com/reference/android/provider/CallLog.Calls.html#TYPE
             long seconds = cursor.getLong(cursor.getColumnIndex(CallLog.Calls.DATE)); // epoch time - https://developer.android.com/reference/java/text/DateFormat.html#parse(java.lang.String
-//            long duration = cursor.getLong(cursor.getColumnIndex(CallLog.Calls.DURATION)); // epoch time - https://developer.android.com/reference/java/text/DateFormat.html#parse(java.lang.String
-        String dir = null;
-                    switch (Integer.parseInt(type))
-                    {
-                        case CallLog.Calls.OUTGOING_TYPE:
-                            dir = "OUTGOING";
-                            break;
+            String duration = cursor.getString(cursor.getColumnIndex(CallLog.Calls.DURATION));
+            String id = cursor.getString(cursor.getColumnIndex(CallLog.Calls._ID));
+            String dir = null;
+            switch (Integer.parseInt(type))
+            {
+                case CallLog.Calls.OUTGOING_TYPE:
+                    dir = "OUTGOING";
+                    break;
 
-                        case CallLog.Calls.INCOMING_TYPE:
-                            dir = "INCOMING";
-                            break;
+                case CallLog.Calls.INCOMING_TYPE:
+                    dir = "INCOMING";
+                    break;
 
-                        case CallLog.Calls.MISSED_TYPE:
-                            dir = "MISSED";
-                            break;
-                    }
+                case CallLog.Calls.MISSED_TYPE:
+                    dir = "MISSED";
+                    break;
+            }
 
 
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yy HH:mm");
-                    String time = formatter.format(new Date(seconds));
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+            String time = formatter.format(new Date(seconds));
 
             HashMap map = new HashMap<String, String>();
             map.put("n", name == null ? (tel == null ? "" : tel): name);
             map.put("tel", tel == null ? "" : tel);
             map.put("type", dir == null ? "" : dir);
-//            map.put("duration", Long.toString(duration));
+            map.put("duration", duration == null ? "" : duration);
+            map.put("id", id == null ? "" : id);
             map.put("date", time == null ? "" : time);
-
-
-
             res.add(map);
-            }
+        }
         cursor.close();
 
         return res;
-        }
+    }
 
 }
