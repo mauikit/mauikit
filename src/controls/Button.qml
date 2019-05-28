@@ -60,7 +60,7 @@ Button
             width: iconSizes.medium * 0.9
             height: width
             isMask: true
-            color: _text.color
+            color: _text.text.length ? _text.color : icon.color
         }
 
         Text
