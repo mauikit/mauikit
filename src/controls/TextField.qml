@@ -65,7 +65,7 @@ TextField
 	
 	selectByMouse: !isMobile
 	focus: true
-	wrapMode: TextEdit.Wrap
+	wrapMode: TextInput.WordWrap	
 	
 	onPressAndHold: entryMenu.popup()
 	onPressed:
