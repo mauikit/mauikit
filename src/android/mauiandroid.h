@@ -31,34 +31,23 @@
 #include <QString>
 #include <QVariantList>
 
+
+
 class MAUIAndroid : public QObject
 {
     Q_OBJECT
 public:
     MAUIAndroid(QObject *parent = nullptr);
     ~MAUIAndroid();
-
-    Q_INVOKABLE void statusbarColor(const QString &bg, const bool &light);
-    Q_INVOKABLE void shareDialog(const QString &url);
-    Q_INVOKABLE void shareText(const QString &text);
-    Q_INVOKABLE void sendSMS(const QString &tel,const QString &subject, const QString &message);
-    Q_INVOKABLE void shareLink(const QString &link);
-    Q_INVOKABLE void shareContact(const QString &id);
-    Q_INVOKABLE void openWithApp(const QString &url);
-    Q_INVOKABLE static QStringList defaultPaths();
-    Q_INVOKABLE static QString homePath();
-    Q_INVOKABLE static QString sdDir();
-
+    void handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data);
 
     static QImage contactPhoto(const QString &id);
     static void addContact(const QString &name, const QString &tel, const QString &tel2, const QString &tel3, const QString &email, const QString &title, const QString &org, const QString &photo, const QString &account, const QString &accountType);
     static void updateContact(const QString &id, const QString &field, const QString &value);
-    Q_INVOKABLE static void call(const QString &tel);
 
-    void setAppIcons(const QString &lowDPI, const QString &mediumDPI, const QString &highDPI);
-    void setAppInfo(const QString &appName, const QString &version, const QString &uri);
-    void handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data);
-    void fileChooser();
+    static void setAppIcons(const QString &lowDPI, const QString &mediumDPI, const QString &highDPI);
+    static void setAppInfo(const QString &appName, const QString &version, const QString &uri);
+    static void fileChooser();
 
 private:
     static QVariantList transform(const QAndroidJniObject &obj);
@@ -69,6 +58,19 @@ public slots:
     static QVariantList getCallLogs();
     static QVariantList getContacts();
     static QVariantMap getContact(const QString &id);
+
+    static void statusbarColor(const QString &bg, const bool &light);
+    static void shareDialog(const QString &url);
+    static void shareText(const QString &text);
+    static void sendSMS(const QString &tel,const QString &subject, const QString &message);
+    static void shareLink(const QString &link);
+    static void shareContact(const QString &id);
+    static void openWithApp(const QString &url);
+    static QStringList defaultPaths();
+    static QString homePath();
+    static QString sdDir();
+    static void call(const QString &tel);
+
 signals:
     void folderPicked(QString path);
 };
@@ -81,7 +83,6 @@ const QString DownloadsPath = HomePath+"/"+QAndroidJniObject::getStaticObjectFie
 const QString DocumentsPath = HomePath+"/"+QAndroidJniObject::getStaticObjectField("android/os/Environment", "DIRECTORY_DOCUMENTS", "Ljava/lang/String;").toString();
 const QString MusicPath = HomePath+"/"+QAndroidJniObject::getStaticObjectField("android/os/Environment", "DIRECTORY_MUSIC", "Ljava/lang/String;").toString();
 const QString VideosPath = HomePath+"/"+QAndroidJniObject::getStaticObjectField("android/os/Environment", "DIRECTORY_MOVIES", "Ljava/lang/String;").toString();
-
 }
 
 #endif // ANDROID_H

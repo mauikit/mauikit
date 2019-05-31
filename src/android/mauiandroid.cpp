@@ -38,15 +38,9 @@ public:
     InterfaceConnFailedException *clone() const { return new InterfaceConnFailedException(*this); }
 };
 
-MAUIAndroid::MAUIAndroid(QObject *parent) : QObject(parent)
-{
+MAUIAndroid::MAUIAndroid(QObject *parent) : QObject(parent) {}
 
-}
-
-MAUIAndroid::~MAUIAndroid()
-{
-    
-}
+MAUIAndroid::~MAUIAndroid() {}
 
 QString MAUIAndroid::getAccounts()
 {
@@ -120,12 +114,13 @@ QImage toImage(const QAndroidJniObject &bitmap)
 QVariantList MAUIAndroid::getContacts()
 {
     QVariantList res;
-    QAndroidJniObject logsObj = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union",
-                                                                          "fetchContacts",
-                                                                          "(Landroid/content/Context;)Ljava/util/List;",
-                                                                          QtAndroid::androidActivity().object<jobject>());
 
-    return MAUIAndroid::transform(logsObj);
+    QAndroidJniObject contactsObj = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union",
+                                                                              "fetchContacts",
+                                                                              "(Landroid/content/Context;)Ljava/util/List;",
+                                                                              QtAndroid::androidActivity().object<jobject>());
+
+    return MAUIAndroid::transform(contactsObj);
 }
 
 
@@ -533,18 +528,12 @@ void MAUIAndroid::fileChooser()
 QVariantList MAUIAndroid::transform(const QAndroidJniObject &obj)
 {
     QVariantList res;
-    auto size = obj.callMethod<jint>("size", "()I");
-
-    const auto get = [&obj](const int &index)  -> QVariant
-    {
-
-        QAndroidJniObject hashObj = obj.callObjectMethod("get", "(I)Ljava/lang/Object;", index);
-        return createVariantMap(hashObj.object<jobject>());
-    };
+    const auto size = obj.callMethod<jint>("size", "()I");
 
     for(auto i = 0; i<size; i++)
     {
-        res << get(i);
+        QAndroidJniObject hashObj = obj.callObjectMethod("get", "(I)Ljava/lang/Object;", i);
+        res << createVariantMap(hashObj.object<jobject>());
     }
 
     return res;
