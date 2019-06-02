@@ -1,4 +1,5 @@
 <RCC>
     <qresource prefix="/">
+        <file>../assets/mauidemo.svg</file>
     </qresource>
 </RCC>

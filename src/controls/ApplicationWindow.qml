@@ -190,31 +190,7 @@ backgroundColor.b, 0.7))
     //        color: "transparent"
     //    }
 	
-    Keys.onBackPressed:
-    {
-        goBackTriggered();
-        console.log("GO BACK CLICKED")
-        event.accepted = true
-    }
-
-    Shortcut
-    {
-        sequence: "Forward"
-        onActivated: goFowardTriggered();
-    }
-
-    Shortcut
-    {
-        sequence: StandardKey.Forward
-        onActivated: goFowardTriggered();
-    }
-
-    Shortcut
-    {
-        sequence: StandardKey.Back
-        onActivated: goBackTriggered();
-    }
-
+   
 	onClosing:
 	{
 		if(!isMobile)
@@ -381,6 +357,32 @@ backgroundColor.b, 0.7))
             iconColor: headBarFGColor
             onClicked: searchButtonClicked()
         }
+        
+        Keys.onBackPressed:
+        {
+			goBackTriggered();
+			console.log("GO BACK CLICKED")
+			event.accepted = true
+		}
+		
+		Shortcut
+		{
+			sequence: "Forward"
+			onActivated: goFowardTriggered();
+		}
+		
+		Shortcut
+		{
+			sequence: StandardKey.Forward
+			onActivated: goFowardTriggered();
+		}
+		
+		Shortcut
+		{
+			sequence: StandardKey.Back
+			onActivated: goBackTriggered();
+		}
+		
     }      
     
     Maui.AboutDialog

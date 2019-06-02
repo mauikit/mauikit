@@ -43,4 +43,16 @@ Maui.ApplicationWindow
         ]
     }
 
+    globalDrawer: Maui.GlobalDrawer
+    {
+        id: _drawer
+
+        width: Kirigami.Units.gridUnit * 14
+        modal: !root.isWide
+        handleVisible: false
+
+//        height: root.height - root.headBar.height - root.footBar.height
+
+    }
+
 }

@@ -49,8 +49,8 @@ Kirigami.GlobalDrawer
 //     modal: true
     
     
-    implicitHeight: root.height - root.headBar.implicitHeight - root.footBar.implicitHeight
-    height: implicitHeight
+    implicitHeight: root.height - root.headBar.height - root.footBar.height
+    height: root.height - root.headBar.height - root.footBar.height
     y: root.headBar.height
 
     topPadding: 0
