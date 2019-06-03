@@ -224,10 +224,7 @@ ToolBar
 					Layout.fillWidth: control.leftSretch && implicitWidth
 					Layout.fillHeight: true
 
-				}				
-				
-			
-				
+				}
 				
 				RowLayout
 				{
@@ -244,7 +241,6 @@ ToolBar
 					Layout.fillWidth: control.middleStrech
 					Layout.fillHeight: true
 				}
-				
 				
 				RowLayout
 				{

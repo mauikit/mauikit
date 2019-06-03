@@ -65,8 +65,8 @@ MenuItem
 	contentItem: RowLayout
 	{
 		anchors.fill: control
-		anchors.leftMargin: control.checkable ? control.indicator.width + control.spacing + space.big : control.spacing
-		anchors.rightMargin: control.spacing
+		anchors.rightMargin: control.checkable ? control.indicator.width + control.spacing + space.big : control.spacing
+		anchors.leftMargin: control.spacing
 		
 		Loader
 		{
@@ -107,6 +107,8 @@ MenuItem
 	{
 		id: _checkIndicator
 		root: control
+		anchors.right: control.right
+		anchors.rightMargin: control.spacing
     }
 
 	background: Item

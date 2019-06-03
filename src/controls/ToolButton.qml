@@ -52,10 +52,10 @@ ToolButton
 	
 	hoverEnabled: !isMobile
 	
-	implicitWidth: Math.max(background ? background.implicitWidth : 0,
-							contentItem.implicitWidth + leftPadding + rightPadding) 
-	implicitHeight: Math.max(background ? background.implicitHeight : 0,
-							 contentItem.implicitHeight + topPadding + bottomPadding)
+	implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+							implicitContentWidth + leftPadding + rightPadding)
+	implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+							 implicitContentHeight + topPadding + bottomPadding)
 	
 	height: control.visible ? (control.display === ToolButton.IconOnly ? size + space.medium : implicitHeight) : 0
 	width: control.visible ? (control.display === ToolButton.IconOnly ? height : implicitWidth + space.small) : 0
@@ -76,111 +76,109 @@ ToolButton
 	spacing: space.tiny
 	
 	
-	
-	// 	background: Rectangle
-	// 	{
-	// 		id: _background
-	// 		implicitHeight: control.visible? iconSizes.medium : 0
-	// 		implicitWidth: control.visible? iconSizes.medium : 0
-	// 		
-	// 		anchors.centerIn: control.icon
-	// 		color: /*(down || pressed || checked) */ checked && enabled  ?
-	// 		Qt.lighter(colorScheme.highlightColor, 1.2) : colorScheme.backgroundColor
-	// 		radius: unit * 3
-	// 		opacity: (down || pressed || checked) && enabled  ?  0.5 : 1
-	// 		border.color: colorScheme.borderColor
-	// 		
-	// 		
-	// 	}
-	
 	Rectangle
 	{
 		id: _indicator
 		color: control.colorScheme.highlightColor
 		height: visible ? unit * 5 : 0
-		width: visible ? (control.width - space.small) : 0
+		width: visible ? (control.width) : 0
 		
 		anchors.bottom: parent.bottom
-		anchors.horizontalCenter: parent.horizontalCenter
+		anchors.horizontalCenter: control.horizontalCenter
 		visible: control.showIndicator && control.visible
 	}
-	
-	// 	contentItem: IconLabel
-	// 	{
-	// 		id: _iconLabel
-	// 		spacing:  control.display === ToolButton.TextUnderIcon ? space.tiny : control.spacing
-	// 		mirrored: control.mirrored
-	// 		display: control.display
-	// 		icon: control.icon
-	// 		text: control.text
-	// 		font: control.font
-	// 		color: control.iconColor
-	// 	}
 	
 	
 	background: Rectangle
 	{
-		implicitHeight: control.visible ? control.height : 0
-		implicitWidth: control.visible ? control.width : 0
+		id: _background
+		implicitHeight: control.visible ? control.size * 2: 0
+		implicitWidth: control.visible ? control.size : 0
 		
-		anchors.centerIn: control
+		anchors.centerIn: control.icon
 		color: /*(down || pressed || checked) */ checked && enabled  ?
 		Qt.lighter(colorScheme.highlightColor, 1.2) : colorScheme.backgroundColor
 		radius: unit * 3
 		opacity: (down || pressed || checked) && enabled  ?  0.5 : 1
 		border.color: colorScheme.borderColor
 	}
-	// 		
-	contentItem: GridLayout
+	
+	contentItem: IconLabel
 	{
-		id: _contentLayout
-		anchors.fill: control
-		
-		columns: (control.display === ToolButton.TextUnderIcon) || (control.display === ToolButton.IconOnly)? 1 : 2
-		rows: (control.display === ToolButton.TextUnderIcon) ? 2 : 1
-		
-		columnSpacing: 0
-		rowSpacing: 0
-		
-		Item
-		{
-			Layout.fillWidth: true
-			Layout.fillHeight: true
-			Layout.row: 1
-			Layout.column: 1
-			Layout.alignment: Qt.AlignBottom
-			
-			Kirigami.Icon
-			{
-				anchors.centerIn: parent
-				source: control.iconName
-				isMask: control.isMask	
-				height: size
-				width: height
-				color: isMask ? control.iconColor : "transparent"
-			}
-		}
-		
-		Item
-		{
-			visible: control.text.length && control.text
-			Layout.fillWidth: true
-			Layout.fillHeight: true
-			Layout.row: (control.display === ToolButton.TextUnderIcon) ? 2 : 1
-			Layout.column: (control.display === ToolButton.TextUnderIcon) || (control.display === ToolButton.IconOnly)? 1 : 2
-			Layout.alignment: Qt.AlignTop
-			
-			Label
-			{
-				anchors.fill: parent
-				font: control.font
-				text: control.text
-				color: control.iconColor
-				horizontalAlignment: Qt.AlignHCenter
-				verticalAlignment: Qt.AlignVCenter
-			}
-		}
+		id: _iconLabel
+		spacing:  control.display === ToolButton.TextUnderIcon ? space.tiny : control.spacing
+		mirrored: control.mirrored
+		display: control.display
+		icon: control.icon
+		text: control.text
+		font: control.font
+		color: control.icon.color
 	}
+	
+	
+	// 	background: Rectangle
+	// 	{
+	// 		implicitHeight: control.visible ? control.height : 0
+	// 		implicitWidth: control.visible ? control.width : 0
+	// 		
+	// 		anchors.centerIn: control
+	// 		color: /*(down || pressed || checked) */ checked && enabled  ?
+	// 		Qt.lighter(colorScheme.highlightColor, 1.2) : colorScheme.backgroundColor
+	// 		radius: unit * 3
+	// 		opacity: (down || pressed || checked) && enabled  ?  0.5 : 1
+	// 		border.color: colorScheme.borderColor
+	// 	}
+	// 			
+	// 	contentItem: GridLayout
+	// 	{
+	// 		id: _contentLayout
+	// 		anchors.fill: control
+	// 		
+	// 		columns: (control.display === ToolButton.TextUnderIcon) || (control.display === ToolButton.IconOnly)? 1 : 2
+	// 		rows: (control.display === ToolButton.TextUnderIcon) ? 2 : 1
+	// 		
+	// 		columnSpacing: 0
+	// 		rowSpacing: 0
+	// 		
+	// 		Item
+	// 		{
+	// 			Layout.fillWidth: true
+	// 			Layout.fillHeight: true
+	// 			Layout.row: 1
+	// 			Layout.column: 1
+	// 			Layout.alignment: Qt.AlignBottom
+	// 			
+	// 			Kirigami.Icon
+	// 			{
+	// 				anchors.centerIn: parent
+	// 				source: control.iconName
+	// 				isMask: control.isMask	
+	// 				height: size
+	// 				width: height
+	// 				color: isMask ? control.iconColor : "transparent"
+	// 			}
+	// 		}
+	// 		
+	// 		Item
+	// 		{
+	// 			visible: control.text.length && control.text
+	// 			Layout.fillWidth: true
+	// 			Layout.fillHeight: true
+	// 			Layout.row: (control.display === ToolButton.TextUnderIcon) ? 2 : 1
+	// 			Layout.column: (control.display === ToolButton.TextUnderIcon) || (control.display === ToolButton.IconOnly)? 1 : 2
+	// 			Layout.alignment: Qt.AlignTop
+	// 			
+	// 			Label
+	// 			{
+	// 				anchors.fill: parent
+	// 				font: control.font
+	// 				text: control.text
+	// 				color: control.iconColor
+	// 				horizontalAlignment: Qt.AlignHCenter
+	// 				verticalAlignment: Qt.AlignVCenter
+	// 			}
+	// 		}
+	// 	}
 	
 	SequentialAnimation
 	{

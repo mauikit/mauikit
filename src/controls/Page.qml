@@ -70,7 +70,7 @@ QQC2.Page
 
     default property alias content : mainContainer.data
     property alias backContain: backContainer.data
-
+    
     clip: true
 
     leftPadding: 0

@@ -67,7 +67,7 @@ Kirigami.AbstractApplicationWindow
     
 
     //redefines here as here we can know a pointer to PageRow
-    wideScreen: width >= applicationWindow().pageStack.defaultColumnWidth * 1.5
+    wideScreen: isWide
 
 
     /***************************************************/
@@ -416,9 +416,7 @@ backgroundColor.b, 0.7))
 		
 		Timer 
 		{
-			id: _notifyTimer
-			interval: 2500
-			
+			id: _notifyTimer			
 			onTriggered: _notify.close()
 		}
 		
@@ -572,11 +570,13 @@ backgroundColor.b, 0.7))
         }
     }
     
-    function notify(icon, title, body, callback)
+    function notify(icon, title, body, callback, timeout)
 	{
 		_notifyIcon.iconName = icon 
 		_notifyTitle.text = title
 		_notifyBody.text = body
+		_notifyTimer.interval = timeout ? timeout : 2500
+		
 		_notify.show(callback) 
 	}
     
