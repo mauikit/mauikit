@@ -143,7 +143,7 @@ backgroundColor.b, 0.7))
 
     Material.theme: Material.Light
     Material.accent: highlightColor
-    Material.background: altToolBars ? backgroundColor : headBarBGColor 
+    Material.background:  headBarBGColor 
     Material.primary: headBarBGColor
     Material.foreground: textColor
 
