@@ -74,8 +74,7 @@ ToolButton
 	
 	display: control.text.length > 0 ? (isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon) : ToolButton.IconOnly
 	spacing: space.tiny
-	
-	
+	Kirigami.Theme.textColor: 	control.icon.color
 	Rectangle
 	{
 		id: _indicator

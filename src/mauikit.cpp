@@ -157,6 +157,7 @@ void MauiKit::registerTypes(const char *uri)
 	
 	qmlRegisterType<StoreList>("StoreList", 1, 0, "StoreList");
 	qmlRegisterType<StoreModel>("StoreModel", 1, 0, "StoreModel");
+// 	qmlRegisterType<MauiApp>(uri, 1, 0, "App");
 	
 	qmlRegisterType<DocumentHandler>("DocumentHandler", 1, 0, "DocumentHandler");
 	
@@ -171,13 +172,6 @@ void MauiKit::registerTypes(const char *uri)
 										auto handy = new Handy;
 										return handy;
 									});	 
-	
-	qmlRegisterSingletonType<MauiApp>(uri, 1, 0, "APP",
-									  [](QQmlEngine*, QJSEngine*) -> QObject* {
-										  auto handy = MauiApp::instance();
-										  return handy;
-									  });	 
-	
 	#ifdef Q_OS_ANDROID
 	QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
 	QIcon::setThemeName("Luv");

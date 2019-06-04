@@ -9,7 +9,7 @@ Maui.ApplicationWindow
     id: root
 
     property int currentPageIndex : 0
-    about.appDescription: "MauiDemo is a gallery app displaying the MauiKit controls in conjuction with Kirigami and QQC2 controls."
+//    about.appDescription: "MauiDemo is a gallery app displaying the MauiKit controls in conjuction with Kirigami and QQC2 controls."
 
 
     property alias dialog : _dialogLoader.item
@@ -30,7 +30,6 @@ Maui.ApplicationWindow
     ]
 
     headBar.spacing: space.huge
-
     headBar.middleContent: [
 
         Maui.ToolButton
@@ -79,15 +78,19 @@ Maui.ApplicationWindow
             onClicked: currentPageIndex = 3
             text: qsTr("Store")
             display: showIndicator ? ToolButton.TextBesideIcon : ToolButton.IconOnly
-
         }
-
     ]
 
-    footBar.leftContent: Kirigami.ActionToolBar
+    footBar.leftContent: Maui.ToolButton
+    {
+        iconName: "view-split-left-right"
+        onClicked: _drawer.modal = !_drawer.modal
+        checked: !_drawer.modal
+    }
+
+    footBar.rightContent: Kirigami.ActionToolBar
     {
         Layout.fillWidth: true
-
         actions:
             [
             Kirigami.Action
@@ -110,14 +113,12 @@ Maui.ApplicationWindow
                 text: "Hidden files"
 
             }
-
         ]
     }
 
     globalDrawer: Maui.GlobalDrawer
     {
         id: _drawer
-
         width: Kirigami.Units.gridUnit * 14
         modal: !root.isWide
         handleVisible: false
@@ -145,7 +146,6 @@ Maui.ApplicationWindow
                      {
                          text: "Header bar background color"
                          Layout.fillWidth: true
-
                      }
 
                      Maui.TextField
@@ -162,7 +162,6 @@ Maui.ApplicationWindow
                      {
                          text: "Header bar foreground color"
                          Layout.fillWidth: true
-
                      }
 
                      Maui.TextField
@@ -179,7 +178,6 @@ Maui.ApplicationWindow
                      {
                          text: "Header bar background color"
                          Layout.fillWidth: true
-
                      }
 
                      Maui.TextField
@@ -190,6 +188,19 @@ Maui.ApplicationWindow
                              root.headBarBGColor= text
                          }
                      }
+
+                     CheckBox
+                     {
+                         text: "Draw toolbar borders"
+                         Layout.fillWidth: true
+                            onCheckedChanged:
+                            {
+                                headBar.drawBorder = checked
+                                footBar.drawBorder = checked
+
+                            }
+                     }
+
                  }
 
             }
@@ -232,7 +243,7 @@ Maui.ApplicationWindow
         Maui.Page
         {
             id: _page3
-
+            margins: 0
             Maui.Editor
             {
                 id: _editor

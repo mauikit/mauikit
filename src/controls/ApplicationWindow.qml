@@ -43,7 +43,7 @@ Kirigami.AbstractApplicationWindow
 	
 	contentItem.anchors.leftMargin: 0
 	contentItem.anchors.rightMargin: 0
-	contentItem.anchors.margins: 0
+	contentItem.anchors.margins: 0	
 	
 	property bool showAccounts : true
 

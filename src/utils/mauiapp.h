@@ -33,6 +33,8 @@ class MauiApp : public QObject
 	Q_PROPERTY(QString version READ getVersion)
 	Q_PROPERTY(QString org READ getOrg)
 	Q_PROPERTY(QString domain READ getDomain)
+	Q_PROPERTY(QString iconName READ getIconName WRITE setIconName)
+	Q_PROPERTY(QString description READ getDomain WRITE setDescription)
 	Q_PROPERTY(QString mauikitVersion READ getMauikitVersion)
 	Q_PROPERTY(QString qtVersion READ getQtVersion)
 	
@@ -69,11 +71,34 @@ public:
 		return Handy::appInfo().value("qt_version").toString();
 	}
 	
+	QString getDescription() const
+	{
+		return description;
+	}
+	
+	void setDescription(const QString &value) 
+	{
+		description = value;
+	}
+	
+	QString getIconName() const
+	{
+		return iconName;
+	}
+	
+	void setIconName(const QString &value) 
+	{
+		iconName = value;
+	}
+	~MauiApp();	
+	
 private:
 	static MauiApp *m_instance;
 	MauiApp(QObject *parent = nullptr);
 	MauiApp(const MauiApp &other) = delete;
-	~MauiApp();	
+	
+	QString description;
+	QString iconName;
 };
 
 #endif // MAUIAPP_H
