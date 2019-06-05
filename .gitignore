@@ -1,6 +1,9 @@
 build/
 src/android/icons/luv-icon-theme/
-src/utils/store/attica/
+src/utils/store/attica/headers
+src/utils/syncing/openssl/
+demo/3rdparty/
+demo/mauikit/
 
 *.kdev4
 *.directory
@@ -25,7 +28,7 @@ src/android/res/*
 *.a
 *.la
 *.lai
-#*.so
+*.so
 *.dll
 *.dylib
 

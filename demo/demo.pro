@@ -22,7 +22,7 @@ linux:unix:!android {
 
     message(Building helpers for Android)
     QT += androidextras webview
-    include($$PWD/../mauikit.pri)
+    include($$PWD/mauikit/mauikit.pri)
     include($$PWD/3rdparty/kirigami/kirigami.pri)
 
     DEFINES += STATIC_KIRIGAMI

@@ -52,13 +52,14 @@ ToolButton
 	
 	hoverEnabled: !isMobile
 	
-//	implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
-//							implicitContentWidth + leftPadding + rightPadding)
-//	implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
-//							 implicitContentHeight + topPadding + bottomPadding)
+
+	//	implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+	//							implicitContentWidth + leftPadding + rightPadding)
+	//	implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+	//							 implicitContentHeight + topPadding + bottomPadding)
 	
-    height: control.visible ? (control.display === ToolButton.IconOnly ? size + space.medium : implicitHeight) : 0
-    width: control.visible ? (control.display === ToolButton.IconOnly ? height : _iconLabel.implicitWidth + space.small) : 0
+	height: control.visible ? (control.display === ToolButton.IconOnly ? size + space.medium : implicitHeight) : 0
+	width: control.visible ? (control.display === ToolButton.IconOnly ? height : _iconLabel.implicitWidth + space.small) : 0
 	
 	icon.name:  control.iconName
 	icon.source: control.iconFallback
@@ -86,33 +87,32 @@ ToolButton
 		anchors.horizontalCenter: control.horizontalCenter
 		visible: control.showIndicator && control.visible
 	}
-	
-	
-    background: Rectangle
-    {
-        id: _background
-        implicitHeight: control.visible ? control.size : 0
-        implicitWidth: control.visible ? control.size : 0
 
-        anchors.centerIn: control.icon
-        color: /*(down || pressed || checked) */ checked && enabled  ?
-        Qt.lighter(colorScheme.highlightColor, 1.2) : colorScheme.backgroundColor
-        radius: unit * 3
-        opacity: (down || pressed || checked) && enabled  ?  0.5 : 1
-        border.color: colorScheme.borderColor
-    }
-
-    contentItem: IconLabel
-    {
-        id: _iconLabel
-        spacing:  control.display === ToolButton.TextUnderIcon ? space.tiny : control.spacing
-        mirrored: control.mirrored
-        display: control.display
-        icon: control.icon
-        text: control.text
-        font: control.font
-        color: control.icon.color
-    }
+	background: Rectangle
+	{
+		id: _background
+		implicitHeight: control.visible ? control.size : 0
+		implicitWidth: control.visible ? control.size : 0
+		
+		anchors.centerIn: control.icon
+		color: /*(down || pressed || checked) */ checked && enabled  ?
+		Qt.lighter(colorScheme.highlightColor, 1.2) : colorScheme.backgroundColor
+		radius: unit * 3
+		opacity: (down || pressed || checked) && enabled  ?  0.5 : 1
+		border.color: colorScheme.borderColor
+	}
+	
+	contentItem: IconLabel
+	{
+		id: _iconLabel
+		spacing:  control.display === ToolButton.TextUnderIcon ? space.tiny : control.spacing
+		mirrored: control.mirrored
+		display: control.display
+		icon: control.icon
+		text: control.text
+		font: control.font
+		color: control.icon.color
+	}
 	
 	
 	// 	background: Rectangle
