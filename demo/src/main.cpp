@@ -18,7 +18,7 @@
 #endif
 
 #ifdef STATIC_MAUIKIT
-#include "./mauikit/src/mauikit.h"
+#include "mauikit.h"
 #include <QStyleHints>
 #endif
 
