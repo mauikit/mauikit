@@ -104,7 +104,7 @@ Maui.Page
 	
 	headBar.middleContent: Maui.TextField
 	{
-		width: headBar.middleLayout.width * 0.8
+		Layout.fillWidth: true
 		placeholderText: qsTr("Search...")
 		onAccepted: _storeList.query = text
 		onCleared: _storeList.query = ""
@@ -405,23 +405,25 @@ Maui.Page
 						
 					}
 					
-					Image
+					Maui.ImageViewer
 					{
 						clip: true
 						anchors.top: parent.top
 						anchors.horizontalCenter: parent.horizontalCenter
 						anchors.verticalCenter: parent.verticalCenter
 						
-						source: model.thumbnail
-						height: Math.min( parent.height, sourceSize.height)
-						width: Math.min( parent.width, sourceSize.width)
+						image.source: model.thumbnail
+						image.horizontalAlignment: Qt.AlignHCenter
+						image.verticalAlignment: Qt.AlignVCenter
+						image.fillMode: Image.PreserveAspectCrop
+						image.cache: false
+						image.asynchronous: true	
+						
+						height: Math.min( parent.height, image.sourceSize.height)
+						width: Math.min( parent.width, image.sourceSize.width)
 						// 					sourceSize.width: Math.min(width, sourceSize.width)
 						// 					sourceSize.height:  Math.min(height, sourceSize.height)
-						horizontalAlignment: Qt.AlignHCenter
-						verticalAlignment: Qt.AlignVCenter
-						fillMode: Image.PreserveAspectCrop
-						cache: false
-						asynchronous: true		
+							
 					}
 					
 					Rectangle

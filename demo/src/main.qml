@@ -285,10 +285,10 @@ Maui.ApplicationWindow
             }
         }
 
-        //        Maui.Store
-        //        {
-        //            id: _page4
-        //        }
+                Maui.Store
+                {
+                    id: _page4
+                }
     }
 
     //Components
