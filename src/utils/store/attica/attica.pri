@@ -154,9 +154,9 @@ SOURCES += \
         $$PWD/src/topicparser.cpp \
 
 DEPENDPATH += \
-    $$PWD/attica/src \
+    $$PWD/src \
 
 INCLUDEPATH += \
-     $$PWD/attica/src  \
+     $$PWD/src  \
 
 

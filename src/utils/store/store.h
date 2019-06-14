@@ -51,7 +51,7 @@ namespace STORE
 	const PROVIDER OPENDESKTOP_API = "https://api.opendesktop.org/v1/";
 	const PROVIDER KDELOOK_API = "https://api.kde-look.org/ocs/v1/";
 	const PROVIDER KRITA_API = "https://share.krita.org/ocs/v1/";
-	const PROVIDER OPENDESKTOPCC_API = "https://opendesktop.cc/ocs/v1/";
+	const PROVIDER OPENDESKTOPCC_API = "https://pling.cc/ocs/v1/";
 	
 	enum CATEGORY_KEY : uint_fast8_t
 	{

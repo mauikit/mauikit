@@ -3,6 +3,7 @@ import QtQuick.Controls 2.3
 import org.kde.mauikit 1.0 as Maui
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.6 as Kirigami
+import StoreList 1.0
 
 Maui.ApplicationWindow
 {
@@ -24,6 +25,11 @@ Maui.ApplicationWindow
             onTriggered:
             {
                 _dialogLoader.sourceComponent = _fileDialogComponent
+                dialog.callback = function(paths)
+                {
+                    console.log("Selected paths >> ", paths)
+                }
+
                 dialog.open()
             }
         }
@@ -84,8 +90,8 @@ Maui.ApplicationWindow
     footBar.leftContent: Maui.ToolButton
     {
         iconName: "view-split-left-right"
-        onClicked: _drawer.modal = !_drawer.modal
-        checked: !_drawer.modal
+        onClicked: _drawer.visible = !_drawer.visible
+        checked: _drawer.visible
     }
 
     footBar.rightContent: Kirigami.ActionToolBar
@@ -126,7 +132,27 @@ Maui.ApplicationWindow
         id: _drawer
         width: Kirigami.Units.gridUnit * 14
         modal: !root.isWide
-        handleVisible: false
+
+        actions: [
+        Kirigami.Action
+            {
+                text: qsTr("Shopping")
+                iconName: "cpu"
+            },
+
+            Kirigami.Action
+                {
+                    text: qsTr("Notes")
+                iconName: "send-sms"
+                },
+
+            Kirigami.Action
+                {
+                    text: qsTr("Example 3")
+                iconName: "love"
+                }
+
+        ]
     }
 
     content: SwipeView
@@ -242,6 +268,8 @@ Maui.ApplicationWindow
         {
             id: _page2
 
+            onItemClicked: openItem(index)
+
         }
 
 
@@ -288,6 +316,9 @@ Maui.ApplicationWindow
                 Maui.Store
                 {
                     id: _page4
+                    list.provider: StoreList.KDELOOK
+
+                    list.category: StoreList.WALLPAPERS
                 }
     }
 

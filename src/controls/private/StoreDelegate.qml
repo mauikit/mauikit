@@ -302,7 +302,7 @@ ItemDelegate
 			
 			Layout.leftMargin: isDetails ? space.medium : 0
 			
-			sourceComponent: labelComponent		
+			sourceComponent: labelComponent
 		}
 		
 		
@@ -311,16 +311,14 @@ ItemDelegate
 			id: detailsInfoLoader
 			sourceComponent: isDetails && showDetailsInfo ? detailsComponent : undefined
 			Layout.fillWidth: isDetails && showDetailsInfo
-			Layout.maximumHeight: ( isDetails && showDetailsInfo ? parent.height :  fontSizes.default * 5)
-			Layout.minimumHeight: ( isDetails && showDetailsInfo ? parent.height :  control.height -  space.tiny)
-			Layout.preferredHeight: ( isDetails && showDetailsInfo ? parent.height : control.height -  space.tiny)
+			Layout.maximumHeight: isDetails ? (showDetailsInfo ? parent.height :  fontSizes.default * 5) : undefined
+			Layout.minimumHeight: isDetails ? ( showDetailsInfo ? parent.height :  control.height -  space.tiny) : undefined
+			Layout.preferredHeight:  isDetails ? (showDetailsInfo ? parent.height : control.height -  space.tiny) : undefined
 			Layout.maximumWidth: control.width * (isMobile ? 0.5 : 0.3)
 			Layout.row:  isDetails && showDetailsInfo ? 1 : 2
 			Layout.column: isDetails && showDetailsInfo ? 3 : 0
 			Layout.rightMargin: space.medium
 			// 			Layout.leftMargin: isDetails ? space.medium : 0
 		}
-		
-		
 	}
 }
