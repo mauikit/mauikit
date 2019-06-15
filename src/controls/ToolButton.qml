@@ -88,31 +88,31 @@ ToolButton
 		visible: control.showIndicator && control.visible
 	}
 
-	background: Rectangle
-	{
-		id: _background
-		implicitHeight: control.visible ? control.size : 0
-		implicitWidth: control.visible ? control.size : 0
-		
-		anchors.centerIn: control.icon
-		color: /*(down || pressed || checked) */ checked && enabled  ?
-		Qt.lighter(colorScheme.highlightColor, 1.2) : colorScheme.backgroundColor
-		radius: unit * 3
-		opacity: (down || pressed || checked) && enabled  ?  0.5 : 1
-		border.color: colorScheme.borderColor
-	}
-	
-	contentItem: IconLabel
-	{
-		id: _iconLabel
-		spacing:  control.display === ToolButton.TextUnderIcon ? space.tiny : control.spacing
-		mirrored: control.mirrored
-		display: control.display
-		icon: control.icon
-		text: control.text
-		font: control.font
-		color: control.icon.color
-	}
+// 	background: Rectangle
+// 	{
+// 		id: _background
+// 		implicitHeight: control.visible ? control.size : 0
+// 		implicitWidth: control.visible ? control.size : 0
+// 		
+// 		anchors.centerIn: control.icon
+// 		color: /*(down || pressed || checked) */ checked && enabled  ?
+// 		Qt.lighter(colorScheme.highlightColor, 1.2) : colorScheme.backgroundColor
+// 		radius: unit * 3
+// 		opacity: (down || pressed || checked) && enabled  ?  0.5 : 1
+// 		border.color: colorScheme.borderColor
+// 	}
+// 	
+// 	contentItem: IconLabel
+// 	{
+// 		id: _iconLabel
+// 		spacing:  control.display === ToolButton.TextUnderIcon ? space.tiny : control.spacing
+// 		mirrored: control.mirrored
+// 		display: control.display
+// 		icon: control.icon
+// 		text: control.text
+// 		font: control.font
+// 		color: control.icon.color
+// 	}
 	
 	
 	// 	background: Rectangle
