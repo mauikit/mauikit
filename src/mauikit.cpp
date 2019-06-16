@@ -69,8 +69,9 @@ void MauiKit::registerTypes(const char *uri)
 	qmlRegisterSingletonType(componentUrl(QStringLiteral("Style.qml")), uri, 1, 0, "Style");
 	qmlRegisterType(componentUrl(QStringLiteral("ToolBar.qml")), uri, 1, 0, "ToolBar");
 	
-	#if QT_VERSION == QT_VERSION_CHECK(5, 12, 0)
-	qmlRegisterType(componentUrl(QStringLiteral("ToolButton.qml")), uri, 1, 0, "ToolButton");
+// 	#if QT_VERSION == QT_VERSION_CHECK(5, 12, 0)
+	#ifdef Q_OS_ANDROID
+	qmlRegisterType(componentUrl(QStringLiteral("ToolButton2.qml")), uri, 1, 0, "ToolButton");
 	#else
 	qmlRegisterType(componentUrl(QStringLiteral("ToolButton.qml")), uri, 1, 0, "ToolButton");
 	#endif

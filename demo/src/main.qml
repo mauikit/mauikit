@@ -15,7 +15,7 @@ Maui.ApplicationWindow
 
     property alias dialog : _dialogLoader.item
     floatingBar: false
-
+altToolBars: false
     mainMenu: [
 
         Maui.MenuItem
@@ -40,21 +40,22 @@ Maui.ApplicationWindow
 
         Maui.ToolButton
         {
-            Layout.fillHeight: true
+//            Layout.fillHeight: true
             iconName: "nx-home"
-            iconColor: root.headBarFGColor
+            colorScheme.textColor : root.headBarFGColor
             spacing: space.medium
             active: currentPageIndex === 0
             showIndicator: true
             onClicked: currentPageIndex = 0
             text: qsTr("Home")
+
         },
 
         Maui.ToolButton
         {
-            Layout.fillHeight: true
+//            Layout.fillHeight: true
             iconName: "view-list-icons"
-            iconColor: root.headBarFGColor
+            colorScheme.textColor: root.headBarFGColor
             spacing: space.medium
             active: currentPageIndex === 1
             showIndicator: true
@@ -64,9 +65,9 @@ Maui.ApplicationWindow
 
         Maui.ToolButton
         {
-            Layout.fillHeight: true
+//            Layout.fillHeight: true
             iconName: "view-media-genre"
-            iconColor: root.headBarFGColor
+            colorScheme.textColor: root.headBarFGColor
             spacing: space.medium
             active: currentPageIndex === 2
             showIndicator: true
@@ -76,9 +77,9 @@ Maui.ApplicationWindow
 
         Maui.ToolButton
         {
-            Layout.fillHeight: true
+//            Layout.fillHeight: true
             iconName: "nx-software-center"
-            iconColor: root.headBarFGColor
+            colorScheme.textColor: root.headBarFGColor
             spacing: space.medium
             active: currentPageIndex === 3
             showIndicator: true
@@ -277,6 +278,7 @@ Maui.ApplicationWindow
         {
             id: _page3
             margins: 0
+            headBar.visible: false
             Maui.Editor
             {
                 id: _editor

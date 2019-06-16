@@ -28,6 +28,12 @@ import "private"
 ToolButton
 {
 	id: control
+	
+	readonly property var indicatorStyles : ({ 
+		underline: 0,
+		box: 1
+	})
+	
 	focusPolicy: Qt.NoFocus
 	/* Controlc color scheming */
 	ColorScheme 
@@ -45,13 +51,15 @@ ToolButton
 	property string iconName: ""
 	property string iconFallback: ""
 	property int size: iconSize
-	property color iconColor: colorScheme.textColor
+	property color iconColor: control.active && control.indicatorStyle === control.indicatorStyles.box ? control.colorScheme.highlightColor :  colorScheme.textColor
 	property bool anim: false
 	property string tooltipText : ""
 	property bool showIndicator: false
 	property bool active: false
-	
+	property int indicatorStyle: indicatorStyles.box
 	hoverEnabled: false
+	
+	
 	
 
 	//	implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
@@ -81,12 +89,14 @@ ToolButton
 	{
 		id: _indicator
 		color: control.colorScheme.highlightColor
-		height: visible ? unit * 5 : 0
+		height: control.indicatorStyle == indicatorStyles.box  ? control.height : (indicatorStyle === indicatorStyles.underline ? unit * 5 : 0)
 		width: visible ? (control.width) : 0
-		
+		radius: control.indicatorStyle == indicatorStyles.box ? radiusV : 0
+		opacity: control.indicatorStyle == indicatorStyles.box ? 0.3 : 1
 		anchors.bottom: parent.bottom
 		anchors.horizontalCenter: control.horizontalCenter
 		visible: control.showIndicator && control.visible && control.active
+		z: background.z -1
 	}
 
 // 	background: Rectangle
