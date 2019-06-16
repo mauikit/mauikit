@@ -44,10 +44,10 @@ Maui.ApplicationWindow
             iconName: "nx-home"
             iconColor: root.headBarFGColor
             spacing: space.medium
-            showIndicator: currentPageIndex === 0
+            active: currentPageIndex === 0
+            showIndicator: true
             onClicked: currentPageIndex = 0
             text: qsTr("Home")
-            display: showIndicator ? ToolButton.TextBesideIcon : ToolButton.IconOnly
         },
 
         Maui.ToolButton
@@ -56,10 +56,10 @@ Maui.ApplicationWindow
             iconName: "view-list-icons"
             iconColor: root.headBarFGColor
             spacing: space.medium
-            showIndicator: currentPageIndex === 1
+            active: currentPageIndex === 1
+            showIndicator: true
             onClicked: currentPageIndex = 1
             text: qsTr("Browser")
-            display: showIndicator ? ToolButton.TextBesideIcon : ToolButton.IconOnly
         },
 
         Maui.ToolButton
@@ -68,10 +68,10 @@ Maui.ApplicationWindow
             iconName: "view-media-genre"
             iconColor: root.headBarFGColor
             spacing: space.medium
-            showIndicator: currentPageIndex === 2
+            active: currentPageIndex === 2
+            showIndicator: true
             onClicked: currentPageIndex = 2
             text: qsTr("Editor")
-            display: showIndicator ? ToolButton.TextBesideIcon : ToolButton.IconOnly
         },
 
         Maui.ToolButton
@@ -80,10 +80,10 @@ Maui.ApplicationWindow
             iconName: "nx-software-center"
             iconColor: root.headBarFGColor
             spacing: space.medium
-            showIndicator: currentPageIndex === 3
+            active: currentPageIndex === 3
+            showIndicator: true
             onClicked: currentPageIndex = 3
             text: qsTr("Store")
-            display: showIndicator ? ToolButton.TextBesideIcon : ToolButton.IconOnly
         }
     ]
 

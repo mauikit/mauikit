@@ -49,8 +49,9 @@ ToolButton
 	property bool anim: false
 	property string tooltipText : ""
 	property bool showIndicator: false
+	property bool active: false
 	
-	hoverEnabled: !isMobile
+	hoverEnabled: false
 	
 
 	//	implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
@@ -59,7 +60,7 @@ ToolButton
 	//							 implicitContentHeight + topPadding + bottomPadding)
 	
 	height: control.visible ? (control.display === ToolButton.IconOnly ? size + space.medium : implicitHeight) : 0
-	width: control.visible ? (control.display === ToolButton.IconOnly ? height : _iconLabel.implicitWidth + space.small) : 0
+	width: control.visible ? (control.display === ToolButton.IconOnly ? height : implicitWidth + space.small) : 0
 	
 	icon.name:  control.iconName
 	icon.source: control.iconFallback
@@ -73,7 +74,7 @@ ToolButton
 	highlighted: !isMask
 	font.pointSize: control.display === ToolButton.TextUnderIcon ? fontSizes.small : undefined
 	
-	display: control.text.length > 0 ? (isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon) : ToolButton.IconOnly
+	display: control.active ? (control.text.length > 0 ? (isWide ? ToolButton.TextBesideIcon : ToolButton.TextUnderIcon) : ToolButton.IconOnly) : ToolButton.IconOnly
 	spacing: space.tiny
 	Kirigami.Theme.textColor: 	control.icon.color
 	Rectangle
@@ -85,7 +86,7 @@ ToolButton
 		
 		anchors.bottom: parent.bottom
 		anchors.horizontalCenter: control.horizontalCenter
-		visible: control.showIndicator && control.visible
+		visible: control.showIndicator && control.visible && control.active
 	}
 
 // 	background: Rectangle
