@@ -70,7 +70,7 @@ void MauiKit::registerTypes(const char *uri)
 	#if QT_VERSION == QT_VERSION_CHECK(5, 12, 0)
     qmlRegisterType(componentUrl(QStringLiteral("ToolButton.qml")), uri, 1, 0, "ToolButton");
 #else
-	qmlRegisterType(componentUrl(QStringLiteral("ToolButton.qml")), uri, 1, 0, "ToolButton");
+    qmlRegisterType(componentUrl(QStringLiteral("ToolButton2.qml")), uri, 1, 0, "ToolButton");
 #endif
 	
     qmlRegisterType(componentUrl(QStringLiteral("ApplicationWindow.qml")), uri, 1, 0, "ApplicationWindow");

@@ -6,6 +6,8 @@ HEADERS += \
 SOURCES += \
     $$PWD/mauiandroid.cpp \
 
+LIBS += -ljnigraphics
+
 DEPENDPATH += \
     $$PWD
 

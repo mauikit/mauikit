@@ -466,11 +466,5 @@
         <file>icons/luv-icon-theme/Luv/actions/22/zoom-original.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/22/zoom-out.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/22/zoom.svg</file>
-        <file>icons/luv-icon-theme/Luv/actions/22/add-image.svg</file>
-        <file>icons/luv-icon-theme/Luv/actions/22/dialer-call.svg</file>
-        <file>icons/luv-icon-theme/Luv/actions/22/dialer-pad.svg</file>
-        <file>icons/luv-icon-theme/Luv/actions/22/send-email.svg</file>
-        <file>icons/luv-icon-theme/Luv/actions/22/send-sms.svg</file>
-        <file>icons/luv-icon-theme/Luv/actions/22/view-contacts.svg</file>
     </qresource>
 </RCC>
