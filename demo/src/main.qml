@@ -9,13 +9,15 @@ Maui.ApplicationWindow
 {
     id: root
 
+    isWide : root.width >= Kirigami.Units.gridUnit * 10
+
     property int currentPageIndex : 0
     //    about.appDescription: "MauiDemo is a gallery app displaying the MauiKit controls in conjuction with Kirigami and QQC2 controls."
 
 
     property alias dialog : _dialogLoader.item
     floatingBar: false
-altToolBars: false
+
     mainMenu: [
 
         Maui.MenuItem
