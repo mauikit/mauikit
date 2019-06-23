@@ -48,8 +48,8 @@ Popup
     
     parent: ApplicationWindow.overlay
 
-    width: parent.width * widthHint > maxWidth ? maxWidth : parent.width * widthHint
-    height: parent.height * heightHint > maxHeight ? maxHeight: parent.height * heightHint
+    width: Math.max(Math.min(parent.width * widthHint, maxWidth), Math.min(maxWidth, parent.width * widthHint))	
+	height: Math.max(Math.min(parent.height * heightHint, maxHeight), Math.min(maxHeight, parent.height * heightHint))	
 
 
     x:  parent.width / 2 - width / 2

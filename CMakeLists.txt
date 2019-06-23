@@ -64,6 +64,7 @@ include_directories(
 
 set(mauikit_SRCS
     src/mauikit.cpp
+    src/utils/mauiapp.cpp
     src/utils/handy.cpp
     )
 
@@ -71,6 +72,7 @@ set(mauikit_HDRS
     src/mauikit.h
     src/utils.h
     src/utils/handy.h
+    src/utils/mauiapp.h
     )
 
 set(editor_SRCS

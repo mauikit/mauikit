@@ -164,10 +164,10 @@ Maui.Dialog
 				font.pointSize: fontSizes.default
 				wrapMode: TextEdit.WordWrap
 				clip: true
-				background: Rectangle
-				{
-					color: "transparent"
-				}
+// 				background: Rectangle
+// 				{
+// 					color: "transparent"
+// 				}
 			}
 		}
 		

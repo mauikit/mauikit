@@ -71,7 +71,7 @@ void Store::searchFor(const STORE::CATEGORY_KEY& categoryKey, const QString &que
 	this->page = page;
 	this->sortBy = sortBy;
 	
-	qDebug() << "CATEGORY LIST" << STORE::CATEGORIES[this->m_category];
+// 	qDebug() << "CATEGORY LIST" << STORE::CATEGORIES[this->m_category];
 	// 	if(this->m_category == categoryKey)
 	// 	{
 	// 		qDebug()<< "SEARCHIGN WITHIN SAME CATEGORY" << this->m_category;
@@ -166,10 +166,10 @@ void Store::providersChanged()
 		for(auto prov : m_manager.providers())
 			qDebug() << prov.name() << prov.baseUrl();
 		
-		m_provider = m_manager.providerByUrl(QUrl(this->provider));
-		// 		m_provider = m_manager.providerByUrl(QUrl(STORE::OPENDESKTOP_API));
+		this->m_provider = m_manager.providerByUrl(QUrl(this->provider));
+// 				this->m_provider = m_manager.providerByUrl(QUrl(STORE::OPENDESKTOP_API));
 		
-		if (!m_provider.isValid())
+		if (!this->m_provider.isValid())
 		{
 			qDebug() << "Could not find "<< this->provider << "provider.";
 			return;
@@ -251,6 +251,9 @@ void Store::getPersonInfo(const QString& nick)
 
 void Store::listProjects()
 {
+	if(!this->m_provider.isValid())
+		return;
+	
 	Attica::ListJob<Attica::Project> *job = m_provider.requestProjects();
 	connect(job, SIGNAL(finished(Attica::BaseJob*)), SLOT(projectListResult(Attica::BaseJob*)));
 	job->start();
@@ -258,13 +261,20 @@ void Store::listProjects()
 
 void Store::listCategories()
 {	
+	if(!this->m_provider.isValid())
+		return;
+		
 	Attica::ListJob<Attica::Category> *job = m_provider.requestCategories();
 	connect(job, SIGNAL(finished(Attica::BaseJob*)), SLOT(categoryListResult(Attica::BaseJob*)));
-	job->start();          
+	job->start(); 
+		     
 }
 
 void Store::download(const QString& id)
 {
+	if(!this->m_provider.isValid())
+		return;
+	
 	Attica::ItemJob<Attica::DownloadItem> *job = m_provider.downloadLink(id);
 	connect(job, SIGNAL(finished(Attica::BaseJob*)), SLOT(contentDownloadReady(Attica::BaseJob*)));
 	job->start();  

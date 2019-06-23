@@ -136,10 +136,10 @@ Maui.Page
 			activeFocusOnTab: true
 			persistentSelection: true
 			
-			background: Rectangle
-			{
-				color: "transparent"
-			}
+// 			background: Rectangle
+// 			{
+// 				color: "transparent"
+// 			}
 			
 // 			onPressAndHold: isMobile ? documentMenu.popup() : undefined
 			

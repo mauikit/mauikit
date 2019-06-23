@@ -235,10 +235,10 @@ Maui.Popup
 							font.pointSize: fontSizes.default
 							wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
 							
-							background: Rectangle
-							{
-								color: "transparent"
-							}
+// 							background: Rectangle
+// 							{
+// 								color: "transparent"
+// 							}
 						}
 					} 
 					

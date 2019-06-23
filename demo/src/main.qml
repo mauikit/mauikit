@@ -3,17 +3,20 @@ import QtQuick.Controls 2.3
 import org.kde.mauikit 1.0 as Maui
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.6 as Kirigami
+import StoreList 1.0
 
 Maui.ApplicationWindow
 {
     id: root
 
+    isWide : root.width >= Kirigami.Units.gridUnit * 10
+
     property int currentPageIndex : 0
-    about.appDescription: "MauiDemo is a gallery app displaying the MauiKit controls in conjuction with Kirigami and QQC2 controls."
+    //    about.appDescription: "MauiDemo is a gallery app displaying the MauiKit controls in conjuction with Kirigami and QQC2 controls."
 
 
     property alias dialog : _dialogLoader.item
-
+    floatingBar: false
 
     mainMenu: [
 
@@ -24,76 +27,87 @@ Maui.ApplicationWindow
             onTriggered:
             {
                 _dialogLoader.sourceComponent = _fileDialogComponent
+                dialog.callback = function(paths)
+                {
+                    console.log("Selected paths >> ", paths)
+                }
+
                 dialog.open()
             }
         }
     ]
 
     headBar.spacing: space.huge
-
     headBar.middleContent: [
 
         Maui.ToolButton
         {
-            //            Layout.fillHeight: true
+//            Layout.fillHeight: true
             iconName: "nx-home"
-            iconColor: root.headBarFGColor
+            colorScheme.textColor : root.headBarFGColor
             spacing: space.medium
-            showIndicator: currentPageIndex === 0
+            active: currentPageIndex === 0
+            showIndicator: true
             onClicked: currentPageIndex = 0
             text: qsTr("Home")
-            display: showIndicator ? ToolButton.TextBesideIcon : ToolButton.IconOnly
+
         },
 
         Maui.ToolButton
         {
-            //            Layout.fillHeight: true
+//            Layout.fillHeight: true
             iconName: "view-list-icons"
-            iconColor: root.headBarFGColor
+            colorScheme.textColor: root.headBarFGColor
             spacing: space.medium
-            showIndicator: currentPageIndex === 1
+            active: currentPageIndex === 1
+            showIndicator: true
             onClicked: currentPageIndex = 1
             text: qsTr("Browser")
-            display: showIndicator ? ToolButton.TextBesideIcon : ToolButton.IconOnly
         },
 
         Maui.ToolButton
         {
-            //            Layout.fillHeight: true
+//            Layout.fillHeight: true
             iconName: "view-media-genre"
-            iconColor: root.headBarFGColor
+            colorScheme.textColor: root.headBarFGColor
             spacing: space.medium
-            showIndicator: currentPageIndex === 2
+            active: currentPageIndex === 2
+            showIndicator: true
             onClicked: currentPageIndex = 2
             text: qsTr("Editor")
-            display: showIndicator ? ToolButton.TextBesideIcon : ToolButton.IconOnly
         },
 
         Maui.ToolButton
         {
-            //            Layout.fillHeight: true
+//            Layout.fillHeight: true
             iconName: "nx-software-center"
-            iconColor: root.headBarFGColor
+            colorScheme.textColor: root.headBarFGColor
             spacing: space.medium
-            showIndicator: currentPageIndex === 3
+            active: currentPageIndex === 3
+            showIndicator: true
             onClicked: currentPageIndex = 3
             text: qsTr("Store")
-            display: showIndicator ? ToolButton.TextBesideIcon : ToolButton.IconOnly
-
         }
-
     ]
 
-    footBar.leftContent: Kirigami.ActionToolBar
+    footBar.leftContent: Maui.ToolButton
+    {
+        iconName: "view-split-left-right"
+        onClicked: _drawer.visible = !_drawer.visible
+        checked: _drawer.visible
+    }
+
+    footBar.rightContent: Kirigami.ActionToolBar
     {
         Layout.fillWidth: true
-
         actions:
             [
             Kirigami.Action
             {
                 iconName: "folder-new"
                 text: "New folder"
+                icon.width: 16
+
 
             },
 
@@ -101,6 +115,8 @@ Maui.ApplicationWindow
             {
                 iconName: "edit-find"
                 text: "Search"
+                icon.width: 16
+
 
             },
 
@@ -108,19 +124,38 @@ Maui.ApplicationWindow
             {
                 iconName: "document-preview-archive"
                 text: "Hidden files"
+                icon.width: 16
 
             }
-
         ]
     }
 
     globalDrawer: Maui.GlobalDrawer
     {
         id: _drawer
-
         width: Kirigami.Units.gridUnit * 14
         modal: !root.isWide
-        handleVisible: false
+
+        actions: [
+        Kirigami.Action
+            {
+                text: qsTr("Shopping")
+                iconName: "cpu"
+            },
+
+            Kirigami.Action
+                {
+                    text: qsTr("Notes")
+                iconName: "send-sms"
+                },
+
+            Kirigami.Action
+                {
+                    text: qsTr("Example 3")
+                iconName: "love"
+                }
+
+        ]
     }
 
     content: SwipeView
@@ -136,61 +171,71 @@ Maui.ApplicationWindow
             Item
             {
                 anchors.fill: parent
-                 ColumnLayout
-                 {
-                     anchors.centerIn: parent
-                     width: Math.max(Math.min(implicitWidth, parent.width), Math.min(400, parent.width))
+                ColumnLayout
+                {
+                    anchors.centerIn: parent
+                    width: Math.max(Math.min(implicitWidth, parent.width), Math.min(400, parent.width))
 
-                     Label
-                     {
-                         text: "Header bar background color"
-                         Layout.fillWidth: true
+                    Label
+                    {
+                        text: "Header bar background color"
+                        Layout.fillWidth: true
+                    }
 
-                     }
+                    Maui.TextField
+                    {
+                        Layout.fillWidth: true
+                        placeholderText: root.headBarBGColor
+                        onAccepted:
+                        {
+                            root.headBarBGColor= text
+                        }
+                    }
 
-                     Maui.TextField
-                     {
-                         Layout.fillWidth: true
-                         placeholderText: root.headBarBGColor
-                         onAccepted:
-                         {
-                             root.headBarBGColor= text
-                         }
-                     }
+                    Label
+                    {
+                        text: "Header bar foreground color"
+                        Layout.fillWidth: true
+                    }
 
-                     Label
-                     {
-                         text: "Header bar foreground color"
-                         Layout.fillWidth: true
+                    Maui.TextField
+                    {
+                        Layout.fillWidth: true
+                        placeholderText: root.headBarFGColor
+                        onAccepted:
+                        {
+                            root.headBarFGColor = text
+                        }
+                    }
 
-                     }
+                    Label
+                    {
+                        text: "Header bar background color"
+                        Layout.fillWidth: true
+                    }
 
-                     Maui.TextField
-                     {
-                         Layout.fillWidth: true
-                         placeholderText: root.headBarFGColor
-                         onAccepted:
-                         {
-                             root.headBarFGColor = text
-                         }
-                     }
+                    Maui.TextField
+                    {
+                        Layout.fillWidth: true
+                        onAccepted:
+                        {
+                            root.headBarBGColor= text
+                        }
+                    }
 
-                     Label
-                     {
-                         text: "Header bar background color"
-                         Layout.fillWidth: true
+                    //                     CheckBox
+                    //                     {
+                    //                         text: "Draw toolbar borders"
+                    //                         Layout.fillWidth: true
+                    //                            onCheckedChanged:
+                    //                            {
+                    //                                headBar.drawBorder = checked
+                    //                                footBar.drawBorder = checked
 
-                     }
+                    //                            }
+                    //                     }
 
-                     Maui.TextField
-                     {
-                         Layout.fillWidth: true
-                         onAccepted:
-                         {
-                             root.headBarBGColor= text
-                         }
-                     }
-                 }
+                }
 
             }
 
@@ -222,41 +267,44 @@ Maui.ApplicationWindow
         }
 
 
-            Maui.FileBrowser
-            {
-                id: _page2
+        Maui.FileBrowser
+        {
+            id: _page2
 
-            }
+            onItemClicked: openItem(index)
+
+        }
 
 
         Maui.Page
         {
             id: _page3
-
+            margins: 0
+            headBar.visible: false
             Maui.Editor
             {
                 id: _editor
                 anchors
                 {
                     fill: parent
-//                    top: parent.top
-//                    right: parent.right
-//                    left: parent.left
-//                    bottom: _terminal.top
+                    //                    top: parent.top
+                    //                    right: parent.right
+                    //                    left: parent.left
+                    //                    bottom: _terminal.top
                 }
             }
 
-//                Maui.Terminal
-//                {
-//                    id: _terminal
-////                    anchors
-////                    {
-////                        top: _editor.top
-////                        right: parent.right
-////                        left: parent.left
-////                        bottom: parent.bottom
-////                    }
-//                }
+            //                Maui.Terminal
+            //                {
+            //                    id: _terminal
+            ////                    anchors
+            ////                    {
+            ////                        top: _editor.top
+            ////                        right: parent.right
+            ////                        left: parent.left
+            ////                        bottom: parent.bottom
+            ////                    }
+            //                }
 
 
             footBar.rightContent: Maui.ToolButton
@@ -264,15 +312,18 @@ Maui.ApplicationWindow
                 iconName: "utilities-terminal"
                 onClicked:
                 {
-//                    _terminal.visible = _terminal.visible
+                    //                    _terminal.visible = _terminal.visible
                 }
             }
         }
 
-//        Maui.Store
-//        {
-//            id: _page4
-//        }
+                Maui.Store
+                {
+                    id: _page4
+                    list.provider: StoreList.KDELOOK
+
+                    list.category: StoreList.WALLPAPERS
+                }
     }
 
     //Components
