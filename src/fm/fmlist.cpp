@@ -260,6 +260,7 @@ void FMList::sortList()
 	{
 		qSort(this->list.begin(), this->list.end(), [](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
 		{
+            Q_UNUSED(e2)
 			const auto key = FMH::MODEL_KEY::MIME;
 			if(e1[key] == "inode/directory")
 				return true;
@@ -753,7 +754,7 @@ void FMList::search(const QString& query, const QString &path, const bool &hidde
 {
 	
 	QFutureWatcher<PathContent> *watcher = new QFutureWatcher<PathContent>;
-	connect(watcher, &QFutureWatcher<FMH::MODEL_LIST>::finished, [this, watcher]()
+	connect(watcher, &QFutureWatcher<FMH::MODEL_LIST>::finished, [=]()
 	{
 		if(this->pathType != FMList::PATHTYPE::SEARCH_PATH)
 			return;
@@ -774,6 +775,7 @@ void FMList::search(const QString& query, const QString &path, const bool &hidde
 		this->sortList();
 		
 		this->setContentReady(true);
+        watcher->deleteLater();
 	});
 	
 	QFuture<PathContent> t1 = QtConcurrent::run([=]() -> PathContent
@@ -817,7 +819,7 @@ void FMList::getPathContent()
 	
 	qDebug()<< "Getting async path contents";
 	QFutureWatcher<PathContent> *watcher = new QFutureWatcher<PathContent>;
-	connect(watcher, &QFutureWatcher<PathContent>::finished, [this, watcher]()
+	connect(watcher, &QFutureWatcher<PathContent>::finished, [=]()
 	{
 		if(this->pathType != FMList::PATHTYPE::PLACES_PATH)
 			return;
@@ -837,7 +839,7 @@ void FMList::getPathContent()
 		
 		emit this->postListChanged();
 		this->setContentReady(true);
-		
+        watcher->deleteLater();		
 	});
 	
 	QFuture<PathContent> t1 = QtConcurrent::run([=]() -> PathContent
