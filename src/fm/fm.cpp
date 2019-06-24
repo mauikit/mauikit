@@ -121,7 +121,7 @@ FM::~FM() {}
 QVariantMap FM::toMap(const FMH::MODEL& model)
 {
 	QVariantMap map;
-	for(auto key : model.keys())
+	for(const auto &key : model.keys())
 		map.insert(FMH::MODEL_NAME[key], model[key]);
 	
 	return map;		
@@ -130,7 +130,7 @@ QVariantMap FM::toMap(const FMH::MODEL& model)
 FMH::MODEL FM::toModel(const QVariantMap& map)
 {
 	FMH::MODEL model;
-	for(auto key : map.keys())
+	for(const auto &key : map.keys())
 		model.insert(FMH::MODEL_NAME_KEY[key], map[key].toString());
 	
 	return model;		
@@ -140,7 +140,7 @@ FMH::MODEL_LIST FM::packItems(const QStringList &items, const QString &type)
 {
     FMH::MODEL_LIST data;
 
-    for(auto path : items)
+    for(const auto &path : items)
         if(UTIL::fileExists(path))
         {
             auto model = FMH::getFileInfoModel(path);
@@ -338,7 +338,7 @@ FMH::MODEL_LIST FM::getTags(const int &limit)
 FMH::MODEL_LIST FM::getBookmarks()
 {
     QStringList bookmarks;
-    for(auto bookmark : this->get("select * from bookmarks"))
+    for(const auto &bookmark : this->get("select * from bookmarks"))
         bookmarks << bookmark.toMap().value(FMH::MODEL_NAME[FMH::MODEL_KEY::PATH]).toString();
 
     return packItems(bookmarks, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::BOOKMARKS_PATH]);
