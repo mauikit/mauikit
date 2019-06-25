@@ -41,9 +41,6 @@ Maui.SideBar
 			path ="Tags/"+path
 			
 		placeClicked(path)
-		
-		if(pageStack.currentIndex === 0 && !pageStack.wideMode)
-			pageStack.currentIndex = 1
 	}
 	
 	PlacesModel

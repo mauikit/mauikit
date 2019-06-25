@@ -163,6 +163,7 @@ Maui.Page
 	{
 		id: previewer
 		parent: parent
+		onShareButtonClicked: control.shareFiles([url])
 	}
 	
 	FMModel
@@ -257,29 +258,10 @@ Maui.Page
 		}
 		
 		onShareClicked:
-		{
-			
-			if(items.length)
-			{
-				if(isAndroid)
-				{
-					// 					if(items.length > 1 && control.selectionBar)			
-					// 						Maui.Android.shareDialog(control.selectionBar.selectedPaths)		
-					// 					else  
-					Maui.Android.shareDialog(items[0].path)
-				}
-				else
-				{
-					dialogLoader.sourceComponent= shareDialogComponent
-					if(items.length > 1 && control.selectionBar)			
-						dialog.show(control.selectionBar.selectedPath)		
-						else  
-							dialog.show([items[0].path])
-							
-							dialog.open()
-				}
-			}
-		}
+		{			
+			if(items.length)			
+                control.shareFiles([items[0].path])
+        }
 	}
 	
 	Component
@@ -594,6 +576,16 @@ Maui.Page
 					}
 				}
 				
+				Maui.MenuItem
+				{
+					text: qsTr("Share")
+					onTriggered:
+					{						
+						control.shareFiles(selectedPaths)						
+						_selectionBarmenu.close()
+					}
+				}
+				
 				MenuSeparator{}
 				
 				Maui.MenuItem
@@ -689,6 +681,21 @@ Maui.Page
 					browser.adaptGrid()
 	}
 	
+	
+    function shareFiles(urls)
+    {
+        if(urls.length <= 0)
+            return;
+        
+        if(isAndroid)              
+            Maui.Android.shareDialog(urls[0])        
+        else
+        {
+            dialogLoader.sourceComponent= shareDialogComponent            
+            dialog.show(urls)                    
+        }
+    }
+    
 	function openItem(index)
 	{
 		var item = modelList.get(index)
@@ -867,9 +874,7 @@ Maui.Page
 					Maui.FM.bookmark(paths[i])
 			}
 			newBookmark()
-		}
-		
-		
+		}		
 	}
 	
 	function zoomIn()

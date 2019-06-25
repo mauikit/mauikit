@@ -19,6 +19,8 @@ Maui.Dialog
 	property string mimetype : ""
 	property bool showInfo: true
 	
+	signal shareButtonClicked(string url)
+	
 	maxHeight: unit * 800
 	maxWidth: unit * 500
 	defaultButtons: false
@@ -47,8 +49,7 @@ Maui.Dialog
 
 			onClicked:
 			{
-				isAndroid ? Maui.Android.shareDialog(currentUrl) :
-				shareDialog.show([currentUrl])
+				shareButtonClicked(currentUrl)
 				close()
 			}
 		},
