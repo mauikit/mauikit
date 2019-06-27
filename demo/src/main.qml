@@ -9,7 +9,7 @@ Maui.ApplicationWindow
 {
     id: root
 
-    isWide : root.width >= Kirigami.Units.gridUnit * 10
+//    isWide : root.width >= Kirigami.Units.gridUnit * 10
 
     property int currentPageIndex : 0
     //    about.appDescription: "MauiDemo is a gallery app displaying the MauiKit controls in conjuction with Kirigami and QQC2 controls."
@@ -106,16 +106,16 @@ Maui.ApplicationWindow
             {
                 iconName: "folder-new"
                 text: "New folder"
-                icon.width: 16
-
-
+                icon.width: iconSizes.medium
+                icon.height: iconSizes.medium
             },
 
             Kirigami.Action
             {
                 iconName: "edit-find"
                 text: "Search"
-                icon.width: 16
+                icon.width: iconSizes.medium
+                icon.height: iconSizes.medium
 
 
             },
@@ -124,7 +124,8 @@ Maui.ApplicationWindow
             {
                 iconName: "document-preview-archive"
                 text: "Hidden files"
-                icon.width: 16
+                icon.width: iconSizes.medium
+                icon.height: iconSizes.medium
 
             }
         ]

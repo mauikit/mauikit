@@ -5,7 +5,8 @@ QT += widgets
 QT += quickcontrols2
 
 CONFIG += c++11
-CONFIG += ordered
+#CONFIG += ordered
+CONFIG += object_parallel_to_source
 
 TARGET = mauidemo
 TEMPLATE = app
