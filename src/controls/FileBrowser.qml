@@ -2,7 +2,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
-import org.kde.kirigami 2.0 as Kirigami
+import org.kde.kirigami 2.6 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
 import "private"
@@ -43,7 +43,7 @@ Maui.Page
 	property alias browser : viewLoader.item
 	
 	property alias previewer : previewer
-	property alias menu : browserMenu.content
+	property alias menu : browserMenu.contentData
 	property alias itemMenu: itemMenu
 	property alias holder: holder
 	property alias dialog : dialogLoader.item
@@ -156,7 +156,8 @@ Maui.Page
 	BrowserMenu
 	{
 		id: browserMenu
-		width: unit *200		
+		width: unit *200	
+		z : 999
 	}
 	
 	Maui.FilePreviewer
@@ -410,107 +411,98 @@ Maui.Page
 	headBarExit: false
 	headBar.visible: currentPathType !== FMList.APPS_PATH
 	altToolBars: isMobile
-	headBar.rightContent: [
-	
-	Maui.ToolButton
+	headBar.rightContent: Kirigami.ActionToolBar
 	{
-		id: viewBtn
+            Layout.fillWidth: true
+        z: 999
+    actions: [
+	
+	Kirigami.Action
+	{
 		iconName: list.viewType == FMList.ICON_VIEW ?  "view-list-details" : "view-list-icons"
-		onClicked: control.switchView()
+		onTriggered: control.switchView()
 	},
 	
-	Maui.ToolButton
+	Kirigami.Action
 	{
 		iconName: "view-sort"
-		tooltipText: qsTr("Sort by...")
-		onClicked: sortMenu.popup()
-		
-		Maui.Menu
-		{
-			id: sortMenu
-			
-			Maui.MenuItem
-			{
-				text: qsTr("Folders first")
-				checkable: true
-				checked: list.foldersFirst
-				onTriggered: list.foldersFirst = !list.foldersFirst
-			}
-			
-			MenuSeparator{}
-			
-			Maui.MenuItem
-			{
-				text: qsTr("Type")
-				checkable: true
-				checked: list.sortBy === FMList.MIME
-				onTriggered: list.sortBy = FMList.MIME
-			}
-			
-			Maui.MenuItem
-			{
-				text: qsTr("Date")
-				checkable: true
-				checked: list.sortBy === FMList.DATE
-				onTriggered: list.sortBy = FMList.DATE
-			}
-			
-			Maui.MenuItem
-			{
-				text: qsTr("Modified")
-				checkable: true
-				checked: list.sortBy === FMList.MODIFIED
-				onTriggered: list.sortBy = FMList.MODIFIED
-			}
-			
-			Maui.MenuItem
-			{
-				text: qsTr("Size")
-				checkable: true
-				checked: list.sortBy === FMList.SIZE
-				onTriggered: list.sortBy = FMList.SIZE
-			}
-			
-			Maui.MenuItem
-			{
-				text: qsTr("Name")
-				checkable: true
-				checked: list.sortBy === FMList.LABEL
-				onTriggered: list.sortBy = FMList.LABEL
-			}
-			
-			MenuSeparator {}
-			
-			Maui.MenuItem
-			{
-				id: groupAction
-				text: qsTr("Group")
-				checkable: true
-				onTriggered:
-				{
-					group = checked
-					group ? groupBy() : browser.section.property = ""
-				}
-			}
-		}
+		text: qsTr("Sort...")
+        
+        Kirigami.Action
+        {
+            text: qsTr("Folders first")
+            checked: list.foldersFirst
+            onTriggered: list.foldersFirst = !list.foldersFirst
+        }
+        
+        Kirigami.Action
+        {
+            text: qsTr("Type")
+            checked: list.sortBy === FMList.MIME
+            onTriggered: list.sortBy = FMList.MIME
+        }
+        
+        Kirigami.Action
+        {
+            text: qsTr("Date")
+            checked: list.sortBy === FMList.DATE
+            onTriggered: list.sortBy = FMList.DATE
+        }
+        
+        Kirigami.Action
+        {
+            text: qsTr("Modified")
+            checked: list.sortBy === FMList.MODIFIED
+            onTriggered: list.sortBy = FMList.MODIFIED
+        }
+        
+        Kirigami.Action
+        {
+            text: qsTr("Size")
+            checked: list.sortBy === FMList.SIZE
+            onTriggered: list.sortBy = FMList.SIZE
+        }
+        
+        Kirigami.Action
+        {
+            text: qsTr("Name")
+            checked: list.sortBy === FMList.LABEL
+            onTriggered: list.sortBy = FMList.LABEL
+        }        
+        
+        Kirigami.Action
+        {
+            id: groupAction
+            text: qsTr("Group")
+            checked: group
+            onTriggered:
+            {
+                group = !group
+               if(group) 
+                   groupBy()
+                   else
+                       browser.section.property = ""
+            }
+        }
+        
 	},
 	
-	Maui.ToolButton
+	Kirigami.Action
 	{
 		iconName: "item-select"
 		checkable: true
 		checked: selectionMode		
-		onClicked: selectionMode = !selectionMode
+		onTriggered: selectionMode = !selectionMode
 		
 	},
 	
-	Maui.ToolButton
+	Kirigami.Action
 	{
 		iconName: "overflow-menu"
-		onClicked: browserMenu.show()
-		tooltipText: qsTr("Menu...")
+		onTriggered: browserMenu.show()
 	}
 	]
+}
 	
 	headBar.leftContent: [
 	Maui.ToolButton
@@ -547,10 +539,10 @@ Maui.Page
 			onIconClicked: _selectionBarmenu.popup()
 			onExitClicked: clearSelection()
 			
-			Maui.Menu
+			Menu
 			{
 				id: _selectionBarmenu
-				Maui.MenuItem
+				MenuItem
 				{
 					text: qsTr("Copy...")
 					onTriggered:
@@ -563,7 +555,7 @@ Maui.Page
 					}
 				}
 				
-				Maui.MenuItem
+				MenuItem
 				{
 					text: qsTr("Cut...")
 					onTriggered:
@@ -576,7 +568,7 @@ Maui.Page
 					}
 				}
 				
-				Maui.MenuItem
+				MenuItem
 				{
 					text: qsTr("Share")
 					onTriggered:
@@ -588,10 +580,10 @@ Maui.Page
 				
 				MenuSeparator{}
 				
-				Maui.MenuItem
+				MenuItem
 				{
 					text: qsTr("Remove...")
-					colorScheme.textColor: dangerColor
+					Kirigami.Theme.textColor: dangerColor
 					
 					onTriggered:
 					{

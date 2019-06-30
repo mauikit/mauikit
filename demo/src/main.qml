@@ -1,9 +1,10 @@
 import QtQuick 2.9
-import QtQuick.Controls 2.3
-import org.kde.mauikit 1.0 as Maui
+import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+
+import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.6 as Kirigami
-import StoreList 1.0
+import QtQuick.Templates 2.3 as T
 
 Maui.ApplicationWindow
 {
@@ -108,12 +109,21 @@ Maui.ApplicationWindow
                 text: "New folder"
                 icon.width: iconSizes.medium
                 icon.height: iconSizes.medium
+                expandible: true
+
+                Kirigami.Action
+                    {
+                        text: "exmaple"
+                        icon.name: "love"
+                    }
+
             },
 
             Kirigami.Action
             {
+                id: _findAction
                 iconName: "edit-find"
-                text: "Search"
+                text: parent == T.ToolButton ? "Search" : undefined
                 icon.width: iconSizes.medium
                 icon.height: iconSizes.medium
 

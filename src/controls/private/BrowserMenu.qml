@@ -5,11 +5,11 @@ import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.2 as Kirigami
 import FMList 1.0
 
-Maui.Menu
+Menu
 { 
     property int pasteFiles : 0
 
-  
+//   popup.z : 999
 
    /* Maui.MenuItem
     {
@@ -19,9 +19,10 @@ Maui.Menu
 		text: qsTr("Per dir props")
 		onTriggered: saveDirProps = !saveDirProps
 	}*/
+
 	
  
-    Maui.MenuItem
+    MenuItem
     {
         icon.name: "image-preview"
         text: qsTr("Previews")
@@ -34,7 +35,7 @@ Maui.Menu
         }
     }
 
-    Maui.MenuItem
+    MenuItem
     {
         icon.name: "visibility"
 
@@ -48,7 +49,7 @@ Maui.Menu
         }
     }
     
-    Maui.MenuItem
+    MenuItem
     {
         icon.name: "bookmark-new"
         text: qsTr("Bookmark")
@@ -66,7 +67,7 @@ Maui.Menu
 
     MenuSeparator { }
 
-    Maui.MenuItem
+    MenuItem
     {
         icon.name: "folder-add"
         text: qsTr("New folder")
@@ -78,7 +79,7 @@ Maui.Menu
 		}
     }
 
-    Maui.MenuItem
+    MenuItem
     {
         icon.name: "document-new"
         text: qsTr("New file")
@@ -92,7 +93,7 @@ Maui.Menu
     
     MenuSeparator { visible : pasteItem.enabled}
     
-    Maui.MenuItem
+    MenuItem
     {
 		id: pasteItem
         visible: enabled

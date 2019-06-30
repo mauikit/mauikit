@@ -140,25 +140,25 @@ TextField
 		border.width: unit		
 	}
 	
-	Maui.Menu
+	Menu
 	{
 		id: entryMenu
 		
-		Maui.MenuItem
+		MenuItem
 		{
 			text: qsTr("Copy")
 			onTriggered: control.copy()
 			enabled: control.selectedText.length
 		}
 		
-		Maui.MenuItem
+		MenuItem
 		{
 			text: qsTr("Cut")			
 			onTriggered: control.cut()
 			enabled: control.selectedText.length
 		}
 		
-		Maui.MenuItem
+		MenuItem
 		{
 			text: qsTr("Paste")
 			onTriggered:
@@ -168,21 +168,21 @@ TextField
 			}
 		}
 		
-		Maui.MenuItem
+		MenuItem
 		{
 			text: qsTr("Select all")
 			onTriggered: control.selectAll()
 			enabled: control.text.length
 		}
 		
-		Maui.MenuItem
+		MenuItem
 		{
 			text: qsTr("Undo")
 			onTriggered: control.undo()
 			enabled: control.canUndo
 		}
 		
-		Maui.MenuItem
+		MenuItem
 		{
 			text: qsTr("Redo")
 			onTriggered: control.redo()

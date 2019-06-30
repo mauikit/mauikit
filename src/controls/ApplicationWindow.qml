@@ -59,7 +59,7 @@ Kirigami.AbstractApplicationWindow
     property alias rightIcon : searchBtn
     
     default property alias content : page.content
-    property alias mainMenu : mainMenu.content
+    property alias mainMenu : mainMenu.contentData
     property alias about : aboutDialog
     property alias accounts: _accountsDialogLoader.item
     property alias currentAccount: _accountCombobox.currentText
@@ -286,7 +286,7 @@ backgroundColor.b, 0.7))
 				mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x ,  altToolBars ? 0 : parent.height+ space.medium)
             }
             
-            Maui.Menu
+            Menu
             {
 				id: mainMenu
 				modal: true
@@ -326,7 +326,7 @@ backgroundColor.b, 0.7))
                     visible: _accountCombobox.visible
                 }
 				
-				Maui.MenuItem
+				MenuItem
 				{
 					text: qsTr("Accounts")
 					visible: root.showAccounts
@@ -338,7 +338,7 @@ backgroundColor.b, 0.7))
 					}
 				}				
 				
-				Maui.MenuItem
+				MenuItem
 				{
 					text: qsTr("About")
 					icon.name: "documentinfo"

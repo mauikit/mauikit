@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.2 as Kirigami
 
-Maui.Menu
+Menu
 {
 	id: control
 	implicitWidth: colorBar.implicitWidth + space.big
@@ -20,7 +20,7 @@ Maui.Menu
 	signal renameClicked(var items)
 	signal tagsClicked(var items)	
 	
-	Maui.MenuItem
+	MenuItem
 	{
 		text: qsTr("Select")
 		onTriggered:
@@ -31,7 +31,7 @@ Maui.Menu
 	}
 	
 	MenuSeparator{}
-	Maui.MenuItem
+	MenuItem
 	{
 		text: qsTr("Copy...")
 		onTriggered:
@@ -41,7 +41,7 @@ Maui.Menu
 		}
 	}
 	
-	Maui.MenuItem
+	MenuItem
 	{
 		text: qsTr("Cut...")
 		onTriggered:
@@ -51,7 +51,7 @@ Maui.Menu
 		}
 	}
 	
-	Maui.MenuItem
+	MenuItem
 	{
 		text: qsTr("Rename...")
 		onTriggered:
@@ -63,7 +63,7 @@ Maui.Menu
 	
 	MenuSeparator{}
 	
-	Maui.MenuItem
+	MenuItem
 	{
 		text: qsTr("Bookmark")
 		enabled: isDir
@@ -74,7 +74,7 @@ Maui.Menu
 		}
 	}
 	
-	Maui.MenuItem
+	MenuItem
 	{
 		text: qsTr("Tags...")
 		onTriggered:
@@ -84,7 +84,7 @@ Maui.Menu
 		}
 	}
 	
-	Maui.MenuItem
+	MenuItem
 	{
 		text: qsTr("Share...")
 		onTriggered:
@@ -94,7 +94,7 @@ Maui.Menu
 		}
 	}
 		
-	Maui.MenuItem
+	MenuItem
 	{
 		text: qsTr("Preview...")
 		onTriggered:
@@ -106,10 +106,10 @@ Maui.Menu
 	
 	MenuSeparator{}
 	
-	Maui.MenuItem
+	MenuItem
 	{
 		text: qsTr("Remove...")
-		colorScheme.textColor: dangerColor
+		Kirigami.Theme.textColor: dangerColor
 		
 		onTriggered:
 		{
@@ -120,9 +120,10 @@ Maui.Menu
 	
 	MenuSeparator{}	
 	
-	Maui.MenuItem
+	MenuItem
 	{
 		width: parent.width
+		height: visible ? iconSize + space.big : 0
 		visible: isDir
 		Maui.ColorsBar
         {
