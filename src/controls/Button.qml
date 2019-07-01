@@ -35,65 +35,65 @@ Button
     property alias colorScheme : colorScheme
     /***************************/
 
-    implicitWidth: Math.max(background ? background.implicitWidth : 0,
-                            contentItem.implicitWidth + leftPadding + rightPadding)
-    implicitHeight: background.implicitHeight
-    hoverEnabled: !isMobile
+//     implicitWidth: Math.max(background ? background.implicitWidth : 0,
+//                             contentItem.implicitWidth + leftPadding + rightPadding)
+//     implicitHeight: background.implicitHeight
+//     hoverEnabled: !isMobile
     
     leftPadding: space.small
     rightPadding: leftPadding
     
-    property alias bg : _buttonBG
-    
-    contentItem: RowLayout
-    {
-        anchors.fill: control
-        Kirigami.Icon
-        {
-            id: _icon
-            visible: icon && icon.name.length > 0
-//             Layout.leftMargin: space.small
-            Layout.fillHeight: visible
-            Layout.preferredWidth: visible ? iconSizes.medium + space.medium : 0
-            Layout.alignment: Qt.AlignCenter
-            source: icon.name
-            width: iconSizes.medium * 0.9
-            height: width
-            isMask: true
-            color: _text.text.length ? _text.color : icon.color
-        }
-
-        Text
-        {
-            id: _text
-            visible: text
-            Layout.fillHeight: visible
-            Layout.fillWidth: visible
-            Layout.alignment: Qt.AlignCenter
-            text: control.text
-            font: control.font
-            color: !control.enabled ? Qt.lighter(colorScheme.textColor, 1,2) :
-                                      control.highlighted || control.down ? Qt.lighter(colorScheme.textColor, 1.4) : colorScheme.textColor
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
-        }
-
-    }
-    
-    background: Rectangle
-    {
-        id: _buttonBG
-        implicitWidth: _icon.visible ? ( (control.text ? (iconSizes.medium * 3) : 0 ) + _icon.width + space.small) : iconSizes.medium * 3
-        implicitHeight: iconSizes.medium + space.small
-
-        color: !control.enabled ? colorScheme.viewBackgroundColor : control.highlighted || control.down ? Qt.darker(colorScheme.backgroundColor, 1.4) : colorScheme.backgroundColor
-
-        border.color: control.highlighted || control.down ? Qt.darker(colorScheme.borderColor, 1.4) : colorScheme.borderColor
-        
-        border.width: unit
-        radius: radiusV
-
-    }
+//     property alias bg : _buttonBG
+//     
+//     contentItem: RowLayout
+//     {
+//         anchors.fill: control
+//         Kirigami.Icon
+//         {
+//             id: _icon
+//             visible: icon && icon.name.length > 0
+// //             Layout.leftMargin: space.small
+//             Layout.fillHeight: visible
+//             Layout.preferredWidth: visible ? iconSizes.medium + space.medium : 0
+//             Layout.alignment: Qt.AlignCenter
+//             source: icon.name
+//             width: iconSizes.medium * 0.9
+//             height: width
+//             isMask: true
+//             color: _text.text.length ? _text.color : icon.color
+//         }
+// 
+//         Text
+//         {
+//             id: _text
+//             visible: text
+//             Layout.fillHeight: visible
+//             Layout.fillWidth: visible
+//             Layout.alignment: Qt.AlignCenter
+//             text: control.text
+//             font: control.font
+//             color: !control.enabled ? Qt.lighter(colorScheme.textColor, 1,2) :
+//                                       control.highlighted || control.down ? Qt.lighter(colorScheme.textColor, 1.4) : colorScheme.textColor
+//             horizontalAlignment: Text.AlignHCenter
+//             verticalAlignment: Text.AlignVCenter
+//             elide: Text.ElideRight
+//         }
+// 
+//     }
+//     
+//     background: Rectangle
+//     {
+//         id: _buttonBG
+//         implicitWidth: _icon.visible ? ( (control.text ? (iconSizes.medium * 3) : 0 ) + _icon.width + space.small) : iconSizes.medium * 3
+//         implicitHeight: iconSizes.medium + space.small
+// 
+//         color: !control.enabled ? colorScheme.viewBackgroundColor : control.highlighted || control.down ? Qt.darker(colorScheme.backgroundColor, 1.4) : colorScheme.backgroundColor
+// 
+//         border.color: control.highlighted || control.down ? Qt.darker(colorScheme.borderColor, 1.4) : colorScheme.borderColor
+//         
+//         border.width: unit
+//         radius: radiusV
+// 
+//     }
     
 }

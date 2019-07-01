@@ -99,6 +99,7 @@ TextField
 	Menu
 	{
 		id: entryMenu
+		z: control.z +1
 		
 		MenuItem
 		{
