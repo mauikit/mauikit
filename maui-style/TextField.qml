@@ -39,39 +39,52 @@ T.TextField {
                              placeholder.implicitHeight + topPadding + bottomPadding)
 
     padding: 6
-
+/*
     color: controlRoot.enabled ? Kirigami.Theme.textColor : Kirigami.Theme.disabledTextColor
     selectionColor: Kirigami.Theme.highlightColor
     selectedTextColor: Kirigami.Theme.highlightedTextColor
-    verticalAlignment: TextInput.AlignVCenter
+    verticalAlignment: TextInput.AlignVCenter*/
     //Text.NativeRendering is broken on non integer pixel ratios
     renderType: Window.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
-    selectByMouse: true
+    selectByMouse: !isMobile
 
-    Controls.Label {
-        id: placeholder
-        x: controlRoot.leftPadding
-        y: controlRoot.topPadding
-        width: controlRoot.width - (controlRoot.leftPadding + controlRoot.rightPadding)
-        height: controlRoot.height - (controlRoot.topPadding + controlRoot.bottomPadding)
+    
+    
+    color: enabled ? colorScheme.textColor : Qt.lighter(colorScheme.textColor, 1.4)
+	selectionColor: highlightColor
+	selectedTextColor: highlightedTextColor
+	
+	verticalAlignment: TextInput.AlignVCenter
+	horizontalAlignment: Text.AlignHCenter
+	
+// 	cursorDelegate: CursorDelegate { }
 
-        text: controlRoot.placeholderText
-        font: controlRoot.font
-        color: Kirigami.Theme.disabledTextColor
-        horizontalAlignment: controlRoot.horizontalAlignment
-        verticalAlignment: controlRoot.verticalAlignment
-        visible: !controlRoot.length && !controlRoot.preeditText && (!controlRoot.activeFocus || controlRoot.horizontalAlignment !== Qt.AlignHCenter)
-        elide: Text.ElideRight
-    }
+    Controls.Label
+	{
+		id: placeholder
+		x: control.leftPadding
+		y: control.topPadding
+		width: control.width - (control.leftPadding + control.rightPadding)
+		height: control.height - (control.topPadding + control.bottomPadding)
+		
+		text: control.placeholderText
+		font: control.font
+		color: Qt.lighter(colorScheme.textColor, 1.4)
+		opacity: 0.4
+		horizontalAlignment: control.horizontalAlignment
+		verticalAlignment: control.verticalAlignment
+		visible: !control.length && !control.preeditText && (!control.activeFocus || control.horizontalAlignment !== Qt.AlignHCenter)
+		elide: Text.ElideRight
+	}	
 
-//    background: StylePrivate.StyleItem {
-//        id: style
-
-//        control: controlRoot
-//        elementType: "edit"
-
-//        sunken: true
-//        hasFocus: controlRoot.activeFocus
-//        hover: controlRoot.hovered
-//    }
+	background: Rectangle 
+	{        
+		implicitWidth: unit * 120
+		implicitHeight: iconSizes.big
+		color: control.activeFocus ? Qt.lighter(colorScheme.backgroundColor, 1.4)
+		: (control.hovered ? Qt.lighter(colorScheme.backgroundColor, 1.3) : colorScheme.backgroundColor)
+		border.color: colorScheme.borderColor
+		radius: radiusV
+		border.width: unit		
+	}
 }

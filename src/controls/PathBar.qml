@@ -24,7 +24,7 @@ import org.kde.kirigami 2.0 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import "private"
 
-Maui.Item
+Item
 {
     id: control    
     /* Controlc color scheming */
@@ -37,6 +37,7 @@ Maui.Item
     height: iconSizes.big
     
     property string url : ""
+    property bool pathEntry: false
     
     signal pathChanged(string path)
     signal homeClicked()
@@ -49,24 +50,38 @@ Maui.Item
         id: pathBarBG
         anchors.fill: parent
 //         z: -1
-        color: pathEntry.visible ? colorScheme.viewBackgroundColor : colorScheme.backgroundColor
+        color: pathEntry ? colorScheme.viewBackgroundColor : colorScheme.backgroundColor
         radius: radiusV
         opacity: 1
         border.color: colorScheme.borderColor
         border.width: unit
     }
     
-    RowLayout
+    Loader
     {
-        id: pathEntry
+        id: _loader        
+        anchors.fill: parent
+        sourceComponent: pathEntry ? _pathEntryComponent : _pathCrumbsComponent
+        
+        onLoaded:
+        {
+            if(sourceComponent === _pathCrumbsComponent)
+                control.append()
+        }
+    }
+    
+    
+    Component
+    {
+        id: _pathEntryComponent
+          RowLayout
+    {
         anchors.fill:  parent
-        visible: false
         
         Maui.TextField
         {
             id: entry
             text: control.url
-            height: parent.height
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.leftMargin: contentMargins
@@ -79,6 +94,10 @@ Maui.Item
             {
                 pathChanged(text)
                 showEntryBar()
+            }
+            background: Rectangle
+            {
+                color: "transparent"
             }
         }
         
@@ -102,13 +121,18 @@ Maui.Item
             }
         }
     }
-    
-    RowLayout
+    }
+  
+    Component
     {
-        id: pathCrumbs
+        id: _pathCrumbsComponent
+
+         RowLayout
+    {
         anchors.fill: parent
         spacing: 0
-        
+                property alias pathsList : pathBarList
+
         Item
         {
             Layout.fillHeight: true
@@ -150,7 +174,7 @@ Maui.Item
             delegate: PathBarDelegate
             {
                 id: delegate
-                height: pathBar.height - (unit*2)
+                height: control.height - (unit*2)
                 width: iconSizes.big * 3
                 Connections
                 {
@@ -169,6 +193,7 @@ Maui.Item
                 onClicked: showEntryBar()
                 z: -1
             }
+            
         }
         
         Item
@@ -196,26 +221,31 @@ Maui.Item
         
         
     }
-    
+    }
+   
+                           Component.onCompleted: control.append(control.url)
+
     function append()
     {
-        pathBarList.model.clear()
+        if(_loader.sourceComponent !== _pathCrumbsComponent)
+            return
+            
+        _loader.item.pathsList.model.clear()
         var places = control.url.split("/")
         var url = ""
         for(var i in places)
         {
             url = url + places[i] + "/"
             if(places[i].length > 1)
-                pathBarList.model.append({label : places[i], path: url})
+                _loader.item.pathsList.model.append({label : places[i], path: url})
         }
         
-        pathBarList.currentIndex = pathBarList.count-1
-        pathBarList.positionViewAtEnd()
+        _loader.item.pathsList.currentIndex = _loader.item.pathsList.count-1
+        _loader.item.pathsList.positionViewAtEnd()
     }
      
     function showEntryBar()
     {
-        pathEntry.visible = !pathEntry.visible
-        pathCrumbs.visible = !pathCrumbs.visible
+        control.pathEntry = !control.pathEntry
     }
 }

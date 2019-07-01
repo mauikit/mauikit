@@ -434,7 +434,8 @@ namespace FMH
 		PicturesPath,
 		MusicPath,
 		VideosPath,
-		DownloadsPath
+		DownloadsPath,
+        RootPath
 	};
 	
 	const QMap<QString, QString> folderIcon

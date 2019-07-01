@@ -1,5 +1,5 @@
 import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 
 import org.kde.kirigami 2.6 as Kirigami
@@ -43,7 +43,7 @@ Maui.Page
 	property alias browser : viewLoader.item
 	
 	property alias previewer : previewer
-	property alias menu : browserMenu.contentData
+	property alias menu : browserMenu.actions
 	property alias itemMenu: itemMenu
 	property alias holder: holder
 	property alias dialog : dialogLoader.item
@@ -156,8 +156,8 @@ Maui.Page
 	BrowserMenu
 	{
 		id: browserMenu
-		width: unit *200	
-		z : 999
+// 		width: unit *200	
+// 		z : 999
 	}
 	
 	Maui.FilePreviewer
@@ -415,6 +415,8 @@ Maui.Page
 	{
             Layout.fillWidth: true
         z: 999
+        		hiddenActions: browserMenu.actions
+
     actions: [
 	
 	Kirigami.Action
@@ -489,19 +491,16 @@ Maui.Page
 	
 	Kirigami.Action
 	{
+        text: qsTr("Select")
 		iconName: "item-select"
 		checkable: true
 		checked: selectionMode		
 		onTriggered: selectionMode = !selectionMode
 		
-	},
-	
-	Kirigami.Action
-	{
-		iconName: "overflow-menu"
-		onTriggered: browserMenu.show()
 	}
 	]
+	
+
 }
 	
 	headBar.leftContent: [
@@ -863,10 +862,11 @@ Maui.Page
 			{
 				if(Maui.FM.isDefaultPath(paths[i]))
 					continue
-					Maui.FM.bookmark(paths[i])
+                Maui.FM.bookmark(paths[i])
 			}
-			newBookmark()
-		}		
+		}
+        newBookmark()
+
 	}
 	
 	function zoomIn()

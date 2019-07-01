@@ -39,31 +39,16 @@ TextField
 	property alias menu : entryMenu
 	signal cleared()
     signal goBackTriggered();
-    signal goFowardTriggered();
-
-	implicitWidth: Math.max(background ? background.implicitWidth : 0,
-							placeholderText ? placeholder.implicitWidth + leftPadding + rightPadding : 0)
-	|| contentWidth + leftPadding + rightPadding
-	implicitHeight:  iconSizes.big
+    signal goFowardTriggered();	
 	
 	height: implicitHeight
 	width: implicitWidth
 	z: 1
-	topPadding: space.tiny
+// 	topPadding: space.tiny
 	bottomPadding: space.tiny
 	rightPadding: clearButton.width + space.small
 	
-	color: enabled ? colorScheme.textColor : Qt.lighter(colorScheme.textColor, 1.4)
-	selectionColor: highlightColor
-	selectedTextColor: highlightedTextColor
-	persistentSelection: true
-	
-	verticalAlignment: TextInput.AlignVCenter
-	horizontalAlignment: Text.AlignHCenter
-	
-	cursorDelegate: CursorDelegate { }
-	
-	selectByMouse: !isMobile
+    persistentSelection: true
 	focus: true
 	wrapMode: TextInput.WordWrap	
 	
@@ -109,35 +94,6 @@ TextField
 		iconName: "edit-clear"
 		iconColor: color   
 		onClicked: {control.clear(); cleared()}
-	}
-	
-	Label
-	{
-		id: placeholder
-		x: control.leftPadding
-		y: control.topPadding
-		width: control.width - (control.leftPadding + control.rightPadding)
-		height: control.height - (control.topPadding + control.bottomPadding)
-		
-		text: control.placeholderText
-		font: control.font
-		color: Qt.lighter(colorScheme.textColor, 1.4)
-		opacity: 0.4
-		horizontalAlignment: control.horizontalAlignment
-		verticalAlignment: control.verticalAlignment
-		visible: !control.length && !control.preeditText && (!control.activeFocus || control.horizontalAlignment !== Qt.AlignHCenter)
-		elide: Text.ElideRight
-	}	
-	
-	background: Rectangle 
-	{        
-		implicitWidth: unit * 120
-		implicitHeight: iconSizes.big
-		color: control.activeFocus ? Qt.lighter(colorScheme.backgroundColor, 1.4)
-		: (control.hovered ? Qt.lighter(colorScheme.backgroundColor, 1.3) : colorScheme.backgroundColor)
-		border.color: colorScheme.borderColor
-		radius: radiusV
-		border.width: unit		
 	}
 	
 	Menu

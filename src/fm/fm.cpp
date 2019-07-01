@@ -36,6 +36,8 @@
 #include "mauiandroid.h"
 #else
 #include "mauikde.h"
+#include <KFilePlacesModel>
+#include <QIcon>
 #endif
 
 /*
@@ -274,7 +276,18 @@ FMH::MODEL_LIST FM::getDevices()
     drives << packItems({MAUIAndroid::sdDir()}, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES_PATH]);
     return drives;
 #else
-    return drives;
+    KFilePlacesModel model;
+    for(const auto &i : model.groupIndexes(KFilePlacesModel::GroupType::RemoteType))
+    {
+        drives << FMH::MODEL{
+            {FMH::MODEL_KEY::NAME, model.text(i)},
+            {FMH::MODEL_KEY::LABEL, model.text(i)},
+            {FMH::MODEL_KEY::PATH, model.url(i).toString()},
+            {FMH::MODEL_KEY::ICON, model.icon(i).name()},            
+            {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES_PATH]},
+        };           
+    }
+    
 #endif
 
     //     auto devices = QStorageInfo::mountedVolumes();
@@ -337,10 +350,23 @@ FMH::MODEL_LIST FM::getTags(const int &limit)
 
 FMH::MODEL_LIST FM::getBookmarks()
 {
-    QStringList bookmarks;
-    for(const auto &bookmark : this->get("select * from bookmarks"))
-        bookmarks << bookmark.toMap().value(FMH::MODEL_NAME[FMH::MODEL_KEY::PATH]).toString();
+        QStringList bookmarks;
 
+#ifdef Q_OS_ANDROID
+ for(const auto &bookmark : this->get("select * from bookmarks"))
+        bookmarks << bookmark.toMap().value(FMH::MODEL_NAME[FMH::MODEL_KEY::PATH]).toString();
+    
+#else
+KFilePlacesModel model;
+    qDebug()<< "PLACES MODEL COUNT"<< model.rowCount() << model.columnCount();
+    for(const auto &i : model.groupIndexes(KFilePlacesModel::GroupType::PlacesType))
+    {
+        const auto url = model.url(i).toString().replace("file://","");
+        if(!FMH::defaultPaths.contains(url))
+            bookmarks << url;
+    }
+#endif    
+   
     return packItems(bookmarks, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::BOOKMARKS_PATH]);
 }
 
@@ -525,13 +551,15 @@ bool FM::isCloud(const QString &path)
 
 bool FM::bookmark(const QString &path)
 {
-    if(FMH::defaultPaths.contains(path))
+     if(FMH::defaultPaths.contains(path))
         return false;
 
     if(!FMH::fileExists(path))
         return false;
+    
+     QFileInfo file (path);
 
-    QFileInfo file (path);
+    #ifdef Q_OS_ANDROID
     QVariantMap bookmark_map {
         {FMH::MODEL_NAME[FMH::MODEL_KEY::PATH], path},
         {FMH::MODEL_NAME[FMH::MODEL_KEY::LABEL], file.baseName()},
@@ -543,25 +571,59 @@ bool FM::bookmark(const QString &path)
         emit this->bookmarkInserted(path);
         return true;
     }
+    
+#else
+KFilePlacesModel model;
+ model.addPlace(file.fileName(), QStringLiteral("file://") + file.filePath());
+#endif  
 
     return false;
 }
 
 bool FM::removeBookmark(const QString& path)
 {
-    FMH::DB data = {{FMH::MODEL_KEY::PATH, path}};
+    
+     #ifdef Q_OS_ANDROID
+     FMH::DB data = {{FMH::MODEL_KEY::PATH, path}};
     if(this->remove(FMH::TABLEMAP[FMH::TABLE::BOOKMARKS], data))
     {
         emit this->bookmarkRemoved(path);
         return true;
     }
+    
+#else
+KFilePlacesModel model;
+    for(const auto &i : model.groupIndexes(KFilePlacesModel::GroupType::PlacesType))
+    {
+        if(path == model.url(i).toString().replace("file://",""))     
+       {
+            model.removePlace(i);
+            return true;
+    }
+    }
+    
+#endif 
+    
+    
 
     return false;
 }
 
 bool FM::isBookmark(const QString& path)
-{
-    return this->checkExistance(QString("select * from bookmarks where path = '%1'").arg(path));
+{ 
+      #ifdef Q_OS_ANDROID
+     return this->checkExistance(QString("select * from bookmarks where path = '%1'").arg(path));
+    
+    
+#else
+const auto bookmarks = this->getBookmarks();
+
+for(const auto &item : bookmarks)
+    if(item[FMH::MODEL_KEY::PATH] == path)
+        return true;
+    
+return false;
+#endif 
 }
 
 bool FM::fileExists(const QString &path)

@@ -138,8 +138,7 @@ Menu
 					refresh()
 			}
 		}
-	}
-	
+	}	
 	
 	function show(items)
 	{
