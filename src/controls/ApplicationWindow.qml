@@ -290,7 +290,7 @@ backgroundColor.b, 0.7))
             {
 				id: mainMenu
 				modal: true
-				
+				z: 999
 				width: unit * 200
 				
 				Item
