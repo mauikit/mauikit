@@ -493,7 +493,7 @@ Maui.Page
 	{
         text: qsTr("Select")
 		iconName: "item-select"
-		checkable: true
+		checkable: false
 		checked: selectionMode		
 		onTriggered: selectionMode = !selectionMode
 		
