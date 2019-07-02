@@ -22,7 +22,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.impl 2.3
 import org.kde.mauikit 1.0 as Maui
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami 2.6 as Kirigami
 import QtGraphicalEffects 1.0
 import "private"
 
@@ -34,6 +34,9 @@ Button
     ColorScheme {id: colorScheme}
     property alias colorScheme : colorScheme
     /***************************/
+    
+    Kirigami.Theme.backgroundColor: colorScheme.backgroundColor
+    Kirigami.Theme.textColor: colorScheme.textColor
 
 //     implicitWidth: Math.max(background ? background.implicitWidth : 0,
 //                             contentItem.implicitWidth + leftPadding + rightPadding)
