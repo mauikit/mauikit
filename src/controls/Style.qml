@@ -25,79 +25,79 @@ import org.kde.kirigami 2.0 as Kirigami
 
 QtObject
 {
-    id: style
-    readonly property bool isAndroid: Qt.platform.os == "android"
-    readonly property bool isMobile : Kirigami.Settings.isMobile
-
-    property color warningColor : "#FFB300"
-    property color dangerColor : "#D81B60"
-    property color infoColor : "#4caf50"
-    property color suggestedColor : "#039BE5"
-
-    property int unit : Kirigami.Units.devicePixelRatio
-
-    property color borderColor: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-    property color backgroundColor: Kirigami.Theme.backgroundColor
-    property color textColor: Kirigami.Theme.textColor
-    property color highlightColor: Kirigami.Theme.highlightColor
-    property color highlightedTextColor: Kirigami.Theme.highlightedTextColor
-    property color buttonBackgroundColor: isAndroid ? Qt.lighter(Kirigami.Theme.buttonBackgroundColor, 1.07) :  Kirigami.Theme.buttonBackgroundColor
-    property color viewBackgroundColor: Kirigami.Theme.viewBackgroundColor
-    property color altColor: Kirigami.Theme.complementaryBackgroundColor
-    property color altColorText: Kirigami.Theme.complementaryTextColor
-
-
-
-    readonly property int rowHeight: Kirigami.Units.iconSizes.medium + space.medium
-    readonly property int rowHeightAlt: rowHeight * 0.8
-
-    readonly property int toolBarHeight: (Kirigami.Units.iconSizes.medium * (isMobile ? 1 : 1.5)) /*+  space.tiny*/
-    readonly property int toolBarHeightAlt: toolBarHeight * 0.9
-
-    readonly property int defaultFontSize: Kirigami.Theme.defaultFont.pointSize
-    readonly property var fontSizes: ({
-                                          tiny: defaultFontSize * 0.7,
-
-                                          small: (isMobile ? defaultFontSize * 0.7 :
-                                                                               defaultFontSize * 0.8),
-
-                                          medium: (isMobile ? defaultFontSize * 0.8 :
-                                                                                defaultFontSize * 0.9),
-
-                                          default: (isMobile ? defaultFontSize * 0.9 :
-                                                                                 defaultFontSize),
-
-                                          big: (isMobile ? defaultFontSize :
-                                                                             defaultFontSize * 1.1),
-
-                                          large: (isMobile ? defaultFontSize * 1.1 :
-                                                                               defaultFontSize * 1.2),
-                                      
-                                           huge: (isMobile ? defaultFontSize * 1.2 :
-                                                                               defaultFontSize * 1.3),
-									  
-									  enormous: (isMobile ? defaultFontSize * 1.3 :
-									  defaultFontSize * 1.4)
-                                      })
-
-    readonly property var space : ({
-                                       tiny: Kirigami.Units.smallSpacing,
-                                       small: Kirigami.Units.smallSpacing*2,
-                                       medium: Kirigami.Units.largeSpacing,
-                                       big: Kirigami.Units.largeSpacing*2,
-                                       large: Kirigami.Units.largeSpacing*3,
-                                       huge: Kirigami.Units.largeSpacing*4,
-                                       enormous: Kirigami.Units.largeSpacing*5
-                                   })
-
-    readonly property var iconSizes : ({
-                                           tiny : 8,
-                                           small :  16,
-                                           medium : 22,
-                                           big:  32,
-                                           large: 48,
-                                           huge: 64,
-                                           enormous: 128
-
-                                       })
+	id: style
+	readonly property bool isAndroid: Qt.platform.os == "android"
+	readonly property bool isMobile : Kirigami.Settings.isMobile
+	
+	property color warningColor : "#FFB300"
+	property color dangerColor : "#D81B60"
+	property color infoColor : "#4caf50"
+	property color suggestedColor : "#039BE5"
+	
+	property int unit : Kirigami.Units.devicePixelRatio
+	
+	property color borderColor: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+	property color backgroundColor: Kirigami.Theme.backgroundColor
+	property color textColor: Kirigami.Theme.textColor
+	property color highlightColor: Kirigami.Theme.highlightColor
+	property color highlightedTextColor: Kirigami.Theme.highlightedTextColor
+	property color buttonBackgroundColor: isAndroid ? Qt.lighter(Kirigami.Theme.buttonBackgroundColor, 1.07) :  Kirigami.Theme.buttonBackgroundColor
+	property color viewBackgroundColor: Kirigami.Theme.viewBackgroundColor
+	property color altColor: Kirigami.Theme.complementaryBackgroundColor
+	property color altColorText: Kirigami.Theme.complementaryTextColor
+	
+	
+	
+	readonly property int rowHeight: iconSizes.medium + space.medium
+	readonly property int rowHeightAlt: rowHeight * 0.8
+	
+	readonly property int toolBarHeight: (iconSizes.medium * (isMobile ? 2 : 1.5)) /*+  space.tiny*/
+	readonly property int toolBarHeightAlt: toolBarHeight * 0.9
+	
+	readonly property int defaultFontSize: Kirigami.Theme.defaultFont.pointSize
+	readonly property var fontSizes: ({
+		tiny: defaultFontSize * 0.7,
+		
+		small: (isMobile ? defaultFontSize * 0.7 :
+		defaultFontSize * 0.8),
+		
+		medium: (isMobile ? defaultFontSize * 0.8 :
+		defaultFontSize * 0.9),
+		
+		default: (isMobile ? defaultFontSize * 0.9 :
+			defaultFontSize),
+			
+			big: (isMobile ? defaultFontSize :
+			defaultFontSize * 1.1),
+			
+			large: (isMobile ? defaultFontSize * 1.1 :
+			defaultFontSize * 1.2),
+			
+			huge: (isMobile ? defaultFontSize * 1.2 :
+			defaultFontSize * 1.3),
+			
+			enormous: (isMobile ? defaultFontSize * 1.3 :
+			defaultFontSize * 1.4)
+	})
+	
+	readonly property var space : ({
+		tiny: Kirigami.Units.smallSpacing,
+		small: Kirigami.Units.smallSpacing*2,
+		medium: Kirigami.Units.largeSpacing,
+		big: Kirigami.Units.largeSpacing*2,
+		large: Kirigami.Units.largeSpacing*3,
+		huge: Kirigami.Units.largeSpacing*4,
+		enormous: Kirigami.Units.largeSpacing*5
+	})
+	
+	readonly property var iconSizes : ({
+		tiny : 8,
+		small :  16,
+		medium : 22,
+		big:  32,
+		large: 48,
+		huge: 64,
+		enormous: 128
+		
+	})
 }
