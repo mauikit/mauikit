@@ -428,7 +428,7 @@ Maui.Page
 	Kirigami.Action
 	{
 		iconName: "view-sort"
-		text: qsTr("Sort...")
+		text: qsTr("Sort")
         
         Kirigami.Action
         {
