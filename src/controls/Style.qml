@@ -48,10 +48,10 @@ QtObject
 	
 	
 	
-	readonly property int rowHeight: iconSizes.medium + space.medium
+	readonly property int rowHeight: iconSizes.medium + space.big
 	readonly property int rowHeightAlt: rowHeight * 0.8
 	
-	readonly property int toolBarHeight: (iconSizes.medium * (isMobile ? 2 : 1.5)) /*+  space.tiny*/
+	readonly property int toolBarHeight: (iconSizes.medium * 2.2) /*+  space.tiny*/
 	readonly property int toolBarHeightAlt: toolBarHeight * 0.9
 	
 	readonly property int defaultFontSize: Kirigami.Theme.defaultFont.pointSize

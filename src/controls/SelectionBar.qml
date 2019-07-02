@@ -228,8 +228,9 @@ Item
                     showThumbnails: true
                     emblemSize: iconSizes.small
                     leftEmblem: "list-remove"
-                    colorScheme.accentColor: control.colorScheme.accentColor
-                    colorScheme.textColor: control.colorScheme.textColor
+					colorScheme.accentColor: control.colorScheme.accentColor
+					colorScheme.backgroundColor: control.colorScheme.altColor
+					colorScheme.textColor: control.colorScheme.altColorText
                     
                     Connections
                     {

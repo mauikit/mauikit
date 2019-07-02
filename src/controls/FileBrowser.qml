@@ -157,7 +157,7 @@ Maui.Page
 	{
 		id: browserMenu
 // 		width: unit *200	
-// 		z : 999
+		z : control.z +1
 	}
 	
 	Maui.FilePreviewer
