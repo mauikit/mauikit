@@ -144,7 +144,6 @@ void FMList::setList()
 			
 		case FMList::PATHTYPE::TRASH_PATH:
 		case FMList::PATHTYPE::DRIVES_PATH:
-		case FMList::PATHTYPE::BOOKMARKS_PATH:
 			this->list = FMH::MODEL_LIST();
 			break;
 	}
@@ -195,7 +194,6 @@ void FMList::reset()
 		
 		case FMList::PATHTYPE::TRASH_PATH:
 		case FMList::PATHTYPE::DRIVES_PATH:
-		case FMList::PATHTYPE::BOOKMARKS_PATH:
 			break;
 	}
 	
@@ -392,7 +390,7 @@ void FMList::setPath(const QString &path)
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::SEARCH_PATH;
-		this->isBookmark = false;
+// 		this->isBookmark = false;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		emit this->isBookmarkChanged();
@@ -402,7 +400,7 @@ void FMList::setPath(const QString &path)
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::CLOUD_PATH;
-		this->isBookmark = false;
+// 		this->isBookmark = false;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		emit this->isBookmarkChanged();
@@ -412,7 +410,7 @@ void FMList::setPath(const QString &path)
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::APPS_PATH;
-		this->isBookmark = false;
+// 		this->isBookmark = false;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		emit this->isBookmarkChanged();
@@ -421,7 +419,7 @@ void FMList::setPath(const QString &path)
 	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::TAGS_PATH]+"/"))
 	{
 		this->pathExists = true;
-		this->isBookmark = false;
+// 		this->isBookmark = false;
 		this->pathType = FMList::PATHTYPE::TAGS_PATH;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
@@ -431,7 +429,7 @@ void FMList::setPath(const QString &path)
 	}else
 	{
 		this->watchPath(this->path);
-		this->isBookmark = this->fm->isBookmark(this->path);
+// 		this->isBookmark = this->fm->isBookmark(this->path);
 		this->pathExists = FMH::fileExists(this->path);
 		this->pathType = FMList::PATHTYPE::PLACES_PATH;
 		emit this->pathExistsChanged();

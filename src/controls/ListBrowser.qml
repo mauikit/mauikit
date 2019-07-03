@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 2.2
+import QtQuick 2.9
+import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 
@@ -27,7 +27,6 @@ ScrollView
 {
     id: control    
     
-    property bool detailsView : false
     property int itemSize : iconSizes.big
     property bool showEmblem : true
     property string rightEmblem
@@ -41,6 +40,7 @@ ScrollView
 	property alias section : _listView.section
 	property alias contentY: _listView.contentY
 	property alias currentIndex : _listView.currentIndex
+	property alias currentItem : _listView.currentItem
 	property alias count : _listView.count
 	property alias cacheBuffer : _listView.cacheBuffer
 	
@@ -49,6 +49,7 @@ ScrollView
 	property alias rightMargin: _listView.rightMargin
 	property alias leftMarging: _listView.leftMargin
 	property alias header : _listView.header 
+	property alias listView: _listView
 
     
     signal itemClicked(int index)
@@ -70,11 +71,16 @@ ScrollView
         snapMode: ListView.SnapToItem
         boundsBehavior: !isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
         
-        width: parent.width
-        height: parent.height
+         keyNavigationEnabled: true
+    clip: true
+    focus: true
+    interactive: true
+    highlightFollowsCurrentItem: true
+    highlightMoveDuration: 0
         
-        clip: true
-        focus: true
+        width: parent.width
+        height: parent.height      
+    
         
         model: ListModel { id: listModel }
         delegate: Maui.IconDelegate

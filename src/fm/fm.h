@@ -35,7 +35,7 @@ public:
 	
 	FMH::MODEL_LIST getTags(const int &limit = 5);	
 	FMH::MODEL_LIST getTagContent(const QString &tag);	
-    FMH::MODEL_LIST getBookmarks();
+//     FMH::MODEL_LIST getBookmarks();
 
     /** Syncing **/
 	bool getCloudServerContent(const QString &server, const QStringList &filters= QStringList(), const int &depth = 0);
@@ -46,9 +46,9 @@ public:
 	/*** START STATIC METHODS ***/
 	static FMH::MODEL_LIST search(const QString &query, const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
 	
-	static FMH::MODEL_LIST getDevices();	
+// 	static FMH::MODEL_LIST getDevices();	
 	static FMH::MODEL_LIST getDefaultPaths();
-	static FMH::MODEL_LIST getCustomPaths();	
+	static FMH::MODEL_LIST getAppsPath();	
 	
 	static FMH::MODEL_LIST packItems(const QStringList &items, const QString &type);
 	
@@ -93,7 +93,7 @@ signals:
 public slots:	
 	bool bookmark(const QString &path);
 	bool removeBookmark(const QString &path);
-	bool isBookmark(const QString &path);
+// 	bool isBookmark(const QString &path);
 
 	QVariantList getCloudAccountsList();	
 	bool addCloudAccount(const QString &server, const QString &user, const QString &password);

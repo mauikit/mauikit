@@ -20,6 +20,7 @@
 #define PLACESLIST_H
 
 #include <QObject>
+#include <KFilePlacesModel>
 #include "fmh.h"
 
 class QFileSystemWatcher;
@@ -50,6 +51,7 @@ public slots:
 private:
 	FM *fm;
 	FMH::MODEL_LIST list;
+    KFilePlacesModel *model;
 	QHash<QString, int> count;
 	QList<int> groups;
 	

@@ -52,7 +52,7 @@ ItemDelegate
 				source: model.icon ? model.icon : ""
 				width: sidebarIconSize
 				height: width
-				isMask: !isMobile
+// 				isMask: !isMobile
 				color: labelColor
 			}
 		}

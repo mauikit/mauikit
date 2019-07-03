@@ -32,6 +32,7 @@
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
 #include <QString>
+#include <KFilePlacesModel>
 
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
@@ -363,22 +364,26 @@ namespace FMH
 	
 	enum PATHTYPE_KEY : uint_fast8_t
 	{
-		PLACES_PATH,
-		DRIVES_PATH,
-		BOOKMARKS_PATH,
-		TAGS_PATH,
-		APPS_PATH,
-		TRASH_PATH,
-		SEARCH_PATH,
-		CLOUD_PATH
+        PLACES_PATH = KFilePlacesModel::GroupType::PlacesType,
+        REMOTE_PATH = KFilePlacesModel::GroupType::RemoteType,
+        DRIVES_PATH = KFilePlacesModel::GroupType::DevicesType,
+        REMOVABLE_PATH = KFilePlacesModel::GroupType::RemovableDevicesType,        
+        TAGS_PATH = KFilePlacesModel::GroupType::TagsType,
+        UNKOWN_TYPE = KFilePlacesModel::GroupType::UnknownType,
+        APPS_PATH = 9,
+        TRASH_PATH = 10,
+        SEARCH_PATH = 11,
+        CLOUD_PATH = 12
 	};
 	
 	static const QHash<PATHTYPE_KEY, QString> PATHTYPE_NAME =
 	{
 		{PATHTYPE_KEY::PLACES_PATH, "Places"},
 		{PATHTYPE_KEY::DRIVES_PATH, "Drives"},
-		{PATHTYPE_KEY::BOOKMARKS_PATH, "Bookmarks"},
 		{PATHTYPE_KEY::APPS_PATH, "Apps"},
+		{PATHTYPE_KEY::REMOTE_PATH, "Remote"},
+		{PATHTYPE_KEY::REMOVABLE_PATH, "Removable"},
+		{PATHTYPE_KEY::UNKOWN_TYPE, "Unkown"},
 		{PATHTYPE_KEY::TRASH_PATH, "Trash"},
 		{PATHTYPE_KEY::TAGS_PATH, "Tags"},
 		{PATHTYPE_KEY::SEARCH_PATH, "Search"},

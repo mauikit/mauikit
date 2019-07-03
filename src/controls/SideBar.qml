@@ -24,7 +24,7 @@ import org.kde.kirigami 2.0 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import "private"
 
-ListView
+Maui.ListBrowser
 {
 	id: control
 	/* Controlc color scheming */
@@ -40,17 +40,7 @@ ListView
     property bool collapsable : true
     property bool isCollapsed : false
 
-    signal itemClicked(int index)
-
-    keyNavigationEnabled: true
-    clip: true
-    focus: true
-    interactive: true
-    highlightFollowsCurrentItem: true
-    highlightMoveDuration: 0
-    snapMode: ListView.SnapToItem
-    boundsBehavior: !isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
-
+//     signal itemClicked(int index)
 
     Rectangle
     {

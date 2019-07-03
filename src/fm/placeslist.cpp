@@ -18,12 +18,12 @@
 
 #include "placeslist.h"
 #include "fm.h"
-
+#include <QIcon>
 #include <QEventLoop>
 #include <QTimer>
 #include <QFileSystemWatcher>
 
-PlacesList::PlacesList(QObject *parent) : QObject(parent)
+PlacesList::PlacesList(QObject *parent) : QObject(parent), model(new KFilePlacesModel(this))
 {
     this->fm = new FM(this);
     this->watcher = new QFileSystemWatcher(this);
@@ -83,27 +83,51 @@ FMH::MODEL_LIST PlacesList::items() const
     return this->list;
 }
 
+static FMH::MODEL_LIST getGroup(const KFilePlacesModel *model,const FMH::PATHTYPE_KEY &type)
+{
+    const auto group = model->groupIndexes(static_cast<KFilePlacesModel::GroupType>(type));
+    return std::accumulate(group.begin(), group.end(), FMH::MODEL_LIST(), [&model, &type](FMH::MODEL_LIST &list, const QModelIndex &index) -> FMH::MODEL_LIST
+    {
+        list << FMH::MODEL
+        {
+            {FMH::MODEL_KEY::PATH, model->url(index).toString().replace("file://", "")},
+            {FMH::MODEL_KEY::URL, model->url(index).toString().replace("file://", "")},
+            {FMH::MODEL_KEY::ICON, model->icon(index).name()},
+            {FMH::MODEL_KEY::LABEL, model->text(index)},
+            {FMH::MODEL_KEY::NAME, model->text(index)},
+            {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_NAME[type]}
+        };
+        
+        return list;
+        
+    });
+}
+
 void PlacesList::setList()
 {		
     this->list.clear();
 
-    for(auto group : this->groups)
+    for(const auto &group : this->groups)
         switch(group)
         {
         case FMH::PATHTYPE_KEY::PLACES_PATH:
-            this->list << FM::getDefaultPaths();
+            this->list << getGroup(this->model, FMH::PATHTYPE_KEY::PLACES_PATH);
             break;
 
         case FMH::PATHTYPE_KEY::APPS_PATH:
-            this->list << FM::getCustomPaths();
-            break;
-
-        case FMH::PATHTYPE_KEY::BOOKMARKS_PATH:
-            this->list << this->fm->getBookmarks();
+            this->list << FM::getAppsPath();
             break;
 
         case FMH::PATHTYPE_KEY::DRIVES_PATH:
-            this->list << FM::getDevices();
+            this->list << getGroup(this->model, FMH::PATHTYPE_KEY::DRIVES_PATH);
+            break;
+            
+        case FMH::PATHTYPE_KEY::REMOTE_PATH:
+            this->list << getGroup(this->model, FMH::PATHTYPE_KEY::REMOTE_PATH);
+            break;
+            
+        case FMH::PATHTYPE_KEY::REMOVABLE_PATH:
+            this->list << getGroup(this->model, FMH::PATHTYPE_KEY::REMOVABLE_PATH);
             break;
 
         case FMH::PATHTYPE_KEY::TAGS_PATH:

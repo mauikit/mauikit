@@ -219,7 +219,7 @@ FMH::MODEL_LIST FM::getDefaultPaths()
     return packItems(FMH::defaultPaths, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::PLACES_PATH]);
 }
 
-FMH::MODEL_LIST FM::getCustomPaths()
+FMH::MODEL_LIST FM::getAppsPath()
 {
 #ifdef Q_OS_ANDROID
     return FMH::MODEL_LIST();
@@ -268,60 +268,60 @@ FMH::MODEL_LIST FM::search(const QString& query, const QString &path, const bool
     return content;
 }
 
-FMH::MODEL_LIST FM::getDevices()
-{
-    FMH::MODEL_LIST drives;
-
-#if defined(Q_OS_ANDROID)
-    drives << packItems({MAUIAndroid::sdDir()}, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES_PATH]);
-    return drives;
-#else
-    KFilePlacesModel model;
-    for(const auto &i : model.groupIndexes(KFilePlacesModel::GroupType::RemoteType))
-    {
-        drives << FMH::MODEL{
-            {FMH::MODEL_KEY::NAME, model.text(i)},
-            {FMH::MODEL_KEY::LABEL, model.text(i)},
-            {FMH::MODEL_KEY::PATH, model.url(i).toString()},
-            {FMH::MODEL_KEY::ICON, model.icon(i).name()},            
-            {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES_PATH]},
-        };           
-    }
-    
-#endif
-
-    //     auto devices = QStorageInfo::mountedVolumes();
-    //     for(auto device : devices)
-    //     {
-    //         if(device.isValid() && !device.isReadOnly())
-    //         {
-    //             QVariantMap drive =
-    //             {
-    //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], "drive-harddisk"},
-    //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::LABEL], device.displayName()},
-    //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::PATH], device.rootPath()},
-    //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::TYPE], FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES]}
-    //             };
-    //
-    //             drives << drive;
-    //         }
-    //     }
-
-    //    for(auto device : QDir::drives())
-    //    {
-    //        QVariantMap drive =
-    //        {
-    //            {"iconName", "drive-harddisk"},
-    //            {"label", device.baseName()},
-    //            {"path", device.absoluteFilePath()},
-    //            {"type", "Drives"}
-    //        };
-
-    //        drives << drive;
-    //    }
-
-    return drives;
-}
+// FMH::MODEL_LIST FM::getDevices()
+// {
+//     FMH::MODEL_LIST drives;
+// 
+// #if defined(Q_OS_ANDROID)
+//     drives << packItems({MAUIAndroid::sdDir()}, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES_PATH]);
+//     return drives;
+// #else
+//     KFilePlacesModel model;
+//     for(const auto &i : model.groupIndexes(KFilePlacesModel::GroupType::RemoteType))
+//     {
+//         drives << FMH::MODEL{
+//             {FMH::MODEL_KEY::NAME, model.text(i)},
+//             {FMH::MODEL_KEY::LABEL, model.text(i)},
+//             {FMH::MODEL_KEY::PATH, model.url(i).toString()},
+//             {FMH::MODEL_KEY::ICON, model.icon(i).name()},            
+//             {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES_PATH]},
+//         };           
+//     }
+//     
+// #endif
+// 
+//     //     auto devices = QStorageInfo::mountedVolumes();
+//     //     for(auto device : devices)
+//     //     {
+//     //         if(device.isValid() && !device.isReadOnly())
+//     //         {
+//     //             QVariantMap drive =
+//     //             {
+//     //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], "drive-harddisk"},
+//     //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::LABEL], device.displayName()},
+//     //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::PATH], device.rootPath()},
+//     //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::TYPE], FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES]}
+//     //             };
+//     //
+//     //             drives << drive;
+//     //         }
+//     //     }
+// 
+//     //    for(auto device : QDir::drives())
+//     //    {
+//     //        QVariantMap drive =
+//     //        {
+//     //            {"iconName", "drive-harddisk"},
+//     //            {"label", device.baseName()},
+//     //            {"path", device.absoluteFilePath()},
+//     //            {"type", "Drives"}
+//     //        };
+// 
+//     //        drives << drive;
+//     //    }
+// 
+//     return drives;
+// }
 
 FMH::MODEL_LIST FM::getTags(const int &limit)
 {
@@ -348,27 +348,27 @@ FMH::MODEL_LIST FM::getTags(const int &limit)
     return data;
 }
 
-FMH::MODEL_LIST FM::getBookmarks()
-{
-        QStringList bookmarks;
-
-#ifdef Q_OS_ANDROID
- for(const auto &bookmark : this->get("select * from bookmarks"))
-        bookmarks << bookmark.toMap().value(FMH::MODEL_NAME[FMH::MODEL_KEY::PATH]).toString();
-    
-#else
-KFilePlacesModel model;
-    qDebug()<< "PLACES MODEL COUNT"<< model.rowCount() << model.columnCount();
-    for(const auto &i : model.groupIndexes(KFilePlacesModel::GroupType::PlacesType))
-    {
-        const auto url = model.url(i).toString().replace("file://","");
-        if(!FMH::defaultPaths.contains(url))
-            bookmarks << url;
-    }
-#endif    
-   
-    return packItems(bookmarks, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::BOOKMARKS_PATH]);
-}
+// FMH::MODEL_LIST FM::getBookmarks()
+// {
+//         QStringList bookmarks;
+// 
+// #ifdef Q_OS_ANDROID
+//  for(const auto &bookmark : this->get("select * from bookmarks"))
+//         bookmarks << bookmark.toMap().value(FMH::MODEL_NAME[FMH::MODEL_KEY::PATH]).toString();
+//     
+// #else
+// KFilePlacesModel model;
+//     qDebug()<< "PLACES MODEL COUNT"<< model.rowCount() << model.columnCount();
+//     for(const auto &i : model.groupIndexes(KFilePlacesModel::GroupType::PlacesType))
+//     {
+//         const auto url = model.url(i).toString().replace("file://","");
+//         if(!FMH::defaultPaths.contains(url))
+//             bookmarks << url;
+//     }
+// #endif    
+//    
+//     return packItems(bookmarks, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::BOOKMARKS_PATH]);
+// }
 
 bool FM::getCloudServerContent(const QString &path, const QStringList &filters, const int &depth)
 {
@@ -609,22 +609,22 @@ KFilePlacesModel model;
     return false;
 }
 
-bool FM::isBookmark(const QString& path)
-{ 
-      #ifdef Q_OS_ANDROID
-     return this->checkExistance(QString("select * from bookmarks where path = '%1'").arg(path));
-    
-    
-#else
-const auto bookmarks = this->getBookmarks();
-
-for(const auto &item : bookmarks)
-    if(item[FMH::MODEL_KEY::PATH] == path)
-        return true;
-    
-return false;
-#endif 
-}
+// bool FM::isBookmark(const QString& path)
+// { 
+//       #ifdef Q_OS_ANDROID
+//      return this->checkExistance(QString("select * from bookmarks where path = '%1'").arg(path));
+//     
+//     
+// #else
+// const auto bookmarks = this->getBookmarks();
+// 
+// for(const auto &item : bookmarks)
+//     if(item[FMH::MODEL_KEY::PATH] == path)
+//         return true;
+//     
+// return false;
+// #endif 
+// }
 
 bool FM::fileExists(const QString &path)
 {

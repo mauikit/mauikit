@@ -70,9 +70,12 @@ ItemDelegate
 	
 	background: Rectangle
 	{
-		color: !isDetails? "transparent" : (isCurrentListItem ? control.colorScheme.highlightColor :
+		color: !isDetails? "transparent" : (isCurrentListItem || (hovered && isDetails) ? control.colorScheme.highlightColor :
 		index % 2 === 0 ? Qt.lighter( control.colorScheme.backgroundColor,1.2) :  control.colorScheme.backgroundColor)		
-	}
+	
+        opacity: hovered ? 0.3 : 1
+
+    }
 	
 // 	Drag.active: _mouseArea.drag.active
 //         Drag.dragType: Drag.Automatic
