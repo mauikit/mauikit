@@ -416,7 +416,7 @@ Maui.Page
         Layout.fillWidth: true
         z: 999
         hiddenActions: browserMenu.actions
-        display: ToolButton.IconOnly
+        display: isMobile ? ToolButton.IconOnly : ToolButton.TextBesideIcon
         
         actions: [
         
@@ -499,9 +499,7 @@ Maui.Page
             onTriggered: selectionMode = !selectionMode
             
         }
-        ]
-        
-        
+        ]       
     }
     
     headBar.leftContent: [
@@ -610,8 +608,9 @@ Maui.Page
             z: holder.z + 1
             sourceComponent: list.viewType == FMList.ICON_VIEW  ?  gridViewBrowser :  listViewBrowser
             
-            Layout.margins: list.viewType == FMList.LIST_VIEW ? unit : contentMargins * 2
-            
+            Layout.topMargin: list.viewType == FMList.LIST_VIEW ? unit : contentMargins * 2
+            Layout.margins: unit
+
             Layout.fillWidth: true
             Layout.fillHeight: true
         }
