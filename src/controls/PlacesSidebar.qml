@@ -2,10 +2,10 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
+import org.kde.kirigami 2.6 as Kirigami
 
 import FMList 1.0
-import PlacesModel 1.0
-import PlacesList 1.0
+
 
 Maui.SideBar
 {
@@ -43,13 +43,37 @@ Maui.SideBar
 		placeClicked(path)
 	}
 	
-	PlacesModel
+	onItemRightClicked: _menu.popup()
+	
+	Menu
+	{
+		id: _menu
+		property int index
+		
+		MenuItem
+		{
+			text: qsTr("Edit")
+		}
+		
+		MenuItem
+		{
+			text: qsTr("Hide")
+		}
+		
+		MenuItem
+		{
+			text: qsTr("Remove")
+			Kirigami.Theme.textColor: dangerColor
+		}
+	}
+	
+	Maui.BaseModel
 	{
 		id: placesModel
 		list: placesList
 	}
 	
-	PlacesList
+	Maui.PlacesList
 	{
 		id: placesList
 		groups: [FMList.PLACES_PATH, FMList.APPS_PATH, FMList.BOOKMARKS_PATH, FMList.DRIVES_PATH, FMList.TAGS_PATH]

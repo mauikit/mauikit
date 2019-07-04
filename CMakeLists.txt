@@ -86,20 +86,20 @@ set(editor_HDRS
 set(fm_SRCS
     src/fm/fm.cpp
     src/fm/fmdb.cpp
-    src/fm/fmmodel.cpp
     src/fm/fmlist.cpp
     src/fm/placeslist.cpp
-    src/fm/placesmodel.cpp
+    src/fm/modellist.cpp
+    src/fm/basemodel.cpp
     )
 
 set(fm_HDRS
     src/fm/fmh.h
     src/fm/fm.h
     src/fm/fmdb.h
-    src/fm/fmmodel.h
     src/fm/fmlist.h
     src/fm/placeslist.h
-    src/fm/placesmodel.h
+    src/fm/modellist.h
+    src/fm/basemodel.h
     )
 
 set(tagging_SRCS

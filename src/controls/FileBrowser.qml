@@ -7,9 +7,6 @@ import org.kde.mauikit 1.0 as Maui
 
 import "private"
 
-import FMModel 1.0
-import FMList 1.0
-
 Maui.Page
 {
     id: control
@@ -167,13 +164,13 @@ Maui.Page
         onShareButtonClicked: control.shareFiles([url])
     }
     
-    FMModel
+    Maui.BaseModel
     {
         id: folderModel
         list: modelList
     }
     
-    FMList
+    Maui.FMList
     {
         id: modelList
         preview: true

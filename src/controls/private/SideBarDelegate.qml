@@ -33,9 +33,8 @@ ItemDelegate
     background: Rectangle
     {
         anchors.fill: parent
-        color: isCurrentListItem ? highlightColor : "transparent"
-        //                                   index % 2 === 0 ? Qt.lighter(backgroundColor,1.2) :
-        //                                                     backgroundColor
+        color: isCurrentListItem || hovered? highlightColor : "transparent"
+        opacity: hovered ? 0.3 : 1
     }
     
     MouseArea

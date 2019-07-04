@@ -17,10 +17,10 @@
  */
 
 #include "fmlist.h"
-#include <QObject>
 #include "fm.h"
 #include "utils.h"
 
+#include <QObject>
 #include <QFileSystemWatcher>
 #include <syncing.h>
 
@@ -29,9 +29,11 @@
 #include <QFuture>
 #include <QThread>
 
-FMList::FMList(QObject *parent) : QObject(parent)
+FMList::FMList(QObject *parent) : 
+ModelList(parent),
+fm(new FM(this)),
+watcher(new QFileSystemWatcher(this))
 {
-	this->fm = new FM(this);
 	connect(this->fm, &FM::cloudServerContentReady, [this](const FMH::MODEL_LIST &list, const QString &url)
 	{
 		if(this->path == url)
@@ -41,8 +43,7 @@ FMList::FMList(QObject *parent) : QObject(parent)
 			this->pathEmpty = this->list.isEmpty();
 			emit this->pathEmptyChanged();
 			this->pos();
-			this->setContentReady(true);	
-			
+			this->setContentReady(true);
 		}	
 	});
 	
@@ -56,7 +57,6 @@ FMList::FMList(QObject *parent) : QObject(parent)
 		emit this->progress(percent);
 	});
 	
-	this->watcher = new QFileSystemWatcher(this);
 	connect(this->watcher, &QFileSystemWatcher::directoryChanged, [this](const QString &path)
 	{
 		Q_UNUSED(path);
@@ -79,7 +79,7 @@ FMList::FMList(QObject *parent) : QObject(parent)
 	// 	connect(this, &FMList::hiddenChanged, this, &FMList::setList);
 	// 	connect(this, &FMList::onlyDirsChanged, this, &FMList::setList);
 	// 	connect(this, &FMList::filtersChanged, this, &FMList::setList);
-	auto value = UTIL::loadSettings("SaveDirProps", "SETTINGS", this->saveDirProps).toBool();
+	const auto value = UTIL::loadSettings("SaveDirProps", "SETTINGS", this->saveDirProps).toBool();
 	this->setSaveDirProps(value);	
 }
 
@@ -222,7 +222,6 @@ FMH::MODEL_LIST FMList::items() const
 {
 	return this->list;
 }
-
 
 FMList::SORTBY FMList::getSortBy() const
 {

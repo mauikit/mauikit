@@ -1,6 +1,6 @@
 /*
  * <one line to give the program's name and a brief idea of what it does.>
- * Copyright (C) 2018  camilo <email>
+ * Copyright (C) 2019  camilo <chiguitar@unal.edu.co>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,22 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PLACESMODEL_H
-#define PLACESMODEL_H
+#ifndef BASEMODEL_H
+#define BASEMODEL_H
 
 #include <QObject>
 #include <QAbstractListModel>
 #include <QList>
 
-class PlacesList;
-class PlacesModel : public QAbstractListModel
+class ModelList;
+class BaseModel : public QAbstractListModel
 {
-    Q_OBJECT
-    Q_PROPERTY(PlacesList *list READ getList WRITE setList)
-
+	Q_OBJECT
+	Q_PROPERTY(ModelList *list READ getList WRITE setList)
+	
 public:    
-	PlacesModel(QObject *parent = nullptr);
-    ~PlacesModel();
+	BaseModel(QObject *parent = nullptr);
+	~BaseModel();
 	
 	int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 	
@@ -44,15 +44,14 @@ public:
 	
 	virtual QHash<int, QByteArray> roleNames() const override;
 	
-	PlacesList* getList() const;
-	void setList(PlacesList *value);	
+	ModelList* getList() const;
+	void setList(ModelList *value);	
 	
 private:
-	PlacesList *list;
+	ModelList *list;
 	
 signals:
 	void listChanged();
-
 };
 
-#endif // PLACESMODEL_H
+#endif // BASEMODEL_H

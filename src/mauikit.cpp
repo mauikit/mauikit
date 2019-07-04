@@ -25,11 +25,10 @@
 #include "fm.h"
 #include "fmh.h"
 
-#include "fmmodel.h"
-#include "fmlist.h"
-
+#include "basemodel.h"
+#include "modellist.h"
 #include "placeslist.h"
-#include "placesmodel.h"
+#include "fmlist.h"
 
 #include "syncingmodel.h"
 #include "syncinglist.h"
@@ -144,11 +143,11 @@ void MauiKit::registerTypes(const char *uri)
 									  });
 	#endif
 	
-	qmlRegisterType<PlacesList>("PlacesList", 1, 0, "PlacesList");
-	qmlRegisterType<PlacesModel>("PlacesModel", 1, 0, "PlacesModel");
+	qmlRegisterType<BaseModel>(uri, 1, 0, "BaseModel"); //BASE MODEL
+	qmlRegisterUncreatableType<ModelList>(uri, 1, 0, "ModelList", QStringLiteral("ModelList should not be created in QML"));
 	
-	qmlRegisterType<FMModel>("FMModel", 1, 0, "FMModel");
-	qmlRegisterType<FMList>("FMList", 1, 0, "FMList");
+		qmlRegisterType<PlacesList>(uri, 1, 0, "PlacesList");
+	qmlRegisterType<FMList>(uri, 1, 0, "FMList");
 	
 	qmlRegisterType<SyncingList>("SyncingList", 1, 0, "SyncingList");
 	qmlRegisterType<SyncingModel>("SyncingModel", 1, 0, "SyncingModel");

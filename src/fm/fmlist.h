@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include "fmh.h"
+#include "modellist.h"
 
 struct PathContent
 {
@@ -30,7 +31,7 @@ struct PathContent
 
 class FM;
 class QFileSystemWatcher;
-class FMList : public QObject
+class FMList : public ModelList
 {
 	Q_OBJECT
 
@@ -113,7 +114,7 @@ class FMList : public QObject
 		FMList(QObject *parent = nullptr);
 		~FMList();
 		
-		FMH::MODEL_LIST items() const;
+		FMH::MODEL_LIST items() const override;
 		
 		FMList::SORTBY getSortBy() const;
 		void setSortBy(const FMList::SORTBY &key);
@@ -238,14 +239,6 @@ signals:
 	
 	void pathEmptyChanged();
 	void pathExistsChanged();
-	
-	void preItemAppended();
-	void postItemAppended();
-	void preItemRemoved(int index);
-	void postItemRemoved();
-	void updateModel(int index, QVector<int> roles);
-	void preListChanged();
-	void postListChanged();	
 	
 	void warning(QString message);
 	void progress(int percent);

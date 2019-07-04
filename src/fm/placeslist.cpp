@@ -23,10 +23,12 @@
 #include <QTimer>
 #include <QFileSystemWatcher>
 
-PlacesList::PlacesList(QObject *parent) : QObject(parent), model(new KFilePlacesModel(this))
-{
-    this->fm = new FM(this);
-    this->watcher = new QFileSystemWatcher(this);
+PlacesList::PlacesList(QObject *parent) : 
+ModelList(parent),
+fm(new FM(this)),
+model(new KFilePlacesModel(this)),
+watcher(new QFileSystemWatcher(this))
+{    
     connect(watcher, &QFileSystemWatcher::directoryChanged, [this](const QString &path)
     {
         if(this->count.contains(path))
