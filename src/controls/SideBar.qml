@@ -40,8 +40,6 @@ Maui.ListBrowser
     property bool collapsable : true
     property bool isCollapsed : false
 
-//     signal itemClicked(int index)
-
     Rectangle
     {
         anchors.fill: parent
@@ -66,6 +64,12 @@ Maui.ListBrowser
                 control.currentIndex = index
                 itemClicked(index)
             }
+            
+            onRightClicked:
+            {
+				control.currentIndex = index
+				itemRightClicked(index)
+			}
         }
     }
 }

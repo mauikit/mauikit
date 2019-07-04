@@ -22,6 +22,8 @@ ItemDelegate
     property string labelColor: ListView.isCurrentItem ? highlightedTextColor :
     itemFgColor
     
+    signal rightClicked()	
+    
     hoverEnabled: !isMobile
     ToolTip.delay: 1000
     ToolTip.timeout: 5000
@@ -35,6 +37,17 @@ ItemDelegate
         //                                   index % 2 === 0 ? Qt.lighter(backgroundColor,1.2) :
         //                                                     backgroundColor
     }
+    
+    MouseArea
+    {
+		anchors.fill: parent
+		acceptedButtons:  Qt.RightButton
+		onClicked:
+		{
+			if(!isMobile && mouse.button === Qt.RightButton)
+				rightClicked()
+		}
+	}
     
     RowLayout
     {
