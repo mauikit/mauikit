@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 set(REQUIRED_QT_VERSION 5.8.0)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 set(MAUIKIT_VERSION 0.0.5)
 

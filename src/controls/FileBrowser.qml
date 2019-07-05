@@ -55,7 +55,7 @@ Maui.Page
     signal itemLeftEmblemClicked(int index)
     signal itemRightEmblemClicked(int index)
     signal rightClicked()
-    signal newBookmark()
+    signal newBookmark(var paths)
     
     margins: 0
     
@@ -196,7 +196,7 @@ Maui.Page
     {
         id: itemMenu
         width: unit *200
-        onBookmarkClicked: control.bookmarkFolder([items[0].path])
+        onBookmarkClicked: control.newBookmark([items[0].path])
         onCopyClicked:
         {
             if(items.length)
@@ -363,7 +363,7 @@ Maui.Page
         "qrc:/assets/MoonSki.png" 
         else if(!modelList.pathExists)
             "qrc:/assets/ElectricPlug.png"
-            else if(!modelList.contentReady && currentPathType === FMList.SEARCH_PATH)
+            else if(!modelList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
                 "qrc:/assets/animat-search-color.gif"
                 else if(!modelList.contentReady)
                     "qrc:/assets/animat-rocket-color.gif"
@@ -374,7 +374,7 @@ Maui.Page
                     qsTr("Folder is empty!")
                     else if(!modelList.pathExists)
                         qsTr("Folder doesn't exists!")
-                        else if(!modelList.contentReady && currentPathType === FMList.SEARCH_PATH)
+                        else if(!modelList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
                             qsTr("Searching for content!")
                             else if(!modelList.contentReady)
                                 qsTr("Loading content!")					
@@ -384,7 +384,7 @@ Maui.Page
                                 qsTr("You can add new files to it")
                                 else if(!modelList.pathExists)
                                     qsTr("Create Folder?")
-                                    else if(!modelList.contentReady && currentPathType === FMList.SEARCH_PATH)
+                                    else if(!modelList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
                                         qsTr("This might take a while!")
                                         else if(!modelList.contentReady)
                                             qsTr("Almost ready!")	
@@ -406,7 +406,7 @@ Maui.Page
     Keys.onSpacePressed: previewer.show(modelList.get(browser.currentIndex).path)
     
     headBarExit: false
-    headBar.visible: currentPathType !== FMList.APPS_PATH
+    headBar.visible: currentPathType !== Maui.FMList.APPS_PATH
     altToolBars: isMobile
     headBar.rightContent: Kirigami.ActionToolBar
     {
@@ -419,7 +419,7 @@ Maui.Page
         
         Kirigami.Action
         {
-            iconName: list.viewType == FMList.ICON_VIEW ?  "view-list-details" : "view-list-icons"
+            iconName: list.viewType == Maui.FMList.ICON_VIEW ?  "view-list-details" : "view-list-icons"
             onTriggered: control.switchView()
         },
         
@@ -438,36 +438,36 @@ Maui.Page
             Kirigami.Action
             {
                 text: qsTr("Type")
-                checked: list.sortBy === FMList.MIME
-                onTriggered: list.sortBy = FMList.MIME
+                checked: list.sortBy === Maui.FMList.MIME
+                onTriggered: list.sortBy = Maui.FMList.MIME
             }
             
             Kirigami.Action
             {
                 text: qsTr("Date")
-                checked: list.sortBy === FMList.DATE
-                onTriggered: list.sortBy = FMList.DATE
+                checked: list.sortBy === Maui.FMList.DATE
+                onTriggered: list.sortBy = Maui.FMList.DATE
             }
             
             Kirigami.Action
             {
                 text: qsTr("Modified")
-                checked: list.sortBy === FMList.MODIFIED
-                onTriggered: list.sortBy = FMList.MODIFIED
+                checked: list.sortBy === Maui.FMList.MODIFIED
+                onTriggered: list.sortBy = Maui.FMList.MODIFIED
             }
             
             Kirigami.Action
             {
                 text: qsTr("Size")
-                checked: list.sortBy === FMList.SIZE
-                onTriggered: list.sortBy = FMList.SIZE
+                checked: list.sortBy === Maui.FMList.SIZE
+                onTriggered: list.sortBy = Maui.FMList.SIZE
             }
             
             Kirigami.Action
             {
                 text: qsTr("Name")
-                checked: list.sortBy === FMList.LABEL
-                onTriggered: list.sortBy = FMList.LABEL
+                checked: list.sortBy === Maui.FMList.LABEL
+                onTriggered: list.sortBy = Maui.FMList.LABEL
             }        
             
             Kirigami.Action
@@ -603,9 +603,9 @@ Maui.Page
         {
             id: viewLoader
             z: holder.z + 1
-            sourceComponent: list.viewType == FMList.ICON_VIEW  ?  gridViewBrowser :  listViewBrowser
+            sourceComponent: list.viewType == Maui.FMList.ICON_VIEW  ?  gridViewBrowser :  listViewBrowser
             
-            Layout.topMargin: list.viewType == FMList.LIST_VIEW ? unit : contentMargins * 2
+            Layout.topMargin: list.viewType == Maui.FMList.LIST_VIEW ? unit : contentMargins * 2
             Layout.margins: unit
 
             Layout.fillWidth: true
@@ -665,7 +665,7 @@ Maui.Page
             else 
                 Maui.FM.saveSettings("IconSize", thumbnailsSize, "SETTINGS")
                 
-                if(list.viewType == FMList.ICON_VIEW)
+                if(list.viewType == Maui.FMList.ICON_VIEW)
                     browser.adaptGrid()
     }
     
@@ -691,13 +691,13 @@ Maui.Page
         
         switch(currentPathType)
         {
-            case FMList.APPS_PATH:
+            case Maui.FMList.APPS_PATH:
                 if(item.path.endsWith("/"))
                     populate(path)
                     else
                         Maui.FM.runApplication(path)
                         break
-            case FMList.CLOUD_PATH:
+            case Maui.FMList.CLOUD_PATH:
                 if(item.mime === "inode/directory")
                     control.openFolder(path)
                     else
@@ -751,7 +751,7 @@ Maui.Page
         browser.currentIndex = 0
         setPath(path)
         
-        if(currentPathType === FMList.PLACES_PATH)
+        if(currentPathType === Maui.FMList.PLACES_PATH)
         {
             if(trackChanges && saveDirProps)
             {
@@ -764,7 +764,7 @@ Maui.Page
             }
         }
         
-        if(list.viewType == FMList.ICON_VIEW)
+        if(list.viewType == Maui.FMList.ICON_VIEW)
             browser.adaptGrid()
     }
     
@@ -848,22 +848,12 @@ Maui.Page
     
     function switchView()
     {	
-        list.viewType = list.viewType ===  FMList.ICON_VIEW ? FMList.LIST_VIEW : FMList.ICON_VIEW
+        list.viewType = list.viewType ===  Maui.FMList.ICON_VIEW ? Maui.FMList.LIST_VIEW : Maui.FMList.ICON_VIEW
     }
     
     function bookmarkFolder(paths)
-    {
-        if(paths.length > 0)
-        {
-            for(var i in paths)
-            {
-                if(Maui.FM.isDefaultPath(paths[i]))
-                    continue
-                    Maui.FM.bookmark(paths[i])
-            }
-        }
-        newBookmark()
-        
+    {        
+        newBookmark(paths)        
     }
     
     function zoomIn()
@@ -886,25 +876,25 @@ Maui.Page
         
         switch(modelList.sortBy)
         {
-            case FMList.LABEL:
+            case Maui.FMList.LABEL:
                 prop = "label"
                 criteria = ViewSection.FirstCharacter
                 break;
-            case FMList.MIME:
+            case Maui.FMList.MIME:
                 prop = "mime"
                 break;
-            case FMList.SIZE:
+            case Maui.FMList.SIZE:
                 prop = "size"
                 break;
-            case FMList.DATE:
+            case Maui.FMList.DATE:
                 prop = "date"
                 break;
-            case FMList.MODIFIED:
+            case Maui.FMList.MODIFIED:
                 prop = "modified"
                 break;
         }
         
-        list.viewType = FMList.LIST_VIEW 
+        list.viewType = Maui.FMList.LIST_VIEW 
         
         if(!prop)
         {

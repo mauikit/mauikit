@@ -75,9 +75,6 @@ private:
 	QVariantList get(const QString &queryTxt);	
 
 signals:
-	void bookmarkInserted(QString bookmark);
-	void bookmarkRemoved(QString bookmark);
-
     void cloudAccountInserted(QString user);
     void cloudAccountRemoved(QString user);
 
@@ -91,10 +88,6 @@ signals:
 	void newItem(FMH::MODEL item, QString path); // when a new item is created
 	
 public slots:	
-	bool bookmark(const QString &path);
-	bool removeBookmark(const QString &path);
-// 	bool isBookmark(const QString &path);
-
 	QVariantList getCloudAccountsList();	
 	bool addCloudAccount(const QString &server, const QString &user, const QString &password);
 	bool removeCloudAccount(const QString &server, const QString &user);

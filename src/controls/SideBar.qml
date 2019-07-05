@@ -39,7 +39,7 @@ Maui.ListBrowser
                                        iconSizes.small
     property bool collapsable : true
     property bool isCollapsed : false
-
+    
     Rectangle
     {
         anchors.fill: parent

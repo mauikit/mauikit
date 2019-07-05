@@ -47,6 +47,9 @@ public slots:
 	QVariantMap get(const int &index) const;
 	void refresh();
 	void clearBadgeCount(const int &index);
+    
+    void addPlace(const QString &path);
+    void removePlace(const int &index);
 	
 private:
 	FM *fm;

@@ -43,7 +43,6 @@ class FMList : public ModelList
 	Q_PROPERTY(FMList::VIEW_TYPE viewType READ getViewType WRITE setViewType NOTIFY viewTypeChanged())
 	Q_PROPERTY(int cloudDepth READ getCloudDepth WRITE setCloudDepth NOTIFY cloudDepthChanged())
 	
-	Q_PROPERTY(bool isBookmark READ getIsBookmark WRITE setIsBookmark NOTIFY isBookmarkChanged())
 	Q_PROPERTY(bool contentReady READ getContentReady NOTIFY contentReadyChanged())
 	
 	Q_PROPERTY(QStringList filters READ getFilters WRITE setFilters NOTIFY filtersChanged())
@@ -152,9 +151,6 @@ class FMList : public ModelList
 		
 		bool getTrackChanges() const;
 		void setTrackChanges(const bool &value);
-		
-		bool getIsBookmark() const;
-		void setIsBookmark(const bool &value);
 
         bool getFoldersFirst() const;
         void setFoldersFirst(const bool &value);
@@ -195,7 +191,6 @@ private:
 	bool pathExists = false;
 	bool pathEmpty = true;
 	bool trackChanges = true;
-	bool isBookmark = false;
     bool foldersFirst = false;
 	bool saveDirProps = false;
 	bool contentReady = false;
@@ -230,7 +225,6 @@ signals:
 	void onlyDirsChanged();
 	void sortByChanged();
 	void trackChangesChanged();
-	void isBookmarkChanged();
     void foldersFirstChanged();
 	void saveDirPropsChanged();
 	void contentReadyChanged();

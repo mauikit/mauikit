@@ -86,6 +86,11 @@ void BaseModel::setList(ModelList *value)
 	
 	if(list)
 	{
+        connect(this->list, &ModelList::preItemAppendedAt, this, [=](int index)
+        {
+            beginInsertRows(QModelIndex(), index, index);
+        });
+        
 		connect(this->list, &ModelList::preItemAppended, this, [=]()
 		{
 			const int index = list->items().size();
@@ -111,13 +116,7 @@ void BaseModel::setList(ModelList *value)
 		{
 			emit this->dataChanged(this->index(index), this->index(index), roles);
 		});
-		
-		// 		connect(this->list, &PlacesList::pathChanged, this, [=]()
-		// 		{
-		// 			beginResetModel();
-		// 			endResetModel();
-		// 		});
-		
+				
 		connect(this->list, &ModelList::preListChanged, this, [=]()
 		{
 			beginResetModel();

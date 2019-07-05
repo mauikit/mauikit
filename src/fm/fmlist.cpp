@@ -389,51 +389,41 @@ void FMList::setPath(const QString &path)
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::SEARCH_PATH;
-// 		this->isBookmark = false;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
-		emit this->isBookmarkChanged();
 		this->watchPath(QString());
 		
 	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]+"/"))
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::CLOUD_PATH;
-// 		this->isBookmark = false;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
-		emit this->isBookmarkChanged();
 		this->watchPath(QString());
 		
 	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/"))
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::APPS_PATH;
-// 		this->isBookmark = false;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
-		emit this->isBookmarkChanged();
 		this->watchPath(QString());
 		
 	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::TAGS_PATH]+"/"))
 	{
 		this->pathExists = true;
-// 		this->isBookmark = false;
 		this->pathType = FMList::PATHTYPE::TAGS_PATH;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
-		emit this->isBookmarkChanged();
 		this->watchPath(QString());
 		
 	}else
 	{
 		this->watchPath(this->path);
-// 		this->isBookmark = this->fm->isBookmark(this->path);
 		this->pathExists = FMH::fileExists(this->path);
 		this->pathType = FMList::PATHTYPE::PLACES_PATH;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
-		emit this->isBookmarkChanged();
 	}
 	
 	emit this->pathChanged();
@@ -649,29 +639,6 @@ void FMList::setTrackChanges(const bool& value)
 	
 	this->trackChanges = value;
 	emit this->trackChangesChanged();
-}
-
-bool FMList::getIsBookmark() const
-{
-	return this->isBookmark;
-}
-
-void FMList::setIsBookmark(const bool& value)
-{
-	if(this->isBookmark == value)
-		return;
-	
-	if(this->pathType != FMList::PATHTYPE::PLACES_PATH)
-		return;
-	
-	this->isBookmark = value;
-	
-	if(value)
-		this->fm->bookmark(this->path);
-	else
-		this->fm->removeBookmark(this->path);
-	
-	emit this->isBookmarkChanged();
 }
 
 bool FMList::getFoldersFirst() const

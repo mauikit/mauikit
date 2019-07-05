@@ -3,7 +3,6 @@
     import QtQuick.Layouts 1.3
     import org.kde.mauikit 1.0 as Maui
     import org.kde.kirigami 2.6 as Kirigami
-    import FMList 1.0
     
     Menu
     { 
@@ -57,14 +56,10 @@
             id: _bookmarkAction
             
             icon.name: "bookmark-new"
-            text: qsTr("Bookmark")
-            checkable: true
-            checked: modelList.isBookmark 
-            
+            text: qsTr("Bookmark")            
             onTriggered: 
             {
-                modelList.isBookmark = !modelList.isBookmark
-                newBookmark()
+                newBookmark([currentPath])
                 close()
             }
         },
@@ -168,7 +163,7 @@
         
         function show()
         {
-            if(currentPathType === FMList.PLACES_PATH || currentPathType === FMList.TAGS_PATH || currentPathType === FMList.CLOUD_PATH)
+            if(currentPathType === Maui.FMList.PLACES_PATH || currentPathType === Maui.FMList.TAGS_PATH || currentPathType === Maui.FMList.CLOUD_PATH)
             {
                 if(isCopy)
                     pasteFiles = copyItems.length

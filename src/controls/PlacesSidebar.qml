@@ -4,9 +4,6 @@ import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.6 as Kirigami
 
-import FMList 1.0
-
-
 Maui.SideBar
 {
 	id: control
@@ -64,6 +61,7 @@ Maui.SideBar
 		{
 			text: qsTr("Remove")
 			Kirigami.Theme.textColor: dangerColor
+			onTriggered: list.removePlace(control.currentIndex)
 		}
 	}
 	
@@ -76,6 +74,11 @@ Maui.SideBar
 	Maui.PlacesList
 	{
 		id: placesList
-		groups: [FMList.PLACES_PATH, FMList.APPS_PATH, FMList.BOOKMARKS_PATH, FMList.DRIVES_PATH, FMList.TAGS_PATH]
+		groups: [
+		Maui.FMList.PLACES_PATH, 
+        Maui.FMList.APPS_PATH, 
+        Maui.FMList.BOOKMARKS_PATH, 
+        Maui.FMList.DRIVES_PATH, 
+        Maui.FMList.TAGS_PATH]
 	}
 }

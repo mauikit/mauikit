@@ -22,7 +22,6 @@ import QtQuick.Controls 2.2
 import org.kde.kirigami 2.0 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import QtQuick.Layouts 1.3
-import FMList 1.0 
 
 Maui.Dialog
 {
@@ -36,10 +35,10 @@ Maui.Dialog
 		property string suggestedFileName : ""
 		
 		property var filters: []
-		property int filterType: FMList.NONE
+		property int filterType: Maui.FMList.NONE
 		
 		property bool onlyDirs: false
-		property int sortBy: FMList.MODIFIED
+		property int sortBy: Maui.FMList.MODIFIED
 		property bool searchBar : false
 		
 		readonly property var modes : ({OPEN: 0, SAVE: 1})
@@ -150,7 +149,15 @@ Maui.Dialog
 							browser.openFolder(path)
 						}
 						
-						list.groups: control.mode === modes.OPEN ? [FMList.PLACES_PATH, FMList.BOOKMARKS_PATH, FMList.CLOUD_PATH, FMList.DRIVES_PATH, FMList.TAGS_PATH] : [FMList.PLACES_PATH, FMList.CLOUD_PATH, FMList.DRIVES_PATH]
+						list.groups: control.mode === modes.OPEN ? [
+						Maui.FMList.PLACES_PATH,
+                        Maui.FMList.BOOKMARKS_PATH,
+                        Maui.FMList.CLOUD_PATH,
+                        Maui.FMList.DRIVES_PATH,
+                        Maui.FMList.TAGS_PATH] : 
+                        [Maui.FMList.PLACES_PATH, 
+                        Maui.FMList.CLOUD_PATH,
+                        Maui.FMList.DRIVES_PATH]
 					}
 					
 					ColumnLayout
