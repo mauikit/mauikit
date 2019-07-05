@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
 import "."
+import org.kde.kirigami 2.6 as Kirigami
 
 import TagsList 1.0 
 import TagsModel 1.0
@@ -47,7 +48,7 @@ ListView
         text: qsTr(control.placeholderText)
         opacity: 0.7
         visible: count === 0 && showPlaceHolder
-        color: colorScheme.textColor
+        color: Kirigami.Theme.textColor
         font.pointSize: fontSizes.default
     }
 
@@ -55,7 +56,7 @@ ListView
     {
         id: delegate
         showDeleteIcon: control.showDeleteIcon
-        colorScheme.textColor: control.colorScheme.textColor
+        colorScheme.textColor: Kirigami.Theme.textColor
         Connections
         {
             target: delegate

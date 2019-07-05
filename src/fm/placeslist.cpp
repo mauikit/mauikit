@@ -66,23 +66,23 @@ FMH::MODEL_LIST PlacesList::items() const
     return this->list;
 }
 
-static FMH::MODEL modelPlaceInfo(const KFilePlacesModel *model, const QModelIndex &index,  const FMH::PATHTYPE_KEY &type)
+static FMH::MODEL modelPlaceInfo(const KFilePlacesModel &model, const QModelIndex &index,  const FMH::PATHTYPE_KEY &type)
 {
     return FMH::MODEL
         {
-            {FMH::MODEL_KEY::PATH, model->url(index).toString().replace("file://", "")},
-            {FMH::MODEL_KEY::URL, model->url(index).toString().replace("file://", "")},
-            {FMH::MODEL_KEY::ICON, model->icon(index).name()},
-            {FMH::MODEL_KEY::LABEL, model->text(index)},
-            {FMH::MODEL_KEY::NAME, model->text(index)},
+            {FMH::MODEL_KEY::PATH, model.url(index).toString().replace("file://", "")},
+            {FMH::MODEL_KEY::URL, model.url(index).toString().replace("file://", "")},
+            {FMH::MODEL_KEY::ICON, model.icon(index).name()},
+            {FMH::MODEL_KEY::LABEL, model.text(index)},
+            {FMH::MODEL_KEY::NAME, model.text(index)},
             {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_NAME[type]}
         };
         
 }
 
-static FMH::MODEL_LIST getGroup(const KFilePlacesModel *model, const FMH::PATHTYPE_KEY &type)
+static FMH::MODEL_LIST getGroup(const KFilePlacesModel &model, const FMH::PATHTYPE_KEY &type)
 {
-    const auto group = model->groupIndexes(static_cast<KFilePlacesModel::GroupType>(type));
+    const auto group = model.groupIndexes(static_cast<KFilePlacesModel::GroupType>(type));
     return std::accumulate(group.begin(), group.end(), FMH::MODEL_LIST(), [&model, &type](FMH::MODEL_LIST &list, const QModelIndex &index) -> FMH::MODEL_LIST
     {
         list << modelPlaceInfo(model, index, type);
@@ -98,7 +98,7 @@ void PlacesList::setList()
         switch(group)
         {
         case FMH::PATHTYPE_KEY::PLACES_PATH:
-            this->list << getGroup(this->model, FMH::PATHTYPE_KEY::PLACES_PATH);
+            this->list << getGroup(*this->model, FMH::PATHTYPE_KEY::PLACES_PATH);
             break;
 
         case FMH::PATHTYPE_KEY::APPS_PATH:
@@ -106,15 +106,15 @@ void PlacesList::setList()
             break;
 
         case FMH::PATHTYPE_KEY::DRIVES_PATH:
-            this->list << getGroup(this->model, FMH::PATHTYPE_KEY::DRIVES_PATH);
+            this->list << getGroup(*this->model, FMH::PATHTYPE_KEY::DRIVES_PATH);
             break;
             
         case FMH::PATHTYPE_KEY::REMOTE_PATH:
-            this->list << getGroup(this->model, FMH::PATHTYPE_KEY::REMOTE_PATH);
+            this->list << getGroup(*this->model, FMH::PATHTYPE_KEY::REMOTE_PATH);
             break;
             
         case FMH::PATHTYPE_KEY::REMOVABLE_PATH:
-            this->list << getGroup(this->model, FMH::PATHTYPE_KEY::REMOVABLE_PATH);
+            this->list << getGroup(*this->model, FMH::PATHTYPE_KEY::REMOVABLE_PATH);
             break;
 
         case FMH::PATHTYPE_KEY::TAGS_PATH:
@@ -213,7 +213,7 @@ void PlacesList::addPlace(const QString& path)
     emit this->preItemAppendedAt(index);
     const auto url =  QStringLiteral("file://")+path;
     this->model->addPlace(QDir(path).dirName(), url);
-    this->list.insert(index, modelPlaceInfo(this->model, this->model->closestItem(QUrl(url)), FMH::PATHTYPE_KEY::PLACES_PATH));
+    this->list.insert(index, modelPlaceInfo(*this->model, this->model->closestItem(QUrl(url)), FMH::PATHTYPE_KEY::PLACES_PATH));
     emit this->postItemAppended();    
 }
 

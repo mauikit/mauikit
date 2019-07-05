@@ -70,8 +70,6 @@ public:
 private:
     Tagging *tag;
 // 	static FM* instance;
-	
-    void init();
 	QVariantList get(const QString &queryTxt);	
 
 signals:

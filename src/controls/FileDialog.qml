@@ -19,7 +19,7 @@
 
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import org.kde.kirigami 2.0 as Kirigami
+import org.kde.kirigami 2.6 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import QtQuick.Layouts 1.3
 
@@ -76,44 +76,63 @@ Maui.Dialog
 			headBarExit: false
 			headBar.plegable: false
 			headBarTitleVisible: false
-			headBar.implicitHeight: pathBar.height + space.big
-			
-			headBar.middleContent: Maui.PathBar
+			headBar.implicitHeight: toolBarHeight + space.medium
+			Component
 			{
-				id: pathBar
-				height: iconSizes.big
-				Layout.fillWidth: true
-				// 				anchors.centerIn: parent
-				url: browser.currentPath
-				onPathChanged: browser.openFolder(path)
-				onHomeClicked:
-				{
-					if(pageRow.currentIndex !== 0 && !pageRow.wideMode)
-						pageRow.currentIndex = 0
-						
-						browser.openFolder(Maui.FM.homePath())
-				}
-				
-				onPlaceClicked: browser.openFolder(path)
-				
-				Maui.TextField
-				{
-					id: searchField
-					anchors.fill: parent
-					visible: searchBar
-					focus: visible
-					z: pathBar.z+1
-					placeholderText: qsTr("Search... ")
-					onAccepted: browser.openFolder("Search/"+text)
-					//            onCleared: browser.goBack()
-					onGoBackTriggered:
-					{
-						searchBar = false
-						searchField.clear()
-					}
-				}
-			}
-			
+                id: _pathBarComponent
+                
+                Maui.PathBar
+                {
+                    anchors.fill: parent
+                    //        colorScheme.backgroundColor: "#fff"
+                    //        colorScheme.textColor: "#333"
+                    //        colorScheme.borderColor: Qt.darker(headBarBGColor, 1.4)
+                    onPathChanged: browser.openFolder(path)
+                    url: browser.currentPath
+                    onHomeClicked: browser.openFolder(Maui.FM.homePath())
+                    onPlaceClicked: browser.openFolder(path)
+                }
+            }
+            
+            Component
+            {
+                id: _searchFieldComponent
+                
+                Maui.TextField
+                {
+                    anchors.fill: parent
+                    placeholderText: qsTr("Search for files... ")
+                    onAccepted: browser.openFolder("Search/"+text)
+                    //            onCleared: browser.goBack()
+                    onGoBackTriggered:
+                    {
+                        searchBar = false
+                        clear()
+                        //                browser.goBack()
+                    }
+                    
+                    background: Rectangle
+                    {
+                        border.color: borderColor
+                        radius: radiusV
+                    }
+                }
+            }
+            
+            headBar.middleContent: Item
+            {
+                id: _pathBarLoader
+                Layout.fillWidth: true
+                Layout.margins: space.medium
+                height: iconSizes.big
+                Loader
+                {
+                    anchors.fill: parent
+                    sourceComponent: searchBar ? _searchFieldComponent : _pathBarComponent
+                    
+                }
+            }
+            
 			headBar.rightContent: Maui.ToolButton
 			{
 				id: searchButton
@@ -151,11 +170,12 @@ Maui.Dialog
 						
 						list.groups: control.mode === modes.OPEN ? [
 						Maui.FMList.PLACES_PATH,
-                        Maui.FMList.BOOKMARKS_PATH,
                         Maui.FMList.CLOUD_PATH,
+                        Maui.FMList.REMOTE_PATH,
                         Maui.FMList.DRIVES_PATH,
                         Maui.FMList.TAGS_PATH] : 
-                        [Maui.FMList.PLACES_PATH, 
+                        [Maui.FMList.PLACES_PATH,
+                        Maui.FMList.REMOTE_PATH,                                                
                         Maui.FMList.CLOUD_PATH,
                         Maui.FMList.DRIVES_PATH]
 					}
@@ -219,17 +239,16 @@ Maui.Dialog
 								width: _bottomBar.middleLayout.width * 0.9
 								placeholderText: qsTr("File name")
 								text: suggestedFileName
-								
 							}
 							
 							rightContent: Row
 							{
 								spacing: space.big
-								Maui.Button
+								Button
 								{
 									id: _acceptButton
-									colorScheme.textColor: "white"
-									colorScheme.backgroundColor: suggestedColor
+									Kirigami.Theme.textColor: "white"
+									Kirigami.Theme.backgroundColor: suggestedColor
 									
 									text: qsTr("Accept")
 									onClicked: 

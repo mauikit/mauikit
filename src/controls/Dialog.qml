@@ -21,7 +21,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami 2.6 as Kirigami
 
 Maui.Popup
 {
@@ -97,25 +97,25 @@ Maui.Popup
 		footBar.rightContent: Row
 		{			
 			spacing: space.big
-			Maui.Button
+			Button
 			{
 				id: _rejectButton
 				visible: defaultButtons
-				colorScheme.textColor: dangerColor
-				colorScheme.borderColor: dangerColor
-				colorScheme.backgroundColor: "transparent"
+				Kirigami.Theme.textColor: dangerColor
+// 				Kirigami.Theme.borderColor: dangerColor
+				Kirigami.Theme.backgroundColor: "transparent"
 				
 				text: rejectText
 				onClicked: rejected()
 				
 			}
 			
-			Maui.Button
+			Button
 			{
 				id: _acceptButton	
 				visible: defaultButtons
-				colorScheme.backgroundColor: infoColor
-				colorScheme.textColor: "white"
+				Kirigami.Theme.backgroundColor: infoColor
+				Kirigami.Theme.textColor: "white"
 				text: acceptText
 				onClicked: accepted()
 				

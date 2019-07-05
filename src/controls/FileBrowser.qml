@@ -568,7 +568,7 @@ Maui.Page
                     text: qsTr("Share")
                     onTriggered:
                     {						
-                        control.shareFiles(selectedPaths)						
+                        control.shareFiles(selectedPaths)
                         _selectionBarmenu.close()
                     }
                 }

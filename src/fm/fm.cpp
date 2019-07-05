@@ -58,10 +58,11 @@ FM* FM::getInstance()
     }
 }*/
 
-void FM::init()
-{
-    this->tag = Tagging::getInstance();
-    this->sync = new Syncing(this);
+
+FM::FM(QObject *parent) : FMDB(parent),
+sync(new Syncing(this)),
+tag(Tagging::getInstance())
+{	
     connect(this->sync, &Syncing::listReady, [this](const FMH::MODEL_LIST &list, const QString &url)
     {
         emit this->cloudServerContentReady(list, url);
@@ -111,11 +112,6 @@ void FM::init()
 	{		
 		emit this->newItem(item, url);
 	});
-}
-
-FM::FM(QObject *parent) : FMDB(parent) 
-{
-	this->init();
 }
 
 FM::~FM() {}

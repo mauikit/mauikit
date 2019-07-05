@@ -28,11 +28,11 @@ Maui.Dialog
 		tooltipText: qsTr("Sort by...")
 		onClicked: sortMenu.popup()
 		
-		Maui.Menu
+		Menu
 		{
 			id: sortMenu			
 			
-			Maui.MenuItem
+			MenuItem
 			{
 				text: qsTr("Name")
 				checkable: true
@@ -40,7 +40,7 @@ Maui.Dialog
 				onTriggered: _tagsList.sortBy = TagsList.TAG
 			}
 			
-			Maui.MenuItem
+			MenuItem
 			{
 				text: qsTr("Date")
 				checkable: true
