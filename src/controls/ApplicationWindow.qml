@@ -274,11 +274,11 @@ backgroundColor.b, 0.7))
         headBar.colorScheme.backgroundColor: headBarBGColor
         headBar.colorScheme.textColor: headBarFGColor
 
-        headBar.leftContent: Maui.ToolButton
+        headBar.leftContent: ToolButton
         {
             id: menuBtn
-            iconName: "application-menu"
-			iconColor: headBarFGColor
+            icon.name: "application-menu"
+			icon.color: headBarFGColor
             checked: mainMenu.visible  
             onClicked:
             {
@@ -350,11 +350,11 @@ backgroundColor.b, 0.7))
 			}			
         }
 
-        headBar.rightContent: Maui.ToolButton
+        headBar.rightContent: ToolButton
         {
             id: searchBtn
-            iconName: "edit-find"
-            iconColor: headBarFGColor
+            icon.name: "edit-find"
+            icon.color: headBarFGColor
             onClicked: searchButtonClicked()
         }
         
@@ -448,13 +448,13 @@ backgroundColor.b, 0.7))
 				Layout.row: 1
 				Layout.column: 1
 				
-				Maui.ToolButton
+				ToolButton
 				{
 					id: _notifyIcon
-					size: iconSizes.large
+					icon.width: iconSizes.large
 					
 					anchors.centerIn: parent
-					isMask: false
+// 					isMask: false
 				}				
 			}
 			

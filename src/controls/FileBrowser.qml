@@ -500,23 +500,23 @@ Maui.Page
     }
     
     headBar.leftContent: [
-    Maui.ToolButton
+    ToolButton
     {
-        iconName: "go-previous"
+        icon.name: "go-previous"
         onClicked: control.goBack()
     },
     
-    Maui.ToolButton
+    ToolButton
     {
         id: goUpButton
-        visible: isAndroid
-        iconName: "go-up"
+        visible: true
+        icon.name: "go-up"
         onClicked: control.goUp()
     },
     
-    Maui.ToolButton
+    ToolButton
     {
-        iconName: "go-next"
+        icon.name: "go-next"
         onClicked: control.goNext()
     }	
     ]

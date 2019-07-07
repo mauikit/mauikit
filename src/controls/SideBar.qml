@@ -71,7 +71,7 @@ Maui.ListBrowser
 				itemRightClicked(index)
 			}
 			
-			onPressedAndHold:
+			onPressAndHold:
 			{
 				control.currentIndex = index
 				itemRightClicked(index)

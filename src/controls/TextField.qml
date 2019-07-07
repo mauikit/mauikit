@@ -83,7 +83,7 @@ TextField
         onActivated: goBackTriggered();
     }
 
-	Maui.ToolButton
+	ToolButton
 	{
 		id: clearButton
 		visible: control.text.length
@@ -91,9 +91,13 @@ TextField
 		anchors.right: control.right
 		anchors.rightMargin: space.small
 		anchors.verticalCenter: parent.verticalCenter
-		iconName: "edit-clear"
-		iconColor: color   
-		onClicked: {control.clear(); cleared()}
+		icon.name: "edit-clear"
+		icon.color: color   
+		onClicked: 
+		{
+            control.clear()
+            cleared()            
+        }
 	}
 	
 	Menu

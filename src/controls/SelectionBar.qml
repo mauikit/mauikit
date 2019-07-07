@@ -268,12 +268,12 @@ Item
                             undefined
             
             Layout.margins: space.big 
-            Maui.ToolButton
+            ToolButton
             {
                 visible: iconVisible
                 anchors.centerIn: parent
-                iconName: control.iconName
-                iconColor: control.colorScheme.textColor
+                icon.name: control.iconName
+                icon.color: control.colorScheme.textColor
                 onClicked: iconClicked()
             }
         }

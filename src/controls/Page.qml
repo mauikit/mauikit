@@ -18,16 +18,16 @@
  */
 
 import QtQuick 2.9
-import QtQuick.Controls 2.2 as QQC2
+import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami 2.6 as Kirigami
 import QtGraphicalEffects 1.0
 import QtQuick.Window 2.0
 
 import "private"
 
-QQC2.Page
+Page
 {
     id: control
 
@@ -122,16 +122,15 @@ QQC2.Page
             clip: false
             z: container.z +1
 
-            leftContent: Maui.ToolButton
+            leftContent: ToolButton
             {
                 id: exitBtn
                 visible: headBarExit
-                anim : true
-                iconName : headBarExitIcon
+                icon.name : headBarExitIcon
                 onClicked : exit()
             }
 
-            middleContent: QQC2.Label
+            middleContent: Label
             {
                 visible: headBarTitleVisible
                 text : headBarTitle

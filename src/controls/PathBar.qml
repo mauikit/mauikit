@@ -108,11 +108,11 @@ Item
             Layout.rightMargin: space.small
             width: iconSize
             
-            Maui.ToolButton
+            ToolButton
             {
                 anchors.centerIn: parent
-                iconName: "go-next"
-                iconColor: control.colorScheme.textColor
+                icon.name: "go-next"
+                icon.color: control.colorScheme.textColor
                 onClicked:
                 {
                     pathChanged(entry.text)
@@ -140,11 +140,12 @@ Item
             Layout.rightMargin: space.small
             width: iconSize
             
-            Maui.ToolButton
+            ToolButton
             {
                 anchors.centerIn: parent
-                iconName: "go-home"
-                iconColor: control.colorScheme.textColor                
+                icon.name: "go-home"
+                flat: true
+                icon.color: control.colorScheme.textColor                
                 onClicked: homeClicked()
             }
         }
@@ -202,11 +203,12 @@ Item
             Layout.leftMargin: space.small
             Layout.rightMargin: space.small
             width: iconSize
-            Maui.ToolButton
+            ToolButton
             {
                 anchors.centerIn: parent
-                iconName: "filename-space-amarok"
-                iconColor: control.colorScheme.textColor                
+                flat: true
+                icon.name: "filename-space-amarok"
+                icon.color: control.colorScheme.textColor                
                 onClicked: showEntryBar()
             }
         }
