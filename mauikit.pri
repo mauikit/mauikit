@@ -39,16 +39,16 @@ HEADERS += \
     $$PWD/src/fm/fm.h \
     $$PWD/src/fm/fmh.h \
     $$PWD/src/fm/fmdb.h \
-    $$PWD/src/fm/fmmodel.h \
     $$PWD/src/fm/fmlist.h \
     $$PWD/src/fm/placeslist.h \
-    $$PWD/src/fm/placesmodel.h \
+    $$PWD/src/fm/basemodel.h \
+    $$PWD/src/fm/modellist.h \
     $$PWD/src/utils/editor/documenthandler.h \
     $$PWD/src/utils/handy.h \
     $$PWD/src/utils/syncing/syncing.h \
-	$$PWD/src/utils/syncing/syncinglist.h \
+    $$PWD/src/utils/syncing/syncinglist.h \
     $$PWD/src/utils/syncing/syncingmodel.h \
-	$$PWD/src/utils/store/store.h \
+    $$PWD/src/utils/store/store.h \
     $$PWD/src/utils/store/storemodel.h \
     $$PWD/src/utils/store/storelist.h
 
@@ -56,10 +56,10 @@ SOURCES += \
     $$PWD/src/mauikit.cpp \
     $$PWD/src/fm/fm.cpp \
     $$PWD/src/fm/fmdb.cpp \
-    $$PWD/src/fm/fmmodel.cpp \
     $$PWD/src/fm/fmlist.cpp \
     $$PWD/src/fm/placeslist.cpp \    
-    $$PWD/src/fm/placesmodel.cpp \    
+    $$PWD/src/fm/basemodel.cpp \
+    $$PWD/src/fm/modellist.cpp \
     $$PWD/src/utils//editor/documenthandler.cpp \
     $$PWD/src/utils/handy.cpp \
     $$PWD/src/utils/syncing/syncing.cpp \
