@@ -593,14 +593,14 @@ namespace FMH
 	
 	inline FMH::MODEL getDirInfoModel(const QString &path, const QString &type = QString())
 	{
-		const QFileInfo file (path);
-		if(!file.exists()) 
+		const QDir dir (path);
+		if(!dir.exists()) 
 			return FMH::MODEL();
 		
 		return FMH::MODEL
 		{
 			{FMH::MODEL_KEY::ICON, FMH::getIconName(path)},
-			{FMH::MODEL_KEY::LABEL, file.baseName()},
+			{FMH::MODEL_KEY::LABEL, dir.dirName()},
 			{FMH::MODEL_KEY::PATH, path},
 			{FMH::MODEL_KEY::TYPE, type}
 		};

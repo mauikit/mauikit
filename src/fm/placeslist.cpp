@@ -181,13 +181,8 @@ QVariantMap PlacesList::get(const int& index) const
     if(index >= this->list.size() || index < 0)
         return QVariantMap();
 
-    QVariantMap res;
-    const auto model = this->list.at(index);
-
-    for(const auto &key : model.keys())
-        res.insert(FMH::MODEL_NAME[key], model[key]);
-   
-    return res;
+    const auto model = this->list.at(index);   
+    return FM::toMap(model);
 }
 
 void PlacesList::refresh()

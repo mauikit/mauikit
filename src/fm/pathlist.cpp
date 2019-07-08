@@ -17,9 +17,18 @@
  */
 
 #include "pathlist.h"
+#include "fm.h"
 
 PathList::PathList(QObject *parent) : ModelList(parent)
 {
+	connect(this, &PathList::pathChanged, [&]()
+	{
+		emit this->preListChanged();
+		this->list.clear();
+		this->list << PathList::splitPath(this->m_path);
+		qDebug()<< this->list;
+		emit this->postListChanged();
+	});
 }
 
 PathList::~PathList()
@@ -28,7 +37,10 @@ PathList::~PathList()
 
 QVariantMap PathList::get(const int& index) const
 {
-	return QVariantMap();
+	if(index >= this->list.size() || index < 0)
+		return QVariantMap();	
+	const auto model = this->list.at(index);	
+	return FM::toMap(model);
 }
 
 QString PathList::getPath()
@@ -41,21 +53,28 @@ FMH::MODEL_LIST PathList::items() const
 	return this->list;
 }
 
-void PathList::setPath(const QString& path) const
+void PathList::setPath(const QString& path)
 {
 	if(path == this->m_path)
 		return;
+	
+	this->m_path = path;	
+	emit this->pathChanged();	
 }
 
 FMH::MODEL_LIST PathList::splitPath(const QString& path)
 {
-	const auto paths = path.split("/");
+	const auto paths = path.split("/", QString::SplitBehavior::SkipEmptyParts);
 	return std::accumulate(paths.constBegin(), paths.constEnd(), FMH::MODEL_LIST(), [](FMH::MODEL_LIST &list, const QString &part) -> FMH::MODEL_LIST
-	{		
-		const auto url = list.last()[FMH::MODEL_KEY::PATH] + QString(part) + "/";
-		if(!part.isEmpty())
-			list << FMH::getDirInfoModel(url);
-		
+	{	
+		const auto url = list.isEmpty() ? QString("/"+part) : list.last()[FMH::MODEL_KEY::PATH] + QString("/"+part);		
+		if(!url.isEmpty())
+			list << (FMH::fileExists(url) ? FMH::getDirInfoModel(url) : 
+			FMH::MODEL 
+			{
+				{FMH::MODEL_KEY::LABEL, part},
+				{FMH::MODEL_KEY::PATH, url}
+			});
 		return list;
 	});
 }

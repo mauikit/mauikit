@@ -70,6 +70,16 @@ Item
 		}
 	}
 	
+	Maui.BaseModel
+	{
+		id: _pathModel
+		list: _pathList
+	}
+	
+	Maui.PathList
+	{
+		id: _pathList
+	}
 	
 	Component
 	{
@@ -131,7 +141,7 @@ Item
 		{
 			anchors.fill: parent
 			spacing: 0
-			property alias pathsList : pathBarList
+			property alias listView: _listView
 			
 			Item
 			{
@@ -155,10 +165,11 @@ Item
 				Layout.fillHeight: true
 				color: colorScheme.borderColor
 			}
+		
 			
 			ListView
 			{
-				id: pathBarList
+				id: _listView
 				Layout.fillHeight: true
 				Layout.fillWidth: true
 				
@@ -170,7 +181,7 @@ Item
 				interactive: true
 				boundsBehavior: isMobile ?  Flickable.DragOverBounds : Flickable.StopAtBounds
 				
-				model: ListModel{}
+				model: _pathModel
 				
 				delegate: PathBarDelegate
 				{
@@ -182,8 +193,8 @@ Item
 						target: delegate
 						onClicked:
 						{
-							pathBarList.currentIndex = index
-							placeClicked(pathBarList.model.get(index).path)
+							_listView.currentIndex = index
+							placeClicked(_pathList.get(index).path)
 						}
 					}
 				}
@@ -193,8 +204,7 @@ Item
 					anchors.fill: parent
 					onClicked: showEntryBar()
 					z: -1
-				}
-				
+				}				
 			}
 			
 			Item
@@ -225,25 +235,17 @@ Item
 		}
 	}
 	
-	Component.onCompleted: control.append(control.url)
+	Component.onCompleted: control.append()	
 	
 	function append()
 	{
+		_pathList.path = control.url
+		
 		if(_loader.sourceComponent !== _pathCrumbsComponent)
 			return
 			
-			_loader.item.pathsList.model.clear()
-			var places = control.url.split("/")
-			var url = ""
-			for(var i in places)
-			{
-				url = url + places[i] + "/"
-				if(places[i].length > 1)
-					_loader.item.pathsList.model.append({label : places[i], path: url})
-			}
-			
-			_loader.item.pathsList.currentIndex = _loader.item.pathsList.count-1
-			_loader.item.pathsList.positionViewAtEnd()
+		_loader.item.listView.currentIndex = _loader.item.listView.count-1
+		_loader.item.listView.positionViewAtEnd()
 	}
 	
 	function showEntryBar()

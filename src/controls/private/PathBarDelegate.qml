@@ -1,18 +1,18 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.0 as Kirigami
+import org.kde.kirigami 2.6 as Kirigami
 
 ItemDelegate
 {
     id: control
     property bool isCurrentListItem : ListView.isCurrentItem
-    property color labelColor : isCurrentListItem ? colorScheme.highlightColor : colorScheme.textColor
+    property color labelColor : isCurrentListItem ? Kirigami.Theme.highlightColor :  Kirigami.Theme.textColor
     anchors.verticalCenter: parent.verticalCenter
     
     background: Rectangle
     {
-        color: isCurrentListItem ? Qt.lighter(colorScheme.backgroundColor, 1.1) : "transparent"
+		color: isCurrentListItem ? Qt.lighter( Kirigami.Theme.backgroundColor, 1.1) : "transparent"
         
         Kirigami.Separator
         {
@@ -30,7 +30,7 @@ ItemDelegate
     
     Label
     {
-        text: label
+        text: model.label
         width: parent.width
         height: parent.height
         rightPadding: space.medium
