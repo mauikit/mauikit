@@ -31,9 +31,7 @@ PathList::PathList(QObject *parent) : ModelList(parent)
 	});
 }
 
-PathList::~PathList()
-{
-}
+PathList::~PathList() {}
 
 QVariantMap PathList::get(const int& index) const
 {
@@ -43,7 +41,7 @@ QVariantMap PathList::get(const int& index) const
 	return FM::toMap(model);
 }
 
-QString PathList::getPath()
+QString PathList::getPath() const
 {
 	return this->m_path;
 }
@@ -68,6 +66,7 @@ FMH::MODEL_LIST PathList::splitPath(const QString& path)
 	return std::accumulate(paths.constBegin(), paths.constEnd(), FMH::MODEL_LIST(), [](FMH::MODEL_LIST &list, const QString &part) -> FMH::MODEL_LIST
 	{	
 		const auto url = list.isEmpty() ? QString("/"+part) : list.last()[FMH::MODEL_KEY::PATH] + QString("/"+part);		
+		
 		if(!url.isEmpty())
 			list << (FMH::fileExists(url) ? FMH::getDirInfoModel(url) : 
 			FMH::MODEL 
@@ -75,6 +74,7 @@ FMH::MODEL_LIST PathList::splitPath(const QString& path)
 				{FMH::MODEL_KEY::LABEL, part},
 				{FMH::MODEL_KEY::PATH, url}
 			});
+		
 		return list;
 	});
 }

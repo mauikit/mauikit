@@ -36,7 +36,7 @@ public:
 	FMH::MODEL_LIST items() const override;
 	
 	void setPath(const QString &path);
-	QString getPath();
+	QString getPath() const;
 	
 private:
 	FMH::MODEL_LIST list;
