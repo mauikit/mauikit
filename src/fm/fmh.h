@@ -590,31 +590,47 @@ namespace FMH
 	const QString FMPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/maui/fm/";
 	const QString DBName = "fm.db";	
 	
+	
+	inline FMH::MODEL getDirInfoModel(const QString &path, const QString &type = QString())
+	{
+		const QFileInfo file (path);
+		if(!file.exists()) 
+			return FMH::MODEL();
+		
+		return FMH::MODEL
+		{
+			{FMH::MODEL_KEY::ICON, FMH::getIconName(path)},
+			{FMH::MODEL_KEY::LABEL, file.baseName()},
+			{FMH::MODEL_KEY::PATH, path},
+			{FMH::MODEL_KEY::TYPE, type}
+		};
+	}	
+	
 	inline QVariantMap getDirInfo(const QString &path, const QString &type = QString())
 	{
-		QFileInfo file (path);
-		if(!file.exists()) return QVariantMap();
+		const QFileInfo file(path);
 		
-		QVariantMap data =
-		{
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], FMH::getIconName(path)},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::LABEL], file.baseName()},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::PATH], path},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::TYPE], type}
-		};
+		if(!file.exists()) 
+			return QVariantMap();
 		
-		return data;
+		const auto data = FMH::getDirInfoModel(path);
+		
+		QVariantMap res; 
+		for(const auto &key : data.keys())		
+			res.insert(FMH::MODEL_NAME[key], data[key]);
+		
+		return res;
 	}
+	
 	
 	inline FMH::MODEL getFileInfoModel(const QString &path)
 	{
-		QFileInfo file(path);
-		if(!file.exists()) return FMH::MODEL();
+		const QFileInfo file(path);
+		if(!file.exists()) 
+			return FMH::MODEL();
 		
-		auto mime = FMH::getMime(path);
-		// 		QLocale locale;
-		
-		FMH::MODEL res =
+		const auto mime = FMH::getMime(path);
+		return FMH::MODEL 
 		{
 			{FMH::MODEL_KEY::GROUP, file.group()},
 			{FMH::MODEL_KEY::OWNER, file.owner()},
@@ -629,24 +645,24 @@ namespace FMH
 			{FMH::MODEL_KEY::PATH, path},
 			{FMH::MODEL_KEY::THUMBNAIL, path},
 			{FMH::MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path).count() - 2) : "0"}			
-		};
-		
-		return res;
+		};		
 	}	
 	
 	inline QVariantMap getFileInfo(const QString &path)
 	{
-		QFileInfo file(path);
-		if(!file.exists()) return QVariantMap();
-		auto data = FMH::getFileInfoModel(path);
+		const QFileInfo file(path);
+		
+		if(!file.exists()) 
+			return QVariantMap();
+		
+		const auto data = FMH::getFileInfoModel(path);
+		
 		QVariantMap res; 
-		for(auto key : data.keys())		
+		for(const auto &key : data.keys())		
 			res.insert(FMH::MODEL_NAME[key], data[key]);
 		
 		return res;
 	}
-	
-	
 	
 	#ifndef STATIC_MAUIKIT
 	#include "mauikit_export.h"

@@ -90,6 +90,7 @@ set(fm_SRCS
     src/fm/placeslist.cpp
     src/fm/modellist.cpp
     src/fm/basemodel.cpp
+    src/fm/pathlist.cpp
     )
 
 set(fm_HDRS
@@ -100,6 +101,7 @@ set(fm_HDRS
     src/fm/placeslist.h
     src/fm/modellist.h
     src/fm/basemodel.h
+	src/fm/pathlist.h
     )
 
 set(tagging_SRCS
@@ -194,7 +196,8 @@ else()
     set(MAUIKDE_KF5LIBS
         KF5::ConfigCore
         KF5::Notifications
-        KF5::I18n KF5::Service
+        KF5::I18n 
+        KF5::Service
         KF5::KIOCore
         KF5::KIOWidgets
         KF5::KIOFileWidgets

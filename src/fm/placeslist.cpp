@@ -76,8 +76,7 @@ static FMH::MODEL modelPlaceInfo(const KFilePlacesModel &model, const QModelInde
             {FMH::MODEL_KEY::LABEL, model.text(index)},
             {FMH::MODEL_KEY::NAME, model.text(index)},
             {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_NAME[type]}
-        };
-        
+        };        
 }
 
 static FMH::MODEL_LIST getGroup(const KFilePlacesModel &model, const FMH::PATHTYPE_KEY &type)

@@ -52,9 +52,9 @@ public:
 	
 	static FMH::MODEL_LIST packItems(const QStringList &items, const QString &type);
 	
-	FMH::MODEL_LIST static getPathContent(const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList(), const QDirIterator::IteratorFlags &iteratorFlags = QDirIterator::NoIteratorFlags);
+	static FMH::MODEL_LIST getPathContent(const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList(), const QDirIterator::IteratorFlags &iteratorFlags = QDirIterator::NoIteratorFlags);
 	
-	FMH::MODEL_LIST static getAppsContent(const QString &path);	
+	static FMH::MODEL_LIST getAppsContent(const QString &path);	
 
 	static bool copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory);
 	static bool removeDir(const QString &path);	

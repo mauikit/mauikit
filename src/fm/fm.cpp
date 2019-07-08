@@ -188,11 +188,8 @@ FMH::MODEL_LIST FM::getPathContent(const QString& path, const bool &hidden, cons
             dirFilter = dirFilter | QDir::Hidden | QDir::System;
 
         QDirIterator it (path, filters, dirFilter, iteratorFlags);
-        while (it.hasNext())
-        {
-            auto url = it.next();
-            content << FMH::getFileInfoModel(url);
-        }
+        while (it.hasNext())        
+			content << FMH::getFileInfoModel(it.next());        
     }
 
     return content;
