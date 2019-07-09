@@ -554,11 +554,6 @@ void FMList::copyInto(const QVariantList& files)
 		this->fm->copy(files, this->path);		
 }
 
-void FMList::test()
-{
-	this->fm->sync->upload("", "");
-}
-
 void FMList::cutInto(const QVariantList& files)
 {
 	if(this->pathType == FMList::PATHTYPE::PLACES_PATH)

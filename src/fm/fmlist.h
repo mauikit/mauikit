@@ -111,6 +111,7 @@ class FMList : public ModelList
 		}; Q_ENUM(VIEW_TYPE)
 		
 		FMList(QObject *parent = nullptr);
+	
 		~FMList();
 		
 		FMH::MODEL_LIST items() const override;
@@ -212,8 +213,6 @@ public slots:
 	void createDir(const QString &name);
 	void copyInto(const QVariantList &files);
 	void cutInto(const QVariantList &files);
-	
-	void test();
 	
 signals:
 	void pathChanged();

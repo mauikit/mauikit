@@ -38,6 +38,8 @@ Item
 	
 	property string url : ""
 	property bool pathEntry: false
+	property alias list : _pathList
+	property alias model : _pathModel
 	
 	signal pathChanged(string path)
 	signal homeClicked()

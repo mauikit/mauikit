@@ -22,12 +22,19 @@
 PathList::PathList(QObject *parent) : ModelList(parent)
 {
 	connect(this, &PathList::pathChanged, [&]()
-	{
-		emit this->preListChanged();
-		this->list.clear();
-		this->list << PathList::splitPath(this->m_path);
-		qDebug()<< this->list;
-		emit this->postListChanged();
+	{		
+		if(!this->list.isEmpty() && FM::parentDir(this->m_path) == this->list.last()[FMH::MODEL_KEY::PATH])
+		{
+			qDebug() << "APPENDING PATHS TO MODEL << "<< FM::parentDir(this->m_path) << this->list.last()[FMH::MODEL_KEY::PATH];
+			emit this->preItemAppended();
+			this->list << FMH::getDirInfoModel(this->m_path);
+			emit this->postItemAppended();
+		}else{
+			emit this->preListChanged();
+			this->list.clear();
+			this->list << PathList::splitPath(this->m_path);
+			emit this->postListChanged();
+		}		
 	});
 }
 

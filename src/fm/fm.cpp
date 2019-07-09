@@ -500,7 +500,7 @@ bool FM::isDefaultPath(const QString &path)
 
 QString FM::parentDir(const QString &path)
 {
-    auto dir = QDir(path);
+    QDir dir(path);
     dir.cdUp();
     return dir.absolutePath();
 }
