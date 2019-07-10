@@ -60,7 +60,10 @@ ScrollView
     signal leftEmblemClicked(int index)
     
     signal areaClicked(var mouse)
-    signal areaRightClicked()    
+    signal areaRightClicked()   
+	
+	padding: 0
+	spacing: 0
     
     ListView
     {

@@ -59,6 +59,7 @@ Maui.Page
 	signal newBookmark(var paths)
 	
 	margins: 0
+	focus: true	
 	
 	Loader
 	{
@@ -339,11 +340,7 @@ columnResizeMode: Kirigami.ColumnView.DynamicColumns
 			{
 				id: _repeater
 				model: _millerModel
-				onItemAdded:
-				{
-					_millerColumns.currentIndex = _millerColumns.count -1
-					modelList= item.list
-				}
+				onItemAdded: _millerColumns.currentIndex = _millerColumns.count -1			
 				
 				Item
 				{		
@@ -386,11 +383,11 @@ columnResizeMode: Kirigami.ColumnView.DynamicColumns
 							_millerColumns.itemClicked(index)
 							
 						}
-// 						onItemDoubleClicked: 
-// 						{
-// 							modelList.path = _millersFMList.path
-// 							_millerColumns.onItemDoubleClicked(index)
-// 						}
+						// 						onItemDoubleClicked: 
+						// 						{
+						// 							modelList.path = _millersFMList.path
+						// 							_millerColumns.onItemDoubleClicked(index)
+						// 						}
 						
 						onItemRightClicked: _millerColumns.itemRightClicked(index)
 						onRightEmblemClicked: _millerColumns.rightEmblemClicked(index)
@@ -412,6 +409,7 @@ columnResizeMode: Kirigami.ColumnView.DynamicColumns
 							height: toolBarHeightAlt
 						}					
 					}
+					
 					
 				}
 				
@@ -469,9 +467,7 @@ columnResizeMode: Kirigami.ColumnView.DynamicColumns
 		
 		onAreaRightClicked: browserMenu.show()
 	}
-	
-	focus: true
-	
+		
 	Maui.Holder
 	{
 		id: holder
@@ -753,8 +749,13 @@ columnResizeMode: Kirigami.ColumnView.DynamicColumns
 				case Maui.FMList.MILLERS_VIEW: return millerViewBrowser
 			}
 			
+			onLoaded:
+			{
+				if(sourceComponent !== millerViewBrowser)
+					control.currentFMList = modelList
+			}
 			Layout.topMargin: list.viewType == Maui.FMList.ICON_VIEW ? contentMargins * 2 : unit
-			Layout.margins: unit
+			Layout.margins: 0
 			
 			Layout.fillWidth: true
 			Layout.fillHeight: true
@@ -763,11 +764,12 @@ columnResizeMode: Kirigami.ColumnView.DynamicColumns
 		Loader
 		{
 			id: selectionBarLoader
+			visible:  control.selectionBar && control.selectionBar.visible
 			Layout.fillWidth: true
-			Layout.preferredHeight: control.selectionBar ? (control.selectionBar.visible ? control.selectionBar.barHeight : 0) : 0
+			Layout.preferredHeight: visible ? control.selectionBar.barHeight: 0
 			Layout.leftMargin:  contentMargins * (isMobile ? 3 : 2)
 			Layout.rightMargin: contentMargins * (isMobile ? 3 : 2)
-			Layout.bottomMargin: contentMargins*2
+			Layout.bottomMargin: visible ? contentMargins*2 : 0
 			z: holder.z +1
 		}
 		
@@ -777,7 +779,7 @@ columnResizeMode: Kirigami.ColumnView.DynamicColumns
 			id: _progressBar
 			Layout.fillWidth: true
 			Layout.alignment: Qt.AlignBottom
-			height: iconSizes.medium
+			Layout.preferredHeight: visible ? iconSizes.medium : 0
 			visible: value > 0
 		}
 		
