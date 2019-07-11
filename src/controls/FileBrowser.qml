@@ -764,12 +764,11 @@ columnResizeMode: Kirigami.ColumnView.DynamicColumns
 		Loader
 		{
 			id: selectionBarLoader
-			visible:  control.selectionBar && control.selectionBar.visible
 			Layout.fillWidth: true
-			Layout.preferredHeight: visible ? control.selectionBar.barHeight: 0
+			Layout.preferredHeight: control.selectionBar && control.selectionBar.visible ? control.selectionBar.barHeight: 0
 			Layout.leftMargin:  contentMargins * (isMobile ? 3 : 2)
 			Layout.rightMargin: contentMargins * (isMobile ? 3 : 2)
-			Layout.bottomMargin: visible ? contentMargins*2 : 0
+			Layout.bottomMargin: control.selectionBar && control.selectionBar.visible ? contentMargins*2 : 0
 			z: holder.z +1
 		}
 		

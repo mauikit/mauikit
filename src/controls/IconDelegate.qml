@@ -143,10 +143,10 @@ ItemDelegate
 				clip: true
 				anchors.centerIn: parent
 				source:  "file://"+model.thumbnail
-				height: folderSize
-				width: isDetails ? folderSize : control.width * 0.9
-				sourceSize.width: width
-				sourceSize.height: folderSize
+				height: Math.min(folderSize, sourceSize.height)
+				width: isDetails ? folderSize : Math.min(control.width * 0.9, sourceSize.width)
+// 				sourceSize.width: width
+// 				sourceSize.height: height
 				horizontalAlignment: Qt.AlignHCenter
 				verticalAlignment: Qt.AlignVCenter
 				fillMode: Image.PreserveAspectCrop
@@ -158,13 +158,13 @@ ItemDelegate
 				{
 					maskSource: Item
 					{
-						width: img.sourceSize.width
-						height: img.sourceSize.height
+						width: img.width
+						height: img.height
 						Rectangle
 						{
 							anchors.centerIn: parent
-							width: img.sourceSize.width
-							height: img.sourceSize.height
+							width: img.width
+							height: img.height
 							radius: radiusV
 						}
 					}
@@ -173,8 +173,7 @@ ItemDelegate
 			
 			Loader
 			{
-				anchors.centerIn: parent
-				
+				anchors.centerIn: parent				
 				sourceComponent: img.status === Image.Ready ? undefined : iconComponent
 			}
 		}

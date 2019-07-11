@@ -83,11 +83,30 @@ ScrollView
 		interactive: true
 		onWidthChanged: adaptContent? control.adaptGrid() : undefined
 		
+		PinchArea
+		{
+	        anchors.fill: parent
+            z: -1
+	        onPinchStarted:
+	        {
+	            console.log("pinch started")
+	        }
 	
-		MouseArea
+	        onPinchUpdated:
+	        {
+                
+	        }
+	
+	        onPinchFinished:
+	        {
+	            console.log("pinch finished")
+                 resizeContent(pinch.scale)
+	        }
+	        
+	        MouseArea
 		{
 			anchors.fill: parent
-			z: -1
+			            propagateComposedEvents: true
 			acceptedButtons:  Qt.RightButton | Qt.LeftButton
 			onClicked: control.areaClicked(mouse)
 			onPressAndHold: control.areaRightClicked()
@@ -99,28 +118,34 @@ ScrollView
                         if (wheel.angleDelta.y != 0) 
                         {
                             var factor = 1 + wheel.angleDelta.y / 600;
-                            if(factor > 1)
-                            {
-                                control.itemSize = control.itemSize + 10
-                                control.cellHeight = control.cellHeight + 10
-                                control.cellWidth = control.cellWidth + 10
-                            }
-                            else if((control.itemSize - 10) > iconSizes.small)
-                            {
-                                control.itemSize = control.itemSize - 10
-                                control.cellHeight = control.cellHeight - 10
-                                control.cellWidth = control.cellWidth - 10
-                            }
-                            
-                            if(adaptContent)
-                                control.adaptGrid()
+                            control.resizeContent(factor)
                         } 
-					}
+					}else
+                        wheel.accepted = false
 				}
 			
-		}									
+		}	
+	    }
 	}
 	
+	function resizeContent(factor)
+    {
+        if(factor > 1)
+        {
+            control.itemSize = control.itemSize + 10
+            control.cellHeight = control.cellHeight + 10
+            control.cellWidth = control.cellWidth + 10
+        }
+        else if((control.itemSize - 10) > iconSizes.small)
+        {
+            control.itemSize = control.itemSize - 10
+            control.cellHeight = control.cellHeight - 10
+            control.cellWidth = control.cellWidth - 10
+        }
+        
+        if(adaptContent)
+            control.adaptGrid()
+    }	
 	
 	function adaptGrid()
 	{
