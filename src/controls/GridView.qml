@@ -91,6 +91,33 @@ ScrollView
 			acceptedButtons:  Qt.RightButton | Qt.LeftButton
 			onClicked: control.areaClicked(mouse)
 			onPressAndHold: control.areaRightClicked()
+            
+            		onWheel:
+				{
+					if (wheel.modifiers & Qt.ControlModifier)
+					{
+                        if (wheel.angleDelta.y != 0) 
+                        {
+                            var factor = 1 + wheel.angleDelta.y / 600;
+                            if(factor > 1)
+                            {
+                                control.itemSize = control.itemSize + 10
+                                control.cellHeight = control.cellHeight + 10
+                                control.cellWidth = control.cellWidth + 10
+                            }
+                            else if((control.itemSize - 10) > iconSizes.small)
+                            {
+                                control.itemSize = control.itemSize - 10
+                                control.cellHeight = control.cellHeight - 10
+                                control.cellWidth = control.cellWidth - 10
+                            }
+                            
+                            if(adaptContent)
+                                control.adaptGrid()
+                        } 
+					}
+				}
+			
 		}									
 	}
 	

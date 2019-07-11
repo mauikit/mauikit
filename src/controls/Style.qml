@@ -92,12 +92,12 @@ QtObject
 	
 	readonly property var iconSizes : ({
 		tiny : 8,
-		small :  16,
-		medium : 22,
-		big:  32,
-		large: 48,
-		huge: 64,
-		enormous: 128
+		small :  Kirigami.Units.iconSizes.small,
+		medium : Kirigami.Units.iconSizes.smallMedium,
+		big:  Kirigami.Units.iconSizes.medium,
+		large: Kirigami.Units.iconSizes.large,
+		huge: Kirigami.Units.iconSizes.huge,
+		enormous: Kirigami.Units.iconSizes.enormous
 		
 	})
 }
