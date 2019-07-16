@@ -46,9 +46,6 @@ T.TextField {
     verticalAlignment: TextInput.AlignVCenter*/
     //Text.NativeRendering is broken on non integer pixel ratios
     renderType: Window.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
-    selectByMouse: !isMobile
-
-    
     
     color: enabled ? colorScheme.textColor : Qt.lighter(colorScheme.textColor, 1.4)
 	selectionColor: highlightColor

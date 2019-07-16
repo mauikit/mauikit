@@ -314,7 +314,7 @@ Maui.Page
 			id: _millerColumns
 // 			columnWidth: Kirigami.Units.gridUnit * 22			
 // 			fillWidth: true
-columnResizeMode: Kirigami.ColumnView.DynamicColumns
+            columnResizeMode: Kirigami.ColumnView.DynamicColumns
 			
 			signal itemClicked(int index)
 			signal itemDoubleClicked(int index)
@@ -322,7 +322,6 @@ columnResizeMode: Kirigami.ColumnView.DynamicColumns
 			
 			signal rightEmblemClicked(int index)
 			signal leftEmblemClicked(int index)
-			
 			
 			Maui.PathList
 			{
@@ -340,12 +339,14 @@ columnResizeMode: Kirigami.ColumnView.DynamicColumns
 			{
 				id: _repeater
 				model: _millerModel
-				onItemAdded: _millerColumns.currentIndex = _millerColumns.count -1			
+				onItemAdded: 
+				{
+//                     if(viewLoader.sourceComponent === millerViewBrowser)
+//                     _millerColumns.currentIndex = _millerColumns.count-1
+                }
 				
 				Item
-				{		
-					property alias list : _millersFMList
-					
+				{							
 					Maui.FMList
 					{	
 						id: _millersFMList
@@ -393,7 +394,7 @@ columnResizeMode: Kirigami.ColumnView.DynamicColumns
 						onRightEmblemClicked: _millerColumns.rightEmblemClicked(index)
 						onLeftEmblemClicked: _millerColumns.leftEmblemClicked(index)
 						
-						model:Maui.BaseModel
+						model: Maui.BaseModel
 						{							
 							list: _millersFMList
 						}
@@ -407,15 +408,9 @@ columnResizeMode: Kirigami.ColumnView.DynamicColumns
 							isSection: true
 							boldLabel: true
 							height: toolBarHeightAlt
-						}					
+						}
 					}
-					
-					
 				}
-				
-				
-				
-				
 			}       
 		}		
 	}
@@ -754,6 +749,7 @@ columnResizeMode: Kirigami.ColumnView.DynamicColumns
 				if(sourceComponent !== millerViewBrowser)
 					control.currentFMList = modelList
 			}
+			
 			Layout.topMargin: list.viewType == Maui.FMList.ICON_VIEW ? contentMargins * 2 : unit
 			Layout.margins: 0
 			

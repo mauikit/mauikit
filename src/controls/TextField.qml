@@ -47,7 +47,7 @@ TextField
 // 	topPadding: space.tiny
 	bottomPadding: space.tiny
 	rightPadding: clearButton.width + space.small
-	
+    selectByMouse: !isMobile
     persistentSelection: true
 	focus: true
 	wrapMode: TextInput.WordWrap	

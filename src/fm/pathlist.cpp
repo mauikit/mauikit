@@ -25,7 +25,7 @@ PathList::PathList(QObject *parent) : ModelList(parent)
 	{		
 		if(!this->list.isEmpty() && FM::parentDir(this->m_path) == this->list.last()[FMH::MODEL_KEY::PATH])
 		{
-			qDebug() << "APPENDING PATHS TO MODEL << "<< FM::parentDir(this->m_path) << this->list.last()[FMH::MODEL_KEY::PATH];
+// 			qDebug() << "APPENDING PATHS TO MODEL << "<< FM::parentDir(this->m_path) << this->list.last()[FMH::MODEL_KEY::PATH];
 			emit this->preItemAppended();
 			this->list << FMH::getDirInfoModel(this->m_path);
 			emit this->postItemAppended();
@@ -42,8 +42,12 @@ PathList::~PathList() {}
 
 QVariantMap PathList::get(const int& index) const
 {
+    if(this->list.isEmpty())
+        return QVariantMap();
+    
 	if(index >= this->list.size() || index < 0)
-		return QVariantMap();	
+		return QVariantMap();
+    
 	const auto model = this->list.at(index);	
 	return FM::toMap(model);
 }
