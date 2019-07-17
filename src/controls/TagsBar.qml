@@ -63,13 +63,13 @@ Item
                 anchors.fill: parent
                 spacing: 0
 
-                Maui.ToolButton
+                ToolButton
                 {
                     Layout.alignment: Qt.AlignLeft
                     visible: allowEditMode
-                    iconName: "list-add"
+                    icon.name: "list-add"
                     onClicked: addClicked()
-                    iconColor: control.Kirigami.Theme.textColor
+                    icon.color: control.Kirigami.Theme.textColor
                 }
 
                 TagList
@@ -130,10 +130,10 @@ Item
                     }
                 }
 
-                Maui.ToolButton
+                ToolButton
                 {
                     Layout.alignment: Qt.AlignLeft
-                    iconName: "checkbox"
+                    icon.name: "checkbox"
                     onClicked: saveTags()
                 }
             }

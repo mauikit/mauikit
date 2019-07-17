@@ -34,9 +34,9 @@ Maui.ToolBar
     width: 30
     signal search(string query)
     
-       leftContent:  Maui.ToolButton
+       leftContent:  ToolButton
     {
-        iconName: "view-filter"
+        icon.name: "view-filter"
     }
 
     middleContent:  Maui.TextField
@@ -48,9 +48,9 @@ Maui.ToolBar
         onAccepted: search(searchInput.text)
     }
 
-    rightContent : Maui.ToolButton
+    rightContent : ToolButton
     {
-        iconName: "edit-clear"
+        icon.name: "edit-clear"
         Layout.alignment: Qt.AlignRight
         onClicked: searchInput.clear()
     }

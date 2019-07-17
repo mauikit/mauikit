@@ -133,12 +133,12 @@ Maui.Dialog
                 }
             }
             
-			headBar.rightContent: Maui.ToolButton
+			headBar.rightContent: ToolButton
 			{
 				id: searchButton
-				iconName: "edit-find"
+				icon.name: "edit-find"
 				onClicked: searchBar = !searchBar
-				iconColor: searchBar ? searchButton.colorScheme.highlightColor : searchButton.colorScheme.textColor
+				checked: searchBar
 			}
 			
 			
@@ -148,9 +148,7 @@ Maui.Dialog
 				anchors.fill: parent
 				clip: true
 				
-				property int sidebarWidth: sidebar.isCollapsed ? sidebar.iconSize * 2 :
-				Kirigami.Units.gridUnit * (isMobile? 15 : 8)
-				
+				property int sidebarWidth: Kirigami.Units.gridUnit * (isMobile? 15 : 8)				
 				separatorVisible: wideMode
 				initialPage: [sidebar, content]
 				defaultColumnWidth: sidebarWidth
@@ -158,10 +156,7 @@ Maui.Dialog
 					
 					Maui.PlacesSidebar
 					{
-						id: sidebar
-						width: isCollapsed ? iconSize*2 : parent.width
-						height: parent.height
-						
+						id: sidebar	
 						onPlaceClicked: 
 						{
 							pageRow.currentIndex = 1

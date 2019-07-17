@@ -38,9 +38,9 @@ Maui.Dialog
     maxHeight: unit * 300
     maxWidth: maxHeight	
 	
-	footBar.leftContent: Maui.ToolButton
+	footBar.leftContent: ToolButton
 	{
-		iconName: "filename-space-amarok"
+		icon.name: "filename-space-amarok"
 // 		text: qsTr("Custom server")
 		checkable: true
 		checked: customServer

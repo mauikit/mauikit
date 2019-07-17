@@ -17,13 +17,12 @@ Item
             Layout.preferredHeight: iconSizes.huge + space.big
             Layout.margins: contentMargins
 
-            Maui.ToolButton
+            ToolButton
             {
                 anchors.centerIn: parent
-                isMask: false
                 flat: true
-                size: iconSizes.huge
-                iconName: iteminfo.icon
+                icon.width: iconSizes.huge
+                icon.name: iteminfo.icon
             }
         }
 
