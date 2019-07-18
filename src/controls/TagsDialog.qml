@@ -22,10 +22,10 @@ Maui.Dialog
 	onAccepted: setTags()
 	onRejected: close()	
 	headBar.plegable: false
-	headBar.leftContent: Maui.ToolButton
+	headBar.leftContent: ToolButton
 	{
-		iconName: "view-sort"
-		tooltipText: qsTr("Sort by...")
+		icon.name: "view-sort"
+		text: qsTr("Sort by...")
 		onClicked: sortMenu.popup()
 		
 		Menu
@@ -69,10 +69,10 @@ Maui.Dialog
 	}
 
 	
-	headBar.rightContent: Maui.ToolButton
+	headBar.rightContent: ToolButton
 	{
-		iconName: "view-refresh"
-		tooltipText: qsTr("Refresh...")
+		icon.name: "view-refresh"
+// 		text: qsTr("Refresh...")
 		onClicked: taglist.refresh()
 	}	
 

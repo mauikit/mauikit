@@ -305,7 +305,7 @@ backgroundColor.b, 0.7))
 						margins: space.medium
 					}
 					
-					Maui.ComboBox
+					ComboBox
 					{
 						id: _accountCombobox
 						anchors.centerIn: parent
@@ -316,8 +316,8 @@ backgroundColor.b, 0.7))
 						textRole: "user"
 						flat: true
 						model: showAccounts ? accounts.model : undefined
-						iconButton.iconName: "user-identity"
-						iconButton.isMask: false
+// 						icon.name: "user-identity"
+// 						iconButton.isMask: false
 					}
 				}
 				

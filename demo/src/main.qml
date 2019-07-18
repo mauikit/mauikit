@@ -41,59 +41,55 @@ Maui.ApplicationWindow
     headBar.spacing: space.huge
     headBar.middleContent: [
 
-        Maui.ToolButton
+        ToolButton
         {
 //            Layout.fillHeight: true
-            iconName: "nx-home"
-            colorScheme.textColor : root.headBarFGColor
+            icon.name: "nx-home"
+            Kirigami.Theme.textColor : root.headBarFGColor
             spacing: space.medium
-            active: currentPageIndex === 0
-            showIndicator: true
+            checked: currentPageIndex === 0
             onClicked: currentPageIndex = 0
             text: qsTr("Home")
 
         },
 
-        Maui.ToolButton
+        ToolButton
         {
 //            Layout.fillHeight: true
-            iconName: "view-list-icons"
-            colorScheme.textColor: root.headBarFGColor
+            icon.name: "view-list-icons"
+			Kirigami.Theme.textColor: root.headBarFGColor
             spacing: space.medium
-            active: currentPageIndex === 1
-            showIndicator: true
+            checked: currentPageIndex === 1
             onClicked: currentPageIndex = 1
             text: qsTr("Browser")
         },
 
-        Maui.ToolButton
+        ToolButton
         {
 //            Layout.fillHeight: true
-            iconName: "view-media-genre"
-            colorScheme.textColor: root.headBarFGColor
+            icon.name: "view-media-genre"
+			Kirigami.Theme.textColor: root.headBarFGColor
             spacing: space.medium
-            active: currentPageIndex === 2
-            showIndicator: true
+            checked: currentPageIndex === 2
             onClicked: currentPageIndex = 2
             text: qsTr("Editor")
         },
 
-        Maui.ToolButton
+        ToolButton
         {
 //            Layout.fillHeight: true
-            iconName: "nx-software-center"
-            colorScheme.textColor: root.headBarFGColor
+            icon.name: "nx-software-center"
+			Kirigami.Theme.textColor: root.headBarFGColor
             spacing: space.medium
-            active: currentPageIndex === 3
-            showIndicator: true
+            checked: currentPageIndex === 3
             onClicked: currentPageIndex = 3
             text: qsTr("Store")
         }
     ]
 
-    footBar.leftContent: Maui.ToolButton
+    footBar.leftContent: ToolButton
     {
-        iconName: "view-split-left-right"
+        icon.name: "view-split-left-right"
         onClicked: _drawer.visible = !_drawer.visible
         checked: _drawer.visible
     }
@@ -250,9 +246,9 @@ Maui.ApplicationWindow
 
             }
 
-            headBar.rightContent: Maui.ToolButton
+            headBar.rightContent: ToolButton
             {
-                iconName: "documentinfo"
+                icon.name: "documentinfo"
                 text: qsTr("Notify")
 
                 onClicked:
@@ -269,11 +265,11 @@ Maui.ApplicationWindow
 
             }
 
-            headBar.leftContent: Maui.ToolButton
+            headBar.leftContent: ToolButton
             {
                 id: _batteryBtn
                 visible: false
-                iconName: "battery"
+                icon.name: "battery"
             }
         }
 

@@ -35,14 +35,14 @@ ItemDelegate
 
     }
 
-    Maui.ToolButton
+    ToolButton
     {
         id: controlIcon
         anchors.centerIn: parent
         enabled: false
 
-        iconName: model.iconName
+        icon.name: model.iconName
         text: model.text
-        iconColor: isCurrent ? highlightedTextColor : textColor
+        icon.color: isCurrent ? highlightedTextColor : textColor
     }
 }

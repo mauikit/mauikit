@@ -33,14 +33,13 @@ ColumnLayout
             autoPlay: true
         }
 
-        Maui.ToolButton
+        ToolButton
         {
             anchors.centerIn: parent
-            isMask: false
             flat: true
-            size: iconSizes.huge
-            iconName: iteminfo.icon
-            iconFallback: "qrc:/assets/application-x-zerosize.svg"
+            icon.width: iconSizes.huge
+            icon.name: iteminfo.icon
+            icon.source: "qrc:/assets/application-x-zerosize.svg"
 			onClicked: player.playbackState === MediaPlayer.PlayingState ? player.pause() : player.play()
         }
         
@@ -56,11 +55,11 @@ ColumnLayout
 			
 			anchors.centerIn: parent
 			
-			Maui.ToolButton
+			ToolButton
 			{
 				anchors.centerIn: parent
-				iconName: player.playbackState === MediaPlayer.PlayingState ? "media-playback-pause" : "media-playback-start"
-				iconColor: "white"
+				icon.name: player.playbackState === MediaPlayer.PlayingState ? "media-playback-pause" : "media-playback-start"
+				icon.color: "white"
 				onClicked: player.playbackState === MediaPlayer.PlayingState ? player.pause() : player.play()				
 			}
         }

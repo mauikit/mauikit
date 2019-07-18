@@ -64,11 +64,11 @@ Maui.Page
 	}
 	
 	footBar.middleContent: [
-	Maui.ToolButton
+	ToolButton
 	{
 		id: _previousPageButton
-		iconName: "go-previous"
-		tooltipText: qsTr("Previous")
+		icon.name: "go-previous"
+		text: qsTr("Previous")
 		enabled: _storeList.contentReady
 		onClicked:
 		{
@@ -88,11 +88,11 @@ Maui.Page
 		anchors.verticalCenter: _previousPageButton.verticalCenter
 	},
 	
-	Maui.ToolButton
+	ToolButton
 	{
 		id: _nextPageButton
-		iconName: "go-next"
-		tooltipText: qsTr("Next")
+		icon.name: "go-next"
+		text: qsTr("Next")
 		enabled: _storeList.contentReady
 		
 		onClicked:
@@ -111,34 +111,33 @@ Maui.Page
 	}
 	
 	footBar.rightContent: [
-	Maui.ToolButton
+	ToolButton
 	{
 		id:_filterButton
-		iconName: "view-filter"
-		iconColor: _filterDrawer.visible ? colorScheme.highlightColor : colorScheme.textColor
+		icon.name: "view-filter"
+		icon.color: _filterDrawer.visible ? colorScheme.highlightColor : colorScheme.textColor
 		onClicked: _filterDrawer.visible ? _filterDrawer.close() : _filterDrawer.open()
 	}
 	]
 	
 	footBar.leftContent: [
-	Maui.ToolButton
-	{
-		
-		iconName: control.detailsView ? "view-list-icons" : "view-list-details"
+	ToolButton
+	{		
+		icon.name: control.detailsView ? "view-list-icons" : "view-list-details"
 		onClicked: control.detailsView = !control.detailsView
 	}, 
 	
-	Maui.ToolButton
+	ToolButton
 	{
 		id:_sortButton
-		iconName: "view-sort"
+		icon.name: "view-sort"
 		
 		onClicked: sortMenu.popup()
 		
-		Maui.Menu
+		Menu
 		{
 			id: sortMenu			
-			Maui.MenuItem
+			MenuItem
 			{
 				text: qsTr("Title")
 				checkable: true
@@ -146,7 +145,7 @@ Maui.Page
 				onTriggered: _storeList.sortBy = StoreList.LABEL
 			}
 			
-			Maui.MenuItem
+			MenuItem
 			{
 				text: qsTr("Rating")
 				checkable: true
@@ -154,7 +153,7 @@ Maui.Page
 				onTriggered: _storeList.sortBy = StoreList.RATE
 			}
 			
-			Maui.MenuItem
+			MenuItem
 			{
 				text: qsTr("Downloads")
 				checkable: true
@@ -162,7 +161,7 @@ Maui.Page
 				onTriggered: _storeList.sortBy = StoreList.COUNT
 			}
 			
-			Maui.MenuItem
+			MenuItem
 			{
 				text: qsTr("Newest")
 				checkable: true
@@ -336,7 +335,7 @@ Maui.Page
 		rejectButton.visible: false
 	
 		
-		footBar.rightContent: Maui.Button
+		footBar.rightContent: Button
 		{
 			id: _openButton
 			text: qsTr("Open...")
@@ -347,13 +346,12 @@ Maui.Page
 			}
 		}
 		
-		footBar.leftContent: [
+		footBar.leftContent: [		
 		
-		
-			Maui.ToolButton
+			ToolButton
 			{
 				id: _linkButton
-				iconName: "view-links"
+				icon.name: "view-links"
 				onClicked: Maui.FM.openUrl(_previewerDialog.currentItem.source)
 			}			
 		]

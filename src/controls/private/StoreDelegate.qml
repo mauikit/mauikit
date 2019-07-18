@@ -156,13 +156,12 @@ ItemDelegate
 	{
 		id: iconComponent
 		
-		Maui.ToolButton
+		ToolButton
 		{
-			iconName: model.icon
-			iconFallback: "qrc:/assets/application-x-zerosize.svg"
-			isMask: size <= iconSizes.medium
-			iconColor: labelColor
-			size: Math.min(iconSizes.huge, Math.min(control.width, control.height))
+			icon.name: model.icon
+			icon.source: "qrc:/assets/application-x-zerosize.svg"
+			icon.color: (size <= iconSizes.medium ?  "transparent" : labelColor)
+			icon.width: Math.min(iconSizes.huge, Math.min(control.width, control.height))
 			enabled: false
 		}
 	}
