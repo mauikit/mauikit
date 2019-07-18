@@ -549,7 +549,7 @@ Maui.Page
 	
 	Kirigami.ActionToolBar
 	{
-		Layout.fillWidth: true
+// 		Layout.fillWidth: fal
 		z: 999
 		hiddenActions: browserMenu.actions
 		display: isMobile ? ToolButton.IconOnly : ToolButton.TextBesideIcon
