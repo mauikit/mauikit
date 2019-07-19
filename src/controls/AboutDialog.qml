@@ -43,60 +43,36 @@ Maui.Dialog
 	maxWidth: unit * 400
 	maxHeight: unit * 250
 	
-	footBar.middleContent: Maui.ToolButton
+	footBar.middleContent: ToolButton
 	{
-		iconName: "view-links"
+		icon.name: "view-links"
 		onClicked: Maui.FM.openUrl(control.appLink)
 		
 	}
 	
-	footBar.rightContent: Maui.ToolButton
+	footBar.rightContent: ToolButton
 	{
-		iconName: "love"
+		icon.name: "love"
 		onClicked: Maui.FM.openUrl(control.appDonation)
 		
 	}
 	
-	footBar.leftContent: Maui.ToolButton
+	footBar.leftContent: ToolButton
 	{
-		iconName: "documentinfo"
+		icon.name: "documentinfo"
 	}
 	
-	GridLayout
+	RowLayout
 	{
 		id: layout
 		anchors.centerIn: parent
 		width: parent.width
-		height: implicitHeight
-		columns: 2
-		rows: 3
-		columnSpacing: space.big
-		rowSpacing: space.small		
+		height: parent.height * 0.7	
 		
-		Label
-		{
-			id: appTitle
-			Layout.fillWidth: true
-			Layout.preferredHeight: implicitHeight
-			Layout.row: 1
-			Layout.column: 2
-			Layout.alignment: Qt.AlignLeft
-			clip: true
-			width: parent.width
-			height: parent.height
-			color: textColor
-			text: appName
-			font.weight: Font.Bold
-			font.bold: true
-			font.pointSize: fontSizes.huge
-		}
 		
 		Item
 		{
-			Layout.fillHeight: true
-			Layout.row: 1
-			Layout.column: 1
-			Layout.rowSpan: 3
+			Layout.fillHeight: true		
 			Layout.margins: space.small
 			Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
 			Layout.minimumWidth: iconSizes.huge
@@ -120,55 +96,92 @@ Maui.Dialog
 			}
 		}
 		
-		Label
-		{
-			id: appVersion
-			Layout.fillWidth: true
-			Layout.preferredHeight: fontSizes.default
-			
-			Layout.row: 2
-			Layout.column: 2
-			Layout.alignment: Qt.AlignLeft
-			clip: true 
-			
-			width: parent.width
-			height: parent.height
-			color:  Qt.lighter(textColor, 1.2)
-			text: app.version
-			font.pointSize: fontSizes.default
-			
-		}
 		
-		ScrollView
+		
+		
+		Item
 		{
+			id: _descriptionItem
 			Layout.fillWidth: true
-			Layout.fillHeight: true
-			
-			Layout.row: 3
-			Layout.column: 2
+			Layout.fillHeight: true			
 			Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+			ScrollView
+		{
+			anchors.fill: parent
+			
+			contentHeight: _columnInfo.implicitHeight
+			
 			padding: 0
 			clip: true
 			
-			TextArea
-			{
-				id: body
-				padding: 0
-				
+
 			
-				placeholderText: qsTr("App description")
-				enabled: false
-				text: appDescription
-				textFormat : TextEdit.AutoText
-				color: textColor
-				font.pointSize: fontSizes.default
-				wrapMode: TextEdit.WordWrap
-				clip: true
-// 				background: Rectangle
-// 				{
-// 					color: "transparent"
-// 				}
+			ColumnLayout
+			{
+				
+				id: _columnInfo
+				width: parent.width
+				spacing: 0
+				Label
+				{
+					id: appTitle
+					Layout.fillWidth: true
+// 					Layout.preferredHeight: implicitHeight
+				
+					Layout.alignment: Qt.AlignLeft
+					clip: true
+					width: parent.width
+					height: parent.height
+					color: textColor
+					text: appName
+					font.weight: Font.Bold
+					font.bold: true
+					font.pointSize: fontSizes.huge
+				}
+				
+				Label
+				{
+					id: appVersion
+					Layout.fillWidth: true
+// 					Layout.preferredHeight: fontSizes.default
+				
+					Layout.alignment: Qt.AlignLeft
+					clip: true 
+					
+					width: parent.width
+					height: parent.height
+					color:  Qt.lighter(textColor, 1.2)
+					text: app.version
+					font.pointSize: fontSizes.default
+					
+				}
+				
+				Label
+				{
+					id: body
+					// 					Layout.fillWidth: true
+// 					Layout.fillHeight: true
+					Layout.preferredWidth:_descriptionItem.width
+					
+					padding: 0
+					// 				placeholderText: qsTr("App description")
+					enabled: false
+					text: appDescription
+					textFormat : TextEdit.AutoText
+					color: textColor
+					font.pointSize: fontSizes.default
+					wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+					
+					clip: true
+					// 				background: Rectangle
+					// 				{
+					// 					color: "transparent"
+					// 				}
+				}
 			}
+			
+		}
+		
 		}
 		
 		//             Item

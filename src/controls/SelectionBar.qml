@@ -22,349 +22,354 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.0 as Kirigami
 import org.kde.mauikit 1.0 as Maui
+import "private"
 
-Maui.Item
+Item
 {
-	id: control
-	
-	colorScheme.textColor : colorScheme.altColorText
-	colorScheme.backgroundColor: colorScheme.altColor
-	colorScheme.accentColor: "#29B6F6"
-	
-	property var selectedPaths: []
-	property var selectedItems: []
-	
-	property alias selectionList : selectionList
-	property alias anim : anim
-	property alias model : selectionList.model
-	property alias count : selectionList.count
-	
-	property int barHeight : itemHeight + space.large
-	property color animColor : "black"
-	property int itemHeight: iconSizes.big + space.big
-	property int itemWidth:  iconSizes.big + (isMobile? space.big : space.large) + space.big
-	property int position: Qt.Horizontal
-	property string iconName : "overflow-menu"
-	property bool iconVisible: true
-	
-	signal iconClicked()
-	signal modelCleared()
-	signal exitClicked()
-	
-	height: if(position === Qt.Horizontal)
-	barHeight
-	else if(position === Qt.Vertical)
-		parent.height
-		else
-			undefined
-			
-			width: if(position === Qt.Horizontal)
-			parent.width
-			else if(position === Qt.Vertical)
-				barHeight
-				else
-					undefined
-					
-					
-					visible: selectionList.count > 0
-					
-					
-					Drag.keys: control.selectedPaths
-					
-					
-					Drag.active: _mouseArea.drag.active
-					Drag.dragType: Drag.Automatic
-					Drag.supportedActions: Qt.CopyAction
-					
-					MouseArea
-					{
-						id: _mouseArea
-						anchors.fill: parent
-						onClicked: 
-						{
-							if(typeof(riseContent) !== "undefined") 
-								riseContent()
-						}
-						drag.target: parent
-						onPressed: selectionList.grabToImage(function(result)
-						{
-							console.log("PRESSED SELECTIONBOX", control.selectedPaths.join(","))
-							parent.Drag.imageSource = result.url
-						})
-					}
-					
-					Rectangle
-					{
-						id: bg
-						anchors.fill: parent
-						z:-1
-						color: colorScheme.backgroundColor
-						radius: radiusV
-						opacity: 1
-						border.color: colorScheme.borderColor
-						
-						SequentialAnimation
-						{
-							id: anim
-							PropertyAnimation
-							{
-								target: bg
-								property: "color"
-								easing.type: Easing.InOutQuad
-								from: animColor
-								to: Qt.lighter(colorScheme.altColor, 1.2)
-								duration: 500
-							}
-						}       
-					}
-					
-					GridLayout
-					{
-						anchors.fill: parent
-						rows: if(position === Qt.Horizontal)
-						1
-						else if(position === Qt.Vertical)
-							4
-							else
-								undefined
-								
-								columns: if(position === Qt.Horizontal)
-								4
-								else if(position === Qt.Vertical)
-									1
-									else
-										undefined
-										
-										Maui.Badge
-										{
-											anchors.verticalCenter: parent.top
-											anchors.horizontalCenter: parent.left
-											Layout.column: if(position === Qt.Horizontal)
-											1
-											else if(position === Qt.Vertical)
-												1
-												else
-													undefined
-													
-													Layout.row: if(position === Qt.Horizontal)
-													1
-													else if(position === Qt.Vertical)
-														1
-														else
-															undefined
-															
-															iconName: "window-close"
-															colorScheme.backgroundColor: dangerColor
-															onClicked:
-															{
-																selectionList.model.clear()
-																exitClicked()
-															}
-										}
-										
-										Item
-										{
-											Layout.fillHeight: true
-											Layout.fillWidth: true
-											Layout.column: if(position === Qt.Horizontal)
-											2
-											else if(position === Qt.Vertical)
-												1
-												else
-													undefined
-													
-													Layout.row: if(position === Qt.Horizontal)
-													1
-													else if(position === Qt.Vertical)
-														2
-														else
-															undefined
-															
-															Layout.alignment: if(position === Qt.Horizontal)
-															Qt.AlignVCenter
-															else if(position === Qt.Vertical)
-																Qt.AlignHCenter
-																else
-																	undefined
-																	ListView
-																	{
-																		id: selectionList
-																		anchors.fill: parent
-																		
-																		boundsBehavior: !isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
-																		orientation: if(position === Qt.Horizontal)
-																		ListView.Horizontal
-																		else if(position === Qt.Vertical)
-																			ListView.Vertical
-																			else
-																				undefined
-																				clip: true
-																				spacing: space.small
-																				
-																				focus: true
-																				interactive: true
-																				
-																				model: ListModel{}
-																				
-																				delegate: Maui.IconDelegate
-																				{
-																					id: delegate
-																					
-																					anchors.verticalCenter: position === Qt.Horizontal ? parent.verticalCenter : undefined
-																					anchors.horizontalCenter: position === Qt.Vertical ? parent.horizontalCenter : undefined
-																					height:  itemHeight
-																					width: itemWidth
-																					folderSize: iconSizes.big
-																					showLabel: true
-																					emblemAdded: true
-																					keepEmblemOverlay: true
-																					showSelectionBackground: false
-																					labelColor: colorScheme.textColor
-																					showTooltip: true
-																					showThumbnails: true
-																					emblemSize: iconSizes.small
-																					leftEmblem: "list-remove"
-																					colorScheme.accentColor: control.colorScheme.accentColor
-																					colorScheme.textColor: control.colorScheme.textColor
-																					
-																					Connections
-																					{
-																						target: delegate
-																						onLeftEmblemClicked: removeSelection(index)
-																					}
-																				}
-																				
-																	}
-										}
-										
-										Item
-										{
-											Layout.alignment: if(position === Qt.Horizontal)
-											Qt.AlignRight || Qt.AlignVCenter
-											else if(position === Qt.Vertical)
-												Qt.AlignCenter
-												else
-													undefined
-													Layout.fillWidth: position === Qt.Vertical
-													Layout.fillHeight: position === Qt.Horizontal
-													Layout.maximumWidth: iconSizes.medium
-													Layout.column: if(position === Qt.Horizontal)
-													3
-													else if(position === Qt.Vertical)
-														1
-														else
-															undefined
-															
-															Layout.row: if(position === Qt.Horizontal)
-															1
-															else if(position === Qt.Vertical)
-																3
-																else
-																	undefined
-																	
-																	Layout.margins: space.big 
-																	Maui.ToolButton
-																	{
-																		visible: iconVisible
-																		anchors.centerIn: parent
-																		iconName: control.iconName
-																		iconColor: control.colorScheme.textColor
-																		onClicked: iconClicked()
-																	}
-										}
-										
-										Maui.Badge
-										{
-											colorScheme.backgroundColor: highlightColor			
-											text: selectionList.count
-											
-											anchors.verticalCenter: parent.top
-											anchors.horizontalCenter: parent.right
-											Layout.column: if(position === Qt.Horizontal)
-											4
-											else if(position === Qt.Vertical)
-												1
-												else
-													undefined
-													
-													Layout.row: if(position === Qt.Horizontal)
-													1
-													else if(position === Qt.Vertical)
-														4
-														else
-															undefined          
-															onClicked:
-															{
-																clear()
-																modelCleared()
-															}
-										}
-					}
-					
-					onVisibleChanged:
-					{
-						if(position === Qt.Vertical) return
-							
-							if(typeof(riseContent) === "undefined") return
-								
-								if(control.visible)
-									riseContent()
-									else
-										dropContent()
-					}
-					
-					function clear()
-					{
-						selectedPaths = []
-						selectedItems = []
-						selectionList.model.clear()
-					}
-					
-					function removeSelection(index)
-					{
-						var path = selectionList.model.get(index).path
-						if(selectedPaths.indexOf(path) > -1)
-						{
-							selectedPaths.splice(index, 1)
-							selectedItems.splice(index, 1)
-							selectionList.model.remove(index)
-						}
-					}
-					
-					function append(item)
-					{
-						if(selectedPaths.indexOf(item.path) < 0)
-						{
-							selectedItems.push(item)
-							selectedPaths.push(item.path)
-							
-							//             for(var i = 0; i < selectionList.count ; i++ )
-							//                 if(selectionList.model.get(i).path === item.path)
-							//                 {
-							//                     selectionList.model.remove(i)
-							//                     return
-							//                 }
-							
-							selectionList.model.append(item)
-							selectionList.positionViewAtEnd()
-							
-							if(position === Qt.Vertical) return
-								
-								if(typeof(riseContent) === "undefined") return
-									
-									riseContent()
-						}
-					}
-					
-					function animate(color)
-					{
-						animColor = color
-						anim.running = true
-					}  
-					
-					function getSelectedPathsString()
-					{
-						var paths = ""+selectedPaths.join(",")
-						return paths
-					}
+    id: control
+    /* Controlc color scheming */
+	ColorScheme {id: colorScheme}
+	property alias colorScheme : colorScheme
+	/***************************/
+    colorScheme.textColor : colorScheme.altColorText
+    colorScheme.backgroundColor: colorScheme.altColor
+    colorScheme.accentColor: "#29B6F6"
+    
+    property var selectedPaths: []
+    property var selectedItems: []
+    
+    property alias selectionList : selectionList
+    property alias anim : anim
+    property alias model : selectionList.model
+    property alias count : selectionList.count
+    
+    property int barHeight : itemHeight + space.large
+    property color animColor : "black"
+    property int itemHeight: iconSizes.big + space.big
+    property int itemWidth:  iconSizes.big + (isMobile? space.big : space.large) + space.big
+    property int position: Qt.Horizontal
+    property string iconName : "overflow-menu"
+    property bool iconVisible: true
+    
+    signal iconClicked()
+    signal modelCleared()
+    signal exitClicked()
+    
+    height: if(position === Qt.Horizontal)
+                barHeight
+            else if(position === Qt.Vertical)
+                parent.height
+            else
+                undefined
+    
+    width: if(position === Qt.Horizontal)
+               parent.width
+           else if(position === Qt.Vertical)
+               barHeight
+           else
+               undefined
+    
+    
+    visible: selectionList.count > 0
+    
+    
+    Drag.keys: control.selectedPaths
+    
+    
+    Drag.active: _mouseArea.drag.active
+    Drag.dragType: Drag.Automatic
+    Drag.supportedActions: Qt.CopyAction
+    
+    MouseArea
+    {
+        id: _mouseArea
+        anchors.fill: parent
+        onClicked: 
+        {
+            if(typeof(riseContent) !== "undefined") 
+                riseContent()
+        }
+        drag.target: parent
+        onPressed: selectionList.grabToImage(function(result)
+        {
+            console.log("PRESSED SELECTIONBOX", control.selectedPaths.join(","))
+            parent.Drag.imageSource = result.url
+        })
+    }
+    
+    Rectangle
+    {
+        id: bg
+        anchors.fill: parent
+        
+        color: colorScheme.backgroundColor
+        radius: radiusV
+
+        opacity: 1
+        border.color: colorScheme.borderColor
+        
+        SequentialAnimation
+        {
+            id: anim
+            PropertyAnimation
+            {
+                target: bg
+                property: "color"
+                easing.type: Easing.InOutQuad
+                from: animColor
+                to: Qt.lighter(colorScheme.altColor, 1.2)
+                duration: 500
+            }
+        }       
+    }
+    
+    GridLayout
+    {
+        anchors.fill: parent
+        rows: if(position === Qt.Horizontal)
+                  1
+              else if(position === Qt.Vertical)
+                  4
+              else
+                  undefined
+        
+        columns: if(position === Qt.Horizontal)
+                     4
+                 else if(position === Qt.Vertical)
+                     1
+                 else
+                     undefined
+        
+        Maui.Badge
+        {
+            anchors.verticalCenter: parent.top
+            anchors.horizontalCenter: parent.left
+            Layout.column: if(position === Qt.Horizontal)
+                               1
+                           else if(position === Qt.Vertical)
+                               1
+                           else
+                               undefined
+            
+            Layout.row: if(position === Qt.Horizontal)
+                            1
+                        else if(position === Qt.Vertical)
+                            1
+                        else
+                            undefined
+            
+            iconName: "window-close"
+            colorScheme.backgroundColor: dangerColor
+            onClicked:
+            {
+                selectionList.model.clear()
+                exitClicked()
+            }
+        }
+        
+        Item
+        {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.column: if(position === Qt.Horizontal)
+                               2
+                           else if(position === Qt.Vertical)
+                               1
+                           else
+                               undefined
+            
+            Layout.row: if(position === Qt.Horizontal)
+                            1
+                        else if(position === Qt.Vertical)
+                            2
+                        else
+                            undefined
+            
+            Layout.alignment: if(position === Qt.Horizontal)
+                                  Qt.AlignVCenter
+                              else if(position === Qt.Vertical)
+                                  Qt.AlignHCenter
+                              else
+                                  undefined
+            ListView
+            {
+                id: selectionList
+                anchors.fill: parent
+                
+                boundsBehavior: !isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
+                orientation: if(position === Qt.Horizontal)
+                                 ListView.Horizontal
+                             else if(position === Qt.Vertical)
+                                 ListView.Vertical
+                             else
+                                 undefined
+                clip: true
+                spacing: space.small
+                
+                focus: true
+                interactive: true
+                model: ListModel{}
+                
+                delegate: Maui.IconDelegate
+                {
+                    id: delegate
+                    
+                    anchors.verticalCenter: position === Qt.Horizontal ? parent.verticalCenter : undefined
+                    anchors.horizontalCenter: position === Qt.Vertical ? parent.horizontalCenter : undefined
+                    height:  itemHeight
+                    width: itemWidth
+                    folderSize: iconSizes.big
+                    showLabel: true
+                    emblemAdded: true
+                    keepEmblemOverlay: true
+                    showSelectionBackground: false
+                    labelColor: colorScheme.textColor
+                    showTooltip: true
+                    showThumbnails: true
+                    emblemSize: iconSizes.small
+                    leftEmblem: "list-remove"
+					colorScheme.accentColor: control.colorScheme.accentColor
+					colorScheme.backgroundColor: control.colorScheme.altColor
+					colorScheme.textColor: control.colorScheme.altColorText
+                    
+                    Connections
+                    {
+                        target: delegate
+                        onLeftEmblemClicked: removeSelection(index)
+                    }
+                }
+                
+            }
+        }
+        
+        Item
+        {
+            Layout.alignment: if(position === Qt.Horizontal)
+                                  Qt.AlignRight || Qt.AlignVCenter
+                              else if(position === Qt.Vertical)
+                                  Qt.AlignCenter
+                              else
+                                  undefined
+            Layout.fillWidth: position === Qt.Vertical
+            Layout.fillHeight: position === Qt.Horizontal
+            Layout.maximumWidth: iconSizes.medium
+            Layout.column: if(position === Qt.Horizontal)
+                               3
+                           else if(position === Qt.Vertical)
+                               1
+                           else
+                               undefined
+            
+            Layout.row: if(position === Qt.Horizontal)
+                            1
+                        else if(position === Qt.Vertical)
+                            3
+                        else
+                            undefined
+            
+            Layout.margins: space.big 
+            ToolButton
+            {
+                visible: iconVisible
+                anchors.centerIn: parent
+                icon.name: control.iconName
+                icon.color: control.colorScheme.textColor
+                onClicked: iconClicked()
+            }
+        }
+        
+        Maui.Badge
+        {
+            colorScheme.backgroundColor: highlightColor			
+            text: selectionList.count
+            
+            anchors.verticalCenter: parent.top
+            anchors.horizontalCenter: parent.right
+            Layout.column: if(position === Qt.Horizontal)
+                               4
+                           else if(position === Qt.Vertical)
+                               1
+                           else
+                               undefined
+            
+            Layout.row: if(position === Qt.Horizontal)
+                            1
+                        else if(position === Qt.Vertical)
+                            4
+                        else
+                            undefined          
+            onClicked:
+            {
+                clear()
+                modelCleared()
+            }
+        }
+    }
+    
+    onVisibleChanged:
+    {
+        if(position === Qt.Vertical) return
+        
+        if(typeof(riseContent) === "undefined") return
+        
+        if(control.visible)
+            riseContent()
+        else
+            dropContent()
+    }
+    
+    function clear()
+    {
+        selectedPaths = []
+        selectedItems = []
+        selectionList.model.clear()
+    }
+    
+    function removeSelection(index)
+    {
+        var path = selectionList.model.get(index).path
+        if(selectedPaths.indexOf(path) > -1)
+        {
+            selectedPaths.splice(index, 1)
+            selectedItems.splice(index, 1)
+            selectionList.model.remove(index)
+        }
+    }
+    
+    function append(item)
+    {
+        if(selectedPaths.indexOf(item.path) < 0)
+        {
+            selectedItems.push(item)
+            selectedPaths.push(item.path)
+            
+            //             for(var i = 0; i < selectionList.count ; i++ )
+            //                 if(selectionList.model.get(i).path === item.path)
+            //                 {
+            //                     selectionList.model.remove(i)
+            //                     return
+            //                 }
+            
+            selectionList.model.append(item)
+            selectionList.positionViewAtEnd()
+            
+            if(position === Qt.Vertical) return
+            
+            if(typeof(riseContent) === "undefined") return
+            
+            riseContent()
+        }
+    }
+    
+    function animate(color)
+    {
+        animColor = color
+        anim.running = true
+    }  
+    
+    function getSelectedPathsString()
+    {
+        var paths = ""+selectedPaths.join(",")
+        return paths
+    }
 }

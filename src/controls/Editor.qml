@@ -28,57 +28,57 @@ Maui.Page
 
 	headBar.leftContent: [	
 	
-	Maui.ToolButton
+	ToolButton
 	{
-		iconName: "edit-undo"
+		icon.name: "edit-undo"
 		enabled: body.canUndo
 		onClicked: body.undo()
 		opacity: enabled ? 1 : 0.5
 		
 	},
 	
-	Maui.ToolButton
+	ToolButton
 	{
-		iconName: "edit-redo"
+		icon.name: "edit-redo"
 		enabled: body.canRedo
 		onClicked: body.redo()
 		opacity: enabled ? 1 : 0.5
 	},
 	
-	Maui.ToolButton
+	ToolButton
 	{
-		iconName: "format-text-bold"
+		icon.name: "format-text-bold"
 		focusPolicy: Qt.TabFocus
-		iconColor: checked ? highlightColor : textColor
-		checkable: true
+		icon.color: checked ? highlightColor : textColor
+		checkable: false
 		checked: document.bold
 		onClicked: document.bold = !document.bold
 	},
 	
-	Maui.ToolButton
+	ToolButton
 	{
-		iconName: "format-text-italic"
-		iconColor: checked ? highlightColor : textColor
+		icon.name: "format-text-italic"
+		icon.color: checked ? highlightColor : textColor
 		focusPolicy: Qt.TabFocus
-		checkable: true
+		checkable: false
 		checked: document.italic
 		onClicked: document.italic = !document.italic
 	},
 	
-	Maui.ToolButton
+	ToolButton
 	{
-		iconName: "format-text-underline"
-		iconColor: checked ? highlightColor : textColor
+		icon.name: "format-text-underline"
+		icon.color: checked ? highlightColor : textColor
 		focusPolicy: Qt.TabFocus
 		checkable: true
 		checked: document.underline
 		onClicked: document.underline = !document.underline
 	},
 	
-	Maui.ToolButton
+	ToolButton
 	{
-		iconName: "format-text-uppercase"
-		iconColor: checked ? highlightColor : textColor
+		icon.name: "format-text-uppercase"
+		icon.color: checked ? highlightColor : textColor
 		focusPolicy: Qt.TabFocus
 		checkable: true
 		checked: document.uppercase
@@ -171,39 +171,39 @@ Maui.Page
 				
 			}
 			
-			Maui.Menu
+			Menu
 			{
 				id: documentMenu
 				z: 999
 				
-				Maui.MenuItem
+				MenuItem
 				{
 					text: qsTr("Copy")
 					onTriggered: body.copy()
 					enabled: body.selectedText.length
 				}
 				
-				Maui.MenuItem
+				MenuItem
 				{
 					text: qsTr("Cut")
 					onTriggered: body.cut()	
 					enabled: !body.readOnly && body.selectedText.length					
 				}
 				
-				Maui.MenuItem
+				MenuItem
 				{
 					text: qsTr("Paste")
 					onTriggered: body.paste()
 					enabled: !body.readOnly					
 				}
 				
-				Maui.MenuItem
+				MenuItem
 				{
 					text: qsTr("Select all")
 					onTriggered: body.selectAll()
 				}
 				
-				Maui.MenuItem
+				MenuItem
 				{
 					text: qsTr("Web search")
 					onTriggered: Maui.FM.openUrl("https://www.google.com/search?q="+body.selectedText)

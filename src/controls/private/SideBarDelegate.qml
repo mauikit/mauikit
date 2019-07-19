@@ -22,6 +22,8 @@ ItemDelegate
     property string labelColor: ListView.isCurrentItem ? highlightedTextColor :
     itemFgColor
     
+    signal rightClicked()	
+    
     hoverEnabled: !isMobile
     ToolTip.delay: 1000
     ToolTip.timeout: 5000
@@ -31,10 +33,20 @@ ItemDelegate
     background: Rectangle
     {
         anchors.fill: parent
-        color: isCurrentListItem ? highlightColor : "transparent"
-        //                                   index % 2 === 0 ? Qt.lighter(backgroundColor,1.2) :
-        //                                                     backgroundColor
+        color: isCurrentListItem || hovered? highlightColor : "transparent"
+        opacity: hovered ? 0.3 : 1
     }
+    
+    MouseArea
+    {
+		anchors.fill: parent
+		acceptedButtons:  Qt.RightButton
+		onClicked:
+		{
+			if(!isMobile && mouse.button === Qt.RightButton)
+				rightClicked()
+		}
+	}
     
     RowLayout
     {
@@ -52,7 +64,7 @@ ItemDelegate
 				source: model.icon ? model.icon : ""
 				width: sidebarIconSize
 				height: width
-				isMask: !isMobile
+// 				isMask: !isMobile
 				color: labelColor
 			}
 		}

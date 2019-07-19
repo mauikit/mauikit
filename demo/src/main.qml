@@ -1,15 +1,16 @@
 import QtQuick 2.9
-import QtQuick.Controls 2.3
-import org.kde.mauikit 1.0 as Maui
+import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+
+import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.6 as Kirigami
-import StoreList 1.0
+import QtQuick.Templates 2.3 as T
 
 Maui.ApplicationWindow
 {
     id: root
 
-    isWide : root.width >= Kirigami.Units.gridUnit * 10
+//    isWide : root.width >= Kirigami.Units.gridUnit * 10
 
     property int currentPageIndex : 0
     //    about.appDescription: "MauiDemo is a gallery app displaying the MauiKit controls in conjuction with Kirigami and QQC2 controls."
@@ -40,59 +41,55 @@ Maui.ApplicationWindow
     headBar.spacing: space.huge
     headBar.middleContent: [
 
-        Maui.ToolButton
+        ToolButton
         {
 //            Layout.fillHeight: true
-            iconName: "nx-home"
-            colorScheme.textColor : root.headBarFGColor
+            icon.name: "nx-home"
+            Kirigami.Theme.textColor : root.headBarFGColor
             spacing: space.medium
-            active: currentPageIndex === 0
-            showIndicator: true
+            checked: currentPageIndex === 0
             onClicked: currentPageIndex = 0
             text: qsTr("Home")
 
         },
 
-        Maui.ToolButton
+        ToolButton
         {
 //            Layout.fillHeight: true
-            iconName: "view-list-icons"
-            colorScheme.textColor: root.headBarFGColor
+            icon.name: "view-list-icons"
+			Kirigami.Theme.textColor: root.headBarFGColor
             spacing: space.medium
-            active: currentPageIndex === 1
-            showIndicator: true
+            checked: currentPageIndex === 1
             onClicked: currentPageIndex = 1
             text: qsTr("Browser")
         },
 
-        Maui.ToolButton
+        ToolButton
         {
 //            Layout.fillHeight: true
-            iconName: "view-media-genre"
-            colorScheme.textColor: root.headBarFGColor
+            icon.name: "view-media-genre"
+			Kirigami.Theme.textColor: root.headBarFGColor
             spacing: space.medium
-            active: currentPageIndex === 2
-            showIndicator: true
+            checked: currentPageIndex === 2
             onClicked: currentPageIndex = 2
             text: qsTr("Editor")
         },
 
-        Maui.ToolButton
+        ToolButton
         {
 //            Layout.fillHeight: true
-            iconName: "nx-software-center"
-            colorScheme.textColor: root.headBarFGColor
+            icon.name: "nx-software-center"
+			Kirigami.Theme.textColor: root.headBarFGColor
             spacing: space.medium
-            active: currentPageIndex === 3
-            showIndicator: true
+            checked: currentPageIndex === 3
             onClicked: currentPageIndex = 3
             text: qsTr("Store")
         }
     ]
 
-    footBar.leftContent: Maui.ToolButton
+    footBar.leftContent: ToolButton
     {
-        iconName: "view-split-left-right"
+        icon.name: "view-split-left-right"
         onClicked: _drawer.visible = !_drawer.visible
         checked: _drawer.visible
     }
@@ -106,16 +103,25 @@ Maui.ApplicationWindow
             {
                 iconName: "folder-new"
                 text: "New folder"
-                icon.width: 16
+                icon.width: iconSizes.medium
+                icon.height: iconSizes.medium
+                expandible: true
 
+                Kirigami.Action
+                    {
+                        text: "exmaple"
+                        icon.name: "love"
+                    }
 
             },
 
             Kirigami.Action
             {
+                id: _findAction
                 iconName: "edit-find"
-                text: "Search"
-                icon.width: 16
+                text: parent == T.ToolButton ? "Search" : undefined
+                icon.width: iconSizes.medium
+                icon.height: iconSizes.medium
 
 
             },
@@ -124,7 +130,8 @@ Maui.ApplicationWindow
             {
                 iconName: "document-preview-archive"
                 text: "Hidden files"
-                icon.width: 16
+                icon.width: iconSizes.medium
+                icon.height: iconSizes.medium
 
             }
         ]
@@ -239,9 +246,9 @@ Maui.ApplicationWindow
 
             }
 
-            headBar.rightContent: Maui.ToolButton
+            headBar.rightContent: ToolButton
             {
-                iconName: "documentinfo"
+                icon.name: "documentinfo"
                 text: qsTr("Notify")
 
                 onClicked:
@@ -258,11 +265,11 @@ Maui.ApplicationWindow
 
             }
 
-            headBar.leftContent: Maui.ToolButton
+            headBar.leftContent: ToolButton
             {
                 id: _batteryBtn
                 visible: false
-                iconName: "battery"
+                icon.name: "battery"
             }
         }
 

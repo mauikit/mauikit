@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include "fmh.h"
+#include "modellist.h"
 
 struct PathContent
 {
@@ -30,7 +31,7 @@ struct PathContent
 
 class FM;
 class QFileSystemWatcher;
-class FMList : public QObject
+class FMList : public ModelList
 {
 	Q_OBJECT
 
@@ -42,7 +43,6 @@ class FMList : public QObject
 	Q_PROPERTY(FMList::VIEW_TYPE viewType READ getViewType WRITE setViewType NOTIFY viewTypeChanged())
 	Q_PROPERTY(int cloudDepth READ getCloudDepth WRITE setCloudDepth NOTIFY cloudDepthChanged())
 	
-	Q_PROPERTY(bool isBookmark READ getIsBookmark WRITE setIsBookmark NOTIFY isBookmarkChanged())
 	Q_PROPERTY(bool contentReady READ getContentReady NOTIFY contentReadyChanged())
 	
 	Q_PROPERTY(QStringList filters READ getFilters WRITE setFilters NOTIFY filtersChanged())
@@ -91,8 +91,9 @@ class FMList : public QObject
 		enum PATHTYPE : uint_fast8_t
 		{
 			PLACES_PATH = FMH::PATHTYPE_KEY::PLACES_PATH,
+			REMOTE_PATH = FMH::PATHTYPE_KEY::REMOTE_PATH,
 			DRIVES_PATH = FMH::PATHTYPE_KEY::DRIVES_PATH,
-			BOOKMARKS_PATH = FMH::PATHTYPE_KEY::BOOKMARKS_PATH,
+			REMOVABLE_PATH = FMH::PATHTYPE_KEY::REMOVABLE_PATH,
 			TAGS_PATH = FMH::PATHTYPE_KEY::TAGS_PATH,
 			APPS_PATH = FMH::PATHTYPE_KEY::APPS_PATH,
 			TRASH_PATH = FMH::PATHTYPE_KEY::TRASH_PATH,
@@ -110,9 +111,10 @@ class FMList : public QObject
 		}; Q_ENUM(VIEW_TYPE)
 		
 		FMList(QObject *parent = nullptr);
+	
 		~FMList();
 		
-		FMH::MODEL_LIST items() const;
+		FMH::MODEL_LIST items() const override;
 		
 		FMList::SORTBY getSortBy() const;
 		void setSortBy(const FMList::SORTBY &key);
@@ -150,9 +152,6 @@ class FMList : public QObject
 		
 		bool getTrackChanges() const;
 		void setTrackChanges(const bool &value);
-		
-		bool getIsBookmark() const;
-		void setIsBookmark(const bool &value);
 
         bool getFoldersFirst() const;
         void setFoldersFirst(const bool &value);
@@ -193,7 +192,6 @@ private:
 	bool pathExists = false;
 	bool pathEmpty = true;
 	bool trackChanges = true;
-	bool isBookmark = false;
     bool foldersFirst = false;
 	bool saveDirProps = false;
 	bool contentReady = false;
@@ -216,8 +214,6 @@ public slots:
 	void copyInto(const QVariantList &files);
 	void cutInto(const QVariantList &files);
 	
-	void test();
-	
 signals:
 	void pathChanged();
 	void pathTypeChanged();
@@ -228,7 +224,6 @@ signals:
 	void onlyDirsChanged();
 	void sortByChanged();
 	void trackChangesChanged();
-	void isBookmarkChanged();
     void foldersFirstChanged();
 	void saveDirPropsChanged();
 	void contentReadyChanged();
@@ -237,14 +232,6 @@ signals:
 	
 	void pathEmptyChanged();
 	void pathExistsChanged();
-	
-	void preItemAppended();
-	void postItemAppended();
-	void preItemRemoved(int index);
-	void postItemRemoved();
-	void updateModel(int index, QVector<int> roles);
-	void preListChanged();
-	void postListChanged();	
 	
 	void warning(QString message);
 	void progress(int percent);

@@ -69,14 +69,14 @@ ItemDelegate
             Layout.maximumWidth: iconSizes.small
             Layout.margins: space.small
 
-            Maui.ToolButton
+            ToolButton
             {
                 anchors.centerIn: parent
                 visible: showDeleteIcon
-                iconName: "window-close"
-                size: iconSizes.small
+                icon.name: "window-close"
+                icon.width: iconSizes.small
                 onClicked: removeTag(index)
-				iconColor: colorScheme.textColor
+				icon.color: colorScheme.textColor
 
             }
         }

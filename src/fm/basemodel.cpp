@@ -1,6 +1,6 @@
 /*
  * <one line to give the program's name and a brief idea of what it does.>
- * Copyright (C) 2018  camilo <email>
+ * Copyright (C) 2019  camilo <chiguitar@unal.edu.co>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,18 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "placesmodel.h"
-#include "placeslist.h"
+#include "basemodel.h"
+#include "modellist.h"
 
-PlacesModel::~PlacesModel()
+BaseModel::~BaseModel()
 {
 }
 
-PlacesModel::PlacesModel(QObject *parent)
+BaseModel::BaseModel(QObject *parent)
 : QAbstractListModel(parent), list(nullptr)
 {}
 
-int PlacesModel::rowCount(const QModelIndex &parent) const
+int BaseModel::rowCount(const QModelIndex &parent) const
 {
 	if (parent.isValid() || !list)
 		return 0;
@@ -35,7 +35,7 @@ int PlacesModel::rowCount(const QModelIndex &parent) const
 	return list->items().size();
 }
 
-QVariant PlacesModel::data(const QModelIndex &index, int role) const
+QVariant BaseModel::data(const QModelIndex &index, int role) const
 {
 	if (!index.isValid() || !list)
 		return QVariant();
@@ -43,7 +43,7 @@ QVariant PlacesModel::data(const QModelIndex &index, int role) const
 	return list->items().at(index.row())[static_cast<FMH::MODEL_KEY>(role)];
 }
 
-bool PlacesModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool BaseModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
 	Q_UNUSED(index);
 	Q_UNUSED(value);
@@ -52,7 +52,7 @@ bool PlacesModel::setData(const QModelIndex &index, const QVariant &value, int r
 	return false;
 }
 
-Qt::ItemFlags PlacesModel::flags(const QModelIndex &index) const
+Qt::ItemFlags BaseModel::flags(const QModelIndex &index) const
 {
 	if (!index.isValid())
 		return Qt::NoItemFlags;
@@ -60,7 +60,7 @@ Qt::ItemFlags PlacesModel::flags(const QModelIndex &index) const
 	return Qt::ItemIsEditable; // FIXME: Implement me!
 }
 
-QHash<int, QByteArray> PlacesModel::roleNames() const
+QHash<int, QByteArray> BaseModel::roleNames() const
 {
 	QHash<int, QByteArray> names;
 	
@@ -70,15 +70,15 @@ QHash<int, QByteArray> PlacesModel::roleNames() const
 	return names;
 }
 
-PlacesList *PlacesModel::getList() const
+ModelList *BaseModel::getList() const
 {
 	return this->list;
 }
 
-void PlacesModel::setList(PlacesList *value)
+void BaseModel::setList(ModelList *value)
 {
 	beginResetModel();
-
+	
 	if(list)
 		list->disconnect(this);
 	
@@ -86,44 +86,43 @@ void PlacesModel::setList(PlacesList *value)
 	
 	if(list)
 	{
-		connect(this->list, &PlacesList::preItemAppended, this, [=]()
+        connect(this->list, &ModelList::preItemAppendedAt, this, [=](int index)
+        {
+            beginInsertRows(QModelIndex(), index, index);
+        });
+        
+		connect(this->list, &ModelList::preItemAppended, this, [=]()
 		{
 			const int index = list->items().size();
 			beginInsertRows(QModelIndex(), index, index);
 		});
 		
-		connect(this->list, &PlacesList::postItemAppended, this, [=]()
+		connect(this->list, &ModelList::postItemAppended, this, [=]()
 		{
 			endInsertRows();
 		});
 		
-		connect(this->list, &PlacesList::preItemRemoved, this, [=](int index)
+		connect(this->list, &ModelList::preItemRemoved, this, [=](int index)
 		{
 			beginRemoveRows(QModelIndex(), index, index);
 		});
 		
-		connect(this->list, &PlacesList::postItemRemoved, this, [=]()
+		connect(this->list, &ModelList::postItemRemoved, this, [=]()
 		{
 			endRemoveRows();
 		});
 		
-		connect(this->list, &PlacesList::updateModel, this, [=](int index, QVector<int> roles)
+		connect(this->list, &ModelList::updateModel, this, [=](int index, QVector<int> roles)
 		{
 			emit this->dataChanged(this->index(index), this->index(index), roles);
 		});
-		
-		// 		connect(this->list, &PlacesList::pathChanged, this, [=]()
-		// 		{
-		// 			beginResetModel();
-		// 			endResetModel();
-		// 		});
-		
-		connect(this->list, &PlacesList::preListChanged, this, [=]()
+				
+		connect(this->list, &ModelList::preListChanged, this, [=]()
 		{
 			beginResetModel();
 		});
 		
-		connect(this->list, &PlacesList::postListChanged, this, [=]()
+		connect(this->list, &ModelList::postListChanged, this, [=]()
 		{	
 			endResetModel();
 		});

@@ -23,7 +23,7 @@ import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.0 as Kirigami
 import "private"
 
-Maui.ToolButton
+ToolButton
 {
 	id: control
 	/* Controlc color scheming */

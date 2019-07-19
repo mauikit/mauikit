@@ -18,45 +18,42 @@
 
 #include "placeslist.h"
 #include "fm.h"
-
+#include <QIcon>
 #include <QEventLoop>
 #include <QTimer>
 #include <QFileSystemWatcher>
 
-PlacesList::PlacesList(QObject *parent) : QObject(parent)
-{
-    this->fm = new FM(this);
-    this->watcher = new QFileSystemWatcher(this);
+#ifdef Q_OS_ANDROID 
+#else
+#include <KFilePlacesModel>
+#endif
+
+#ifdef Q_OS_ANDROID 
+PlacesList::PlacesList(QObject *parent) : ModelList(parent),
+fm(new FM(this)),
+model(nullptr),
+watcher(new QFileSystemWatcher(this))
+#else
+PlacesList::PlacesList(QObject *parent) : ModelList(parent),
+fm(new FM(this)),
+model(new KFilePlacesModel(this)),
+watcher(new QFileSystemWatcher(this))
+#endif
+{    
     connect(watcher, &QFileSystemWatcher::directoryChanged, [this](const QString &path)
     {
         if(this->count.contains(path))
         {
-
-            // 			QEventLoop loop;
-            // 			QTimer timer;
-            // 			connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
-            //
-            // 			timer.setSingleShot(true);
-            // 			timer.setInterval(1000);
-
-            auto oldCount =  this->count[path];
+            const auto oldCount =  this->count[path];
             const auto index = this->indexOf(path);
-
-            // 			timer.start();
-            // 			loop.exec();
-            // 			timer.stop();
-
-            auto newCount = FM::getPathContent(path, true, false).size();
-            auto count = newCount - oldCount;
+            const auto newCount = FMH::getFileInfoModel(path)[FMH::MODEL_KEY::COUNT].toInt();
+            const auto count = newCount - oldCount;
 
             this->list[index][FMH::MODEL_KEY::COUNT] = QString::number(count);
-
             emit this->updateModel(index, {FMH::MODEL_KEY::COUNT});
         }
-    });
 
-    connect(fm, &FM::bookmarkInserted, this, &PlacesList::reset);
-    connect(fm, &FM::bookmarkRemoved, this, &PlacesList::reset);
+    });
 
     connect(fm, &FM::cloudAccountInserted, this, &PlacesList::reset);
     connect(fm, &FM::cloudAccountRemoved, this, &PlacesList::reset);
@@ -74,36 +71,70 @@ void PlacesList::watchPath(const QString& path)
     this->watcher->addPath(path);
 }
 
-PlacesList::~PlacesList()
-{
-}
+PlacesList::~PlacesList() {}
 
 FMH::MODEL_LIST PlacesList::items() const
 {
     return this->list;
 }
 
+#ifdef Q_OS_ANDROID
+#else
+static FMH::MODEL modelPlaceInfo(const KFilePlacesModel &model, const QModelIndex &index,  const FMH::PATHTYPE_KEY &type)
+{
+    return FMH::MODEL
+        {
+            {FMH::MODEL_KEY::PATH, model.url(index).toString().replace("file://", "")},
+            {FMH::MODEL_KEY::URL, model.url(index).toString().replace("file://", "")},
+            {FMH::MODEL_KEY::ICON, model.icon(index).name()},
+            {FMH::MODEL_KEY::LABEL, model.text(index)},
+            {FMH::MODEL_KEY::NAME, model.text(index)},
+            {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_NAME[type]}
+        };
+}
+#endif
+
+
+static FMH::MODEL_LIST getGroup(const KFilePlacesModel &model, const FMH::PATHTYPE_KEY &type)
+{
+	#ifdef Q_OS_ANDROID
+	//do android stuff until cmake works with android 
+	return FMH::MODEL_LIST();
+	#else
+	const auto group = model.groupIndexes(static_cast<KFilePlacesModel::GroupType>(type));
+	return std::accumulate(group.begin(), group.end(), FMH::MODEL_LIST(), [&model, &type](FMH::MODEL_LIST &list, const QModelIndex &index) -> FMH::MODEL_LIST
+	{
+		list << modelPlaceInfo(model, index, type);
+		return list;        
+	});
+	#endif
+}
+
 void PlacesList::setList()
 {		
     this->list.clear();
 
-    for(auto group : this->groups)
+    for(const auto &group : this->groups)
         switch(group)
         {
         case FMH::PATHTYPE_KEY::PLACES_PATH:
-            this->list << FM::getDefaultPaths();
+            this->list << getGroup(*this->model, FMH::PATHTYPE_KEY::PLACES_PATH);
             break;
 
         case FMH::PATHTYPE_KEY::APPS_PATH:
-            this->list << FM::getCustomPaths();
-            break;
-
-        case FMH::PATHTYPE_KEY::BOOKMARKS_PATH:
-            this->list << this->fm->getBookmarks();
+            this->list << FM::getAppsPath();
             break;
 
         case FMH::PATHTYPE_KEY::DRIVES_PATH:
-            this->list << FM::getDevices();
+            this->list << getGroup(*this->model, FMH::PATHTYPE_KEY::DRIVES_PATH);
+            break;
+            
+        case FMH::PATHTYPE_KEY::REMOTE_PATH:
+            this->list << getGroup(*this->model, FMH::PATHTYPE_KEY::REMOTE_PATH);
+            break;
+            
+        case FMH::PATHTYPE_KEY::REMOVABLE_PATH:
+            this->list << getGroup(*this->model, FMH::PATHTYPE_KEY::REMOVABLE_PATH);
             break;
 
         case FMH::PATHTYPE_KEY::TAGS_PATH:
@@ -123,12 +154,12 @@ void PlacesList::setCount()
     this->watcher->removePaths(this->watcher->directories());
     for(auto &data : this->list)
     {
-        auto path = data[FMH::MODEL_KEY::PATH];
+        const auto path = data[FMH::MODEL_KEY::PATH];
         if(FM::isDir(path))
-        {
-            auto count = FM::getPathContent(path, true, false).size();
+        {   
             data.insert(FMH::MODEL_KEY::COUNT, "0");
-            this->count.insert(path, count);
+            const auto count = FMH::getFileInfoModel(path)[FMH::MODEL_KEY::COUNT];
+            this->count.insert(path, count.toInt());
             this->watchPath(path);
         }
     }
@@ -136,15 +167,12 @@ void PlacesList::setCount()
 
 int PlacesList::indexOf(const QString& path)
 {
-    int i = -1;
-    for(auto data : this->list)
+    const auto index = std::find_if(this->list.begin(), this->list.end(), [&path](const FMH::MODEL &item) -> bool
     {
-        i++;
-        if(data[FMH::MODEL_KEY::PATH] == path)
-            break;
-    }
+        return item[FMH::MODEL_KEY::PATH] == path;
 
-    return i;
+    });
+    return std::distance(this->list.begin(), index);
 }
 
 void PlacesList::reset()
@@ -174,13 +202,8 @@ QVariantMap PlacesList::get(const int& index) const
     if(index >= this->list.size() || index < 0)
         return QVariantMap();
 
-    QVariantMap res;
-    const auto model = this->list.at(index);
-
-    for(auto key : model.keys())
-        res.insert(FMH::MODEL_NAME[key], model[key]);
-
-    return res;
+    const auto model = this->list.at(index);   
+    return FM::toMap(model);
 }
 
 void PlacesList::refresh()
@@ -193,3 +216,39 @@ void PlacesList::clearBadgeCount(const int& index)
     this->list[index][FMH::MODEL_KEY::COUNT] = "0";
     emit this->updateModel(index, {FMH::MODEL_KEY::COUNT});
 }
+
+void PlacesList::addPlace(const QString& path)
+{    
+    const auto it = std::find_if(this->list.rbegin(), this->list.rend(), [](const FMH::MODEL &item) -> bool{
+       return item[FMH::MODEL_KEY::TYPE] == FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::PLACES_PATH]; 
+    });
+    const auto index = std::distance(it, this->list.rend());
+    
+    qDebug()<< "trying to add path to places" << path<< QDir(path).dirName();
+    emit this->preItemAppendedAt(index);
+    const auto url =  QStringLiteral("file://")+path;
+	
+#ifdef Q_OS_ANDROID
+	//do android stuff until cmake works with android 
+#else
+	this->model->addPlace(QDir(path).dirName(), url);
+	this->list.insert(index, modelPlaceInfo(*this->model, this->model->closestItem(QUrl(url)), FMH::PATHTYPE_KEY::PLACES_PATH));
+#endif
+	
+    emit this->postItemAppended();    
+}
+
+void PlacesList::removePlace(const int& index)
+{
+    emit this->preItemRemoved(index);
+	
+	#ifdef Q_OS_ANDROID
+	//do android stuff until cmake works with android 
+	#else
+	this->model->removePlace(this->model->index(index, 0));	
+	#endif
+	
+    this->list.removeAt(index);
+    emit this->postItemRemoved();
+}
+

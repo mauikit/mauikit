@@ -22,17 +22,17 @@ Maui.Dialog
 	onAccepted: setTags()
 	onRejected: close()	
 	headBar.plegable: false
-	headBar.leftContent: Maui.ToolButton
+	headBar.leftContent: ToolButton
 	{
-		iconName: "view-sort"
-		tooltipText: qsTr("Sort by...")
+		icon.name: "view-sort"
+		text: qsTr("Sort by...")
 		onClicked: sortMenu.popup()
 		
-		Maui.Menu
+		Menu
 		{
 			id: sortMenu			
 			
-			Maui.MenuItem
+			MenuItem
 			{
 				text: qsTr("Name")
 				checkable: true
@@ -40,7 +40,7 @@ Maui.Dialog
 				onTriggered: _tagsList.sortBy = TagsList.TAG
 			}
 			
-			Maui.MenuItem
+			MenuItem
 			{
 				text: qsTr("Date")
 				checkable: true
@@ -69,10 +69,10 @@ Maui.Dialog
 	}
 
 	
-	headBar.rightContent: Maui.ToolButton
+	headBar.rightContent: ToolButton
 	{
-		iconName: "view-refresh"
-		tooltipText: qsTr("Refresh...")
+		icon.name: "view-refresh"
+// 		text: qsTr("Refresh...")
 		onClicked: taglist.refresh()
 	}	
 

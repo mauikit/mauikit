@@ -26,13 +26,13 @@ import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.2 as Kirigami
 import QtGraphicalEffects 1.0
 
-Item
+ScrollView
 {
 	id: control
 	
 	property int cellWidth: unit * 200
 	property int cellHeight: unit * 200
-	property int spacing: space.medium
+    spacing: space.medium
 	property int itemSize: 0
 	
 	property alias model : gridView.model
@@ -60,7 +60,7 @@ Item
 		
 		anchors
 		{
-			leftMargin: scrollBar.visible ? 0 : scrollBar.width
+			leftMargin: control.ScrollBar.visible ? 0 : control.ScrollBar.width
 		}
 		
 		flow: GridView.FlowLeftToRight
@@ -81,20 +81,71 @@ Item
 		snapMode: GridView.SnapToRow
 		highlightMoveDuration: 0
 		interactive: true
-		ScrollBar.vertical: ScrollBar{ id:scrollBar; visible: true}
 		onWidthChanged: adaptContent? control.adaptGrid() : undefined
 		
+		PinchArea
+		{
+	        anchors.fill: parent
+            z: -1
+	        onPinchStarted:
+	        {
+	            console.log("pinch started")
+	        }
 	
-		MouseArea
+	        onPinchUpdated:
+	        {
+                
+	        }
+	
+	        onPinchFinished:
+	        {
+	            console.log("pinch finished")
+                 resizeContent(pinch.scale)
+	        }
+	        
+	        MouseArea
 		{
 			anchors.fill: parent
-			z: -1
+			            propagateComposedEvents: true
 			acceptedButtons:  Qt.RightButton | Qt.LeftButton
 			onClicked: control.areaClicked(mouse)
 			onPressAndHold: control.areaRightClicked()
-		}									
+            
+            		onWheel:
+				{
+					if (wheel.modifiers & Qt.ControlModifier)
+					{
+                        if (wheel.angleDelta.y != 0) 
+                        {
+                            var factor = 1 + wheel.angleDelta.y / 600;
+                            control.resizeContent(factor)
+                        } 
+					}else
+                        wheel.accepted = false
+				}
+			
+		}	
+	    }
 	}
 	
+	function resizeContent(factor)
+    {
+        if(factor > 1)
+        {
+            control.itemSize = control.itemSize + 10
+            control.cellHeight = control.cellHeight + 10
+            control.cellWidth = control.cellWidth + 10
+        }
+        else if((control.itemSize - 10) > iconSizes.small)
+        {
+            control.itemSize = control.itemSize - 10
+            control.cellHeight = control.cellHeight - 10
+            control.cellWidth = control.cellWidth - 10
+        }
+        
+        if(adaptContent)
+            control.adaptGrid()
+    }	
 	
 	function adaptGrid()
 	{

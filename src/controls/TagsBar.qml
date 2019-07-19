@@ -20,10 +20,11 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import org.kde.kirigami 2.6 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import "private"
 
-Maui.Item
+Item
 {
     id: control
     clip : true
@@ -62,13 +63,13 @@ Maui.Item
                 anchors.fill: parent
                 spacing: 0
 
-                Maui.ToolButton
+                ToolButton
                 {
                     Layout.alignment: Qt.AlignLeft
                     visible: allowEditMode
-                    iconName: "list-add"
+                    icon.name: "list-add"
                     onClicked: addClicked()
-                    iconColor: control.colorScheme.textColor
+                    icon.color: control.Kirigami.Theme.textColor
                 }
 
                 TagList
@@ -82,8 +83,8 @@ Maui.Item
                     showDeleteIcon: allowEditMode
                     onTagRemoved: tagRemovedClicked(index)
                     onTagClicked: control.tagClicked(tagsList.model.get(index).tag)
-					colorScheme.textColor: control.colorScheme.textColor
-					colorScheme.backgroundColor: control.colorScheme.backgroundColor					
+					Kirigami.Theme.textColor: control.colorScheme.textColor
+					Kirigami.Theme.backgroundColor: control.colorScheme.backgroundColor					
                     MouseArea
                     {
                         anchors.fill: parent
@@ -129,10 +130,10 @@ Maui.Item
                     }
                 }
 
-                Maui.ToolButton
+                ToolButton
                 {
                     Layout.alignment: Qt.AlignLeft
-                    iconName: "checkbox"
+                    icon.name: "checkbox"
                     onClicked: saveTags()
                 }
             }
@@ -175,5 +176,4 @@ Maui.Item
 
         return tags
     }
-
 }

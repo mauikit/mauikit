@@ -59,7 +59,7 @@ Kirigami.AbstractApplicationWindow
     property alias rightIcon : searchBtn
     
     default property alias content : page.content
-    property alias mainMenu : mainMenu.content
+    property alias mainMenu : mainMenu.contentData
     property alias about : aboutDialog
     property alias accounts: _accountsDialogLoader.item
     property alias currentAccount: _accountCombobox.currentText
@@ -274,11 +274,11 @@ backgroundColor.b, 0.7))
         headBar.colorScheme.backgroundColor: headBarBGColor
         headBar.colorScheme.textColor: headBarFGColor
 
-        headBar.leftContent: Maui.ToolButton
+        headBar.leftContent: ToolButton
         {
             id: menuBtn
-            iconName: "application-menu"
-			iconColor: headBarFGColor
+            icon.name: "application-menu"
+			icon.color: headBarFGColor
             checked: mainMenu.visible  
             onClicked:
             {
@@ -286,11 +286,11 @@ backgroundColor.b, 0.7))
 				mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x ,  altToolBars ? 0 : parent.height+ space.medium)
             }
             
-            Maui.Menu
+            Menu
             {
 				id: mainMenu
 				modal: true
-				
+				z: 999
 				width: unit * 200
 				
 				Item
@@ -305,7 +305,7 @@ backgroundColor.b, 0.7))
 						margins: space.medium
 					}
 					
-					Maui.ComboBox
+					ComboBox
 					{
 						id: _accountCombobox
 						anchors.centerIn: parent
@@ -316,8 +316,8 @@ backgroundColor.b, 0.7))
 						textRole: "user"
 						flat: true
 						model: showAccounts ? accounts.model : undefined
-						iconButton.iconName: "user-identity"
-						iconButton.isMask: false
+// 						icon.name: "user-identity"
+// 						iconButton.isMask: false
 					}
 				}
 				
@@ -326,7 +326,7 @@ backgroundColor.b, 0.7))
                     visible: _accountCombobox.visible
                 }
 				
-				Maui.MenuItem
+				MenuItem
 				{
 					text: qsTr("Accounts")
 					visible: root.showAccounts
@@ -338,7 +338,7 @@ backgroundColor.b, 0.7))
 					}
 				}				
 				
-				Maui.MenuItem
+				MenuItem
 				{
 					text: qsTr("About")
 					icon.name: "documentinfo"
@@ -350,11 +350,11 @@ backgroundColor.b, 0.7))
 			}			
         }
 
-        headBar.rightContent: Maui.ToolButton
+        headBar.rightContent: ToolButton
         {
             id: searchBtn
-            iconName: "edit-find"
-            iconColor: headBarFGColor
+            icon.name: "edit-find"
+            icon.color: headBarFGColor
             onClicked: searchButtonClicked()
         }
         
@@ -448,13 +448,13 @@ backgroundColor.b, 0.7))
 				Layout.row: 1
 				Layout.column: 1
 				
-				Maui.ToolButton
+				ToolButton
 				{
 					id: _notifyIcon
-					size: iconSizes.large
+					icon.width: iconSizes.large
 					
 					anchors.centerIn: parent
-					isMask: false
+// 					isMask: false
 				}				
 			}
 			

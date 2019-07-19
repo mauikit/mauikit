@@ -54,25 +54,25 @@ ComboBox
 	
 	
 	
-	Maui.ToolButton
+	ToolButton
 	{
 		id: _iconButton
 		visible: iconName.length
-		size: iconSizes.medium
+		icon.width: iconSizes.medium
 		enabled: false
-		iconColor: control.pressed || control.down ? control.colorScheme.highlightedTextColor : control.colorScheme.textColor
+		icon.color: control.pressed || control.down ? control.colorScheme.highlightedTextColor : control.colorScheme.textColor
 		anchors.left: control.left
 		anchors.verticalCenter: control.verticalCenter
 		anchors.margins: space.small
 	}
 	
-	indicator: Maui.ToolButton
+	indicator: ToolButton
 	{
 		id: _indicatorButton
-		size: iconSizes.small
+		icon.width: iconSizes.small
 		enabled: false
-		iconName: _popup.visible ? "go-up" : "go-down"
-		iconColor: control.pressed || control.down ? control.colorScheme.highlightedTextColor : control.colorScheme.textColor
+		icon.name: _popup.visible ? "go-up" : "go-down"
+		icon.color: control.pressed || control.down ? control.colorScheme.highlightedTextColor : control.colorScheme.textColor
 		anchors.right: control.right
 		anchors.verticalCenter: control.verticalCenter
 		anchors.margins: space.small

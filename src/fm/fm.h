@@ -35,7 +35,7 @@ public:
 	
 	FMH::MODEL_LIST getTags(const int &limit = 5);	
 	FMH::MODEL_LIST getTagContent(const QString &tag);	
-    FMH::MODEL_LIST getBookmarks();
+//     FMH::MODEL_LIST getBookmarks();
 
     /** Syncing **/
 	bool getCloudServerContent(const QString &server, const QStringList &filters= QStringList(), const int &depth = 0);
@@ -46,15 +46,15 @@ public:
 	/*** START STATIC METHODS ***/
 	static FMH::MODEL_LIST search(const QString &query, const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
 	
-	static FMH::MODEL_LIST getDevices();	
+// 	static FMH::MODEL_LIST getDevices();	
 	static FMH::MODEL_LIST getDefaultPaths();
-	static FMH::MODEL_LIST getCustomPaths();	
+	static FMH::MODEL_LIST getAppsPath();	
 	
 	static FMH::MODEL_LIST packItems(const QStringList &items, const QString &type);
 	
-	FMH::MODEL_LIST static getPathContent(const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList(), const QDirIterator::IteratorFlags &iteratorFlags = QDirIterator::NoIteratorFlags);
+	static FMH::MODEL_LIST getPathContent(const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList(), const QDirIterator::IteratorFlags &iteratorFlags = QDirIterator::NoIteratorFlags);
 	
-	FMH::MODEL_LIST static getAppsContent(const QString &path);	
+	static FMH::MODEL_LIST getAppsContent(const QString &path);	
 
 	static bool copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory);
 	static bool removeDir(const QString &path);	
@@ -70,14 +70,9 @@ public:
 private:
     Tagging *tag;
 // 	static FM* instance;
-	
-    void init();
 	QVariantList get(const QString &queryTxt);	
 
 signals:
-	void bookmarkInserted(QString bookmark);
-	void bookmarkRemoved(QString bookmark);
-
     void cloudAccountInserted(QString user);
     void cloudAccountRemoved(QString user);
 
@@ -91,10 +86,6 @@ signals:
 	void newItem(FMH::MODEL item, QString path); // when a new item is created
 	
 public slots:	
-	bool bookmark(const QString &path);
-	bool removeBookmark(const QString &path);
-	bool isBookmark(const QString &path);
-
 	QVariantList getCloudAccountsList();	
 	bool addCloudAccount(const QString &server, const QString &user, const QString &password);
 	bool removeCloudAccount(const QString &server, const QString &user);

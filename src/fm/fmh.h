@@ -39,6 +39,7 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KFileItem>
+#include <KFilePlacesModel>
 #endif
 
 namespace FMH
@@ -361,24 +362,43 @@ namespace FMH
 	typedef QHash<FMH::MODEL_KEY, QString> MODEL;
 	typedef QList<MODEL> MODEL_LIST;
 	
+#ifdef Q_OS_ANDROID
 	enum PATHTYPE_KEY : uint_fast8_t
 	{
-		PLACES_PATH,
-		DRIVES_PATH,
-		BOOKMARKS_PATH,
-		TAGS_PATH,
-		APPS_PATH,
-		TRASH_PATH,
-		SEARCH_PATH,
-		CLOUD_PATH
+        PLACES_PATH,
+        REMOTE_PATH,
+        DRIVES_PATH,
+        REMOVABLE_PATH,
+        TAGS_PATH,
+        UNKOWN_TYPE,
+        APPS_PATH,
+        TRASH_PATH,
+        SEARCH_PATH,
+        CLOUD_PATH
 	};
-	
+#else
+    enum PATHTYPE_KEY : uint_fast8_t
+    {
+        PLACES_PATH = KFilePlacesModel::GroupType::PlacesType,
+        REMOTE_PATH = KFilePlacesModel::GroupType::RemoteType,
+        DRIVES_PATH = KFilePlacesModel::GroupType::DevicesType,
+        REMOVABLE_PATH = KFilePlacesModel::GroupType::RemovableDevicesType,
+        TAGS_PATH = KFilePlacesModel::GroupType::TagsType,
+        UNKOWN_TYPE = KFilePlacesModel::GroupType::UnknownType,
+        APPS_PATH = 9,
+        TRASH_PATH = 10,
+        SEARCH_PATH = 11,
+        CLOUD_PATH = 12
+    };
+#endif
 	static const QHash<PATHTYPE_KEY, QString> PATHTYPE_NAME =
 	{
 		{PATHTYPE_KEY::PLACES_PATH, "Places"},
 		{PATHTYPE_KEY::DRIVES_PATH, "Drives"},
-		{PATHTYPE_KEY::BOOKMARKS_PATH, "Bookmarks"},
 		{PATHTYPE_KEY::APPS_PATH, "Apps"},
+		{PATHTYPE_KEY::REMOTE_PATH, "Remote"},
+		{PATHTYPE_KEY::REMOVABLE_PATH, "Removable"},
+		{PATHTYPE_KEY::UNKOWN_TYPE, "Unkown"},
 		{PATHTYPE_KEY::TRASH_PATH, "Trash"},
 		{PATHTYPE_KEY::TAGS_PATH, "Tags"},
 		{PATHTYPE_KEY::SEARCH_PATH, "Search"},
@@ -434,7 +454,8 @@ namespace FMH
 		PicturesPath,
 		MusicPath,
 		VideosPath,
-		DownloadsPath
+		DownloadsPath,
+        RootPath
 	};
 	
 	const QMap<QString, QString> folderIcon
@@ -584,31 +605,47 @@ namespace FMH
 	const QString FMPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/maui/fm/";
 	const QString DBName = "fm.db";	
 	
+	
+	inline FMH::MODEL getDirInfoModel(const QString &path, const QString &type = QString())
+	{
+		const QDir dir (path);
+		if(!dir.exists()) 
+			return FMH::MODEL();
+		
+		return FMH::MODEL
+		{
+			{FMH::MODEL_KEY::ICON, FMH::getIconName(path)},
+			{FMH::MODEL_KEY::LABEL, dir.dirName()},
+			{FMH::MODEL_KEY::PATH, path},
+			{FMH::MODEL_KEY::TYPE, type}
+		};
+	}	
+	
 	inline QVariantMap getDirInfo(const QString &path, const QString &type = QString())
 	{
-		QFileInfo file (path);
-		if(!file.exists()) return QVariantMap();
+		const QFileInfo file(path);
 		
-		QVariantMap data =
-		{
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], FMH::getIconName(path)},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::LABEL], file.baseName()},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::PATH], path},
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::TYPE], type}
-		};
+		if(!file.exists()) 
+			return QVariantMap();
 		
-		return data;
+		const auto data = FMH::getDirInfoModel(path);
+		
+		QVariantMap res; 
+		for(const auto &key : data.keys())		
+			res.insert(FMH::MODEL_NAME[key], data[key]);
+		
+		return res;
 	}
+	
 	
 	inline FMH::MODEL getFileInfoModel(const QString &path)
 	{
-		QFileInfo file(path);
-		if(!file.exists()) return FMH::MODEL();
+		const QFileInfo file(path);
+		if(!file.exists()) 
+			return FMH::MODEL();
 		
-		auto mime = FMH::getMime(path);
-		// 		QLocale locale;
-		
-		FMH::MODEL res =
+		const auto mime = FMH::getMime(path);
+		return FMH::MODEL 
 		{
 			{FMH::MODEL_KEY::GROUP, file.group()},
 			{FMH::MODEL_KEY::OWNER, file.owner()},
@@ -623,24 +660,24 @@ namespace FMH
 			{FMH::MODEL_KEY::PATH, path},
 			{FMH::MODEL_KEY::THUMBNAIL, path},
 			{FMH::MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path).count() - 2) : "0"}			
-		};
-		
-		return res;
+		};		
 	}	
 	
 	inline QVariantMap getFileInfo(const QString &path)
 	{
-		QFileInfo file(path);
-		if(!file.exists()) return QVariantMap();
-		auto data = FMH::getFileInfoModel(path);
+		const QFileInfo file(path);
+		
+		if(!file.exists()) 
+			return QVariantMap();
+		
+		const auto data = FMH::getFileInfoModel(path);
+		
 		QVariantMap res; 
-		for(auto key : data.keys())		
+		for(const auto &key : data.keys())		
 			res.insert(FMH::MODEL_NAME[key], data[key]);
 		
 		return res;
 	}
-	
-	
 	
 	#ifndef STATIC_MAUIKIT
 	#include "mauikit_export.h"

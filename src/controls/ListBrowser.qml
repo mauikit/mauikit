@@ -17,109 +17,140 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 2.2
+import QtQuick 2.9
+import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 
-ListView
+
+ScrollView
 {
-    id: control
-    property bool detailsView : false
+    id: control    
+    
     property int itemSize : iconSizes.big
     property bool showEmblem : true
     property string rightEmblem
     property string leftEmblem
-
+    
     property bool showDetailsInfo : false
     property bool showPreviewThumbnails: true
+    
+    property alias model : _listView.model
+	property alias delegate : _listView.delegate
+	property alias section : _listView.section
+	property alias contentY: _listView.contentY
+	property alias currentIndex : _listView.currentIndex
+	property alias currentItem : _listView.currentItem
+	property alias count : _listView.count
+	property alias cacheBuffer : _listView.cacheBuffer
+	
+	property alias topMargin: _listView.topMargin
+	property alias bottomMargin: _listView.bottomMargin
+	property alias rightMargin: _listView.rightMargin
+	property alias leftMarging: _listView.leftMargin
+	property alias header : _listView.header 
+	property alias listView: _listView
 
+    
     signal itemClicked(int index)
     signal itemDoubleClicked(int index)
     signal itemRightClicked(int index)
-
-	signal rightEmblemClicked(int index)
-	signal leftEmblemClicked(int index)
-
+    
+    signal rightEmblemClicked(int index)
+    signal leftEmblemClicked(int index)
+    
     signal areaClicked(var mouse)
-    signal areaRightClicked()
-
-    //    maximumFlickVelocity: 400
-
-    snapMode: ListView.SnapToItem
-    boundsBehavior: !isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
-
-    width: parent.width
-    height: parent.height
-
-    clip: true
-    focus: true
-
-    model: ListModel { id: listModel }
-    delegate: Maui.IconDelegate
-    {
-        id: delegate
-        isDetails: true
-        width: parent.width
-        height: itemSize + space.big
-
-        showDetailsInfo: control.showDetailsInfo
-        folderSize : itemSize
-        showTooltip: true
-        showEmblem: control.showEmblem
-        showThumbnails: showPreviewThumbnails
-        rightEmblem: control.rightEmblem
-        leftEmblem: control.leftEmblem
-
-        Connections
-        {
-            target: delegate
-            onClicked:
-            {
-                control.currentIndex = index
-                control.itemClicked(index)
-            }
-
-            onDoubleClicked:
-            {
-                control.currentIndex = index
-                control.itemDoubleClicked(index)
-            }
-
-            onPressAndHold:
-            {
-                control.currentIndex = index
-                control.itemRightClicked(index)
-            }
-
-            onRightClicked:
-            {
-                control.currentIndex = index
-                control.itemRightClicked(index)
-            }
-
-            onRightEmblemClicked:
-            {
-                control.currentIndex = index
-                control.rightEmblemClicked(index)
-            }
-
-            onLeftEmblemClicked:
-            {
-                control.currentIndex = index
-                control.leftEmblemClicked(index)
-            }
-        }
-    }
-
-    ScrollBar.vertical: ScrollBar{ visible: !isMobile}
-
-    MouseArea
+    signal areaRightClicked()   
+	
+	padding: 0
+	spacing: 0
+    
+    ListView
     {
         anchors.fill: parent
-        z: -1
-        acceptedButtons:  Qt.RightButton | Qt.LeftButton
-        onClicked: control.areaClicked(mouse)
-        onPressAndHold: control.areaRightClicked()
+        id: _listView
+        //    maximumFlickVelocity: 400
+        
+        snapMode: ListView.SnapToItem
+        boundsBehavior: !isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
+        
+         keyNavigationEnabled: true
+    clip: true
+    focus: true
+    interactive: true
+    highlightFollowsCurrentItem: true
+    highlightMoveDuration: 0
+        
+        width: parent.width
+        height: parent.height      
+    
+        
+        model: ListModel { id: listModel }
+        delegate: Maui.IconDelegate
+        {
+            id: delegate
+            isDetails: true
+            width: parent.width
+            height: itemSize + space.big
+            
+            showDetailsInfo: control.showDetailsInfo
+            folderSize : itemSize
+            showTooltip: true
+            showEmblem: control.showEmblem
+            showThumbnails: showPreviewThumbnails
+            rightEmblem: control.rightEmblem
+            leftEmblem: control.leftEmblem
+            
+            Connections
+            {
+                target: delegate
+                onClicked:
+                {
+                    control.currentIndex = index
+                    control.itemClicked(index)
+                }
+                
+                onDoubleClicked:
+                {
+                    control.currentIndex = index
+                    control.itemDoubleClicked(index)
+                }
+                
+                onPressAndHold:
+                {
+                    control.currentIndex = index
+                    control.itemRightClicked(index)
+                }
+                
+                onRightClicked:
+                {
+                    control.currentIndex = index
+                    control.itemRightClicked(index)
+                }
+                
+                onRightEmblemClicked:
+                {
+                    control.currentIndex = index
+                    control.rightEmblemClicked(index)
+                }
+                
+                onLeftEmblemClicked:
+                {
+                    control.currentIndex = index
+                    control.leftEmblemClicked(index)
+                }
+            }
+        }
+                
+        MouseArea
+        {
+            anchors.fill: parent
+            z: -1
+            acceptedButtons:  Qt.RightButton | Qt.LeftButton
+            onClicked: control.areaClicked(mouse)
+            onPressAndHold: control.areaRightClicked()
+        }
     }
 }
+
+

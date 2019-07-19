@@ -20,11 +20,11 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.0 as Kirigami
+import org.kde.kirigami 2.6 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import "private"
 
-ListView
+Maui.ListBrowser
 {
 	id: control
 	/* Controlc color scheming */
@@ -39,19 +39,7 @@ ListView
                                        iconSizes.small
     property bool collapsable : true
     property bool isCollapsed : false
-
-    signal itemClicked(int index)
-
-    keyNavigationEnabled: true
-    clip: true
-    focus: true
-    interactive: true
-    highlightFollowsCurrentItem: true
-    highlightMoveDuration: 0
-    snapMode: ListView.SnapToItem
-    boundsBehavior: !isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
-
-
+    
     Rectangle
     {
         anchors.fill: parent
@@ -76,6 +64,18 @@ ListView
                 control.currentIndex = index
                 itemClicked(index)
             }
+            
+            onRightClicked:
+            {
+				control.currentIndex = index
+				itemRightClicked(index)
+			}
+			
+			onPressAndHold:
+			{
+				control.currentIndex = index
+				itemRightClicked(index)
+			}
         }
     }
 }

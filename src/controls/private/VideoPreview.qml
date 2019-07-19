@@ -15,13 +15,13 @@ ColumnLayout
         Layout.fillHeight: true
         Layout.margins: 0
 
-        Maui.ToolButton
+        ToolButton
         {
             anchors.centerIn: parent
-            isMask: false
+            icon.color: "transparent"
             flat: true
-            size: iconSizes.huge
-            iconName: iteminfo.icon
+            icon.width: iconSizes.huge
+            icon.name: iteminfo.icon
         }
 
         Video
@@ -52,11 +52,11 @@ ColumnLayout
 			
             anchors.centerIn: parent
 			
-			Maui.ToolButton
+			ToolButton
 			{
 				anchors.centerIn: parent
-				iconName: player.playbackState === MediaPlayer.PlayingState ? "media-playback-pause" : "media-playback-start"
-				iconColor: "white"
+				icon.name: player.playbackState === MediaPlayer.PlayingState ? "media-playback-pause" : "media-playback-start"
+				icon.color: "white"
 				onClicked: player.playbackState === MediaPlayer.PlayingState ? player.pause() : player.play()				
 			}
 		}
@@ -81,7 +81,6 @@ ColumnLayout
 				width: parent.width
 				spacing: space.large
 				// 			spacing: rowHeight
-				
 				
 				Column
 				{

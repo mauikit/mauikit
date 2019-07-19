@@ -86,12 +86,12 @@ Rectangle
 	Component
 	{
 		id: iconComponent
-		Maui.ToolButton
+		ToolButton
 		{
 			anchors.centerIn: parent
-			iconName: control.iconName
-			iconColor: control.colorScheme.textColor
-			size: control.size
+			icon.name: control.iconName
+			icon.color: control.colorScheme.textColor
+			icon.width: control.size
 			enabled: false
 		}
 	}

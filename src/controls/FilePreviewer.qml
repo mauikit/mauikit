@@ -2,7 +2,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.0 as Kirigami
+import org.kde.kirigami 2.6 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import "private"
 
@@ -19,14 +19,16 @@ Maui.Dialog
 	property string mimetype : ""
 	property bool showInfo: true
 	
+	signal shareButtonClicked(string url)
+	
 	maxHeight: unit * 800
 	maxWidth: unit * 500
 	defaultButtons: false
 		
-		footBar.leftContent: Maui.ToolButton
+		footBar.leftContent: ToolButton
 		{
-			iconColor: control.colorScheme.textColor
-			iconName: "document-open"
+			icon.color: control.colorScheme.textColor
+			icon.name: "document-open"
             text: qsTr("Open")
 			onClicked:
 			{
@@ -38,25 +40,24 @@ Maui.Dialog
 		
 		footBar.middleContent: [
 		
-		Maui.ToolButton
+		ToolButton
 		{
 			visible: !isDir
-			iconColor: control.colorScheme.textColor
-			iconName: "document-share"
+			icon.color: control.colorScheme.textColor
+			icon.name: "document-share"
                 text: qsTr("Share")
 
 			onClicked:
 			{
-				isAndroid ? Maui.Android.shareDialog(currentUrl) :
-				shareDialog.show([currentUrl])
+				shareButtonClicked(currentUrl)
 				close()
 			}
 		},
 		
-		Maui.ToolButton
+		ToolButton
 		{
-			iconName: "love"
-			iconColor: control.colorScheme.textColor
+			icon.name: "love"
+			icon.color: control.colorScheme.textColor
                 text: qsTr("Fav")
 
 			
@@ -65,15 +66,15 @@ Maui.Dialog
 
 		]
 		
-        footBar.rightContent:  Maui.ToolButton
+        footBar.rightContent:  ToolButton
         {
-            iconName: "documentinfo"
+            icon.name: "documentinfo"
             text: qsTr("Info")
 
             checkable: true
             checked: showInfo
             onClicked: showInfo = !showInfo
-            iconColor: control.colorScheme.textColor
+            icon.color: control.colorScheme.textColor
 
         }
 
@@ -175,8 +176,8 @@ Maui.Dialog
 				onTagRemovedClicked: list.removeFromUrls(index)
 				onTagsEdited: list.updateToUrls(tags)
 // 				colorScheme: control.colorScheme
-				colorScheme.textColor: control.colorScheme.textColor
-				colorScheme.backgroundColor: control.colorScheme.backgroundColor
+				Kirigami.Theme.textColor: control.colorScheme.textColor
+				Kirigami.Theme.backgroundColor: control.colorScheme.backgroundColor
 				onAddClicked:
 				{
 					dialogLoader.sourceComponent = tagsDialogComponent

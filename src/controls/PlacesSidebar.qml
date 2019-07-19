@@ -2,10 +2,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
-
-import FMList 1.0
-import PlacesModel 1.0
-import PlacesList 1.0
+import org.kde.kirigami 2.6 as Kirigami
 
 Maui.SideBar
 {
@@ -41,20 +38,47 @@ Maui.SideBar
 			path ="Tags/"+path
 			
 		placeClicked(path)
-		
-		if(pageStack.currentIndex === 0 && !pageStack.wideMode)
-			pageStack.currentIndex = 1
 	}
 	
-	PlacesModel
+	onItemRightClicked: _menu.popup()
+	
+	Menu
+	{
+		id: _menu
+		property int index
+		
+		MenuItem
+		{
+			text: qsTr("Edit")
+		}
+		
+		MenuItem
+		{
+			text: qsTr("Hide")
+		}
+		
+		MenuItem
+		{
+			text: qsTr("Remove")
+			Kirigami.Theme.textColor: dangerColor
+			onTriggered: list.removePlace(control.currentIndex)
+		}
+	}
+	
+	Maui.BaseModel
 	{
 		id: placesModel
 		list: placesList
 	}
 	
-	PlacesList
+	Maui.PlacesList
 	{
 		id: placesList
-		groups: [FMList.PLACES_PATH, FMList.APPS_PATH, FMList.BOOKMARKS_PATH, FMList.DRIVES_PATH, FMList.TAGS_PATH]
+		groups: [
+		Maui.FMList.PLACES_PATH, 
+        Maui.FMList.APPS_PATH, 
+        Maui.FMList.BOOKMARKS_PATH, 
+        Maui.FMList.DRIVES_PATH, 
+        Maui.FMList.TAGS_PATH]
 	}
 }

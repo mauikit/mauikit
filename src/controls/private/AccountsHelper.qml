@@ -2,7 +2,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
-import org.kde.kirigami 2.0 as Kirigami
+import org.kde.kirigami 2.6 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
 import SyncingModel 1.0 
@@ -31,10 +31,10 @@ Maui.Dialog
 	}
 	
 	footBar.margins: 0
-	footBar.middleContent: Maui.Button
+	footBar.middleContent: Button
 	{
-		colorScheme.textColor: "white"
-		colorScheme.backgroundColor: suggestedColor
+		Kirigami.Theme.textColor: "white"
+		Kirigami.Theme.backgroundColor: suggestedColor
 		text: qsTr("Add account")
 		onClicked: _syncDialog.open()
 	}
@@ -69,7 +69,7 @@ Maui.Dialog
 			close()
 		}
 		
-		footBar.rightContent: Maui.Button
+		footBar.rightContent: Button
 		{
 			text: qsTr("Delete account and files")			
 			onClicked: 
@@ -81,7 +81,7 @@ Maui.Dialog
 		}
 	}
 	
-	Maui.Menu
+	Menu
 	{	
 		id: _menu
 // 		Maui.MenuItem
@@ -94,10 +94,10 @@ Maui.Dialog
 // 			}
 // 		}
 // 		
-		Maui.MenuItem
+		MenuItem
 		{
 			text: qsTr("Remove...")
-			colorScheme.textColor: dangerColor
+			Kirigami.Theme.textColor: dangerColor
 			
 			onTriggered: _removeDialog.open()
 		}

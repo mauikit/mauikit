@@ -21,7 +21,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami 2.6 as Kirigami
 
 Maui.Popup
 {
@@ -38,10 +38,7 @@ Maui.Popup
 	property bool entryField: false
 	
 	default property alias content : page.content
-		
-	property alias swipeViewContent : content.data
-	property alias swipeView : swipeView
-	
+			
 	property alias acceptButton : _acceptButton
 	property alias rejectButton : _rejectButton		
 	property alias textEntry : _textEntry
@@ -62,26 +59,6 @@ Maui.Popup
 	z: 1
     clip: false
     
-	
-	Maui.Popup
-	{
-		id: _confirmationDialog
-// 		title: qsTr("Are you sure?")
-// 		message: qsTr("Click Accept to finish or Cancel to abort.")
-// 		
-// 		onAccepted: 
-// 		{
-// 			control.accepted()
-// 			close()
-// 		}
-// 		
-// 		onRejected: 
-// 		{
-// 			close()
-// 			control.close()
-// 		}
-	}
-	
 	Maui.Badge
 	{
 		id: _closeButton
@@ -120,73 +97,34 @@ Maui.Popup
 		footBar.rightContent: Row
 		{			
 			spacing: space.big
-			Maui.Button
+			Button
 			{
 				id: _rejectButton
 				visible: defaultButtons
-				colorScheme.textColor: dangerColor
-				colorScheme.borderColor: dangerColor
-				colorScheme.backgroundColor: "transparent"
+				Kirigami.Theme.textColor: dangerColor
+// 				Kirigami.Theme.borderColor: dangerColor
+				Kirigami.Theme.backgroundColor: "transparent"
 				
 				text: rejectText
 				onClicked: rejected()
 				
 			}
 			
-			Maui.Button
+			Button
 			{
 				id: _acceptButton	
 				visible: defaultButtons
-				colorScheme.backgroundColor: infoColor
-				colorScheme.textColor: "white"
+				Kirigami.Theme.backgroundColor: infoColor
+				Kirigami.Theme.textColor: "white"
 				text: acceptText
-				onClicked: 
-				{
-					if(confirmationDialog)
-						_confirmationDialog.open()
-					else
-						accepted()
-				}
+				onClicked: accepted()
+				
 			}
 		} 
-		
-		content: SwipeView
-		{
-			id: swipeView
-			anchors.fill: parent
-			interactive: false
-			clip: true
-			
-			background: Rectangle
-			{
-				color: "transparent"
-			}
-			
-			contentItem: ListView 
-			{
-				id: content
-				implicitHeight: contentHeight
-				orientation: ListView.Horizontal
-				interactive: swipeView.interactive
-				model: swipeView.contentModel
-				boundsBehavior: !isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
-				flickableDirection: Flickable.AutoFlickDirection
-				snapMode: GridView.SnapToRow
-				highlightMoveDuration: 0
-				clip: true
-				currentIndex: swipeView.currentIndex
-				
-				ScrollIndicator.vertical: ScrollIndicator {}
-			}
-			
-			Item
-            {
 				ColumnLayout        
 				{
 					id: _pageContent
-					anchors.centerIn: parent
-					width: parent.width
-					height: implicitHeight
+					anchors.fill: parent
 					spacing: space.medium
 				
 					Label
@@ -240,24 +178,20 @@ Maui.Popup
 // 								color: "transparent"
 // 							}
 						}
-					} 
-					
-					Item
-					{
-						Layout.fillWidth: entryField
+					} 						
+						Maui.TextField
+						{
+							id: _textEntry
+// 							anchors.fill: parent
+							onAccepted: control.accepted()		
+                            Layout.fillWidth: entryField
 						height: entryField ?  iconSizes.big : 0
 						visible: entryField
 						clip: true
 						
-						Maui.TextField
-						{
-							id: _textEntry
-							anchors.fill: parent
-							onAccepted: control.accepted()					
 						}
-					}			
+							
 				}				
-			}
-		}			
+				
 	}
 }

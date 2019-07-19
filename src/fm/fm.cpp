@@ -36,6 +36,8 @@
 #include "mauiandroid.h"
 #else
 #include "mauikde.h"
+#include <KFilePlacesModel>
+#include <QIcon>
 #endif
 
 /*
@@ -56,10 +58,11 @@ FM* FM::getInstance()
     }
 }*/
 
-void FM::init()
-{
-    this->tag = Tagging::getInstance();
-    this->sync = new Syncing(this);
+
+FM::FM(QObject *parent) : FMDB(parent),
+sync(new Syncing(this)),
+tag(Tagging::getInstance())
+{	
     connect(this->sync, &Syncing::listReady, [this](const FMH::MODEL_LIST &list, const QString &url)
     {
         emit this->cloudServerContentReady(list, url);
@@ -111,17 +114,12 @@ void FM::init()
 	});
 }
 
-FM::FM(QObject *parent) : FMDB(parent) 
-{
-	this->init();
-}
-
 FM::~FM() {}
 
 QVariantMap FM::toMap(const FMH::MODEL& model)
 {
 	QVariantMap map;
-	for(auto key : model.keys())
+	for(const auto &key : model.keys())
 		map.insert(FMH::MODEL_NAME[key], model[key]);
 	
 	return map;		
@@ -130,7 +128,7 @@ QVariantMap FM::toMap(const FMH::MODEL& model)
 FMH::MODEL FM::toModel(const QVariantMap& map)
 {
 	FMH::MODEL model;
-	for(auto key : map.keys())
+	for(const auto &key : map.keys())
 		model.insert(FMH::MODEL_NAME_KEY[key], map[key].toString());
 	
 	return model;		
@@ -140,7 +138,7 @@ FMH::MODEL_LIST FM::packItems(const QStringList &items, const QString &type)
 {
     FMH::MODEL_LIST data;
 
-    for(auto path : items)
+    for(const auto &path : items)
         if(UTIL::fileExists(path))
         {
             auto model = FMH::getFileInfoModel(path);
@@ -190,11 +188,8 @@ FMH::MODEL_LIST FM::getPathContent(const QString& path, const bool &hidden, cons
             dirFilter = dirFilter | QDir::Hidden | QDir::System;
 
         QDirIterator it (path, filters, dirFilter, iteratorFlags);
-        while (it.hasNext())
-        {
-            auto url = it.next();
-            content << FMH::getFileInfoModel(url);
-        }
+        while (it.hasNext())        
+			content << FMH::getFileInfoModel(it.next());        
     }
 
     return content;
@@ -217,7 +212,7 @@ FMH::MODEL_LIST FM::getDefaultPaths()
     return packItems(FMH::defaultPaths, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::PLACES_PATH]);
 }
 
-FMH::MODEL_LIST FM::getCustomPaths()
+FMH::MODEL_LIST FM::getAppsPath()
 {
 #ifdef Q_OS_ANDROID
     return FMH::MODEL_LIST();
@@ -266,49 +261,60 @@ FMH::MODEL_LIST FM::search(const QString& query, const QString &path, const bool
     return content;
 }
 
-FMH::MODEL_LIST FM::getDevices()
-{
-    FMH::MODEL_LIST drives;
-
-#if defined(Q_OS_ANDROID)
-    drives << packItems({MAUIAndroid::sdDir()}, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES_PATH]);
-    return drives;
-#else
-    return drives;
-#endif
-
-    //     auto devices = QStorageInfo::mountedVolumes();
-    //     for(auto device : devices)
-    //     {
-    //         if(device.isValid() && !device.isReadOnly())
-    //         {
-    //             QVariantMap drive =
-    //             {
-    //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], "drive-harddisk"},
-    //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::LABEL], device.displayName()},
-    //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::PATH], device.rootPath()},
-    //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::TYPE], FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES]}
-    //             };
-    //
-    //             drives << drive;
-    //         }
-    //     }
-
-    //    for(auto device : QDir::drives())
-    //    {
-    //        QVariantMap drive =
-    //        {
-    //            {"iconName", "drive-harddisk"},
-    //            {"label", device.baseName()},
-    //            {"path", device.absoluteFilePath()},
-    //            {"type", "Drives"}
-    //        };
-
-    //        drives << drive;
-    //    }
-
-    return drives;
-}
+// FMH::MODEL_LIST FM::getDevices()
+// {
+//     FMH::MODEL_LIST drives;
+// 
+// #if defined(Q_OS_ANDROID)
+//     drives << packItems({MAUIAndroid::sdDir()}, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES_PATH]);
+//     return drives;
+// #else
+//     KFilePlacesModel model;
+//     for(const auto &i : model.groupIndexes(KFilePlacesModel::GroupType::RemoteType))
+//     {
+//         drives << FMH::MODEL{
+//             {FMH::MODEL_KEY::NAME, model.text(i)},
+//             {FMH::MODEL_KEY::LABEL, model.text(i)},
+//             {FMH::MODEL_KEY::PATH, model.url(i).toString()},
+//             {FMH::MODEL_KEY::ICON, model.icon(i).name()},            
+//             {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES_PATH]},
+//         };           
+//     }
+//     
+// #endif
+// 
+//     //     auto devices = QStorageInfo::mountedVolumes();
+//     //     for(auto device : devices)
+//     //     {
+//     //         if(device.isValid() && !device.isReadOnly())
+//     //         {
+//     //             QVariantMap drive =
+//     //             {
+//     //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], "drive-harddisk"},
+//     //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::LABEL], device.displayName()},
+//     //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::PATH], device.rootPath()},
+//     //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::TYPE], FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES]}
+//     //             };
+//     //
+//     //             drives << drive;
+//     //         }
+//     //     }
+// 
+//     //    for(auto device : QDir::drives())
+//     //    {
+//     //        QVariantMap drive =
+//     //        {
+//     //            {"iconName", "drive-harddisk"},
+//     //            {"label", device.baseName()},
+//     //            {"path", device.absoluteFilePath()},
+//     //            {"type", "Drives"}
+//     //        };
+// 
+//     //        drives << drive;
+//     //    }
+// 
+//     return drives;
+// }
 
 FMH::MODEL_LIST FM::getTags(const int &limit)
 {
@@ -333,15 +339,6 @@ FMH::MODEL_LIST FM::getTags(const int &limit)
     }
 
     return data;
-}
-
-FMH::MODEL_LIST FM::getBookmarks()
-{
-    QStringList bookmarks;
-    for(auto bookmark : this->get("select * from bookmarks"))
-        bookmarks << bookmark.toMap().value(FMH::MODEL_NAME[FMH::MODEL_KEY::PATH]).toString();
-
-    return packItems(bookmarks, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::BOOKMARKS_PATH]);
 }
 
 bool FM::getCloudServerContent(const QString &path, const QStringList &filters, const int &depth)
@@ -503,7 +500,7 @@ bool FM::isDefaultPath(const QString &path)
 
 QString FM::parentDir(const QString &path)
 {
-    auto dir = QDir(path);
+    QDir dir(path);
     dir.cdUp();
     return dir.absolutePath();
 }
@@ -521,47 +518,6 @@ bool FM::isApp(const QString& path)
 bool FM::isCloud(const QString &path)
 {
 	return path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]);
-}
-
-bool FM::bookmark(const QString &path)
-{
-    if(FMH::defaultPaths.contains(path))
-        return false;
-
-    if(!FMH::fileExists(path))
-        return false;
-
-    QFileInfo file (path);
-    QVariantMap bookmark_map {
-        {FMH::MODEL_NAME[FMH::MODEL_KEY::PATH], path},
-        {FMH::MODEL_NAME[FMH::MODEL_KEY::LABEL], file.baseName()},
-        {FMH::MODEL_NAME[FMH::MODEL_KEY::DATE], QDateTime::currentDateTime()}
-    };
-
-    if(this->insert(FMH::TABLEMAP[FMH::TABLE::BOOKMARKS], bookmark_map))
-    {
-        emit this->bookmarkInserted(path);
-        return true;
-    }
-
-    return false;
-}
-
-bool FM::removeBookmark(const QString& path)
-{
-    FMH::DB data = {{FMH::MODEL_KEY::PATH, path}};
-    if(this->remove(FMH::TABLEMAP[FMH::TABLE::BOOKMARKS], data))
-    {
-        emit this->bookmarkRemoved(path);
-        return true;
-    }
-
-    return false;
-}
-
-bool FM::isBookmark(const QString& path)
-{
-    return this->checkExistance(QString("select * from bookmarks where path = '%1'").arg(path));
 }
 
 bool FM::fileExists(const QString &path)

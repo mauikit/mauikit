@@ -1,7 +1,7 @@
 
 import QMLTermWidget 1.0
-import QtQuick 2.2
-import QtQuick.Controls 1.1
+import QtQuick 2.9
+import QtQuick.Controls 2.2
 import org.kde.mauikit 1.0 as Maui
 import "private"
 
@@ -19,24 +19,24 @@ Item
 	property alias kterminal: kterminal
 	property alias session: ksession
 	property alias findBar : findBar
-	property alias menu : terminalMenu.content
+	property alias menu : terminalMenu.contentData
 	
 	property size terminalSize: kterminal.terminalSize
 	property size fontMetrics: kterminal.fontMetrics
 	
 	
-	Maui.Menu
+	Menu
 	{
 		id: terminalMenu
 		z: 999
 		
-		Maui.MenuItem
+		MenuItem
 		{
 			text: qsTr("Copy")
 			onTriggered:  kterminal.copyClipboard();
 		}
 		
-		Maui.MenuItem
+		MenuItem
 		{
 			text: qsTr("Paste")
 			onTriggered: kterminal.pasteClipboard()
@@ -44,7 +44,7 @@ Item
 		}
 		
 		
-		Maui.MenuItem
+		MenuItem
 		{
 			id: searchButton
 			text: qsTr("Find")

@@ -17,10 +17,10 @@
  */
 
 #include "fmlist.h"
-#include <QObject>
 #include "fm.h"
 #include "utils.h"
 
+#include <QObject>
 #include <QFileSystemWatcher>
 #include <syncing.h>
 
@@ -29,9 +29,11 @@
 #include <QFuture>
 #include <QThread>
 
-FMList::FMList(QObject *parent) : QObject(parent)
+FMList::FMList(QObject *parent) : 
+ModelList(parent),
+fm(new FM(this)),
+watcher(new QFileSystemWatcher(this))
 {
-	this->fm = new FM(this);
 	connect(this->fm, &FM::cloudServerContentReady, [this](const FMH::MODEL_LIST &list, const QString &url)
 	{
 		if(this->path == url)
@@ -41,8 +43,7 @@ FMList::FMList(QObject *parent) : QObject(parent)
 			this->pathEmpty = this->list.isEmpty();
 			emit this->pathEmptyChanged();
 			this->pos();
-			this->setContentReady(true);	
-			
+			this->setContentReady(true);
 		}	
 	});
 	
@@ -56,7 +57,6 @@ FMList::FMList(QObject *parent) : QObject(parent)
 		emit this->progress(percent);
 	});
 	
-	this->watcher = new QFileSystemWatcher(this);
 	connect(this->watcher, &QFileSystemWatcher::directoryChanged, [this](const QString &path)
 	{
 		Q_UNUSED(path);
@@ -79,7 +79,7 @@ FMList::FMList(QObject *parent) : QObject(parent)
 	// 	connect(this, &FMList::hiddenChanged, this, &FMList::setList);
 	// 	connect(this, &FMList::onlyDirsChanged, this, &FMList::setList);
 	// 	connect(this, &FMList::filtersChanged, this, &FMList::setList);
-	auto value = UTIL::loadSettings("SaveDirProps", "SETTINGS", this->saveDirProps).toBool();
+	const auto value = UTIL::loadSettings("SaveDirProps", "SETTINGS", this->saveDirProps).toBool();
 	this->setSaveDirProps(value);	
 }
 
@@ -144,7 +144,6 @@ void FMList::setList()
 			
 		case FMList::PATHTYPE::TRASH_PATH:
 		case FMList::PATHTYPE::DRIVES_PATH:
-		case FMList::PATHTYPE::BOOKMARKS_PATH:
 			this->list = FMH::MODEL_LIST();
 			break;
 	}
@@ -195,7 +194,6 @@ void FMList::reset()
 		
 		case FMList::PATHTYPE::TRASH_PATH:
 		case FMList::PATHTYPE::DRIVES_PATH:
-		case FMList::PATHTYPE::BOOKMARKS_PATH:
 			break;
 	}
 	
@@ -224,7 +222,6 @@ FMH::MODEL_LIST FMList::items() const
 {
 	return this->list;
 }
-
 
 FMList::SORTBY FMList::getSortBy() const
 {
@@ -260,6 +257,7 @@ void FMList::sortList()
 	{
 		qSort(this->list.begin(), this->list.end(), [](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
 		{
+            Q_UNUSED(e2)
 			const auto key = FMH::MODEL_KEY::MIME;
 			if(e1[key] == "inode/directory")
 				return true;
@@ -391,51 +389,41 @@ void FMList::setPath(const QString &path)
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::SEARCH_PATH;
-		this->isBookmark = false;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
-		emit this->isBookmarkChanged();
 		this->watchPath(QString());
 		
 	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]+"/"))
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::CLOUD_PATH;
-		this->isBookmark = false;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
-		emit this->isBookmarkChanged();
 		this->watchPath(QString());
 		
 	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/"))
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::APPS_PATH;
-		this->isBookmark = false;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
-		emit this->isBookmarkChanged();
 		this->watchPath(QString());
 		
 	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::TAGS_PATH]+"/"))
 	{
 		this->pathExists = true;
-		this->isBookmark = false;
 		this->pathType = FMList::PATHTYPE::TAGS_PATH;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
-		emit this->isBookmarkChanged();
 		this->watchPath(QString());
 		
 	}else
 	{
 		this->watchPath(this->path);
-		this->isBookmark = this->fm->isBookmark(this->path);
 		this->pathExists = FMH::fileExists(this->path);
 		this->pathType = FMList::PATHTYPE::PLACES_PATH;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
-		emit this->isBookmarkChanged();
 	}
 	
 	emit this->pathChanged();
@@ -540,13 +528,9 @@ QVariantMap FMList::get(const int &index) const
 	if(index >= this->list.size() || index < 0)
 		return QVariantMap();
 	
-	QVariantMap res;
 	const auto model = this->list.at(index);
 	
-	for(auto key : model.keys())
-		res.insert(FMH::MODEL_NAME[key], model[key]);
-	
-	return res;
+	return FM::toMap(model);
 }
 
 void FMList::refresh()
@@ -568,11 +552,6 @@ void FMList::copyInto(const QVariantList& files)
 {
 	if(this->pathType == FMList::PATHTYPE::PLACES_PATH ||  this->pathType == FMList::PATHTYPE::CLOUD_PATH)
 		this->fm->copy(files, this->path);		
-}
-
-void FMList::test()
-{
-	this->fm->sync->upload("", "");
 }
 
 void FMList::cutInto(const QVariantList& files)
@@ -653,29 +632,6 @@ void FMList::setTrackChanges(const bool& value)
 	emit this->trackChangesChanged();
 }
 
-bool FMList::getIsBookmark() const
-{
-	return this->isBookmark;
-}
-
-void FMList::setIsBookmark(const bool& value)
-{
-	if(this->isBookmark == value)
-		return;
-	
-	if(this->pathType != FMList::PATHTYPE::PLACES_PATH)
-		return;
-	
-	this->isBookmark = value;
-	
-	if(value)
-		this->fm->bookmark(this->path);
-	else
-		this->fm->removeBookmark(this->path);
-	
-	emit this->isBookmarkChanged();
-}
-
 bool FMList::getFoldersFirst() const
 {
 	return this->foldersFirst;
@@ -753,7 +709,7 @@ void FMList::search(const QString& query, const QString &path, const bool &hidde
 {
 	
 	QFutureWatcher<PathContent> *watcher = new QFutureWatcher<PathContent>;
-	connect(watcher, &QFutureWatcher<FMH::MODEL_LIST>::finished, [this, watcher]()
+	connect(watcher, &QFutureWatcher<FMH::MODEL_LIST>::finished, [=]()
 	{
 		if(this->pathType != FMList::PATHTYPE::SEARCH_PATH)
 			return;
@@ -774,6 +730,7 @@ void FMList::search(const QString& query, const QString &path, const bool &hidde
 		this->sortList();
 		
 		this->setContentReady(true);
+        watcher->deleteLater();
 	});
 	
 	QFuture<PathContent> t1 = QtConcurrent::run([=]() -> PathContent
@@ -817,7 +774,7 @@ void FMList::getPathContent()
 	
 	qDebug()<< "Getting async path contents";
 	QFutureWatcher<PathContent> *watcher = new QFutureWatcher<PathContent>;
-	connect(watcher, &QFutureWatcher<PathContent>::finished, [this, watcher]()
+	connect(watcher, &QFutureWatcher<PathContent>::finished, [=]()
 	{
 		if(this->pathType != FMList::PATHTYPE::PLACES_PATH)
 			return;
@@ -837,7 +794,7 @@ void FMList::getPathContent()
 		
 		emit this->postListChanged();
 		this->setContentReady(true);
-		
+        watcher->deleteLater();		
 	});
 	
 	QFuture<PathContent> t1 = QtConcurrent::run([=]() -> PathContent

@@ -25,11 +25,11 @@
 #include "fm.h"
 #include "fmh.h"
 
-#include "fmmodel.h"
-#include "fmlist.h"
-
+#include "basemodel.h"
+#include "modellist.h"
 #include "placeslist.h"
-#include "placesmodel.h"
+#include "fmlist.h"
+#include "pathlist.h"
 
 #include "syncingmodel.h"
 #include "syncinglist.h"
@@ -69,14 +69,6 @@ void MauiKit::registerTypes(const char *uri)
 
 	qmlRegisterSingletonType(componentUrl(QStringLiteral("Style.qml")), uri, 1, 0, "Style");
 	qmlRegisterType(componentUrl(QStringLiteral("ToolBar.qml")), uri, 1, 0, "ToolBar");
-	
-// 	#if QT_VERSION == QT_VERSION_CHECK(5, 12, 0)
-	#ifdef Q_OS_ANDROID
-	qmlRegisterType(componentUrl(QStringLiteral("ToolButton2.qml")), uri, 1, 0, "ToolButton");
-	#else
-	qmlRegisterType(componentUrl(QStringLiteral("ToolButton.qml")), uri, 1, 0, "ToolButton");
-	#endif
-	
 	qmlRegisterType(componentUrl(QStringLiteral("ApplicationWindow.qml")), uri, 1, 0, "ApplicationWindow");
 	qmlRegisterType(componentUrl(QStringLiteral("Page.qml")), uri, 1, 0, "Page");
 	qmlRegisterType(componentUrl(QStringLiteral("ShareDialog.qml")), uri, 1, 0, "ShareDialog");
@@ -91,7 +83,6 @@ void MauiKit::registerTypes(const char *uri)
 	qmlRegisterType(componentUrl(QStringLiteral("LabelDelegate.qml")), uri, 1, 0, "LabelDelegate");
 	qmlRegisterType(componentUrl(QStringLiteral("NewDialog.qml")), uri, 1, 0, "NewDialog");
 	qmlRegisterType(componentUrl(QStringLiteral("Dialog.qml")), uri, 1, 0, "Dialog");
-	qmlRegisterType(componentUrl(QStringLiteral("Button.qml")), uri, 1, 0, "Button");
 	qmlRegisterType(componentUrl(QStringLiteral("AboutDialog.qml")), uri, 1, 0, "AboutDialog");
 	qmlRegisterType(componentUrl(QStringLiteral("Popup.qml")), uri, 1, 0, "Popup");
 	qmlRegisterType(componentUrl(QStringLiteral("TextField.qml")), uri, 1, 0, "TextField");
@@ -100,13 +91,9 @@ void MauiKit::registerTypes(const char *uri)
 	qmlRegisterType(componentUrl(QStringLiteral("TagsDialog.qml")), uri, 1, 0, "TagsDialog");
 	qmlRegisterType(componentUrl(QStringLiteral("Badge.qml")), uri, 1, 0, "Badge");
 	qmlRegisterType(componentUrl(QStringLiteral("GridView.qml")), uri, 1, 0, "GridView");
-	qmlRegisterType(componentUrl(QStringLiteral("Item.qml")), uri, 1, 0, "Item");
-	qmlRegisterType(componentUrl(QStringLiteral("Menu.qml")), uri, 1, 0, "Menu");
-	qmlRegisterType(componentUrl(QStringLiteral("MenuItem.qml")), uri, 1, 0, "MenuItem");
 	qmlRegisterType(componentUrl(QStringLiteral("ColorsBar.qml")), uri, 1, 0, "ColorsBar");
 	qmlRegisterType(componentUrl(QStringLiteral("ComboBox.qml")), uri, 1, 0, "ComboBox");
 	qmlRegisterType(componentUrl(QStringLiteral("ImageViewer.qml")), uri, 1, 0, "ImageViewer");
-	qmlRegisterType(componentUrl(QStringLiteral("ActionBar.qml")), uri, 1, 0, "ActionBar");
 	qmlRegisterType(componentUrl(QStringLiteral("private/TagList.qml")), uri, 1, 0, "TagList");
 	
 	/** STORE CONTROLS **/
@@ -145,11 +132,12 @@ void MauiKit::registerTypes(const char *uri)
 									  });
 	#endif
 	
-	qmlRegisterType<PlacesList>("PlacesList", 1, 0, "PlacesList");
-	qmlRegisterType<PlacesModel>("PlacesModel", 1, 0, "PlacesModel");
+	qmlRegisterType<BaseModel>(uri, 1, 0, "BaseModel"); //BASE MODEL
+	qmlRegisterUncreatableType<ModelList>(uri, 1, 0, "ModelList", QStringLiteral("ModelList should not be created in QML"));
 	
-	qmlRegisterType<FMModel>("FMModel", 1, 0, "FMModel");
-	qmlRegisterType<FMList>("FMList", 1, 0, "FMList");
+	qmlRegisterType<PlacesList>(uri, 1, 0, "PlacesList");
+	qmlRegisterType<FMList>(uri, 1, 0, "FMList");
+	qmlRegisterType<PathList>(uri, 1, 0, "PathList");
 	
 	qmlRegisterType<SyncingList>("SyncingList", 1, 0, "SyncingList");
 	qmlRegisterType<SyncingModel>("SyncingModel", 1, 0, "SyncingModel");

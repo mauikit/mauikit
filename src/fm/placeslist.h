@@ -20,11 +20,12 @@
 #define PLACESLIST_H
 
 #include <QObject>
-#include "fmh.h"
+#include "modellist.h"
 
-class QFileSystemWatcher;
 class FM;
-class PlacesList : public QObject
+class KFilePlacesModel;
+class QFileSystemWatcher;
+class PlacesList : public ModelList
 {
     Q_OBJECT
 	Q_PROPERTY(QList<int> groups READ getGroups WRITE setGroups NOTIFY groupsChanged())	
@@ -33,7 +34,7 @@ public:
 	PlacesList(QObject *parent = nullptr);
     ~PlacesList();
 	
-	FMH::MODEL_LIST items() const;
+	FMH::MODEL_LIST items() const override;
 	
 	QList<int> getGroups() const;
 	void setGroups(const QList<int> &value);
@@ -46,10 +47,14 @@ public slots:
 	QVariantMap get(const int &index) const;
 	void refresh();
 	void clearBadgeCount(const int &index);
+    
+    void addPlace(const QString &path);
+    void removePlace(const int &index);
 	
 private:
 	FM *fm;
 	FMH::MODEL_LIST list;
+    KFilePlacesModel *model;
 	QHash<QString, int> count;
 	QList<int> groups;
 	
@@ -61,14 +66,5 @@ private:
 	
 signals:
 	void groupsChanged();
-	
-	void preItemAppended();
-	void postItemAppended();
-	void preItemRemoved(int index);
-	void postItemRemoved();
-	void updateModel(int index, QVector<int> roles);
-	void preListChanged();
-	void postListChanged();
-	
 };
 #endif // PLACESLIST_H
