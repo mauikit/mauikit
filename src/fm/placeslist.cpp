@@ -23,10 +23,22 @@
 #include <QTimer>
 #include <QFileSystemWatcher>
 
+#ifdef Q_OS_ANDROID 
+#else
+#include <KFilePlacesModel>
+#endif
+
+#ifdef Q_OS_ANDROID 
+PlacesList::PlacesList(QObject *parent) : ModelList(parent),
+fm(new FM(this)),
+model(nullptr),
+watcher(new QFileSystemWatcher(this))
+#else
 PlacesList::PlacesList(QObject *parent) : ModelList(parent),
 fm(new FM(this)),
 model(new KFilePlacesModel(this)),
 watcher(new QFileSystemWatcher(this))
+#endif
 {    
     connect(watcher, &QFileSystemWatcher::directoryChanged, [this](const QString &path)
     {
@@ -206,15 +218,27 @@ void PlacesList::addPlace(const QString& path)
     qDebug()<< "trying to add path to places" << path<< QDir(path).dirName();
     emit this->preItemAppendedAt(index);
     const auto url =  QStringLiteral("file://")+path;
-    this->model->addPlace(QDir(path).dirName(), url);
-    this->list.insert(index, modelPlaceInfo(*this->model, this->model->closestItem(QUrl(url)), FMH::PATHTYPE_KEY::PLACES_PATH));
+	
+#ifdef Q_OS_ANDROID
+	//do android stuff until cmake works with android 
+#else
+	this->model->addPlace(QDir(path).dirName(), url);
+	this->list.insert(index, modelPlaceInfo(*this->model, this->model->closestItem(QUrl(url)), FMH::PATHTYPE_KEY::PLACES_PATH));
+#endif
+	
     emit this->postItemAppended();    
 }
 
 void PlacesList::removePlace(const int& index)
 {
     emit this->preItemRemoved(index);
-    this->model->removePlace(this->model->index(index, 0));
+	
+	#ifdef Q_OS_ANDROID
+	//do android stuff until cmake works with android 
+	#else
+	this->model->removePlace(this->model->index(index, 0));	
+	#endif
+	
     this->list.removeAt(index);
     emit this->postItemRemoved();
 }

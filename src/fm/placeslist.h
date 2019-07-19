@@ -20,10 +20,10 @@
 #define PLACESLIST_H
 
 #include <QObject>
-#include <KFilePlacesModel>
 #include "modellist.h"
 
 class FM;
+class KFilePlacesModel;
 class QFileSystemWatcher;
 class PlacesList : public ModelList
 {
