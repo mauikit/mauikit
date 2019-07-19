@@ -165,7 +165,7 @@ void MauiKit::registerTypes(const char *uri)
 	#ifdef Q_OS_ANDROID
 	QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
 	QIcon::setThemeName("Luv");
-	QQuickStyle::setStyle(":/style");
+    QQuickStyle::setStyle(":/style");
 	// 	 #else
 	// 	 QQuickStyle::setStyle("maui-style");
 	#endif

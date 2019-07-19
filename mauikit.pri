@@ -42,8 +42,8 @@ HEADERS += \
     $$PWD/src/fm/fmlist.h \
     $$PWD/src/fm/pathlist.h \
     $$PWD/src/fm/placeslist.h \
-    $$PWD/src/fm/basemodel.h \
-    $$PWD/src/fm/modellist.h \
+    $$PWD/src/utils/model_template/mauimodel.h \
+    $$PWD/src/utils/model_template/mauilist.h \
     $$PWD/src/utils/editor/documenthandler.h \
     $$PWD/src/utils/handy.h \
     $$PWD/src/utils/syncing/syncing.h \
@@ -60,8 +60,8 @@ SOURCES += \
     $$PWD/src/fm/fmlist.cpp \
     $$PWD/src/fm/pathlist.cpp \
     $$PWD/src/fm/placeslist.cpp \
-    $$PWD/src/fm/basemodel.cpp \
-    $$PWD/src/fm/modellist.cpp \
+    $$PWD/src/utils/model_template/mauimodel.cpp \
+    $$PWD/src/utils/model_template/mauilist.cpp \
     $$PWD/src/utils//editor/documenthandler.cpp \
     $$PWD/src/utils/handy.cpp \
     $$PWD/src/utils/syncing/syncing.cpp \
@@ -74,6 +74,7 @@ SOURCES += \
 DEPENDPATH += \
     $$PWD/src \
     $$PWD/src/fm
+    $$PWD/src/utils/model_template
 
 INCLUDEPATH += \
      $$PWD/src \
@@ -81,6 +82,7 @@ INCLUDEPATH += \
      $$PWD/src/utils \
      $$PWD/src/utils/editor \
      $$PWD/src/utils/syncing \
+     $$PWD/src/utils/model_template \
      $$PWD/src/utils/store
 
 DEFINES += \

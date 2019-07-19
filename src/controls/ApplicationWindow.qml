@@ -572,7 +572,7 @@ backgroundColor.b, 0.7))
     
     function notify(icon, title, body, callback, timeout)
 	{
-		_notifyIcon.iconName = icon 
+        _notifyIcon.icon.name = icon
 		_notifyTitle.text = title
 		_notifyBody.text = body
 		_notifyTimer.interval = timeout ? timeout : 2500

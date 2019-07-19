@@ -52,8 +52,8 @@ T.ToolButton {
     padding: Kirigami.Units.smallSpacing
     spacing: Kirigami.Units.smallSpacing
 
-    icon.width: Kirigami.Units.iconSizes.medium
-    icon.height: Kirigami.Units.iconSizes.medium
+    icon.width: Kirigami.Units.iconSizes.smallMedium
+    icon.height: Kirigami.Units.iconSizes.smallMedium
     icon.color: visualFocus ? control.palette.highlight : control.palette.buttonText
     
     flat: control.parent === T.ToolBar
@@ -76,6 +76,6 @@ T.ToolButton {
         radius: height * 0.05
 
         opacity: control.down ? 1.0 : 0.5
-        color: control.flat ? "transparent" : (control.down || control.checked || control.highlighted ? Kirigami.Theme.buttonHoverColor : control.palette.button)
+        color: (control.down || control.checked || control.highlighted ? Kirigami.Theme.buttonHoverColor : "transparent")
     }
 }

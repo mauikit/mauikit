@@ -1,5 +1,5 @@
 import QtQuick 2.9
-import QtQuick.Controls 2.5
+import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 import org.kde.kirigami 2.7 as Kirigami
@@ -552,7 +552,7 @@ Maui.Page
 // 		Layout.fillWidth: fal
 		z: 999
 		hiddenActions: browserMenu.actions
-		display: isMobile ? ToolButton.IconOnly : ToolButton.TextBesideIcon
+//		display: isMobile ? ToolButton.IconOnly : ToolButton.TextBesideIcon
 		
 		actions: [	
 		
