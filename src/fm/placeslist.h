@@ -20,12 +20,12 @@
 #define PLACESLIST_H
 
 #include <QObject>
-#include "modellist.h"
+#include "mauilist.h"
 
 class FM;
 class KFilePlacesModel;
 class QFileSystemWatcher;
-class PlacesList : public ModelList
+class PlacesList : public MauiList
 {
     Q_OBJECT
 	Q_PROPERTY(QList<int> groups READ getGroups WRITE setGroups NOTIFY groupsChanged())	

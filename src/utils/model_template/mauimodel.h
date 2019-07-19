@@ -16,38 +16,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MODELLIST_H
-#define MODELLIST_H
-#include "fmh.h"
+#ifndef MAUIMODEL_H
+#define MAUIMODEL_H
 
-/**
- * @todo write docs
- */
 #include <QObject>
+#include <QAbstractListModel>
+#include <QList>
 
-class ModelList : public QObject
+class MauiList;
+class MauiModel : public QAbstractListModel
 {
-    Q_OBJECT
-
-public:
-    /**
-     * Default constructor
-     */
-	explicit ModelList(QObject *parent = nullptr);
-    ~ModelList();
+	Q_OBJECT
+	Q_PROPERTY(MauiList *list READ getList WRITE setList)
 	
-	virtual FMH::MODEL_LIST items() const {return FMH::MODEL_LIST();};
+public:    
+	MauiModel(QObject *parent = nullptr);
+	~MauiModel();
+	
+	int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+	
+	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+	
+	// Editable:
+	bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
+	
+	Qt::ItemFlags flags(const QModelIndex& index) const override;
+	
+	virtual QHash<int, QByteArray> roleNames() const override;
+	
+	MauiList* getList() const;
+	void setList(MauiList *value);	
+	
+private:
+	MauiList *list;
 	
 signals:
-	void preItemAppended();
-	void postItemAppended();
-    void preItemAppendedAt(int index);
-	void preItemRemoved(int index);
-	void postItemRemoved();
-	void updateModel(int index, QVector<int> roles);
-	void preListChanged();
-	void postListChanged();
-
+	void listChanged();
 };
 
-#endif // MODELLIST_H
+#endif // MAUIMODEL_H

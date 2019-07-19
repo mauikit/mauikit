@@ -18,12 +18,12 @@
 
 #ifndef PATHLIST_H
 #define PATHLIST_H
-#include "modellist.h"
+#include "mauilist.h"
 
 /**
  * @todo write docs
  */
-class PathList : public ModelList
+class PathList : public MauiList
 {
     Q_OBJECT
     

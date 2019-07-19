@@ -16,12 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "modellist.h"
+#include "mauilist.h"
 
-ModelList::ModelList(QObject *parent) : QObject(parent)
+MauiList::MauiList(QObject *parent) : QObject(parent)
 {
 }
 
-ModelList::~ModelList()
+MauiList::~MauiList()
 {
 }

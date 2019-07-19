@@ -25,8 +25,8 @@
 #include "fm.h"
 #include "fmh.h"
 
-#include "basemodel.h"
-#include "modellist.h"
+#include "mauimodel.h"
+#include "mauilist.h"
 #include "placeslist.h"
 #include "fmlist.h"
 #include "pathlist.h"
@@ -132,8 +132,8 @@ void MauiKit::registerTypes(const char *uri)
 									  });
 	#endif
 	
-	qmlRegisterType<BaseModel>(uri, 1, 0, "BaseModel"); //BASE MODEL
-	qmlRegisterUncreatableType<ModelList>(uri, 1, 0, "ModelList", QStringLiteral("ModelList should not be created in QML"));
+	qmlRegisterType<MauiModel>(uri, 1, 0, "BaseModel"); //BASE MODEL
+	qmlRegisterUncreatableType<MauiList>(uri, 1, 0, "ModelList", QStringLiteral("ModelList should not be created in QML"));
 	
 	qmlRegisterType<PlacesList>(uri, 1, 0, "PlacesList");
 	qmlRegisterType<FMList>(uri, 1, 0, "FMList");

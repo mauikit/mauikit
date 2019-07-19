@@ -19,7 +19,7 @@
 #include "pathlist.h"
 #include "fm.h"
 
-PathList::PathList(QObject *parent) : ModelList(parent)
+PathList::PathList(QObject *parent) : MauiList(parent)
 {
 	connect(this, &PathList::pathChanged, [&]()
 	{		

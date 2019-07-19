@@ -39,6 +39,9 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils
     ${CMAKE_CURRENT_BINARY_DIR}/src/utils
     
+	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/model_template
+    ${CMAKE_CURRENT_BINARY_DIR}/src/utils/model_template
+    
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/tagging
     ${CMAKE_CURRENT_BINARY_DIR}/src/utils/tagging
     
@@ -66,6 +69,8 @@ set(mauikit_SRCS
     src/mauikit.cpp
     src/utils/mauiapp.cpp
     src/utils/handy.cpp
+    src/utils/model_template/mauilist.cpp
+    src/utils/model_template/mauimodel.cpp
     )
 
 set(mauikit_HDRS
@@ -73,6 +78,8 @@ set(mauikit_HDRS
     src/utils.h
     src/utils/handy.h
     src/utils/mauiapp.h
+	src/utils/model_template/mauilist.h
+    src/utils/model_template/mauimodel.h
     )
 
 set(editor_SRCS
@@ -88,8 +95,6 @@ set(fm_SRCS
     src/fm/fmdb.cpp
     src/fm/fmlist.cpp
     src/fm/placeslist.cpp
-    src/fm/modellist.cpp
-    src/fm/basemodel.cpp
     src/fm/pathlist.cpp
     )
 
@@ -99,8 +104,6 @@ set(fm_HDRS
     src/fm/fmdb.h
     src/fm/fmlist.h
     src/fm/placeslist.h
-    src/fm/modellist.h
-    src/fm/basemodel.h
 	src/fm/pathlist.h
     )
 

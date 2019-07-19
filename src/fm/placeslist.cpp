@@ -29,12 +29,12 @@
 #endif
 
 #ifdef Q_OS_ANDROID 
-PlacesList::PlacesList(QObject *parent) : ModelList(parent),
+PlacesList::PlacesList(QObject *parent) : MauiList(parent),
 fm(new FM(this)),
 model(nullptr),
 watcher(new QFileSystemWatcher(this))
 #else
-PlacesList::PlacesList(QObject *parent) : ModelList(parent),
+PlacesList::PlacesList(QObject *parent) : MauiList(parent),
 fm(new FM(this)),
 model(new KFilePlacesModel(this)),
 watcher(new QFileSystemWatcher(this))

@@ -30,7 +30,7 @@
 #include <QThread>
 
 FMList::FMList(QObject *parent) : 
-ModelList(parent),
+MauiList(parent),
 fm(new FM(this)),
 watcher(new QFileSystemWatcher(this))
 {

@@ -21,7 +21,7 @@
 
 #include <QObject>
 #include "fmh.h"
-#include "modellist.h"
+#include "mauilist.h"
 
 struct PathContent
 {
@@ -31,7 +31,7 @@ struct PathContent
 
 class FM;
 class QFileSystemWatcher;
-class FMList : public ModelList
+class FMList : public MauiList
 {
 	Q_OBJECT
 

@@ -16,18 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "basemodel.h"
-#include "modellist.h"
+#include "mauimodel.h"
+#include "mauilist.h"
 
-BaseModel::~BaseModel()
+MauiModel::~MauiModel()
 {
 }
 
-BaseModel::BaseModel(QObject *parent)
+MauiModel::MauiModel(QObject *parent)
 : QAbstractListModel(parent), list(nullptr)
 {}
 
-int BaseModel::rowCount(const QModelIndex &parent) const
+int MauiModel::rowCount(const QModelIndex &parent) const
 {
 	if (parent.isValid() || !list)
 		return 0;
@@ -35,7 +35,7 @@ int BaseModel::rowCount(const QModelIndex &parent) const
 	return list->items().size();
 }
 
-QVariant BaseModel::data(const QModelIndex &index, int role) const
+QVariant MauiModel::data(const QModelIndex &index, int role) const
 {
 	if (!index.isValid() || !list)
 		return QVariant();
@@ -43,7 +43,7 @@ QVariant BaseModel::data(const QModelIndex &index, int role) const
 	return list->items().at(index.row())[static_cast<FMH::MODEL_KEY>(role)];
 }
 
-bool BaseModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool MauiModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
 	Q_UNUSED(index);
 	Q_UNUSED(value);
@@ -52,7 +52,7 @@ bool BaseModel::setData(const QModelIndex &index, const QVariant &value, int rol
 	return false;
 }
 
-Qt::ItemFlags BaseModel::flags(const QModelIndex &index) const
+Qt::ItemFlags MauiModel::flags(const QModelIndex &index) const
 {
 	if (!index.isValid())
 		return Qt::NoItemFlags;
@@ -60,7 +60,7 @@ Qt::ItemFlags BaseModel::flags(const QModelIndex &index) const
 	return Qt::ItemIsEditable; // FIXME: Implement me!
 }
 
-QHash<int, QByteArray> BaseModel::roleNames() const
+QHash<int, QByteArray> MauiModel::roleNames() const
 {
 	QHash<int, QByteArray> names;
 	
@@ -70,12 +70,12 @@ QHash<int, QByteArray> BaseModel::roleNames() const
 	return names;
 }
 
-ModelList *BaseModel::getList() const
+MauiList *MauiModel::getList() const
 {
 	return this->list;
 }
 
-void BaseModel::setList(ModelList *value)
+void MauiModel::setList(MauiList *value)
 {
 	beginResetModel();
 	
@@ -86,43 +86,43 @@ void BaseModel::setList(ModelList *value)
 	
 	if(list)
 	{
-        connect(this->list, &ModelList::preItemAppendedAt, this, [=](int index)
+        connect(this->list, &MauiList::preItemAppendedAt, this, [=](int index)
         {
             beginInsertRows(QModelIndex(), index, index);
         });
         
-		connect(this->list, &ModelList::preItemAppended, this, [=]()
+		connect(this->list, &MauiList::preItemAppended, this, [=]()
 		{
 			const int index = list->items().size();
 			beginInsertRows(QModelIndex(), index, index);
 		});
 		
-		connect(this->list, &ModelList::postItemAppended, this, [=]()
+		connect(this->list, &MauiList::postItemAppended, this, [=]()
 		{
 			endInsertRows();
 		});
 		
-		connect(this->list, &ModelList::preItemRemoved, this, [=](int index)
+		connect(this->list, &MauiList::preItemRemoved, this, [=](int index)
 		{
 			beginRemoveRows(QModelIndex(), index, index);
 		});
 		
-		connect(this->list, &ModelList::postItemRemoved, this, [=]()
+		connect(this->list, &MauiList::postItemRemoved, this, [=]()
 		{
 			endRemoveRows();
 		});
 		
-		connect(this->list, &ModelList::updateModel, this, [=](int index, QVector<int> roles)
+		connect(this->list, &MauiList::updateModel, this, [=](int index, QVector<int> roles)
 		{
 			emit this->dataChanged(this->index(index), this->index(index), roles);
 		});
 				
-		connect(this->list, &ModelList::preListChanged, this, [=]()
+		connect(this->list, &MauiList::preListChanged, this, [=]()
 		{
 			beginResetModel();
 		});
 		
-		connect(this->list, &ModelList::postListChanged, this, [=]()
+		connect(this->list, &MauiList::postListChanged, this, [=]()
 		{	
 			endResetModel();
 		});
