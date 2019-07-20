@@ -51,7 +51,7 @@ Maui.Popup
 	signal rejected()
 	
 	maxWidth: unit * 300
-	maxHeight: _pageContent.implicitHeight + page.footBar.height + space.huge
+	maxHeight: (_pageContent.implicitHeight * 1.2) + page.footBar.height + space.huge + page.padding
 	
 	widthHint: 0.9
 	heightHint: 0.9
@@ -84,6 +84,7 @@ Maui.Popup
 		id: page
 // 		headBar.visible: headBar.count > 2
 		anchors.fill: parent
+		padding: space.huge
 // 		footBar.dropShadow: false
 // 		footBar.drawBorder: false
 // 		margins: space.big
@@ -93,12 +94,8 @@ Maui.Popup
 // 		footBar.visible: defaultButtons || footBar.count > 1
 // 		footBar.colorScheme.backgroundColor: colorScheme.backgroundColor
 // 		footBar.margins: space.big
-
-
-	footBar.rightContent: Row
-	{			
-		spacing: space.big
-		Button
+footBar.visible: control.defaultButtons || footBar.count > 1
+property QtObject _rejectButton : Button
 		{
 			id: _rejectButton
 			visible: defaultButtons
@@ -111,7 +108,7 @@ Maui.Popup
 			
 		}
 		
-		Button
+		property QtObject _acceptButton: Button
 		{
 			id: _acceptButton	
 			visible: defaultButtons
@@ -121,7 +118,20 @@ Maui.Popup
 			onClicked: accepted()
 			
 		}
-	} 
+
+Component
+{
+	id: _defaultButtonsComponent
+	Row
+	{			
+		spacing: space.big		
+		children: [_rejectButton, _acceptButton]		
+	} 	
+}
+	footBar.rightContent: Loader
+	{
+		sourceComponent: control.defaultButtons ? _defaultButtonsComponent : undefined
+	}
 
 				ColumnLayout        
 				{
@@ -160,21 +170,19 @@ Maui.Popup
 						padding: 0                
 						clip: true
                         ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-
-						TextArea
+contentHeight: body.implicitHeight
+						Label
 						{
 							id: body
-							padding: 0
-							
-							width: parent.width
-							height: parent.height
+							width: _pageContent.width							
+							padding: 0							
 							enabled: false
 							text: message
 							textFormat : TextEdit.AutoText
 							color: colorScheme.textColor
 							font.pointSize: fontSizes.default
 							wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-							
+							elide: Text.ElideLeft
 // 							background: Rectangle
 // 							{
 // 								color: "transparent"

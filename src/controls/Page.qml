@@ -7,12 +7,24 @@ Page
 {
 	id: control
 	
+// 	property int margins: 0       
+// 	contentItem.anchors.margins: margins
+// 	contentItem.anchors.left: contentItem.parent.left
+// 	contentItem.anchors.top: contentItem.parent.top
+// 	contentItem.anchors.bottom: contentItem.parent.bottom
+// 	contentItem.anchors.right: contentItem.parent.right
+
+leftPadding: control.padding
+rightPadding: control.padding
+topPadding: control.padding
+bottomPadding: control.padding
+	
 	property alias headBar : _headBar
 	property alias footBar: _footBar
 	property QtObject mheadBar : Maui.ToolBar
 	{ 
 		id: _headBar
-		visible: count
+		visible: count > 1
 		position: ToolBar.Header 
 		Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor	
 		
