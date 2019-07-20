@@ -37,7 +37,7 @@ Maui.Popup
 	property bool confirmationDialog: false
 	property bool entryField: false
 	
-	default property alias content : page.content
+	default property alias content : page.contentData
 			
 	property alias acceptButton : _acceptButton
 	property alias rejectButton : _rejectButton		
@@ -45,14 +45,13 @@ Maui.Popup
 	property alias page : page
 	property alias footBar : page.footBar
 	property alias headBar: page.headBar
-	property alias headBarTitle: page.headBarTitle
 	property alias closeButton: _closeButton
 		
 	signal accepted()
 	signal rejected()
 	
 	maxWidth: unit * 300
-	maxHeight: _pageContent.implicitHeight + page.footBar.height + page.margins + space.huge
+	maxHeight: _pageContent.implicitHeight + page.footBar.height + space.huge
 	
 	widthHint: 0.9
 	heightHint: 0.9
@@ -83,44 +82,47 @@ Maui.Popup
 	Maui.Page
 	{
 		id: page
-		headBar.visible: headBar.count > 2
+// 		headBar.visible: headBar.count > 2
 		anchors.fill: parent
-		footBar.dropShadow: false
-		footBar.drawBorder: false
-		margins: space.big
+// 		footBar.dropShadow: false
+// 		footBar.drawBorder: false
+// 		margins: space.big
 		clip: true
-		headBarExit: false
-		colorScheme.backgroundColor : control.colorScheme.backgroundColor
-		footBar.visible: defaultButtons || footBar.count > 1
-		footBar.colorScheme.backgroundColor: colorScheme.backgroundColor
-		footBar.margins: space.big
-		footBar.rightContent: Row
-		{			
-			spacing: space.big
-			Button
-			{
-				id: _rejectButton
-				visible: defaultButtons
-				Kirigami.Theme.textColor: dangerColor
-// 				Kirigami.Theme.borderColor: dangerColor
-				Kirigami.Theme.backgroundColor: "transparent"
-				
-				text: rejectText
-				onClicked: rejected()
-				
-			}
+// 		headBarExit: false
+// 		colorScheme.backgroundColor : control.colorScheme.backgroundColor
+// 		footBar.visible: defaultButtons || footBar.count > 1
+// 		footBar.colorScheme.backgroundColor: colorScheme.backgroundColor
+// 		footBar.margins: space.big
+
+
+	footBar.rightContent: Row
+	{			
+		spacing: space.big
+		Button
+		{
+			id: _rejectButton
+			visible: defaultButtons
+			Kirigami.Theme.textColor: dangerColor
+			// 				Kirigami.Theme.borderColor: dangerColor
+			Kirigami.Theme.backgroundColor: "transparent"
 			
-			Button
-			{
-				id: _acceptButton	
-				visible: defaultButtons
-				Kirigami.Theme.backgroundColor: infoColor
-				Kirigami.Theme.textColor: "white"
-				text: acceptText
-				onClicked: accepted()
-				
-			}
-		} 
+			text: rejectText
+			onClicked: rejected()
+			
+		}
+		
+		Button
+		{
+			id: _acceptButton	
+			visible: defaultButtons
+			Kirigami.Theme.backgroundColor: infoColor
+			Kirigami.Theme.textColor: "white"
+			text: acceptText
+			onClicked: accepted()
+			
+		}
+	} 
+
 				ColumnLayout        
 				{
 					id: _pageContent

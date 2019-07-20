@@ -43,24 +43,26 @@ Maui.Dialog
 	maxWidth: unit * 400
 	maxHeight: unit * 250
 	
+	
 	footBar.middleContent: ToolButton
-	{
-		icon.name: "view-links"
-		onClicked: Maui.FM.openUrl(control.appLink)
+		{
+			icon.name: "view-links"
+			onClicked: Maui.FM.openUrl(control.appLink)
+			
+		}
 		
-	}
-	
-	footBar.rightContent: ToolButton
-	{
-		icon.name: "love"
-		onClicked: Maui.FM.openUrl(control.appDonation)
+		footBar.rightContent: ToolButton
+		{
+			icon.name: "love"
+			onClicked: Maui.FM.openUrl(control.appDonation)
+			
+		}
 		
-	}
+		footBar.leftContent: ToolButton
+		{
+			icon.name: "documentinfo"
+		}
 	
-	footBar.leftContent: ToolButton
-	{
-		icon.name: "documentinfo"
-	}
 	
 	RowLayout
 	{

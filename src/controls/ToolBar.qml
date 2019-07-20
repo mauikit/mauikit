@@ -29,12 +29,6 @@ ToolBar
 {
 	id: control    
 	
-	/* Controlc color scheming */
-	ColorScheme {id: colorScheme}
-	property alias colorScheme : colorScheme
-	/***************************/
-	
-	clip: true
 	implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
 	implicitHeight: visible ? (floating ? toolBarHeightAlt : toolBarHeight) : 0
 	
@@ -123,7 +117,7 @@ ToolBar
 // 			source: headBarBG
 // 		}
 // 	}
-	
+
 	Rectangle
 	{
 		width: parent.height 
@@ -149,7 +143,7 @@ ToolBar
 			GradientStop 
 			{
 				position: 1.0
-				color: colorScheme.textColor
+				color: Kirigami.Theme.textColor
 			}
 		}        
 	}
@@ -174,7 +168,7 @@ ToolBar
 			GradientStop
 			{
 				position: 0.0
-				color: colorScheme.textColor
+				color: Kirigami.Theme.textColor
 			}
 			
 			GradientStop
@@ -209,7 +203,6 @@ ToolBar
 				id: layout
 				height: mainFlickable.height
 				width: mainFlickable.width
-
 				
 				RowLayout
 				{
@@ -219,7 +212,6 @@ ToolBar
 					Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
 					spacing: leftContent.length > 0 ? control.spacing : 0
 					Layout.minimumWidth: !sticky ? undefined : implicitWidth
-					clip: true
 					Layout.fillWidth: control.leftSretch && implicitWidth
 					Layout.fillHeight: true
 
@@ -230,9 +222,7 @@ ToolBar
 					id: middleRowContent				
 					property bool sticky : false
 					
-					Layout.alignment: Qt.AlignCenter
-					
-					clip: true
+					Layout.alignment: Qt.AlignCenter					
 					spacing: middleContent.length === 1 ? 0 : control.spacing
 					Layout.minimumWidth: !sticky ? undefined : implicitWidth
 					
@@ -249,14 +239,13 @@ ToolBar
 					Layout.rightMargin: leftRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.rightSretch ? leftRowContent.implicitWidth : undefined
 					Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
 					spacing: rightContent.length > 0 ? control.spacing : 0
-					Layout.minimumWidth: !sticky ? undefined : implicitWidth
-					clip: true					
-					Layout.fillWidth: implicitWidth
+					Layout.minimumWidth: implicitWidth
+					Layout.fillWidth: false
 					Layout.fillHeight: true
 				}           
 			}
 			
-			ScrollBar.horizontal: ScrollBar { visible: false}        
+// 			ScrollBar.horizontal: ScrollBar { visible: false}        
 		}		
 	
 }

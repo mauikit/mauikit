@@ -28,7 +28,6 @@ Maui.Dialog
 	id: control
 	maxHeight: isMobile ? parent.height * 0.95 : unit * 500
 	maxWidth: unit * 700
-	page.margins: 0
 	defaultButtons: false
 		
 		property string initPath
@@ -69,13 +68,9 @@ Maui.Dialog
 			id: page
 			anchors.fill: parent
 			leftPadding: 0
-			margins: 0
 			rightPadding: leftPadding
 			topPadding: leftPadding
 			bottomPadding: leftPadding
-			headBarExit: false
-			headBar.plegable: false
-			headBarTitleVisible: false
 			headBar.implicitHeight: toolBarHeight + space.medium
 			Component
 			{
@@ -184,7 +179,6 @@ Maui.Dialog
 							id: browser
 							Layout.fillWidth: true
 							Layout.fillHeight: true
-							altToolBars: false
 							previewer.parent: ApplicationWindow.overlay
 							trackChanges: false
 							selectionMode: control.mode === modes.OPEN
