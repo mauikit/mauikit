@@ -19,7 +19,7 @@
 
 import QtQuick 2.6
 import QtQuick.Controls 2.2
-import org.kde.kirigami 2.0 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
@@ -56,7 +56,7 @@ ToolBar
 	property alias layout : layout
 	
 	property int margins: space.medium
-	spacing: space.big
+	spacing: space.medium
 	property int count : leftContent.length + middleContent.length + rightContent.length
 	
 	property bool dropShadow: false
@@ -69,7 +69,6 @@ ToolBar
 	property bool leftSretch: strech
 	property bool rightSretch: strech
 	property bool middleStrech: strech
-	
 	padding: 0    
 	//    leftPadding: Kirigami.Units.smallSpacing*2
 	//    rightPadding: Kirigami.Units.smallSpacing*2
@@ -85,45 +84,45 @@ ToolBar
 // 				
 // 	}
 	
-	background: Rectangle
-	{
-		id: headBarBG
-		color: colorScheme.backgroundColor
-		implicitHeight: toolBarHeightAlt  
-		radius: floating ? radiusV : 0   
-		border.color: floating ? colorScheme.borderColor : "transparent"
-		
-		SequentialAnimation on radius
-		{
-			ColorAnimation { to: colorScheme.backgroundColor ; duration: 1000 }
-		}
-		
-		Kirigami.Separator
-		{
-			visible: drawBorder
-			color: colorScheme.borderColor
-			height: unit
-			anchors
-			{
-				left: parent.left
-				right: parent.right
-				bottom: control.position == ToolBar.Footer ? undefined : parent.bottom
-				top: control.position == ToolBar.Footer ? parent.top : undefined
-			}
-		}
-		
-		layer.enabled: dropShadow
-		layer.effect: DropShadow
-		{
-			anchors.fill: headBarBG
-			horizontalOffset: 0
-			verticalOffset:  unit * (altToolBars ? -1 : 1)
-			radius: 8
-			samples: 25
-			color: Qt.darker(colorScheme.backgroundColor, 1.4)
-			source: headBarBG
-		}
-	}
+// 	background: Rectangle
+// 	{
+// 		id: headBarBG
+// 		color: colorScheme.backgroundColor
+// 		implicitHeight: toolBarHeightAlt  
+// 		radius: floating ? radiusV : 0   
+// 		border.color: floating ? colorScheme.borderColor : "transparent"
+// 		
+// 		SequentialAnimation on radius
+// 		{
+// 			ColorAnimation { to: colorScheme.backgroundColor ; duration: 1000 }
+// 		}
+// 		
+// 		Kirigami.Separator
+// 		{
+// 			visible: drawBorder
+// 			color: colorScheme.borderColor
+// 			height: unit
+// 			anchors
+// 			{
+// 				left: parent.left
+// 				right: parent.right
+// 				bottom: control.position == ToolBar.Footer ? undefined : parent.bottom
+// 				top: control.position == ToolBar.Footer ? parent.top : undefined
+// 			}
+// 		}
+// 		
+// 		layer.enabled: dropShadow
+// 		layer.effect: DropShadow
+// 		{
+// 			anchors.fill: headBarBG
+// 			horizontalOffset: 0
+// 			verticalOffset:  unit * (altToolBars ? -1 : 1)
+// 			radius: 8
+// 			samples: 25
+// 			color: Qt.darker(colorScheme.backgroundColor, 1.4)
+// 			source: headBarBG
+// 		}
+// 	}
 	
 	Rectangle
 	{

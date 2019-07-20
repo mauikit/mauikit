@@ -24,7 +24,7 @@ import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import QtQuick.Window 2.3
 
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
 import QtQuick.Controls.Material 2.1
@@ -271,8 +271,8 @@ backgroundColor.b, 0.7))
             color: bgColor
         }
 
-        headBar.colorScheme.backgroundColor: headBarBGColor
-        headBar.colorScheme.textColor: headBarFGColor
+        Kirigami.Theme.backgroundColor: headBarBGColor
+        Kirigami.Theme.textColor: headBarFGColor
 
         headBar.leftContent: ToolButton
         {
