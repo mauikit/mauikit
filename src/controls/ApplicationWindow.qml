@@ -19,7 +19,6 @@
 
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import QtQuick.Window 2.0
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import QtQuick.Window 2.3
@@ -332,6 +331,7 @@ backgroundColor.b, 0.7))
 		id: _footBar
 		visible: count
 		position: ToolBar.Footer
+		width: root.width
 		Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor		
 	}  
 	
@@ -339,6 +339,7 @@ backgroundColor.b, 0.7))
 	footer: Column 
 	{
 		id: _footer
+
 		children: headBar.position === ToolBar.Footer ? [footBar, headBar] : footBar		
 	}        
     

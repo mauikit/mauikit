@@ -29,10 +29,10 @@ ToolBar
 {
 	id: control    
 	
-	implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
+// 	implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
 	implicitHeight: visible ? (floating ? toolBarHeightAlt : toolBarHeight) : 0
 	
-	width: floating ? implicitWidth : parent.width
+// 	width: parent.width 
 	height:  implicitHeight 
 	
 	property alias stickyRightContent : rightRowContent.sticky

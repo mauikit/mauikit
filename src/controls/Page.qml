@@ -1,8 +1,10 @@
-import QtQuick 2.4
+import QtQuick 2.9
 import QtQuick.Controls 2.2
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 import QtQuick.Layouts 1.3
+import QtQuick.Window 2.3
+
 
 Page
 {
@@ -59,6 +61,7 @@ bottomPadding: control.padding
 		id: _footBar
 		visible: count
 		position: ToolBar.Footer
+		width: control.width		
 		Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor		
 	}   
 	
