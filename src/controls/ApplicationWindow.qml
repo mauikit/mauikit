@@ -41,24 +41,22 @@ Kirigami.AbstractApplicationWindow
     width: Screen.width * (isMobile ? 1 : 0.4)
     height: Screen.height * (isMobile ? 1 : 0.4)
 	
-	contentItem.anchors.leftMargin: 0
-	contentItem.anchors.rightMargin: 0
-	contentItem.anchors.margins: 0	
-	
+// 	contentItem.anchors.leftMargin: root.globalDrawer && (root.globalDrawer.modal === false) ? root.globalDrawer.contentItem.width * root.globalDrawer.position : 0
+// 	contentItem.anchors.left: contentItem.parent.left
+	// 	contentItem.anchors.right: contentItem.parent.right
+// 		contentItem.anchors.rightMargin: 0
 	property bool showAccounts : true
 
 	/***************************************************/
     /******************** ALIASES *********************/
     /*************************************************/
-    property alias page : page
-    property alias footBar : page.footBar
-    property alias headBar : page.headBar
+    property alias headBar : _headBar
+    property alias footBar: _footBar
     property alias dialog: dialogLoader.item
     
     property alias leftIcon : menuBtn
     property alias rightIcon : searchBtn
     
-    default property alias content : page.contentData
     property alias mainMenu : mainMenu.contentData
     property alias about : aboutDialog
     property alias accounts: _accountsDialogLoader.item
@@ -236,131 +234,113 @@ backgroundColor.b, 0.7))
 // 		globalDrawer.height: root.height - headBar.height
 // 		globalDrawer.y: headBar.height
 	
+	
 
-    Maui.Page
-    {
-        id: page
- 
-        anchors.fill: parent        
-        contentItem.anchors.leftMargin: root.globalDrawer && (root.globalDrawer.modal === false) ? root.globalDrawer.contentItem.width * root.globalDrawer.position : 0
-        contentItem.anchors.left: contentItem.parent.left
-        contentItem.anchors.right: contentItem.parent.right
-//         margins: 0
-//         headBar.plegable: false
-//         headBar.height: toolBarHeight + space.small
-//         headBar.implicitHeight: toolBarHeight + space.small
-
-//         Kirigami.Theme.backgroundColor: "red"
-//         Kirigami.Theme.textColor: headBarFGColor
-
-      	headBar.leftContent: ToolButton
+	property QtObject mheadBar : Maui.ToolBar
+	{ 
+		id: _headBar
+		visible: count > 1
+		position: ToolBar.Header 
+		Kirigami.Theme.backgroundColor: headBarBGColor
+		Kirigami.Theme.textColor: headBarFGColor
+		
+		leftContent: ToolButton
+		{
+			id: menuBtn
+			icon.name: "application-menu"
+			icon.color: headBarFGColor
+			checked: mainMenu.visible  
+			onClicked:
 			{
-				id: menuBtn
-				icon.name: "application-menu"
-				icon.color: headBarFGColor
-				checked: mainMenu.visible  
-				onClicked:
+
+				menuButtonClicked()
+				mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x , parent.height+ space.medium)
+			}			
+			
+			Menu
+			{
+				id: mainMenu
+				modal: true
+				z: 999
+				width: unit * 200
+				
+				Item
 				{
-					menuButtonClicked()
-					mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x , parent.height+ space.medium)
+					height: _accountCombobox.visible ? unit * 90 : 0
+					
+					anchors
+					{
+						left: parent.left
+						right: parent.right
+						top: parent.top
+						margins: space.medium
+					}
+					
+					ComboBox
+					{
+						id: _accountCombobox
+						anchors.centerIn: parent
+						// 						parent: mainMenu
+						popup.z: 999
+						width: parent.width
+						visible: (count > 1) && showAccounts
+						textRole: "user"
+						flat: true
+						model: showAccounts ? accounts.model : undefined
+						// 						icon.name: "user-identity"
+						// 						iconButton.isMask: false
+					}
 				}
 				
-				Menu
+				MenuSeparator
 				{
-					id: mainMenu
-					modal: true
-					z: 999
-					width: unit * 200
-					
-					Item
-					{
-						height: _accountCombobox.visible ? unit * 90 : 0
-						
-						anchors
-						{
-							left: parent.left
-							right: parent.right
-							top: parent.top
-							margins: space.medium
-						}
-						
-						ComboBox
-						{
-							id: _accountCombobox
-							anchors.centerIn: parent
-							// 						parent: mainMenu
-							popup.z: 999
-							width: parent.width
-							visible: (count > 1) && showAccounts
-							textRole: "user"
-							flat: true
-							model: showAccounts ? accounts.model : undefined
-							// 						icon.name: "user-identity"
-							// 						iconButton.isMask: false
-						}
-					}
-					
-					MenuSeparator
-					{
-						visible: _accountCombobox.visible
-					}
-					
-					MenuItem
-					{
-						text: qsTr("Accounts")
-						visible: root.showAccounts
-						icon.name: "list-add-user"
-						onTriggered: 
-						{
-							if(root.accounts)
-								accounts.open()
-						}
-					}				
-					
-					MenuItem
-					{
-						text: qsTr("About")
-						icon.name: "documentinfo"
-						onTriggered: aboutDialog.open()
-					}
+					visible: _accountCombobox.visible
 				}
-			}	
-			
-			headBar.rightContent: ToolButton
-			{
-				id: searchBtn
-				icon.name: "edit-find"
-				icon.color: headBarFGColor
-				onClicked: searchButtonClicked()
+				
+				MenuItem
+				{
+					text: qsTr("Accounts")
+					visible: root.showAccounts
+					icon.name: "list-add-user"
+					onTriggered: 
+					{
+						if(root.accounts)
+							accounts.open()
+					}
+				}				
+				
+				MenuItem
+				{
+					text: qsTr("About")
+					icon.name: "documentinfo"
+					onTriggered: aboutDialog.open()
+				}
 			}
+		}	
 		
-        
-        Keys.onBackPressed:
-        {
-			goBackTriggered();
-			console.log("GO BACK CLICKED")
-			event.accepted = true
-		}
-		
-		Shortcut
+		rightContent: ToolButton
 		{
-			sequence: "Forward"
-			onActivated: goFowardTriggered();
+			id: searchBtn
+			icon.name: "edit-find"
+			icon.color: headBarFGColor
+			onClicked: searchButtonClicked()
 		}
-		
-		Shortcut
-		{
-			sequence: StandardKey.Forward
-			onActivated: goFowardTriggered();
-		}
-		
-		Shortcut
-		{
-			sequence: StandardKey.Back
-			onActivated: goBackTriggered();
-		}
-		
-    }      
+	}
+	
+	property QtObject mfootBar : Maui.ToolBar 
+	{ 
+		id: _footBar
+		visible: count
+		position: ToolBar.Footer
+		Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor		
+	}  
+	
+	header: headBar.position === ToolBar.Header ? headBar : undefined	
+	footer: Column 
+	{
+		id: _footer
+		children: headBar.position === ToolBar.Footer ? [footBar, headBar] : footBar		
+	}        
     
     Maui.AboutDialog
     {

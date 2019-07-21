@@ -68,4 +68,29 @@ bottomPadding: control.padding
 		id: _footer
 		children: headBar.position === ToolBar.Footer ? [footBar, headBar] : footBar		
 	}  
+	
+	Keys.onBackPressed:
+	{
+		goBackTriggered();
+		console.log("GO BACK CLICKED")
+		event.accepted = true
+	}
+	
+	Shortcut
+	{
+		sequence: "Forward"
+		onActivated: goFowardTriggered();
+	}
+	
+	Shortcut
+	{
+		sequence: StandardKey.Forward
+		onActivated: goFowardTriggered();
+	}
+	
+	Shortcut
+	{
+		sequence: StandardKey.Back
+		onActivated: goBackTriggered();
+	}
 }
