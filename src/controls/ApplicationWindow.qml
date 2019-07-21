@@ -271,8 +271,8 @@ backgroundColor.b, 0.7))
             color: bgColor
         }
 
-        Kirigami.Theme.backgroundColor: headBarBGColor
-        Kirigami.Theme.textColor: headBarFGColor
+//         Kirigami.Theme.backgroundColor: headBarBGColor
+//         Kirigami.Theme.textColor: headBarFGColor
 
         headBar.leftContent: ToolButton
         {
