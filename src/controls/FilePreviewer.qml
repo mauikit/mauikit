@@ -10,8 +10,8 @@ Maui.Dialog
 {
 	id: control
 	
-	colorScheme.backgroundColor: "#2d2d2d"
-	colorScheme.textColor: "#fafafa"
+// 	colorScheme.backgroundColor: "#2d2d2d"
+// 	colorScheme.textColor: "#fafafa"
 	
 	property string currentUrl: ""
 	property var iteminfo : ({})
@@ -24,10 +24,11 @@ Maui.Dialog
 	maxHeight: unit * 800
 	maxWidth: unit * 500
 	defaultButtons: false
+        page.padding: 0
 		
 		footBar.leftContent: ToolButton
 		{
-			icon.color: control.colorScheme.textColor
+// 			icon.color: control.colorScheme.textColor
 			icon.name: "document-open"
             text: qsTr("Open")
 			onClicked:
@@ -43,7 +44,7 @@ Maui.Dialog
 		ToolButton
 		{
 			visible: !isDir
-			icon.color: control.colorScheme.textColor
+// 			icon.color: control.colorScheme.textColor
 			icon.name: "document-share"
                 text: qsTr("Share")
 
@@ -57,7 +58,7 @@ Maui.Dialog
 		ToolButton
 		{
 			icon.name: "love"
-			icon.color: control.colorScheme.textColor
+// 			icon.color: control.colorScheme.textColor
                 text: qsTr("Fav")
 
 			
@@ -74,7 +75,7 @@ Maui.Dialog
             checkable: true
             checked: showInfo
             onClicked: showInfo = !showInfo
-            icon.color: control.colorScheme.textColor
+//             icon.color: control.colorScheme.textColor
 
         }
 
