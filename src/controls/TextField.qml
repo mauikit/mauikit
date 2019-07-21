@@ -41,8 +41,8 @@ TextField
     signal goBackTriggered();
     signal goFowardTriggered();	
 	
-	height: implicitHeight
-	width: implicitWidth
+// 	height: implicitHeight
+// 	width: implicitWidth
 	z: 1
 // 	topPadding: space.tiny
 	bottomPadding: space.tiny
@@ -50,7 +50,8 @@ TextField
     selectByMouse: !isMobile
     persistentSelection: true
 	focus: true
-	wrapMode: TextInput.WordWrap	
+	wrapMode: TextInput.WordWrap
+	
 	
 	onPressAndHold: entryMenu.popup()
 	onPressed:

@@ -67,7 +67,8 @@ Maui.Popup
 		anchors
 		{
 			verticalCenter: parent.top
-			horizontalCenter: parent.left			
+			horizontalCenter: parent.left
+			horizontalCenterOffset: control.width === control.parent.width ? _closeButton.width : 0
 		}
 
 		z: control.z+1

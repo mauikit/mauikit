@@ -29,6 +29,7 @@ Maui.Dialog
 	maxHeight: isMobile ? parent.height * 0.95 : unit * 500
 	maxWidth: unit * 700
 	defaultButtons: false
+		page.padding: 0
 		
 		property string initPath
 		property string suggestedFileName : ""

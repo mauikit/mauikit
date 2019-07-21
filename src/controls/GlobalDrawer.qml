@@ -53,6 +53,7 @@ Kirigami.GlobalDrawer
     height: root.height - root.headBar.height - root.footBar.height
     y: root.headBar.height
 
+
     topPadding: 0
     bottomPadding: 0
     leftPadding: 0

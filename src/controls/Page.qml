@@ -32,7 +32,9 @@ bottomPadding: control.padding
 		{
 			id: _titleComponent
 			Label
-			{				
+			{	
+				width: parent.width
+				height: parent.height
 				text: control.title				
 				elide : Text.ElideRight
 				font.bold : false
