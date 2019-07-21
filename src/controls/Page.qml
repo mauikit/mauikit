@@ -48,8 +48,8 @@ bottomPadding: control.padding
 		
 		middleContent: Loader
 		{
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+            Layout.fillWidth: sourceComponent === _titleComponent
+            Layout.fillHeight: sourceComponent === _titleComponent
 			sourceComponent: control.title ? _titleComponent : undefined
 		}
 	}
