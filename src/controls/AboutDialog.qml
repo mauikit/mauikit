@@ -37,201 +37,197 @@ Maui.Dialog
 	property string appIcon: "qrc:/assets/mauikit-logo.png"
 	
 	defaultButtons: false
-	widthHint: 0.9
-	heightHint: 0.8
-	
-	maxWidth: unit * 400
-	maxHeight: unit * 250
-	
-	footBar.middleContent: ToolButton
-	{
-		icon.name: "view-links"
-		onClicked: Maui.FM.openUrl(control.appLink)
+		widthHint: 0.9
+		heightHint: 0.8
 		
-	}
-	
-	footBar.rightContent: ToolButton
-	{
-		icon.name: "love"
-		onClicked: Maui.FM.openUrl(control.appDonation)
-		
-	}
-	
-	footBar.leftContent: ToolButton
-	{
-		icon.name: "documentinfo"
-	}
-	
-	RowLayout
-	{
-		id: layout
-		anchors.centerIn: parent
-		width: parent.width
-		height: parent.height * 0.7	
+		maxWidth: unit * 400
+		maxHeight: unit * 250
 		
 		
-		Item
+		footBar.middleContent: ToolButton
 		{
-			Layout.fillHeight: true		
-			Layout.margins: space.small
-			Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-			Layout.minimumWidth: iconSizes.huge
-			Layout.maximumWidth: iconSizes.huge
-			Layout.preferredWidth: iconSizes.huge
-			Layout.minimumHeight: iconSizes.huge           
+			icon.name: "view-links"
+			onClicked: Maui.FM.openUrl(control.appLink)
 			
-			clip: true 
-			
-			Image
-			{
-				source: app.icon || control.appIcon
-				width: iconSizes.huge
-				height: width
-				sourceSize.width: width
-				sourceSize.height: height
-				horizontalAlignment: Qt.AlignHCenter
-				asynchronous: true
-				
-				fillMode: Image.PreserveAspectFit
-			}
 		}
 		
-		
-		
-		
-		Item
+		footBar.rightContent: ToolButton
 		{
-			id: _descriptionItem
-			Layout.fillWidth: true
-			Layout.fillHeight: true			
-			Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-			ScrollView
+			icon.name: "love"
+			onClicked: Maui.FM.openUrl(control.appDonation)
+			
+		}
+		
+		footBar.leftContent: ToolButton
 		{
-			anchors.fill: parent
+			icon.name: "documentinfo"
+		}		
+		
+		RowLayout
+		{
+			id: layout
+			anchors.centerIn: parent
+			width: parent.width
+			height: parent.height * 0.7	
 			
-			contentHeight: _columnInfo.implicitHeight
 			
-			padding: 0
-			clip: true
-			
-
-			
-			ColumnLayout
+			Item
 			{
+				Layout.fillHeight: true		
+				Layout.margins: space.small
+				Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+				Layout.minimumWidth: iconSizes.huge
+				Layout.maximumWidth: iconSizes.huge
+				Layout.preferredWidth: iconSizes.huge
+				Layout.minimumHeight: iconSizes.huge           
 				
-				id: _columnInfo
-				width: parent.width
-				spacing: 0
-				Label
+				clip: true 
+				
+				Image
 				{
-					id: appTitle
-					Layout.fillWidth: true
-// 					Layout.preferredHeight: implicitHeight
-				
-					Layout.alignment: Qt.AlignLeft
-					clip: true
-					width: parent.width
-					height: parent.height
-					color: textColor
-					text: appName
-					font.weight: Font.Bold
-					font.bold: true
-					font.pointSize: fontSizes.huge
-				}
-				
-				Label
-				{
-					id: appVersion
-					Layout.fillWidth: true
-// 					Layout.preferredHeight: fontSizes.default
-				
-					Layout.alignment: Qt.AlignLeft
-					clip: true 
+					source: app.icon || control.appIcon
+					width: iconSizes.huge
+					height: width
+					sourceSize.width: width
+					sourceSize.height: height
+					horizontalAlignment: Qt.AlignHCenter
+					asynchronous: true
 					
-					width: parent.width
-					height: parent.height
-					color:  Qt.lighter(textColor, 1.2)
-					text: app.version
-					font.pointSize: fontSizes.default
-					
+					fillMode: Image.PreserveAspectFit
 				}
-				
-				Label
+			}			
+			
+			Item
+			{
+				id: _descriptionItem
+				Layout.fillWidth: true
+				Layout.fillHeight: true			
+				Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+				ScrollView
 				{
-					id: body
-					// 					Layout.fillWidth: true
-// 					Layout.fillHeight: true
-					Layout.preferredWidth:_descriptionItem.width
+					anchors.fill: parent
+					
+					contentHeight: _columnInfo.implicitHeight
 					
 					padding: 0
-					// 				placeholderText: qsTr("App description")
-					enabled: false
-					text: appDescription
-					textFormat : TextEdit.AutoText
-					color: textColor
-					font.pointSize: fontSizes.default
-					wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-					
 					clip: true
-					// 				background: Rectangle
-					// 				{
-					// 					color: "transparent"
-					// 				}
+					
+					ColumnLayout
+					{
+						
+						id: _columnInfo
+						width: parent.width
+						spacing: 0
+						Label
+						{
+							id: appTitle
+							Layout.fillWidth: true
+							// 					Layout.preferredHeight: implicitHeight
+							
+							Layout.alignment: Qt.AlignLeft
+							clip: true
+							width: parent.width
+							height: parent.height
+							color: textColor
+							text: appName
+							font.weight: Font.Bold
+							font.bold: true
+							font.pointSize: fontSizes.huge
+						}
+						
+						Label
+						{
+							id: appVersion
+							Layout.fillWidth: true
+							// 					Layout.preferredHeight: fontSizes.default
+							
+							Layout.alignment: Qt.AlignLeft
+							clip: true 
+							
+							width: parent.width
+							height: parent.height
+							color:  Qt.lighter(textColor, 1.2)
+							text: app.version
+							font.pointSize: fontSizes.default
+							
+						}
+						
+						Label
+						{
+							id: body
+							// 					Layout.fillWidth: true
+							// 					Layout.fillHeight: true
+							Layout.preferredWidth:_descriptionItem.width
+							
+							padding: 0
+							// 				placeholderText: qsTr("App description")
+							enabled: false
+							text: appDescription
+							textFormat : TextEdit.AutoText
+							color: textColor
+							font.pointSize: fontSizes.default
+							wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+							
+							clip: true
+							// 				background: Rectangle
+							// 				{
+							// 					color: "transparent"
+							// 				}
+						}
+					}
+					
 				}
+				
 			}
+			
+			//             Item
+			//             {
+			//                 Layout.fillWidth: true
+			//                 Layout.row: 4
+			//                 Layout.column: 2
+			//                 Layout.margins: space.small
+			//                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+			//                 Label
+			//                 {
+			//                     color: textColor
+			//                     width: parent.width
+			//                     height: parent.height
+			//
+			//                     text: qsTr("Built with MauiKit and Kirigami.")
+			//                     font.pointSize: fontSizes.default
+			//                     wrapMode: TextEdit.WrapAnywhere
+			//
+			//
+			//                 }
+			//             }
+			
+			
+			
+			
+			//          Item
+			//         {
+			//             Layout.fillWidth: true
+			//             Layout.fillHeight: true
+			//             Layout.row: 5
+			//             Layout.column: 2
+			//             Layout.margins: space.big
+			//             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+			//
+			//             Label
+			//             {
+			//                 color: textColor
+			//                 width: parent.width
+			//                 height: parent.height
+			//
+			//                 text: "MauiKit " + app.mauikit + " Qt " +app.qt
+			//                 font.pointSize: fontSizes.default
+			//                  wrapMode: TextEdit.WrapAnywhere
+			//
+			//             }
+			//         }
 			
 		}
 		
-		}
-		
-		//             Item
-		//             {
-		//                 Layout.fillWidth: true
-		//                 Layout.row: 4
-		//                 Layout.column: 2
-		//                 Layout.margins: space.small
-		//                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-		//                 Label
-		//                 {
-		//                     color: textColor
-		//                     width: parent.width
-		//                     height: parent.height
-		//
-		//                     text: qsTr("Built with MauiKit and Kirigami.")
-		//                     font.pointSize: fontSizes.default
-		//                     wrapMode: TextEdit.WrapAnywhere
-		//
-		//
-		//                 }
-		//             }
-		
-		
-		
-		
-		//          Item
-		//         {
-		//             Layout.fillWidth: true
-		//             Layout.fillHeight: true
-		//             Layout.row: 5
-		//             Layout.column: 2
-		//             Layout.margins: space.big
-		//             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-		//
-		//             Label
-		//             {
-		//                 color: textColor
-		//                 width: parent.width
-		//                 height: parent.height
-		//
-		//                 text: "MauiKit " + app.mauikit + " Qt " +app.qt
-		//                 font.pointSize: fontSizes.default
-		//                  wrapMode: TextEdit.WrapAnywhere
-		//
-		//             }
-		//         }
-		
-	}
-	
-	onOpened : control.app = Maui.Handy.appInfo()
+		onOpened : control.app = Maui.Handy.appInfo()
 		
 }

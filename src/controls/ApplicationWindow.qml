@@ -58,7 +58,7 @@ Kirigami.AbstractApplicationWindow
     property alias leftIcon : menuBtn
     property alias rightIcon : searchBtn
     
-    default property alias content : page.content
+    default property alias content : page.contentData
     property alias mainMenu : mainMenu.contentData
     property alias about : aboutDialog
     property alias accounts: _accountsDialogLoader.item
@@ -159,15 +159,7 @@ backgroundColor.b, 0.7))
 
     /***************************************************/
     /********************* PROPS **********************/
-    /*************************************************/
-
-    property bool altToolBars : isMobile
-    property bool floatingBar : altToolBars
-
-    property int footBarAligment : Qt.AlignCenter
-    property bool footBarOverlap : false
-    property bool allowRiseContent: floatingBar && footBarOverlap
-    property int footBarMargins: space.big
+    /*************************************************/ 
     
     property alias searchButton : searchBtn
     property alias menuButton : menuBtn
@@ -216,22 +208,22 @@ backgroundColor.b, 0.7))
 	
     onHeadBarBGColorChanged: 
     {
-        if(!isMobile && colorSchemeName.length > 0 && !altToolBars)
+        if(!isMobile && colorSchemeName.length > 0)
             Maui.KDE.setColorScheme(colorSchemeName, headBarBGColor, headBarFGColor)
-        else if(isAndroid && !altToolBars)
+        else if(isAndroid && headBar.position === ToolBar.Header)
             Maui.Android.statusbarColor(headBarBGColor, false)
-		else if(isAndroid && altToolBars)
+			else if(isAndroid && headBar.position === ToolBar.Footer)
 			Maui.Android.statusbarColor(viewBackgroundColor, true)
 				
     }
     
     onHeadBarFGColorChanged: 
     {
-        if(!isAndroid && !isMobile && colorSchemeName.length > 0 && !altToolBars)
+		if(!isAndroid && !isMobile && colorSchemeName.length > 0 && headBar.position === ToolBar.Header)
             Maui.KDE.setColorScheme(colorSchemeName, headBarBGColor, headBarFGColor)
-        else if(isAndroid && !altToolBars)
+			else if(isAndroid && headBar.position === ToolBar.Header)
             Maui.Android.statusbarColor(headBarBGColor, false)
-			else if(isAndroid && altToolBars)
+			else if(isAndroid && headBar.position === ToolBar.Footer)
 				Maui.Android.statusbarColor(viewBackgroundColor, true)
     }
     
@@ -248,115 +240,100 @@ backgroundColor.b, 0.7))
     Maui.Page
     {
         id: page
-        anchors.fill: parent
-        
-        leftMargin: root.globalDrawer && (root.globalDrawer.modal === false) ? root.globalDrawer.contentItem.width * root.globalDrawer.position : 0
-        
-        margins: 0
-        headBar.plegable: false
-        headBar.height: toolBarHeight + space.small
-        headBar.implicitHeight: toolBarHeight + space.small
+ 
+        anchors.fill: parent        
+        contentItem.anchors.leftMargin: root.globalDrawer && (root.globalDrawer.modal === false) ? root.globalDrawer.contentItem.width * root.globalDrawer.position : 0
+        contentItem.anchors.left: contentItem.parent.left
+        contentItem.anchors.right: contentItem.parent.right
+//         margins: 0
+//         headBar.plegable: false
+//         headBar.height: toolBarHeight + space.small
+//         headBar.implicitHeight: toolBarHeight + space.small
 
-        headBarExit: false
-
-        altToolBars: root.altToolBars
-        floatingBar : root.floatingBar
-        footBarAligment : root.footBarAligment
-        footBarOverlap : root.footBarOverlap
-        footBarMargins: root.footBarMargins
-        allowRiseContent: root.allowRiseContent
-
-        background: Rectangle
-        {
-            color: bgColor
-        }
-
-//         Kirigami.Theme.backgroundColor: headBarBGColor
+//         Kirigami.Theme.backgroundColor: "red"
 //         Kirigami.Theme.textColor: headBarFGColor
 
-        headBar.leftContent: ToolButton
-        {
-            id: menuBtn
-            icon.name: "application-menu"
-			icon.color: headBarFGColor
-            checked: mainMenu.visible  
-            onClicked:
-            {
-                menuButtonClicked()
-				mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x ,  altToolBars ? 0 : parent.height+ space.medium)
-            }
-            
-            Menu
-            {
-				id: mainMenu
-				modal: true
-				z: 999
-				width: unit * 200
-				
-				Item
+      	headBar.leftContent: ToolButton
+			{
+				id: menuBtn
+				icon.name: "application-menu"
+				icon.color: headBarFGColor
+				checked: mainMenu.visible  
+				onClicked:
 				{
-					height: _accountCombobox.visible ? unit * 90 : 0
-					
-					anchors
-					{
-						left: parent.left
-						right: parent.right
-						top: parent.top
-						margins: space.medium
-					}
-					
-					ComboBox
-					{
-						id: _accountCombobox
-						anchors.centerIn: parent
-// 						parent: mainMenu
-						popup.z: 999
-						width: parent.width
-						visible: (count > 1) && showAccounts
-						textRole: "user"
-						flat: true
-						model: showAccounts ? accounts.model : undefined
-// 						icon.name: "user-identity"
-// 						iconButton.isMask: false
-					}
+					menuButtonClicked()
+					mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x , parent.height+ space.medium)
 				}
 				
-				MenuSeparator
+				Menu
 				{
-                    visible: _accountCombobox.visible
-                }
-				
-				MenuItem
-				{
-					text: qsTr("Accounts")
-					visible: root.showAccounts
-					icon.name: "list-add-user"
-					onTriggered: 
+					id: mainMenu
+					modal: true
+					z: 999
+					width: unit * 200
+					
+					Item
 					{
-						if(root.accounts)
-							accounts.open()
+						height: _accountCombobox.visible ? unit * 90 : 0
+						
+						anchors
+						{
+							left: parent.left
+							right: parent.right
+							top: parent.top
+							margins: space.medium
+						}
+						
+						ComboBox
+						{
+							id: _accountCombobox
+							anchors.centerIn: parent
+							// 						parent: mainMenu
+							popup.z: 999
+							width: parent.width
+							visible: (count > 1) && showAccounts
+							textRole: "user"
+							flat: true
+							model: showAccounts ? accounts.model : undefined
+							// 						icon.name: "user-identity"
+							// 						iconButton.isMask: false
+						}
 					}
-				}				
-				
-				MenuItem
-				{
-					text: qsTr("About")
-					icon.name: "documentinfo"
-					onTriggered: aboutDialog.open()
+					
+					MenuSeparator
+					{
+						visible: _accountCombobox.visible
+					}
+					
+					MenuItem
+					{
+						text: qsTr("Accounts")
+						visible: root.showAccounts
+						icon.name: "list-add-user"
+						onTriggered: 
+						{
+							if(root.accounts)
+								accounts.open()
+						}
+					}				
+					
+					MenuItem
+					{
+						text: qsTr("About")
+						icon.name: "documentinfo"
+						onTriggered: aboutDialog.open()
+					}
 				}
-				
-				MenuSeparator {}
-				
-			}			
-        }
-
-        headBar.rightContent: ToolButton
-        {
-            id: searchBtn
-            icon.name: "edit-find"
-            icon.color: headBarFGColor
-            onClicked: searchButtonClicked()
-        }
+			}	
+			
+			headBar.rightContent: ToolButton
+			{
+				id: searchBtn
+				icon.name: "edit-find"
+				icon.color: headBarFGColor
+				onClicked: searchButtonClicked()
+			}
+		
         
         Keys.onBackPressed:
         {
@@ -513,7 +490,7 @@ backgroundColor.b, 0.7))
 
      Component.onCompleted:
      {
-         if(isAndroid && altToolBars)
+		 if(isAndroid && headBar.position === ToolBar.Footer)
 			 Maui.Android.statusbarColor(backgroundColor, true)			 
 			 
 			 if(!isMobile)

@@ -38,14 +38,16 @@ Maui.Dialog
     maxHeight: unit * 300
     maxWidth: maxHeight	
 	
-	footBar.leftContent: ToolButton
-	{
-		icon.name: "filename-space-amarok"
-// 		text: qsTr("Custom server")
-		checkable: true
-		checked: customServer
-		onClicked: customServer = !customServer
-	}
+
+		footBar.leftContent: ToolButton
+		{
+			icon.name: "filename-space-amarok"
+			// 		text: qsTr("Custom server")
+			checkable: true
+			checked: customServer
+			onClicked: customServer = !customServer
+		}		
+	
 	
     onRejected:	close()
 

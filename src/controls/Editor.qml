@@ -23,9 +23,7 @@ Maui.Page
 	property alias canRedo: body.canRedo
 	
 	
-	headBarExit: false
 	headBar.visible: !body.readOnly
-
 	headBar.leftContent: [	
 	
 	ToolButton

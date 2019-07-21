@@ -1,5 +1,5 @@
 import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 
 import org.kde.kirigami 2.7 as Kirigami
@@ -58,8 +58,8 @@ Maui.Page
 	signal rightClicked()
 	signal newBookmark(var paths)
 	
-	margins: 0
 	focus: true	
+	Kirigami.Theme.backgroundColor: Kirigami.Theme.viewBackgroundColor
 	
 	Loader
 	{
@@ -73,7 +73,7 @@ Maui.Page
 		Maui.Dialog
 		{
 			property var items: []
-			
+		
 			title: qsTr("Delete files?")
 			message: qsTr("If you are sure you want to delete the files click on Accept, otherwise click on Cancel")
 			rejectButton.text: qsTr("Cancel")
@@ -514,10 +514,10 @@ Maui.Page
 	}
 	
 	Keys.onSpacePressed: previewer.show(modelList.get(browser.currentIndex).path)
-	
-	headBarExit: false
 	headBar.visible: currentPathType !== Maui.FMList.APPS_PATH
-	altToolBars: isMobile
+	headBar.position: isMobile ? ToolBar.Footer : ToolBar.Header
+	
+// 	headBar.stickyRightContent: true
 	headBar.rightContent:[
 	ToolButton
 	{
@@ -552,7 +552,9 @@ Maui.Page
         position: Controls.ToolBar.Header
         Layout.fillWidth: false
         z: 999
-		hiddenActions: browserMenu.actions
+
+        hiddenActions: browserMenu.actions
+
 //		display: isMobile ? ToolButton.IconOnly : ToolButton.TextBesideIcon
 		
 		actions: [	
@@ -617,8 +619,7 @@ Maui.Page
 						else
 							browser.section.property = ""
 				}
-			}
-			
+			}			
 		},
 		
 		Kirigami.Action
@@ -769,7 +770,6 @@ Maui.Page
 			z: holder.z +1
 		}
 		
-		
 		ProgressBar
 		{
 			id: _progressBar
@@ -777,8 +777,7 @@ Maui.Page
 			Layout.alignment: Qt.AlignBottom
 			Layout.preferredHeight: visible ? iconSizes.medium : 0
 			visible: value > 0
-		}
-		
+		}		
 	}
 	
 // 		PinchArea

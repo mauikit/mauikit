@@ -104,28 +104,28 @@ ScrollView
 	        }
 	        
 	        MouseArea
-		{
-			anchors.fill: parent
-			            propagateComposedEvents: true
-			acceptedButtons:  Qt.RightButton | Qt.LeftButton
-			onClicked: control.areaClicked(mouse)
-			onPressAndHold: control.areaRightClicked()
-            
-            		onWheel:
+	        {
+				anchors.fill: parent
+				propagateComposedEvents: true
+				acceptedButtons:  Qt.RightButton | Qt.LeftButton
+				onClicked: control.areaClicked(mouse)
+				onPressAndHold: control.areaRightClicked()
+				
+				onWheel:
 				{
 					if (wheel.modifiers & Qt.ControlModifier)
 					{
-                        if (wheel.angleDelta.y != 0) 
-                        {
-                            var factor = 1 + wheel.angleDelta.y / 600;
-                            control.resizeContent(factor)
-                        } 
+						if (wheel.angleDelta.y != 0) 
+						{
+							var factor = 1 + wheel.angleDelta.y / 600;
+							control.resizeContent(factor)
+						} 
 					}else
-                        wheel.accepted = false
+						wheel.accepted = false
 				}
-			
-		}	
-	    }
+				
+			}	
+		}
 	}
 	
 	function resizeContent(factor)
