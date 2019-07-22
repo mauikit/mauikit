@@ -515,7 +515,7 @@ Maui.Page
 	
 	Keys.onSpacePressed: previewer.show(modelList.get(browser.currentIndex).path)
 	headBar.visible: currentPathType !== Maui.FMList.APPS_PATH
-	headBar.position: ToolBar.Footer
+	headBar.position: isMobile ? ToolBar.Footer : ToolBar.Header
 	
 // 	headBar.stickyRightContent: true
 	headBar.rightContent:[
