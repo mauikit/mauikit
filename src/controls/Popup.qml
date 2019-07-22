@@ -65,7 +65,7 @@ else
 
     z: parent.z+1
 
-    modal: true
+    modal: control.width !== control.parent.width && control.height !== control.parent.height
     focus: true
     clip: true
     
