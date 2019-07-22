@@ -43,14 +43,15 @@ Kirigami.GlobalDrawer
 //     property alias handleButton : _handleButton
 
 //     z: ApplicationWindow.overlay.z
-    handleVisible: false
+//     handleVisible: false
 //     y: altToolBars ? 0 : headBar.height
 //     height: parent.height - (floatingBar && altToolBars ? 0 : headBar.height)
 //     modal: true
     
     
     implicitHeight: root.height - root.header.height - root.footer.height
-//     height: root.height - root.header.height - root.footer.height
+    height: root.height - root.header.height - root.footer.height
+//     ApplicationWindow.height -ApplicationWindow.header.height - ApplicationWindow.footer.height
     y: root.header.height
 
 

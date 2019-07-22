@@ -240,6 +240,7 @@ backgroundColor.b, 0.7))
 		id: _headBar
 		visible: count > 1
 		position: ToolBar.Header 
+		width: root.width		
 		Kirigami.Theme.backgroundColor: headBarBGColor
 		Kirigami.Theme.textColor: headBarFGColor
 		
@@ -332,7 +333,7 @@ backgroundColor.b, 0.7))
 		visible: count
 		position: ToolBar.Footer
 		width: root.width
-		Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor		
+		Kirigami.Theme.backgroundColor: Kirigami.Theme.backgroundColor		
 	}  
 	
 	header: headBar.position === ToolBar.Header ? headBar : undefined	

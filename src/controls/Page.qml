@@ -28,6 +28,7 @@ bottomPadding: control.padding
 	{ 
 		id: _headBar
 		visible: count > 1
+		width: control.width		
 		position: ToolBar.Header 
 		Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor	
 		
@@ -65,7 +66,10 @@ bottomPadding: control.padding
 		Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor		
 	}   
 	
-	header: headBar.position === ToolBar.Header ? headBar : undefined	
+	header: headBar.position === ToolBar.Header ? headBar : undefined
+	
+	
+	
 	footer: Column 
 	{
 		id: _footer
