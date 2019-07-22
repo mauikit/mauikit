@@ -336,13 +336,23 @@ backgroundColor.b, 0.7))
 		Kirigami.Theme.backgroundColor: Kirigami.Theme.backgroundColor		
 	}  
 	
-	header: headBar.position === ToolBar.Header ? headBar : undefined	
+	header: headBar.count && headBar.position === ToolBar.Header ? headBar : undefined
+	
 	footer: Column 
 	{
 		id: _footer
-
-		children: headBar.position === ToolBar.Footer ? [footBar, headBar] : footBar		
-	}        
+		children:
+		{
+			if(headBar.position === ToolBar.Footer && footBar.count) 
+				return [footBar , headBar]
+				else if(headBar.position === ToolBar.Footer)
+					return [headBar]
+					else if(footBar.count)
+						return [footBar]
+						else 
+							return []
+		}
+	}      
     
     Maui.AboutDialog
     {

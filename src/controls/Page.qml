@@ -28,7 +28,7 @@ bottomPadding: control.padding
 	{ 
 		id: _headBar
 		visible: count > 1
-		width: control.width		
+		width: control.width	
 		position: ToolBar.Header 
 		Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor	
 		
@@ -66,15 +66,24 @@ bottomPadding: control.padding
 		Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor		
 	}   
 	
-	header: headBar.position === ToolBar.Header ? headBar : undefined
-	
-	
+	header: headBar.count && headBar.position === ToolBar.Header ? headBar : undefined
 	
 	footer: Column 
-	{
-		id: _footer
-		children: headBar.position === ToolBar.Footer ? [footBar, headBar] : footBar		
-	}  
+		{
+			id: _footer
+			children:
+			{
+				if(headBar.position === ToolBar.Footer && footBar.count) 
+					 return [footBar , headBar]
+				else if(headBar.position === ToolBar.Footer)
+					 return [headBar]
+				else if(footBar.count)
+					return [footBar]
+				else 
+					 return []
+			}
+		}
+	
 	
 	Keys.onBackPressed:
 	{
