@@ -50,7 +50,7 @@ Kirigami.GlobalDrawer
     
     
     implicitHeight: root.height - root.header.height - root.footer.height
-    height: root.height - root.header.height - root.footer.height
+//     height: root.height - root.header.height - root.footer.height
     y: root.header.height
 
 
