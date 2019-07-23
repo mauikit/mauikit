@@ -381,8 +381,7 @@ Maui.Page
 						onItemClicked: 
 						{
 							control.currentFMList = _millersFMList
-							_millerColumns.itemClicked(index)
-							
+							_millerColumns.itemClicked(index)							
 						}
 						// 						onItemDoubleClicked: 
 						// 						{
@@ -390,9 +389,23 @@ Maui.Page
 						// 							_millerColumns.onItemDoubleClicked(index)
 						// 						}
 						
-						onItemRightClicked: _millerColumns.itemRightClicked(index)
-						onRightEmblemClicked: _millerColumns.rightEmblemClicked(index)
-						onLeftEmblemClicked: _millerColumns.leftEmblemClicked(index)
+						onItemRightClicked: 
+						{
+                            control.currentFMList = _millersFMList
+                            _millerColumns.itemRightClicked(index)
+                        }
+                        
+						onRightEmblemClicked:
+						{
+                            control.currentFMList = _millersFMList
+                             _millerColumns.rightEmblemClicked(index)
+                        }
+                        
+						onLeftEmblemClicked: 
+						{
+                            control.currentFMList = _millersFMList
+                            _millerColumns.leftEmblemClicked(index)
+                        }
 						
 						model: Maui.BaseModel
 						{							
@@ -435,19 +448,19 @@ Maui.Page
 		
 		onItemRightClicked:
 		{
-			itemMenu.show([modelList.get(index)])
+			itemMenu.show([control.currentFMList.get(index)])
 			control.itemRightClicked(index)
 		}
 		
 		onLeftEmblemClicked:
 		{
-			control.addToSelection(modelList.get(index), true)
+			control.addToSelection(control.currentFMList.get(index), true)
 			control.itemLeftEmblemClicked(index)
 		}
 		
 		onRightEmblemClicked:
 		{
-			isAndroid ? Maui.Android.shareDialog([modelList.get(index).path]) : shareDialog.show([modelList.get(index).path])
+			isAndroid ? Maui.Android.shareDialog([control.currentFMList.get(index).path]) : shareDialog.show([control.currentFMList.get(index).path])
 			control.itemRightEmblemClicked(index)
 		}
 		
@@ -468,35 +481,35 @@ Maui.Page
 		id: holder
 		anchors.fill : parent
 		z: -1
-		visible: !modelList.pathExists || modelList.pathEmpty || !modelList.contentReady
-		emoji: if(modelList.pathExists && modelList.pathEmpty)
+		visible: !control.currentFMList.pathExists || control.currentFMList.pathEmpty || !control.currentFMList.contentReady
+		emoji: if(control.currentFMList.pathExists && control.currentFMList.pathEmpty)
 		"qrc:/assets/MoonSki.png" 
-		else if(!modelList.pathExists)
+		else if(!control.currentFMList.pathExists)
 			"qrc:/assets/ElectricPlug.png"
-			else if(!modelList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
+			else if(!control.currentFMList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
 				"qrc:/assets/animat-search-color.gif"
-				else if(!modelList.contentReady)
+				else if(!control.currentFMList.contentReady)
 					"qrc:/assets/animat-rocket-color.gif"
 					
-					isGif: !modelList.contentReady			
+					isGif: !control.currentFMList.contentReady			
 					isMask: false
-					title : if(modelList.pathExists && modelList.pathEmpty)
+					title : if(control.currentFMList.pathExists && control.currentFMList.pathEmpty)
 					qsTr("Folder is empty!")
-					else if(!modelList.pathExists)
+					else if(!control.currentFMList.pathExists)
 						qsTr("Folder doesn't exists!")
-						else if(!modelList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
+						else if(!control.currentFMList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
 							qsTr("Searching for content!")
-							else if(!modelList.contentReady)
+							else if(!control.currentFMList.contentReady)
 								qsTr("Loading content!")					
 								
 								
-								body: if(modelList.pathExists && modelList.pathEmpty)
+								body: if(control.currentFMList.pathExists && control.currentFMList.pathEmpty)
 								qsTr("You can add new files to it")
-								else if(!modelList.pathExists)
+								else if(!control.currentFMList.pathExists)
 									qsTr("Create Folder?")
-									else if(!modelList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
+									else if(!control.currentFMList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
 										qsTr("This might take a while!")
-										else if(!modelList.contentReady)
+										else if(!control.currentFMList.contentReady)
 											qsTr("Almost ready!")	
 											
 											
@@ -505,15 +518,15 @@ Maui.Page
 											
 											onActionTriggered:
 											{
-												if(!modelList.pathExists)
+												if(!control.currentFMList.pathExists)
 												{
 													Maui.FM.createDir(control.currentPath.slice(0, control.currentPath.lastIndexOf("/")), control.currentPath.split("/").pop())
-													control.openFolder(modelList.parentPath)				
+													control.openFolder(control.currentFMList.parentPath)				
 												}
 											}
 	}
 	
-	Keys.onSpacePressed: previewer.show(modelList.get(browser.currentIndex).path)
+	Keys.onSpacePressed: previewer.show(control.currentFMList.get(browser.currentIndex).path)
 	headBar.visible: currentPathType !== Maui.FMList.APPS_PATH
 	headBar.position: isMobile ? ToolBar.Footer : ToolBar.Header
 	
@@ -750,6 +763,7 @@ Maui.Page
 			{
 				if(sourceComponent !== millerViewBrowser)
 					control.currentFMList = modelList
+
 			}
 			
 			Layout.topMargin: list.viewType == Maui.FMList.ICON_VIEW ? contentMargins * 2 : unit
@@ -934,7 +948,7 @@ Maui.Page
 	function refresh()
 	{
 		var pos = browser.contentY
-		modelList.refresh()
+		control.currentFMList.refresh()
 		
 		browser.contentY = pos
 	}
