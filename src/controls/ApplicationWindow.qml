@@ -244,7 +244,7 @@ backgroundColor.b, 0.7))
 		Kirigami.Theme.backgroundColor: headBarBGColor
 		Kirigami.Theme.textColor: headBarFGColor
 		
-		leftContent: ToolButton
+		leftContent: [ ToolButton
 		{
 			id: menuBtn
 			icon.name: "application-menu"
@@ -316,7 +316,16 @@ backgroundColor.b, 0.7))
 					onTriggered: aboutDialog.open()
 				}
 			}
-		}	
+		},
+		
+		Kirigami.Separator
+		{
+			visible: menuBtn.visible
+			Layout.preferredHeight: 16
+			opacity: 0.5
+			width: visible ? 2 : 0
+		}
+		]
 		
 		rightContent: ToolButton
 		{

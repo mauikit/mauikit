@@ -192,8 +192,7 @@ ToolBar
 			contentWidth: ((control.margins * 2) + space.medium) 
 			+ (control.stickyLeftContent ? leftRowContent.implicitWidth : leftRowContent.width) 
 			+ (control.stickyMiddleContent ? middleRowContent.implicitWidth : middleRowContent.width) 
-			+ (control.stickyRightContent ? rightRowContent.implicitWidth : rightRowContent.width)
-			
+			+ (control.stickyRightContent ? rightRowContent.implicitWidth : rightRowContent.width)			
 			
 			boundsBehavior: isMobile ? Flickable.DragOverBounds : Flickable.StopAtBounds
 			clip: true
@@ -239,8 +238,9 @@ ToolBar
 					Layout.rightMargin: leftRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.rightSretch ? leftRowContent.implicitWidth : undefined
 					Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
 					spacing: rightContent.length > 0 ? control.spacing : 0
-					Layout.minimumWidth: implicitWidth
-					Layout.fillWidth: false
+// 					Layout.minimumWidth: !sticky ? undefined : implicitWidth
+// 					Layout.maximumWidth: !sticky ? rightRowContent.width : implicitWidth
+					Layout.fillWidth: control.rightSretch
 					Layout.fillHeight: true
 				}           
 			}

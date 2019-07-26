@@ -312,7 +312,7 @@ Maui.Page
 		Kirigami.ColumnView
 		{
 			id: _millerColumns
-// 			columnWidth: Kirigami.Units.gridUnit * 22			
+			columnWidth: Math.min(Kirigami.Units.gridUnit * 22, control.width)			
 // 			fillWidth: true
             columnResizeMode: Kirigami.ColumnView.DynamicColumns
 			
@@ -322,6 +322,8 @@ Maui.Page
 			
 			signal rightEmblemClicked(int index)
 			signal leftEmblemClicked(int index)
+			
+			
 			
 			Maui.PathList
 			{
@@ -339,10 +341,14 @@ Maui.Page
 			{
 				id: _repeater
 				model: _millerModel
+				onCountChanged: _millerColumns.currentIndex = _repeater.count - 1					
+				
 				onItemAdded: 
 				{
 //                     if(viewLoader.sourceComponent === millerViewBrowser)
 //                     _millerColumns.currentIndex = _millerColumns.count-1
+					
+// 					_millerColumns.contentX= _millerColumns.columnWidth * _millerColumns.count
                 }
 				
 				Item
@@ -381,7 +387,7 @@ Maui.Page
 						onItemClicked: 
 						{
 							control.currentFMList = _millersFMList
-							_millerColumns.itemClicked(index)							
+							_millerColumns.itemClicked(index)
 						}
 						// 						onItemDoubleClicked: 
 						// 						{
@@ -529,7 +535,22 @@ Maui.Page
 	Keys.onSpacePressed: previewer.show(control.currentFMList.get(browser.currentIndex).path)
 	headBar.visible: currentPathType !== Maui.FMList.APPS_PATH
 	headBar.position: isMobile ? ToolBar.Footer : ToolBar.Header
+	property list<QtObject> t_actions:
+	[
 	
+	Action
+	{
+		id: _previewAction
+		icon.name: "image-preview"
+		text: qsTr("Previews")
+		checkable: true
+		checked: list.preview
+		onTriggered:
+		{
+			list.preview = !list.preview
+			close()
+		}
+	}]
 // 	headBar.stickyRightContent: true
 	headBar.rightContent:[
 	ToolButton
@@ -563,12 +584,10 @@ Maui.Page
 	Kirigami.ActionToolBar
 	{
         position: Controls.ToolBar.Header
-        Layout.fillWidth: false
-        z: 999
+        Layout.fillWidth: true
+        hiddenActions: t_actions
 
-        hiddenActions: browserMenu.actions
-
-//		display: isMobile ? ToolButton.IconOnly : ToolButton.TextBesideIcon
+        display: isWide ? ToolButton.TextBesideIcon : ToolButton.IconOnly
 		
 		actions: [	
 		
