@@ -9,16 +9,17 @@ Menu
 	id: control
 	implicitWidth: colorBar.implicitWidth + space.big
 	
-	property var items : []
+	property var item : {}
+	property int index : -1
 	property bool isDir : false
 	
-	signal bookmarkClicked(var items)
-	signal removeClicked(var items)
-	signal shareClicked(var items)
-	signal copyClicked(var items)
-	signal cutClicked(var items)
-	signal renameClicked(var items)
-	signal tagsClicked(var items)	
+	signal bookmarkClicked(var item)
+	signal removeClicked(var item)
+	signal shareClicked(var item)
+	signal copyClicked(var item)
+	signal cutClicked(var item)
+	signal renameClicked(var item)
+	signal tagsClicked(var item)	
 	
 	MenuItem
 	{
@@ -26,7 +27,7 @@ Menu
 		onTriggered:
 		{
 			
-			addToSelection(list.get(browser.currentIndex))
+			addToSelection(currentFMList.get(index))
 		}
 	}
 	
@@ -36,7 +37,7 @@ Menu
 		text: qsTr("Copy...")
 		onTriggered:
 		{
-			copyClicked(control.items)
+			copyClicked(control.item)
 			close()
 		}
 	}
@@ -46,7 +47,7 @@ Menu
 		text: qsTr("Cut...")
 		onTriggered:
 		{
-			cutClicked(control.items)
+			cutClicked(control.item)
 			close()
 		}
 	}
@@ -56,7 +57,7 @@ Menu
 		text: qsTr("Rename...")
 		onTriggered:
 		{
-			renameClicked(control.items)
+			renameClicked(control.item)
 			close()
 		}
 	}	
@@ -69,7 +70,7 @@ Menu
 		enabled: isDir
 		onTriggered:
 		{
-			bookmarkClicked(control.items)
+			bookmarkClicked(control.item)
 			close()
 		}
 	}
@@ -79,7 +80,7 @@ Menu
 		text: qsTr("Tags...")
 		onTriggered:
 		{
-			tagsClicked(control.items)
+			tagsClicked(control.item)
 			close()
 		}
 	}
@@ -89,7 +90,7 @@ Menu
 		text: qsTr("Share...")
 		onTriggered:
 		{
-			shareClicked(control.items)
+			shareClicked(control.item)
 			close()
 		}
 	}
@@ -99,7 +100,7 @@ Menu
 		text: qsTr("Preview...")
 		onTriggered:
 		{
-			previewer.show(control.items[0].path)
+			previewer.show(control.item.path)
 			close()
 		}
 	}
@@ -113,7 +114,7 @@ Menu
 		
 		onTriggered:
 		{
-			removeClicked(control.items)
+			removeClicked(control.item)
 			close()
 		}
 	}
@@ -132,23 +133,21 @@ Menu
 			size:  iconSize
 			onColorPicked:
 			{
-				for(var i in control.items)
-					Maui.FM.setDirConf(control.items[i].path+"/.directory", "Desktop Entry", "Icon", color)
+					Maui.FM.setDirConf(control.item.path+"/.directory", "Desktop Entry", "Icon", color)
 					
 					refresh()
 			}
 		}
 	}	
 	
-	function show(items)
+	function show(item, index)
 	{
-		if(items.length > 0 )
+		if(item)
 		{
-			if(items.length == 1)
-				isDir = Maui.FM.isDir(items[0].path)
-				
-				control.items = items
-				popup()
+			control.index = index
+			isDir = Maui.FM.isDir(item.path)
+			control.item = item
+			popup()
 		}
 	}
 }

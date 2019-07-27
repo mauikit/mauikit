@@ -128,9 +128,9 @@ Maui.Page
 		{
 			title: qsTr("Rename file")
 			message: qsTr("Rename a file or folder to a new custom name")
-			textEntry.text: list.get(browser.currentIndex).label
+			textEntry.text: itemMenu.item.label
 			textEntry.placeholderText: qsTr("New name...")
-			onFinished: Maui.FM.rename(itemMenu.items[0].path, textEntry.text)
+			onFinished: Maui.FM.rename(itemMenu.item.path, textEntry.text)
 			onRejected: close()
 			acceptText: qsTr("Rename")
 			rejectText: qsTr("Cancel")
@@ -201,38 +201,31 @@ Maui.Page
 		onBookmarkClicked: control.newBookmark([items[0].path])
 		onCopyClicked:
 		{
-			if(items.length)
-				control.copy(items)			
+			if(item)
+				control.copy([item])			
 		}
 		
 		onCutClicked:
 		{
-			if(items.length)
-				control.cut(items)			
+			if(item)
+				control.cut([item])			
 		}
 		
 		onTagsClicked:
 		{
-			if(items.length)
+			if(item)
 			{
 				dialogLoader.sourceComponent = tagsDialogComponent
-				
-				if(items.length > 1 && control.selectionBar)			
-					dialog.composerList.urls = control.selectionBar.selectedPaths			
-					else  
-						dialog.composerList.urls = items[0].path
-						
-						dialog.open()
+				dialog.composerList.urls = item.path
+				dialog.open()
 			}
 		}
 		
 		onRenameClicked:
-		{
-			if(items.length === 1)
-			{
+		{			
 				dialogLoader.sourceComponent = renameDialogComponent
 				dialog.open()
-			}
+			
 		}
 		
 		//        onSaveToClicked:
@@ -323,7 +316,8 @@ Maui.Page
 			signal rightEmblemClicked(int index)
 			signal leftEmblemClicked(int index)
 			
-			
+			signal areaClicked(var mouse)
+			signal areaRightClicked() 
 			
 			Maui.PathList
 			{
@@ -352,7 +346,7 @@ Maui.Page
                 }
 				
 				Item
-				{							
+				{
 					Maui.FMList
 					{	
 						id: _millersFMList
@@ -386,8 +380,7 @@ Maui.Page
 						// 			itemSize: thumbnailsSize
 						onItemClicked: 
 						{
-							control.currentFMList = _millersFMList
-							
+							control.currentFMList = _millersFMList							
 							_millerColumns.itemClicked(index)
 						}
 						// 						onItemDoubleClicked: 
@@ -398,7 +391,7 @@ Maui.Page
 						
 						onItemRightClicked: 
 						{
-                            control.currentFMList = _millersFMList
+                            control.currentFMList = _millersFMList                            
                             _millerColumns.itemRightClicked(index)
                         }
                         
@@ -413,6 +406,18 @@ Maui.Page
                             control.currentFMList = _millersFMList
                             _millerColumns.leftEmblemClicked(index)
                         }
+                        
+                        onAreaClicked:
+                        {
+							control.currentFMList = _millersFMList
+							_millerColumns.areaClicked(mouse)
+						}
+						
+						onAreaRightClicked:
+						{
+							control.currentFMList = _millersFMList
+							_millerColumns.areaRightClicked()							
+						}
 						
 						model: Maui.BaseModel
 						{							
@@ -455,7 +460,7 @@ Maui.Page
 		
 		onItemRightClicked:
 		{
-			itemMenu.show([control.currentFMList.get(index)])
+			itemMenu.show(control.currentFMList.get(index), index)
 			control.itemRightClicked(index)
 		}
 		
