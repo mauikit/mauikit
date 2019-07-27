@@ -350,11 +350,12 @@ backgroundColor.b, 0.7))
 	footer: Column 
 	{
 		id: _footer
+		visible : children > 0
 		children:
 		{
-			if(headBar.position === ToolBar.Footer && footBar.count) 
+			if(headBar.position === ToolBar.Footer && headBar.count && footBar.count) 
 				return [footBar , headBar]
-				else if(headBar.position === ToolBar.Footer)
+				else if(headBar.position === ToolBar.Footer && headBar.count)
 					return [headBar]
 					else if(footBar.count)
 						return [footBar]

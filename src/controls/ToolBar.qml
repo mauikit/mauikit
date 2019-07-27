@@ -189,7 +189,7 @@ ToolBar
 			
 			flickableDirection: Flickable.HorizontalFlick
 			interactive: (contentWidth > control.width) && control.flickable
-			contentWidth: ((control.margins * 2) + space.medium) 
+			contentWidth: ((control.margins) + space.medium) 
 			+ (control.stickyLeftContent ? leftRowContent.implicitWidth : leftRowContent.width) 
 			+ (control.stickyMiddleContent ? middleRowContent.implicitWidth : middleRowContent.width) 
 			+ (control.stickyRightContent ? rightRowContent.implicitWidth : rightRowContent.width)			
@@ -206,6 +206,7 @@ ToolBar
 				RowLayout
 				{
 					id: leftRowContent
+// 					visible: control.leftSretch && implicitWidth
 					property bool sticky : false
 					Layout.leftMargin: rightRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.leftSretch ? rightRowContent.implicitWidth : undefined
 					Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
@@ -213,14 +214,13 @@ ToolBar
 					Layout.minimumWidth: !sticky ? undefined : implicitWidth
 					Layout.fillWidth: control.leftSretch && implicitWidth
 					Layout.fillHeight: true
-
 				}
 				
 				RowLayout
 				{
 					id: middleRowContent				
 					property bool sticky : false
-					
+// 					visible: control.middleStrech && implicitWidth
 					Layout.alignment: Qt.AlignCenter					
 					spacing: middleContent.length === 1 ? 0 : control.spacing
 					Layout.minimumWidth: !sticky ? undefined : implicitWidth
@@ -233,14 +233,14 @@ ToolBar
 				RowLayout
 				{
 					id: rightRowContent
-					
+// 					visible: control.rightSretch && implicitWidth
 					property bool sticky : false
 					Layout.rightMargin: leftRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.rightSretch ? leftRowContent.implicitWidth : undefined
 					Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
 					spacing: rightContent.length > 0 ? control.spacing : 0
-// 					Layout.minimumWidth: !sticky ? undefined : implicitWidth
+					Layout.minimumWidth: !sticky ? undefined : implicitWidth
 // 					Layout.maximumWidth: !sticky ? rightRowContent.width : implicitWidth
-					Layout.fillWidth: control.rightSretch
+Layout.fillWidth: control.rightSretch && implicitWidth
 					Layout.fillHeight: true
 				}           
 			}
