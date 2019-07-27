@@ -314,7 +314,7 @@ Maui.Page
 			id: _millerColumns
 			columnWidth: Math.min(Kirigami.Units.gridUnit * 22, control.width)			
 // 			fillWidth: true
-//             columnResizeMode: Kirigami.ColumnView.DynamicColumns
+            columnResizeMode: Kirigami.ColumnView.DynamicColumns
 			
 			signal itemClicked(int index)
 			signal itemDoubleClicked(int index)
@@ -329,6 +329,7 @@ Maui.Page
 			{
 				id: _millerList
 				path: control.currentPath
+				onPathChanged: _millerColumns.currentIndex = _repeater.count - 1	
 			}
 			
 			Maui.BaseModel
@@ -341,7 +342,6 @@ Maui.Page
 			{
 				id: _repeater
 				model: _millerModel
-// 				onCountChanged: _millerColumns.currentIndex = _repeater.count - 1					
 				
 				onItemAdded: 
 				{
@@ -387,6 +387,7 @@ Maui.Page
 						onItemClicked: 
 						{
 							control.currentFMList = _millersFMList
+							
 							_millerColumns.itemClicked(index)
 						}
 						// 						onItemDoubleClicked: 

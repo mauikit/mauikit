@@ -23,8 +23,8 @@ Maui.Dialog
 	
 	maxHeight: unit * 800
 	maxWidth: unit * 500
-	defaultButtons: false
-        page.padding: 0
+	defaultButtons: false	
+        page.padding: space.big
 		
 		footBar.leftContent: ToolButton
 		{

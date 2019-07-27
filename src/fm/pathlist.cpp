@@ -21,21 +21,7 @@
 
 PathList::PathList(QObject *parent) : MauiList(parent)
 {
-	connect(this, &PathList::pathChanged, [&]()
-	{		
-		if(!this->list.isEmpty() && FM::parentDir(this->m_path) == this->list.last()[FMH::MODEL_KEY::PATH])
-		{
-// 			qDebug() << "APPENDING PATHS TO MODEL << "<< FM::parentDir(this->m_path) << this->list.last()[FMH::MODEL_KEY::PATH];
-			emit this->preItemAppended();
-			this->list << FMH::getDirInfoModel(this->m_path);
-			emit this->postItemAppended();
-		}else{
-			emit this->preListChanged();
-			this->list.clear();
-			this->list << PathList::splitPath(this->m_path);
-			emit this->postListChanged();
-		}		
-	});
+	
 }
 
 PathList::~PathList() {}
@@ -65,7 +51,20 @@ FMH::MODEL_LIST PathList::items() const
 void PathList::setPath(const QString& path)
 {
 	if(path == this->m_path)
-		return;
+		return;	
+	
+	if(!this->list.isEmpty() && FM::parentDir(path) == this->m_path)
+	{
+		// 			qDebug() << "APPENDING PATHS TO MODEL << "<< FM::parentDir(this->m_path) << this->list.last()[FMH::MODEL_KEY::PATH];
+		emit this->preItemAppended();
+		this->list << FMH::getDirInfoModel(path);
+		emit this->postItemAppended();
+	}else{
+		emit this->preListChanged();
+		this->list.clear();
+		this->list << PathList::splitPath(path);
+		emit this->postListChanged();
+	}	
 	
 	this->m_path = path;	
 	emit this->pathChanged();	
