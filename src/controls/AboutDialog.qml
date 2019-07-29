@@ -47,7 +47,7 @@ Maui.Dialog
 		
 		footBar.middleContent: ToolButton
 		{
-			icon.name: "view-links"
+			icon.name: "link"
 			onClicked: Maui.FM.openUrl(control.appLink)
 			
 		}

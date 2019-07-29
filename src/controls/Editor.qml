@@ -47,7 +47,7 @@ Maui.Page
 	{
 		icon.name: "format-text-bold"
 		focusPolicy: Qt.TabFocus
-		icon.color: checked ? highlightColor : textColor
+		icon.color: checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
 		checkable: false
 		checked: document.bold
 		onClicked: document.bold = !document.bold
@@ -56,7 +56,7 @@ Maui.Page
 	ToolButton
 	{
 		icon.name: "format-text-italic"
-		icon.color: checked ? highlightColor : textColor
+		icon.color: checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
 		focusPolicy: Qt.TabFocus
 		checkable: false
 		checked: document.italic
@@ -66,7 +66,7 @@ Maui.Page
 	ToolButton
 	{
 		icon.name: "format-text-underline"
-		icon.color: checked ? highlightColor : textColor
+		icon.color: checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
 		focusPolicy: Qt.TabFocus
 		checkable: true
 		checked: document.underline
@@ -76,7 +76,7 @@ Maui.Page
 	ToolButton
 	{
 		icon.name: "format-text-uppercase"
-		icon.color: checked ? highlightColor : textColor
+		icon.color: checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
 		focusPolicy: Qt.TabFocus
 		checkable: true
 		checked: document.uppercase
@@ -162,7 +162,7 @@ Maui.Page
 				Label
 				{
 					text: body.length + " / " + body.lineCount
-					color: textColor
+					color: Kirigami.Theme.textColor
 					opacity: 0.5
 					font.pointSize: fontSizes.medium
 				}

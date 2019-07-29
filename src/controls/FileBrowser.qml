@@ -581,7 +581,7 @@ Maui.Page
 	
 	Kirigami.ActionToolBar
 	{
-        position: Controls.ToolBar.Header
+        position: ToolBar.Header
         Layout.fillWidth: true
         hiddenActions: t_actions
 

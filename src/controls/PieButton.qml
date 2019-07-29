@@ -29,7 +29,7 @@ ToolButton
 	property int alignment : Qt.AlignLeft
 	
 	property int barHeight : 0
-	property int maxWidth :  ApplicationWindow.overlay.width *( isMobile ? 1 : 0.5)
+	property int maxWidth :  ApplicationWindow.overlay.width * (isMobile ? 1 : 0.5)
 	
 	property alias content : content.middleContent
 	
@@ -79,7 +79,14 @@ ToolButton
 			implicitHeight: parent.height
 			spacing: space.enormous
 			Kirigami.Theme.backgroundColor: "transparent"
-			drawBorder: false
+			
+			background: Rectangle
+			{
+				color: Kirigami.Theme.backgroundColor
+				radius: radiusV
+				border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+				
+			}
 		}
 	}
 	

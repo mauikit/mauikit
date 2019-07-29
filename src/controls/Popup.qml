@@ -64,8 +64,10 @@ else
     margins: unit 
     padding: unit
     
-    topPadding: popupBackground.radius
-    bottomPadding: popupBackground.radius
+//     topPadding: popupBackground.radius
+//     bottomPadding: popupBackground.radius
+topPadding: control.padding
+bottomPadding: control.padding
     leftPadding: control.padding
     rightPadding: control.padding
     

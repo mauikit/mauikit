@@ -53,8 +53,8 @@ Item
 		{
 			id: imageHolder
 			
-			width: emojiSize
-			height: emojiSize
+			width: Math.min(parent.width, emojiSize)
+			height: width
 			sourceSize.width: width
 			sourceSize.height: height
 			source: emoji
@@ -103,7 +103,7 @@ Item
 	
 	Loader
 	{
-		anchors.centerIn: parent
+		anchors.fill: parent
 		sourceComponent: control.visible ? _mainComponent : undefined
 	}
 	
@@ -111,17 +111,19 @@ Item
 	{
 		id: _mainComponent
 		
-		Column
+		ColumnLayout
 		{
-			height: Math.min(parent.height * 0.7, implicitHeight)
+			height: Math.min(parent.height * 0.5, implicitHeight)
 			width: parent.width * 0.7
+			anchors.centerIn: parent
 			
 			Loader
 			{
 				id: loader			
-				height: control.emoji ? emojiSize : 0
-				width: height
-				anchors.horizontalCenter: parent.horizontalCenter
+				Layout.preferredHeight: control.emoji ? emojiSize : 0
+				Layout.preferredWidth: control.emoji ? emojiSize : 0
+				Layout.alignment: Qt.AlignCenter
+// 				anchors.horizontalCenter: parent.horizontalCenter
 				
 				sourceComponent: control.emoji ? (isGif ? animComponent : imgComponent) : undefined
 			}			
@@ -129,7 +131,7 @@ Item
 			Label
 			{
 				id: textHolder
-				width: parent.width
+				Layout.fillWidth: true
 				
 				opacity: 0.5
 				text: message ? qsTr(message) : "<h3>"+title+"</h3><p>"+body+"</p>"
