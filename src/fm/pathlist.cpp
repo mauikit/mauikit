@@ -28,12 +28,11 @@ PathList::~PathList() {}
 
 QVariantMap PathList::get(const int& index) const
 {
-    if(this->list.isEmpty())
+    if(this->list.isEmpty() || index >= this->list.size() || index < 0)
+    {
         return QVariantMap();
-    
-	if(index >= this->list.size() || index < 0)
-		return QVariantMap();
-    
+    }
+
 	const auto model = this->list.at(index);	
 	return FM::toMap(model);
 }
