@@ -30,7 +30,7 @@ bottomPadding: control.padding
 		visible: count > 1
 		width: control.width	
 		position: ToolBar.Header 
-		Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor	
+// 		Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor	
 		
 		Component
 		{
@@ -41,7 +41,7 @@ bottomPadding: control.padding
 				elide : Text.ElideRight
 				font.bold : false
 				font.weight: Font.Bold
-				color : colorScheme.textColor
+				color : Kirigami.Theme.textColor
 				font.pointSize: fontSizes.big
 				horizontalAlignment : Text.AlignHCenter
 				verticalAlignment :  Text.AlignVCenter
@@ -63,7 +63,7 @@ bottomPadding: control.padding
 		visible: count
 		position: ToolBar.Footer
 		width: control.width		
-		Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor		
+// 		Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor		
 	}   
 	
 	header: headBar.count && headBar.position === ToolBar.Header ? headBar : undefined

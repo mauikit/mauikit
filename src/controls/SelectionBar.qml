@@ -20,20 +20,15 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.0 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import "private"
 
 Item
 {
     id: control
-    /* Controlc color scheming */
-	ColorScheme {id: colorScheme}
-	property alias colorScheme : colorScheme
-	/***************************/
-    colorScheme.textColor : colorScheme.altColorText
-    colorScheme.backgroundColor: colorScheme.altColor
-    colorScheme.accentColor: "#29B6F6"
+    Kirigami.Theme.inherit: false    
+    Kirigami.Theme.colorSet: Kirigami.Theme.Complementary    
     
     property var selectedPaths: []
     property var selectedItems: []
@@ -83,12 +78,7 @@ Item
     MouseArea
     {
         id: _mouseArea
-        anchors.fill: parent
-        onClicked: 
-        {
-            if(typeof(riseContent) !== "undefined") 
-                riseContent()
-        }
+        anchors.fill: parent        
         drag.target: parent
         onPressed: selectionList.grabToImage(function(result)
         {
@@ -101,12 +91,12 @@ Item
     {
         id: bg
         anchors.fill: parent
-        
-        color: colorScheme.backgroundColor
+//         Kirigami.Theme.colorSet: Kirigami.Theme.Complementary    
+        color: Kirigami.Theme.backgroundColor
         radius: radiusV
 
         opacity: 1
-        border.color: colorScheme.borderColor
+//         border.color: Kirigami.Theme.complementaryTextColor
         
         SequentialAnimation
         {
@@ -117,7 +107,7 @@ Item
                 property: "color"
                 easing.type: Easing.InOutQuad
                 from: animColor
-                to: Qt.lighter(colorScheme.altColor, 1.2)
+                to: Qt.lighter(Kirigami.Theme.backgroundColor, 1.2)
                 duration: 500
             }
         }       
@@ -159,8 +149,10 @@ Item
                             undefined
             
             iconName: "window-close"
-            colorScheme.backgroundColor: dangerColor
-            onClicked:
+			Kirigami.Theme.backgroundColor: dangerColor
+			Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
+			
+			onClicked:
             {
                 selectionList.model.clear()
                 exitClicked()
@@ -223,14 +215,14 @@ Item
                     emblemAdded: true
                     keepEmblemOverlay: true
                     showSelectionBackground: false
-                    labelColor: colorScheme.textColor
+                    labelColor: Kirigami.Theme.textColor
                     showTooltip: true
                     showThumbnails: true
                     emblemSize: iconSizes.small
                     leftEmblem: "list-remove"
-					colorScheme.accentColor: control.colorScheme.accentColor
-					colorScheme.backgroundColor: control.colorScheme.altColor
-					colorScheme.textColor: control.colorScheme.altColorText
+					Kirigami.Theme.highlightColor: Kirigami.Theme.highlightColor
+					Kirigami.Theme.backgroundColor: Kirigami.Theme.complementaryBackgroundColor
+					Kirigami.Theme.textColor: Kirigami.Theme.textColor
                     
                     Connections
                     {
@@ -273,14 +265,14 @@ Item
                 visible: iconVisible
                 anchors.centerIn: parent
                 icon.name: control.iconName
-                icon.color: control.colorScheme.textColor
+                icon.color: Kirigami.Theme.textColor
                 onClicked: iconClicked()
             }
         }
         
         Maui.Badge
         {
-            colorScheme.backgroundColor: highlightColor			
+			Kirigami.Theme.backgroundColor: Kirigami.Theme.highlightColor			
             text: selectionList.count
             
             anchors.verticalCenter: parent.top
@@ -352,12 +344,6 @@ Item
             
             selectionList.model.append(item)
             selectionList.positionViewAtEnd()
-            
-            if(position === Qt.Vertical) return
-            
-            if(typeof(riseContent) === "undefined") return
-            
-            riseContent()
         }
     }
     

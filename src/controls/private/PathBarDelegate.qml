@@ -23,7 +23,7 @@ ItemDelegate
                 right: parent.right               
             }
             
-            color: colorScheme.borderColor
+            color: pathBarBG.border.color
         }
     }
     

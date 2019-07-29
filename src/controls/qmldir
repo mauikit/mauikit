@@ -13,7 +13,6 @@ singleton Style 1.0 Style.qml
 
 ApplicationWindow 1.0 ApplicationWindow.qml
 ToolBar 1.0 ToolBar.qml
-ToolButton 1.0 ToolButton.qml
 Page 1.0 Page.qml
 ShareDialog 1.0 ShareDialog.qml
 PieButton 1.0 PieButton.qml
@@ -37,22 +36,13 @@ PathBar 1.0 PathBar.qml
 Dialog 1.0 Dialog.qml
 Popup 1.0 Popup.qml
 AboutDialog 1.0 AboutDialog.qml
-Button 1.0 Button.qml
 TextField 1.0 TextField.qml
-SearchBar 1.0 SearchBar.qml
 Badge 1.0 Badge.qml
 GridView 1.0 GridView.qml
-Item 1.0 Item.qml
-Menu 1.0 Menu.qml
-MenuItem 1.0 MenuItem.qml
 Terminal 1.0 Terminal.qml
 SyncDialog 1.0 SyncDialog.qml
 SyncDialog 1.0 SyncDialogA.qml
 Editor 1.0 Editor.qml
 ColorsBar 1.0 ColorsBar.qml
-ComboBox 1.0 ComboBox.qml
 Holder 1.0 Holder.qml
 ImageViewer 1.0 ImageViewer.qml
-ActionBar 1.0 ActionBar.qml
-
-

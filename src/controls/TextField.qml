@@ -30,12 +30,7 @@ import "private"
 TextField
 {
 	id: control    
-	
-	/* Controlc color scheming */
-	ColorScheme {id: colorScheme}
-	property alias colorScheme : colorScheme
-	/***************************/
-	
+
 	property alias menu : entryMenu
 	signal cleared()
     signal goBackTriggered();
@@ -93,7 +88,7 @@ TextField
 		anchors.rightMargin: space.small
 		anchors.verticalCenter: parent.verticalCenter
 		icon.name: "edit-clear"
-		icon.color: color   
+		icon.color: control.color   
 		onClicked: 
 		{
             control.clear()

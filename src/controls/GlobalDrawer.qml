@@ -19,7 +19,7 @@
 
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
 import QtGraphicalEffects 1.0
@@ -28,16 +28,8 @@ import "private"
 Kirigami.GlobalDrawer
 {
     id: control
+    Kirigami.Theme.backgroundColor: viewBackgroundColor
     
-    /* Controlc color scheming */
-	ColorScheme 
-	{
-		id: colorScheme
-		backgroundColor: viewBackgroundColor
-	}	
-	property alias colorScheme : colorScheme
-	/***************************/
-	
     property Item bg
     
 //     property alias handleButton : _handleButton

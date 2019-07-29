@@ -20,31 +20,21 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.6 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import "private"
 
 Maui.ListBrowser
 {
 	id: control
-	/* Controlc color scheming */
-	ColorScheme {id: colorScheme}
-	property alias colorScheme : colorScheme
-	/***************************/
 
-	property color bgColor: isCollapsed ? colorScheme.altColor : colorScheme.backgroundColor
-	property color fgColor : isCollapsed ? colorScheme.altColorText : colorScheme.textColor
-
-    property int iconSize : isMobile ? (isCollapsed || isWide ? iconSizes.medium : iconSizes.big) :
-                                       iconSizes.small
-    property bool collapsable : true
-    property bool isCollapsed : false
+	property int iconSize : iconSizes.small
     
     Rectangle
     {
         anchors.fill: parent
         z: -1
-        color: bgColor
+        color: Kirigami.Theme.backgroundColor
     }
 
     model: ListModel {}
@@ -53,8 +43,7 @@ Maui.ListBrowser
     {
         id: itemDelegate
         sidebarIconSize: iconSize
-        labelsVisible: !isCollapsed
-        itemFgColor: fgColor
+        itemFgColor: Kirigami.Theme.textColor
 
         Connections
         {

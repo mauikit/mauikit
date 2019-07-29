@@ -21,7 +21,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
-import org.kde.kirigami 2.6 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 
 Maui.Popup
 {
@@ -62,8 +62,9 @@ Maui.Popup
 	{
 		id: _closeButton
 		iconName: "window-close"
-		colorScheme.backgroundColor: hovered ?  dangerColor : colorScheme.altColor
-
+		Kirigami.Theme.backgroundColor: hovered ?  dangerColor : Kirigami.Theme.complementaryBackgroundColor
+		Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
+		
 		anchors
 		{
 			verticalCenter: parent.top
@@ -151,7 +152,7 @@ Component
 						Layout.alignment: Qt.AlignLeft | Qt.AlignTop
 						
 						clip: true
-						color: colorScheme.textColor
+						color: Kirigami.Theme.textColor
 						text: title
 						font.weight: Font.Thin
 						font.bold: true
@@ -180,14 +181,10 @@ contentHeight: body.implicitHeight
 							enabled: false
 							text: message
 							textFormat : TextEdit.AutoText
-							color: colorScheme.textColor
+							color: Kirigami.Theme.textColor
 							font.pointSize: fontSizes.default
 							wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
 							elide: Text.ElideLeft
-// 							background: Rectangle
-// 							{
-// 								color: "transparent"
-// 							}
 						}
 					} 						
 						Maui.TextField

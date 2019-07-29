@@ -21,6 +21,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
 Maui.Dialog
@@ -128,7 +129,7 @@ Maui.Dialog
 							clip: true
 							width: parent.width
 							height: parent.height
-							color: textColor
+							color: Kirigami.Theme.textColor
 							text: appName
 							font.weight: Font.Bold
 							font.bold: true
@@ -146,7 +147,7 @@ Maui.Dialog
 							
 							width: parent.width
 							height: parent.height
-							color:  Qt.lighter(textColor, 1.2)
+							color:  Qt.lighter(Kirigami.Theme.textColor, 1.2)
 							text: app.version
 							font.pointSize: fontSizes.default
 							
@@ -164,7 +165,7 @@ Maui.Dialog
 							enabled: false
 							text: appDescription
 							textFormat : TextEdit.AutoText
-							color: textColor
+							color: Kirigami.Theme.textColor
 							font.pointSize: fontSizes.default
 							wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
 							

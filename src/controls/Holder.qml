@@ -21,17 +21,14 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
-import org.kde.kirigami 2.0 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 import "private"
 
 Item
 {
 	id: control
 	anchors.fill: parent
-	/* Controlc color scheming */
-	ColorScheme {id: colorScheme}
-	property alias colorScheme : colorScheme
-	/***************************/
+
 	property string emoji
 	property string message
 	property string title
@@ -64,8 +61,7 @@ Item
 			asynchronous: true
 			horizontalAlignment: Qt.AlignHCenter
 			
-			fillMode: Image.PreserveAspectFit
-			
+			fillMode: Image.PreserveAspectFit		
 			
 			HueSaturation
 			{
@@ -99,50 +95,56 @@ Item
 		Rectangle
 		{
 			anchors.fill: parent
-			color: parent.hovered ? control.colorScheme.backgroundColor : "transparent"
+			color: parent.hovered ? Kirigami.Theme.backgroundColor : "transparent"
 			radius: radiusV
 		}
 		
 	}
 	
-	Column
+	Loader
 	{
 		anchors.centerIn: parent
-		height: implicitHeight
-		width: parent.width * 0.7
-		
-		Loader
-		{
-			id: loader			
-			height: control.emoji ? emojiSize : 0
-			width: height
-			anchors.horizontalCenter: parent.horizontalCenter
-		
-			sourceComponent: control.emoji ? (isGif ? animComponent : imgComponent) : undefined
-		}
-		
-		
-		Label
-		{
-			id: textHolder
-			width: parent.width
-		
-			opacity: 0.5
-			text: message ? qsTr(message) : "<h3>"+title+"</h3><p>"+body+"</p>"
-			font.pointSize: fontSizes.default
-			
-			padding: space.medium
-			font.bold: true
-			textFormat: Text.RichText
-			horizontalAlignment: Qt.AlignHCenter
-			elide: Text.ElideRight
-			color: colorScheme.textColor
-			wrapMode: Text.Wrap		
-			
-		}
+		sourceComponent: control.visible ? _mainComponent : undefined
 	}
 	
-	
+	Component
+	{
+		id: _mainComponent
+		
+		Column
+		{
+			height: Math.min(parent.height * 0.7, implicitHeight)
+			width: parent.width * 0.7
+			
+			Loader
+			{
+				id: loader			
+				height: control.emoji ? emojiSize : 0
+				width: height
+				anchors.horizontalCenter: parent.horizontalCenter
+				
+				sourceComponent: control.emoji ? (isGif ? animComponent : imgComponent) : undefined
+			}			
+			
+			Label
+			{
+				id: textHolder
+				width: parent.width
+				
+				opacity: 0.5
+				text: message ? qsTr(message) : "<h3>"+title+"</h3><p>"+body+"</p>"
+				font.pointSize: fontSizes.default
+				
+				padding: space.medium
+				font.bold: true
+				textFormat: Text.RichText
+				horizontalAlignment: Qt.AlignHCenter
+				elide: Text.ElideRight
+				color: Kirigami.Theme.textColor
+				wrapMode: Text.Wrap					
+			}
+		}
+	}
 }
 
 

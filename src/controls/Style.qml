@@ -20,7 +20,7 @@
 pragma Singleton
 
 import QtQuick 2.4
-import org.kde.kirigami 2.0 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 
 
 QtObject

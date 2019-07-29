@@ -21,15 +21,10 @@ import QtQuick 2.6
 import QtQuick.Controls 2.2
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
-import "private"
 
 ToolButton
 {
 	id: control
-	/* Controlc color scheming */
-	ColorScheme {id: colorScheme}
-	property alias colorScheme : colorScheme
-	/***************************/
 	
 	property int alignment : Qt.AlignLeft
 	
@@ -57,8 +52,8 @@ ToolButton
 		background: Rectangle
 		{
 			radius: radiusV
-			color: colorScheme.backgroundColor
-			border.color: colorScheme.borderColor		
+			color: Kirigami.Theme.backgroundColor
+			border.color: Kirigami.Theme.borderColor		
 		}
 		
 		onFocusChanged: !activeFocus || !focus ? close() : undefined

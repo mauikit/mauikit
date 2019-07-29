@@ -9,12 +9,7 @@ import TagsModel 1.0
 ListView
 {
     id: control
-    
-    /* Controlc color scheming */
-	ColorScheme {id: colorScheme}
-	property alias colorScheme : colorScheme
-	/***************************/
-    
+ 
     orientation: ListView.Horizontal
     clip: true
     spacing: contentMargins
@@ -56,7 +51,7 @@ ListView
     {
         id: delegate
         showDeleteIcon: control.showDeleteIcon
-        colorScheme.textColor: Kirigami.Theme.textColor
+        Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
         Connections
         {
             target: delegate

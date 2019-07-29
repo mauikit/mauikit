@@ -21,7 +21,7 @@ import QtQuick 2.9
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import org.kde.mauikit 1.0 as Maui
-import org.kde.kirigami 2.0 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 
 Maui.Dialog
 {
@@ -31,9 +31,7 @@ Maui.Dialog
     widthHint: 0.9
     
 	maxHeight: (Math.ceil(grid.count / (control.width / (grid.itemSize + grid.spacing))) * (grid.itemSize + grid.spacing + space.enormous)) + space.huge
-    
-	
-    maxWidth: unit * 500
+  maxWidth: unit * 500
 
 	verticalAlignment: Qt.AlignBottom
     

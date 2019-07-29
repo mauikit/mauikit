@@ -20,21 +20,13 @@
 import QtQuick 2.9
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 import "private"
 
 ItemDelegate
 {
 	id: control
-	/* Controlc color scheming */
-	ColorScheme 
-	{
-		id: colorScheme
-		
-		backgroundColor: isSection ? "transparent" : (index % 2 === 0 ? Qt.darker(backgroundColor) : "transparent")				
-	}
-	property alias colorScheme : colorScheme
-	/***************************/
+	Kirigami.Theme.backgroundColor: isSection ? "transparent" : (index % 2 === 0 ? Qt.darker(Kirigami.Theme.backgroundColor) : "transparent")				
 	
     width: parent.width
     height: rowHeight
@@ -43,11 +35,11 @@ ItemDelegate
     property bool boldLabel : false
     property alias label: labelTxt.text
     property alias labelTxt : labelTxt
-    property string labelColor: ListView.isCurrentItem ? colorScheme.highlightedTextColor : colorScheme.textColor
+    property string labelColor: ListView.isCurrentItem ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.textColor
 
     background: Rectangle
     {
-		color: colorScheme.backgroundColor
+		color: Kirigami.Theme.backgroundColor
         opacity: 0.1
     }
 

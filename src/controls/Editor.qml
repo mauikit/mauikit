@@ -2,6 +2,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
+import org.kde.kirigami 2.6 as Kirigami
 import DocumentHandler 1.0 
 import "private"
 
@@ -20,9 +21,8 @@ Maui.Page
 	property alias underline: document.underline
 	property alias italic: document.italic
 	property alias bold: document.bold
-	property alias canRedo: body.canRedo
-	
-	
+	property alias canRedo: body.canRedo	
+		
 	headBar.visible: !body.readOnly
 	headBar.leftContent: [	
 	
@@ -120,12 +120,12 @@ Maui.Page
 			height: parent.height
 			
 			placeholderText: qsTr("Body")
-			
+			Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
 			selectByKeyboard :!isMobile
 			selectByMouse : !isMobile
 			textFormat : TextEdit.AutoText
 			
-			color: control.colorScheme.textColor
+			color: control.Kirigami.Theme.textColor
 			
 			font.pointSize: fontSizes.large
 			wrapMode: TextEdit.WrapAnywhere

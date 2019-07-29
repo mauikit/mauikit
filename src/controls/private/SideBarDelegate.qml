@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
 ItemDelegate
@@ -18,8 +18,8 @@ ItemDelegate
     
     clip: true
     
-    property color itemFgColor : textColor
-    property string labelColor: ListView.isCurrentItem ? highlightedTextColor :
+    property color itemFgColor : Kirigami.Theme.textColor
+    property string labelColor: ListView.isCurrentItem ? Kirigami.Theme.highlightedTextColor :
     itemFgColor
     
     signal rightClicked()	
@@ -27,13 +27,13 @@ ItemDelegate
     hoverEnabled: !isMobile
     ToolTip.delay: 1000
     ToolTip.timeout: 5000
-    ToolTip.visible: hovered && isCollapsed
+    ToolTip.visible: hovered 
     ToolTip.text: qsTr(model.label)
     
     background: Rectangle
     {
         anchors.fill: parent
-        color: isCurrentListItem || hovered? highlightColor : "transparent"
+        color: isCurrentListItem || hovered ? Kirigami.Theme.highlightColor : "transparent"
         opacity: hovered ? 0.3 : 1
     }
     
@@ -55,8 +55,8 @@ ItemDelegate
         Item
         {
 			Layout.fillHeight: true
-			Layout.fillWidth: isCollapsed
-			width: !isCollapsed ? parent.height : parent.width
+			Layout.fillWidth: false
+			Layout.preferredWidth: parent.height
 			
 			Kirigami.Icon
 			{

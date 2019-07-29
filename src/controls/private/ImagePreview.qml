@@ -2,6 +2,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
+import org.kde.kirigami 2.7 as Kirigami
 
 ColumnLayout
 {
@@ -64,7 +65,7 @@ ColumnLayout
 						text: qsTr("Type")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
-						color: colorScheme.textColor
+						color: Kirigami.Theme.textColor
 						
 					}
 					
@@ -78,7 +79,7 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: iteminfo.mime
-						color: colorScheme.textColor
+						color: Kirigami.Theme.textColor
 						
 					}
 				}
@@ -93,7 +94,7 @@ ColumnLayout
 						text: qsTr("Date")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light	
-						color: colorScheme.textColor
+						color: Kirigami.Theme.textColor
 						
 					}
 					
@@ -107,7 +108,7 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: iteminfo.date
-						color: colorScheme.textColor
+						color: Kirigami.Theme.textColor
 						
 					}
 				}
@@ -123,7 +124,7 @@ ColumnLayout
 						text: qsTr("Modified")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
-						color: colorScheme.textColor
+						color: Kirigami.Theme.textColor
 						
 					}
 					
@@ -137,7 +138,7 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: iteminfo.modified
-						color: colorScheme.textColor
+						color: Kirigami.Theme.textColor
 						
 					}
 				}
@@ -152,7 +153,7 @@ ColumnLayout
 						text: qsTr("Owner")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
-						color: colorScheme.textColor
+						color: Kirigami.Theme.textColor
 						
 					}
 					
@@ -166,7 +167,7 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: iteminfo.owner
-						color: colorScheme.textColor
+						color: Kirigami.Theme.textColor
 						
 					}
 				}
@@ -181,7 +182,7 @@ ColumnLayout
 						text: qsTr("Tags")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
-						color: colorScheme.textColor
+						color: Kirigami.Theme.textColor
 						
 					}
 					
@@ -195,7 +196,7 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: iteminfo.tags
-						color: colorScheme.textColor
+						color: Kirigami.Theme.textColor
 						
 					}
 				}
@@ -210,7 +211,7 @@ ColumnLayout
 						text: qsTr("Permissions")
 						font.pointSize: fontSizes.default
 						font.weight: Font.Light
-						color: colorScheme.textColor
+						color: Kirigami.Theme.textColor
 						
 					}
 					
@@ -224,7 +225,7 @@ ColumnLayout
 						font.weight: Font.Bold
 						font.bold: true
 						text: iteminfo.permissions
-						color: colorScheme.textColor
+						color: Kirigami.Theme.textColor
 						
 					}
 				}

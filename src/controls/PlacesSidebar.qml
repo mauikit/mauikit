@@ -14,7 +14,7 @@ Maui.SideBar
 	focus: true
 	clip: true
 	model: placesModel
-	section.property: !control.isCollapsed ? "type" : ""
+	section.property: "type"
 	section.criteria: ViewSection.FullString
 	section.delegate: Maui.LabelDelegate
 	{

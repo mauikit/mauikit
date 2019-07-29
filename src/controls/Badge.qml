@@ -21,7 +21,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 
 import "private"
 
@@ -29,15 +29,9 @@ Rectangle
 {
 	id: control
 	
-	/* Controlc color scheming */
-	ColorScheme 
-	{
-		id: colorScheme
-		textColor: altColorText
-		backgroundColor: altColor
-	}
-	property alias colorScheme : colorScheme
-	/***************************/
+	Kirigami.Theme.inherit: false    
+	Kirigami.Theme.colorSet: Kirigami.Theme.Complementary    
+	
     property alias item : loader.item
 	property bool hovered : false
 	
@@ -54,8 +48,8 @@ Rectangle
 	height: size + space.small
 	width: size + space.small
 	radius: Math.min(width, height)
-	color: colorScheme.backgroundColor
-	border.color: colorScheme.borderColor
+	color: Kirigami.Theme.backgroundColor
+// 	border.color: colorScheme.borderColor
 	
     clip: false
 	
@@ -77,7 +71,7 @@ Rectangle
 			font.weight: Font.Bold
 			font.bold: true
 			font.pointSize: fontSizes.default
-			color: colorScheme.textColor
+			color: Kirigami.Theme.textColor
 			verticalAlignment: Qt.AlignVCenter
 			horizontalAlignment: Qt.AlignHCenter
 		}
@@ -90,7 +84,7 @@ Rectangle
 		{
 			anchors.centerIn: parent
 			icon.name: control.iconName
-			icon.color: control.colorScheme.textColor
+			icon.color: Kirigami.Theme.textColor
 			icon.width: control.size
 			enabled: false
 		}

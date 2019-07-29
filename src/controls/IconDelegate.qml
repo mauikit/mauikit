@@ -21,22 +21,14 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import QtGraphicalEffects 1.0
 import "private"
 
 ItemDelegate
 {
-	id: control
-	/* Controlc color scheming */
-	ColorScheme 
-	{
-		id: colorScheme
-	}
-	property alias colorScheme : colorScheme
-	/***************************/
-	
+	id: control	
 	property bool isDetails : false
 	property bool showDetailsInfo: false
 	
@@ -53,8 +45,8 @@ ItemDelegate
 	property bool keepEmblemOverlay : false
 	property bool isCurrentListItem :  ListView.isCurrentItem
 	
-	property color labelColor : (isCurrentListItem || GridView.isCurrentItem || (keepEmblemOverlay && emblemAdded)) && !hovered && showSelectionBackground ?  highlightedTextColor :  control.colorScheme.textColor
-	property color hightlightedColor : GridView.isCurrentItem || hovered || (keepEmblemOverlay && emblemAdded) ?  control.colorScheme.highlightColor : "transparent"
+	property color labelColor : (isCurrentListItem || GridView.isCurrentItem || (keepEmblemOverlay && emblemAdded)) && !hovered && showSelectionBackground ?  highlightedTextColor :  Kirigami.Theme.textColor
+	property color hightlightedColor : GridView.isCurrentItem || hovered || (keepEmblemOverlay && emblemAdded) ? Kirigami.Theme.highlightColor : "transparent"
 	
 	property string rightEmblem
 	property string leftEmblem : "list-add"
@@ -70,8 +62,8 @@ ItemDelegate
 	
 	background: Rectangle
 	{
-		color: !isDetails? "transparent" : (isCurrentListItem || (hovered && isDetails) ? control.colorScheme.highlightColor :
-		index % 2 === 0 ? Qt.lighter( control.colorScheme.backgroundColor,1.2) :  control.colorScheme.backgroundColor)		
+		color: !isDetails? "transparent" : (isCurrentListItem || (hovered && isDetails) ? Kirigami.Theme.highlightColor :
+		index % 2 === 0 ? Qt.lighter( Kirigami.Theme.backgroundColor,1.2) :  Kirigami.Theme.backgroundColor)		
 	
         opacity: hovered ? 0.3 : 1
 
@@ -114,7 +106,8 @@ ItemDelegate
 		onClicked: leftEmblemClicked(index)
 // 		Component.onCompleted: leftEmblemIcon.item.isMask = false
 		size: iconSizes.small
-		colorScheme.backgroundColor: control.colorScheme.accentColor
+		Kirigami.Theme.backgroundColor: Kirigami.Theme.highlightColor
+		Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
 	}
 	
 	Maui.Badge
@@ -127,7 +120,7 @@ ItemDelegate
 		anchors.top: parent.top
 		anchors.right: parent.right
 		onClicked: rightEmblemClicked(index)
-		colorScheme.backgroundColor: control.colorScheme.accentColor
+		Kirigami.Theme.backgroundColor: Kirigami.Theme.highlightColor
 	}
 	
 	Component

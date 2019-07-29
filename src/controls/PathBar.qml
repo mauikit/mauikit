@@ -20,20 +20,14 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.0 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import "private"
 
 Item
 {
 	id: control    
-	/* Controlc color scheming */
-	ColorScheme 
-	{
-		id: colorScheme
-	}
-	property alias colorScheme : colorScheme
-	/***************************/
+	
 	height: iconSizes.big
 	
 	property string url : ""
@@ -53,10 +47,10 @@ Item
 		id: pathBarBG
 		anchors.fill: parent
 		//         z: -1
-		color: pathEntry ? colorScheme.viewBackgroundColor : colorScheme.backgroundColor
+		color: pathEntry ? Kirigami.Theme.viewBackgroundColor : Kirigami.Theme.backgroundColor
 		radius: radiusV
 		opacity: 1
-		border.color: colorScheme.borderColor
+		border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
 		border.width: unit
 	}
 	
@@ -99,9 +93,9 @@ Item
 				Layout.fillWidth: true
 				Layout.leftMargin: contentMargins
 				Layout.alignment: Qt.AlignVCenter
-				colorScheme.textColor: control.colorScheme.textColor
-				colorScheme.backgroundColor: "transparent"
-				colorScheme.borderColor: "transparent"
+				Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
+				Kirigami.Theme.backgroundColor: "transparent"
+// 				Kirigami.Theme.borderColor: "transparent"
 				horizontalAlignment: Qt.AlignLeft
 				onAccepted:
 				{
@@ -125,7 +119,7 @@ Item
 				{
 					anchors.centerIn: parent
 					icon.name: "go-next"
-					icon.color: control.colorScheme.textColor
+					icon.color: control.Kirigami.Theme.textColor
 					onClicked:
 					{
 						pathChanged(entry.text)
@@ -159,7 +153,7 @@ Item
 					anchors.centerIn: parent
 					icon.name: "go-home"
 					flat: true
-					icon.color: control.colorScheme.textColor                
+					icon.color: control.Kirigami.Theme.textColor                
 					onClicked: homeClicked()
 				}
 			}
@@ -167,7 +161,7 @@ Item
 			Kirigami.Separator
 			{
 				Layout.fillHeight: true
-				color: colorScheme.borderColor
+				color: pathBarBG.border.color
 			}
 		
 			
@@ -222,7 +216,7 @@ Item
 					anchors.centerIn: parent
 					flat: true
 					icon.name: "filename-space-amarok"
-					icon.color: control.colorScheme.textColor                
+					icon.color: control.Kirigami.Theme.textColor                
 					onClicked: showEntryBar()
 				}
 			}

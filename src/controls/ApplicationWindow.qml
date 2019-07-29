@@ -101,34 +101,34 @@ Kirigami.AbstractApplicationWindow
 		Custom: 4
 	})
 
-    property color borderColor: Qt.tint(textColor, Qt.rgba(backgroundColor.r, backgroundColor.g, 
-backgroundColor.b, 0.7))
-    property color backgroundColor: Maui.Style.backgroundColor
-    property color textColor: Maui.Style.textColor
-    property color highlightColor: Maui.Style.highlightColor
-    property color highlightedTextColor: Maui.Style.highlightedTextColor
-    property color buttonBackgroundColor: Maui.Style.buttonBackgroundColor
-    property color viewBackgroundColor: Maui.Style.viewBackgroundColor
-    property color altColor: Maui.Style.altColor
-    property color altColorText: Maui.Style.altColorText
-    property color accentColor : buttonBackgroundColor
-    
-    property color bgColor: viewBackgroundColor
-    property color headBarBGColor: backgroundColor
-    property color headBarFGColor: textColor
+//     property color borderColor: Qt.tint(textColor, Qt.rgba(backgroundColor.r, backgroundColor.g, 
+// backgroundColor.b, 0.7))
+//     property color backgroundColor: Maui.Style.backgroundColor
+//     property color textColor: Maui.Style.textColor
+//     property color highlightColor: Maui.Style.highlightColor
+//     property color highlightedTextColor: Maui.Style.highlightedTextColor
+//     property color buttonBackgroundColor: Maui.Style.buttonBackgroundColor
+//     property color viewBackgroundColor: Maui.Style.viewBackgroundColor
+//     property color altColor: Maui.Style.altColor
+//     property color altColorText: Maui.Style.altColorText
+//     property color accentColor : buttonBackgroundColor
+//     
+// 	property color bgColor: Kirigami.Theme.viewBackgroundColor
+    property color headBarBGColor: Kirigami.Theme.backgroundColor
+    property color headBarFGColor: Kirigami.Theme.textColor
 
-    readonly property string darkBorderColor: Qt.darker(darkBackgroundColor, 1.5)
-    readonly property string darkBackgroundColor: "#303030"
-    readonly property string darkTextColor: "#FAFAFA"
-    readonly property string darkHighlightColor: "#29B6F6"
-    readonly property string darkHighlightedTextColor: darkTextColor
-    readonly property string darkViewBackgroundColor: "#212121"
-    readonly property string darkDarkColor: "#191919"
-    readonly property string darkButtonBackgroundColor :  "#191919"
-    readonly property color darkAltColor: "#333"
-    readonly property color darkAltColorText: darkTextColor
-    readonly property color darkAccentColor : darkButtonBackgroundColor
-    readonly property color darkBgColor: darkBackgroundColor
+//     readonly property string darkBorderColor: Qt.darker(darkBackgroundColor, 1.5)
+//     readonly property string darkBackgroundColor: "#303030"
+//     readonly property string darkTextColor: "#FAFAFA"
+//     readonly property string darkHighlightColor: "#29B6F6"
+//     readonly property string darkHighlightedTextColor: darkTextColor
+//     readonly property string darkViewBackgroundColor: "#212121"
+//     readonly property string darkDarkColor: "#191919"
+//     readonly property string darkButtonBackgroundColor :  "#191919"
+//     readonly property color darkAltColor: "#333"
+//     readonly property color darkAltColorText: darkTextColor
+//     readonly property color darkAccentColor : darkButtonBackgroundColor
+//     readonly property color darkBgColor: darkBackgroundColor
 
 
     property color warningColor : Maui.Style.warningColor
@@ -138,11 +138,11 @@ backgroundColor.b, 0.7))
     
     /* ANDROID THEMING*/
 
-    Material.theme: Material.Light
-    Material.accent: highlightColor
-    Material.background:  headBarBGColor 
-    Material.primary: headBarBGColor
-    Material.foreground: textColor
+//     Material.theme: Material.Light
+//     Material.accent: Kirigami.Theme.highlightColor
+//     Material.background:  headBarBGColor 
+//     Material.primary: headBarBGColor
+//     Material.foreground: Kirigami.Theme.textColor
 
     /***************************************************/
     /**************** READONLY PROPS ******************/
@@ -203,32 +203,32 @@ backgroundColor.b, 0.7))
 		}
 	}
 	
-    onHeadBarBGColorChanged: 
-    {
-        if(!isMobile && colorSchemeName.length > 0)
-            Maui.KDE.setColorScheme(colorSchemeName, headBarBGColor, headBarFGColor)
-        else if(isAndroid && headBar.position === ToolBar.Header)
-            Maui.Android.statusbarColor(headBarBGColor, false)
-			else if(isAndroid && headBar.position === ToolBar.Footer)
-			Maui.Android.statusbarColor(viewBackgroundColor, true)
-				
-    }
-    
-    onHeadBarFGColorChanged: 
-    {
-		if(!isAndroid && !isMobile && colorSchemeName.length > 0 && headBar.position === ToolBar.Header)
-            Maui.KDE.setColorScheme(colorSchemeName, headBarBGColor, headBarFGColor)
-			else if(isAndroid && headBar.position === ToolBar.Header)
-            Maui.Android.statusbarColor(headBarBGColor, false)
-			else if(isAndroid && headBar.position === ToolBar.Footer)
-				Maui.Android.statusbarColor(viewBackgroundColor, true)
-    }
-    
+//     onHeadBarBGColorChanged: 
+//     {
+//         if(!isMobile && colorSchemeName.length > 0)
+//             Maui.KDE.setColorScheme(colorSchemeName, headBarBGColor, headBarFGColor)
+//         else if(isAndroid && headBar.position === ToolBar.Header)
+//             Maui.Android.statusbarColor(headBarBGColor, false)
+// 			else if(isAndroid && headBar.position === ToolBar.Footer)
+// 				Maui.Android.statusbarColor(Kirigami.Theme.viewBackgroundColor, true)
+// 				
+//     }
+//     
+//     onHeadBarFGColorChanged: 
+//     {
+// 		if(!isAndroid && !isMobile && colorSchemeName.length > 0 && headBar.position === ToolBar.Header)
+//             Maui.KDE.setColorScheme(colorSchemeName, headBarBGColor, headBarFGColor)
+// 			else if(isAndroid && headBar.position === ToolBar.Header)
+//             Maui.Android.statusbarColor(headBarBGColor, false)
+// 			else if(isAndroid && headBar.position === ToolBar.Footer)
+// 				Maui.Android.statusbarColor(Kirigami.Theme.viewBackgroundColor, true)
+//     }
+  /*  
     background: Rectangle
     {
         color: bgColor
     }
-    
+    */
   
 // 		globalDrawer.height: root.height - headBar.height
 // 		globalDrawer.y: headBar.height
@@ -241,8 +241,9 @@ backgroundColor.b, 0.7))
 		visible: count > 1
 		position: ToolBar.Header 
 		width: root.width		
-		Kirigami.Theme.backgroundColor: headBarBGColor
-		Kirigami.Theme.textColor: headBarFGColor
+// 		Kirigami.Theme.backgroundColor: headBarBGColor
+// 		Kirigami.Theme.textColor: headBarFGColor
+// 		Kirigami.Theme.inherit: true
 		
 		leftContent: [ ToolButton
 		{
@@ -342,7 +343,7 @@ backgroundColor.b, 0.7))
 		visible: count
 		position: ToolBar.Footer
 		width: root.width
-		Kirigami.Theme.backgroundColor: Kirigami.Theme.backgroundColor		
+// 		Kirigami.Theme.backgroundColor: Kirigami.Theme.backgroundColor		
 	}  
 	
 	header: headBar.count && headBar.position === ToolBar.Header ? headBar : undefined
@@ -387,8 +388,8 @@ backgroundColor.b, 0.7))
 		property var cb : ({})
 		verticalAlignment: Qt.AlignTop
 		defaultButtons: false
-		colorScheme.backgroundColor: altColor
-		colorScheme.textColor: altColorText
+// 		colorScheme.backgroundColor: altColor
+// 		colorScheme.textColor: altColorText
 		
 		maxHeight: Math.max(unit * 120, (_notifyLayout.implicitHeight))
 		maxWidth: isMobile ? parent.width * 0.9 : unit * 500
@@ -457,7 +458,7 @@ backgroundColor.b, 0.7))
 						font.weight: Font.Bold
 						font.bold: true
 						font.pointSize: fontSizes.big
-						color: _notify.colorScheme.textColor
+// 						color: _notify.colorScheme.textColor
 						elide: Qt.ElideRight
 						wrapMode: Text.Wrap
 					}
@@ -468,7 +469,7 @@ backgroundColor.b, 0.7))
 						Layout.fillHeight: true
 						Layout.fillWidth: true
 						font.pointSize: fontSizes.default	
-						color: _notify.colorScheme.textColor
+// 						color: _notify.colorScheme.textColor
 						elide: Qt.ElideRight
 						wrapMode: Text.Wrap
 					}
@@ -493,7 +494,7 @@ backgroundColor.b, 0.7))
      Component.onCompleted:
      {
 		 if(isAndroid && headBar.position === ToolBar.Footer)
-			 Maui.Android.statusbarColor(backgroundColor, true)			 
+			 Maui.Android.statusbarColor(Kirigami.Theme.backgroundColor, true)			 
 			 
 			 if(!isMobile)
 			 {	

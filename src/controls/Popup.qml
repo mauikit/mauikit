@@ -21,7 +21,7 @@ import QtQuick 2.9
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.1
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 import QtGraphicalEffects 1.0
 import "private"
 
@@ -29,15 +29,7 @@ Popup
 {
     id: control
     
-    /* Controlc color scheming */
-	ColorScheme
-	{
-		id: colorScheme
-		backgroundColor: viewBackgroundColor
-	}
-	property alias colorScheme : colorScheme
-	/***************************/
-	property alias backgroudItem: popupBackground.data
+// 	property alias backgroudItem: popupBackground.data
     property int maxWidth : parent.width
     property int maxHeight : parent.height
     property double hint : 0.9
@@ -63,7 +55,7 @@ else
                         parent.height / 2 - height / 2
 
 
-    z: parent.z+1
+//     z: parent.z+1
 
     modal: control.width !== control.parent.width && control.height !== control.parent.height
     focus: true
@@ -82,14 +74,14 @@ else
     topMargin: control.margins
     bottomMargin: control.margins    
 
-    background: Rectangle
-    {
-		id: popupBackground
-        radius: control.width === control.parent.width && control.height === control.parent.height ? 0 : radiusV
-        color: colorScheme.backgroundColor
-        border.color: control.width === control.parent.width && control.height === control.parent.height ? "transparent" : colorScheme.borderColor       
-        
-    }  
+//     background: Rectangle
+//     {
+// 		id: popupBackground
+//         radius: control.width === control.parent.width && control.height === control.parent.height ? 0 : radiusV
+//         color: Kirigami.Theme.backgroundColor
+//         border.color: control.width === control.parent.width && control.height === control.parent.height ? "transparent" : Kirigami.Theme.borderColor       
+//         
+//     }  
 
     enter: Transition 
     {
@@ -105,8 +97,8 @@ else
 		NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; easing.type: Easing.OutCubic; duration: 150 }
 	}
 
-    Material.accent: colorScheme.accentColor
-    Material.background: colorScheme.backgroundColor
-    Material.primary: colorScheme.backgroundColor
-    Material.foreground: colorScheme.textColor
+	Material.accent: Kirigami.Theme.highlightColor
+	Material.background: Kirigami.Theme.backgroundColor
+	Material.primary: Kirigami.Theme.backgroundColor
+	Material.foreground: Kirigami.Theme.textColor
 }

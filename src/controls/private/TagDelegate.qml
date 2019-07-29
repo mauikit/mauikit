@@ -2,17 +2,13 @@ import QtQuick 2.0
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
+import org.kde.kirigami 2.7 as Kirigami
 
 ItemDelegate
 {
 	
 	id: control
-	
-	/* Controlc color scheming */
-	ColorScheme {id: colorScheme}
-	property alias colorScheme : colorScheme
-	/***************************/
-	
+
     clip: true
 
     property int tagWidth: iconSizes.medium * 5
@@ -58,7 +54,7 @@ ItemDelegate
                 horizontalAlignment: Qt.AlignHCenter
                 elide: Qt.ElideRight
                 font.pointSize: fontSizes.medium
-                color: colorScheme.textColor
+                color: Kirigami.Theme.textColor
             }
         }
 
@@ -76,7 +72,7 @@ ItemDelegate
                 icon.name: "window-close"
                 icon.width: iconSizes.small
                 onClicked: removeTag(index)
-				icon.color: colorScheme.textColor
+				icon.color: Kirigami.Theme.textColor
 
             }
         }

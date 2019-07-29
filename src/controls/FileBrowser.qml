@@ -11,11 +11,6 @@ Maui.Page
 {
 	id: control
 	
-	/* Controlc color scheming */
-	ColorScheme {id: colorScheme}
-	property alias colorScheme : colorScheme
-	/***************************/
-	
 	property alias trackChanges: modelList.trackChanges
 	property alias saveDirProps: modelList.saveDirProps
 	
@@ -84,7 +79,7 @@ Maui.Page
 				if(control.selectionBar && control.selectionBar.visible)
 				{
 					control.selectionBar.clear()
-					control.selectionBar.animate("red")
+					control.selectionBar.animate(Maui.Style.dangerColor)
 				}
 				
 				control.remove(items)
@@ -246,15 +241,12 @@ Maui.Page
 		onRemoveClicked:
 		{
 			dialogLoader.sourceComponent= removeDialogComponent
-			dialog.items = items
+			dialog.items = [item]
 			dialog.open()
 		}
 		
-		onShareClicked:
-		{			
-			if(items.length)			
-				control.shareFiles([items[0].path])
-		}
+		onShareClicked: control.shareFiles([item.path])
+		
 	}
 	
 	Component

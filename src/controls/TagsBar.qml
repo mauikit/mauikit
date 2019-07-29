@@ -75,7 +75,7 @@ Item
                 TagList
                 {
                     id: tagsList
-                    Layout.leftMargin: contentMargins
+                    Layout.leftMargin: space.medium
                     Layout.alignment: Qt.AlignCenter
                     Layout.fillHeight: true
                     Layout.fillWidth: true
@@ -83,8 +83,8 @@ Item
                     showDeleteIcon: allowEditMode
                     onTagRemoved: tagRemovedClicked(index)
                     onTagClicked: control.tagClicked(tagsList.model.get(index).tag)
-					Kirigami.Theme.textColor: control.colorScheme.textColor
-					Kirigami.Theme.backgroundColor: control.colorScheme.backgroundColor					
+					Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
+					Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor					
                     MouseArea
                     {
                         anchors.fill: parent
@@ -122,9 +122,9 @@ Item
                         selectByMouse: !isMobile
                         focus: true
                         wrapMode: TextEdit.Wrap
-                        color: colorScheme.textColor
-                        selectionColor: highlightColor
-                        selectedTextColor: highlightedTextColor
+                        color: Kirigami.Theme.textColor
+                        selectionColor: Kirigami.Theme.highlightColor
+                        selectedTextColor: Kirigami.Theme.highlightedTextColor
                         onFocusChanged: editMode = false
                         onAccepted: saveTags()
                     }
