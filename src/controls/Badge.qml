@@ -49,7 +49,7 @@ Rectangle
 	width: size + space.small
 	radius: Math.min(width, height)
 	color: Kirigami.Theme.backgroundColor
-// 	border.color: colorScheme.borderColor
+	border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
 	
     clip: false
 	
