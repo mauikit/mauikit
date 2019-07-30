@@ -45,7 +45,7 @@ ItemDelegate
 	property bool keepEmblemOverlay : false
 	property bool isCurrentListItem :  ListView.isCurrentItem
 	
-	property color labelColor : (isCurrentListItem || GridView.isCurrentItem || (keepEmblemOverlay && emblemAdded)) && !hovered && showSelectionBackground ?  highlightedTextColor :  Kirigami.Theme.textColor
+	property color labelColor : (isCurrentListItem || GridView.isCurrentItem || (keepEmblemOverlay && emblemAdded)) && !hovered && showSelectionBackground ?  Kirigami.Theme.highlightedTextColor :  Kirigami.Theme.textColor
 	property color hightlightedColor : GridView.isCurrentItem || hovered || (keepEmblemOverlay && emblemAdded) ? Kirigami.Theme.highlightColor : "transparent"
 	
 	property string rightEmblem
