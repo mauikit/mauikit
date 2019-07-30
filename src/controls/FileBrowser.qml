@@ -36,7 +36,7 @@ Maui.Page
 	property var currentFMList : modelList
 	
 	property alias previewer : previewer
-	property alias menu : browserMenu.actions
+	property alias menu : browserMenu.contentData
 	property alias itemMenu: itemMenu
 	property alias holder: holder
 	property alias dialog : dialogLoader.item
@@ -99,6 +99,7 @@ Maui.Page
 			acceptButton.text: qsTr("Create")
 			onFinished: list.createDir(text)
 			rejectButton.visible: false
+			textEntry.placeholderText: qsTr("Folder name...")
 		}
 	}
 	
@@ -112,7 +113,8 @@ Maui.Page
 			message: qsTr("Create a new file with a custom name and extension")
 			acceptButton.text: qsTr("Create")
 			onFinished: Maui.FM.createFile(control.currentPath, text)
-			rejectButton.visible: false			
+			rejectButton.visible: false
+			textEntry.placeholderText: qsTr("File name...")
 		}
 	}
 	
@@ -535,7 +537,6 @@ Maui.Page
 	headBar.position: isMobile ? ToolBar.Footer : ToolBar.Header
 	property list<QtObject> t_actions:
 	[
-	
 	Action
 	{
 		id: _previewAction
@@ -543,12 +544,61 @@ Maui.Page
 		text: qsTr("Previews")
 		checkable: true
 		checked: list.preview
-		onTriggered:
+		onTriggered: list.preview = !list.preview
+	},
+	
+	Action
+	{
+		id: _hiddenAction		
+		icon.name: "visibility"		
+		text: qsTr("Hidden files")
+		checkable: true
+		checked: list.hidden
+		onTriggered: list.hidden = !list.hidden	
+	},
+	
+	Action
+	{
+		id: _bookmarkAction		
+		icon.name: "bookmark-new"
+		text: qsTr("Bookmark")            
+		onTriggered: newBookmark([currentPath])		
+	},
+	
+	Action
+	{
+		id: _newFolderAction		
+		icon.name: "folder-add"
+		text: qsTr("New folder")
+		onTriggered: 
 		{
-			list.preview = !list.preview
-			close()
+			dialogLoader.sourceComponent= newFolderDialogComponent
+			dialog.open()
 		}
+	},
+	
+	Action
+	{
+		id: _newDocumentAction
+		icon.name: "document-new"
+		text: qsTr("New file")
+		onTriggered: 
+		{
+			dialogLoader.sourceComponent= newFileDialogComponent
+			dialog.open()
+		}
+	},	
+	
+	Action
+	{
+		id: _pasteAction
+		text: qsTr("Paste ")+"["+browserMenu.pasteFiles+"]"
+		icon.name: "edit-paste"
+		enabled: browserMenu.pasteFiles > 0
+		onTriggered: paste()
 	}]
+	
+	
 // 	headBar.stickyRightContent: true
 	headBar.rightContent:[
 	ToolButton

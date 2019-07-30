@@ -78,7 +78,6 @@ Item
 		visible: false
 		anchors.bottom: parent.bottom
 		width: parent.width
-		colorScheme.borderColor: "transparent"
 		height: visible ?  iconSizes.big : 0
 		placeholderText: qsTr("Find...")
 		horizontalAlignment: Qt.Left
