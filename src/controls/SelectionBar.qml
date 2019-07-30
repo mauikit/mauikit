@@ -260,12 +260,13 @@ Item
                             undefined
             
             Layout.margins: space.big 
+            
             ToolButton
             {
                 visible: iconVisible
                 anchors.centerIn: parent
                 icon.name: control.iconName
-                icon.color: Kirigami.Theme.textColor
+                icon.color: control.Kirigami.Theme.textColor
                 onClicked: iconClicked()
             }
         }
