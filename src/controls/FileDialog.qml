@@ -262,12 +262,10 @@ Maui.Dialog
 		
 		function show(cb)
 		{
-			callback = cb
-			if(initPath)
-				browser.openFolder(initPath)
-				else
-					browser.openFolder(browser.currentPath)
-					open()
+			if(cb)
+				callback = cb			
+			browser.openFolder(initPath ? initPath :browser.currentPath)
+				open()
 		}
 		
 		function closeIt()
@@ -292,7 +290,9 @@ Maui.Dialog
 				}
 			}
 			
-			callback(paths)		
+			if(callback)
+				callback(paths)	
+				
 			control.closeIt()
 		}
 }
