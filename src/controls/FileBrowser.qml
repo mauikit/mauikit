@@ -195,7 +195,7 @@ Maui.Page
 	{
 		id: itemMenu
 		width: unit *200
-		onBookmarkClicked: control.newBookmark([items[0].path])
+		onBookmarkClicked: control.newBookmark([item.path])
 		onCopyClicked:
 		{
 			if(item)
@@ -562,7 +562,7 @@ Maui.Page
 		id: _bookmarkAction		
 		icon.name: "bookmark-new"
 		text: qsTr("Bookmark")            
-		onTriggered: newBookmark([currentPath])		
+		onTriggered: newBookmark([currentPath])
 	},
 	
 	Action

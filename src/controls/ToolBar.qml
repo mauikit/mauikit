@@ -117,44 +117,105 @@ ToolBar
 // 			source: headBarBG
 // 		}
 // 	}
+	
 
-	Rectangle
+	Item
 	{
-		width: parent.height 
+		id: _rightFlickRec
+		width: parent.height
 		height: iconSizes.tiny
-		visible: !mainFlickable.atXEnd && mainFlickable.interactive
-		rotation: 270
-		opacity: 0.2
+		visible: /*!mainFlickable.atXEnd && */!mainFlickable.fits
+// 		rotation: 270
+// color: "#333"
+
+// 		Kirigami.Theme.colorSet: Kirigami.Theme.View
+// 		Kirigami.Theme.inherit: false
+// 		color: Kirigami.Theme.backgroundColor
 		anchors 
 		{
 			top: parent.top
 			bottom: parent.bottom
 			right: parent.right
+// 			margins: 1
 		}
 		z: 999
 		
-		gradient: Gradient
+	/*	gradient: Gradient
 		{
+			
 			GradientStop
 			{
 				position: 0.0
 				color: "transparent"
+				
+				
 			}
 			GradientStop 
 			{
 				position: 1.0
-				color: Kirigami.Theme.textColor
+				color: Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.2)
 			}
-		}        
+		}*/ 
+	
+	Kirigami.Separator
+	{
+		anchors 
+		{
+			top: parent.top
+			bottom: parent.bottom
+			left: parent.left
+		}		
 	}
 	
-	Rectangle
+// 	MouseArea
+// 	{
+// 		anchors.fill: parent
+// 		enabled: !mainFlickable.atXEnd
+// 		onClicked:
+// 		{
+// 			console.log("trying to flick", mainFlickable.contentX, layout.width, mainFlickable.contentWidth)
+// 						mainFlickable.flick(100, 0)
+// 			if(!mainFlickable.atXEnd)
+// 				mainFlickable.contentX += control.height
+// 				if(mainFlickable.atXEnd)
+// 					mainFlickable.returnToBounds()
+// 					
+// 		}
+// 		Label
+// 		{
+// 			anchors.centerIn: parent
+// 			text: ">"
+// 			font.pointSize: fontSizes.big
+// 			font.bold: true
+// 		}
+// 	}
+		
+		ToolButton
+		{
+// 			rotation: 90
+		anchors.centerIn: parent
+		icon.width: iconSizes.small
+		icon.name: "arrow-right-double"
+// 		icon.color: "white"
+		enabled: !mainFlickable.atXEnd
+		onClicked:
+		{
+			mainFlickable.flick(100, 0)
+			if(!mainFlickable.atXEnd)
+				mainFlickable.contentX += control.height
+				if(mainFlickable.atXEnd)
+					mainFlickable.returnToBounds()
+		}
+		}
+	}
+	
+	Item
 	{
+		id: _leftFlickRec
 		width: parent.height
 		height: iconSizes.tiny
-		visible: !mainFlickable.atXBeginning && mainFlickable.interactive
-		rotation: 270
-		opacity: 0.2
+		visible: /*!mainFlickable.atXBeginning &&*/ !mainFlickable.fits
+// 		rotation: 270
 		anchors 
 		{
 			top: parent.top
@@ -162,13 +223,13 @@ ToolBar
 			left: parent.left
 		}
 		z: 999
-		
+		/*
 		gradient: Gradient 
 		{
 			GradientStop
 			{
 				position: 0.0
-				color: Kirigami.Theme.textColor
+				color: Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.2)
 			}
 			
 			GradientStop
@@ -176,19 +237,47 @@ ToolBar
 				position: 1.0
 				color: "transparent"
 			}
-		}            
+		}   */ 
+		
+		Kirigami.Separator
+		{
+			anchors 
+			{
+				top: parent.top
+				bottom: parent.bottom
+				right: parent.right
+			}		
+		}
+		
+		ToolButton
+		{
+// 			rotation: 90
+			anchors.centerIn: parent
+			icon.name: "arrow-left-double"
+			enabled: !mainFlickable.atXBeginning
+			onClicked:
+			{
+				if(!mainFlickable.atXBeginning)
+					mainFlickable.contentX -= control.height
+					
+					if(mainFlickable.atXBeginning)
+						mainFlickable.returnToBounds()
+			}
+		}
 	}
 	
 	
 		Flickable
 		{
 			id: mainFlickable       
+			property bool fits : contentWidth < control.width
+			onFitsChanged: returnToBounds()
 			anchors.fill: parent
-			anchors.leftMargin: margins
-			anchors.rightMargin: margins
+			anchors.leftMargin: !fits && _leftFlickRec.visible ? _leftFlickRec.width : margins
+			anchors.rightMargin: !fits && _rightFlickRec.visible ? _rightFlickRec.width : margins
 			
 			flickableDirection: Flickable.HorizontalFlick
-			interactive: (contentWidth > control.width) && control.flickable
+			interactive: !fits && isMobile
 			contentWidth: ((control.margins) + space.medium) 
 			+ (control.stickyLeftContent ? leftRowContent.implicitWidth : leftRowContent.width) 
 			+ (control.stickyMiddleContent ? middleRowContent.implicitWidth : middleRowContent.width) 
@@ -200,8 +289,8 @@ ToolBar
 			RowLayout
 			{
 				id: layout
-				height: mainFlickable.height
-				width: mainFlickable.width
+				width: control.width - control.margins - space.medium
+				height: control.height
 				
 				RowLayout
 				{

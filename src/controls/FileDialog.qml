@@ -188,6 +188,12 @@ Maui.Dialog
 							list.sortBy: control.sortBy
 							list.filterType: control.filterType
 							
+							onNewBookmark: 
+							{
+								for(var index in paths)
+									sidebar.list.addPlace(paths[index])
+							}
+							
 							onItemClicked: 
 							{
 								switch(control.mode)
