@@ -77,8 +77,8 @@ ToolButton
 			id: content
 			anchors.fill: parent
 			implicitHeight: parent.height
-			spacing: space.enormous
-			Kirigami.Theme.backgroundColor: "transparent"
+			spacing: space.big
+// 			Kirigami.Theme.backgroundColor: "transparent"
 			
 			background: Rectangle
 			{
