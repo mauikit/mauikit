@@ -146,6 +146,7 @@ namespace FMH
 		DESCRIPTION,
 		BOOKMARK,
 		ACCOUNT,
+		ACCOUNTTYPE,
 		VERSION,
 		DOMAIN,
 		
@@ -238,6 +239,7 @@ namespace FMH
 		{MODEL_KEY::DESCRIPTION, "description"},
 		{MODEL_KEY::BOOKMARK, "bookmark"},
 		{MODEL_KEY::ACCOUNT, "account"},
+		{MODEL_KEY::ACCOUNTTYPE, "accounttype"},
 		{MODEL_KEY::VERSION, "version"},
 		{MODEL_KEY::DOMAIN, "domain"},
 		
@@ -264,10 +266,7 @@ namespace FMH
 		
 		{MODEL_KEY::CITY, "city"},
 		{MODEL_KEY::STATE, "state"},
-		{MODEL_KEY::COUNTRY, "country"},
-		
-		
-		
+		{MODEL_KEY::COUNTRY, "country"}
 	};
 	
 	static const QHash<QString, FMH::MODEL_KEY> MODEL_NAME_KEY =
@@ -331,6 +330,7 @@ namespace FMH
 		{MODEL_NAME[MODEL_KEY::DESCRIPTION], MODEL_KEY::DESCRIPTION},		
 		{MODEL_NAME[MODEL_KEY::BOOKMARK], MODEL_KEY::BOOKMARK},
 		{MODEL_NAME[MODEL_KEY::ACCOUNT], MODEL_KEY::ACCOUNT},
+		{MODEL_NAME[MODEL_KEY::ACCOUNTTYPE], MODEL_KEY::ACCOUNTTYPE},
 		{MODEL_NAME[MODEL_KEY::VERSION], MODEL_KEY::VERSION},
 		{MODEL_NAME[MODEL_KEY::DOMAIN], MODEL_KEY::DOMAIN},
 		
@@ -360,7 +360,7 @@ namespace FMH
 	};
 	
 	typedef QHash<FMH::MODEL_KEY, QString> MODEL;
-	typedef QList<MODEL> MODEL_LIST;
+	typedef QVector<MODEL> MODEL_LIST;
 	
 #ifdef Q_OS_ANDROID
 	enum PATHTYPE_KEY : uint_fast8_t
@@ -691,10 +691,8 @@ namespace FMH
 	{
 		Q_OBJECT
 	public:
-		explicit Downloader(QObject *parent = 0) : QObject(parent)
-		{
-			this->manager = new QNetworkAccessManager;
-		}
+		explicit Downloader(QObject *parent = 0) : QObject(parent), manager(new QNetworkAccessManager)
+		{}
 		
 		virtual ~Downloader()
 		{
@@ -763,9 +761,7 @@ namespace FMH
                 
                 qDebug() << "Array reply is now finished";
                 emit this->dataReady(this->array);
-
-				emit this->done();				
-				
+				emit this->done();
 			});
 			
 			
@@ -832,6 +828,7 @@ namespace FMH
 			}
 			
 			emit done();
+			reply->deleteLater();
 		}
 	};
 	

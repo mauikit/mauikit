@@ -35,19 +35,7 @@ QtObject
 	property color suggestedColor : "#039BE5"
 	
 	property int unit : Kirigami.Units.devicePixelRatio
-	
-	property color borderColor: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-	property color backgroundColor: Kirigami.Theme.backgroundColor
-	property color textColor: Kirigami.Theme.textColor
-	property color highlightColor: Kirigami.Theme.highlightColor
-	property color highlightedTextColor: Kirigami.Theme.highlightedTextColor
-	property color buttonBackgroundColor: isAndroid ? Qt.lighter(Kirigami.Theme.buttonBackgroundColor, 1.07) :  Kirigami.Theme.buttonBackgroundColor
-	property color viewBackgroundColor: Kirigami.Theme.viewBackgroundColor
-	property color altColor: Kirigami.Theme.complementaryBackgroundColor
-	property color altColorText: Kirigami.Theme.complementaryTextColor
-	
-	
-	
+
 	readonly property int rowHeight: iconSizes.medium + space.big
 	readonly property int rowHeightAlt: rowHeight * 0.8
 	

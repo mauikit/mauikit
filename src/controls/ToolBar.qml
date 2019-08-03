@@ -277,7 +277,7 @@ ToolBar
 			anchors.rightMargin: !fits && _rightFlickRec.visible ? _rightFlickRec.width : margins
 			
 			flickableDirection: Flickable.HorizontalFlick
-			interactive: !fits && isMobile
+			interactive: !fits && Kirigami.Settings.isMobile
 			contentWidth: ((control.margins) + space.medium) 
 			+ (control.stickyLeftContent ? leftRowContent.implicitWidth : leftRowContent.width) 
 			+ (control.stickyMiddleContent ? middleRowContent.implicitWidth : middleRowContent.width) 

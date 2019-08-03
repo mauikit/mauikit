@@ -100,9 +100,9 @@ Maui.Popup
 			{
 				id: _rejectButton
 				visible: defaultButtons
-				Kirigami.Theme.textColor: dangerColor
+				Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
 				// 				Kirigami.Theme.borderColor: dangerColor
-				Kirigami.Theme.backgroundColor: "transparent"
+				Kirigami.Theme.backgroundColor: Qt.rgba(Kirigami.Theme.negativeTextColor.r, Kirigami.Theme.negativeTextColor.g, Kirigami.Theme.negativeTextColor.b, 0.2)
 				
 				text: rejectText
 				onClicked: rejected()
@@ -113,8 +113,8 @@ Maui.Popup
 			{
 				id: _acceptButton	
 				visible: defaultButtons
-				Kirigami.Theme.backgroundColor: infoColor
-				Kirigami.Theme.textColor: "white"
+				Kirigami.Theme.backgroundColor: Qt.rgba(Kirigami.Theme.positiveTextColor.r, Kirigami.Theme.positiveTextColor.g, Kirigami.Theme.positiveTextColor.b, 0.2)
+				Kirigami.Theme.textColor: Kirigami.Theme.positiveTextColor
 				text: acceptText
 				onClicked: accepted()
 				
