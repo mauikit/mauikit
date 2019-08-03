@@ -18,14 +18,23 @@
 
 #ifndef MAUILIST_H
 #define MAUILIST_H
+
 #include "fmh.h"
+
+#ifndef STATIC_MAUIKIT
+#include "mauikit_export.h"
+#endif
 
 /**
  * @todo write docs
  */
 #include <QObject>
 
+#ifdef STATIC_MAUIKIT
 class MauiList : public QObject
+#else
+class MAUIKIT_EXPORT MauiList : public QObject
+#endif
 {
     Q_OBJECT
 
@@ -36,7 +45,7 @@ public:
 	explicit MauiList(QObject *parent = nullptr);
 	~MauiList();
 	
-	virtual FMH::MODEL_LIST items() const {return FMH::MODEL_LIST();};
+	virtual FMH::MODEL_LIST items() const = 0;
 	
 signals:
 	void preItemAppended();

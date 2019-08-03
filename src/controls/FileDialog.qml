@@ -229,9 +229,9 @@ Maui.Dialog
 									{
 										if(Maui.FM.isDir(list.get(index).path))
 											openItem(index)
-											else
-												textField.text = list.get(index).label
-												break
+										else
+											textField.text = list.get(index).label
+											break
 									}				
 								}
 							}

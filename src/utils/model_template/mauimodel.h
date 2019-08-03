@@ -24,7 +24,16 @@
 #include <QList>
 
 class MauiList;
+
+#ifndef STATIC_MAUIKIT
+#include "mauikit_export.h"
+#endif
+
+#ifdef STATIC_MAUIKIT
 class MauiModel : public QAbstractListModel
+#else
+class MAUIKIT_EXPORT MauiModel : public QAbstractListModel
+#endif
 {
 	Q_OBJECT
 	Q_PROPERTY(MauiList *list READ getList WRITE setList)
