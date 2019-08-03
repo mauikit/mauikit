@@ -28,7 +28,7 @@ Maui.Dialog
 	id: control
 	maxHeight: isMobile ? parent.height * 0.95 : unit * 500
 	maxWidth: unit * 700
-	defaultButtons: false
+// 	defaultButtons: false
 		page.padding: 0
 		
 		property string initPath
@@ -47,6 +47,32 @@ Maui.Dialog
 		property var callback : ({})
 		
 		property alias textField: _textField
+		
+		
+		rejectButton.visible: false
+		acceptButton.text: control.mode === modes.SAVE ? qsTr("Save") : qsTr("Open")
+		footBar.leftSretch: false
+		footBar.middleContent: Maui.TextField
+		{
+			id: _textField
+			visible: control.mode === modes.SAVE
+			Layout.fillWidth: true
+			placeholderText: qsTr("File name")
+			text: suggestedFileName
+		}
+		
+		onAccepted:  
+		{									
+			console.log("CURRENT PATHb", browser.currentPath+"/"+textField.text)
+			if(control.mode === modes.SAVE && Maui.FM.fileExists(browser.currentPath+"/"+textField.text))
+			{
+				_confirmationDialog.open()
+			}else
+			{
+				done()
+			}
+		}
+		
 		
 		Maui.Dialog
 		{
@@ -146,7 +172,7 @@ Maui.Dialog
 				
 				property int sidebarWidth: Kirigami.Units.gridUnit * (isMobile? 15 : 8)				
 				separatorVisible: wideMode
-				initialPage: [sidebar, content]
+				initialPage: [sidebar, browser]
 				defaultColumnWidth: sidebarWidth
 // 					interactive: currentIndex === 1
 					
@@ -171,15 +197,11 @@ Maui.Dialog
                         Maui.FMList.DRIVES_PATH]
 					}
 					
-					ColumnLayout
-					{
-						id: content
-						
+					
 						Maui.FileBrowser
 						{
 							id: browser
-							Layout.fillWidth: true
-							Layout.fillHeight: true
+							
 							previewer.parent: ApplicationWindow.overlay
 							trackChanges: false
 							selectionMode: control.mode === modes.OPEN
@@ -220,49 +242,7 @@ Maui.Dialog
 									if(currentPath === sidebar.list.get(i).path)
 										sidebar.currentIndex = i
 							}
-						}
-						
-						Maui.ToolBar
-						{
-							id: _bottomBar
-							position: ToolBar.Footer
-							drawBorder: true
-							Layout.fillWidth: true
-							middleContent: Maui.TextField
-							{
-								id: _textField
-								visible: control.mode === modes.SAVE
-								width: _bottomBar.middleLayout.width * 0.9
-								placeholderText: qsTr("File name")
-								text: suggestedFileName
-							}
-							
-							rightContent: Row
-							{
-								spacing: space.big
-								Button
-								{
-									id: _acceptButton
-									Kirigami.Theme.textColor: "white"
-									Kirigami.Theme.backgroundColor: suggestedColor
-									
-									text: qsTr("Accept")
-									onClicked: 
-									{									
-										console.log("CURRENT PATHb", browser.currentPath+"/"+textField.text)
-										if(control.mode === modes.SAVE && Maui.FM.fileExists(browser.currentPath+"/"+textField.text))
-										{
-											_confirmationDialog.open()
-										}else
-										{
-											done()
-										}
-									}
-									
-								}
-							} 
-						}
-					}
+						}			
 			}
 		}
 		

@@ -81,7 +81,7 @@ Maui.Popup
 			}		
 		}
 		
-		Maui.Page
+		contentItem: Maui.Page
 		{
 			id: page
 			// 		headBar.visible: headBar.count > 2
