@@ -2,7 +2,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick 2.9
 
-import org.kde.kirigami 2.0 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
 import StoreModel 1.0
@@ -78,7 +78,7 @@ Maui.Page
 	
 	Label
 	{
-		color: control.colorScheme.textColor
+		color: Kirigami.Theme.textColor
 		text: _storeList.page
 		font.bold: true
 		font.weight: Font.Bold
@@ -115,7 +115,7 @@ Maui.Page
 	{
 		id:_filterButton
 		icon.name: "view-filter"
-		icon.color: _filterDrawer.visible ? colorScheme.highlightColor : colorScheme.textColor
+		icon.color: _filterDrawer.visible ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
 		onClicked: _filterDrawer.visible ? _filterDrawer.close() : _filterDrawer.open()
 	}
 	]
@@ -435,7 +435,7 @@ Maui.Page
 							margins: space.big
 						}
 						
-						color: viewBackgroundColor
+						color: Kirigami.Theme.backgroundColor
 						radius: Math.max(height, width)
 						
 						Label
@@ -444,7 +444,7 @@ Maui.Page
 							text: index
 							horizontalAlignment: Qt.AlignHCenter
 							verticalAlignment: Qt.AlignVCenter
-							color: textColor
+							color: Kirigami.Theme.textColor
 							font.bold: true
 							font.weight: Font.bold
 							font.pointSize: fontSizes.big
@@ -463,7 +463,7 @@ Maui.Page
 				text: _previewerDialog.currentItem.label
 				horizontalAlignment: Qt.AlignHCenter
 				verticalAlignment: Qt.AlignVCenter
-				color: textColor
+				color: Kirigami.Theme.textColor
 				font.bold: true
 				font.weight: Font.bold
 				font.pointSize: fontSizes.big				
@@ -478,7 +478,7 @@ Maui.Page
 				text: _previewerDialog.currentItem.owner
 				horizontalAlignment: Qt.AlignHCenter
 				verticalAlignment: Qt.AlignVCenter
-				color: textColor
+				color: Kirigami.Theme.textColor
 				font.pointSize: fontSizes.small
 				opacity: 0.5
 			}
@@ -494,7 +494,7 @@ Maui.Page
 				text: qsTr("Rating: ") + _previewerDialog.currentItem.rate
 				horizontalAlignment: Qt.AlignLeft
 				verticalAlignment: Qt.AlignVCenter
-				color: textColor
+				color: Kirigami.Theme.textColor
 				font.pointSize: fontSizes.small		
 			}
 			
@@ -509,7 +509,7 @@ Maui.Page
 				text: qsTr("Downloads: ") + _previewerDialog.currentItem.count
 				horizontalAlignment: Qt.AlignLeft
 				verticalAlignment: Qt.AlignVCenter
-				color: textColor
+				color: Kirigami.Theme.textColor
 				font.pointSize: fontSizes.small				
 			}
 			
@@ -539,7 +539,7 @@ Maui.Page
 				text: qsTr("Date: ") + _previewerDialog.currentItem.date
 				horizontalAlignment: Qt.AlignLeft
 				verticalAlignment: Qt.AlignVCenter
-				color: textColor
+				color: Kirigami.Theme.textColor
 				font.pointSize: fontSizes.small				
 			}
 			
@@ -554,7 +554,7 @@ Maui.Page
 				text: qsTr("Tags: ") + _previewerDialog.currentItem.tag
 				horizontalAlignment: Qt.AlignLeft
 				verticalAlignment: Qt.AlignVCenter
-				color: textColor
+				color: Kirigami.Theme.textColor
 				font.pointSize: fontSizes.small				
 			}
 			
@@ -566,7 +566,7 @@ Maui.Page
 				text: _previewerDialog.currentItem.description
 				horizontalAlignment: Qt.AlignLeft
 				verticalAlignment: Qt.AlignVCenter
-				color: textColor
+				color: Kirigami.Theme.textColor
 				wrapMode: Text.Wrap
 				elide: Qt.ElideRight
 				font.pointSize: fontSizes.default

@@ -28,7 +28,7 @@ import "private"
 Kirigami.GlobalDrawer
 {
     id: control
-    Kirigami.Theme.backgroundColor: viewBackgroundColor
+//     Kirigami.Theme.backgroundColor: viewBackgroundColor
     
     property Item bg
     

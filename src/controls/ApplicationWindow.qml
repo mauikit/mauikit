@@ -518,36 +518,36 @@ Kirigami.AbstractApplicationWindow
 
     function switchColorScheme(variant)
     {
-        switch(variant)
-        {
-        case colorScheme.Default:
-
-            backgroundColor = Maui.Style.backgroundColor
-            textColor = Maui.Style.textColor
-            highlightColor = Maui.Style.highlightColor
-            highlightedTextColor = Maui.Style.highlightedTextColor
-            buttonBackgroundColor = Maui.Style.buttonBackgroundColor
-            viewBackgroundColor = Maui.Style.viewBackgroundColor
-            altColor = Maui.Style.altColor
-            borderColor = Maui.Style.borderColor
-            if(isAndroid) Maui.Android.statusbarColor(backgroundColor, true)
-            break
-
-        case colorScheme.Dark:
-            borderColor = darkBorderColor
-            backgroundColor = darkBackgroundColor
-            textColor = darkTextColor
-            highlightColor = darkHighlightColor
-            highlightedTextColor = darkHighlightedTextColor
-            buttonBackgroundColor = darkButtonBackgroundColor
-            viewBackgroundColor = darkViewBackgroundColor
-            altColor = darkDarkColor
-            altColorText = darkAltColorText
-            bgColor =darkBgColor
-            
-            if(isAndroid) Maui.Android.statusbarColor(backgroundColor, false)
-            break         
-        }
+//         switch(variant)
+//         {
+//         case colorScheme.Default:
+// 
+//             backgroundColor = Maui.Style.backgroundColor
+//             textColor = Maui.Style.textColor
+//             highlightColor = Maui.Style.highlightColor
+//             highlightedTextColor = Maui.Style.highlightedTextColor
+//             buttonBackgroundColor = Maui.Style.buttonBackgroundColor
+//             viewBackgroundColor = Maui.Style.viewBackgroundColor
+//             altColor = Maui.Style.altColor
+//             borderColor = Maui.Style.borderColor
+//             if(isAndroid) Maui.Android.statusbarColor(backgroundColor, true)
+//             break
+// 
+//         case colorScheme.Dark:
+//             borderColor = darkBorderColor
+//             backgroundColor = darkBackgroundColor
+//             textColor = darkTextColor
+//             highlightColor = darkHighlightColor
+//             highlightedTextColor = darkHighlightedTextColor
+//             buttonBackgroundColor = darkButtonBackgroundColor
+//             viewBackgroundColor = darkViewBackgroundColor
+//             altColor = darkDarkColor
+//             altColorText = darkAltColorText
+//             bgColor =darkBgColor
+//             
+//             if(isAndroid) Maui.Android.statusbarColor(backgroundColor, false)
+//             break         
+//         }
     }
     
     function notify(icon, title, body, callback, timeout)

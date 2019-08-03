@@ -42,12 +42,16 @@ Item
 	
 	onUrlChanged: append()
 	
+	Kirigami.Theme.colorSet: Kirigami.Theme.View
+	Kirigami.Theme.inherit: false
+	
 	Rectangle
 	{
 		id: pathBarBG
 		anchors.fill: parent
+		
 		//         z: -1
-		color: pathEntry ? Kirigami.Theme.viewBackgroundColor : Kirigami.Theme.backgroundColor
+		color: pathEntry ? Kirigami.Theme.backgroundColor : Kirigami.Theme.backgroundColor
 		radius: radiusV
 		opacity: 1
 		border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))

@@ -54,7 +54,9 @@ Maui.Page
 	signal newBookmark(var paths)
 	
 	focus: true	
-	Kirigami.Theme.backgroundColor: Kirigami.Theme.viewBackgroundColor
+	Kirigami.Theme.colorSet: Kirigami.Theme.View
+	Kirigami.Theme.inherit: false
+// 	Kirigami.Theme.backgroundColor: Kirigami.Theme.viewBackgroundColor
 	
 	Loader
 	{
