@@ -12,7 +12,6 @@ Maui.Dialog
 {
 	
 	id: control
-	defaultButtons: false
 		
 		maxHeight: 300* unit
 		maxWidth: maxHeight
@@ -29,16 +28,9 @@ Maui.Dialog
 				close();
 			}
 		}
-		
-		// 	footBar.margins: 0
-		
-			footBar.middleContent: Button
-			{
-				Kirigami.Theme.textColor: "white"
-				Kirigami.Theme.backgroundColor: suggestedColor
-				text: qsTr("Add account")
-				onClicked: _syncDialog.open()
-			}
+		rejectButton.visible: false
+		acceptButton.text: qsTr("Add account") 
+		onAccepted: _syncDialog.open()
 		
 		
 		SyncingModel
@@ -60,10 +52,10 @@ Maui.Dialog
 			title: qsTr("Remove account?")
 			message: qsTr("Are you sure you want to remove this account?")
 			
-			acceptButton.text: qsTr("Delete account")
-			rejectButton.visible: false
+			rejectButton.text: qsTr("Delete account")
+// 			rejectButton.visible: false
 			
-			onAccepted: 
+			onRejected: 
 			{
 				var account = _syncingList.get(_listView.currentIndex)
 				console.log(account.label)

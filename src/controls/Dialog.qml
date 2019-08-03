@@ -72,7 +72,7 @@ Maui.Popup
 				horizontalCenterOffset: control.width === control.parent.width ? _closeButton.width : 0
 			}
 			
-			z: control.z+1
+			z: control.z+999
 			
 			onClicked:
 			{
