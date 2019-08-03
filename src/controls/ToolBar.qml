@@ -124,7 +124,7 @@ ToolBar
 		id: _rightFlickRec
 		width: parent.height
 		height: iconSizes.tiny
-		visible: /*!mainFlickable.atXEnd && */!mainFlickable.fits
+		visible: /*!mainFlickable.atXEnd && */!mainFlickable.fits && control.flickable
 // 		rotation: 270
 // color: "#333"
 
@@ -214,7 +214,7 @@ ToolBar
 		id: _leftFlickRec
 		width: parent.height
 		height: iconSizes.tiny
-		visible: /*!mainFlickable.atXBeginning &&*/ !mainFlickable.fits
+		visible: /*!mainFlickable.atXBeginning &&*/ !mainFlickable.fits && control.flickable
 // 		rotation: 270
 		anchors 
 		{
@@ -273,8 +273,8 @@ ToolBar
 			property bool fits : contentWidth < control.width
 			onFitsChanged: returnToBounds()
 			anchors.fill: parent
-			anchors.leftMargin: !fits && _leftFlickRec.visible ? _leftFlickRec.width : margins
-			anchors.rightMargin: !fits && _rightFlickRec.visible ? _rightFlickRec.width : margins
+			anchors.leftMargin: !fits && _leftFlickRec.visible && control.flickable ? _leftFlickRec.width : margins
+			anchors.rightMargin: !fits && _rightFlickRec.visible && control.flickable ? _rightFlickRec.width : margins
 			
 			flickableDirection: Flickable.HorizontalFlick
 			interactive: !fits && Kirigami.Settings.isMobile
