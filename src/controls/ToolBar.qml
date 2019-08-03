@@ -122,8 +122,8 @@ ToolBar
 	Item
 	{
 		id: _rightFlickRec
-		width: parent.height
-		height: iconSizes.tiny
+		width: iconSizes.small
+		height: parent.height
 		visible: /*!mainFlickable.atXEnd && */!mainFlickable.fits && control.flickable
 // 		rotation: 270
 // color: "#333"
@@ -194,8 +194,9 @@ ToolBar
 		{
 // 			rotation: 90
 		anchors.centerIn: parent
-		icon.width: iconSizes.small
 		icon.name: "arrow-right-double"
+		icon.width: iconSizes.small
+		icon.height: icon.width
 // 		icon.color: "white"
 		enabled: !mainFlickable.atXEnd
 		onClicked:
@@ -212,8 +213,8 @@ ToolBar
 	Item
 	{
 		id: _leftFlickRec
-		width: parent.height
-		height: iconSizes.tiny
+		width: iconSizes.small
+		height: parent.height
 		visible: /*!mainFlickable.atXBeginning &&*/ !mainFlickable.fits && control.flickable
 // 		rotation: 270
 		anchors 
@@ -254,6 +255,8 @@ ToolBar
 // 			rotation: 90
 			anchors.centerIn: parent
 			icon.name: "arrow-left-double"
+			icon.width: iconSizes.small
+			icon.height: icon.width
 			enabled: !mainFlickable.atXBeginning
 			onClicked:
 			{
