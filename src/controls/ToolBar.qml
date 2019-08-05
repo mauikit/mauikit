@@ -196,7 +196,7 @@ ToolBar
 		anchors.centerIn: parent
 		icon.name: "arrow-right-double"
 		icon.width: iconSizes.small
-		icon.height: icon.width
+		icon.height: iconSizes.small
 // 		icon.color: "white"
 		enabled: !mainFlickable.atXEnd
 		onClicked:
@@ -256,7 +256,7 @@ ToolBar
 			anchors.centerIn: parent
 			icon.name: "arrow-left-double"
 			icon.width: iconSizes.small
-			icon.height: icon.width
+			icon.height: iconSizes.small
 			enabled: !mainFlickable.atXBeginning
 			onClicked:
 			{

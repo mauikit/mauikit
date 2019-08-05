@@ -698,6 +698,8 @@ namespace FMH
 		{
 			qDebug()<< "DELETEING DOWNLOADER";
 			this->manager->deleteLater();
+			this->reply->deleteLater();
+			
 		}
 		
 		void setFile(const QString &fileURL, const QString &fileName = QString())
@@ -715,14 +717,15 @@ namespace FMH
 			file->setFileName(fileName);
 			file->open(QIODevice::WriteOnly);
 			
-			connect(reply,SIGNAL(downloadProgress(qint64,qint64)),this,SLOT(onDownloadProgress(qint64,qint64)));
-			connect(manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(onFinished(QNetworkReply*)));
-			connect(reply,SIGNAL(readyRead()),this,SLOT(onReadyRead()));
-			connect(reply,SIGNAL(finished()),this,SLOT(onReplyFinished()));
+			connect(reply, SIGNAL(downloadProgress(qint64,qint64)),this,SLOT(onDownloadProgress(qint64,qint64)));
+			connect(manager, SIGNAL(finished(QNetworkReply*)),this,SLOT(onFinished(QNetworkReply*)));
+			connect(reply, SIGNAL(readyRead()),this,SLOT(onReadyRead()));
+			connect(reply, SIGNAL(finished()),this,SLOT(onReplyFinished()));
 		}
 		
 		void getArray(const QString &fileURL, const QMap<QString, QString> &headers = {})
 		{		
+			qDebug() << fileURL << headers;
 			if(fileURL.isEmpty())			
 				return;
 						
@@ -749,22 +752,17 @@ namespace FMH
 					default:
 					{
 						qDebug() << reply->errorString();						
-						emit this->warning(reply->errorString());
-						
+						emit this->warning(reply->errorString());						
 					};
 				}
-				
 			});
 			
 			connect(reply, &QNetworkReply::finished, [=]()
-			{
-                
+			{                
                 qDebug() << "Array reply is now finished";
                 emit this->dataReady(this->array);
 				emit this->done();
 			});
-			
-			
 		}
 		
 	private:
@@ -828,7 +826,6 @@ namespace FMH
 			}
 			
 			emit done();
-			reply->deleteLater();
 		}
 	};
 	
