@@ -365,7 +365,7 @@ FMH::MODEL_LIST FM::getCloudAccounts()
 {
     auto accounts = this->get("select * from clouds");
     FMH::MODEL_LIST res;
-    for(auto account : accounts)
+    for(const auto &account : accounts)
     {
         auto map = account.toMap();
         res << FMH::MODEL {
@@ -374,6 +374,7 @@ FMH::MODEL_LIST FM::getCloudAccounts()
 		{FMH::MODEL_KEY::LABEL, map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString()},
 		{FMH::MODEL_KEY::USER, map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString()},
 		{FMH::MODEL_KEY::SERVER, map[FMH::MODEL_NAME[FMH::MODEL_KEY::SERVER]].toString()},
+		{FMH::MODEL_KEY::PASSWORD, map[FMH::MODEL_NAME[FMH::MODEL_KEY::PASSWORD]].toString()},
 		{FMH::MODEL_KEY::TYPE,  FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]}};
 }
 return res;

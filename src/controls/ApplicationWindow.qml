@@ -59,7 +59,7 @@ Kirigami.AbstractApplicationWindow
     property alias mainMenu : mainMenu.contentData
     property alias about : aboutDialog
     property alias accounts: _accountsDialogLoader.item
-    property alias currentAccount: _accountCombobox.currentText
+    property var currentAccount: ({})
     property alias notifyDialog: _notify
     
 
@@ -267,7 +267,7 @@ Kirigami.AbstractApplicationWindow
 				
 				Item
 				{
-					height: _accountCombobox.visible ? unit * 90 : 0
+					height: _accountCombobox.visible ? _accountCombobox.implicitHeight + space.big: 0
 					
 					anchors
 					{
@@ -284,12 +284,30 @@ Kirigami.AbstractApplicationWindow
 						// 						parent: mainMenu
 						popup.z: 999
 						width: parent.width
-						visible: (count > 1) && showAccounts
+// 						visible: (count > 1) && showAccounts
 						textRole: "user"
 						flat: true
-						model: showAccounts ? accounts.model : undefined
+						model: accounts.model
+						onActivated:
+						{
+							var account = accounts.list.get(index)
+							root.currentAccount = account
+							console.log(currentAccount.user, currentAccount.password, currentAccount.server)
+						}
 						// 						icon.name: "user-identity"
 						// 						iconButton.isMask: false
+					}
+				}
+				
+				MenuItem
+				{
+					text: qsTr("Accounts")
+					visible: root.showAccounts
+					icon.name: "list-add-user"
+					onTriggered: 
+					{
+						if(root.accounts)
+							accounts.open()
 					}
 				}
 				
