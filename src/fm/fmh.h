@@ -119,6 +119,7 @@ namespace FMH
 		VIEWTYPE,
 		ADDDATE,
 		FAV,
+		FAVORITE,
 		COLOR,
 		RATE,
 		FORMAT,
@@ -149,6 +150,12 @@ namespace FMH
 		ACCOUNTTYPE,
 		VERSION,
 		DOMAIN,
+		CATEGORY,
+		CONTENT,
+		PIN,
+		IMG,
+		PREVIEW,
+		LINK,
 		
 		/** ccdav keys **/
 		N,
@@ -212,6 +219,7 @@ namespace FMH
 		{MODEL_KEY::VIEWTYPE, "viewtype"},
 		{MODEL_KEY::ADDDATE, "adddate"},
 		{MODEL_KEY::FAV, "fav"},
+		{MODEL_KEY::FAVORITE, "favorite"},
 		{MODEL_KEY::COLOR, "color"},
 		{MODEL_KEY::RATE, "rate"},
 		{MODEL_KEY::FORMAT, "format"},
@@ -242,7 +250,12 @@ namespace FMH
 		{MODEL_KEY::ACCOUNTTYPE, "accounttype"},
 		{MODEL_KEY::VERSION, "version"},
 		{MODEL_KEY::DOMAIN, "domain"},
-		
+		{MODEL_KEY::CATEGORY, "category"},
+		{MODEL_KEY::CONTENT, "content"},
+		{MODEL_KEY::PIN, "pin"},
+		{MODEL_KEY::IMG, "img"},
+		{MODEL_KEY::PREVIEW, "preview"},
+		{MODEL_KEY::LINK, "link"},
 		
 		/** ccdav keys **/
 		{MODEL_KEY::N, "n"},
@@ -303,6 +316,7 @@ namespace FMH
 		{MODEL_NAME[MODEL_KEY::VIEWTYPE], MODEL_KEY::VIEWTYPE},
 		{MODEL_NAME[MODEL_KEY::ADDDATE], MODEL_KEY::ADDDATE},
 		{MODEL_NAME[MODEL_KEY::FAV], MODEL_KEY::FAV},
+		{MODEL_NAME[MODEL_KEY::FAVORITE], MODEL_KEY::FAVORITE},
 		{MODEL_NAME[MODEL_KEY::COLOR], MODEL_KEY::COLOR},
 		{MODEL_NAME[MODEL_KEY::RATE], MODEL_KEY::RATE},
 		{MODEL_NAME[MODEL_KEY::FORMAT], MODEL_KEY::FORMAT},
@@ -333,6 +347,12 @@ namespace FMH
 		{MODEL_NAME[MODEL_KEY::ACCOUNTTYPE], MODEL_KEY::ACCOUNTTYPE},
 		{MODEL_NAME[MODEL_KEY::VERSION], MODEL_KEY::VERSION},
 		{MODEL_NAME[MODEL_KEY::DOMAIN], MODEL_KEY::DOMAIN},
+		{MODEL_NAME[MODEL_KEY::CATEGORY], MODEL_KEY::CATEGORY},
+		{MODEL_NAME[MODEL_KEY::CONTENT], MODEL_KEY::CONTENT},
+		{MODEL_NAME[MODEL_KEY::PIN], MODEL_KEY::PIN},
+		{MODEL_NAME[MODEL_KEY::IMG], MODEL_KEY::IMG},
+		{MODEL_NAME[MODEL_KEY::PREVIEW], MODEL_KEY::PREVIEW},
+		{MODEL_NAME[MODEL_KEY::LINK], MODEL_KEY::LINK},
 		
 		/** ccdav keys **/
 		{MODEL_NAME[MODEL_KEY::N], MODEL_KEY::N},
@@ -698,7 +718,7 @@ namespace FMH
 		{
 			qDebug()<< "DELETEING DOWNLOADER";
 			this->manager->deleteLater();
-			this->reply->deleteLater();
+// 			this->reply->deleteLater();
 			
 		}
 		
