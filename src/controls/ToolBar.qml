@@ -29,10 +29,10 @@ ToolBar
 {
 	id: control    
 	
-// 	implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
+	// 	implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
 	implicitHeight: visible ? (floating ? toolBarHeightAlt : toolBarHeight) : 0
 	
-// 	width: parent.width 
+	// 	width: parent.width 
 	height:  implicitHeight 
 	
 	property alias stickyRightContent : rightRowContent.sticky
@@ -68,137 +68,84 @@ ToolBar
 	//    rightPadding: Kirigami.Units.smallSpacing*2
 	signal unfolded()
 	
-// 	onPlegableChanged: folded = plegable
-// 	onVisibleChanged: 
-// 	{
-// 		if(control.visible)
-// 			control.height= implicitHeight
-// 			else
-// 				control.height= 0
-// 				
-// 	}
+	// 	onPlegableChanged: folded = plegable
+	// 	onVisibleChanged: 
+	// 	{
+	// 		if(control.visible)
+	// 			control.height= implicitHeight
+	// 			else
+	// 				control.height= 0
+	// 				
+	// 	}
 	
-// 	background: Rectangle
-// 	{
-// 		id: headBarBG
-// 		color: colorScheme.backgroundColor
-// 		implicitHeight: toolBarHeightAlt  
-// 		radius: floating ? radiusV : 0   
-// 		border.color: floating ? colorScheme.borderColor : "transparent"
-// 		
-// 		SequentialAnimation on radius
-// 		{
-// 			ColorAnimation { to: colorScheme.backgroundColor ; duration: 1000 }
-// 		}
-// 		
-// 		Kirigami.Separator
-// 		{
-// 			visible: drawBorder
-// 			color: colorScheme.borderColor
-// 			height: unit
-// 			anchors
-// 			{
-// 				left: parent.left
-// 				right: parent.right
-// 				bottom: control.position == ToolBar.Footer ? undefined : parent.bottom
-// 				top: control.position == ToolBar.Footer ? parent.top : undefined
-// 			}
-// 		}
-// 		
-// 		layer.enabled: dropShadow
-// 		layer.effect: DropShadow
-// 		{
-// 			anchors.fill: headBarBG
-// 			horizontalOffset: 0
-// 			verticalOffset:  unit * (altToolBars ? -1 : 1)
-// 			radius: 8
-// 			samples: 25
-// 			color: Qt.darker(colorScheme.backgroundColor, 1.4)
-// 			source: headBarBG
-// 		}
-// 	}
+	// 	background: Rectangle
+	// 	{
+	// 		id: headBarBG
+	// 		color: colorScheme.backgroundColor
+	// 		implicitHeight: toolBarHeightAlt  
+	// 		radius: floating ? radiusV : 0   
+	// 		border.color: floating ? colorScheme.borderColor : "transparent"
+	// 		
+	// 		SequentialAnimation on radius
+	// 		{
+	// 			ColorAnimation { to: colorScheme.backgroundColor ; duration: 1000 }
+	// 		}
+	// 		
+	// 		Kirigami.Separator
+	// 		{
+	// 			visible: drawBorder
+	// 			color: colorScheme.borderColor
+	// 			height: unit
+	// 			anchors
+	// 			{
+	// 				left: parent.left
+	// 				right: parent.right
+	// 				bottom: control.position == ToolBar.Footer ? undefined : parent.bottom
+	// 				top: control.position == ToolBar.Footer ? parent.top : undefined
+	// 			}
+	// 		}
+	// 		
+	// 		layer.enabled: dropShadow
+	// 		layer.effect: DropShadow
+	// 		{
+	// 			anchors.fill: headBarBG
+	// 			horizontalOffset: 0
+	// 			verticalOffset:  unit * (altToolBars ? -1 : 1)
+	// 			radius: 8
+	// 			samples: 25
+	// 			color: Qt.darker(colorScheme.backgroundColor, 1.4)
+	// 			source: headBarBG
+	// 		}
+	// 	}
 	
-
-	Item
+	
+	MouseArea
 	{
 		id: _rightFlickRec
-		width: iconSizes.small
+		width: iconSizes.medium
 		height: parent.height
 		visible: /*!mainFlickable.atXEnd && */!mainFlickable.fits && control.flickable
-// 		rotation: 270
-// color: "#333"
-
-// 		Kirigami.Theme.colorSet: Kirigami.Theme.View
-// 		Kirigami.Theme.inherit: false
-// 		color: Kirigami.Theme.backgroundColor
+		hoverEnabled: true
 		anchors 
 		{
 			top: parent.top
 			bottom: parent.bottom
 			right: parent.right
-// 			margins: 1
 		}
+		
 		z: 999
 		
-	/*	gradient: Gradient
+		Kirigami.Icon
 		{
-			
-			GradientStop
-			{
-				position: 0.0
-				color: "transparent"
-				
-				
-			}
-			GradientStop 
-			{
-				position: 1.0
-				color: Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.2)
-			}
-		}*/ 
-	
-	Kirigami.Separator
-	{
-		anchors 
-		{
-			top: parent.top
-			bottom: parent.bottom
-			left: parent.left
-		}		
-	}
-	
-// 	MouseArea
-// 	{
-// 		anchors.fill: parent
-// 		enabled: !mainFlickable.atXEnd
-// 		onClicked:
-// 		{
-// 			console.log("trying to flick", mainFlickable.contentX, layout.width, mainFlickable.contentWidth)
-// 						mainFlickable.flick(100, 0)
-// 			if(!mainFlickable.atXEnd)
-// 				mainFlickable.contentX += control.height
-// 				if(mainFlickable.atXEnd)
-// 					mainFlickable.returnToBounds()
-// 					
-// 		}
-// 		Label
-// 		{
-// 			anchors.centerIn: parent
-// 			text: ">"
-// 			font.pointSize: fontSizes.big
-// 			font.bold: true
-// 		}
-// 	}
+			anchors.centerIn: parent
+			source: "arrow-right-double"
+			width: iconSizes.small
+			height: iconSizes.small
+			color: _rightFlickRec.hovered ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor			
+		}
 		
-		ToolButton
-		{
-// 			rotation: 90
-		anchors.centerIn: parent
-		icon.name: "arrow-right-double"
-		icon.width: iconSizes.small
-		icon.height: iconSizes.small
-// 		icon.color: "white"
 		enabled: !mainFlickable.atXEnd
+		opacity: enabled ? 1 : 0.4
 		onClicked:
 		{
 			mainFlickable.flick(100, 0)
@@ -207,16 +154,16 @@ ToolBar
 				if(mainFlickable.atXEnd)
 					mainFlickable.returnToBounds()
 		}
-		}
+		
 	}
 	
-	Item
+	MouseArea
 	{
 		id: _leftFlickRec
-		width: iconSizes.small
+		width: iconSizes.medium
 		height: parent.height
 		visible: /*!mainFlickable.atXBeginning &&*/ !mainFlickable.fits && control.flickable
-// 		rotation: 270
+		hoverEnabled: true
 		anchors 
 		{
 			top: parent.top
@@ -224,120 +171,97 @@ ToolBar
 			left: parent.left
 		}
 		z: 999
-		/*
-		gradient: Gradient 
-		{
-			GradientStop
-			{
-				position: 0.0
-				color: Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.2)
-			}
-			
-			GradientStop
-			{
-				position: 1.0
-				color: "transparent"
-			}
-		}   */ 
 		
-		Kirigami.Separator
+		Kirigami.Icon
 		{
-			anchors 
-			{
-				top: parent.top
-				bottom: parent.bottom
-				right: parent.right
-			}		
+			anchors.centerIn: parent
+			source: "arrow-left-double"
+			width: iconSizes.small
+			height: iconSizes.small		
+			color: _leftFlickRec.hovered ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
 		}
 		
-		ToolButton
+		enabled: !mainFlickable.atXBeginning
+		opacity: enabled ? 1 : 0.4		
+		onClicked:
 		{
-// 			rotation: 90
-			anchors.centerIn: parent
-			icon.name: "arrow-left-double"
-			icon.width: iconSizes.small
-			icon.height: iconSizes.small
-			enabled: !mainFlickable.atXBeginning
-			onClicked:
-			{
-				if(!mainFlickable.atXBeginning)
-					mainFlickable.contentX -= control.height
-					
-					if(mainFlickable.atXBeginning)
-						mainFlickable.returnToBounds()
-			}
+			if(!mainFlickable.atXBeginning)
+				mainFlickable.contentX -= control.height
+				
+				if(mainFlickable.atXBeginning)
+					mainFlickable.returnToBounds()
 		}
 	}
 	
 	
-		Flickable
+	Flickable
+	{
+		id: mainFlickable       
+		property bool fits : contentWidth < control.width
+		onFitsChanged: returnToBounds()
+		anchors.fill: parent
+		anchors.leftMargin: !fits && _leftFlickRec.visible && control.flickable ? _leftFlickRec.width : margins
+		anchors.rightMargin: !fits && _rightFlickRec.visible && control.flickable ? _rightFlickRec.width : margins
+		
+		flickableDirection: Flickable.HorizontalFlick
+		interactive: !fits && Kirigami.Settings.isMobile
+		contentWidth: ((control.margins) + space.medium) 
+		+ (control.stickyLeftContent ? leftRowContent.implicitWidth : leftRowContent.width) 
+		+ (control.stickyMiddleContent ? middleRowContent.implicitWidth : middleRowContent.width) 
+		+ (control.stickyRightContent ? rightRowContent.implicitWidth : rightRowContent.width)			
+		
+		boundsBehavior: isMobile ? Flickable.DragOverBounds : Flickable.StopAtBounds
+		clip: true
+		
+		RowLayout
 		{
-			id: mainFlickable       
-			property bool fits : contentWidth < control.width
-			onFitsChanged: returnToBounds()
-			anchors.fill: parent
-			anchors.leftMargin: !fits && _leftFlickRec.visible && control.flickable ? _leftFlickRec.width : margins
-			anchors.rightMargin: !fits && _rightFlickRec.visible && control.flickable ? _rightFlickRec.width : margins
-			
-			flickableDirection: Flickable.HorizontalFlick
-			interactive: !fits && Kirigami.Settings.isMobile
-			contentWidth: ((control.margins) + space.medium) 
-			+ (control.stickyLeftContent ? leftRowContent.implicitWidth : leftRowContent.width) 
-			+ (control.stickyMiddleContent ? middleRowContent.implicitWidth : middleRowContent.width) 
-			+ (control.stickyRightContent ? rightRowContent.implicitWidth : rightRowContent.width)			
-			
-			boundsBehavior: isMobile ? Flickable.DragOverBounds : Flickable.StopAtBounds
-			clip: true
+			id: layout
+			width: control.width - control.margins - space.medium
+			height: control.height
 			
 			RowLayout
 			{
-				id: layout
-				width: control.width - control.margins - space.medium
-				height: control.height
-				
-				RowLayout
-				{
-					id: leftRowContent
-// 					visible: control.leftSretch && implicitWidth
-					property bool sticky : false
-					Layout.leftMargin: rightRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.leftSretch ? rightRowContent.implicitWidth : undefined
-					Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-					spacing: leftContent.length > 0 ? control.spacing : 0
-					Layout.minimumWidth: !sticky ? undefined : implicitWidth
-					Layout.fillWidth: control.leftSretch && implicitWidth
-					Layout.fillHeight: true
-				}
-				
-				RowLayout
-				{
-					id: middleRowContent				
-					property bool sticky : false
-// 					visible: control.middleStrech && implicitWidth
-					Layout.alignment: Qt.AlignCenter					
-					spacing: middleContent.length === 1 ? 0 : control.spacing
-					Layout.minimumWidth: !sticky ? undefined : implicitWidth
-					
-					//                             Layout.maximumWidth: control.width - leftRowContent.implicitWidth - rightRowContent.implicitWidth
-					Layout.fillWidth: control.middleStrech
-					Layout.fillHeight: true
-				}
-				
-				RowLayout
-				{
-					id: rightRowContent
-// 					visible: control.rightSretch && implicitWidth
-					property bool sticky : false
-					Layout.rightMargin: leftRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.rightSretch ? leftRowContent.implicitWidth : undefined
-					Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
-					spacing: rightContent.length > 0 ? control.spacing : 0
-					Layout.minimumWidth: !sticky ? undefined : implicitWidth
-// 					Layout.maximumWidth: !sticky ? rightRowContent.width : implicitWidth
-Layout.fillWidth: control.rightSretch && implicitWidth
-					Layout.fillHeight: true
-				}           
+				id: leftRowContent
+				// 					visible: control.leftSretch && implicitWidth
+				property bool sticky : false
+				Layout.leftMargin: rightRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.leftSretch ? rightRowContent.implicitWidth : undefined
+				Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+				spacing: leftContent.length > 0 ? control.spacing : 0
+				Layout.minimumWidth: !sticky ? undefined : implicitWidth
+				Layout.fillWidth: control.leftSretch && implicitWidth
+				Layout.fillHeight: true
 			}
 			
-// 			ScrollBar.horizontal: ScrollBar { visible: false}        
-		}		
+			RowLayout
+			{
+				id: middleRowContent				
+				property bool sticky : false
+				// 					visible: control.middleStrech && implicitWidth
+				Layout.alignment: Qt.AlignCenter					
+				spacing: middleContent.length === 1 ? 0 : control.spacing
+				Layout.minimumWidth: !sticky ? undefined : implicitWidth
+				
+				//                             Layout.maximumWidth: control.width - leftRowContent.implicitWidth - rightRowContent.implicitWidth
+				Layout.fillWidth: control.middleStrech
+				Layout.fillHeight: true
+			}
+			
+			RowLayout
+			{
+				id: rightRowContent
+				// 					visible: control.rightSretch && implicitWidth
+				property bool sticky : false
+				Layout.rightMargin: leftRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.rightSretch ? leftRowContent.implicitWidth : undefined
+				Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+				spacing: rightContent.length > 0 ? control.spacing : 0
+				Layout.minimumWidth: !sticky ? undefined : implicitWidth
+				// 					Layout.maximumWidth: !sticky ? rightRowContent.width : implicitWidth
+				Layout.fillWidth: control.rightSretch && implicitWidth
+				Layout.fillHeight: true
+			}           
+		}
+		
+		// 			ScrollBar.horizontal: ScrollBar { visible: false}        
+	}		
 	
 }
