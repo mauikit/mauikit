@@ -20,7 +20,6 @@
 #include "mauikit.h"
 
 #include <QDebug>
-#include <QQuickStyle>
 
 #include "fm.h"
 #include "fmh.h"
@@ -45,9 +44,10 @@
 
 #include "mauiapp.h"
 
-#ifdef Q_OS_ANDROID
+#if defined Q_OS_ANDROID || defined APPIMAGE_PACKAGE
 #include "mauiandroid.h"
 #include <QIcon>
+#include <QQuickStyle>
 #else
 #include "mauikde.h"
 #endif

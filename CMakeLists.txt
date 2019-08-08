@@ -164,9 +164,6 @@ set(store_HDRS
 
 #use dbus on linux, bsd etc, but not andoid and apple stuff
 option(IS_APPIMAGE_PACKAGE "If set to true then the icons and styled is packaged as well")
-if(IS_APPIMAGE_PACKAGE)
-    target_compile_definitions(MauiKit PUBLIC APPIMAGE_PACKAGE)
-endif()
     
 if(ANDROID OR IS_APPIMAGE_PACKAGE)
 	qt5_add_resources(MauiIcon_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/android/android.qrc)
@@ -281,6 +278,10 @@ target_link_libraries(MauiKit
     ${MAUIANDROID_LIBS}
 # #     webdavclient
     )
+    
+if(IS_APPIMAGE_PACKAGE)
+    target_compile_definitions(MauiKit PUBLIC APPIMAGE_PACKAGE)
+endif()
 
 if (ANDROID)
     kde_enable_exceptions(MauiKit PRIVATE)
