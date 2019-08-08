@@ -166,7 +166,7 @@ set(store_HDRS
 option(IS_APPIMAGE_PACKAGE "If set to true then the icons and styled is packaged as well")
     
 if(ANDROID OR IS_APPIMAGE_PACKAGE)
-	qt5_add_resources(MauiIcon_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/android/android.qrc)
+	qt5_add_resources(MauiIcon_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/android/icons.qrc)
     qt5_add_resources(MauiStyle_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/maui-style/style.qrc)
     
      if (NOT EXISTS ${CMAKE_SOURCE_DIR}/src/android/icons/luv-icon-theme/.git)
@@ -255,7 +255,8 @@ add_library(MauiKit
     ${mauikit_SRCS}
     ${mauikit_RESOURCES}
     ${mauikit_ASSETS}
-    ${mauikit_style_QRCS}
+    ${MauiIcon_RESOURCES}
+    ${MauiStyle_RESOURCES}
 
     ${mauikit_Android_SRCS}
 
