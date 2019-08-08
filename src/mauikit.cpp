@@ -46,13 +46,13 @@
 
 #ifdef Q_OS_ANDROID
 #include "mauiandroid.h"
+#else
+#include "mauikde.h"
 #endif
 
 #if defined Q_OS_ANDROID || defined APPIMAGE_PACKAGE
 #include <QIcon>
 #include <QQuickStyle>
-#else
-#include "mauikde.h"
 #endif
 
 
