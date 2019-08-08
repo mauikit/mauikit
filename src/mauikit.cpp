@@ -165,7 +165,7 @@ void MauiKit::registerTypes(const char *uri)
 									});	 
 	
 	#if defined Q_OS_ANDROID || defined APPIMAGE_PACKAGE	
-// 	QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
+	QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
 	QIcon::setThemeName("Luv");
     QQuickStyle::setStyle(":/style");	
 	qWarning()<< QIcon::themeName() << QIcon::themeSearchPaths() << QIcon::fallbackSearchPaths() << FMH::fileExists(":/icons/luv-icon-theme");	
