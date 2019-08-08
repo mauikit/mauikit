@@ -28,6 +28,9 @@ include(ECMQtDeclareLoggingCategory)
 include(ECMAddQch)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 
+
+#options - for the appimage
+
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Qml 
     Sql Core Quick Gui Svg QuickControls2 Network DBus Xml)
 ecm_find_qmlmodule(QtGraphicalEffects 1.0)
@@ -160,26 +163,37 @@ set(store_HDRS
 
 
 #use dbus on linux, bsd etc, but not andoid and apple stuff
-if(ANDROID)
-
-    find_package(Qt5 REQUIRED COMPONENTS AndroidExtras Xml WebView Network)
-    qt5_add_resources(MauiAndroid_RESOURCES src/android/android.qrc src/android/icons.qrc)
+option(IS_APPIMAGE_PACKAGE "If set to true then the icons and styled is packaged as well")
+if(IS_APPIMAGE_PACKAGE)
+    target_compile_definitions(MauiKit PUBLIC APPIMAGE_PACKAGE)
+endif()
     
+if(ANDROID OR IS_APPIMAGE_PACKAGE)
+	qt5_add_resources(MauiIcon_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/android/android.qrc)
+    qt5_add_resources(MauiStyle_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/maui-style/style.qrc)
+    
+     if (NOT EXISTS ${CMAKE_SOURCE_DIR}/src/android/icons/luv-icon-theme/.git)
+        find_package(Git REQUIRED)
+        execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/Nitrux/luv-icon-theme.git ${CMAKE_SOURCE_DIR}/src/android/icons/luv-icon-theme)
+    endif()
+    
+    set(mauikit_style_QRCS
+        ${MauiIcon_RESOURCES}
+        ${MauiStyle_RESOURCES}
+        )
+endif()
+
+if(ANDROID)
+    find_package(Qt5 REQUIRED COMPONENTS AndroidExtras Xml WebView Network)    
     set(MAUIANDROID_LIBS
         Qt5::Xml
         Qt5::AndroidExtras
         Qt5::Network
         Qt5::WebView
-        )
-
-    if (NOT EXISTS ${CMAKE_SOURCE_DIR}/src/android/icons/luv-icon-theme/.git)
-        find_package(Git REQUIRED)
-        execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/Nitrux/luv-icon-theme.git ${CMAKE_SOURCE_DIR}/src/android/icons/luv-icon-theme)
-    endif()
+        )  
+    
     set(mauikit_Android_SRCS
         src/android/mauiandroid.cpp
-        ${MauiAndroid_RESOURCES}
-        ${MauiAndroid_icons_RESOURCES}
         )
 else()
     find_package(Qt5 REQUIRED COMPONENTS WebEngine)
@@ -244,6 +258,7 @@ add_library(MauiKit
     ${mauikit_SRCS}
     ${mauikit_RESOURCES}
     ${mauikit_ASSETS}
+    ${mauikit_style_QRCS}
 
     ${mauikit_Android_SRCS}
 

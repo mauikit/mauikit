@@ -160,7 +160,8 @@ void MauiKit::registerTypes(const char *uri)
 										auto handy = new Handy;
 										return handy;
 									});	 
-	#ifdef Q_OS_ANDROID
+	
+	#if defined Q_OS_ANDROID || defined APPIMAGE_PACKAGE
 	QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
 	QIcon::setThemeName("Luv");
     QQuickStyle::setStyle(":/style");
