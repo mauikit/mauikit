@@ -9,7 +9,8 @@ demo/mauikit/
 *.directory
 *.*~
 *.properties
-
+.*.kate-swp
+.swp.*
 
 #android stuff
 src/android/AndroidManifest.xml
