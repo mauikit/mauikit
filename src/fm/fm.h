@@ -42,7 +42,8 @@ public:
     FMH::MODEL_LIST getCloudAccounts();
 	Q_INVOKABLE void createCloudDir(const QString &path, const QString &name);
 	
-
+	void getTrashContent();
+	
 	/*** START STATIC METHODS ***/
 	static FMH::MODEL_LIST search(const QString &query, const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
 	
@@ -53,7 +54,6 @@ public:
 	static FMH::MODEL_LIST packItems(const QStringList &items, const QString &type);
 	
 	static FMH::MODEL_LIST getPathContent(const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList(), const QDirIterator::IteratorFlags &iteratorFlags = QDirIterator::NoIteratorFlags);
-	
 	static FMH::MODEL_LIST getAppsContent(const QString &path);	
 
 	static bool copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory);
@@ -78,6 +78,8 @@ signals:
 
     void cloudServerContentReady(FMH::MODEL_LIST list, const QString &url);
 	void cloudItemReady(FMH::MODEL item, QString path); //when a item is downloaded and ready
+	
+	void trashContentReady(FMH::MODEL_LIST list);
 
 	void warningMessage(QString message);
 	void loadProgress(int percent);
@@ -117,6 +119,8 @@ public slots:
 	bool copy(const QVariantList &data, const QString &where);
 	bool cut(const QVariantList &data, const QString &where);
 	static bool removeFile(const QString &path);
+	void moveToTrash(const QString &path);
+	static void emptyTrash();
 	static bool rename(const QString &path, const QString &name);
 	static bool createDir(const QString &path, const QString &name);
 	static bool createFile(const QString &path, const QString &name);

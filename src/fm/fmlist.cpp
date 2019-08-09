@@ -47,6 +47,20 @@ watcher(new QFileSystemWatcher(this))
 		}	
 	});
 	
+	
+	connect(this->fm, &FM::trashContentReady, [this](const FMH::MODEL_LIST &list)
+	{
+		if(this->path == "trash://")
+		{			
+			this->pre();		
+			this->list = list;
+			this->pathEmpty = this->list.isEmpty();
+			emit this->pathEmptyChanged();
+			this->pos();
+			this->setContentReady(true);
+		}	
+	});
+	
 	connect(this->fm, &FM::warningMessage, [this](const QString &message)
 	{
 		emit this->warning(message);
@@ -120,6 +134,12 @@ void FMList::setList()
 			this->getPathContent();
 			return; //ASYNC
 			
+		case FMList::PATHTYPE::TRASH_PATH:
+			this->list.clear();
+			this->setContentReady(false);
+			this->fm->getTrashContent();
+			break;//ASYNC
+			
 		case FMList::PATHTYPE::SEARCH_PATH:
 			this->list.clear();
 			this->setContentReady(false);
@@ -142,13 +162,12 @@ void FMList::setList()
 				return;			
 			}else break;
 			
-		case FMList::PATHTYPE::TRASH_PATH:
 		case FMList::PATHTYPE::DRIVES_PATH:
 			this->list = FMH::MODEL_LIST();
 			break;
 	}
 	
-	this->pathEmpty = this->list.isEmpty() && FM::fileExists(this->path);
+	this->pathEmpty = this->list.isEmpty()/* && FM::fileExists(this->path)*/;
 	emit this->pathEmptyChanged();
 	
 	this->sortList();
@@ -417,6 +436,13 @@ void FMList::setPath(const QString &path)
 		emit this->pathTypeChanged();
 		this->watchPath(QString());
 		
+	}else if(path.startsWith("trash://"))		
+	{
+		this->pathExists = true;
+		this->pathType = FMList::PATHTYPE::TRASH_PATH;
+		emit this->pathExistsChanged();
+		emit this->pathTypeChanged();
+		this->watchPath(QString());
 	}else
 	{
 		this->watchPath(this->path);
@@ -738,8 +764,7 @@ void FMList::search(const QString& query, const QString &path, const bool &hidde
 		PathContent res;
 		res.path = path;
 		
-		FMH::MODEL_LIST content;
-		
+		FMH::MODEL_LIST content;		
 		if (FM::isDir(path))
 		{
 			QDir::Filters dirFilter;
@@ -753,12 +778,10 @@ void FMList::search(const QString& query, const QString &path, const bool &hidde
 			QDirIterator it (path, filters, dirFilter, QDirIterator::Subdirectories);
 			while (it.hasNext())
 			{
-				auto url = it.next();
-				auto info = it.fileInfo();
-				
+				const auto url = it.next();
+				const auto info = it.fileInfo();				
 				if(info.completeBaseName().contains(query, Qt::CaseInsensitive))
-					content << FMH::getFileInfoModel(url);
-				
+					content << FMH::getFileInfoModel(url);				
 			}
 		}
 		
@@ -770,8 +793,7 @@ void FMList::search(const QString& query, const QString &path, const bool &hidde
 }
 
 void FMList::getPathContent()
-{
-	
+{	
 	qDebug()<< "Getting async path contents";
 	QFutureWatcher<PathContent> *watcher = new QFutureWatcher<PathContent>;
 	connect(watcher, &QFutureWatcher<PathContent>::finished, [=]()

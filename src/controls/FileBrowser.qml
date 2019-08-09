@@ -71,12 +71,13 @@ Maui.Page
 		{
 			property var items: []
 		
-			title: qsTr("Delete files?")
-			message: qsTr("If you are sure you want to delete the files click on Accept, otherwise click on Cancel")
-			rejectButton.text: qsTr("Cancel")
-			acceptButton.text: qsTr("Accept")
-			onRejected: close()
-			onAccepted:
+			title: qsTr("Remove files?")
+			message: qsTr("You can move the file to the Trash or Delete it completely from your system. Which one you preffer?")
+			rejectButton.text: qsTr("Delete")
+			acceptButton.text: qsTr("Trash")
+// 			acceptButton.Kirigami.Theme.backgroundColor: Qt.rgba(Kirigami.Theme.neutralTextColor.r, Kirigami.Theme.neutralTextColor.g, Kirigami.Theme.neutralTextColor.b, 0.2)
+// 			acceptButton.Kirigami.Theme.textColor: Kirigami.Theme.neutralTextColor
+			onRejected: 
 			{
 				if(control.selectionBar && control.selectionBar.visible)
 				{
@@ -85,6 +86,18 @@ Maui.Page
 				}
 				
 				control.remove(items)
+				close()
+			}
+			
+			onAccepted:
+			{
+				if(control.selectionBar && control.selectionBar.visible)
+				{
+					control.selectionBar.clear()
+					control.selectionBar.animate(Maui.Style.dangerColor)
+				}
+				
+				control.trash(items)
 				close()
 			}
 		}
@@ -456,7 +469,8 @@ Maui.Page
 		
 		onItemRightClicked:
 		{
-			itemMenu.show(control.currentFMList.get(index), index)
+			if(currentFMList.pathType !== Maui.FMList.TRASH_PATH)
+				itemMenu.show(control.currentFMList.get(index), index)
 			control.itemRightClicked(index)
 		}
 		
@@ -1073,6 +1087,12 @@ Maui.Page
 	{
 		for(var i in items)
 			Maui.FM.removeFile(items[i].path)
+	}
+	
+	function trash(items)
+	{
+		for(var i in items)
+			Maui.FM.moveToTrash(items[i].path)
 	}
 	
 	function bookmarkFolder(paths)
