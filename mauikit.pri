@@ -6,7 +6,7 @@ QT +=  \
     svg \
     concurrent \
     
-CONFIG += c++11
+CONFIG += c++17
 
 linux:unix:!android {
 

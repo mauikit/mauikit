@@ -98,8 +98,12 @@ static FMH::MODEL modelPlaceInfo(const KFilePlacesModel &model, const QModelInde
 static FMH::MODEL_LIST getGroup(const KFilePlacesModel &model, const FMH::PATHTYPE_KEY &type)
 {
 	#ifdef Q_OS_ANDROID
-	//do android stuff until cmake works with android 
-	return FMH::MODEL_LIST();
+    FMH::MODEL_LIST res;
+    if(type == FMH::PATHTYPE_KEY::PLACES_PATH)
+        for(const auto &path : FMH::defaultPaths)
+            res << FMH::getDirInfoModel(path, FMH::PATHTYPE_NAME[type]);
+
+    return res;
 	#else
 	const auto group = model.groupIndexes(static_cast<KFilePlacesModel::GroupType>(type));
 	return std::accumulate(group.begin(), group.end(), FMH::MODEL_LIST(), [&model, &type](FMH::MODEL_LIST &list, const QModelIndex &index) -> FMH::MODEL_LIST
