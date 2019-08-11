@@ -225,8 +225,8 @@ void FM::getPathContent(const QString& path, const bool &hidden, const bool &onl
 	watcher->setFuture(t1);
 	
 	#else	
-	auto dir = new KCoreDirLister;
-	connect(dir, static_cast<void (KCoreDirLister::*)(const QUrl&)>(&KCoreDirLister::completed), [=, dir = std::move(dir)](QUrl url)
+	auto dir = new KCoreDirLister(this);
+	connect(dir, static_cast<void (KCoreDirLister::*)(const QUrl&)>(&KCoreDirLister::completed), [=, dir](QUrl url)
 	{
 		qDebug()<< "PATH CONTENT READY" << url;	
 		
@@ -252,8 +252,18 @@ void FM::getPathContent(const QString& path, const bool &hidden, const bool &onl
 		res.content = content;
 		
 		emit this->pathContentReady(res);
-		dir->deleteLater();
+// 		dir->deleteLater();
 	});
+	
+// 	connect(dir, static_cast<void (KCoreDirLister::*)(const QUrl&, const KFileItemList &items)>(&KCoreDirLister::itemsAdded), []()
+//  {
+// 	 qDebug()<< "MORE ITEMS WERE ADDED";
+// });
+// 	
+// 	connect(dir, static_cast<void (KCoreDirLister::*)(const KFileItemList &items)>(&KCoreDirLister::newItems), []()
+// 	{
+// 		qDebug()<< "MORE NEW ITEMS WERE ADDED";
+// 	});
 	
 	
 	const auto url = QUrl(path).isRelative()? QUrl::fromLocalFile(path) : QUrl(path);
@@ -665,20 +675,13 @@ bool FM::cut(const QVariantList &data, const QString &where)
 {	
 	FMH::MODEL_LIST items;
 	
-	for(auto k : data)
-	{	
-		auto map = k.toMap();
-		FMH::MODEL model;
-		
-		for(auto key : map.keys())
-			model.insert(FMH::MODEL_NAME_KEY[key], map[key].toString());				
-		
-		items << model;
-	}
+	for(auto k : data)		
+		items << FM::toModel(k.toMap());
 	
-	for(auto item : items)
+	
+	for(const auto &item : items)
 	{
-		auto path = item[FMH::MODEL_KEY::PATH];
+		const auto path = item[FMH::MODEL_KEY::PATH];
 		
 		if(this->isCloud(path))
 		{
@@ -687,8 +690,15 @@ bool FM::cut(const QVariantList &data, const QString &where)
 			
 		}else if(UTIL::fileExists(path))
 		{
-			QFile file(path);
-			file.rename(where+"/"+QFileInfo(path).fileName());
+			#ifdef Q_OS_ANDROID
+			QFile file(QString(path).replace("file://", ""));
+			file.rename(where+"/"+QFileInfo(QString(path).replace("file://", "")).fileName());
+			#else
+			
+			qDebug()<< "TRYING TO CUT" << path << where+"/"+QFileInfo(QString(path).replace("file://", "")).fileName();
+			auto job = KIO::copy(QUrl(path), QUrl(where+"/"+QFileInfo(QString(path).replace("file://", "")).fileName()));
+			job->start();
+			#endif
 		}
 	}
 	
@@ -789,7 +799,7 @@ bool FM::copyPath(QString sourceDir, QString destinationDir, bool overWriteDirec
 	#else 
 	
 	qDebug()<< "TRYING TO COPY" << sourceDir << destinationDir;
-	auto job = KIO::move(QUrl(sourceDir), QUrl(destinationDir));
+	auto job = KIO::copy(QUrl(sourceDir), QUrl(destinationDir));
 	job->start();
 	return true;	
 	#endif
