@@ -202,6 +202,9 @@ FMH::MODEL_LIST FM::getPathContent(const QString& path, const bool &hidden, cons
 
 void FM::getTrashContent()
 {	
+#ifdef Q_OS_ANDROID
+
+#else
 	auto dir = new KCoreDirLister(this);
 	connect(dir, static_cast<void (KCoreDirLister::*)(const QUrl&)>(&KCoreDirLister::completed), [=](QUrl url)
  {
@@ -226,6 +229,8 @@ void FM::getTrashContent()
 });	
 	if(dir->openUrl(QUrl("trash://")))
 		qDebug()<< "TRASH CONTENT";	
+
+#endif
 }
 
 FMH::MODEL_LIST FM::getAppsContent(const QString& path)
