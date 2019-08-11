@@ -688,15 +688,14 @@ bool FM::cut(const QVariantList &data, const QString &where)
 			this->sync->setCopyTo(where);			
 			this->sync->resolveFile(item, Syncing::SIGNAL_TYPE::COPY);
 			
-		}else if(UTIL::fileExists(path))
+		}else if(FMH::fileExists(path))
 		{
 			#ifdef Q_OS_ANDROID
 			QFile file(QString(path).replace("file://", ""));
 			file.rename(where+"/"+QFileInfo(QString(path).replace("file://", "")).fileName());
-			#else
-			
-			qDebug()<< "TRYING TO CUT" << path << where+"/"+QFileInfo(QString(path).replace("file://", "")).fileName();
-			auto job = KIO::copy(QUrl(path), QUrl(where+"/"+QFileInfo(QString(path).replace("file://", "")).fileName()));
+			#else			
+			qDebug()<< "TRYING TO CUT" << path << QUrl(where+"/"+FMH::getFileInfoModel(path)[FMH::MODEL_KEY::LABEL]);
+			auto job = KIO::move(QUrl(path), QUrl(where+"/"+FMH::getFileInfoModel(path)[FMH::MODEL_KEY::LABEL]));
 			job->start();
 			#endif
 		}

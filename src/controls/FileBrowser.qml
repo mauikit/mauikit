@@ -1075,10 +1075,10 @@ Maui.Page
 	function paste()
 	{
 		if(isCopy)
-			list.copyInto(copyItems, currentPath)
+			currentFMList.copyInto(copyItems)
 			else if(isCut)
 			{
-				list.cutInto(cutItems, currentPath)
+				currentFMList.cutInto(cutItems)
 				clearSelection()			
 			}
 	}
