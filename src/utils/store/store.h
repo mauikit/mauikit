@@ -23,14 +23,23 @@
 #include "fmh.h"
 
 #ifdef STATIC_MAUIKIT
-#include "providermanager.h"
-#include "provider.h"
-#include "category.h"
-#include "content.h"
-#include "listjob.h"
-#include "person.h"
-#include "project.h"
-#include "downloaditem.h"
+//#include "providermanager.h"
+//#include "provider.h"
+//#include "category.h"
+//#include "content.h"
+//#include "listjob.h"
+//#include "person.h"
+//#include "project.h"
+//#include "downloaditem.h"
+#include <attica/Attica/attica/providermanager.h>
+#include <attica/Attica/attica/provider.h>
+#include <attica/Attica/attica/category.h>
+#include <attica/Attica/attica/content.h>
+#include <attica/Attica/attica/listjob.h>
+#include <attica/Attica/attica/person.h>
+#include <attica/Attica/attica/project.h>
+#include <attica/Attica/attica/downloaditem.h>
+
 #else
 #include <Attica/ProviderManager>
 #include <Attica/Provider>
@@ -53,7 +62,7 @@ namespace STORE
 	const PROVIDER KRITA_API = "https://share.krita.org/ocs/v1/";
 	const PROVIDER OPENDESKTOPCC_API = "https://pling.cc/ocs/v1/";
 	
-	enum CATEGORY_KEY : uint_fast8_t
+    enum CATEGORY_KEY : uint
 	{
 		WALLPAPERS,
 		IMAGES,
@@ -66,7 +75,7 @@ namespace STORE
 		NONE
 	};
 	
-	enum ATTRIBUTE_KEY : uint_fast8_t
+    enum ATTRIBUTE_KEY : uint
 	{
 		PREVIEW_1,
 		PREVIEW_2,

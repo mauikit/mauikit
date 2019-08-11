@@ -77,8 +77,8 @@ namespace TAG
 		KEY
     };/* Q_ENUM_NS(KEYS);*/
 
-	typedef QHash<TAG::KEYS, QString> DB;
-	typedef QList<DB> DB_LIST;
+    typedef QMap<TAG::KEYS, QString> DB;
+    typedef QList<DB> DB_LIST;
 	
     static const DB KEYMAP =
     {
@@ -101,7 +101,7 @@ namespace TAG
 		{TAG::KEYS::VERSION, "version"}
     };	
 	
-	static const QHash<QString, TAG::KEYS> MAPKEY =
+    static const QMap<QString, TAG::KEYS> MAPKEY =
 	{
 		{TAG::KEYMAP[KEYS::URL], KEYS::URL},
 		{TAG::KEYMAP[KEYS::TAG], KEYS::TAG},

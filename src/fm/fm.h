@@ -5,6 +5,9 @@
 #include <QVariantList>
 #include <QStringList>
 #include <QStorageInfo>
+#include <QVector>
+#include <QHash>
+
 #include "fmdb.h"
 #include "fmh.h"
 

@@ -146,9 +146,9 @@ void MauiKit::registerTypes(const char *uri)
 	qmlRegisterType<TagsList>("TagsList", 1, 0, "TagsList");
 	qmlRegisterType<TagsModel>("TagsModel", 1, 0, "TagsModel");
 	
-	qmlRegisterType<StoreList>("StoreList", 1, 0, "StoreList");
-	qmlRegisterType<StoreModel>("StoreModel", 1, 0, "StoreModel");
-// 	qmlRegisterType<MauiApp>(uri, 1, 0, "App");
+    qmlRegisterType<StoreList>("StoreList", 1, 0, "StoreList");
+    qmlRegisterType<StoreModel>("StoreModel", 1, 0, "StoreModel");
+//    qmlRegisterType<MauiApp>(uri, 1, 0, "App");
 	
 	qmlRegisterType<DocumentHandler>("DocumentHandler", 1, 0, "DocumentHandler");
 	

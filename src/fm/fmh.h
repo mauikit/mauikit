@@ -32,6 +32,8 @@
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
 #include <QString>
+#include <QVector>
+#include <QHash>
 
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
@@ -64,7 +66,7 @@ namespace FMH
 		#endif
 	}
 	
-	enum FILTER_TYPE : uint_fast8_t
+    enum FILTER_TYPE : int
 	{
 		AUDIO,
 		VIDEO,
@@ -74,7 +76,7 @@ namespace FMH
 		NONE
 	}; 
 	
-	static const QHash<FMH::FILTER_TYPE, QStringList> FILTER_LIST =
+    static const QHash<FMH::FILTER_TYPE, QStringList> FILTER_LIST =
 	{
 		{FILTER_TYPE::AUDIO, QStringList {"*.mp3", "*.mp4", "*.wav", "*.ogg", "*.flac"}},
 		{FILTER_TYPE::VIDEO, QStringList {"*.mp4", "*.mkv", "*.mov", "*.avi", "*.flv"}},
@@ -84,7 +86,7 @@ namespace FMH
 		{FILTER_TYPE::NONE, QStringList()}
 	};
 	
-	enum MODEL_KEY : uint_fast8_t
+    enum MODEL_KEY : int
 	{
 		ICON,
 		LABEL,
@@ -184,7 +186,7 @@ namespace FMH
 		
 	}; 
 	
-	static const QHash<FMH::MODEL_KEY, QString> MODEL_NAME =
+    static const QHash<FMH::MODEL_KEY, QString> MODEL_NAME =
 	{
 		{MODEL_KEY::ICON, "icon"},
 		{MODEL_KEY::LABEL, "label"},
@@ -282,7 +284,7 @@ namespace FMH
 		{MODEL_KEY::COUNTRY, "country"}
 	};
 	
-	static const QHash<QString, FMH::MODEL_KEY> MODEL_NAME_KEY =
+    static const QHash<QString, FMH::MODEL_KEY> MODEL_NAME_KEY =
 	{
 		{MODEL_NAME[MODEL_KEY::ICON], MODEL_KEY::ICON},
 		{MODEL_NAME[MODEL_KEY::LABEL], MODEL_KEY::LABEL},
@@ -379,11 +381,11 @@ namespace FMH
 		{MODEL_NAME[MODEL_KEY::COUNTRY], MODEL_KEY::COUNTRY}
 	};
 	
-	typedef QHash<FMH::MODEL_KEY, QString> MODEL;
+    typedef QHash<FMH::MODEL_KEY, QString> MODEL;
 	typedef QVector<MODEL> MODEL_LIST;
 	
 #ifdef Q_OS_ANDROID
-	enum PATHTYPE_KEY : uint_fast8_t
+    enum PATHTYPE_KEY : int
 	{
         PLACES_PATH,
         REMOTE_PATH,
@@ -397,7 +399,7 @@ namespace FMH
         CLOUD_PATH
 	};
 #else
-    enum PATHTYPE_KEY : uint_fast8_t
+    enum PATHTYPE_KEY : int
     {
         PLACES_PATH = KFilePlacesModel::GroupType::PlacesType,
         REMOTE_PATH = KFilePlacesModel::GroupType::RemoteType,
@@ -411,7 +413,7 @@ namespace FMH
         CLOUD_PATH = 12
     };
 #endif
-	static const QHash<PATHTYPE_KEY, QString> PATHTYPE_NAME =
+    static const QHash<PATHTYPE_KEY, QString> PATHTYPE_NAME =
 	{
 		{PATHTYPE_KEY::PLACES_PATH, "Places"},
 		{PATHTYPE_KEY::DRIVES_PATH, "Drives"},
