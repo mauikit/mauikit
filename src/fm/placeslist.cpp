@@ -100,8 +100,7 @@ static FMH::MODEL_LIST getGroup(const KFilePlacesModel &model, const FMH::PATHTY
 	#ifdef Q_OS_ANDROID
     FMH::MODEL_LIST res;
     if(type == FMH::PATHTYPE_KEY::PLACES_PATH)
-        for(const auto &path : FMH::defaultPaths)
-            res << FMH::getDirInfoModel(path, FMH::PATHTYPE_NAME[type]);
+        res = FM::getDefaultPaths();
 
     return res;
 	#else
@@ -230,11 +229,12 @@ void PlacesList::addPlace(const QString& path)
     
     qDebug()<< "trying to add path to places" << path<< QDir(path).dirName();
     emit this->preItemAppendedAt(index);
-    const auto url =  QStringLiteral("file://")+path;
 	
 #ifdef Q_OS_ANDROID
 	//do android stuff until cmake works with android 
+    this->list.insert(index, FMH::getDirInfoModel(path));
 #else
+    const auto url =  QStringLiteral("file://")+path;
 	this->model->addPlace(QDir(path).dirName(), url);
 	this->list.insert(index, modelPlaceInfo(*this->model, this->model->closestItem(QUrl(url)), FMH::PATHTYPE_KEY::PLACES_PATH));
 #endif
