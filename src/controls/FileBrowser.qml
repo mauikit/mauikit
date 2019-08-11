@@ -42,7 +42,7 @@ Maui.Page
 	property alias dialog : dialogLoader.item
 	property alias goUpButton : goUpButton
 	
-	property alias currentPathType : modelList.pathType
+	property int currentPathType : currentFMList.pathType
 	property int thumbnailsSize : iconSizes.large
 	
 	signal itemClicked(int index)
@@ -936,23 +936,23 @@ Maui.Page
 			case Maui.FMList.APPS_PATH:
 				if(item.path.endsWith("/"))
 					populate(path)
-					else
-						Maui.FM.runApplication(path)
-						break
+				else
+					Maui.FM.runApplication(path)
+				break
 			case Maui.FMList.CLOUD_PATH:
 				if(item.mime === "inode/directory")
 					control.openFolder(path)
-					else
-						Maui.FM.openCloudItem(item)
-						break;
+				else
+					Maui.FM.openCloudItem(item)
+				break;
 			default:
 				if(selectionMode && !Maui.FM.isDir(item.path))
 					addToSelection(item, true)
 					else
 					{
-						if(Maui.FM.isDir(path))
+						if(item.mime === "inode/directory")							
 							control.openFolder(path)
-							else if(Maui.FM.isApp(path))
+						else if(Maui.FM.isApp(path))
 								control.launchApp(path)
 								else
 								{

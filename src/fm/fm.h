@@ -56,7 +56,8 @@ public:
 	
 	static FMH::MODEL_LIST packItems(const QStringList &items, const QString &type);
 	
-	static FMH::MODEL_LIST getPathContent(const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList(), const QDirIterator::IteratorFlags &iteratorFlags = QDirIterator::NoIteratorFlags);
+	void getPathContent(const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList(), const QDirIterator::IteratorFlags &iteratorFlags = QDirIterator::NoIteratorFlags);
+// 	static FMH::MODEL_LIST getPathContent(const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList(), const QDirIterator::IteratorFlags &iteratorFlags = QDirIterator::NoIteratorFlags);
 	static FMH::MODEL_LIST getAppsContent(const QString &path);	
 
 	static bool copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory);
@@ -83,7 +84,8 @@ signals:
 	void cloudItemReady(FMH::MODEL item, QString path); //when a item is downloaded and ready
 	
 	void trashContentReady(FMH::MODEL_LIST list);
-
+	void pathContentReady(FMH::PATH_CONTENT list);
+	
 	void warningMessage(QString message);
 	void loadProgress(int percent);
 	

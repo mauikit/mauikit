@@ -34,6 +34,7 @@
 #include <QString>
 #include <QVector>
 #include <QHash>
+#include <QUrl>
 
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
@@ -384,6 +385,12 @@ namespace FMH
     typedef QHash<FMH::MODEL_KEY, QString> MODEL;
 	typedef QVector<MODEL> MODEL_LIST;
 	
+	struct PATH_CONTENT
+	{
+		QString path;
+		FMH::MODEL_LIST content;
+	};
+	
 #ifdef Q_OS_ANDROID
     enum PATHTYPE_KEY : int
 	{
@@ -392,11 +399,13 @@ namespace FMH
         DRIVES_PATH,
         REMOVABLE_PATH,
         TAGS_PATH,
-        UNKOWN_TYPE,
+        UNKNOWN_TYPE,
         APPS_PATH,
         TRASH_PATH,
         SEARCH_PATH,
-        CLOUD_PATH
+        CLOUD_PATH,
+		FISH_PATH,
+		MTP_PATH
 	};
 #else
     enum PATHTYPE_KEY : int
@@ -406,26 +415,63 @@ namespace FMH
         DRIVES_PATH = KFilePlacesModel::GroupType::DevicesType,
         REMOVABLE_PATH = KFilePlacesModel::GroupType::RemovableDevicesType,
         TAGS_PATH = KFilePlacesModel::GroupType::TagsType,
-        UNKOWN_TYPE = KFilePlacesModel::GroupType::UnknownType,
+        UNKNOWN_TYPE = KFilePlacesModel::GroupType::UnknownType,
         APPS_PATH = 9,
         TRASH_PATH = 10,
         SEARCH_PATH = 11,
-        CLOUD_PATH = 12
-    };
-#endif
-    static const QHash<PATHTYPE_KEY, QString> PATHTYPE_NAME =
-	{
-		{PATHTYPE_KEY::PLACES_PATH, "Places"},
-		{PATHTYPE_KEY::DRIVES_PATH, "Drives"},
-		{PATHTYPE_KEY::APPS_PATH, "Apps"},
-		{PATHTYPE_KEY::REMOTE_PATH, "Remote"},
-		{PATHTYPE_KEY::REMOVABLE_PATH, "Removable"},
-		{PATHTYPE_KEY::UNKOWN_TYPE, "Unkown"},
-		{PATHTYPE_KEY::TRASH_PATH, "Trash"},
-		{PATHTYPE_KEY::TAGS_PATH, "Tags"},
-		{PATHTYPE_KEY::SEARCH_PATH, "Search"},
-		{PATHTYPE_KEY::CLOUD_PATH, "Cloud"}
+		CLOUD_PATH = 12,
+		FISH_PATH = 13,
+		MTP_PATH = 14,
 	};
+#endif
+    static const QHash<PATHTYPE_KEY, QString> PATHTYPE_SCHEME =
+	{
+		{PATHTYPE_KEY::PLACES_PATH, "file"},
+		{PATHTYPE_KEY::DRIVES_PATH, "drives"},
+		{PATHTYPE_KEY::APPS_PATH, "apps"},
+		{PATHTYPE_KEY::REMOTE_PATH, "remote"},
+		{PATHTYPE_KEY::REMOVABLE_PATH, "removable"},
+		{PATHTYPE_KEY::UNKNOWN_TYPE, "Unkown"},
+		{PATHTYPE_KEY::TRASH_PATH, "trash"},
+		{PATHTYPE_KEY::TAGS_PATH, "tags"},
+		{PATHTYPE_KEY::SEARCH_PATH, "search"},
+		{PATHTYPE_KEY::CLOUD_PATH, "cloud"},
+		{PATHTYPE_KEY::FISH_PATH, "fish"},
+		{PATHTYPE_KEY::MTP_PATH, "mtp"}
+	};
+	
+	static const QHash<PATHTYPE_KEY, QString> PATHTYPE_URI =
+	{
+		{PATHTYPE_KEY::PLACES_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::PLACES_PATH] + "://"},
+		{PATHTYPE_KEY::DRIVES_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::DRIVES_PATH] + "://"},
+		{PATHTYPE_KEY::APPS_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::APPS_PATH] + "://"},
+		{PATHTYPE_KEY::REMOTE_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::REMOTE_PATH] + "://"},
+		{PATHTYPE_KEY::REMOVABLE_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::REMOVABLE_PATH] + "://"},
+		{PATHTYPE_KEY::UNKNOWN_TYPE, PATHTYPE_SCHEME[PATHTYPE_KEY::UNKNOWN_TYPE] + "://"},
+		{PATHTYPE_KEY::TRASH_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::TRASH_PATH] + "://"},
+		{PATHTYPE_KEY::TAGS_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::TAGS_PATH] + "://"},
+		{PATHTYPE_KEY::SEARCH_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::SEARCH_PATH] + "://"},
+		{PATHTYPE_KEY::CLOUD_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::CLOUD_PATH] + "://"},
+		{PATHTYPE_KEY::FISH_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::FISH_PATH] + "://"},
+		{PATHTYPE_KEY::MTP_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::MTP_PATH] + "://"}
+	};
+	
+	static const QHash<PATHTYPE_KEY, QString> PATHTYPE_LABEL =
+	{
+		{PATHTYPE_KEY::PLACES_PATH, ("Places")},
+		{PATHTYPE_KEY::DRIVES_PATH, ("Drives")},
+		{PATHTYPE_KEY::APPS_PATH, ("Apps")},
+		{PATHTYPE_KEY::REMOTE_PATH, ("Remote")},
+		{PATHTYPE_KEY::REMOVABLE_PATH, ("Removable")},
+		{PATHTYPE_KEY::UNKNOWN_TYPE, ("Unknown")},
+		{PATHTYPE_KEY::TRASH_PATH, ("Trash")},
+		{PATHTYPE_KEY::TAGS_PATH, ("Tags")},
+		{PATHTYPE_KEY::SEARCH_PATH, ("Search")},
+		{PATHTYPE_KEY::CLOUD_PATH, ("Cloud")},
+		{PATHTYPE_KEY::FISH_PATH, ("Remote")},
+		{PATHTYPE_KEY::MTP_PATH, ("Drives")}
+	};
+	
 	
 	const QString DataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
 	const QString CloudCachePath = FMH::DataPath+"/Cloud/";
@@ -459,25 +505,25 @@ namespace FMH
 	};	
 	
 	#else
-	const QString PicturesPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
-	const QString DownloadsPath = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
-	const QString DocumentsPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-	const QString HomePath =  QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-	const QString MusicPath = QStandardPaths::writableLocation(QStandardPaths::MusicLocation);
-	const QString VideosPath = QStandardPaths::writableLocation(QStandardPaths::MoviesLocation);
-	const QString DesktopPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
-	const QString AppsPath = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
-	const QString RootPath = "/";
+	const QString PicturesPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)).toString();
+	const QString DownloadsPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DownloadLocation)).toString();
+	const QString DocumentsPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).toString();
+	const QString HomePath =  QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).toString();
+	const QString MusicPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::MusicLocation)).toString();
+	const QString VideosPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::MoviesLocation)).toString();
+	const QString DesktopPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation)).toString();
+	const QString AppsPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation)).toString();
+	const QString RootPath = "file:///";
 	const QStringList defaultPaths =
 	{
-		HomePath,
-		DesktopPath,
-		DocumentsPath,
-		PicturesPath,
-		MusicPath,
-		VideosPath,
-		DownloadsPath,
-        RootPath
+		FMH::HomePath,
+		FMH::DesktopPath,
+		FMH::DocumentsPath,
+		FMH::PicturesPath,
+		FMH::MusicPath,
+		FMH::VideosPath,
+		FMH::DownloadsPath,
+		FMH::RootPath
 	};
 	
 	const QMap<QString, QString> folderIcon
@@ -496,10 +542,9 @@ namespace FMH
 	#endif	
 	
 	inline bool fileExists(const QString &url)
-	{
-		QFileInfo path(url);
-		if (path.exists()) return true;
-		else return false;
+	{		
+		const QFileInfo path(QString(url).replace("file://", ""));		
+		return path.exists();
 	}
 	
 	inline QVariantMap dirConf(const QString &path)
@@ -579,7 +624,7 @@ namespace FMH
 	
 	inline QString getIconName(const QString &path)
 	{
-		if(QFileInfo(path).isDir())
+		if(QFileInfo(QString(path).replace("file://", "")).isDir())
 		{
 			if(folderIcon.contains(path))
 				return folderIcon[path];
@@ -625,12 +670,12 @@ namespace FMH
 	typedef QMap<FMH::MODEL_KEY, QString> DB;
 	
 	const QString FMPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/maui/fm/";
-	const QString DBName = "fm.db";	
-	
+	const QString DBName = "fm.db";
 	
 	inline FMH::MODEL getDirInfoModel(const QString &path, const QString &type = QString())
 	{
-		const QDir dir (path);
+			
+		const QDir dir (QString(path).replace("file://", ""));		
 		if(!dir.exists()) 
 			return FMH::MODEL();
 		
@@ -645,7 +690,8 @@ namespace FMH
 	
 	inline QVariantMap getDirInfo(const QString &path, const QString &type = QString())
 	{
-		const QFileInfo file(path);
+			
+		const QFileInfo file(QString(path).replace("file://", ""));	
 		
 		if(!file.exists()) 
 			return QVariantMap();
@@ -661,12 +707,14 @@ namespace FMH
 	
 	
 	inline FMH::MODEL getFileInfoModel(const QString &path)
-	{
-		const QFileInfo file(path);
+	{			
+		const QFileInfo file(QString(path).replace("file://", ""));	
+		
+		
 		if(!file.exists()) 
 			return FMH::MODEL();
 		
-		const auto mime = FMH::getMime(path);
+		const auto mime = FMH::getMime(QString(path).replace("file://", ""));
 		return FMH::MODEL 
 		{
 			{FMH::MODEL_KEY::GROUP, file.group()},
@@ -679,20 +727,23 @@ namespace FMH
 			{FMH::MODEL_KEY::MIME, mime },
 			{FMH::MODEL_KEY::ICON, FMH::getIconName(path)},
 			{FMH::MODEL_KEY::SIZE, QString::number(file.size()) /*locale.formattedDataSize(file.size())*/},
-			{FMH::MODEL_KEY::PATH, path},
+			{FMH::MODEL_KEY::PATH, QUrl::fromLocalFile(path).toString()},
 			{FMH::MODEL_KEY::THUMBNAIL, path},
 			{FMH::MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path).count() - 2) : "0"}			
 		};		
 	}	
 	
 	inline QVariantMap getFileInfo(const QString &path)
-	{
-		const QFileInfo file(path);
+	{		
+		
+		const QFileInfo file(QString(path).replace("file://", ""));	
 		
 		if(!file.exists()) 
 			return QVariantMap();
 		
-		const auto data = FMH::getFileInfoModel(path);
+		const auto data = FMH::getFileInfoModel(QString(path).replace("file://", ""));
+		
+		qDebug()<< "getting item info model" << data;
 		
 		QVariantMap res; 
 		for(const auto &key : data.keys())		

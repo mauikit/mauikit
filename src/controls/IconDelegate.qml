@@ -135,7 +135,7 @@ ItemDelegate
 				id: img
 				clip: true
 				anchors.centerIn: parent
-				source:  "file://"+model.thumbnail
+				source: model.thumbnail ? (model.thumbnail.startsWith("file://") ? model.thumbnail : "file://"+model.thumbnail) : undefined
 				height: Math.min(folderSize, sourceSize.height)
 				width: isDetails ? folderSize : Math.min(control.width * 0.9, sourceSize.width)
 // 				sourceSize.width: width

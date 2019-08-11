@@ -32,6 +32,11 @@
 #include <QLocale>
 #include <QRegularExpression>
 
+#include <QtConcurrent>
+#include <QtConcurrent/QtConcurrentRun>
+#include <QFuture>
+#include <QThread>
+
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
 #else
@@ -178,26 +183,85 @@ QVariantList FM::get(const QString &queryTxt)
 	return mapList;
 }
 
-FMH::MODEL_LIST FM::getPathContent(const QString& path, const bool &hidden, const bool &onlyDirs, const QStringList& filters, const QDirIterator::IteratorFlags &iteratorFlags)
-{
-	FMH::MODEL_LIST content;
+
+
+void FM::getPathContent(const QString& path, const bool &hidden, const bool &onlyDirs, const QStringList& filters, const QDirIterator::IteratorFlags &iteratorFlags)
+{	
+	qDebug()<< "Getting async path contents";
 	
-	if (FM::isDir(path))
+	#ifdef Q_OS_ANDROID
+	QFutureWatcher<FMH::PATH_CONTENT> *watcher = new QFutureWatcher<FMH::PATH_CONTENT>;
+	connect(watcher, &QFutureWatcher<FMH::PATH_CONTENT>::finished, [this, watcher = std::move(watcher)]()
 	{
-		QDir::Filters dirFilter;
-		
-		dirFilter = (onlyDirs ? QDir::AllDirs | QDir::NoDotDot | QDir::NoDot :
-		QDir::Files | QDir::AllDirs | QDir::NoDotDot | QDir::NoDot);
-		
-		if(hidden)
-			dirFilter = dirFilter | QDir::Hidden | QDir::System;
-		
-		QDirIterator it (path, filters, dirFilter, iteratorFlags);
-		while (it.hasNext())        
-			content << FMH::getFileInfoModel(it.next());        
-	}
+		emit this->pathContentReady(watcher->future().result());
+		watcher->deleteLater();
+	});
 	
-	return content;
+	QFuture<FMH::PATH_CONTENT> t1 = QtConcurrent::run([=]() -> FMH::PATH_CONTENT
+	{		
+		FMH::PATH_CONTENT res;
+		res.path = path;
+		
+		FMH::MODEL_LIST content;
+		
+		if (FM::isDir(path))
+		{
+			QDir::Filters dirFilter;
+			
+			dirFilter = (onlyDirs ? QDir::AllDirs | QDir::NoDotDot | QDir::NoDot :
+			QDir::Files | QDir::AllDirs | QDir::NoDotDot | QDir::NoDot);
+			
+			if(hidden)
+				dirFilter = dirFilter | QDir::Hidden | QDir::System;
+			
+			QDirIterator it (QString(path).replace("file://", ""), filters, dirFilter, iteratorFlags);
+			while (it.hasNext())        
+				content << FMH::getFileInfoModel(it.next());        
+		}
+		
+		res.content = content;		
+		return res;
+	});
+	watcher->setFuture(t1);
+	
+	#else	
+	auto dir = new KCoreDirLister;
+	connect(dir, static_cast<void (KCoreDirLister::*)(const QUrl&)>(&KCoreDirLister::completed), [=, dir = std::move(dir)](QUrl url)
+	{
+		qDebug()<< "PATH CONTENT READY" << url;	
+		
+		FMH::PATH_CONTENT res;
+		FMH::MODEL_LIST content;
+		for(const auto &kfile : dir->items())
+		{
+			qDebug() << kfile.url() << kfile.name() << kfile.isDir();
+			content << FMH::MODEL{ {FMH::MODEL_KEY::LABEL, kfile.name()},
+			{FMH::MODEL_KEY::NAME, kfile.name()},
+			{FMH::MODEL_KEY::PATH, kfile.url().toString()},
+			{FMH::MODEL_KEY::THUMBNAIL, kfile.localPath()},
+			{FMH::MODEL_KEY::MIME, kfile.mimetype()},
+			{FMH::MODEL_KEY::GROUP, kfile.group()},
+			{FMH::MODEL_KEY::ICON, kfile.iconName()},
+			{FMH::MODEL_KEY::SIZE, QString::number(kfile.size())},
+			{FMH::MODEL_KEY::THUMBNAIL, kfile.mostLocalUrl().toString()},
+			{FMH::MODEL_KEY::OWNER, kfile.user()},
+			};
+		}
+		
+		res.path = path;
+		res.content = content;
+		
+		emit this->pathContentReady(res);
+		dir->deleteLater();
+	});
+	
+	
+	const auto url = QUrl(path).isRelative()? QUrl::fromLocalFile(path) : QUrl(path);
+	
+	if(dir->openUrl(url))
+		qDebug()<< "GETTING PATH CONTENT" << url;	
+	
+	#endif	
 }
 
 void FM::getTrashContent()
@@ -237,17 +301,18 @@ FMH::MODEL_LIST FM::getAppsContent(const QString& path)
 {
 	FMH::MODEL_LIST res;
 	#if (defined (Q_OS_LINUX) && !defined (Q_OS_ANDROID))
-	if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/"))
-		return MAUIKDE::getApps(QString(path).replace(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/",""));
-	else
-		return MAUIKDE::getApps();
+	QUrl __url(path);	
+	
+// 	if(__url.scheme() == FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH])
+	return MAUIKDE::getApps(QString(path).replace("apps://", ""));
+
 	#endif
 	return res;
 }
 
 FMH::MODEL_LIST FM::getDefaultPaths()
 {
-	return packItems(FMH::defaultPaths, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::PLACES_PATH]);
+	return packItems(FMH::defaultPaths, FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::PLACES_PATH]);
 }
 
 FMH::MODEL_LIST FM::getAppsPath()
@@ -261,9 +326,9 @@ FMH::MODEL_LIST FM::getAppsPath()
 		FMH::MODEL
 		{
 			{FMH::MODEL_KEY::ICON, "system-run"},
-			{FMH::MODEL_KEY::LABEL, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]},
-			{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/"},
-			{FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::PLACES_PATH]}
+			{FMH::MODEL_KEY::LABEL, "Apps"},
+			{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::APPS_PATH]},
+			{FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]}
 		}
 	};
 }
@@ -362,16 +427,16 @@ FMH::MODEL_LIST FM::getTags(const int &limit)
 	
 	if(this->tag)
 	{
-		for(auto tag : this->tag->getUrlsTags(false))
+		for(const auto &tag : this->tag->getUrlsTags(false))
 		{
 			qDebug()<< "TAG << "<< tag;
-			auto label = tag.toMap().value(TAG::KEYMAP[TAG::KEYS::TAG]).toString();
+			const auto label = tag.toMap().value(TAG::KEYMAP[TAG::KEYS::TAG]).toString();
 			data << FMH::MODEL
 			{
-				{FMH::MODEL_KEY::PATH, label},
+				{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::TAGS_PATH]+label},
 				{FMH::MODEL_KEY::ICON, "tag"},
 				{FMH::MODEL_KEY::LABEL, label},
-				{FMH::MODEL_KEY::TYPE,  FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::TAGS_PATH]}
+				{FMH::MODEL_KEY::TYPE,  FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::TAGS_PATH]}
 			};
 		}
 	}
@@ -407,13 +472,13 @@ FMH::MODEL_LIST FM::getCloudAccounts()
 	{
 		auto map = account.toMap();
 		res << FMH::MODEL {
-			{FMH::MODEL_KEY::PATH, QStringLiteral("Cloud/")+map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString()},
+			{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::CLOUD_PATH]+map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString()},
 			{FMH::MODEL_KEY::ICON, "folder-cloud"},
 			{FMH::MODEL_KEY::LABEL, map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString()},
 			{FMH::MODEL_KEY::USER, map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString()},
 			{FMH::MODEL_KEY::SERVER, map[FMH::MODEL_NAME[FMH::MODEL_KEY::SERVER]].toString()},
 			{FMH::MODEL_KEY::PASSWORD, map[FMH::MODEL_NAME[FMH::MODEL_KEY::PASSWORD]].toString()},
-			{FMH::MODEL_KEY::TYPE,  FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]}};
+			{FMH::MODEL_KEY::TYPE,  FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::CLOUD_PATH]}};
 	}
 	return res;
 }
@@ -503,7 +568,7 @@ QString FM::resolveUserCloudCachePath(const QString &server, const QString &user
 
 QString FM::resolveLocalCloudPath(const QString& path)
 {
-	return QString(path).replace(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]+"/"+this->sync->getUser(), "");
+	return QString(path).replace(FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::CLOUD_PATH]+this->sync->getUser(), "");
 }
 
 FMH::MODEL_LIST FM::getTagContent(const QString &tag)
@@ -539,14 +604,15 @@ bool FM::isDefaultPath(const QString &path)
 
 QString FM::parentDir(const QString &path)
 {
-	QDir dir(path);
+	QDir dir(QString(path).replace("file://", ""));
 	dir.cdUp();
 	return dir.absolutePath();
 }
 
 bool FM::isDir(const QString &path)
 {
-	return QFileInfo(path).isDir();
+	QFileInfo file(QString(path).replace("file://", ""));
+	 return file.isDir();
 }
 
 bool FM::isApp(const QString& path)
@@ -556,7 +622,7 @@ bool FM::isApp(const QString& path)
 
 bool FM::isCloud(const QString &path)
 {
-	return path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]);
+	return path.startsWith(FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::CLOUD_PATH]);
 }
 
 bool FM::fileExists(const QString &path)
@@ -721,7 +787,9 @@ bool FM::copyPath(QString sourceDir, QString destinationDir, bool overWriteDirec
 	
 	return false;
 	#else 
-	auto job = KIO::move(QUrl::fromLocalFile(sourceDir), QUrl::fromLocalFile(destinationDir));
+	
+	qDebug()<< "TRYING TO COPY" << sourceDir << destinationDir;
+	auto job = KIO::move(QUrl(sourceDir), QUrl(destinationDir));
 	job->start();
 	return true;	
 	#endif
@@ -730,11 +798,11 @@ bool FM::copyPath(QString sourceDir, QString destinationDir, bool overWriteDirec
 bool FM::removeFile(const QString &path)
 {
 	#ifdef Q_OS_ANDROID
-	if(QFileInfo(path).isDir())
+	if(QFileInfo(QString(path).replace("file://", "")).isDir())
 		return removeDir(path);
 	else return QFile(path).remove();
 	#else
-	auto job = KIO::del(QUrl::fromLocalFile(path));
+	auto job = KIO::del(QUrl(path));
 	job->start();
 	return true;
 	#endif    
@@ -744,7 +812,7 @@ void FM::moveToTrash(const QString &path)
 {
 	#ifdef Q_OS_ANDROID
 	#else
-	auto job = KIO::trash(QUrl::fromLocalFile(path));
+	auto job = KIO::trash(QUrl(path));
 	job->start();	
 	#endif
 }
@@ -761,9 +829,9 @@ void FM::emptyTrash()
 bool FM::removeDir(const QString &path)
 {
 	bool result = true;
-	QDir dir(path);
+	QDir dir(QString(path).replace("file://", ""));
 	
-	if (dir.exists(path))
+	if (dir.exists())
 	{
 		Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst))
 		{
@@ -789,21 +857,19 @@ bool FM::removeDir(const QString &path)
 
 bool FM::rename(const QString &path, const QString &name)
 {
-	QFile file(path);
-	auto url = QFileInfo(path).dir().absolutePath();
-	qDebug()<< "RENAME FILE TO:" << path << name << url;
-	
+	QFile file(QString(path).replace("file://", ""));
+	auto url = QFileInfo(QString(path).replace("file://", "")).dir().absolutePath();	
 	return file.rename(url+"/"+name);
 }
 
 bool FM::createDir(const QString &path, const QString &name)
 {
-	return QDir(path).mkdir(name);
+	return QDir(QString(path).replace("file://", "")).mkdir(name);
 }
 
 bool FM::createFile(const QString &path, const QString &name)
 {
-	QFile file(path + "/" + name);
+	QFile file(QString(path).replace("file://", "") + "/" + name);
 	
 	if(file.open(QIODevice::ReadWrite))
 	{

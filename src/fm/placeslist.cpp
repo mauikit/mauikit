@@ -84,12 +84,12 @@ static FMH::MODEL modelPlaceInfo(const KFilePlacesModel &model, const QModelInde
 {
     return FMH::MODEL
         {
-            {FMH::MODEL_KEY::PATH, model.url(index).toString().replace("file://", "")},
-            {FMH::MODEL_KEY::URL, model.url(index).toString().replace("file://", "")},
+            {FMH::MODEL_KEY::PATH, model.url(index).toString()},
+            {FMH::MODEL_KEY::URL, model.url(index).toString()},
             {FMH::MODEL_KEY::ICON, model.icon(index).name()},
             {FMH::MODEL_KEY::LABEL, model.text(index)},
             {FMH::MODEL_KEY::NAME, model.text(index)},
-            {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_NAME[type]}
+            {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_LABEL[type]}
         };
 }
 #endif
@@ -223,7 +223,7 @@ void PlacesList::clearBadgeCount(const int& index)
 void PlacesList::addPlace(const QString& path)
 {    
     const auto it = std::find_if(this->list.rbegin(), this->list.rend(), [](const FMH::MODEL &item) -> bool{
-       return item[FMH::MODEL_KEY::TYPE] == FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::PLACES_PATH]; 
+       return item[FMH::MODEL_KEY::TYPE] == FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]; 
     });
     const auto index = std::distance(it, this->list.rend());
     
