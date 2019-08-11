@@ -456,8 +456,8 @@ FMH::MODEL_LIST FM::getTags(const int &limit)
 
 bool FM::getCloudServerContent(const QString &path, const QStringList &filters, const int &depth)
 {
-	auto user = path.split("/")[1];
-	
+	auto user = QString(path).replace("cloud://", "/").split("/")[1];
+	qDebug()<< "tryina get cloud content" << user;
 	auto data = this->get(QString("select * from clouds where user = '%1'").arg(user));
 	
 	if(data.isEmpty())

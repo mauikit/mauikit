@@ -187,7 +187,7 @@ void FMList::setList()
 			break;
 	}
 	
-	this->pathEmpty = this->list.isEmpty()/* && FM::fileExists(this->path)*/;
+	this->pathEmpty = this->list.isEmpty() && FM::fileExists(this->path);
 	emit this->pathEmptyChanged();
 	
 	this->sortList();
