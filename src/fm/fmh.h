@@ -477,21 +477,21 @@ namespace FMH
 	const QString CloudCachePath = FMH::DataPath+"/Cloud/";
 	
 	#if defined(Q_OS_ANDROID)
-	const QString PicturesPath = PATHS::PicturesPath;
-	const QString DownloadsPath = PATHS::DownloadsPath;
-	const QString DocumentsPath = PATHS::DocumentsPath;
-	const QString HomePath = PATHS::HomePath;
-	const QString MusicPath = PATHS::MusicPath;
-	const QString VideosPath = PATHS::VideosPath;
+    const QString PicturesPath = QUrl::fromLocalFile(PATHS::PicturesPath).toString();
+    const QString DownloadsPath = QUrl::fromLocalFile(PATHS::DownloadsPath).toString();
+    const QString DocumentsPath = QUrl::fromLocalFile(PATHS::DocumentsPath).toString();
+    const QString HomePath = QUrl::fromLocalFile(PATHS::HomePath).toString();
+    const QString MusicPath = QUrl::fromLocalFile(PATHS::MusicPath).toString();
+    const QString VideosPath = QUrl::fromLocalFile(PATHS::VideosPath).toString();
 	
 	const QStringList defaultPaths =
 	{
-		HomePath,
-		DocumentsPath,
-		PicturesPath,
-		MusicPath,
-		VideosPath,
-		DownloadsPath
+        FMH::HomePath,
+        FMH::DocumentsPath,
+        FMH::PicturesPath,
+        FMH::MusicPath,
+        FMH::VideosPath,
+        FMH::DownloadsPath
 	};
 	
 	const QMap<QString, QString> folderIcon
@@ -708,8 +708,7 @@ namespace FMH
 	
 	inline FMH::MODEL getFileInfoModel(const QString &path)
 	{			
-		const QFileInfo file(QString(path).replace("file://", ""));	
-		
+        const QFileInfo file(QString(path).replace("file://", ""));
 		
 		if(!file.exists()) 
 			return FMH::MODEL();
@@ -727,9 +726,9 @@ namespace FMH
 			{FMH::MODEL_KEY::MIME, mime },
 			{FMH::MODEL_KEY::ICON, FMH::getIconName(path)},
 			{FMH::MODEL_KEY::SIZE, QString::number(file.size()) /*locale.formattedDataSize(file.size())*/},
-			{FMH::MODEL_KEY::PATH, QUrl::fromLocalFile(path).toString()},
+            {FMH::MODEL_KEY::PATH, path},
 			{FMH::MODEL_KEY::THUMBNAIL, path},
-			{FMH::MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path).count() - 2) : "0"}			
+            {FMH::MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(QString(path).replace("file://", "")).count() - 2) : "0"}
 		};		
 	}	
 	
