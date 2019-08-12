@@ -547,11 +547,11 @@ namespace FMH
 	 **/
 	inline bool fileExists(const QUrl &path)
 	{		
-// 		if(!path.isLocalFile())
-// 		{
-// 			qWarning() << "URL recived is not a local file" << path;
-// 			return false;	  
-// 		}		
+		if(!path.isLocalFile())
+		{
+			qWarning() << "URL recived is not a local file" << path;
+			return false;	  
+		}		
 		return QFileInfo::exists(path.toLocalFile());		
 	}
 	
@@ -647,11 +647,11 @@ namespace FMH
 	{
 		if(QFileInfo(path.toLocalFile()).isDir())
 		{
-			if(folderIcon.contains(path.toLocalFile()))
-				return folderIcon[path.toLocalFile()];
+			if(folderIcon.contains(path.toString()))
+				return folderIcon[path.toString()];
 			else
 			{
-				auto icon = FMH::dirConf(QString(path.toLocalFile()+"/%1").arg(".directory"))[FMH::MODEL_NAME[FMH::MODEL_KEY::ICON]].toString();
+				auto icon = FMH::dirConf(QString(path.toString()+"/%1").arg(".directory"))[FMH::MODEL_NAME[FMH::MODEL_KEY::ICON]].toString();
 				return icon.isEmpty() ? "folder" : icon;
 			}
 			
@@ -659,7 +659,7 @@ namespace FMH
 			
 			#if defined(Q_OS_ANDROID)
 			QMimeDatabase mime;
-			auto type = mime.mimeTypeForFile(path);
+			auto type = mime.mimeTypeForFile(path.toLocalFile());
 			return type.iconName();
 			#else
 			KFileItem mime(path);

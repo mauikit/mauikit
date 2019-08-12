@@ -555,12 +555,12 @@ FMH::MODEL_LIST FM::getTagContent(const QString &tag)
 	return content;
 }
 
-QVariantMap FM::getDirInfo(const QString &path, const QString &type)
+QVariantMap FM::getDirInfo(const QUrl &path, const QString &type)
 {
 	return FMH::getDirInfo(path, type);
 }
 
-QVariantMap FM::getFileInfo(const QString &path)
+QVariantMap FM::getFileInfo(const QUrl &path)
 {
 	return FMH::getFileInfo(path);
 }
@@ -570,9 +570,9 @@ bool FM::isDefaultPath(const QString &path)
 	return FMH::defaultPaths.contains(path);
 }
 
-QString FM::parentDir(const QString &path)
+QString FM::parentDir(const QUrl &path)
 {
-	QDir dir(QString(path).replace("file://", ""));
+	QDir dir(path.toLocalFile());
 	dir.cdUp();
 	return dir.absolutePath();
 }
@@ -594,12 +594,12 @@ bool FM::isApp(const QString& path)
 	return /*QFileInfo(path).isExecutable() ||*/ path.endsWith(".desktop");
 }
 
-bool FM::isCloud(const QString &path)
+bool FM::isCloud(const QUrl &path)
 {
-	return path.startsWith(FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::CLOUD_PATH]);
+	return path.scheme() == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::CLOUD_PATH];
 }
 
-bool FM::fileExists(const QString &path)
+bool FM::fileExists(const QUrl &path)
 {
 	return FMH::fileExists(path);
 }
@@ -871,12 +871,12 @@ void FM::runApplication(const QString& exec)
 	#endif
 }
 
-QVariantMap FM::dirConf(const QString &path)
+QVariantMap FM::dirConf(const QUrl &path)
 {
 	return FMH::dirConf(path);
 }
 
-void FM::setDirConf(const QString &path, const QString &group, const QString &key, const QVariant &value)
+void FM::setDirConf(const QUrl &path, const QString &group, const QString &key, const QVariant &value)
 {
 	FMH::setDirConf(path, group, key, value);
 }

@@ -102,23 +102,23 @@ public slots:
 	static QString formatSize(const int &size);
 	static QString formatDate(const QString &dateStr, const QString &format = QString("dd/MM/yyyy"), const QString &initFormat = QString());
 	static QString homePath();	
-	static QString parentDir(const QString &path);
+	static QString parentDir(const QUrl &path);
 	
-	static QVariantMap getDirInfo(const QString &path, const QString &type);
-	static QVariantMap getFileInfo(const QString &path);
+	static QVariantMap getDirInfo(const QUrl &path, const QString &type);
+	static QVariantMap getFileInfo(const QUrl &path);
 	
 	static bool isDefaultPath(const QString &path);
 	static bool isDir(const QUrl &path);
 	static bool isApp(const QString &path);
-	static bool isCloud(const QString &path);
-	static bool fileExists(const QString &path);
+	static bool isCloud(const QUrl &path);
+	static bool fileExists(const QUrl &path);
 	
 	/* SETTINGS */
 	static void saveSettings(const QString &key, const QVariant &value, const QString &group);
 	static QVariant loadSettings(const QString &key, const QString &group, const QVariant &defaultValue);
 	
-	static QVariantMap dirConf(const QString &path);
-	static void setDirConf(const QString &path, const QString &group, const QString &key, const QVariant &value);
+	static QVariantMap dirConf(const QUrl &path);
+	static void setDirConf(const QUrl &path, const QString &group, const QString &key, const QVariant &value);
 	
 	/* ACTIONS */	
 	bool copy(const QVariantList &data, const QString &where);
