@@ -185,11 +185,11 @@ QVariantList FM::get(const QString &queryTxt)
 
 
 
-void FM::getPathContent(const QString& path, const bool &hidden, const bool &onlyDirs, const QStringList& filters, const QDirIterator::IteratorFlags &iteratorFlags)
+void FM::getPathContent(const QUrl& path, const bool &hidden, const bool &onlyDirs, const QStringList& filters, const QDirIterator::IteratorFlags &iteratorFlags)
 {	
 	qDebug()<< "Getting async path contents";
 	
-	#ifdef Q_OS_ANDROID
+// 	#ifdef Q_OS_ANDROID
 	QFutureWatcher<FMH::PATH_CONTENT> *watcher = new QFutureWatcher<FMH::PATH_CONTENT>;
 	connect(watcher, &QFutureWatcher<FMH::PATH_CONTENT>::finished, [this, watcher = std::move(watcher)]()
 	{
@@ -200,7 +200,7 @@ void FM::getPathContent(const QString& path, const bool &hidden, const bool &onl
 	QFuture<FMH::PATH_CONTENT> t1 = QtConcurrent::run([=]() -> FMH::PATH_CONTENT
 	{		
 		FMH::PATH_CONTENT res;
-		res.path = path;
+		res.path = path.toString();
 		
 		FMH::MODEL_LIST content;
 		
@@ -214,64 +214,15 @@ void FM::getPathContent(const QString& path, const bool &hidden, const bool &onl
 			if(hidden)
 				dirFilter = dirFilter | QDir::Hidden | QDir::System;
 			
-			QDirIterator it (QString(path).replace("file://", ""), filters, dirFilter, iteratorFlags);
+			QDirIterator it (path.toLocalFile(), filters, dirFilter, iteratorFlags);
 			while (it.hasNext())        
-				content << FMH::getFileInfoModel(it.next());        
+				content << FMH::getFileInfoModel(QUrl::fromLocalFile(it.next()));        
 		}
 		
-		res.content = content;		
+		res.content = content;	
 		return res;
 	});
 	watcher->setFuture(t1);
-	
-	#else	
-	auto dir = new KCoreDirLister(this);
-	connect(dir, static_cast<void (KCoreDirLister::*)(const QUrl&)>(&KCoreDirLister::completed), [=, dir](QUrl url)
-	{
-		qDebug()<< "PATH CONTENT READY" << url;	
-		
-		FMH::PATH_CONTENT res;
-		FMH::MODEL_LIST content;
-		for(const auto &kfile : dir->items())
-		{
-			qDebug() << kfile.url() << kfile.name() << kfile.isDir();
-			content << FMH::MODEL{ {FMH::MODEL_KEY::LABEL, kfile.name()},
-			{FMH::MODEL_KEY::NAME, kfile.name()},
-			{FMH::MODEL_KEY::PATH, kfile.url().toString()},
-			{FMH::MODEL_KEY::THUMBNAIL, kfile.localPath()},
-			{FMH::MODEL_KEY::MIME, kfile.mimetype()},
-			{FMH::MODEL_KEY::GROUP, kfile.group()},
-			{FMH::MODEL_KEY::ICON, kfile.iconName()},
-			{FMH::MODEL_KEY::SIZE, QString::number(kfile.size())},
-			{FMH::MODEL_KEY::THUMBNAIL, kfile.mostLocalUrl().toString()},
-			{FMH::MODEL_KEY::OWNER, kfile.user()},
-			};
-		}
-		
-		res.path = path;
-		res.content = content;
-		
-		emit this->pathContentReady(res);
-// 		dir->deleteLater();
-	});
-	
-// 	connect(dir, static_cast<void (KCoreDirLister::*)(const QUrl&, const KFileItemList &items)>(&KCoreDirLister::itemsAdded), []()
-//  {
-// 	 qDebug()<< "MORE ITEMS WERE ADDED";
-// });
-// 	
-// 	connect(dir, static_cast<void (KCoreDirLister::*)(const KFileItemList &items)>(&KCoreDirLister::newItems), []()
-// 	{
-// 		qDebug()<< "MORE NEW ITEMS WERE ADDED";
-// 	});
-	
-	
-	const auto url = QUrl(path).isRelative()? QUrl::fromLocalFile(path) : QUrl(path);
-	
-	if(dir->openUrl(url))
-		qDebug()<< "GETTING PATH CONTENT" << url;	
-	
-	#endif	
 }
 
 void FM::getTrashContent()
@@ -456,8 +407,15 @@ FMH::MODEL_LIST FM::getTags(const int &limit)
 
 bool FM::getCloudServerContent(const QString &path, const QStringList &filters, const int &depth)
 {
-	auto user = QString(path).replace("cloud://", "/").split("/")[1];
-	qDebug()<< "tryina get cloud content" << user;
+	const auto __list = QString(path).replace("cloud://", "/").split("/");
+	
+	if(__list.isEmpty() || __list.size() < 2)
+	{
+		qWarning()<< "Could not parse username to get cloud server content";
+		return false;		
+	}
+	
+	auto user = __list[1];
 	auto data = this->get(QString("select * from clouds where user = '%1'").arg(user));
 	
 	if(data.isEmpty())
@@ -619,9 +577,15 @@ QString FM::parentDir(const QString &path)
 	return dir.absolutePath();
 }
 
-bool FM::isDir(const QString &path)
+bool FM::isDir(const QUrl &path)
 {
-	QFileInfo file(QString(path).replace("file://", ""));
+	if(!path.isLocalFile())
+	{
+		qWarning() << "URL recived is not a local file. isDir" << path;
+		return false;	  
+	}	
+	
+	QFileInfo file(path.toLocalFile());
 	 return file.isDir();
 }
 

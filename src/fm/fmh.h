@@ -541,23 +541,39 @@ namespace FMH
 	
 	#endif	
 	
-	inline bool fileExists(const QString &url)
+	/**
+	 * Checks if a local file exists.
+	 * The URL must represent a local file path, by using the scheme file://
+	 **/
+	inline bool fileExists(const QUrl &path)
 	{		
-		const QFileInfo path(QString(url).replace("file://", ""));		
-		return path.exists();
+// 		if(!path.isLocalFile())
+// 		{
+// 			qWarning() << "URL recived is not a local file" << path;
+// 			return false;	  
+// 		}		
+		return QFileInfo::exists(path.toLocalFile());		
 	}
 	
-	inline QVariantMap dirConf(const QString &path)
+	
+	/**
+	 * Return the configuration of a single directory represented
+	 * by a QVariantMap.
+	 * The passed path must be a local file URL.
+	 **/	
+	inline QVariantMap dirConf(const QUrl &path)
 	{
 		if(!FMH::fileExists(path))
 			return QVariantMap();
 		
 		QString icon, iconsize, hidden, detailview, showthumbnail, showterminal;
+		
 		uint count = 0, sortby = FMH::MODEL_KEY::MODIFIED, viewType = 0;
+		
 		bool foldersFirst = false;
 		
 		#ifdef Q_OS_ANDROID
-		QSettings file(path, QSettings::Format::NativeFormat);
+		QSettings file(path.toLocalFile(), QSettings::Format::NativeFormat);
 		file.beginGroup(QString("Desktop Entry"));
 		icon = file.value("Icon").toString();
 		file.endGroup();
@@ -578,7 +594,8 @@ namespace FMH
 		file.endGroup();
 		
 		#else
-		KConfig file(path);
+		
+		KConfig file(path.toLocalFile());
 		icon =  file.entryMap(QString("Desktop Entry"))["Icon"];
 		hidden = file.entryMap(QString("Settings"))["HiddenFilesShown"];
 		iconsize = file.entryMap(QString("MAUIFM"))["IconSize"];
@@ -589,9 +606,10 @@ namespace FMH
 		sortby = file.entryMap(QString("MAUIFM"))["SortBy"].toInt();
 		foldersFirst = file.entryMap(QString("MAUIFM"))["FoldersFirst"] == "true" ? true : false;
 		viewType = file.entryMap(QString("MAUIFM"))["ViewType"].toInt();
+		
 		#endif
 		
-		auto res = QVariantMap({
+		return QVariantMap({
 			{FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], icon.isEmpty() ? "folder" : icon},
 							   {FMH::MODEL_NAME[FMH::MODEL_KEY::ICONSIZE], iconsize},
 						 {FMH::MODEL_NAME[FMH::MODEL_KEY::COUNT], count},
@@ -603,34 +621,37 @@ namespace FMH
 						 {FMH::MODEL_NAME[FMH::MODEL_KEY::FOLDERSFIRST], foldersFirst},
 						 {FMH::MODEL_NAME[FMH::MODEL_KEY::VIEWTYPE], viewType}
 		});
-		
-		return res;
 	}
 	
-	inline void setDirConf(const QString &path, const QString &group, const QString &key, const QVariant &value)
+	inline void setDirConf(const QUrl &path, const QString &group, const QString &key, const QVariant &value)
 	{
 		#ifdef Q_OS_ANDROID
-		QSettings file(path, QSettings::Format::IniFormat);
+		QSettings file(path.toLocalFile(), QSettings::Format::IniFormat);
 		file.beginGroup(group);
 		file.setValue(key, value);
 		file.endGroup();
 		file.sync();
 		#else
-		KConfig file(path);
+		KConfig file(path.toLocalFile());
 		auto kgroup = file.group(group);
 		kgroup.writeEntry(key, value);
 		#endif
 	}
 	
-	inline QString getIconName(const QString &path)
+	/**
+	 * Returns the icon name for certain file.
+	 * The file path must be represented as a local file URL.
+	 * It also looks into the directory config file to get custom set icons
+	 **/	
+	inline QString getIconName(const QUrl &path)
 	{
-		if(QFileInfo(QString(path).replace("file://", "")).isDir())
+		if(QFileInfo(path.toLocalFile()).isDir())
 		{
-			if(folderIcon.contains(path))
-				return folderIcon[path];
+			if(folderIcon.contains(path.toLocalFile()))
+				return folderIcon[path.toLocalFile()];
 			else
 			{
-				auto icon = FMH::dirConf(QString(path+"/%1").arg(".directory"))[FMH::MODEL_NAME[FMH::MODEL_KEY::ICON]].toString();
+				auto icon = FMH::dirConf(QString(path.toLocalFile()+"/%1").arg(".directory"))[FMH::MODEL_NAME[FMH::MODEL_KEY::ICON]].toString();
 				return icon.isEmpty() ? "folder" : icon;
 			}
 			
@@ -647,15 +668,13 @@ namespace FMH
 		}
 	}
 	
-	inline QString getMime(const QString &path)
+	inline QString getMime(const QUrl &path)
 	{
-		QMimeDatabase mimedb;
-		auto mime = mimedb.mimeTypeForFile(path).name();
-		
-		return mime;
+		const QMimeDatabase mimedb;
+		return mimedb.mimeTypeForFile(path.toLocalFile()).name();		
 	}
 	
-	enum class TABLE : uint8_t
+	enum class TABLE : uint
 	{
 		BOOKMARKS,
 		CLOUDS
@@ -672,10 +691,9 @@ namespace FMH
 	const QString FMPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/maui/fm/";
 	const QString DBName = "fm.db";
 	
-	inline FMH::MODEL getDirInfoModel(const QString &path, const QString &type = QString())
-	{
-			
-		const QDir dir (QString(path).replace("file://", ""));		
+	inline FMH::MODEL getDirInfoModel(const QUrl &path, const QString &type = QString())
+	{			
+		const QDir dir (path.toLocalFile());		
 		if(!dir.exists()) 
 			return FMH::MODEL();
 		
@@ -683,15 +701,15 @@ namespace FMH
 		{
 			{FMH::MODEL_KEY::ICON, FMH::getIconName(path)},
 			{FMH::MODEL_KEY::LABEL, dir.dirName()},
-			{FMH::MODEL_KEY::PATH, path},
+			{FMH::MODEL_KEY::PATH, path.toString()},
 			{FMH::MODEL_KEY::TYPE, type}
 		};
 	}	
 	
-	inline QVariantMap getDirInfo(const QString &path, const QString &type = QString())
+	inline QVariantMap getDirInfo(const QUrl &path, const QString &type = QString())
 	{
 			
-		const QFileInfo file(QString(path).replace("file://", ""));	
+		const QFileInfo file(path.toLocalFile());	
 		
 		if(!file.exists()) 
 			return QVariantMap();
@@ -706,15 +724,16 @@ namespace FMH
 	}
 	
 	
-	inline FMH::MODEL getFileInfoModel(const QString &path)
+	inline FMH::MODEL getFileInfoModel(const QUrl &path)
 	{			
-		const QFileInfo file(QString(path).replace("file://", ""));	
-		
+		qDebug()<< "trying to get path info model" << path << path.isLocalFile();
+		const QFileInfo file(path.toLocalFile());
 		
 		if(!file.exists()) 
 			return FMH::MODEL();
+		qDebug()<< "trying to get path info model. exists";
 		
-		const auto mime = FMH::getMime(QString(path).replace("file://", ""));
+		const auto mime = FMH::getMime(path);
 		return FMH::MODEL 
 		{
 			{FMH::MODEL_KEY::GROUP, file.group()},
@@ -727,21 +746,21 @@ namespace FMH
 			{FMH::MODEL_KEY::MIME, mime },
 			{FMH::MODEL_KEY::ICON, FMH::getIconName(path)},
 			{FMH::MODEL_KEY::SIZE, QString::number(file.size()) /*locale.formattedDataSize(file.size())*/},
-			{FMH::MODEL_KEY::PATH, QUrl::fromLocalFile(path).toString()},
-			{FMH::MODEL_KEY::THUMBNAIL, path},
-			{FMH::MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path).count() - 2) : "0"}			
+			{FMH::MODEL_KEY::PATH, path.toString()},
+			{FMH::MODEL_KEY::THUMBNAIL, path.toLocalFile()},
+			{FMH::MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path.toLocalFile()).count() - 2) : "0"}			
 		};		
 	}	
 	
-	inline QVariantMap getFileInfo(const QString &path)
+	inline QVariantMap getFileInfo(const QUrl &path)
 	{		
 		
-		const QFileInfo file(QString(path).replace("file://", ""));	
+		const QFileInfo file(path.toLocalFile());	
 		
 		if(!file.exists()) 
 			return QVariantMap();
 		
-		const auto data = FMH::getFileInfoModel(QString(path).replace("file://", ""));
+		const auto data = FMH::getFileInfoModel(path);
 		
 		qDebug()<< "getting item info model" << data;
 		

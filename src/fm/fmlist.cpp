@@ -62,11 +62,14 @@ watcher(new QFileSystemWatcher(this))
 	
 	connect(this->fm, &FM::pathContentReady, [this](const FMH::PATH_CONTENT &res)
 	{
+		qDebug()<< "PATHCN ONTEN READY" << res.path << this->path << res.content;
+		
 		if(this->pathType != FMList::PATHTYPE::PLACES_PATH)
 			return;		
 		
 		if(res.path != this->path)
 			return;
+		
 		
 		emit this->preListChanged();
 		this->list = res.content;

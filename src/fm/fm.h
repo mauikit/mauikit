@@ -56,7 +56,7 @@ public:
 	
 	static FMH::MODEL_LIST packItems(const QStringList &items, const QString &type);
 	
-	void getPathContent(const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList(), const QDirIterator::IteratorFlags &iteratorFlags = QDirIterator::NoIteratorFlags);
+	void getPathContent(const QUrl &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList(), const QDirIterator::IteratorFlags &iteratorFlags = QDirIterator::NoIteratorFlags);
 // 	static FMH::MODEL_LIST getPathContent(const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList(), const QDirIterator::IteratorFlags &iteratorFlags = QDirIterator::NoIteratorFlags);
 	static FMH::MODEL_LIST getAppsContent(const QString &path);	
 
@@ -108,7 +108,7 @@ public slots:
 	static QVariantMap getFileInfo(const QString &path);
 	
 	static bool isDefaultPath(const QString &path);
-	static bool isDir(const QString &path);
+	static bool isDir(const QUrl &path);
 	static bool isApp(const QString &path);
 	static bool isCloud(const QString &path);
 	static bool fileExists(const QString &path);
