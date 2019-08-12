@@ -149,7 +149,7 @@ FMH::MODEL_LIST FM::packItems(const QStringList &items, const QString &type)
 	FMH::MODEL_LIST data;
 	
 	for(const auto &path : items)
-		if(UTIL::fileExists(path))
+        if(FMH::fileExists(path))
 		{
 			auto model = FMH::getFileInfoModel(path);
 			model.insert(FMH::MODEL_KEY::TYPE, type);
@@ -273,7 +273,7 @@ FMH::MODEL_LIST FM::getAppsContent(const QString& path)
 
 FMH::MODEL_LIST FM::getDefaultPaths()
 {
-	return packItems(FMH::defaultPaths, FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::PLACES_PATH]);
+    return packItems(FMH::defaultPaths, FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]);
 }
 
 FMH::MODEL_LIST FM::getAppsPath()
