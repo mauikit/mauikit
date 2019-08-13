@@ -80,6 +80,7 @@ dirLister(new KCoreDirLister(this))
 #endif
 {
 	#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+	this->dirLister->setAutoUpdate(true);
 	connect(dirLister, static_cast<void (KCoreDirLister::*)(const QUrl&)>(&KCoreDirLister::completed), [&](QUrl url)
 	{
 		qDebug()<< "PATH CONTENT READY" << url;	
