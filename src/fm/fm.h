@@ -102,7 +102,7 @@ public slots:
 	static QString formatSize(const int &size);
 	static QString formatDate(const QString &dateStr, const QString &format = QString("dd/MM/yyyy"), const QString &initFormat = QString());
 	static QString homePath();	
-	static QString parentDir(const QUrl &path);
+	static QUrl parentDir(const QUrl &path);
 	
 	static QVariantMap getDirInfo(const QUrl &path, const QString &type);
 	static QVariantMap getFileInfo(const QUrl &path);

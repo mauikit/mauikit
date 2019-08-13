@@ -654,11 +654,10 @@ QString FMList::getParentPath()
 	switch(this->pathType)
 	{		
 		case FMList::PATHTYPE::PLACES_PATH:
-			return FM::parentDir(this->path);
+			return FM::parentDir(this->path).toString();
 		default:
 			return this->getPreviousPath();
-	}
-	
+	}	
 }
 
 QString FMList::getPosteriorPath()

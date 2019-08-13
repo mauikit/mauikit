@@ -625,11 +625,17 @@ bool FM::isDefaultPath(const QString &path)
 	return FMH::defaultPaths.contains(path);
 }
 
-QString FM::parentDir(const QUrl &path)
+QUrl FM::parentDir(const QUrl &path)
 {
+	if(!path.isLocalFile())
+	{
+		qWarning() << "URL recived is not a local file" << path;
+		return QVariantMap();	  
+	}	
+	
 	QDir dir(path.toLocalFile());
 	dir.cdUp();
-	return dir.absolutePath();
+	return QUrl::fromLocalFile(dir.absolutePath());
 }
 
 bool FM::isDir(const QUrl &path)
