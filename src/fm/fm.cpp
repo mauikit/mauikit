@@ -377,13 +377,13 @@ FMH::MODEL_LIST FM::search(const QString& query, const QUrl &path, const bool &h
 		{
 			auto url = it.next();
 			auto info = it.fileInfo();
-			qDebug()<< info.completeBaseName() <<  info.completeBaseName().contains(query);
 			if(info.completeBaseName().contains(query, Qt::CaseInsensitive))
 			{
 				content << FMH::getFileInfoModel(QUrl::fromLocalFile(url));
 			}
 		}
-	}
+	}else
+		qWarning() << "Search path does not exists" << path;
 	
 	qDebug()<< content;
 	return content;

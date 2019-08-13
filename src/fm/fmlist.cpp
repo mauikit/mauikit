@@ -187,7 +187,7 @@ void FMList::setList()
 		case FMList::PATHTYPE::SEARCH_PATH:
 			this->list.clear();
 			this->setContentReady(false);
-			this->search(QString(this->path).right(this->path.length()- 1 - this->path.lastIndexOf("/")), this->searchPath);
+			this->search(QString(this->path).right(this->path.length()- 1 - this->path.lastIndexOf("/")), this->searchPath, this->hidden, this->onlyDirs, this->filters);
 			return; //ASYNC
 			
 		case FMList::PATHTYPE::APPS_PATH:
@@ -853,33 +853,8 @@ void FMList::search(const QString& query, const QUrl &path, const bool &hidden, 
 	QFuture<FMH::PATH_CONTENT> t1 = QtConcurrent::run([=]() -> FMH::PATH_CONTENT
 	{		
 		FMH::PATH_CONTENT res;
-		res.path = path.toString();
-		
-		FMH::MODEL_LIST content;		
-		if (FM::isDir(path))
-		{
-			qWarning() << "SEarch path does exists" << path;
-			
-			QDir::Filters dirFilter;
-			
-			dirFilter = (onlyDirs ? QDir::AllDirs | QDir::NoDotDot | QDir::NoDot :
-			QDir::Files | QDir::AllDirs | QDir::NoDotDot | QDir::NoDot);
-			
-			if(hidden)
-				dirFilter = dirFilter | QDir::Hidden | QDir::System;
-			
-			QDirIterator it (path.toLocalFile(), filters, dirFilter, QDirIterator::Subdirectories);
-			while (it.hasNext())
-			{
-				const auto url = it.next();
-				const auto info = it.fileInfo();	
-				if(info.completeBaseName().contains(query, Qt::CaseInsensitive))
-					content << FMH::getFileInfoModel(QUrl::fromLocalFile(url));				
-			}
-		}else
-			qWarning() << "Search path does not exists" << path;
-		
-		res.content = content;		
+		res.path = path.toString();				
+		res.content = FM::search(query, path, hidden, onlyDirs, filters);
 		return res;
 	});
 	watcher->setFuture(t1);

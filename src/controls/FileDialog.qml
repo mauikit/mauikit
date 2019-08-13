@@ -19,7 +19,7 @@
 
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import org.kde.kirigami 2.6 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import QtQuick.Layouts 1.3
 
@@ -124,7 +124,7 @@ Maui.Dialog
                 {
                     anchors.fill: parent
                     placeholderText: qsTr("Search for files... ")
-                    onAccepted: browser.openFolder("Search/"+text)
+                    onAccepted: browser.openFolder("search://"+text)
                     //            onCleared: browser.goBack()
                     onGoBackTriggered:
                     {
@@ -135,8 +135,9 @@ Maui.Dialog
                     
                     background: Rectangle
                     {
-                        border.color: borderColor
-                        radius: radiusV
+						border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+						radius: radiusV
+						color: Kirigami.Theme.backgroundColor
                     }
                 }
             }
