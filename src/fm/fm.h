@@ -92,6 +92,7 @@ signals:
 	
 	void trashContentReady(FMH::MODEL_LIST list);
 	void pathContentReady(FMH::PATH_CONTENT list);
+	void pathContentChanged(QUrl path);
 	
 	void warningMessage(QString message);
 	void loadProgress(int percent);

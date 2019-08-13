@@ -109,26 +109,30 @@ dirLister(new KCoreDirLister(this))
 		emit this->pathContentReady(res);
 	});
 	
-	connect(dirLister, static_cast<void (KCoreDirLister::*)(const QUrl&, const KFileItemList &items)>(&KCoreDirLister::itemsAdded), []()
+	connect(dirLister, static_cast<void (KCoreDirLister::*)(const QUrl&, const KFileItemList &items)>(&KCoreDirLister::itemsAdded), [&]()
 	 {
 		 qDebug()<< "MORE ITEMS WERE ADDED";
+		 emit this->pathContentChanged(dirLister->url());		 
 	});
 		
-	connect(dirLister, static_cast<void (KCoreDirLister::*)(const KFileItemList &items)>(&KCoreDirLister::newItems), []()
+	connect(dirLister, static_cast<void (KCoreDirLister::*)(const KFileItemList &items)>(&KCoreDirLister::newItems), [&]()
 		{
 			qDebug()<< "MORE NEW ITEMS WERE ADDED";
+			emit this->pathContentChanged(dirLister->url());			
 		});
 	
 	connect(dirLister, static_cast<void (KCoreDirLister::*)(const KFileItemList &items)>(&KCoreDirLister::itemsDeleted), [&]()
 	{
 		qDebug()<< "ITEMS WERE DELETED";
 		dirLister->updateDirectory(dirLister->url());
+		emit this->pathContentChanged(dirLister->url());		
 	}); 
 	
 	connect(dirLister, static_cast<void (KCoreDirLister::*)(const QList< QPair< KFileItem, KFileItem > > &items)>(&KCoreDirLister::refreshItems), [&]()
 	{
 		qDebug()<< "ITEMS WERE REFRESHED";
 		dirLister->updateDirectory(dirLister->url());
+		emit this->pathContentChanged(dirLister->url());
 		
 	});
 #endif

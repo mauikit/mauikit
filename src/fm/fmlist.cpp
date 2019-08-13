@@ -34,7 +34,7 @@ MauiList(parent),
 fm(new FM(this)),
 watcher(new QFileSystemWatcher(this))
 {
-	connect(this->fm, &FM::cloudServerContentReady, [this](const FMH::MODEL_LIST &list, const QString &url)
+	connect(this->fm, &FM::cloudServerContentReady, [&](const FMH::MODEL_LIST &list, const QString &url)
 	{
 		if(this->path == url)
 		{			
@@ -47,7 +47,7 @@ watcher(new QFileSystemWatcher(this))
 		}	
 	});	
 	
-	connect(this->fm, &FM::trashContentReady, [this](const FMH::MODEL_LIST &list)
+	connect(this->fm, &FM::trashContentReady, [&](const FMH::MODEL_LIST &list)
 	{
 		if(this->path == "trash://")
 		{			
@@ -60,7 +60,7 @@ watcher(new QFileSystemWatcher(this))
 		}	
 	});
 	
-	connect(this->fm, &FM::pathContentReady, [this](const FMH::PATH_CONTENT &res)
+	connect(this->fm, &FM::pathContentReady, [&](const FMH::PATH_CONTENT &res)
 	{
 		qDebug()<< "PATHCN ONTEN READY" << res.path << this->path << res.content;
 		
@@ -83,26 +83,34 @@ watcher(new QFileSystemWatcher(this))
 		this->setContentReady(true);
 	});	
 	
-	connect(this->fm, &FM::warningMessage, [this](const QString &message)
+	connect(this->fm, &FM::warningMessage, [&](const QString &message)
 	{
 		emit this->warning(message);
 	});
 	
-	connect(this->fm, &FM::loadProgress, [this](const int &percent)
+	connect(this->fm, &FM::loadProgress, [&](const int &percent)
 	{
 		emit this->progress(percent);
 	});
 	
 	// with kio based on android it watches the directory itself, so better relay on that
 #ifdef Q_OS_ANDROID
-	connect(this->watcher, &QFileSystemWatcher::directoryChanged, [this](const QString &path)
+	connect(this->watcher, &QFileSystemWatcher::directoryChanged, [&](const QString &path)
 	{
 		qDebug()<< "FOLDER PATH CHANGED" << path;
 		this->reset();
 	});
+#else
+	connect(this->fm, &FM::pathContentChanged, [&](const QUrl &path)
+	{
+		qDebug()<< "FOLDER PATH CHANGED" << path;
+		if(path.toString() != this->path)
+			return;
+		this->sortList();
+	});
 #endif
 	
-	connect(this->fm, &FM::newItem, [this] (const FMH::MODEL &item, const QString &url)
+	connect(this->fm, &FM::newItem, [&] (const FMH::MODEL &item, const QString &url)
 	{
 		if(this->path == url)
 		{
