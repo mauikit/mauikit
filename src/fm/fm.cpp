@@ -264,6 +264,9 @@ void FM::getPathContent(const QUrl& path, const bool &hidden, const bool &onlyDi
 	// 		qDebug()<< "MORE NEW ITEMS WERE ADDED";
 	// 	});
 	
+	dir->setShowingDotFiles(hidden);
+	dir->setDirOnlyMode(onlyDirs);
+	dir->setNameFilter(filters.join(" "));
 	if(dir->openUrl(path))
 		qDebug()<< "GETTING PATH CONTENT" << path;	
 	
@@ -340,9 +343,15 @@ FMH::MODEL_LIST FM::getAppsPath()
 	};
 }
 
-FMH::MODEL_LIST FM::search(const QString& query, const QString &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)
+FMH::MODEL_LIST FM::search(const QString& query, const QUrl &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)
 {
-	FMH::MODEL_LIST content;
+	FMH::MODEL_LIST content;	
+	
+	if(!path.isLocalFile())
+	{
+		qWarning() << "URL recived is not a local file. FM::search" << path;
+		return content;	  
+	}	
 	
 	if (FM::isDir(path))
 	{
@@ -354,7 +363,7 @@ FMH::MODEL_LIST FM::search(const QString& query, const QString &path, const bool
 		if(hidden)
 			dirFilter = dirFilter | QDir::Hidden | QDir::System;
 		
-		QDirIterator it (path, filters, dirFilter, QDirIterator::Subdirectories);
+		QDirIterator it (path.toLocalFile(), filters, dirFilter, QDirIterator::Subdirectories);
 		while (it.hasNext())
 		{
 			auto url = it.next();
@@ -362,7 +371,7 @@ FMH::MODEL_LIST FM::search(const QString& query, const QString &path, const bool
 			qDebug()<< info.completeBaseName() <<  info.completeBaseName().contains(query);
 			if(info.completeBaseName().contains(query, Qt::CaseInsensitive))
 			{
-				content << FMH::getFileInfoModel(url);
+				content << FMH::getFileInfoModel(QUrl::fromLocalFile(url));
 			}
 		}
 	}
@@ -594,7 +603,7 @@ FMH::MODEL_LIST FM::getTagContent(const QString &tag)
 	for(auto data : this->tag->getUrls(tag, false))
 	{
 		const auto url = data.toMap().value(TAG::KEYMAP[TAG::KEYS::URL]).toString();
-		auto item = FMH::getFileInfoModel(url);
+		auto item = FMH::getFileInfoModel(QUrl::fromLocalFile(url));
 		content << item;
 	}
 	
@@ -701,10 +710,9 @@ bool FM::cut(const QVariantList &data, const QString &where)
 		}else if(FMH::fileExists(path))
 		{
 			#ifdef Q_OS_ANDROID
-			QFile file(QString(path).replace("file://", ""));
-			file.rename(where+"/"+QFileInfo(QString(path).replace("file://", "")).fileName());
+			QFile file(QUrl(path).toLocalFile());
+			file.rename(where+"/"+QFileInfo(QUrl(path).toLocalFile()).fileName());
 			#else			
-			qDebug()<< "TRYING TO CUT" << path << QUrl(where+"/"+FMH::getFileInfoModel(path)[FMH::MODEL_KEY::LABEL]);
 			auto job = KIO::move(QUrl(path), QUrl(where+"/"+FMH::getFileInfoModel(path)[FMH::MODEL_KEY::LABEL]));
 			job->start();
 			#endif

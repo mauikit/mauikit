@@ -790,9 +790,15 @@ void FMList::setViewType(const FMList::VIEW_TYPE& value)
 	emit this->viewTypeChanged();
 }
 
-void FMList::search(const QString& query, const QString &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)
+void FMList::search(const QString& query, const QUrl &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)
 {
 	qDebug()<< "SEARCHING FOR" << query << path;
+	
+	if(!path.isLocalFile())
+	{
+		qWarning() << "URL recived is not a local file. search" << path;
+		return;	  
+	}	
 	
 	QFutureWatcher<FMH::PATH_CONTENT> *watcher = new QFutureWatcher<FMH::PATH_CONTENT>;
 	connect(watcher, &QFutureWatcher<FMH::MODEL_LIST>::finished, [=]()
@@ -822,7 +828,7 @@ void FMList::search(const QString& query, const QString &path, const bool &hidde
 	QFuture<FMH::PATH_CONTENT> t1 = QtConcurrent::run([=]() -> FMH::PATH_CONTENT
 	{		
 		FMH::PATH_CONTENT res;
-		res.path = path;
+		res.path = path.toString();
 		
 		FMH::MODEL_LIST content;		
 		if (FM::isDir(path))
@@ -837,17 +843,16 @@ void FMList::search(const QString& query, const QString &path, const bool &hidde
 			if(hidden)
 				dirFilter = dirFilter | QDir::Hidden | QDir::System;
 			
-			QDirIterator it (QString(path).remove("file://"), filters, dirFilter, QDirIterator::Subdirectories);
+			QDirIterator it (path.toLocalFile(), filters, dirFilter, QDirIterator::Subdirectories);
 			while (it.hasNext())
 			{
 				const auto url = it.next();
 				const auto info = it.fileInfo();	
-				qDebug()<< "FOUND FROM SEARCH"<< url;
 				if(info.completeBaseName().contains(query, Qt::CaseInsensitive))
-					content << FMH::getFileInfoModel(url);				
+					content << FMH::getFileInfoModel(QUrl::fromLocalFile(url));				
 			}
 		}else
-			qWarning() << "SEarch path doe snto exists" << path;
+			qWarning() << "Search path does not exists" << path;
 		
 		res.content = content;		
 		return res;

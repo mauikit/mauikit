@@ -48,7 +48,7 @@ public:
 	void getTrashContent();
 	
 	/*** START STATIC METHODS ***/
-	static FMH::MODEL_LIST search(const QString &query, const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
+	static FMH::MODEL_LIST search(const QString &query, const QUrl &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
 	
 // 	static FMH::MODEL_LIST getDevices();	
 	static FMH::MODEL_LIST getDefaultPaths();
