@@ -64,8 +64,8 @@ public:
 // 	static FMH::MODEL_LIST getPathContent(const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList(), const QDirIterator::IteratorFlags &iteratorFlags = QDirIterator::NoIteratorFlags);
 	static FMH::MODEL_LIST getAppsContent(const QString &path);	
 
-	static bool copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory);
-	static bool removeDir(const QString &path);	
+	static bool copyPath(QUrl sourceDir, QUrl destinationDir, bool overWriteDirectory);
+	static bool removeDir(const QUrl &path);	
 	
 	static QString resolveUserCloudCachePath(const QString &server, const QString &user);
 	QString resolveLocalCloudPath(const QString &path);
@@ -131,12 +131,12 @@ public slots:
 	/* ACTIONS */	
 	bool copy(const QVariantList &data, const QString &where);
 	bool cut(const QVariantList &data, const QString &where);
-	static bool removeFile(const QString &path);
-	void moveToTrash(const QString &path);
+	static bool removeFile(const QUrl &path);
+	void moveToTrash(const QUrl &path);
 	static void emptyTrash();
-	static bool rename(const QString &path, const QString &name);
-	static bool createDir(const QString &path, const QString &name);
-	static bool createFile(const QString &path, const QString &name);
+	static bool rename(const QUrl &path, const QString &name);
+	static bool createDir(const QUrl &path, const QString &name);
+	static bool createFile(const QUrl &path, const QString &name);
 	
 	static bool openUrl(const QString &url);
 	static void openLocation(const QStringList &urls);	

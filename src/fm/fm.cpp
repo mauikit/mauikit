@@ -290,6 +290,13 @@ void FM::getPathContent(const QUrl& path, const bool &hidden, const bool &onlyDi
 	this->dirLister->setShowingDotFiles(hidden);
 	this->dirLister->setDirOnlyMode(onlyDirs);
 	this->dirLister->setNameFilter(filters.join(" "));
+	
+// 	if(this->dirLister->url() == path)
+// 	{
+// 		this->dirLister->emitChanges();
+// 		return;
+// 	}
+	
 	if(this->dirLister->openUrl(path))
 		qDebug()<< "GETTING PATH CONTENT" << path;	
 	
@@ -632,7 +639,7 @@ bool FM::isDir(const QUrl &path)
 {
 	if(!path.isLocalFile())
 	{
-		qWarning() << "URL recived is not a local file. isDir" << path;
+		qWarning() << "URL recived is not a local file. FM::isDir" << path;
 		return false;	  
 	}	
 	
@@ -768,14 +775,14 @@ bool FM::copy(const QVariantList &data, const QString &where)
 	return true;
 }
 
-bool FM::copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory)
+bool FM::copyPath(QUrl sourceDir, QUrl destinationDir, bool overWriteDirectory)
 {
 	#ifdef Q_OS_ANDROID	
-	QFileInfo fileInfo(sourceDir);
+	QFileInfo fileInfo(sourceDir.toLocalFile());
 	if(fileInfo.isFile())		
-		QFile::copy(sourceDir, destinationDir);	
+		QFile::copy(sourceDir.toLocalFile(), destinationDir.toLocalFile());	
 	
-	QDir originDirectory(sourceDir);
+	QDir originDirectory(sourceDir.toLocalFile());
 	
 	if (!originDirectory.exists())    
 		return false;
@@ -787,55 +794,60 @@ bool FM::copyPath(QString sourceDir, QString destinationDir, bool overWriteDirec
 	else if(destinationDirectory.exists() && overWriteDirectory)    
 		destinationDirectory.removeRecursively();    
 	
-	originDirectory.mkpath(destinationDir);
+	originDirectory.mkpath(destinationDir.toLocalFile());
 	
 	foreach(QString directoryName, originDirectory.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
 	{
-		QString destinationPath = destinationDir + "/" + directoryName;
+		QString destinationPath = destinationDir.toLocalFile() + "/" + directoryName;
 		originDirectory.mkpath(destinationPath);
-		copyPath(sourceDir + "/" + directoryName, destinationPath, overWriteDirectory);
+		copyPath(sourceDir.toLocalFile() + "/" + directoryName, destinationPath, overWriteDirectory);
 	}
 	
 	foreach (QString fileName, originDirectory.entryList(QDir::Files))
 	{
-		QFile::copy(sourceDir + "/" + fileName, destinationDir + "/" + fileName);
+		QFile::copy(sourceDir.toLocalFile() + "/" + fileName, destinationDir.toLocalFile() + "/" + fileName);
 	}
 	
 	/*! Possible race-condition mitigation? */
-	QDir finalDestination(destinationDir);
+	QDir finalDestination(destinationDir.toLocalFile());
 	finalDestination.refresh();
 	
 	if(finalDestination.exists())    
 		return true;    
 	
 	return false;
-	#else 
-	
-	qDebug()<< "TRYING TO COPY" << sourceDir << destinationDir;
+	#else 	
+	qDebug()<< "TRYING TO COPY" << sourceDir.toLocalFile() << destinationDir.toLocalFile();
 	auto job = KIO::copy(QUrl(sourceDir), QUrl(destinationDir));
 	job->start();
 	return true;	
 	#endif
 }
 
-bool FM::removeFile(const QString &path)
+bool FM::removeFile(const QUrl &path)
 {
+	if(!path.isLocalFile())	
+		qWarning() << "URL recived is not a local file, FM::removeFile" << path;	
+	
 	#ifdef Q_OS_ANDROID
-	if(QFileInfo(QString(path).replace("file://", "")).isDir())
-		return removeDir(path);
-	else return QFile(path).remove();
+	if(QFileInfo(path.toLocalFile()).isDir())
+		return removeDir(path.toLocalFile());
+	else return QFile(path.toLocalFile()).remove();
 	#else
-	auto job = KIO::del(QUrl(path));
+	auto job = KIO::del(path);
 	job->start();
 	return true;
 	#endif    
 }
 
-void FM::moveToTrash(const QString &path)
+void FM::moveToTrash(const QUrl &path)
 {
+	if(!path.isLocalFile())	
+		qWarning() << "URL recived is not a local file, FM::moveToTrash" << path;	
+	
 	#ifdef Q_OS_ANDROID
 	#else
-	auto job = KIO::trash(QUrl(path));
+	auto job = KIO::trash(path);
 	job->start();	
 	#endif
 }
@@ -849,10 +861,10 @@ void FM::emptyTrash()
 	#endif
 }
 
-bool FM::removeDir(const QString &path)
+bool FM::removeDir(const QUrl &path)
 {
 	bool result = true;
-	QDir dir(QString(path).replace("file://", ""));
+	QDir dir(path.toLocalFile());
 	
 	if (dir.exists())
 	{
@@ -872,27 +884,27 @@ bool FM::removeDir(const QString &path)
 				return result;
 			}
 		}
-		result = dir.rmdir(path);
+		result = dir.rmdir(path.toLocalFile());
 	}
 	
 	return result;
 }
 
-bool FM::rename(const QString &path, const QString &name)
+bool FM::rename(const QUrl &path, const QString &name)
 {
-	QFile file(QString(path).replace("file://", ""));
-	auto url = QFileInfo(QString(path).replace("file://", "")).dir().absolutePath();	
+	QFile file(path.toLocalFile());
+	const auto url = QFileInfo(path.toLocalFile()).dir().absolutePath();	
 	return file.rename(url+"/"+name);
 }
 
-bool FM::createDir(const QString &path, const QString &name)
+bool FM::createDir(const QUrl &path, const QString &name)
 {
-	return QDir(QString(path).replace("file://", "")).mkdir(name);
+	return QDir(path.toLocalFile()).mkdir(name);
 }
 
-bool FM::createFile(const QString &path, const QString &name)
+bool FM::createFile(const QUrl &path, const QString &name)
 {
-	QFile file(QString(path).replace("file://", "") + "/" + name);
+	QFile file(path.toLocalFile() + "/" + name);
 	
 	if(file.open(QIODevice::ReadWrite))
 	{
