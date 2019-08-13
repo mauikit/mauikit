@@ -110,22 +110,22 @@ dirLister(new KCoreDirLister(this))
 	});
 	
 	connect(dirLister, static_cast<void (KCoreDirLister::*)(const QUrl&, const KFileItemList &items)>(&KCoreDirLister::itemsAdded), [&]()
-	 {
-		 qDebug()<< "MORE ITEMS WERE ADDED";
-		 emit this->pathContentChanged(dirLister->url());		 
+	{
+		qDebug()<< "MORE ITEMS WERE ADDED";
+		emit this->pathContentChanged(dirLister->url());		 
 	});
-		
+	
 	connect(dirLister, static_cast<void (KCoreDirLister::*)(const KFileItemList &items)>(&KCoreDirLister::newItems), [&]()
-		{
-			qDebug()<< "MORE NEW ITEMS WERE ADDED";
-			emit this->pathContentChanged(dirLister->url());			
-		});
+	{
+		qDebug()<< "MORE NEW ITEMS WERE ADDED";
+		emit this->pathContentChanged(dirLister->url());			
+	});
 	
 	connect(dirLister, static_cast<void (KCoreDirLister::*)(const KFileItemList &items)>(&KCoreDirLister::itemsDeleted), [&]()
 	{
 		qDebug()<< "ITEMS WERE DELETED";
 		dirLister->updateDirectory(dirLister->url());
-		emit this->pathContentChanged(dirLister->url());		
+		// 		emit this->pathContentChanged(dirLister->url());	// changes when dleted items are not that important?	
 	}); 
 	
 	connect(dirLister, static_cast<void (KCoreDirLister::*)(const QList< QPair< KFileItem, KFileItem > > &items)>(&KCoreDirLister::refreshItems), [&]()
@@ -135,7 +135,7 @@ dirLister(new KCoreDirLister(this))
 		emit this->pathContentChanged(dirLister->url());
 		
 	});
-#endif
+	#endif
 	connect(this->sync, &Syncing::listReady, [this](const FMH::MODEL_LIST &list, const QString &url)
 	{
 		emit this->cloudServerContentReady(list, url);
@@ -300,34 +300,9 @@ void FM::getPathContent(const QUrl& path, const bool &hidden, const bool &onlyDi
 
 void FM::getTrashContent()
 {	
-	#ifdef Q_OS_ANDROID
-	
-	#else
-	auto dir = new KCoreDirLister(this);
-	connect(dir, static_cast<void (KCoreDirLister::*)(const QUrl&)>(&KCoreDirLister::completed), [=](QUrl url)
-	{
-		qDebug()<< "TRASH CONTENT READY" << url;	
-		
-		FMH::MODEL_LIST res;
-		for(const auto &kfile : dir->items())
-		{
-			qDebug() << kfile.url() << kfile.name() << kfile.isDir();
-			res << FMH::MODEL{ {FMH::MODEL_KEY::LABEL, kfile.name()},
-			{FMH::MODEL_KEY::NAME, kfile.name()},
-			{FMH::MODEL_KEY::GROUP, kfile.group()},
-			{FMH::MODEL_KEY::ICON, kfile.iconName()},
-			{FMH::MODEL_KEY::SIZE, QString::number(kfile.size())},
-			{FMH::MODEL_KEY::THUMBNAIL, kfile.mostLocalUrl().toString()},
-			{FMH::MODEL_KEY::OWNER, kfile.user()},
-			};
-		}
-		
-		emit this->trashContentReady(res);
-		dir->deleteLater();
-	});	
-	if(dir->openUrl(QUrl("trash://")))
-		qDebug()<< "TRASH CONTENT";	
-	
+	#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)	
+	if(this->dirLister->openUrl(QUrl("trash://")))
+		qDebug()<< "TRASH CONTENT";		
 	#endif
 }
 
