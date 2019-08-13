@@ -659,11 +659,10 @@ namespace FMH
 	{
 		if(!path.isLocalFile())
 		{
-			qWarning() << "URL recived is not a local file" << path;
-			return QString();	  
+			qWarning() << "URL recived is not a local file. FMH::getIconName" << path;
 		}		
 		
-		if(QFileInfo(path.toLocalFile()).isDir())
+		if(path.isLocalFile() && QFileInfo(path.toLocalFile()).isDir())
 		{
 			if(folderIcon.contains(path.toString()))
 				return folderIcon[path.toString()];

@@ -78,8 +78,7 @@ sync(new Syncing(this)),
 tag(Tagging::getInstance()),
 dirLister(new KCoreDirLister(this))
 #endif
-{	
-	
+{
 	#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 	connect(dirLister, static_cast<void (KCoreDirLister::*)(const QUrl&)>(&KCoreDirLister::completed), [&](QUrl url)
 	{
@@ -335,7 +334,7 @@ FMH::MODEL_LIST FM::getAppsPath()
 		FMH::MODEL
 		{
 			{FMH::MODEL_KEY::ICON, "system-run"},
-			{FMH::MODEL_KEY::LABEL, "Apps"},
+			{FMH::MODEL_KEY::LABEL, FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]},
 			{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::APPS_PATH]},
 			{FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]}
 		}
@@ -515,7 +514,7 @@ void FM::openCloudItem(const QVariantMap &item)
 {
 	qDebug()<< item;
 	FMH::MODEL data;
-	for(auto key : item.keys())
+	for(const auto &key : item.keys())
 		data.insert(FMH::MODEL_NAME_KEY[key], item[key].toString());
 	
 	this->sync->resolveFile(data, Syncing::SIGNAL_TYPE::OPEN);
@@ -525,7 +524,7 @@ void FM::getCloudItem(const QVariantMap &item)
 {
 	qDebug()<< item;
 	FMH::MODEL data;
-	for(auto key : item.keys())
+	for(const auto &key : item.keys())
 		data.insert(FMH::MODEL_NAME_KEY[key], item[key].toString());
 	
 	this->sync->resolveFile(data, Syncing::SIGNAL_TYPE::DOWNLOAD);
@@ -535,24 +534,16 @@ QVariantList FM::getCloudAccountsList()
 {
 	QVariantList res;
 	
-	auto data = this->getCloudAccounts();
-	
-	for(auto item : data)
-	{
-		QVariantMap map;
-		
-		for(auto key : item.keys())
-			map.insert(FMH::MODEL_NAME[key], item[key]);
-		
-		res << map;		
-	}
+	const auto data = this->getCloudAccounts();
+		for(const auto &item : data)
+		res << FM::toMap(item);
 	
 	return res;
 }
 
 bool FM::addCloudAccount(const QString &server, const QString &user, const QString &password)
 {
-	QVariantMap account = {
+	const QVariantMap account = {
 		{FMH::MODEL_NAME[FMH::MODEL_KEY::SERVER], server},
 		{FMH::MODEL_NAME[FMH::MODEL_KEY::USER], user},
 		{FMH::MODEL_NAME[FMH::MODEL_KEY::PASSWORD], password}
@@ -599,7 +590,7 @@ FMH::MODEL_LIST FM::getTagContent(const QString &tag)
 	
 	qDebug()<< "TAG CONTENT FOR TAG"<< tag;
 	
-	for(auto data : this->tag->getUrls(tag, false))
+	for(const auto &data : this->tag->getUrls(tag, false))
 	{
 		const auto url = data.toMap().value(TAG::KEYMAP[TAG::KEYS::URL]).toString();
 		auto item = FMH::getFileInfoModel(QUrl::fromLocalFile(url));
@@ -699,7 +690,7 @@ bool FM::cut(const QVariantList &data, const QString &where)
 {	
 	FMH::MODEL_LIST items;
 	
-	for(auto k : data)		
+	for(const auto &k : data)		
 		items << FM::toModel(k.toMap());
 	
 	
