@@ -149,7 +149,7 @@ FMH::MODEL_LIST FM::packItems(const QStringList &items, const QString &type)
 	FMH::MODEL_LIST data;
 	
 	for(const auto &path : items)
-        if(FMH::fileExists(path))
+		if(FMH::fileExists(path))
 		{
 			auto model = FMH::getFileInfoModel(path);
 			model.insert(FMH::MODEL_KEY::TYPE, type);
@@ -189,7 +189,7 @@ void FM::getPathContent(const QUrl& path, const bool &hidden, const bool &onlyDi
 {	
 	qDebug()<< "Getting async path contents";
 	
-// 	#ifdef Q_OS_ANDROID
+	#ifdef Q_OS_ANDROID
 	QFutureWatcher<FMH::PATH_CONTENT> *watcher = new QFutureWatcher<FMH::PATH_CONTENT>;
 	connect(watcher, &QFutureWatcher<FMH::PATH_CONTENT>::finished, [this, watcher = std::move(watcher)]()
 	{
@@ -223,39 +223,85 @@ void FM::getPathContent(const QUrl& path, const bool &hidden, const bool &onlyDi
 		return res;
 	});
 	watcher->setFuture(t1);
+	#else	
+	auto dir = new KCoreDirLister(this);
+	connect(dir, static_cast<void (KCoreDirLister::*)(const QUrl&)>(&KCoreDirLister::completed), [=, dir](QUrl url)
+	{
+		qDebug()<< "PATH CONTENT READY" << url;	
+		
+		FMH::PATH_CONTENT res;
+		FMH::MODEL_LIST content;
+		for(const auto &kfile : dir->items())
+		{
+			qDebug() << kfile.url() << kfile.name() << kfile.isDir();
+			content << FMH::MODEL{ {FMH::MODEL_KEY::LABEL, kfile.name()},
+			{FMH::MODEL_KEY::NAME, kfile.name()},
+			{FMH::MODEL_KEY::PATH, kfile.url().toString()},
+			{FMH::MODEL_KEY::THUMBNAIL, kfile.localPath()},
+			{FMH::MODEL_KEY::MIME, kfile.mimetype()},
+			{FMH::MODEL_KEY::GROUP, kfile.group()},
+			{FMH::MODEL_KEY::ICON, kfile.iconName()},
+			{FMH::MODEL_KEY::SIZE, QString::number(kfile.size())},
+			{FMH::MODEL_KEY::THUMBNAIL, kfile.mostLocalUrl().toString()},
+			{FMH::MODEL_KEY::OWNER, kfile.user()},
+			};
+		}
+		
+		res.path = path.toString();
+		res.content = content;
+		
+		emit this->pathContentReady(res);
+		// 		dir->deleteLater();
+	});
+	
+	// 	connect(dir, static_cast<void (KCoreDirLister::*)(const QUrl&, const KFileItemList &items)>(&KCoreDirLister::itemsAdded), []()
+	//  {
+	// 	 qDebug()<< "MORE ITEMS WERE ADDED";
+	// });
+	// 	
+	// 	connect(dir, static_cast<void (KCoreDirLister::*)(const KFileItemList &items)>(&KCoreDirLister::newItems), []()
+	// 	{
+	// 		qDebug()<< "MORE NEW ITEMS WERE ADDED";
+	// 	});
+	
+	if(dir->openUrl(path))
+		qDebug()<< "GETTING PATH CONTENT" << path;	
+	
+	#endif	
+	
 }
 
 void FM::getTrashContent()
 {	
-#ifdef Q_OS_ANDROID
-
-#else
+	#ifdef Q_OS_ANDROID
+	
+	#else
 	auto dir = new KCoreDirLister(this);
 	connect(dir, static_cast<void (KCoreDirLister::*)(const QUrl&)>(&KCoreDirLister::completed), [=](QUrl url)
- {
-	 qDebug()<< "TRASH CONTENT READY" << url;	
-	 
-	 FMH::MODEL_LIST res;
-	 for(const auto &kfile : dir->items())
-	 {
-		 qDebug() << kfile.url() << kfile.name() << kfile.isDir();
-		 res << FMH::MODEL{ {FMH::MODEL_KEY::LABEL, kfile.name()},
+	{
+		qDebug()<< "TRASH CONTENT READY" << url;	
+		
+		FMH::MODEL_LIST res;
+		for(const auto &kfile : dir->items())
+		{
+			qDebug() << kfile.url() << kfile.name() << kfile.isDir();
+			res << FMH::MODEL{ {FMH::MODEL_KEY::LABEL, kfile.name()},
 			{FMH::MODEL_KEY::NAME, kfile.name()},
 			{FMH::MODEL_KEY::GROUP, kfile.group()},
 			{FMH::MODEL_KEY::ICON, kfile.iconName()},
 			{FMH::MODEL_KEY::SIZE, QString::number(kfile.size())},
 			{FMH::MODEL_KEY::THUMBNAIL, kfile.mostLocalUrl().toString()},
 			{FMH::MODEL_KEY::OWNER, kfile.user()},
-		 };
-	 }
-	 
-	 emit this->trashContentReady(res);
-	 dir->deleteLater();
-});	
+			};
+		}
+		
+		emit this->trashContentReady(res);
+		dir->deleteLater();
+	});	
 	if(dir->openUrl(QUrl("trash://")))
 		qDebug()<< "TRASH CONTENT";	
-
-#endif
+	
+	#endif
 }
 
 FMH::MODEL_LIST FM::getAppsContent(const QString& path)
@@ -264,16 +310,16 @@ FMH::MODEL_LIST FM::getAppsContent(const QString& path)
 	#if (defined (Q_OS_LINUX) && !defined (Q_OS_ANDROID))
 	QUrl __url(path);	
 	
-// 	if(__url.scheme() == FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH])
+	// 	if(__url.scheme() == FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH])
 	return MAUIKDE::getApps(QString(path).replace("apps://", ""));
-
+	
 	#endif
 	return res;
 }
 
 FMH::MODEL_LIST FM::getDefaultPaths()
 {
-    return packItems(FMH::defaultPaths, FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]);
+	return packItems(FMH::defaultPaths, FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]);
 }
 
 FMH::MODEL_LIST FM::getAppsPath()
@@ -586,7 +632,7 @@ bool FM::isDir(const QUrl &path)
 	}	
 	
 	QFileInfo file(path.toLocalFile());
-	 return file.isDir();
+	return file.isDir();
 }
 
 bool FM::isApp(const QString& path)

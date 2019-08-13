@@ -64,8 +64,8 @@ watcher(new QFileSystemWatcher(this))
 	{
 		qDebug()<< "PATHCN ONTEN READY" << res.path << this->path << res.content;
 		
-		if(this->pathType != FMList::PATHTYPE::PLACES_PATH)
-			return;		
+// 		if(this->pathType != FMList::PATHTYPE::PLACES_PATH)
+// 			return;		
 		
 		if(res.path != this->path)
 			return;
@@ -74,7 +74,7 @@ watcher(new QFileSystemWatcher(this))
 		emit this->preListChanged();
 		this->list = res.content;
 		
-		this->pathEmpty = this->list.isEmpty() && FM::fileExists(this->path);
+		this->pathEmpty = this->list.isEmpty() /*&& FM::fileExists(this->path)*/;
 		emit this->pathEmptyChanged();
 		
 		this->sortList();		
@@ -151,6 +151,10 @@ void FMList::setList()
 	this->setContentReady(true);
 	switch(this->pathType)
 	{
+		case FMList::PATHTYPE::FISH_PATH:
+		case FMList::PATHTYPE::MTP_PATH:
+		case FMList::PATHTYPE::DRIVES_PATH:
+		case FMList::PATHTYPE::REMOTE_PATH:			
 		case FMList::PATHTYPE::PLACES_PATH:
 			this->list.clear();
 			this->setContentReady(false);
@@ -185,9 +189,7 @@ void FMList::setList()
 				return;			
 			}else break;
 			
-		case FMList::PATHTYPE::DRIVES_PATH:
-			this->list = FMH::MODEL_LIST();
-			break;
+	
 	}
 	
 	this->pathEmpty = this->list.isEmpty() && FM::fileExists(this->path);
@@ -481,10 +483,28 @@ void FMList::setPath(const QString &path)
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		
-	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::MTP_PATH] || __scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::FISH_PATH])		
+	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::MTP_PATH])		
 	{
 		this->pathExists = true;
-		this->pathType = FMList::PATHTYPE::PLACES_PATH;
+		this->pathType = FMList::PATHTYPE::MTP_PATH;
+		emit this->pathExistsChanged();
+		emit this->pathTypeChanged();
+	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::FISH_PATH] )		
+	{
+		this->pathExists = true;
+		this->pathType = FMList::PATHTYPE::FISH_PATH;
+		emit this->pathExistsChanged();
+		emit this->pathTypeChanged();
+	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::REMOTE_PATH] )		
+	{
+		this->pathExists = true;
+		this->pathType = FMList::PATHTYPE::REMOTE_PATH;
+		emit this->pathExistsChanged();
+		emit this->pathTypeChanged();
+	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::DRIVES_PATH] )		
+	{
+		this->pathExists = true;
+		this->pathType = FMList::PATHTYPE::DRIVES_PATH;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 	}

@@ -563,6 +563,12 @@ namespace FMH
 	 **/	
 	inline QVariantMap dirConf(const QUrl &path)
 	{
+		if(!path.isLocalFile())
+		{
+			qWarning() << "URL recived is not a local file" << path;
+			return QVariantMap();	  
+		}	
+		
 		if(!FMH::fileExists(path))
 			return QVariantMap();
 		
@@ -625,6 +631,12 @@ namespace FMH
 	
 	inline void setDirConf(const QUrl &path, const QString &group, const QString &key, const QVariant &value)
 	{
+		if(!path.isLocalFile())
+		{
+			qWarning() << "URL recived is not a local file" << path;
+			return;	  
+		}		
+		
 		#ifdef Q_OS_ANDROID
 		QSettings file(path.toLocalFile(), QSettings::Format::IniFormat);
 		file.beginGroup(group);
@@ -645,6 +657,12 @@ namespace FMH
 	 **/	
 	inline QString getIconName(const QUrl &path)
 	{
+		if(!path.isLocalFile())
+		{
+			qWarning() << "URL recived is not a local file" << path;
+			return QString();	  
+		}		
+		
 		if(QFileInfo(path.toLocalFile()).isDir())
 		{
 			if(folderIcon.contains(path.toString()))
@@ -670,6 +688,12 @@ namespace FMH
 	
 	inline QString getMime(const QUrl &path)
 	{
+		if(!path.isLocalFile())
+		{
+			qWarning() << "URL recived is not a local file" << path;
+			return QString();	  
+		}		
+		
 		const QMimeDatabase mimedb;
 		return mimedb.mimeTypeForFile(path.toLocalFile()).name();		
 	}
@@ -692,7 +716,13 @@ namespace FMH
 	const QString DBName = "fm.db";
 	
 	inline FMH::MODEL getDirInfoModel(const QUrl &path, const QString &type = QString())
-	{			
+	{		
+		if(!path.isLocalFile())
+		{
+			qWarning() << "URL recived is not a local file" << path;
+			return FMH::MODEL();	  
+		}		
+		
 		const QDir dir (path.toLocalFile());		
 		if(!dir.exists()) 
 			return FMH::MODEL();
@@ -708,7 +738,12 @@ namespace FMH
 	
 	inline QVariantMap getDirInfo(const QUrl &path, const QString &type = QString())
 	{
-			
+		if(!path.isLocalFile())
+		{
+			qWarning() << "URL recived is not a local file" << path;
+			return QVariantMap();	  
+		}		
+		
 		const QFileInfo file(path.toLocalFile());	
 		
 		if(!file.exists()) 
@@ -725,7 +760,13 @@ namespace FMH
 	
 	
 	inline FMH::MODEL getFileInfoModel(const QUrl &path)
-	{			
+	{		
+		if(!path.isLocalFile())
+		{
+			qWarning() << "URL recived is not a local file" << path;
+			return FMH::MODEL();  
+		}		
+		
 		const QFileInfo file(path.toLocalFile());
 		if(!file.exists()) 
 			return FMH::MODEL();
@@ -744,21 +785,19 @@ namespace FMH
 			{FMH::MODEL_KEY::MIME, mime },
 			{FMH::MODEL_KEY::ICON, FMH::getIconName(path)},
 			{FMH::MODEL_KEY::SIZE, QString::number(file.size()) /*locale.formattedDataSize(file.size())*/},
-<<<<<<< HEAD
 			{FMH::MODEL_KEY::PATH, path.toString()},
 			{FMH::MODEL_KEY::THUMBNAIL, path.toLocalFile()},
-			{FMH::MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path.toLocalFile()).count() - 2) : "0"}			
-=======
-            {FMH::MODEL_KEY::PATH, path},
-			{FMH::MODEL_KEY::THUMBNAIL, path},
-            {FMH::MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(QString(path).replace("file://", "")).count() - 2) : "0"}
->>>>>>> 8d5df18e4666ca748f1ac37c021a2e66c8a704e2
+			{FMH::MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path.toLocalFile()).count() - 2) : "0"}
 		};		
 	}	
 	
 	inline QVariantMap getFileInfo(const QUrl &path)
 	{		
-		
+		if(!path.isLocalFile())
+		{
+			qWarning() << "URL recived is not a local file" << path;
+			return QVariantMap();	  
+		}	
 		const QFileInfo file(path.toLocalFile());	
 		
 		if(!file.exists()) 
