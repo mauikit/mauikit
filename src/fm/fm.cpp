@@ -68,11 +68,70 @@
  *    }
  * }*/
 
-
+#ifdef Q_OS_ANDROID
 FM::FM(QObject *parent) : FMDB(parent),
 sync(new Syncing(this)),
 tag(Tagging::getInstance())
+#else
+FM::FM(QObject *parent) : FMDB(parent),
+sync(new Syncing(this)),
+tag(Tagging::getInstance()),
+dirLister(new KCoreDirLister(this))
+#endif
 {	
+	
+	#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+	connect(dirLister, static_cast<void (KCoreDirLister::*)(const QUrl&)>(&KCoreDirLister::completed), [&](QUrl url)
+	{
+		qDebug()<< "PATH CONTENT READY" << url;	
+		
+		FMH::PATH_CONTENT res;
+		FMH::MODEL_LIST content;
+		for(const auto &kfile : dirLister->items())
+		{
+			qDebug() << kfile.url() << kfile.name() << kfile.isDir();
+			content << FMH::MODEL{ {FMH::MODEL_KEY::LABEL, kfile.name()},
+			{FMH::MODEL_KEY::NAME, kfile.name()},
+			{FMH::MODEL_KEY::PATH, kfile.url().toString()},
+			{FMH::MODEL_KEY::THUMBNAIL, kfile.localPath()},
+			{FMH::MODEL_KEY::MIME, kfile.mimetype()},
+			{FMH::MODEL_KEY::GROUP, kfile.group()},
+			{FMH::MODEL_KEY::ICON, kfile.iconName()},
+			{FMH::MODEL_KEY::SIZE, QString::number(kfile.size())},
+			{FMH::MODEL_KEY::THUMBNAIL, kfile.mostLocalUrl().toString()},
+			{FMH::MODEL_KEY::OWNER, kfile.user()},
+			};
+		}
+		
+		res.path = url.toString();
+		res.content = content;
+		
+		emit this->pathContentReady(res);
+	});
+	
+	connect(dirLister, static_cast<void (KCoreDirLister::*)(const QUrl&, const KFileItemList &items)>(&KCoreDirLister::itemsAdded), []()
+	 {
+		 qDebug()<< "MORE ITEMS WERE ADDED";
+	});
+		
+	connect(dirLister, static_cast<void (KCoreDirLister::*)(const KFileItemList &items)>(&KCoreDirLister::newItems), []()
+		{
+			qDebug()<< "MORE NEW ITEMS WERE ADDED";
+		});
+	
+	connect(dirLister, static_cast<void (KCoreDirLister::*)(const KFileItemList &items)>(&KCoreDirLister::itemsDeleted), [&]()
+	{
+		qDebug()<< "ITEMS WERE DELETED";
+		dirLister->updateDirectory(dirLister->url());
+	}); 
+	
+	connect(dirLister, static_cast<void (KCoreDirLister::*)(const QList< QPair< KFileItem, KFileItem > > &items)>(&KCoreDirLister::refreshItems), [&]()
+	{
+		qDebug()<< "ITEMS WERE REFRESHED";
+		dirLister->updateDirectory(dirLister->url());
+		
+	});
+#endif
 	connect(this->sync, &Syncing::listReady, [this](const FMH::MODEL_LIST &list, const QString &url)
 	{
 		emit this->cloudServerContentReady(list, url);
@@ -223,51 +282,12 @@ void FM::getPathContent(const QUrl& path, const bool &hidden, const bool &onlyDi
 		return res;
 	});
 	watcher->setFuture(t1);
-	#else	
-	auto dir = new KCoreDirLister(this);
-	connect(dir, static_cast<void (KCoreDirLister::*)(const QUrl&)>(&KCoreDirLister::completed), [=, dir](QUrl url)
-	{
-		qDebug()<< "PATH CONTENT READY" << url;	
-		
-		FMH::PATH_CONTENT res;
-		FMH::MODEL_LIST content;
-		for(const auto &kfile : dir->items())
-		{
-			qDebug() << kfile.url() << kfile.name() << kfile.isDir();
-			content << FMH::MODEL{ {FMH::MODEL_KEY::LABEL, kfile.name()},
-			{FMH::MODEL_KEY::NAME, kfile.name()},
-			{FMH::MODEL_KEY::PATH, kfile.url().toString()},
-			{FMH::MODEL_KEY::THUMBNAIL, kfile.localPath()},
-			{FMH::MODEL_KEY::MIME, kfile.mimetype()},
-			{FMH::MODEL_KEY::GROUP, kfile.group()},
-			{FMH::MODEL_KEY::ICON, kfile.iconName()},
-			{FMH::MODEL_KEY::SIZE, QString::number(kfile.size())},
-			{FMH::MODEL_KEY::THUMBNAIL, kfile.mostLocalUrl().toString()},
-			{FMH::MODEL_KEY::OWNER, kfile.user()},
-			};
-		}
-		
-		res.path = path.toString();
-		res.content = content;
-		
-		emit this->pathContentReady(res);
-		// 		dir->deleteLater();
-	});
+	#else
 	
-	// 	connect(dir, static_cast<void (KCoreDirLister::*)(const QUrl&, const KFileItemList &items)>(&KCoreDirLister::itemsAdded), []()
-	//  {
-	// 	 qDebug()<< "MORE ITEMS WERE ADDED";
-	// });
-	// 	
-	// 	connect(dir, static_cast<void (KCoreDirLister::*)(const KFileItemList &items)>(&KCoreDirLister::newItems), []()
-	// 	{
-	// 		qDebug()<< "MORE NEW ITEMS WERE ADDED";
-	// 	});
-	
-	dir->setShowingDotFiles(hidden);
-	dir->setDirOnlyMode(onlyDirs);
-	dir->setNameFilter(filters.join(" "));
-	if(dir->openUrl(path))
+	this->dirLister->setShowingDotFiles(hidden);
+	this->dirLister->setDirOnlyMode(onlyDirs);
+	this->dirLister->setNameFilter(filters.join(" "));
+	if(this->dirLister->openUrl(path))
 		qDebug()<< "GETTING PATH CONTENT" << path;	
 	
 	#endif	
@@ -629,8 +649,8 @@ QUrl FM::parentDir(const QUrl &path)
 {
 	if(!path.isLocalFile())
 	{
-		qWarning() << "URL recived is not a local file" << path;
-		return QVariantMap();	  
+		qWarning() << "URL recived is not a local file, FM::parentDir" << path;
+		return path;	  
 	}	
 	
 	QDir dir(path.toLocalFile());

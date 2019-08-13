@@ -235,9 +235,9 @@ void PlacesList::addPlace(const QString& path)
 	//do android stuff until cmake works with android 
     this->list.insert(index, FMH::getDirInfoModel(path));
 #else
-    const auto url =  QStringLiteral("file://")+path;
-	this->model->addPlace(QDir(path).dirName(), url);
-	this->list.insert(index, modelPlaceInfo(*this->model, this->model->closestItem(QUrl(url)), FMH::PATHTYPE_KEY::PLACES_PATH));
+//     const auto url =  QStringLiteral("file://")+path;
+	this->model->addPlace(QDir(path).dirName(), path);
+	this->list.insert(index, modelPlaceInfo(*this->model, this->model->closestItem(path), FMH::PATHTYPE_KEY::PLACES_PATH));
 #endif
 	
     emit this->postItemAppended();    

@@ -19,6 +19,10 @@
 #include "mauiandroid.h"
 #endif
 
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+class KCoreDirLister;
+#endif
+
 class Syncing;
 class Tagging;
 #ifdef STATIC_MAUIKIT
@@ -73,6 +77,9 @@ public:
 
 private:
     Tagging *tag;
+	#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)	
+	KCoreDirLister *dirLister;
+	#endif
 // 	static FM* instance;
 	QVariantList get(const QString &queryTxt);	
 
