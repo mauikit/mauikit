@@ -644,9 +644,11 @@ namespace FMH
 		file.endGroup();
 		file.sync();
 		#else
-		KConfig file(path.toLocalFile());
+		KConfig file(path.toLocalFile(), KConfig::SimpleConfig);
 		auto kgroup = file.group(group);
 		kgroup.writeEntry(key, value);
+		file.reparseConfiguration();
+		file.sync();
 		#endif
 	}
 	

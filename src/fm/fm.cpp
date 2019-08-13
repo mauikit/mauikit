@@ -91,6 +91,8 @@ dirLister(new KCoreDirLister(this))
 			qDebug() << kfile.url() << kfile.name() << kfile.isDir();
 			content << FMH::MODEL{ {FMH::MODEL_KEY::LABEL, kfile.name()},
 			{FMH::MODEL_KEY::NAME, kfile.name()},
+			{FMH::MODEL_KEY::DATE, kfile.time(KFileItem::FileTimes::CreationTime).toString(Qt::TextDate)},
+			{FMH::MODEL_KEY::MODIFIED, kfile.time(KFileItem::FileTimes::ModificationTime).toString(Qt::TextDate)},
 			{FMH::MODEL_KEY::PATH, kfile.url().toString()},
 			{FMH::MODEL_KEY::THUMBNAIL, kfile.localPath()},
 			{FMH::MODEL_KEY::MIME, kfile.mimetype()},
@@ -99,6 +101,7 @@ dirLister(new KCoreDirLister(this))
 			{FMH::MODEL_KEY::SIZE, QString::number(kfile.size())},
 			{FMH::MODEL_KEY::THUMBNAIL, kfile.mostLocalUrl().toString()},
 			{FMH::MODEL_KEY::OWNER, kfile.user()},
+			{FMH::MODEL_KEY::COUNT, kfile.isLocalFile() && kfile.isDir() ?  QString::number(QDir(kfile.localPath()).count() - 2) : "0"}
 			};
 		}
 		

@@ -215,6 +215,8 @@ public slots:
 	void copyInto(const QVariantList &files);
 	void cutInto(const QVariantList &files);
 	
+	static void setDirIcon(const QUrl& path, const QString &iconName);
+	
 signals:
 	void pathChanged();
 	void pathTypeChanged();

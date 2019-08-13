@@ -130,12 +130,11 @@ Menu
         {
             anchors.centerIn: parent
             id: colorBar
-			size:  iconSize
+			size: iconSize
 			onColorPicked:
 			{
-					Maui.FM.setDirConf(control.item.path+"/.directory", "Desktop Entry", "Icon", color)
-					
-					refresh()
+				currentFMList.setDirIcon(control.item.path, color)
+				refresh()
 			}
 		}
 	}	

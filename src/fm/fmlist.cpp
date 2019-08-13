@@ -666,6 +666,12 @@ void FMList::cutInto(const QVariantList& files)
 // 	}
 }
 
+void FMList::setDirIcon(const QUrl& path, const QString &iconName)
+{
+	qDebug()<< "setting dir icon to "<< path << iconName;
+	FMH::setDirConf(path.toString()+"/.directory", "Desktop Entry", "Icon", iconName);
+}
+
 QString FMList::getParentPath()
 {
 	switch(this->pathType)
