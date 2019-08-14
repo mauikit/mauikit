@@ -119,33 +119,32 @@ Menu
 		}
 	}
 	
-	MenuSeparator{}	
+	MenuSeparator{ visible: colorBar.visible }	
 	
 	MenuItem
-	{
+	{		
 		width: parent.width
 		height: visible ? iconSize + space.big : 0
 		visible: isDir
 		Maui.ColorsBar
         {
+			id: colorBar
+			
+			visible: parent.visible
             anchors.centerIn: parent
-            id: colorBar
 			size: iconSize
-			onColorPicked:
-			{
-				currentFMList.setDirIcon(control.item.path, color)
-				refresh()
-			}
+			onColorPicked: currentFMList.setDirIcon(index, color)
 		}
 	}	
 	
-	function show(item, index)
-	{
+	function show(index)
+	{		
+		control.item = currentFMList.get(index)
+
 		if(item)
 		{
 			control.index = index
 			isDir = Maui.FM.isDir(item.path)
-			control.item = item
 			popup()
 		}
 	}

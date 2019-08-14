@@ -470,7 +470,7 @@ Maui.Page
 		onItemRightClicked:
 		{
 			if(currentFMList.pathType !== Maui.FMList.TRASH_PATH)
-				itemMenu.show(control.currentFMList.get(index), index)
+				itemMenu.show(index)
 			control.itemRightClicked(index)
 		}
 		
@@ -1031,7 +1031,7 @@ Maui.Page
 	function refresh()
 	{
 		var pos = browser.contentY
-		control.currentFMList.refresh()
+// 		control.currentFMList.refresh()
 		
 		browser.contentY = pos
 	}

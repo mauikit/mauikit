@@ -253,9 +253,7 @@ void FMList::reset()
 			break;
 		}
 		
-		case FMList::PATHTYPE::TRASH_PATH:
-		case FMList::PATHTYPE::DRIVES_PATH:
-			break;
+		default: break;
 	}
 	
 	if(this->saveDirProps)
@@ -666,13 +664,20 @@ void FMList::cutInto(const QVariantList& files)
 // 	}
 }
 
-void FMList::setDirIcon(const QUrl& path, const QString &iconName)
+void FMList::setDirIcon(const int &index, const QString &iconName)
 {
-	qDebug()<< "setting dir icon to "<< path << iconName;
+	if(index >= this->list.size() || index < 0)
+		return;	
+	
+	const auto path = QUrl(this->list.at(index)[FMH::MODEL_KEY::PATH]);
+	
+	if(!FM::isDir(path))
+		return;	
+
 	FMH::setDirConf(path.toString()+"/.directory", "Desktop Entry", "Icon", iconName);
-// 	QFile file(path.toLocalFile());
-// 	file.open(QIODevice::WriteOnly);
-// 	file.close();	
+	
+	this->list[index][FMH::MODEL_KEY::ICON] = iconName;	
+	emit this->updateModel(index, QVector<int> {FMH::MODEL_KEY::ICON});
 }
 
 QString FMList::getParentPath()
