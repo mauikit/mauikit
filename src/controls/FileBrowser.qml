@@ -27,6 +27,7 @@ Maui.Page
 	property bool selectionMode : false
 	property bool group : false
 	property bool showEmblems: true
+	property bool singleSelection: false
 	
 	property alias selectionBar : selectionBarLoader.item
 	
@@ -469,7 +470,9 @@ Maui.Page
 		
 		onItemRightClicked:
 		{
-			if(currentFMList.pathType !== Maui.FMList.TRASH_PATH)
+			if(currentFMList.pathType !== Maui.FMList.TRASH_PATH &&
+				currentFMList.pathType !== Maui.FMList.REMOTE_PATH
+			)
 				itemMenu.show(index)
 			control.itemRightClicked(index)
 		}
@@ -1039,6 +1042,7 @@ Maui.Page
 	function addToSelection(item, append)
 	{
 		selectionBarLoader.sourceComponent= selectionBarComponent
+		selectionBar.singleSelection = control.singleSelection
 		selectionBar.append(item)
 	}
 	

@@ -47,6 +47,7 @@ Maui.Dialog
 		property var callback : ({})
 		
 		property alias textField: _textField
+		property alias singleSelection : browser.singleSelection
 		
 		
 		rejectButton.visible: false
