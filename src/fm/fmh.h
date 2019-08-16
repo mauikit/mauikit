@@ -159,6 +159,7 @@ namespace FMH
 		IMG,
 		PREVIEW,
 		LINK,
+		STAMP,
 		
 		/** ccdav keys **/
 		N,
@@ -259,6 +260,7 @@ namespace FMH
 		{MODEL_KEY::IMG, "img"},
 		{MODEL_KEY::PREVIEW, "preview"},
 		{MODEL_KEY::LINK, "link"},
+		{MODEL_KEY::STAMP, "stamp"},
 		
 		/** ccdav keys **/
 		{MODEL_KEY::N, "n"},
@@ -356,6 +358,7 @@ namespace FMH
 		{MODEL_NAME[MODEL_KEY::IMG], MODEL_KEY::IMG},
 		{MODEL_NAME[MODEL_KEY::PREVIEW], MODEL_KEY::PREVIEW},
 		{MODEL_NAME[MODEL_KEY::LINK], MODEL_KEY::LINK},
+		{MODEL_NAME[MODEL_KEY::STAMP], MODEL_KEY::STAMP},
 		
 		/** ccdav keys **/
 		{MODEL_NAME[MODEL_KEY::N], MODEL_KEY::N},
