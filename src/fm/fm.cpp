@@ -869,14 +869,14 @@ bool FM::removeDir(const QUrl &path)
 {
 	bool result = true;
 	QDir dir(path.toLocalFile());
-	
+    qDebug()<< "TRYING TO REMOVE DIR" << path << path.toLocalFile();
 	if (dir.exists())
 	{
 		Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst))
 		{
 			if (info.isDir())
 			{
-				result = removeDir(info.absoluteFilePath());
+                result = removeDir(QUrl::fromLocalFile(info.absoluteFilePath()));
 			}
 			else
 			{
