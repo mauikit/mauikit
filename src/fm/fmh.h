@@ -45,6 +45,110 @@
 #include <KFilePlacesModel>
 #endif
 
+
+namespace PRIV
+{
+  template<typename T>
+  struct __KEY
+  {
+    T value;
+    QString n;
+    QString label;
+    uint operator[](std::string)
+    {
+      return value;
+    }
+
+    T operator()()
+    {
+      return value;
+    }
+
+    bool operator==(const __KEY &other) const
+    {
+      return (value == other.value
+              && n == other.n);
+    }
+  };
+
+  typedef struct
+  {
+    QString n;
+    QString label;
+  } PUBLIC_KEY;
+
+
+  // boilerplate code for custom qhash keys to work with qt
+  inline uint qHash(const __KEY<uint> &key)
+  {
+    return qHash(key.n) ^ key.value;
+  }
+
+  // anon struct that holds the static list of keys on a keyring
+  static struct
+  {
+    QHash<QString, __KEY<uint>> values;
+    __KEY<uint> operator << (const PUBLIC_KEY &__val)
+    {
+      __KEY<uint> __k = {static_cast<unsigned int>(values.size()), __val.n, __val.label};
+      values[__val.n] = __k;
+      return (__k);
+//      return std::forward<__KEY<uint>>(__k);
+    }
+
+    __KEY<uint>& operator[] (const QString &n)
+    {
+      return values[n];
+    }
+
+  } KEYDB;
+}
+
+namespace KEYS
+{
+  //type aliases
+  typedef QHash<QString, PRIV::__KEY<uint>> KEYRING; // the keyring containing the registered keys
+  typedef PRIV::__KEY<uint> KEY; // alias to the wanted type of key with uint
+
+  inline static const KEY _SET (const QString &value)
+  {
+    return PRIV::KEYDB << PRIV::PUBLIC_KEY {value , QString()};
+  }
+
+  inline static const KEY _SET (const  PRIV::PUBLIC_KEY &value)
+  {
+    return PRIV::KEYDB << value;
+  }
+
+
+  inline static const QString& (_N)(const KEY & k)
+  {
+    return k.n;
+  }
+
+  inline static const KEY& _K (const QString &n)
+  {
+    return PRIV::KEYDB[n];
+  }
+
+  inline static const KEYRING& _VALUES()
+  {
+    return PRIV::KEYDB.values;
+  }
+
+  static const auto ID = _SET("id");
+  static const auto LOG = _SET("log");
+  static const auto FAV = _SET("fav");
+
+};
+
+namespace MODELS
+{
+  typedef QHash<KEYS::KEY, QString> MODEL;
+  typedef QVector<MODEL> MODEL_LIST;
+}
+
+
 namespace FMH
 {
 	
