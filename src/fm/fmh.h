@@ -46,6 +46,9 @@
 #endif
 
 
+/**
+ *base key implementation model
+ */
 namespace PRIV
 {
   template<typename T>
@@ -88,12 +91,18 @@ namespace PRIV
   static struct
   {
     QHash<QString, __KEY<uint>> values;
-    __KEY<uint> operator << (const PUBLIC_KEY &__val)
+    __KEY<uint>& operator << (const PUBLIC_KEY &__val)
     {
-      __KEY<uint> __k = {static_cast<unsigned int>(values.size()), __val.n, __val.label};
-      values[__val.n] = __k;
-      return (__k);
-//      return std::forward<__KEY<uint>>(__k);
+
+      if(values.contains(__val.n))
+        {
+          values[__val.n] = {static_cast<unsigned int>(static_cast<unsigned int>(values[__val.n].value)), __val.n, __val.label};
+        }
+        else {
+          values[__val.n] = {static_cast<unsigned int>(values.size()), __val.n, __val.label};
+        }
+      return (values[__val.n]);
+      //      return std::forward<__KEY<uint>>(__k);
     }
 
     __KEY<uint>& operator[] (const QString &n)
@@ -110,25 +119,34 @@ namespace KEYS
   typedef QHash<QString, PRIV::__KEY<uint>> KEYRING; // the keyring containing the registered keys
   typedef PRIV::__KEY<uint> KEY; // alias to the wanted type of key with uint
 
-  inline static const KEY _SET (const QString &value)
+  inline static const KEY& _SET (const QString &value)
   {
     return PRIV::KEYDB << PRIV::PUBLIC_KEY {value , QString()};
   }
 
-  inline static const KEY _SET (const  PRIV::PUBLIC_KEY &value)
+  inline static const KEY& _SET (const  PRIV::PUBLIC_KEY &value)
   {
     return PRIV::KEYDB << value;
   }
-
 
   inline static const QString& (_N)(const KEY & k)
   {
     return k.n;
   }
 
-  inline static const KEY& _K (const QString &n)
+  inline static const KEY& _K (const KEYRING::key_type &n)
   {
     return PRIV::KEYDB[n];
+  }
+
+  inline static const KEY& _K (const decltype(KEY::value) &value)
+  {
+     const auto res = std::find_if(PRIV::KEYDB.values.constBegin(), PRIV::KEYDB.values.constEnd(), [&value](const KEY &key) -> bool
+    {
+        return key.value == value;
+      });
+
+     return res.value();
   }
 
   inline static const KEYRING& _VALUES()
@@ -136,10 +154,124 @@ namespace KEYS
     return PRIV::KEYDB.values;
   }
 
-  static const auto ID = _SET("id");
-  static const auto LOG = _SET("log");
-  static const auto FAV = _SET("fav");
+  inline static const QStringList _NAMES()
+  {
+    return std::accumulate(PRIV::KEYDB.values.constBegin(), PRIV::KEYDB.values.constEnd(), QStringList(), [](QStringList &res, const KEY &key)
+    {
+        res << key.n;
+        return res;
+      });
+  }
 
+  inline static const QVector<uint> _KEYS()
+  {
+    return std::accumulate(PRIV::KEYDB.values.constBegin(), PRIV::KEYDB.values.constEnd(), QVector<uint>(), [](QVector<uint> &res, const KEY &key)
+    {
+        res << key.value;
+        return res;
+      });
+  }
+
+  inline static uint _COUNT()
+  {
+    return uint (KEYS::_VALUES().count());
+  }
+
+  static const auto &ICON= _SET("icon");
+  static const auto &LABEL = _SET("label");
+  static const auto &PATH = _SET("path");
+  static const auto &URL = _SET("url");
+  static const auto &TYPE = _SET("type");
+  static const auto &GROUP = _SET("group");
+  static const auto &OWNER = _SET("owner");
+  static const auto &SUFFIX = _SET("suffix");
+  static const auto &NAME = _SET("name");
+  static const auto &DATE = _SET("date");
+  static const auto &MODIFIED = _SET("modified");
+  static const auto &MIME = _SET("mime");
+  static const auto &SIZE = _SET("size");
+  static const auto &TAG = _SET("tag");
+  static const auto &PERMISSIONS = _SET("permissions");
+  static const auto &THUMBNAIL = _SET("thumbnail");
+  static const auto &THUMBNAIL_1 = _SET("thumbnail_1");
+  static const auto &THUMBNAIL_2 = _SET("thumbnail_2");
+  static const auto &THUMBNAIL_3 = _SET("thumbnail_3");
+  static const auto &ICONSIZE = _SET("iconsize");
+  static const auto &HIDDEN = _SET("hidden");
+  static const auto &DETAILVIEW = _SET("detailview");
+  static const auto &SHOWTERMINAL = _SET("showterminal");
+  static const auto &SHOWTHUMBNAIL = _SET("showthumbnail");
+  static const auto &COUNT = _SET("count");
+  static const auto &SORTBY = _SET("sortby");
+  static const auto &USER = _SET("user");
+  static const auto &PASSWORD = _SET("password");
+  static const auto &SERVER = _SET("server");
+  static const auto &FOLDERSFIRST = _SET("foldersfirst");
+  static const auto &VIEWTYPE = _SET("viewtype");
+  static const auto &ADDDATE = _SET("adddate");
+  static const auto &FAV = _SET("fav");
+  static const auto &FAVORITE = _SET("favorite");
+  static const auto &COLOR = _SET("color");
+  static const auto &RATE = _SET("rate");
+  static const auto &FORMAT = _SET("format");
+  static const auto &PLACE = _SET("place");
+  static const auto &LOCATION = _SET("location");
+  static const auto &ALBUM = _SET("album");
+  static const auto &DURATION = _SET("duration");
+  static const auto &RELEASEDATE = _SET("releasedate");
+  static const auto &ARTIST = _SET("artist");
+  static const auto &LYRICS = _SET("lyrics");
+  static const auto &TRACK = _SET("track");
+  static const auto &GENRE = _SET("genre");
+  static const auto &WIKI = _SET("wiki");
+  static const auto &CONTEXT = _SET("context");
+  static const auto &SOURCETYPE = _SET("sourcetype");
+  static const auto &ARTWORK= _SET("artwork");
+  static const auto &NOTE = _SET("note");
+  static const auto &MOOD = _SET("mood");
+  static const auto &COMMENT = _SET("comment");
+  static const auto &PLAYLIST = _SET("playlist");
+  static const auto &SOURCE = _SET("source");
+  static const auto &TITLE = _SET("title");
+  static const auto &ID = _SET("id");
+  static const auto &LICENSE = _SET("license");
+  static const auto &DESCRIPTION = _SET("description");
+  static const auto &BOOKMARK = _SET("bookmark");
+  static const auto &ACCOUNT = _SET("account");
+  static const auto &ACCOUNTTYPE= _SET("accounttype");
+  static const auto &VERSION = _SET("version");
+  static const auto &DOMAIN = _SET("domain");
+  static const auto &CATEGORY = _SET("category");
+  static const auto &CONTENT = _SET("content");
+  static const auto &PIN = _SET("pin");
+  static const auto &IMG = _SET("img");
+  static const auto &PREVIEW = _SET("preview");
+  static const auto &LINK = _SET("link");
+  static const auto &STAMP = _SET("stamp");
+
+  /** ccdav keys **/
+  static const auto &N = _SET("n");
+  static const auto &IM = _SET("im");
+  static const auto &PHOTO = _SET("photo");
+  static const auto &GENDER = _SET("gender");
+  static const auto &ADR = _SET("adr");
+  static const auto &ADR_2 = _SET("adr2");
+  static const auto &ADR_3 = _SET("adr3");
+  static const auto &EMAIL= _SET("email");
+  static const auto &EMAIL_2 = _SET("email2");
+  static const auto &EMAIL_3 = _SET("email3");
+  static const auto &LANG= _SET("lang");
+  static const auto &NICKNAME = _SET("nickname");
+  static const auto &ORG = _SET("org");
+  static const auto &PROFILE = _SET("profile");
+  static const auto &TZ = _SET("tz");
+  static const auto &TEL = _SET("tel");
+  static const auto &TEL_2 = _SET("tel2");
+  static const auto &TEL_3 = _SET("tel3");
+
+  static const auto &CITY = _SET("city");
+  static const auto &STATE = _SET("state");
+  static const auto &COUNTRY = _SET("country");
 };
 
 namespace MODELS
@@ -148,6 +280,11 @@ namespace MODELS
   typedef QVector<MODEL> MODEL_LIST;
 }
 
+// boilerplate code for custom qhash keys to work with qt
+inline uint qHash(const KEYS::KEY &key)
+{
+  return qHash(key.n) ^ key.value;
+}
 
 namespace FMH
 {
@@ -191,106 +328,7 @@ namespace FMH
 		{FILTER_TYPE::NONE, QStringList()}
 	};
 	
-    enum MODEL_KEY : int
-	{
-		ICON,
-		LABEL,
-		PATH,
-		URL,
-		TYPE,
-		GROUP,
-		OWNER,
-		SUFFIX,
-		NAME,
-		DATE,
-		SIZE,
-		MODIFIED,
-		MIME,
-		TAG,
-		PERMISSIONS,
-		THUMBNAIL,
-		THUMBNAIL_1,
-		THUMBNAIL_2,
-		THUMBNAIL_3,
-		HIDDEN,
-		ICONSIZE,
-		DETAILVIEW,
-		SHOWTHUMBNAIL,
-		SHOWTERMINAL,
-		COUNT,
-		SORTBY,
-		USER,
-		PASSWORD,
-		SERVER,
-		FOLDERSFIRST,
-		VIEWTYPE,
-		ADDDATE,
-		FAV,
-		FAVORITE,
-		COLOR,
-		RATE,
-		FORMAT,
-		PLACE,
-		LOCATION,
-		ALBUM,
-		ARTIST,
-		TRACK,
-		DURATION,
-		ARTWORK,
-		PLAYLIST,
-		LYRICS,
-		WIKI,
-		MOOD,
-		SOURCETYPE,
-		GENRE,
-		NOTE,
-		COMMENT,
-		CONTEXT,
-		SOURCE,
-		TITLE,
-		ID,
-		RELEASEDATE,
-		LICENSE,
-		DESCRIPTION,
-		BOOKMARK,
-		ACCOUNT,
-		ACCOUNTTYPE,
-		VERSION,
-		DOMAIN,
-		CATEGORY,
-		CONTENT,
-		PIN,
-		IMG,
-		PREVIEW,
-		LINK,
-		STAMP,
-		
-		/** ccdav keys **/
-		N,
-		PHOTO,
-		GENDER,
-		ADR,
-		ADR_2,
-		ADR_3,
-		EMAIL,
-		EMAIL_2,
-		EMAIL_3,
-		LANG,
-		NICKNAME,
-		ORG,
-		PROFILE,
-		TZ,
-		TEL,
-		TEL_2,
-		TEL_3,
-		IM,
-		
-		/** other keys **/
-		CITY,
-		STATE,
-		COUNTRY
-		
-	}; 
+    
 	
     static const QHash<FMH::MODEL_KEY, QString> MODEL_NAME =
 	{
