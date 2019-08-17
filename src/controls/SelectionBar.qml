@@ -46,6 +46,13 @@ Item
     property string iconName : "overflow-menu"
     property bool iconVisible: true
     
+    /**
+	 * if singleSelection is set to true then only a single item is selected
+	 * at time, and replaced with a newe item appended
+	 **/
+	
+    property bool singleSelection: false
+    
     signal iconClicked()
     signal modelCleared()
     signal exitClicked()
@@ -333,6 +340,9 @@ Item
     {
         if(selectedPaths.indexOf(item.path) < 0)
         {
+			if(control.singleSelection)
+				clear()
+			
             selectedItems.push(item)
             selectedPaths.push(item.path)
             

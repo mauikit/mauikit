@@ -34,7 +34,7 @@ MauiList(parent),
 fm(new FM(this)),
 watcher(new QFileSystemWatcher(this))
 {
-	connect(this->fm, &FM::cloudServerContentReady, [this](const FMH::MODEL_LIST &list, const QString &url)
+	connect(this->fm, &FM::cloudServerContentReady, [&](const FMH::MODEL_LIST &list, const QString &url)
 	{
 		if(this->path == url)
 		{			
@@ -45,10 +45,9 @@ watcher(new QFileSystemWatcher(this))
 			this->pos();
 			this->setContentReady(true);
 		}	
-	});
+	});	
 	
-	
-	connect(this->fm, &FM::trashContentReady, [this](const FMH::MODEL_LIST &list)
+	connect(this->fm, &FM::trashContentReady, [&](const FMH::MODEL_LIST &list)
 	{
 		if(this->path == "trash://")
 		{			
@@ -61,23 +60,57 @@ watcher(new QFileSystemWatcher(this))
 		}	
 	});
 	
-	connect(this->fm, &FM::warningMessage, [this](const QString &message)
+	connect(this->fm, &FM::pathContentReady, [&](const FMH::PATH_CONTENT &res)
+	{
+		qDebug()<< "PATHCN ONTEN READY" << res.path << this->path << res.content;
+		
+// 		if(this->pathType != FMList::PATHTYPE::PLACES_PATH)
+// 			return;		
+		
+		if(res.path != this->path)
+			return;
+		
+		
+		emit this->preListChanged();
+		this->list = res.content;
+		
+		this->pathEmpty = this->list.isEmpty() /*&& FM::fileExists(this->path)*/;
+		emit this->pathEmptyChanged();
+		
+		this->sortList();		
+		
+		emit this->postListChanged();
+		this->setContentReady(true);
+	});	
+	
+	connect(this->fm, &FM::warningMessage, [&](const QString &message)
 	{
 		emit this->warning(message);
 	});
 	
-	connect(this->fm, &FM::loadProgress, [this](const int &percent)
+	connect(this->fm, &FM::loadProgress, [&](const int &percent)
 	{
 		emit this->progress(percent);
 	});
 	
-	connect(this->watcher, &QFileSystemWatcher::directoryChanged, [this](const QString &path)
+	// with kio based on android it watches the directory itself, so better relay on that
+#ifdef Q_OS_ANDROID
+	connect(this->watcher, &QFileSystemWatcher::directoryChanged, [&](const QString &path)
 	{
-		Q_UNUSED(path);
+		qDebug()<< "FOLDER PATH CHANGED" << path;
 		this->reset();
 	});
+#else
+	connect(this->fm, &FM::pathContentChanged, [&](const QUrl &path)
+	{
+		qDebug()<< "FOLDER PATH CHANGED" << path;
+		if(path.toString() != this->path)
+			return;
+		this->sortList();
+	});
+#endif
 	
-	connect(this->fm, &FM::newItem, [this] (const FMH::MODEL &item, const QString &url)
+	connect(this->fm, &FM::newItem, [&] (const FMH::MODEL &item, const QString &url)
 	{
 		if(this->path == url)
 		{
@@ -114,13 +147,20 @@ void FMList::pos()
 
 void FMList::watchPath(const QString& path, const bool& clear)
 {	
+	#ifdef Q_OS_ANDROID
+	
 	if(!this->watcher->directories().isEmpty() && clear)
 		this->watcher->removePaths(this->watcher->directories());
 	
 	if(path.isEmpty() || !FMH::fileExists(path))
 		return;
 	
-	this->watcher->addPath(path);
+	this->watcher->addPath(QString(path).replace("file://", ""));
+	qDebug()<< "WATCHING PATHS" << this->watcher->directories();
+#else
+	Q_UNUSED(path)
+	Q_UNUSED(clear)
+#endif
 }
 
 void FMList::setList()
@@ -128,10 +168,14 @@ void FMList::setList()
 	this->setContentReady(true);
 	switch(this->pathType)
 	{
+		case FMList::PATHTYPE::FISH_PATH:
+		case FMList::PATHTYPE::MTP_PATH:
+		case FMList::PATHTYPE::DRIVES_PATH:
+		case FMList::PATHTYPE::REMOTE_PATH:			
 		case FMList::PATHTYPE::PLACES_PATH:
 			this->list.clear();
 			this->setContentReady(false);
-			this->getPathContent();
+			this->fm->getPathContent(this->path, this->hidden, this->onlyDirs, this->filters);
 			return; //ASYNC
 			
 		case FMList::PATHTYPE::TRASH_PATH:
@@ -143,7 +187,7 @@ void FMList::setList()
 		case FMList::PATHTYPE::SEARCH_PATH:
 			this->list.clear();
 			this->setContentReady(false);
-			this->search(QString(this->path).right(this->path.length()- 1 - this->path.lastIndexOf("/")), this->searchPath);
+			this->search(QString(this->path).right(this->path.length()- 1 - this->path.lastIndexOf("/")), this->searchPath, this->hidden, this->onlyDirs, this->filters);
 			return; //ASYNC
 			
 		case FMList::PATHTYPE::APPS_PATH:
@@ -162,12 +206,10 @@ void FMList::setList()
 				return;			
 			}else break;
 			
-		case FMList::PATHTYPE::DRIVES_PATH:
-			this->list = FMH::MODEL_LIST();
-			break;
+	
 	}
 	
-	this->pathEmpty = this->list.isEmpty()/* && FM::fileExists(this->path)*/;
+	this->pathEmpty = this->list.isEmpty() && FM::fileExists(this->path);
 	emit this->pathEmptyChanged();
 	
 	this->sortList();
@@ -211,9 +253,7 @@ void FMList::reset()
 			break;
 		}
 		
-		case FMList::PATHTYPE::TRASH_PATH:
-		case FMList::PATHTYPE::DRIVES_PATH:
-			break;
+		default: break;
 	}
 	
 	if(this->saveDirProps)
@@ -233,6 +273,7 @@ void FMList::reset()
 	emit this->previewChanged();			
 	
 	
+	qDebug()<< "RESETING PATH CONTENTE" << this->path;
 	this->setList();	
 	this->pos();
 }
@@ -404,7 +445,11 @@ void FMList::setPath(const QString &path)
 	
 	qDebug()<< "Prev History" << this->prevHistory;
 	
-	if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::SEARCH_PATH]+"/"))
+	const auto __scheme = QUrl(this->path).scheme();
+	qDebug()<< "CurrentPath" <<__scheme;
+	
+// 	if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::SEARCH_PATH]+"/"))
+	if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::SEARCH_PATH])
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::SEARCH_PATH;
@@ -412,7 +457,7 @@ void FMList::setPath(const QString &path)
 		emit this->pathTypeChanged();
 		this->watchPath(QString());
 		
-	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]+"/"))
+	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::CLOUD_PATH])
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::CLOUD_PATH;
@@ -420,15 +465,16 @@ void FMList::setPath(const QString &path)
 		emit this->pathTypeChanged();
 		this->watchPath(QString());
 		
-	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/"))
+	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::APPS_PATH])
 	{
+		qDebug()<< "GET APPS" ;
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::APPS_PATH;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		this->watchPath(QString());
 		
-	}else if(path.startsWith(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::TAGS_PATH]+"/"))
+	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::TAGS_PATH])
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::TAGS_PATH;
@@ -436,22 +482,50 @@ void FMList::setPath(const QString &path)
 		emit this->pathTypeChanged();
 		this->watchPath(QString());
 		
-	}else if(path.startsWith("trash://"))		
+	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::TRASH_PATH])
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::TRASH_PATH;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		this->watchPath(QString());
-	}else
+		
+	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::PLACES_PATH]) 
 	{
 		this->watchPath(this->path);
 		this->pathExists = FMH::fileExists(this->path);
 		this->pathType = FMList::PATHTYPE::PLACES_PATH;
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
+		
+	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::MTP_PATH])		
+	{
+		this->pathExists = true;
+		this->pathType = FMList::PATHTYPE::MTP_PATH;
+		emit this->pathExistsChanged();
+		emit this->pathTypeChanged();
+	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::FISH_PATH] )		
+	{
+		this->pathExists = true;
+		this->pathType = FMList::PATHTYPE::FISH_PATH;
+		emit this->pathExistsChanged();
+		emit this->pathTypeChanged();
+	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::REMOTE_PATH] )		
+	{
+		this->pathExists = true;
+		this->pathType = FMList::PATHTYPE::REMOTE_PATH;
+		emit this->pathExistsChanged();
+		emit this->pathTypeChanged();
+	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::DRIVES_PATH] )		
+	{
+		this->pathExists = true;
+		this->pathType = FMList::PATHTYPE::DRIVES_PATH;
+		emit this->pathExistsChanged();
+		emit this->pathTypeChanged();
 	}
 	
+	
+	qDebug() << "PATHTYPE IS" << this->pathType << FMH::PATHTYPE_SCHEME[static_cast<FMH::PATHTYPE_KEY>(this->pathType)];
 	emit this->pathChanged();
 }
 
@@ -570,7 +644,7 @@ void FMList::createDir(const QString& name)
 		this->fm->createDir(this->path, name);	
 	else if(this->pathType == FMList::PATHTYPE::CLOUD_PATH)		
 	{
-		this->fm->createCloudDir(QString(this->path).replace(FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::CLOUD_PATH]+"/"+this->fm->sync->getUser(), ""), name);
+		this->fm->createCloudDir(QString(this->path).replace(FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::CLOUD_PATH]+"/"+this->fm->sync->getUser(), ""), name);
 	}
 }
 
@@ -590,16 +664,31 @@ void FMList::cutInto(const QVariantList& files)
 // 	}
 }
 
+void FMList::setDirIcon(const int &index, const QString &iconName)
+{
+	if(index >= this->list.size() || index < 0)
+		return;	
+	
+	const auto path = QUrl(this->list.at(index)[FMH::MODEL_KEY::PATH]);
+	
+	if(!FM::isDir(path))
+		return;	
+
+	FMH::setDirConf(path.toString()+"/.directory", "Desktop Entry", "Icon", iconName);
+	
+	this->list[index][FMH::MODEL_KEY::ICON] = iconName;	
+	emit this->updateModel(index, QVector<int> {FMH::MODEL_KEY::ICON});
+}
+
 QString FMList::getParentPath()
 {
 	switch(this->pathType)
 	{		
 		case FMList::PATHTYPE::PLACES_PATH:
-			return FM::parentDir(this->path);
+			return FM::parentDir(this->path).toString();
 		default:
 			return this->getPreviousPath();
-	}
-	
+	}	
 }
 
 QString FMList::getPosteriorPath()
@@ -731,10 +820,17 @@ void FMList::setViewType(const FMList::VIEW_TYPE& value)
 	emit this->viewTypeChanged();
 }
 
-void FMList::search(const QString& query, const QString &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)
+void FMList::search(const QString& query, const QUrl &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)
 {
+	qDebug()<< "SEARCHING FOR" << query << path;
 	
-	QFutureWatcher<PathContent> *watcher = new QFutureWatcher<PathContent>;
+	if(!path.isLocalFile())
+	{
+		qWarning() << "URL recived is not a local file. search" << path;
+		return;	  
+	}	
+	
+	QFutureWatcher<FMH::PATH_CONTENT> *watcher = new QFutureWatcher<FMH::PATH_CONTENT>;
 	connect(watcher, &QFutureWatcher<FMH::MODEL_LIST>::finished, [=]()
 	{
 		if(this->pathType != FMList::PATHTYPE::SEARCH_PATH)
@@ -759,71 +855,11 @@ void FMList::search(const QString& query, const QString &path, const bool &hidde
         watcher->deleteLater();
 	});
 	
-	QFuture<PathContent> t1 = QtConcurrent::run([=]() -> PathContent
+	QFuture<FMH::PATH_CONTENT> t1 = QtConcurrent::run([=]() -> FMH::PATH_CONTENT
 	{		
-		PathContent res;
-		res.path = path;
-		
-		FMH::MODEL_LIST content;		
-		if (FM::isDir(path))
-		{
-			QDir::Filters dirFilter;
-			
-			dirFilter = (onlyDirs ? QDir::AllDirs | QDir::NoDotDot | QDir::NoDot :
-			QDir::Files | QDir::AllDirs | QDir::NoDotDot | QDir::NoDot);
-			
-			if(hidden)
-				dirFilter = dirFilter | QDir::Hidden | QDir::System;
-			
-			QDirIterator it (path, filters, dirFilter, QDirIterator::Subdirectories);
-			while (it.hasNext())
-			{
-				const auto url = it.next();
-				const auto info = it.fileInfo();				
-				if(info.completeBaseName().contains(query, Qt::CaseInsensitive))
-					content << FMH::getFileInfoModel(url);				
-			}
-		}
-		
-		res.content = content;
-		
-		return res;
-	});
-	watcher->setFuture(t1);
-}
-
-void FMList::getPathContent()
-{	
-	qDebug()<< "Getting async path contents";
-	QFutureWatcher<PathContent> *watcher = new QFutureWatcher<PathContent>;
-	connect(watcher, &QFutureWatcher<PathContent>::finished, [=]()
-	{
-		if(this->pathType != FMList::PATHTYPE::PLACES_PATH)
-			return;
-		
-		const auto res = watcher->future().result();
-		
-		if(res.path != this->path)
-			return;
-		
-		emit this->preListChanged();
-		this->list = res.content;
-		
-		this->pathEmpty = this->list.isEmpty() && FM::fileExists(this->path);
-		emit this->pathEmptyChanged();
-		
-		this->sortList();		
-		
-		emit this->postListChanged();
-		this->setContentReady(true);
-        watcher->deleteLater();		
-	});
-	
-	QFuture<PathContent> t1 = QtConcurrent::run([=]() -> PathContent
-	{		
-		PathContent res;
-		res.path = this->path;
-		res.content = FM::getPathContent(this->path, this->hidden, this->onlyDirs, this->filters);	
+		FMH::PATH_CONTENT res;
+		res.path = path.toString();				
+		res.content = FM::search(query, path, hidden, onlyDirs, filters);
 		return res;
 	});
 	watcher->setFuture(t1);

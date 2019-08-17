@@ -248,7 +248,7 @@ FMH::MODEL_LIST MAUIKDE::getApps()
 				{
 					{FMH::MODEL_KEY::ICON, s->icon()},
 					{FMH::MODEL_KEY::LABEL, s->name()},
-					{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/"+s->entryPath()}
+					{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::APPS_PATH]+s->entryPath()}
 				};
 			}
 		}
@@ -257,12 +257,16 @@ FMH::MODEL_LIST MAUIKDE::getApps()
 }
 
 FMH::MODEL_LIST MAUIKDE::getApps(const QString &groupStr)
-{
-	if(groupStr.isEmpty()) return getApps();
+{	
+	const auto grp = QString(groupStr).replace("/", "")+"/";
+	qDebug() << "APP GROUDP" << groupStr<< grp;
+	
+	if(grp.isEmpty()) return getApps();
+	
 	
 	FMH::MODEL_LIST res;
 	//    const KServiceGroup::Ptr group(static_cast<KServiceGroup*>(groupStr));
-	auto group = new KServiceGroup(groupStr);
+	auto group = new KServiceGroup(grp);
 	KServiceGroup::List list = group->entries(true /* sorted */,
 											  true /* excludeNoDisplay */,
 										   false /* allowSeparators */,
@@ -301,7 +305,7 @@ FMH::MODEL_LIST MAUIKDE::getApps(const QString &groupStr)
 			res <<  FMH::MODEL { 
 				{FMH::MODEL_KEY::ICON, s->icon()},
 				{FMH::MODEL_KEY::LABEL, s->name()},
-				{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::APPS_PATH]+"/"+s->entryPath()}
+				{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::APPS_PATH]+s->entryPath()}
 			};
 		}
 	}

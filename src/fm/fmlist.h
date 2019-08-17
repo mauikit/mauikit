@@ -91,6 +91,8 @@ class FMList : public MauiList
 		enum PATHTYPE : uint_fast8_t
 		{
 			PLACES_PATH = FMH::PATHTYPE_KEY::PLACES_PATH,
+			FISH_PATH = FMH::PATHTYPE_KEY::FISH_PATH,
+			MTP_PATH = FMH::PATHTYPE_KEY::MTP_PATH,
 			REMOTE_PATH = FMH::PATHTYPE_KEY::REMOTE_PATH,
 			DRIVES_PATH = FMH::PATHTYPE_KEY::DRIVES_PATH,
 			REMOVABLE_PATH = FMH::PATHTYPE_KEY::REMOVABLE_PATH,
@@ -178,8 +180,7 @@ private:
 	void setList();
 	void sortList();
 	void watchPath(const QString &path, const bool &clear = true);
-    void search(const QString &query, const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
-	void getPathContent();
+    void search(const QString &query, const QUrl &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
 	
 	FMH::MODEL_LIST list = {{}};
 	
@@ -213,6 +214,8 @@ public slots:
 	void createDir(const QString &name);
 	void copyInto(const QVariantList &files);
 	void cutInto(const QVariantList &files);
+	
+	void setDirIcon(const int &index, const QString &iconName);
 	
 signals:
 	void pathChanged();

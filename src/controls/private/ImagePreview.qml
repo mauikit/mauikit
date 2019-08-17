@@ -25,8 +25,8 @@ ColumnLayout
 // 			verticalAlignment: Qt.AlignVCenter
 			width: parent.width
 			height: parent.height
-			image.source: "file://"+currentUrl
-// 			fillMode: Image.PreserveAspectCrop
+			image.source: currentUrl.startsWith("file://") ? currentUrl : "file://"+currentUrl			
+			// 			fillMode: Image.PreserveAspectCrop
 // 			asynchronous: true
 // 			sourceSize.height: height
 // 			sourceSize.width: width

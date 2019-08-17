@@ -27,6 +27,7 @@ Maui.Page
 	property bool selectionMode : false
 	property bool group : false
 	property bool showEmblems: true
+	property bool singleSelection: false
 	
 	property alias selectionBar : selectionBarLoader.item
 	
@@ -42,7 +43,7 @@ Maui.Page
 	property alias dialog : dialogLoader.item
 	property alias goUpButton : goUpButton
 	
-	property alias currentPathType : modelList.pathType
+	property int currentPathType : currentFMList.pathType
 	property int thumbnailsSize : iconSizes.large
 	
 	signal itemClicked(int index)
@@ -469,8 +470,10 @@ Maui.Page
 		
 		onItemRightClicked:
 		{
-			if(currentFMList.pathType !== Maui.FMList.TRASH_PATH)
-				itemMenu.show(control.currentFMList.get(index), index)
+			if(currentFMList.pathType !== Maui.FMList.TRASH_PATH &&
+				currentFMList.pathType !== Maui.FMList.REMOTE_PATH
+			)
+				itemMenu.show(index)
 			control.itemRightClicked(index)
 		}
 		
@@ -936,23 +939,23 @@ Maui.Page
 			case Maui.FMList.APPS_PATH:
 				if(item.path.endsWith("/"))
 					populate(path)
-					else
-						Maui.FM.runApplication(path)
-						break
+				else
+					Maui.FM.runApplication(path)
+				break
 			case Maui.FMList.CLOUD_PATH:
 				if(item.mime === "inode/directory")
 					control.openFolder(path)
-					else
-						Maui.FM.openCloudItem(item)
-						break;
+				else
+					Maui.FM.openCloudItem(item)
+				break;
 			default:
 				if(selectionMode && !Maui.FM.isDir(item.path))
 					addToSelection(item, true)
 					else
 					{
-						if(Maui.FM.isDir(path))
+						if(item.mime === "inode/directory")							
 							control.openFolder(path)
-							else if(Maui.FM.isApp(path))
+						else if(Maui.FM.isApp(path))
 								control.launchApp(path)
 								else
 								{
@@ -1031,7 +1034,7 @@ Maui.Page
 	function refresh()
 	{
 		var pos = browser.contentY
-		control.currentFMList.refresh()
+// 		control.currentFMList.refresh()
 		
 		browser.contentY = pos
 	}
@@ -1039,6 +1042,7 @@ Maui.Page
 	function addToSelection(item, append)
 	{
 		selectionBarLoader.sourceComponent= selectionBarComponent
+		selectionBar.singleSelection = control.singleSelection
 		selectionBar.append(item)
 	}
 	
@@ -1075,10 +1079,10 @@ Maui.Page
 	function paste()
 	{
 		if(isCopy)
-			list.copyInto(copyItems, currentPath)
+			currentFMList.copyInto(copyItems)
 			else if(isCut)
 			{
-				list.cutInto(cutItems, currentPath)
+				currentFMList.cutInto(cutItems)
 				clearSelection()			
 			}
 	}

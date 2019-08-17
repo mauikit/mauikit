@@ -48,7 +48,7 @@ FMH::MODEL_LIST PathList::items() const
 }
 
 void PathList::setPath(const QString& path)
-{
+{	
 	if(path == this->m_path)
 		return;	
 	
@@ -71,18 +71,27 @@ void PathList::setPath(const QString& path)
 
 FMH::MODEL_LIST PathList::splitPath(const QString& path)
 {
-	const auto paths = path.split("/", QString::SplitBehavior::SkipEmptyParts);
-	return std::accumulate(paths.constBegin(), paths.constEnd(), FMH::MODEL_LIST(), [](FMH::MODEL_LIST &list, const QString &part) -> FMH::MODEL_LIST
+	auto __url = QUrl(path);
+	const auto scheme = __url.scheme();
+	__url.setScheme("");
+	
+	const auto m_url = __url.toString();
+	
+	const auto paths = m_url.split("/", QString::SplitBehavior::SkipEmptyParts);
+	
+	qDebug()<< "PATHBAR LIST"<< m_url << paths;
+	
+	
+	return std::accumulate(paths.constBegin(), paths.constEnd(), FMH::MODEL_LIST(), [scheme](FMH::MODEL_LIST &list, const QString &part) -> FMH::MODEL_LIST
 	{	
-		const auto url = list.isEmpty() ? QString("/"+part) : list.last()[FMH::MODEL_KEY::PATH] + QString("/"+part);		
+		const auto url = list.isEmpty() ? QString(scheme + (scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::PLACES_PATH] ? ":///" : "://")  +part) : list.last()[FMH::MODEL_KEY::PATH] + QString("/"+part);		
 		
 		if(!url.isEmpty())
-			list << (FMH::fileExists(url) ? FMH::getDirInfoModel(url) : 
-			FMH::MODEL 
+			list << FMH::MODEL 
 			{
 				{FMH::MODEL_KEY::LABEL, part},
 				{FMH::MODEL_KEY::PATH, url}
-			});
+			};
 		
 		return list;
 	});

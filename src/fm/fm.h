@@ -19,6 +19,10 @@
 #include "mauiandroid.h"
 #endif
 
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+class KCoreDirLister;
+#endif
+
 class Syncing;
 class Tagging;
 #ifdef STATIC_MAUIKIT
@@ -48,7 +52,7 @@ public:
 	void getTrashContent();
 	
 	/*** START STATIC METHODS ***/
-	static FMH::MODEL_LIST search(const QString &query, const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
+	static FMH::MODEL_LIST search(const QString &query, const QUrl &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
 	
 // 	static FMH::MODEL_LIST getDevices();	
 	static FMH::MODEL_LIST getDefaultPaths();
@@ -56,11 +60,12 @@ public:
 	
 	static FMH::MODEL_LIST packItems(const QStringList &items, const QString &type);
 	
-	static FMH::MODEL_LIST getPathContent(const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList(), const QDirIterator::IteratorFlags &iteratorFlags = QDirIterator::NoIteratorFlags);
+	void getPathContent(const QUrl &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList(), const QDirIterator::IteratorFlags &iteratorFlags = QDirIterator::NoIteratorFlags);
+// 	static FMH::MODEL_LIST getPathContent(const QString &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList(), const QDirIterator::IteratorFlags &iteratorFlags = QDirIterator::NoIteratorFlags);
 	static FMH::MODEL_LIST getAppsContent(const QString &path);	
 
-	static bool copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory);
-	static bool removeDir(const QString &path);	
+	static bool copyPath(QUrl sourceDir, QUrl destinationDir, bool overWriteDirectory);
+	static bool removeDir(const QUrl &path);	
 	
 	static QString resolveUserCloudCachePath(const QString &server, const QString &user);
 	QString resolveLocalCloudPath(const QString &path);
@@ -72,6 +77,9 @@ public:
 
 private:
     Tagging *tag;
+	#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)	
+	KCoreDirLister *dirLister;
+	#endif
 // 	static FM* instance;
 	QVariantList get(const QString &queryTxt);	
 
@@ -83,7 +91,9 @@ signals:
 	void cloudItemReady(FMH::MODEL item, QString path); //when a item is downloaded and ready
 	
 	void trashContentReady(FMH::MODEL_LIST list);
-
+	void pathContentReady(FMH::PATH_CONTENT list);
+	void pathContentChanged(QUrl path);
+	
 	void warningMessage(QString message);
 	void loadProgress(int percent);
 	
@@ -100,33 +110,33 @@ public slots:
 	static QString formatSize(const int &size);
 	static QString formatDate(const QString &dateStr, const QString &format = QString("dd/MM/yyyy"), const QString &initFormat = QString());
 	static QString homePath();	
-	static QString parentDir(const QString &path);
+	static QUrl parentDir(const QUrl &path);
 	
-	static QVariantMap getDirInfo(const QString &path, const QString &type);
-	static QVariantMap getFileInfo(const QString &path);
+	static QVariantMap getDirInfo(const QUrl &path, const QString &type);
+	static QVariantMap getFileInfo(const QUrl &path);
 	
 	static bool isDefaultPath(const QString &path);
-	static bool isDir(const QString &path);
+	static bool isDir(const QUrl &path);
 	static bool isApp(const QString &path);
-	static bool isCloud(const QString &path);
-	static bool fileExists(const QString &path);
+	static bool isCloud(const QUrl &path);
+	static bool fileExists(const QUrl &path);
 	
 	/* SETTINGS */
 	static void saveSettings(const QString &key, const QVariant &value, const QString &group);
 	static QVariant loadSettings(const QString &key, const QString &group, const QVariant &defaultValue);
 	
-	static QVariantMap dirConf(const QString &path);
-	static void setDirConf(const QString &path, const QString &group, const QString &key, const QVariant &value);
+	static QVariantMap dirConf(const QUrl &path);
+	static void setDirConf(const QUrl &path, const QString &group, const QString &key, const QVariant &value);
 	
 	/* ACTIONS */	
 	bool copy(const QVariantList &data, const QString &where);
 	bool cut(const QVariantList &data, const QString &where);
-	static bool removeFile(const QString &path);
-	void moveToTrash(const QString &path);
+	static bool removeFile(const QUrl &path);
+	void moveToTrash(const QUrl &path);
 	static void emptyTrash();
-	static bool rename(const QString &path, const QString &name);
-	static bool createDir(const QString &path, const QString &name);
-	static bool createFile(const QString &path, const QString &name);
+	static bool rename(const QUrl &path, const QString &name);
+	static bool createDir(const QUrl &path, const QString &name);
+	static bool createFile(const QUrl &path, const QString &name);
 	
 	static bool openUrl(const QString &url);
 	static void openLocation(const QStringList &urls);	

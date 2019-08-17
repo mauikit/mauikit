@@ -84,12 +84,12 @@ static FMH::MODEL modelPlaceInfo(const KFilePlacesModel &model, const QModelInde
 {
     return FMH::MODEL
         {
-            {FMH::MODEL_KEY::PATH, model.url(index).toString().replace("file://", "")},
-            {FMH::MODEL_KEY::URL, model.url(index).toString().replace("file://", "")},
+            {FMH::MODEL_KEY::PATH, model.url(index).toString()},
+            {FMH::MODEL_KEY::URL, model.url(index).toString()},
             {FMH::MODEL_KEY::ICON, model.icon(index).name()},
             {FMH::MODEL_KEY::LABEL, model.text(index)},
             {FMH::MODEL_KEY::NAME, model.text(index)},
-            {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_NAME[type]}
+            {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_LABEL[type]}
         };
 }
 #endif
@@ -98,6 +98,7 @@ static FMH::MODEL modelPlaceInfo(const KFilePlacesModel &model, const QModelInde
 static FMH::MODEL_LIST getGroup(const KFilePlacesModel &model, const FMH::PATHTYPE_KEY &type)
 {
 	#ifdef Q_OS_ANDROID
+    Q_UNUSED(model)
     FMH::MODEL_LIST res;
     if(type == FMH::PATHTYPE_KEY::PLACES_PATH)
         res = FM::getDefaultPaths();
@@ -223,7 +224,7 @@ void PlacesList::clearBadgeCount(const int& index)
 void PlacesList::addPlace(const QString& path)
 {    
     const auto it = std::find_if(this->list.rbegin(), this->list.rend(), [](const FMH::MODEL &item) -> bool{
-       return item[FMH::MODEL_KEY::TYPE] == FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::PLACES_PATH]; 
+       return item[FMH::MODEL_KEY::TYPE] == FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]; 
     });
     const auto index = std::distance(it, this->list.rend());
     
@@ -234,9 +235,9 @@ void PlacesList::addPlace(const QString& path)
 	//do android stuff until cmake works with android 
     this->list.insert(index, FMH::getDirInfoModel(path));
 #else
-    const auto url =  QStringLiteral("file://")+path;
-	this->model->addPlace(QDir(path).dirName(), url);
-	this->list.insert(index, modelPlaceInfo(*this->model, this->model->closestItem(QUrl(url)), FMH::PATHTYPE_KEY::PLACES_PATH));
+//     const auto url =  QStringLiteral("file://")+path;
+	this->model->addPlace(QDir(path).dirName(), path);
+	this->list.insert(index, modelPlaceInfo(*this->model, this->model->closestItem(path), FMH::PATHTYPE_KEY::PLACES_PATH));
 #endif
 	
     emit this->postItemAppended();    

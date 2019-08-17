@@ -100,6 +100,7 @@ ScrollView
             showThumbnails: showPreviewThumbnails
             rightEmblem: control.rightEmblem
             leftEmblem: control.leftEmblem
+            opacity: (model.name).startsWith(".") ? 0.5 : 1
             
             Connections
             {
