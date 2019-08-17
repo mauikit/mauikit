@@ -791,7 +791,7 @@ bool FM::copyPath(QUrl sourceDir, QUrl destinationDir, bool overWriteDirectory)
 	if (!originDirectory.exists())    
 		return false;
 	
-	QDir destinationDirectory(destinationDir);
+    QDir destinationDirectory(destinationDir.toLocalFile());
 	
 	if(destinationDirectory.exists() && !overWriteDirectory)    
 		return false;    
