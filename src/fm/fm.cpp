@@ -835,7 +835,7 @@ bool FM::removeFile(const QUrl &path)
 	
 	#ifdef Q_OS_ANDROID
 	if(QFileInfo(path.toLocalFile()).isDir())
-		return removeDir(path.toLocalFile());
+		return removeDir(path);
 	else return QFile(path.toLocalFile()).remove();
 	#else
 	auto job = KIO::del(path);
