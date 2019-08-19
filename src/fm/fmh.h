@@ -388,6 +388,35 @@ namespace FMH
     typedef QHash<FMH::MODEL_KEY, QString> MODEL;
 	typedef QVector<MODEL> MODEL_LIST;
 	
+	
+	static const inline QVariantMap toMap(const FMH::MODEL& model)
+	{
+		QVariantMap map;
+		for(const auto &key : model.keys())
+			map.insert(FMH::MODEL_NAME[key], model[key]);
+		
+		return map;		
+	}
+	
+	static const inline FMH::MODEL toModel(const QVariantMap& map)
+	{
+		FMH::MODEL model;
+		for(const auto &key : map.keys())
+			model.insert(FMH::MODEL_NAME_KEY[key], map[key].toString());
+		
+		return model;		
+	}
+	
+	static const inline FMH::MODEL filterModel(const FMH::MODEL &model, const QVector<FMH::MODEL_KEY> &keys)
+	{
+		FMH::MODEL res;
+		for(const auto &key : keys)
+			if(model.contains(key))
+				res[key] = model[key];
+			
+			return res;
+	}	
+	
 	struct PATH_CONTENT
 	{
 		QString path;

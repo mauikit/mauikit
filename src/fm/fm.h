@@ -70,6 +70,10 @@ public:
 	static QString resolveUserCloudCachePath(const QString &server, const QString &user);
 	QString resolveLocalCloudPath(const QString &path);
 	
+	/**
+	 * only keeping this two for legacy. shoudl be removed soon
+	 * and instead use FMH::toMap, FMH::toModel, FMH::filterModel
+	 **/
 	static QVariantMap toMap(const FMH::MODEL &model);
 	static FMH::MODEL toModel(const QVariantMap &map);
 	
