@@ -274,7 +274,7 @@ Maui.Page
 		Maui.ListBrowser
 		{
 			showPreviewThumbnails: modelList.preview
-			showEmblem: selectionMode
+			keepEmblemOverlay: selectionMode
 			rightEmblem: isMobile ? "document-share" : ""
 			leftEmblem: "list-add"
 			showDetailsInfo: true
@@ -300,7 +300,7 @@ Maui.Page
 		Maui.GridBrowser
 		{
 			itemSize : thumbnailsSize + fontSizes.default
-			showEmblem: selectionMode
+			keepEmblemOverlay: selectionMode
 			showPreviewThumbnails: modelList.preview
 			rightEmblem: isMobile ? "document-share" : ""
 			leftEmblem: "list-add"
@@ -383,7 +383,7 @@ Maui.Page
 						anchors.fill: parent
 						
 						showPreviewThumbnails: modelList.preview
-						showEmblem: selectionMode
+						keepEmblemOverlay: selectionMode
 						rightEmblem: isMobile ? "document-share" : ""
 						leftEmblem: "list-add"
 						showDetailsInfo: true

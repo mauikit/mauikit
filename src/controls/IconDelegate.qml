@@ -99,7 +99,7 @@ ItemDelegate
 	{
 		id: leftEmblemIcon
 		iconName: leftEmblem
-		visible: (isHovered && leftEmblem) || showEmblem
+		visible: (isHovered || keepEmblemOverlay) && showEmblem && leftEmblem
 		z: 999
 		anchors.top: parent.top
 		anchors.left: parent.left
@@ -135,7 +135,7 @@ ItemDelegate
 				id: img
 				clip: true
 				anchors.centerIn: parent
-				source: model.thumbnail ? (model.thumbnail.startsWith("file://") ? model.thumbnail : "file://"+model.thumbnail) : undefined
+				source: model.thumbnail ? model.thumbnail : undefined
 				height: Math.min(folderSize, sourceSize.height)
 				width: isDetails ? folderSize : Math.min(control.width * 0.9, sourceSize.width)
 // 				sourceSize.width: width

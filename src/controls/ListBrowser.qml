@@ -29,6 +29,7 @@ ScrollView
     
     property int itemSize : iconSizes.big
     property bool showEmblem : true
+    property bool keepEmblemOverlay : false
     property string rightEmblem
     property string leftEmblem
     
@@ -67,22 +68,22 @@ ScrollView
     
     ListView
     {
-        anchors.fill: parent
-        id: _listView
-        //    maximumFlickVelocity: 400
-        
-        snapMode: ListView.SnapToItem
-        boundsBehavior: !isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
-        
-         keyNavigationEnabled: true
-    clip: true
-    focus: true
-    interactive: true
-    highlightFollowsCurrentItem: true
-    highlightMoveDuration: 0
-        
-        width: parent.width
-        height: parent.height      
+		anchors.fill: parent
+		id: _listView
+		//    maximumFlickVelocity: 400
+		
+		snapMode: ListView.SnapToItem
+		boundsBehavior: !isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
+		
+		keyNavigationEnabled: true
+		clip: true
+		focus: true
+		interactive: true
+		highlightFollowsCurrentItem: true
+		highlightMoveDuration: 0
+		
+		width: parent.width
+		height: parent.height      
     
         
         model: ListModel { id: listModel }
@@ -97,6 +98,7 @@ ScrollView
             folderSize : itemSize
             showTooltip: true
             showEmblem: control.showEmblem
+            keepEmblemOverlay : control.keepEmblemOverlay
             showThumbnails: showPreviewThumbnails
             rightEmblem: control.rightEmblem
             leftEmblem: control.leftEmblem

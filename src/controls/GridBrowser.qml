@@ -29,6 +29,7 @@ Maui.GridView
 	itemSize : iconSizes.large
     spacing: isMobile ? itemSize * 0.7 : itemSize * 0.8
 	property bool showEmblem : true
+	property bool keepEmblemOverlay : false
 	property string rightEmblem
 	property string leftEmblem
 	
@@ -59,6 +60,7 @@ Maui.GridView
 		folderSize : control.itemSize
 		showTooltip: true
 		showEmblem: control.showEmblem
+		keepEmblemOverlay: control.keepEmblemOverlay
 		showThumbnails: control.showPreviewThumbnails
 		rightEmblem: control.rightEmblem
 		leftEmblem: control.leftEmblem
