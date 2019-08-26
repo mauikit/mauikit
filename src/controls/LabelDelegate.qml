@@ -27,6 +27,7 @@ ItemDelegate
 {
 	id: control
 	Kirigami.Theme.backgroundColor: isSection ? "transparent" : (index % 2 === 0 ? Qt.darker(Kirigami.Theme.backgroundColor) : "transparent")				
+	property bool isCurrentListItem :  ListView.isCurrentItem
 	
     width: parent.width
     height: rowHeight
@@ -39,8 +40,8 @@ ItemDelegate
 
     background: Rectangle
     {
-		color: Kirigami.Theme.backgroundColor
-        opacity: 0.1
+		color: isCurrentListItem ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor
+		opacity: isCurrentListItem ? 1 : 0.1
     }
 
     ColumnLayout
