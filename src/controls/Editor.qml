@@ -220,10 +220,12 @@ Item
 			activeFocusOnTab: true
 			persistentSelection: true
 			
-// 			background: Rectangle
-// 			{
-// 				color: "transparent"
-// 			}
+			background: Rectangle
+			{
+				color: "transparent"
+				implicitWidth: 200
+				implicitHeight: 22
+			}
 			
 // 			onPressAndHold: isMobile ? documentMenu.popup() : undefined
 			

@@ -44,6 +44,8 @@ Maui.Dialog
 		maxWidth: unit * 400
 		maxHeight: unit * 250
 		
+		page.padding: space.small
+		
 		
 		footBar.middleContent: ToolButton
 		{
