@@ -62,7 +62,7 @@ QVariantMap StoreList::get(const int& index) const
 	const auto model = this->list.at(index);
 	
 	for(auto key : model.keys())
-		res.insert(FMH::MODEL_NAME[key], model[key]);
+		res.insert(KEYS::_N[key], model[key]);
 	
 	return res;
 }
@@ -72,7 +72,7 @@ void StoreList::download(const int& index)
 	if(index >= this->list.size() || index < 0)
 		return;
 	
-	// 	this->store->download(this->list[index][FMH::MODEL_KEY::ID]);
+	// 	this->store->download(this->list[index][KEYS::ID]);
 	this->store->download(this->list[index]);
 }
 
@@ -185,7 +185,7 @@ QVariantList StoreList::getCategoryList()
 	auto data = STORE::CATEGORIES[static_cast<STORE::CATEGORY_KEY>(this->category)];
 	
 	for(auto category : data)
-		res << QVariantMap {{FMH::MODEL_NAME[FMH::MODEL_KEY::LABEL], category}};
+		res << QVariantMap {{KEYS::_N[KEYS::LABEL], category}};
 	
 	return res;		
 }
@@ -223,20 +223,20 @@ void StoreList::sortList()
 	{
 		qDebug()<< "TRYIT LIST";
 		
-		auto role = static_cast<FMH::MODEL_KEY>(this->sortBy);;
+		auto role = static_cast<KEYS>(this->sortBy);;
 		
 		switch(role)
 		{				
-			case FMH::MODEL_KEY::RATE:
-			case FMH::MODEL_KEY::COUNT:
+			case KEYS::RATE:
+			case KEYS::COUNT:
 			{				
 				if(e1[role].toDouble() > e2[role].toDouble())
 					return true;
 				break;
 			}
 			
-			case FMH::MODEL_KEY::MODIFIED:
-			case FMH::MODEL_KEY::DATE:
+			case KEYS::MODIFIED:
+			case KEYS::DATE:
 			{
 				auto currentTime = QDateTime::currentDateTime();
 				
@@ -249,9 +249,9 @@ void StoreList::sortList()
 				break;
 			}
 			
-			case FMH::MODEL_KEY::LABEL:
-			case FMH::MODEL_KEY::USER:
-			case FMH::MODEL_KEY::OWNER:
+			case KEYS::LABEL:
+			case KEYS::USER:
+			case KEYS::OWNER:
 			{
 				const auto str1 = QString(e1[role]).toLower();
 				const auto str2 = QString(e2[role]).toLower();
@@ -308,7 +308,7 @@ bool StoreList::fileExists(const int &index)
 	if(index >= this->list.size() || index < 0)
 		return false;
 	
-	const auto url = this->list[index][FMH::MODEL_KEY::URL];
+	const auto url = this->list[index][KEYS::URL];
 	
 	const QStringList filePathList = url.split('/');
 	const auto fileName = filePathList.at(filePathList.count() - 1);
@@ -324,7 +324,7 @@ QString StoreList::itemLocalPath(const int &index)
 	if(!this->fileExists(index))
 		return QString();
 	
-	const auto url = this->list[index][FMH::MODEL_KEY::URL];
+	const auto url = this->list[index][KEYS::URL];
 	
 	const QStringList filePathList = url.split('/');
 	const auto fileName = filePathList.at(filePathList.count() - 1);

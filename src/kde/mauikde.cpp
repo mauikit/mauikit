@@ -246,9 +246,9 @@ FMH::MODEL_LIST MAUIKDE::getApps()
 				
 				res << FMH::MODEL
 				{
-					{FMH::MODEL_KEY::ICON, s->icon()},
-					{FMH::MODEL_KEY::LABEL, s->name()},
-					{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::APPS_PATH]+s->entryPath()}
+					{KEYS::ICON, s->icon()},
+					{KEYS::LABEL, s->name()},
+					{KEYS::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::APPS_PATH]+s->entryPath()}
 				};
 			}
 		}
@@ -285,9 +285,9 @@ FMH::MODEL_LIST MAUIKDE::getApps(const QString &groupStr)
 			
 			res << FMH::MODEL {
 				
-				{FMH::MODEL_KEY::ICON, s->icon()},
-				{FMH::MODEL_KEY::LABEL, s->name()},
-				{FMH::MODEL_KEY::PATH, s->entryPath()}
+				{KEYS::ICON, s->icon()},
+				{KEYS::LABEL, s->name()},
+				{KEYS::PATH, s->entryPath()}
 			};
 			
 			
@@ -303,9 +303,9 @@ FMH::MODEL_LIST MAUIKDE::getApps(const QString &groupStr)
 				continue;
 			
 			res <<  FMH::MODEL { 
-				{FMH::MODEL_KEY::ICON, s->icon()},
-				{FMH::MODEL_KEY::LABEL, s->name()},
-				{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::APPS_PATH]+s->entryPath()}
+				{KEYS::ICON, s->icon()},
+				{KEYS::LABEL, s->name()},
+				{KEYS::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::APPS_PATH]+s->entryPath()}
 			};
 		}
 	}

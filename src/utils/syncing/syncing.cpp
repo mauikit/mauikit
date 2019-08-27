@@ -56,16 +56,16 @@ void Syncing::listDirOutputHandler(WebDAVReply *reply, const QStringList &filter
 			if(!filters.isEmpty() && !filters.contains("*"+QString(displayName).right(displayName.length() -  displayName.lastIndexOf("."))))
 				continue;
 			
-			list << FMH::MODEL { {FMH::MODEL_KEY::LABEL, displayName},
-		 {FMH::MODEL_KEY::NAME, item.getDisplayName()},
-			{FMH::MODEL_KEY::DATE, item.getCreationDate().toString(Qt::TextDate)},
-			{FMH::MODEL_KEY::MODIFIED, item.getLastModified()},
-			{FMH::MODEL_KEY::MIME, item.getContentType().isEmpty() ? "inode/directory" : item.getContentType()},
-			{FMH::MODEL_KEY::ICON, FMH::getIconName(url)},
-			{FMH::MODEL_KEY::SIZE, QString::number(item.getContentLength())},
-			{FMH::MODEL_KEY::PATH, path},
-		 {FMH::MODEL_KEY::URL, url},
-		 {FMH::MODEL_KEY::THUMBNAIL, item.getContentType().isEmpty() ? url : this->getCacheFile(url)}};
+			list << FMH::MODEL { {KEYS::LABEL, displayName},
+		 {KEYS::NAME, item.getDisplayName()},
+			{KEYS::DATE, item.getCreationDate().toString(Qt::TextDate)},
+			{KEYS::MODIFIED, item.getLastModified()},
+			{KEYS::MIME, item.getContentType().isEmpty() ? "inode/directory" : item.getContentType()},
+			{KEYS::ICON, FMH::getIconName(url)},
+			{KEYS::SIZE, QString::number(item.getContentLength())},
+			{KEYS::PATH, path},
+		 {KEYS::URL, url},
+		 {KEYS::THUMBNAIL, item.getContentType().isEmpty() ? url : this->getCacheFile(url)}};
 		}
 		emit this->listReady(list, this->currentPath);
 		
@@ -158,7 +158,7 @@ void Syncing::upload(const QString &path, const QString &filePath)
 			auto cachePath = this->saveToCache(filePath, path);
 			
 			auto item = FMH::getFileInfoModel(cachePath);
-// 			item[FMH::MODEL_KEY::PATH] =  this->currentPath+"/"+QFileInfo(filePath).fileName()+"/";
+// 			item[KEYS::PATH] =  this->currentPath+"/"+QFileInfo(filePath).fileName()+"/";
 			
 			emit this->uploadReady(item, this->currentPath);
 		} else
@@ -192,11 +192,11 @@ void Syncing::createDir(const QString &path, const QString &name)
 			qDebug() << "\nDir Created"
 			<< "\nURL  :" << reply->url();
 			FMH::MODEL dir = {
-				{FMH::MODEL_KEY::LABEL, name},
-		 {FMH::MODEL_KEY::DATE, QDateTime::currentDateTime().toString(Qt::TextDate)},
-			{FMH::MODEL_KEY::MIME, "inode/directory"},
-		 {FMH::MODEL_KEY::ICON, "folder"},
-		 {FMH::MODEL_KEY::PATH, this->currentPath+"/"+name+"/"}
+				{KEYS::LABEL, name},
+		 {KEYS::DATE, QDateTime::currentDateTime().toString(Qt::TextDate)},
+			{KEYS::MIME, "inode/directory"},
+		 {KEYS::ICON, "folder"},
+		 {KEYS::PATH, this->currentPath+"/"+name+"/"}
 			};
 			emit this->dirCreated(dir, this->currentPath);
 		} else 
@@ -354,17 +354,17 @@ void Syncing::resolveFile(const FMH::MODEL& item, const Syncing::SIGNAL_TYPE &si
 {	
 	this->signalType = signalType;
 	
-	const auto url = item[FMH::MODEL_KEY::URL];
+	const auto url = item[KEYS::URL];
 	const auto file = this->getCacheFile(url);	
 	
 	if(FMH::fileExists(file))
 	{			
 		const auto cacheFile = FMH::getFileInfoModel(file);
 		
-		const auto dateCacheFile = QDateTime::fromString(cacheFile[FMH::MODEL_KEY::DATE], Qt::TextDate);		
-		const auto dateCloudFile = QDateTime::fromString(QString(item[FMH::MODEL_KEY::MODIFIED]).replace("GMT", "").simplified(), "ddd, dd MMM yyyy hh:mm:ss");
+		const auto dateCacheFile = QDateTime::fromString(cacheFile[KEYS::DATE], Qt::TextDate);		
+		const auto dateCloudFile = QDateTime::fromString(QString(item[KEYS::MODIFIED]).replace("GMT", "").simplified(), "ddd, dd MMM yyyy hh:mm:ss");
 		
-		qDebug()<<"FILE EXISTS ON CACHE" << dateCacheFile << dateCloudFile<< QString(item[FMH::MODEL_KEY::MODIFIED]).replace("GMT", "").simplified()<< file;
+		qDebug()<<"FILE EXISTS ON CACHE" << dateCacheFile << dateCloudFile<< QString(item[KEYS::MODIFIED]).replace("GMT", "").simplified()<< file;
 		
 		if(dateCloudFile >  dateCacheFile)
 			this->download(url);

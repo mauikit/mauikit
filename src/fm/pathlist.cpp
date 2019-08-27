@@ -54,7 +54,7 @@ void PathList::setPath(const QString& path)
 	
 	if(!this->list.isEmpty() && FM::parentDir(path) == this->m_path)
 	{
-		// 			qDebug() << "APPENDING PATHS TO MODEL << "<< FM::parentDir(this->m_path) << this->list.last()[FMH::MODEL_KEY::PATH];
+		// 			qDebug() << "APPENDING PATHS TO MODEL << "<< FM::parentDir(this->m_path) << this->list.last()[KEYS::PATH];
 		emit this->preItemAppended();
 		this->list << FMH::getDirInfoModel(path);
 		emit this->postItemAppended();
@@ -84,13 +84,13 @@ FMH::MODEL_LIST PathList::splitPath(const QString& path)
 	
 	return std::accumulate(paths.constBegin(), paths.constEnd(), FMH::MODEL_LIST(), [scheme](FMH::MODEL_LIST &list, const QString &part) -> FMH::MODEL_LIST
 	{	
-		const auto url = list.isEmpty() ? QString(scheme + (scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::PLACES_PATH] ? ":///" : "://")  +part) : list.last()[FMH::MODEL_KEY::PATH] + QString("/"+part);		
+		const auto url = list.isEmpty() ? QString(scheme + (scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::PLACES_PATH] ? ":///" : "://")  +part) : list.last()[KEYS::PATH] + QString("/"+part);		
 		
 		if(!url.isEmpty())
 			list << FMH::MODEL 
 			{
-				{FMH::MODEL_KEY::LABEL, part},
-				{FMH::MODEL_KEY::PATH, url}
+				{KEYS::LABEL, part},
+				{KEYS::PATH, url}
 			};
 		
 		return list;

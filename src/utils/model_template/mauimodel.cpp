@@ -40,7 +40,7 @@ QVariant MauiModel::data(const QModelIndex &index, int role) const
 	if (!index.isValid() || !list)
 		return QVariant();
 	
-	return list->items().at(index.row())[static_cast<FMH::MODEL_KEY>(role)];
+	return list->items().at(index.row())[static_cast<KEYS>(role)];
 }
 
 bool MauiModel::setData(const QModelIndex &index, const QVariant &value, int role)
@@ -64,8 +64,8 @@ QHash<int, QByteArray> MauiModel::roleNames() const
 {
 	QHash<int, QByteArray> names;
 	
-	for(auto key : FMH::MODEL_NAME.keys())
-		names[key] = QString(FMH::MODEL_NAME[key]).toUtf8();	
+	for(auto key : KEYS::_N.keys())
+		names[key] = QString(KEYS::_N[key]).toUtf8();	
 	
 	return names;
 }

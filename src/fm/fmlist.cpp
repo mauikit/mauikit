@@ -240,9 +240,9 @@ void FMList::reset()
 			if(this->saveDirProps)
 			{
 				auto conf = FMH::dirConf(this->path+"/.directory");				
-				this->hidden = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN]].toBool();				
-				this->preview = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTHUMBNAIL]].toBool();
-				this->foldersFirst = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::FOLDERSFIRST]].toBool();
+				this->hidden = conf[KEYS::_N[KEYS::HIDDEN]].toBool();				
+				this->preview = conf[KEYS::_N[KEYS::SHOWTHUMBNAIL]].toBool();
+				this->foldersFirst = conf[KEYS::_N[KEYS::FOLDERSFIRST]].toBool();
 			}else
 			{
 				this->hidden = UTIL::loadSettings("HiddenFilesShown", "SETTINGS", this->hidden).toBool();
@@ -259,8 +259,8 @@ void FMList::reset()
 	if(this->saveDirProps)
 	{
 		auto conf = FMH::dirConf(this->path+"/.directory");	
-		this->sort = static_cast<FMList::SORTBY>(conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SORTBY]].toInt());		
-		this->viewType = static_cast<FMList::VIEW_TYPE>(conf[FMH::MODEL_NAME[FMH::MODEL_KEY::VIEWTYPE]].toInt());		
+		this->sort = static_cast<FMList::SORTBY>(conf[KEYS::_N[KEYS::SORTBY]].toInt());		
+		this->viewType = static_cast<FMList::VIEW_TYPE>(conf[KEYS::_N[KEYS::VIEWTYPE]].toInt());		
 	}else
 	{	
 		this->sort = static_cast<FMList::SORTBY>(UTIL::loadSettings("SortBy", "SETTINGS", this->sort).toInt());
@@ -310,7 +310,7 @@ void FMList::setSortBy(const FMList::SORTBY &key)
 
 void FMList::sortList()
 {
-	FMH::MODEL_KEY key = static_cast<FMH::MODEL_KEY>(this->sort);
+	KEYS key = static_cast<KEYS>(this->sort);
 	auto index = 0;
 	
 	if(this->foldersFirst)
@@ -318,7 +318,7 @@ void FMList::sortList()
 		qSort(this->list.begin(), this->list.end(), [](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
 		{
             Q_UNUSED(e2)
-			const auto key = FMH::MODEL_KEY::MIME;
+			const auto key = KEYS::MIME;
 			if(e1[key] == "inode/directory")
 				return true;
 			
@@ -326,7 +326,7 @@ void FMList::sortList()
 		});
 		
 		for(auto item : this->list)
-			if(item[FMH::MODEL_KEY::MIME] == "inode/directory")
+			if(item[KEYS::MIME] == "inode/directory")
 				index++;
 			else break;
 			
@@ -336,15 +336,15 @@ void FMList::sortList()
 			
 			switch(role)
 			{				
-				case FMH::MODEL_KEY::SIZE:
+				case KEYS::SIZE:
 				{				
 					if(e1[role].toDouble() > e2[role].toDouble())
 						return true;
 					break;
 				}
 				
-				case FMH::MODEL_KEY::MODIFIED:
-				case FMH::MODEL_KEY::DATE:
+				case KEYS::MODIFIED:
+				case KEYS::DATE:
 				{
 					auto currentTime = QDateTime::currentDateTime();
 					
@@ -357,7 +357,7 @@ void FMList::sortList()
 					break;
 				}
 				
-				case FMH::MODEL_KEY::LABEL:
+				case KEYS::LABEL:
 				{
 					const auto str1 = QString(e1[role]).toLower();
 					const auto str2 = QString(e2[role]).toLower();
@@ -382,20 +382,20 @@ void FMList::sortList()
 		
 		switch(role)
 		{
-			case FMH::MODEL_KEY::MIME:
+			case KEYS::MIME:
 				if(e1[role] == "inode/directory")
 					return true;
 				break;
 				
-			case FMH::MODEL_KEY::SIZE:
+			case KEYS::SIZE:
 			{				
 				if(e1[role].toDouble() > e2[role].toDouble())
 					return true;
 				break;
 			}
 			
-			case FMH::MODEL_KEY::MODIFIED:
-			case FMH::MODEL_KEY::DATE:
+			case KEYS::MODIFIED:
+			case KEYS::DATE:
 			{
 				auto currentTime = QDateTime::currentDateTime();
 				
@@ -408,7 +408,7 @@ void FMList::sortList()
 				break;
 			}
 			
-			case FMH::MODEL_KEY::LABEL:
+			case KEYS::LABEL:
 			{
 				const auto str1 = QString(e1[role]).toLower();
 				const auto str2 = QString(e2[role]).toLower();
@@ -669,15 +669,15 @@ void FMList::setDirIcon(const int &index, const QString &iconName)
 	if(index >= this->list.size() || index < 0)
 		return;	
 	
-	const auto path = QUrl(this->list.at(index)[FMH::MODEL_KEY::PATH]);
+	const auto path = QUrl(this->list.at(index)[KEYS::PATH]);
 	
 	if(!FM::isDir(path))
 		return;	
 
 	FMH::setDirConf(path.toString()+"/.directory", "Desktop Entry", "Icon", iconName);
 	
-	this->list[index][FMH::MODEL_KEY::ICON] = iconName;	
-	emit this->updateModel(index, QVector<int> {FMH::MODEL_KEY::ICON});
+	this->list[index][KEYS::ICON] = iconName;	
+	emit this->updateModel(index, QVector<int> {KEYS::ICON});
 }
 
 QString FMList::getParentPath()

@@ -44,8 +44,6 @@
 #include <KFileItem>
 #include <KFilePlacesModel>
 #endif
-
-
 /**
  *base key implementation model
  */
@@ -72,6 +70,11 @@ namespace PRIV
       return (value == other.value
               && n == other.n);
     }
+
+    inline operator uint()const
+    {
+      return value;
+    }
   };
 
   typedef struct
@@ -96,13 +99,15 @@ namespace PRIV
 
       if(values.contains(__val.n))
         {
-          values[__val.n] = {static_cast<unsigned int>(static_cast<unsigned int>(values[__val.n].value)), __val.n, __val.label};
+          values[__val.n].n =  __val.n;
+          values[__val.n].label = __val.label;
         }
-        else {
+      else {
+
           values[__val.n] = {static_cast<unsigned int>(values.size()), __val.n, __val.label};
         }
+
       return (values[__val.n]);
-      //      return std::forward<__KEY<uint>>(__k);
     }
 
     __KEY<uint>& operator[] (const QString &n)
@@ -129,25 +134,6 @@ namespace KEYS
     return PRIV::KEYDB << value;
   }
 
-  inline static const QString& (_N)(const KEY & k)
-  {
-    return k.n;
-  }
-
-  inline static const KEY& _K (const KEYRING::key_type &n)
-  {
-    return PRIV::KEYDB[n];
-  }
-
-  inline static const KEY& _K (const decltype(KEY::value) &value)
-  {
-     const auto res = std::find_if(PRIV::KEYDB.values.constBegin(), PRIV::KEYDB.values.constEnd(), [&value](const KEY &key) -> bool
-    {
-        return key.value == value;
-      });
-
-     return res.value();
-  }
 
   inline static const KEYRING& _VALUES()
   {
@@ -176,6 +162,47 @@ namespace KEYS
   {
     return uint (KEYS::_VALUES().count());
   }
+
+  static struct
+  {
+    inline const decltype(KEY::n)& operator()(const KEY & k)
+    {
+      return k.n;
+    }
+
+    inline const decltype(KEY::n)& operator[](const KEY & k)
+    {
+        return this->operator()(k);
+      }
+  } _N;
+
+  static struct
+  {
+    inline const KEY& operator()(const KEYRING::key_type &n)
+    {
+      return PRIV::KEYDB[n];
+    }
+
+    inline const KEY& operator()(const decltype(KEY::value) &value)
+    {
+      const auto res = std::find_if(PRIV::KEYDB.values.constBegin(), PRIV::KEYDB.values.constEnd(), [&value](const KEY &key) -> bool
+      {
+          return key.value == value;
+        });
+
+      return res.value();
+    }
+
+    inline const KEY& operator[](const KEYRING::key_type &n)
+    {
+      return this->operator()(n);
+    }
+
+    inline const KEY& operator[](const decltype(KEY::value) &value)
+    {
+      return this->operator()(value);
+    }
+  } _K;
 
   static const auto &ICON= _SET("icon");
   static const auto &LABEL = _SET("label");
@@ -286,6 +313,7 @@ inline uint qHash(const KEYS::KEY &key)
   return qHash(key.n) ^ key.value;
 }
 
+
 namespace FMH
 {
 	
@@ -328,207 +356,8 @@ namespace FMH
 		{FILTER_TYPE::NONE, QStringList()}
 	};
 	
-    
-	
-    static const QHash<FMH::MODEL_KEY, QString> MODEL_NAME =
-	{
-		{MODEL_KEY::ICON, "icon"},
-		{MODEL_KEY::LABEL, "label"},
-		{MODEL_KEY::PATH, "path"},
-		{MODEL_KEY::URL, "url"},
-		{MODEL_KEY::TYPE, "type"},
-		{MODEL_KEY::GROUP, "group"},
-		{MODEL_KEY::OWNER, "owner"},
-		{MODEL_KEY::SUFFIX, "suffix"},
-		{MODEL_KEY::NAME, "name"},
-		{MODEL_KEY::DATE, "date"},
-		{MODEL_KEY::MODIFIED, "modified"},
-		{MODEL_KEY::MIME, "mime"},
-		{MODEL_KEY::SIZE, "size"},
-		{MODEL_KEY::TAG, "tag"},
-		{MODEL_KEY::PERMISSIONS, "permissions"},
-		{MODEL_KEY::THUMBNAIL, "thumbnail"},
-		{MODEL_KEY::THUMBNAIL_1, "thumbnail_1"},
-		{MODEL_KEY::THUMBNAIL_2, "thumbnail_2"},
-		{MODEL_KEY::THUMBNAIL_3, "thumbnail_3"},
-		{MODEL_KEY::ICONSIZE, "iconsize"},
-		{MODEL_KEY::HIDDEN, "hidden"},
-		{MODEL_KEY::DETAILVIEW, "detailview"},
-		{MODEL_KEY::SHOWTERMINAL, "showterminal"},
-		{MODEL_KEY::SHOWTHUMBNAIL, "showthumbnail"},
-		{MODEL_KEY::COUNT, "count"},
-		{MODEL_KEY::SORTBY, "sortby"},
-		{MODEL_KEY::USER, "user"},
-		{MODEL_KEY::PASSWORD, "password"},
-		{MODEL_KEY::SERVER, "server"},
-		{MODEL_KEY::FOLDERSFIRST, "foldersfirst"},
-		{MODEL_KEY::VIEWTYPE, "viewtype"},
-		{MODEL_KEY::ADDDATE, "adddate"},
-		{MODEL_KEY::FAV, "fav"},
-		{MODEL_KEY::FAVORITE, "favorite"},
-		{MODEL_KEY::COLOR, "color"},
-		{MODEL_KEY::RATE, "rate"},
-		{MODEL_KEY::FORMAT, "format"},
-		{MODEL_KEY::PLACE, "place"},
-		{MODEL_KEY::LOCATION, "location"},
-		{MODEL_KEY::ALBUM, "album"},
-		{MODEL_KEY::DURATION, "duration"},
-		{MODEL_KEY::RELEASEDATE, "releasedate"},
-		{MODEL_KEY::ARTIST, "artist"},
-		{MODEL_KEY::LYRICS, "lyrics"},
-		{MODEL_KEY::TRACK, "track"},
-		{MODEL_KEY::GENRE, "genre"},	
-		{MODEL_KEY::WIKI, "wiki"},	
-		{MODEL_KEY::CONTEXT, "context"},	
-		{MODEL_KEY::SOURCETYPE, "sourcetype"},	
-		{MODEL_KEY::ARTWORK, "artwork"},	
-		{MODEL_KEY::NOTE, "note"},	
-		{MODEL_KEY::MOOD, "mood"},	
-		{MODEL_KEY::COMMENT, "comment"},	
-		{MODEL_KEY::PLAYLIST, "playlist"},	
-		{MODEL_KEY::SOURCE, "source"},
-		{MODEL_KEY::TITLE, "title"},	
-		{MODEL_KEY::ID, "id"},	
-		{MODEL_KEY::LICENSE, "license"},	
-		{MODEL_KEY::DESCRIPTION, "description"},
-		{MODEL_KEY::BOOKMARK, "bookmark"},
-		{MODEL_KEY::ACCOUNT, "account"},
-		{MODEL_KEY::ACCOUNTTYPE, "accounttype"},
-		{MODEL_KEY::VERSION, "version"},
-		{MODEL_KEY::DOMAIN, "domain"},
-		{MODEL_KEY::CATEGORY, "category"},
-		{MODEL_KEY::CONTENT, "content"},
-		{MODEL_KEY::PIN, "pin"},
-		{MODEL_KEY::IMG, "img"},
-		{MODEL_KEY::PREVIEW, "preview"},
-		{MODEL_KEY::LINK, "link"},
-		{MODEL_KEY::STAMP, "stamp"},
-		
-		/** ccdav keys **/
-		{MODEL_KEY::N, "n"},
-		{MODEL_KEY::IM, "im"},
-		{MODEL_KEY::PHOTO, "photo"},
-		{MODEL_KEY::GENDER, "gender"},
-		{MODEL_KEY::ADR, "adr"},
-		{MODEL_KEY::ADR_2, "adr2"},
-		{MODEL_KEY::ADR_3, "adr3"},
-		{MODEL_KEY::EMAIL, "email"},
-		{MODEL_KEY::EMAIL_2, "email2"},
-		{MODEL_KEY::EMAIL_3, "email3"},
-		{MODEL_KEY::LANG, "lang"},
-		{MODEL_KEY::NICKNAME, "nickname"},
-		{MODEL_KEY::ORG, "org"},
-		{MODEL_KEY::PROFILE, "profile"},
-		{MODEL_KEY::TZ, "tz"},
-		{MODEL_KEY::TEL, "tel"},
-		{MODEL_KEY::TEL_2, "tel2"},
-		{MODEL_KEY::TEL_3, "tel3"},
-		
-		{MODEL_KEY::CITY, "city"},
-		{MODEL_KEY::STATE, "state"},
-		{MODEL_KEY::COUNTRY, "country"}
-	};
-	
-    static const QHash<QString, FMH::MODEL_KEY> MODEL_NAME_KEY =
-	{
-		{MODEL_NAME[MODEL_KEY::ICON], MODEL_KEY::ICON},
-		{MODEL_NAME[MODEL_KEY::LABEL], MODEL_KEY::LABEL},
-		{MODEL_NAME[MODEL_KEY::PATH], MODEL_KEY::PATH},
-		{MODEL_NAME[MODEL_KEY::URL], MODEL_KEY::URL},
-		{MODEL_NAME[MODEL_KEY::TYPE], MODEL_KEY::TYPE},
-		{MODEL_NAME[MODEL_KEY::GROUP], MODEL_KEY::GROUP},
-		{MODEL_NAME[MODEL_KEY::OWNER], MODEL_KEY::OWNER},
-		{MODEL_NAME[MODEL_KEY::SUFFIX], MODEL_KEY::SUFFIX},
-		{MODEL_NAME[MODEL_KEY::NAME], MODEL_KEY::NAME},
-		{MODEL_NAME[MODEL_KEY::DATE], MODEL_KEY::DATE},
-		{MODEL_NAME[MODEL_KEY::MODIFIED], MODEL_KEY::MODIFIED},
-		{MODEL_NAME[MODEL_KEY::MIME], MODEL_KEY::MIME},
-		{MODEL_NAME[MODEL_KEY::SIZE], MODEL_KEY::SIZE,},
-		{MODEL_NAME[MODEL_KEY::TAG], MODEL_KEY::TAG},
-		{MODEL_NAME[MODEL_KEY::PERMISSIONS], MODEL_KEY::PERMISSIONS},
-		{MODEL_NAME[MODEL_KEY::THUMBNAIL], MODEL_KEY::THUMBNAIL},
-		{MODEL_NAME[MODEL_KEY::THUMBNAIL_1], MODEL_KEY::THUMBNAIL_1},
-		{MODEL_NAME[MODEL_KEY::THUMBNAIL_2], MODEL_KEY::THUMBNAIL_2},
-		{MODEL_NAME[MODEL_KEY::THUMBNAIL_3], MODEL_KEY::THUMBNAIL_3},
-		{MODEL_NAME[MODEL_KEY::ICONSIZE], MODEL_KEY::ICONSIZE},
-		{MODEL_NAME[MODEL_KEY::HIDDEN], MODEL_KEY::HIDDEN},
-		{MODEL_NAME[MODEL_KEY::DETAILVIEW], MODEL_KEY::DETAILVIEW},
-		{MODEL_NAME[MODEL_KEY::SHOWTERMINAL], MODEL_KEY::SHOWTERMINAL},
-		{MODEL_NAME[MODEL_KEY::SHOWTHUMBNAIL], MODEL_KEY::SHOWTHUMBNAIL},
-		{MODEL_NAME[MODEL_KEY::COUNT], MODEL_KEY::COUNT},
-		{MODEL_NAME[MODEL_KEY::SORTBY], MODEL_KEY::SORTBY},
-		{MODEL_NAME[MODEL_KEY::USER], MODEL_KEY::USER},
-		{MODEL_NAME[MODEL_KEY::PASSWORD], MODEL_KEY::PASSWORD},
-		{MODEL_NAME[MODEL_KEY::SERVER], MODEL_KEY::SERVER},
-		{MODEL_NAME[MODEL_KEY::VIEWTYPE], MODEL_KEY::VIEWTYPE},
-		{MODEL_NAME[MODEL_KEY::ADDDATE], MODEL_KEY::ADDDATE},
-		{MODEL_NAME[MODEL_KEY::FAV], MODEL_KEY::FAV},
-		{MODEL_NAME[MODEL_KEY::FAVORITE], MODEL_KEY::FAVORITE},
-		{MODEL_NAME[MODEL_KEY::COLOR], MODEL_KEY::COLOR},
-		{MODEL_NAME[MODEL_KEY::RATE], MODEL_KEY::RATE},
-		{MODEL_NAME[MODEL_KEY::FORMAT], MODEL_KEY::FORMAT},
-		{MODEL_NAME[MODEL_KEY::PLACE], MODEL_KEY::PLACE},
-		{MODEL_NAME[MODEL_KEY::LOCATION], MODEL_KEY::LOCATION},
-		{MODEL_NAME[MODEL_KEY::ALBUM], MODEL_KEY::ALBUM},
-		{MODEL_NAME[MODEL_KEY::ARTIST], MODEL_KEY::ARTIST},
-		{MODEL_NAME[MODEL_KEY::DURATION], MODEL_KEY::DURATION},
-		{MODEL_NAME[MODEL_KEY::TRACK], MODEL_KEY::TRACK},
-		{MODEL_NAME[MODEL_KEY::GENRE], MODEL_KEY::GENRE},
-		{MODEL_NAME[MODEL_KEY::LYRICS], MODEL_KEY::LYRICS},
-		{MODEL_NAME[MODEL_KEY::RELEASEDATE], MODEL_KEY::RELEASEDATE},
-		{MODEL_NAME[MODEL_KEY::FORMAT], MODEL_KEY::FORMAT},
-		{MODEL_NAME[MODEL_KEY::WIKI], MODEL_KEY::WIKI},
-		{MODEL_NAME[MODEL_KEY::SOURCETYPE], MODEL_KEY::SOURCETYPE},
-		{MODEL_NAME[MODEL_KEY::ARTWORK], MODEL_KEY::ARTWORK},
-		{MODEL_NAME[MODEL_KEY::NOTE], MODEL_KEY::NOTE},
-		{MODEL_NAME[MODEL_KEY::MOOD], MODEL_KEY::MOOD},
-		{MODEL_NAME[MODEL_KEY::COMMENT], MODEL_KEY::COMMENT},
-		{MODEL_NAME[MODEL_KEY::CONTEXT], MODEL_KEY::CONTEXT},
-		{MODEL_NAME[MODEL_KEY::SOURCE], MODEL_KEY::SOURCE},		
-		{MODEL_NAME[MODEL_KEY::TITLE], MODEL_KEY::TITLE},		
-		{MODEL_NAME[MODEL_KEY::ID], MODEL_KEY::ID},		
-		{MODEL_NAME[MODEL_KEY::LICENSE], MODEL_KEY::LICENSE},
-		{MODEL_NAME[MODEL_KEY::DESCRIPTION], MODEL_KEY::DESCRIPTION},		
-		{MODEL_NAME[MODEL_KEY::BOOKMARK], MODEL_KEY::BOOKMARK},
-		{MODEL_NAME[MODEL_KEY::ACCOUNT], MODEL_KEY::ACCOUNT},
-		{MODEL_NAME[MODEL_KEY::ACCOUNTTYPE], MODEL_KEY::ACCOUNTTYPE},
-		{MODEL_NAME[MODEL_KEY::VERSION], MODEL_KEY::VERSION},
-		{MODEL_NAME[MODEL_KEY::DOMAIN], MODEL_KEY::DOMAIN},
-		{MODEL_NAME[MODEL_KEY::CATEGORY], MODEL_KEY::CATEGORY},
-		{MODEL_NAME[MODEL_KEY::CONTENT], MODEL_KEY::CONTENT},
-		{MODEL_NAME[MODEL_KEY::PIN], MODEL_KEY::PIN},
-		{MODEL_NAME[MODEL_KEY::IMG], MODEL_KEY::IMG},
-		{MODEL_NAME[MODEL_KEY::PREVIEW], MODEL_KEY::PREVIEW},
-		{MODEL_NAME[MODEL_KEY::LINK], MODEL_KEY::LINK},
-		{MODEL_NAME[MODEL_KEY::STAMP], MODEL_KEY::STAMP},
-		
-		/** ccdav keys **/
-		{MODEL_NAME[MODEL_KEY::N], MODEL_KEY::N},
-		{MODEL_NAME[MODEL_KEY::IM], MODEL_KEY::IM},
-		{MODEL_NAME[MODEL_KEY::PHOTO], MODEL_KEY::PHOTO},
-		{MODEL_NAME[MODEL_KEY::GENDER], MODEL_KEY::GENDER},
-		{MODEL_NAME[MODEL_KEY::ADR], MODEL_KEY::ADR},
-		{MODEL_NAME[MODEL_KEY::ADR_2], MODEL_KEY::ADR_2},
-		{MODEL_NAME[MODEL_KEY::ADR_3], MODEL_KEY::ADR_3},
-		{MODEL_NAME[MODEL_KEY::EMAIL], MODEL_KEY::EMAIL},
-		{MODEL_NAME[MODEL_KEY::EMAIL_2], MODEL_KEY::EMAIL_2},
-		{MODEL_NAME[MODEL_KEY::EMAIL_3], MODEL_KEY::EMAIL_3},
-		{MODEL_NAME[MODEL_KEY::LANG], MODEL_KEY::LANG},
-		{MODEL_NAME[MODEL_KEY::NICKNAME], MODEL_KEY::NICKNAME},
-		{MODEL_NAME[MODEL_KEY::ORG], MODEL_KEY::ORG},
-		{MODEL_NAME[MODEL_KEY::PROFILE], MODEL_KEY::PROFILE},
-		{MODEL_NAME[MODEL_KEY::TZ], MODEL_KEY::TZ},
-		{MODEL_NAME[MODEL_KEY::TEL], MODEL_KEY::TEL},
-		{MODEL_NAME[MODEL_KEY::TEL_2], MODEL_KEY::TEL_2},
-		{MODEL_NAME[MODEL_KEY::TEL_3], MODEL_KEY::TEL_3},
-		
-		{MODEL_NAME[MODEL_KEY::CITY], MODEL_KEY::CITY},
-		{MODEL_NAME[MODEL_KEY::STATE], MODEL_KEY::STATE},
-		{MODEL_NAME[MODEL_KEY::COUNTRY], MODEL_KEY::COUNTRY}
-	};
-	
-    typedef QHash<FMH::MODEL_KEY, QString> MODEL;
-	typedef QVector<MODEL> MODEL_LIST;
+    typedef MODELS::MODEL MODEL;
+	typedef MODELS::MODEL_LIST MODEL_LIST;
 	
 	struct PATH_CONTENT
 	{
@@ -719,7 +548,7 @@ namespace FMH
 		
 		QString icon, iconsize, hidden, detailview, showthumbnail, showterminal;
 		
-		uint count = 0, sortby = FMH::MODEL_KEY::MODIFIED, viewType = 0;
+		uint count = 0, sortby = KEYS::MODIFIED, viewType = 0;
 		
 		bool foldersFirst = false;
 		
@@ -761,16 +590,16 @@ namespace FMH
 		#endif
 		
 		return QVariantMap({
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], icon.isEmpty() ? "folder" : icon},
-							   {FMH::MODEL_NAME[FMH::MODEL_KEY::ICONSIZE], iconsize},
-						 {FMH::MODEL_NAME[FMH::MODEL_KEY::COUNT], count},
-						 {FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTERMINAL], showterminal.isEmpty() ? "false" : showterminal},
-							   {FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTHUMBNAIL], showthumbnail.isEmpty() ? "false" : showthumbnail},
-							   {FMH::MODEL_NAME[FMH::MODEL_KEY::DETAILVIEW], detailview.isEmpty() ? "false" : detailview},
-							   {FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN], hidden.isEmpty() ? false : (hidden == "true" ? true : false)},
-							   {FMH::MODEL_NAME[FMH::MODEL_KEY::SORTBY], sortby},
-						 {FMH::MODEL_NAME[FMH::MODEL_KEY::FOLDERSFIRST], foldersFirst},
-						 {FMH::MODEL_NAME[FMH::MODEL_KEY::VIEWTYPE], viewType}
+			{KEYS::_N[KEYS::ICON], icon.isEmpty() ? "folder" : icon},
+							   {KEYS::_N[KEYS::ICONSIZE], iconsize},
+						 {KEYS::_N[KEYS::COUNT], count},
+						 {KEYS::_N[KEYS::SHOWTERMINAL], showterminal.isEmpty() ? "false" : showterminal},
+							   {KEYS::_N[KEYS::SHOWTHUMBNAIL], showthumbnail.isEmpty() ? "false" : showthumbnail},
+							   {KEYS::_N[KEYS::DETAILVIEW], detailview.isEmpty() ? "false" : detailview},
+							   {KEYS::_N[KEYS::HIDDEN], hidden.isEmpty() ? false : (hidden == "true" ? true : false)},
+							   {KEYS::_N[KEYS::SORTBY], sortby},
+						 {KEYS::_N[KEYS::FOLDERSFIRST], foldersFirst},
+						 {KEYS::_N[KEYS::VIEWTYPE], viewType}
 		});
 	}
 	
@@ -815,7 +644,7 @@ namespace FMH
 				return folderIcon[path.toString()];
 			else
 			{
-				auto icon = FMH::dirConf(QString(path.toString()+"/%1").arg(".directory"))[FMH::MODEL_NAME[FMH::MODEL_KEY::ICON]].toString();
+				auto icon = FMH::dirConf(QString(path.toString()+"/%1").arg(".directory"))[KEYS::_N[KEYS::ICON]].toString();
 				return icon.isEmpty() ? "folder" : icon;
 			}
 			
@@ -856,7 +685,7 @@ namespace FMH
 		{TABLE::CLOUDS, "clouds"}
 	};
 	
-	typedef QMap<FMH::MODEL_KEY, QString> DB;
+	typedef QMap<KEYS::KEY, QString> DB;
 	
 	const QString FMPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/maui/fm/";
 	const QString DBName = "fm.db";
@@ -875,10 +704,10 @@ namespace FMH
 		
 		return FMH::MODEL
 		{
-			{FMH::MODEL_KEY::ICON, FMH::getIconName(path)},
-			{FMH::MODEL_KEY::LABEL, dir.dirName()},
-			{FMH::MODEL_KEY::PATH, path.toString()},
-			{FMH::MODEL_KEY::TYPE, type}
+			{KEYS::ICON, FMH::getIconName(path)},
+			{KEYS::LABEL, dir.dirName()},
+			{KEYS::PATH, path.toString()},
+			{KEYS::TYPE, type}
 		};
 	}	
 	
@@ -899,7 +728,7 @@ namespace FMH
 		
 		QVariantMap res; 
 		for(const auto &key : data.keys())		
-			res.insert(FMH::MODEL_NAME[key], data[key]);
+			res.insert(KEYS::_N[key], data[key]);
 		
 		return res;
 	}
@@ -921,19 +750,19 @@ namespace FMH
 		const auto mime = FMH::getMime(path);
 		return FMH::MODEL 
 		{
-			{FMH::MODEL_KEY::GROUP, file.group()},
-			{FMH::MODEL_KEY::OWNER, file.owner()},
-			{FMH::MODEL_KEY::SUFFIX, file.completeSuffix()},
-			{FMH::MODEL_KEY::LABEL, /*file.isDir() ? file.baseName() :*/ path == FMH::HomePath ? QStringLiteral("Home") : file.fileName()},
-			{FMH::MODEL_KEY::NAME, file.fileName()},
-			{FMH::MODEL_KEY::DATE,  file.birthTime().toString(Qt::TextDate)},
-			{FMH::MODEL_KEY::MODIFIED, file.lastModified().toString(Qt::TextDate)},
-			{FMH::MODEL_KEY::MIME, mime },
-			{FMH::MODEL_KEY::ICON, FMH::getIconName(path)},
-			{FMH::MODEL_KEY::SIZE, QString::number(file.size()) /*locale.formattedDataSize(file.size())*/},
-			{FMH::MODEL_KEY::PATH, path.toString()},
-			{FMH::MODEL_KEY::THUMBNAIL, path.toLocalFile()},
-			{FMH::MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path.toLocalFile()).count() - 2) : "0"}
+			{KEYS::GROUP, file.group()},
+			{KEYS::OWNER, file.owner()},
+			{KEYS::SUFFIX, file.completeSuffix()},
+			{KEYS::LABEL, /*file.isDir() ? file.baseName() :*/ path == FMH::HomePath ? QStringLiteral("Home") : file.fileName()},
+			{KEYS::NAME, file.fileName()},
+			{KEYS::DATE,  file.birthTime().toString(Qt::TextDate)},
+			{KEYS::MODIFIED, file.lastModified().toString(Qt::TextDate)},
+			{KEYS::MIME, mime },
+			{KEYS::ICON, FMH::getIconName(path)},
+			{KEYS::SIZE, QString::number(file.size()) /*locale.formattedDataSize(file.size())*/},
+			{KEYS::PATH, path.toString()},
+			{KEYS::THUMBNAIL, path.toLocalFile()},
+			{KEYS::COUNT, file.isDir() ? QString::number(QDir(path.toLocalFile()).count() - 2) : "0"}
 		};		
 	}	
 	
@@ -955,7 +784,7 @@ namespace FMH
 		
 		QVariantMap res; 
 		for(const auto &key : data.keys())		
-			res.insert(FMH::MODEL_NAME[key], data[key]);
+			res.insert(KEYS::_N[key], data[key]);
 		
 		return res;
 	}

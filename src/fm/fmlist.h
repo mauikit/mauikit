@@ -64,21 +64,21 @@ class FMList : public MauiList
 	
 	public:
 		
-		enum SORTBY : uint_fast8_t
+		enum SORTBY : uint
 		{
-			SIZE = FMH::MODEL_KEY::SIZE,
-			MODIFIED = FMH::MODEL_KEY::MODIFIED,
-			DATE = FMH::MODEL_KEY::DATE,
-			LABEL = FMH::MODEL_KEY::LABEL,
-			MIME = FMH::MODEL_KEY::MIME,
-			ADDDATE = FMH::MODEL_KEY::MIME,
-			TITLE = FMH::MODEL_KEY::TITLE,
-			PLACE = FMH::MODEL_KEY::PLACE,
-			FORMAT = FMH::MODEL_KEY::FORMAT
+			SIZE = KEYS::SIZE,
+			MODIFIED = KEYS::MODIFIED,
+			DATE = KEYS::DATE,
+			LABEL = KEYS::LABEL,
+			MIME = KEYS::MIME,
+			ADDDATE = KEYS::MIME,
+			TITLE = KEYS::TITLE,
+			PLACE = KEYS::PLACE,
+			FORMAT = KEYS::FORMAT
 			
 		}; Q_ENUM(SORTBY)
 		
-		enum FILTER : uint_fast8_t
+		enum FILTER : uint
 		{
 			AUDIO = FMH::FILTER_TYPE::AUDIO,
 			VIDEO= FMH::FILTER_TYPE::VIDEO,
@@ -88,7 +88,7 @@ class FMList : public MauiList
 			
 		}; Q_ENUM(FILTER)
 		
-		enum PATHTYPE : uint_fast8_t
+		enum PATHTYPE : uint
 		{
 			PLACES_PATH = FMH::PATHTYPE_KEY::PLACES_PATH,
 			FISH_PATH = FMH::PATHTYPE_KEY::FISH_PATH,
@@ -104,7 +104,7 @@ class FMList : public MauiList
 			
 		}; Q_ENUM(PATHTYPE)
 		
-		enum VIEW_TYPE : uint_fast8_t
+		enum VIEW_TYPE : uint
 		{
 			ICON_VIEW,
 			LIST_VIEW,

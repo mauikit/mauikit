@@ -35,17 +35,17 @@ QVariantMap Handy::appInfo()
 {
 	auto app =  UTIL::app;
 	
-    auto res = QVariantMap({{FMH::MODEL_NAME[FMH::MODEL_KEY::NAME], app->applicationName()},
-                           {FMH::MODEL_NAME[FMH::MODEL_KEY::VERSION], app->applicationVersion()},
-                           {FMH::MODEL_NAME[FMH::MODEL_KEY::ORG], app->organizationName()},
-                           {FMH::MODEL_NAME[FMH::MODEL_KEY::DOMAIN], app->organizationDomain()},
+    auto res = QVariantMap({{KEYS::_N[KEYS::NAME], app->applicationName()},
+                           {KEYS::_N[KEYS::VERSION], app->applicationVersion()},
+                           {KEYS::_N[KEYS::ORG], app->organizationName()},
+                           {KEYS::_N[KEYS::DOMAIN], app->organizationDomain()},
                            {"mauikit_version", MAUIKIT_VERSION_STR},
                            {"qt_version", QT_VERSION_STR} });
 	
 	#ifdef Q_OS_ANDROID
-    res.insert(FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], QGuiApplication::windowIcon().name());
+    res.insert(KEYS::_N[KEYS::ICON], QGuiApplication::windowIcon().name());
 	#else
-    res.insert(FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], QApplication::windowIcon().name());
+    res.insert(KEYS::_N[KEYS::ICON], QApplication::windowIcon().name());
 	#endif	
 	
     return res;
@@ -57,7 +57,7 @@ QVariantMap Handy::userInfo()
 	if (name.isEmpty())
 		name = qgetenv("USERNAME");
 	
-    auto res = QVariantMap({{FMH::MODEL_NAME[FMH::MODEL_KEY::NAME], name}});
+    auto res = QVariantMap({{KEYS::_N[KEYS::NAME], name}});
 	
 	return res;
 	

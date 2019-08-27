@@ -46,11 +46,11 @@ watcher(new QFileSystemWatcher(this))
         {
             const auto oldCount =  this->count[path];
             const auto index = this->indexOf(path);
-            const auto newCount = FMH::getFileInfoModel(path)[FMH::MODEL_KEY::COUNT].toInt();
+            const auto newCount = FMH::getFileInfoModel(path)[KEYS::COUNT].toInt();
             const auto count = newCount - oldCount;
 
-            this->list[index][FMH::MODEL_KEY::COUNT] = QString::number(count);
-            emit this->updateModel(index, {FMH::MODEL_KEY::COUNT});
+            this->list[index][KEYS::COUNT] = QString::number(count);
+            emit this->updateModel(index, {KEYS::COUNT});
         }
 
     });
@@ -84,12 +84,12 @@ static FMH::MODEL modelPlaceInfo(const KFilePlacesModel &model, const QModelInde
 {
     return FMH::MODEL
         {
-            {FMH::MODEL_KEY::PATH, model.url(index).toString()},
-            {FMH::MODEL_KEY::URL, model.url(index).toString()},
-            {FMH::MODEL_KEY::ICON, model.icon(index).name()},
-            {FMH::MODEL_KEY::LABEL, model.text(index)},
-            {FMH::MODEL_KEY::NAME, model.text(index)},
-            {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_LABEL[type]}
+            {KEYS::PATH, model.url(index).toString()},
+            {KEYS::URL, model.url(index).toString()},
+            {KEYS::ICON, model.icon(index).name()},
+            {KEYS::LABEL, model.text(index)},
+            {KEYS::NAME, model.text(index)},
+            {KEYS::TYPE, FMH::PATHTYPE_LABEL[type]}
         };
 }
 #endif
@@ -158,11 +158,11 @@ void PlacesList::setCount()
     this->watcher->removePaths(this->watcher->directories());
     for(auto &data : this->list)
     {
-        const auto path = data[FMH::MODEL_KEY::PATH];
+        const auto path = data[KEYS::PATH];
         if(FM::isDir(path))
         {   
-            data.insert(FMH::MODEL_KEY::COUNT, "0");
-            const auto count = FMH::getFileInfoModel(path)[FMH::MODEL_KEY::COUNT];
+            data.insert(KEYS::COUNT, "0");
+            const auto count = FMH::getFileInfoModel(path)[KEYS::COUNT];
             this->count.insert(path, count.toInt());
             this->watchPath(path);
         }
@@ -173,7 +173,7 @@ int PlacesList::indexOf(const QString& path)
 {
     const auto index = std::find_if(this->list.begin(), this->list.end(), [&path](const FMH::MODEL &item) -> bool
     {
-        return item[FMH::MODEL_KEY::PATH] == path;
+        return item[KEYS::PATH] == path;
 
     });
     return std::distance(this->list.begin(), index);
@@ -217,14 +217,14 @@ void PlacesList::refresh()
 
 void PlacesList::clearBadgeCount(const int& index)
 {
-    this->list[index][FMH::MODEL_KEY::COUNT] = "0";
-    emit this->updateModel(index, {FMH::MODEL_KEY::COUNT});
+    this->list[index][KEYS::COUNT] = "0";
+    emit this->updateModel(index, {KEYS::COUNT});
 }
 
 void PlacesList::addPlace(const QString& path)
 {    
     const auto it = std::find_if(this->list.rbegin(), this->list.rend(), [](const FMH::MODEL &item) -> bool{
-       return item[FMH::MODEL_KEY::TYPE] == FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]; 
+       return item[KEYS::TYPE] == FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]; 
     });
     const auto index = std::distance(it, this->list.rend());
     

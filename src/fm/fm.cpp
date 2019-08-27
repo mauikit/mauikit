@@ -90,19 +90,19 @@ dirLister(new KCoreDirLister(this))
 		for(const auto &kfile : dirLister->items())
 		{
 			qDebug() << kfile.url() << kfile.name() << kfile.isDir();
-			content << FMH::MODEL{ {FMH::MODEL_KEY::LABEL, kfile.name()},
-			{FMH::MODEL_KEY::NAME, kfile.name()},
-			{FMH::MODEL_KEY::DATE, kfile.time(KFileItem::FileTimes::CreationTime).toString(Qt::TextDate)},
-			{FMH::MODEL_KEY::MODIFIED, kfile.time(KFileItem::FileTimes::ModificationTime).toString(Qt::TextDate)},
-			{FMH::MODEL_KEY::PATH, kfile.url().toString()},
-			{FMH::MODEL_KEY::THUMBNAIL, kfile.localPath()},
-			{FMH::MODEL_KEY::MIME, kfile.mimetype()},
-			{FMH::MODEL_KEY::GROUP, kfile.group()},
-			{FMH::MODEL_KEY::ICON, kfile.iconName()},
-			{FMH::MODEL_KEY::SIZE, QString::number(kfile.size())},
-			{FMH::MODEL_KEY::THUMBNAIL, kfile.mostLocalUrl().toString()},
-			{FMH::MODEL_KEY::OWNER, kfile.user()},
-			{FMH::MODEL_KEY::COUNT, kfile.isLocalFile() && kfile.isDir() ?  QString::number(QDir(kfile.localPath()).count() - 2) : "0"}
+			content << FMH::MODEL{ {KEYS::LABEL, kfile.name()},
+			{KEYS::NAME, kfile.name()},
+			{KEYS::DATE, kfile.time(KFileItem::FileTimes::CreationTime).toString(Qt::TextDate)},
+			{KEYS::MODIFIED, kfile.time(KFileItem::FileTimes::ModificationTime).toString(Qt::TextDate)},
+			{KEYS::PATH, kfile.url().toString()},
+			{KEYS::THUMBNAIL, kfile.localPath()},
+			{KEYS::MIME, kfile.mimetype()},
+			{KEYS::GROUP, kfile.group()},
+			{KEYS::ICON, kfile.iconName()},
+			{KEYS::SIZE, QString::number(kfile.size())},
+			{KEYS::THUMBNAIL, kfile.mostLocalUrl().toString()},
+			{KEYS::OWNER, kfile.user()},
+			{KEYS::COUNT, kfile.isLocalFile() && kfile.isDir() ?  QString::number(QDir(kfile.localPath()).count() - 2) : "0"}
 			};
 		}
 		
@@ -149,7 +149,7 @@ dirLister(new KCoreDirLister(this))
 		switch(signalType)
 		{
 			case Syncing::SIGNAL_TYPE::OPEN:
-				this->openUrl(item[FMH::MODEL_KEY::PATH]);
+				this->openUrl(item[KEYS::PATH]);
 				break;
 				
 			case Syncing::SIGNAL_TYPE::DOWNLOAD:
@@ -160,7 +160,7 @@ dirLister(new KCoreDirLister(this))
 			{
 				QVariantMap data;
 				for(auto key : item.keys())
-					data.insert(FMH::MODEL_NAME[key], item[key]);				
+					data.insert(KEYS::_N[key], item[key]);				
 				
 				this->copy(QVariantList {data}, this->sync->getCopyTo());
 				break;	
@@ -196,7 +196,7 @@ QVariantMap FM::toMap(const FMH::MODEL& model)
 {
 	QVariantMap map;
 	for(const auto &key : model.keys())
-		map.insert(FMH::MODEL_NAME[key], model[key]);
+		map.insert(KEYS::_N[key], model[key]);
 	
 	return map;		
 }
@@ -205,7 +205,7 @@ FMH::MODEL FM::toModel(const QVariantMap& map)
 {
 	FMH::MODEL model;
 	for(const auto &key : map.keys())
-		model.insert(FMH::MODEL_NAME_KEY[key], map[key].toString());
+		model.insert(KEYS::_K[key], map[key].toString());
 	
 	return model;		
 }
@@ -218,7 +218,7 @@ FMH::MODEL_LIST FM::packItems(const QStringList &items, const QString &type)
 		if(FMH::fileExists(path))
 		{
 			auto model = FMH::getFileInfoModel(path);
-			model.insert(FMH::MODEL_KEY::TYPE, type);
+			model.insert(KEYS::TYPE, type);
 			data << model;
 		}
 		
@@ -236,9 +236,9 @@ QVariantList FM::get(const QString &queryTxt)
 		while(query.next())
 		{
 			QVariantMap data;
-			for(auto key : FMH::MODEL_NAME.keys())
-				if(query.record().indexOf(FMH::MODEL_NAME[key]) > -1)
-					data[FMH::MODEL_NAME[key]] = query.value(FMH::MODEL_NAME[key]).toString();
+			for(const auto nameKey : KEYS::_NAMES())
+				if(query.record().indexOf(nameKey) > -1)
+					data[nameKey] = query.value(nameKey).toString();
 				
 				mapList<< data;
 			
@@ -344,10 +344,10 @@ FMH::MODEL_LIST FM::getAppsPath()
 	{
 		FMH::MODEL
 		{
-			{FMH::MODEL_KEY::ICON, "system-run"},
-			{FMH::MODEL_KEY::LABEL, FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::APPS_PATH]},
-			{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::APPS_PATH]},
-			{FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]}
+			{KEYS::ICON, "system-run"},
+			{KEYS::LABEL, FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::APPS_PATH]},
+			{KEYS::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::APPS_PATH]},
+			{KEYS::TYPE, FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]}
 		}
 	};
 }
@@ -401,11 +401,11 @@ FMH::MODEL_LIST FM::search(const QString& query, const QUrl &path, const bool &h
 //     for(const auto &i : model.groupIndexes(KFilePlacesModel::GroupType::RemoteType))
 //     {
 //         drives << FMH::MODEL{
-//             {FMH::MODEL_KEY::NAME, model.text(i)},
-//             {FMH::MODEL_KEY::LABEL, model.text(i)},
-//             {FMH::MODEL_KEY::PATH, model.url(i).toString()},
-//             {FMH::MODEL_KEY::ICON, model.icon(i).name()},            
-//             {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES_PATH]},
+//             {KEYS::NAME, model.text(i)},
+//             {KEYS::LABEL, model.text(i)},
+//             {KEYS::PATH, model.url(i).toString()},
+//             {KEYS::ICON, model.icon(i).name()},            
+//             {KEYS::TYPE, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES_PATH]},
 //         };           
 //     }
 //     
@@ -418,10 +418,10 @@ FMH::MODEL_LIST FM::search(const QString& query, const QUrl &path, const bool &h
 //     //         {
 //     //             QVariantMap drive =
 //     //             {
-//     //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], "drive-harddisk"},
-//     //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::LABEL], device.displayName()},
-//     //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::PATH], device.rootPath()},
-//     //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::TYPE], FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES]}
+//     //                 {KEYS::_N[KEYS::ICON], "drive-harddisk"},
+//     //                 {KEYS::_N[KEYS::LABEL], device.displayName()},
+//     //                 {KEYS::_N[KEYS::PATH], device.rootPath()},
+//     //                 {KEYS::_N[KEYS::TYPE], FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES]}
 //     //             };
 //     //
 //     //             drives << drive;
@@ -458,10 +458,10 @@ FMH::MODEL_LIST FM::getTags(const int &limit)
 			const auto label = tag.toMap().value(TAG::KEYMAP[TAG::KEYS::TAG]).toString();
 			data << FMH::MODEL
 			{
-				{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::TAGS_PATH]+label},
-				{FMH::MODEL_KEY::ICON, "tag"},
-				{FMH::MODEL_KEY::LABEL, label},
-				{FMH::MODEL_KEY::TYPE,  FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::TAGS_PATH]}
+				{KEYS::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::TAGS_PATH]+label},
+				{KEYS::ICON, "tag"},
+				{KEYS::LABEL, label},
+				{KEYS::TYPE,  FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::TAGS_PATH]}
 			};
 		}
 	}
@@ -487,9 +487,9 @@ bool FM::getCloudServerContent(const QString &path, const QStringList &filters, 
 	
 	auto map = data.first().toMap();
 	
-	user = map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString();
-	auto server = map[FMH::MODEL_NAME[FMH::MODEL_KEY::SERVER]].toString();
-	auto password = map[FMH::MODEL_NAME[FMH::MODEL_KEY::PASSWORD]].toString();
+	user = map[KEYS::_N[KEYS::USER]].toString();
+	auto server = map[KEYS::_N[KEYS::SERVER]].toString();
+	auto password = map[KEYS::_N[KEYS::PASSWORD]].toString();
 	this->sync->setCredentials(server, user, password);
 	
 	this->sync->listContent(path, filters, depth);
@@ -504,13 +504,13 @@ FMH::MODEL_LIST FM::getCloudAccounts()
 	{
 		auto map = account.toMap();
 		res << FMH::MODEL {
-			{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::CLOUD_PATH]+map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString()},
-			{FMH::MODEL_KEY::ICON, "folder-cloud"},
-			{FMH::MODEL_KEY::LABEL, map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString()},
-			{FMH::MODEL_KEY::USER, map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString()},
-			{FMH::MODEL_KEY::SERVER, map[FMH::MODEL_NAME[FMH::MODEL_KEY::SERVER]].toString()},
-			{FMH::MODEL_KEY::PASSWORD, map[FMH::MODEL_NAME[FMH::MODEL_KEY::PASSWORD]].toString()},
-			{FMH::MODEL_KEY::TYPE,  FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::CLOUD_PATH]}};
+			{KEYS::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::CLOUD_PATH]+map[KEYS::_N[KEYS::USER]].toString()},
+			{KEYS::ICON, "folder-cloud"},
+			{KEYS::LABEL, map[KEYS::_N[KEYS::USER]].toString()},
+			{KEYS::USER, map[KEYS::_N[KEYS::USER]].toString()},
+			{KEYS::SERVER, map[KEYS::_N[KEYS::SERVER]].toString()},
+			{KEYS::PASSWORD, map[KEYS::_N[KEYS::PASSWORD]].toString()},
+			{KEYS::TYPE,  FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::CLOUD_PATH]}};
 	}
 	return res;
 }
@@ -526,7 +526,7 @@ void FM::openCloudItem(const QVariantMap &item)
 	qDebug()<< item;
 	FMH::MODEL data;
 	for(const auto &key : item.keys())
-		data.insert(FMH::MODEL_NAME_KEY[key], item[key].toString());
+		data.insert(KEYS::_K[key], item[key].toString());
 	
 	this->sync->resolveFile(data, Syncing::SIGNAL_TYPE::OPEN);
 }
@@ -536,7 +536,7 @@ void FM::getCloudItem(const QVariantMap &item)
 	qDebug()<< item;
 	FMH::MODEL data;
 	for(const auto &key : item.keys())
-		data.insert(FMH::MODEL_NAME_KEY[key], item[key].toString());
+		data.insert(KEYS::_K[key], item[key].toString());
 	
 	this->sync->resolveFile(data, Syncing::SIGNAL_TYPE::DOWNLOAD);
 }
@@ -555,9 +555,9 @@ QVariantList FM::getCloudAccountsList()
 bool FM::addCloudAccount(const QString &server, const QString &user, const QString &password)
 {
 	const QVariantMap account = {
-		{FMH::MODEL_NAME[FMH::MODEL_KEY::SERVER], server},
-		{FMH::MODEL_NAME[FMH::MODEL_KEY::USER], user},
-		{FMH::MODEL_NAME[FMH::MODEL_KEY::PASSWORD], password}
+		{KEYS::_N[KEYS::SERVER], server},
+		{KEYS::_N[KEYS::USER], user},
+		{KEYS::_N[KEYS::PASSWORD], password}
 	};
 	
 	if(this->insert(FMH::TABLEMAP[FMH::TABLE::CLOUDS], account))
@@ -572,8 +572,8 @@ bool FM::addCloudAccount(const QString &server, const QString &user, const QStri
 bool FM::removeCloudAccount(const QString &server, const QString &user)
 {
 	FMH::DB account = {
-		{FMH::MODEL_KEY::SERVER, server},
-		{FMH::MODEL_KEY::USER, user},
+		{KEYS::SERVER, server},
+		{KEYS::USER, user},
 	};
 	
 	if(this->remove(FMH::TABLEMAP[FMH::TABLE::CLOUDS], account))
@@ -707,7 +707,7 @@ bool FM::cut(const QVariantList &data, const QString &where)
 	
 	for(const auto &item : items)
 	{
-		const auto path = item[FMH::MODEL_KEY::PATH];
+		const auto path = item[KEYS::PATH];
 		
 		if(this->isCloud(path))
 		{
@@ -720,7 +720,7 @@ bool FM::cut(const QVariantList &data, const QString &where)
 			QFile file(QUrl(path).toLocalFile());
 			file.rename(where+"/"+QFileInfo(QUrl(path).toLocalFile()).fileName());
 			#else			
-			auto job = KIO::move(QUrl(path), QUrl(where+"/"+FMH::getFileInfoModel(path)[FMH::MODEL_KEY::LABEL]));
+			auto job = KIO::move(QUrl(path), QUrl(where+"/"+FMH::getFileInfoModel(path)[KEYS::LABEL]));
 			job->start();
 			#endif
 		}
@@ -739,7 +739,7 @@ bool FM::copy(const QVariantList &data, const QString &where)
 	QStringList cloudPaths;	
 	for(const auto &item : items)
 	{
-		const auto path = item[FMH::MODEL_KEY::PATH];
+		const auto path = item[KEYS::PATH];
 		if(this->isDir(path))
 		{
 			return FM::copyPath(path, where+"/"+QFileInfo(path).fileName(), false);
@@ -754,7 +754,7 @@ bool FM::copy(const QVariantList &data, const QString &where)
 			if(this->isCloud(where))
 				cloudPaths << path;
 			else
-				FM::copyPath(path, where+"/"+FMH::getFileInfoModel(path)[FMH::MODEL_KEY::LABEL], false);			
+				FM::copyPath(path, where+"/"+FMH::getFileInfoModel(path)[KEYS::LABEL], false);			
 		}
 	}
 	

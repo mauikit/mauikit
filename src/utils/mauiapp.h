@@ -43,22 +43,22 @@ public:
 	static MauiApp *instance();
 	static QString getName() 
 	{
-		return Handy::appInfo().value(FMH::MODEL_NAME[FMH::MODEL_KEY::NAME]).toString();
+		return Handy::appInfo().value(KEYS::_N[KEYS::NAME]).toString();
 	}
 	
 	static QString getVersion() 
 	{
-		return Handy::appInfo().value(FMH::MODEL_NAME[FMH::MODEL_KEY::VERSION]).toString();
+		return Handy::appInfo().value(KEYS::_N[KEYS::VERSION]).toString();
 	}
 	
 	static QString getOrg() 
 	{
-		return Handy::appInfo().value(FMH::MODEL_NAME[FMH::MODEL_KEY::ORG]).toString();
+		return Handy::appInfo().value(KEYS::_N[KEYS::ORG]).toString();
 	}
 	
 	static QString getDomain() 
 	{
-		return Handy::appInfo().value(FMH::MODEL_NAME[FMH::MODEL_KEY::DOMAIN]).toString();
+		return Handy::appInfo().value(KEYS::_N[KEYS::DOMAIN]).toString();
 	}
 	
 	static QString getMauikitVersion() 

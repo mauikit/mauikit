@@ -26,7 +26,7 @@ QVariantMap SyncingList::get(const int &index) const
 
     QVariantMap res;
     for(auto key : folder.keys())
-        res.insert(FMH::MODEL_NAME[key], folder[key]);
+        res.insert(KEYS::_N[key], folder[key]);
 
     return res;
 }
@@ -40,9 +40,9 @@ void SyncingList::insert(const QVariantMap& data)
 {	
 	FMH::MODEL model;
 	for(auto key : data.keys())
-		model.insert(FMH::MODEL_NAME_KEY[key], data[key].toString());		
+		model.insert(KEYS::_N_KEY[key], data[key].toString());		
 	
-	if(this->fm->addCloudAccount(model[FMH::MODEL_KEY::SERVER], model[FMH::MODEL_KEY::USER], model[FMH::MODEL_KEY::PASSWORD]))
+	if(this->fm->addCloudAccount(model[KEYS::SERVER], model[KEYS::USER], model[KEYS::PASSWORD]))
 	{
 		this->setList();
 	}	

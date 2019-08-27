@@ -173,7 +173,7 @@ bool FMDB::update(const QString &tableName, const FMH::DB &updateData, const QVa
 
     QStringList set;
     for (auto key : updateData.keys())
-        set.append(FMH::MODEL_NAME[key]+" = '"+updateData[key]+"'");
+        set.append(KEYS::_N[key]+" = '"+updateData[key]+"'");
 
     QStringList condition;
     for (auto key : where.keys())
@@ -209,7 +209,7 @@ bool FMDB::remove(const QString &tableName, const FMH::DB &removeData)
         auto i = 0;
     for (auto key : removeData.keys())
     {
-        strValues.append(QString("%1 = \"%2\"").arg(FMH::MODEL_NAME[key], removeData[key]));
+        strValues.append(QString("%1 = \"%2\"").arg(KEYS::_N[key], removeData[key]));
         i++;
 
         if(removeData.keys().size() > 1 && i<removeData.keys().size())

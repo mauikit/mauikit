@@ -119,22 +119,22 @@ void Store::contentListResult(Attica::BaseJob* j)
 		{
 			const auto att = p.attributes();
 			list << FMH::MODEL {
-				{FMH::MODEL_KEY::ID, p.id()},
-				{FMH::MODEL_KEY::URL, att[STORE::ATTRIBUTE[STORE::ATTRIBUTE_KEY::DOWNLOAD_LINK]]},
-				{FMH::MODEL_KEY::THUMBNAIL, att[STORE::ATTRIBUTE[STORE::ATTRIBUTE_KEY::PREVIEW_SMALL_1]]},
-				{FMH::MODEL_KEY::THUMBNAIL_1, att[STORE::ATTRIBUTE[STORE::ATTRIBUTE_KEY::PREVIEW_1]]},
-				{FMH::MODEL_KEY::THUMBNAIL_2, att[STORE::ATTRIBUTE[STORE::ATTRIBUTE_KEY::PREVIEW_2]]},
-				{FMH::MODEL_KEY::THUMBNAIL_3, att[STORE::ATTRIBUTE[STORE::ATTRIBUTE_KEY::DOWNLOAD_LINK]]},
-				{FMH::MODEL_KEY::LABEL, p.name()},
-				{FMH::MODEL_KEY::OWNER, p.author()},
-				{FMH::MODEL_KEY::LICENSE, p.license()},
-				{FMH::MODEL_KEY::DESCRIPTION, p.description()},
-				{FMH::MODEL_KEY::RATE, QString::number(p.rating())},
-				{FMH::MODEL_KEY::DATE, p.created().toString()},
-				{FMH::MODEL_KEY::MODIFIED, p.updated().toString()},
-				{FMH::MODEL_KEY::TAG, p.tags().join(",")},	
-				{FMH::MODEL_KEY::COUNT, QString::number(p.downloads())},	
-				{FMH::MODEL_KEY::SOURCE, p.detailpage().toString()}	
+				{KEYS::ID, p.id()},
+				{KEYS::URL, att[STORE::ATTRIBUTE[STORE::ATTRIBUTE_KEY::DOWNLOAD_LINK]]},
+				{KEYS::THUMBNAIL, att[STORE::ATTRIBUTE[STORE::ATTRIBUTE_KEY::PREVIEW_SMALL_1]]},
+				{KEYS::THUMBNAIL_1, att[STORE::ATTRIBUTE[STORE::ATTRIBUTE_KEY::PREVIEW_1]]},
+				{KEYS::THUMBNAIL_2, att[STORE::ATTRIBUTE[STORE::ATTRIBUTE_KEY::PREVIEW_2]]},
+				{KEYS::THUMBNAIL_3, att[STORE::ATTRIBUTE[STORE::ATTRIBUTE_KEY::DOWNLOAD_LINK]]},
+				{KEYS::LABEL, p.name()},
+				{KEYS::OWNER, p.author()},
+				{KEYS::LICENSE, p.license()},
+				{KEYS::DESCRIPTION, p.description()},
+				{KEYS::RATE, QString::number(p.rating())},
+				{KEYS::DATE, p.created().toString()},
+				{KEYS::MODIFIED, p.updated().toString()},
+				{KEYS::TAG, p.tags().join(",")},	
+				{KEYS::COUNT, QString::number(p.downloads())},	
+				{KEYS::SOURCE, p.detailpage().toString()}	
 			}; 
 		}
 		
@@ -282,7 +282,7 @@ void Store::download(const QString& id)
 
 void Store::download(const FMH::MODEL &item)
 {
-	this->downloadLink(item[FMH::MODEL_KEY::URL], item[FMH::MODEL_KEY::LABEL]); 
+	this->downloadLink(item[KEYS::URL], item[KEYS::LABEL]); 
 }
 
 void Store::contentDownloadReady(Attica::BaseJob* j)
