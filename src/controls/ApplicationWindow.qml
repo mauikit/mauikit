@@ -250,6 +250,8 @@ Kirigami.AbstractApplicationWindow
 			id: menuBtn
 			icon.name: "application-menu"
 			icon.color: headBarFGColor
+			icon.width: iconSizes.medium
+			icon.height: iconSizes.medium
 			checked: mainMenu.visible  
 			onClicked:
 			{
