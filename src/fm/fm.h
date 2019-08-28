@@ -125,6 +125,12 @@ public slots:
 	static bool isCloud(const QUrl &path);
 	static bool fileExists(const QUrl &path);
 	
+	/**
+	 * if the url is a file path then it returns its directory
+	 * and if it is a directory returns the same path
+	 * */
+	static QString fileDir(const QUrl &path);
+	
 	/* SETTINGS */
 	static void saveSettings(const QString &key, const QVariant &value, const QString &group);
 	static QVariant loadSettings(const QString &key, const QString &group, const QVariant &defaultValue);

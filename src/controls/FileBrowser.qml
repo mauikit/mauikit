@@ -620,34 +620,6 @@ Maui.Page
 	
 // 	headBar.stickyRightContent: true
 	headBar.rightContent:[
-	ToolButton
-	{
-		icon.name: "view-list-icons"
-		onClicked: list.viewType = Maui.FMList.ICON_VIEW
-		checkable: false
-		checked: list.viewType === Maui.FMList.ICON_VIEW
-		icon.width: iconSizes.medium
-		autoExclusive: true		
-	},
-	
-	ToolButton
-	{
-		icon.name: "view-list-details"
-		onClicked: list.viewType = Maui.FMList.LIST_VIEW
-		icon.width: iconSizes.medium
-		checked: list.viewType === Maui.FMList.LIST_VIEW	
-		autoExclusive: true
-	},
-	
-	ToolButton
-	{
-		icon.name: "view-file-columns"
-		onClicked: list.viewType = Maui.FMList.MILLERS_VIEW
-		icon.width: iconSizes.medium
-		checked: list.viewType === Maui.FMList.MILLERS_VIEW
-		autoExclusive: true		
-	},	
-	
 	Kirigami.ActionToolBar
 	{
         position: ToolBar.Header
@@ -657,6 +629,36 @@ Maui.Page
         display: isWide ? ToolButton.TextBesideIcon : ToolButton.IconOnly
 		
 		actions: [	
+		Action
+		{
+			icon.name: "view-list-icons"
+			onTriggered: list.viewType = Maui.FMList.ICON_VIEW
+			checkable: false
+			checked: list.viewType === Maui.FMList.ICON_VIEW
+			icon.width: iconSizes.medium
+			text: qsTr("Grid view")
+// 			autoExclusive: true		
+		},
+		
+		Action
+		{
+			icon.name: "view-list-details"
+			onTriggered: list.viewType = Maui.FMList.LIST_VIEW
+			icon.width: iconSizes.medium
+			checked: list.viewType === Maui.FMList.LIST_VIEW	
+			text: qsTr("List view")			
+// 			autoExclusive: true
+		},
+		
+		Action
+		{
+			icon.name: "view-file-columns"
+			onTriggered: list.viewType = Maui.FMList.MILLERS_VIEW
+			icon.width: iconSizes.medium
+			checked: list.viewType === Maui.FMList.MILLERS_VIEW
+			text: qsTr("Column view")			
+// 			autoExclusive: true		
+		},
 		
 		Kirigami.Action
 		{
@@ -981,7 +983,7 @@ Maui.Page
 	
 	function openFolder(path)
 	{
-		populate(path)
+		populate(Maui.FM.fileDir(path))// make sure the path is a dir
 	}
 	
 	function setPath(path)

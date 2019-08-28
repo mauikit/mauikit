@@ -166,7 +166,7 @@ Maui.Dialog
 							// 				placeholderText: qsTr("App description")
 							enabled: false
 							text: appDescription
-							textFormat : TextEdit.AutoText
+// 							textFormat : TextEdit.AutoText
 							color: Kirigami.Theme.textColor
 							font.pointSize: fontSizes.default
 							wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
@@ -177,32 +177,34 @@ Maui.Dialog
 							// 					color: "transparent"
 							// 				}
 						}
+						
+						Kirigami.Separator
+						{
+							Layout.fillWidth: true
+							Layout.preferredHeight: 1
+							Layout.alignment: Qt.AlignLeft
+							Layout.margins: space.big
+							opacity: 0.4
+						}
+						
+						Label
+						{
+							color: Kirigami.Theme.textColor
+							Layout.preferredWidth:_descriptionItem.width							
+							
+							text: qsTr("Built with MauiKit " + app.mauikit_version + " and Kirigami." )
+							font.pointSize: fontSizes.default
+							wrapMode: TextEdit.WrapAnywhere
+							
+							
+						}
 					}
 					
 				}
 				
 			}
 			
-			//             Item
-			//             {
-			//                 Layout.fillWidth: true
-			//                 Layout.row: 4
-			//                 Layout.column: 2
-			//                 Layout.margins: space.small
-			//                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-			//                 Label
-			//                 {
-			//                     color: textColor
-			//                     width: parent.width
-			//                     height: parent.height
-			//
-			//                     text: qsTr("Built with MauiKit and Kirigami.")
-			//                     font.pointSize: fontSizes.default
-			//                     wrapMode: TextEdit.WrapAnywhere
-			//
-			//
-			//                 }
-			//             }
+			            
 			
 			
 			

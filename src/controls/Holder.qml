@@ -86,19 +86,12 @@ Item
 	
 	MouseArea
 	{
+		id: _mouseArea
 		anchors.fill: parent
 		enabled: control.enabled
 		onClicked: actionTriggered()
 		
-		hoverEnabled: true
-		
-		Rectangle
-		{
-			anchors.fill: parent
-			color: parent.hovered ? Kirigami.Theme.backgroundColor : "transparent"
-			radius: radiusV
-		}
-		
+		hoverEnabled: true	
 	}
 	
 	Item
@@ -133,7 +126,7 @@ Item
 			textFormat: Text.RichText
 			horizontalAlignment: Qt.AlignHCenter
 			elide: Text.ElideRight
-			color: Kirigami.Theme.textColor
+			color: _mouseArea.hovered ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
 			wrapMode: Text.Wrap	
 			
 			anchors 

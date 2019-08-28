@@ -658,6 +658,23 @@ bool FM::fileExists(const QUrl &path)
 	return FMH::fileExists(path);
 }
 
+QString FM::fileDir(const QUrl& path)
+{	
+	QString res;
+	if(path.isLocalFile())
+	{
+		const QFileInfo file(path.toLocalFile());
+		if(file.isDir())
+			res = path.toString();
+		else
+			res = QUrl::fromLocalFile(file.dir().absolutePath()).toString();
+	}else	
+		qWarning()<< "The path is not a local one. FM::fileDir";
+	
+	return res;
+}
+
+
 void FM::saveSettings(const QString &key, const QVariant &value, const QString &group)
 {
 	UTIL::saveSettings(key, value, group);

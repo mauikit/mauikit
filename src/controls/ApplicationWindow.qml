@@ -314,19 +314,7 @@ Kirigami.AbstractApplicationWindow
 				MenuSeparator
 				{
 					visible: _accountCombobox.visible
-				}
-				
-				MenuItem
-				{
-					text: qsTr("Accounts")
-					visible: root.showAccounts
-					icon.name: "list-add-user"
-					onTriggered: 
-					{
-						if(root.accounts)
-							accounts.open()
-					}
-				}				
+				}			
 				
 				MenuItem
 				{
