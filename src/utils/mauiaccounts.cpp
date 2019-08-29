@@ -50,12 +50,12 @@ int MauiAccounts::getCurrentAccountIndex() const
 	return this->m_currentAccountIndex;
 }
 
-ACCOUNT MauiAccounts::getCurrentAccount() const
+QVariantMap MauiAccounts::getCurrentAccount() const
 {
 	return this->m_currentAccount;
 }
 
-void MauiAccounts::registerAccount(const ACCOUNT& account)
+void MauiAccounts::registerAccount(const QVariantMap& account)
 {
 	// register the account to the backend needed
 	auto model = FMH::toModel(account);

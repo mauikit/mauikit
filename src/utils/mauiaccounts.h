@@ -38,7 +38,7 @@ class MauiAccounts : public MauiList
 
     Q_PROPERTY(int currentAccountIndex READ getCurrentAccountIndex WRITE setCurrentAccountIndex NOTIFY currentAccountIndexChanged)
 	
-	Q_PROPERTY(ACCOUNT currentAccount READ getCurrentAccount NOTIFY currentAccountChanged)
+	Q_PROPERTY(QVariantMap currentAccount READ getCurrentAccount NOTIFY currentAccountChanged)
 	Q_PROPERTY(uint count READ getCount NOTIFY countChanged)
 public:
     /**
@@ -61,13 +61,13 @@ public:
 	void setCurrentAccountIndex(const int &index);
 	int getCurrentAccountIndex() const;  
 	
-	ACCOUNT getCurrentAccount() const;        
+	QVariantMap getCurrentAccount() const;        
 	
 	uint getCount() const;
 	
 public slots:	
 	QVariantMap get(const int &index) const;
-	void registerAccount(const ACCOUNT &account);
+	void registerAccount(const QVariantMap &account);
 	
 	void removeAccount(const int &index);
 	void removeAccountAndFiles(const int &index);
@@ -76,7 +76,7 @@ public slots:
 private:
 	FM *fm;
 	FMH::MODEL_LIST m_data;
-	ACCOUNT m_currentAccount;
+	QVariantMap m_currentAccount;
 	
 	int m_currentAccountIndex = 1;
 	uint m_count = 0;	
@@ -84,7 +84,7 @@ private:
 	void setAccounts();
 	
 signals:
-	void currentAccountChanged(ACCOUNT account);
+	void currentAccountChanged(QVariantMap account);
 	void currentAccountIndexChanged(int index);	
 	void countChanged(uint count);
 
