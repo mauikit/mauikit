@@ -27,15 +27,14 @@ import org.kde.mauikit 1.0 as Maui
 Maui.Dialog
 {
 	id: control
-	property var app : ({})
-	property string appName : Qt.application.name
-	property string appVersion : Qt.application.version
-	property string organizationName : Qt.application.organization
-	property string organizationDomain : Qt.application.domain
-	property string appDescription : ""
+	property string appName : Maui.App.name
+	property string appVersion : Maui.App.version
+	property string organizationName : Maui.App.org
+	property string organizationDomain : Maui.App.domain
+	property string appDescription : Maui.App.description
 	property string appLink: "www.maui-project.org"
 	property string appDonation: ""
-	property string appIcon: "qrc:/assets/mauikit-logo.png"
+	property string appIcon: Maui.App.iconName
 	
 	defaultButtons: false
 		widthHint: 0.9
@@ -88,7 +87,7 @@ Maui.Dialog
 				
 				Image
 				{
-					source: app.icon || control.appIcon
+					source: control.appIcon
 					width: iconSizes.huge
 					height: width
 					sourceSize.width: width
@@ -123,10 +122,7 @@ Maui.Dialog
 						spacing: 0
 						Label
 						{
-							id: appTitle
-							Layout.fillWidth: true
-							// 					Layout.preferredHeight: implicitHeight
-							
+							Layout.fillWidth: true						
 							Layout.alignment: Qt.AlignLeft
 							clip: true
 							width: parent.width
@@ -140,7 +136,6 @@ Maui.Dialog
 						
 						Label
 						{
-							id: appVersion
 							Layout.fillWidth: true
 							// 					Layout.preferredHeight: fontSizes.default
 							
@@ -150,7 +145,7 @@ Maui.Dialog
 							width: parent.width
 							height: parent.height
 							color:  Qt.lighter(Kirigami.Theme.textColor, 1.2)
-							text: app.version
+							text: appVersion
 							font.pointSize: fontSizes.default
 							
 						}
@@ -192,7 +187,7 @@ Maui.Dialog
 							color: Kirigami.Theme.textColor
 							Layout.preferredWidth:_descriptionItem.width							
 							
-							text: qsTr("Built with MauiKit " + app.mauikit_version + " and Kirigami." )
+							text: qsTr("Built with MauiKit " + Maui.App.mauikitVersion + " and Kirigami." )
 							font.pointSize: fontSizes.default
 							wrapMode: TextEdit.WrapAnywhere
 							
@@ -231,8 +226,6 @@ Maui.Dialog
 			//             }
 			//         }
 			
-		}
-		
-		onOpened : control.app = Maui.Handy.appInfo()
+		}		
 		
 }

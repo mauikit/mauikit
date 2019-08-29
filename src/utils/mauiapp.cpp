@@ -18,13 +18,14 @@
 
 #include "mauiapp.h"
 #include "utils.h"
+#include "mauiaccounts.h"
 
-MauiApp::MauiApp(QObject *parent) : QObject(parent)
+MauiApp::MauiApp(QObject *parent) : QObject(parent), m_accounts(new MauiAccounts(this))
 {
-	QObject::connect(UTIL::app, &QCoreApplication::aboutToQuit, []()
-	{
-		delete MauiApp::m_instance;
-	});
+// 	QObject::connect(UTIL::app, &QCoreApplication::aboutToQuit, []()
+// 	{
+// 		delete MauiApp::m_instance;
+// 	});
 }
 
 MauiApp::~MauiApp() {}
@@ -36,6 +37,12 @@ MauiApp * MauiApp::instance()
 		MauiApp::m_instance = new MauiApp();
 	
 	return MauiApp::m_instance;	
+}
+
+
+MauiAccounts * MauiApp::getAccounts() const
+{
+	return this->m_accounts;
 }
 
 

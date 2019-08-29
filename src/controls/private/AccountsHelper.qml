@@ -5,9 +5,6 @@ import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.6 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
-import SyncingModel 1.0 
-import SyncingList 1.0
-
 Maui.Dialog
 {
 	
@@ -17,7 +14,7 @@ Maui.Dialog
 		maxWidth: maxHeight
 		
 		property alias model : _syncingModel
-		property alias list : _syncingList
+		property alias list : _syncingModel.list
 		
 		Maui.SyncDialog
 		{
@@ -30,18 +27,12 @@ Maui.Dialog
 		}
 		rejectButton.visible: false
 		acceptButton.text: qsTr("Add account") 
-		onAccepted: _syncDialog.open()
+		onAccepted: _syncDialog.open()		
 		
-		
-		SyncingModel
+		Maui.BaseModel
 		{
 			id: _syncingModel
-			list: _syncingList
-		}
-		
-		SyncingList
-		{
-			id: _syncingList
+			list: Maui.App.accounts
 		}
 		
 		Maui.Dialog
@@ -57,7 +48,7 @@ Maui.Dialog
 			
 			onRejected: 
 			{
-				var account = _syncingList.get(_listView.currentIndex)
+				var account = Maui.App.accounts.get(_listView.currentIndex)
 				console.log(account.label)
 				control.removeAccount(account.server, account.user)
 				close()
@@ -69,7 +60,7 @@ Maui.Dialog
 					text: qsTr("Delete account and files")			
 					onClicked: 
 					{
-						var account = _syncingList.get(_listView.currentIndex)
+						var account = Maui.App.accounts.get(_listView.currentIndex)
 						control.removeAccountAndFiles(account.server, account.user)
 						close()
 					}
@@ -148,18 +139,18 @@ Maui.Dialog
 		function addAccount(server, user, password)
 		{
 			if(user.length)
-				_syncingList.insert({server: server, user: user, password: password})
+				Maui.App.accounts.insert({server: server, user: user, password: password})
 		}
 		
 		function removeAccount(server, user)
 		{
 			if(server.length && user.length)
-				_syncingList.removeAccount(server, user)
+				Maui.App.accounts.removeAccount(server, user)
 		}
 		
 		function removeAccountAndFiles(server, user)
 		{
 			if(server.length && user.length)
-				_syncingList.removeAccountAndFiles(server, user)
+				Maui.App.accounts.removeAccountAndFiles(server, user)
 		}
 }

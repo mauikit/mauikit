@@ -71,6 +71,7 @@ include_directories(
 set(mauikit_SRCS
     src/mauikit.cpp
     src/utils/mauiapp.cpp
+    src/utils/mauiaccounts.cpp
     src/utils/handy.cpp
     src/utils/model_template/mauilist.cpp
     src/utils/model_template/mauimodel.cpp
@@ -81,6 +82,7 @@ set(mauikit_HDRS
     src/utils.h
     src/utils/handy.h
     src/utils/mauiapp.h
+    src/utils/mauiaccounts.h
 	src/utils/model_template/mauilist.h
     src/utils/model_template/mauimodel.h
     )
@@ -127,8 +129,6 @@ set(tagging_HDRS
 
 set(syncing_SRCS
     src/utils/syncing/syncing.cpp
-    src/utils/syncing/syncingmodel.cpp
-    src/utils/syncing/syncinglist.cpp
     src/utils/syncing/libwebdavclient/lib/WebDAVClient.cpp
     src/utils/syncing/libwebdavclient/lib/dto/WebDAVItem.cpp
     src/utils/syncing/libwebdavclient/lib/utils/Environment.cpp
@@ -139,8 +139,6 @@ set(syncing_SRCS
 
 set(syncing_HDRS
     src/utils/syncing/syncing.h
-    src/utils/syncing/syncingmodel.h
-    src/utils/syncing/syncinglist.h
     src/utils/syncing/libwebdavclient/lib/WebDAVClient.hpp
     src/utils/syncing/libwebdavclient/lib/dto/WebDAVItem.hpp
     src/utils/syncing/libwebdavclient/lib/utils/Environment.hpp

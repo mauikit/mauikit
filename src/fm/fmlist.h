@@ -116,7 +116,7 @@ class FMList : public MauiList
 	
 		~FMList();
 		
-		FMH::MODEL_LIST items() const override;
+		FMH::MODEL_LIST items() const final override;
 		
 		FMList::SORTBY getSortBy() const;
 		void setSortBy(const FMList::SORTBY &key);

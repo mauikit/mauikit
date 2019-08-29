@@ -25,19 +25,21 @@
  * @todo write docs
  */
 
+class MauiAccounts;
 class MauiApp : public QObject
 {
     Q_OBJECT
     
-    Q_PROPERTY(QString name READ getName)
-	Q_PROPERTY(QString version READ getVersion)
-	Q_PROPERTY(QString org READ getOrg)
-	Q_PROPERTY(QString domain READ getDomain)
-	Q_PROPERTY(QString iconName READ getIconName WRITE setIconName)
-	Q_PROPERTY(QString description READ getDomain WRITE setDescription)
-	Q_PROPERTY(QString mauikitVersion READ getMauikitVersion)
-	Q_PROPERTY(QString qtVersion READ getQtVersion)
-	
+    Q_PROPERTY(QString name READ getName CONSTANT)
+	Q_PROPERTY(QString version READ getVersion CONSTANT)
+	Q_PROPERTY(QString org READ getOrg CONSTANT)
+	Q_PROPERTY(QString domain READ getDomain CONSTANT)
+	Q_PROPERTY(QString iconName READ getIconName WRITE setIconName NOTIFY iconNameChanged)
+	Q_PROPERTY(QString description READ getDescription WRITE setDescription NOTIFY descriptionChanged)
+	Q_PROPERTY(QString mauikitVersion READ getMauikitVersion CONSTANT)
+	Q_PROPERTY(QString qtVersion READ getQtVersion CONSTANT)
+	Q_PROPERTY(MauiAccounts * accounts READ getAccounts CONSTANT FINAL)
+
 
 public:    
 	static MauiApp *instance();
@@ -64,7 +66,7 @@ public:
 	static QString getMauikitVersion() 
 	{
 		return Handy::appInfo().value("mauikit_version").toString();
-	}
+	}	
 	
 	static QString getQtVersion() 
 	{
@@ -78,7 +80,11 @@ public:
 	
 	void setDescription(const QString &value) 
 	{
+		if(description == value)
+			return;
+		
 		description = value;
+		emit this->descriptionChanged(description);
 	}
 	
 	QString getIconName() const
@@ -88,17 +94,29 @@ public:
 	
 	void setIconName(const QString &value) 
 	{
+		if(iconName == value)
+			return;
+		
 		iconName = value;
+		emit this->iconNameChanged(iconName);
 	}
+	
+	MauiAccounts *getAccounts() const;
+	
 	~MauiApp();	
 	
 private:
 	static MauiApp *m_instance;
 	MauiApp(QObject *parent = nullptr);
 	MauiApp(const MauiApp &other) = delete;
+	MauiAccounts *m_accounts;
 	
 	QString description;
 	QString iconName;
+	
+signals:
+	void iconNameChanged(QString iconName);
+	void descriptionChanged(QString description);
 };
 
 #endif // MAUIAPP_H

@@ -1,9 +1,8 @@
 #include "syncinglist.h"
 #include "fm.h"
 
-SyncingList::SyncingList(QObject *parent) : QObject(parent)
+SyncingList::SyncingList(QObject *parent) : QObject(parent), fm(new FM(this))
 {
-	this->fm = new FM(this);
 	this->setList();
 }
 
@@ -22,13 +21,7 @@ QVariantMap SyncingList::get(const int &index) const
     if(index >= this->list.size() || index < 0)
         return QVariantMap();
 
-    const auto folder = this->list.at(index);
-
-    QVariantMap res;
-    for(auto key : folder.keys())
-        res.insert(FMH::MODEL_NAME[key], folder[key]);
-
-    return res;
+	return FMH::toMap(this->list.at(index));
 }
 
 void SyncingList::refresh()
@@ -38,9 +31,7 @@ void SyncingList::refresh()
 
 void SyncingList::insert(const QVariantMap& data)
 {	
-	FMH::MODEL model;
-	for(auto key : data.keys())
-		model.insert(FMH::MODEL_NAME_KEY[key], data[key].toString());		
+	auto model = FMH::toModel(data);
 	
 	if(this->fm->addCloudAccount(model[FMH::MODEL_KEY::SERVER], model[FMH::MODEL_KEY::USER], model[FMH::MODEL_KEY::PASSWORD]))
 	{
@@ -57,9 +48,7 @@ void SyncingList::removeAccount(const QString &server, const QString &user)
 }
 
 void SyncingList::removeAccountAndFiles(const QString &server, const QString &user)
-{	
-	
-	
+{
 	if(this->fm->removeCloudAccount(server, user))
 	{
 		this->refresh();

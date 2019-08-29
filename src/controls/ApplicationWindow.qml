@@ -30,8 +30,6 @@ import QtQuick.Controls.Material 2.1
 
 import "private"
 
-import SyncingModel 1.0 
-import SyncingList 1.0
 
 Kirigami.AbstractApplicationWindow
 {
@@ -250,6 +248,8 @@ Kirigami.AbstractApplicationWindow
 			id: menuBtn
 			icon.name: "application-menu"
 			icon.color: headBarFGColor
+			icon.width: iconSizes.medium
+			icon.height: iconSizes.medium
 			checked: mainMenu.visible  
 			onClicked:
 			{
@@ -287,7 +287,10 @@ Kirigami.AbstractApplicationWindow
 // 						visible: (count > 1) && showAccounts
 						textRole: "user"
 						flat: true
-						model: accounts.model
+						model: Maui.BaseModel
+						{
+							list: Maui.App.accounts
+						}
 						onActivated:
 						{
 							var account = accounts.list.get(index)
