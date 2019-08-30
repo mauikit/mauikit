@@ -15,6 +15,10 @@ demo/mauikit/
 #android stuff
 src/android/AndroidManifest.xml
 src/android/res/*
+src/android/gradle/*
+src/android/gradle*
+src/android/build.gradle
+
 
 #.*
 *.*~
