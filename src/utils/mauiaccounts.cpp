@@ -98,11 +98,25 @@ void MauiAccounts::refresh()
 
 void MauiAccounts::removeAccount(const int& index)
 {
-	//todo
+	if(index >= this->m_data.size() || index < 0)
+		return;
+	
+	if(this->fm->removeCloudAccount(this->m_data.at(index)[FMH::MODEL_KEY::SERVER], this->m_data.at(index)[FMH::MODEL_KEY::USER]))
+	{
+		this->refresh();
+	}
 }
 
 void MauiAccounts::removeAccountAndFiles(const int& index)
 {
-	//todo
+	if(index >= this->m_data.size() || index < 0)
+		return;
+	
+	if(this->fm->removeCloudAccount(this->m_data.at(index)[FMH::MODEL_KEY::SERVER], this->m_data.at(index)[FMH::MODEL_KEY::USER]))
+	{
+		this->refresh();
+	}	
+	
+	this->fm->removeDir(FM::resolveUserCloudCachePath(this->m_data.at(index)[FMH::MODEL_KEY::SERVER], this->m_data.at(index)[FMH::MODEL_KEY::USER]));
 }
 

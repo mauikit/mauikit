@@ -127,7 +127,7 @@ Maui.Dialog
 	
 	function addAccount(server, user, password)
 	{
-		if(user.length)
+        if(user.length)
             Maui.App.accounts.registerAccount({server: server, user: user, password: password})
 	}
 	
