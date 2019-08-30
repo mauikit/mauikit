@@ -21,12 +21,14 @@
 
 
 import QtQuick 2.6
-import QtQuick.Window 2.1
-import QtQuick.Templates 2.3 as T
-import org.kde.kirigami 2.2 as Kirigami
+import QtQuick.Window 2.2
+import QtQuick.Controls 2.6
+import QtQuick.Templates 2.6 as T
+import org.kde.kirigami 2.5 as Kirigami
 
 T.TextArea {
-    id: controlRoot
+    id: control
+    palette: Kirigami.Theme.palette
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     Kirigami.Theme.inherit: false
 
@@ -42,38 +44,37 @@ T.TextArea {
     color: Kirigami.Theme.textColor
     selectionColor: Kirigami.Theme.highlightColor
     selectedTextColor: Kirigami.Theme.highlightedTextColor
+    opacity: control.enabled ? 1 : 0.6
     wrapMode: Text.WordWrap
     verticalAlignment: TextEdit.AlignTop
-    //Text.NativeRendering is broken on non integer pixel ratios
-    renderType: Window.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
-    selectByMouse: true
+    hoverEnabled: !Kirigami.Settings.tabletMode
+
+    // Work around Qt bug where NativeRendering breaks for non-integer scale factors
+    // https://bugreports.qt.io/browse/QTBUG-67007
+    renderType: Screen.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
+
+    selectByMouse: !Kirigami.Settings.tabletMode
 
     Label {
         id: placeholder
-        x: controlRoot.leftPadding
-        y: controlRoot.topPadding
-        width: controlRoot.width - (controlRoot.leftPadding + controlRoot.rightPadding)
-        height: controlRoot.height - (controlRoot.topPadding + controlRoot.bottomPadding)
+        x: control.leftPadding
+        y: control.topPadding
+        width: control.width - (control.leftPadding + control.rightPadding)
+        height: control.height - (control.topPadding + control.bottomPadding)
 
-        text: controlRoot.placeholderText
-        font: controlRoot.font
+        text: control.placeholderText
+        font: control.font
         color: Kirigami.Theme.disabledTextColor
-        horizontalAlignment: controlRoot.horizontalAlignment
-        verticalAlignment: controlRoot.verticalAlignment
-        visible: !controlRoot.length && !controlRoot.preeditText && (!controlRoot.activeFocus || controlRoot.horizontalAlignment !== Qt.AlignHCenter)
+        horizontalAlignment: control.horizontalAlignment
+        verticalAlignment: control.verticalAlignment
+        visible: !control.length && !control.preeditText && (!control.activeFocus || control.horizontalAlignment !== Qt.AlignHCenter)
         elide: Text.ElideRight
     }
 
-//    background: StylePrivate.StyleItem {
-//        id: style
-//        control: controlRoot
-//        visible: controlRoot.backgroundVisible
-//        elementType: "edit"
-//        implicitWidth: 200
-//        implicitHeight: 22
-
-//        sunken: true
-//        hasFocus: controlRoot.activeFocus
-//        hover: controlRoot.hovered
-//    }
+    background: Rectangle {
+        y: parent.height - height - control.bottomPadding / 2
+        implicitWidth: 120
+        height: control.activeFocus ? 2 : 1
+        color: control.activeFocus ? control. Kirigami.Theme.highlightColor : control.Kirigami.Theme.disabledTextColor
+    }
 }
