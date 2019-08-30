@@ -660,7 +660,7 @@ bool FM::fileExists(const QUrl &path)
 
 QString FM::fileDir(const QUrl& path)
 {	
-	QString res;
+	QString res = path.toString();
 	if(path.isLocalFile())
 	{
 		const QFileInfo file(path.toLocalFile());

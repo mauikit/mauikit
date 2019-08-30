@@ -19,14 +19,19 @@
 #ifndef MAUIAPP_H
 #define MAUIAPP_H
 #include <QObject>
-#include <handy.h>
-#include <fmh.h>
-/**
- * @todo write docs
- */
+#include "handy.h"
+#include "fmh.h"
+
+#ifndef STATIC_MAUIKIT
+#include "mauikit_export.h"
+#endif
 
 class MauiAccounts;
+#ifdef STATIC_MAUIKIT
 class MauiApp : public QObject
+#else
+class MAUIKIT_EXPORT MauiApp : public QObject
+#endif
 {
     Q_OBJECT
     

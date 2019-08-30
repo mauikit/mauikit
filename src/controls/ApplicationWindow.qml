@@ -101,11 +101,11 @@ Kirigami.AbstractApplicationWindow
 	
 	/* ANDROID THEMING*/
 	
-	//     Material.theme: Material.Light
-	//     Material.accent: Kirigami.Theme.highlightColor
-	//     Material.background:  headBarBGColor 
-	//     Material.primary: headBarBGColor
-	//     Material.foreground: Kirigami.Theme.textColor
+// 	Material.theme: Material.Dark
+// 	Material.accent: "yellow"
+// 	Material.background:  headBarBGColor 
+// 	Material.primary: headBarBGColor
+// 	Material.foreground: Kirigami.Theme.textColor
 	
 	/***************************************************/
 	/**************** READONLY PROPS ******************/

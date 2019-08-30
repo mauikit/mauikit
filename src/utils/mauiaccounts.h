@@ -28,11 +28,17 @@
  * This properties and functions are exposed to
  * all the Maui Applications that might want to use the accounts
  */
-
-typedef QVariantMap ACCOUNT;
+#ifndef STATIC_MAUIKIT
+#include "mauikit_export.h"
+#endif
 
 class FM;
+#ifdef STATIC_MAUIKIT
 class MauiAccounts : public MauiList
+#else
+class MAUIKIT_EXPORT MauiAccounts : public MauiList
+
+#endif
 {
     Q_OBJECT
 

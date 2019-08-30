@@ -6,151 +6,140 @@ import org.kde.kirigami 2.6 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
 Maui.Dialog
-{
-	
+{	
 	id: control
-		
-		maxHeight: 300* unit
-		maxWidth: maxHeight
-		
-		property alias model : _syncingModel
-		property alias list : _syncingModel.list
-		
-		Maui.SyncDialog
+	
+	maxHeight: 300* unit
+	maxWidth: maxHeight
+	
+	property alias model : _syncingModel
+	property alias list : _syncingModel.list
+	
+	Maui.SyncDialog
+	{
+		id: _syncDialog
+		onAccepted:
 		{
-			id: _syncDialog
-			onAccepted:
-			{
-				control.addAccount(serverField.text, userField.text, passwordField.text);
-				close();
-			}
+			control.addAccount(serverField.text, userField.text, passwordField.text);
+			close();
 		}
-		rejectButton.visible: false
-		acceptButton.text: qsTr("Add account") 
-		onAccepted: _syncDialog.open()		
+	}
+	rejectButton.visible: false
+	acceptButton.text: qsTr("Add account") 
+	onAccepted: _syncDialog.open()		
+	
+	Maui.BaseModel
+	{
+		id: _syncingModel
+		list: Maui.App.accounts
+	}
+	
+	Maui.Dialog
+	{
+		id: _removeDialog
 		
-		Maui.BaseModel
+		maxWidth: unit * 400
+		title: qsTr("Remove account?")
+		message: qsTr("Are you sure you want to remove this account?")
+		
+		rejectButton.text: qsTr("Delete account")
+		// 			rejectButton.visible: false
+		
+		onRejected: 
 		{
-			id: _syncingModel
-			list: Maui.App.accounts
+			var account = Maui.App.accounts.get(_listView.currentIndex)
+			console.log(account.label)
+			control.removeAccount(account.server, account.user)
+			close()
 		}
 		
-		Maui.Dialog
+		
+		footBar.rightContent: Button
 		{
-			id: _removeDialog
-			
-			maxWidth: unit * 400
-			title: qsTr("Remove account?")
-			message: qsTr("Are you sure you want to remove this account?")
-			
-			rejectButton.text: qsTr("Delete account")
-// 			rejectButton.visible: false
-			
-			onRejected: 
+			text: qsTr("Delete account and files")			
+			onClicked: 
 			{
 				var account = Maui.App.accounts.get(_listView.currentIndex)
-				console.log(account.label)
-				control.removeAccount(account.server, account.user)
+				control.removeAccountAndFiles(account.server, account.user)
 				close()
 			}
+		}
+	}
+	
+	Menu
+	{	
+		id: _menu
+		
+		MenuItem
+		{
+			text: qsTr("Remove...")
+			Kirigami.Theme.textColor: dangerColor
 			
-			
-				footBar.rightContent: Button
+			onTriggered: _removeDialog.open()
+		}
+		
+	}
+	
+	ListView
+	{
+		id: _listView
+		anchors.fill: parent
+		model: _syncingModel
+		delegate: Maui.ListDelegate 
+		{
+			id: delegate
+			label: model.label
+			radius: radiusV
+			Connections
+			{
+				target: delegate
+				onClicked:
 				{
-					text: qsTr("Delete account and files")			
-					onClicked: 
-					{
-						var account = Maui.App.accounts.get(_listView.currentIndex)
-						control.removeAccountAndFiles(account.server, account.user)
-						close()
-					}
+					_listView.currentIndex = index				
+				}	
+				
+				onPressAndHold:
+				{
+					_listView.currentIndex = index
+					_menu.popup()	
 				}
 				
-		}
-		
-		Menu
-		{	
-			id: _menu
-			// 		Maui.MenuItem
-			// 		{
-			// 			text: qsTr("Edit...")
-			// 			onTriggered:
-			// 			{
-			// 				previewer.show(control.items[0].path)
-			// 				close()
-			// 			}
-			// 		}
-			// 		
-			MenuItem
-			{
-				text: qsTr("Remove...")
-				Kirigami.Theme.textColor: dangerColor
-				
-				onTriggered: _removeDialog.open()
-			}
-			
-		}
-		
-		ListView
-		{
-			id: _listView
-			anchors.fill: parent
-			model: _syncingModel
-			delegate: Maui.ListDelegate 
-			{
-				id: delegate
-				label: model.label
-				radius: radiusV
-				Connections
+				onRightClicked:
 				{
-					target: delegate
-					onClicked:
-					{
-						_listView.currentIndex = index				
-					}	
-					
-					onPressAndHold:
-					{
-						_listView.currentIndex = index
-						_menu.popup()	
-					}
-					
-					onRightClicked:
-					{
-						_listView.currentIndex = index
-						_menu.popup()	
-					}
-					
+					_listView.currentIndex = index
+					_menu.popup()	
 				}
+				
 			}
-			
-			Maui.Holder
-			{
-				visible: _listView.count == 0
-				isMask: false
-				isGif: false
-				emojiSize: iconSizes.huge
-				title: qsTr("No accounts yet!")
-				body: qsTr("Start adding new accounts to sync your files, music, contacts, images, notes, etc...")
-			}
-			
 		}
 		
-		function addAccount(server, user, password)
+		Maui.Holder
 		{
-			if(user.length)
-				Maui.App.accounts.insert({server: server, user: user, password: password})
+			visible: _listView.count == 0
+			isMask: false
+			isGif: false
+			emojiSize: iconSizes.huge
+			title: qsTr("No accounts yet!")
+			body: qsTr("Start adding new accounts to sync your files, music, contacts, images, notes, etc...")
 		}
 		
-		function removeAccount(server, user)
-		{
-			if(server.length && user.length)
-				Maui.App.accounts.removeAccount(server, user)
-		}
-		
-		function removeAccountAndFiles(server, user)
-		{
-			if(server.length && user.length)
-				Maui.App.accounts.removeAccountAndFiles(server, user)
-		}
+	}
+	
+	function addAccount(server, user, password)
+	{
+		if(user.length)
+			Maui.App.accounts.insert({server: server, user: user, password: password})
+	}
+	
+	function removeAccount(server, user)
+	{
+		if(server.length && user.length)
+			Maui.App.accounts.removeAccount(server, user)
+	}
+	
+	function removeAccountAndFiles(server, user)
+	{
+		if(server.length && user.length)
+			Maui.App.accounts.removeAccountAndFiles(server, user)
+	}
 }

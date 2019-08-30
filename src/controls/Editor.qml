@@ -199,9 +199,8 @@ Item
 				
 				background: Rectangle
 				{
-					color: "transparent"
-				}
-				
+					color: "transparent"					
+				}				
 			}
 			
 			
@@ -222,7 +221,7 @@ Item
 			
 			background: Rectangle
 			{
-				color: "transparent"
+				color: Kirigami.Theme.backgroundColor
 				implicitWidth: 200
 				implicitHeight: 22
 			}
