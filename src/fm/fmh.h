@@ -822,7 +822,11 @@ namespace FMH
 			{FMH::MODEL_KEY::ICON, FMH::getIconName(path)},
 			{FMH::MODEL_KEY::SIZE, QString::number(file.size()) /*locale.formattedDataSize(file.size())*/},
 			{FMH::MODEL_KEY::PATH, path.toString()},
+<<<<<<< HEAD
 			{FMH::MODEL_KEY::THUMBNAIL, path.toString()},
+=======
+            {FMH::MODEL_KEY::THUMBNAIL, path.toString()},
+>>>>>>> eb4271593ac5495b7aaaee219b50e6ef9a3f89b6
 			{FMH::MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path.toLocalFile()).count() - 2) : "0"}
 		};		
 	}	
