@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<manifest package="org.kde.index" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0" android:versionCode="1" android:installLocation="auto">
-    <application android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="index" android:icon="@drawable/icon">
-        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation" android:name="org.qtproject.qt5.android.bindings.QtActivity" android:label="index" android:screenOrientation="unspecified" android:launchMode="singleTop">
+<manifest package="org.kde.buho" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0" android:versionCode="1" android:installLocation="auto">
+    <application android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="buho" android:icon="@drawable/icon">
+        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation" android:name="org.qtproject.qt5.android.bindings.QtActivity" android:label="buho" android:screenOrientation="unspecified" android:launchMode="singleTop">
 
                    android:name=&quot;com.example.android.tools.NotificationClient&quot;
             <intent-filter>
@@ -14,7 +14,7 @@
             <!-- Application arguments -->
 
 
-            <meta-data android:name="android.app.lib_name" android:value="index"/>
+            <meta-data android:name="android.app.lib_name" android:value="buho"/>
 
             <meta-data android:name="android.app.qt_sources_resource_id" android:resource="@array/qt_sources"/>
             <meta-data android:name="android.app.repository" android:value="default"/>
@@ -120,7 +120,7 @@
 
     </application>
 
-    <uses-sdk android:minSdkVersion="19"/>
+    <uses-sdk android:minSdkVersion="21"/>
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
@@ -138,5 +138,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
     <uses-permission android:name="android.permission.MOUNT_FORMAT_FILESYSTEMS"/>
-<uses-permission android:name="android.permission.INSTALL_PACKAGES"/>
+
+<uses-permission android:name="android.permission.ACCESS_CHECKIN_PROPERTIES"/>
 </manifest>
