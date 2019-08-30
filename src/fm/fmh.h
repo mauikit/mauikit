@@ -713,7 +713,7 @@ namespace FMH
 			
 			#if defined(Q_OS_ANDROID)
 			QMimeDatabase mime;
-			auto type = mime.mimeTypeForFile(path.toLocalFile());
+            auto type = mime.mimeTypeForFile(path.toString());
 			return type.iconName();
 			#else
 			KFileItem mime(path);
@@ -822,7 +822,7 @@ namespace FMH
 			{FMH::MODEL_KEY::ICON, FMH::getIconName(path)},
 			{FMH::MODEL_KEY::SIZE, QString::number(file.size()) /*locale.formattedDataSize(file.size())*/},
 			{FMH::MODEL_KEY::PATH, path.toString()},
-			{FMH::MODEL_KEY::THUMBNAIL, path.toLocalFile()},
+            {FMH::MODEL_KEY::THUMBNAIL, path.toString()},
 			{FMH::MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path.toLocalFile()).count() - 2) : "0"}
 		};		
 	}	
