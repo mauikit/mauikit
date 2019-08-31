@@ -24,6 +24,7 @@ Item
 	property alias canRedo: body.canRedo	
 	property alias headBar: _editorToolBar	
 	
+	
 	DocumentHandler
 	{
 		id: document

@@ -73,7 +73,7 @@ SOURCES += \
 
 DEPENDPATH += \
     $$PWD/src \
-    $$PWD/src/fm
+    $$PWD/src/fm \
     $$PWD/src/utils/model_template
 
 INCLUDEPATH += \

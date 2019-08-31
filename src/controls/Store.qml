@@ -32,20 +32,13 @@ Maui.Page
 	signal openFile(string filePath)
 	signal fileReady(var item)
 	
-	floatingBar: false
-	footBarOverlap: false
-	footBar.drawBorder: false
-	headBar.drawBorder: false
-	altToolBars: false
-	headBarExit: false
 	headBar.visible: !holder.visible
-	margins: control.detailsView ?  0 : space.big
+	padding: control.detailsView ?  0 : space.big
 	
 	StoreModel
 	{
 		id: _storeModel
-		list: _storeList
-		
+		list: _storeList		
 	}
 	
 	StoreList
@@ -275,13 +268,12 @@ Maui.Page
 	}
 	
 	
-	Maui.Drawer
+	Kirigami.OverlayDrawer
 	{
 		id: _filterDrawer
 		y: 0
 // 		height: parent.height - footBar.implicitHeight - headBar.implicitHeight
 		edge: Qt.RightEdge
-		bg: control
 // 		parent: control
 		height: parent.height - (footBar.height)
 		ListView
@@ -329,7 +321,7 @@ Maui.Page
 		
 		maxHeight: parent.height
 		maxWidth: unit * 800
-		page.margins: 0
+		page.padding: 0
 		
 		acceptButton.text: qsTr("Download")
 		rejectButton.visible: false
