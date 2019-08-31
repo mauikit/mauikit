@@ -3,6 +3,8 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.6 as Kirigami
+import org.kde.kquicksyntaxhighlighter 0.1
+import SyntaxHighlighterUtil 1.0
 import DocumentHandler 1.0 
 import "private"
 
@@ -22,10 +24,9 @@ Item
 	property alias italic: document.italic
 	property alias bold: document.bold
 	property alias canRedo: body.canRedo	
-	property alias headBar: _editorToolBar	
-	
-	
-	DocumentHandler
+    property alias headBar: _editorToolBar
+
+    DocumentHandler
 	{
 		id: document
 		document: body.textDocument
@@ -45,6 +46,14 @@ Item
 		onLoaded:
 		{
 			body.text = text
+
+            var formatName = SyntaxHighlighterUtil.getLanguageNameFromFileName(document.fileName);
+
+            for (var i=0; i<languagesListModel.count; i++) {
+                if (languagesListModel.get(i).text === formatName) {
+                    languagesListComboBox.currentIndex = i;
+                }
+            }
 		}
 	}
 	
@@ -116,7 +125,7 @@ Item
 	ScrollView
 	{
 		id: _scrollView
-		anchors.fill: parent
+        anchors.fill: parent
 		
 		TextArea
 		{
@@ -125,7 +134,10 @@ Item
 			width: parent.width
 			height: parent.height*/
 			topPadding: _editorToolBar.visible ?  _editorToolBar.height : 0
-//			topInset: stickyHeadBar ? 0 : topPadding
+			topInset: stickyHeadBar ? 0 : topPadding
+
+            ListModel { id: languagesListModel }
+
 			Maui.ToolBar
 			{
 				id: _editorToolBar
@@ -138,8 +150,17 @@ Item
 					top: parent.top
 				}
 				
-				leftContent: [	
-				
+                leftContent: [
+
+                ComboBox {
+                    id: languagesListComboBox
+                    model: languagesListModel
+                    font.pointSize: fontSizes.small
+                    onCurrentIndexChanged: {
+                        syntaxHighlighter.formatName = languagesListModel.get(currentIndex).text;
+                    }
+                },
+
 				ToolButton
 				{
 					icon.name: "edit-undo"
@@ -220,12 +241,12 @@ Item
 			activeFocusOnTab: true
 			persistentSelection: true
 			
-			background: Rectangle
+            /*background: Rectangle
 			{
 				color: Kirigami.Theme.backgroundColor
 				implicitWidth: 200
 				implicitHeight: 22
-			}
+            }*/
 			
 // 			onPressAndHold: isMobile ? documentMenu.popup() : undefined
 			
@@ -233,9 +254,22 @@ Item
 			{
 				if(!isMobile && event.button === Qt.RightButton)
 					documentMenu.popup()
-			}			
+            }
+
+            KQuickSyntaxHighlighter {
+                id: syntaxHighlighter
+                textEdit: body
+            }
 		}
 		ScrollBar.vertical.height: _scrollView.height - body.topPadding
 		ScrollBar.vertical.y: body.topPadding
-	}
+    }
+
+    Component.onCompleted: {
+        var languages = SyntaxHighlighterUtil.getLanguageNameList();
+
+        for (var index in languages) {
+            languagesListModel.append({text: languages[index]});
+        }
+    }
 }

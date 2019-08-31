@@ -38,6 +38,7 @@
 
 #include "handy.h"
 #include "documenthandler.h"
+#include "syntaxhighlighterutil.h"
 
 #include "mauiaccounts.h"
 #include "mauiapp.h"
@@ -52,6 +53,11 @@
 #include <QIcon>
 #include <QQuickStyle>
 #endif
+
+/**
+ * Global Variables
+ */
+SyntaxHighlighterUtil *syntaxHighlighterUtil = nullptr;
 
 
 QUrl MauiKit::componentUrl(const QString &fileName) const
@@ -120,6 +126,16 @@ void MauiKit::registerTypes(const char *uri)
 	/** EDITOR CONTROLS **/
 	qmlRegisterType<DocumentHandler>("DocumentHandler", 1, 0, "DocumentHandler");	
 	qmlRegisterType(componentUrl(QStringLiteral("Editor.qml")), uri, 1, 0, "Editor");
+    qmlRegisterSingletonType<SyntaxHighlighterUtil>("SyntaxHighlighterUtil", 1, 0, "SyntaxHighlighterUtil", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject* {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+
+        if (syntaxHighlighterUtil == nullptr) {
+            syntaxHighlighterUtil = new SyntaxHighlighterUtil();
+        }
+
+        return syntaxHighlighterUtil;
+    });
 	
 	
 	/** PLATFORMS SPECIFIC CONTROLS **/

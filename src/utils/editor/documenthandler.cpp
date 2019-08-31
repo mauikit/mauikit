@@ -315,6 +315,9 @@ void DocumentHandler::load(const QUrl &fileUrl)
 
     const QUrl path = QQmlFileSelector::get(engine)->selector()->select(fileUrl);
     const QString fileName = QQmlFile::urlToLocalFileOrQrc(path);
+
+    m_fileUrl = fileUrl;
+    emit fileUrlChanged();
 	
     if (QFile::exists(fileName))
 	{
@@ -336,9 +339,6 @@ void DocumentHandler::load(const QUrl &fileUrl)
             reset();
         }
     }
-
-    m_fileUrl = fileUrl;
-    emit fileUrlChanged();
 }
 
 void DocumentHandler::saveAs(const QUrl &fileUrl)
