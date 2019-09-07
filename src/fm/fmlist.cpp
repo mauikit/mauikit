@@ -427,6 +427,12 @@ void FMList::sortList()
 	});
 }
 
+QString FMList::getPathName() const
+{
+    return this->pathName;
+}
+
+
 QString FMList::getPath() const
 {
 	return this->path;
@@ -453,6 +459,8 @@ void FMList::setPath(const QString &path)
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::SEARCH_PATH;
+        this->pathName = "Search";
+        
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		this->watchPath(QString());
@@ -461,15 +469,16 @@ void FMList::setPath(const QString &path)
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::CLOUD_PATH;
+        this->pathName = "Cloud";
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		this->watchPath(QString());
 		
 	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::APPS_PATH])
 	{
-		qDebug()<< "GET APPS" ;
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::APPS_PATH;
+        this->pathName = "Apps";
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		this->watchPath(QString());
@@ -478,6 +487,7 @@ void FMList::setPath(const QString &path)
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::TAGS_PATH;
+        emit this->pathName = "Tags";
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		this->watchPath(QString());
@@ -486,6 +496,7 @@ void FMList::setPath(const QString &path)
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::TRASH_PATH;
+        this->pathName = "Trash";
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		this->watchPath(QString());
@@ -495,6 +506,7 @@ void FMList::setPath(const QString &path)
 		this->watchPath(this->path);
 		this->pathExists = FMH::fileExists(this->path);
 		this->pathType = FMList::PATHTYPE::PLACES_PATH;
+        this->pathName = FMH::getDirInfoModel(this->path)[FMH::MODEL_KEY::LABEL];
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		
@@ -502,24 +514,28 @@ void FMList::setPath(const QString &path)
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::MTP_PATH;
+        this->pathName = "MTP";
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::FISH_PATH] )		
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::FISH_PATH;
+        this->pathName = "Fish";
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::REMOTE_PATH] )		
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::REMOTE_PATH;
+        this->pathName = "Remote";
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::DRIVES_PATH] )		
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::DRIVES_PATH;
+        this->pathName = "Drives";
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 	}
@@ -527,6 +543,7 @@ void FMList::setPath(const QString &path)
 	
 	qDebug() << "PATHTYPE IS" << this->pathType << FMH::PATHTYPE_SCHEME[static_cast<FMH::PATHTYPE_KEY>(this->pathType)];
 	emit this->pathChanged();
+    emit this->pathNameChanged();
 }
 
 FMList::PATHTYPE FMList::getPathType() const

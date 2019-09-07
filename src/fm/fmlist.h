@@ -35,28 +35,29 @@ class FMList : public MauiList
 {
 	Q_OBJECT
 
-	Q_PROPERTY(QString path READ getPath WRITE setPath NOTIFY pathChanged())
+	Q_PROPERTY(QString path READ getPath WRITE setPath NOTIFY pathChanged)
+	Q_PROPERTY(QString pathName READ getPathName NOTIFY pathNameChanged)
 
-	Q_PROPERTY(bool hidden READ getHidden WRITE setHidden NOTIFY hiddenChanged())
-	Q_PROPERTY(bool onlyDirs READ getOnlyDirs WRITE setOnlyDirs NOTIFY onlyDirsChanged())
-	Q_PROPERTY(bool preview READ getPreview WRITE setPreview NOTIFY previewChanged())
-	Q_PROPERTY(FMList::VIEW_TYPE viewType READ getViewType WRITE setViewType NOTIFY viewTypeChanged())
-	Q_PROPERTY(int cloudDepth READ getCloudDepth WRITE setCloudDepth NOTIFY cloudDepthChanged())
+	Q_PROPERTY(bool hidden READ getHidden WRITE setHidden NOTIFY hiddenChanged)
+	Q_PROPERTY(bool onlyDirs READ getOnlyDirs WRITE setOnlyDirs NOTIFY onlyDirsChanged)
+	Q_PROPERTY(bool preview READ getPreview WRITE setPreview NOTIFY previewChanged)
+	Q_PROPERTY(FMList::VIEW_TYPE viewType READ getViewType WRITE setViewType NOTIFY viewTypeChanged)
+	Q_PROPERTY(int cloudDepth READ getCloudDepth WRITE setCloudDepth NOTIFY cloudDepthChanged)
 	
-	Q_PROPERTY(bool contentReady READ getContentReady NOTIFY contentReadyChanged())
+	Q_PROPERTY(bool contentReady READ getContentReady NOTIFY contentReadyChanged)
 	
-	Q_PROPERTY(QStringList filters READ getFilters WRITE setFilters NOTIFY filtersChanged())
-	Q_PROPERTY(FMList::FILTER filterType READ getFilterType WRITE setFilterType NOTIFY filterTypeChanged())
+	Q_PROPERTY(QStringList filters READ getFilters WRITE setFilters NOTIFY filtersChanged)
+	Q_PROPERTY(FMList::FILTER filterType READ getFilterType WRITE setFilterType NOTIFY filterTypeChanged)
 	
-	Q_PROPERTY(FMList::SORTBY sortBy READ getSortBy WRITE setSortBy NOTIFY sortByChanged())
-    Q_PROPERTY(bool foldersFirst READ getFoldersFirst WRITE setFoldersFirst NOTIFY foldersFirstChanged())
-    Q_PROPERTY(FMList::PATHTYPE pathType READ getPathType NOTIFY pathTypeChanged())
+	Q_PROPERTY(FMList::SORTBY sortBy READ getSortBy WRITE setSortBy NOTIFY sortByChanged)
+    Q_PROPERTY(bool foldersFirst READ getFoldersFirst WRITE setFoldersFirst NOTIFY foldersFirstChanged)
+    Q_PROPERTY(FMList::PATHTYPE pathType READ getPathType NOTIFY pathTypeChanged)
 	
-	Q_PROPERTY(bool trackChanges READ getTrackChanges WRITE setTrackChanges NOTIFY trackChangesChanged())
-	Q_PROPERTY(bool saveDirProps READ getSaveDirProps WRITE setSaveDirProps NOTIFY saveDirPropsChanged())	
+	Q_PROPERTY(bool trackChanges READ getTrackChanges WRITE setTrackChanges NOTIFY trackChangesChanged)
+	Q_PROPERTY(bool saveDirProps READ getSaveDirProps WRITE setSaveDirProps NOTIFY saveDirPropsChanged)	
 	
-	Q_PROPERTY(bool pathExists READ getPathExists NOTIFY pathExistsChanged())
-	Q_PROPERTY(bool pathEmpty READ getPathEmpty NOTIFY pathEmptyChanged())
+	Q_PROPERTY(bool pathExists READ getPathExists NOTIFY pathExistsChanged)
+	Q_PROPERTY(bool pathEmpty READ getPathEmpty NOTIFY pathEmptyChanged)
 	
 	Q_PROPERTY(QString previousPath READ getPreviousPath)
 	Q_PROPERTY(QString posteriorPath READ getPosteriorPath)
@@ -122,8 +123,10 @@ class FMList : public MauiList
 		void setSortBy(const FMList::SORTBY &key);
 		
 		QString getPath() const;
-		void setPath(const QString &path);		
-	
+		void setPath(const QString &path);	
+        
+        QString getPathName() const;
+        
 		FMList::PATHTYPE getPathType() const;
 		
 		QStringList getFilters() const;
@@ -185,6 +188,7 @@ private:
 	FMH::MODEL_LIST list = {{}};
 	
 	QString path = QString();
+    QString pathName = QString();
 	QStringList filters = {};
 	
 	bool onlyDirs = false;
@@ -219,6 +223,7 @@ public slots:
 	
 signals:
 	void pathChanged();
+    void pathNameChanged();
 	void pathTypeChanged();
 	void filtersChanged();
 	void filterTypeChanged();
