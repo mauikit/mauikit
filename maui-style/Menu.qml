@@ -40,6 +40,7 @@ import QtQuick.Templates 2.12 as T
 import QtQuick.Window 2.12
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
+import QtGraphicalEffects 1.0
 
 T.Menu {
     id: control
@@ -83,13 +84,19 @@ T.Menu {
         implicitWidth: 200
         implicitHeight: Maui.Style.rowHeight
 
-        radius: 3
+        radius: radiusV
         color: control.Kirigami.Theme.backgroundColor
         border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-//        layer.enabled: control.Material.elevation > 0
-//        layer.effect: ElevationEffect {
-//            elevation: control.Material.elevation
-//        }
+        layer.enabled: true
+
+        layer.effect: DropShadow {
+            transparentBorder: true
+            radius: 8
+            samples: 16
+            horizontalOffset: 0
+            verticalOffset: 4
+            color: Qt.rgba(0, 0, 0, 0.3)
+        }
     }
 
     T.Overlay.modal: Rectangle {

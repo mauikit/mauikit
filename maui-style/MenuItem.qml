@@ -60,20 +60,20 @@ T.MenuItem {
     icon.height: 24
     icon.color: enabled ? Kirigami.Theme.textColor : Kirigami.Theme.disabledTextColor
 
-    indicator: CheckIndicator {
-        x: text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding + (control.availableWidth - width) / 2
-        y: control.topPadding + (control.availableHeight - height) / 2
-        visible: control.checkable
-        control: control
-        checkState: control.checked ? Qt.Checked : Qt.Unchecked
-    }
+//    indicator: CheckIndicator {
+//        x: text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding + (control.availableWidth - width) / 2
+//        y: control.topPadding + (control.availableHeight - height) / 2
+//        visible: control.checkable
+//        control: control
+//        checked: control.checked ? Qt.Checked : Qt.Unchecked
+//    }
 
     arrow: Kirigami.Icon {
         x: control.mirrored ? control.padding : control.width - width - control.padding
         y: control.topPadding + (control.availableHeight - height) / 2
 
         visible: control.subMenu
-        mirror: control.mirrored
+//        mirror: control.mirrored
         color: control.enabled ? control.Kirigami.Theme.textColor : control.Kirigami.Theme.disabledTextColor
         source: "qrc:/qt-project.org/imports/QtQuick/Controls.2/Material/images/arrow-indicator.png"
     }

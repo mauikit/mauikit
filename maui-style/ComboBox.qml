@@ -1,149 +1,155 @@
-/*
- * Copyright 2017 Marco Martin <mart@kde.org>
- * Copyright 2017 The Qt Company Ltd.
- *
- * GNU Lesser General Public License Usage
- * Alternatively, this file may be used under the terms of the GNU Lesser
- * General Public License version 3 as published by the Free Software
- * Foundation and appearing in the file LICENSE.LGPLv3 included in the
- * packaging of this file. Please review the following information to
- * ensure the GNU Lesser General Public License version 3 requirements
- * will be met: https://www.gnu.org/licenses/lgpl.html.
- *
- * GNU General Public License Usage
- * Alternatively, this file may be used under the terms of the GNU
- * General Public License version 2.0 or later as published by the Free
- * Software Foundation and appearing in the file LICENSE.GPL included in
- * the packaging of this file. Please review the following information to
- * ensure the GNU General Public License version 2.0 requirements will be
- * met: http://www.gnu.org/licenses/gpl-2.0.html.
- */
+/****************************************************************************
+**
+** Copyright (C) 2017 The Qt Company Ltd.
+** Contact: http://www.qt.io/licensing/
+**
+** This file is part of the Qt Quick Controls 2 module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:LGPL3$
+** Commercial License Usage
+** Licensees holding valid commercial Qt licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see http://www.qt.io/terms-conditions. For further
+** information use the contact form at http://www.qt.io/contact-us.
+**
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 3 as published by the Free Software
+** Foundation and appearing in the file LICENSE.LGPLv3 included in the
+** packaging of this file. Please review the following information to
+** ensure the GNU Lesser General Public License version 3 requirements
+** will be met: https://www.gnu.org/licenses/lgpl.html.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 2.0 or later as published by the Free
+** Software Foundation and appearing in the file LICENSE.GPL included in
+** the packaging of this file. Please review the following information to
+** ensure the GNU General Public License version 2.0 requirements will be
+** met: http://www.gnu.org/licenses/gpl-2.0.html.
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
 
-
-import QtQuick 2.6
-import QtQuick.Window 2.2
-import QtQuick.Templates 2.3 as T
-import QtQuick.Controls 2.3 as Controls
-import QtGraphicalEffects 1.0
-import org.kde.kirigami 2.2 as Kirigami
+import QtQuick 2.12
+import QtQuick.Window 2.12
+import QtQuick.Controls 2.12
+import QtQuick.Controls.impl 2.12
+import QtQuick.Templates 2.12 as T
+import org.kde.kirigami 2.7 as Kirigami
 
 T.ComboBox {
-    id: controlRoot
-    //NOTE: typeof necessary to not have warnings on Qt 5.7
-    Kirigami.Theme.colorSet: typeof(editable) != "undefined" && editable ? Kirigami.Theme.View : Kirigami.Theme.Button
-    Kirigami.Theme.inherit: false
+    id: control
 
-    implicitWidth: background.implicitWidth + leftPadding + rightPadding
-    implicitHeight: background.implicitHeight
-    baselineOffset: contentItem.y + contentItem.baselineOffset
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            implicitContentWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+                             implicitContentHeight + topPadding + bottomPadding,
+                             implicitIndicatorHeight + topPadding + bottomPadding)
 
-    hoverEnabled: true
-    padding: 5
-    leftPadding: padding + 5
-    rightPadding: padding + 5
+    topInset: 6
+    bottomInset: 6
 
-    delegate: ItemDelegate {
-        width: controlRoot.popup.width
-        text: controlRoot.textRole ? (Array.isArray(controlRoot.model) ? modelData[controlRoot.textRole] : model[controlRoot.textRole]) : modelData
-        highlighted: controlRoot.highlightedIndex == index
-        property bool separatorVisible: false
-        Kirigami.Theme.colorSet: controlRoot.Kirigami.Theme.inherit ? controlRoot.Kirigami.Theme.colorSet : Kirigami.Theme.View
-        Kirigami.Theme.inherit: controlRoot.Kirigami.Theme.inherit
+    leftPadding: padding + (!control.mirrored || !indicator || !indicator.visible ? 0 : indicator.width + spacing)
+    rightPadding: padding + (control.mirrored || !indicator || !indicator.visible ? 0 : indicator.width + spacing)
+
+
+    delegate: MenuItem {
+        width: parent.width
+        text: control.textRole ? (Array.isArray(control.model) ? modelData[control.textRole] : model[control.textRole]) : modelData
+//        Material.foreground: control.currentIndex === index ? parent.Material.accent : parent.Material.foreground
+        highlighted: control.highlightedIndex === index
+        hoverEnabled: control.hoverEnabled
     }
 
-    indicator: Item {}
-
-    contentItem: MouseArea {
-        onPressed: mouse.accepted = false;
-        onWheel: {
-            if (wheel.pixelDelta.y < 0 || wheel.angleDelta.y < 0) {
-                controlRoot.currentIndex = (controlRoot.currentIndex + 1) % delegateModel.count
-            } else {
-                controlRoot.currentIndex = (controlRoot.currentIndex - 1 + delegateModel.count) % delegateModel.count
-            }
-        }
-        T.TextField {
-            anchors {
-                fill: parent
-                leftMargin: controlRoot.mirrored ? 12 : 1
-                rightMargin: !controlRoot.mirrored ? 12 : 1
-            }
-
-            text: controlRoot.editText
-
-            visible: typeof(controlRoot.editable) != "undefined" && controlRoot.editable
-            readOnly: controlRoot.popup.visible
-            inputMethodHints: controlRoot.inputMethodHints
-            validator: controlRoot.validator
-            renderType: Window.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
-            color: controlRoot.enabled ? Kirigami.Theme.textColor : Kirigami.Theme.disabledTextColor
-            selectionColor: Kirigami.Theme.highlightColor
-            selectedTextColor: Kirigami.Theme.highlightedTextColor
-            selectByMouse: true
-
-            font: controlRoot.font
-            horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
-            opacity: controlRoot.enabled ? 1 : 0.3
-        }
+    indicator: Kirigami.Icon {
+        x: control.mirrored ? control.padding : control.width - width - control.padding
+        y: control.topPadding + (control.availableHeight - height) / 2
+        color: control.enabled ? control.Kirigami.Theme.textColor : control.Kirigami.Theme.highlightColor
+        source: "arrow-down"
+        height: iconSizes.small
+        width: height
     }
 
-//    background: StylePrivate.StyleItem {
-//        id: styleitem
-//        control: controlRoot
-//        elementType: "combobox"
-//        anchors.fill: parent
-//        hover: controlRoot.hovered
-//        sunken: controlRoot.pressed
-//        raised: !sunken
-//        hasFocus: controlRoot.activeFocus
-//        enabled: controlRoot.enabled
-//        // contentHeight as in QComboBox magic numbers taken from QQC1 style
-//        contentHeight: Math.max(Math.ceil(textHeight("")), 14) + 2
-//        text: controlRoot.displayText
-//        properties: {
-//            "editable" : control.editable
-//        }
-//    }
+    contentItem: T.TextField {
+        padding: 6
+        leftPadding: control.editable ? 2 : control.mirrored ? 0 : 12
+        rightPadding: control.editable ? 2 : control.mirrored ? 12 : 0
+
+        text: control.editable ? control.editText : control.displayText
+
+        enabled: control.editable
+        autoScroll: control.editable
+        readOnly: control.down
+        inputMethodHints: control.inputMethodHints
+        validator: control.validator
+
+        font: control.font
+        color: control.enabled ? control.Kirigami.Theme.textColor : control.Kirigami.Theme.highlightColor
+        selectionColor:  control.Kirigami.Theme.highlightColor
+        selectedTextColor: control.Kirigami.Theme.highlightedTextColor
+        verticalAlignment: Text.AlignVCenter
+
+//        cursorDelegate: CursorDelegate { }
+    }
+
+    background: Rectangle {
+        implicitWidth: (Kirigami.Settings.isMobile ? Kirigami.Units.iconSizes.medium : Kirigami.Units.iconSizes.medium) * 2 + Kirigami.Units.smallSpacing
+        implicitHeight: Kirigami.Settings.isMobile ? Kirigami.Units.iconSizes.medium : Kirigami.Units.iconSizes.medium
+
+        radius: height * 0.07
+
+        color: !control.editable ? control.Kirigami.Theme.backgroundColor : "transparent"
+
+        border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+
+
+        Rectangle {
+            visible: control.editable
+            y: parent.y + control.baselineOffset
+            width: parent.width
+            height: control.activeFocus ? 2 : 1
+            color: control.editable && control.activeFocus ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.highlightedTextColor
+        }
+    }
 
     popup: T.Popup {
-        y: controlRoot.height
-        width: Math.max(controlRoot.width, 150)
-        implicitHeight: contentItem.implicitHeight
-        topMargin: 6
-        bottomMargin: 6
-        Kirigami.Theme.colorSet: Kirigami.Theme.View
-        Kirigami.Theme.inherit: controlRoot.Kirigami.Theme.inherit
+//        y: control.editable ? control.height - 5 : 0
+        width: control.width
+        height: Math.min(contentItem.implicitHeight, control.Window.height - topMargin - bottomMargin)
+        transformOrigin: Item.Top
+        topMargin: 12
+        bottomMargin: 12
+        enter: Transition {
+            // grow_fade_in
+            NumberAnimation { property: "scale"; from: 0.9; to: 1.0; easing.type: Easing.OutQuint; duration: 220 }
+            NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; easing.type: Easing.OutCubic; duration: 150 }
+        }
+
+        exit: Transition {
+            // shrink_fade_out
+            NumberAnimation { property: "scale"; from: 1.0; to: 0.9; easing.type: Easing.OutQuint; duration: 220 }
+            NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; easing.type: Easing.OutCubic; duration: 150 }
+        }
 
         contentItem: ListView {
-            id: listview
             clip: true
             implicitHeight: contentHeight
-            model: controlRoot.popup.visible ? controlRoot.delegateModel : null
-            currentIndex: controlRoot.highlightedIndex
-            highlightRangeMode: ListView.ApplyRange
+            model: control.delegateModel
+            currentIndex: control.highlightedIndex
             highlightMoveDuration: 0
-            T.ScrollBar.vertical: Controls.ScrollBar { }
+
+            T.ScrollIndicator.vertical: ScrollIndicator { }
         }
+
         background: Rectangle {
-            anchors {
-                fill: parent
-                margins: -1
-            }
-            radius: 2
-            color: Kirigami.Theme.backgroundColor
-            property color borderColor: Kirigami.Theme.textColor
-            border.color: Qt.rgba(borderColor.r, borderColor.g, borderColor.b, 0.3)
-            layer.enabled: true
-            
-            layer.effect: DropShadow {
-                transparentBorder: true
-                radius: 4
-                samples: 8
-                horizontalOffset: 2
-                verticalOffset: 2
-                color: Qt.rgba(0, 0, 0, 0.3)
-            }
+            radius: height * 0.07
+            color: parent.Kirigami.Theme.backgroundColor
+            border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+
         }
     }
 }

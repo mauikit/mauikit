@@ -77,11 +77,12 @@ T.TextField {
 	background: Rectangle 
 	{        
 		implicitWidth: unit * 120
-		implicitHeight: iconSizes.big
+        implicitHeight: Kirigami.Settings.isMobile ? Kirigami.Units.iconSizes.medium : Kirigami.Units.iconSizes.medium
         color: control.activeFocus ? Qt.lighter(Kirigami.Theme.backgroundColor, 1.4)
         : (control.hovered ? Qt.lighter(Kirigami.Theme.backgroundColor, 1.3) : Kirigami.Theme.backgroundColor)
-        border.color: Kirigami.Theme.borderColor
-		radius: radiusV
+        border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+
+        radius: radiusV
 		border.width: unit		
 	}
 }

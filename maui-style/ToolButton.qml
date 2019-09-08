@@ -38,7 +38,7 @@ import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Controls.impl 2.3
 import QtQuick.Templates 2.3 as T
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 
 T.ToolButton {
     id: control
@@ -54,7 +54,7 @@ T.ToolButton {
 
     icon.width: Kirigami.Units.iconSizes.smallMedium
     icon.height: Kirigami.Units.iconSizes.smallMedium
-    icon.color: visualFocus ? control.palette.highlight : control.palette.buttonText
+    icon.color: visualFocus ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
     
     flat: control.parent === T.ToolBar
 
@@ -66,14 +66,14 @@ T.ToolButton {
         icon: control.icon
         text: control.text
         font: control.font
-        color: control.visualFocus ? control.palette.highlight : control.palette.buttonText
+        color: control.visualFocus ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
     }
 
     background: Rectangle {
         implicitWidth: Kirigami.Units.iconSizes.medium
         implicitHeight: Kirigami.Units.iconSizes.medium
         
-        radius: height * 0.05
+        radius: height * 0.07
 
         opacity: control.down ? 1.0 : 0.5
         color: (control.down || control.checked || control.highlighted ? Kirigami.Theme.buttonHoverColor : "transparent")

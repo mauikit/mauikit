@@ -23,7 +23,7 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.2
 import QtQuick.Templates 2.3 as T
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 
 T.ToolBar {
     id: controlRoot
@@ -31,8 +31,8 @@ T.ToolBar {
     implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(background ? background.implicitHeight : 0, contentHeight + topPadding + bottomPadding)
 
-//     leftPadding: Kirigami.Units.smallSpacing*2
-//     rightPadding: Kirigami.Units.smallSpacing*2
+    //     leftPadding: Kirigami.Units.smallSpacing*2
+    //     rightPadding: Kirigami.Units.smallSpacing*2
     
     contentWidth: contentChildren[0].implicitWidth
     contentHeight: contentChildren[0].implicitHeight
@@ -44,36 +44,21 @@ T.ToolBar {
     readonly property bool isFooter : controlRoot.position == T.ToolBar.Footer
     readonly property bool isHeader : controlRoot.position == T.ToolBar.Header
     
-    background: Rectangle 
+    background: Rectangle
     {
         implicitHeight: Kirigami.Units.iconSizes.medium + (Kirigami.Settings.isMobile ?  Kirigami.Units.smallSpacing : Kirigami.Units.largeSpacing)
-        
-//         color: mainHeader || mainFooter ? Kirigami.Theme.buttonBackgroundColor :   Kirigami.Theme.viewBackgroundColor
-        color: Kirigami.Theme.viewBackgroundColor
-        
-        Kirigami.Separator 
+        color: Kirigami.Theme.backgroundColor
+        Kirigami.Separator
         {
-            visible: mainHeader
-            color: Qt.darker(Kirigami.Theme.backgroundColor, 1.2)
-            anchors 
-            {
-                left: parent.left
-                right: parent.right
-                top: mainHeader && !Kirigami.Settings.isMobile ? parent.top : undefined
-            }
-        }  
-        
-         Kirigami.Separator 
-        {
-                        color: Qt.darker(Kirigami.Theme.backgroundColor, 1.2)
+            color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
 
-            anchors 
+            anchors
             {
                 left: parent.left
                 right: parent.right
                 bottom: !isFooter ? parent.bottom : undefined
             }
         }
-       
+
     }
 }
