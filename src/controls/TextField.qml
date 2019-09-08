@@ -48,7 +48,7 @@ TextField
 	wrapMode: TextInput.WordWrap
 	
 	
-	onPressAndHold: entryMenu.popup()
+    onPressAndHold: !isMobile ? entryMenu.popup() : undefined
 	onPressed:
 	{
 		if(!isMobile && event.button === Qt.RightButton)

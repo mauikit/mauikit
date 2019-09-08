@@ -75,7 +75,7 @@ T.ToolButton {
         
         radius: height * 0.07
 
-        opacity: control.down ? 1.0 : 0.5
+        opacity: control.down ? 1.0 : 0.4
         color: (control.down || control.checked || control.highlighted ? Kirigami.Theme.buttonHoverColor : "transparent")
     }
 }

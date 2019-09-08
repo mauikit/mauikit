@@ -58,8 +58,8 @@ T.MenuItem {
 
     icon.width: Kirigami.Units.iconSizes.smallMedium
     icon.height: 24
-    icon.color: enabled ? Kirigami.Theme.textColor : Kirigami.Theme.disabledTextColor
-
+    icon.color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightedTextColor : control.Kirigami.Theme.textColor) :
+                             control.Kirigami.Theme.disabledTextColor
 //    indicator: CheckIndicator {
 //        x: text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding + (control.availableWidth - width) / 2
 //        y: control.topPadding + (control.availableHeight - height) / 2
@@ -74,7 +74,8 @@ T.MenuItem {
 
         visible: control.subMenu
 //        mirror: control.mirrored
-        color: control.enabled ? control.Kirigami.Theme.textColor : control.Kirigami.Theme.disabledTextColor
+        color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightedTextColor : control.Kirigami.Theme.textColor) :
+                                 control.Kirigami.Theme.disabledTextColor
         source: "qrc:/qt-project.org/imports/QtQuick/Controls.2/Material/images/arrow-indicator.png"
     }
 
@@ -92,7 +93,8 @@ T.MenuItem {
         icon: control.icon
         text: control.text
         font: control.font
-        color: control.enabled ? control.Kirigami.Theme.textColor : control.Kirigami.Theme.disabledTextColor
+        color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightedTextColor : control.Kirigami.Theme.textColor) :
+                                 control.Kirigami.Theme.disabledTextColor
     }
 
     background: Rectangle {
