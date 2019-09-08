@@ -25,7 +25,7 @@ import org.kde.kirigami 2.3 as Kirigami
 
 T.Button {
     id: controlRoot
-    implicitWidth: background.implicitWidth
+    implicitWidth: Math.max(background.implicitWidth, contentItem.implicitWidth + Kirigami.Units.smallSpacing )
     implicitHeight: background.implicitHeight
     hoverEnabled: true
     contentItem: Label {
