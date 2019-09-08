@@ -323,6 +323,7 @@ Kirigami.AbstractApplicationWindow
 	{
 		id: _footer
 		visible : children > 0
+// 		height: 200
 		children:
 		{
 			if(headBar.position === ToolBar.Footer && headBar.count && footBar.count) 

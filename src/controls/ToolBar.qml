@@ -30,7 +30,7 @@ ToolBar
 	id: control    
 	
 	// 	implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
-	implicitHeight: visible ? (floating ? toolBarHeightAlt : toolBarHeight) : 0
+	implicitHeight: visible ? toolBarHeight : 0
 	
 	// 	width: parent.width 
 	height:  implicitHeight 
