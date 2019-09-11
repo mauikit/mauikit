@@ -84,28 +84,13 @@ Kirigami.AbstractApplicationWindow
 	/***************************************************/
 	/********************* COLORS *********************/
 	/*************************************************/
-	
-	readonly property var colorScheme: ({
-		Default : 1,
-		Light : 2,
-		Dark: 3,
-		Custom: 4
-	})
-	
 	property color headBarBGColor: Kirigami.Theme.backgroundColor
 	property color headBarFGColor: Kirigami.Theme.textColor	
 	property color warningColor : Maui.Style.warningColor
 	property color dangerColor : Maui.Style.dangerColor
 	property color infoColor : Maui.Style.infoColor
 	property color suggestedColor : Maui.Style.suggestedColor
-	
-	/* ANDROID THEMING*/
-	
-// 	Material.theme: Material.Dark
-// 	Material.accent: "yellow"
-// 	Material.background:  headBarBGColor 
-// 	Material.primary: headBarBGColor
-// 	Material.foreground: Kirigami.Theme.textColor
+
 	
 	/***************************************************/
 	/**************** READONLY PROPS ******************/
@@ -129,20 +114,7 @@ Kirigami.AbstractApplicationWindow
 	/*************************************************/
 	signal menuButtonClicked();
 	signal searchButtonClicked();
-	signal goBackTriggered();
-	signal goFowardTriggered();
-	
-	//    overlay.modal: Rectangle
-	//    {
-	//        color: Color.transparent(altColor, 0.5)
-	//    }
-	
-	
-	//    overlay.modeless: Rectangle {
-	//        color: "transparent"
-	//    }
-	
-	
+
 	onClosing:
 	{
 		if(!isMobile)
@@ -314,7 +286,6 @@ Kirigami.AbstractApplicationWindow
 		visible: count
 		position: ToolBar.Footer
 		width: root.width
-		// 		Kirigami.Theme.backgroundColor: Kirigami.Theme.backgroundColor		
 	}  
 	
 	header: headBar.count && headBar.position === ToolBar.Header ? headBar : undefined
@@ -323,7 +294,6 @@ Kirigami.AbstractApplicationWindow
 	{
 		id: _footer
 		visible : children > 0
-// 		height: 200
 		children:
 		{
 			if(headBar.position === ToolBar.Footer && headBar.count && footBar.count) 
@@ -474,40 +444,6 @@ Kirigami.AbstractApplicationWindow
 				
 			}
 			
-	}
-	
-	function switchColorScheme(variant)
-	{
-		//         switch(variant)
-		//         {
-		//         case colorScheme.Default:
-		// 
-		//             backgroundColor = Maui.Style.backgroundColor
-		//             textColor = Maui.Style.textColor
-		//             highlightColor = Maui.Style.highlightColor
-		//             highlightedTextColor = Maui.Style.highlightedTextColor
-		//             buttonBackgroundColor = Maui.Style.buttonBackgroundColor
-		//             viewBackgroundColor = Maui.Style.viewBackgroundColor
-		//             altColor = Maui.Style.altColor
-		//             borderColor = Maui.Style.borderColor
-		//             if(isAndroid) Maui.Android.statusbarColor(backgroundColor, true)
-		//             break
-		// 
-		//         case colorScheme.Dark:
-		//             borderColor = darkBorderColor
-		//             backgroundColor = darkBackgroundColor
-		//             textColor = darkTextColor
-		//             highlightColor = darkHighlightColor
-		//             highlightedTextColor = darkHighlightedTextColor
-		//             buttonBackgroundColor = darkButtonBackgroundColor
-		//             viewBackgroundColor = darkViewBackgroundColor
-		//             altColor = darkDarkColor
-		//             altColorText = darkAltColorText
-		//             bgColor =darkBgColor
-		//             
-		//             if(isAndroid) Maui.Android.statusbarColor(backgroundColor, false)
-		//             break         
-		//         }
 	}
 	
 	function notify(icon, title, body, callback, timeout)
