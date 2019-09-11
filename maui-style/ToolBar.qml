@@ -21,44 +21,33 @@
 
 
 import QtQuick 2.6
-import QtQuick.Controls 2.2
-import QtQuick.Templates 2.3 as T
-import org.kde.kirigami 2.7 as Kirigami
+import QtQuick.Templates 2.5 as T
+import org.kde.kirigami 2.4 as Kirigami
+import org.kde.mauikit 1.0 as Maui
 
 T.ToolBar {
     id: controlRoot
 
+    palette: Kirigami.Theme.palette
     implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(background ? background.implicitHeight : 0, contentHeight + topPadding + bottomPadding)
 
-    //     leftPadding: Kirigami.Units.smallSpacing*2
-    //     rightPadding: Kirigami.Units.smallSpacing*2
-    
     contentWidth: contentChildren[0].implicitWidth
     contentHeight: contentChildren[0].implicitHeight
 
+    padding: Kirigami.Units.smallSpacing
     contentItem: Item {}
-
-    readonly property bool mainHeader : controlRoot == T.ApplicationWindow.header
-    readonly property bool mainFooter : controlRoot == T.ApplicationWindow.footer
-    readonly property bool isFooter : controlRoot.position == T.ToolBar.Footer
-    readonly property bool isHeader : controlRoot.position == T.ToolBar.Header
-    
-    background: Rectangle
-    {
-        implicitHeight: Kirigami.Units.iconSizes.medium + (Kirigami.Settings.isMobile ?  Kirigami.Units.smallSpacing : Kirigami.Units.largeSpacing)
+    position: controlRoot.parent.footer == controlRoot ? ToolBar.Footer : ToolBar.Header
+    background: Rectangle {
+        implicitHeight: Maui.Style.toolBarHeight
         color: Kirigami.Theme.backgroundColor
-        Kirigami.Separator
-        {
-            color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-
-            anchors
-            {
+        Kirigami.Separator {
+            anchors {
                 left: parent.left
                 right: parent.right
-                bottom: !isFooter ? parent.bottom : undefined
+                top: controlRoot.position == T.ToolBar.Footer || (controlRoot.parent.footer && controlRoot.parent.footer == controlRoot) ? parent.top : undefined
+                bottom: controlRoot.position == T.ToolBar.Footer || (controlRoot.parent.footer && controlRoot.parent.footer == controlRoot) ? undefined : parent.bottom
             }
         }
-
     }
 }
