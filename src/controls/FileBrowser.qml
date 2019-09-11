@@ -436,7 +436,8 @@ Maui.Page
                         
                         onItemDoubleClicked: 
                         {
-                            control.currentFMList = _millersFMList                            _millerColumns.itemDoubleClicked(index)
+                            control.currentFMList = _millersFMList
+                            _millerColumns.itemDoubleClicked(index)
                         }
                         
                         onItemRightClicked: 
