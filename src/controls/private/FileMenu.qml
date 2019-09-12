@@ -9,7 +9,7 @@ Menu
 	id: control
 	implicitWidth: colorBar.implicitWidth + space.big
 	
-	property var item : {}
+    property var item : ({})
 	property int index : -1
 	property bool isDir : false
 	

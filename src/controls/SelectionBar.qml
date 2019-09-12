@@ -105,20 +105,9 @@ Item
         opacity: 1
         border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
 		
-        SequentialAnimation
-        {
-            id: anim
-            PropertyAnimation
-            {
-                target: bg
-                property: "color"
-                easing.type: Easing.InOutQuad
-                from: animColor
-                to: Qt.lighter(Kirigami.Theme.backgroundColor, 1.2)
-                duration: 500
-            }
-        }       
+       
     }
+    
     
     GridLayout
     {
@@ -136,6 +125,7 @@ Item
                      1
                  else
                      undefined
+                     
         
         Maui.Badge
         {
@@ -195,6 +185,20 @@ Item
                 id: selectionList
                 anchors.fill: parent
                 
+                 SequentialAnimation
+        {
+            id: anim
+            PropertyAnimation
+            {
+                target: selectionList
+                property: "y"
+                easing.type: Easing.InOutQuad
+                from: (-200)
+                to: 0
+                duration: 100
+            }
+        }       
+                
                 boundsBehavior: !isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
                 orientation: if(position === Qt.Horizontal)
                                  ListView.Horizontal
@@ -221,6 +225,7 @@ Item
                     showLabel: true
                     emblemAdded: true
                     keepEmblemOverlay: true
+                    showEmblem: true
                     showSelectionBackground: false
                     labelColor: Kirigami.Theme.textColor
                     showTooltip: true

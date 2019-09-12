@@ -47,9 +47,9 @@ T.TextField {
     //Text.NativeRendering is broken on non integer pixel ratios
     renderType: Window.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
     
-    color: enabled ? colorScheme.textColor : Qt.lighter(colorScheme.textColor, 1.4)
-	selectionColor: highlightColor
-	selectedTextColor: highlightedTextColor
+    color: enabled ? Kirigami.Theme.textColor : Kirigami.Theme.disabledtextColor
+    selectionColor: Kirigami.Theme.highlightColor
+    selectedTextColor: Kirigami.Theme.highlightedTextColor
 	
 	verticalAlignment: TextInput.AlignVCenter
 	horizontalAlignment: Text.AlignHCenter
@@ -66,7 +66,7 @@ T.TextField {
 		
 		text: control.placeholderText
 		font: control.font
-		color: Qt.lighter(colorScheme.textColor, 1.4)
+        color: Qt.lighter(Kirigami.Theme.textColor, 1.4)
 		opacity: 0.4
 		horizontalAlignment: control.horizontalAlignment
 		verticalAlignment: control.verticalAlignment
@@ -77,11 +77,12 @@ T.TextField {
 	background: Rectangle 
 	{        
 		implicitWidth: unit * 120
-		implicitHeight: iconSizes.big
-		color: control.activeFocus ? Qt.lighter(colorScheme.backgroundColor, 1.4)
-		: (control.hovered ? Qt.lighter(colorScheme.backgroundColor, 1.3) : colorScheme.backgroundColor)
-		border.color: colorScheme.borderColor
-		radius: radiusV
+        implicitHeight: Kirigami.Settings.isMobile ? Kirigami.Units.iconSizes.medium : Kirigami.Units.iconSizes.medium
+        color: control.activeFocus ? Qt.lighter(Kirigami.Theme.backgroundColor, 1.4)
+        : (control.hovered ? Qt.lighter(Kirigami.Theme.backgroundColor, 1.3) : Kirigami.Theme.backgroundColor)
+        border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+
+        radius: radiusV
 		border.width: unit		
 	}
 }

@@ -25,27 +25,26 @@ import org.kde.kirigami 2.3 as Kirigami
 
 T.Button {
     id: controlRoot
-    implicitWidth: background.implicitWidth
+    implicitWidth: Math.max(background.implicitWidth, contentItem.implicitWidth + Kirigami.Units.smallSpacing )
     implicitHeight: background.implicitHeight
     hoverEnabled: true
-    contentItem: Text {
+    contentItem: Label {
         text: controlRoot.text
         font: controlRoot.font
          color: !controlRoot.enabled ? Kirigami.Theme.disabledTextColor :
-            controlRoot.highlighted || controlRoot.down ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.buttonTextColor
+            controlRoot.highlighted || controlRoot.down ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.textColor
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
     }
     
     background: Rectangle {
-        implicitWidth: (Kirigami.Settings.isMobile ? Kirigami.Units.iconSizes.smallMedium : Kirigami.Units.iconSizes.medium) * 2 + Kirigami.Units.smallSpacing
-        implicitHeight: Kirigami.Settings.isMobile ? Kirigami.Units.iconSizes.smallMedium : Kirigami.Units.iconSizes.medium 
+        implicitWidth: (Kirigami.Settings.isMobile ? Kirigami.Units.iconSizes.medium : Kirigami.Units.iconSizes.medium) * 2 + Kirigami.Units.smallSpacing
+        implicitHeight: Kirigami.Settings.isMobile ? Kirigami.Units.iconSizes.medium : Kirigami.Units.iconSizes.medium
      
-        color: !controlRoot.enabled ? Kirigami.Theme.backgroundColor :
-                controlRoot.highlighted || controlRoot.down ? Kirigami.Theme.buttonFocusColor : Kirigami.Theme.buttonBackgroundColor
+        color: Kirigami.Theme.backgroundColor
         border.color: controlRoot.hovered ? Kirigami.Theme.buttonHoverColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
         border.width: Kirigami.Units.devicePixelRatio
-        radius: height * 0.05
+        radius: height * 0.07
     }
 }
