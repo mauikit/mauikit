@@ -16,7 +16,8 @@ linux:unix:!android {
 } else:android {
 
     message(Building Maui helpers for Android)
-    include($$PWD/src/android/android.pri)
+    include($$PWD/src/android/android.pri)    
+    include($$PWD/src/utils/editor/syntaxhighlighter.pri)
     include($$PWD/src/utils/syncing/openssl/openssl.pri)
     include($$PWD/src/utils/syncing/libwebdavclient/webdavclient.pri)
     include($$PWD/src/utils/store/attica/attica.pri)
