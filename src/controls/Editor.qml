@@ -240,13 +240,13 @@ Item
 			activeFocusOnPress: true
 			activeFocusOnTab: true
 			persistentSelection: true
-			
-            /*background: Rectangle
+
+            background: Rectangle
 			{
 				color: Kirigami.Theme.backgroundColor
 				implicitWidth: 200
 				implicitHeight: 22
-            }*/
+            }
 			
 // 			onPressAndHold: isMobile ? documentMenu.popup() : undefined
 			
