@@ -2,8 +2,14 @@
 
 #include <QDebug>
 #include <QVector>
+
+#ifdef STATIC_MAUIKIT
+#include "KSyntaxHighlighting/KSyntaxHighlighting/Repository"
+#include "KSyntaxHighlighting/KSyntaxHighlighting/Definition"
+#else
 #include <KSyntaxHighlighting/Repository>
 #include <KSyntaxHighlighting/Definition>
+#endif
 
 SyntaxHighlighterUtil::SyntaxHighlighterUtil()
 {
