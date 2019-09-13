@@ -154,14 +154,11 @@ void MauiKit::registerTypes(const char *uri)
 
 	/** MAUI APPLICATION SPECIFIC PROPS **/
 	qmlRegisterType<MauiAccounts>();
-	qmlRegisterSingletonType<MauiApp>(uri, 1, 0, "App", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject* {
-		Q_UNUSED(engine)
-		Q_UNUSED(scriptEngine)
-		return MauiApp::instance();
-	});
+	qmlRegisterUncreatableType<MauiApp>(uri, 1, 0, "App", "Cannot be created App");
 	
 	
 	/** HELPERS **/	
+
 	qmlRegisterSingletonType<Handy>(uri, 1, 0, "Handy",
 									[](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject* {
 										Q_UNUSED(engine)
