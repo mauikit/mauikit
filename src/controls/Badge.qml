@@ -46,7 +46,8 @@ Rectangle
 	
 	z: parent.z+1
 	height: size + space.small
-	width: size + space.small
+	width: Math.max(implicitWidth,  size + space.small)
+	implicitWidth: (loader.sourceComponent == labelComponent ? loader.item.implicitWidth : size ) + space.small
 	radius: Math.min(width, height)
 	color: Kirigami.Theme.backgroundColor
 	border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))

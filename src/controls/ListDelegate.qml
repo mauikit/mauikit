@@ -80,7 +80,6 @@ ItemDelegate
                 id:controlIcon
                 anchors.centerIn: parent
                 source: model.icon ? model.icon : ""
-               isMask: true
                 color: labelColor
                 height: iconSizes.medium
                 width: height

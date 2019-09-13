@@ -96,12 +96,13 @@ ItemDelegate
         
         Item
         {
-            visible: model.count && model.count > 0
+            visible: typeof model.count !== "undefined" && model.count && model.count > 0 && labelsVisible
             Layout.fillHeight: true
-            width: iconSizes.big + space.small
+            Layout.preferredWidth: Math.max(iconSizes.big + space.small, _badge.implicitWidth)
             Layout.alignment: Qt.AlignRight
             Maui.Badge
             {
+                id: _badge
                 anchors.centerIn: parent
                 text: model.count                
             }
