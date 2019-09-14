@@ -28,7 +28,7 @@ Item
 {
 	id: control    
 	
-	height: iconSizes.big
+	height: Kirigami.Units.iconSizes.medium
 	
 	property string url : ""
 	property bool pathEntry: false
@@ -189,7 +189,7 @@ Item
 				{
 					id: delegate
 					height: control.height - (unit*2)
-					width: implicitWidth
+					width: Math.max(Kirigami.Units.iconSizes.medium * 3, implicitWidth)
 					Connections
 					{
 						target: delegate
