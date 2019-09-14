@@ -189,7 +189,7 @@ Item
 				{
 					id: delegate
 					height: control.height - (unit*2)
-					width: Math.max(Kirigami.Units.iconSizes.medium * 3, implicitWidth)
+					width: Math.max(Kirigami.Units.iconSizes.medium * 2, implicitWidth)
 					Connections
 					{
 						target: delegate
