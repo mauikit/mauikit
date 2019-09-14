@@ -959,7 +959,7 @@ Maui.Page
             {
                 var conf = Maui.FM.dirConf(path+"/.directory")
                 var iconsize = conf["iconsize"] ||  iconSizes.large
-                thumbnailsSize = parseInt(iconsize)				
+                thumbnailsSize = parseInt(iconsize)
             }else
             {
                 thumbnailsSize = parseInt(Maui.FM.loadSettings("IconSize", "SETTINGS", thumbnailsSize))		

@@ -41,19 +41,20 @@ ColumnLayout
         Layout.fillHeight: visible
         Layout.minimumHeight: control.height * 0.3
 		
-		ScrollView
+		Kirigami.ScrollablePage
 		{
 			anchors.fill: parent
-			
-			contentHeight: _columnInfo.implicitHeight
-			
+			Kirigami.Theme.backgroundColor: "transparent"
+            padding: 0
+            leftPadding: padding
+            rightPadding: padding
+            topPadding: padding
+            bottomPadding: padding
+            
 			ColumnLayout
 			{
 				id: _columnInfo
-				width: parent.width
 				spacing: space.large
-				// 			spacing: rowHeight
-				
 				
 				Column
 				{

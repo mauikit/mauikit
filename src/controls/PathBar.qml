@@ -189,7 +189,7 @@ Item
 				{
 					id: delegate
 					height: control.height - (unit*2)
-					width: iconSizes.big * 3
+					width: implicitWidth
 					Connections
 					{
 						target: delegate
