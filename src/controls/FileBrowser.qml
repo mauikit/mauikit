@@ -58,7 +58,12 @@ Maui.Page
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     Kirigami.Theme.inherit: false
     
-    onGoBackTriggered: control.goBack()
+    onGoBackTriggered:
+    {
+        control.goBack()
+        console.log("trying to go BACCCCCCCCCCCCCCCCCK")
+    }
+
     onGoForwardTriggered: control.goNext()
     
     Keys.onSpacePressed: previewer.show(control.currentFMList.get(browser.currentIndex).path)
