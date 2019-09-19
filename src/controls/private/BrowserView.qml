@@ -9,9 +9,16 @@ Maui.Page
 {
 	id: control
 	
+	property string path
 	property Maui.FMList currentFMList : null
 	property alias currentView : viewLoader.item
-	property int viewType : Maui.FMList.LIST_VIEW
+	property int viewType : Maui.FM.loadSettings("VIEW_TYPE", "BROWSER", Maui.FMList.LIST_VIEW)
+	
+	onViewTypeChanged: Maui.FM.saveSettings("VIEW_TYPE", viewType, "BROWSER")	
+	
+	height: _browserList.height
+	width: _browserList.width
+	
 	
 	function setCurrentFMList()
 	{
@@ -33,46 +40,45 @@ Maui.Page
 		onLoaded: setCurrentFMList()
 	}
 	
+	Maui.FMList
+	{
+		id: _commonFMList
+		preview: true
+		path: control.path
+		foldersFirst: true
+		onSortByChanged: if(group) groupBy()
+		onContentReadyChanged: console.log("CONTENT READY?", contentReady)
+		onWarning:
+		{			
+			notify("dialog-information", "An error happened", message)
+		}
+		
+		onProgress:
+		{
+			if(percent === 100)
+				_progressBar.value = 0
+				else
+					_progressBar.value = percent/100
+		}
+	}
+	
 	Component
 	{
-		id: listViewBrowser
-		
+		id: listViewBrowser		
 		
 		Maui.ListBrowser
 		{
-			property alias currentFMList : _listViewFMList
-			showPreviewThumbnails: modelList.preview
+			property alias currentFMList : _browserModel.list
+			showPreviewThumbnails: _listViewFMList.preview
 			keepEmblemOverlay: selectionMode
 			rightEmblem: isMobile ? "document-share" : ""
 			leftEmblem: "list-add"
-			showDetailsInfo: true			
-			
-			Maui.FMList
-			{
-				id: _listViewFMList
-				preview: true
-				path: currentPath
-				foldersFirst: true
-				onSortByChanged: if(group) groupBy()
-				onContentReadyChanged: console.log("CONTENT READY?", contentReady)
-				onWarning:
-				{			
-					notify("dialog-information", "An error happened", message)
-				}
-				
-				onProgress:
-				{
-					if(percent === 100)
-						_progressBar.value = 0
-						else
-							_progressBar.value = percent/100
-				}
-			}
+			showDetailsInfo: true
 			
 			model: Maui.BaseModel
 			{
 				id: _browserModel
-				list: _listViewFMList
+				list: _commonFMList
 			}
 			
 			section.delegate: Maui.LabelDelegate
@@ -94,38 +100,17 @@ Maui.Page
 		
 		Maui.GridBrowser
 		{
-			property alias currentFMList : _gridViewFMList
+			property alias currentFMList : _browserModel.list
 			itemSize : thumbnailsSize + fontSizes.default
 			keepEmblemOverlay: selectionMode
-			showPreviewThumbnails: modelList.preview
+			showPreviewThumbnails: _gridViewFMList.preview
 			rightEmblem: isMobile ? "document-share" : ""
-			leftEmblem: "list-add"
-			
-			Maui.FMList
-			{
-				id: _gridViewFMList
-				preview: true
-				path: currentPath
-				foldersFirst: true
-				onSortByChanged: if(group) groupBy()
-				onContentReadyChanged: console.log("CONTENT READY?", contentReady)
-				onWarning:
-				{			
-					notify("dialog-information", "An error happened", message)
-				}				
-				onProgress:
-				{
-					if(percent === 100)
-						_progressBar.value = 0
-						else
-							_progressBar.value = percent/100
-				}
-			}
+			leftEmblem: "list-add"			
 			
 			model: Maui.BaseModel
 			{
 				id: _browserModel
-				list: _gridViewFMList
+				list: _commonFMList
 			}
 		}
 	}
@@ -155,20 +140,27 @@ Maui.Page
 				id: _millerColumns
 				anchors.fill: parent
 				
+				boundsBehavior: !isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
+				
+				keyNavigationEnabled: true
+				interactive: Kirigami.Settings.isMobile
+				highlightFollowsCurrentItem: true
+				
 				orientation: ListView.Horizontal
 				snapMode: ListView.SnapToItem
+				
+				ScrollBar.horizontal: ScrollBar { }
 				
 				onCurrentItemChanged: 
 				{
 					_millerControl.currentFMList = currentItem.currentFMList
 					control.setCurrentFMList()				
 				}
-				highlightFollowsCurrentItem: true 
 				
 				Maui.PathList
 				{
 					id: _millerList
-					path: currentPath
+					path: control.path
 				}
 				
 				model: Maui.BaseModel
@@ -190,7 +182,8 @@ Maui.Page
 						color: "transparent"
 					}
 					
-					ListView.onAdd: _millerColumns.positionViewAtEnd()
+					ListView.onAdd: _millerColumns.currentIndex = _millerColumns.count-1	
+					
 					Kirigami.Separator
 					{
 						anchors.top: parent.top
@@ -203,9 +196,9 @@ Maui.Page
 					Maui.FMList
 					{	
 						id: _millersFMList
-						preview: modelList.preview
+						preview: true
 						path: model.path
-						foldersFirst: modelList.foldersFirst
+						foldersFirst: true
 						onWarning:
 						{			
 							notify("dialog-information", "An error happened", message)
@@ -225,7 +218,7 @@ Maui.Page
 						id: _millerListView
 						anchors.fill: parent
 						
-						showPreviewThumbnails: modelList.preview
+						showPreviewThumbnails: _millersFMList.preview
 						keepEmblemOverlay: selectionMode
 						rightEmblem: isMobile ? "document-share" : ""
 						leftEmblem: "list-add"
@@ -235,9 +228,7 @@ Maui.Page
 						onItemClicked: 
 						{
 							_millerColumns.currentIndex = _index
-							_millerControl.itemClicked(index)
-							
-							console.log(" ITEM CLICKED ", _index, index)
+							_millerControl.itemClicked(index)							
 						}
 						
 						onItemDoubleClicked: 

@@ -67,24 +67,20 @@ ScrollView
 	spacing: 0
     
     ListView
-    {
-		anchors.fill: parent
+    {	
 		id: _listView
-		//    maximumFlickVelocity: 400
+		anchors.fill: parent
 		
 		snapMode: ListView.SnapToItem
 		boundsBehavior: !isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
 		
 		keyNavigationEnabled: true
-		clip: true
-		focus: true
-		interactive: true
+		interactive: isMobile
 		highlightFollowsCurrentItem: true
 		highlightMoveDuration: 0
 		
 		width: parent.width
-		height: parent.height      
-    
+		height: parent.height 
         
         model: ListModel { id: listModel }
         delegate: Maui.IconDelegate

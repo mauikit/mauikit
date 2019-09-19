@@ -28,7 +28,8 @@ Item
 {
 	id: control
 	anchors.fill: parent
-
+	visible: false
+	
 	property string emoji
 	property string message
 	property string title
@@ -44,7 +45,7 @@ Item
 	
 	clip: true
 	focus: true
-
+	
 	Component
 	{
 		id: imgComponent
@@ -94,29 +95,24 @@ Item
 		hoverEnabled: true	
 	}
 	
-	Item
+	Column
 	{
-		anchors.centerIn: parent
-		height: loader.height + textHolder.implicitHeight
-		width: Math.min(500, control.width)
+		anchors.centerIn: parent		
+		
 		
 		Loader
 		{
 			id: loader			
 			height: control.emoji ? emojiSize : 0
-			width: height				
-			sourceComponent: control.emoji ? (isGif ? animComponent : imgComponent) : undefined
-			anchors 
-			{
-				bottom: textHolder.top
-				horizontalCenter: parent.horizontalCenter
-			}
+			width: height		
+			anchors.horizontalCenter: parent.horizontalCenter
+			sourceComponent: control.emoji ? (isGif ? animComponent : imgComponent) : undefined			
 		}			
 		
 		Label
 		{
 			id: textHolder
-			width: parent.width				
+			width: Math.min(control.width * 0.7, implicitWidth)			
 			opacity: 0.5
 			text: message ? qsTr(message) : "<h3>"+title+"</h3><p>"+body+"</p>"
 			font.pointSize: fontSizes.default
@@ -127,13 +123,7 @@ Item
 			horizontalAlignment: Qt.AlignHCenter
 			elide: Text.ElideRight
 			color: _mouseArea.hovered ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-			wrapMode: Text.Wrap	
-			
-			anchors 
-			{
-				top: loader.bottom
-				horizontalCenter: parent.horizontalCenter
-			}
+			wrapMode: Text.Wrap				
 		}			
 	}
 }

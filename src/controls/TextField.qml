@@ -45,8 +45,7 @@ TextField
     selectByMouse: !isMobile
     persistentSelection: true
 	focus: true
-	wrapMode: TextInput.WordWrap
-	
+	wrapMode: TextInput.WordWrap	
 	
     onPressAndHold: !isMobile ? entryMenu.popup() : undefined
 	onPressed:

@@ -30,6 +30,14 @@ Menu
 			addToSelection(currentFMList.get(index))
 		}
 	}
+	MenuSeparator{}
+	
+	MenuItem
+	{
+		visible: isDir
+		text: qsTr("Open in tab")
+		onTriggered: openTab(item.path)
+	}
 	
 	MenuSeparator{}
 	MenuItem

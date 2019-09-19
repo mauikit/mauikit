@@ -49,7 +49,7 @@ Menu
     MenuItem
     {
         action: _pasteAction
-    }
+    }  
     
     
     function show()

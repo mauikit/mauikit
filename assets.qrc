@@ -13,5 +13,9 @@
 		<file>assets/animat-diamond-color.gif</file>		
 		<file>assets/animat-search-color.gif</file>		
 		<file>assets/opendesktop.png</file>			
+		<file>assets/folder-add.svg</file>			
+		<file>assets/view-refresh.svg</file>			
+		<file>assets/edit-find.svg</file>			
+		<file>assets/dialog-information.svg</file>			
 	</qresource>
 </RCC>

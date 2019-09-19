@@ -43,6 +43,7 @@ class FMList : public MauiList
 	Q_PROPERTY(bool preview READ getPreview WRITE setPreview NOTIFY previewChanged)
 	
 	Q_PROPERTY(int cloudDepth READ getCloudDepth WRITE setCloudDepth NOTIFY cloudDepthChanged)
+	Q_PROPERTY(uint count READ getCount NOTIFY countChanged)
 	
 	Q_PROPERTY(bool contentReady READ getContentReady NOTIFY contentReadyChanged)
 	
@@ -170,6 +171,8 @@ class FMList : public MauiList
 		int getCloudDepth() const;
 		void setCloudDepth(const int &value);
 		
+		uint getCount() const;
+		
 private:
 	FM *fm;
 	QFileSystemWatcher *watcher;
@@ -198,6 +201,7 @@ private:
 	bool saveDirProps = false;
 	bool contentReady = false;
 	int cloudDepth = 1;
+	uint count = 0;
 	QString searchPath;
 	
 	FMList::SORTBY sort = FMList::SORTBY::MODIFIED;
@@ -232,6 +236,7 @@ signals:
 	void saveDirPropsChanged();
 	void contentReadyChanged();
 	void cloudDepthChanged();
+	void countChanged();
 	
 	void pathEmptyChanged();
 	void pathExistsChanged();

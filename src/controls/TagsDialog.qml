@@ -18,6 +18,7 @@ Maui.Dialog
 	signal tagsReady(var tags)
 	defaultButtons: true
 	maxHeight: unit * 500
+	page.padding: Maui.Style.space.medium
 	
 	onAccepted: setTags()
 	onRejected: close()	
@@ -25,7 +26,7 @@ Maui.Dialog
 	headBar.leftContent: ToolButton
 	{
 		icon.name: "view-sort"
-		text: qsTr("Sort by...")
+// 		text: qsTr("Sort by...")
 		onClicked: sortMenu.popup()
 		
 		Menu
@@ -53,7 +54,7 @@ Maui.Dialog
 	headBar.middleContent: Maui.TextField
 	{
 		id: tagText
-		width: headBar.middleLayout.width * 0.9
+		Layout.fillWidth: true
 		placeholderText: qsTr("New tags...")
 		onAccepted:
 		{

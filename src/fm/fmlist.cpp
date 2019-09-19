@@ -42,6 +42,8 @@ watcher(new QFileSystemWatcher(this))
 			this->list = list;
 			this->pathEmpty = this->list.isEmpty();
 			emit this->pathEmptyChanged();
+			this->count = this->list.size();		
+			emit this->countChanged();
 			this->pos();
 			this->setContentReady(true);
 		}	
@@ -55,30 +57,30 @@ watcher(new QFileSystemWatcher(this))
 			this->list = list;
 			this->pathEmpty = this->list.isEmpty();
 			emit this->pathEmptyChanged();
+			this->count = this->list.size();		
+			emit this->countChanged();
 			this->pos();
 			this->setContentReady(true);
 		}	
 	});
 	
 	connect(this->fm, &FM::pathContentReady, [&](const FMH::PATH_CONTENT &res)
-	{
-		qDebug()<< "PATHCN ONTEN READY" << res.path << this->path << res.content;
-		
+	{		
 // 		if(this->pathType != FMList::PATHTYPE::PLACES_PATH)
 // 			return;		
 		
 		if(res.path != this->path)
-			return;
-		
+			return;		
 		
 		emit this->preListChanged();
 		this->list = res.content;
-		
 		this->pathEmpty = this->list.isEmpty() /*&& FM::fileExists(this->path)*/;
 		emit this->pathEmptyChanged();
 		
-		this->sortList();		
+		this->sortList();	
 		
+		this->count = this->list.size();		
+		emit this->countChanged();
 		emit this->postListChanged();
 		this->setContentReady(true);
 	});	
@@ -873,5 +875,10 @@ void FMList::setCloudDepth(const int& value)
 	
 	emit this->cloudDepthChanged();
 	this->reset();
+}
+
+uint FMList::getCount() const
+{
+	return this->count;
 }
 

@@ -180,9 +180,8 @@ ItemDelegate
 		{
 			source: model.icon
 			fallback: "qrc:/assets/application-x-zerosize.svg"
-			isMask: folderSize <= iconSizes.medium			
 			height: folderSize
-			width: folderSize
+			width: height
 		}
 	}
 	

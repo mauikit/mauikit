@@ -75,7 +75,7 @@ public:
 	 * and instead use FMH::toMap, FMH::toModel, FMH::filterModel
 	 **/
 	static QVariantMap toMap(const FMH::MODEL &model);
-	static FMH::MODEL toModel(const QVariantMap &map);
+	static FMH::MODEL toModel(const QVariantMap &map);	
 	
 	/*** END STATIC METHODS ***/
 
