@@ -205,12 +205,13 @@ Maui.Dialog
 							id: browser
 							
 							previewer.parent: ApplicationWindow.overlay
-							trackChanges: false
 							selectionMode: control.mode === modes.OPEN
-							list.onlyDirs: control.onlyDirs
-							list.filters: control.filters
-							list.sortBy: control.sortBy
-							list.filterType: control.filterType
+							
+							currentFMList.trackChanges: false
+							currentFMList.onlyDirs: control.onlyDirs
+							currentFMList.filters: control.filters
+							currentFMList.sortBy: control.sortBy
+							currentFMList.filterType: control.filterType
 							
 							onNewBookmark: 
 							{

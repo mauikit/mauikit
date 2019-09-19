@@ -260,15 +260,12 @@ void FMList::reset()
 	{
 		auto conf = FMH::dirConf(this->path+"/.directory");	
 		this->sort = static_cast<FMList::SORTBY>(conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SORTBY]].toInt());		
-		this->viewType = static_cast<FMList::VIEW_TYPE>(conf[FMH::MODEL_NAME[FMH::MODEL_KEY::VIEWTYPE]].toInt());		
 	}else
 	{	
 		this->sort = static_cast<FMList::SORTBY>(UTIL::loadSettings("SortBy", "SETTINGS", this->sort).toInt());
-		this->viewType = static_cast<FMList::VIEW_TYPE>(UTIL::loadSettings("ViewType", "SETTINGS", this->viewType).toInt());
 	}
 	
 	emit this->sortByChanged();
-	emit this->viewTypeChanged();
 	emit this->hiddenChanged();
 	emit this->previewChanged();			
 	
@@ -815,26 +812,6 @@ void FMList::setContentReady(const bool& value)
 bool FMList::getContentReady() const
 {
 	return this->contentReady;
-}
-
-FMList::VIEW_TYPE FMList::getViewType() const
-{
-	return this->viewType;
-}
-
-void FMList::setViewType(const FMList::VIEW_TYPE& value)
-{
-	if(this->viewType == value)
-		return;
-	
-	this->viewType = value;
-	
-	if(this->trackChanges && this->saveDirProps)
-		FMH::setDirConf(this->path+"/.directory", "MAUIFM", "ViewType", this->viewType);
-	else
-		UTIL::saveSettings("ViewType", this->viewType, "SETTINGS");
-	
-	emit this->viewTypeChanged();
 }
 
 void FMList::search(const QString& query, const QUrl &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)

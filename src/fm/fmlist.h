@@ -41,7 +41,7 @@ class FMList : public MauiList
 	Q_PROPERTY(bool hidden READ getHidden WRITE setHidden NOTIFY hiddenChanged)
 	Q_PROPERTY(bool onlyDirs READ getOnlyDirs WRITE setOnlyDirs NOTIFY onlyDirsChanged)
 	Q_PROPERTY(bool preview READ getPreview WRITE setPreview NOTIFY previewChanged)
-	Q_PROPERTY(FMList::VIEW_TYPE viewType READ getViewType WRITE setViewType NOTIFY viewTypeChanged)
+	
 	Q_PROPERTY(int cloudDepth READ getCloudDepth WRITE setCloudDepth NOTIFY cloudDepthChanged)
 	
 	Q_PROPERTY(bool contentReady READ getContentReady NOTIFY contentReadyChanged)
@@ -167,9 +167,6 @@ class FMList : public MauiList
 		bool getContentReady() const;
 		void setContentReady(const bool &value);
 		
-		VIEW_TYPE getViewType() const;
-		void setViewType(const VIEW_TYPE &value);
-		
 		int getCloudDepth() const;
 		void setCloudDepth(const int &value);
 		
@@ -203,7 +200,6 @@ private:
 	int cloudDepth = 1;
 	QString searchPath;
 	
-	VIEW_TYPE viewType = VIEW_TYPE::ICON_VIEW;
 	FMList::SORTBY sort = FMList::SORTBY::MODIFIED;
 	FMList::FILTER filterType = FMList::FILTER::NONE;
 	FMList::PATHTYPE pathType = FMList::PATHTYPE::PLACES_PATH;
@@ -235,7 +231,6 @@ signals:
     void foldersFirstChanged();
 	void saveDirPropsChanged();
 	void contentReadyChanged();
-	void viewTypeChanged();
 	void cloudDepthChanged();
 	
 	void pathEmptyChanged();

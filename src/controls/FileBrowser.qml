@@ -11,8 +11,8 @@ Maui.Page
 {
     id: control
     
-    property alias trackChanges: modelList.trackChanges
-    property alias saveDirProps: modelList.saveDirProps
+    property alias trackChanges: control.currentFMList.trackChanges
+    property alias saveDirProps: control.currentFMList.saveDirProps
     
     property string currentPath: Maui.FM.homePath()
     
@@ -30,11 +30,9 @@ Maui.Page
     property bool singleSelection: false
     
     property alias selectionBar : selectionBarLoader.item
-    
-    property alias model : folderModel
-    property alias list : modelList
-    property alias browser : viewLoader.item
-    property var currentFMList : modelList
+
+    property alias browser : _browserView.currentView
+    property alias currentFMList : _browserView.currentFMList
     
     property alias previewer : previewer
     property alias menu : browserMenu.contentData
@@ -77,8 +75,8 @@ Maui.Page
         icon.name: "image-preview"
         text: qsTr("Previews")
         checkable: true
-        checked: list.preview
-        onTriggered: list.preview = !list.preview
+        checked: control.currentFMList.preview
+        onTriggered: control.currentFMList.preview = !control.currentFMList.preview
     },
     
     Action
@@ -87,8 +85,8 @@ Maui.Page
         icon.name: "visibility"		
         text: qsTr("Hidden files")
         checkable: true
-        checked: list.hidden
-        onTriggered: list.hidden = !list.hidden	
+        checked: control.currentFMList.hidden
+        onTriggered: control.currentFMList.hidden = !control.currentFMList.hidden	
     },
     
     Action
@@ -186,7 +184,7 @@ Maui.Page
             title: qsTr("New folder")
             message: qsTr("Create a new folder with a custom name")
             acceptButton.text: qsTr("Create")
-            onFinished: list.createDir(text)
+			onFinished: control.currentFMList.createDir(text)
             rejectButton.visible: false
             textEntry.placeholderText: qsTr("Folder name...")
         }
@@ -251,34 +249,6 @@ Maui.Page
         onShareButtonClicked: control.shareFiles([url])
     }
     
-    Maui.BaseModel
-    {
-        id: folderModel
-        list: modelList
-    }
-    
-    Maui.FMList
-    {
-        id: modelList
-        preview: true
-        path: currentPath
-        foldersFirst: true
-        onSortByChanged: if(group) groupBy()
-        onContentReadyChanged: console.log("CONTENT READY?", contentReady)
-        onWarning:
-        {			
-            notify("dialog-information", "An error happened", message)
-        }
-        
-        onProgress:
-        {
-            if(percent === 100)
-                _progressBar.value = 0
-                else
-                    _progressBar.value = percent/100
-        }
-    }	
-    
     FileMenu
     {
         id: itemMenu
@@ -322,186 +292,13 @@ Maui.Page
         onShareClicked: control.shareFiles([item.path])		
     }
     
-    Component
-    {
-        id: listViewBrowser
-        
-        Maui.ListBrowser
-        {
-            showPreviewThumbnails: modelList.preview
-            keepEmblemOverlay: selectionMode
-            rightEmblem: isMobile ? "document-share" : ""
-            leftEmblem: "list-add"
-            showDetailsInfo: true
-            model: folderModel
-            section.delegate: Maui.LabelDelegate
-            {
-                id: delegate
-                label: section
-                labelTxt.font.pointSize: fontSizes.big
-                
-                isSection: true
-                boldLabel: true
-                height: toolBarHeightAlt
-            }
-        }
-    }
-    
-    Component
-    {
-        id: gridViewBrowser
-        
-        Maui.GridBrowser
-        {
-            itemSize : thumbnailsSize + fontSizes.default
-            keepEmblemOverlay: selectionMode
-            showPreviewThumbnails: modelList.preview
-            rightEmblem: isMobile ? "document-share" : ""
-            leftEmblem: "list-add"
-            model: folderModel
-        }
-    }
-    
-    Component
-    {
-        id: millerViewBrowser
-        
-        Kirigami.ColumnView
-        {
-            id: _millerColumns
-            columnWidth: Math.min(Kirigami.Units.gridUnit * 22, control.width)
-            columnResizeMode: Kirigami.ColumnView.DynamicColumns
-            
-            signal itemClicked(int index)
-            signal itemDoubleClicked(int index)
-            signal itemRightClicked(int index)
-            
-            signal rightEmblemClicked(int index)
-            signal leftEmblemClicked(int index)
-            
-            signal areaClicked(var mouse)
-            signal areaRightClicked() 
-            
-            Maui.PathList
-            {
-                id: _millerList
-                path: control.currentPath
-                onPathChanged: _millerColumns.currentIndex = _repeater.count - 1	
-            }
-            
-            Maui.BaseModel
-            {
-                id: _millerModel
-                list: _millerList
-            }
-            
-            Repeater
-            {
-                id: _repeater
-                model: _millerModel
-                
-                
-                Item
-                {
-                    Maui.FMList
-                    {	
-                        id: _millersFMList
-                        preview: modelList.preview
-                        path: model.path
-                        foldersFirst: modelList.foldersFirst
-                        onWarning:
-                        {			
-                            notify("dialog-information", "An error happened", message)
-                        }
-                        
-                        onProgress:
-                        {
-                            if(percent === 100)
-                                _progressBar.value = 0
-                                else
-                                    _progressBar.value = percent/100
-                        }
-                    }
-                    
-                    Maui.ListBrowser
-                    {
-                        id: _millerListView
-                        anchors.fill: parent
-                        
-                        showPreviewThumbnails: modelList.preview
-                        keepEmblemOverlay: selectionMode
-                        rightEmblem: isMobile ? "document-share" : ""
-                        leftEmblem: "list-add"
-                        showDetailsInfo: true
-                        onItemClicked: 
-                        {
-                            control.currentFMList = _millersFMList
-                            _millerColumns.itemClicked(index)
-                        }
-                        
-                        onItemDoubleClicked: 
-                        {
-                            control.currentFMList = _millersFMList
-                            _millerColumns.itemDoubleClicked(index)
-                        }
-                        
-                        onItemRightClicked: 
-                        {
-                            control.currentFMList = _millersFMList                            
-                            _millerColumns.itemRightClicked(index)
-                        }
-                        
-                        onRightEmblemClicked:
-                        {
-                            control.currentFMList = _millersFMList
-                            _millerColumns.rightEmblemClicked(index)
-                        }
-                        
-                        onLeftEmblemClicked: 
-                        {
-                            control.currentFMList = _millersFMList
-                            _millerColumns.leftEmblemClicked(index)
-                        }
-                        
-                        onAreaClicked:
-                        {
-                            control.currentFMList = _millersFMList
-                            _millerColumns.areaClicked(mouse)
-                        }
-                        
-                        onAreaRightClicked:
-                        {
-                            control.currentFMList = _millersFMList
-                            _millerColumns.areaRightClicked()							
-                        }
-                        
-                        model: Maui.BaseModel
-                        {							
-                            list: _millersFMList
-                        }
-                        
-                        section.delegate: Maui.LabelDelegate
-                        {
-                            id: delegate
-                            label: section
-                            labelTxt.font.pointSize: fontSizes.big
-                            
-                            isSection: true
-                            boldLabel: true
-                            height: toolBarHeightAlt
-                        }
-                    }
-                }
-            }       
-        }		
-    }
-    
     Connections
     {
         target: browser
         
         onItemClicked: 
         {		
+			console.log("item clicked connections:", index)
             browser.currentIndex = index
             indexHistory.push(index)
             control.itemClicked(index)
@@ -546,6 +343,7 @@ Maui.Page
         
         onAreaRightClicked: browserMenu.show()
     }
+    
     
     Maui.Holder
     {
@@ -614,9 +412,9 @@ Maui.Page
         Action
         {
             icon.name: "view-list-icons"
-            onTriggered: list.viewType = Maui.FMList.ICON_VIEW
+            onTriggered: _browserView.viewType = Maui.FMList.ICON_VIEW
             checkable: false
-            checked: list.viewType === Maui.FMList.ICON_VIEW
+            checked: _browserView.viewType === Maui.FMList.ICON_VIEW
             icon.width: iconSizes.medium
             text: qsTr("Grid view")
             // 			autoExclusive: true		
@@ -625,9 +423,9 @@ Maui.Page
         Action
         {
             icon.name: "view-list-details"
-            onTriggered: list.viewType = Maui.FMList.LIST_VIEW
+			onTriggered: _browserView.viewType = Maui.FMList.LIST_VIEW
             icon.width: iconSizes.medium
-            checked: list.viewType === Maui.FMList.LIST_VIEW	
+            checked: _browserView.viewType === Maui.FMList.LIST_VIEW	
             text: qsTr("List view")			
             // 			autoExclusive: true
         },
@@ -635,9 +433,9 @@ Maui.Page
         Action
         {
             icon.name: "view-file-columns"
-            onTriggered: list.viewType = Maui.FMList.MILLERS_VIEW
+			onTriggered: _browserView.viewType = Maui.FMList.MILLERS_VIEW
             icon.width: iconSizes.medium
-            checked: list.viewType === Maui.FMList.MILLERS_VIEW
+            checked: _browserView.viewType === Maui.FMList.MILLERS_VIEW
             text: qsTr("Column view")			
             // 			autoExclusive: true		
         },
@@ -650,56 +448,56 @@ Maui.Page
             Kirigami.Action
             {
                 text: qsTr("Folders first")
-                checked: list.foldersFirst
-                onTriggered: list.foldersFirst = !list.foldersFirst
+                checked: con.foldersFirst
+                onTriggered: control.currentFMList.foldersFirst = !control.currentFMList.foldersFirst
             }
             
             Kirigami.Action
             {
                 text: qsTr("Type")
-                checked: list.sortBy === Maui.FMList.MIME
-                onTriggered: list.sortBy = Maui.FMList.MIME
+				checked: control.currentFMList.sortBy === Maui.FMList.MIME
+				onTriggered: control.currentFMList.sortBy = Maui.FMList.MIME
             }
             
             Kirigami.Action
             {
                 text: qsTr("Date")
-                checked: list.sortBy === Maui.FMList.DATE
-                onTriggered: list.sortBy = Maui.FMList.DATE
+				checked: control.currentFMList.sortBy === Maui.FMList.DATE
+				onTriggered: control.currentFMList.sortBy = Maui.FMList.DATE
             }
             
             Kirigami.Action
             {
                 text: qsTr("Modified")
-                checked: list.sortBy === Maui.FMList.MODIFIED
-                onTriggered: list.sortBy = Maui.FMList.MODIFIED
+				checked: control.currentFMList.sortBy === Maui.FMList.MODIFIED
+				onTriggered: control.currentFMList.sortBy = Maui.FMList.MODIFIED
             }
             
             Kirigami.Action
             {
                 text: qsTr("Size")
-                checked: list.sortBy === Maui.FMList.SIZE
-                onTriggered: list.sortBy = Maui.FMList.SIZE
+				checked: control.currentFMList.sortBy === Maui.FMList.SIZE
+				onTriggered: control.currentFMList.sortBy = Maui.FMList.SIZE
             }
             
             Kirigami.Action
             {
                 text: qsTr("Name")
-                checked: list.sortBy === Maui.FMList.LABEL
-                onTriggered: list.sortBy = Maui.FMList.LABEL
+				checked: control.currentFMList.sortBy === Maui.FMList.LABEL
+				onTriggered: control.currentFMList.sortBy = Maui.FMList.LABEL
             }        
             
             Kirigami.Action
             {
                 id: groupAction
                 text: qsTr("Group")
-                checked: group
+                checked: control.group
                 onTriggered:
                 {
-                    group = !group
-                    if(group) 
+					control.group = !control.group
+					if(control.group) 
                         groupBy()
-                        else
+                    else
                             browser.section.property = ""
                 }
             }			
@@ -710,8 +508,8 @@ Maui.Page
             text: qsTr("Select")
             icon.name: "item-select"
             checkable: false
-            checked: selectionMode		
-            onTriggered: selectionMode = !selectionMode
+            checked: control.selectionMode		
+            onTriggered: control.selectionMode = !control.selectionMode
             
         }
         ]       
@@ -818,27 +616,12 @@ Maui.Page
         z: holder.z + 1
         spacing: 0
         
-        Loader
+        BrowserView
         {
-            id: viewLoader
+            id: _browserView
             z: holder.z + 1
-            sourceComponent: switch(list.viewType)
-            {
-                case Maui.FMList.ICON_VIEW: return gridViewBrowser
-                case Maui.FMList.LIST_VIEW: return listViewBrowser
-                case Maui.FMList.MILLERS_VIEW: return millerViewBrowser
-            }
-            
-            onLoaded:
-            {
-                if(sourceComponent !== millerViewBrowser)
-                    control.currentFMList = modelList
-                    
-            }
-            
-            Layout.topMargin: list.viewType == Maui.FMList.ICON_VIEW ? contentMargins * 2 : unit
-            Layout.margins: 0
-            
+            Layout.topMargin: _browserView.viewType == Maui.FMList.ICON_VIEW ? contentMargins * 2 : 0
+            Layout.margins: 0            
             Layout.fillWidth: true
             Layout.fillHeight: true
         }
@@ -871,7 +654,7 @@ Maui.Page
             else 
                 Maui.FM.saveSettings("IconSize", thumbnailsSize, "SETTINGS")
                 
-                if(list.viewType == Maui.FMList.ICON_VIEW)
+                if(_browserView.viewType == Maui.FMList.ICON_VIEW)
                     browser.adaptGrid()
     }
     
@@ -893,7 +676,7 @@ Maui.Page
     function openItem(index)
     {
         var item = control.currentFMList.get(index)
-        var path = item.path
+        var path = item.path        
         
         switch(currentPathType)
         {
@@ -971,24 +754,24 @@ Maui.Page
             }
         }
         
-        if(list.viewType == Maui.FMList.ICON_VIEW)
+        if(_browserView.viewType == Maui.FMList.ICON_VIEW)
             browser.adaptGrid()
     }
     
     function goBack()
     {
-        populate(modelList.previousPath)
+		populate(control.currentFMList.previousPath)
         browser.currentIndex = indexHistory.pop()
     }
     
     function goNext()
     {
-        openFolder(modelList.posteriorPath)
+		openFolder(control.currentFMList.posteriorPath)
     }
     
     function goUp()
     {
-        openFolder(modelList.parentPath)
+		openFolder(control.currentFMList.parentPath)
     }
     
     function refresh()
@@ -1074,7 +857,7 @@ Maui.Page
         var prop = ""
         var criteria = ViewSection.FullString
         
-        switch(modelList.sortBy)
+        switch(control.currentFMList.sortBy)
         {
             case Maui.FMList.LABEL:
                 prop = "label"
@@ -1094,7 +877,7 @@ Maui.Page
                 break;
         }
         
-        list.viewType = Maui.FMList.LIST_VIEW 
+        _browserView.viewType = Maui.FMList.LIST_VIEW 
         
         if(!prop)
         {
