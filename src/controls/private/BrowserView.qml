@@ -10,7 +10,27 @@ Maui.Page
 	id: control
 	
 	property string path
-	property Maui.FMList currentFMList : null
+	property Maui.FMList currentFMList : Maui.FMList
+	{
+		id: _commonFMList
+		preview: true
+		path: control.path
+		foldersFirst: true
+		onSortByChanged: if(group) groupBy()
+		onContentReadyChanged: console.log("CONTENT READY?", contentReady)
+		onWarning:
+		{			
+			notify("dialog-information", "An error happened", message)
+		}
+		
+		onProgress:
+		{
+			if(percent === 100)
+				_progressBar.value = 0
+				else
+					_progressBar.value = percent/100
+		}
+	}
 	property alias currentView : viewLoader.item
 	property int viewType : Maui.FM.loadSettings("VIEW_TYPE", "BROWSER", Maui.FMList.LIST_VIEW)
 	
@@ -18,7 +38,6 @@ Maui.Page
 	
 	height: _browserList.height
 	width: _browserList.width
-	
 	
 	function setCurrentFMList()
 	{
@@ -40,27 +59,7 @@ Maui.Page
 		onLoaded: setCurrentFMList()
 	}
 	
-	Maui.FMList
-	{
-		id: _commonFMList
-		preview: true
-		path: control.path
-		foldersFirst: true
-		onSortByChanged: if(group) groupBy()
-		onContentReadyChanged: console.log("CONTENT READY?", contentReady)
-		onWarning:
-		{			
-			notify("dialog-information", "An error happened", message)
-		}
-		
-		onProgress:
-		{
-			if(percent === 100)
-				_progressBar.value = 0
-				else
-					_progressBar.value = percent/100
-		}
-	}
+	
 	
 	Component
 	{

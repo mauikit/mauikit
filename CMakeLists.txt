@@ -89,10 +89,12 @@ set(mauikit_HDRS
 
 set(editor_SRCS
     src/utils/editor/documenthandler.cpp
+    src/utils/editor/syntaxhighlighterutil.cpp
     )
 
 set(editor_HDRS
     src/utils/editor/documenthandler.cpp
+    src/utils/editor/syntaxhighlighterutil.h
     )
 
 set(fm_SRCS
@@ -193,7 +195,8 @@ if(ANDROID)
 else()
     find_package(Qt5 REQUIRED COMPONENTS WebEngine)
     find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications
-        Config Service KIO ConfigWidgets Attica)
+        Config Service KIO ConfigWidgets Attica SyntaxHighlighting)
+    find_package(/usr/lib/x86_64-linux-gnu/qt5/qml/org/kde/kquicksyntaxhighlighter/libkquicksyntaxhighlighterplugin.so)
 
     set(mauikit_KDE_SRCS
         src/kde/mauikde.cpp
@@ -217,7 +220,9 @@ else()
         KF5::KIONTLM
         KF5::ConfigWidgets
         KF5::Attica
+        KF5::SyntaxHighlighting
         Qt5::WebEngine
+#         /usr/lib/x86_64-linux-gnu/qt5/qml/org/kde/kquicksyntaxhighlighter/libkquicksyntaxhighlighterplugin.so
         )
 endif()
 # set(CMAKE_AUTORCC ON)

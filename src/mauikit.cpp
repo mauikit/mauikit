@@ -38,6 +38,7 @@
 
 #include "handy.h"
 #include "documenthandler.h"
+#include "syntaxhighlighterutil.h"
 
 #include "mauiaccounts.h"
 #include "mauiapp.h"
@@ -53,14 +54,13 @@
 #include <QQuickStyle>
 #endif
 
-
 QUrl MauiKit::componentUrl(const QString &fileName) const
 {
-	#ifdef MAUI_APP
-	return QUrl(QStringLiteral("qrc:/maui/kit/") + fileName);
-	#else
-	return QUrl(resolveFileUrl(fileName));
-	#endif
+#ifdef MAUI_APP
+  return QUrl(QStringLiteral("qrc:/maui/kit/") + fileName);
+#else
+  return QUrl(resolveFileUrl(fileName));
+#endif
 }
 
 void MauiKit::registerTypes(const char *uri)
@@ -119,9 +119,12 @@ void MauiKit::registerTypes(const char *uri)
 	qmlRegisterType(componentUrl(QStringLiteral("SyncDialog.qml")), uri, 1, 0, "SyncDialog"); //to be rename to accountsDialog
 	
 	/** EDITOR CONTROLS **/
-	qmlRegisterType<DocumentHandler>("DocumentHandler", 1, 0, "DocumentHandler");	
+	qmlRegisterType<DocumentHandler>(uri, 1, 0, "DocumentHandler");
+	qmlRegisterType<SyntaxHighlighterUtil>();  
 	qmlRegisterType(componentUrl(QStringLiteral("Editor.qml")), uri, 1, 0, "Editor");
-	
+	#ifdef STATIC_MAUIKIT
+	qmlRegisterType<KQuickSyntaxHighlighter>("org.kde.kquicksyntaxhighlighter", 0, 1, "KQuickSyntaxHighlighter");
+	#endif
 	
 	/** PLATFORMS SPECIFIC CONTROLS **/
 	#ifdef Q_OS_ANDROID

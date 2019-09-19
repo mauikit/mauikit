@@ -62,6 +62,17 @@
 #include <QDebug>
 #include <QUrl>
 
+#include "syntaxhighlighterutil.h"
+
+/**
+ * Global Variables
+ */
+#ifdef STATIC_MAUIKIT
+#include "kquicksyntaxhighlighter/kquicksyntaxhighlighter.h"
+#endif
+
+SyntaxHighlighterUtil *DocumentHandler::syntaxHighlighterUtil = nullptr;
+
 DocumentHandler::DocumentHandler(QObject *parent)
     : QObject(parent)
     , m_document(nullptr)
@@ -243,12 +254,9 @@ void DocumentHandler::setUnderline(bool underline)
     emit underlineChanged();
 }
 
-bool DocumentHandler::isRich() const
+bool DocumentHandler::getIsRich() const
 {
-    const QString filePath = fileUrl().fileName();
-    const bool isRtf = QFileInfo(filePath).suffix().contains(QLatin1String("rtf"));
-
-    return isRtf;
+    return this->isRich;
 }
 
 int DocumentHandler::fontSize() const
@@ -300,6 +308,14 @@ QUrl DocumentHandler::fileUrl() const
     return m_fileUrl;
 }
 
+SyntaxHighlighterUtil * DocumentHandler::getSyntaxHighlighterUtil()
+{	
+	if (!DocumentHandler::syntaxHighlighterUtil) 	
+		DocumentHandler::syntaxHighlighterUtil = new SyntaxHighlighterUtil();
+	
+	return DocumentHandler::syntaxHighlighterUtil;
+}
+
 void DocumentHandler::load(const QUrl &fileUrl)
 {
 	
@@ -315,12 +331,12 @@ void DocumentHandler::load(const QUrl &fileUrl)
 
     const QUrl path = QQmlFileSelector::get(engine)->selector()->select(fileUrl);
     const QString fileName = QQmlFile::urlToLocalFileOrQrc(path);
+
+    m_fileUrl = fileUrl;
+    emit fileUrlChanged();
 	
     if (QFile::exists(fileName))
-	{
-		
-		qDebug()<< "LOAD FILE EXISTS << ";
-		
+	{		
         QFile file(fileName);
         if (file.open(QFile::ReadOnly))
 		{
@@ -332,13 +348,13 @@ void DocumentHandler::load(const QUrl &fileUrl)
             if (QTextDocument *doc = textDocument())
                 doc->setModified(false);
 
+			this->isRich = QFileInfo(fileName).suffix().contains(QLatin1String("rtf"));
+			
+			emit this->isRichChanged();
             emit loaded(codec->toUnicode(data));
             reset();
         }
     }
-
-    m_fileUrl = fileUrl;
-    emit fileUrlChanged();
 }
 
 void DocumentHandler::saveAs(const QUrl &fileUrl)

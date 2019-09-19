@@ -35,8 +35,7 @@ Maui.Dialog
 		property string suggestedFileName : ""
 		
 		property var filters: []
-		property int filterType: Maui.FMList.NONE
-		
+		property int filterType: Maui.FMList.NONE		
 		property bool onlyDirs: false
 		property int sortBy: Maui.FMList.MODIFIED
 		property bool searchBar : false
@@ -207,11 +206,14 @@ Maui.Dialog
 							previewer.parent: ApplicationWindow.overlay
 							selectionMode: control.mode === modes.OPEN
 							
-							currentFMList.trackChanges: false
-							currentFMList.onlyDirs: control.onlyDirs
-							currentFMList.filters: control.filters
-							currentFMList.sortBy: control.sortBy
-							currentFMList.filterType: control.filterType
+							Component.onCompleted:
+							{								
+								browser.currentFMList.trackChanges= false
+								browser.currentFMList.onlyDirs= control.onlyDirs
+								browser.currentFMList.filters= control.filters
+								browser.currentFMList.sortBy= control.sortBy
+								browser.currentFMList.filterType= control.filterType
+							}
 							
 							onNewBookmark: 
 							{
@@ -230,10 +232,10 @@ Maui.Dialog
 									}
 									case modes.SAVE:
 									{
-										if(Maui.FM.isDir(list.get(index).path))
+										if(Maui.FM.isDir(currentFMList.get(index).path))
 											openItem(index)
 										else
-											textField.text = list.get(index).label
+											textField.text = currentFMList.get(index).label
 											break
 									}				
 								}
@@ -259,7 +261,7 @@ Maui.Dialog
 		
 		function closeIt()
 		{
-			browser.clearSelection()
+			browser.clean()
 			close()
 		}
 		

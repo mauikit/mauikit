@@ -61,6 +61,7 @@ class QTextDocument;
 class QQuickTextDocument;
 QT_END_NAMESPACE
 
+class SyntaxHighlighterUtil;
 class DocumentHandler : public QObject
 {
     Q_OBJECT
@@ -78,13 +79,15 @@ class DocumentHandler : public QObject
     Q_PROPERTY(bool uppercase READ uppercase WRITE setUppercase NOTIFY uppercaseChanged)
     Q_PROPERTY(bool italic READ italic WRITE setItalic NOTIFY italicChanged)
     Q_PROPERTY(bool underline READ underline WRITE setUnderline NOTIFY underlineChanged)
-    Q_PROPERTY(bool isRich READ isRich NOTIFY isRichChanged)
+    Q_PROPERTY(bool isRich READ getIsRich NOTIFY isRichChanged)
 
     Q_PROPERTY(int fontSize READ fontSize WRITE setFontSize NOTIFY fontSizeChanged)
 
     Q_PROPERTY(QString fileName READ fileName NOTIFY fileUrlChanged)
     Q_PROPERTY(QString fileType READ fileType NOTIFY fileUrlChanged)
     Q_PROPERTY(QUrl fileUrl READ fileUrl NOTIFY fileUrlChanged)
+	
+	Q_PROPERTY(SyntaxHighlighterUtil * syntaxHighlighterUtil READ getSyntaxHighlighterUtil CONSTANT FINAL)
 
 public:
     explicit DocumentHandler(QObject *parent = nullptr);
@@ -122,7 +125,7 @@ public:
     bool underline() const;
     void setUnderline(bool underline);
 
-    bool isRich() const;
+    bool getIsRich() const;
 
     int fontSize() const;
     void setFontSize(int size);
@@ -130,6 +133,8 @@ public:
     QString fileName() const;
     QString fileType() const;
     QUrl fileUrl() const;
+	
+	static SyntaxHighlighterUtil * getSyntaxHighlighterUtil();
 
 public Q_SLOTS:
     void load(const QUrl &fileUrl);
@@ -170,10 +175,14 @@ private:
     int m_cursorPosition;
     int m_selectionStart;
     int m_selectionEnd;
-
+	
+	bool isRich = false;
+	
     QFont m_font;
     int m_fontSize;
     QUrl m_fileUrl;
+	
+	static SyntaxHighlighterUtil *syntaxHighlighterUtil;
 };
 
 #endif // DOCUMENTHANDLER_H

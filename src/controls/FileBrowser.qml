@@ -27,9 +27,18 @@ Maui.Page
     property bool isCut : false
     
     property bool selectionMode : false
-    property bool group : false
-    property bool showEmblems: true
     property bool singleSelection: false
+    
+    property bool group : false
+    
+    property bool showEmblems: true
+    
+    //redefinition to work wiht the whole loading async thing
+    property int viewType
+    property var filters: []
+    property int filterType: Maui.FMList.NONE    
+    property bool onlyDirs: false
+    property int sortBy: Maui.FMList.MODIFIED
     
     property alias selectionBar : selectionBarLoader.item
 
@@ -478,7 +487,7 @@ Maui.Page
             Kirigami.Action
             {
                 text: qsTr("Folders first")
-                checked: con.foldersFirst
+				checked: control.currentFMList.foldersFirst
                 onTriggered: control.currentFMList.foldersFirst = !control.currentFMList.foldersFirst
             }
             
@@ -756,6 +765,8 @@ Maui.Page
 			Layout.fillWidth: true
 			Layout.fillHeight: true
 			z: holder.z + 1
+			clip: true
+			
 			orientation: ListView.Horizontal
 			model: tabsObjectModel
 			snapMode: ListView.SnapOneItem
@@ -787,7 +798,17 @@ Maui.Page
         }		
     }
     
-    Component.onCompleted: openTab(Maui.FM.homePath())	
+    Component.onCompleted: 
+    {
+		openTab(Maui.FM.homePath())	
+								
+		browserView.viewType = control.viewType
+		control.currentFMList.onlyDirs= control.onlyDirs
+		control.currentFMList.filters= control.filters
+		control.currentFMList.sortBy= control.sortBy
+		control.currentFMList.filterType= control.filterType
+		
+	}
     
     onThumbnailsSizeChanged:
     {

@@ -16,7 +16,8 @@ linux:unix:!android {
 } else:android {
 
     message(Building Maui helpers for Android)
-    include($$PWD/src/android/android.pri)
+    include($$PWD/src/android/android.pri)    
+    include($$PWD/src/utils/editor/syntaxhighlighter.pri)
     include($$PWD/src/utils/syncing/openssl/openssl.pri)
     include($$PWD/src/utils/syncing/libwebdavclient/webdavclient.pri)
     include($$PWD/src/utils/store/attica/attica.pri)
@@ -45,6 +46,7 @@ HEADERS += \
     $$PWD/src/utils/model_template/mauimodel.h \
     $$PWD/src/utils/model_template/mauilist.h \
     $$PWD/src/utils/editor/documenthandler.h \
+    $$PWD/src/utils/editor/syntaxhighlighterutil.h \
     $$PWD/src/utils/handy.h \
     $$PWD/src/utils/mauiapp.h \
     $$PWD/src/utils/mauiaccounts.h \
@@ -63,6 +65,7 @@ SOURCES += \
     $$PWD/src/utils/model_template/mauimodel.cpp \
     $$PWD/src/utils/model_template/mauilist.cpp \
     $$PWD/src/utils//editor/documenthandler.cpp \
+    $$PWD/src/utils/editor/syntaxhighlighterutil.cpp \
     $$PWD/src/utils/handy.cpp \
     $$PWD/src/utils/mauiapp.cpp \
     $$PWD/src/utils/mauiaccounts.cpp \
