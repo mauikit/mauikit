@@ -4,8 +4,6 @@ import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.6 as Kirigami
 import org.kde.kquicksyntaxhighlighter 0.1
-import SyntaxHighlighterUtil 1.0
-import DocumentHandler 1.0 
 import "private"
 
 Item
@@ -26,7 +24,7 @@ Item
 	property alias canRedo: body.canRedo	
     property alias headBar: _editorToolBar
 
-    DocumentHandler
+    Maui.DocumentHandler
 	{
 		id: document
 		document: body.textDocument
@@ -46,11 +44,11 @@ Item
 		onLoaded:
 		{
 			body.text = text
-
-            var formatName = SyntaxHighlighterUtil.getLanguageNameFromFileName(document.fileName);
-
-            for (var i=0; i<languagesListModel.count; i++) {
-                if (languagesListModel.get(i).text === formatName) {
+            var formatName = document.syntaxHighlighterUtil.getLanguageNameFromFileName(document.fileName);
+            for (var i=0; i<languagesListModel.count; i++) 
+			{
+                if (languagesListModel.get(i).text === formatName) 
+				{
                     languagesListComboBox.currentIndex = i;
                 }
             }
@@ -152,7 +150,8 @@ Item
 				
                 leftContent: [
 
-                ComboBox {
+                ComboBox
+                {
                     id: languagesListComboBox
                     model: languagesListModel
                     font.pointSize: fontSizes.small
@@ -256,7 +255,8 @@ Item
 					documentMenu.popup()
             }
 
-            KQuickSyntaxHighlighter {
+            KQuickSyntaxHighlighter 
+            {
                 id: syntaxHighlighter
                 textEdit: body
             }
@@ -266,7 +266,7 @@ Item
     }
 
     Component.onCompleted: {
-        var languages = SyntaxHighlighterUtil.getLanguageNameList();
+		var languages = document.syntaxHighlighterUtil.getLanguageNameList();
 
         for (var index in languages) {
             languagesListModel.append({text: languages[index]});

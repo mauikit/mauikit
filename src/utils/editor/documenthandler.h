@@ -61,6 +61,7 @@ class QTextDocument;
 class QQuickTextDocument;
 QT_END_NAMESPACE
 
+class SyntaxHighlighterUtil;
 class DocumentHandler : public QObject
 {
     Q_OBJECT
@@ -85,6 +86,8 @@ class DocumentHandler : public QObject
     Q_PROPERTY(QString fileName READ fileName NOTIFY fileUrlChanged)
     Q_PROPERTY(QString fileType READ fileType NOTIFY fileUrlChanged)
     Q_PROPERTY(QUrl fileUrl READ fileUrl NOTIFY fileUrlChanged)
+	
+	Q_PROPERTY(SyntaxHighlighterUtil * syntaxHighlighterUtil READ getSyntaxHighlighterUtil CONSTANT FINAL)
 
 public:
     explicit DocumentHandler(QObject *parent = nullptr);
@@ -130,6 +133,8 @@ public:
     QString fileName() const;
     QString fileType() const;
     QUrl fileUrl() const;
+	
+	static SyntaxHighlighterUtil * getSyntaxHighlighterUtil();
 
 public Q_SLOTS:
     void load(const QUrl &fileUrl);
@@ -174,6 +179,8 @@ private:
     QFont m_font;
     int m_fontSize;
     QUrl m_fileUrl;
+	
+	static SyntaxHighlighterUtil *syntaxHighlighterUtil;
 };
 
 #endif // DOCUMENTHANDLER_H

@@ -49,20 +49,10 @@
 #include "mauikde.h"
 #endif
 
-#ifdef STATIC_MAUIKIT
-#include "kquicksyntaxhighlighter/kquicksyntaxhighlighter.h"
-#endif
-
 #if defined Q_OS_ANDROID || defined APPIMAGE_PACKAGE
 #include <QIcon>
 #include <QQuickStyle>
 #endif
-
-/**
- * Global Variables
- */
-SyntaxHighlighterUtil *syntaxHighlighterUtil = nullptr;
-
 
 QUrl MauiKit::componentUrl(const QString &fileName) const
 {
@@ -129,23 +119,12 @@ void MauiKit::registerTypes(const char *uri)
   qmlRegisterType(componentUrl(QStringLiteral("SyncDialog.qml")), uri, 1, 0, "SyncDialog"); //to be rename to accountsDialog
 
   /** EDITOR CONTROLS **/
-  qmlRegisterType<DocumentHandler>("DocumentHandler", 1, 0, "DocumentHandler");
+  qmlRegisterType<DocumentHandler>(uri, 1, 0, "DocumentHandler");
+  qmlRegisterType<SyntaxHighlighterUtil>();  
   qmlRegisterType(componentUrl(QStringLiteral("Editor.qml")), uri, 1, 0, "Editor");
 #ifdef STATIC_MAUIKIT
   qmlRegisterType<KQuickSyntaxHighlighter>("org.kde.kquicksyntaxhighlighter", 0, 1, "KQuickSyntaxHighlighter");
 #endif
-  qmlRegisterSingletonType<SyntaxHighlighterUtil>("SyntaxHighlighterUtil", 1, 0, "SyntaxHighlighterUtil",
-                                                  [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject* {
-    Q_UNUSED(engine)
-    Q_UNUSED(scriptEngine)
-
-    if (syntaxHighlighterUtil == nullptr) {
-        syntaxHighlighterUtil = new SyntaxHighlighterUtil();
-      }
-
-    return syntaxHighlighterUtil;
-  });
-
 
   /** PLATFORMS SPECIFIC CONTROLS **/
 #ifdef Q_OS_ANDROID
@@ -183,7 +162,6 @@ void MauiKit::registerTypes(const char *uri)
     Q_UNUSED(scriptEngine)
     return MauiApp::instance();
   });
-
 
   /** HELPERS **/
   qmlRegisterSingletonType<Handy>(uri, 1, 0, "Handy",

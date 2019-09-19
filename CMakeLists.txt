@@ -222,7 +222,7 @@ else()
         KF5::Attica
         KF5::SyntaxHighlighting
         Qt5::WebEngine
-        /usr/lib/x86_64-linux-gnu/qt5/qml/org/kde/kquicksyntaxhighlighter/libkquicksyntaxhighlighterplugin.so
+#         /usr/lib/x86_64-linux-gnu/qt5/qml/org/kde/kquicksyntaxhighlighter/libkquicksyntaxhighlighterplugin.so
         )
 endif()
 # set(CMAKE_AUTORCC ON)

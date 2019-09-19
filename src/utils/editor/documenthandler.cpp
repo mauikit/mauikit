@@ -62,6 +62,17 @@
 #include <QDebug>
 #include <QUrl>
 
+#include "syntaxhighlighterutil.h"
+
+/**
+ * Global Variables
+ */
+#ifdef STATIC_MAUIKIT
+#include "kquicksyntaxhighlighter/kquicksyntaxhighlighter.h"
+#endif
+
+SyntaxHighlighterUtil *DocumentHandler::syntaxHighlighterUtil = nullptr;
+
 DocumentHandler::DocumentHandler(QObject *parent)
     : QObject(parent)
     , m_document(nullptr)
@@ -298,6 +309,14 @@ QString DocumentHandler::fileType() const
 QUrl DocumentHandler::fileUrl() const
 {
     return m_fileUrl;
+}
+
+SyntaxHighlighterUtil * DocumentHandler::getSyntaxHighlighterUtil()
+{	
+	if (!DocumentHandler::syntaxHighlighterUtil) 	
+		DocumentHandler::syntaxHighlighterUtil = new SyntaxHighlighterUtil();
+	
+	return DocumentHandler::syntaxHighlighterUtil;
 }
 
 void DocumentHandler::load(const QUrl &fileUrl)
