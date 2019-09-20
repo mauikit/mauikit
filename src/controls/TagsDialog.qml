@@ -9,6 +9,8 @@ import TagsList 1.0
 
 Maui.Dialog
 {	
+    id: control
+
 	property var urls : []
 	
 	property alias taglist :_tagsList

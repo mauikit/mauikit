@@ -4,7 +4,6 @@
         <file>BusyIndicator.qml</file>
         <file>Button.qml</file>
         <file>CheckBox.qml</file>
-        <file>CheckIndicator.qml</file>
         <file>ComboBox.qml</file>
         <file>Container.qml</file>
         <file>Control.qml</file>

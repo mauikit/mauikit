@@ -61,14 +61,14 @@ T.MenuItem {
     icon.color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightedTextColor : control.Kirigami.Theme.textColor) :
                              control.Kirigami.Theme.disabledTextColor
 
-    indicator: CheckIndicator
-    {
-        x: text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding + (control.availableWidth - width) / 2
-        y: control.topPadding + (control.availableHeight - height) / 2
-        visible: control.checkable
-        control: control
-        checked: control.checked ? Qt.Checked : Qt.Unchecked
-    }
+//    indicator: RadioButton
+//    {
+//        x: text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding + (control.availableWidth - width) / 2
+//        y: control.topPadding + (control.availableHeight - height) / 2
+//        visible: control.checkable
+////        control: control
+//        checked: control.checked ? Qt.Checked : Qt.Unchecked
+//    }
 
     arrow: Kirigami.Icon
     {

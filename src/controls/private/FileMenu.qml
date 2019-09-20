@@ -152,7 +152,7 @@ Menu
 		if(item)
 		{
 			control.index = index
-			isDir = Maui.FM.isDir(item.path)
+            isDir = Maui.FM.isDir(item.path)
 			popup()
 		}
 	}
