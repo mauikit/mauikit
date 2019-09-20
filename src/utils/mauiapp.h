@@ -19,6 +19,8 @@
 #ifndef MAUIAPP_H
 #define MAUIAPP_H
 #include <QObject>
+#include <QQuickItem>
+
 #include "handy.h"
 #include "fmh.h"
 
@@ -46,7 +48,9 @@ class MAUIKIT_EXPORT MauiApp : public QObject
 	Q_PROPERTY(MauiAccounts * accounts READ getAccounts CONSTANT FINAL)
 
 
-public:    
+public:  
+    static MauiApp *qmlAttachedProperties(QObject *object);
+    
 	static MauiApp *instance();
 	static QString getName() 
 	{
@@ -123,5 +127,8 @@ signals:
 	void iconNameChanged(QString iconName);
 	void descriptionChanged(QString description);
 };
+
+
+QML_DECLARE_TYPEINFO(MauiApp, QML_HAS_ATTACHED_PROPERTIES)
 
 #endif // MAUIAPP_H

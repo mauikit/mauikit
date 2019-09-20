@@ -81,7 +81,7 @@ namespace FMH
 	{
 		{FILTER_TYPE::AUDIO, QStringList {"*.mp3", "*.mp4", "*.wav", "*.ogg", "*.flac"}},
 		{FILTER_TYPE::VIDEO, QStringList {"*.mp4", "*.mkv", "*.mov", "*.avi", "*.flv"}},
-		{FILTER_TYPE::TEXT, QStringList {"*.txt", "*.cpp", "*.js", "*.doc", "*.h", "*.json", "*.html", "*.rtf"}},
+		{FILTER_TYPE::TEXT, QStringList {"*.txt", "*.cpp", "*.js", "*.doc", "*.h", "*.json", "*.html", "*.rtf", "*.qml", "*.py", "*.go"}},
 		{FILTER_TYPE::DOCUMENT, QStringList {"*.pdf", "*.txt", "*.cbz", "*.cbr", "*.epub", "*.cbt", "*.cba", "*.cb7"}},
 		{FILTER_TYPE::IMAGE, QStringList {"*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg", "*.bmp"}},
 		{FILTER_TYPE::NONE, QStringList()}
@@ -185,7 +185,45 @@ namespace FMH
 		/** other keys **/
 		CITY,
 		STATE,
-		COUNTRY
+		COUNTRY,
+		
+		/** keys from opendesktop store **/
+		PACKAGE_ARCH,
+		PACKAGE_TYPE,
+		GPG_FINGERPRINT,
+		GPG_SIGNATURE,
+		PACKAGE_NAME,
+		PRICE,
+		REPOSITORY,
+		TAGS,
+		WAY,
+		PIC,
+		SMALL_PIC,
+		CHANGED,
+		COMMENTS,
+		CREATED,
+		DETAIL_PAGE,
+		DETAILS,
+		TOTAL_DOWNLOADS,
+		GHNS_EXCLUDED,
+		LANGUAGE,
+		PERSON_ID,
+		SCORE,
+		SUMMARY,
+		TYPE_ID,
+		TYPE_NAME,
+		XDG_TYPE,
+		
+		//file props
+		SYMLINK,
+		IS_SYMLINK,
+		IS_DIR,
+		IS_FILE,
+		IS_REMOTE,
+		EXECUTABLE,
+		READABLE,
+		WRITABLE,
+		LAST_READ,
 		
 	}; 
 	
@@ -286,7 +324,45 @@ namespace FMH
 		
 		{MODEL_KEY::CITY, "city"},
 		{MODEL_KEY::STATE, "state"},
-		{MODEL_KEY::COUNTRY, "country"}
+		{MODEL_KEY::COUNTRY, "country"}, 
+		
+		// opendesktop keys
+		{MODEL_KEY::PACKAGE_ARCH, "packagearch"},
+		{MODEL_KEY::PACKAGE_TYPE, "packagetype"},
+		{MODEL_KEY::GPG_FINGERPRINT, "gpgfingerprint"},
+		{MODEL_KEY::GPG_SIGNATURE, "gpgsignature"},
+		{MODEL_KEY::PACKAGE_NAME, "packagename"},
+		{MODEL_KEY::PRICE, "price"},
+		{MODEL_KEY::REPOSITORY, "repository"},
+		{MODEL_KEY::TAGS, "tags"},
+		{MODEL_KEY::WAY, "way"},
+		{MODEL_KEY::PIC, "pic"},
+		{MODEL_KEY::SMALL_PIC, "smallpic"},
+		{MODEL_KEY::CHANGED, "changed"},
+		{MODEL_KEY::COMMENTS, "comments"},
+		{MODEL_KEY::CREATED, "created"},
+		{MODEL_KEY::DETAIL_PAGE, "detailpage"},
+		{MODEL_KEY::DETAILS, "details"},
+		{MODEL_KEY::TOTAL_DOWNLOADS, "totaldownloads"},
+		{MODEL_KEY::GHNS_EXCLUDED, "ghnsexcluded"},
+		{MODEL_KEY::LANGUAGE, "language"},
+		{MODEL_KEY::SCORE, "score"},
+		{MODEL_KEY::SUMMARY, "summary"},
+		{MODEL_KEY::TYPE_ID, "typeid"},
+		{MODEL_KEY::TYPE_NAME, "typename"},
+		{MODEL_KEY::XDG_TYPE, "xdgtype"},
+
+//file props
+		{MODEL_KEY::SYMLINK, "symlink"},
+		{MODEL_KEY::IS_SYMLINK, "issymlink"},
+		{MODEL_KEY::LAST_READ, "lastread"},
+		{MODEL_KEY::READABLE, "readable"},
+		{MODEL_KEY::WRITABLE, "writeable"},
+		{MODEL_KEY::IS_DIR, "isdir"},
+		{MODEL_KEY::IS_FILE, "isfile"},
+		{MODEL_KEY::IS_REMOTE, "isremote"},
+		{MODEL_KEY::EXECUTABLE, "executable"}
+		
 	};
 	
     static const QHash<QString, FMH::MODEL_KEY> MODEL_NAME_KEY =
@@ -385,7 +461,45 @@ namespace FMH
 		
 		{MODEL_NAME[MODEL_KEY::CITY], MODEL_KEY::CITY},
 		{MODEL_NAME[MODEL_KEY::STATE], MODEL_KEY::STATE},
-		{MODEL_NAME[MODEL_KEY::COUNTRY], MODEL_KEY::COUNTRY}
+		{MODEL_NAME[MODEL_KEY::COUNTRY], MODEL_KEY::COUNTRY},
+		
+		//opendesktop store keys
+		{MODEL_NAME[MODEL_KEY::PACKAGE_ARCH], MODEL_KEY::PACKAGE_ARCH},
+		{MODEL_NAME[MODEL_KEY::PACKAGE_TYPE], MODEL_KEY::PACKAGE_TYPE},
+		{MODEL_NAME[MODEL_KEY::GPG_FINGERPRINT], MODEL_KEY::GPG_FINGERPRINT},
+		{MODEL_NAME[MODEL_KEY::GPG_SIGNATURE], MODEL_KEY::GPG_SIGNATURE},
+		{MODEL_NAME[MODEL_KEY::PACKAGE_NAME], MODEL_KEY::PACKAGE_NAME},
+		{MODEL_NAME[MODEL_KEY::PRICE], MODEL_KEY::PRICE},
+		{MODEL_NAME[MODEL_KEY::REPOSITORY], MODEL_KEY::REPOSITORY},
+		{MODEL_NAME[MODEL_KEY::TAGS], MODEL_KEY::TAGS},
+		{MODEL_NAME[MODEL_KEY::WAY], MODEL_KEY::WAY},
+		{MODEL_NAME[MODEL_KEY::PIC], MODEL_KEY::PIC},
+		{MODEL_NAME[MODEL_KEY::SMALL_PIC], MODEL_KEY::SMALL_PIC},
+		{MODEL_NAME[MODEL_KEY::CHANGED], MODEL_KEY::CHANGED},
+		{MODEL_NAME[MODEL_KEY::COMMENTS], MODEL_KEY::COMMENTS},
+		{MODEL_NAME[MODEL_KEY::CREATED], MODEL_KEY::CREATED},
+		{MODEL_NAME[MODEL_KEY::DETAIL_PAGE], MODEL_KEY::DETAIL_PAGE},
+		{MODEL_NAME[MODEL_KEY::DETAILS], MODEL_KEY::DETAILS},
+		{MODEL_NAME[MODEL_KEY::TOTAL_DOWNLOADS], MODEL_KEY::TOTAL_DOWNLOADS},
+		{MODEL_NAME[MODEL_KEY::GHNS_EXCLUDED], MODEL_KEY::GHNS_EXCLUDED},
+		{MODEL_NAME[MODEL_KEY::LANGUAGE], MODEL_KEY::LANGUAGE},
+		{MODEL_NAME[MODEL_KEY::PERSON_ID], MODEL_KEY::PERSON_ID},
+		{MODEL_NAME[MODEL_KEY::SCORE], MODEL_KEY::SCORE},
+		{MODEL_NAME[MODEL_KEY::SUMMARY], MODEL_KEY::SUMMARY},
+		{MODEL_NAME[MODEL_KEY::TYPE_ID], MODEL_KEY::TYPE_ID},
+		{MODEL_NAME[MODEL_KEY::TYPE_NAME], MODEL_KEY::TYPE_NAME},
+		{MODEL_NAME[MODEL_KEY::XDG_TYPE], MODEL_KEY::XDG_TYPE},
+		
+		//file props		
+		{MODEL_NAME[MODEL_KEY::SYMLINK], MODEL_KEY::SYMLINK},
+		{MODEL_NAME[MODEL_KEY::IS_SYMLINK], MODEL_KEY::IS_SYMLINK},
+		{MODEL_NAME[MODEL_KEY::LAST_READ], MODEL_KEY::LAST_READ},
+		{MODEL_NAME[MODEL_KEY::READABLE], MODEL_KEY::READABLE},
+		{MODEL_NAME[MODEL_KEY::WRITABLE], MODEL_KEY::WRITABLE},
+		{MODEL_NAME[MODEL_KEY::IS_DIR], MODEL_KEY::IS_DIR},
+		{MODEL_NAME[MODEL_KEY::IS_FILE], MODEL_KEY::IS_FILE},
+		{MODEL_NAME[MODEL_KEY::IS_REMOTE], MODEL_KEY::IS_REMOTE},
+		{MODEL_NAME[MODEL_KEY::EXECUTABLE], MODEL_KEY::EXECUTABLE}		
 	};
 	
     typedef QHash<FMH::MODEL_KEY, QString> MODEL;
@@ -751,49 +865,6 @@ namespace FMH
 	const QString FMPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/maui/fm/";
 	const QString DBName = "fm.db";
 	
-	inline FMH::MODEL getDirInfoModel(const QUrl &path, const QString &type = QString())
-	{		
-		if(!path.isLocalFile())
-		{
-			qWarning() << "URL recived is not a local file" << path;
-			return FMH::MODEL();	  
-		}		
-		
-		const QDir dir (path.toLocalFile());		
-		if(!dir.exists()) 
-			return FMH::MODEL();
-		
-		return FMH::MODEL
-		{
-			{FMH::MODEL_KEY::ICON, FMH::getIconName(path)},
-			{FMH::MODEL_KEY::LABEL, dir.dirName()},
-			{FMH::MODEL_KEY::PATH, path.toString()},
-			{FMH::MODEL_KEY::TYPE, type}
-		};
-	}	
-	
-	inline QVariantMap getDirInfo(const QUrl &path, const QString &type = QString())
-	{
-		if(!path.isLocalFile())
-		{
-			qWarning() << "URL recived is not a local file" << path;
-			return QVariantMap();	  
-		}		
-		
-		const QFileInfo file(path.toLocalFile());	
-		
-		if(!file.exists()) 
-			return QVariantMap();
-		
-		const auto data = FMH::getDirInfoModel(path);
-		
-		QVariantMap res; 
-		for(const auto &key : data.keys())		
-			res.insert(FMH::MODEL_NAME[key], data[key]);
-		
-		return res;
-	}
-	
 	
 	inline FMH::MODEL getFileInfoModel(const QUrl &path)
 	{		
@@ -806,7 +877,7 @@ namespace FMH
 		const QFileInfo file(path.toLocalFile());
 		if(!file.exists()) 
 			return FMH::MODEL();
-		qDebug()<< "trying to get path info model. exists";
+		qDebug()<< "trying to get path info model. exists";		
 		
 		const auto mime = FMH::getMime(path);
 		return FMH::MODEL 
@@ -818,7 +889,18 @@ namespace FMH
 			{FMH::MODEL_KEY::NAME, file.fileName()},
 			{FMH::MODEL_KEY::DATE,  file.birthTime().toString(Qt::TextDate)},
 			{FMH::MODEL_KEY::MODIFIED, file.lastModified().toString(Qt::TextDate)},
+			{FMH::MODEL_KEY::LAST_READ, file.lastRead().toString(Qt::TextDate)},
+			
 			{FMH::MODEL_KEY::MIME, mime },
+			{FMH::MODEL_KEY::SYMLINK, file.symLinkTarget() },
+			{FMH::MODEL_KEY::SYMLINK, file.symLinkTarget() },
+			{FMH::MODEL_KEY::IS_SYMLINK, QVariant(file.isSymLink()).toString()},
+			{FMH::MODEL_KEY::IS_FILE, QVariant(file.isFile()).toString()},
+			{FMH::MODEL_KEY::HIDDEN, QVariant(file.isHidden()).toString()},
+			{FMH::MODEL_KEY::IS_DIR, QVariant(file.isDir()).toString()},
+			{FMH::MODEL_KEY::WRITABLE, QVariant(file.isWritable()).toString()},
+			{FMH::MODEL_KEY::READABLE, QVariant(file.isReadable()).toString()},
+			{FMH::MODEL_KEY::EXECUTABLE, QVariant(file.isExecutable()).toString()},			
 			{FMH::MODEL_KEY::ICON, FMH::getIconName(path)},
 			{FMH::MODEL_KEY::SIZE, QString::number(file.size()) /*locale.formattedDataSize(file.size())*/},
 			{FMH::MODEL_KEY::PATH, path.toString()},
@@ -850,6 +932,47 @@ namespace FMH
 		return res;
 	}
 	
+	inline FMH::MODEL getDirInfoModel(const QUrl &path, const QString &type = QString())
+	{		
+		if(!path.isLocalFile())
+		{
+			qWarning() << "URL recived is not a local file" << path;
+			return FMH::MODEL();	  
+		}		
+		
+		const QDir dir (path.toLocalFile());		
+		if(!dir.exists()) 
+			return FMH::MODEL();
+		
+		auto res = getFileInfoModel(path);
+		res[FMH::MODEL_KEY::LABEL] = dir.dirName();
+		res[FMH::MODEL_KEY::TYPE] =  type;
+		
+		return res;
+	}	
+	
+	inline QVariantMap getDirInfo(const QUrl &path, const QString &type = QString())
+	{
+		if(!path.isLocalFile())
+		{
+			qWarning() << "URL recived is not a local file" << path;
+			return QVariantMap();	  
+		}		
+		
+		const QFileInfo file(path.toLocalFile());	
+		
+		if(!file.exists()) 
+			return QVariantMap();
+		
+		const auto data = FMH::getDirInfoModel(path);
+		
+		QVariantMap res; 
+		for(const auto &key : data.keys())		
+			res.insert(FMH::MODEL_NAME[key], data[key]);
+		
+		return res;
+	}	
+
 	#ifndef STATIC_MAUIKIT
 	#include "mauikit_export.h"
 	#endif

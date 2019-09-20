@@ -28,11 +28,11 @@ PathList::~PathList() {}
 
 QVariantMap PathList::get(const int& index) const
 {
-    if(this->list.isEmpty() || index >= this->list.size() || index < 0)
-    {
-        return QVariantMap();
-    }
-
+	if(this->list.isEmpty() || index >= this->list.size() || index < 0)
+	{
+		return QVariantMap();
+	}
+	
 	const auto model = this->list.at(index);	
 	return FM::toMap(model);
 }
@@ -77,10 +77,12 @@ FMH::MODEL_LIST PathList::splitPath(const QString& path)
 	
 	const auto m_url = __url.toString();
 	
-	const auto paths = m_url.split("/", QString::SplitBehavior::SkipEmptyParts);
+	auto paths = m_url.split("/", QString::SplitBehavior::SkipEmptyParts);
 	
-	qDebug()<< "PATHBAR LIST"<< m_url << paths;
-	
+	if(paths.isEmpty())
+	{
+		return {{{FMH::MODEL_KEY::LABEL, QString()}, {FMH::MODEL_KEY::PATH, path}}};
+	}
 	
 	return std::accumulate(paths.constBegin(), paths.constEnd(), FMH::MODEL_LIST(), [scheme](FMH::MODEL_LIST &list, const QString &part) -> FMH::MODEL_LIST
 	{	

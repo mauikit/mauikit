@@ -22,10 +22,10 @@
 
 MauiApp::MauiApp(QObject *parent) : QObject(parent), m_accounts(new MauiAccounts(this))
 {
-// 	QObject::connect(UTIL::app, &QCoreApplication::aboutToQuit, []()
-// 	{
-// 		delete MauiApp::m_instance;
-// 	});
+    // 	QObject::connect(UTIL::app, &QCoreApplication::aboutToQuit, []()
+    // 	{
+    // 		delete MauiApp::m_instance;
+    // 	});
 }
 
 MauiApp::~MauiApp() {}
@@ -33,17 +33,25 @@ MauiApp::~MauiApp() {}
 MauiApp * MauiApp::m_instance = nullptr;
 MauiApp * MauiApp::instance()
 {
-	if(MauiApp::m_instance == nullptr)		 
-		MauiApp::m_instance = new MauiApp();
-	
-	return MauiApp::m_instance;	
+    if(MauiApp::m_instance == nullptr)		 
+        MauiApp::m_instance = new MauiApp();
+    
+    return MauiApp::m_instance;	
 }
-
 
 MauiAccounts * MauiApp::getAccounts() const
 {
-	return this->m_accounts;
+    return this->m_accounts;
 }
+
+MauiApp * MauiApp::qmlAttachedProperties(QObject* object)
+{
+     if(MauiApp::m_instance == nullptr)		 
+        MauiApp::m_instance = new MauiApp(object);
+    
+    return MauiApp::m_instance;	   
+}
+
 
 
 

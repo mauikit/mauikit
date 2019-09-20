@@ -64,8 +64,8 @@ Kirigami.AbstractApplicationWindow
 	
 	property bool isWide : root.width >= Kirigami.Units.gridUnit * 30
 	
-	property int radiusV : unit * 4
-	property int iconSize : iconSizes.medium * (isMobile ? 0.95 : 1)
+	property int radiusV : Maui.Style.radiusV
+	property int iconSize : Maui.Style.iconSizes.medium * (isMobile ? 0.95 : 1)
 	
 	readonly property int unit : Maui.Style.unit
 	readonly property int rowHeight: Maui.Style.rowHeight
@@ -74,7 +74,7 @@ Kirigami.AbstractApplicationWindow
 	readonly property int toolBarHeight: Maui.Style.toolBarHeight
 	readonly property int toolBarHeightAlt: Maui.Style.toolBarHeightAlt
 	
-	readonly property int contentMargins: space.medium
+	readonly property int contentMargins: Maui.Style.contentMargins
 	readonly property var fontSizes: Maui.Style.fontSizes
 	readonly property var space : Maui.Style.space
 	readonly property var iconSizes : Maui.Style.iconSizes
@@ -84,28 +84,13 @@ Kirigami.AbstractApplicationWindow
 	/***************************************************/
 	/********************* COLORS *********************/
 	/*************************************************/
-	
-	readonly property var colorScheme: ({
-		Default : 1,
-		Light : 2,
-		Dark: 3,
-		Custom: 4
-	})
-	
 	property color headBarBGColor: Kirigami.Theme.backgroundColor
 	property color headBarFGColor: Kirigami.Theme.textColor	
 	property color warningColor : Maui.Style.warningColor
 	property color dangerColor : Maui.Style.dangerColor
 	property color infoColor : Maui.Style.infoColor
 	property color suggestedColor : Maui.Style.suggestedColor
-	
-	/* ANDROID THEMING*/
-	
-// 	Material.theme: Material.Dark
-// 	Material.accent: "yellow"
-// 	Material.background:  headBarBGColor 
-// 	Material.primary: headBarBGColor
-// 	Material.foreground: Kirigami.Theme.textColor
+
 	
 	/***************************************************/
 	/**************** READONLY PROPS ******************/
@@ -129,20 +114,7 @@ Kirigami.AbstractApplicationWindow
 	/*************************************************/
 	signal menuButtonClicked();
 	signal searchButtonClicked();
-	signal goBackTriggered();
-	signal goFowardTriggered();
-	
-	//    overlay.modal: Rectangle
-	//    {
-	//        color: Color.transparent(altColor, 0.5)
-	//    }
-	
-	
-	//    overlay.modeless: Rectangle {
-	//        color: "transparent"
-	//    }
-	
-	
+
 	onClosing:
 	{
 		if(!isMobile)
@@ -208,8 +180,8 @@ Kirigami.AbstractApplicationWindow
 			id: menuBtn
 			icon.name: "application-menu"
 			icon.color: headBarFGColor
-			icon.width: iconSizes.medium
-			icon.height: iconSizes.medium
+			icon.width: Maui.Style.iconSizes.medium
+			icon.height: Maui.Style.iconSizes.medium
 			checked: mainMenu.visible  
 			onClicked:
 			{
@@ -293,8 +265,8 @@ Kirigami.AbstractApplicationWindow
 		Kirigami.Separator
 		{
 			visible: menuBtn.visible
-			Layout.preferredHeight: 16
-			opacity: 0.5
+            Layout.preferredHeight: Maui.Style.iconSizes.small
+// 			opacity: 0.5
 			width: visible ? 2 : 0
 		}
 		]
@@ -314,7 +286,6 @@ Kirigami.AbstractApplicationWindow
 		visible: count
 		position: ToolBar.Footer
 		width: root.width
-		// 		Kirigami.Theme.backgroundColor: Kirigami.Theme.backgroundColor		
 	}  
 	
 	header: headBar.count && headBar.position === ToolBar.Header ? headBar : undefined
@@ -393,14 +364,14 @@ Kirigami.AbstractApplicationWindow
 				Item
 				{
 					Layout.fillHeight: true
-					Layout.preferredWidth: iconSizes.huge + space.big
+					Layout.preferredWidth: Maui.Style.iconSizes.huge + Maui.Style.space.big
 					Layout.row: 1
 					Layout.column: 1
 					
 					ToolButton
 					{
 						id: _notifyIcon
-						icon.width: iconSizes.large						
+						icon.width: Maui.Style.iconSizes.large						
 						anchors.centerIn: parent
 					}				
 				}
@@ -473,40 +444,6 @@ Kirigami.AbstractApplicationWindow
 				
 			}
 			
-	}
-	
-	function switchColorScheme(variant)
-	{
-		//         switch(variant)
-		//         {
-		//         case colorScheme.Default:
-		// 
-		//             backgroundColor = Maui.Style.backgroundColor
-		//             textColor = Maui.Style.textColor
-		//             highlightColor = Maui.Style.highlightColor
-		//             highlightedTextColor = Maui.Style.highlightedTextColor
-		//             buttonBackgroundColor = Maui.Style.buttonBackgroundColor
-		//             viewBackgroundColor = Maui.Style.viewBackgroundColor
-		//             altColor = Maui.Style.altColor
-		//             borderColor = Maui.Style.borderColor
-		//             if(isAndroid) Maui.Android.statusbarColor(backgroundColor, true)
-		//             break
-		// 
-		//         case colorScheme.Dark:
-		//             borderColor = darkBorderColor
-		//             backgroundColor = darkBackgroundColor
-		//             textColor = darkTextColor
-		//             highlightColor = darkHighlightColor
-		//             highlightedTextColor = darkHighlightedTextColor
-		//             buttonBackgroundColor = darkButtonBackgroundColor
-		//             viewBackgroundColor = darkViewBackgroundColor
-		//             altColor = darkDarkColor
-		//             altColorText = darkAltColorText
-		//             bgColor =darkBgColor
-		//             
-		//             if(isAndroid) Maui.Android.statusbarColor(backgroundColor, false)
-		//             break         
-		//         }
 	}
 	
 	function notify(icon, title, body, callback, timeout)

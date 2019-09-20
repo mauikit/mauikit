@@ -64,10 +64,9 @@ T.Popup {
     contentItem: Item { }
 
     background: Rectangle {
-        radius: Kirigami.Units.devicePixelRatio * 4
-        color: Kirigami.Theme.viewBackgroundColor
-        property color borderColor: Kirigami.Theme.textColor
-        border.color: Qt.rgba(borderColor.r, borderColor.g, borderColor.b, 0.3)
+        radius: radiusV
+        color: Kirigami.Theme.backgroundColor
+        border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
         layer.enabled: true
         
         layer.effect: DropShadow {

@@ -38,6 +38,7 @@
 
 #include "handy.h"
 #include "documenthandler.h"
+#include "syntaxhighlighterutil.h"
 
 #include "mauiaccounts.h"
 #include "mauiapp.h"
@@ -53,14 +54,13 @@
 #include <QQuickStyle>
 #endif
 
-
 QUrl MauiKit::componentUrl(const QString &fileName) const
 {
-	#ifdef MAUI_APP
-	return QUrl(QStringLiteral("qrc:/maui/kit/") + fileName);
-	#else
-	return QUrl(resolveFileUrl(fileName));
-	#endif
+#ifdef MAUI_APP
+  return QUrl(QStringLiteral("qrc:/maui/kit/") + fileName);
+#else
+  return QUrl(resolveFileUrl(fileName));
+#endif
 }
 
 void MauiKit::registerTypes(const char *uri)
@@ -110,6 +110,7 @@ void MauiKit::registerTypes(const char *uri)
 									 Q_UNUSED(scriptEngine)
 									 return new FM;									  
 								 });
+//     qmlRegisterSingletonType(componentUrl(QStringLiteral("private/FileBrowser.qml")), uri, 1, 0, "FileMenu");
 	qmlRegisterType(componentUrl(QStringLiteral("FileBrowser.qml")), uri, 1, 0, "FileBrowser");
 	qmlRegisterType(componentUrl(QStringLiteral("PlacesSidebar.qml")), uri, 1, 0, "PlacesSidebar");
 	qmlRegisterType(componentUrl(QStringLiteral("FilePreviewer.qml")), uri, 1, 0, "FilePreviewer");
@@ -118,9 +119,12 @@ void MauiKit::registerTypes(const char *uri)
 	qmlRegisterType(componentUrl(QStringLiteral("SyncDialog.qml")), uri, 1, 0, "SyncDialog"); //to be rename to accountsDialog
 	
 	/** EDITOR CONTROLS **/
-	qmlRegisterType<DocumentHandler>("DocumentHandler", 1, 0, "DocumentHandler");	
+	qmlRegisterType<DocumentHandler>(uri, 1, 0, "DocumentHandler");
+	qmlRegisterType<SyntaxHighlighterUtil>();  
 	qmlRegisterType(componentUrl(QStringLiteral("Editor.qml")), uri, 1, 0, "Editor");
-	
+	#ifdef STATIC_MAUIKIT
+	qmlRegisterType<KQuickSyntaxHighlighter>("org.kde.kquicksyntaxhighlighter", 0, 1, "KQuickSyntaxHighlighter");
+	#endif
 	
 	/** PLATFORMS SPECIFIC CONTROLS **/
 	#ifdef Q_OS_ANDROID
@@ -153,14 +157,11 @@ void MauiKit::registerTypes(const char *uri)
 
 	/** MAUI APPLICATION SPECIFIC PROPS **/
 	qmlRegisterType<MauiAccounts>();
-	qmlRegisterSingletonType<MauiApp>(uri, 1, 0, "App", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject* {
-		Q_UNUSED(engine)
-		Q_UNUSED(scriptEngine)
-		return MauiApp::instance();
-	});
+	qmlRegisterUncreatableType<MauiApp>(uri, 1, 0, "App", "Cannot be created App");
 	
 	
 	/** HELPERS **/	
+
 	qmlRegisterSingletonType<Handy>(uri, 1, 0, "Handy",
 									[](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject* {
 										Q_UNUSED(engine)

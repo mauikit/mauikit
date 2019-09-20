@@ -38,10 +38,10 @@ Item
     property alias model : selectionList.model
     property alias count : selectionList.count
     
-    property int barHeight : itemHeight + space.large
+    property int barHeight : itemHeight + Maui.Style.space.large
     property color animColor : "black"
-    property int itemHeight: iconSizes.big + space.big
-    property int itemWidth:  iconSizes.big + (isMobile? space.big : space.large) + space.big
+	property int itemHeight: Maui.Style.iconSizes.big + Maui.Style.space.big
+	property int itemWidth:  Maui.Style.iconSizes.big + (Kirigami.Settings.isMobile? Maui.Style.space.big : Maui.Style.space.large) + Maui.Style.space.big
     property int position: Qt.Horizontal
     property string iconName : "overflow-menu"
     property bool iconVisible: true
@@ -105,20 +105,9 @@ Item
         opacity: 1
         border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
 		
-        SequentialAnimation
-        {
-            id: anim
-            PropertyAnimation
-            {
-                target: bg
-                property: "color"
-                easing.type: Easing.InOutQuad
-                from: animColor
-                to: Qt.lighter(Kirigami.Theme.backgroundColor, 1.2)
-                duration: 500
-            }
-        }       
+       
     }
+    
     
     GridLayout
     {
@@ -136,6 +125,7 @@ Item
                      1
                  else
                      undefined
+                     
         
         Maui.Badge
         {
@@ -195,6 +185,20 @@ Item
                 id: selectionList
                 anchors.fill: parent
                 
+                 SequentialAnimation
+        {
+            id: anim
+            PropertyAnimation
+            {
+                target: selectionList
+                property: "y"
+                easing.type: Easing.InOutQuad
+                from: (-200)
+                to: 0
+                duration: 100
+            }
+        }       
+                
                 boundsBehavior: !isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
                 orientation: if(position === Qt.Horizontal)
                                  ListView.Horizontal
@@ -217,15 +221,16 @@ Item
                     anchors.horizontalCenter: position === Qt.Vertical ? parent.horizontalCenter : undefined
                     height:  itemHeight
                     width: itemWidth
-                    folderSize: iconSizes.big
+                    folderSize: Maui.Style.iconSizes.big
                     showLabel: true
                     emblemAdded: true
                     keepEmblemOverlay: true
+                    showEmblem: true
                     showSelectionBackground: false
                     labelColor: Kirigami.Theme.textColor
                     showTooltip: true
                     showThumbnails: true
-                    emblemSize: iconSizes.small
+                    emblemSize: Maui.Style.iconSizes.small
                     leftEmblem: "list-remove"
 					Kirigami.Theme.highlightColor: Kirigami.Theme.highlightColor
 					Kirigami.Theme.backgroundColor: Kirigami.Theme.complementaryBackgroundColor

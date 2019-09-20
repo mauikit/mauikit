@@ -119,8 +119,7 @@ Flickable
 			height: flick.contentHeight
 			fillMode: Image.PreserveAspectFit
 			autoTransform: true
-			asynchronous: true
-			
+			asynchronous: true			
 			
 			MouseArea
 			{

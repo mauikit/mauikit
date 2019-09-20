@@ -78,7 +78,7 @@ Item
 		visible: false
 		anchors.bottom: parent.bottom
 		width: parent.width
-		height: visible ?  iconSizes.big : 0
+		height: visible ?  Maui.Style.iconSizes.big : 0
 		placeholderText: qsTr("Find...")
 		horizontalAlignment: Qt.Left
 		

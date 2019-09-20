@@ -35,8 +35,7 @@ Maui.Dialog
 		property string suggestedFileName : ""
 		
 		property var filters: []
-		property int filterType: Maui.FMList.NONE
-		
+		property int filterType: Maui.FMList.NONE		
 		property bool onlyDirs: false
 		property int sortBy: Maui.FMList.MODIFIED
 		property bool searchBar : false
@@ -148,7 +147,7 @@ Maui.Dialog
                 id: _pathBarLoader
                 Layout.fillWidth: true
                 Layout.margins: space.medium
-                height: iconSizes.big
+                height: Maui.Style.iconSizes.big
                 Loader
                 {
                     anchors.fill: parent
@@ -172,11 +171,9 @@ Maui.Dialog
 				anchors.fill: parent
 				clip: true
 				
-				property int sidebarWidth: Kirigami.Units.gridUnit * (isMobile? 15 : 8)				
 				separatorVisible: wideMode
 				initialPage: [sidebar, browser]
-				defaultColumnWidth: sidebarWidth
-// 					interactive: currentIndex === 1
+				defaultColumnWidth:  Kirigami.Units.gridUnit * (isMobile? 15 : 8)		
 					
 					Maui.PlacesSidebar
 					{
@@ -205,12 +202,16 @@ Maui.Dialog
 							id: browser
 							
 							previewer.parent: ApplicationWindow.overlay
-							trackChanges: false
 							selectionMode: control.mode === modes.OPEN
-							list.onlyDirs: control.onlyDirs
-							list.filters: control.filters
-							list.sortBy: control.sortBy
-							list.filterType: control.filterType
+							
+							Component.onCompleted:
+							{								
+								browser.currentFMList.trackChanges= false
+								browser.currentFMList.onlyDirs= control.onlyDirs
+								browser.currentFMList.filters= control.filters
+								browser.currentFMList.sortBy= control.sortBy
+								browser.currentFMList.filterType= control.filterType
+							}
 							
 							onNewBookmark: 
 							{
@@ -229,10 +230,10 @@ Maui.Dialog
 									}
 									case modes.SAVE:
 									{
-										if(Maui.FM.isDir(list.get(index).path))
+										if(Maui.FM.isDir(currentFMList.get(index).path))
 											openItem(index)
 										else
-											textField.text = list.get(index).label
+											textField.text = currentFMList.get(index).label
 											break
 									}				
 								}
@@ -258,7 +259,7 @@ Maui.Dialog
 		
 		function closeIt()
 		{
-			browser.clearSelection()
+			browser.clean()
 			close()
 		}
 		

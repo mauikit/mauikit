@@ -1,6 +1,6 @@
 /*
  * <one line to give the program's name and a brief idea of what it does.>
- * Copyright (C) 2018  camilo <email>
+ * Copyright (C) 2018  camilo higuita <milo.h@aol.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,6 +42,8 @@ watcher(new QFileSystemWatcher(this))
 			this->list = list;
 			this->pathEmpty = this->list.isEmpty();
 			emit this->pathEmptyChanged();
+			this->count = this->list.size();		
+			emit this->countChanged();
 			this->pos();
 			this->setContentReady(true);
 		}	
@@ -55,30 +57,30 @@ watcher(new QFileSystemWatcher(this))
 			this->list = list;
 			this->pathEmpty = this->list.isEmpty();
 			emit this->pathEmptyChanged();
+			this->count = this->list.size();		
+			emit this->countChanged();
 			this->pos();
 			this->setContentReady(true);
 		}	
 	});
 	
 	connect(this->fm, &FM::pathContentReady, [&](const FMH::PATH_CONTENT &res)
-	{
-		qDebug()<< "PATHCN ONTEN READY" << res.path << this->path << res.content;
-		
+	{		
 // 		if(this->pathType != FMList::PATHTYPE::PLACES_PATH)
 // 			return;		
 		
 		if(res.path != this->path)
-			return;
-		
+			return;		
 		
 		emit this->preListChanged();
 		this->list = res.content;
-		
 		this->pathEmpty = this->list.isEmpty() /*&& FM::fileExists(this->path)*/;
 		emit this->pathEmptyChanged();
 		
-		this->sortList();		
+		this->sortList();	
 		
+		this->count = this->list.size();		
+		emit this->countChanged();
 		emit this->postListChanged();
 		this->setContentReady(true);
 	});	
@@ -260,15 +262,12 @@ void FMList::reset()
 	{
 		auto conf = FMH::dirConf(this->path+"/.directory");	
 		this->sort = static_cast<FMList::SORTBY>(conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SORTBY]].toInt());		
-		this->viewType = static_cast<FMList::VIEW_TYPE>(conf[FMH::MODEL_NAME[FMH::MODEL_KEY::VIEWTYPE]].toInt());		
 	}else
 	{	
 		this->sort = static_cast<FMList::SORTBY>(UTIL::loadSettings("SortBy", "SETTINGS", this->sort).toInt());
-		this->viewType = static_cast<FMList::VIEW_TYPE>(UTIL::loadSettings("ViewType", "SETTINGS", this->viewType).toInt());
 	}
 	
 	emit this->sortByChanged();
-	emit this->viewTypeChanged();
 	emit this->hiddenChanged();
 	emit this->previewChanged();			
 	
@@ -427,6 +426,12 @@ void FMList::sortList()
 	});
 }
 
+QString FMList::getPathName() const
+{
+    return this->pathName;
+}
+
+
 QString FMList::getPath() const
 {
 	return this->path;
@@ -453,6 +458,8 @@ void FMList::setPath(const QString &path)
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::SEARCH_PATH;
+        this->pathName = "Search";
+        
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		this->watchPath(QString());
@@ -461,15 +468,16 @@ void FMList::setPath(const QString &path)
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::CLOUD_PATH;
+        this->pathName = "Cloud";
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		this->watchPath(QString());
 		
 	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::APPS_PATH])
 	{
-		qDebug()<< "GET APPS" ;
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::APPS_PATH;
+        this->pathName = "Apps";
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		this->watchPath(QString());
@@ -478,6 +486,7 @@ void FMList::setPath(const QString &path)
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::TAGS_PATH;
+        emit this->pathName = "Tags";
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		this->watchPath(QString());
@@ -486,6 +495,7 @@ void FMList::setPath(const QString &path)
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::TRASH_PATH;
+        this->pathName = "Trash";
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		this->watchPath(QString());
@@ -495,6 +505,7 @@ void FMList::setPath(const QString &path)
 		this->watchPath(this->path);
 		this->pathExists = FMH::fileExists(this->path);
 		this->pathType = FMList::PATHTYPE::PLACES_PATH;
+        this->pathName = FMH::getDirInfoModel(this->path)[FMH::MODEL_KEY::LABEL];
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 		
@@ -502,24 +513,28 @@ void FMList::setPath(const QString &path)
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::MTP_PATH;
+        this->pathName = "MTP";
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::FISH_PATH] )		
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::FISH_PATH;
+        this->pathName = "Fish";
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::REMOTE_PATH] )		
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::REMOTE_PATH;
+        this->pathName = "Remote";
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::DRIVES_PATH] )		
 	{
 		this->pathExists = true;
 		this->pathType = FMList::PATHTYPE::DRIVES_PATH;
+        this->pathName = "Drives";
 		emit this->pathExistsChanged();
 		emit this->pathTypeChanged();
 	}
@@ -527,6 +542,7 @@ void FMList::setPath(const QString &path)
 	
 	qDebug() << "PATHTYPE IS" << this->pathType << FMH::PATHTYPE_SCHEME[static_cast<FMH::PATHTYPE_KEY>(this->pathType)];
 	emit this->pathChanged();
+    emit this->pathNameChanged();
 }
 
 FMList::PATHTYPE FMList::getPathType() const
@@ -800,26 +816,6 @@ bool FMList::getContentReady() const
 	return this->contentReady;
 }
 
-FMList::VIEW_TYPE FMList::getViewType() const
-{
-	return this->viewType;
-}
-
-void FMList::setViewType(const FMList::VIEW_TYPE& value)
-{
-	if(this->viewType == value)
-		return;
-	
-	this->viewType = value;
-	
-	if(this->trackChanges && this->saveDirProps)
-		FMH::setDirConf(this->path+"/.directory", "MAUIFM", "ViewType", this->viewType);
-	else
-		UTIL::saveSettings("ViewType", this->viewType, "SETTINGS");
-	
-	emit this->viewTypeChanged();
-}
-
 void FMList::search(const QString& query, const QUrl &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)
 {
 	qDebug()<< "SEARCHING FOR" << query << path;
@@ -879,5 +875,10 @@ void FMList::setCloudDepth(const int& value)
 	
 	emit this->cloudDepthChanged();
 	this->reset();
+}
+
+uint FMList::getCount() const
+{
+	return this->count;
 }
 

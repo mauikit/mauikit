@@ -15,9 +15,9 @@ Maui.Page
 {
 	id: control
 	/*props*/
-	property int itemSize : isMobile ? iconSizes.huge * 1.5 : iconSizes.enormous
-	property int itemSpacing: isMobile ? space.medium : space.big
-	property int itemRadius : unit * 6
+	property int itemSize : Kirigami.Settings.isMobile ? Maui.Style.iconSizes.huge * 1.5 : Maui.Style.iconSizes.enormous
+	property int itemSpacing: Kirigami.Settings.isMobile ? Maui.Style.space.medium : Maui.Style.space.big
+	property int itemRadius : Maui.Style.unit * 6
 	property bool showLabels : true
 	property bool fitPreviews : false
 	property bool detailsView : false
@@ -33,7 +33,7 @@ Maui.Page
 	signal fileReady(var item)
 	
 	headBar.visible: !holder.visible
-	padding: control.detailsView ?  0 : space.big
+	padding: control.detailsView ?  0 : Maui.Style.space.big
 	
 	StoreModel
 	{
@@ -171,7 +171,7 @@ Maui.Page
 		id: holder
 		visible: _storeList.contentEmpty
 		
-		emojiSize: iconSizes.huge
+		emojiSize: Maui.Style.iconSizes.huge
 		emoji: if(!_storeList.contentReady)
 		"qrc:/assets/animat-diamond-color.gif"
 		else
@@ -280,7 +280,7 @@ Maui.Page
 		{
 			id: _filterList
 			anchors.fill: parent
-			anchors.margins: space.medium
+			anchors.margins: Maui.Style.space.medium
 			model: ListModel{id: _filterModel}
 			delegate: Maui.ListDelegate
 			{
@@ -418,13 +418,13 @@ Maui.Page
 					
 					Rectangle
 					{
-						height: iconSizes.medium
+						height: Maui.Style.iconSizes.medium
 						width: height
 						anchors
 						{
 							horizontalCenter: parent.horizontalCenter
 							bottom: parent.bottom
-							margins: space.big
+							margins: Maui.Style.space.big
 						}
 						
 						color: Kirigami.Theme.backgroundColor
@@ -478,7 +478,7 @@ Maui.Page
 			Label
 			{
 				Layout.fillWidth: true
-				Layout.leftMargin: space.big
+				Layout.leftMargin: Maui.Style.space.big
 				
 				Layout.preferredHeight: rowHeightAlt
 				wrapMode: Text.Wrap
@@ -493,7 +493,7 @@ Maui.Page
 			Label
 			{
 				Layout.fillWidth: true
-				Layout.leftMargin: space.big
+				Layout.leftMargin: Maui.Style.space.big
 				
 				Layout.preferredHeight: rowHeightAlt
 				wrapMode: Text.Wrap
@@ -523,7 +523,7 @@ Maui.Page
 			Label
 			{
 				Layout.fillWidth: true
-				Layout.leftMargin: space.big
+				Layout.leftMargin: Maui.Style.space.big
 				
 				Layout.preferredHeight: rowHeightAlt
 				wrapMode: Text.Wrap
@@ -539,7 +539,7 @@ Maui.Page
 			{
 				Layout.fillWidth: true
 				Layout.preferredHeight: rowHeightAlt
-				Layout.leftMargin: space.big
+				Layout.leftMargin: Maui.Style.space.big
 				
 				wrapMode: Text.Wrap
 				elide: Qt.ElideRight
@@ -554,7 +554,7 @@ Maui.Page
 			{
 				Layout.fillWidth: true
 				Layout.fillHeight: true
-				Layout.leftMargin: space.big
+				Layout.leftMargin: Maui.Style.space.big
 				text: _previewerDialog.currentItem.description
 				horizontalAlignment: Qt.AlignLeft
 				verticalAlignment: Qt.AlignVCenter

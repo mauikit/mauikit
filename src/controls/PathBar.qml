@@ -28,7 +28,7 @@ Item
 {
 	id: control    
 	
-	height: iconSizes.big
+	height: Maui.Style.iconSizes.medium
 	
 	property string url : ""
 	property bool pathEntry: false
@@ -189,7 +189,7 @@ Item
 				{
 					id: delegate
 					height: control.height - (unit*2)
-					width: iconSizes.big * 3
+					width: Math.max(Maui.Style.iconSizes.medium * 2, implicitWidth)
 					Connections
 					{
 						target: delegate

@@ -9,14 +9,13 @@ ItemDelegate
 	
 	id: control
 
-    clip: true
-
-    property int tagWidth: iconSizes.medium * 5
-    property int tagHeight: iconSizes.medium
+	property int tagWidth: Math.max(Maui.Style.iconSizes.medium * 5, tagLabel.implicitWidth + _closeIcon.width)
+    property int tagHeight: Maui.Style.iconSizes.medium
     property bool showDeleteIcon: true
+    
     signal removeTag(int index)
-    hoverEnabled: !isMobile
-
+	
+    hoverEnabled: !Kirigami.Settings.isMobile
     height: tagHeight
     width: tagWidth
 
@@ -37,43 +36,41 @@ ItemDelegate
     RowLayout
     {
         anchors.fill: parent
-
-        Item
-        {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            Layout.leftMargin: tagWidth *0.2
+            
             Label
             {
                 id: tagLabel
-                text: tag
-                height: parent.height
-                width: parent.width
-                anchors.centerIn: parent
+                text: tag      
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                Layout.leftMargin: tagWidth *0.2
                 verticalAlignment: Qt.AlignVCenter
                 horizontalAlignment: Qt.AlignHCenter
                 elide: Qt.ElideRight
-                font.pointSize: fontSizes.medium
+                wrapMode: Text.NoWrap
+                font.pointSize: Maui.Style.fontSizes.medium
                 color: Kirigami.Theme.textColor
             }
-        }
+        
 
         Item
         {
+			id: _closeIcon
             Layout.fillHeight: true
-            width: showDeleteIcon? iconSizes.small : 0
-            Layout.maximumWidth: iconSizes.small
-            Layout.margins: space.small
+            Layout.preferredWidth: showDeleteIcon ? Maui.Style.iconSizes.small : 0
+            Layout.margins: Maui.Style.space.small
+            Layout.alignment: Qt.AlignRight
 
             ToolButton
             {
                 anchors.centerIn: parent
                 visible: showDeleteIcon
                 icon.name: "window-close"
-                icon.width: iconSizes.small
+				height: Maui.Style.iconSizes.small
+				width: height
+				icon.width: height
                 onClicked: removeTag(index)
 				icon.color: Kirigami.Theme.textColor
-
             }
         }
     }

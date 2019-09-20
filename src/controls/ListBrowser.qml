@@ -27,7 +27,7 @@ ScrollView
 {
     id: control    
     
-    property int itemSize : iconSizes.big
+    property int itemSize : Maui.Style.iconSizes.big
     property bool showEmblem : true
     property bool keepEmblemOverlay : false
     property string rightEmblem
@@ -65,26 +65,24 @@ ScrollView
 	
 	padding: 0
 	spacing: 0
-    
+	focus: true
+	
     ListView
-    {
-		anchors.fill: parent
+    {	
 		id: _listView
-		//    maximumFlickVelocity: 400
+		anchors.fill: parent
+		focus: true
 		
 		snapMode: ListView.SnapToItem
 		boundsBehavior: !isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
 		
 		keyNavigationEnabled: true
-		clip: true
-		focus: true
-		interactive: true
+		interactive: isMobile
 		highlightFollowsCurrentItem: true
 		highlightMoveDuration: 0
 		
 		width: parent.width
-		height: parent.height      
-    
+		height: parent.height 
         
         model: ListModel { id: listModel }
         delegate: Maui.IconDelegate
@@ -102,7 +100,6 @@ ScrollView
             showThumbnails: showPreviewThumbnails
             rightEmblem: control.rightEmblem
             leftEmblem: control.leftEmblem
-            opacity: (model.name).startsWith(".") ? 0.5 : 1
             
             Connections
             {

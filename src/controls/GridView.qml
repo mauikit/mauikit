@@ -136,7 +136,7 @@ ScrollView
             control.cellHeight = control.cellHeight + 10
             control.cellWidth = control.cellWidth + 10
         }
-        else if((control.itemSize - 10) > iconSizes.small)
+        else if((control.itemSize - 10) > Maui.Style.iconSizes.small)
         {
             control.itemSize = control.itemSize - 10
             control.cellHeight = control.cellHeight - 10

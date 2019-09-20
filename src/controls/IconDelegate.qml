@@ -33,13 +33,14 @@ ItemDelegate
 	property bool showDetailsInfo: false
 	
 	property int folderSize : iconSize
-	property int emblemSize: iconSizes.medium
+	property int emblemSize: Maui.Style.iconSizes.medium
 	property bool isHovered :  hovered
 	property bool showLabel : true
 	property bool showEmblem : false
 	property bool showSelectionBackground : true
 	property bool showTooltip : false
 	property bool showThumbnails : false
+	property bool draggable : false
 	
 	property bool emblemAdded : false
 	property bool keepEmblemOverlay : false
@@ -51,6 +52,12 @@ ItemDelegate
 	property string rightEmblem
 	property string leftEmblem : "list-add"
 	
+	
+	//override the itemdelegate default signals to allow dragging content
+	signal pressed(var mouse)
+	signal pressAndHold(var mouse)
+	signal clicked(var mouse)
+	
 	signal rightClicked()
 	signal emblemClicked(int index)
 	signal rightEmblemClicked(int index)
@@ -58,7 +65,9 @@ ItemDelegate
 	
 	focus: true
 	clip: true
-	hoverEnabled: !isMobile
+	hoverEnabled: !Kirigami.Settings.isMobile
+	
+	opacity: (model.hidden == true || model.hidden == "true" )? 0.5 : 1
 	
 	background: Rectangle
 	{
@@ -66,33 +75,44 @@ ItemDelegate
 		index % 2 === 0 ? Qt.lighter( Kirigami.Theme.backgroundColor,1.2) :  Kirigami.Theme.backgroundColor)		
 	
         opacity: hovered ? 0.3 : 1
-
     }
 	
-// 	Drag.active: _mouseArea.drag.active
-//         Drag.dragType: Drag.Automatic
-//         Drag.supportedActions: Qt.CopyAction
-//         Drag.mimeData:
-//         {
-//             "text/uri-list": model.path
-//         }
-	
+	//dragging still needs more work
+	Drag.active: _mouseArea.drag.active && control.draggable
+	Drag.dragType: Drag.Automatic
+	Drag.supportedActions: Qt.CopyAction
+	Drag.mimeData:
+	{
+		"text/uri-list": model.path
+	}	
+
 	MouseArea
 	{
         id: _mouseArea
 		anchors.fill: parent
-		acceptedButtons:  Qt.RightButton
-// 		drag.target: parent
+		acceptedButtons:  Qt.RightButton | Qt.LeftButton
+		drag.target: control.draggable ? parent : undefined
+		
 		onClicked:
 		{
-			if(!isMobile && mouse.button === Qt.RightButton)
+			if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
 				rightClicked()
+			else	
+				control.clicked(mouse)
 		}
 		
-// 		onPressed: parent.grabToImage(function(result)
-//         {
-//                 parent.Drag.imageSource = result.url
-//             })
+		onPressed: 
+		{	
+			if(control.draggable)
+				loader.grabToImage(function(result)
+				{
+					parent.Drag.imageSource = result.url
+				})
+			
+			control.pressed(mouse)			
+		}
+		
+		onPressAndHold : control.pressAndHold(mouse)
 	}
 	
 	Maui.Badge
@@ -104,8 +124,7 @@ ItemDelegate
 		anchors.top: parent.top
 		anchors.left: parent.left
 		onClicked: leftEmblemClicked(index)
-// 		Component.onCompleted: leftEmblemIcon.item.isMask = false
-		size: iconSizes.small
+		size: Maui.Style.iconSizes.small
 		Kirigami.Theme.backgroundColor: Kirigami.Theme.highlightColor
 		Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
 	}
@@ -116,7 +135,7 @@ ItemDelegate
 		iconName: rightEmblem
 		visible: (isHovered || keepEmblemOverlay) && showEmblem && rightEmblem
 		z: 999
-		size: iconSizes.medium
+		size: Maui.Style.iconSizes.medium
 		anchors.top: parent.top
 		anchors.right: parent.right
 		onClicked: rightEmblemClicked(index)
@@ -133,18 +152,18 @@ ItemDelegate
 			Image
 			{
 				id: img
-				clip: true
 				anchors.centerIn: parent
 				source: model.thumbnail ? model.thumbnail : undefined
-				height: Math.min(folderSize, sourceSize.height)
-				width: isDetails ? folderSize : Math.min(control.width * 0.9, sourceSize.width)
-// 				sourceSize.width: width
-// 				sourceSize.height: height
+				height: Math.min(folderSize, implicitHeight)
+				width: isDetails ? folderSize : Math.min(control.width * 0.9, implicitWidth)
+				sourceSize.width: width
+				sourceSize.height: height
 				horizontalAlignment: Qt.AlignHCenter
 				verticalAlignment: Qt.AlignVCenter
 				fillMode: Image.PreserveAspectCrop
 				cache: false
 				asynchronous: true
+				smooth: true
 				
 				layer.enabled: true
 				layer.effect: OpacityMask
@@ -158,7 +177,7 @@ ItemDelegate
 							anchors.centerIn: parent
 							width: img.width
 							height: img.height
-							radius: radiusV
+							radius: Maui.Style.radiusV
 						}
 					}
 				}
@@ -180,9 +199,8 @@ ItemDelegate
 		{
 			source: model.icon
 			fallback: "qrc:/assets/application-x-zerosize.svg"
-			isMask: folderSize <= iconSizes.medium			
 			height: folderSize
-			width: folderSize
+			width: height
 		}
 	}
 	
@@ -204,7 +222,7 @@ ItemDelegate
 				verticalAlignment: Qt.AlignVCenter
 				elide: Qt.ElideRight
 				wrapMode: Text.Wrap
-				font.pointSize: fontSizes.default
+				font.pointSize: Maui.Style.fontSizes.default
 				color: labelColor
 				
 				Rectangle
@@ -213,8 +231,8 @@ ItemDelegate
 					anchors.fill: parent
 					
 					z: -1
-					radius: radiusV
-					color: hightlightedColor
+					radius: Maui.Style.radiusV
+					color: control.hightlightedColor
 					opacity: hovered ? 0.25 : 0.5
 				}
 			}
@@ -247,7 +265,7 @@ ItemDelegate
 					verticalAlignment: Qt.AlignBottom
 					elide: Qt.ElideRight
 					wrapMode: Text.Wrap
-					font.pointSize: fontSizes.small
+					font.pointSize: Maui.Style.fontSizes.small
 					color: labelColor
 					opacity: isCurrentListItem ? 1 : 0.5
 					text: model.mime === "inode/directory" ? (model.count ? model.count + qsTr(" items") : "") : Maui.FM.formatSize(model.size)
@@ -266,7 +284,7 @@ ItemDelegate
 					verticalAlignment: Qt.AlignTop
 					elide: Qt.ElideRight
 					wrapMode: Text.Wrap
-					font.pointSize: fontSizes.small
+					font.pointSize: Maui.Style.fontSizes.small
 					color: labelColor
 					opacity: isCurrentListItem ? 1 : 0.5
 				}
@@ -280,8 +298,8 @@ ItemDelegate
 		anchors.fill: parent
 		rows: isDetails ? 1 : 2
 		columns: isDetails && showDetailsInfo ? 3 : (isDetails && !showDetailsInfo ? 2 : 1)
-		rowSpacing: space.tiny
-		columnSpacing: space.tiny
+		rowSpacing: Maui.Style.space.tiny
+		columnSpacing: Maui.Style.space.tiny
 		
 		Item
 		{
@@ -291,15 +309,22 @@ ItemDelegate
 			Layout.row: 1
 			Layout.column: 1
 			Layout.alignment: Qt.AlignCenter
-			Layout.leftMargin: isDetails ? space.medium : 0
+			Layout.leftMargin: isDetails ? Maui.Style.space.medium : 0
 			
 			Loader
 			{
 				id: loader
 				anchors.centerIn: parent
 				sourceComponent: model.mime ? (model.mime.indexOf("image") > -1 && showThumbnails ? imgComponent :
-				iconComponent) : iconComponent
-				
+				iconComponent) : iconComponent				
+			}
+			
+			Maui.Badge
+			{
+				iconName: "link"
+				anchors.left: parent.left
+				anchors.bottom: parent.bottom
+				visible: (model.issymlink == true) || (model.issymlink == "true")
 			}
 			
 			ToolTip.delay: 1000
@@ -312,9 +337,9 @@ ItemDelegate
 		{
 			id: labelLoader
 			Layout.fillWidth: true
-			Layout.maximumHeight: (isDetails ? parent.height :  fontSizes.default * 5)
-			Layout.minimumHeight: (isDetails ? parent.height :  control.height - folderSize - space.tiny)
-			Layout.preferredHeight: (isDetails ? parent.height : control.height - folderSize - space.tiny)
+			Layout.maximumHeight: (isDetails ? parent.height :  Maui.Style.fontSizes.default * 5)
+			Layout.minimumHeight: (isDetails ? parent.height :  control.height - folderSize - Maui.Style.space.tiny)
+			Layout.preferredHeight: (isDetails ? parent.height : control.height - folderSize - Maui.Style.space.tiny)
 			
 			Layout.row: isDetails ? 1 : 2
 			Layout.column: isDetails ? 2 : 1
@@ -331,15 +356,12 @@ ItemDelegate
 			sourceComponent: isDetails && showDetailsInfo ? detailsComponent : undefined
 			Layout.fillWidth: isDetails && showDetailsInfo
 			Layout.maximumHeight: ( isDetails && showDetailsInfo ? parent.height :  fontSizes.default * 5)
-			Layout.minimumHeight: ( isDetails && showDetailsInfo ? parent.height :  control.height - folderSize - space.tiny)
-			Layout.preferredHeight: ( isDetails && showDetailsInfo ? parent.height : control.height - folderSize - space.tiny)
+			Layout.minimumHeight: ( isDetails && showDetailsInfo ? parent.height :  control.height - folderSize - Maui.Style.space.tiny)
+			Layout.preferredHeight: ( isDetails && showDetailsInfo ? parent.height : control.height - folderSize - Maui.Style.space.tiny)
 			Layout.maximumWidth: control.width * (isMobile ? 0.5 : 0.3)
 			Layout.row:  isDetails && showDetailsInfo ? 1 : 2
 			Layout.column: isDetails && showDetailsInfo ? 3 : 0
-			Layout.rightMargin: space.medium
-			// 			Layout.leftMargin: isDetails ? space.medium : 0
-		}
-		
-		
+			Layout.rightMargin: Maui.Style.space.medium
+		}		
 	}
 }

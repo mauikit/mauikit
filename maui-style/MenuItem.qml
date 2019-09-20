@@ -1,66 +1,106 @@
-/*
- * Copyright 2017 Marco Martin <mart@kde.org>
- * Copyright 2017 The Qt Company Ltd.
- *
- * GNU Lesser General Public License Usage
- * Alternatively, this file may be used under the terms of the GNU Lesser
- * General Public License version 3 as published by the Free Software
- * Foundation and appearing in the file LICENSE.LGPLv3 included in the
- * packaging of this file. Please review the following information to
- * ensure the GNU Lesser General Public License version 3 requirements
- * will be met: https://www.gnu.org/licenses/lgpl.html.
- *
- * GNU General Public License Usage
- * Alternatively, this file may be used under the terms of the GNU
- * General Public License version 2.0 or later as published by the Free
- * Software Foundation and appearing in the file LICENSE.GPL included in
- * the packaging of this file. Please review the following information to
- * ensure the GNU General Public License version 2.0 requirements will be
- * met: http://www.gnu.org/licenses/gpl-2.0.html.
- */
+/****************************************************************************
+**
+** Copyright (C) 2017 The Qt Company Ltd.
+** Contact: http://www.qt.io/licensing/
+**
+** This file is part of the Qt Quick Controls 2 module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:LGPL3$
+** Commercial License Usage
+** Licensees holding valid commercial Qt licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see http://www.qt.io/terms-conditions. For further
+** information use the contact form at http://www.qt.io/contact-us.
+**
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 3 as published by the Free Software
+** Foundation and appearing in the file LICENSE.LGPLv3 included in the
+** packaging of this file. Please review the following information to
+** ensure the GNU Lesser General Public License version 3 requirements
+** will be met: https://www.gnu.org/licenses/lgpl.html.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 2.0 or later as published by the Free
+** Software Foundation and appearing in the file LICENSE.GPL included in
+** the packaging of this file. Please review the following information to
+** ensure the GNU General Public License version 2.0 requirements will be
+** met: http://www.gnu.org/licenses/gpl-2.0.html.
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
 
-
-import QtQuick 2.6
-import QtQuick.Layouts 1.2
-import QtQuick.Templates 2.3 as T
-import org.kde.kirigami 2.2 as Kirigami
+import QtQuick 2.12
+import QtQuick.Templates 2.12 as T
+import QtQuick.Controls 2.12
+import QtQuick.Controls.impl 2.12
+import QtQuick.Controls.Material 2.12
+import QtQuick.Controls.Material.impl 2.12
+import org.kde.kirigami 2.7 as Kirigami
+import org.kde.mauikit 1.0 as Maui
 
 T.MenuItem {
-    id: controlRoot
+    id: control
 
-    implicitWidth: Math.max(background ? background.implicitWidth : 0,
-                            contentItem.implicitWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(background ? background.implicitHeight : 0,
-                             Math.max(contentItem.implicitHeight,
-                                      indicator ? indicator.implicitHeight : 0) + topPadding + bottomPadding)
-    baselineOffset: contentItem.y + contentItem.baselineOffset
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            implicitContentWidth + leftPadding + rightPadding)
+    implicitHeight: visible ? Math.max(implicitBackgroundHeight + topInset + bottomInset,
+                             implicitContentHeight + topPadding + bottomPadding,
+                             implicitIndicatorHeight + topPadding + bottomPadding) : 0
 
-    Layout.fillWidth: true
-    padding: Kirigami.Settings.isMobile ? Kirigami.Units.largeSpacing : Kirigami.Units.smallSpacing
-    hoverEnabled: true
+    padding: 16
+    //    verticalPadding: Material.menuItemVerticalPadding
+    spacing: 16
 
-    contentItem: Label {
-        leftPadding: !controlRoot.mirrored ? (controlRoot.indicator ? controlRoot.indicator.width : 0) + controlRoot.spacing : 0
-        rightPadding: controlRoot.mirrored ? (controlRoot.indicator ? controlRoot.indicator.width : 0) + controlRoot.spacing : 0
+    icon.width: Kirigami.Units.iconSizes.smallMedium
+    icon.height: 24
+    icon.color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightedTextColor : control.Kirigami.Theme.textColor) :
+                             control.Kirigami.Theme.disabledTextColor
+//    indicator: CheckIndicator {
+//        x: text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding + (control.availableWidth - width) / 2
+//        y: control.topPadding + (control.availableHeight - height) / 2
+//        visible: control.checkable
+//        control: control
+//        checked: control.checked ? Qt.Checked : Qt.Unchecked
+//    }
 
-        text: controlRoot.text
-        font: controlRoot.font
-        color: controlRoot.hovered && !controlRoot.pressed ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.textColor
-        elide: Text.ElideRight
-        visible: controlRoot.text
-        horizontalAlignment: Text.AlignLeft
-        verticalAlignment: Text.AlignVCenter
+    arrow: Kirigami.Icon {
+        x: control.mirrored ? control.padding : control.width - width - control.padding
+        y: control.topPadding + (control.availableHeight - height) / 2
+
+        visible: control.subMenu
+//        mirror: control.mirrored
+        color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightedTextColor : control.Kirigami.Theme.textColor) :
+                                 control.Kirigami.Theme.disabledTextColor
+        source: "qrc:/qt-project.org/imports/QtQuick/Controls.2/Material/images/arrow-indicator.png"
     }
 
-    background: Item {
-        anchors.fill: parent
-        implicitWidth: Kirigami.Units.gridUnit * 8
+    contentItem: IconLabel {
+        readonly property real arrowPadding: control.subMenu && control.arrow ? control.arrow.width + control.spacing : 0
+        readonly property real indicatorPadding: control.checkable && control.indicator ? control.indicator.width + control.spacing : 0
+        leftPadding: !control.mirrored ? indicatorPadding : arrowPadding
+        rightPadding: control.mirrored ? indicatorPadding : arrowPadding
 
-        Rectangle {
-            anchors.fill: parent
-            color: Kirigami.Theme.highlightColor
-            opacity: controlRoot.hovered && !controlRoot.pressed ? 1 : 0
-            Behavior on opacity { NumberAnimation { duration: 150 } }
-        }
+        spacing: control.spacing
+        mirrored: control.mirrored
+        display: control.display
+        alignment: Qt.AlignLeft
+
+        icon: control.icon
+        text: control.text
+        font: control.font
+        color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightedTextColor : control.Kirigami.Theme.textColor) :
+                                 control.Kirigami.Theme.disabledTextColor
+    }
+
+    background: Rectangle {
+        implicitWidth: 200
+        implicitHeight: Maui.Style.rowHeight
+        color: control.highlighted ? control.Kirigami.Theme.highlightColor : "transparent"
+
     }
 }

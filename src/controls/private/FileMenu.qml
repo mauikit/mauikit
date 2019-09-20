@@ -9,7 +9,7 @@ Menu
 	id: control
 	implicitWidth: colorBar.implicitWidth + space.big
 	
-	property var item : {}
+    property var item : ({})
 	property int index : -1
 	property bool isDir : false
 	
@@ -29,6 +29,14 @@ Menu
 			
 			addToSelection(currentFMList.get(index))
 		}
+	}
+	MenuSeparator{}
+	
+	MenuItem
+	{
+		visible: isDir
+		text: qsTr("Open in tab")
+		onTriggered: openTab(item.path)
 	}
 	
 	MenuSeparator{}

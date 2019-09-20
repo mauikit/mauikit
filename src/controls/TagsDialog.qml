@@ -17,7 +17,8 @@ Maui.Dialog
 	
 	signal tagsReady(var tags)
 	defaultButtons: true
-	maxHeight: unit * 500
+	maxHeight: Maui.Style.unit * 500
+	page.padding: Maui.Style.space.medium
 	
 	onAccepted: setTags()
 	onRejected: close()	
@@ -25,7 +26,6 @@ Maui.Dialog
 	headBar.leftContent: ToolButton
 	{
 		icon.name: "view-sort"
-		text: qsTr("Sort by...")
 		onClicked: sortMenu.popup()
 		
 		Menu
@@ -53,7 +53,7 @@ Maui.Dialog
 	headBar.middleContent: Maui.TextField
 	{
 		id: tagText
-		width: headBar.middleLayout.width * 0.9
+		Layout.fillWidth: true
 		placeholderText: qsTr("New tags...")
 		onAccepted:
 		{
@@ -117,7 +117,7 @@ Maui.Dialog
 					isMask: false
 					title : "No tags!"
 					body: "Start tagging your pics"
-					emojiSize: iconSizes.huge
+					emojiSize: Maui.Style.iconSizes.huge
 				}
 				
 				model: _tagsModel
@@ -125,7 +125,7 @@ Maui.Dialog
 				{
 					id: delegate
 					label: tag
-					radius: radiusV
+					radius: Maui.Style.radiusV
 					Connections
 					{
 						target: delegate

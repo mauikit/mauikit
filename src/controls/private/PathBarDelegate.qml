@@ -9,7 +9,7 @@ ItemDelegate
     property bool isCurrentListItem : ListView.isCurrentItem
     property color labelColor : isCurrentListItem ? Kirigami.Theme.highlightColor :  Kirigami.Theme.textColor
     anchors.verticalCenter: parent.verticalCenter
-    
+    implicitWidth: _label.implicitWidth
     background: Rectangle
     {
 		color: isCurrentListItem ? Qt.lighter( Kirigami.Theme.backgroundColor, 1.1) : "transparent"
@@ -21,8 +21,7 @@ ItemDelegate
                 top: parent.top
                 bottom: parent.bottom
                 right: parent.right               
-            }
-            
+            }            
             color: pathBarBG.border.color
         }
     }
@@ -30,9 +29,9 @@ ItemDelegate
     
     Label
     {
+        id: _label
         text: model.label
-        width: parent.width
-        height: parent.height
+        anchors.fill: parent
         rightPadding: space.medium
         leftPadding: rightPadding        
         horizontalAlignment: Qt.AlignHCenter

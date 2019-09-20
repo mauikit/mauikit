@@ -94,8 +94,17 @@ dirLister(new KCoreDirLister(this))
 			{FMH::MODEL_KEY::NAME, kfile.name()},
 			{FMH::MODEL_KEY::DATE, kfile.time(KFileItem::FileTimes::CreationTime).toString(Qt::TextDate)},
 			{FMH::MODEL_KEY::MODIFIED, kfile.time(KFileItem::FileTimes::ModificationTime).toString(Qt::TextDate)},
+			{FMH::MODEL_KEY::LAST_READ, kfile.time(KFileItem::FileTimes::AccessTime).toString(Qt::TextDate)},
 			{FMH::MODEL_KEY::PATH, kfile.url().toString()},
 			{FMH::MODEL_KEY::THUMBNAIL, kfile.localPath()},
+			{FMH::MODEL_KEY::SYMLINK, kfile.linkDest()},
+			{FMH::MODEL_KEY::IS_SYMLINK, QVariant(kfile.isLink()).toString()},
+			{FMH::MODEL_KEY::HIDDEN, QVariant(kfile.isHidden()).toString()},
+			{FMH::MODEL_KEY::IS_DIR, QVariant(kfile.isDir()).toString()},
+			{FMH::MODEL_KEY::IS_FILE, QVariant(kfile.isFile()).toString()},
+			{FMH::MODEL_KEY::WRITABLE, QVariant(kfile.isWritable()).toString()},
+			{FMH::MODEL_KEY::READABLE, QVariant(kfile.isReadable()).toString()},
+			{FMH::MODEL_KEY::EXECUTABLE, QVariant(kfile.isDesktopFile()).toString()},
 			{FMH::MODEL_KEY::MIME, kfile.mimetype()},
 			{FMH::MODEL_KEY::GROUP, kfile.group()},
 			{FMH::MODEL_KEY::ICON, kfile.iconName()},
@@ -595,8 +604,8 @@ FMH::MODEL_LIST FM::getTagContent(const QString &tag)
 	
 	for(const auto &data : this->tag->getUrls(tag, false))
 	{
-		const auto url = data.toMap().value(TAG::KEYMAP[TAG::KEYS::URL]).toString();
-		auto item = FMH::getFileInfoModel(QUrl::fromLocalFile(url));
+		const auto url = QUrl(data.toMap().value(TAG::KEYMAP[TAG::KEYS::URL]).toString());
+		auto item = FMH::getFileInfoModel(url);
 		content << item;
 	}
 	

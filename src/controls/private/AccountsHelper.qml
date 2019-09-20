@@ -118,7 +118,7 @@ Maui.Dialog
 			visible: _listView.count == 0
 			isMask: false
 			isGif: false
-			emojiSize: iconSizes.huge
+			emojiSize: Maui.Style.iconSizes.huge
 			title: qsTr("No accounts yet!")
 			body: qsTr("Start adding new accounts to sync your files, music, contacts, images, notes, etc...")
 		}
