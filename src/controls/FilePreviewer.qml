@@ -17,6 +17,8 @@ Maui.Dialog
 	property string mimetype : ""
 	property bool showInfo: true
 	
+	property alias infoModel : _infoModel
+	
 	signal shareButtonClicked(url url)
 	
 	maxHeight: Maui.Style.unit * 800
@@ -123,9 +125,9 @@ Maui.Dialog
 			Loader
 			{
 				id: previewLoader
+				visible: !control.showInfo
 				Layout.fillWidth: true
 				Layout.fillHeight: true
-				Layout.margins: Maui.Style.space.big
 				
 				sourceComponent: switch(mimetype)
 				{
@@ -144,6 +146,73 @@ Maui.Dialog
 					case "inode" :
 					default:
 						defaultPreview
+				}
+			}
+			
+			Kirigami.ScrollablePage
+			{
+				id: _infoContent
+				visible: control.showInfo
+				Layout.fillWidth: true
+				Layout.fillHeight: true
+				Layout.margins: Maui.Style.space.big
+				
+				Kirigami.Theme.backgroundColor: "transparent"
+				padding: 0
+				leftPadding: padding
+				rightPadding: padding
+				topPadding: padding
+				bottomPadding: padding	
+				
+				ColumnLayout
+				{
+					width: parent.width
+					spacing: Maui.Style.space.large			
+					
+					Repeater
+					{
+						model: ListModel { id: _infoModel }
+						
+						Column
+						{
+							spacing: Maui.Style.space.small	
+							width: parent.width
+							
+							Label
+							{
+								width: parent.width
+								visible: _valueLabel.visible						
+								text: model.key	
+								color: Kirigami.Theme.textColor							
+								
+								elide: Text.ElideRight
+								wrapMode: Text.NoWrap
+								
+								horizontalAlignment: Qt.AlignLeft								
+								
+								font.weight: Font.Bold
+								font.bold: true	
+							}
+							
+							Label
+							{		
+								id: _valueLabel
+								
+								width: parent.width
+								visible: text.length						
+								text: model.value
+								color: Kirigami.Theme.textColor
+								
+								elide: Qt.ElideMiddle
+								wrapMode: Text.Wrap
+								
+								horizontalAlignment: Qt.AlignLeft
+								
+								font.weight: Font.Light								
+							}
+						}
+				}
+					
 				}
 			}
 			
@@ -175,16 +244,35 @@ Maui.Dialog
 		
 		function show(path)
 		{
-			control.currentUrl = path
 			control.iteminfo = Maui.FM.getFileInfo(path)
+			control.initModel()
+			
 			if(iteminfo.mime.indexOf("/"))
-			control.mimetype = iteminfo.mime.slice(0, iteminfo.mime.indexOf("/"))
-			else control.mimetype = ""
+			{
+				control.mimetype = iteminfo.mime.slice(0, iteminfo.mime.indexOf("/"))				
+			}else 
+			{
+				control.mimetype = ""
+			}
+			
 			control.isDir = mimetype === "inode"
+			control.currentUrl = path
 			
-			showInfo = mimetype === "image" || mimetype === "video" || mimetype === "text"? false : true
+			control.showInfo = control.mimetype === "image" || control.mimetype === "video" || control.mimetype === "text"? false : true
 			
-			console.log("MIME TYPE FOR PREVEIWER", mimetype, iteminfo.icon)
 			open()
+		}
+		
+		function initModel()
+		{			
+			control.infoModel.clear()
+			control.infoModel.append({key: "Type", value: iteminfo.mime})
+			control.infoModel.append({key: "Date", value: iteminfo.date})
+			control.infoModel.append({key: "Modified", value: iteminfo.modified})
+			control.infoModel.append({key: "Last read", value: iteminfo.lastread})
+			control.infoModel.append({key: "Owner", value: iteminfo.owner})
+			control.infoModel.append({key: "Group", value: iteminfo.group})
+			control.infoModel.append({key: "Size", value: Maui.FM.formatSize(iteminfo.size)})
+			control.infoModel.append({key: "Symlink", value: iteminfo.symlink})			
 		}
 }

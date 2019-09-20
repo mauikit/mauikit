@@ -3,380 +3,63 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtMultimedia 5.8
 import org.kde.mauikit 1.0 as Maui
+import org.kde.kirigami 2.7 as Kirigami
 
-ColumnLayout
+Item
 {
-    id: layout
-    anchors.fill: parent
-    property alias player: player
-    
-//     Rectangle
-//     {
-// 		Layout.fillWidth: true
-// 		Layout.fillHeight: true
-// 		color: "yellow"
-// 		height: 300
-// 	}
-
-    Item
-    {
-        Layout.fillWidth: true
-//         Layout.fillHeight: true
-        Layout.preferredHeight: parent.width * 0.3
-        Layout.margins: contentMargins
-
-        MediaPlayer
-        {
-            id: player
-            source: "file://"+currentUrl
-            autoLoad: true
-            autoPlay: true
-        }
-
-        ToolButton
-        {
-            anchors.centerIn: parent
-            flat: true
-            icon.width: Maui.Style.iconSizes.huge
-            icon.name: iteminfo.icon
-            icon.source: "qrc:/assets/application-x-zerosize.svg"
-			onClicked: player.playbackState === MediaPlayer.PlayingState ? player.pause() : player.play()
-        }
-        
-        
-        Rectangle
-        {
-			height: Maui.Style.iconSizes.big
-			width: height
-			
-			radius: height
-			
-			color: "black"
-			
-			anchors.centerIn: parent
-			
-			ToolButton
-			{
-				anchors.centerIn: parent
-				icon.name: player.playbackState === MediaPlayer.PlayingState ? "media-playback-pause" : "media-playback-start"
-				icon.color: "white"
-				onClicked: player.playbackState === MediaPlayer.PlayingState ? player.pause() : player.play()				
-			}
-        }
-        
-    }
-    
-    Item
-    {
-		visible: showInfo
-		Layout.fillWidth: true
-		Layout.fillHeight: true
+	id: control
+	anchors.fill: parent
+	property alias player: player
 		
-		ScrollView
+	MediaPlayer
+	{
+		id: player
+		source: currentUrl
+		autoLoad: true
+		autoPlay: true
+		
+		onStatusChanged:
 		{
-			anchors.fill: parent
-			
-			contentHeight: _columnInfo.implicitHeight
-			
-			ColumnLayout
-			{
-				id: _columnInfo
-				width: parent.width
-				spacing: space.large
-				// 			spacing: rowHeight
-								
-				Column
-				{
-					Layout.fillWidth: true
-					spacing: space.small
-					Label
-					{
-						visible: iteminfo.mime
-						text: qsTr("Title")
-						font.pointSize: fontSizes.default
-						font.weight: Font.Light
-						color: colorScheme.textColor
-					}
-					
-					Label
-					{							 
-						horizontalAlignment: Qt.AlignHCenter
-						verticalAlignment: Qt.AlignVCenter
-						elide: Qt.ElideRight
-						wrapMode: Text.Wrap
-						font.pointSize: fontSizes.big
-						font.weight: Font.Bold
-						font.bold: true
-						text: player.metaData.title
-						color: colorScheme.textColor
-					}
-				}
-				
-				Column
-				{
-					Layout.fillWidth: true
-					spacing: space.small
-					Label
-					{
-						visible: iteminfo.date						
-						text: qsTr("Artist")
-						font.pointSize: fontSizes.default
-						font.weight: Font.Light
-						color: colorScheme.textColor
-					}
-					
-					Label
-					{							 
-						horizontalAlignment: Qt.AlignHCenter
-						verticalAlignment: Qt.AlignVCenter
-						elide: Qt.ElideRight
-						wrapMode: Text.Wrap
-						font.pointSize: fontSizes.big
-						font.weight: Font.Bold
-						font.bold: true
-						text: player.metaData.albumArtist
-						color: colorScheme.textColor
-					}
-				}
-				
-				
-				Column
-				{
-					Layout.fillWidth: true
-					spacing: space.small
-					Label
-					{
-						visible: iteminfo.modified						
-						text: qsTr("Album")
-						font.pointSize: fontSizes.default
-						font.weight: Font.Light
-						color: colorScheme.textColor
-						
-						
-					}
-					
-					Label
-					{							 
-						horizontalAlignment: Qt.AlignHCenter
-						verticalAlignment: Qt.AlignVCenter
-						elide: Qt.ElideRight
-						wrapMode: Text.Wrap
-						font.pointSize: fontSizes.big
-						font.weight: Font.Bold
-						font.bold: true
-						text: player.metaData.albumTitle
-						color: colorScheme.textColor
-						
-					}
-				}
-				
-				Column
-				{
-					Layout.fillWidth: true
-					spacing: space.small
-					Label
-					{
-						visible: iteminfo.owner						
-						text: qsTr("Author")
-						font.pointSize: fontSizes.default
-						font.weight: Font.Light
-						color: colorScheme.textColor
-						
-						
-					}
-					
-					Label
-					{							 
-						horizontalAlignment: Qt.AlignHCenter
-						verticalAlignment: Qt.AlignVCenter
-						elide: Qt.ElideRight
-						wrapMode: Text.Wrap
-						font.pointSize: fontSizes.big
-						font.weight: Font.Bold
-						font.bold: true
-						text: player.metaData.author
-						color: colorScheme.textColor
-						
-					}
-				}
-				
-				Column
-				{
-					Layout.fillWidth: true
-					spacing: space.small
-					Label
-					{
-						visible: iteminfo.tags
-						text: qsTr("Codec")
-						font.pointSize: fontSizes.default
-						font.weight: Font.Light
-						color: colorScheme.textColor
-						
-					}
-					
-					Label
-					{							 
-						horizontalAlignment: Qt.AlignHCenter
-						verticalAlignment: Qt.AlignVCenter
-						elide: Qt.ElideRight
-						wrapMode: Text.Wrap
-						font.pointSize: fontSizes.big
-						font.weight: Font.Bold
-						font.bold: true
-						text: player.metaData.audioCodec
-						color: colorScheme.textColor
-						
-					}
-				}
-				
-				Column
-				{
-					Layout.fillWidth: true
-					spacing: space.small
-					Label
-					{
-						visible: iteminfo.permissions						
-						text: qsTr("Copyright")
-						font.pointSize: fontSizes.default
-						font.weight: Font.Light
-						color: colorScheme.textColor
-						
-					}
-					
-					Label
-					{							 
-						horizontalAlignment: Qt.AlignHCenter
-						verticalAlignment: Qt.AlignVCenter
-						elide: Qt.ElideRight
-						wrapMode: Text.Wrap
-						font.pointSize: fontSizes.big
-						font.weight: Font.Bold
-						font.bold: true
-						text: player.metaData.copyright
-						color: colorScheme.textColor
-						
-					}
-				}
-				
-				Column
-				{
-					Layout.fillWidth: true
-					spacing: space.small
-					Label
-					{
-						visible: iteminfo.permissions						
-						text: qsTr("Duration")
-						font.pointSize: fontSizes.default
-						font.weight: Font.Light
-						color: colorScheme.textColor
-						
-					}
-					
-					Label
-					{							 
-						horizontalAlignment: Qt.AlignHCenter
-						verticalAlignment: Qt.AlignVCenter
-						elide: Qt.ElideRight
-						wrapMode: Text.Wrap
-						font.pointSize: fontSizes.big
-						font.weight: Font.Bold
-						font.bold: true
-						text: player.metaData.duration
-						color: colorScheme.textColor
-						
-					}
-				}
-				
-				Column
-				{
-					Layout.fillWidth: true
-					spacing: space.small
-					Label
-					{
-						visible: iteminfo.permissions						
-						text: qsTr("Track")
-						font.pointSize: fontSizes.default
-						font.weight: Font.Light
-						color: colorScheme.textColor
-						
-					}
-					
-					Label
-					{							 
-						horizontalAlignment: Qt.AlignHCenter
-						verticalAlignment: Qt.AlignVCenter
-						elide: Qt.ElideRight
-						wrapMode: Text.Wrap
-						font.pointSize: fontSizes.big
-						font.weight: Font.Bold
-						font.bold: true
-						text: player.metaData.trackNumber
-						color: colorScheme.textColor
-						
-					}
-				}
-				
-				Column
-				{
-					Layout.fillWidth: true
-					spacing: space.small
-					Label
-					{
-						visible: iteminfo.permissions						
-						text: qsTr("Year")
-						font.pointSize: fontSizes.default
-						font.weight: Font.Light
-						color: colorScheme.textColor
-						
-					}
-					
-					Label
-					{							 
-						horizontalAlignment: Qt.AlignHCenter
-						verticalAlignment: Qt.AlignVCenter
-						elide: Qt.ElideRight
-						wrapMode: Text.Wrap
-						font.pointSize: fontSizes.big
-						font.weight: Font.Bold
-						font.bold: true
-						text: player.metaData.year
-						color: colorScheme.textColor
-						
-					}
-				}
-				
-				Column
-				{
-					Layout.fillWidth: true
-					spacing: space.small
-					Label
-					{
-						visible: iteminfo.permissions						
-						text: qsTr("Rating")
-						font.pointSize: fontSizes.default
-						font.weight: Font.Light
-						color: colorScheme.textColor
-						
-					}
-					
-					Label
-					{							 
-						horizontalAlignment: Qt.AlignHCenter
-						verticalAlignment: Qt.AlignVCenter
-						elide: Qt.ElideRight
-						wrapMode: Text.Wrap
-						font.pointSize: fontSizes.big
-						font.weight: Font.Bold
-						font.bold: true
-						text: player.metaData.userRating
-						color: colorScheme.textColor
-						
-					}
-				}
-				
-			}
-			
+			infoModel.append({key:"Title", value: player.metaData.title})
+			infoModel.append({key:"Artist", value: player.metaData.albumArtist})
+			infoModel.append({key:"Album", value: player.metaData.albumTitle})
+			infoModel.append({key:"Author", value: player.metaData.author})
+			infoModel.append({key:"Codec", value: player.metaData.audioCodec})
+			infoModel.append({key:"Copyright", value: player.metaData.copyright})
+			infoModel.append({key:"Duration", value: player.metaData.duration})
+			infoModel.append({key:"Track", value: player.metaData.trackNumber})
+			infoModel.append({key:"Year", value: player.metaData.year})
+			infoModel.append({key:"Rating", value: player.metaData.userRating})
+			infoModel.append({key:"Lyrics", value: player.metaData.lyrics})
+			infoModel.append({key:"Genre", value: player.metaData.genre})
+			infoModel.append({key:"Artwork", value: player.metaData.coverArtUrlLarge})			
 		}
 	}
+	
+	Kirigami.Icon
+	{
+		anchors.centerIn: parent
+		width: Maui.Style.iconSizes.huge * 2
+		source: iteminfo.icon
+	}	
+	
+	Rectangle
+	{
+		height: Maui.Style.iconSizes.big
+		width: height		
+		radius: height		
+		color: "black"
+		
+		anchors.centerIn: parent
+		
+		ToolButton
+		{
+			anchors.centerIn: parent
+			icon.name: player.playbackState === MediaPlayer.PlayingState ? "media-playback-pause" : "media-playback-start"
+			icon.color: "white"
+			onClicked: player.playbackState === MediaPlayer.PlayingState ? player.pause() : player.play()				
+		}
+	}   
 }
+
 

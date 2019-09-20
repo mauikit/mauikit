@@ -65,11 +65,13 @@ ScrollView
 	
 	padding: 0
 	spacing: 0
-    
+	focus: true
+	
     ListView
     {	
 		id: _listView
 		anchors.fill: parent
+		focus: true
 		
 		snapMode: ListView.SnapToItem
 		boundsBehavior: !isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds

@@ -250,7 +250,7 @@ Maui.Page
 			Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
 			selectByKeyboard :!isMobile
 			selectByMouse : !isMobile
-			textFormat : TextEdit.AutoText
+			textFormat: TextEdit.AutoText
 			
 			color: control.Kirigami.Theme.textColor
 			

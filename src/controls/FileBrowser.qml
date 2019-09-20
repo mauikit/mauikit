@@ -63,14 +63,14 @@ Maui.Page
     signal rightClicked()
     signal newBookmark(var paths)
     
-    focus: true	
-    Kirigami.Theme.colorSet: Kirigami.Theme.View
+		
+	Kirigami.Theme.colorSet: Kirigami.Theme.View
     Kirigami.Theme.inherit: false
     
     onGoBackTriggered: control.goBack()
     onGoForwardTriggered: control.goNext()
     
-    Keys.onSpacePressed: previewer.show(control.currentFMList.get(browser.currentIndex).path)
+	focus: true
 	
 	footBar.visible: false	
 	footBar.leftContent: Label
@@ -95,7 +95,7 @@ Maui.Page
 	]
 	
     headBar.visible: currentPathType !== Maui.FMList.APPS_PATH
-    headBar.position: isMobile ? ToolBar.Footer : ToolBar.Header
+    headBar.position: Kirigami.Settings.isMobile ? ToolBar.Footer : ToolBar.Header
     property list<QtObject> t_actions:
     [
     Action
@@ -185,7 +185,7 @@ Maui.Page
             message: qsTr("You can move the file to the Trash or Delete it completely from your system. Which one you preffer?")
             rejectButton.text: qsTr("Delete")
             acceptButton.text: qsTr("Trash")
-            acceptButton.visible: !isMobile
+            acceptButton.visible: !Kirigami.Settings.isMobile
             
             onRejected: 
             {
@@ -290,7 +290,7 @@ Maui.Page
     FileMenu
     {
         id: itemMenu
-        width: unit *200
+        width: Maui.Style.unit *200
         onBookmarkClicked: control.newBookmark([item.path])
         onCopyClicked:
         {
@@ -680,7 +680,7 @@ Maui.Page
 							font.pointSize: fontSizes.default
 							Layout.fillWidth: true
 							Layout.fillHeight: true
-							Layout.margins: space.small
+							Layout.margins: Maui.Style.space.small
 							Layout.alignment: Qt.AlignCenter
 							verticalAlignment: Qt.AlignVCenter
 							horizontalAlignment: Qt.AlignHCenter
@@ -730,11 +730,14 @@ Maui.Page
 			Layout.fillHeight: true
 			clip: true
 			
+// 			focus: true
+// 			Keys.onSpacePressed: previewer.show(control.currentFMList.get(browser.currentIndex).path)
+						
 			orientation: ListView.Horizontal
 			model: tabsObjectModel
 			snapMode: ListView.SnapOneItem
 			spacing: 0
-			interactive: isMobile && tabsObjectModel.count > 1
+			interactive: Kirigami.Settings.isMobile && tabsObjectModel.count > 1
 			highlightFollowsCurrentItem: true
 			highlightMoveDuration: 0
 			onMovementEnded: _browserList.currentIndex = indexAt(contentX, contentY)
@@ -745,9 +748,9 @@ Maui.Page
             id: selectionBarLoader
             Layout.fillWidth: true
             Layout.preferredHeight: control.selectionBar && control.selectionBar.visible ? control.selectionBar.barHeight: 0
-            Layout.leftMargin:  contentMargins * (isMobile ? 3 : 2)
-            Layout.rightMargin: contentMargins * (isMobile ? 3 : 2)
-            Layout.bottomMargin: control.selectionBar && control.selectionBar.visible ? contentMargins*2 : 0
+            Layout.leftMargin: Maui.Style.contentMargins * (Kirigami.Settings.isMobile ? 3 : 2)
+			Layout.rightMargin: Maui.Style.contentMargins * (Kirigami.Settings.isMobile ? 3 : 2)
+			Layout.bottomMargin: control.selectionBar && control.selectionBar.visible ? Maui.Style.contentMargins*2 : 0
         }
         
         ProgressBar
@@ -859,7 +862,7 @@ Maui.Page
                                 control.launchApp(path)
                                 else
                                 {
-                                    if (isMobile)
+                                    if (Kirigami.Settings.isMobile)
                                         previewer.show(path)
                                         else
                                             control.openFile(path)
@@ -881,7 +884,7 @@ Maui.Page
     
     function openFolder(path)
     {
-        populate(Maui.FM.fileDir(path))// make sure the path is a dir
+        populate(Maui.FM.fileDir(path))// make sure the path is a dir // file to dir
     }
     
     function setPath(path)
