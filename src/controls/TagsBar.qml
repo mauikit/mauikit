@@ -28,7 +28,7 @@ Rectangle
 {
 	id: control
 	width: parent.width
-	height: Maui.Style.rowHeight
+    height: Maui.Style.toolBarHeight
 	property alias listView : tagsList
 	property alias count : tagsList.count
 	property bool editMode : false

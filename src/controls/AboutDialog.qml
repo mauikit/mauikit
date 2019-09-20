@@ -39,140 +39,138 @@ Maui.Dialog
     defaultButtons: false
     widthHint: 0.9
     heightHint: 0.8
-        
-    maxWidth: unit * 400
-    maxHeight: unit * 250
-        
-    page.padding: space.small
-        
-        
-        footBar.middleContent: ToolButton
+
+    maxWidth: Maui.Style.unit * 400
+    maxHeight: Maui.Style.unit * 250
+
+    page.padding: Maui.Style.space.small
+
+    footBar.middleContent: ToolButton
+    {
+        icon.name: "link"
+        onClicked: Maui.FM.openUrl(control.appLink)
+
+    }
+
+    footBar.rightContent: ToolButton
+    {
+        icon.name: "love"
+        onClicked: Maui.FM.openUrl(control.appDonation)
+    }
+
+    footBar.leftContent: ToolButton
+    {
+        icon.name: "documentinfo"
+    }
+
+    RowLayout
+    {
+        id: layout
+        anchors.centerIn: parent
+        width: parent.width
+        height: parent.height * 0.7
+
+        Item
         {
-            icon.name: "link"
-            onClicked: Maui.FM.openUrl(control.appLink)
-            
-        }
-        
-        footBar.rightContent: ToolButton
-        {
-            icon.name: "love"
-            onClicked: Maui.FM.openUrl(control.appDonation)
-            
-        }
-        
-        footBar.leftContent: ToolButton
-        {
-            icon.name: "documentinfo"
-        }		
-        
-        RowLayout
-        {
-            id: layout
-            anchors.centerIn: parent
-            width: parent.width
-            height: parent.height * 0.7           
-            
-            Item
+            Layout.fillHeight: true
+            Layout.margins: Maui.Style.space.small
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+            Layout.minimumWidth: Maui.Style.iconSizes.huge
+            Layout.maximumWidth: Maui.Style.iconSizes.huge
+            Layout.preferredWidth: Maui.Style.iconSizes.huge
+            Layout.minimumHeight: Maui.Style.iconSizes.huge
+
+            Image
             {
-                Layout.fillHeight: true		
-                Layout.margins: Maui.Style.space.small
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-                Layout.minimumWidth: Maui.Style.iconSizes.huge
-                Layout.maximumWidth: Maui.Style.iconSizes.huge
-                Layout.preferredWidth: Maui.Style.iconSizes.huge
-                Layout.minimumHeight: Maui.Style.iconSizes.huge           
-                
-                Image
+                source: control.appIcon
+                width: Maui.Style.iconSizes.huge
+                height: width
+                sourceSize.width: width
+                sourceSize.height: height
+                horizontalAlignment: Qt.AlignHCenter
+                asynchronous: true
+
+                fillMode: Image.PreserveAspectFit
+            }
+        }
+
+        Item
+        {
+            id: _descriptionItem
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+
+            Kirigami.ScrollablePage
+            {
+                anchors.fill: parent
+                Kirigami.Theme.backgroundColor: "transparent"
+                padding: 0
+                leftPadding: padding
+                rightPadding: padding
+                topPadding: padding
+                bottomPadding: padding
+
+                ColumnLayout
                 {
-                    source: control.appIcon
-                    width: Maui.Style.iconSizes.huge
-                    height: width
-                    sourceSize.width: width
-                    sourceSize.height: height
-                    horizontalAlignment: Qt.AlignHCenter
-                    asynchronous: true
-                    
-                    fillMode: Image.PreserveAspectFit
+                    id: _columnInfo
+                    spacing: Maui.Style.space.medium
+
+                    Label
+                    {
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignLeft
+                        color: Kirigami.Theme.textColor
+                        text: appName
+                        font.weight: Font.Bold
+                        font.bold: true
+                        font.pointSize: Maui.Style.fontSizes.huge
+                        elide: Text.ElideRight
+                        wrapMode: Text.NoWrap
+                    }
+
+                    Label
+                    {
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignLeft
+                        color:  Qt.lighter(Kirigami.Theme.textColor, 1.2)
+                        text: appVersion
+                        font.weight: Font.Light
+                        font.pointSize: Maui.Style.fontSizes.default
+                        elide: Text.ElideRight
+                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    }
+
+                    Label
+                    {
+                        id: body
+                        Layout.fillWidth: true
+                        text: appDescription
+                        color: Kirigami.Theme.textColor
+                        font.pointSize: Maui.Style.fontSizes.default
+                        elide: Text.ElideRight
+                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    }
+
+                    Kirigami.Separator
+                    {
+                        Layout.fillWidth: true
+                        Layout.margins: Maui.Style.space.big
+                        opacity: 0.4
+                    }
+
+                    Label
+                    {
+                        color: Kirigami.Theme.textColor
+                        Layout.fillWidth: true
+
+                        text: qsTr("Built with MauiKit " + Maui.App.mauikitVersion + " and Kirigami." )
+                        font.pointSize: Maui.Style.fontSizes.default
+                        elide: Text.ElideRight
+                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    }
                 }
-            }			
-            
-            Item
-            {
-                id: _descriptionItem
-                Layout.fillWidth: true
-                Layout.fillHeight: true			
-                Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-                
-                Kirigami.ScrollablePage
-                {
-                    anchors.fill: parent     
-                    Kirigami.Theme.backgroundColor: "transparent"
-                    padding: 0
-                    leftPadding: padding
-                    rightPadding: padding
-                    topPadding: padding
-                    bottomPadding: padding
-        
-                    ColumnLayout
-                    
-                    {                        
-                        id: _columnInfo
-                        spacing: 0
-                        Label
-                        {
-                            Layout.fillWidth: true						
-                            Layout.alignment: Qt.AlignLeft                            
-                            color: Kirigami.Theme.textColor
-                            text: appName
-                            font.weight: Font.Bold
-                            font.bold: true
-                            font.pointSize: Maui.Style.fontSizes.huge
-                            elide: Text.ElideRight
-                            wrapMode: Text.NoWrap 
-                        }
-                        
-                        Label
-                        {
-                            Layout.fillWidth: true                            
-                            Layout.alignment: Qt.AlignLeft
-                            color:  Qt.lighter(Kirigami.Theme.textColor, 1.2)
-                            text: appVersion
-                            font.weight: Font.Light
-                            font.pointSize: Maui.Style.fontSizes.default
-                            elide: Text.ElideRight
-                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere                            
-                        }
-                        
-                        Label
-                        {
-                            id: body
-                            Layout.fillWidth: true                          
-                            text: appDescription
-                            color: Kirigami.Theme.textColor
-                            font.pointSize: Maui.Style.fontSizes.default
-                            elide: Text.ElideRight
-                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere          
-                        }
-                        
-                        Kirigami.Separator
-                        {
-                            Layout.fillWidth: true
-                            Layout.margins: Maui.Style.space.big
-                            opacity: 0.4
-                        }
-                        
-                        Label
-                        {
-                            color: Kirigami.Theme.textColor
-                            Layout.fillWidth: true							
-                            
-                            text: qsTr("Built with MauiKit " + Maui.App.mauikitVersion + " and Kirigami." )
-							font.pointSize: Maui.Style.fontSizes.default
-                            elide: Text.ElideRight
-                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                        }
-                    }                    
-                }                
-            }            
-        }        
+            }
+        }
+    }
 }

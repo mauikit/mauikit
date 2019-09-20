@@ -154,10 +154,10 @@ ItemDelegate
 				id: img
 				anchors.centerIn: parent
 				source: model.thumbnail ? model.thumbnail : undefined
-				height: Math.min(folderSize, implicitHeight)
-				width: isDetails ? folderSize : Math.min(control.width * 0.9, implicitWidth)
-				sourceSize.width: width
-				sourceSize.height: height
+                height: Math.min(folderSize, sourceSize.height)
+                width: isDetails ? folderSize : Math.min(control.width * 0.9, sourceSize.width)
+//				sourceSize.width: width
+//				sourceSize.height: height
 				horizontalAlignment: Qt.AlignHCenter
 				verticalAlignment: Qt.AlignVCenter
 				fillMode: Image.PreserveAspectCrop

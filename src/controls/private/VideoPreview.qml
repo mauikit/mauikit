@@ -8,6 +8,8 @@ import org.kde.kirigami 2.7 as Kirigami
 Video
 {
 	id: player
+
+    property alias player : player
 	anchors.fill: parent
 	source: currentUrl
 	autoLoad: true
@@ -30,6 +32,7 @@ Video
 	
 	ToolButton
 	{
+        visible: player.playbackState == MediaPlayer.StoppedState
 		anchors.centerIn: parent
 		icon.color: "transparent"
 		flat: true

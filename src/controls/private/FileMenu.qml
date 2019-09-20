@@ -39,7 +39,7 @@ Menu
 		onTriggered: openTab(item.path)
 	}
 	
-	MenuSeparator{}
+    MenuSeparator{visible: isDir}
 	MenuItem
 	{
 		text: qsTr("Copy...")

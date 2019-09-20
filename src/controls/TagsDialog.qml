@@ -137,8 +137,7 @@ Maui.Dialog
 					}
 				}				
 			}			
-		}
-		
+		}		
 		
 		Maui.TagList
 		{
@@ -159,38 +158,7 @@ Maui.Dialog
 		
 		for(var i = 0; i < tagListComposer.count; i++)
 			tags.push(tagListComposer.list.get(i).tag)
-		tagsReady(tags)
+        control.tagsReady(tags)
 		close()
-	}
-	
-// 	function show(urls)
-// 	{
-// 		control.urls = urls
-// 		tagListComposer.list.urls = picUrls
-// 				
-// 		open()
-// 	}
-// 	
-	
-// 	
-// 	function addTagsToPic(urls, tags)
-// 	{        
-// 		if(tags.length < 1)
-// 			return
-// 			
-// 			for(var j in urls)
-// 			{
-// 				var url = urls[j]
-// 				
-// 				if(!dba.checkExistance("images", "url", url))
-// 					if(!dba.addPic(url))
-// 						return
-// 						
-// 						for(var i in tags)
-// 							if(PIX.addTagToPic(tags[i], url))
-// 								picTagged(tags[i], url)
-// 								
-// 			}
-// 			close()
-// 	}  
+    }
 }
