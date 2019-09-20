@@ -194,9 +194,7 @@ if(ANDROID)
         )
 else()
     find_package(Qt5 REQUIRED COMPONENTS WebEngine)
-    find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications
-        Config Service KIO ConfigWidgets Attica SyntaxHighlighting)
-    find_package(/usr/lib/x86_64-linux-gnu/qt5/qml/org/kde/kquicksyntaxhighlighter/libkquicksyntaxhighlighterplugin.so)
+    find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets Attica SyntaxHighlighting)
 
     set(mauikit_KDE_SRCS
         src/kde/mauikde.cpp
