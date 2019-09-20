@@ -4,7 +4,6 @@
         <file>BusyIndicator.qml</file>
         <file>Button.qml</file>
         <file>CheckBox.qml</file>
-        <file>CheckDelegate.qml</file>
         <file>CheckIndicator.qml</file>
         <file>ComboBox.qml</file>
         <file>Container.qml</file>
@@ -23,9 +22,6 @@
         <file>Page.qml</file>
         <file>Popup.qml</file>
         <file>ProgressBar.qml</file>
-        <file>RadioButton.qml</file>
-        <file>RadioDelegate.qml</file>
-        <file>RadioIndicator.qml</file>
         <file>RangeSlider.qml</file>
         <file>README.md</file>
         <file>ScrollBar.qml</file>
