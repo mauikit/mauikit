@@ -76,13 +76,7 @@ Maui.Dialog
 		{
 			id: imagePreview
 			ImagePreview {}
-		}
-		
-		Component
-		{
-			id: defaultPreview
-			DefaultPreview {}
-		}
+        }
 		
 		Component
 		{

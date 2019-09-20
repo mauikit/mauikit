@@ -67,10 +67,6 @@
 /**
  * Global Variables
  */
-#ifdef STATIC_MAUIKIT
-#include "kquicksyntaxhighlighter/kquicksyntaxhighlighter.h"
-#endif
-
 SyntaxHighlighterUtil *DocumentHandler::syntaxHighlighterUtil = nullptr;
 
 DocumentHandler::DocumentHandler(QObject *parent)

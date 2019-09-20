@@ -54,6 +54,10 @@
 #include <QQuickStyle>
 #endif
 
+#ifdef STATIC_MAUIKIT
+#include "kquicksyntaxhighlighter/kquicksyntaxhighlighter.h"
+#endif
+
 QUrl MauiKit::componentUrl(const QString &fileName) const
 {
 #ifdef MAUI_APP
