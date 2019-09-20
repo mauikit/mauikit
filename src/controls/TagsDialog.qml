@@ -118,7 +118,7 @@ Maui.Dialog
 					isMask: false
 					title : "No tags!"
 					body: "Start tagging your pics"
-					emojiSize: iconSizes.huge
+					emojiSize: Maui.Style.iconSizes.huge
 				}
 				
 				model: _tagsModel
@@ -126,7 +126,7 @@ Maui.Dialog
 				{
 					id: delegate
 					label: tag
-					radius: radiusV
+					radius: Maui.Style.radiusV
 					Connections
 					{
 						target: delegate

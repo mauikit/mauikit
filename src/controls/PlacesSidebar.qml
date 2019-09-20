@@ -9,6 +9,7 @@ Maui.SideBar
 	id: control
 	
 	property alias list : placesList
+	property alias itemMenu : _menu
 	
 	signal placeClicked (string path)
 	focus: true

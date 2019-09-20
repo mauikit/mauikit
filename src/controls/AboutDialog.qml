@@ -75,17 +75,17 @@ Maui.Dialog
             Item
             {
                 Layout.fillHeight: true		
-                Layout.margins: space.small
+                Layout.margins: Maui.Style.space.small
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-                Layout.minimumWidth: iconSizes.huge
-                Layout.maximumWidth: iconSizes.huge
-                Layout.preferredWidth: iconSizes.huge
-                Layout.minimumHeight: iconSizes.huge           
+                Layout.minimumWidth: Maui.Style.iconSizes.huge
+                Layout.maximumWidth: Maui.Style.iconSizes.huge
+                Layout.preferredWidth: Maui.Style.iconSizes.huge
+                Layout.minimumHeight: Maui.Style.iconSizes.huge           
                 
                 Image
                 {
                     source: control.appIcon
-                    width: iconSizes.huge
+                    width: Maui.Style.iconSizes.huge
                     height: width
                     sourceSize.width: width
                     sourceSize.height: height
@@ -126,7 +126,7 @@ Maui.Dialog
                             text: appName
                             font.weight: Font.Bold
                             font.bold: true
-                            font.pointSize: fontSizes.huge
+                            font.pointSize: Maui.Style.fontSizes.huge
                             elide: Text.ElideRight
                             wrapMode: Text.NoWrap 
                         }
@@ -138,7 +138,7 @@ Maui.Dialog
                             color:  Qt.lighter(Kirigami.Theme.textColor, 1.2)
                             text: appVersion
                             font.weight: Font.Light
-                            font.pointSize: fontSizes.default
+                            font.pointSize: Maui.Style.fontSizes.default
                             elide: Text.ElideRight
                             wrapMode: Text.WrapAtWordBoundaryOrAnywhere                            
                         }
@@ -149,7 +149,7 @@ Maui.Dialog
                             Layout.fillWidth: true                          
                             text: appDescription
                             color: Kirigami.Theme.textColor
-                            font.pointSize: fontSizes.default
+                            font.pointSize: Maui.Style.fontSizes.default
                             elide: Text.ElideRight
                             wrapMode: Text.WrapAtWordBoundaryOrAnywhere          
                         }
@@ -157,7 +157,7 @@ Maui.Dialog
                         Kirigami.Separator
                         {
                             Layout.fillWidth: true
-                            Layout.margins: space.big
+                            Layout.margins: Maui.Style.space.big
                             opacity: 0.4
                         }
                         
@@ -167,7 +167,7 @@ Maui.Dialog
                             Layout.fillWidth: true							
                             
                             text: qsTr("Built with MauiKit " + Maui.App.mauikitVersion + " and Kirigami." )
-                            font.pointSize: fontSizes.default
+							font.pointSize: Maui.Style.fontSizes.default
                             elide: Text.ElideRight
                             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                         }

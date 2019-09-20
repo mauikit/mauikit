@@ -66,9 +66,9 @@ Maui.Dialog
 				Layout.alignment: Qt.AlignCenter
 				Layout.preferredWidth: width
 				Layout.preferredHeight: height
-				Layout.margins: space.big
+				Layout.margins: Maui.Style.space.big
 				
-				width: iconSizes.huge
+				width: Maui.Style.iconSizes.huge
 				height: width
 				sourceSize.width: width
 				sourceSize.height: height

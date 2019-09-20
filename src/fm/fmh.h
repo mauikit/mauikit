@@ -212,7 +212,18 @@ namespace FMH
 		SUMMARY,
 		TYPE_ID,
 		TYPE_NAME,
-		XDG_TYPE
+		XDG_TYPE,
+		
+		//file props
+		SYMLINK,
+		IS_SYMLINK,
+		IS_DIR,
+		IS_FILE,
+		IS_REMOTE,
+		EXECUTABLE,
+		READABLE,
+		WRITABLE,
+		LAST_READ,
 		
 	}; 
 	
@@ -339,7 +350,19 @@ namespace FMH
 		{MODEL_KEY::SUMMARY, "summary"},
 		{MODEL_KEY::TYPE_ID, "typeid"},
 		{MODEL_KEY::TYPE_NAME, "typename"},
-		{MODEL_KEY::XDG_TYPE, "xdgtype"}		
+		{MODEL_KEY::XDG_TYPE, "xdgtype"},
+
+//file props
+		{MODEL_KEY::SYMLINK, "symlink"},
+		{MODEL_KEY::IS_SYMLINK, "issymlink"},
+		{MODEL_KEY::LAST_READ, "lastread"},
+		{MODEL_KEY::READABLE, "readable"},
+		{MODEL_KEY::WRITABLE, "writeable"},
+		{MODEL_KEY::IS_DIR, "isdir"},
+		{MODEL_KEY::IS_FILE, "isfile"},
+		{MODEL_KEY::IS_REMOTE, "isremote"},
+		{MODEL_KEY::EXECUTABLE, "executable"}
+		
 	};
 	
     static const QHash<QString, FMH::MODEL_KEY> MODEL_NAME_KEY =
@@ -465,7 +488,18 @@ namespace FMH
 		{MODEL_NAME[MODEL_KEY::SUMMARY], MODEL_KEY::SUMMARY},
 		{MODEL_NAME[MODEL_KEY::TYPE_ID], MODEL_KEY::TYPE_ID},
 		{MODEL_NAME[MODEL_KEY::TYPE_NAME], MODEL_KEY::TYPE_NAME},
-		{MODEL_NAME[MODEL_KEY::XDG_TYPE], MODEL_KEY::XDG_TYPE}
+		{MODEL_NAME[MODEL_KEY::XDG_TYPE], MODEL_KEY::XDG_TYPE},
+		
+		//file props		
+		{MODEL_NAME[MODEL_KEY::SYMLINK], MODEL_KEY::SYMLINK},
+		{MODEL_NAME[MODEL_KEY::IS_SYMLINK], MODEL_KEY::IS_SYMLINK},
+		{MODEL_NAME[MODEL_KEY::LAST_READ], MODEL_KEY::LAST_READ},
+		{MODEL_NAME[MODEL_KEY::READABLE], MODEL_KEY::READABLE},
+		{MODEL_NAME[MODEL_KEY::WRITABLE], MODEL_KEY::WRITABLE},
+		{MODEL_NAME[MODEL_KEY::IS_DIR], MODEL_KEY::IS_DIR},
+		{MODEL_NAME[MODEL_KEY::IS_FILE], MODEL_KEY::IS_FILE},
+		{MODEL_NAME[MODEL_KEY::IS_REMOTE], MODEL_KEY::IS_REMOTE},
+		{MODEL_NAME[MODEL_KEY::EXECUTABLE], MODEL_KEY::EXECUTABLE}		
 	};
 	
     typedef QHash<FMH::MODEL_KEY, QString> MODEL;
@@ -831,49 +865,6 @@ namespace FMH
 	const QString FMPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/maui/fm/";
 	const QString DBName = "fm.db";
 	
-	inline FMH::MODEL getDirInfoModel(const QUrl &path, const QString &type = QString())
-	{		
-		if(!path.isLocalFile())
-		{
-			qWarning() << "URL recived is not a local file" << path;
-			return FMH::MODEL();	  
-		}		
-		
-		const QDir dir (path.toLocalFile());		
-		if(!dir.exists()) 
-			return FMH::MODEL();
-		
-		return FMH::MODEL
-		{
-			{FMH::MODEL_KEY::ICON, FMH::getIconName(path)},
-			{FMH::MODEL_KEY::LABEL, dir.dirName()},
-			{FMH::MODEL_KEY::PATH, path.toString()},
-			{FMH::MODEL_KEY::TYPE, type}
-		};
-	}	
-	
-	inline QVariantMap getDirInfo(const QUrl &path, const QString &type = QString())
-	{
-		if(!path.isLocalFile())
-		{
-			qWarning() << "URL recived is not a local file" << path;
-			return QVariantMap();	  
-		}		
-		
-		const QFileInfo file(path.toLocalFile());	
-		
-		if(!file.exists()) 
-			return QVariantMap();
-		
-		const auto data = FMH::getDirInfoModel(path);
-		
-		QVariantMap res; 
-		for(const auto &key : data.keys())		
-			res.insert(FMH::MODEL_NAME[key], data[key]);
-		
-		return res;
-	}
-	
 	
 	inline FMH::MODEL getFileInfoModel(const QUrl &path)
 	{		
@@ -886,7 +877,7 @@ namespace FMH
 		const QFileInfo file(path.toLocalFile());
 		if(!file.exists()) 
 			return FMH::MODEL();
-		qDebug()<< "trying to get path info model. exists";
+		qDebug()<< "trying to get path info model. exists";		
 		
 		const auto mime = FMH::getMime(path);
 		return FMH::MODEL 
@@ -898,7 +889,18 @@ namespace FMH
 			{FMH::MODEL_KEY::NAME, file.fileName()},
 			{FMH::MODEL_KEY::DATE,  file.birthTime().toString(Qt::TextDate)},
 			{FMH::MODEL_KEY::MODIFIED, file.lastModified().toString(Qt::TextDate)},
+			{FMH::MODEL_KEY::LAST_READ, file.lastRead().toString(Qt::TextDate)},
+			
 			{FMH::MODEL_KEY::MIME, mime },
+			{FMH::MODEL_KEY::SYMLINK, file.symLinkTarget() },
+			{FMH::MODEL_KEY::SYMLINK, file.symLinkTarget() },
+			{FMH::MODEL_KEY::IS_SYMLINK, QVariant(file.isSymLink()).toString()},
+			{FMH::MODEL_KEY::IS_FILE, QVariant(file.isFile()).toString()},
+			{FMH::MODEL_KEY::HIDDEN, QVariant(file.isHidden()).toString()},
+			{FMH::MODEL_KEY::IS_DIR, QVariant(file.isDir()).toString()},
+			{FMH::MODEL_KEY::WRITABLE, QVariant(file.isWritable()).toString()},
+			{FMH::MODEL_KEY::READABLE, QVariant(file.isReadable()).toString()},
+			{FMH::MODEL_KEY::EXECUTABLE, QVariant(file.isExecutable()).toString()},			
 			{FMH::MODEL_KEY::ICON, FMH::getIconName(path)},
 			{FMH::MODEL_KEY::SIZE, QString::number(file.size()) /*locale.formattedDataSize(file.size())*/},
 			{FMH::MODEL_KEY::PATH, path.toString()},
@@ -930,6 +932,47 @@ namespace FMH
 		return res;
 	}
 	
+	inline FMH::MODEL getDirInfoModel(const QUrl &path, const QString &type = QString())
+	{		
+		if(!path.isLocalFile())
+		{
+			qWarning() << "URL recived is not a local file" << path;
+			return FMH::MODEL();	  
+		}		
+		
+		const QDir dir (path.toLocalFile());		
+		if(!dir.exists()) 
+			return FMH::MODEL();
+		
+		auto res = getFileInfoModel(path);
+		res[FMH::MODEL_KEY::LABEL] = dir.dirName();
+		res[FMH::MODEL_KEY::TYPE] =  type;
+		
+		return res;
+	}	
+	
+	inline QVariantMap getDirInfo(const QUrl &path, const QString &type = QString())
+	{
+		if(!path.isLocalFile())
+		{
+			qWarning() << "URL recived is not a local file" << path;
+			return QVariantMap();	  
+		}		
+		
+		const QFileInfo file(path.toLocalFile());	
+		
+		if(!file.exists()) 
+			return QVariantMap();
+		
+		const auto data = FMH::getDirInfoModel(path);
+		
+		QVariantMap res; 
+		for(const auto &key : data.keys())		
+			res.insert(FMH::MODEL_NAME[key], data[key]);
+		
+		return res;
+	}	
+
 	#ifndef STATIC_MAUIKIT
 	#include "mauikit_export.h"
 	#endif

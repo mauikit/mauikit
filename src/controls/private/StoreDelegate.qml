@@ -31,7 +31,7 @@ ItemDelegate
 	property bool isDetails : false
 	property bool showDetailsInfo: false
 	
-	property int emblemSize: iconSizes.medium
+	property int emblemSize: Maui.Style.iconSizes.medium
 	property bool isHovered :  hovered
 	property bool showLabel : true
 	property bool showEmblem : true
@@ -88,7 +88,7 @@ ItemDelegate
 		anchors.left: parent.left
 		onClicked: leftEmblemClicked(index)
 		// 		Component.onCompleted: leftEmblemIcon.item.isMask = false
-		size: iconSizes.small
+		size: Maui.Style.iconSizes.small
 	}
 	
 	Maui.Badge
@@ -97,7 +97,7 @@ ItemDelegate
 		iconName: rightEmblem
 		visible: (isHovered || keepEmblemOverlay) && showEmblem && rightEmblem
 		z: 999
-		size: iconSizes.medium
+		size: Maui.Style.iconSizes.medium
 		anchors.top: parent.top
 		anchors.right: parent.right
 		onClicked: rightEmblemClicked(index)
@@ -160,8 +160,8 @@ ItemDelegate
 		{
 			icon.name: model.icon
 			icon.source: "qrc:/assets/application-x-zerosize.svg"
-			icon.color: (size <= iconSizes.medium ?  "transparent" : labelColor)
-			icon.width: Math.min(iconSizes.huge, Math.min(control.width, control.height))
+			icon.color: (size <= Maui.Style.iconSizes.medium ?  "transparent" : labelColor)
+			icon.width: Math.min(Maui.Style.iconSizes.huge, Math.min(control.width, control.height))
 			enabled: false
 		}
 	}
@@ -183,7 +183,7 @@ ItemDelegate
 				verticalAlignment: Qt.AlignVCenter
 				elide: Qt.ElideRight
 				wrapMode: Text.Wrap
-				font.pointSize: fontSizes.default
+				font.pointSize: Maui.Style.fontSizes.default
 				color: labelColor
 				
 				Rectangle
@@ -226,7 +226,7 @@ ItemDelegate
 					verticalAlignment: Qt.AlignBottom
 					elide: Qt.ElideRight
 					wrapMode: Text.Wrap
-					font.pointSize: fontSizes.small
+					font.pointSize: Maui.Style.fontSizes.small
 					color: labelColor
 					opacity: isCurrentListItem ? 1 : 0.5
 					text: model.owner
@@ -245,7 +245,7 @@ ItemDelegate
 					verticalAlignment: Qt.AlignTop
 					elide: Qt.ElideRight
 					wrapMode: Text.Wrap
-					font.pointSize: fontSizes.small
+					font.pointSize: Maui.Style.fontSizes.small
 					color: labelColor
 					opacity: isCurrentListItem ? 1 : 0.5
 				}
@@ -259,8 +259,8 @@ ItemDelegate
 		anchors.fill: parent
 		rows: isDetails ? 1 : 2
 		columns: isDetails && showDetailsInfo ? 3 : (isDetails && !showDetailsInfo ? 2 : 1)
-		rowSpacing: space.tiny
-		columnSpacing: space.tiny
+		rowSpacing: Maui.Style.space.tiny
+		columnSpacing: Maui.Style.space.tiny
 		
 		Item
 		{
@@ -271,7 +271,7 @@ ItemDelegate
 			Layout.row: 1
 			Layout.column: 1
 			Layout.alignment: Qt.AlignCenter
-			Layout.leftMargin: isDetails ? space.medium : 0
+			Layout.leftMargin: isDetails ? Maui.Style.space.medium : 0
 			
 			Loader
 			{
@@ -299,7 +299,7 @@ ItemDelegate
 			Layout.row: isDetails ? 1 : 2
 			Layout.column: isDetails ? 2 : 1
 			
-			Layout.leftMargin: isDetails ? space.medium : 0
+			Layout.leftMargin: isDetails ? Maui.Style.space.medium : 0
 			
 			sourceComponent: labelComponent
 		}
@@ -311,12 +311,12 @@ ItemDelegate
 			sourceComponent: isDetails && showDetailsInfo ? detailsComponent : undefined
 			Layout.fillWidth: isDetails && showDetailsInfo
 			Layout.maximumHeight: isDetails ? (showDetailsInfo ? parent.height :  fontSizes.default * 5) : undefined
-			Layout.minimumHeight: isDetails ? ( showDetailsInfo ? parent.height :  control.height -  space.tiny) : undefined
-			Layout.preferredHeight:  isDetails ? (showDetailsInfo ? parent.height : control.height -  space.tiny) : undefined
+			Layout.minimumHeight: isDetails ? ( showDetailsInfo ? parent.height :  control.height -  Maui.Style.space.tiny) : undefined
+			Layout.preferredHeight:  isDetails ? (showDetailsInfo ? parent.height : control.height -  Maui.Style.space.tiny) : undefined
 			Layout.maximumWidth: control.width * (isMobile ? 0.5 : 0.3)
 			Layout.row:  isDetails && showDetailsInfo ? 1 : 2
 			Layout.column: isDetails && showDetailsInfo ? 3 : 0
-			Layout.rightMargin: space.medium
+			Layout.rightMargin: Maui.Style.space.medium
 			// 			Layout.leftMargin: isDetails ? space.medium : 0
 		}
 	}

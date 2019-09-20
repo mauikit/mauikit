@@ -27,7 +27,7 @@ ScrollView
 {
     id: control    
     
-    property int itemSize : iconSizes.big
+    property int itemSize : Maui.Style.iconSizes.big
     property bool showEmblem : true
     property bool keepEmblemOverlay : false
     property string rightEmblem
@@ -98,7 +98,6 @@ ScrollView
             showThumbnails: showPreviewThumbnails
             rightEmblem: control.rightEmblem
             leftEmblem: control.leftEmblem
-            opacity: (model.name).startsWith(".") ? 0.5 : 1
             
             Connections
             {

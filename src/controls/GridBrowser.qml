@@ -21,12 +21,13 @@ import QtQuick 2.0
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
+import org.kde.kirigami 2.7 as Kirigami
 
 Maui.GridView
 {
 	id: control
 	
-	itemSize : iconSizes.large
+	itemSize : Maui.Style.iconSizes.large
     spacing: isMobile ? itemSize * 0.7 : itemSize * 0.8
 	property bool showEmblem : true
 	property bool keepEmblemOverlay : false
@@ -59,12 +60,12 @@ Maui.GridView
 		height: control.cellHeight * 0.9
 		folderSize : control.itemSize
 		showTooltip: true
+// 		draggable: !Kirigami.Settings.isMobile
 		showEmblem: control.showEmblem
 		keepEmblemOverlay: control.keepEmblemOverlay
 		showThumbnails: control.showPreviewThumbnails
 		rightEmblem: control.rightEmblem
 		leftEmblem: control.leftEmblem
-		opacity: (model.name).startsWith(".") ? 0.5 : 1
 		
 		Connections
 		{

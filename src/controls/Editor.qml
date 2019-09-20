@@ -75,8 +75,7 @@ Maui.Page
 			color: Kirigami.Theme.textColor
 			opacity: 0.5
 			font.pointSize: fontSizes.medium
-		}
-		
+		}		
 	}
 	
 	Menu
@@ -120,6 +119,8 @@ Maui.Page
 		}
 	}	
 	
+	
+	footBar.visible: !body.readOnly
 	footBar.rightContent: [
 	ToolButton
 	{
@@ -142,8 +143,7 @@ Maui.Page
 		onCurrentIndexChanged: {
 			syntaxHighlighter.formatName = languagesListModel.get(currentIndex).text;
 		}
-	}
-		
+	}	
 	]
 
 	
@@ -155,9 +155,6 @@ Maui.Page
 		TextArea
 		{
 			id: body
-			/*
-			 *			width: parent.width
-			 *			height: parent.height*/
 			topPadding: _editorToolBar.visible ?  _editorToolBar.height : 0
 			topInset: stickyHeadBar ? 0 : topPadding
 			
@@ -197,9 +194,7 @@ Maui.Page
 				Row
 				{
 					id: _editingActions
-					visible: document.isRich
-					
-					
+					visible: document.isRich && !body.readOnly
 					
 					ToolButton
 					{

@@ -15,7 +15,7 @@ Maui.Page
     property var trackChanges: control.currentFMList.trackChanges
     property var saveDirProps: control.currentFMList.saveDirProps
     
-    property string currentPath
+    property url currentPath
 	onCurrentPathChanged: control.browserView.path = control.currentPath
     
     property var copyItems : []
@@ -49,7 +49,6 @@ Maui.Page
     property alias previewer : previewer
     property alias menu : browserMenu.contentData
     property alias itemMenu: itemMenu
-    property alias holder: holder
     property alias dialog : dialogLoader.item
     property alias goUpButton : goUpButton
     
@@ -310,7 +309,7 @@ Maui.Page
             if(item)
             {
                 dialogLoader.sourceComponent = tagsDialogComponent
-                dialog.composerList.urls = item.path
+                dialog.composerList.urls = [item.path]
                 dialog.open()
             }
         }
@@ -383,59 +382,7 @@ Maui.Page
         onAreaRightClicked: browserMenu.show()
     }
     
-    
-    Maui.Holder
-    {
-        id: holder
-        anchors.fill : parent
-        z: -1
-        visible: !control.currentFMList.pathExists || control.currentFMList.pathEmpty || !control.currentFMList.contentReady
-        emoji: if(control.currentFMList.pathExists && control.currentFMList.pathEmpty)
-        "qrc:/assets/folder-add.svg" 
-        else if(!control.currentFMList.pathExists)
-            "qrc:/assets/dialog-information.svg"
-            else if(!control.currentFMList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
-                "qrc:/assets/edit-find.svg"
-                else if(!control.currentFMList.contentReady)
-                    "qrc:/assets/view-refresh.svg"
-                    
-//                     isGif: !control.currentFMList.contentReady			
-//                     isMask: false
-                    title : if(control.currentFMList.pathExists && control.currentFMList.pathEmpty)
-                    qsTr("Folder is empty!")
-                    else if(!control.currentFMList.pathExists)
-                        qsTr("Folder doesn't exists!")
-                        else if(!control.currentFMList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
-                            qsTr("Searching for content!")
-                            else if(!control.currentFMList.contentReady)
-                                qsTr("Loading content!")					
-                                
-                                
-                                body: if(control.currentFMList.pathExists && control.currentFMList.pathEmpty)
-                                qsTr("You can add new files to it")
-                                else if(!control.currentFMList.pathExists)
-                                    qsTr("Create Folder?")
-                                    else if(!control.currentFMList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
-                                        qsTr("This might take a while!")
-                                        else if(!control.currentFMList.contentReady)
-                                            qsTr("Almost ready!")	
-                                            
-                                            
-                                            
-                                            emojiSize: iconSizes.huge
-                                            
-                                            onActionTriggered:
-                                            {
-                                                if(!control.currentFMList.pathExists)
-                                                {
-                                                    Maui.FM.createDir(control.currentPath.slice(0, control.currentPath.lastIndexOf("/")), control.currentPath.split("/").pop())
-                                                    control.openFolder(control.currentFMList.parentPath)				
-                                                }
-                                            }
-    }
-    
-   
-    
+
     
     // 	headBar.stickyRightContent: true
     headBar.rightContent:[
@@ -454,7 +401,7 @@ Maui.Page
             onTriggered: browserView.viewType = Maui.FMList.ICON_VIEW
             checkable: false
             checked: browserView.viewType === Maui.FMList.ICON_VIEW
-            icon.width: iconSizes.medium
+            icon.width: Maui.Style.iconSizes.medium
             text: qsTr("Grid view")
             // 			autoExclusive: true		
         },
@@ -463,7 +410,7 @@ Maui.Page
         {
             icon.name: "view-list-details"
 			onTriggered: browserView.viewType = Maui.FMList.LIST_VIEW
-            icon.width: iconSizes.medium
+			icon.width: Maui.Style.iconSizes.medium
             checked: browserView.viewType === Maui.FMList.LIST_VIEW	
             text: qsTr("List view")			
             // 			autoExclusive: true
@@ -473,7 +420,7 @@ Maui.Page
         {
             icon.name: "view-file-columns"
 			onTriggered: browserView.viewType = Maui.FMList.MILLERS_VIEW
-            icon.width: iconSizes.medium
+			icon.width: Maui.Style.iconSizes.medium
             checked: browserView.viewType === Maui.FMList.MILLERS_VIEW
             text: qsTr("Column view")			
             // 			autoExclusive: true		
@@ -589,31 +536,31 @@ Maui.Page
             
             Menu
             {
-                id: _selectionBarmenu
+                id: _selectionBarmenu             
+
                 MenuItem
                 {
                     text: qsTr("Copy...")
-                    onTriggered:
-                    {
-                        if(control.selectionBar)				
-                            control.selectionBar.animate("#6fff80")
-                            control.copy(selectedItems)		
-                            console.log(selectedItems)
-                            _selectionBarmenu.close()
-                    }
+					onTriggered: if(control.selectionBar)	
+					{
+						control.selectionBar.animate("#6fff80")
+						control.copy(selectedItems)		
+						console.log(selectedItems)
+						_selectionBarmenu.close()
+					}
+                    
                 }
                 
                 MenuItem
                 {
                     text: qsTr("Cut...")
-                    onTriggered:
-                    {
-                        if(control.selectionBar)
-                            control.selectionBar.animate("#fff44f")
-                            control.cut(selectedItems)
-                            
-                            _selectionBarmenu.close()
-                    }
+					onTriggered: if(control.selectionBar)
+					{
+						control.selectionBar.animate("#fff44f")
+						control.cut(selectedItems)                            
+						_selectionBarmenu.close()
+					}
+                    
                 }
                 
                 MenuItem
@@ -625,6 +572,18 @@ Maui.Page
                         _selectionBarmenu.close()
                     }
                 }
+                
+                MenuItem
+                {
+					text: qsTr("Tags...")
+					onTriggered: if(control.selectionBar)
+					{
+						dialogLoader.sourceComponent = tagsDialogComponent
+						dialog.composerList.urls = selectedPaths
+						dialog.open()
+						_selectionBarmenu.close()
+					}
+				}
                 
                 MenuSeparator{}
                 
@@ -650,7 +609,6 @@ Maui.Page
     ColumnLayout
     {
         anchors.fill: parent
-        visible: !holder.visible
         spacing: 0
         
         TabBar
@@ -683,9 +641,15 @@ Maui.Page
 					readonly property int minTabWidth: 150 * unit
 					implicitWidth: control.width / _repeater.count
 					implicitHeight: Maui.Style.rowHeight
-					checked: index === _browserList.currentIndex
+					checked: index === _browserList.currentIndex					
 					
-					onClicked: _browserList.currentIndex = index					
+					onClicked:
+					{
+						_browserList.currentIndex = index
+						
+						control.currentPath =  tabsObjectModel.get(index).path
+					}
+					
 					background: Rectangle
 					{
 						color: checked ? Kirigami.Theme.focusColor : Kirigami.Theme.backgroundColor
@@ -727,11 +691,11 @@ Maui.Page
 						
 						ToolButton
 						{
-							Layout.preferredHeight: iconSizes.medium
-							Layout.preferredWidth: iconSizes.medium
-							icon.height: iconSizes.medium
-							icon.width: iconSizes.width
-							Layout.margins: space.medium
+							Layout.preferredHeight: Maui.Style.iconSizes.medium
+							Layout.preferredWidth: Maui.Style.iconSizes.medium
+							icon.height: Maui.Style.iconSizes.medium
+							icon.width: Maui.Style.iconSizes.width
+							Layout.margins: Maui.Style.space.medium
 							Layout.alignment: Qt.AlignRight
 							
 							icon.name: "dialog-close"
@@ -764,7 +728,6 @@ Maui.Page
 			Layout.margins: 0            
 			Layout.fillWidth: true
 			Layout.fillHeight: true
-			z: holder.z + 1
 			clip: true
 			
 			orientation: ListView.Horizontal
@@ -785,7 +748,6 @@ Maui.Page
             Layout.leftMargin:  contentMargins * (isMobile ? 3 : 2)
             Layout.rightMargin: contentMargins * (isMobile ? 3 : 2)
             Layout.bottomMargin: control.selectionBar && control.selectionBar.visible ? contentMargins*2 : 0
-            z: holder.z +1
         }
         
         ProgressBar
@@ -838,7 +800,7 @@ Maui.Page
 		
 		_browserList.currentIndex = tabsObjectModel.count - 1
 		
-		if(path && Maui.FM.fileExists(path))
+		if(path)
 		{
 			setTabMetadata(path)
 			openFolder(path)
@@ -940,7 +902,7 @@ Maui.Page
             if(trackChanges && saveDirProps)
             {
                 var conf = Maui.FM.dirConf(path+"/.directory")
-                var iconsize = conf["iconsize"] ||  iconSizes.large
+				var iconsize = conf["iconsize"] ||  Maui.Style.iconSizes.large
                 thumbnailsSize = parseInt(iconsize)
             }else
             {
@@ -1042,7 +1004,7 @@ Maui.Page
     {
         var newSize = control.thumbnailsSize - 8
         
-        if(newSize >= iconSizes.small)
+        if(newSize >= Maui.Style.iconSizes.small)
             control.thumbnailsSize = newSize
     }	
     

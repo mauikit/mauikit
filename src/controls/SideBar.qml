@@ -28,7 +28,7 @@ Maui.ListBrowser
 {
 	id: control
 
-    property int iconSize : Kirigami.Units.iconSizes.small
+	property int iconSize : Maui.Style.iconSizes.small
     property bool showLabels: true
     
     Rectangle

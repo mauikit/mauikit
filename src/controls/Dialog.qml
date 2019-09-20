@@ -192,7 +192,7 @@ Maui.Popup
                     // 							anchors.fill: parent
                     onAccepted: control.accepted()		
                     Layout.fillWidth: entryField
-                    height: entryField ?  iconSizes.big : 0
+                    height: entryField ?  Maui.Style.iconSizes.big : 0
                     visible: entryField
                 }							
             }

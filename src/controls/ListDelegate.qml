@@ -81,7 +81,7 @@ ItemDelegate
                 anchors.centerIn: parent
                 source: model.icon ? model.icon : ""
                 color: labelColor
-                height: iconSizes.medium
+                height: Maui.Style.iconSizes.medium
                 width: height
             }
         }

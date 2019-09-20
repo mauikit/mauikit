@@ -32,25 +32,23 @@ TextField
 	id: control    
 
 	property alias menu : entryMenu
+	property alias actions : _actions
+	
 	signal cleared()
     signal goBackTriggered();
     signal goFowardTriggered();	
-	
-// 	height: implicitHeight
-// 	width: implicitWidth
-	z: 1
-// 	topPadding: space.tiny
-	bottomPadding: space.tiny
-	rightPadding: clearButton.width + space.small
-    selectByMouse: !isMobile
+
+	bottomPadding: Maui.Style.space.tiny
+	rightPadding: _actions.implicitWidth + Maui.Style.space.small
+    selectByMouse: !Kirigami.Settings.isMobile
     persistentSelection: true
 	focus: true
-	wrapMode: TextInput.WordWrap	
+	wrapMode: TextInput.NoWrap	
 	
-    onPressAndHold: !isMobile ? entryMenu.popup() : undefined
+    onPressAndHold: !Kirigami.Settings.isMobile ? entryMenu.popup() : undefined
 	onPressed:
 	{
-		if(!isMobile && event.button === Qt.RightButton)
+		if(!Kirigami.Settings.isMobile && event.button === Qt.RightButton)
 			entryMenu.popup()
 	}
 	
@@ -78,22 +76,27 @@ TextField
         onActivated: goBackTriggered();
     }
 
-	ToolButton
-	{
-		id: clearButton
-		visible: control.text.length
-		anchors.top: control.top
+    Row
+    {
+		id: _actions	
+		z: parent.z + 1
 		anchors.right: control.right
-		anchors.rightMargin: space.small
+		anchors.rightMargin: Maui.Style.space.small
 		anchors.verticalCenter: parent.verticalCenter
-		icon.name: "edit-clear"
-		icon.color: control.color   
-		onClicked: 
+		
+		ToolButton
 		{
-            control.clear()
-            cleared()            
-        }
-	}
+			id: clearButton
+			visible: control.text.length			
+			icon.name: "edit-clear"
+			icon.color: control.color   
+			onClicked: 
+			{
+				control.clear()
+				cleared()            
+			}
+		}
+    }
 	
 	Menu
 	{

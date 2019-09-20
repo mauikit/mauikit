@@ -8,7 +8,7 @@ Row
     anchors.verticalCenter: parent.verticalCenter
     spacing: space.medium
     property string currentColor
-    property int size : iconSizes.medium
+    property int size : Maui.Style.iconSizes.medium
 
 
         Rectangle

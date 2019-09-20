@@ -64,8 +64,8 @@ Kirigami.AbstractApplicationWindow
 	
 	property bool isWide : root.width >= Kirigami.Units.gridUnit * 30
 	
-	property int radiusV : unit * 4
-	property int iconSize : iconSizes.medium * (isMobile ? 0.95 : 1)
+	property int radiusV : Maui.Style.radiusV
+	property int iconSize : Maui.Style.iconSizes.medium * (isMobile ? 0.95 : 1)
 	
 	readonly property int unit : Maui.Style.unit
 	readonly property int rowHeight: Maui.Style.rowHeight
@@ -74,7 +74,7 @@ Kirigami.AbstractApplicationWindow
 	readonly property int toolBarHeight: Maui.Style.toolBarHeight
 	readonly property int toolBarHeightAlt: Maui.Style.toolBarHeightAlt
 	
-	readonly property int contentMargins: space.medium
+	readonly property int contentMargins: Maui.Style.contentMargins
 	readonly property var fontSizes: Maui.Style.fontSizes
 	readonly property var space : Maui.Style.space
 	readonly property var iconSizes : Maui.Style.iconSizes
@@ -180,8 +180,8 @@ Kirigami.AbstractApplicationWindow
 			id: menuBtn
 			icon.name: "application-menu"
 			icon.color: headBarFGColor
-			icon.width: iconSizes.medium
-			icon.height: iconSizes.medium
+			icon.width: Maui.Style.iconSizes.medium
+			icon.height: Maui.Style.iconSizes.medium
 			checked: mainMenu.visible  
 			onClicked:
 			{
@@ -265,7 +265,7 @@ Kirigami.AbstractApplicationWindow
 		Kirigami.Separator
 		{
 			visible: menuBtn.visible
-            Layout.preferredHeight: Kirigami.Units.iconSizes.small
+            Layout.preferredHeight: Maui.Style.iconSizes.small
 // 			opacity: 0.5
 			width: visible ? 2 : 0
 		}
@@ -364,14 +364,14 @@ Kirigami.AbstractApplicationWindow
 				Item
 				{
 					Layout.fillHeight: true
-					Layout.preferredWidth: iconSizes.huge + space.big
+					Layout.preferredWidth: Maui.Style.iconSizes.huge + Maui.Style.space.big
 					Layout.row: 1
 					Layout.column: 1
 					
 					ToolButton
 					{
 						id: _notifyIcon
-						icon.width: iconSizes.large						
+						icon.width: Maui.Style.iconSizes.large						
 						anchors.centerIn: parent
 					}				
 				}

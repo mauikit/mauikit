@@ -35,7 +35,7 @@ Rectangle
     property alias item : loader.item
 	property bool hovered : false
 	
-	property int size: isMobile ? iconSizes.medium : iconSizes.small
+	property int size: Kirigami.Settings.isMobile ? Maui.Style.iconSizes.medium : Maui.Style.iconSizes.small
 	property string iconName : ""
 	property string text : ""
 	

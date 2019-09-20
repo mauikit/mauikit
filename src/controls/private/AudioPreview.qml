@@ -37,7 +37,7 @@ ColumnLayout
         {
             anchors.centerIn: parent
             flat: true
-            icon.width: iconSizes.huge
+            icon.width: Maui.Style.iconSizes.huge
             icon.name: iteminfo.icon
             icon.source: "qrc:/assets/application-x-zerosize.svg"
 			onClicked: player.playbackState === MediaPlayer.PlayingState ? player.pause() : player.play()
@@ -46,7 +46,7 @@ ColumnLayout
         
         Rectangle
         {
-			height: iconSizes.big
+			height: Maui.Style.iconSizes.big
 			width: height
 			
 			radius: height

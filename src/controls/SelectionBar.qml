@@ -38,10 +38,10 @@ Item
     property alias model : selectionList.model
     property alias count : selectionList.count
     
-    property int barHeight : itemHeight + space.large
+    property int barHeight : itemHeight + Maui.Style.space.large
     property color animColor : "black"
-    property int itemHeight: iconSizes.big + space.big
-    property int itemWidth:  iconSizes.big + (isMobile? space.big : space.large) + space.big
+	property int itemHeight: Maui.Style.iconSizes.big + Maui.Style.space.big
+	property int itemWidth:  Maui.Style.iconSizes.big + (Kirigami.Settings.isMobile? Maui.Style.space.big : Maui.Style.space.large) + Maui.Style.space.big
     property int position: Qt.Horizontal
     property string iconName : "overflow-menu"
     property bool iconVisible: true
@@ -221,7 +221,7 @@ Item
                     anchors.horizontalCenter: position === Qt.Vertical ? parent.horizontalCenter : undefined
                     height:  itemHeight
                     width: itemWidth
-                    folderSize: iconSizes.big
+                    folderSize: Maui.Style.iconSizes.big
                     showLabel: true
                     emblemAdded: true
                     keepEmblemOverlay: true
@@ -230,7 +230,7 @@ Item
                     labelColor: Kirigami.Theme.textColor
                     showTooltip: true
                     showThumbnails: true
-                    emblemSize: iconSizes.small
+                    emblemSize: Maui.Style.iconSizes.small
                     leftEmblem: "list-remove"
 					Kirigami.Theme.highlightColor: Kirigami.Theme.highlightColor
 					Kirigami.Theme.backgroundColor: Kirigami.Theme.complementaryBackgroundColor

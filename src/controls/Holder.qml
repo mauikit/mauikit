@@ -37,7 +37,7 @@ Item
 	
 	property bool isMask : true
 	property bool isGif : false
-	property int emojiSize : iconSizes.large
+	property int emojiSize : Maui.Style.iconSizes.large
 	
 	property bool enabled: true
 	

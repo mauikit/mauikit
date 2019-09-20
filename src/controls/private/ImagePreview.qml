@@ -11,28 +11,18 @@ ColumnLayout
 	
 	Item
 	{
+		visible : !showInfo		
 		Layout.fillWidth: true
 		Layout.fillHeight: true
 		Layout.margins: 0
-//		Layout.maximumHeight: parent.height * 0.7
-//		Layout.preferredHeight: parent.height * 0.7
-//		Layout.minimumHeight: parent.height * 0.7
 		
 		Maui.ImageViewer
 		{
-// 			anchors.centerIn: parent
-// 			horizontalAlignment: Qt.AlignHCenter
-// 			verticalAlignment: Qt.AlignVCenter
 			width: parent.width
 			height: parent.height
-			image.source: currentUrl.startsWith("file://") ? currentUrl : "file://"+currentUrl			
-			// 			fillMode: Image.PreserveAspectCrop
-// 			asynchronous: true
-// 			sourceSize.height: height
-// 			sourceSize.width: width
+			image.source: currentUrl
 		}
-	}
-	
+	}	
 	
 	Item
 	{
@@ -54,20 +44,20 @@ ColumnLayout
 			ColumnLayout
 			{
 				id: _columnInfo
-				spacing: space.large
+				spacing: Maui.Style.space.large
 				
 				Column
 				{
 					Layout.fillWidth: true
-					spacing: space.small
+					spacing: Maui.Style.space.small
+					
 					Label
 					{
 						visible: iteminfo.mime
 						text: qsTr("Type")
-						font.pointSize: fontSizes.default
+						font.pointSize: Maui.Style.fontSizes.default
 						font.weight: Font.Light
-						color: Kirigami.Theme.textColor
-						
+						color: Kirigami.Theme.textColor						
 					}
 					
 					Label
@@ -76,27 +66,26 @@ ColumnLayout
 						verticalAlignment: Qt.AlignVCenter
 						elide: Qt.ElideRight
 						wrapMode: Text.Wrap
-						font.pointSize: fontSizes.big
+						font.pointSize: Maui.Style.fontSizes.big
 						font.weight: Font.Bold
 						font.bold: true
 						text: iteminfo.mime
 						color: Kirigami.Theme.textColor
-						
 					}
 				}
 				
 				Column
 				{
 					Layout.fillWidth: true
-					spacing: space.small
+					spacing: Maui.Style.space.small
+					
 					Label
 					{
 						visible: iteminfo.date						
 						text: qsTr("Date")
-						font.pointSize: fontSizes.default
+						font.pointSize: Maui.Style.fontSizes.default
 						font.weight: Font.Light	
-						color: Kirigami.Theme.textColor
-						
+						color: Kirigami.Theme.textColor						
 					}
 					
 					Label
@@ -105,7 +94,7 @@ ColumnLayout
 						verticalAlignment: Qt.AlignVCenter
 						elide: Qt.ElideRight
 						wrapMode: Text.Wrap
-						font.pointSize: fontSizes.big
+						font.pointSize: Maui.Style.fontSizes.big
 						font.weight: Font.Bold
 						font.bold: true
 						text: iteminfo.date
@@ -118,15 +107,15 @@ ColumnLayout
 				Column
 				{
 					Layout.fillWidth: true
-					spacing: space.small
+					spacing: Maui.Style.space.small
+					
 					Label
 					{
 						visible: iteminfo.modified						
 						text: qsTr("Modified")
-						font.pointSize: fontSizes.default
+						font.pointSize: Maui.Style.fontSizes.default
 						font.weight: Font.Light
-						color: Kirigami.Theme.textColor
-						
+						color: Kirigami.Theme.textColor						
 					}
 					
 					Label
@@ -135,7 +124,7 @@ ColumnLayout
 						verticalAlignment: Qt.AlignVCenter
 						elide: Qt.ElideRight
 						wrapMode: Text.Wrap
-						font.pointSize: fontSizes.big
+						font.pointSize: Maui.Style.fontSizes.big
 						font.weight: Font.Bold
 						font.bold: true
 						text: iteminfo.modified
@@ -147,15 +136,15 @@ ColumnLayout
 				Column
 				{
 					Layout.fillWidth: true
-					spacing: space.small
+					spacing: Maui.Style.space.small
+					
 					Label
 					{
 						visible: iteminfo.owner						
 						text: qsTr("Owner")
-						font.pointSize: fontSizes.default
+						font.pointSize: Maui.Style.fontSizes.default
 						font.weight: Font.Light
-						color: Kirigami.Theme.textColor
-						
+						color: Kirigami.Theme.textColor						
 					}
 					
 					Label
@@ -164,7 +153,7 @@ ColumnLayout
 						verticalAlignment: Qt.AlignVCenter
 						elide: Qt.ElideRight
 						wrapMode: Text.Wrap
-						font.pointSize: fontSizes.big
+						font.pointSize: Maui.Style.fontSizes.big
 						font.weight: Font.Bold
 						font.bold: true
 						text: iteminfo.owner
@@ -176,16 +165,7 @@ ColumnLayout
 				Column
 				{
 					Layout.fillWidth: true
-					spacing: space.small
-					Label
-					{
-						visible: iteminfo.tags
-						text: qsTr("Tags")
-						font.pointSize: fontSizes.default
-						font.weight: Font.Light
-						color: Kirigami.Theme.textColor
-						
-					}
+					spacing: Maui.Style.space.small				
 					
 					Label
 					{							 
@@ -193,7 +173,7 @@ ColumnLayout
 						verticalAlignment: Qt.AlignVCenter
 						elide: Qt.ElideRight
 						wrapMode: Text.Wrap
-						font.pointSize: fontSizes.big
+						font.pointSize: Maui.Style.fontSizes.big
 						font.weight: Font.Bold
 						font.bold: true
 						text: iteminfo.tags
@@ -205,15 +185,15 @@ ColumnLayout
 				Column
 				{
 					Layout.fillWidth: true
-					spacing: space.small
+					spacing: Maui.Style.space.small
+					
 					Label
 					{
 						visible: iteminfo.permissions						
-						text: qsTr("Permissions")
-						font.pointSize: fontSizes.default
+						text: qsTr("Symlink")
+						font.pointSize: Maui.Style.fontSizes.default
 						font.weight: Font.Light
 						color: Kirigami.Theme.textColor
-						
 					}
 					
 					Label
@@ -222,12 +202,11 @@ ColumnLayout
 						verticalAlignment: Qt.AlignVCenter
 						elide: Qt.ElideRight
 						wrapMode: Text.Wrap
-						font.pointSize: fontSizes.big
+						font.pointSize: Maui.Style.fontSizes.big
 						font.weight: Font.Bold
 						font.bold: true
-						text: iteminfo.permissions
+						text: iteminfo.symlink
 						color: Kirigami.Theme.textColor
-						
 					}
 				}
 			}

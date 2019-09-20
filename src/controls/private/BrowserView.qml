@@ -9,28 +9,9 @@ Maui.Page
 {
 	id: control
 	
-	property string path
-	property Maui.FMList currentFMList : Maui.FMList
-	{
-		id: _commonFMList
-		preview: true
-		path: control.path
-		foldersFirst: true
-		onSortByChanged: if(group) groupBy()
-		onContentReadyChanged: console.log("CONTENT READY?", contentReady)
-		onWarning:
-		{			
-			notify("dialog-information", "An error happened", message)
-		}
-		
-		onProgress:
-		{
-			if(percent === 100)
-				_progressBar.value = 0
-				else
-					_progressBar.value = percent/100
-		}
-	}
+	property url path
+	property Maui.FMList currentFMList 
+	
 	property alias currentView : viewLoader.item
 	property int viewType : Maui.FM.loadSettings("VIEW_TYPE", "BROWSER", Maui.FMList.LIST_VIEW)
 	
@@ -59,7 +40,27 @@ Maui.Page
 		onLoaded: setCurrentFMList()
 	}
 	
-	
+	Maui.FMList
+	{
+		id: _commonFMList
+		preview: true
+		path: control.path
+		foldersFirst: true
+		onSortByChanged: if(group) groupBy()
+		onContentReadyChanged: console.log("CONTENT READY?", contentReady)
+		onWarning:
+		{			
+			notify("dialog-information", "An error happened", message)
+		}
+		
+		onProgress:
+		{
+			if(percent === 100)
+				_progressBar.value = 0
+				else
+					_progressBar.value = percent/100
+		}
+	}
 	
 	Component
 	{
@@ -70,7 +71,6 @@ Maui.Page
 			property alias currentFMList : _browserModel.list
 			showPreviewThumbnails: _listViewFMList.preview
 			keepEmblemOverlay: selectionMode
-			rightEmblem: isMobile ? "document-share" : ""
 			leftEmblem: "list-add"
 			showDetailsInfo: true
 			
@@ -103,9 +103,7 @@ Maui.Page
 			itemSize : thumbnailsSize + fontSizes.default
 			keepEmblemOverlay: selectionMode
 			showPreviewThumbnails: _gridViewFMList.preview
-			rightEmblem: isMobile ? "document-share" : ""
 			leftEmblem: "list-add"			
-			
 			model: Maui.BaseModel
 			{
 				id: _browserModel
@@ -155,6 +153,8 @@ Maui.Page
 					_millerControl.currentFMList = currentItem.currentFMList
 					control.setCurrentFMList()				
 				}
+				
+				onCurrentIndexChanged: positionViewAtEnd()
 				
 				Maui.PathList
 				{
@@ -285,5 +285,67 @@ Maui.Page
 				}				
 			}			
 		}
-	}	
+	}
+	
+	
+	
+	Maui.Holder
+	{
+		id: holder
+		anchors.fill : parent
+		z: -1
+		visible: !control.currentFMList.pathExists || control.currentFMList.pathEmpty || !control.currentFMList.contentReady
+		emoji: 
+		{
+			if(control.currentFMList.pathExists && control.currentFMList.pathEmpty)
+				"qrc:/assets/folder-add.svg" 
+				else if(!control.currentFMList.pathExists)
+					"qrc:/assets/dialog-information.svg"
+					else if(!control.currentFMList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
+						"qrc:/assets/edit-find.svg"
+						else if(!control.currentFMList.contentReady)
+							"qrc:/assets/view-refresh.svg"
+		}
+		
+		//                     isGif: !control.currentFMList.contentReady			
+		//                     isMask: false
+		title :
+		{
+			if(control.currentFMList.pathExists && control.currentFMList.pathEmpty)
+				qsTr("Folder is empty!")
+				else if(!control.currentFMList.pathExists)
+					qsTr("Folder doesn't exists!")
+					else if(!control.currentFMList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
+						qsTr("Searching for content!")
+						else if(!control.currentFMList.contentReady)
+							qsTr("Loading content!")					
+							
+		}
+		
+		body:
+		{
+			if(control.currentFMList.pathExists && control.currentFMList.pathEmpty)
+				qsTr("You can add new files to it")
+				else if(!control.currentFMList.pathExists)
+					qsTr("Create Folder?")
+					else if(!control.currentFMList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
+						qsTr("This might take a while!")
+						else if(!control.currentFMList.contentReady)
+							qsTr("Almost ready!")	
+		}
+		
+		emojiSize: Maui.Style.iconSizes.huge
+		
+		onActionTriggered:
+		{
+			if(!control.currentFMList.pathExists)
+			{
+				Maui.FM.createDir(control.path.slice(0, control.path.lastIndexOf("/")), control.path.split("/").pop())
+				openFolder(control.currentFMList.parentPath)				
+			}
+		}
+	}
+	
+	
+	
 }

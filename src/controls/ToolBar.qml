@@ -122,7 +122,7 @@ ToolBar
 	MouseArea
 	{
 		id: _rightFlickRec
-		width: iconSizes.medium
+		width: Maui.Style.iconSizes.medium
 		height: parent.height
 		visible: /*!mainFlickable.atXEnd && */!mainFlickable.fits && control.flickable
 		hoverEnabled: true
@@ -139,8 +139,8 @@ ToolBar
 		{
 			anchors.centerIn: parent
 			source: "arrow-right-double"
-			width: iconSizes.small
-			height: iconSizes.small
+			width: Maui.Style.iconSizes.small
+			height: Maui.Style.iconSizes.small
 			color: _rightFlickRec.hovered ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor			
 		}
 		
@@ -160,7 +160,7 @@ ToolBar
 	MouseArea
 	{
 		id: _leftFlickRec
-		width: iconSizes.medium
+		width: Maui.Style.iconSizes.medium
 		height: parent.height
 		visible: /*!mainFlickable.atXBeginning &&*/ !mainFlickable.fits && control.flickable
 		hoverEnabled: true
@@ -176,8 +176,8 @@ ToolBar
 		{
 			anchors.centerIn: parent
 			source: "arrow-left-double"
-			width: iconSizes.small
-			height: iconSizes.small		
+			width: Maui.Style.iconSizes.small
+			height: Maui.Style.iconSizes.small		
 			color: _leftFlickRec.hovered ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
 		}
 		

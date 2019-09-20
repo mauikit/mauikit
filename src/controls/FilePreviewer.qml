@@ -10,32 +10,31 @@ Maui.Dialog
 {
 	id: control
 	
-// 	colorScheme.backgroundColor: "#2d2d2d"
-// 	colorScheme.textColor: "#fafafa"
-	
-	property string currentUrl: ""
+	property url currentUrl: ""
 	property var iteminfo : ({})
+	
 	property bool isDir : false
 	property string mimetype : ""
 	property bool showInfo: true
 	
-	signal shareButtonClicked(string url)
+	signal shareButtonClicked(url url)
 	
-	maxHeight: unit * 800
-	maxWidth: unit * 500
-	defaultButtons: false	
-        page.padding: space.big
+	maxHeight: Maui.Style.unit * 800
+	maxWidth: Maui.Style.unit * 500
+	
+	defaultButtons: false
+		
+		page.padding: 0
 		
 		footBar.leftContent: ToolButton
 		{
-// 			icon.color: control.colorScheme.textColor
 			icon.name: "document-open"
-            text: qsTr("Open")
+			text: qsTr("Open")
 			onClicked:
 			{
 				if(typeof(previewLoader.item.player) !== "undefined")
 					previewLoader.item.player.stop()
-					openFile(currentUrl)
+					control.openFile(currentUrl)
 			}
 		}
 		
@@ -44,10 +43,8 @@ Maui.Dialog
 		ToolButton
 		{
 			visible: !isDir
-// 			icon.color: control.colorScheme.textColor
 			icon.name: "document-share"
 			text: qsTr("Share")
-
 			onClicked:
 			{
 				shareButtonClicked(currentUrl)
@@ -58,12 +55,8 @@ Maui.Dialog
 		ToolButton
 		{
 			icon.name: "love"
-// 			icon.color: control.colorScheme.textColor
-                text: qsTr("Fav")
-
-			
-        }
-		
+			text: qsTr("Fav")
+		}
 
 		]
 		
@@ -73,78 +66,67 @@ Maui.Dialog
             text: qsTr("Info")
 
             checkable: true
-            checked: showInfo
-            onClicked: showInfo = !showInfo
-//             icon.color: control.colorScheme.textColor
-
+            checked: control.showInfo
+            onClicked: control.showInfo = !control.showInfo
         }
 
 		Component
 		{
 			id: imagePreview
-			ImagePreview
-			{
-				id: imagePreviewer
-			}
+			ImagePreview {}
 		}
 		
 		Component
 		{
 			id: defaultPreview
-			DefaultPreview
-			{
-				id: defaultPreviewer
-			}
+			DefaultPreview {}
 		}
 		
 		Component
 		{
 			id: audioPreview
-			AudioPreview
-			{
-				id: audioPreviewer
-			}
+			AudioPreview {}
 		}
 		
 		Component
 		{
-			id: videoPreview
-			
-			VideoPreview
-			{
-				id: videoPreviewer
-			}
+			id: videoPreview			
+			VideoPreview {}
 		}
+		
+		Component
+		{
+			id: textPreview
+			TextPreview {}
+		}		
 		
 		ColumnLayout
 		{
 			anchors.fill: parent
 			spacing: 0
-			clip: true
 			
-			
-				Label
-				{		
-					Layout.fillWidth: true
-					Layout.margins: space.medium
-					horizontalAlignment: Qt.AlignHCenter
-					verticalAlignment: Qt.AlignVCenter
-					elide: Qt.ElideRight
-					wrapMode: Text.Wrap
-					font.pointSize: fontSizes.big
-					font.weight: Font.Bold
-					font.bold: true
-					text: iteminfo.name
-					color: Kirigami.Theme.textColor
-					
-				}
-			
+			Label
+			{		
+				Layout.fillWidth: true
+				Layout.margins: Maui.Style.space.medium
+				horizontalAlignment: Qt.AlignHCenter
+				verticalAlignment: Qt.AlignVCenter
+				elide: Qt.ElideMiddle
+				wrapMode: Text.Wrap
+				font.pointSize: Maui.Style.fontSizes.big
+				font.weight: Font.Bold
+				font.bold: true
+				text: iteminfo.name
+				color: Kirigami.Theme.textColor
+			}			
 			
 			Loader
 			{
 				id: previewLoader
 				Layout.fillWidth: true
 				Layout.fillHeight: true
+				Layout.margins: Maui.Style.space.big
+				
 				sourceComponent: switch(mimetype)
 				{
 					case "audio" :
@@ -154,7 +136,7 @@ Maui.Dialog
 						videoPreview
 						break
 					case "text" :
-						defaultPreview
+						textPreview
 						break
 					case "image" :
 						imagePreview
@@ -170,13 +152,10 @@ Maui.Dialog
 				id: _tagsBar
 				Layout.fillWidth: true
 				Layout.margins: 0
-				// 				height: 64
 				list.urls: [control.currentUrl]
 				allowEditMode: true
-				clip: true
 				onTagRemovedClicked: list.removeFromUrls(index)
 				onTagsEdited: list.updateToUrls(tags)
-// 				colorScheme: control.colorScheme
 				Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
 				Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
 				onAddClicked:
@@ -185,7 +164,6 @@ Maui.Dialog
 					dialog.composerList.urls = [control.currentUrl]
 					dialog.open()
 				}
-				
 			}
 		}
 		
@@ -204,7 +182,7 @@ Maui.Dialog
 			else control.mimetype = ""
 			control.isDir = mimetype === "inode"
 			
-			showInfo = mimetype === "image" || mimetype === "video" ? false : true
+			showInfo = mimetype === "image" || mimetype === "video" || mimetype === "text"? false : true
 			
 			console.log("MIME TYPE FOR PREVEIWER", mimetype, iteminfo.icon)
 			open()

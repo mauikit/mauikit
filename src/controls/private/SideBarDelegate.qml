@@ -10,7 +10,7 @@ ItemDelegate
     
     property bool isCurrentListItem :  ListView.isCurrentItem
     property bool labelsVisible : true
-    property int sidebarIconSize : iconSizes.small
+    property int sidebarIconSize : Maui.Style.iconSizes.small
     property alias label: controlLabel.text
     
     width: parent.width
@@ -98,7 +98,7 @@ ItemDelegate
         {
             visible: typeof model.count !== "undefined" && model.count && model.count > 0 && labelsVisible
             Layout.fillHeight: true
-            Layout.preferredWidth: Math.max(iconSizes.big + space.small, _badge.implicitWidth)
+            Layout.preferredWidth: Math.max(Maui.Style.iconSizes.big + Maui.Style.space.small, _badge.implicitWidth)
             Layout.alignment: Qt.AlignRight
             Maui.Badge
             {

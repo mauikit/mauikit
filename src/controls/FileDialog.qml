@@ -147,7 +147,7 @@ Maui.Dialog
                 id: _pathBarLoader
                 Layout.fillWidth: true
                 Layout.margins: space.medium
-                height: iconSizes.big
+                height: Maui.Style.iconSizes.big
                 Loader
                 {
                     anchors.fill: parent
@@ -171,11 +171,9 @@ Maui.Dialog
 				anchors.fill: parent
 				clip: true
 				
-				property int sidebarWidth: Kirigami.Units.gridUnit * (isMobile? 15 : 8)				
 				separatorVisible: wideMode
 				initialPage: [sidebar, browser]
-				defaultColumnWidth: sidebarWidth
-// 					interactive: currentIndex === 1
+				defaultColumnWidth:  Kirigami.Units.gridUnit * (isMobile? 15 : 8)		
 					
 					Maui.PlacesSidebar
 					{
