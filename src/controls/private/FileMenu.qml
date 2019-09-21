@@ -12,6 +12,7 @@ Menu
     property var item : ({})
 	property int index : -1
 	property bool isDir : false
+	property bool isExec : false
 	
 	signal bookmarkClicked(var item)
 	signal removeClicked(var item)
@@ -23,6 +24,7 @@ Menu
 	
 	MenuItem
 	{
+		visible: !control.isExec
 		text: qsTr("Select")
 		onTriggered:
 		{
@@ -34,7 +36,7 @@ Menu
 	
 	MenuItem
 	{
-		visible: isDir
+		visible: control.isDir
 		text: qsTr("Open in tab")
 		onTriggered: openTab(item.path)
 	}
@@ -42,6 +44,7 @@ Menu
     MenuSeparator{visible: isDir}
 	MenuItem
 	{
+		visible: !control.isExec
 		text: qsTr("Copy...")
 		onTriggered:
 		{
@@ -52,6 +55,7 @@ Menu
 	
 	MenuItem
 	{
+		visible: !control.isExec
 		text: qsTr("Cut...")
 		onTriggered:
 		{
@@ -62,6 +66,7 @@ Menu
 	
 	MenuItem
 	{
+		visible: !control.isExec
 		text: qsTr("Rename...")
 		onTriggered:
 		{
@@ -74,8 +79,8 @@ Menu
 	
 	MenuItem
 	{
+		visible: !control.isExec && control.isDir
 		text: qsTr("Bookmark")
-		enabled: isDir
 		onTriggered:
 		{
 			bookmarkClicked(control.item)
@@ -85,6 +90,7 @@ Menu
 	
 	MenuItem
 	{
+		visible: !control.isExec
 		text: qsTr("Tags...")
 		onTriggered:
 		{
@@ -95,6 +101,7 @@ Menu
 	
 	MenuItem
 	{
+		visible: !control.isExec		
 		text: qsTr("Share...")
 		onTriggered:
 		{
@@ -105,6 +112,7 @@ Menu
 		
 	MenuItem
 	{
+		visible: !control.isExec
 		text: qsTr("Preview...")
 		onTriggered:
 		{
@@ -118,7 +126,7 @@ Menu
 	MenuItem
 	{
 		text: qsTr("Remove...")
-		Kirigami.Theme.textColor: dangerColor
+		Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
 		
 		onTriggered:
 		{
@@ -132,15 +140,15 @@ Menu
 	MenuItem
 	{		
 		width: parent.width
-		height: visible ? iconSize + space.big : 0
-		visible: isDir
+		height: visible ? Maui.Style.iconSizes.medium + Maui.Style.space.big : 0
+		visible: control.isDir
 		Maui.ColorsBar
         {
 			id: colorBar
 			
 			visible: parent.visible
             anchors.centerIn: parent
-			size: iconSize
+            size: Maui.Style.iconSizes.medium
 			onColorPicked: currentFMList.setDirIcon(index, color)
 		}
 	}	
@@ -152,7 +160,8 @@ Menu
 		if(item)
 		{
 			control.index = index
-            isDir = Maui.FM.isDir(item.path)
+			control.isDir = item.isdir == true || item.isdir == "true"
+			control.isExec = item.executable == true || item.executable == "true"
 			popup()
 		}
 	}

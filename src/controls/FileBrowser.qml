@@ -900,21 +900,21 @@ Maui.Page
         browser.currentIndex = 0
         setPath(path)
         
-        if(currentPathType === Maui.FMList.PLACES_PATH)
-        {
-            if(trackChanges && saveDirProps)
-            {
-                var conf = Maui.FM.dirConf(path+"/.directory")
-				var iconsize = conf["iconsize"] ||  Maui.Style.iconSizes.large
-                thumbnailsSize = parseInt(iconsize)
-            }else
-            {
-                thumbnailsSize = parseInt(Maui.FM.loadSettings("IconSize", "SETTINGS", thumbnailsSize))		
-            }
-        }
-        
-        if(browserView.viewType == Maui.FMList.ICON_VIEW)
-            browser.adaptGrid()
+//         if(currentPathType === Maui.FMList.PLACES_PATH)
+//         {
+//             if(trackChanges && saveDirProps)
+//             {
+//                 var conf = Maui.FM.dirConf(path+"/.directory")
+// 				var iconsize = conf["iconsize"] ||  Maui.Style.iconSizes.large
+//                 thumbnailsSize = parseInt(iconsize)
+//             }else
+//             {
+//                 thumbnailsSize = parseInt(Maui.FM.loadSettings("IconSize", "SETTINGS", thumbnailsSize))		
+//             }
+//         }
+//         
+//         if(browserView.viewType == Maui.FMList.ICON_VIEW)
+//             browser.adaptGrid()
     }
     
     function goBack()

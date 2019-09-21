@@ -52,18 +52,11 @@ void PathList::setPath(const QString& path)
 	if(path == this->m_path)
 		return;	
 	
-	if(!this->list.isEmpty() && FM::parentDir(path) == this->m_path)
-	{
-		// 			qDebug() << "APPENDING PATHS TO MODEL << "<< FM::parentDir(this->m_path) << this->list.last()[FMH::MODEL_KEY::PATH];
-		emit this->preItemAppended();
-		this->list << FMH::getDirInfoModel(path);
-		emit this->postItemAppended();
-	}else{
+	
 		emit this->preListChanged();
 		this->list.clear();
 		this->list << PathList::splitPath(path);
 		emit this->postListChanged();
-	}	
 	
 	this->m_path = path;	
 	emit this->pathChanged();	
@@ -71,22 +64,28 @@ void PathList::setPath(const QString& path)
 
 FMH::MODEL_LIST PathList::splitPath(const QString& path)
 {
-	auto __url = QUrl(path);
-	const auto scheme = __url.scheme();
-	__url.setScheme("");
+	QString __url = path;
+	QString __scheme;
 	
-	const auto m_url = __url.toString();
+	if(path.contains(":"))	//means it has a scheme
+	{
+		const auto parts = QString(path).split(":", QString::SplitBehavior::SkipEmptyParts);
+		__url = parts[1];
+		__scheme = parts[0];		
+	}
+
+	qDebug()<< "STRING TO SPLIT"<< __url << path << __scheme;
 	
-	auto paths = m_url.split("/", QString::SplitBehavior::SkipEmptyParts);
+	const auto paths = __url.split("/", QString::SplitBehavior::SkipEmptyParts);
 	
 	if(paths.isEmpty())
 	{
-		return {{{FMH::MODEL_KEY::LABEL, QString()}, {FMH::MODEL_KEY::PATH, path}}};
+		return {{{FMH::MODEL_KEY::LABEL, path}, {FMH::MODEL_KEY::PATH, path}}};
 	}
 	
-	return std::accumulate(paths.constBegin(), paths.constEnd(), FMH::MODEL_LIST(), [scheme](FMH::MODEL_LIST &list, const QString &part) -> FMH::MODEL_LIST
+	return std::accumulate(paths.constBegin(), paths.constEnd(), FMH::MODEL_LIST(), [__scheme](FMH::MODEL_LIST &list, const QString &part) -> FMH::MODEL_LIST
 	{	
-		const auto url = list.isEmpty() ? QString(scheme + (scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::PLACES_PATH] ? ":///" : "://")  +part) : list.last()[FMH::MODEL_KEY::PATH] + QString("/"+part);		
+		const auto url = list.isEmpty() ? QString(__scheme + (__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::PLACES_PATH] ? ":///" : "://")  +part) : list.last()[FMH::MODEL_KEY::PATH] + QString("/"+part);		
 		
 		if(!url.isEmpty())
 			list << FMH::MODEL 
