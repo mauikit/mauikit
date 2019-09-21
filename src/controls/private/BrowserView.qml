@@ -152,9 +152,7 @@ Maui.Page
 				{
 					_millerControl.currentFMList = currentItem.currentFMList
 					control.setCurrentFMList()				
-				}
-				
-				onCurrentIndexChanged: positionViewAtEnd()
+				}				
 				
 				Maui.PathList
 				{
@@ -181,7 +179,11 @@ Maui.Page
 						color: "transparent"
 					}
 					
-					ListView.onAdd: _millerColumns.currentIndex = _millerColumns.count-1	
+					ListView.onAdd: 
+					{
+						_millerColumns.currentIndex = _millerColumns.count-1
+						_millerColumns.positionViewAtEnd()
+					}	
 					
 					Kirigami.Separator
 					{

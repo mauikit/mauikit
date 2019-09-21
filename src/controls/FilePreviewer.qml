@@ -33,10 +33,9 @@ Maui.Dialog
         icon.name: "document-open"
         text: qsTr("Open")
         onClicked:
-        {
-            if(typeof(previewLoader.item.player) !== "undefined")
-                previewLoader.item.player.stop()
-            control.openFile(currentUrl)
+        {           
+            openFile(control.currentUrl)
+			control.close()
         }
     }
 
@@ -122,25 +121,6 @@ Maui.Dialog
             visible: !control.showInfo
             Layout.fillWidth: true
             Layout.fillHeight: true
-
-            sourceComponent: switch(mimetype)
-                             {
-                             case "audio" :
-                                 audioPreview
-                                 break
-                             case "video" :
-                                 videoPreview
-                                 break
-                             case "text" :
-                                 textPreview
-                                 break
-                             case "image" :
-                                 imagePreview
-                                 break
-                             case "inode" :
-                             default:
-                                 defaultPreview
-                             }
         }
 
         Kirigami.ScrollablePage
@@ -232,8 +212,10 @@ Maui.Dialog
 
     onClosed:
     {
-        if(previewLoader.item.player)
+        if(previewLoader.item.player != null)
             previewLoader.item.player.stop()
+			
+			previewLoader.sourceComponent = null
     }
 
     function show(path)
@@ -248,13 +230,32 @@ Maui.Dialog
         {
             control.mimetype = ""
         }
-
         control.isDir = mimetype === "inode"
-        control.currentUrl = path
-
-        control.showInfo = control.mimetype === "image" || control.mimetype === "video" || control.mimetype === "text"? false : true
-
-        open()
+        control.showInfo = control.mimetype === "image" || control.mimetype === "video" || control.mimetype === "text"? false : true               
+       
+		control.currentUrl = path
+		var component;
+		 switch(mimetype)
+		{
+			case "audio" :
+				component = audioPreview
+				break
+			case "video" :
+				component = videoPreview
+				break
+			case "text" :
+				component = textPreview
+				break
+			case "image" :
+				component = imagePreview
+				break
+			case "inode" :
+			default:
+				component = undefined
+		}
+		
+		previewLoader.sourceComponent = component
+		open()
     }
 
     function initModel()

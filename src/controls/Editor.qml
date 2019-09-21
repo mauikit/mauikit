@@ -12,6 +12,8 @@ Maui.Page
 	
 	property bool showLineCount : true
 	property bool stickyHeadBar : true
+	property bool showSyntaxHighlighting: true
+	
 	property alias body : body
 	property alias document : document
 	property alias scrollView: _scrollView
@@ -23,6 +25,9 @@ Maui.Page
 	property alias bold: document.bold
 	property alias canRedo: body.canRedo	
 	property alias headBar: _editorToolBar
+	
+	ListModel { id: languagesListModel }
+	
 	
 	Maui.DocumentHandler
 	{
@@ -74,7 +79,7 @@ Maui.Page
 			text: body.length + " / " + body.lineCount
 			color: Kirigami.Theme.textColor
 			opacity: 0.5
-			font.pointSize: fontSizes.medium
+			font.pointSize: Maui.Style.fontSizes.medium
 		}		
 	}
 	
@@ -120,7 +125,7 @@ Maui.Page
 	}	
 	
 	
-	footBar.visible: !body.readOnly
+// 	footBar.visible: !body.readOnly
 	footBar.rightContent: [
 	ToolButton
 	{
@@ -136,16 +141,12 @@ Maui.Page
 	
 	ComboBox
 	{
-		visible: !document.isRich
+		visible: control.showSyntaxHighlighting
 		id: languagesListComboBox
 		model: languagesListModel
-		font.pointSize: fontSizes.small
-		onCurrentIndexChanged: {
-			syntaxHighlighter.formatName = languagesListModel.get(currentIndex).text;
-		}
+		onCurrentIndexChanged: syntaxHighlighter.formatName = languagesListModel.get(currentIndex).text		
 	}	
 	]
-
 	
 	ScrollView
 	{
@@ -156,9 +157,7 @@ Maui.Page
 		{
 			id: body
 			topPadding: _editorToolBar.visible ?  _editorToolBar.height : 0
-			topInset: stickyHeadBar ? 0 : topPadding
-			
-			ListModel { id: languagesListModel }
+			topInset: stickyHeadBar ? 0 : topPadding			
 			
 			Maui.ToolBar
 			{
@@ -248,13 +247,13 @@ Maui.Page
 			
 			placeholderText: qsTr("Body")
 			Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
-			selectByKeyboard :!isMobile
-			selectByMouse : !isMobile
+			selectByKeyboard :!Kirigami.Settings.isMobile
+			selectByMouse : !Kirigami.Settings.isMobile
 			textFormat: TextEdit.AutoText
 			
 			color: control.Kirigami.Theme.textColor
 			
-			font.pointSize: fontSizes.large
+			font.pointSize: Maui.Style.fontSizes.large
 			wrapMode: TextEdit.WrapAnywhere
 			
 			activeFocusOnPress: true
@@ -286,11 +285,24 @@ Maui.Page
 		ScrollBar.vertical.y: body.topPadding
 	}
 	
-	Component.onCompleted: {
+	Component.onCompleted:
+	{
 		var languages = document.syntaxHighlighterUtil.getLanguageNameList();
 		
-		for (var index in languages) {
+		for (var index in languages)
+		{
 			languagesListModel.append({text: languages[index]});
 		}
+	}
+	
+	function zoomIn()
+	{
+		body.font.pointSize = body.font.pointSize + 2
+	}
+	
+	function zoomOut()
+	{
+		body.font.pointSize = body.font.pointSize - 2
+		
 	}
 }
