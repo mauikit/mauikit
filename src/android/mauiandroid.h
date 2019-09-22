@@ -60,7 +60,7 @@ public slots:
     static QVariantMap getContact(const QString &id);
 
     static void statusbarColor(const QString &bg, const bool &light);
-    static void shareDialog(const QString &url);
+    static void shareDialog(const QUrl &url);
     static void shareText(const QString &text);
     static void sendSMS(const QString &tel,const QString &subject, const QString &message);
     static void shareLink(const QString &link);

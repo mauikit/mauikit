@@ -26,6 +26,7 @@
 #include <QDomDocument>
 #include <QFile>
 #include <QImage>
+#include <QUrl>
 
 #include "utils.h"
 
@@ -251,7 +252,7 @@ void MAUIAndroid::statusbarColor(const QString &bg, const bool &light)
     });
 }
 
-void MAUIAndroid::shareDialog(const QString &url)
+void MAUIAndroid::shareDialog(const QUrl &url)
 {
     qDebug()<< "trying to share dialog";
     QAndroidJniEnvironment _env;
@@ -263,13 +264,13 @@ void MAUIAndroid::shareDialog(const QString &url)
     if (activity.isValid())
     {
         QMimeDatabase mimedb;
-        QString mimeType = mimedb.mimeTypeForFile(url).name();
+        QString mimeType = mimedb.mimeTypeForFile(url.toLocalFile()).name();
         
         QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/SendIntent",
                                                   "share",
                                                   "(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;)V",
                                                   activity.object<jobject>(),
-                                                  QAndroidJniObject::fromString(url).object<jstring>(),
+                                                  QAndroidJniObject::fromString(url.toLocalFile()).object<jstring>(),
                                                   QAndroidJniObject::fromString(mimeType).object<jstring>());
         
         
