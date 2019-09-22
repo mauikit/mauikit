@@ -69,41 +69,39 @@ Maui.Dialog
         anchors.centerIn: parent
         width: parent.width
         height: parent.height * 0.7
+        spacing: Maui.Style.space.big
 
         Item
         {
+			visible: parent.width > control.maxWidth * 0.7
             Layout.fillHeight: true
             Layout.margins: Maui.Style.space.small
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-            Layout.minimumWidth: Maui.Style.iconSizes.huge
-            Layout.maximumWidth: Maui.Style.iconSizes.huge
+            Layout.alignment: Qt.AlignVCenter          
             Layout.preferredWidth: Maui.Style.iconSizes.huge
-            Layout.minimumHeight: Maui.Style.iconSizes.huge
-
+            
             Image
             {
+				anchors.centerIn: parent
                 source: control.appIcon
-                width: Maui.Style.iconSizes.huge
+                width: Math.max(Maui.Style.iconSizes.huge, parent.width)
                 height: width
                 sourceSize.width: width
                 sourceSize.height: height
-                horizontalAlignment: Qt.AlignHCenter
+                
                 asynchronous: true
 
                 fillMode: Image.PreserveAspectFit
             }
         }
 
-        Item
-        {
-            id: _descriptionItem
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+    
 
             Kirigami.ScrollablePage
             {
-                anchors.fill: parent
+				id: _descriptionItem
+				Layout.fillWidth: true
+				Layout.fillHeight: true
+				Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                 Kirigami.Theme.backgroundColor: "transparent"
                 padding: 0
                 leftPadding: padding
@@ -171,6 +169,6 @@ Maui.Dialog
                     }
                 }
             }
-        }
+        
     }
 }

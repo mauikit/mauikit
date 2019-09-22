@@ -7,8 +7,8 @@ QtObject
     property int filterType : Maui.FMList.NONE  
     property bool onlyDirs: false
     property int sortBy: Maui.FMList.MODIFIED
-    property var trackChanges
-    property var saveDirProps
+    property bool trackChanges : false
+    property bool saveDirProps : false
     
     onFilterTypeChanged: setSettings()
     onFiltersChanged : setSettings()

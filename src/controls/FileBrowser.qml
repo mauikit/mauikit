@@ -392,7 +392,7 @@ Maui.Page
         Layout.fillWidth: true
         hiddenActions: t_actions
         
-        display: isWide ? ToolButton.TextBesideIcon : ToolButton.IconOnly
+        display:  ToolButton.IconOnly
         
         actions: [	
         Action

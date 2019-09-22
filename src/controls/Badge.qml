@@ -45,7 +45,7 @@ Rectangle
 	signal released()
 	
 	z: parent.z+1
-	height: size + space.small
+	height: size + Maui.Style.space.small
 	width: Math.max(implicitWidth, height)
 	implicitWidth: (loader.sourceComponent == labelComponent ? Math.max(loader.item.implicitWidth + Maui.Style.space.small, control.height) : control.height) 
 	radius: Math.min(width, height)
@@ -81,13 +81,13 @@ Rectangle
 	Component
 	{
 		id: iconComponent
-		ToolButton
+		Kirigami.Icon
 		{
 			anchors.centerIn: parent
-			icon.name: control.iconName
-			icon.color: Kirigami.Theme.textColor
-			icon.width: control.size
-			enabled: false
+			source: control.iconName
+			color: Kirigami.Theme.textColor
+			width: control.size
+			height: width
 		}
 	}
 	
