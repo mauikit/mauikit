@@ -26,18 +26,14 @@ import QtQuick.Layouts 1.3
 Maui.Dialog
 {
 	id: control
-	maxHeight: isMobile ? parent.height * 0.95 : unit * 500
-	maxWidth: unit * 700
-// 	defaultButtons: false
+	maxHeight: Kirigami.Settings.isMobile ? parent.height * 0.95 : unit * 500
+	maxWidth: Maui.Style.unit * 700
 		page.padding: 0
 		
 		property string initPath
 		property string suggestedFileName : ""
 		
-		property var filters: []
-		property int filterType: Maui.FMList.NONE		
-		property bool onlyDirs: false
-		property int sortBy: Maui.FMList.MODIFIED
+		property alias settings : browser.settings
 		property bool searchBar : false
 		
 		readonly property var modes : ({OPEN: 0, SAVE: 1})
@@ -77,9 +73,7 @@ Maui.Dialog
 		Maui.Dialog
 		{
 			id: _confirmationDialog
-			
-			// 		anchors.centerIn: parent
-			
+						
 			acceptButton.text: qsTr("Accept")
 			rejectButton.text: qsTr("Cancel")
 			
@@ -204,14 +198,7 @@ Maui.Dialog
 							previewer.parent: ApplicationWindow.overlay
 							selectionMode: control.mode === modes.OPEN
 							
-							Component.onCompleted:
-							{								
-								browser.currentFMList.trackChanges= false
-								browser.currentFMList.onlyDirs= control.onlyDirs
-								browser.currentFMList.filters= control.filters
-								browser.currentFMList.sortBy= control.sortBy
-								browser.currentFMList.filterType= control.filterType
-							}
+						
 							
 							onNewBookmark: 
 							{

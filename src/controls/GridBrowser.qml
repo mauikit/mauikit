@@ -28,7 +28,7 @@ Maui.GridView
 	id: control
 	
 	itemSize : Maui.Style.iconSizes.large
-    spacing: isMobile ? itemSize * 0.7 : itemSize * 0.8
+    spacing: Kirigami.Settings.isMobile ? itemSize * 0.7 : itemSize * 0.8
 	property bool showEmblem : true
 	property bool keepEmblemOverlay : false
 	property string rightEmblem

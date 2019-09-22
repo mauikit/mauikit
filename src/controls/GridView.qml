@@ -23,7 +23,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.impl 2.3
 import org.kde.mauikit 1.0 as Maui
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 import QtGraphicalEffects 1.0
 
 ScrollView
@@ -47,12 +47,15 @@ ScrollView
 	property alias rightMargin: gridView.rightMargin
 	property alias leftMarging: gridView.leftMargin
 	property alias header : gridView.header 
+	property alias holder : _holder
 	
 	property bool centerContent: false
 	property bool adaptContent: false 
 			
 	signal areaClicked(var mouse)
 	signal areaRightClicked()
+	
+	
 	
 	GridView
 	{
@@ -76,12 +79,18 @@ ScrollView
 		cellHeight: control.cellHeight
 		//        maximumFlickVelocity: albumSize*8
 		
-		boundsBehavior: !isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
+		boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
 		flickableDirection: Flickable.AutoFlickDirection
 		snapMode: GridView.SnapToRow
 		highlightMoveDuration: 0
 		interactive: true
 		onWidthChanged: adaptContent? control.adaptGrid() : undefined
+		
+		Maui.Holder
+		{
+			id: _holder
+			anchors.fill : parent		
+		}	
 		
 		PinchArea
 		{

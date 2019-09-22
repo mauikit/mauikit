@@ -18,6 +18,7 @@ Maui.Dialog
     property bool showInfo: true
 
     property alias infoModel : _infoModel
+    property alias tagBar : _tagsBar
 
     signal shareButtonClicked(url url)
 

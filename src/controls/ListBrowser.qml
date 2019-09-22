@@ -21,7 +21,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
-
+import org.kde.kirigami 2.7 as Kirigami
 
 ScrollView
 {
@@ -51,7 +51,7 @@ ScrollView
 	property alias leftMarging: _listView.leftMargin
 	property alias header : _listView.header 
 	property alias listView: _listView
-
+	property alias holder : _holder
     
     signal itemClicked(int index)
     signal itemDoubleClicked(int index)
@@ -65,7 +65,7 @@ ScrollView
 	
 	padding: 0
 	spacing: 0
-	focus: true
+	focus: true	
 	
     ListView
     {	
@@ -74,15 +74,21 @@ ScrollView
 		focus: true
 		
 		snapMode: ListView.SnapToItem
-		boundsBehavior: !isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
+		boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
 		
 		keyNavigationEnabled: true
-		interactive: isMobile
+		interactive: Kirigami.Settings.isMobile
 		highlightFollowsCurrentItem: true
 		highlightMoveDuration: 0
 		
 		width: parent.width
 		height: parent.height 
+		
+		Maui.Holder
+		{
+			id: _holder
+			anchors.fill : parent		
+		}	
         
         model: ListModel { id: listModel }
         delegate: Maui.IconDelegate
@@ -90,7 +96,7 @@ ScrollView
             id: delegate
             isDetails: true
             width: parent.width
-            height: itemSize + space.big
+            height: itemSize + Maui.Style.space.big
             
             showDetailsInfo: control.showDetailsInfo
             folderSize : itemSize
@@ -150,7 +156,7 @@ ScrollView
             onClicked: control.areaClicked(mouse)
             onPressAndHold: control.areaRightClicked()
         }
-    }
+    }  
 }
 
 

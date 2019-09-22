@@ -2,25 +2,26 @@ import QtQuick 2.0
 import QtQuick.Controls 2.2
 import "."
 import org.kde.kirigami 2.6 as Kirigami
+import org.kde.mauikit 1.0 as Maui 
 
 import TagsList 1.0 
 import TagsModel 1.0
 
 ListView
 {
-    id: control
- 
+    id: control 
     orientation: ListView.Horizontal
     clip: true
-    spacing: contentMargins
-    signal tagRemoved(int index)
-    signal tagClicked(int index)
+    spacing: Maui.Style.contentMargins   
     boundsBehavior: isMobile ?  Flickable.DragOverBounds : Flickable.StopAtBounds
 
-    property string placeholderText: "Add tags..."
+    property string placeholderText: qsTr("Add tags...")
     property alias list : _tagsList
     property bool showPlaceHolder:  true
     property bool showDeleteIcon: true
+    
+    signal tagRemoved(int index)
+	signal tagClicked(int index)
     
     TagsModel
     {
@@ -42,9 +43,9 @@ ListView
         verticalAlignment: Qt.AlignVCenter
         text: qsTr(control.placeholderText)
         opacity: 0.7
-        visible: count === 0 && showPlaceHolder
+        visible: count === 0 && control.showPlaceHolder
         color: Kirigami.Theme.textColor
-        font.pointSize: fontSizes.default
+        font.pointSize: Maui.Style.fontSizes.default
     }
 
     delegate: TagDelegate
@@ -58,12 +59,5 @@ ListView
             onRemoveTag: tagRemoved(index)
             onClicked: tagClicked(index)
         }
-    }
-
-    function populate(tags)
-    {
-        model.clear()
-        for(var i in tags)
-            model.append(tags[i])
     }
 }

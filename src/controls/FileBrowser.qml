@@ -2,6 +2,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import QtQml.Models 2.3
+import QtQml 2.1
 
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
@@ -12,11 +13,10 @@ Maui.Page
 {
     id: control
     
-    property var trackChanges: control.currentFMList.trackChanges
-    property var saveDirProps: control.currentFMList.saveDirProps
-    
     property url currentPath
 	onCurrentPathChanged: control.browserView.path = control.currentPath
+    
+    property int viewType
     
     property var copyItems : []
     property var cutItems : []
@@ -29,21 +29,16 @@ Maui.Page
     property bool selectionMode : false
     property bool singleSelection: false
     
-    property bool group : false
-    
+    property bool group : false    
     property bool showEmblems: true
-    
-    //redefinition to work wiht the whole loading async thing
-    property int viewType
-    property var filters: []
-    property int filterType: Maui.FMList.NONE    
-    property bool onlyDirs: false
-    property int sortBy: Maui.FMList.MODIFIED
+
+    //group properties from the browser since the browser views are loaded async and 
+    //their properties can not be accesed inmediately
+    property BrowserSettings settings : BrowserSettings {}
     
     property alias selectionBar : selectionBarLoader.item
 
-    property alias browserView : _browserList.currentItem
-    property var browser : browserView.currentView
+    property alias browserView : _browserList.currentItem    
     property Maui.FMList currentFMList : browserView.currentFMList
     
     property alias previewer : previewer
@@ -52,8 +47,8 @@ Maui.Page
     property alias dialog : dialogLoader.item
     property alias goUpButton : goUpButton
     
-    property int currentPathType : currentFMList.pathType
-    property int thumbnailsSize : iconSizes.large
+    property int currentPathType : control.currentFMList.pathType
+    property int thumbnailsSize : Maui.Style.iconSizes.large
     
     signal itemClicked(int index)
     signal itemDoubleClicked(int index)
@@ -181,7 +176,7 @@ Maui.Page
         {
             property var items: []
             
-            title: qsTr("Remove files?")
+            title: qsTr(String("Remove %1 files?").arg(items.length.toString()))
             message: qsTr("You can move the file to the Trash or Delete it completely from your system. Which one you preffer?")
             rejectButton.text: qsTr("Delete")
             acceptButton.text: qsTr("Trash")
@@ -270,7 +265,12 @@ Maui.Page
         id: tagsDialogComponent
         Maui.TagsDialog
         {
-            onTagsReady: composerList.updateToUrls(tags)
+            onTagsReady: 
+            {
+				composerList.updateToUrls(tags)				
+				if(previewer.visible)
+					previewer.tagBar.list.refresh()
+			}
         }
     }	
     
@@ -332,19 +332,19 @@ Maui.Page
     
     Connections
     {
-        target: browser
+		target: browserView.currentView
         
         onItemClicked: 
         {		
 			console.log("item clicked connections:", index)
-            browser.currentIndex = index
+			browserView.currentView.currentIndex = index
             indexHistory.push(index)
             control.itemClicked(index)
         }
         
         onItemDoubleClicked: 
         {
-            browser.currentIndex = index	
+			browserView.currentView.currentIndex = index	
             indexHistory.push(index)
             control.itemDoubleClicked(index)
         }
@@ -484,7 +484,7 @@ Maui.Page
 					if(control.group) 
                         groupBy()
                     else
-                            browser.section.property = ""
+						browserView.currentView.section.property = ""
                 }
             }			
         },
@@ -766,26 +766,33 @@ Maui.Page
     Component.onCompleted: 
     {
 		openTab(Maui.FM.homePath())	
-								
-		browserView.viewType = control.viewType
-		control.currentFMList.onlyDirs= control.onlyDirs
-		control.currentFMList.filters= control.filters
-		control.currentFMList.sortBy= control.sortBy
-		control.currentFMList.filterType= control.filterType
-		
+		browserView.viewType = control.viewType		
+		control.setSettings()
 	}
     
     onThumbnailsSizeChanged:
     {
-        if(trackChanges && saveDirProps)
+        if(settings.trackChanges && settings.saveDirProps)
             Maui.FM.setDirConf(currentPath+"/.directory", "MAUIFM", "IconSize", thumbnailsSize)
             else 
                 Maui.FM.saveSettings("IconSize", thumbnailsSize, "SETTINGS")
                 
-                if(browserView.viewType == Maui.FMList.ICON_VIEW)
-                    browser.adaptGrid()
+                if(browserView.viewType === Maui.FMList.ICON_VIEW)
+					browserView.currentView.adaptGrid()
     }
     
+    function setSettings()
+	{		
+		if(control.currentFMList !== null)
+		{
+			control.currentFMList.onlyDirs= control.settings.onlyDirs
+			control.currentFMList.filters= control.settings.filters
+			control.currentFMList.sortBy= control.settings.sortBy
+			control.currentFMList.filterType= control.settings.filterType
+			control.currentFMList.trackChanges= control.settings.trackChanges
+			control.currentFMList.saveDirProps= control.settings.saveDirProps
+		}
+	}    
     
     function openTab(path)
 	{
@@ -897,7 +904,7 @@ Maui.Page
         if(!path.length)
             return;
         
-        browser.currentIndex = 0
+		browserView.currentView.currentIndex = 0
         setPath(path)
         
 //         if(currentPathType === Maui.FMList.PLACES_PATH)
@@ -920,7 +927,7 @@ Maui.Page
     function goBack()
     {
 		populate(control.currentFMList.previousPath)
-        browser.currentIndex = indexHistory.pop()
+		browserView.currentView.currentIndex = indexHistory.pop()
     }
     
     function goNext()
@@ -935,8 +942,8 @@ Maui.Page
     
     function refresh()
     {
-        var pos = browser.contentY        
-        browser.contentY = pos
+		var pos = browserView.currentView.contentY        
+		browserView.currentView.contentY = pos
     }
     
     function addToSelection(item, append)
@@ -1040,11 +1047,11 @@ Maui.Page
         
         if(!prop)
         {
-            browser.section.property = ""
+			browserView.currentView.section.property = ""
             return
         }
         
-        browser.section.property = prop
-        browser.section.criteria = criteria
+        browserView.currentView.section.property = prop
+        browserView.currentView.section.criteria = criteria
     }
 }

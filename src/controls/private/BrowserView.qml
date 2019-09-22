@@ -15,6 +15,48 @@ Maui.Page
 	property alias currentView : viewLoader.item
 	property int viewType : Maui.FM.loadSettings("VIEW_TYPE", "BROWSER", Maui.FMList.LIST_VIEW)
 	
+	property QtObject holder : QtObject 
+	{		
+		property string emoji: 
+		{
+			if(control.currentFMList.pathExists && control.currentFMList.pathEmpty)
+				"qrc:/assets/folder-add.svg" 
+				else if(!control.currentFMList.pathExists)
+					"qrc:/assets/dialog-information.svg"
+					else if(!control.currentFMList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
+						"qrc:/assets/edit-find.svg"
+						else if(!control.currentFMList.contentReady)
+							"qrc:/assets/view-refresh.svg"
+		}
+		
+		property string title :
+		{
+			if(control.currentFMList.pathExists && control.currentFMList.pathEmpty)
+				qsTr("Folder is empty!")
+				else if(!control.currentFMList.pathExists)
+					qsTr("Folder doesn't exists!")
+					else if(!control.currentFMList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
+						qsTr("Searching for content!")
+						else if(!control.currentFMList.contentReady)
+							qsTr("Loading content!")					
+							
+		}
+		
+		property string body:
+		{
+			if(control.currentFMList.pathExists && control.currentFMList.pathEmpty)
+				qsTr("You can add new files to it")
+				else if(!control.currentFMList.pathExists)
+					qsTr("Create Folder?")
+					else if(!control.currentFMList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
+						qsTr("This might take a while!")
+						else if(!control.currentFMList.contentReady)
+							qsTr("Almost ready!")	
+		}
+		
+		property int emojiSize: Maui.Style.iconSizes.huge
+	}
+	
 	onViewTypeChanged: Maui.FM.saveSettings("VIEW_TYPE", viewType, "BROWSER")	
 	
 	height: _browserList.height
@@ -73,7 +115,12 @@ Maui.Page
 			keepEmblemOverlay: selectionMode
 			leftEmblem: "list-add"
 			showDetailsInfo: true
-		
+			holder.visible: !currentFMList.pathExists || currentFMList.pathEmpty || !currentFMList.contentReady
+			holder.emoji: control.holder.emoji
+			holder.title: control.holder.title
+			holder.body: control.holder.body
+			holder.emojiSize: control.holder.emojiSize
+			
 			model: Maui.BaseModel
 			{
 				id: _browserModel
@@ -89,7 +136,7 @@ Maui.Page
 				isSection: true
 				boldLabel: true
 				height: toolBarHeightAlt
-			}
+			}	
 		}
 	}
 	
@@ -103,7 +150,13 @@ Maui.Page
 			itemSize : thumbnailsSize + fontSizes.default
 			keepEmblemOverlay: selectionMode
 			showPreviewThumbnails: _gridViewFMList.preview
-			leftEmblem: "list-add"			
+			leftEmblem: "list-add"	
+			holder.visible: !currentFMList.pathExists || currentFMList.pathEmpty || !currentFMList.contentReady
+			holder.emoji: control.holder.emoji
+			holder.title: control.holder.title
+			holder.body: control.holder.body
+			holder.emojiSize: control.holder.emojiSize
+			
 			model: Maui.BaseModel
 			{
 				id: _browserModel
@@ -137,7 +190,7 @@ Maui.Page
 				id: _millerColumns
 				anchors.fill: parent
 				
-				boundsBehavior: !isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
+				boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
 				
 				keyNavigationEnabled: true
 				interactive: Kirigami.Settings.isMobile
@@ -221,11 +274,16 @@ Maui.Page
 						
 						showPreviewThumbnails: _millersFMList.preview
 						keepEmblemOverlay: selectionMode
-						rightEmblem: isMobile ? "document-share" : ""
+						rightEmblem: Kirigami.Settings.isMobile ? "document-share" : ""
 						leftEmblem: "list-add"
 						showDetailsInfo: true
 						currentIndex : _millerControl.currentIndex						
-						
+						holder.visible: !_millersFMList.pathExists || _millersFMList.pathEmpty || !_millersFMList.contentReady
+						holder.emoji: control.holder.emoji
+						holder.title: control.holder.title
+						holder.body: control.holder.body
+						holder.emojiSize: control.holder.emojiSize
+
 						onItemClicked: 
 						{
 							_millerColumns.currentIndex = _index
@@ -289,64 +347,6 @@ Maui.Page
 		}
 	}
 	
-	
-	
-	Maui.Holder
-	{
-		id: holder
-		anchors.fill : parent
-		z: -1
-		visible: !control.currentFMList.pathExists || control.currentFMList.pathEmpty || !control.currentFMList.contentReady
-		emoji: 
-		{
-			if(control.currentFMList.pathExists && control.currentFMList.pathEmpty)
-				"qrc:/assets/folder-add.svg" 
-				else if(!control.currentFMList.pathExists)
-					"qrc:/assets/dialog-information.svg"
-					else if(!control.currentFMList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
-						"qrc:/assets/edit-find.svg"
-						else if(!control.currentFMList.contentReady)
-							"qrc:/assets/view-refresh.svg"
-		}
-		
-		//                     isGif: !control.currentFMList.contentReady			
-		//                     isMask: false
-		title :
-		{
-			if(control.currentFMList.pathExists && control.currentFMList.pathEmpty)
-				qsTr("Folder is empty!")
-				else if(!control.currentFMList.pathExists)
-					qsTr("Folder doesn't exists!")
-					else if(!control.currentFMList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
-						qsTr("Searching for content!")
-						else if(!control.currentFMList.contentReady)
-							qsTr("Loading content!")					
-							
-		}
-		
-		body:
-		{
-			if(control.currentFMList.pathExists && control.currentFMList.pathEmpty)
-				qsTr("You can add new files to it")
-				else if(!control.currentFMList.pathExists)
-					qsTr("Create Folder?")
-					else if(!control.currentFMList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
-						qsTr("This might take a while!")
-						else if(!control.currentFMList.contentReady)
-							qsTr("Almost ready!")	
-		}
-		
-		emojiSize: Maui.Style.iconSizes.huge
-		
-		onActionTriggered:
-		{
-			if(!control.currentFMList.pathExists)
-			{
-				Maui.FM.createDir(control.path.slice(0, control.path.lastIndexOf("/")), control.path.split("/").pop())
-				openFolder(control.currentFMList.parentPath)				
-			}
-		}
-	}
 	
 	
 	
