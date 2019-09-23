@@ -38,7 +38,7 @@ TextField
     signal goBackTriggered();
     signal goFowardTriggered();	
 
-	bottomPadding: Maui.Style.space.tiny
+//	bottomPadding: Maui.Style.space.tiny
 	rightPadding: _actions.implicitWidth + Maui.Style.space.small
     selectByMouse: !Kirigami.Settings.isMobile
     persistentSelection: true

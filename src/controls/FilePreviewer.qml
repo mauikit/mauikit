@@ -232,7 +232,7 @@ Maui.Dialog
             control.mimetype = ""
         }
         control.isDir = mimetype === "inode"
-        control.showInfo = control.mimetype === "image" || control.mimetype === "video" || control.mimetype === "text"? false : true               
+        control.showInfo = control.mimetype === "audio" || control.mimetype === "image" || control.mimetype === "video" || control.mimetype === "text"? false : true
        
 		control.currentUrl = path
 		var component;

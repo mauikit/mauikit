@@ -34,7 +34,7 @@ Kirigami.GlobalDrawer
     
 //     property alias handleButton : _handleButton
 
-z:  modal ? ApplicationWindow.overlay.z  : ApplicationWindow.overlay.z -1
+//z:  modal ? ApplicationWindow.overlay.z + 1  : ApplicationWindow.z
 //     handleVisible: false
 //     y: altToolBars ? 0 : headBar.height
 //     height: parent.height - (floatingBar && altToolBars ? 0 : headBar.height)

@@ -52,12 +52,12 @@ T.MenuItem {
                              implicitContentHeight + topPadding + bottomPadding,
                              implicitIndicatorHeight + topPadding + bottomPadding) : 0
 
-    padding: 16
+    padding: Maui.Style.space.small
     //    verticalPadding: Material.menuItemVerticalPadding
-    spacing: 16
+    spacing: Maui.Style.space.small
 
-    icon.width: Kirigami.Units.iconSizes.smallMedium
-    icon.height: 24
+    icon.width: Maui.Style.iconSizes.medium
+    icon.height: Maui.Style.iconSizes.medium
     icon.color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightedTextColor : control.Kirigami.Theme.textColor) :
                              control.Kirigami.Theme.disabledTextColor
 
@@ -82,7 +82,8 @@ T.MenuItem {
         source: "qrc:/qt-project.org/imports/QtQuick/Controls.2/Material/images/arrow-indicator.png"
     }
 
-    contentItem: IconLabel {
+    contentItem: IconLabel
+    {
         readonly property real arrowPadding: control.subMenu && control.arrow ? control.arrow.width + control.spacing : 0
         readonly property real indicatorPadding: control.checkable && control.indicator ? control.indicator.width + control.spacing : 0
         leftPadding: !control.mirrored ? indicatorPadding : arrowPadding
@@ -100,9 +101,10 @@ T.MenuItem {
                                  control.Kirigami.Theme.disabledTextColor
     }
 
-    background: Rectangle {
+    background: Rectangle
+    {
         implicitWidth: 200
-        implicitHeight: Maui.Style.rowHeight
+        implicitHeight: Maui.Style.rowHeightAlt
         color: control.highlighted ? control.Kirigami.Theme.highlightColor : "transparent"
 
     }

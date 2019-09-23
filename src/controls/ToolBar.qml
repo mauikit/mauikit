@@ -29,12 +29,11 @@ ToolBar
 {
 	id: control    
 	
-	// 	implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
-	implicitHeight: visible ? toolBarHeight : 0
-	
-	// 	width: parent.width 
+    implicitHeight: visible ? Maui.Style.toolBarHeight : 0
 	height:  implicitHeight 
-	
+    spacing: Maui.Style.space.medium
+    padding: 0
+
 	property alias stickyRightContent : rightRowContent.sticky
 	property alias stickyLeftContent : leftRowContent.sticky
 	property alias stickyMiddleContent : middleRowContent.sticky
@@ -49,34 +48,17 @@ ToolBar
 	
 	property alias layout : layout
 	
-	property int margins: space.medium
-	spacing: space.medium
+    property int margins: Maui.Style.space.medium
 	property int count : leftContent.length + middleContent.length + rightContent.length
 	
-	property bool dropShadow: false
-	property bool drawBorder: false
-	property bool floating: false
-	property bool plegable: false //deprecrated
-	property bool folded : false //deprecrated
 	property bool flickable: true
 	property bool strech : true
 	property bool leftSretch: strech
 	property bool rightSretch: strech
 	property bool middleStrech: strech
-	padding: 0    
+
 	//    leftPadding: Kirigami.Units.smallSpacing*2
-	//    rightPadding: Kirigami.Units.smallSpacing*2
-	signal unfolded()
-	
-	// 	onPlegableChanged: folded = plegable
-	// 	onVisibleChanged: 
-	// 	{
-	// 		if(control.visible)
-	// 			control.height= implicitHeight
-	// 			else
-	// 				control.height= 0
-	// 				
-	// 	}
+    //    rightPadding: Kirigami.Units.smallSpacing*2
 	
 	// 	background: Rectangle
 	// 	{
@@ -191,8 +173,7 @@ ToolBar
 				if(mainFlickable.atXBeginning)
 					mainFlickable.returnToBounds()
 		}
-	}
-	
+	}	
 	
 	Flickable
 	{
@@ -205,7 +186,7 @@ ToolBar
 		
 		flickableDirection: Flickable.HorizontalFlick
 		interactive: !fits && Kirigami.Settings.isMobile
-		contentWidth: ((control.margins) + space.medium) 
+        contentWidth: ((control.margins) + Maui.Style.space.medium)
 		+ (control.stickyLeftContent ? leftRowContent.implicitWidth : leftRowContent.width) 
 		+ (control.stickyMiddleContent ? middleRowContent.implicitWidth : middleRowContent.width) 
 		+ (control.stickyRightContent ? rightRowContent.implicitWidth : rightRowContent.width)			
@@ -216,7 +197,7 @@ ToolBar
 		RowLayout
 		{
 			id: layout
-			width: control.width - control.margins - space.medium
+            width: control.width - control.margins - Maui.Style.space.medium
 			height: control.height
 			
 			RowLayout

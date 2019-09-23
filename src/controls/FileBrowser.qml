@@ -284,7 +284,6 @@ Maui.Page
     Maui.FilePreviewer
     {
         id: previewer
-//         parent: parent
         onShareButtonClicked: control.shareFiles([url])
     }
     

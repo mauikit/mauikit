@@ -9,13 +9,14 @@
         <file>assets/BugSearch.png</file>
         <file>assets/MoonSki.png</file>
         <file>assets/application-x-zerosize.svg</file>
-		<file>assets/animat-rocket-color.gif</file>
-		<file>assets/animat-diamond-color.gif</file>		
-		<file>assets/animat-search-color.gif</file>		
-		<file>assets/opendesktop.png</file>			
-		<file>assets/folder-add.svg</file>			
-		<file>assets/view-refresh.svg</file>			
-		<file>assets/edit-find.svg</file>			
-		<file>assets/dialog-information.svg</file>			
-	</qresource>
+        <file>assets/animat-rocket-color.gif</file>
+        <file>assets/animat-diamond-color.gif</file>
+        <file>assets/animat-search-color.gif</file>
+        <file>assets/opendesktop.png</file>
+        <file>assets/folder-add.svg</file>
+        <file>assets/view-refresh.svg</file>
+        <file>assets/edit-find.svg</file>
+        <file>assets/dialog-information.svg</file>
+        <file>assets/cover.png</file>
+    </qresource>
 </RCC>

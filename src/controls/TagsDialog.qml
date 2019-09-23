@@ -22,7 +22,6 @@ Maui.Dialog
 	
 	onAccepted: setTags()
 	onRejected: close()	
-	headBar.plegable: false
 	headBar.leftContent: ToolButton
 	{
 		icon.name: "view-sort"

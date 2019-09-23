@@ -99,13 +99,13 @@ T.Menu {
         }
     }
 
-    T.Overlay.modal: Rectangle {
-        color: "#333"
-        Behavior on opacity { NumberAnimation { duration: 150 } }
-    }
+//    T.Overlay.modal: Rectangle {
+//        color: "#333"
+//        Behavior on opacity { NumberAnimation { duration: 150 } }
+//    }
 
-    T.Overlay.modeless: Rectangle {
-        color: "#333"
-        Behavior on opacity { NumberAnimation { duration: 150 } }
-    }
+//    T.Overlay.modeless: Rectangle {
+//        color: "#333"
+//        Behavior on opacity { NumberAnimation { duration: 150 } }
+//    }
 }
