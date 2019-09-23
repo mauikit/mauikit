@@ -40,7 +40,6 @@ class FMList : public MauiList
 
 	Q_PROPERTY(bool hidden READ getHidden WRITE setHidden NOTIFY hiddenChanged)
 	Q_PROPERTY(bool onlyDirs READ getOnlyDirs WRITE setOnlyDirs NOTIFY onlyDirsChanged)
-	Q_PROPERTY(bool preview READ getPreview WRITE setPreview NOTIFY previewChanged)
 	
 	Q_PROPERTY(int cloudDepth READ getCloudDepth WRITE setCloudDepth NOTIFY cloudDepthChanged)
 	Q_PROPERTY(uint count READ getCount NOTIFY countChanged)
@@ -138,10 +137,7 @@ class FMList : public MauiList
 		
 		bool getHidden() const;
 		void setHidden(const bool &state);
-		
-		bool getPreview() const;
-		void setPreview(const bool &state);
-		
+			
 		bool getOnlyDirs() const;
 		void setOnlyDirs(const bool &state);
 		
@@ -193,7 +189,6 @@ private:
 	
 	bool onlyDirs = false;
 	bool hidden = false;
-	bool preview = false;
 	bool pathExists = false;
 	bool pathEmpty = true;
 	bool trackChanges = true;
@@ -228,7 +223,6 @@ signals:
 	void filtersChanged();
 	void filterTypeChanged();
 	void hiddenChanged();
-	void previewChanged();
 	void onlyDirsChanged();
 	void sortByChanged();
 	void trackChangesChanged();

@@ -16,8 +16,10 @@ Maui.Page
     property url currentPath
 	onCurrentPathChanged: control.browserView.path = control.currentPath
     
-    property int viewType
-    onViewTypeChanged: browserView.viewType = control.viewType
+    property int viewType : Maui.FMList.LIST_VIEW 
+    property int currentPathType : control.currentFMList.pathType
+    property int thumbnailsSize : Maui.Style.iconSizes.large
+    property bool showThumbnails: true
     
     property var copyItems : []
     property var cutItems : []
@@ -47,8 +49,7 @@ Maui.Page
     property alias itemMenu: itemMenu
     property alias dialog : dialogLoader.item
     
-    property int currentPathType : control.currentFMList.pathType
-    property int thumbnailsSize : Maui.Style.iconSizes.large
+ 
     
     signal itemClicked(int index)
     signal itemDoubleClicked(int index)
@@ -99,8 +100,8 @@ Maui.Page
         icon.name: "image-preview"
         text: qsTr("Previews")
         checkable: true
-        checked: control.currentFMList.preview
-        onTriggered: control.currentFMList.preview = !control.currentFMList.preview
+        checked: control.showThumbnails
+        onTriggered: control.showThumbnails = !control.showThumbnails
     },
     
     Action
@@ -723,7 +724,6 @@ Maui.Page
 		ListView
 		{
 			id: _browserList
-			Layout.topMargin: control.viewType == Maui.FMList.ICON_VIEW ? contentMargins * 2 : 0
 			Layout.margins: 0            
 			Layout.fillWidth: true
 			Layout.fillHeight: true
@@ -765,7 +765,7 @@ Maui.Page
     Component.onCompleted: 
     {
 		openTab(Maui.FM.homePath())	
-		browserView.viewType = control.viewType		
+// 		browserView.viewType = control.viewType		
 		control.setSettings()
 	}
     
@@ -776,7 +776,7 @@ Maui.Page
             else 
                 Maui.FM.saveSettings("IconSize", thumbnailsSize, "SETTINGS")
                 
-                if(browserView.viewType === Maui.FMList.ICON_VIEW)
+                if(control.viewType === Maui.FMList.ICON_VIEW)
 					browserView.currentView.adaptGrid()
     }
     
@@ -1042,7 +1042,7 @@ Maui.Page
                 break;
         }
         
-        browserView.viewType = Maui.FMList.LIST_VIEW 
+        control.viewType = Maui.FMList.LIST_VIEW 
         
         if(!prop)
         {

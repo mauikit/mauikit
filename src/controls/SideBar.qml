@@ -38,14 +38,14 @@ Maui.ListBrowser
         color: Kirigami.Theme.backgroundColor
     }
 
-    model: ListModel {}
-
-    delegate: SideBarDelegate
+    delegate: Maui.ListDelegate
     {
         id: itemDelegate
-        sidebarIconSize: control.iconSize
+        iconSize: control.iconSize
         itemFgColor: Kirigami.Theme.textColor
-        labelsVisible: showLabels
+        labelVisible: control.showLabels
+//         radius: Maui.Style.radiusV
+//         padding: Maui.Style.space.tiny 
         
         Connections
         {

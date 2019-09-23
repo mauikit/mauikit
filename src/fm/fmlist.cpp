@@ -226,7 +226,6 @@ void FMList::reset()
 		case FMList::PATHTYPE::APPS_PATH:
 			
 			this->hidden = false;			
-			this->preview = false;
 			break;
 			
 		case FMList::PATHTYPE::CLOUD_PATH:			
@@ -234,7 +233,6 @@ void FMList::reset()
 		case FMList::PATHTYPE::TAGS_PATH:
 			
 			this->hidden = false;			
-			this->preview = true;
 			break;
 			
 		case FMList::PATHTYPE::PLACES_PATH:
@@ -243,12 +241,10 @@ void FMList::reset()
 			{
 				auto conf = FMH::dirConf(this->path+"/.directory");				
 				this->hidden = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN]].toBool();				
-				this->preview = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTHUMBNAIL]].toBool();
 				this->foldersFirst = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::FOLDERSFIRST]].toBool();
 			}else
 			{
 				this->hidden = UTIL::loadSettings("HiddenFilesShown", "SETTINGS", this->hidden).toBool();
-				this->preview = UTIL::loadSettings("ShowThumbnail", "SETTINGS", this->preview).toBool();
 				this->foldersFirst = UTIL::loadSettings("FoldersFirst", "SETTINGS", this->foldersFirst).toBool();
 			}
 		
@@ -269,10 +265,7 @@ void FMList::reset()
 	
 	emit this->sortByChanged();
 	emit this->hiddenChanged();
-	emit this->previewChanged();			
 	
-	
-	qDebug()<< "RESETING PATH CONTENTE" << this->path;
 	this->setList();	
 	this->pos();
 }
@@ -601,26 +594,6 @@ void FMList::setHidden(const bool &state)
 	
 	emit this->hiddenChanged();
 	this->reset();
-}
-
-bool FMList::getPreview() const
-{
-	return this->preview;
-}
-
-void FMList::setPreview(const bool &state)
-{
-	if(this->preview == state)
-		return;
-	
-	this->preview = state;
-	
-	if(this->pathType == FMList::PATHTYPE::PLACES_PATH && this->trackChanges && this->saveDirProps)
-		FMH::setDirConf(this->path+"/.directory", "MAUIFM", "ShowThumbnail", this->preview);
-	else
-		UTIL::saveSettings("ShowThumbnail", this->preview, "SETTINGS");
-	
-	emit this->previewChanged();
 }
 
 bool FMList::getOnlyDirs() const

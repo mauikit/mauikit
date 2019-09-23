@@ -63,19 +63,17 @@ ItemDelegate
 	signal rightEmblemClicked(int index)
 	signal leftEmblemClicked(int index)
 	
-	focus: true
-	clip: true
 	hoverEnabled: !Kirigami.Settings.isMobile
 	
 	opacity: (model.hidden == true || model.hidden == "true" )? 0.5 : 1
 
-	background: Rectangle
-	{
-		color: !isDetails? "transparent" : (isCurrentListItem || (hovered && isDetails) ? Kirigami.Theme.highlightColor :
-		index % 2 === 0 ? Qt.lighter( Kirigami.Theme.backgroundColor,1.2) :  Kirigami.Theme.backgroundColor)		
+	padding: 0
+	bottomPadding: padding
+	rightPadding:/* control.isDetails?  Maui.Style.space.big : */0
+	leftPadding: /*control.isDetails?  Maui.Style.space.big : */0
+	topPadding: padding
 	
-        opacity: hovered ? 0.3 : 1
-    }
+	background: null
 	
 	//dragging still needs more work
 	Drag.active: _mouseArea.drag.active && control.draggable
@@ -292,7 +290,28 @@ ItemDelegate
 		}		
 	}
 	
-	GridLayout
+	Item
+	{
+		anchors
+		{
+			fill: parent
+			topMargin: control.topPadding
+			bottomMargin: control.bottomPadding
+			leftMargin: control.leftPadding
+			rightMargin: control.rightPadding
+			margins: control.padding
+		}
+		
+		Rectangle
+		{
+			anchors.fill: parent			
+			color: !control.isDetails? "transparent" : (control.isCurrentListItem || (control.hovered && control.isDetails) ? Kirigami.Theme.highlightColor :
+			index % 2 === 0 ? Qt.lighter( Kirigami.Theme.backgroundColor,1.2) :  Kirigami.Theme.backgroundColor)		
+			radius: Maui.Style.radiusV
+			opacity: control.isCurrentListItem || control.hovered ? 0.4 : 1
+		}
+		
+		GridLayout
 	{
 		id: delegatelayout
 		anchors.fill: parent
@@ -364,4 +383,7 @@ ItemDelegate
 			Layout.rightMargin: Maui.Style.space.medium
 		}		
 	}
+	}
+	
+	
 }

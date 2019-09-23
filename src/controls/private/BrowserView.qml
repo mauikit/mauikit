@@ -9,11 +9,11 @@ Maui.Page
 {
 	id: control
 	focus: true
+	
 	property url path
 	property Maui.FMList currentFMList 
 	
 	property alias currentView : viewLoader.item
-	property int viewType : Maui.FMList.LIST_VIEW 
 	
 	height: _browserList.height
 	width: _browserList.width
@@ -69,7 +69,8 @@ Maui.Page
 	{
 		id: viewLoader
 		anchors.fill: parent
-		sourceComponent: switch(control.viewType)
+		
+		sourceComponent: switch(viewType)
 		{
 			case Maui.FMList.ICON_VIEW: return gridViewBrowser
 			case Maui.FMList.LIST_VIEW: return listViewBrowser
@@ -82,7 +83,6 @@ Maui.Page
 	Maui.FMList
 	{
 		id: _commonFMList
-		preview: true
 		path: control.path
 		foldersFirst: true
 		onSortByChanged: if(group) groupBy()
@@ -108,10 +108,12 @@ Maui.Page
 		Maui.ListBrowser
 		{
 			property alias currentFMList : _browserModel.list
-			showPreviewThumbnails: _listViewFMList.preview
+			showPreviewThumbnails: showThumbnails
 			keepEmblemOverlay: selectionMode
 			leftEmblem: "list-add"
 			showDetailsInfo: true
+			topMargin: Maui.Style.contentMargins
+			
 			holder.visible: !currentFMList.pathExists || currentFMList.pathEmpty || !currentFMList.contentReady
 			holder.emoji: control.holder.emoji
 			holder.title: control.holder.title
@@ -146,8 +148,10 @@ Maui.Page
 			property alias currentFMList : _browserModel.list
             itemSize : thumbnailsSize + Maui.Style.fontSizes.default
 			keepEmblemOverlay: selectionMode
-			showPreviewThumbnails: _gridViewFMList.preview
+			showPreviewThumbnails: showThumbnails
 			leftEmblem: "list-add"	
+			topMargin: Maui.Style.contentMargins * 2
+			
 			holder.visible: !currentFMList.pathExists || currentFMList.pathEmpty || !currentFMList.contentReady
 			holder.emoji: control.holder.emoji
 			holder.title: control.holder.title
@@ -247,7 +251,6 @@ Maui.Page
 					Maui.FMList
 					{	
 						id: _millersFMList
-						preview: true
 						path: model.path
 						foldersFirst: true
 						onWarning:
@@ -268,8 +271,9 @@ Maui.Page
 					{
 						id: _millerListView
 						anchors.fill: parent
+						topMargin: Maui.Style.contentMargins
 						
-						showPreviewThumbnails: _millersFMList.preview
+						showPreviewThumbnails: showThumbnails
 						keepEmblemOverlay: selectionMode
 						rightEmblem: Kirigami.Settings.isMobile ? "document-share" : ""
 						leftEmblem: "list-add"

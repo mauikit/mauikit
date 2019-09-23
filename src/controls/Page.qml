@@ -20,11 +20,11 @@ Page
     
     property alias headBar : _headBar
     property alias footBar: _footBar
-    property QtObject mheadBar : Maui.ToolBar
+    property Maui.ToolBar mheadBar : Maui.ToolBar
     { 
         id: _headBar
         visible: count > 1
-        width: control.width	
+        width: parent.width	
         position: ToolBar.Header 
         
         Component
@@ -52,12 +52,12 @@ Page
         }
     }
     
-    property QtObject mfootBar : Maui.ToolBar 
+    property Maui.ToolBar mfootBar : Maui.ToolBar 
     { 
         id: _footBar
         visible: count
         position: ToolBar.Footer
-        width: control.width
+        width: parent.width
     }   
     
     header: headBar.count && headBar.position === ToolBar.Header ? headBar : undefined

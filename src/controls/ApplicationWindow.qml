@@ -165,7 +165,7 @@ Kirigami.AbstractApplicationWindow
 }
 */
 	
-	property QtObject mheadBar : Maui.ToolBar
+	property Maui.ToolBar mheadBar : Maui.ToolBar
 	{ 
 		id: _headBar
 		visible: count > 1
@@ -280,7 +280,7 @@ Kirigami.AbstractApplicationWindow
 		}
 	}
 	
-	property QtObject mfootBar : Maui.ToolBar 
+	property Maui.ToolBar mfootBar : Maui.ToolBar 
 	{ 
 		id: _footBar
 		visible: count

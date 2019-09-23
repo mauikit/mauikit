@@ -25,24 +25,35 @@ import org.kde.mauikit 1.0 as Maui
 
 ItemDelegate
 {
-    id: control
-
-    property bool isCurrentListItem :  ListView.isCurrentItem
-
-    property alias label: controlLabel.text
-    property alias iconName: controlIcon.source
+	id: control
+	
+	property bool isCurrentListItem :  ListView.isCurrentItem
+	property bool labelVisible : true
+	property int iconSize : Maui.Style.iconSizes.medium    
 	property int radius : 0
+	
+	property alias label: controlLabel.text
+	property alias iconName: controlIcon.source  
 	
 	signal rightClicked()
 	
-    width: parent.width
-    height: rowHeight
-
-    clip: true
-
-    property string labelColor: ListView.isCurrentItem ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.textColor
-
-	hoverEnabled: !isMobile
+	width: parent.width
+	height: Math.max(control.iconSize + Maui.Style.space.big, Maui.Style.rowHeight)
+	
+	clip: true
+	
+	property color itemFgColor : Kirigami.Theme.textColor
+	property color labelColor: ListView.isCurrentItem ? Kirigami.Theme.highlightedTextColor :
+	itemFgColor
+	
+	hoverEnabled: !Kirigami.Settings.isMobile
+	background: null
+	padding: 0
+	
+	ToolTip.delay: 1000
+	ToolTip.timeout: 5000
+	ToolTip.visible: hovered 
+	ToolTip.text: qsTr(control.label)
 	
 	MouseArea
 	{
@@ -50,64 +61,91 @@ ItemDelegate
 		acceptedButtons:  Qt.RightButton
 		onClicked:
 		{
-			if(!isMobile && mouse.button === Qt.RightButton)
+			if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
 				rightClicked()
 		}
 	}
-														 
-    background: Rectangle
-    {
-        anchors.fill: parent
-        color: isCurrentListItem || hovered ? Kirigami.Theme.highlightColor : "transparent"
-		radius: control.radius
-		opacity: hovered ? 0.3 : 1
-        //                                   index % 2 === 0 ? Qt.lighter(backgroundColor,1.2) :
-        //                                                     backgroundColor
-    }
-
-    RowLayout
-    {
-        anchors.fill: parent
-
-        Item
-        {
-            Layout.fillHeight: true
-            visible: model.icon !== typeof("undefined")
-            width: model.icon ? parent.height : 0
-
-            Kirigami.Icon
-            {
-                id:controlIcon
-                anchors.centerIn: parent
-                source: model.icon ? model.icon : ""
-                color: labelColor
-                height: Maui.Style.iconSizes.medium
-                width: height
-            }
-        }
-
-        Item
-        {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignVCenter
-
-            Label
-            {
-                id: controlLabel
-                height: parent.height
-                width: parent.width
-                verticalAlignment:  Qt.AlignVCenter
-                horizontalAlignment: Qt.AlignLeft
-
-                text: model.label
-                font.bold: false
-                elide: Text.ElideRight
-
-                font.pointSize: isMobile ? fontSizes.big :
-                                           fontSizes.default
-                color: labelColor
-            }
-        }
-    }
+	
+	Item
+	{
+		anchors
+		{
+			fill: parent
+			topMargin: control.topPadding
+			bottomMargin: control.bottomPadding
+			leftMargin: control.leftPadding
+			rightMargin: control.rightPadding
+			margins: control.padding
+		}
+		
+		Rectangle
+		{
+			anchors.fill: parent
+			color: control.isCurrentListItem || hovered ? Kirigami.Theme.highlightColor : "transparent"
+			radius: control.radius
+			opacity: control.hovered || control.isCurrentListItem ? 0.4 : 1			
+		}
+		
+		RowLayout
+		{
+			anchors.fill: parent
+			
+			Item
+			{
+				Layout.fillHeight: true
+				Layout.preferredWidth: model.icon ? parent.height : 0
+				visible: model.icon !== typeof("undefined")
+				
+				Kirigami.Icon
+				{
+					id: controlIcon
+					anchors.centerIn: parent
+					source: model.icon ? model.icon : ""
+					color: control.labelColor
+					height: control.iconSize
+					width: height
+				}
+			}
+			
+			Label
+			{
+				id: controlLabel
+				visible: control.labelVisible
+				Layout.fillHeight: true
+				Layout.fillWidth: true
+				Layout.alignment: Qt.AlignVCenter
+				verticalAlignment:  Qt.AlignVCenter
+				horizontalAlignment: Qt.AlignLeft
+				
+				text: model.label
+				font.bold: false
+				elide: Text.ElideRight
+				wrapMode: Text.NoWrap
+				font.pointSize: Kirigami.Settings.isMobile ? Maui.Style.fontSizes.big :
+				Maui.Style.fontSizes.default
+				color: control.labelColor
+			}
+			
+			Item
+			{
+				visible: typeof model.count !== "undefined" && model.count && model.count > 0 && control.labelVisible
+				Layout.fillHeight: true
+				Layout.preferredWidth: Math.max(Maui.Style.iconSizes.big + Maui.Style.space.small, _badge.implicitWidth)
+				Layout.alignment: Qt.AlignRight
+				Maui.Badge
+				{
+					id: _badge
+					anchors.centerIn: parent
+					text: model.count                
+				}
+			}		
+		}		
+	}
+	
+	
+	function clearCount()
+	{
+		console.log("CLEANING SIDEBAR COUNT")
+		model.count = 0
+	}
 }

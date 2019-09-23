@@ -21,6 +21,8 @@ import QtQuick 2.9
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import org.kde.kirigami 2.7 as Kirigami
+import org.kde.mauikit 1.0 as Maui
+
 import "private"
 
 ItemDelegate
@@ -30,7 +32,7 @@ ItemDelegate
 	property bool isCurrentListItem :  ListView.isCurrentItem
 	
     width: parent.width
-    height: rowHeight
+    height: Maui.Style.rowHeight
 
     property bool isSection : false
     property bool boldLabel : false
@@ -40,8 +42,8 @@ ItemDelegate
 
     background: Rectangle
     {
-		color: isCurrentListItem ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor
-		opacity: isCurrentListItem ? 1 : 0.1
+		color: control.isCurrentListItem ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor
+		opacity: control.isCurrentListItem ? 1 : 0.1
     }
 
     ColumnLayout
@@ -51,7 +53,7 @@ ItemDelegate
         Label
         {
             id: labelTxt
-            Layout.margins: contentMargins
+            Layout.margins: Maui.Style.contentMargins
             Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
 
             width: parent.width
@@ -62,7 +64,7 @@ ItemDelegate
             text: labelTxt.text
             elide: Text.ElideRight
             color: labelColor
-            font.pointSize: fontSizes.default
+            font.pointSize: Maui.Style.fontSizes.default
 
             font.bold: boldLabel
             font.weight : boldLabel ? Font.Bold : Font.Normal
