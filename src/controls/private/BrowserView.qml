@@ -13,7 +13,10 @@ Maui.Page
 	property Maui.FMList currentFMList 
 	
 	property alias currentView : viewLoader.item
-	property int viewType : Maui.FM.loadSettings("VIEW_TYPE", "BROWSER", Maui.FMList.LIST_VIEW)
+	property int viewType : Maui.FMList.LIST_VIEW 
+	
+	height: _browserList.height
+	width: _browserList.width
 	
 	property QtObject holder : QtObject 
 	{		
@@ -55,16 +58,10 @@ Maui.Page
 		}
 		
 		property int emojiSize: Maui.Style.iconSizes.huge
-	}
-	
-	onViewTypeChanged: Maui.FM.saveSettings("VIEW_TYPE", viewType, "BROWSER")	
-	
-	height: _browserList.height
-	width: _browserList.width
+	}	
 	
 	function setCurrentFMList()
 	{
-		console.log("SETTING CURRENT FM LIST")
 		control.currentFMList = currentView.currentFMList	
 	}
 	
@@ -345,9 +342,5 @@ Maui.Page
 				}				
 			}			
 		}
-	}
-	
-	
-	
-	
+	}	
 }

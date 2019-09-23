@@ -17,6 +17,7 @@ Maui.Page
 	onCurrentPathChanged: control.browserView.path = control.currentPath
     
     property int viewType
+    onViewTypeChanged: browserView.viewType = control.viewType
     
     property var copyItems : []
     property var cutItems : []
@@ -398,9 +399,9 @@ Maui.Page
         Action
         {
             icon.name: "view-list-icons"
-            onTriggered: browserView.viewType = Maui.FMList.ICON_VIEW
+            onTriggered: control.viewType = Maui.FMList.ICON_VIEW
             checkable: false
-            checked: browserView.viewType === Maui.FMList.ICON_VIEW
+            checked: control.viewType === Maui.FMList.ICON_VIEW
             icon.width: Maui.Style.iconSizes.medium
             text: qsTr("Grid view")
             // 			autoExclusive: true		
@@ -409,9 +410,9 @@ Maui.Page
         Action
         {
             icon.name: "view-list-details"
-			onTriggered: browserView.viewType = Maui.FMList.LIST_VIEW
+			onTriggered: control.viewType = Maui.FMList.LIST_VIEW
 			icon.width: Maui.Style.iconSizes.medium
-            checked: browserView.viewType === Maui.FMList.LIST_VIEW	
+			checked: control.viewType === Maui.FMList.LIST_VIEW	
             text: qsTr("List view")			
             // 			autoExclusive: true
         },
@@ -419,9 +420,9 @@ Maui.Page
         Action
         {
             icon.name: "view-file-columns"
-			onTriggered: browserView.viewType = Maui.FMList.MILLERS_VIEW
+			onTriggered: control.viewType = Maui.FMList.MILLERS_VIEW
 			icon.width: Maui.Style.iconSizes.medium
-            checked: browserView.viewType === Maui.FMList.MILLERS_VIEW
+			checked: control.viewType === Maui.FMList.MILLERS_VIEW
             text: qsTr("Column view")			
             // 			autoExclusive: true		
         },
@@ -724,7 +725,7 @@ Maui.Page
 		ListView
 		{
 			id: _browserList
-			Layout.topMargin: browserView.viewType == Maui.FMList.ICON_VIEW ? contentMargins * 2 : 0
+			Layout.topMargin: control.viewType == Maui.FMList.ICON_VIEW ? contentMargins * 2 : 0
 			Layout.margins: 0            
 			Layout.fillWidth: true
 			Layout.fillHeight: true
