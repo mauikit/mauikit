@@ -372,7 +372,7 @@ Maui.Page
         
         onAreaClicked:
         {
-            if(!isMobile && mouse.button === Qt.RightButton)
+            if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
                 browserMenu.show()
                 else return
                     

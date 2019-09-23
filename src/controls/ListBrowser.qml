@@ -50,7 +50,6 @@ Kirigami.ScrollablePage
     property alias bottomMargin: _listView.bottomMargin
     property alias rightMargin: _listView.rightMargin
     property alias leftMarging: _listView.leftMargin
-//    property alias header : _listView.header
     property alias listView: _listView
 	property alias holder : _holder
     
@@ -64,9 +63,15 @@ Kirigami.ScrollablePage
     signal areaClicked(var mouse)
     signal areaRightClicked()   
 	
-//    padding: 0
-//    spacing: 0
-//    focus: true
+   spacing: 0
+   focus: true
+	
+	Kirigami.Theme.backgroundColor: "transparent"
+	padding: 0
+	leftPadding: padding
+	rightPadding: padding
+	topPadding: padding
+	bottomPadding: padding	
 	
     ListView
     {	
@@ -87,7 +92,6 @@ Kirigami.ScrollablePage
 			anchors.fill : parent		
 		}	
         
-        model: ListModel { id: listModel }
         delegate: Maui.IconDelegate
         {
             id: delegate
