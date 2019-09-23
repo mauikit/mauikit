@@ -46,7 +46,6 @@ Maui.Page
     property alias menu : browserMenu.contentData
     property alias itemMenu: itemMenu
     property alias dialog : dialogLoader.item
-    property alias goUpButton : goUpButton
     
     property int currentPathType : control.currentFMList.pathType
     property int thumbnailsSize : Maui.Style.iconSizes.large
