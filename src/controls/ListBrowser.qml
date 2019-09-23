@@ -23,7 +23,8 @@ import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 
-ScrollView
+
+Kirigami.ScrollablePage
 {
     id: control    
     
@@ -45,12 +46,12 @@ ScrollView
 	property alias count : _listView.count
 	property alias cacheBuffer : _listView.cacheBuffer
 	
-	property alias topMargin: _listView.topMargin
-	property alias bottomMargin: _listView.bottomMargin
-	property alias rightMargin: _listView.rightMargin
-	property alias leftMarging: _listView.leftMargin
-	property alias header : _listView.header 
-	property alias listView: _listView
+    property alias topMargin: _listView.topMargin
+    property alias bottomMargin: _listView.bottomMargin
+    property alias rightMargin: _listView.rightMargin
+    property alias leftMarging: _listView.leftMargin
+//    property alias header : _listView.header
+    property alias listView: _listView
 	property alias holder : _holder
     
     signal itemClicked(int index)
@@ -63,27 +64,23 @@ ScrollView
     signal areaClicked(var mouse)
     signal areaRightClicked()   
 	
-	padding: 0
-	spacing: 0
-	focus: true	
+//    padding: 0
+//    spacing: 0
+//    focus: true
 	
     ListView
     {	
 		id: _listView
-		anchors.fill: parent
-		focus: true
+        focus: true
 		
-		snapMode: ListView.SnapToItem
-		boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
+        snapMode: ListView.SnapToItem
+        boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
 		
-		keyNavigationEnabled: true
-		interactive: Kirigami.Settings.isMobile
-		highlightFollowsCurrentItem: true
-		highlightMoveDuration: 0
-		
-		width: parent.width
-		height: parent.height 
-		
+        keyNavigationEnabled: true
+        interactive: Kirigami.Settings.isMobile
+        highlightFollowsCurrentItem: true
+        highlightMoveDuration: 0
+
 		Maui.Holder
 		{
 			id: _holder

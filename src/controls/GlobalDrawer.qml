@@ -58,22 +58,22 @@ z:  modal ? ApplicationWindow.overlay.z  : ApplicationWindow.overlay.z -1
 			visible = true
 	}
 
-    FastBlur
-    {
-        id: blur
-        height: parent.height
-        width: parent.width
-        radius: 90
-        opacity: 0.5
-        source: ShaderEffectSource
-        {
-            sourceItem: bg
-            sourceRect:Qt.rect(bg.width-(control.position * control.width),
-                               0,
-                               control.width,
-                               control.height)
-        }
-    }
+//    FastBlur
+//    {
+//        id: blur
+//        height: parent.height
+//        width: parent.width
+//        radius: 90
+//        opacity: 0.5
+//        source: ShaderEffectSource
+//        {
+//            sourceItem: bg
+//            sourceRect:Qt.rect(bg.width-(control.position * control.width),
+//                               0,
+//                               control.width,
+//                               control.height)
+//        }
+//    }
     
 //     background: Rectangle 
 //     {

@@ -26,118 +26,121 @@ import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 import QtGraphicalEffects 1.0
 
-ScrollView
+Kirigami.ScrollablePage
 {
-	id: control
-	
-	property int cellWidth: unit * 200
-	property int cellHeight: unit * 200
-    spacing: space.medium
-	property int itemSize: 0
-	
-	property alias model : gridView.model
-	property alias delegate : gridView.delegate
-	property alias contentY: gridView.contentY
-	property alias currentIndex : gridView.currentIndex
-	property alias count : gridView.count
-	property alias cacheBuffer : gridView.cacheBuffer
-	
-	property alias topMargin: gridView.topMargin
-	property alias bottomMargin: gridView.bottomMargin
-	property alias rightMargin: gridView.rightMargin
-	property alias leftMarging: gridView.leftMargin
-	property alias header : gridView.header 
-	property alias holder : _holder
-	
-	property bool centerContent: false
-	property bool adaptContent: false 
-			
-	signal areaClicked(var mouse)
-	signal areaRightClicked()
-	
-	
-	
-	GridView
-	{
-		id: gridView
-		
-		anchors
-		{
-			leftMargin: control.ScrollBar.visible ? 0 : control.ScrollBar.width
-		}
-		
-		flow: GridView.FlowLeftToRight
-		clip: true
-		focus: true
-		anchors.horizontalCenter: centerContent ? parent.horizontalCenter :
-		undefined
-		width: centerContent ? Math.min(model.count, 
-										Math.floor(parent.width/cellWidth))*cellWidth :
-										parent.width
-		height: parent.height
-		cellWidth: control.cellWidth 
-		cellHeight: control.cellHeight
-		//        maximumFlickVelocity: albumSize*8
-		
-		boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
-		flickableDirection: Flickable.AutoFlickDirection
-		snapMode: GridView.SnapToRow
-		highlightMoveDuration: 0
-		interactive: true
-		onWidthChanged: adaptContent? control.adaptGrid() : undefined
-		
-		Maui.Holder
-		{
-			id: _holder
-			anchors.fill : parent		
-		}	
-		
-		PinchArea
-		{
-	        anchors.fill: parent
+    id: control
+
+    property int itemSize: 0
+
+    property alias cellWidth: gridView.cellWidth
+    property alias cellHeight: gridView.cellHeight
+    property alias model : gridView.model
+    property alias delegate : gridView.delegate
+    property alias contentY: gridView.contentY
+    property alias currentIndex : gridView.currentIndex
+    property alias count : gridView.count
+    property alias cacheBuffer : gridView.cacheBuffer
+
+    property alias topMargin: gridView.topMargin
+    property alias bottomMargin: gridView.bottomMargin
+    property alias rightMargin: gridView.rightMargin
+    property alias leftMarging: gridView.leftMargin
+    property alias holder : _holder
+    property alias gridView : gridView
+
+    property bool centerContent: false
+    property bool adaptContent: false
+
+    signal areaClicked(var mouse)
+    signal areaRightClicked()
+
+    spacing: Maui.Style.space.medium
+
+    Kirigami.Theme.backgroundColor: "transparent"
+    padding: 0
+    leftPadding: padding
+    rightPadding: padding
+    topPadding: padding
+    bottomPadding: padding
+
+    GridView
+    {
+        id: gridView
+
+        anchors
+        {
+            leftMargin: control.ScrollBar.visible ? 0 : control.ScrollBar.width
+        }
+
+        flow: GridView.FlowLeftToRight
+        clip: true
+        focus: true
+        anchors.horizontalCenter: centerContent ? parent.horizontalCenter :
+        undefined
+        width: centerContent ? Math.min(model.count,
+                                        Math.floor(parent.width/cellWidth))*cellWidth :
+                                        parent.width
+        cellWidth: Maui.Style.unit * 200
+        cellHeight: Maui.Style.unit * 200
+
+        boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
+        flickableDirection: Flickable.AutoFlickDirection
+        snapMode: GridView.SnapToRow
+        highlightMoveDuration: 0
+        interactive: true
+        onWidthChanged: adaptContent? control.adaptGrid() : undefined
+
+        Maui.Holder
+        {
+            id: _holder
+            anchors.fill : parent
+        }
+
+        PinchArea
+        {
+            anchors.fill: parent
             z: -1
-	        onPinchStarted:
-	        {
-	            console.log("pinch started")
-	        }
-	
-	        onPinchUpdated:
-	        {
-                
-	        }
-	
-	        onPinchFinished:
-	        {
-	            console.log("pinch finished")
+            onPinchStarted:
+            {
+                console.log("pinch started")
+            }
+
+            onPinchUpdated:
+            {
+
+            }
+
+            onPinchFinished:
+            {
+                console.log("pinch finished")
                  resizeContent(pinch.scale)
-	        }
-	        
-	        MouseArea
-	        {
-				anchors.fill: parent
-				propagateComposedEvents: true
-				acceptedButtons:  Qt.RightButton | Qt.LeftButton
-				onClicked: control.areaClicked(mouse)
-				onPressAndHold: control.areaRightClicked()
-				
-				onWheel:
-				{
-					if (wheel.modifiers & Qt.ControlModifier)
-					{
-						if (wheel.angleDelta.y != 0) 
-						{
-							var factor = 1 + wheel.angleDelta.y / 600;
-							control.resizeContent(factor)
-						} 
-					}else
-						wheel.accepted = false
-				}
-				
-			}	
-		}
-	}
-	
-	function resizeContent(factor)
+            }
+
+            MouseArea
+            {
+                anchors.fill: parent
+                propagateComposedEvents: true
+                acceptedButtons:  Qt.RightButton | Qt.LeftButton
+                onClicked: control.areaClicked(mouse)
+                onPressAndHold: control.areaRightClicked()
+
+                onWheel:
+                {
+                    if (wheel.modifiers & Qt.ControlModifier)
+                    {
+                        if (wheel.angleDelta.y != 0)
+                        {
+                            var factor = 1 + wheel.angleDelta.y / 600;
+                            control.resizeContent(factor)
+                        }
+                    }else
+                        wheel.accepted = false
+                }
+            }
+        }
+    }
+
+    function resizeContent(factor)
     {
         if(factor > 1)
         {
@@ -151,19 +154,19 @@ ScrollView
             control.cellHeight = control.cellHeight - 10
             control.cellWidth = control.cellWidth - 10
         }
-        
+
         if(adaptContent)
             control.adaptGrid()
-    }	
-	
-	function adaptGrid()
-	{
-		var amount = parseInt(gridView.width / (itemSize + spacing), 10)
-		var leftSpace = parseInt(gridView.width  - ( amount * (itemSize + spacing) ), 10)
-		var size = parseInt((itemSize + spacing) + (parseInt(leftSpace/amount, 10)), 10)
-		
-		size = size > itemSize + spacing ? size : itemSize + spacing
-		
-		cellWidth = size
-	}
+    }
+
+    function adaptGrid()
+    {
+        var amount = parseInt(gridView.width / (itemSize + spacing), 10)
+        var leftSpace = parseInt(gridView.width  - ( amount * (itemSize + spacing) ), 10)
+        var size = parseInt((itemSize + spacing) + (parseInt(leftSpace/amount, 10)), 10)
+
+        size = size > itemSize + spacing ? size : itemSize + spacing
+
+        cellWidth = size
+    }
 }

@@ -885,34 +885,33 @@ namespace FMH
 			return FMH::MODEL();
 		qDebug()<< "trying to get path info model. exists";		
 		
-		const auto mime = FMH::getMime(path);
-		return FMH::MODEL 
-		{
-			{FMH::MODEL_KEY::GROUP, file.group()},
-			{FMH::MODEL_KEY::OWNER, file.owner()},
-			{FMH::MODEL_KEY::SUFFIX, file.completeSuffix()},
-			{FMH::MODEL_KEY::LABEL, /*file.isDir() ? file.baseName() :*/ path == FMH::HomePath ? QStringLiteral("Home") : file.fileName()},
-			{FMH::MODEL_KEY::NAME, file.fileName()},
-			{FMH::MODEL_KEY::DATE,  file.birthTime().toString(Qt::TextDate)},
-			{FMH::MODEL_KEY::MODIFIED, file.lastModified().toString(Qt::TextDate)},
-			{FMH::MODEL_KEY::LAST_READ, file.lastRead().toString(Qt::TextDate)},
-			
-			{FMH::MODEL_KEY::MIME, mime },
-			{FMH::MODEL_KEY::SYMLINK, file.symLinkTarget() },
-			{FMH::MODEL_KEY::SYMLINK, file.symLinkTarget() },
-			{FMH::MODEL_KEY::IS_SYMLINK, QVariant(file.isSymLink()).toString()},
-			{FMH::MODEL_KEY::IS_FILE, QVariant(file.isFile()).toString()},
-			{FMH::MODEL_KEY::HIDDEN, QVariant(file.isHidden()).toString()},
-			{FMH::MODEL_KEY::IS_DIR, QVariant(file.isDir()).toString()},
-			{FMH::MODEL_KEY::WRITABLE, QVariant(file.isWritable()).toString()},
-			{FMH::MODEL_KEY::READABLE, QVariant(file.isReadable()).toString()},
-			{FMH::MODEL_KEY::EXECUTABLE, QVariant(file.isExecutable()).toString()},			
-			{FMH::MODEL_KEY::ICON, FMH::getIconName(path)},
-			{FMH::MODEL_KEY::SIZE, QString::number(file.size()) /*locale.formattedDataSize(file.size())*/},
-			{FMH::MODEL_KEY::PATH, path.toString()},
-			{FMH::MODEL_KEY::THUMBNAIL, path.toString()},
-			{FMH::MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path.toLocalFile()).count() - 2) : "0"}
-		};		
+        const auto mime = FMH::getMime(path);
+        return FMH::MODEL
+        {
+            {FMH::MODEL_KEY::GROUP, file.group()},
+            {FMH::MODEL_KEY::OWNER, file.owner()},
+            {FMH::MODEL_KEY::SUFFIX, file.completeSuffix()},
+            {FMH::MODEL_KEY::LABEL, /*file.isDir() ? file.baseName() :*/ path == FMH::HomePath ? QStringLiteral("Home") : file.fileName()},
+                {FMH::MODEL_KEY::NAME, file.fileName()},
+                {FMH::MODEL_KEY::DATE,  file.birthTime().toString(Qt::TextDate)},
+                {FMH::MODEL_KEY::MODIFIED, file.lastModified().toString(Qt::TextDate)},
+                {FMH::MODEL_KEY::LAST_READ, file.lastRead().toString(Qt::TextDate)},
+                {FMH::MODEL_KEY::MIME, mime },
+                {FMH::MODEL_KEY::SYMLINK, file.symLinkTarget() },
+                {FMH::MODEL_KEY::SYMLINK, file.symLinkTarget() },
+                {FMH::MODEL_KEY::IS_SYMLINK, QVariant(file.isSymLink()).toString()},
+                {FMH::MODEL_KEY::IS_FILE, QVariant(file.isFile()).toString()},
+                {FMH::MODEL_KEY::HIDDEN, QVariant(file.isHidden()).toString()},
+                {FMH::MODEL_KEY::IS_DIR, QVariant(file.isDir()).toString()},
+                {FMH::MODEL_KEY::WRITABLE, QVariant(file.isWritable()).toString()},
+                {FMH::MODEL_KEY::READABLE, QVariant(file.isReadable()).toString()},
+                {FMH::MODEL_KEY::EXECUTABLE,  QVariant(file.suffix().endsWith(".desktop")).toString()},
+                {FMH::MODEL_KEY::ICON, FMH::getIconName(path)},
+                {FMH::MODEL_KEY::SIZE, QString::number(file.size()) /*locale.formattedDataSize(file.size())*/},
+                {FMH::MODEL_KEY::PATH, path.toString()},
+                {FMH::MODEL_KEY::THUMBNAIL, path.toString()},
+                {FMH::MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path.toLocalFile()).count() - 2) : "0"}
+                };
 	}	
 	
 	inline QVariantMap getFileInfo(const QUrl &path)
