@@ -52,28 +52,32 @@ Item
 	{
 		id: imgComponent
 		
-		Image
+        Kirigami.Icon
 		{
 			id: imageHolder
 			
 			width: Math.min(parent.width, emojiSize)
 			height: width
-			sourceSize.width: width
-			sourceSize.height: height
+            color: Kirigami.Theme.textColor
+            opacity: 0.5
+//			sourceSize.width: width
+//			sourceSize.height: height
 			source: emoji
-			asynchronous: true
-			horizontalAlignment: Qt.AlignHCenter
+//            asynchronous: false
+//            cache: true
+//            smooth: true
+//			horizontalAlignment: Qt.AlignHCenter
 			
-			fillMode: Image.PreserveAspectFit		
+//			fillMode: Image.PreserveAspectFit
 			
-			HueSaturation
-			{
-				anchors.fill: parent
-				source: parent
-				saturation: -1
-				lightness: 0.3
-				visible: isMask
-			}
+//			HueSaturation
+//			{
+//				anchors.fill: parent
+//				source: parent
+//				saturation: -1
+//				lightness: 0.3
+//				visible: isMask
+//			}
 		}
 	}
 	
@@ -117,9 +121,9 @@ Item
 			width: Math.min(control.width * 0.7, implicitWidth)			
 			opacity: 0.5
 			text: message ? qsTr(message) : "<h3>"+title+"</h3><p>"+body+"</p>"
-			font.pointSize: fontSizes.default
+            font.pointSize: Maui.Style.fontSizes.default
 			
-			padding: space.medium
+            padding: Maui.Style.space.medium
 			font.bold: true
 			textFormat: Text.RichText
 			horizontalAlignment: Qt.AlignHCenter

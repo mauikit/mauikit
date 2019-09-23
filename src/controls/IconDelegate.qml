@@ -68,7 +68,7 @@ ItemDelegate
 	hoverEnabled: !Kirigami.Settings.isMobile
 	
 	opacity: (model.hidden == true || model.hidden == "true" )? 0.5 : 1
-	
+
 	background: Rectangle
 	{
 		color: !isDetails? "transparent" : (isCurrentListItem || (hovered && isDetails) ? Kirigami.Theme.highlightColor :
