@@ -111,9 +111,7 @@ Maui.Page
 			showPreviewThumbnails: showThumbnails
 			keepEmblemOverlay: selectionMode
 			leftEmblem: "list-add"
-			showDetailsInfo: true
-			topMargin: Maui.Style.contentMargins
-			
+			showDetailsInfo: true		
 			holder.visible: !currentFMList.pathExists || currentFMList.pathEmpty || !currentFMList.contentReady
 			holder.emoji: control.holder.emoji
 			holder.title: control.holder.title
@@ -271,7 +269,6 @@ Maui.Page
 					{
 						id: _millerListView
 						anchors.fill: parent
-						topMargin: Maui.Style.contentMargins
 						
 						showPreviewThumbnails: showThumbnails
 						keepEmblemOverlay: selectionMode
