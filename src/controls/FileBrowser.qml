@@ -509,13 +509,13 @@ Maui.Page
         onClicked: control.goBack()
     },
     
-    ToolButton
-    {
-        id: goUpButton
-        visible: true
-        icon.name: "go-up"
-        onClicked: control.goUp()
-    },
+//     ToolButton
+//     {
+//         id: goUpButton
+//         visible: true
+//         icon.name: "go-up"
+//         onClicked: control.goUp()
+//     },
     
     ToolButton
     {
