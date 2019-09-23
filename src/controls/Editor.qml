@@ -24,10 +24,7 @@ Maui.Page
 	property alias italic: document.italic
 	property alias bold: document.bold
 	property alias canRedo: body.canRedo	
-	property alias headBar: _editorToolBar
-	
-	ListModel { id: languagesListModel }
-	
+	property alias headBar: _editorToolBar	
 	
 	Maui.DocumentHandler
 	{
@@ -37,9 +34,7 @@ Maui.Page
 		selectionStart: body.selectionStart
 		selectionEnd: body.selectionEnd
 		// textColor: TODO
-		//            onLoaded: {
-		//                body.text = text
-		//            }
+		
 		onError:
 		{
 			body.text = message
@@ -49,14 +44,8 @@ Maui.Page
 		onLoaded:
 		{
 			body.text = text
-			var formatName = document.syntaxHighlighterUtil.getLanguageNameFromFileName(document.fileName);
-			for (var i=0; i<languagesListModel.count; i++) 
-			{
-				if (languagesListModel.get(i).text === formatName) 
-				{
-					languagesListComboBox.currentIndex = i;
-				}
-			}
+			var formatName = document.syntaxHighlighterUtil.getLanguageNameFromFileName(document.fileName)
+			languagesListComboBox.currentIndex = languagesListComboBox.find(formatName)
 		}
 	}
 	
@@ -68,7 +57,7 @@ Maui.Page
 		{
 			right: parent.right
 			bottom: parent.bottom
-			margins: space.big
+			margins: Maui.Style.space.big
 		}
 		
 		width: implicitWidth
@@ -143,8 +132,8 @@ Maui.Page
 	{
 		visible: control.showSyntaxHighlighting
 		id: languagesListComboBox
-		model: languagesListModel
-		onCurrentIndexChanged: syntaxHighlighter.formatName = languagesListModel.get(currentIndex).text		
+		model: document.syntaxHighlighterUtil.getLanguageNameList()
+		onCurrentIndexChanged: syntaxHighlighter.formatName = languagesListComboBox.model[currentIndex]		
 	}	
 	]
 	
@@ -233,8 +222,7 @@ Maui.Page
 						checkable: true
 						checked: document.uppercase
 						onClicked: document.uppercase = !document.uppercase
-					}
-					
+					}					
 				}
 				]
 				
@@ -271,7 +259,7 @@ Maui.Page
 			
 			onPressed:
 			{
-				if(!isMobile && event.button === Qt.RightButton)
+				if(!Kirigami.Settings.isMobile && event.button === Qt.RightButton)
 					documentMenu.popup()
 			}
 			
@@ -283,16 +271,6 @@ Maui.Page
 		}
 		ScrollBar.vertical.height: _scrollView.height - body.topPadding
 		ScrollBar.vertical.y: body.topPadding
-	}
-	
-	Component.onCompleted:
-	{
-		var languages = document.syntaxHighlighterUtil.getLanguageNameList();
-		
-		for (var index in languages)
-		{
-			languagesListModel.append({text: languages[index]});
-		}
 	}
 	
 	function zoomIn()

@@ -17,7 +17,7 @@ class SyntaxHighlighterUtil: public QObject {
     SyntaxHighlighterUtil();
 
   public slots:
-    QList<QString> getLanguageNameList();
+	QStringList getLanguageNameList();
     QString getLanguageNameFromFileName(QString fileName);
 };
 

@@ -16,11 +16,12 @@ SyntaxHighlighterUtil::SyntaxHighlighterUtil()
     repo = new KSyntaxHighlighting::Repository();
 }
 
-QList<QString> SyntaxHighlighterUtil::getLanguageNameList()
+QStringList SyntaxHighlighterUtil::getLanguageNameList()
 {
-    QList<QString> languages;
+	QStringList languages;
 
-    for (KSyntaxHighlighting::Definition def : repo->definitions()) {
+    for (KSyntaxHighlighting::Definition def : repo->definitions())
+	{
         languages.append(def.name());
     }
 

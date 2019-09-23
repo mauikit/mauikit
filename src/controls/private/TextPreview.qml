@@ -8,11 +8,11 @@ Maui.Editor
 {
 	id: control
 	anchors.fill: parent	
-	property url path : currentUrl
-	onPathChanged: document.load(path) 
 	
 	body.readOnly: true
 	Kirigami.Theme.backgroundColor: "transparent"
+	
+	Component.onCompleted: document.load(currentUrl) 
 	
 	Connections
 	{
