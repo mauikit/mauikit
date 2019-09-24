@@ -5,7 +5,6 @@ import org.kde.kirigami 2.7 as Kirigami
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.3
 
-
 Page
 {
     id: control

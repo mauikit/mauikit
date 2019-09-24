@@ -213,7 +213,7 @@ Item
                 interactive: true
                 model: ListModel{}
                 
-                delegate: Maui.IconDelegate
+                delegate: Maui.GridBrowserDelegate
                 {
                     id: delegate
                     
@@ -223,10 +223,9 @@ Item
                     width: itemWidth
                     folderSize: Maui.Style.iconSizes.big
                     showLabel: true
-                    emblemAdded: true
                     keepEmblemOverlay: true
                     showEmblem: true
-                    showSelectionBackground: false
+//                     showSelectionBackground: false
                     labelColor: Kirigami.Theme.textColor
                     showTooltip: true
                     showThumbnails: true

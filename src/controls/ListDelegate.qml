@@ -23,82 +23,29 @@ import QtQuick.Controls 2.2
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
-ItemDelegate
+Maui.ListItemDelegate
 {
 	id: control
 	
-	property bool isCurrentListItem :  ListView.isCurrentItem
 	property bool labelVisible : true
 	property int iconSize : Maui.Style.iconSizes.medium    
-	property int radius : Maui.Style.radiusV
 	
 	property alias label: controlLabel.text
-	property alias iconName: controlIcon.source  
+	property alias iconName: controlIcon.source  	
 	
-	signal rightClicked()
+	implicitWidth: parent.width
+	implicitHeight: Math.max(control.iconSize + Maui.Style.space.big, Maui.Style.rowHeight)	
 	
-	width: parent.width
-	height: Math.max(control.iconSize + Maui.Style.space.big, Maui.Style.rowHeight)
-	
-	clip: true
-	
-	property color itemFgColor : Kirigami.Theme.textColor
-	property color labelColor: ListView.isCurrentItem ? Qt.darker(Kirigami.Theme.highlightColor, 3) :
-	itemFgColor
-	
-	hoverEnabled: !Kirigami.Settings.isMobile
-	background: null
 	padding: 0
-	leftPadding: Maui.Style.space.small
-	rightPadding: Maui.Style.space.small
+	leftPadding: Maui.Style.space.tiny
+	rightPadding: Maui.Style.space.tiny
 
 	ToolTip.delay: 1000
 	ToolTip.timeout: 5000
 	ToolTip.visible: hovered 
 	ToolTip.text: qsTr(control.label)
 	
-	MouseArea
-	{
-		anchors.fill: parent
-		acceptedButtons:  Qt.RightButton
-		onClicked:
-		{
-			if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
-				rightClicked()
-		}
-	}
-	
-	Item
-	{
-		anchors
-		{
-			fill: parent
-			topMargin: control.topPadding
-			bottomMargin: control.bottomPadding
-			leftMargin: control.leftPadding
-			rightMargin: control.rightPadding
-			margins: control.padding
-		}
-		
-		Rectangle
-		{
-			visible: control.isCurrentListItem
-			anchors.fill: parent
-			border.color: Kirigami.Theme.highlightColor
-			color: "transparent"
-			radius: control.radius
-			
-		}
-		
-		Rectangle
-		{
-			anchors.fill: parent
-			color: control.isCurrentListItem || hovered ? Kirigami.Theme.highlightColor: "transparent"
-			opacity: control.hovered || control.isCurrentListItem ? 0.4 : 1	
-			radius: control.radius
-		}
-		
-		RowLayout
+	RowLayout
 		{
 			anchors.fill: parent
 			
@@ -152,7 +99,6 @@ ItemDelegate
 				}
 			}		
 		}		
-	}
 	
 	
 	function clearCount()

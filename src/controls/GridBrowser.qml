@@ -51,16 +51,14 @@ Maui.GridView
 	
 	model: ListModel { id: gridModel  }
 	
-	delegate: Maui.IconDelegate
+	delegate: Maui.GridBrowserDelegate
 	{
 		id: delegate
-	
-		isDetails: false
-		width: control.cellWidth * 0.9
-		height: control.cellHeight * 0.9
+		width: control.cellWidth
+		height: control.cellHeight 
+        padding: Maui.Style.space.tiny
 		folderSize : control.itemSize
 		showTooltip: true
-// 		draggable: !Kirigami.Settings.isMobile
 		showEmblem: control.showEmblem
 		keepEmblemOverlay: control.keepEmblemOverlay
 		showThumbnails: control.showPreviewThumbnails

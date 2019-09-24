@@ -94,15 +94,14 @@ Kirigami.ScrollablePage
 			anchors.fill : parent		
 		}	
         
-        delegate: Maui.IconDelegate
+        delegate: Maui.ListBrowserDelegate
         {
             id: delegate
-            isDetails: true
             width: parent.width
             height: itemSize + Maui.Style.space.big
             leftPadding: Maui.Style.space.small
             rightPadding: Maui.Style.space.small
-            radius: Maui.Style.radiusV
+            padding: 0
             showDetailsInfo: control.showDetailsInfo
             folderSize : itemSize
             showTooltip: true

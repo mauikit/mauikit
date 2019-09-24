@@ -19,8 +19,11 @@ PieButton 1.0 PieButton.qml
 SideBar 1.0 SideBar.qml
 GlobalDrawer 1.0 GlobalDrawer.qml
 ListDelegate 1.0 ListDelegate.qml
+ListItemDelegate 1.0 ListItemDelegate.qml
+ListBrowserDelegate 1.0 ListBrowserDelegate.qml
+GridItemDelegate 1.0 GridItemDelegate.qml
+GridBrowserDelegate 1.0 GridBrowserDelegate.qml
 SelectionBar 1.0 SelectionBar.qml
-IconDelegate 1.0 IconDelegate.qml
 LabelDelegate 1.0 LabelDelegate.qml
 NewDialog 1.0 NewDialog.qml
 TagsBar 1.0 TagsBar.qml

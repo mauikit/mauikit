@@ -149,7 +149,7 @@ Maui.Page
 			keepEmblemOverlay: selectionMode
 			showPreviewThumbnails: showThumbnails
 			leftEmblem: "list-add"	
-			topMargin: Maui.Style.contentMargins * 2
+// 			topMargin: Maui.Style.contentMargins * 2
 			
 			holder.visible: !currentFMList.pathExists || currentFMList.pathEmpty || !currentFMList.contentReady
 			holder.emoji: control.holder.emoji
