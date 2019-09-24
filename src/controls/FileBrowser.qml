@@ -182,6 +182,7 @@ Maui.Page
             rejectButton.text: qsTr("Delete")
             acceptButton.text: qsTr("Trash")
             acceptButton.visible: !Kirigami.Settings.isMobile
+            page.padding: Maui.Style.space.huge
             
             onRejected: 
             {
