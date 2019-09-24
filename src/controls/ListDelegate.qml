@@ -32,7 +32,6 @@ ItemDelegate
 	property int iconSize : Maui.Style.iconSizes.medium    
 	property int radius : Maui.Style.radiusV
 	
-	
 	property alias label: controlLabel.text
 	property alias iconName: controlIcon.source  
 	
@@ -50,8 +49,8 @@ ItemDelegate
 	hoverEnabled: !Kirigami.Settings.isMobile
 	background: null
 	padding: 0
-	leftPadding: control.collapsed ?  0 : Maui.Style.space.small
-	rightPadding: control.collapsed ?  0 : Maui.Style.space.small
+	leftPadding: Maui.Style.space.small
+	rightPadding: Maui.Style.space.small
 
 	ToolTip.delay: 1000
 	ToolTip.timeout: 5000

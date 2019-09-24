@@ -46,7 +46,11 @@ Maui.ListBrowser
         id: itemDelegate
         iconSize: control.iconSize
         itemFgColor: Kirigami.Theme.textColor
-        labelVisible: control.showLabels       
+        labelVisible: control.showLabels   
+        
+        leftPadding: control.collapsed ?  0 : Maui.Style.space.small
+        rightPadding: control.collapsed ?  0 : Maui.Style.space.small
+        radius : control.collapsed ?  0 : Maui.Style.radiusV
         
         Connections
         {
