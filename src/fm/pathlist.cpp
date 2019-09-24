@@ -52,14 +52,21 @@ void PathList::setPath(const QString& path)
 	if(path == this->m_path)
 		return;	
 	
-	
+	if(!this->list.isEmpty() && FM::parentDir(path) == this->m_path)
+	{
+		emit this->preItemAppended();
+		this->list << FMH::getDirInfoModel(path);
+		emit this->postItemAppended();
+	}else{
 		emit this->preListChanged();
 		this->list.clear();
 		this->list << PathList::splitPath(path);
 		emit this->postListChanged();
+	}	
 	
 	this->m_path = path;	
 	emit this->pathChanged();	
+	
 }
 
 FMH::MODEL_LIST PathList::splitPath(const QString& path)

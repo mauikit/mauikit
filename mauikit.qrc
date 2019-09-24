@@ -7,7 +7,6 @@
         <file alias="ShareDialog.qml">src/controls/ShareDialog.qml</file>
         <file alias="PieButton.qml">src/controls/PieButton.qml</file>
         <file alias="Page.qml">src/controls/Page.qml</file>
-        <file alias="private/SideBarDelegate.qml">src/controls/private/SideBarDelegate.qml</file>
         <file alias="private/PathBarDelegate.qml">src/controls/private/PathBarDelegate.qml</file>
         <file alias="private/EdgeShadow.qml">src/controls/private/EdgeShadow.qml</file>
 		<file alias="private/BrowserMenu.qml">src/controls/private/BrowserMenu.qml</file>
