@@ -243,13 +243,8 @@ ItemDelegate
 	{
 		id: detailsComponent
 		
-		RowLayout
-		{
-			anchors.fill: parent
-			
 			ColumnLayout
 			{				
-				Layout.alignment: Qt.AlignRight
 				
 				Label
 				{
@@ -281,7 +276,7 @@ ItemDelegate
 					opacity: isCurrentListItem ? 1 : 0.5
 				}
 			}
-		}		
+			
 	}
 	
 	Item
@@ -326,9 +321,8 @@ ItemDelegate
 			
 			Item
 			{
-				Layout.fillHeight: true
-				Layout.fillWidth: true
-				Layout.maximumWidth: folderSize
+				Layout.preferredHeight: folderSize
+				Layout.preferredWidth: folderSize
 				Layout.row: 1
 				Layout.column: 1
 				Layout.alignment: Qt.AlignCenter
@@ -359,32 +353,29 @@ ItemDelegate
 			Loader
 			{
 				id: labelLoader
-				Layout.fillWidth: true
-				Layout.maximumHeight: (isDetails ? parent.height :  Maui.Style.fontSizes.default * 5)
-				Layout.minimumHeight: (isDetails ? parent.height :  control.height - folderSize - Maui.Style.space.tiny)
+				Layout.fillWidth: true			
 				Layout.preferredHeight: (isDetails ? parent.height : control.height - folderSize - Maui.Style.space.tiny)
 				
 				Layout.row: isDetails ? 1 : 2
 				Layout.column: isDetails ? 2 : 1
 				
-				Layout.leftMargin: isDetails ? space.medium : 0
+				Layout.leftMargin: isDetails ? Maui.Style.space.medium : 0
 				
 				sourceComponent: model.label && model.label.length && showLabel? labelComponent : undefined			
-			}
-			
+			}			
 			
 			Loader
 			{
 				id: detailsInfoLoader
+// 				visible: control.width > delegatelayout.implicitWidth * 2
 				sourceComponent: isDetails && showDetailsInfo ? detailsComponent : undefined
-				Layout.fillWidth: isDetails && showDetailsInfo
-				Layout.maximumHeight: ( isDetails && showDetailsInfo ? parent.height :  fontSizes.default * 5)
-				Layout.minimumHeight: ( isDetails && showDetailsInfo ? parent.height :  control.height - folderSize - Maui.Style.space.tiny)
 				Layout.preferredHeight: ( isDetails && showDetailsInfo ? parent.height : control.height - folderSize - Maui.Style.space.tiny)
-				Layout.maximumWidth: control.width * (isMobile ? 0.5 : 0.3)
+				Layout.preferredWidth: item.implicitWidth
 				Layout.row:  isDetails && showDetailsInfo ? 1 : 2
 				Layout.column: isDetails && showDetailsInfo ? 3 : 0
 				Layout.rightMargin: Maui.Style.space.medium
+				Layout.alignment: Qt.AlignRight
+				
 			}		
 		}
 	}	
