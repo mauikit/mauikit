@@ -108,6 +108,7 @@ Maui.Page
 		Maui.ListBrowser
 		{
 			property alias currentFMList : _browserModel.list
+			topMargin: Maui.Style.contentMargins			
 			showPreviewThumbnails: showThumbnails
 			keepEmblemOverlay: selectionMode
 			leftEmblem: "list-add"
@@ -128,11 +129,11 @@ Maui.Page
 			{
 				id: delegate
 				label: section
-				labelTxt.font.pointSize: fontSizes.big
+				labelTxt.font.pointSize: Maui.Style.fontSizes.big
 				
 				isSection: true
 				boldLabel: true
-				height: toolBarHeightAlt
+				height: Maui.Style.toolBarHeightAlt
 			}	
 		}
 	}
@@ -269,13 +270,13 @@ Maui.Page
 					{
 						id: _millerListView
 						anchors.fill: parent
-						
+						topMargin: Maui.Style.contentMargins
 						showPreviewThumbnails: showThumbnails
 						keepEmblemOverlay: selectionMode
 						rightEmblem: Kirigami.Settings.isMobile ? "document-share" : ""
 						leftEmblem: "list-add"
 						showDetailsInfo: true
-						currentIndex : _millerControl.currentIndex						
+// 						currentIndex : _millerControl.currentIndex						
 						holder.visible: !_millersFMList.pathExists || _millersFMList.pathEmpty || !_millersFMList.contentReady
 						holder.emoji: control.holder.emoji
 						holder.title: control.holder.title
@@ -285,30 +286,35 @@ Maui.Page
 						onItemClicked: 
 						{
 							_millerColumns.currentIndex = _index
+							_millerListView.currentIndex = index
 							_millerControl.itemClicked(index)							
 						}
 						
 						onItemDoubleClicked: 
 						{
 							_millerColumns.currentIndex = _index
+							_millerListView.currentIndex = index						
 							_millerControl.itemDoubleClicked(index)
 						}
 						
 						onItemRightClicked: 
 						{
 							_millerColumns.currentIndex = _index
+							_millerListView.currentIndex = index							
 							_millerControl.itemRightClicked(index)
 						}
 						
 						onRightEmblemClicked:
 						{
 							_millerColumns.currentIndex = _index
+							_millerListView.currentIndex = index							
 							_millerControl.rightEmblemClicked(index)
 						}
 						
 						onLeftEmblemClicked: 
 						{
 							_millerColumns.currentIndex = _index
+							_millerListView.currentIndex = index							
 							_millerControl.leftEmblemClicked(index)
 						}
 						

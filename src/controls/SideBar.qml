@@ -29,7 +29,10 @@ Maui.ListBrowser
 	id: control
 
 	property int iconSize : Maui.Style.iconSizes.small
-    property bool showLabels: true
+	property bool showLabels: !collapsed
+    
+    property bool collapsed : false
+    
     
     Rectangle
     {
@@ -43,9 +46,7 @@ Maui.ListBrowser
         id: itemDelegate
         iconSize: control.iconSize
         itemFgColor: Kirigami.Theme.textColor
-        labelVisible: control.showLabels
-//         radius: Maui.Style.radiusV
-//         padding: Maui.Style.space.tiny 
+        labelVisible: control.showLabels       
         
         Connections
         {

@@ -77,6 +77,8 @@ Kirigami.ScrollablePage
     {	
 		id: _listView
         focus: true
+        
+        spacing: Maui.Style.space.tiny
 		
         snapMode: ListView.SnapToItem
         boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
@@ -98,7 +100,9 @@ Kirigami.ScrollablePage
             isDetails: true
             width: parent.width
             height: itemSize + Maui.Style.space.big
-            
+            leftPadding: Maui.Style.space.small
+            rightPadding: Maui.Style.space.small
+            radius: Maui.Style.radiusV
             showDetailsInfo: control.showDetailsInfo
             folderSize : itemSize
             showTooltip: true

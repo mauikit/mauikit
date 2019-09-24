@@ -46,7 +46,9 @@ ItemDelegate
 	property bool keepEmblemOverlay : false
 	property bool isCurrentListItem :  ListView.isCurrentItem
 	
-	property color labelColor : (isCurrentListItem || GridView.isCurrentItem || (keepEmblemOverlay && emblemAdded)) && !hovered && showSelectionBackground ?  Kirigami.Theme.highlightedTextColor :  Kirigami.Theme.textColor
+	property int radius: 0
+	
+	property color labelColor : (isCurrentListItem || GridView.isCurrentItem || (keepEmblemOverlay && emblemAdded)) && !hovered && showSelectionBackground ? Qt.darker(Kirigami.Theme.highlightColor, 3) :  Kirigami.Theme.textColor
 	property color hightlightedColor : GridView.isCurrentItem || hovered || (keepEmblemOverlay && emblemAdded) ? Kirigami.Theme.highlightColor : "transparent"
 	
 	property string rightEmblem
@@ -66,11 +68,11 @@ ItemDelegate
 	hoverEnabled: !Kirigami.Settings.isMobile
 	
 	opacity: (model.hidden == true || model.hidden == "true" )? 0.5 : 1
-
+	
 	padding: 0
 	bottomPadding: padding
-	rightPadding:/* control.isDetails?  Maui.Style.space.big : */0
-	leftPadding: /*control.isDetails?  Maui.Style.space.big : */0
+	rightPadding: padding
+	leftPadding: padding
 	topPadding: padding
 	
 	background: null
@@ -83,10 +85,10 @@ ItemDelegate
 	{
 		"text/uri-list": model.path
 	}	
-
+	
 	MouseArea
 	{
-        id: _mouseArea
+		id: _mouseArea
 		anchors.fill: parent
 		acceptedButtons:  Qt.RightButton | Qt.LeftButton
 		drag.target: control.draggable ? parent : undefined
@@ -95,8 +97,8 @@ ItemDelegate
 		{
 			if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
 				rightClicked()
-			else	
-				control.clicked(mouse)
+				else	
+					control.clicked(mouse)
 		}
 		
 		onPressed: 
@@ -106,8 +108,8 @@ ItemDelegate
 				{
 					parent.Drag.imageSource = result.url
 				})
-			
-			control.pressed(mouse)			
+				
+				control.pressed(mouse)			
 		}
 		
 		onPressAndHold : control.pressAndHold(mouse)
@@ -152,10 +154,10 @@ ItemDelegate
 				id: img
 				anchors.centerIn: parent
 				source: model.thumbnail ? model.thumbnail : undefined
-                height: Math.min(folderSize, sourceSize.height)
-                width: isDetails ? folderSize : Math.min(control.width * 0.9, sourceSize.width)
-//				sourceSize.width: width
-//				sourceSize.height: height
+				height: Math.min(folderSize, sourceSize.height)
+				width: isDetails ? folderSize : Math.min(control.width * 0.9, sourceSize.width)
+				//				sourceSize.width: width
+				//				sourceSize.height: height
 				horizontalAlignment: Qt.AlignHCenter
 				verticalAlignment: Qt.AlignVCenter
 				fillMode: Image.PreserveAspectCrop
@@ -246,23 +248,17 @@ ItemDelegate
 			anchors.fill: parent
 			
 			ColumnLayout
-			{
-				Layout.fillHeight: true
-				Layout.fillWidth: false
-				Layout.maximumWidth: 80
-				Layout.minimumWidth: 80
-				Layout.preferredWidth: 80
+			{				
 				Layout.alignment: Qt.AlignRight
 				
 				Label
 				{
 					Layout.alignment: Qt.AlignRight					
-					Layout.fillWidth: true
 					Layout.fillHeight: true
 					horizontalAlignment: Qt.AlignRight
 					verticalAlignment: Qt.AlignBottom
 					elide: Qt.ElideRight
-					wrapMode: Text.Wrap
+					wrapMode: Text.NoWrap
 					font.pointSize: Maui.Style.fontSizes.small
 					color: labelColor
 					opacity: isCurrentListItem ? 1 : 0.5
@@ -271,9 +267,7 @@ ItemDelegate
 				
 				Label
 				{
-					Layout.alignment: Qt.AlignRight
-					
-					Layout.fillWidth: true
+					Layout.alignment: Qt.AlignRight					
 					Layout.fillHeight: true
 					
 					text: Maui.FM.formatDate(model.modified, "MM/dd/yyyy")
@@ -281,7 +275,7 @@ ItemDelegate
 					horizontalAlignment: Qt.AlignRight
 					verticalAlignment: Qt.AlignTop
 					elide: Qt.ElideRight
-					wrapMode: Text.Wrap
+					wrapMode: Text.NoWrap
 					font.pointSize: Maui.Style.fontSizes.small
 					color: labelColor
 					opacity: isCurrentListItem ? 1 : 0.5
@@ -304,86 +298,94 @@ ItemDelegate
 		
 		Rectangle
 		{
+			visible: control.isDetails && control.isCurrentListItem
+			anchors.fill: parent
+			border.color: Kirigami.Theme.highlightColor
+			color: "transparent"
+			radius: control.radius
+		}
+		
+		Rectangle
+		{
 			anchors.fill: parent			
 			color: !control.isDetails? "transparent" : (control.isCurrentListItem || (control.hovered && control.isDetails) ? Kirigami.Theme.highlightColor :
 			index % 2 === 0 ? Qt.lighter( Kirigami.Theme.backgroundColor,1.2) :  Kirigami.Theme.backgroundColor)		
-			radius: Maui.Style.radiusV
+			radius: control.radius
 			opacity: control.isCurrentListItem || control.hovered ? 0.4 : 1
+			
 		}
 		
 		GridLayout
-	{
-		id: delegatelayout
-		anchors.fill: parent
-		rows: isDetails ? 1 : 2
-		columns: isDetails && showDetailsInfo ? 3 : (isDetails && !showDetailsInfo ? 2 : 1)
-		rowSpacing: Maui.Style.space.tiny
-		columnSpacing: Maui.Style.space.tiny
-		
-		Item
 		{
-			Layout.fillHeight: true
-			Layout.fillWidth: true
-			Layout.maximumWidth: folderSize
-			Layout.row: 1
-			Layout.column: 1
-			Layout.alignment: Qt.AlignCenter
-			Layout.leftMargin: isDetails ? Maui.Style.space.medium : 0
+			id: delegatelayout
+			anchors.fill: parent
+			rows: isDetails ? 1 : 2
+			columns: isDetails && showDetailsInfo ? 3 : (isDetails && !showDetailsInfo ? 2 : 1)
+			rowSpacing: Maui.Style.space.tiny
+			columnSpacing: Maui.Style.space.tiny
+			
+			Item
+			{
+				Layout.fillHeight: true
+				Layout.fillWidth: true
+				Layout.maximumWidth: folderSize
+				Layout.row: 1
+				Layout.column: 1
+				Layout.alignment: Qt.AlignCenter
+				Layout.leftMargin: isDetails ? Maui.Style.space.medium : 0
+				
+				Loader
+				{
+					id: loader
+					anchors.centerIn: parent
+					sourceComponent: model.mime ? (model.mime.indexOf("image") > -1 && showThumbnails ? imgComponent :
+					iconComponent) : iconComponent				
+				}
+				
+				Maui.Badge
+				{
+					iconName: "link"
+					anchors.left: parent.left
+					anchors.bottom: parent.bottom
+					visible: (model.issymlink == true) || (model.issymlink == "true")
+				}
+				
+				ToolTip.delay: 1000
+				ToolTip.timeout: 5000
+				ToolTip.visible: hovered && showTooltip
+				ToolTip.text: model.tooltip ? model.tooltip : model.path
+			}		
 			
 			Loader
 			{
-				id: loader
-				anchors.centerIn: parent
-				sourceComponent: model.mime ? (model.mime.indexOf("image") > -1 && showThumbnails ? imgComponent :
-				iconComponent) : iconComponent				
+				id: labelLoader
+				Layout.fillWidth: true
+				Layout.maximumHeight: (isDetails ? parent.height :  Maui.Style.fontSizes.default * 5)
+				Layout.minimumHeight: (isDetails ? parent.height :  control.height - folderSize - Maui.Style.space.tiny)
+				Layout.preferredHeight: (isDetails ? parent.height : control.height - folderSize - Maui.Style.space.tiny)
+				
+				Layout.row: isDetails ? 1 : 2
+				Layout.column: isDetails ? 2 : 1
+				
+				Layout.leftMargin: isDetails ? space.medium : 0
+				
+				sourceComponent: model.label && model.label.length && showLabel? labelComponent : undefined			
 			}
 			
-			Maui.Badge
+			
+			Loader
 			{
-				iconName: "link"
-				anchors.left: parent.left
-				anchors.bottom: parent.bottom
-				visible: (model.issymlink == true) || (model.issymlink == "true")
-			}
-			
-			ToolTip.delay: 1000
-			ToolTip.timeout: 5000
-			ToolTip.visible: hovered && showTooltip
-			ToolTip.text: model.tooltip ? model.tooltip : model.path
-		}		
-		
-		Loader
-		{
-			id: labelLoader
-			Layout.fillWidth: true
-			Layout.maximumHeight: (isDetails ? parent.height :  Maui.Style.fontSizes.default * 5)
-			Layout.minimumHeight: (isDetails ? parent.height :  control.height - folderSize - Maui.Style.space.tiny)
-			Layout.preferredHeight: (isDetails ? parent.height : control.height - folderSize - Maui.Style.space.tiny)
-			
-			Layout.row: isDetails ? 1 : 2
-			Layout.column: isDetails ? 2 : 1
-			
-			Layout.leftMargin: isDetails ? space.medium : 0
-			
-			sourceComponent: model.label && model.label.length && showLabel? labelComponent : undefined			
+				id: detailsInfoLoader
+				sourceComponent: isDetails && showDetailsInfo ? detailsComponent : undefined
+				Layout.fillWidth: isDetails && showDetailsInfo
+				Layout.maximumHeight: ( isDetails && showDetailsInfo ? parent.height :  fontSizes.default * 5)
+				Layout.minimumHeight: ( isDetails && showDetailsInfo ? parent.height :  control.height - folderSize - Maui.Style.space.tiny)
+				Layout.preferredHeight: ( isDetails && showDetailsInfo ? parent.height : control.height - folderSize - Maui.Style.space.tiny)
+				Layout.maximumWidth: control.width * (isMobile ? 0.5 : 0.3)
+				Layout.row:  isDetails && showDetailsInfo ? 1 : 2
+				Layout.column: isDetails && showDetailsInfo ? 3 : 0
+				Layout.rightMargin: Maui.Style.space.medium
+			}		
 		}
-		
-		
-		Loader
-		{
-			id: detailsInfoLoader
-			sourceComponent: isDetails && showDetailsInfo ? detailsComponent : undefined
-			Layout.fillWidth: isDetails && showDetailsInfo
-			Layout.maximumHeight: ( isDetails && showDetailsInfo ? parent.height :  fontSizes.default * 5)
-			Layout.minimumHeight: ( isDetails && showDetailsInfo ? parent.height :  control.height - folderSize - Maui.Style.space.tiny)
-			Layout.preferredHeight: ( isDetails && showDetailsInfo ? parent.height : control.height - folderSize - Maui.Style.space.tiny)
-			Layout.maximumWidth: control.width * (isMobile ? 0.5 : 0.3)
-			Layout.row:  isDetails && showDetailsInfo ? 1 : 2
-			Layout.column: isDetails && showDetailsInfo ? 3 : 0
-			Layout.rightMargin: Maui.Style.space.medium
-		}		
-	}
-	}
-	
-	
+	}	
 }

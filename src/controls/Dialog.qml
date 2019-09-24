@@ -86,7 +86,7 @@ Maui.Popup
             id: page
             // 		headBar.visible: headBar.count > 2
             anchors.fill: parent
-            padding: space.huge
+            padding: Maui.Style.space.medium
             // 		footBar.dropShadow: false
             // 		footBar.drawBorder: false
             // 		margins: space.big

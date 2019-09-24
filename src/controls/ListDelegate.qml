@@ -30,7 +30,8 @@ ItemDelegate
 	property bool isCurrentListItem :  ListView.isCurrentItem
 	property bool labelVisible : true
 	property int iconSize : Maui.Style.iconSizes.medium    
-	property int radius : 0
+	property int radius : Maui.Style.radiusV
+	
 	
 	property alias label: controlLabel.text
 	property alias iconName: controlIcon.source  
@@ -43,13 +44,15 @@ ItemDelegate
 	clip: true
 	
 	property color itemFgColor : Kirigami.Theme.textColor
-	property color labelColor: ListView.isCurrentItem ? Kirigami.Theme.highlightedTextColor :
+	property color labelColor: ListView.isCurrentItem ? Qt.darker(Kirigami.Theme.highlightColor, 3) :
 	itemFgColor
 	
 	hoverEnabled: !Kirigami.Settings.isMobile
 	background: null
 	padding: 0
-	
+	leftPadding: control.collapsed ?  0 : Maui.Style.space.small
+	rightPadding: control.collapsed ?  0 : Maui.Style.space.small
+
 	ToolTip.delay: 1000
 	ToolTip.timeout: 5000
 	ToolTip.visible: hovered 
@@ -80,10 +83,20 @@ ItemDelegate
 		
 		Rectangle
 		{
+			visible: control.isCurrentListItem
 			anchors.fill: parent
-			color: control.isCurrentListItem || hovered ? Kirigami.Theme.highlightColor : "transparent"
+			border.color: Kirigami.Theme.highlightColor
+			color: "transparent"
 			radius: control.radius
-			opacity: control.hovered || control.isCurrentListItem ? 0.4 : 1			
+			
+		}
+		
+		Rectangle
+		{
+			anchors.fill: parent
+			color: control.isCurrentListItem || hovered ? Kirigami.Theme.highlightColor: "transparent"
+			opacity: control.hovered || control.isCurrentListItem ? 0.4 : 1	
+			radius: control.radius
 		}
 		
 		RowLayout

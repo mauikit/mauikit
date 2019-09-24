@@ -52,10 +52,10 @@ Item
 		
 		//         z: -1
 		color: pathEntry ? Kirigami.Theme.backgroundColor : Kirigami.Theme.backgroundColor
-		radius: radiusV
+		radius: Maui.Style.radiusV
 		opacity: 1
 		border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-		border.width: unit
+		border.width: Maui.Style.unit
 	}
 	
 	Loader
