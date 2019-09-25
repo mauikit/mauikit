@@ -27,8 +27,7 @@ Maui.GridView
 {
 	id: control
 	
-	itemSize : Maui.Style.iconSizes.large
-    spacing: Kirigami.Settings.isMobile ? itemSize * 0.7 : itemSize * 0.8
+	itemSize : Maui.Style.iconSizes.large * 2
 	property bool showEmblem : true
 	property bool keepEmblemOverlay : false
 	property string rightEmblem
@@ -46,18 +45,13 @@ Maui.GridView
 	
 	signal itemRightClicked(int index)
 	
-	cellWidth: itemSize + spacing
-    cellHeight: itemSize + (spacing * 1.5)
-	
-	model: ListModel { id: gridModel  }
-	
 	delegate: Maui.GridBrowserDelegate
 	{
 		id: delegate
 		width: control.cellWidth
-		height: control.cellHeight 
-        padding: Maui.Style.space.tiny
-		folderSize : control.itemSize
+		height: control.cellHeight
+        padding: Maui.Style.space.small
+        folderSize : control.itemSize / 2
 		showTooltip: true
 		showEmblem: control.showEmblem
 		keepEmblemOverlay: control.keepEmblemOverlay

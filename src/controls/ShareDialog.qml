@@ -30,11 +30,11 @@ Maui.Dialog
 
     widthHint: 0.9
     
-	maxHeight: (Math.ceil(grid.count / (control.width / (grid.itemSize + grid.spacing))) * (grid.itemSize + grid.spacing + space.enormous)) + space.huge
-  maxWidth: unit * 500
-
+    maxHeight: Math.min(grid.implicitHeight, maxWidth) + (page.padding * 2)
+	maxWidth: Maui.Style.unit * 500
+	
 	verticalAlignment: Qt.AlignBottom
-    
+	
     defaultButtons: false
     
     Maui.GridBrowser
@@ -42,8 +42,7 @@ Maui.Dialog
 		id: grid
 		anchors.fill: parent
 		showEmblem: false
-		centerContent: true
-		
+		model: ListModel {}
 		onItemClicked:
 		{
 			grid.currentIndex = index

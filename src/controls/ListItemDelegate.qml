@@ -45,6 +45,7 @@ ItemDelegate
     signal pressAndHold(var mouse)
     signal clicked(var mouse)	
     signal rightClicked(var mouse)
+	signal doubleClicked(var mouse)
     
     background: null
     hoverEnabled: !Kirigami.Settings.isMobile
@@ -67,6 +68,8 @@ ItemDelegate
                 else	
                     control.clicked(mouse)
         }
+        
+        onDoubleClicked: control.doubleClicked(mouse)
         
         onPressed: 
         {	

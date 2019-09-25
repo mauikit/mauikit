@@ -31,6 +31,7 @@ Kirigami.ScrollablePage
     id: control
 
     property int itemSize: 0
+    onItemSizeChanged :  gridView.size_ = itemSize    
 
     property alias cellWidth: gridView.cellWidth
     property alias cellHeight: gridView.cellHeight
@@ -48,8 +49,8 @@ Kirigami.ScrollablePage
     property alias holder : _holder
     property alias gridView : gridView
 
-    property bool centerContent: false
-    property bool adaptContent: false
+    property bool centerContent: false //deprecrated
+    property bool adaptContent: true
 
     signal areaClicked(var mouse)
     signal areaRightClicked()
@@ -66,22 +67,27 @@ Kirigami.ScrollablePage
     GridView
     {
         id: gridView
-
+        
+        //nasty trick
+        property int size_    
+        Component.onCompleted:
+        {
+			gridView.size_ = control.itemSize
+		}
+		
         anchors
         {
-            leftMargin: control.ScrollBar.visible ? 0 : control.ScrollBar.width
+			leftMargin: control.ScrollBar.visible ? (control.ScrollBar.width * -1) : 0 
         }
 
         flow: GridView.FlowLeftToRight
         clip: true
         focus: true
-        anchors.horizontalCenter: centerContent ? parent.horizontalCenter :
-        undefined
-        width: centerContent ? Math.min(model.count,
-                                        Math.floor(parent.width/cellWidth))*cellWidth :
-                                        parent.width
-        cellWidth: Maui.Style.unit * 200
-        cellHeight: Maui.Style.unit * 200
+//         width: centerContent ? Math.min(gridView.count,
+//                                         Math.floor(parent.width/cellWidth))*cellWidth :
+//                                         parent.width
+        cellWidth: control.itemSize
+        cellHeight: cellWidth
 
         boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
         flickableDirection: Flickable.AutoFlickDirection
@@ -144,13 +150,13 @@ Kirigami.ScrollablePage
     {
         if(factor > 1)
         {
-            control.itemSize = control.itemSize + 10
+//             control.itemSize = control.itemSize + 10
             control.cellHeight = control.cellHeight + 10
             control.cellWidth = control.cellWidth + 10
         }
         else if((control.itemSize - 10) > Maui.Style.iconSizes.small)
         {
-            control.itemSize = control.itemSize - 10
+//             control.itemSize = control.itemSize - 10
             control.cellHeight = control.cellHeight - 10
             control.cellWidth = control.cellWidth - 10
         }
@@ -161,12 +167,9 @@ Kirigami.ScrollablePage
 
     function adaptGrid()
     {
-        var amount = parseInt(gridView.width / (itemSize + spacing), 10)
-        var leftSpace = parseInt(gridView.width  - ( amount * (itemSize + spacing) ), 10)
-        var size = parseInt((itemSize + spacing) + (parseInt(leftSpace/amount, 10)), 10)
-
-        size = size > itemSize + spacing ? size : itemSize + spacing
-
-        cellWidth = size
-    }
+		var amount = parseInt(gridView.width / (gridView.size_), 10)
+		var leftSpace = parseInt(gridView.width  - ( amount * (gridView.size_) ), 10)
+		var size = parseInt((gridView.size_) + (parseInt(leftSpace/amount, 10)), 10)
+		control.cellWidth = size
+    }   
 }
