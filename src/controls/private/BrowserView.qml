@@ -145,7 +145,7 @@ Maui.Page
 		Maui.GridBrowser
 		{
 			property alias currentFMList : _browserModel.list
-//             itemSize : thumbnailsSize + Maui.Style.fontSizes.default
+             itemSize : thumbnailsSize + Maui.Style.fontSizes.default
 			keepEmblemOverlay: selectionMode
 			showPreviewThumbnails: showThumbnails
 			leftEmblem: "list-add"	

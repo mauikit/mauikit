@@ -73,19 +73,12 @@ Kirigami.ScrollablePage
         Component.onCompleted:
         {
 			gridView.size_ = control.itemSize
-		}
-		
-        anchors
-        {
-			leftMargin: control.ScrollBar.visible ? (control.ScrollBar.width * -1) : 0 
         }
 
         flow: GridView.FlowLeftToRight
         clip: true
         focus: true
-//         width: centerContent ? Math.min(gridView.count,
-//                                         Math.floor(parent.width/cellWidth))*cellWidth :
-//                                         parent.width
+
         cellWidth: control.itemSize
         cellHeight: cellWidth
 
@@ -167,8 +160,8 @@ Kirigami.ScrollablePage
 
     function adaptGrid()
     {
-		var amount = parseInt(gridView.width / (gridView.size_), 10)
-		var leftSpace = parseInt(gridView.width  - ( amount * (gridView.size_) ), 10)
+        var amount = parseInt(gridView.width / (gridView.size_), 10)
+        var leftSpace = parseInt(gridView.width  - ( amount * (gridView.size_) ), 10)
 		var size = parseInt((gridView.size_) + (parseInt(leftSpace/amount, 10)), 10)
 		control.cellWidth = size
     }   
