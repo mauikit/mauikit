@@ -80,7 +80,7 @@ Kirigami.ScrollablePage
         focus: true
 
         cellWidth: control.itemSize
-        cellHeight: cellWidth
+        cellHeight: control.itemSize
 
         boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
         flickableDirection: Flickable.AutoFlickDirection
@@ -143,26 +143,23 @@ Kirigami.ScrollablePage
     {
         if(factor > 1)
         {
-//             control.itemSize = control.itemSize + 10
-            control.cellHeight = control.cellHeight + 10
-            control.cellWidth = control.cellWidth + 10
+            control.itemSize = control.itemSize + 10
         }
-        else if((control.itemSize - 10) > Maui.Style.iconSizes.small)
+        else
         {
-//             control.itemSize = control.itemSize - 10
-            control.cellHeight = control.cellHeight - 10
-            control.cellWidth = control.cellWidth - 10
+            control.itemSize = control.itemSize - 10
         }
 
+//         gridView.size_ = control.itemSize
         if(adaptContent)
             control.adaptGrid()
     }
 
-    function adaptGrid()
+  /*  function adaptGrid()
     {
         var amount = parseInt(gridView.width / (gridView.size_), 10)
         var leftSpace = parseInt(gridView.width  - ( amount * (gridView.size_) ), 10)
 		var size = parseInt((gridView.size_) + (parseInt(leftSpace/amount, 10)), 10)
 		control.cellWidth = size
-    }   
+    }  */ 
 }

@@ -18,7 +18,7 @@ Maui.Page
     
     property int viewType : Maui.FMList.LIST_VIEW 
     property int currentPathType : control.currentFMList.pathType
-    property int thumbnailsSize : Maui.Style.iconSizes.large * 1.7
+    property int thumbnailsSize : Maui.Style.iconSizes.large * 1.9
     property bool showThumbnails: true
     
     property var copyItems : []
