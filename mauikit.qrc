@@ -20,10 +20,10 @@
         <file alias="private/AccountsHelper.qml">src/controls/private/AccountsHelper.qml</file>
         <file alias="Holder.qml">src/controls/Holder.qml</file>
         <file alias="ListDelegate.qml">src/controls/ListDelegate.qml</file>
-        <file alias="ListItemDelegate.qml">src/controls/ListDelegate.qml</file>
-        <file alias="GridItemDelegate.qml">src/controls/ListDelegate.qml</file>
-        <file alias="GridBrowserDelegate.qml">src/controls/ListDelegate.qml</file>
-        <file alias="ListBrowserDelegate.qml">src/controls/ListDelegate.qml</file>
+		<file alias="ListItemDelegate.qml">src/controls/ListItemDelegate.qml</file>
+		<file alias="GridItemDelegate.qml">src/controls/GridItemDelegate.qml</file>
+		<file alias="GridBrowserDelegate.qml">src/controls/GridBrowserDelegate.qml</file>
+		<file alias="ListBrowserDelegate.qml">src/controls/ListBrowserDelegate.qml</file>
         <file alias="GlobalDrawer.qml">src/controls/GlobalDrawer.qml</file>
         <file alias="SelectionBar.qml">src/controls/SelectionBar.qml</file>
         <file alias="LabelDelegate.qml">src/controls/LabelDelegate.qml</file>
