@@ -48,10 +48,12 @@ Maui.GridView
 	delegate: Maui.GridBrowserDelegate
 	{
 		id: delegate
-        width: control.cellWidth 
-        height: control.cellHeight 
-        padding: Maui.Style.space.small
-        folderSize : control.itemSize / 2
+       
+       folderSize: height * 0.5
+       height: control.cellHeight 
+       width: control.cellWidth
+       padding: Maui.Style.space.small    
+       
 		showTooltip: true
 		showEmblem: control.showEmblem
 		keepEmblemOverlay: control.keepEmblemOverlay

@@ -136,8 +136,7 @@ Maui.GridItemDelegate
         {
             source: model.icon
             fallback: "qrc:/assets/application-x-zerosize.svg"
-            height: control.folderSize
-            width: height
+           
         }
     }
     
@@ -147,27 +146,21 @@ Maui.GridItemDelegate
         anchors.fill: parent
         spacing: Maui.Style.space.tiny
         
-        Item
+        Loader
         {
-            Layout.preferredHeight: control.folderSize
-            Layout.preferredWidth: control.folderSize
-            Layout.alignment: Qt.AlignCenter
-            
-            Loader
-            {
-                anchors.centerIn: parent
-                sourceComponent: model.mime ? (model.mime.indexOf("image") > -1 && control.showThumbnails ? _imgComponent : _iconComponent) : _iconComponent 
-            }
-            
-            Maui.Badge
-            {
-                iconName: "link"
-                anchors.left: parent.left
-                anchors.bottom: parent.bottom
-                visible: (model.issymlink == true) || (model.issymlink == "true")
-            }       
-            
-        }         
+			sourceComponent: model.mime ? (model.mime.indexOf("image") > -1 && control.showThumbnails ? _imgComponent : _iconComponent) : _iconComponent 
+			Layout.preferredHeight: control.folderSize
+			Layout.preferredWidth: control.folderSize
+			Layout.alignment: Qt.AlignCenter
+			
+			Maui.Badge
+			{
+				iconName: "link"
+				anchors.left: parent.left
+				anchors.bottom: parent.bottom
+				visible: (model.issymlink == true) || (model.issymlink == "true")
+			}   
+		}        
         
         Label
         {
@@ -182,5 +175,6 @@ Maui.GridItemDelegate
             wrapMode: Text.Wrap
             color: control.labelColor				
         }
-    }    
+    }        
+
 }

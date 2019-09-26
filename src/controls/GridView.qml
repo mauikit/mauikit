@@ -143,11 +143,13 @@ Kirigami.ScrollablePage
     {
         if(factor > 1)
         {
-            control.itemSize = control.itemSize + 10
+			gridView.size_ = gridView.size_ + 10
+			control.cellHeight = control.cellHeight + 10
         }
         else
         {
-            control.itemSize = control.itemSize - 10
+			gridView.size_ = gridView.size_ - 10
+			control.cellHeight = control.cellHeight - 10
         }
 
 //         gridView.size_ = control.itemSize
@@ -155,11 +157,11 @@ Kirigami.ScrollablePage
             control.adaptGrid()
     }
 
-  /*  function adaptGrid()
+    function adaptGrid()
     {
         var amount = parseInt(gridView.width / (gridView.size_), 10)
         var leftSpace = parseInt(gridView.width  - ( amount * (gridView.size_) ), 10)
 		var size = parseInt((gridView.size_) + (parseInt(leftSpace/amount, 10)), 10)
 		control.cellWidth = size
-    }  */ 
+    }    
 }

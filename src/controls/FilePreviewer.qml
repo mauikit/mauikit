@@ -213,7 +213,7 @@ Maui.Dialog
 
     onClosed:
     {
-        if(previewLoader.item.player != null)
+		if(previewLoader.item && previewLoader.item.player != null)
             previewLoader.item.player.stop()
 			
 			previewLoader.sourceComponent = null
@@ -269,6 +269,7 @@ Maui.Dialog
         control.infoModel.append({key: "Owner", value: iteminfo.owner})
         control.infoModel.append({key: "Group", value: iteminfo.group})
         control.infoModel.append({key: "Size", value: Maui.FM.formatSize(iteminfo.size)})
-        control.infoModel.append({key: "Symlink", value: iteminfo.symlink})
-    }
+		control.infoModel.append({key: "Symlink", value: iteminfo.symlink})
+		control.infoModel.append({key: "Path", value: iteminfo.path})
+	}
 }

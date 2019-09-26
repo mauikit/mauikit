@@ -147,8 +147,31 @@ Maui.Page
 			id: body
 			topPadding: _editorToolBar.visible ?  _editorToolBar.height : 0
 			topInset: stickyHeadBar ? 0 : topPadding			
+			font.family: languagesListComboBox.currentIndex > 0 ? "Monospace" : undefined		
+			placeholderText: qsTr("Body")
+			Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
+			selectByKeyboard :!Kirigami.Settings.isMobile
+			selectByMouse : !Kirigami.Settings.isMobile
+			textFormat: TextEdit.AutoText
 			
-			Maui.ToolBar
+			color: control.Kirigami.Theme.textColor
+			
+			font.pointSize: Maui.Style.fontSizes.large
+			wrapMode: TextEdit.WrapAnywhere
+			
+			activeFocusOnPress: true
+			activeFocusOnTab: true
+			persistentSelection: true
+			
+			background: Rectangle
+			{
+				color: Kirigami.Theme.backgroundColor
+				implicitWidth: 200
+				implicitHeight: 22
+			}
+			
+			// 			onPressAndHold: isMobile ? documentMenu.popup() : undefined
+				Maui.ToolBar
 			{
 				id: _editorToolBar
 				visible: !body.readOnly
@@ -232,30 +255,6 @@ Maui.Page
 				}				
 			}
 			
-			
-			placeholderText: qsTr("Body")
-			Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
-			selectByKeyboard :!Kirigami.Settings.isMobile
-			selectByMouse : !Kirigami.Settings.isMobile
-			textFormat: TextEdit.AutoText
-			
-			color: control.Kirigami.Theme.textColor
-			
-			font.pointSize: Maui.Style.fontSizes.large
-			wrapMode: TextEdit.WrapAnywhere
-			
-			activeFocusOnPress: true
-			activeFocusOnTab: true
-			persistentSelection: true
-			
-			background: Rectangle
-			{
-				color: Kirigami.Theme.backgroundColor
-				implicitWidth: 200
-				implicitHeight: 22
-			}
-			
-			// 			onPressAndHold: isMobile ? documentMenu.popup() : undefined
 			
 			onPressed:
 			{
