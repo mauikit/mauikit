@@ -177,9 +177,9 @@ Maui.Page
         {
             property var items: []
 
-            title: qsTr(String("Remove %1 files?").arg(items.length.toString()))
-            message: qsTr("You can move the file to the Trash or Delete it completely from your system. Which one you preffer?")
-            rejectButton.text: qsTr("Delete")
+            title: qsTr(String("Removing %1 files?").arg(items.length.toString()))
+			message: isAndroid ?  qsTr("This action will completely delete your files from your system. This action can not be undone.") : qsTr("You can move the file to the Trash or Delete it completely from your system. Which one you preffer?")
+			rejectButton.text: qsTr("Delete")
             acceptButton.text: qsTr("Trash")
             acceptButton.visible: !Kirigami.Settings.isMobile
             page.padding: Maui.Style.space.huge
