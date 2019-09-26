@@ -140,7 +140,7 @@ void MauiKit::registerTypes(const char *uri)
 											  Q_UNUSED(engine)
 											  Q_UNUSED(scriptEngine)
 											  return new MAUIAndroid;
-										  });
+                                          });
 	#else
 	qmlRegisterType(componentUrl(QStringLiteral("Terminal.qml")), uri, 1, 0, "Terminal");	
 	qmlRegisterSingletonType<MAUIKDE>(uri, 1, 0, "KDE",

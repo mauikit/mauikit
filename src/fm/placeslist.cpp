@@ -100,8 +100,17 @@ static FMH::MODEL_LIST getGroup(const KFilePlacesModel &model, const FMH::PATHTY
 	#ifdef Q_OS_ANDROID
     Q_UNUSED(model)
     FMH::MODEL_LIST res;
-    if(type == FMH::PATHTYPE_KEY::PLACES_PATH)
-        res = FM::getDefaultPaths();
+
+    switch(type)
+    {
+        case(FMH::PATHTYPE_KEY::PLACES_PATH):
+            res = FM::getDefaultPaths();
+            break;
+        case(FMH::PATHTYPE_KEY::DRIVES_PATH):
+            res = FM::getDevices();
+            break;
+        default: break;
+    }
 
     return res;
 	#else

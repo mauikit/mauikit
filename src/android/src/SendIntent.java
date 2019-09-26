@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.Manifest;
 import android.net.Uri;
 import java.io.File;
 import android.provider.ContactsContract;
@@ -58,6 +59,14 @@ public class SendIntent
         sendIntent.setType("text/plain");
         context.startActivity(Intent.createChooser(sendIntent, text));
     }
+
+public static void requestPermission(Activity context)
+{
+    System.out.println("REQUETSIN FUCKIGN PERMSISSION");
+            context.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+
+        }
 
     public static void share(Activity context, String url, String mime)
     {

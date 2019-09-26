@@ -128,15 +128,15 @@ Kirigami.AbstractApplicationWindow
 	}
 	
 	property bool isPortrait: Screen.primaryOrientation === Qt.PortraitOrientation || Screen.primaryOrientation === Qt.InvertedPortraitOrientation	
-	onIsPortraitChanged: 
-	{
-		if(isPortrait)
-		{
-			console.log("PORTARIT MODE CHANGED")
-			width: Screen.width
-			height: Screen.height
-		}
-	}
+//	onIsPortraitChanged:
+//	{
+//		if(isPortrait)
+//		{
+//			console.log("PORTARIT MODE CHANGED")
+//			width: Screen.width
+//			height: Screen.height
+//		}
+//	}
 	
 	//     onHeadBarBGColorChanged: 
 	//     {

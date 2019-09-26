@@ -390,60 +390,17 @@ FMH::MODEL_LIST FM::search(const QString& query, const QUrl &path, const bool &h
 	return content;
 }
 
-// FMH::MODEL_LIST FM::getDevices()
-// {
-//     FMH::MODEL_LIST drives;
-// 
-// #if defined(Q_OS_ANDROID)
-//     drives << packItems({MAUIAndroid::sdDir()}, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES_PATH]);
-//     return drives;
-// #else
-//     KFilePlacesModel model;
-//     for(const auto &i : model.groupIndexes(KFilePlacesModel::GroupType::RemoteType))
-//     {
-//         drives << FMH::MODEL{
-//             {FMH::MODEL_KEY::NAME, model.text(i)},
-//             {FMH::MODEL_KEY::LABEL, model.text(i)},
-//             {FMH::MODEL_KEY::PATH, model.url(i).toString()},
-//             {FMH::MODEL_KEY::ICON, model.icon(i).name()},            
-//             {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES_PATH]},
-//         };           
-//     }
-//     
-// #endif
-// 
-//     //     auto devices = QStorageInfo::mountedVolumes();
-//     //     for(auto device : devices)
-//     //     {
-//     //         if(device.isValid() && !device.isReadOnly())
-//     //         {
-//     //             QVariantMap drive =
-//     //             {
-//     //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], "drive-harddisk"},
-//     //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::LABEL], device.displayName()},
-//     //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::PATH], device.rootPath()},
-//     //                 {FMH::MODEL_NAME[FMH::MODEL_KEY::TYPE], FMH::PATHTYPE_NAME[FMH::PATHTYPE_KEY::DRIVES]}
-//     //             };
-//     //
-//     //             drives << drive;
-//     //         }
-//     //     }
-// 
-//     //    for(auto device : QDir::drives())
-//     //    {
-//     //        QVariantMap drive =
-//     //        {
-//     //            {"iconName", "drive-harddisk"},
-//     //            {"label", device.baseName()},
-//     //            {"path", device.absoluteFilePath()},
-//     //            {"type", "Drives"}
-//     //        };
-// 
-//     //        drives << drive;
-//     //    }
-// 
-//     return drives;
-// }
+ FMH::MODEL_LIST FM::getDevices()
+ {
+     FMH::MODEL_LIST drives;
+
+ #if defined(Q_OS_ANDROID)
+     drives << packItems(MAUIAndroid::sdDirs(), FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::DRIVES_PATH]);
+     return drives;
+ #endif
+
+     return drives;
+ }
 
 FMH::MODEL_LIST FM::getTags(const int &limit)
 {
@@ -518,8 +475,8 @@ FMH::MODEL_LIST FM::getCloudAccounts()
 
 void FM::createCloudDir(const QString &path, const QString &name)
 {
-	qDebug()<< "trying to create folder at"<< path;
-	this->sync->createDir(path, name);
+    qDebug()<< "trying to create folder at"<< path;
+    this->sync->createDir(path, name);
 }
 
 void FM::openCloudItem(const QVariantMap &item)
@@ -851,10 +808,12 @@ bool FM::removeFile(const QUrl &path)
 	if(!path.isLocalFile())	
 		qWarning() << "URL recived is not a local file, FM::removeFile" << path;	
 	
+    qDebug()<< "TRYING TO REMOVE FILE: " << path;
+
 	#ifdef Q_OS_ANDROID
 	if(QFileInfo(path.toLocalFile()).isDir())
 		return removeDir(path);
-	else return QFile(path.toLocalFile()).remove();
+    else return QFile(path.toLocalFile()).remove();
 	#else
 	auto job = KIO::del(path);
 	job->start();
@@ -921,7 +880,9 @@ bool FM::rename(const QUrl &path, const QString &name)
 
 bool FM::createDir(const QUrl &path, const QString &name)
 {
-	return QDir(path.toLocalFile()).mkdir(name);
+    QFileInfo dd(path.toLocalFile());
+    qDebug()<< "Trying to create dir" << path.toLocalFile() << dd.isReadable() << dd.isWritable() << dd.permissions();
+    return QDir(path.toLocalFile()).mkdir(name);
 }
 
 bool FM::createFile(const QUrl &path, const QString &name)

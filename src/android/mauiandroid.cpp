@@ -386,7 +386,7 @@ QString MAUIAndroid::homePath()
     return mediaPath.toString();
 }
 
-QString MAUIAndroid::sdDir()
+QStringList MAUIAndroid::sdDirs()
 {
     //    QAndroidJniObject mediaDir = QAndroidJniObject::callStaticObjectMethod("android/os/Environment", "getExternalStorageDirectory", "()Ljava/io/File;");
     //    QAndroidJniObject mediaPath = mediaDir.callObjectMethod( "getAbsolutePath", "()Ljava/lang/String;" );
@@ -398,12 +398,15 @@ QString MAUIAndroid::sdDir()
     //    }
     
     //    qbDebug::Instance()->msg()<<"TESTED SDPATH"<<QProcessEnvironment::systemEnvironment().value("EXTERNAL_SDCARD_STORAGE",dataAbsPath);
-    if(UTIL::fileExists("/mnt/extSdCard"))
-        return "/mnt/extSdCard";
-    else if(UTIL::fileExists("/mnt/ext_sdcard"))
-        return "/mnt/ext_sdcard";
-    else
-        return "/mnt/";
+
+    QStringList res;
+    if(UTIL::fileExists("file:///mnt/extSdCard"))
+        res << "file:///mnt/extSdCard";
+
+    if(UTIL::fileExists("file:///mnt/ext_sdcard"))
+        res << "file:///mnt/ext_sdcard";
+
+    return res;
 }
 
 QImage MAUIAndroid::contactPhoto(const QString &id)
@@ -642,6 +645,39 @@ QStringList MAUIAndroid::defaultPaths()
     paths.append(PATHS::DownloadsPath);
     
     return paths;
+}
+
+
+bool MAUIAndroid::checkAndroidStoragePermissions()
+{
+    qDebug()<< "CHECKIGN PERMISSSIONS";
+
+//    QtAndroid::PermissionResult r = QtAndroid::checkPermission("android.permission.WRITE_EXTERNAL_STORAGE");
+//    if(r == QtAndroid::PermissionResult::Denied) {
+//        QtAndroid::requestPermissionsSync( QStringList() << "android.permission.WRITE_EXTERNAL_STORAGE" );
+//        r = QtAndroid::checkPermission("android.permission.WRITE_EXTERNAL_STORAGE");
+//        if(r == QtAndroid::PermissionResult::Denied) {
+//            qDebug() << "Permission denied";
+//            return false;
+//        }
+//    }
+
+//    qDebug() << "Permissions granted!";
+//    return true;
+
+//    QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/SendIntent",
+//                                              "requestPermission",
+//                                              "(Landroid/app/Activity;)V",
+//                                              QtAndroid::androidActivity().object<jobject>());
+
+
+
+    // C++
+    QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/SDCard",
+                                              "getStorageNames",
+                                              "(Landroid/app/Activity;)V",
+                                              QtAndroid::androidActivity().object<jobject>());
+//    return (true);
 }
 
 

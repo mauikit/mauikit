@@ -19,4 +19,3 @@ RESOURCES += \
     $$PWD/icons.qrc
 
 ANDROID_PACKAGE_SOURCE_DIR += $$PWD/
-

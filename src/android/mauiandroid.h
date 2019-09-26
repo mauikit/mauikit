@@ -31,8 +31,6 @@
 #include <QString>
 #include <QVariantList>
 
-
-
 class MAUIAndroid : public QObject
 {
     Q_OBJECT
@@ -48,6 +46,7 @@ public:
     static void setAppIcons(const QString &lowDPI, const QString &mediumDPI, const QString &highDPI);
     static void setAppInfo(const QString &appName, const QString &version, const QString &uri);
     static void fileChooser();
+
 
 private:
     static QVariantList transform(const QAndroidJniObject &obj);
@@ -68,8 +67,11 @@ public slots:
     static void openWithApp(const QString &url);
     static QStringList defaultPaths();
     static QString homePath();
-    static QString sdDir();
+    static QStringList sdDirs();
     static void call(const QString &tel);
+
+    static bool checkAndroidStoragePermissions();
+
 
 signals:
     void folderPicked(QString path);
