@@ -899,7 +899,12 @@ bool FM::createFile(const QUrl &path, const QString &name)
 
 bool FM::openUrl(const QString &url)
 {
-	return QDesktopServices::openUrl(QUrl::fromUserInput(url));
+#ifdef Q_OS_ANDROID
+    MAUIAndroid::openUrl(url);
+    return true;
+#else
+    return QDesktopServices::openUrl(QUrl::fromUserInput(url));
+#endif
 }
 
 void FM::openLocation(const QStringList &urls)

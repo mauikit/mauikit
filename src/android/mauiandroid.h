@@ -64,7 +64,7 @@ public slots:
     static void sendSMS(const QString &tel,const QString &subject, const QString &message);
     static void shareLink(const QString &link);
     static void shareContact(const QString &id);
-    static void openWithApp(const QString &url);
+    static void openUrl(const QUrl &url);
     static QStringList defaultPaths();
     static QString homePath();
     static QStringList sdDirs();

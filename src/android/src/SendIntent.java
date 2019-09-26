@@ -85,13 +85,13 @@ public class SendIntent
         System.out.println(file.exists());
 
         Uri uri;
-        try {
+        try
+        {
             uri = FileProvider.getUriForFile(context, AUTHORITY, file);
         } catch (IllegalArgumentException e) {
             System.out.println("cannot be shared: "+ url+ " " +e);
             return;
         }
-
 
         Intent sendIntent = ShareCompat.IntentBuilder.from(QtNative.activity()).getIntent();
         sendIntent.setAction(Intent.ACTION_SEND);
@@ -105,22 +105,27 @@ public class SendIntent
         } else {
             System.out.println( "Intent not resolved");
         }
-
     }
 
-    public static void openFile(Activity context, String url)
+    public static void openUrl(Activity context, String url)
     {
         File file = new File(url);
-        Uri uri = Uri.fromFile(file);
-        String mime = context.getContentResolver().getType(uri);
+        Uri uri;
+        try
+        {
+            uri = FileProvider.getUriForFile(context, AUTHORITY, file);
+        } catch (IllegalArgumentException e) {
+            System.out.println("cannot be open: "+ url+ " " +e);
+            return;
+        }
+    String mime = context.getContentResolver().getType(uri);
 
-
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-
-        intent.setDataAndType(uri, mime);
-        context.startActivity(Intent.createChooser(intent, "Open folder"));
-
+    Intent viewIntent = ShareCompat.IntentBuilder.from(context).getIntent();
+    viewIntent.setAction(Intent.ACTION_VIEW);
+    viewIntent.setDataAndType(uri, mime);
+    viewIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            viewIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+    context.startActivity(viewIntent);
     }
 
     public static void fileChooser(Activity context)
