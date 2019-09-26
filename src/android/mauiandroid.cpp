@@ -265,21 +265,22 @@ void MAUIAndroid::shareDialog(const QUrl &url)
     {
         QMimeDatabase mimedb;
         QString mimeType = mimedb.mimeTypeForFile(url.toLocalFile()).name();
-        
+
         QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/SendIntent",
                                                   "share",
                                                   "(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;)V",
                                                   activity.object<jobject>(),
                                                   QAndroidJniObject::fromString(url.toLocalFile()).object<jstring>(),
                                                   QAndroidJniObject::fromString(mimeType).object<jstring>());
-        
-        
+
+
         if (_env->ExceptionCheck()) {
             _env->ExceptionClear();
             throw InterfaceConnFailedException();
         }
     }else
         throw InterfaceConnFailedException();
+
 }
 
 void MAUIAndroid::shareText(const QString &text)
@@ -298,8 +299,8 @@ void MAUIAndroid::shareText(const QString &text)
                                                   "(Landroid/app/Activity;Ljava/lang/String;)V",
                                                   activity.object<jobject>(),
                                                   QAndroidJniObject::fromString(text).object<jstring>());
-        
-        
+
+
         if (_env->ExceptionCheck()) {
             _env->ExceptionClear();
             throw InterfaceConnFailedException();
@@ -324,8 +325,8 @@ void MAUIAndroid::shareLink(const QString &link)
                                                   "(Landroid/app/Activity;Ljava/lang/String;)V",
                                                   activity.object<jobject>(),
                                                   QAndroidJniObject::fromString(link).object<jstring>());
-        
-        
+
+
         if (_env->ExceptionCheck()) {
             _env->ExceptionClear();
             throw InterfaceConnFailedException();
@@ -375,14 +376,14 @@ void MAUIAndroid::sendSMS(const QString &tel,const QString &subject, const QStri
 
 void MAUIAndroid::openWithApp(const QString &url)
 {
-    
+
 }
 
 QString MAUIAndroid::homePath()
 {
     QAndroidJniObject mediaDir = QAndroidJniObject::callStaticObjectMethod("android/os/Environment", "getExternalStorageDirectory", "()Ljava/io/File;");
     QAndroidJniObject mediaPath = mediaDir.callObjectMethod( "getAbsolutePath", "()Ljava/lang/String;" );
-    
+
     return mediaPath.toString();
 }
 
@@ -396,7 +397,7 @@ QStringList MAUIAndroid::sdDirs()
     //            // Handle exception here.
     //            env->ExceptionClear();
     //    }
-    
+
     //    qbDebug::Instance()->msg()<<"TESTED SDPATH"<<QProcessEnvironment::systemEnvironment().value("EXTERNAL_SDCARD_STORAGE",dataAbsPath);
 
     QStringList res;
@@ -425,22 +426,22 @@ QImage MAUIAndroid::contactPhoto(const QString &id)
 
 void MAUIAndroid::setAppIcons(const QString &lowDPI, const QString &mediumDPI, const QString &highDPI)
 {
-    
-    
+
+
 }
 
 void MAUIAndroid::setAppInfo(const QString &appName, const QString &version, const QString &uri)
 {
-    
+
     QDomDocument doc("mydocument");
     QFile file(":/assets/AndroidManifest.xml");
-    
+
     if (!file.open(QIODevice::ReadOnly))
     {
         qDebug("Cannot open the file");
         return;
     }
-    
+
     // Parse file
     if (!doc.setContent(&file)) {
         qDebug("Cannot parse the content");
@@ -448,7 +449,7 @@ void MAUIAndroid::setAppInfo(const QString &appName, const QString &version, con
         return;
     }
     file.close();
-    
+
     // Modify content
     QDomNodeList manifest = doc.elementsByTagName("manifest");
     if (manifest.size() < 1)
@@ -456,12 +457,12 @@ void MAUIAndroid::setAppInfo(const QString &appName, const QString &version, con
         qDebug("Cannot find manifest");
         return;
     }
-    
+
     //Manifest//
     QDomElement root = manifest.at(0).toElement();
     root.setAttribute("package", uri);
     root.setAttribute("android:versionName", version);
-    
+
     //Application//
     auto applicationNode = root.toElement().elementsByTagName("application");
     if (applicationNode.size() < 1)
@@ -469,10 +470,10 @@ void MAUIAndroid::setAppInfo(const QString &appName, const QString &version, con
         qDebug("Cannot find application node in manifest");
         return;
     }
-    
+
     auto application = applicationNode.at(0).toElement();
     application.setAttribute("android:label", appName);
-    
+
     // Activity //
     auto activityNode = application.toElement().elementsByTagName("activity");
     if (activityNode.size() < 1)
@@ -480,10 +481,10 @@ void MAUIAndroid::setAppInfo(const QString &appName, const QString &version, con
         qDebug("Cannot find activity node in manifest");
         return;
     }
-    
+
     auto activity = activityNode.at(0).toElement();
     activity.setAttribute("android:label", appName);
-    
+
     // Service //
     auto serviceNode = application.toElement().elementsByTagName("service");
     if (serviceNode.size() < 1)
@@ -491,7 +492,7 @@ void MAUIAndroid::setAppInfo(const QString &appName, const QString &version, con
         qDebug("Cannot find service node in manifest");
         return;
     }
-    
+
     auto service = activityNode.at(0).toElement();
     auto serviceMetadataNode = service.elementsByTagName("meta-data");
     if (serviceMetadataNode.size() < 1)
@@ -499,16 +500,16 @@ void MAUIAndroid::setAppInfo(const QString &appName, const QString &version, con
         qDebug("Cannot find service metadata node in manifest");
         return;
     }
-    
+
     auto serviceMetadata = serviceMetadataNode.at(1).toElement();
     serviceMetadata.setAttribute("android:value", appName);
-    
+
     if(!file.open(QIODevice::Truncate | QIODevice::WriteOnly))
     {
         qDebug("Basically, now we lost content of a file");
         return;
     }
-    
+
     QByteArray xml = doc.toByteArray();
     file.write(xml);
     file.close();
@@ -636,14 +637,14 @@ QVariantMap MAUIAndroid::createVariantMap(jobject data)
 QStringList MAUIAndroid::defaultPaths()
 {
     QStringList paths;
-    
+
     paths.append(PATHS::HomePath);
     paths.append(PATHS::DocumentsPath);
     paths.append(PATHS::MusicPath);
     paths.append(PATHS::VideosPath);
     paths.append(PATHS::PicturesPath);
     paths.append(PATHS::DownloadsPath);
-    
+
     return paths;
 }
 

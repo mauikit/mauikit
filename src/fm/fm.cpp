@@ -475,7 +475,6 @@ FMH::MODEL_LIST FM::getCloudAccounts()
 
 void FM::createCloudDir(const QString &path, const QString &name)
 {
-    qDebug()<< "trying to create folder at"<< path;
     this->sync->createDir(path, name);
 }
 

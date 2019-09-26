@@ -22,6 +22,7 @@
 #include <QEventLoop>
 #include <QTimer>
 #include <QFileSystemWatcher>
+#include "utils.h"
 
 #ifdef Q_OS_ANDROID 
 #else
@@ -100,11 +101,11 @@ static FMH::MODEL_LIST getGroup(const KFilePlacesModel &model, const FMH::PATHTY
 	#ifdef Q_OS_ANDROID
     Q_UNUSED(model)
     FMH::MODEL_LIST res;
-
     switch(type)
     {
         case(FMH::PATHTYPE_KEY::PLACES_PATH):
-            res = FM::getDefaultPaths();
+            res << FM::getDefaultPaths();
+            res<< FM::packItems(UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, "FileManager").toStringList(), FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]);
             break;
         case(FMH::PATHTYPE_KEY::DRIVES_PATH):
             res = FM::getDevices();
@@ -242,6 +243,9 @@ void PlacesList::addPlace(const QString& path)
 	
 #ifdef Q_OS_ANDROID
 	//do android stuff until cmake works with android 
+    auto bookmarks = UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, "FileManager").toStringList();
+    bookmarks << path;
+    UTIL::saveSettings("BOOKMARKS", bookmarks, "PREFERENCES", "FileManager");
     this->list.insert(index, FMH::getDirInfoModel(path));
 #else
 //     const auto url =  QStringLiteral("file://")+path;
