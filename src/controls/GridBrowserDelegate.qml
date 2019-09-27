@@ -64,20 +64,20 @@ Maui.GridItemDelegate
         Kirigami.Theme.backgroundColor: Kirigami.Theme.highlightColor
         Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
     }
-    /*
-     * Maui.Badge
-     * {
-     *	id: _rightEmblemIcon
-     *	iconName: rightEmblem
-     *	visible: (isHovered || keepEmblemOverlay) && showEmblem && rightEmblem
-     *	z: 999
-     *	size: Maui.Style.iconSizes.medium
-     *	anchors.top: parent.top
-     *	anchors.right: parent.right
-     *	onClicked: rightEmblemClicked(index)
-     *	Kirigami.Theme.backgroundColor: Kirigami.Theme.highlightColor
-}    
-*/
+
+    Maui.Badge
+    {
+        id: _rightEmblemIcon
+        iconName: rightEmblem
+        visible: (control.hovered || control.keepEmblemOverlay) && control.showEmblem && control.rightEmblem
+        z: 999
+        size: Maui.Style.iconSizes.medium
+        anchors.top: parent.top
+        anchors.right: parent.right
+        onClicked: rightEmblemClicked(index)
+        Kirigami.Theme.backgroundColor: Kirigami.Theme.highlightColor
+    }
+
     Component
     {
         id: _imgComponent
@@ -91,8 +91,8 @@ Maui.GridItemDelegate
                 id: img
                 anchors.centerIn: parent
                 source: model.thumbnail ? model.thumbnail : undefined
-                height: Math.min (control.folderSize, img.implicitHeight)
-                width: Math.min(_layout.width * 0.98, img.implicitWidth)
+                height: Math.min (parent.height, img.implicitHeight)
+                width: Math.min(parent.width * 0.98, img.implicitWidth)
                 sourceSize.width: width
                 sourceSize.height: height
                 horizontalAlignment: Qt.AlignHCenter
@@ -132,11 +132,17 @@ Maui.GridItemDelegate
     {
         id: _iconComponent
         
-        Kirigami.Icon
+        Item
         {
-            source: model.icon
-            fallback: "qrc:/assets/application-x-zerosize.svg"
-           
+            anchors.fill: parent
+            Kirigami.Icon
+            {
+                anchors.centerIn: parent
+                source: model.icon
+                fallback: "qrc:/assets/application-x-zerosize.svg"
+                height: control.folderSize
+                width: height
+            }
         }
     }
     
@@ -150,9 +156,9 @@ Maui.GridItemDelegate
         {
 			sourceComponent: model.mime ? (model.mime.indexOf("image") > -1 && control.showThumbnails ? _imgComponent : _iconComponent) : _iconComponent 
 			Layout.preferredHeight: control.folderSize
-			Layout.preferredWidth: control.folderSize
+            Layout.fillWidth: true
             Layout.alignment: Qt.AlignCenter
-            Layout.margins: Maui.Style.unit * 2
+            Layout.margins: Maui.Style.unit
 			
 			Maui.Badge
 			{
