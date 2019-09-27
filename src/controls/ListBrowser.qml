@@ -80,7 +80,7 @@ Kirigami.ScrollablePage
         
         spacing: Maui.Style.space.tiny
 		
-        snapMode: ListView.SnapToItem
+        snapMode: ListView.NoSnap
         boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
 		
         keyNavigationEnabled: true

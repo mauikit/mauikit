@@ -151,7 +151,8 @@ Maui.GridItemDelegate
 			sourceComponent: model.mime ? (model.mime.indexOf("image") > -1 && control.showThumbnails ? _imgComponent : _iconComponent) : _iconComponent 
 			Layout.preferredHeight: control.folderSize
 			Layout.preferredWidth: control.folderSize
-			Layout.alignment: Qt.AlignCenter
+            Layout.alignment: Qt.AlignCenter
+            Layout.margins: Maui.Style.unit * 2
 			
 			Maui.Badge
 			{

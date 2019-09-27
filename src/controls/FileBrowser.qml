@@ -49,8 +49,6 @@ Maui.Page
     property alias itemMenu: itemMenu
     property alias dialog : dialogLoader.item
 
-
-
     signal itemClicked(int index)
     signal itemDoubleClicked(int index)
     signal itemRightClicked(int index)
@@ -177,8 +175,8 @@ Maui.Page
         {
             property var items: []
 
-            title: qsTr(String("Removing %1 files?").arg(items.length.toString()))
-			message: isAndroid ?  qsTr("This action will completely delete your files from your system. This action can not be undone.") : qsTr("You can move the file to the Trash or Delete it completely from your system. Which one you preffer?")
+            title: qsTr(String("Removing %1 files").arg(items.length.toString()))
+            message: isAndroid ?  qsTr("This action will completely remove your files from your system. This action can not be undone.") : qsTr("You can move the file to the Trash or Delete it completely from your system. Which one you preffer?")
 			rejectButton.text: qsTr("Delete")
             acceptButton.text: qsTr("Trash")
             acceptButton.visible: !Kirigami.Settings.isMobile
@@ -436,6 +434,7 @@ Maui.Page
             {
                 text: qsTr("Folders first")
                 checked: control.currentFMList.foldersFirst
+                checkable: true
                 onTriggered: control.currentFMList.foldersFirst = !control.currentFMList.foldersFirst
             }
 
@@ -443,6 +442,7 @@ Maui.Page
             {
                 text: qsTr("Type")
                 checked: control.currentFMList.sortBy === Maui.FMList.MIME
+                checkable: true
                 onTriggered: control.currentFMList.sortBy = Maui.FMList.MIME
             }
 
@@ -450,12 +450,14 @@ Maui.Page
             {
                 text: qsTr("Date")
                 checked: control.currentFMList.sortBy === Maui.FMList.DATE
+                checkable: true
                 onTriggered: control.currentFMList.sortBy = Maui.FMList.DATE
             }
 
             Kirigami.Action
             {
                 text: qsTr("Modified")
+                checkable: true
                 checked: control.currentFMList.sortBy === Maui.FMList.MODIFIED
                 onTriggered: control.currentFMList.sortBy = Maui.FMList.MODIFIED
             }
@@ -463,6 +465,7 @@ Maui.Page
             Kirigami.Action
             {
                 text: qsTr("Size")
+                checkable: true
                 checked: control.currentFMList.sortBy === Maui.FMList.SIZE
                 onTriggered: control.currentFMList.sortBy = Maui.FMList.SIZE
             }
@@ -470,6 +473,7 @@ Maui.Page
             Kirigami.Action
             {
                 text: qsTr("Name")
+                checkable: true
                 checked: control.currentFMList.sortBy === Maui.FMList.LABEL
                 onTriggered: control.currentFMList.sortBy = Maui.FMList.LABEL
             }
@@ -478,6 +482,7 @@ Maui.Page
             {
                 id: groupAction
                 text: qsTr("Group")
+                checkable: true
                 checked: control.group
                 onTriggered:
                 {
@@ -534,6 +539,7 @@ Maui.Page
             anchors.fill: parent
             onIconClicked: _selectionBarmenu.popup()
             onExitClicked: clean()
+            onItemClicked: removeSelection(index)
 
             Menu
             {
@@ -549,7 +555,6 @@ Maui.Page
                         console.log(selectedItems)
                         _selectionBarmenu.close()
                     }
-
                 }
 
                 MenuItem

@@ -27,79 +27,79 @@ import "private"
 
 Rectangle
 {
-	id: control
-	
-	Kirigami.Theme.inherit: false    
-	Kirigami.Theme.colorSet: Kirigami.Theme.Complementary    
-	
+    id: control
+
+    Kirigami.Theme.inherit: false
+    Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
+
     property alias item : loader.item
-	property bool hovered : false
-	
-	property int size: Kirigami.Settings.isMobile ? Maui.Style.iconSizes.medium : Maui.Style.iconSizes.small
-	property string iconName : ""
-	property string text : ""
-	
-	signal clicked()    
-	signal pressed()    
-	signal hovered()    
-	signal released()
-	
-	z: parent.z+1
-	height: size + Maui.Style.space.small
-	width: Math.max(implicitWidth, height)
-	implicitWidth: (loader.sourceComponent == labelComponent ? Math.max(loader.item.implicitWidth + Maui.Style.space.small, control.height) : control.height) 
-	radius: Math.min(width, height)
-	color: Kirigami.Theme.backgroundColor
-	border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-	
+    property bool hovered : false
+
+    property int size: Kirigami.Settings.isMobile ? Maui.Style.iconSizes.medium : Maui.Style.iconSizes.small
+    property string iconName : ""
+    property string text : ""
+
+    signal clicked()
+    signal pressed()
+    signal hovered()
+    signal released()
+
+    z: parent.z+1
+    height: size + Maui.Style.space.small
+    width: Math.max(implicitWidth, height)
+    implicitWidth: (loader.sourceComponent == labelComponent ? Math.max(loader.item.implicitWidth + Maui.Style.space.small, control.height) : control.height)
+    radius: Math.min(width, height)
+    color: Kirigami.Theme.backgroundColor
+    border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+
     clip: false
-	
-	Loader
-	{
+
+    Loader
+    {
         id: loader
-		anchors.fill: parent
-		sourceComponent: control.text.length && !control.iconName.length ? labelComponent : (!control.text.length && control.iconName.length ? iconComponent : undefined)
-	}
-	
-	Component
-	{
-		id: labelComponent
-		Label
-		{
-			height: parent.height
-			width: parent.width
-			text: control.text
-			font.weight: Font.Bold
-			font.bold: true
-			font.pointSize: fontSizes.default
-			color: Kirigami.Theme.textColor
-			verticalAlignment: Qt.AlignVCenter
-			horizontalAlignment: Qt.AlignHCenter
-		}
-	}	
-	
-	Component
-	{
-		id: iconComponent
-		Kirigami.Icon
-		{
-			anchors.centerIn: parent
-			source: control.iconName
-			color: Kirigami.Theme.textColor
-			width: control.size
-			height: width
-		}
-	}
-	
-	MouseArea
-	{
-		id: mouseArea
-		anchors.fill: parent
-		onClicked: control.clicked() 
-		onPressed: control.pressed() 
-		onReleased: control.released()
-		hoverEnabled: true
-		onEntered: hovered = true
-		onExited: hovered = false
-	}
+        anchors.fill: parent
+        sourceComponent: control.text.length && !control.iconName.length ? labelComponent : (!control.text.length && control.iconName.length ? iconComponent : undefined)
+    }
+
+    Component
+    {
+        id: labelComponent
+        Label
+        {
+            height: parent.height
+            width: parent.width
+            text: control.text
+            font.weight: Font.Bold
+            font.bold: true
+            font.pointSize: fontSizes.default
+            color: Kirigami.Theme.textColor
+            verticalAlignment: Qt.AlignVCenter
+            horizontalAlignment: Qt.AlignHCenter
+        }
+    }
+
+    Component
+    {
+        id: iconComponent
+        Kirigami.Icon
+        {
+            anchors.centerIn: parent
+            source: control.iconName
+            color: Kirigami.Theme.textColor
+            width: control.size
+            height: width
+        }
+    }
+
+    MouseArea
+    {
+        id: mouseArea
+        anchors.fill: parent
+        onClicked: control.clicked()
+        onPressed: control.pressed()
+        onReleased: control.released()
+        hoverEnabled: true
+        onEntered: hovered = true
+        onExited: hovered = false
+    }
 }

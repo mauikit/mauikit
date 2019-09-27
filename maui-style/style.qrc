@@ -40,5 +40,6 @@
         <file>ToolButton.qml</file>
         <file>ToolTip.qml</file>
         <file>private/DefaultListItemBackground.qml</file>
+        <file>CheckIndicator.qml</file>
     </qresource>
 </RCC>

@@ -27,9 +27,10 @@ import "private"
 Item
 {
     id: control
-    Kirigami.Theme.inherit: false    
-    Kirigami.Theme.colorSet: Kirigami.Theme.Complementary    
-    
+    Kirigami.Theme.inherit: false
+    Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
+    readonly property int barHeight : Maui.Style.iconSizes.large  + Maui.Style.space.large
+
     property var selectedPaths: []
     property var selectedItems: []
     
@@ -38,33 +39,30 @@ Item
     property alias model : selectionList.model
     property alias count : selectionList.count
     
-    property int barHeight : itemHeight + Maui.Style.space.large
     property color animColor : "black"
-	property int itemHeight: Maui.Style.iconSizes.big + Maui.Style.space.big
-	property int itemWidth:  Maui.Style.iconSizes.big + (Kirigami.Settings.isMobile? Maui.Style.space.big : Maui.Style.space.large) + Maui.Style.space.big
     property int position: Qt.Horizontal
     property string iconName : "overflow-menu"
     property bool iconVisible: true
     
     /**
-	 * if singleSelection is set to true then only a single item is selected
-	 * at time, and replaced with a newe item appended
-	 **/
-	
+     * if singleSelection is set to true then only a single item is selected
+     * at time, and replaced with a newe item appended
+     **/
     property bool singleSelection: false
     
     signal iconClicked()
     signal modelCleared()
     signal exitClicked()
+    signal itemClicked(int index)
     
-    height: if(position === Qt.Horizontal)
+    implicitHeight: if(position === Qt.Horizontal)
                 barHeight
             else if(position === Qt.Vertical)
                 parent.height
             else
                 undefined
     
-    width: if(position === Qt.Horizontal)
+    implicitWidth: if(position === Qt.Horizontal)
                parent.width
            else if(position === Qt.Vertical)
                barHeight
@@ -73,45 +71,55 @@ Item
     
     
     visible: selectionList.count > 0
-    
-    
-    Drag.keys: control.selectedPaths
-    
-    
-    Drag.active: _mouseArea.drag.active
-    Drag.dragType: Drag.Automatic
-    Drag.supportedActions: Qt.CopyAction
-    
-    MouseArea
-    {
-        id: _mouseArea
-        anchors.fill: parent        
-        drag.target: parent
-        onPressed: selectionList.grabToImage(function(result)
-        {
-            console.log("PRESSED SELECTIONBOX", control.selectedPaths.join(","))
-            parent.Drag.imageSource = result.url
-        })
-    }
-    
+
     Rectangle
     {
         id: bg
         anchors.fill: parent
-//         Kirigami.Theme.colorSet: Kirigami.Theme.Complementary    
-        color: Kirigami.Theme.backgroundColor
-        radius: radiusV
-
+        color: Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.6)
+        radius: Maui.Style.radiusV
         opacity: 1
-        border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-		
-       
+        //        border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+        border.color: Kirigami.Theme.backgroundColor
     }
-    
-    
+
+
+    Maui.Badge
+    {
+        anchors.verticalCenter: parent.top
+        anchors.horizontalCenter: parent.left
+
+        iconName: "window-close"
+        Kirigami.Theme.backgroundColor: dangerColor
+        Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
+        z: parent.z +1
+        onClicked:
+        {
+            selectionList.model.clear()
+            exitClicked()
+        }
+    }
+
+    Maui.Badge
+    {
+        Kirigami.Theme.backgroundColor: Kirigami.Theme.highlightColor
+        text: selectionList.count
+        z: parent.z +1
+
+        anchors.verticalCenter: parent.top
+        anchors.horizontalCenter: parent.right
+
+        onClicked:
+        {
+            clear()
+            modelCleared()
+        }
+    }
+
     GridLayout
     {
         anchors.fill: parent
+        anchors.margins: Maui.Style.space.small
         rows: if(position === Qt.Horizontal)
                   1
               else if(position === Qt.Vertical)
@@ -125,41 +133,12 @@ Item
                      1
                  else
                      undefined
-                     
-        
-        Maui.Badge
-        {
-            anchors.verticalCenter: parent.top
-            anchors.horizontalCenter: parent.left
-            Layout.column: if(position === Qt.Horizontal)
-                               1
-                           else if(position === Qt.Vertical)
-                               1
-                           else
-                               undefined
-            
-            Layout.row: if(position === Qt.Horizontal)
-                            1
-                        else if(position === Qt.Vertical)
-                            1
-                        else
-                            undefined
-            
-            iconName: "window-close"
-			Kirigami.Theme.backgroundColor: dangerColor
-			Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
-			
-			onClicked:
-            {
-                selectionList.model.clear()
-                exitClicked()
-            }
-        }
-        
+
         Item
         {
             Layout.fillHeight: true
             Layout.fillWidth: true
+            Layout.leftMargin: Maui.Style.space.small
             Layout.column: if(position === Qt.Horizontal)
                                2
                            else if(position === Qt.Vertical)
@@ -173,33 +152,27 @@ Item
                             2
                         else
                             undefined
-            
-            Layout.alignment: if(position === Qt.Horizontal)
-                                  Qt.AlignVCenter
-                              else if(position === Qt.Vertical)
-                                  Qt.AlignHCenter
-                              else
-                                  undefined
+
             ListView
             {
                 id: selectionList
                 anchors.fill: parent
                 
-                 SequentialAnimation
-        {
-            id: anim
-            PropertyAnimation
-            {
-                target: selectionList
-                property: "y"
-                easing.type: Easing.InOutQuad
-                from: (-200)
-                to: 0
-                duration: 100
-            }
-        }       
+                SequentialAnimation
+                {
+                    id: anim
+                    PropertyAnimation
+                    {
+                        target: selectionList
+                        property: "y"
+                        easing.type: Easing.InOutQuad
+                        from: (-200)
+                        to: 0
+                        duration: 100
+                    }
+                }
                 
-                boundsBehavior: !isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
+                boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
                 orientation: if(position === Qt.Horizontal)
                                  ListView.Horizontal
                              else if(position === Qt.Vertical)
@@ -207,7 +180,7 @@ Item
                              else
                                  undefined
                 clip: true
-                spacing: space.small
+                spacing: Maui.Style.space.small
                 
                 focus: true
                 interactive: true
@@ -216,46 +189,46 @@ Item
                 delegate: Maui.GridBrowserDelegate
                 {
                     id: delegate
-                    
+//                    isCurrentItem: ListView.isCurrentItem
                     anchors.verticalCenter: position === Qt.Horizontal ? parent.verticalCenter : undefined
                     anchors.horizontalCenter: position === Qt.Vertical ? parent.horizontalCenter : undefined
-                    height:  itemHeight
-                    width: itemWidth
+                    height: selectionList.height
+                    width: height
                     folderSize: Maui.Style.iconSizes.big
                     showLabel: true
                     keepEmblemOverlay: true
-                    showEmblem: true
-//                     showSelectionBackground: false
+                    showEmblem: !Kirigami.Settings.isMobile
                     labelColor: Kirigami.Theme.textColor
                     showTooltip: true
                     showThumbnails: true
                     emblemSize: Maui.Style.iconSizes.small
-                    leftEmblem: "list-remove"
-					Kirigami.Theme.highlightColor: Kirigami.Theme.highlightColor
-					Kirigami.Theme.backgroundColor: Kirigami.Theme.complementaryBackgroundColor
-					Kirigami.Theme.textColor: Kirigami.Theme.textColor
+//                    leftEmblem: "list-remove"
+                    Kirigami.Theme.highlightColor: Kirigami.Theme.highlightColor
+                    Kirigami.Theme.backgroundColor: Kirigami.Theme.complementaryBackgroundColor
+                    Kirigami.Theme.textColor: Kirigami.Theme.textColor
                     
                     Connections
                     {
                         target: delegate
                         onLeftEmblemClicked: removeSelection(index)
+                        onClicked: control.itemClicked(index)
                     }
                 }
-                
             }
         }
         
         Item
         {
-            Layout.alignment: if(position === Qt.Horizontal)
-                                  Qt.AlignRight || Qt.AlignVCenter
-                              else if(position === Qt.Vertical)
-                                  Qt.AlignCenter
-                              else
-                                  undefined
+//            Layout.alignment: if(position === Qt.Horizontal)
+//                                  Qt.AlignRight || Qt.AlignVCenter
+//                              else if(position === Qt.Vertical)
+//                                  Qt.AlignCenter
+//                              else
+//                                  undefined
             Layout.fillWidth: position === Qt.Vertical
             Layout.fillHeight: position === Qt.Horizontal
-            Layout.maximumWidth: iconSizes.medium
+            Layout.preferredWidth: Maui.Style.iconSizes.medium
+            Layout.preferredHeight: Maui.Style.iconSizes.medium
             Layout.column: if(position === Qt.Horizontal)
                                3
                            else if(position === Qt.Vertical)
@@ -269,9 +242,9 @@ Item
                             3
                         else
                             undefined
-            
-            Layout.margins: space.big 
-            
+
+            Layout.margins: Maui.Style.space.medium
+
             ToolButton
             {
                 visible: iconVisible
@@ -279,33 +252,6 @@ Item
                 icon.name: control.iconName
                 icon.color: control.Kirigami.Theme.textColor
                 onClicked: iconClicked()
-            }
-        }
-        
-        Maui.Badge
-        {
-			Kirigami.Theme.backgroundColor: Kirigami.Theme.highlightColor			
-            text: selectionList.count
-            
-            anchors.verticalCenter: parent.top
-            anchors.horizontalCenter: parent.right
-            Layout.column: if(position === Qt.Horizontal)
-                               4
-                           else if(position === Qt.Vertical)
-                               1
-                           else
-                               undefined
-            
-            Layout.row: if(position === Qt.Horizontal)
-                            1
-                        else if(position === Qt.Vertical)
-                            4
-                        else
-                            undefined          
-            onClicked:
-            {
-                clear()
-                modelCleared()
             }
         }
     }
@@ -344,9 +290,9 @@ Item
     {
         if(selectedPaths.indexOf(item.path) < 0)
         {
-			if(control.singleSelection)
-				clear()
-			
+            if(control.singleSelection)
+                clear()
+
             selectedItems.push(item)
             selectedPaths.push(item.path)
             
@@ -366,7 +312,7 @@ Item
     {
         animColor = color
         anim.running = true
-    }  
+    }
     
     function getSelectedPathsString()
     {

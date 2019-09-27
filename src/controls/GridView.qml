@@ -84,7 +84,7 @@ Kirigami.ScrollablePage
 
         boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
         flickableDirection: Flickable.AutoFlickDirection
-        snapMode: GridView.SnapToRow
+        snapMode: GridView.NoSnap
         highlightMoveDuration: 0
         interactive: true
         onWidthChanged: adaptContent? control.adaptGrid() : undefined
