@@ -631,10 +631,7 @@ Maui.Page
 
             ListModel { id: tabsListModel }
 
-            background: Rectangle
-            {
-                color: "transparent"
-            }
+            background: null
 
             Repeater
             {
@@ -658,19 +655,31 @@ Maui.Page
 
                     background: Rectangle
                     {
-                        color: checked ? Kirigami.Theme.focusColor : Kirigami.Theme.backgroundColor
-                        opacity: checked ? 0.4 : 1
+                        color: "transparent"
+
 
                         Kirigami.Separator
                         {
-                            color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
                             z: tabsBar.z + 1
-                            width : 1
-                            //                                    visible: tabsListModel.count > 1
+                            width: Maui.Style.unit
                             anchors
                             {
                                 bottom: parent.bottom
                                 top: parent.top
+                                right: parent.right
+                            }
+                        }
+
+                        Kirigami.Separator
+                        {
+                            color: Kirigami.Theme.highlightColor
+                            z: tabsBar.z + 1
+                            height: Maui.Style.unit * 2
+                            visible: checked
+                            anchors
+                            {
+                                bottom: parent.bottom
+                                left: parent.left
                                 right: parent.right
                             }
                         }
@@ -690,7 +699,7 @@ Maui.Page
                             Layout.alignment: Qt.AlignCenter
                             verticalAlignment: Qt.AlignVCenter
                             horizontalAlignment: Qt.AlignHCenter
-                            color: Kirigami.Theme.textColor
+                            color: checked ?  Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
                             wrapMode: Text.NoWrap
                             elide: Text.ElideRight
                         }
