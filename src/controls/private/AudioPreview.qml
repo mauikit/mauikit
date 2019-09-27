@@ -77,6 +77,23 @@ ColumnLayout
             onMoved: player.seek((_slider.value / 1000) * player.duration)
         }
     }
+
+    Component.onCompleted:
+    {
+        infoModel.append({key:"Title", value: player.metaData.title})
+        infoModel.append({key:"Artist", value: player.metaData.albumArtist})
+        infoModel.append({key:"Album", value: player.metaData.albumTitle})
+        infoModel.append({key:"Author", value: player.metaData.author})
+        infoModel.append({key:"Codec", value: player.metaData.audioCodec})
+        infoModel.append({key:"Copyright", value: player.metaData.copyright})
+        infoModel.append({key:"Duration", value: player.metaData.duration})
+        infoModel.append({key:"Track", value: player.metaData.trackNumber})
+        infoModel.append({key:"Year", value: player.metaData.year})
+        infoModel.append({key:"Rating", value: player.metaData.userRating})
+        infoModel.append({key:"Lyrics", value: player.metaData.lyrics})
+        infoModel.append({key:"Genre", value: player.metaData.genre})
+        infoModel.append({key:"Artwork", value: player.metaData.coverArtUrlLarge})
+    }
 }
 
 
