@@ -11,6 +11,7 @@ ColumnLayout
     anchors.fill: parent
     property alias player: player
 
+
     Item
     {
         Layout.fillHeight: true
@@ -35,8 +36,9 @@ ColumnLayout
                 source: currentUrl
                 autoLoad: true
                 autoPlay: true
+                property string title : player.metaData.title
 
-                onStatusChanged:
+                onTitleChanged:
                 {
                     infoModel.append({key:"Title", value: player.metaData.title})
                     infoModel.append({key:"Artist", value: player.metaData.albumArtist})
@@ -64,6 +66,7 @@ ColumnLayout
         {
             icon.name: player.playbackState === MediaPlayer.PlayingState ? "media-playback-pause" : "media-playback-start"
             onClicked: player.playbackState === MediaPlayer.PlayingState ? player.pause() : player.play()
+
         }
 
         middleContent : Slider
@@ -76,23 +79,6 @@ ColumnLayout
             value: (1000 * player.position) / player.duration
             onMoved: player.seek((_slider.value / 1000) * player.duration)
         }
-    }
-
-    Component.onCompleted:
-    {
-        infoModel.append({key:"Title", value: player.metaData.title})
-        infoModel.append({key:"Artist", value: player.metaData.albumArtist})
-        infoModel.append({key:"Album", value: player.metaData.albumTitle})
-        infoModel.append({key:"Author", value: player.metaData.author})
-        infoModel.append({key:"Codec", value: player.metaData.audioCodec})
-        infoModel.append({key:"Copyright", value: player.metaData.copyright})
-        infoModel.append({key:"Duration", value: player.metaData.duration})
-        infoModel.append({key:"Track", value: player.metaData.trackNumber})
-        infoModel.append({key:"Year", value: player.metaData.year})
-        infoModel.append({key:"Rating", value: player.metaData.userRating})
-        infoModel.append({key:"Lyrics", value: player.metaData.lyrics})
-        infoModel.append({key:"Genre", value: player.metaData.genre})
-        infoModel.append({key:"Artwork", value: player.metaData.coverArtUrlLarge})
     }
 }
 

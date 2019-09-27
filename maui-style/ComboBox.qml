@@ -40,8 +40,11 @@ import QtQuick.Controls 2.12
 import QtQuick.Controls.impl 2.12
 import QtQuick.Templates 2.12 as T
 import org.kde.kirigami 2.7 as Kirigami
+import org.kde.mauikit 1.0 as Maui
+import QtGraphicalEffects 1.0
 
-T.ComboBox {
+T.ComboBox
+{
     id: control
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
@@ -50,14 +53,16 @@ T.ComboBox {
                              implicitContentHeight + topPadding + bottomPadding,
                              implicitIndicatorHeight + topPadding + bottomPadding)
 
-    topInset: 6
-    bottomInset: 6
+    topInset: Maui.Style.space.small
+    bottomInset: Maui.Style.space.small
 
+    spacing: Maui.Style.space.small
     leftPadding: padding + (!control.mirrored || !indicator || !indicator.visible ? 0 : indicator.width + spacing)
     rightPadding: padding + (control.mirrored || !indicator || !indicator.visible ? 0 : indicator.width + spacing)
 
 
-    delegate: MenuItem {
+    delegate: MenuItem
+    {
         width: parent.width
         text: control.textRole ? (Array.isArray(control.model) ? modelData[control.textRole] : model[control.textRole]) : modelData
 //        Material.foreground: control.currentIndex === index ? parent.Material.accent : parent.Material.foreground
@@ -65,17 +70,19 @@ T.ComboBox {
         hoverEnabled: control.hoverEnabled
     }
 
-    indicator: Kirigami.Icon {
-        x: control.mirrored ? control.padding : control.width - width - control.padding
+    indicator: Kirigami.Icon
+    {
+        x: control.mirrored ? control.padding : control.width - width - control.padding - Maui.Style.space.small
         y: control.topPadding + (control.availableHeight - height) / 2
         color: control.enabled ? control.Kirigami.Theme.textColor : control.Kirigami.Theme.highlightColor
-        source: "arrow-down"
-        height: iconSizes.small
+        source: "go-down"
+        height: Maui.Style.iconSizes.small
         width: height
     }
 
-    contentItem: T.TextField {
-        padding: 6
+    contentItem: T.TextField
+    {
+        padding: Maui.Style.space.small
         leftPadding: control.editable ? 2 : control.mirrored ? 0 : 12
         rightPadding: control.editable ? 2 : control.mirrored ? 12 : 0
 
@@ -96,7 +103,8 @@ T.ComboBox {
 //        cursorDelegate: CursorDelegate { }
     }
 
-    background: Rectangle {
+    background: Rectangle
+    {
         implicitWidth: (Kirigami.Settings.isMobile ? Kirigami.Units.iconSizes.medium : Kirigami.Units.iconSizes.medium) * 2 + Kirigami.Units.smallSpacing
         implicitHeight: Kirigami.Settings.isMobile ? Kirigami.Units.iconSizes.medium : Kirigami.Units.iconSizes.medium
 
@@ -116,13 +124,15 @@ T.ComboBox {
         }
     }
 
-    popup: T.Popup {
+    popup: T.Popup
+    {
 //        y: control.editable ? control.height - 5 : 0
-        width: control.width
-        height: Math.min(contentItem.implicitHeight, control.Window.height - topMargin - bottomMargin)
+//        x: control.x - width
+        width: Math.max(control.width, 150)
+        implicitHeight: Math.min(contentItem.implicitHeight, control.Window.height - topMargin - bottomMargin)
         transformOrigin: Item.Top
-        topMargin: 12
-        bottomMargin: 12
+        topMargin: Maui.Style.space.small
+        bottomMargin: Maui.Style.space.small
         enter: Transition {
             // grow_fade_in
             NumberAnimation { property: "scale"; from: 0.9; to: 1.0; easing.type: Easing.OutQuint; duration: 220 }
@@ -135,7 +145,8 @@ T.ComboBox {
             NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; easing.type: Easing.OutCubic; duration: 150 }
         }
 
-        contentItem: ListView {
+        contentItem: ListView
+        {
             clip: true
             implicitHeight: contentHeight
             model: control.delegateModel
@@ -145,11 +156,21 @@ T.ComboBox {
             T.ScrollIndicator.vertical: ScrollIndicator { }
         }
 
-        background: Rectangle {
-            radius: height * 0.07
+        background: Rectangle
+        {
+            radius: Maui.Style.radiusV
             color: parent.Kirigami.Theme.backgroundColor
             border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+            layer.enabled: true
 
+            layer.effect: DropShadow {
+                transparentBorder: true
+                radius: 8
+                samples: 16
+                horizontalOffset: 0
+                verticalOffset: 4
+                color: Qt.rgba(0, 0, 0, 0.3)
+            }
         }
     }
 }

@@ -21,13 +21,16 @@ ColumnLayout
         autoLoad: true
         autoPlay: true
         loops: 3
+        property string codec : player.metaData.videoCodec
 
-        onStatusChanged:
+        onCodecChanged:
         {
+            infoModel.append({key:"Title", value: player.metaData.title})
             infoModel.append({key:"Camera", value: player.metaData.cameraModel})
             infoModel.append({key:"Zoom ratio", value: player.metaData.digitalZoomRatio})
             infoModel.append({key:"Author", value: player.metaData.author})
-            infoModel.append({key:"Codec", value: player.metaData.audioCodec})
+            infoModel.append({key:"Audio Codec", value: player.metaData.audioCodec})
+            infoModel.append({key:"Video Codec", value: player.metaData.videoCodec})
             infoModel.append({key:"Copyright", value: player.metaData.copyright})
             infoModel.append({key:"Duration", value: player.metaData.duration})
             infoModel.append({key:"Frame rate", value: player.metaData.videoFrameRate})

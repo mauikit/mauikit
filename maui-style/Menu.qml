@@ -80,11 +80,12 @@ T.Menu {
         ScrollIndicator.vertical: ScrollIndicator {}
     }
 
-    background: Rectangle {
+    background: Rectangle
+    {
         implicitWidth: 200
         implicitHeight: Maui.Style.rowHeight
 
-        radius: radiusV
+        radius: Maui.Style.radiusV
         color: control.Kirigami.Theme.backgroundColor
         border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
         layer.enabled: true
