@@ -24,34 +24,33 @@ import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import "private"
 
-
 Drawer
 {
     id: control
 
-    position: Qt.Left
+    edge: Qt.LeftEdge
     implicitHeight: ApplicationWindow.height - ApplicationWindow.header.height - ApplicationWindow.footer.height
     height: ApplicationWindow.height - ApplicationWindow.header.height - ApplicationWindow.footer.height
     y: ApplicationWindow.header.height
 
     //     ApplicationWindow.height -ApplicationWindow.header.height - ApplicationWindow.footer.height
     implicitWidth: privateProperties.isCollapsed && collapsed && collapsible  ? collapsedSize : preferredWidth
+    width: implicitWidth
     visible: true
     modal: false
     interactive: Kirigami.Settings.isMobile && modal && !collapsible && !collapsed
-    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside | Popup.CloseOnReleaseOutside
-
+    dragMargin: Maui.Style.space.huge
     onModalChanged: visible = true
+    dim: false
 
     default property alias content : _content.data
-
     property alias hovered : _mouseArea.containsMouse
     property alias model : _listBrowser.model
     property alias section : _listBrowser.section
     property alias currentIndex: _listBrowser.currentIndex
 
     property int iconSize : Maui.Style.iconSizes.small
-    property bool showLabels: !collapsed  || !privateProperties.isCollapsed
+    property bool showLabels: control.width > collapsedSize
 
     property bool collapsible: false
 
@@ -80,6 +79,39 @@ Drawer
             privateProperties.isCollapsed = true
         }
     }
+
+    Behavior on width
+    {
+        NumberAnimation
+        {
+            duration: Kirigami.Units.longDuration
+            easing.type: Easing.InOutQuad
+        }
+    }
+
+            EdgeShadow
+            {
+                z: -2
+                visible: control.modal
+                parent: control.background
+                edge: control.edge
+                anchors
+                {
+                    right: control.edge == Qt.RightEdge ? parent.left : (control.edge == Qt.LeftEdge ? undefined : parent.right)
+                    left: control.edge == Qt.LeftEdge ? parent.right : (control.edge == Qt.RightEdge ? undefined : parent.left)
+                    top: control.edge == Qt.TopEdge ? parent.bottom : (control.edge == Qt.BottomEdge ? undefined : parent.top)
+                    bottom: control.edge == Qt.BottomEdge ? parent.top : (control.edge == Qt.TopEdge ? undefined : parent.bottom)
+                }
+
+                opacity: control.position == 0 ? 0 : 1
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: Units.longDuration
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+            }
 
     contentItem: Item
     {
@@ -139,8 +171,8 @@ Drawer
         anchors.fill: parent
         hoverEnabled: Kirigami.Settings.isMobile ? false : true
         propagateComposedEvents: true
-        preventStealing: true
-        parent: control.contentItem.parent
+        //        preventStealing: true
+        parent: control.contentItem
 
         onEntered:
         {
@@ -162,7 +194,7 @@ Drawer
             if(Kirigami.Settings.isMobile)
                 return
 
-            if(!privateProperties.isCollapsed  && collapsible  && collapsed  && modal)
+            if(!privateProperties.isCollapsed  && control.collapsible && control.collapsed  && modal)
             {
                 collapse()
             }
@@ -171,10 +203,14 @@ Drawer
 
         onPositionChanged:
         {
+            if(!control.collapsible)
+                return
+
             if (!pressed)
                 return
 
-            if(control.collapsed && Kirigami.Settings.isMobile)
+
+            if(control.collapsible && control.collapsed && Kirigami.Settings.isMobile)
             {
                 if(mouse.x > (control.collapsedSize*2))
                 {
@@ -182,7 +218,27 @@ Drawer
 
                 }else if((mouse.x*2) < control.collapsedSize)
                 {
-                   collapse()
+                    collapse()
+                }
+            }
+        }
+
+        onReleased:
+        {
+            console.log("RELASED AT", mouse.x)
+
+            if(!control.collapsible)
+                return
+
+            if(control.collapsible && control.collapsed && Kirigami.Settings.isMobile)
+            {
+                if(mouse.x > (control.collapsedSize*2))
+                {
+                    expand()
+
+                }else
+                {
+                    collapse()
                 }
             }
         }
@@ -190,7 +246,7 @@ Drawer
 
     function collapse()
     {
-        if(collapsible)
+        if(collapsible && !privateProperties.isCollapsed)
         {
             modal = false
             privateProperties.isCollapsed  = true
@@ -199,7 +255,7 @@ Drawer
 
     function expand()
     {
-        if(collapsible)
+        if(collapsible && privateProperties.isCollapsed)
         {
             modal = true
             privateProperties.isCollapsed = false
