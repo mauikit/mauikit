@@ -23,7 +23,8 @@ Page
     { 
         id: _headBar
         visible: count > 1
-//         width: parent.width	
+        width: control.width
+        height: implictiHeight
         position: ToolBar.Header 
         
         Component
@@ -56,7 +57,8 @@ Page
         id: _footBar
         visible: count
         position: ToolBar.Footer
-//         width: parent.width
+         width: control.width
+         height: implictiHeight
     }   
     
     header: headBar.count && headBar.position === ToolBar.Header ? headBar : undefined

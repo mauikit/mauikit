@@ -62,7 +62,7 @@ Maui.Popup
     {
         id: _closeButton
         iconName: "window-close"
-        Kirigami.Theme.backgroundColor: hovered ?  dangerColor : Kirigami.Theme.complementaryBackgroundColor
+        Kirigami.Theme.backgroundColor: hovered ?  Kirigami.Theme.negativeTextColor : Kirigami.Theme.complementaryBackgroundColor
         Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
 
         anchors

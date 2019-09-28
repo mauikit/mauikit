@@ -27,188 +27,183 @@ import "private"
 
 Drawer
 {
-	id: control
-	
-	position: Qt.Left
-	
-	default property alias content : _content.data
-		
-		property alias hovered : _mouseArea.containsMouse
-		property alias model : _listBrowser.model
-		property alias section : _listBrowser.section
-		property alias currentIndex: _listBrowser.currentIndex
-		
-		property int iconSize : Maui.Style.iconSizes.small
-		property bool showLabels: !collapsed  || !privateProperties.isCollapsed 
-		
-		property bool collapsible: false
-		
-		property bool collapsed: false
-		
-		signal itemClicked(int index)
-		signal itemRightClicked(int index)
-		
-		onCollapsedChanged :
-		{
-			if(!collapsed && modal)
-			{
-				modal = false
-				
-			}
-			
-			if(!modal && !collapsed)
-			{
-				privateProperties.isCollapsed = true
-				
-			}
-		}
-		
-		property int collapsedSize: Maui.Style.iconSizes.medium + (Maui.Style.space.medium*4)
-		property int preferredWidth : Kirigami.Units.gridUnit * 12
-		
-		implicitHeight: ApplicationWindow.height - ApplicationWindow.header.height - ApplicationWindow.footer.height
-		height: ApplicationWindow.height - ApplicationWindow.header.height - ApplicationWindow.footer.height
-		y: ApplicationWindow.header.height
-		
-		//     ApplicationWindow.height -ApplicationWindow.header.height - ApplicationWindow.footer.height
-		implicitWidth: privateProperties.isCollapsed && collapsed && collapsible  ? collapsedSize : preferredWidth
-		visible: true
-		modal: false
-		interactive: Kirigami.Settings.isMobile && modal && !collapsible && !collapsed
-		rightMargin: 100
-		onPositionChanged:
-		{
-			console.log("position changed", position)
-		}
-		
-		onModalChanged:
-		{
-			visible = true
-		}
-		
-		
-		property QtObject privateProperties : QtObject{
-			
-			property bool isCollapsed: control.collapsed		
-			
-		}
-		
-		//     onModalChanged:
-		//     {
-		// 		_mouseArea.containsMouse = true
-		// 		control.focus = true
-		// 	}
-		
-		contentItem: Item
-		{
-			id: _content
-			anchors.fill: parent	
-			data: Maui.ListBrowser
-			{
-				id: _listBrowser
-				anchors.fill: parent
-				Rectangle
-				{
-					anchors.fill: parent
-					z: -1
-					color: Kirigami.Theme.backgroundColor
-				}
-				
-				delegate: Maui.ListDelegate
-				{
-					id: itemDelegate
-					iconSize: control.iconSize
-					labelVisible: control.showLabels   
-					
-					leftPadding:  Maui.Style.space.tiny
-					rightPadding:  Maui.Style.space.tiny
-					
-					Connections
-					{
-						target: itemDelegate
-						onClicked:
-						{
-							control.currentIndex = index
-							control.itemClicked(index)
-						}
-						
-						onRightClicked:
-						{
-							control.currentIndex = index
-							control.itemRightClicked(index)
-						}
-						
-						onPressAndHold:
-						{
-							control.currentIndex = index
-							control.itemRightClicked(index)
-						}
-					}
-				}
-			}
-		}
-		
-		MouseArea
-		{
-			id: _mouseArea	
-			anchors.fill: parent
-// 			hoverEnabled: true
-			hoverEnabled: Kirigami.Settings.isMobile ? false : true
-			propagateComposedEvents: true
-			// 			preventStealing: true
-			// 		parent: ApplicationWindow.overlay.parent
-			parent: control.contentItem.parent
-			
-			onEntered:
-			{
-				// 				if(Kirigami.Setting.isMobile)
-				// 					return
-				
-				if(containsMouse && privateProperties.isCollapsed && collapsed && collapsible && !modal)			
-				{				
-					modal = true
-					privateProperties.isCollapsed = false				
-				}
-				
-				console.log("ENTERED", control.z)
-			}
-			
-			onExited:
-			{
-				// 				if(Kirigami.Settings.isMobile)
-				// 					return
-				
-				if(!privateProperties.isCollapsed  && collapsible  && collapsed  && modal)			
-				{				
-					modal = false
-					privateProperties.isCollapsed  = true	
-				}
-				console.log("EXITED", control.z)			
-			}
-			
-			onPositionChanged: 
-			{
-				if (!pressed)
-				{
-					return;
-				}
-				
-				console.log(mouse.x, mouse.x > control.collapsedSize)
-				
-				if(control.collapsed && Kirigami.Settings.isMobile)
-				{
-					if(mouse.x > control.collapsedSize)
-					{
-						modal = true
-						privateProperties.isCollapsed = false	
-					}else
-					{
-						modal = false
-						privateProperties.isCollapsed  = true	
-					}
-					
-				}
-			}
-		}
+    id: control
+
+    position: Qt.Left
+    implicitHeight: ApplicationWindow.height - ApplicationWindow.header.height - ApplicationWindow.footer.height
+    height: ApplicationWindow.height - ApplicationWindow.header.height - ApplicationWindow.footer.height
+    y: ApplicationWindow.header.height
+
+    //     ApplicationWindow.height -ApplicationWindow.header.height - ApplicationWindow.footer.height
+    implicitWidth: privateProperties.isCollapsed && collapsed && collapsible  ? collapsedSize : preferredWidth
+    visible: true
+    modal: false
+    interactive: Kirigami.Settings.isMobile && modal && !collapsible && !collapsed
+    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside | Popup.CloseOnReleaseOutside
+
+    onModalChanged: visible = true
+
+    default property alias content : _content.data
+
+    property alias hovered : _mouseArea.containsMouse
+    property alias model : _listBrowser.model
+    property alias section : _listBrowser.section
+    property alias currentIndex: _listBrowser.currentIndex
+
+    property int iconSize : Maui.Style.iconSizes.small
+    property bool showLabels: !collapsed  || !privateProperties.isCollapsed
+
+    property bool collapsible: false
+
+    property bool collapsed: false
+
+    property int collapsedSize: Maui.Style.iconSizes.medium + (Maui.Style.space.medium*4)
+    property int preferredWidth : Kirigami.Units.gridUnit * 12
+
+    property QtObject privateProperties : QtObject
+    {
+        property bool isCollapsed: control.collapsed
+    }
+
+    signal itemClicked(int index)
+    signal itemRightClicked(int index)
+
+    onCollapsedChanged :
+    {
+        if(!collapsed && modal)
+        {
+            modal = false
+        }
+
+        if(!modal && !collapsed)
+        {
+            privateProperties.isCollapsed = true
+        }
+    }
+
+    contentItem: Item
+    {
+        id: _content
+        anchors.fill: parent
+        anchors.topMargin: Maui.Style.space.tiny
+        anchors.bottomMargin: Maui.Style.space.tiny
+
+        data: Maui.ListBrowser
+        {
+            id: _listBrowser
+            anchors.fill: parent
+            Rectangle
+            {
+                anchors.fill: parent
+                z: -1
+                color: Kirigami.Theme.backgroundColor
+            }
+
+            delegate: Maui.ListDelegate
+            {
+                id: itemDelegate
+                iconSize: control.iconSize
+                labelVisible: control.showLabels
+
+                leftPadding:  Maui.Style.space.tiny
+                rightPadding:  Maui.Style.space.tiny
+
+                Connections
+                {
+                    target: itemDelegate
+                    onClicked:
+                    {
+                        control.currentIndex = index
+                        control.itemClicked(index)
+                    }
+
+                    onRightClicked:
+                    {
+                        control.currentIndex = index
+                        control.itemRightClicked(index)
+                    }
+
+                    onPressAndHold:
+                    {
+                        control.currentIndex = index
+                        control.itemRightClicked(index)
+                    }
+                }
+            }
+        }
+    }
+
+    MouseArea
+    {
+        id: _mouseArea
+        anchors.fill: parent
+        hoverEnabled: Kirigami.Settings.isMobile ? false : true
+        propagateComposedEvents: true
+        preventStealing: true
+        parent: control.contentItem.parent
+
+        onEntered:
+        {
+            if(Kirigami.Settings.isMobile)
+            {
+                return;
+            }
+
+            if(containsMouse && privateProperties.isCollapsed && collapsed && collapsible && !modal)
+            {
+                expand()
+            }
+
+            console.log("ENTERED", control.z)
+        }
+
+        onExited:
+        {
+            if(Kirigami.Settings.isMobile)
+                return
+
+            if(!privateProperties.isCollapsed  && collapsible  && collapsed  && modal)
+            {
+                collapse()
+            }
+            console.log("EXITED", control.z)
+        }
+
+        onPositionChanged:
+        {
+            if (!pressed)
+                return
+
+            if(control.collapsed && Kirigami.Settings.isMobile)
+            {
+                if(mouse.x > (control.collapsedSize*2))
+                {
+                    expand()
+
+                }else if((mouse.x*2) < control.collapsedSize)
+                {
+                   collapse()
+                }
+            }
+        }
+    }
+
+    function collapse()
+    {
+        if(collapsible)
+        {
+            modal = false
+            privateProperties.isCollapsed  = true
+        }
+    }
+
+    function expand()
+    {
+        if(collapsible)
+        {
+            modal = true
+            privateProperties.isCollapsed = false
+        }
+    }
 }
 
