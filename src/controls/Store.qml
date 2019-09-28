@@ -75,7 +75,7 @@ Maui.Page
 		text: _storeList.page
 		font.bold: true
 		font.weight: Font.Bold
-		font.pointSize: fontSizes.big
+		font.pointSize: Maui.Style.fontSizes.big
 		enabled: _storeList.contentReady
 		
 		anchors.verticalCenter: _previousPageButton.verticalCenter
@@ -232,11 +232,11 @@ Maui.Page
 			{
 				id: delegate
 				label: section
-				labelTxt.font.pointSize: fontSizes.big
+				labelTxt.font.pointSize: Maui.Style.fontSizes.big
 				
 				isSection: true
 				boldLabel: true
-				height: toolBarHeightAlt
+				height: Maui.Style.toolBarHeightAlt
 			}
 		}
 	}
@@ -285,7 +285,7 @@ Maui.Page
 			delegate: Maui.ListDelegate
 			{
 				id: delegate
-				radius: radiusV
+				radius: Maui.Style.radiusV
 				
 				Connections
 				{
@@ -320,7 +320,7 @@ Maui.Page
 		property var currentItem : ({})
 		
 		maxHeight: parent.height
-		maxWidth: unit * 800
+		maxWidth: Maui.Style.unit * 800
 		page.padding: 0
 		
 		acceptButton.text: qsTr("Download")
@@ -439,7 +439,7 @@ Maui.Page
 							color: Kirigami.Theme.textColor
 							font.bold: true
 							font.weight: Font.bold
-							font.pointSize: fontSizes.big
+							font.pointSize: Maui.Style.fontSizes.big
 						}
 					}
 								
@@ -458,7 +458,7 @@ Maui.Page
 				color: Kirigami.Theme.textColor
 				font.bold: true
 				font.weight: Font.bold
-				font.pointSize: fontSizes.big				
+				font.pointSize: Maui.Style.fontSizes.big				
 			}
 			
 			Label
@@ -471,7 +471,7 @@ Maui.Page
 				horizontalAlignment: Qt.AlignHCenter
 				verticalAlignment: Qt.AlignVCenter
 				color: Kirigami.Theme.textColor
-				font.pointSize: fontSizes.small
+				font.pointSize: Maui.Style.fontSizes.small
 				opacity: 0.5
 			}
 			
@@ -487,7 +487,7 @@ Maui.Page
 				horizontalAlignment: Qt.AlignLeft
 				verticalAlignment: Qt.AlignVCenter
 				color: Kirigami.Theme.textColor
-				font.pointSize: fontSizes.small		
+				font.pointSize: Maui.Style.fontSizes.small		
 			}
 			
 			Label
@@ -502,13 +502,13 @@ Maui.Page
 				horizontalAlignment: Qt.AlignLeft
 				verticalAlignment: Qt.AlignVCenter
 				color: Kirigami.Theme.textColor
-				font.pointSize: fontSizes.small				
+				font.pointSize: Maui.Style.fontSizes.small				
 			}
 			
 // 			Label
 // 			{
 // 				Layout.fillWidth: true
-// 				Layout.leftMargin: space.big
+// 				Layout.leftMargin: Maui.Style.space.big
 // 				
 // 				Layout.preferredHeight: rowHeightAlt
 // 				wrapMode: Text.Wrap
@@ -517,7 +517,7 @@ Maui.Page
 // 				horizontalAlignment: Qt.AlignLeft
 // 				verticalAlignment: Qt.AlignVCenter
 // 				color: textColor
-// 				font.pointSize: fontSizes.small				
+// 				font.pointSize: Maui.Style.fontSizes.small				
 // 			}
 			
 			Label
@@ -532,7 +532,7 @@ Maui.Page
 				horizontalAlignment: Qt.AlignLeft
 				verticalAlignment: Qt.AlignVCenter
 				color: Kirigami.Theme.textColor
-				font.pointSize: fontSizes.small				
+				font.pointSize: Maui.Style.fontSizes.small				
 			}
 			
 			Label
@@ -547,7 +547,7 @@ Maui.Page
 				horizontalAlignment: Qt.AlignLeft
 				verticalAlignment: Qt.AlignVCenter
 				color: Kirigami.Theme.textColor
-				font.pointSize: fontSizes.small				
+				font.pointSize: Maui.Style.fontSizes.small				
 			}
 			
 			Label
@@ -561,7 +561,7 @@ Maui.Page
 				color: Kirigami.Theme.textColor
 				wrapMode: Text.Wrap
 				elide: Qt.ElideRight
-				font.pointSize: fontSizes.default
+				font.pointSize: Maui.Style.fontSizes.default
 			}
 			
 		}

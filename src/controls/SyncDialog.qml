@@ -35,7 +35,7 @@ Maui.Dialog
 	property alias userField: userField
 	property alias passwordField: passwordField
 	
-    maxHeight: unit * 300
+    maxHeight: Maui.Style.unit * 300
     maxWidth: maxHeight	
 	
 

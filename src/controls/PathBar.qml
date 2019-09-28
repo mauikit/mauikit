@@ -115,9 +115,9 @@ Item
 			Item
 			{
 				Layout.fillHeight: true
-				Layout.leftMargin: space.small
-				Layout.rightMargin: space.small
-				width: iconSize
+				Layout.leftMargin: Maui.Style.space.small
+				Layout.rightMargin: Maui.Style.space.small
+				width: Maui.Style.iconSizes.medium
 				
 				ToolButton
 				{
@@ -148,9 +148,9 @@ Item
 			Item
 			{
 				Layout.fillHeight: true
-				Layout.leftMargin: space.small
-				Layout.rightMargin: space.small
-				width: iconSize
+				Layout.leftMargin: Maui.Style.space.small
+				Layout.rightMargin: Maui.Style.space.small
+				width: Maui.Style.iconSizes.medium
 				
 				ToolButton
 				{
@@ -188,7 +188,7 @@ Item
 				delegate: PathBarDelegate
 				{
 					id: delegate
-					height: control.height - (unit*2)
+					height: control.height - (Maui.Style.unit*2)
 					width: Math.max(Maui.Style.iconSizes.medium * 2, implicitWidth)
 					Connections
 					{
@@ -212,9 +212,9 @@ Item
 			Item
 			{
 				Layout.fillHeight: true
-				Layout.leftMargin: space.small
-				Layout.rightMargin: space.small
-				width: iconSize
+				Layout.leftMargin: Maui.Style.space.small
+				Layout.rightMargin: Maui.Style.space.small
+				width: Maui.Style.iconSizes.medium
 				ToolButton
 				{
 					anchors.centerIn: parent

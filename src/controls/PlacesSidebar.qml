@@ -13,7 +13,6 @@ Maui.SideBar
 	
 	signal placeClicked (string path)
 	focus: true
-	clip: true
 	model: placesModel
 	section.property: "type"
 	section.criteria: ViewSection.FullString
@@ -21,24 +20,24 @@ Maui.SideBar
 	{
 		id: delegate
 		label: section
-		labelTxt.font.pointSize: fontSizes.big
+		labelTxt.font.pointSize: Maui.Style.fontSizes.big
 		
 		isSection: true
 		boldLabel: true
-		height: toolBarHeightAlt
+		height: Maui.Style.toolBarHeightAlt
 	}
 	
-// 	onItemClicked:
-// 	{
-// 		var item = list.get(index)
-// 		var path = item.path
-// 		
-// 		placesList.clearBadgeCount(index)	
-// 			
-// 		placeClicked(path)
-// 	}
-// 	
-// 	onItemRightClicked: _menu.popup()
+	onItemClicked:
+	{
+		var item = list.get(index)
+		var path = item.path
+		
+		placesList.clearBadgeCount(index)	
+			
+		placeClicked(path)
+	}
+	
+	onItemRightClicked: _menu.popup()
 	
 	Menu
 	{
@@ -58,7 +57,7 @@ Maui.SideBar
 		MenuItem
 		{
 			text: qsTr("Remove")
-			Kirigami.Theme.textColor: dangerColor
+			Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
 			onTriggered: list.removePlace(control.currentIndex)
 		}
 	}

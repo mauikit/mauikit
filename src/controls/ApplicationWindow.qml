@@ -19,6 +19,7 @@
 
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import QtQuick.Window 2.3
@@ -35,9 +36,12 @@ Kirigami.AbstractApplicationWindow
 {
 	id: root
 	visible: true
-	width: Screen.width * (isMobile ? 1 : 0.4)
-	height: Screen.height * (isMobile ? 1 : 0.4)	
+	width: Screen.width * (Kirigami.Settings.isMobile ? 1 : 0.4)
+	height: Screen.height * (Kirigami.Settings.isMobile ? 1 : 0.4)	
+	contentItem.anchors.leftMargin: (root.sideBar.collapsible && root.sideBar.modal && root.sideBar.collapsed) ? root.sideBar.collapsedSize : (root.sideBar.modal ? 0 : root.sideBar.width)
+
 	property bool showAccounts : true
+	property Maui.SideBar sideBar 
 	
 	/***************************************************/
 	/******************** ALIASES *********************/
@@ -55,30 +59,16 @@ Kirigami.AbstractApplicationWindow
 	property var currentAccount: Maui.App.accounts.currentAccount
 	property alias notifyDialog: _notify	
 	
-	//redefines here as here we can know a pointer to PageRow
+	property alias searchButton : searchBtn
+	property alias menuButton : menuBtn
+	
 	wideScreen: isWide	
 	
 	/***************************************************/
 	/*********************** UI ***********************/
 	/*************************************************/
 	
-	property bool isWide : root.width >= Kirigami.Units.gridUnit * 30
-	
-	property int radiusV : Maui.Style.radiusV
-	property int iconSize : Maui.Style.iconSizes.medium * (isMobile ? 0.95 : 1)
-	
-	readonly property int unit : Maui.Style.unit
-	readonly property int rowHeight: Maui.Style.rowHeight
-	readonly property int rowHeightAlt: Maui.Style.rowHeightAlt
-	
-	readonly property int toolBarHeight: Maui.Style.toolBarHeight
-	readonly property int toolBarHeightAlt: Maui.Style.toolBarHeightAlt
-	
-	readonly property int contentMargins: Maui.Style.contentMargins
-	readonly property var fontSizes: Maui.Style.fontSizes
-	readonly property var space : Maui.Style.space
-	readonly property var iconSizes : Maui.Style.iconSizes
-	
+	property bool isWide : root.width >= Kirigami.Units.gridUnit * 30	
 	property string colorSchemeName : Qt.application.name
 	
 	/***************************************************/
@@ -86,10 +76,6 @@ Kirigami.AbstractApplicationWindow
 	/*************************************************/
 	property color headBarBGColor: Kirigami.Theme.backgroundColor
 	property color headBarFGColor: Kirigami.Theme.textColor	
-	property color warningColor : Maui.Style.warningColor
-	property color dangerColor : Maui.Style.dangerColor
-	property color infoColor : Maui.Style.infoColor
-	property color suggestedColor : Maui.Style.suggestedColor
 
 	
 	/***************************************************/
@@ -101,13 +87,6 @@ Kirigami.AbstractApplicationWindow
 	
 	readonly property real screenWidth : Screen.width
 	readonly property real screenHeight : Screen.height
-	
-	/***************************************************/
-	/********************* PROPS **********************/
-	/*************************************************/ 
-	
-	property alias searchButton : searchBtn
-	property alias menuButton : menuBtn
 	
 	/***************************************************/
 	/******************** SIGNALS *********************/
@@ -187,7 +166,7 @@ Kirigami.AbstractApplicationWindow
 			{
 				
 				menuButtonClicked()
-				mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x , parent.height+ space.medium)
+				mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x , parent.height+ Maui.Style.space.medium)
 			}			
 			
 			Menu
@@ -195,18 +174,18 @@ Kirigami.AbstractApplicationWindow
 				id: mainMenu
 				modal: true
 				z: 999
-				width: unit * 200
+				width: Maui.Style.unit * 200
 				
 				Item
 				{
-					height: _accountCombobox.visible ? _accountCombobox.implicitHeight + space.big: 0
+					height: _accountCombobox.visible ? _accountCombobox.implicitHeight + Maui.Style.space.big: 0
 					
 					anchors
 					{
 						left: parent.left
 						right: parent.right
 						top: parent.top
-						margins: space.medium
+						margins: Maui.Style.space.medium
 					}
 					
 					ComboBox
@@ -331,8 +310,8 @@ Kirigami.AbstractApplicationWindow
 		verticalAlignment: Qt.AlignTop
 		defaultButtons: false			
 			
-			maxHeight: Math.max(unit * 120, (_notifyLayout.implicitHeight))
-			maxWidth: isMobile ? parent.width * 0.9 : unit * 500
+			maxHeight: Math.max(Maui.Style.unit * 120, (_notifyLayout.implicitHeight))
+			maxWidth: Kirigami.Settings.isMobile ? parent.width * 0.9 : Maui.Style.unit * 500
 			
 			Timer 
 			{
@@ -395,7 +374,7 @@ Kirigami.AbstractApplicationWindow
 							Layout.fillWidth: true
 							font.weight: Font.Bold
 							font.bold: true
-							font.pointSize: fontSizes.big
+							font.pointSize:Maui.Style.fontSizes.big
 							// 						color: _notify.colorScheme.textColor
 							elide: Qt.ElideRight
 							wrapMode: Text.Wrap
@@ -406,7 +385,7 @@ Kirigami.AbstractApplicationWindow
 							id: _notifyBody
 							Layout.fillHeight: true
 							Layout.fillWidth: true
-							font.pointSize: fontSizes.default	
+							font.pointSize:Maui.Style.fontSizes.default	
 							// 						color: _notify.colorScheme.textColor
 							elide: Qt.ElideRight
 							wrapMode: Text.Wrap

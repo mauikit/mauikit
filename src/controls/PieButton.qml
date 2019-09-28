@@ -43,15 +43,15 @@ ToolButton
 	{
 		id: popup
 		height: barHeight
-		implicitWidth: content.middleLayout.implicitWidth + space.big + space.small
+		implicitWidth: content.middleLayout.implicitWidth + Maui.Style.space.big + Maui.Style.space.small
 		width: implicitWidth > maxWidth ? maxWidth : (content.middleLayout.implicitWidth > ApplicationWindow.overlay.width ? ApplicationWindow.overlay.width  : implicitWidth)		
 		padding: 0
 		margins: 0
-		x: alignment === Qt.AlignLeft ? (control.x - width) - space.big : (control.x + control.width) + space.big
+		x: alignment === Qt.AlignLeft ? (control.x - width) - Maui.Style.space.big : (control.x + control.width) + Maui.Style.space.big
 		y:  parent.height / 2 - height / 2
 		background: Rectangle
 		{
-			radius: radiusV
+			radius: Maui.Style.radiusV
 			color: Kirigami.Theme.backgroundColor
 			border.color: Kirigami.Theme.borderColor		
 		}
@@ -77,13 +77,13 @@ ToolButton
 			id: content
 			anchors.fill: parent
 			implicitHeight: parent.height
-			spacing: space.big
+			spacing: Maui.Style.space.big
 // 			Kirigami.Theme.backgroundColor: "transparent"
 			
 			background: Rectangle
 			{
 				color: Kirigami.Theme.backgroundColor
-				radius: radiusV
+				radius: Maui.Style.radiusV
 				border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
 				
 			}

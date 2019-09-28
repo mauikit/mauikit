@@ -71,7 +71,7 @@ Rectangle
             text: control.text
             font.weight: Font.Bold
             font.bold: true
-            font.pointSize: fontSizes.default
+            font.pointSize: Maui.Style.fontSizes.default
             color: Kirigami.Theme.textColor
             verticalAlignment: Qt.AlignVCenter
             horizontalAlignment: Qt.AlignHCenter

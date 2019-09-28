@@ -641,7 +641,7 @@ Maui.Page
                 TabButton
                 {
                     id: _tabButton
-                    readonly property int minTabWidth: 150 * unit
+                    readonly property int minTabWidth: 150 * Maui.Style.unit
                     implicitWidth: control.width / _repeater.count
                     implicitHeight: Maui.Style.rowHeight
                     checked: index === _browserList.currentIndex
@@ -692,7 +692,7 @@ Maui.Page
                         Label
                         {
                             text: tabsObjectModel.get(index).currentFMList.pathName
-                            font.pointSize: fontSizes.default
+                            font.pointSize: Maui.Style.fontSizes.default
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             Layout.margins: Maui.Style.space.small
@@ -772,7 +772,7 @@ Maui.Page
             id: _progressBar
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignBottom
-            Layout.preferredHeight: visible ? iconSizes.medium : 0
+            Layout.preferredHeight: visible ? Maui.Style.iconSizes.medium : 0
             visible: value > 0
         }
     }

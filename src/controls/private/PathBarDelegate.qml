@@ -37,7 +37,7 @@ ItemDelegate
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment:  Qt.AlignVCenter
         elide: Qt.ElideRight
-        font.pointSize: fontSizes.default
+        font.pointSize: Maui.Style.fontSizes.default
         color: labelColor
     }
     

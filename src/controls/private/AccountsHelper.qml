@@ -9,7 +9,7 @@ Maui.Dialog
 {	
 	id: control
 	
-	maxHeight: 300* unit
+	maxHeight: 300* Maui.Style.unit
 	maxWidth: maxHeight
 	
 	property alias model : _syncingModel
@@ -38,7 +38,7 @@ Maui.Dialog
 	{
 		id: _removeDialog
 		
-		maxWidth: unit * 400
+		maxWidth: Maui.Style.unit * 400
 		title: qsTr("Remove account?")
 		message: qsTr("Are you sure you want to remove this account?")
 		
@@ -73,7 +73,7 @@ Maui.Dialog
 		MenuItem
 		{
 			text: qsTr("Remove...")
-			Kirigami.Theme.textColor: dangerColor
+			Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
 			
 			onTriggered: _removeDialog.open()
 		}
@@ -89,7 +89,7 @@ Maui.Dialog
 		{
 			id: delegate
 			label: model.label
-			radius: radiusV
+			radius: Maui.Style.radiusV
 			Connections
 			{
 				target: delegate

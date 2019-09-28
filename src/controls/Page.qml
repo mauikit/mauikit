@@ -23,7 +23,7 @@ Page
     { 
         id: _headBar
         visible: count > 1
-        width: control.width	
+//         width: parent.width	
         position: ToolBar.Header 
         
         Component
@@ -36,7 +36,7 @@ Page
                 font.bold : false
                 font.weight: Font.Bold
                 color : Kirigami.Theme.textColor
-                font.pointSize: fontSizes.big
+                font.pointSize: Maui.Style.fontSizes.big
                 horizontalAlignment : Text.AlignHCenter
                 verticalAlignment :  Text.AlignVCenter
                 
@@ -56,7 +56,7 @@ Page
         id: _footBar
         visible: count
         position: ToolBar.Footer
-        width: control.width
+//         width: parent.width
     }   
     
     header: headBar.count && headBar.position === ToolBar.Header ? headBar : undefined

@@ -83,7 +83,7 @@ z:  modal ? ApplicationWindow.overlay.z + 1  : ApplicationWindow.z
 // 		{
 // 			parent: control.handle
 // 			anchors.fill: parent
-// 			anchors.margins: space.huge
+// 			anchors.margins: Maui.Style.space.huge
 // 			
 // 			DropShadow 
 // 			{
@@ -102,9 +102,9 @@ z:  modal ? ApplicationWindow.overlay.z + 1  : ApplicationWindow.z
 // 				anchors.centerIn: parent
 // 				
 // 				color: control.handle.pressed ? control.colorScheme.highlightColor : control.colorScheme.accentColor
-// 				width: iconSizes.medium + space.medium * 2
+// 				width: iconSizes.medium + Maui.Style.space.medium * 2
 // 				height: width
-// 				radius: radiusV
+// 				radius: Maui.Style.radiusV
 // 				
 // 				Maui.ToolButton
 // 				{

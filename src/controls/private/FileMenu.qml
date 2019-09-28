@@ -7,7 +7,7 @@ import org.kde.kirigami 2.2 as Kirigami
 Menu
 {
 	id: control
-	implicitWidth: colorBar.implicitWidth + space.big
+	implicitWidth: colorBar.implicitWidth + Maui.Style.space.big
 	
     property var item : ({})
 	property int index : -1

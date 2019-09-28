@@ -138,7 +138,7 @@ ItemDelegate
 							anchors.centerIn: parent
 							width: img.sourceSize.width
 							height: img.sourceSize.height
-							radius: radiusV
+							radius: Maui.Style.radiusV
 						}
 					}
 				}
@@ -192,7 +192,7 @@ ItemDelegate
 					anchors.fill: parent
 					
 					z: -1
-					radius: radiusV
+					radius: Maui.Style.radiusV
 					color: hightlightedColor
 					opacity: hovered ? 0.25 : 0.5
 				}
@@ -310,14 +310,14 @@ ItemDelegate
 			id: detailsInfoLoader
 			sourceComponent: isDetails && showDetailsInfo ? detailsComponent : undefined
 			Layout.fillWidth: isDetails && showDetailsInfo
-			Layout.maximumHeight: isDetails ? (showDetailsInfo ? parent.height :  fontSizes.default * 5) : undefined
+			Layout.maximumHeight: isDetails ? (showDetailsInfo ? parent.height :  Maui.Style.fontSizes.default * 5) : undefined
 			Layout.minimumHeight: isDetails ? ( showDetailsInfo ? parent.height :  control.height -  Maui.Style.space.tiny) : undefined
 			Layout.preferredHeight:  isDetails ? (showDetailsInfo ? parent.height : control.height -  Maui.Style.space.tiny) : undefined
 			Layout.maximumWidth: control.width * (isMobile ? 0.5 : 0.3)
 			Layout.row:  isDetails && showDetailsInfo ? 1 : 2
 			Layout.column: isDetails && showDetailsInfo ? 3 : 0
 			Layout.rightMargin: Maui.Style.space.medium
-			// 			Layout.leftMargin: isDetails ? space.medium : 0
+			// 			Layout.leftMargin: isDetails ? Maui.Style.space.medium : 0
 		}
 	}
 }

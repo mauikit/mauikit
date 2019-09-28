@@ -52,8 +52,8 @@ Maui.Popup
 
     clip: false
 
-    maxWidth: unit * 300
-    maxHeight: (_pageContent.implicitHeight * 1.2) + page.footBar.height + space.huge + page.padding
+    maxWidth: Maui.Style.unit * 300
+    maxHeight: (_pageContent.implicitHeight * 1.2) + page.footBar.height + Maui.Style.space.huge + page.padding
 
     widthHint: 0.9
     heightHint: 0.9
@@ -89,12 +89,12 @@ Maui.Popup
         padding: Maui.Style.space.medium
         // 		footBar.dropShadow: false
         // 		footBar.drawBorder: false
-        // 		margins: space.big
+        // 		margins: Maui.Style.space.big
         // 		headBarExit: false
         // 		colorScheme.backgroundColor : control.colorScheme.backgroundColor
         // 		footBar.visible: defaultButtons || footBar.count > 1
         // 		footBar.colorScheme.backgroundColor: colorScheme.backgroundColor
-        // 		footBar.margins: space.big
+        // 		footBar.margins: Maui.Style.space.big
         footBar.visible: control.defaultButtons || footBar.count > 1
         property QtObject _rejectButton : Button
         {
@@ -123,7 +123,7 @@ Maui.Popup
             id: _defaultButtonsComponent
             Row
             {
-                spacing: space.big
+                spacing: Maui.Style.space.big
                 children: [_rejectButton, _acceptButton]
             }
         }
@@ -136,7 +136,7 @@ Maui.Popup
         {
             id: _pageContent
             anchors.fill: parent
-            spacing: space.medium
+            spacing: Maui.Style.space.medium
 
             Label
             {
@@ -152,7 +152,7 @@ Maui.Popup
                 text: title
                 font.weight: Font.Thin
                 font.bold: true
-                font.pointSize: fontSizes.huge
+                font.pointSize:Maui.Style.fontSizes.huge
                 elide: Qt.ElideRight
                 wrapMode: Text.Wrap
                 //                         elide: Qt.ElideRight
@@ -179,7 +179,7 @@ Maui.Popup
                     text: message
                     textFormat : TextEdit.AutoText
                     color: Kirigami.Theme.textColor
-                    font.pointSize: fontSizes.default
+                    font.pointSize:Maui.Style.fontSizes.default
                     wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
                     elide: Text.ElideLeft
                 }

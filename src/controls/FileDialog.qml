@@ -26,7 +26,7 @@ import QtQuick.Layouts 1.3
 Maui.Dialog
 {
 	id: control
-	maxHeight: Kirigami.Settings.isMobile ? parent.height * 0.95 : unit * 500
+	maxHeight: Kirigami.Settings.isMobile ? parent.height * 0.95 : Maui.Style.unit * 500
 	maxWidth: Maui.Style.unit * 700
 	page.padding: 0
 	
@@ -92,7 +92,7 @@ Maui.Dialog
 		rightPadding: leftPadding
 		topPadding: leftPadding
 		bottomPadding: leftPadding
-		headBar.implicitHeight: toolBarHeight + space.medium
+		headBar.implicitHeight: Maui.Style.toolBarHeight + Maui.Style.space.medium
 		Component
 		{
 			id: _pathBarComponent
@@ -130,7 +130,7 @@ Maui.Dialog
 				background: Rectangle
 				{
 					border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-					radius: radiusV
+					radius: Maui.Style.radiusV
 					color: Kirigami.Theme.backgroundColor
 				}
 			}
@@ -140,7 +140,7 @@ Maui.Dialog
 		{
 			id: _pathBarLoader
 			Layout.fillWidth: true
-			Layout.margins: space.medium
+			Layout.margins: Maui.Style.space.medium
 			height: Maui.Style.iconSizes.big
 			Loader
 			{

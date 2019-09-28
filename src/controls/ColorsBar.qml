@@ -1,12 +1,13 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import org.kde.mauikit 1.0 as Maui
 
 Row
 {
     signal colorPicked(string color)
     anchors.verticalCenter: parent.verticalCenter
-    spacing: space.medium
+    spacing: Maui.Style.space.medium
     property string currentColor
     property int size : Maui.Style.iconSizes.medium
 
@@ -17,7 +18,7 @@ Row
             anchors.verticalCenter: parent.verticalCenter
             height: size
             width: height
-            radius: radiusV
+            radius: Maui.Style.radiusV
             border.color: Qt.darker(color, 1.7)
 
             MouseArea
@@ -38,7 +39,7 @@ Row
             anchors.verticalCenter: parent.verticalCenter
             height: size
             width: height
-            radius: radiusV
+            radius: Maui.Style.radiusV
             border.color: Qt.darker(color, 1.7)
 
             MouseArea
@@ -59,7 +60,7 @@ Row
             anchors.verticalCenter: parent.verticalCenter
             height: size
             width: height
-            radius: radiusV
+            radius: Maui.Style.radiusV
             border.color: Qt.darker(color, 1.7)
 
             MouseArea
@@ -80,7 +81,7 @@ Row
             anchors.verticalCenter: parent.verticalCenter
             height: size
             width: height
-            radius: radiusV
+            radius: Maui.Style.radiusV
             border.color: Qt.darker(color, 1.7)
 
             MouseArea
@@ -103,7 +104,7 @@ Row
             anchors.verticalCenter: parent.verticalCenter
             height: size
             width: height
-            radius: radiusV
+            radius: Maui.Style.radiusV
             border.color: Qt.darker(color, 1.7)
 
             MouseArea
@@ -132,7 +133,7 @@ Row
 //            anchors.centerIn: parent
 //            height: size
 //            width: height
-//            radius: radiusV
+//            radius: Maui.Style.radiusV
 //            border.color: Qt.darker(color, 1.7)
 
 //            MouseArea
@@ -160,7 +161,7 @@ Row
 //            anchors.centerIn: parent
 //            height: size
 //            width: height
-//            radius: radiusV
+//            radius: Maui.Style.radiusV
 //            border.color: Qt.darker(color, 1.7)
 
 //            MouseArea
@@ -188,7 +189,7 @@ Row
 //            anchors.centerIn: parent
 //            height: size
 //            width: height
-//            radius: radiusV
+//            radius: Maui.Style.radiusV
 //            border.color: Qt.darker(color, 1.7)
 
 //            MouseArea

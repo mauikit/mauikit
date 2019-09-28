@@ -22,6 +22,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.1
 import org.kde.kirigami 2.7 as Kirigami
+import org.kde.mauikit 1.0 as Maui
 import QtGraphicalEffects 1.0
 import "private"
 
@@ -48,9 +49,9 @@ Popup
     y: if(verticalAlignment === Qt.AlignVCenter) 
     parent.height / 2 - height / 2
     else if(verticalAlignment === Qt.AlignTop)
-        (height + space.huge)
+		(height + Maui.Style.space.huge)
         else if(verticalAlignment === Qt.AlignBottom)
-            (parent.height) - (height + space.huge)
+			(parent.height) - (height + Maui.Style.space.huge)
             else
                 parent.height / 2 - height / 2
                 
@@ -61,8 +62,8 @@ Popup
                 focus: true
                 clip: true
                 
-                margins: unit 
-                padding: unit
+                margins: Maui.Style.unit 
+                padding: Maui.Style.unit 
                 
                 //     topPadding: popupBackground.radius
                 //     bottomPadding: popupBackground.radius

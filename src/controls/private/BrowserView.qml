@@ -339,11 +339,11 @@ Maui.Page
 						{
 							id: delegate
 							label: section
-							labelTxt.font.pointSize: fontSizes.big
+							labelTxt.font.pointSize: Maui.Style.fontSizes.big
 							
 							isSection: true
 							boldLabel: true
-							height: toolBarHeightAlt
+							height: Maui.Style.toolBarHeightAlt
 						}
 					}
 				}				

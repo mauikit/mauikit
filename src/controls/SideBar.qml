@@ -44,6 +44,10 @@ Drawer
 		property bool collapsible: false
 		
 		property bool collapsed: false
+		
+		signal itemClicked(int index)
+		signal itemRightClicked(int index)
+		
 		onCollapsedChanged :
 		{
 			if(!collapsed && modal)
@@ -62,10 +66,15 @@ Drawer
 		property int collapsedSize: Maui.Style.iconSizes.medium + (Maui.Style.space.medium*4)
 		property int preferredWidth : Kirigami.Units.gridUnit * 12
 		
+		implicitHeight: ApplicationWindow.height - ApplicationWindow.header.height - ApplicationWindow.footer.height
+		height: ApplicationWindow.height - ApplicationWindow.header.height - ApplicationWindow.footer.height
+		y: ApplicationWindow.header.height
+		
+		//     ApplicationWindow.height -ApplicationWindow.header.height - ApplicationWindow.footer.height
 		implicitWidth: privateProperties.isCollapsed && collapsed && collapsible  ? collapsedSize : preferredWidth
 		visible: true
 		modal: false
-		interactive: false
+		interactive: Kirigami.Settings.isMobile && modal && !collapsible && !collapsed
 		rightMargin: 100
 		onPositionChanged:
 		{
@@ -120,19 +129,19 @@ Drawer
 						onClicked:
 						{
 							control.currentIndex = index
-							itemClicked(index)
+							control.itemClicked(index)
 						}
 						
 						onRightClicked:
 						{
 							control.currentIndex = index
-							itemRightClicked(index)
+							control.itemRightClicked(index)
 						}
 						
 						onPressAndHold:
 						{
 							control.currentIndex = index
-							itemRightClicked(index)
+							control.itemRightClicked(index)
 						}
 					}
 				}
@@ -143,40 +152,38 @@ Drawer
 		{
 			id: _mouseArea	
 			anchors.fill: parent
-			hoverEnabled: true
-			propagateComposedEvents: false
-			preventStealing: true
+// 			hoverEnabled: true
+			hoverEnabled: Kirigami.Settings.isMobile ? false : true
+			propagateComposedEvents: true
+			// 			preventStealing: true
 			// 		parent: ApplicationWindow.overlay.parent
-			z: 10000000
-			onClicked: 
-			{
-				console.log("clickedddddddd")
-			}
+			parent: control.contentItem.parent
+			
 			onEntered:
 			{
-// 				if(Kirigami.Setting.isMobile)
-// 					return
-					
-					if(containsMouse && privateProperties.isCollapsed && collapsed && collapsible && !modal)			
-					{				
-						modal = true
-						privateProperties.isCollapsed = false				
-					}
-					
-					console.log("ENTERED", control.z)
+				// 				if(Kirigami.Setting.isMobile)
+				// 					return
+				
+				if(containsMouse && privateProperties.isCollapsed && collapsed && collapsible && !modal)			
+				{				
+					modal = true
+					privateProperties.isCollapsed = false				
+				}
+				
+				console.log("ENTERED", control.z)
 			}
 			
 			onExited:
 			{
-// 				if(Kirigami.Settings.isMobile)
-// 					return
-					
-					if(!privateProperties.isCollapsed  && collapsible  && collapsed  && modal)			
-					{				
-						modal = false
-						privateProperties.isCollapsed  = true	
-					}
-					console.log("EXITED", control.z)			
+				// 				if(Kirigami.Settings.isMobile)
+				// 					return
+				
+				if(!privateProperties.isCollapsed  && collapsible  && collapsed  && modal)			
+				{				
+					modal = false
+					privateProperties.isCollapsed  = true	
+				}
+				console.log("EXITED", control.z)			
 			}
 			
 			onPositionChanged: 
@@ -188,7 +195,7 @@ Drawer
 				
 				console.log(mouse.x, mouse.x > control.collapsedSize)
 				
-				if(control.collapsed)
+				if(control.collapsed && Kirigami.Settings.isMobile)
 				{
 					if(mouse.x > control.collapsedSize)
 					{
@@ -201,9 +208,7 @@ Drawer
 					}
 					
 				}
-			}		
-			
-		}	
-		
+			}
+		}
 }
 

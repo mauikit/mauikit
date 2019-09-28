@@ -64,8 +64,8 @@ ToolBar
 	// 	{
 	// 		id: headBarBG
 	// 		color: colorScheme.backgroundColor
-	// 		implicitHeight: toolBarHeightAlt  
-	// 		radius: floating ? radiusV : 0   
+	// 		implicitHeight: Maui.Style.toolBarHeightAlt  
+	// 		radius: floating ? Maui.Style.radiusV : 0   
 	// 		border.color: floating ? colorScheme.borderColor : "transparent"
 	// 		
 	// 		SequentialAnimation on radius
@@ -77,7 +77,7 @@ ToolBar
 	// 		{
 	// 			visible: drawBorder
 	// 			color: colorScheme.borderColor
-	// 			height: unit
+	// 			height: Maui.Style.unit
 	// 			anchors
 	// 			{
 	// 				left: parent.left
@@ -92,7 +92,7 @@ ToolBar
 	// 		{
 	// 			anchors.fill: headBarBG
 	// 			horizontalOffset: 0
-	// 			verticalOffset:  unit * (altToolBars ? -1 : 1)
+	// 			verticalOffset:  Maui.Style.unit * (altToolBars ? -1 : 1)
 	// 			radius: 8
 	// 			samples: 25
 	// 			color: Qt.darker(colorScheme.backgroundColor, 1.4)
