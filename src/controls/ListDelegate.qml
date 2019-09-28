@@ -52,6 +52,7 @@ Maui.ListItemDelegate
 			Item
 			{
 				Layout.fillHeight: true
+				Layout.fillWidth: !labelVisible
 				Layout.preferredWidth: model.icon ? parent.height : 0
 				visible: model.icon !== typeof("undefined")
 				
@@ -89,7 +90,7 @@ Maui.ListItemDelegate
 			{
 				visible: typeof model.count !== "undefined" && model.count && model.count > 0 && control.labelVisible
 				Layout.fillHeight: true
-				Layout.preferredWidth: Math.max(Maui.Style.iconSizes.big + Maui.Style.space.small, _badge.implicitWidth)
+				Layout.preferredWidth: visible ? Math.max(Maui.Style.iconSizes.big + Maui.Style.space.small, _badge.implicitWidth) : 0
 				Layout.alignment: Qt.AlignRight
 				Maui.Badge
 				{

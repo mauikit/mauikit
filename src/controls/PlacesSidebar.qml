@@ -28,17 +28,17 @@ Maui.SideBar
 		height: toolBarHeightAlt
 	}
 	
-	onItemClicked:
-	{
-		var item = list.get(index)
-		var path = item.path
-		
-		placesList.clearBadgeCount(index)	
-			
-		placeClicked(path)
-	}
-	
-	onItemRightClicked: _menu.popup()
+// 	onItemClicked:
+// 	{
+// 		var item = list.get(index)
+// 		var path = item.path
+// 		
+// 		placesList.clearBadgeCount(index)	
+// 			
+// 		placeClicked(path)
+// 	}
+// 	
+// 	onItemRightClicked: _menu.popup()
 	
 	Menu
 	{
