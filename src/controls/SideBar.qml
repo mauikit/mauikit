@@ -242,7 +242,7 @@ Drawer
             startX = mouse.x
             console.log("PRESSED SIDEBAR", !(Kirigami.Settings.isMobile && !modal && !collapsed && !privateProperties.isCollapsed))
             console.log(Kirigami.Settings.isMobile , modal , collapsed , privateProperties.isCollapsed)
-            mouse.accepted = !(Kirigami.Settings.isMobile && !modal && !collapsed && !privateProperties.isCollapsed)
+            mouse.accepted = !(!modal && !collapsed && !privateProperties.isCollapsed) && Kirigami.Settings.isMobile
         }
 
         onReleased:
