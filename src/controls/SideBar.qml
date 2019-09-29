@@ -88,7 +88,7 @@ Drawer
 			NumberAnimation
 			{
 				duration: Kirigami.Units.longDuration
-				easing.type: Easing.OutInQuad
+                easing.type: Easing.InOutQuad
 			}
 		}
 		

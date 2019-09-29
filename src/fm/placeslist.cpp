@@ -258,10 +258,15 @@ void PlacesList::addPlace(const QString& path)
 
 void PlacesList::removePlace(const int& index)
 {
+    if(index >= this->list.size() || index < 0)
+        return;
+
     emit this->preItemRemoved(index);
 	
 	#ifdef Q_OS_ANDROID
-	//do android stuff until cmake works with android 
+    auto bookmarks = UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, "FileManager").toStringList();
+    bookmarks.removeOne(this->list.at(index)[FMH::MODEL_KEY::PATH]);
+    UTIL::saveSettings("BOOKMARKS", bookmarks, "PREFERENCES", "FileManager");
 	#else
 	this->model->removePlace(this->model->index(index, 0));	
 	#endif
