@@ -217,7 +217,7 @@ Drawer
 
             if(mouse.y !== startY && mouse.x < (startX + Maui.Style.space.big))
             {
-                if(!_listBrowser.listView.atYEnd || !_listBrowser.listView.atYBegin)
+                if(!_listBrowser.listView.contentHeight || !_listBrowser.listView.atYBegin)
                     _listBrowser.listView.flick(0,(mouse.y -startY) * 2 )
             }
 
