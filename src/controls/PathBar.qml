@@ -84,51 +84,36 @@ Item
 	
 	Component
 	{
-		id: _pathEntryComponent
-		RowLayout
+		id: _pathEntryComponent		
+		
+		Maui.TextField
 		{
-			anchors.fill:  parent
-			
-			Maui.TextField
+			id: entry
+			text: control.url
+			anchors.fill:  parent			
+			anchors.leftMargin: contentMargins
+			Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
+			Kirigami.Theme.backgroundColor: "transparent"
+			// 				Kirigami.Theme.borderColor: "transparent"
+			horizontalAlignment: Qt.AlignLeft
+			onAccepted:
 			{
-				id: entry
-				text: control.url
-				Layout.fillHeight: true
-				Layout.fillWidth: true
-				Layout.leftMargin: contentMargins
-				Layout.alignment: Qt.AlignVCenter
-				Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
-				Kirigami.Theme.backgroundColor: "transparent"
-// 				Kirigami.Theme.borderColor: "transparent"
-				horizontalAlignment: Qt.AlignLeft
-				onAccepted:
-				{
-					pathChanged(text)
-					showEntryBar()
-				}
-				background: Rectangle
-				{
-					color: "transparent"
-				}
+				pathChanged(text)
+				showEntryBar()
+			}
+			background: Rectangle
+			{
+				color: "transparent"
 			}
 			
-			Item
+			actions.data: ToolButton
 			{
-				Layout.fillHeight: true
-				Layout.leftMargin: Maui.Style.space.small
-				Layout.rightMargin: Maui.Style.space.small
-				width: Maui.Style.iconSizes.medium
-				
-				ToolButton
+				icon.name: "go-next"
+				icon.color: control.Kirigami.Theme.textColor
+				onClicked:
 				{
-					anchors.centerIn: parent
-					icon.name: "go-next"
-					icon.color: control.Kirigami.Theme.textColor
-					onClicked:
-					{
-						pathChanged(entry.text)
-						showEntryBar()
-					}
+					pathChanged(entry.text)
+					showEntryBar()
 				}
 			}
 		}
@@ -150,7 +135,7 @@ Item
 				Layout.fillHeight: true
 				Layout.leftMargin: Maui.Style.space.small
 				Layout.rightMargin: Maui.Style.space.small
-				width: Maui.Style.iconSizes.medium
+				Layout.preferredWidth: Maui.Style.iconSizes.medium
 				
 				ToolButton
 				{
@@ -181,7 +166,7 @@ Item
 				
 				focus: true
 				interactive: true
-				boundsBehavior: isMobile ?  Flickable.DragOverBounds : Flickable.StopAtBounds
+				boundsBehavior: Kirigami.Settings.isMobile ?  Flickable.DragOverBounds : Flickable.StopAtBounds
 				
 				model: _pathModel
 				
@@ -214,7 +199,7 @@ Item
 				Layout.fillHeight: true
 				Layout.leftMargin: Maui.Style.space.small
 				Layout.rightMargin: Maui.Style.space.small
-				width: Maui.Style.iconSizes.medium
+				Layout.preferredWidth: Maui.Style.iconSizes.medium
 				ToolButton
 				{
 					anchors.centerIn: parent
@@ -224,16 +209,6 @@ Item
 					onClicked: showEntryBar()
 				}
 			}
-			
-			//        MouseArea
-			//        {
-			//            anchors.fill: parent
-			//            propagateComposedEvents: true
-			//            onClicked: showEntryBar()
-			//        }
-			
-			
-			
 		}
 	}
 	

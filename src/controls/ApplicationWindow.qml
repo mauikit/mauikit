@@ -239,14 +239,6 @@ Kirigami.AbstractApplicationWindow
 					onTriggered: aboutDialog.open()
 				}
 			}
-		},
-		
-		Kirigami.Separator
-		{
-			visible: menuBtn.visible
-            Layout.preferredHeight: Maui.Style.iconSizes.small
-// 			opacity: 0.5
-			width: visible ? 2 : 0
 		}
 		]
 		

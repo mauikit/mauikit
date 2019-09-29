@@ -130,7 +130,6 @@ ToolBar
 		opacity: enabled ? 1 : 0.4
 		onClicked:
 		{
-			mainFlickable.flick(100, 0)
 			if(!mainFlickable.atXEnd)
 				mainFlickable.contentX += control.height
 				if(mainFlickable.atXEnd)
@@ -191,7 +190,7 @@ ToolBar
 		+ (control.stickyMiddleContent ? middleRowContent.implicitWidth : middleRowContent.width) 
 		+ (control.stickyRightContent ? rightRowContent.implicitWidth : rightRowContent.width)			
 		
-		boundsBehavior: isMobile ? Flickable.DragOverBounds : Flickable.StopAtBounds
+		boundsBehavior: Kirigami.Settings.isMobile ? Flickable.DragOverBounds : Flickable.StopAtBounds
 		clip: true
 		
 		RowLayout
@@ -211,7 +210,7 @@ ToolBar
 				Layout.minimumWidth: !sticky ? undefined : implicitWidth
 				Layout.fillWidth: control.leftSretch && implicitWidth
 				Layout.fillHeight: true
-			}
+			}			
 			
 			RowLayout
 			{
