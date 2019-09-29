@@ -14,6 +14,7 @@ Maui.Page
 	property Maui.FMList currentFMList 
 	
 	property alias currentView : viewLoader.item
+	property int viewType
 	
 	height: _browserList.height
 	width: _browserList.width
@@ -70,7 +71,7 @@ Maui.Page
 		id: viewLoader
 		anchors.fill: parent
 		
-		sourceComponent: switch(viewType)
+		sourceComponent: switch(control.viewType)
 		{
 			case Maui.FMList.ICON_VIEW: return gridViewBrowser
 			case Maui.FMList.LIST_VIEW: return listViewBrowser

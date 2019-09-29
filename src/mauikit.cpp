@@ -58,6 +58,8 @@
 #include "kquicksyntaxhighlighter/kquicksyntaxhighlighter.h"
 #endif
 
+
+
 QUrl MauiKit::componentUrl(const QString &fileName) const
 {
 #ifdef MAUI_APP
@@ -69,6 +71,7 @@ QUrl MauiKit::componentUrl(const QString &fileName) const
 
 void MauiKit::registerTypes(const char *uri)
 {
+	
     Q_ASSERT(uri == QLatin1String("org.kde.mauikit"));
 
     qmlRegisterSingletonType(componentUrl(QStringLiteral("Style.qml")), uri, 1, 0, "Style");
@@ -175,10 +178,17 @@ void MauiKit::registerTypes(const char *uri)
     });
 
 #if defined Q_OS_ANDROID || defined APPIMAGE_PACKAGE
-    QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
+	Q_INIT_RESOURCE(mauikit);
+	Q_INIT_RESOURCE(icons);
+	Q_INIT_RESOURCE(style);
+	QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
     QIcon::setThemeName("Luv");
     QQuickStyle::setStyle(":/style");
 #endif
 
-    qmlProtectModule(uri, 1);
+    qmlProtectModule(uri, 1);	
 }
+
+#include "moc_mauikit.cpp"
+
+

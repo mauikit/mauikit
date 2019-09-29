@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(MAUIKIT_VERSION 0.0.5)
 
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
 set(AUTOMOC_MOC_OPTIONS -Muri=org.kde.maui)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -28,9 +30,7 @@ include(ECMQtDeclareLoggingCategory)
 include(ECMAddQch)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 
-
 #options - for the appimage
-
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Qml 
     Sql Core Quick Gui Svg QuickControls2 Network DBus Xml)
 ecm_find_qmlmodule(QtGraphicalEffects 1.0)

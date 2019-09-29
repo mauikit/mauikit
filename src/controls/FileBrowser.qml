@@ -17,6 +17,8 @@ Maui.Page
     onCurrentPathChanged: control.browserView.path = control.currentPath
 
     property int viewType : Maui.FMList.LIST_VIEW
+    onViewTypeChanged: browserView.viewType = control.viewType    
+    
     property int currentPathType : control.currentFMList.pathType
     property int thumbnailsSize : Maui.Style.iconSizes.large * 1.7
     property bool showThumbnails: true
@@ -381,9 +383,6 @@ Maui.Page
         onAreaRightClicked: browserMenu.show()
     }
 
-
-
-    // 	headBar.stickyRightContent: true
     headBar.rightContent:[
     Kirigami.ActionToolBar
     {
@@ -399,7 +398,7 @@ Maui.Page
             icon.name: "view-list-icons"
             onTriggered: control.viewType = Maui.FMList.ICON_VIEW
             checkable: false
-            checked: control.viewType === Maui.FMList.ICON_VIEW
+            checked: browserView.viewType === Maui.FMList.ICON_VIEW
             icon.width: Maui.Style.iconSizes.medium
             text: qsTr("Grid view")
             // 			autoExclusive: true
@@ -410,7 +409,7 @@ Maui.Page
             icon.name: "view-list-details"
             onTriggered: control.viewType = Maui.FMList.LIST_VIEW
             icon.width: Maui.Style.iconSizes.medium
-            checked: control.viewType === Maui.FMList.LIST_VIEW
+            checked: browserView.viewType === Maui.FMList.LIST_VIEW
             text: qsTr("List view")
             // 			autoExclusive: true
         },
@@ -420,7 +419,7 @@ Maui.Page
             icon.name: "view-file-columns"
             onTriggered: control.viewType = Maui.FMList.MILLERS_VIEW
             icon.width: Maui.Style.iconSizes.medium
-            checked: control.viewType === Maui.FMList.MILLERS_VIEW
+            checked: browserView.viewType === Maui.FMList.MILLERS_VIEW
             text: qsTr("Column view")
             // 			autoExclusive: true
         },
@@ -791,7 +790,7 @@ Maui.Page
             else
                 Maui.FM.saveSettings("IconSize", thumbnailsSize, "SETTINGS")
 
-                if(control.viewType === Maui.FMList.ICON_VIEW)
+				if(browserView.viewType === Maui.FMList.ICON_VIEW)
                     browserView.currentView.adaptGrid()
     }
 
@@ -823,10 +822,11 @@ Maui.Page
         })
 
         _browserList.currentIndex = tabsObjectModel.count - 1
-
+        
         if(path)
         {
             setTabMetadata(path)
+			browserView.viewType = control.viewType			
             openFolder(path)
         }
     }
@@ -1057,7 +1057,7 @@ Maui.Page
                 break;
         }
 
-        control.viewType = Maui.FMList.LIST_VIEW
+        browserView.viewType = Maui.FMList.LIST_VIEW
 
         if(!prop)
         {

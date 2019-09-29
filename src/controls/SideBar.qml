@@ -72,15 +72,15 @@ Drawer
 			if(!collapsible)
 				return
 				
-			if(!collapsed && modal)
-			{
-				modal = false
-			}
-			
-			if(!modal && !collapsed)
-			{
-				privateProperties.isCollapsed = true
-			}
+				if(!collapsed && modal)
+				{
+					modal = false
+				}
+				
+				if(!modal && !collapsed)
+				{
+					privateProperties.isCollapsed = true
+				}
 		}
 		
 		Behavior on width
@@ -88,7 +88,7 @@ Drawer
 			NumberAnimation
 			{
 				duration: Kirigami.Units.longDuration
-                easing.type: Easing.InOutQuad
+				easing.type: Easing.InOutQuad
 			}
 		}
 		
@@ -129,6 +129,7 @@ Drawer
 			{
 				id: _listBrowser
 				anchors.fill: parent
+				listView.flickableDirection: Flickable.VerticalFlick
 				Rectangle
 				{
 					anchors.fill: parent
@@ -176,22 +177,20 @@ Drawer
 			anchors.fill: parent
 			hoverEnabled: Kirigami.Settings.isMobile ? false : true
 			propagateComposedEvents: true
-			//        preventStealing: true
-			parent: control.contentItem
+			enabled: control.collapsible 		
+			parent: control.contentItem			
+			property int startY
+			property int startX
 			
 			onEntered:
 			{
-				if(Kirigami.Settings.isMobile)
-				{
+				if(Kirigami.Settings.isMobile)				
 					return;
-				}
 				
-				if(containsMouse && privateProperties.isCollapsed && collapsed && collapsible && !modal)
+				if(containsMouse && privateProperties.isCollapsed && control.collapsed && control.collapsible && !control.modal)
 				{
 					expand()
-				}
-				
-				console.log("ENTERED", control.z)
+				}				
 			}
 			
 			onExited:
@@ -199,21 +198,24 @@ Drawer
 				if(Kirigami.Settings.isMobile)
 					return
 					
-					if(!privateProperties.isCollapsed  && control.collapsible && control.collapsed  && modal)
+					if(!privateProperties.isCollapsed  && control.collapsible && control.collapsed && control.modal)
 					{
 						collapse()
 					}
-					console.log("EXITED", control.z)
-			}
+			}			
 			
 			onPositionChanged:
-			{
-				if(!control.collapsible)
-					return
+			{				
+				if (!pressed)
+					return					
 					
-					if (!pressed)
+					if(mouse.y !== startY && mouse.x < (startX + Maui.Style.space.big))
+					{
+						_listBrowser.listView.flick(0,(mouse.y -startY) * 6 )						
+					}					
+					
+					if(!control.collapsible)
 						return
-						
 						
 						if(control.collapsible && control.collapsed && Kirigami.Settings.isMobile)
 						{
@@ -228,9 +230,16 @@ Drawer
 						}
 			}
 			
+			onPressed: 
+			{
+				startY = mouse.y
+				startX = mouse.x
+				mouse.accepted = Kirigami.Settings.isMobile				
+			}
+			
 			onReleased:
 			{
-				console.log("RELASED AT", mouse.x)
+				mouse.accepted = true
 				
 				if(!control.collapsible)
 					return
@@ -246,6 +255,7 @@ Drawer
 							collapse()
 						}
 					}
+					
 			}
 		}
 		
