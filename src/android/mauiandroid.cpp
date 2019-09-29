@@ -272,7 +272,7 @@ void MAUIAndroid::shareDialog(const QUrl &url)
                                                   activity.object<jobject>(),
                                                   QAndroidJniObject::fromString(url.toLocalFile()).object<jstring>(),
                                                   QAndroidJniObject::fromString(mimeType).object<jstring>(),
-												  QAndroidJniObject::fromString(QString("org.kde.%1.fileprovider").arg(qAppName())).object<jstring>());
+                                                  QAndroidJniObject::fromString(QString("%1.fileprovider").arg(UTIL::app->organizationDomain())).object<jstring>());
 
 
         if (_env->ExceptionCheck()) {
@@ -391,7 +391,7 @@ void MAUIAndroid::openUrl(const QUrl &url)
 												  "(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;)V",
                                                   activity.object<jobject>(),
 												  QAndroidJniObject::fromString(url.toLocalFile()).object<jstring>(),
-												  QAndroidJniObject::fromString(QString("org.kde.%1.fileprovider").arg(qAppName())).object<jstring>());
+                                                  QAndroidJniObject::fromString(QString("%1.fileprovider").arg(UTIL::app->organizationDomain())).object<jstring>());
 
 
         if (_env->ExceptionCheck()) {
