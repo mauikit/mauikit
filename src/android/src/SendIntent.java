@@ -43,7 +43,6 @@ import java.io.FileNotFoundException;
 
 public class SendIntent
 {
-    private static String AUTHORITY="org.kde.index.fileprovider";
     private static final int READ_REQUEST_CODE = 42;
     private static final int CONTACT_PICKER_RESULT = 1001;
 
@@ -79,7 +78,7 @@ public class SendIntent
 
     }
 
-    public static void share(Activity context, String url, String mime)
+    public static void share(Activity context, String url, String mime, String authority)
     {
         File file = new File(url);
         System.out.println(file.exists());
@@ -87,7 +86,7 @@ public class SendIntent
         Uri uri;
         try
         {
-            uri = FileProvider.getUriForFile(context, AUTHORITY, file);
+            uri = FileProvider.getUriForFile(context, authority, file);
         } catch (IllegalArgumentException e) {
             System.out.println("cannot be shared: "+ url+ " " +e);
             return;
@@ -107,13 +106,13 @@ public class SendIntent
         }
     }
 
-    public static void openUrl(Activity context, String url)
+    public static void openUrl(Activity context, String url, String authority)
     {
         File file = new File(url);
         Uri uri;
         try
         {
-            uri = FileProvider.getUriForFile(context, AUTHORITY, file);
+            uri = FileProvider.getUriForFile(context, authority, file);
         } catch (IllegalArgumentException e) {
             System.out.println("cannot be open: "+ url+ " " +e);
             return;

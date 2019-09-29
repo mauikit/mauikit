@@ -268,10 +268,11 @@ void MAUIAndroid::shareDialog(const QUrl &url)
 
         QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/SendIntent",
                                                   "share",
-                                                  "(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;)V",
+												  "(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",
                                                   activity.object<jobject>(),
                                                   QAndroidJniObject::fromString(url.toLocalFile()).object<jstring>(),
-                                                  QAndroidJniObject::fromString(mimeType).object<jstring>());
+                                                  QAndroidJniObject::fromString(mimeType).object<jstring>(),
+												  QAndroidJniObject::fromString(QString("org.kde.%1.fileprovider").arg(qAppName())).object<jstring>());
 
 
         if (_env->ExceptionCheck()) {
@@ -387,9 +388,10 @@ void MAUIAndroid::openUrl(const QUrl &url)
     {
         QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/SendIntent",
                                                   "openUrl",
-                                                  "(Landroid/app/Activity;Ljava/lang/String;)V",
+												  "(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;)V",
                                                   activity.object<jobject>(),
-                                                  QAndroidJniObject::fromString(url.toLocalFile()).object<jstring>());
+												  QAndroidJniObject::fromString(url.toLocalFile()).object<jstring>(),
+												  QAndroidJniObject::fromString(QString("org.kde.%1.fileprovider").arg(qAppName())).object<jstring>());
 
 
         if (_env->ExceptionCheck()) {
