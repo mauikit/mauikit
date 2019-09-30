@@ -80,6 +80,22 @@ Item
         radius: Maui.Style.radiusV
         opacity: 1
         border.color: Kirigami.Theme.backgroundColor
+        
+        
+        
+        SequentialAnimation
+        {
+			id: anim
+			PropertyAnimation
+			{
+				target: bg
+				property: "opacity"
+				easing.type: Easing.InOutQuad
+				from: 0.5
+				to: 1
+				duration: 600
+			}
+		}
     }
 
     Maui.Badge
@@ -153,22 +169,12 @@ Item
             ListView
             {
                 id: selectionList
-                anchors.fill: parent
+                anchors.fill: parent              
                 
-                SequentialAnimation
-                {
-                    id: anim
-                    PropertyAnimation
-                    {
-                        target: selectionList
-                        property: "y"
-                        easing.type: Easing.InOutQuad
-                        from: (-200)
-                        to: 0
-                        duration: 100
-                    }
-                }
-                
+                highlightFollowsCurrentItem: true
+                highlightMoveDuration: 0
+                keyNavigationEnabled: true
+                interactive: Kirigami.Settings.isMobile
                 boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
                 orientation: if(position === Qt.Horizontal)
                                  ListView.Horizontal
@@ -177,10 +183,15 @@ Item
                              else
                                  undefined
                 clip: true
-                spacing: Maui.Style.space.small
-                
                 focus: true
-                interactive: true
+                
+                spacing: Maui.Style.space.small                
+                
+                ScrollBar.horizontal: ScrollBar 
+                {
+					policy: Kirigami.Settings.isMobile? Qt.ScrollBarAlwaysOff : Qt.ScrollBarAsNeeded				
+				}
+                
                 model: ListModel{}
                 
                 delegate: Maui.GridBrowserDelegate
@@ -188,6 +199,7 @@ Item
                     id: delegate
                     anchors.verticalCenter: position === Qt.Horizontal ? parent.verticalCenter : undefined
                     anchors.horizontalCenter: position === Qt.Vertical ? parent.horizontalCenter : undefined
+                    isCurrentItem: ListView.isCurrentItem
                     height: selectionList.height
                     width: height
                     folderSize: Maui.Style.iconSizes.big
@@ -277,7 +289,8 @@ Item
     
     function append(item)
     {
-        if(selectedPaths.indexOf(item.path) < 0)
+		var index  = selectedPaths.indexOf(item.path)
+        if(index < 0)
         {
             if(control.singleSelection)
                 clear()
@@ -287,10 +300,15 @@ Item
             
             selectionList.model.append(item)
             selectionList.positionViewAtEnd()
+			selectionList.currentIndex = selectionList.count - 1
+			
         }else
         {
-            notify(item.icon, qsTr("Item already selected!"), String("The item '%1' is already in the selection box").arg(item.label), null, 4000)
+			selectionList.currentIndex = index
+//             notify(item.icon, qsTr("Item already selected!"), String("The item '%1' is already in the selection box").arg(item.label), null, 4000)
         }
+        
+        animate(Kirigami.Theme.backgroundColor)
     }
     
     function animate(color)
