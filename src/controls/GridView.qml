@@ -63,6 +63,7 @@ Kirigami.ScrollablePage
     rightPadding: padding
     topPadding: padding
     bottomPadding: padding
+    focus: true
 
     GridView
     {

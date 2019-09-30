@@ -743,7 +743,7 @@ Maui.Page
             Layout.fillHeight: true
             clip: true
 
-// 			focus: true
+            focus: true
 // 			Keys.onSpacePressed: previewer.show(control.currentFMList.get(browser.currentIndex).path)
 
             orientation: ListView.Horizontal

@@ -309,27 +309,32 @@ Kirigami.AbstractApplicationWindow
 			Timer 
 			{
 				id: _notifyTimer			
-				onTriggered: _notify.close()
+                onTriggered:
+                {
+                    if(!_mouseArea.pressed)
+                        _notify.close()
+                }
 			}
 			
 			onClosed: _notifyTimer.stop()
 			
 			MouseArea
 			{
+                id: _mouseArea
 				anchors.fill: parent
 				onClicked: 
 				{
 					if(_notify.cb)
-						_notify.cb()
-						
-						_notify.close()
+                    {
+                        _notify.cb()
+                        _notify.close()
+                    }
 				}
 			}
 			
 			GridLayout
 			{
-				anchors.fill: parent
-				
+				anchors.fill: parent				
 				columns: 2
 				rows: 1
 				
@@ -340,10 +345,11 @@ Kirigami.AbstractApplicationWindow
 					Layout.row: 1
 					Layout.column: 1
 					
-					ToolButton
+                    Kirigami.Icon
 					{
 						id: _notifyIcon
-						icon.width: Maui.Style.iconSizes.large						
+                        width: Maui.Style.iconSizes.large
+                        height: width
 						anchors.centerIn: parent
 					}				
 				}
@@ -420,7 +426,7 @@ Kirigami.AbstractApplicationWindow
 	
 	function notify(icon, title, body, callback, timeout)
 	{
-		_notifyIcon.icon.name = icon
+        _notifyIcon.source = icon
 		_notifyTitle.text = title
 		_notifyBody.text = body
 		_notifyTimer.interval = timeout ? timeout : 2500

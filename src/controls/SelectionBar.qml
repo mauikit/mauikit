@@ -79,10 +79,8 @@ Item
         color: Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.6)
         radius: Maui.Style.radiusV
         opacity: 1
-        //        border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
         border.color: Kirigami.Theme.backgroundColor
     }
-
 
     Maui.Badge
     {
@@ -108,7 +106,6 @@ Item
 
         anchors.verticalCenter: parent.top
         anchors.horizontalCenter: parent.right
-
         onClicked:
         {
             clear()
@@ -189,7 +186,6 @@ Item
                 delegate: Maui.GridBrowserDelegate
                 {
                     id: delegate
-//                    isCurrentItem: ListView.isCurrentItem
                     anchors.verticalCenter: position === Qt.Horizontal ? parent.verticalCenter : undefined
                     anchors.horizontalCenter: position === Qt.Vertical ? parent.horizontalCenter : undefined
                     height: selectionList.height
@@ -202,7 +198,6 @@ Item
                     showTooltip: true
                     showThumbnails: true
                     emblemSize: Maui.Style.iconSizes.small
-//                    leftEmblem: "list-remove"
                     Kirigami.Theme.highlightColor: Kirigami.Theme.highlightColor
                     Kirigami.Theme.backgroundColor: Kirigami.Theme.complementaryBackgroundColor
                     Kirigami.Theme.textColor: Kirigami.Theme.textColor
@@ -219,12 +214,6 @@ Item
         
         Item
         {
-//            Layout.alignment: if(position === Qt.Horizontal)
-//                                  Qt.AlignRight || Qt.AlignVCenter
-//                              else if(position === Qt.Vertical)
-//                                  Qt.AlignCenter
-//                              else
-//                                  undefined
             Layout.fillWidth: position === Qt.Vertical
             Layout.fillHeight: position === Qt.Horizontal
             Layout.preferredWidth: Maui.Style.iconSizes.medium
@@ -296,15 +285,11 @@ Item
             selectedItems.push(item)
             selectedPaths.push(item.path)
             
-            //             for(var i = 0; i < selectionList.count ; i++ )
-            //                 if(selectionList.model.get(i).path === item.path)
-            //                 {
-            //                     selectionList.model.remove(i)
-            //                     return
-            //                 }
-            
             selectionList.model.append(item)
             selectionList.positionViewAtEnd()
+        }else
+        {
+            notify(item.icon, qsTr("File already selected!"), String("The file %1 is already in the selection box").arg(item.label), null, 4000)
         }
     }
     
