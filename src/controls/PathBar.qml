@@ -140,7 +140,7 @@ Item
 				ToolButton
 				{
 					anchors.centerIn: parent
-					icon.name: "go-home"
+					icon.name: "user-home"
 					flat: true
 					icon.color: control.Kirigami.Theme.textColor                
 					onClicked: homeClicked()
