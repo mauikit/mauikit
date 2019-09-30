@@ -73,29 +73,21 @@ Maui.Popup
         }
 
         z: control.z+999
-
-        onClicked:
-        {
-            // 			rejected()
-            close()
-        }
+        onClicked: close()
     }
 
-    contentItem: Maui.Page
+   Maui.Page
     {
         id: page
-        // 		headBar.visible: headBar.count > 2
         anchors.fill: parent
+        anchors.margins: Maui.Style.unit
         padding: Maui.Style.space.medium
-        // 		footBar.dropShadow: false
-        // 		footBar.drawBorder: false
-        // 		margins: Maui.Style.space.big
-        // 		headBarExit: false
-        // 		colorScheme.backgroundColor : control.colorScheme.backgroundColor
-        // 		footBar.visible: defaultButtons || footBar.count > 1
-        // 		footBar.colorScheme.backgroundColor: colorScheme.backgroundColor
-        // 		footBar.margins: Maui.Style.space.big
         footBar.visible: control.defaultButtons || footBar.count > 1
+
+        footBar.background: null
+
+        Kirigami.Theme.backgroundColor: "transparent"
+
         property QtObject _rejectButton : Button
         {
             id: _rejectButton
@@ -127,6 +119,7 @@ Maui.Popup
                 children: [_rejectButton, _acceptButton]
             }
         }
+
         footBar.rightContent: Loader
         {
             sourceComponent: control.defaultButtons ? _defaultButtonsComponent : undefined
@@ -142,9 +135,7 @@ Maui.Popup
             {
                 width: parent.width
                 height: visible ? implicitHeight : 0
-
                 visible: title.length > 0
-
                 Layout.fillWidth: visible
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
 
@@ -155,7 +146,6 @@ Maui.Popup
                 font.pointSize:Maui.Style.fontSizes.huge
                 elide: Qt.ElideRight
                 wrapMode: Text.Wrap
-                //                         elide: Qt.ElideRight
             }
 
             Kirigami.ScrollablePage
@@ -170,7 +160,6 @@ Maui.Popup
                 topPadding: padding
                 bottomPadding: padding
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-                //                     ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
                 Label
                 {
@@ -188,7 +177,6 @@ Maui.Popup
             Maui.TextField
             {
                 id: _textEntry
-                // 							anchors.fill: parent
                 onAccepted: control.accepted()
                 Layout.fillWidth: entryField
                 height: entryField ?  Maui.Style.iconSizes.big : 0

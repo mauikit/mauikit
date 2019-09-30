@@ -157,7 +157,16 @@ Maui.Page
 
     Action
     {
+        id: _selectAllAction
+        text: qsTr("Select all")
+        icon.name: "edit-select"
+        onTriggered: selectAll()
+    },
+
+    Action
+    {
         text: qsTr("Status bar")
+        icon.name: "settings-configure"
         checkable: false
         checked: control.footBar.visible
         onTriggered: control.footBar.visible = !control.footBar.visible
@@ -595,7 +604,7 @@ Maui.Page
                 MenuItem
                 {
                     text: qsTr("Remove...")
-                    Kirigami.Theme.textColor: dangerColor
+                    Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
 
                     onTriggered:
                     {
@@ -960,9 +969,11 @@ Maui.Page
         browserView.currentView.contentY = pos
     }
 
-    function addToSelection(item, append)
+    function addToSelection(item, append) //TODO append is unsused so remove it
     {
+        if(!selectionBarComponent.item)
         selectionBarLoader.sourceComponent= selectionBarComponent
+
         selectionBar.singleSelection = control.singleSelection
         selectionBar.append(item)
     }
@@ -1006,6 +1017,12 @@ Maui.Page
     {
         for(var i in items)
             Maui.FM.removeFile(items[i].path)
+    }
+
+    function selectAll() //TODO for now dont select more than 100 items so things dont freeze or break
+    {
+        for(var i = 0; i < Math.min(control.currentFMList.count, 100); i++)
+            addToSelection(control.currentFMList.get(i), false)
     }
 
     function trash(items)

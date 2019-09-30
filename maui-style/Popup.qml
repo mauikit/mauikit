@@ -24,8 +24,10 @@ import QtQuick 2.6
 import QtGraphicalEffects 1.0
 import QtQuick.Templates 2.3 as T
 import org.kde.kirigami 2.2 as Kirigami
+import org.kde.mauikit 1.0 as Maui
 
-T.Popup {
+T.Popup
+{
     id: control
 
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
@@ -63,8 +65,9 @@ T.Popup {
 
     contentItem: Item { }
 
-    background: Rectangle {
-        radius: radiusV
+    background: Rectangle
+    {
+        radius: Maui.Style.radiusV
         color: Kirigami.Theme.backgroundColor
         border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
         layer.enabled: true

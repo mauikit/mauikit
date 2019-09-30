@@ -25,6 +25,7 @@ import QtQuick.Window 2.1
 import QtQuick.Controls 2.3 as Controls
 import QtQuick.Templates 2.3 as T
 import org.kde.kirigami 2.2 as Kirigami
+import org.kde.mauikit 1.0 as Maui
 
 T.TextField {
     id: controlRoot
@@ -35,7 +36,7 @@ T.TextField {
                             placeholderText ? placeholder.implicitWidth + leftPadding + rightPadding : 0)
                             || contentWidth + leftPadding + rightPadding
     implicitHeight: Math.max(contentHeight + topPadding + bottomPadding,
-                             background ? Kirigami.Units.iconSizes.smallMedium : 0,
+                             background ? Maui.Style.iconSizes.medium : 0,
                              placeholder.implicitHeight + topPadding + bottomPadding)
 
     padding: 6
@@ -77,13 +78,13 @@ T.TextField {
 
 	background: Rectangle 
 	{        
-		implicitWidth: unit * 120
-        implicitHeight: Kirigami.Settings.isMobile ? Kirigami.Units.iconSizes.medium : Kirigami.Units.iconSizes.medium
+        implicitWidth: Maui.Style.unit * 120
+        implicitHeight: Maui.Style.iconSizes.medium
         color: control.activeFocus ? Qt.lighter(Kirigami.Theme.backgroundColor, 1.4)
         : (control.hovered ? Qt.lighter(Kirigami.Theme.backgroundColor, 1.3) : Kirigami.Theme.backgroundColor)
         border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
 
-        radius: radiusV
-		border.width: unit		
+        radius: Maui.Style.radiusV
+        border.width: Maui.Style.unit
 	}
 }

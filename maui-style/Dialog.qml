@@ -25,7 +25,8 @@ import QtGraphicalEffects 1.0
 import QtQuick.Templates 2.3 as T
 import org.kde.kirigami 2.2 as Kirigami
 
-T.Dialog {
+T.Dialog
+{
     id: control
 
     implicitWidth: Math.max(background ? background.implicitWidth : 0,

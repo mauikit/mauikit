@@ -289,7 +289,7 @@ Item
             selectionList.positionViewAtEnd()
         }else
         {
-            notify(item.icon, qsTr("File already selected!"), String("The file %1 is already in the selection box").arg(item.label), null, 4000)
+            notify(item.icon, qsTr("Item already selected!"), String("The item '%1' is already in the selection box").arg(item.label), null, 4000)
         }
     }
     

@@ -54,9 +54,7 @@ Popup
 			(parent.height) - (height + Maui.Style.space.huge)
             else
                 parent.height / 2 - height / 2
-                
-                
-                //     z: parent.z+1
+
                 
                 modal: control.width !== control.parent.width && control.height !== control.parent.height
                 focus: true
@@ -89,10 +87,5 @@ Popup
                     // shrink_fade_out
                     NumberAnimation { property: "scale"; from: 1.0; to: 0.9; easing.type: Easing.OutQuint; duration: 220 }
                     NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; easing.type: Easing.OutCubic; duration: 150 }
-                }
-                
-//                 Material.accent: Kirigami.Theme.highlightColor
-//                 Material.background: Kirigami.Theme.backgroundColor
-//                 Material.primary: Kirigami.Theme.backgroundColor
-//                 Material.foreground: Kirigami.Theme.textColor
+                }                
 }

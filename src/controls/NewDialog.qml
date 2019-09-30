@@ -13,7 +13,7 @@ Maui.Dialog
 	rejectText: "No, cancel"
 	onAccepted: done()
 	onRejected: textEntry.clear()
-	page.padding: Maui.Style.space.huge
+    page.padding: Maui.Style.space.huge
 	
 	function done()
 	{
