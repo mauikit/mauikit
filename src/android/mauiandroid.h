@@ -70,7 +70,7 @@ public slots:
     static QStringList sdDirs();
     static void call(const QString &tel);
 
-    static bool checkAndroidStoragePermissions();
+    static bool checkRunTimePermissions();
 
 
 signals:
