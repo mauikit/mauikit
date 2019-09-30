@@ -790,7 +790,7 @@ Maui.Page
             else
                 Maui.FM.saveSettings("IconSize", thumbnailsSize, "SETTINGS")
 
-				if(browserView.viewType === Maui.FMList.ICON_VIEW)
+				if(control.viewType === Maui.FMList.ICON_VIEW)
                     browserView.currentView.adaptGrid()
     }
 

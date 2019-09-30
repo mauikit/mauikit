@@ -169,7 +169,7 @@ Maui.Dialog
 			initialPage: [sidebar, browser]
 			defaultColumnWidth:  Kirigami.Units.gridUnit * (isMobile? 15 : 8)		
 				
-				Maui.PlacesSidebar
+				Maui.PlacesListBrowser
 				{
 					id: sidebar	
 					onPlaceClicked: 

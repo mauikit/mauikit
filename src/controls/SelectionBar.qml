@@ -90,7 +90,7 @@ Item
         anchors.horizontalCenter: parent.left
 
         iconName: "window-close"
-        Kirigami.Theme.backgroundColor: dangerColor
+        Kirigami.Theme.backgroundColor: Kirigami.Theme.negativeTextColor
         Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
         z: parent.z +1
         onClicked:

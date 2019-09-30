@@ -72,6 +72,7 @@ Kirigami.ScrollablePage
 	rightPadding: padding
 	topPadding: padding
 	bottomPadding: padding	
+
 	
     ListView
     {	
@@ -79,7 +80,6 @@ Kirigami.ScrollablePage
         focus: true
         
         spacing: Maui.Style.space.tiny
-		
         snapMode: ListView.NoSnap
         boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
 		

@@ -41,7 +41,7 @@ Kirigami.AbstractApplicationWindow
     contentItem.anchors.leftMargin: (root.sideBar.collapsible && root.sideBar.collapsed) ? root.sideBar.collapsedSize : (root.sideBar.modal ? 0 : root.sideBar.width)
 
 	property bool showAccounts : true
-	property Maui.SideBar sideBar 
+	property Maui.AbstractSideBar sideBar 
 	
 	/***************************************************/
 	/******************** ALIASES *********************/

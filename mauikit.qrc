@@ -1,8 +1,9 @@
 <RCC>
     <qresource prefix="/maui/kit">
         <file alias="ToolBar.qml">src/controls/ToolBar.qml</file>
-        <file alias="SideBar.qml">src/controls/SideBar.qml</file>
-        <file alias="ApplicationWindow.qml">src/controls/ApplicationWindow.qml</file>
+		<file alias="AbstractSideBar.qml">src/controls/AbstractSideBar.qml</file>
+		<file alias="SideBar.qml">src/controls/SideBar.qml</file>
+		<file alias="ApplicationWindow.qml">src/controls/ApplicationWindow.qml</file>
         <file alias="Style.qml">src/controls/Style.qml</file>
         <file alias="ShareDialog.qml">src/controls/ShareDialog.qml</file>
         <file alias="PieButton.qml">src/controls/PieButton.qml</file>
@@ -48,8 +49,9 @@
         <file alias="SyncDialog.qml">src/controls/SyncDialog.qml</file>
         <file alias="Terminal.qml">src/controls/Terminal.qml</file>
         <file alias="Editor.qml">src/controls/Editor.qml</file>
-        <file alias="PlacesSidebar.qml">src/controls/PlacesSidebar.qml</file>
-        <file alias="Store.qml">src/controls/Store.qml</file>
+		<file alias="PlacesSidebar.qml">src/controls/PlacesSidebar.qml</file>
+		<file alias="PlacesListBrowser.qml">src/controls/PlacesListBrowser.qml</file>
+		<file alias="Store.qml">src/controls/Store.qml</file>
         <file alias="ImageViewer.qml">src/controls/ImageViewer.qml</file>
         <file alias="private/StoreDelegate.qml">src/controls/private/StoreDelegate.qml</file>
     </qresource>
