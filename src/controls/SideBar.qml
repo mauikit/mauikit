@@ -55,6 +55,7 @@ Maui.AbstractSideBar
 		signal itemRightClicked(int index)
 		onModalChanged: visible = true
 		visible: true	
+		dim: false
 		
 		onCollapsedChanged :
 		{
@@ -79,18 +80,20 @@ Maui.AbstractSideBar
 		}
 		
 		
-		Item
+		ColumnLayout
 		{
 			id: _content
-			anchors.fill: parent
-			anchors.topMargin: Maui.Style.space.tiny
-			anchors.bottomMargin: Maui.Style.space.tiny
-			anchors.margins: Maui.Style.unit
+			anchors.fill: parent			
+			spacing: 0
 			
-			data: Maui.ListBrowser
+			Maui.ListBrowser
 			{
 				id: _listBrowser
-				anchors.fill: parent
+				Layout.fillHeight: true
+				Layout.fillWidth: true
+				Layout.topMargin: Maui.Style.space.tiny
+				Layout.bottomMargin: Maui.Style.space.tiny
+				Layout.margins: Maui.Style.unit
 				listView.flickableDirection: Flickable.VerticalFlick
 				Rectangle
 				{
@@ -131,63 +134,72 @@ Maui.AbstractSideBar
 					}
 				}
 			}
-		}
-		
-		MouseArea
-		{
-			id: _mouseArea
-			anchors.fill: parent
-			hoverEnabled: Kirigami.Settings.isMobile ? false : true
-			propagateComposedEvents: true
-			enabled: control.collapsible
-			visible: enabled
-			parent: control.contentItem
-			property int startY
+			
+			MouseArea
+			{
+				id: _handle
+				visible: collapsible && collapsed
+			Layout.preferredHeight: Maui.Style.toolBarHeight
+			Layout.fillWidth: true
+			hoverEnabled: true
+			preventStealing: true
+			propagateComposedEvents: false
 			property int startX
+			property int startY
 			
-			onEntered:
+			Rectangle
 			{
-				if(Kirigami.Settings.isMobile)
-					return;
+				anchors.fill: parent 
+				color:  _handle.containsMouse || _handle.containsPress ? Qt.rgba(Kirigami.Theme.highlightColor.r, Kirigami.Theme.highlightColor.g, Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
 				
-				if(containsMouse && privateProperties.isCollapsed && control.collapsed && control.collapsible && !control.modal)
+				Kirigami.Separator
 				{
-					expand()
-				}
-			}
-			
-			onExited:
-			{
-				if(Kirigami.Settings.isMobile)
-					return
-					
-					if(!privateProperties.isCollapsed  && control.collapsible && control.collapsed && control.modal)
+					anchors
 					{
-						collapse()
+						left: parent.left
+						right: parent.right
+						top: parent.top
 					}
+					
+					height: Maui.Style.unit				
+				}
+				
+				Kirigami.Icon
+				{
+					source: "love"
+					color:  _handle.containsMouse || _handle.containsPress ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+					anchors.centerIn: parent	
+					width: Maui.Style.iconSizes.medium
+					height: width
+				}	
+			}
+					
+			
+			onClicked:
+			{
+				if(privateProperties.isCollapsed)
+					expand()
+					else
+						collapse()	
 			}
 			
 			onPositionChanged:
 			{
 				if (!pressed)
-					return
-					
-					if(mouse.y !== startY && mouse.x < (startX + Maui.Style.space.big))
-					{
-						if(!_listBrowser.listView.atYEnd || !_listBrowser.listView.atYBegin)
-							_listBrowser.listView.flick(0,(mouse.y -startY) * 2 )
-					}
+					return				
 					
 					if(!control.collapsible)
 						return
 						
 						if(control.collapsible && control.collapsed && Kirigami.Settings.isMobile)
 						{
-							if(mouse.x > (control.collapsedSize*2))
+							if(mouse.x > (startX + Maui.Style.space.big))
 							{
 								expand()
 								
-							}else if((mouse.x*2) < control.collapsedSize)
+							}
+							
+							if(mouse.x < (startX - Maui.Style.space.big))
 							{
 								collapse()
 							}
@@ -198,32 +210,31 @@ Maui.AbstractSideBar
 			{
 				startY = mouse.y
 				startX = mouse.x
-				console.log("PRESSED SIDEBAR", !(Kirigami.Settings.isMobile && !modal && !collapsed && !privateProperties.isCollapsed))
-				console.log(Kirigami.Settings.isMobile , modal , collapsed , privateProperties.isCollapsed)
-				mouse.accepted = !(!modal && !collapsed && !privateProperties.isCollapsed) && Kirigami.Settings.isMobile
+				mouse.accepted = true
 			}
 			
-			onReleased:
-			{
-				mouse.accepted = true
-				
-				if(!control.collapsible)
-					return
-					
-					if(control.collapsible && control.collapsed && Kirigami.Settings.isMobile)
-					{
-						if(mouse.x > (control.collapsedSize*2))
-						{
-							expand()
-							
-						}else
-						{
-							collapse()
-						}
-					}
-					
+// 			onReleased:
+// 			{
+// 				mouse.accepted = true
+// 				
+// 				if(!control.collapsible)
+// 					return
+// 					
+// 					if(control.collapsible && control.collapsed && Kirigami.Settings.isMobile)
+// 					{
+// 						if(mouse.x > (control.collapsedSize*2))
+// 						{
+// 							expand()
+// 							
+// 						}else
+// 						{
+// 							collapse()
+// 						}
+// 					}
+// 			}
+			
 			}
-		}
+		}		
 		
 		function collapse()
 		{
