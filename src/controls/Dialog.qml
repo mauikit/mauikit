@@ -84,9 +84,9 @@ Maui.Popup
         padding: Maui.Style.space.medium
         footBar.visible: control.defaultButtons || footBar.count > 1
 
-        footBar.background: null
+//        footBar.background: null
 
-        Kirigami.Theme.backgroundColor: "transparent"
+//        Kirigami.Theme.backgroundColor: "transparent"
 
         property QtObject _rejectButton : Button
         {
