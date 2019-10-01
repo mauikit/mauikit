@@ -36,7 +36,7 @@ ItemDelegate
 
     property int radius: Maui.Style.radiusV
 	
-	property color labelColor : isCurrentItem ? Qt.darker(Kirigami.Theme.highlightColor, 3) :  Kirigami.Theme.textColor
+	property color labelColor : Kirigami.Theme.textColor
 	property color hightlightedColor : isCurrentItem || hovered ? Kirigami.Theme.highlightColor : "transparent"
 	    
     
