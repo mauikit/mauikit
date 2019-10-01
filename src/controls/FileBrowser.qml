@@ -167,7 +167,7 @@ Maui.Page
     {
         text: qsTr("Status bar")
         icon.name: "settings-configure"
-        checkable: false
+        checkable: true
         checked: control.footBar.visible
         onTriggered: control.footBar.visible = !control.footBar.visible
     }
@@ -507,7 +507,7 @@ Maui.Page
         {
             text: qsTr("Select mode")
             icon.name: "item-select"
-            checkable: false
+            checkable: true
             checked: control.selectionMode
             onTriggered: control.selectionMode = !control.selectionMode
 
