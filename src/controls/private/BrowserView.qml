@@ -205,6 +205,12 @@ Maui.Page
 					control.setCurrentFMList()				
                 }
 
+                onCountChanged:
+                {
+                    _millerColumns.currentIndex = _millerColumns.count-1
+                    _millerColumns.positionViewAtEnd()
+                }
+
 				Maui.PathList
 				{
 					id: _millerList
