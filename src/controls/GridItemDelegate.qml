@@ -36,10 +36,9 @@ ItemDelegate
 
     property int radius: Maui.Style.radiusV
 	
-	property color labelColor : isCurrentItem ? Qt.darker(Kirigami.Theme.highlightColor) :  Kirigami.Theme.textColor
+	property color labelColor : Kirigami.Theme.textColor
 	property color hightlightedColor : isCurrentItem || hovered ? Kirigami.Theme.highlightColor : "transparent"
 	    
-    
     //override the itemdelegate default signals to allow dragging content
     signal pressed(var mouse)
     signal pressAndHold(var mouse)
