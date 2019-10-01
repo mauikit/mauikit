@@ -60,11 +60,11 @@ Maui.ListItemDelegate
 				{
 					id: controlIcon
 					anchors.centerIn: parent
-					source: model.icon ? model.icon : ""
-					color: control.labelColor
-					height: control.iconSize
-					width: height
-				}
+                    source: model.icon ? model.icon : ""
+                    color: control.labelColor
+                    height: control.iconSize
+                    width: height
+                }
 			}
 			
 			Label

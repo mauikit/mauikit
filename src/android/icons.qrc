@@ -325,7 +325,6 @@
         <file>icons/luv-icon-theme/Luv/mimetypes/64/application-x-trash.svg</file>
         <file>icons/luv-icon-theme/Luv/mimetypes/64/application-x-zerosize.svg</file>
         <file>icons/luv-icon-theme/Luv/mimetypes/64/application-zip.svg</file>
-        <file>icons/luv-icon-theme/Luv/mimetypes/64/audio-x-generic.svg</file>
         <file>icons/luv-icon-theme/Luv/mimetypes/64/font-ttf.svg</file>
         <file>icons/luv-icon-theme/Luv/mimetypes/64/fonts-package.svg</file>
         <file>icons/luv-icon-theme/Luv/mimetypes/64/image-bmp.svg</file>
@@ -615,5 +614,91 @@
         <file>icons/luv-icon-theme/Luv/apps/48/calamares.svg</file>
         <file>icons/luv-icon-theme/Luv/apps/48/asc-de.svg</file>
         <file>icons/luv-icon-theme/Luv/apps/48/anbox.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/user-home.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/folder.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/folder-videos.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/folder-pictures.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/folder-music.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/folder-download.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/folder-documents.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/start-here.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/folder-cloud.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/32/folder-orange.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/32/folder-grey.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/32/folder-green.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/32/folder-black.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/32/folder-cloud.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/32/folder-applications.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/48/folder-orange.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/48/folder-grey.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/48/folder-green.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/48/folder-black.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/48/folder-cloud.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/48/folder-applications.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/64/folder-orange.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/64/folder-grey.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/64/folder-green.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/64/folder-black.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/64/folder-cloud.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/64/folder-applications.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/16/folder-open.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/16/folder-google-drive.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/16/folder-github.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/16/folder-cloud.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/16/folder-applications.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/view-file-columns.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/sidebar-expand.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/sidebar-collapse.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/edit-select-all.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/view-split-top-bottom.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/view-split-left-right.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/view-sort.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/view-side-tree.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/view-links.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/view-choose.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/view-barcode.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/tab-duplicate.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/project-open.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/process-stop.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/handle-sort.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/go-jump.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/folder-new.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/folder-add.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/edit-rename.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/edit-link.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/edit-clear.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/document-open-recent.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/document-edit.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/archive-remove.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/archive-insert.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/archive-extract.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/16/text-x-generic.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/16/application-x-zerosize.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/32/application-x-zerosize.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/48/application-x-zerosize.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/64/text-xml.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/64/text-x-qml.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/64/text-x-chdr.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/64/text-x-c++src.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/64/audio-x-mpeg.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/64/audio-x-flac.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/64/application-x-partial-download.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/64/application-x-rpm.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/64/application-x-rar.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/64/application-x-msdownload.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/64/application-x-ms-dos-executable.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/64/application-x-mimearchive.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/64/application-x-iso9660-appimage.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/64/application-vnd.debian.binary-package.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/64/application-vnd.appimage.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/64/application-rtf.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/folder-music-sidebar.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/user-home-sidebar.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/folder-videos-sidebar.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/folder-sidebar.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/folder-pictures-sidebar.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/folder-download-sidebar.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/folder-documents-sidebar.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/folder-cloud-sidebar.svg</file>
     </qresource>
 </RCC>
