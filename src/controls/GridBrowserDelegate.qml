@@ -61,8 +61,6 @@ Maui.GridItemDelegate
         anchors.left: parent.left
         onClicked: leftEmblemClicked(index)
         size: Maui.Style.iconSizes.small
-        Kirigami.Theme.backgroundColor: Kirigami.Theme.highlightColor
-        Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
     }
 
     Maui.Badge
@@ -75,7 +73,6 @@ Maui.GridItemDelegate
         anchors.top: parent.top
         anchors.right: parent.right
         onClicked: rightEmblemClicked(index)
-        Kirigami.Theme.backgroundColor: Kirigami.Theme.highlightColor
     }
 
     Component

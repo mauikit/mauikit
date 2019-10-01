@@ -193,10 +193,9 @@ Maui.Page
 				
 				keyNavigationEnabled: true
 				interactive: Kirigami.Settings.isMobile
-				highlightFollowsCurrentItem: true
-				
+
 				orientation: ListView.Horizontal
-				snapMode: ListView.SnapToItem
+                snapMode: ListView.NoSnap
 				
 				ScrollBar.horizontal: ScrollBar { }
 				
@@ -204,12 +203,18 @@ Maui.Page
 				{
 					_millerControl.currentFMList = currentItem.currentFMList
 					control.setCurrentFMList()				
-				}				
-				
+                }
+
 				Maui.PathList
 				{
 					id: _millerList
 					path: control.path
+
+                    onPathChanged:
+                    {
+                        _millerColumns.currentIndex = _millerColumns.count-1
+                        _millerColumns.positionViewAtEnd()
+                    }
 				}
 				
 				model: Maui.BaseModel
@@ -229,13 +234,7 @@ Maui.Page
 					background: Rectangle
 					{
 						color: "transparent"
-					}
-					
-					ListView.onAdd: 
-					{
-						_millerColumns.currentIndex = _millerColumns.count-1
-						_millerColumns.positionViewAtEnd()
-					}	
+                    }
 					
 					Kirigami.Separator
 					{

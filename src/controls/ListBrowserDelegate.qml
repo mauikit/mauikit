@@ -61,9 +61,7 @@ Maui.ListItemDelegate
 		anchors.top: parent.top
 		anchors.left: parent.left
 		onClicked: leftEmblemClicked(index)
-		size: Maui.Style.iconSizes.small
-		Kirigami.Theme.backgroundColor: Kirigami.Theme.highlightColor
-		Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
+        size: Maui.Style.iconSizes.small
 	}
 	
 	

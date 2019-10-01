@@ -49,8 +49,8 @@ Rectangle
     width: Math.max(implicitWidth, height)
     implicitWidth: (loader.sourceComponent == labelComponent ? Math.max(loader.item.implicitWidth + Maui.Style.space.small, control.height) : control.height)
     radius: Math.min(width, height)
-    color: Kirigami.Theme.backgroundColor
-    border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+    color: control.Kirigami.Theme.backgroundColor
+    border.color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.7))
 
     clip: false
 
