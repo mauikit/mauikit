@@ -100,7 +100,7 @@ Maui.AbstractSideBar
                 id: itemDelegate
                 iconSize: control.iconSize
                 labelVisible: control.showLabels
-                iconName: model.icon +  isAndroid ? ("-sidebar") : ""
+                iconName: model.icon +  (isAndroid ? ("-sidebar") : "")
                 leftPadding:  Maui.Style.space.tiny
                 rightPadding:  Maui.Style.space.tiny
 
