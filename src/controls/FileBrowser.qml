@@ -72,7 +72,7 @@ Maui.Page
     footBar.leftContent: Label
     {
     Layout.fillWidth: true
-    text: control.currentFMList.count + " " + qsTr("items")
+    text: qsTr("%n item(s)", "0", control.currentFMList.count)
     }
 
     footBar.rightContent: [
@@ -98,7 +98,7 @@ Maui.Page
     {
         id: _previewAction
         icon.name: "image-preview"
-        text: qsTr("Previews")
+        text: qsTr("Show Previews")
         checkable: true
         checked: control.showThumbnails
         onTriggered: control.showThumbnails = !control.showThumbnails
@@ -108,7 +108,7 @@ Maui.Page
     {
         id: _hiddenAction
         icon.name: "visibility"
-        text: qsTr("Hidden files")
+        text: qsTr("Show Hidden Files")
         checkable: true
         checked: control.currentFMList.hidden
         onTriggered: control.currentFMList.hidden = !control.currentFMList.hidden
@@ -118,7 +118,7 @@ Maui.Page
     {
         id: _bookmarkAction
         icon.name: "bookmark-new"
-        text: qsTr("Bookmark")
+        text: qsTr("Bookmark Current Path")
         onTriggered: newBookmark([currentPath])
     },
 
@@ -126,7 +126,7 @@ Maui.Page
     {
         id: _newFolderAction
         icon.name: "folder-add"
-        text: qsTr("New folder")
+        text: qsTr("New Folder...")
         onTriggered:
         {
             dialogLoader.sourceComponent= newFolderDialogComponent
@@ -138,7 +138,7 @@ Maui.Page
     {
         id: _newDocumentAction
         icon.name: "document-new"
-        text: qsTr("New file")
+        text: qsTr("New file...")
         onTriggered:
         {
             dialogLoader.sourceComponent= newFileDialogComponent
@@ -149,7 +149,7 @@ Maui.Page
     Action
     {
         id: _pasteAction
-        text: qsTr("Paste ")+"["+browserMenu.pasteFiles+"]"
+        text: qsTr("Paste %n File(s)", "0", browserMenu.pasteFiles)
         icon.name: "edit-paste"
         enabled: browserMenu.pasteFiles > 0
         onTriggered: paste()
@@ -158,14 +158,14 @@ Maui.Page
     Action
     {
         id: _selectAllAction
-        text: qsTr("Select all")
+        text: qsTr("Select All")
         icon.name: "edit-select-all"
         onTriggered: selectAll()
     },
 
     Action
     {
-        text: qsTr("Status bar")
+        text: qsTr("Show Status Bar")
         icon.name: "settings-configure"
         checkable: true
         checked: control.footBar.visible
@@ -186,10 +186,10 @@ Maui.Page
         {
             property var items: []
 
-            title: qsTr(String("Removing %1 files").arg(items.length.toString()))
-            message: isAndroid ?  qsTr("This action will completely remove your files from your system. This action can not be undone.") : qsTr("You can move the file to the Trash or Delete it completely from your system. Which one you preffer?")
-			rejectButton.text: qsTr("Delete")
-            acceptButton.text: qsTr("Trash")
+            title: qsTr("Removing %n file(s)", "0", items.length)
+            message: isAndroid ?  qsTr("This action will remove your files from your system permanently. This action can not be undone.") : qsTr("You can move the file to the trash or delete it completely from your system. Which one do you prefer?")
+			rejectButton.text: qsTr("Delete Files")
+            acceptButton.text: qsTr("Send to Trash")
             acceptButton.visible: !Kirigami.Settings.isMobile
             page.padding: Maui.Style.space.huge
 
@@ -225,8 +225,8 @@ Maui.Page
 
         Maui.NewDialog
         {
-            title: qsTr("New folder")
-            message: qsTr("Create a new folder with a custom name")
+            title: qsTr("New Folder...")
+            message: qsTr("Create a new folder")
             acceptButton.text: qsTr("Create")
             onFinished: control.currentFMList.createDir(text)
             rejectButton.visible: false
@@ -240,8 +240,8 @@ Maui.Page
 
         Maui.NewDialog
         {
-            title: qsTr("New file")
-            message: qsTr("Create a new file with a custom name and extension")
+            title: qsTr("New File...")
+            message: qsTr("Create a new file")
             acceptButton.text: qsTr("Create")
             onFinished: Maui.FM.createFile(control.currentPath, text)
             rejectButton.visible: false
@@ -254,8 +254,8 @@ Maui.Page
         id: renameDialogComponent
         Maui.NewDialog
         {
-            title: qsTr("Rename file")
-            message: qsTr("Rename a file or folder to a new custom name")
+            title: qsTr("Rename File...")
+            message: qsTr("Rename a file or folder")
             textEntry.text: itemMenu.item.label
             textEntry.placeholderText: qsTr("New name...")
             onFinished: Maui.FM.rename(itemMenu.item.path, textEntry.text)
@@ -409,7 +409,7 @@ Maui.Page
             checkable: false
             checked: browserView.viewType === Maui.FMList.ICON_VIEW
             icon.width: Maui.Style.iconSizes.medium
-            text: qsTr("Grid view")
+            text: qsTr("Grid View")
             // 			autoExclusive: true
         },
 
@@ -419,7 +419,7 @@ Maui.Page
             onTriggered: control.viewType = Maui.FMList.LIST_VIEW
             icon.width: Maui.Style.iconSizes.medium
             checked: browserView.viewType === Maui.FMList.LIST_VIEW
-            text: qsTr("List view")
+            text: qsTr("List View")
             // 			autoExclusive: true
         },
 
@@ -429,18 +429,18 @@ Maui.Page
             onTriggered: control.viewType = Maui.FMList.MILLERS_VIEW
             icon.width: Maui.Style.iconSizes.medium
             checked: browserView.viewType === Maui.FMList.MILLERS_VIEW
-            text: qsTr("Column view")
+            text: qsTr("Column View")
             // 			autoExclusive: true
         },
 
         Kirigami.Action
         {
             icon.name: "view-sort"
-            text: qsTr("Sort")
+            text: qsTr("Sort By")
 
             Kirigami.Action
             {
-                text: qsTr("Folders first")
+                text: qsTr("Show Folders First")
                 checked: control.currentFMList.foldersFirst
                 checkable: true
                 onTriggered: control.currentFMList.foldersFirst = !control.currentFMList.foldersFirst
@@ -464,7 +464,7 @@ Maui.Page
 
             Kirigami.Action
             {
-                text: qsTr("Modified")
+                text: qsTr("Last Modified")
                 checkable: true
                 checked: control.currentFMList.sortBy === Maui.FMList.MODIFIED
                 onTriggered: control.currentFMList.sortBy = Maui.FMList.MODIFIED
@@ -505,7 +505,7 @@ Maui.Page
 
         Kirigami.Action
         {
-            text: qsTr("Select mode")
+            text: qsTr("Selection Mode")
             icon.name: "item-select"
             checkable: true
             checked: control.selectionMode
@@ -579,7 +579,7 @@ Maui.Page
 
                 MenuItem
                 {
-                    text: qsTr("Share")
+                    text: qsTr("Share...")
                     onTriggered:
                     {
                         control.shareFiles(selectedPaths)
@@ -589,7 +589,7 @@ Maui.Page
 
                 MenuItem
                 {
-                    text: qsTr("Tags")
+                    text: qsTr("Tags...")
                     onTriggered: if(control.selectionBar)
                     {
                         dialogLoader.sourceComponent = tagsDialogComponent

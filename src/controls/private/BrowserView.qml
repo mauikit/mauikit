@@ -36,26 +36,26 @@ Maui.Page
 		property string title :
 		{
 			if(control.currentFMList.pathExists && control.currentFMList.pathEmpty)
-				qsTr("Folder is empty!")
+				qsTr("Folder is empty")
 				else if(!control.currentFMList.pathExists)
-					qsTr("Folder doesn't exists!")
+					qsTr("Folder doesn't exist")
 					else if(!control.currentFMList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
-						qsTr("Searching for content!")
+						qsTr("Searching for content...")
 						else if(!control.currentFMList.contentReady)
-							qsTr("Loading content!")					
+							qsTr("Loading content...")					
 							
 		}
 		
 		property string body:
 		{
 			if(control.currentFMList.pathExists && control.currentFMList.pathEmpty)
-				qsTr("You can add new files to it")
+				qsTr("You can add new files to this folder.")
 				else if(!control.currentFMList.pathExists)
 					qsTr("Create Folder?")
 					else if(!control.currentFMList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
-						qsTr("This might take a while!")
+						qsTr("This might take a while.")
 						else if(!control.currentFMList.contentReady)
-							qsTr("Almost ready!")	
+							qsTr("Almost ready...")	
 		}
 		
 		property int emojiSize: Maui.Style.iconSizes.huge

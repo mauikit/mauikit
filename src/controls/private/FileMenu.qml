@@ -37,7 +37,7 @@ Menu
 	MenuItem
 	{
 		visible: control.isDir
-		text: qsTr("Open in tab")
+		text: qsTr("Open in new tab...")
 		onTriggered: openTab(item.path)
 	}
 	
@@ -67,7 +67,7 @@ Menu
 	MenuItem
 	{
 		visible: !control.isExec
-        text: qsTr("Rename")
+        text: qsTr("Rename...")
 		onTriggered:
 		{
 			renameClicked(control.item)
@@ -80,7 +80,7 @@ Menu
 	MenuItem
 	{
 		visible: !control.isExec && control.isDir
-		text: qsTr("Bookmark")
+		text: qsTr("Add to Bookmarks")
 		onTriggered:
 		{
 			bookmarkClicked(control.item)
@@ -91,7 +91,7 @@ Menu
 	MenuItem
 	{
 		visible: !control.isExec
-        text: qsTr("Tags")
+        text: qsTr("Tags...")
 		onTriggered:
 		{
 			tagsClicked(control.item)
@@ -102,7 +102,7 @@ Menu
 	MenuItem
 	{
 		visible: !control.isExec		
-        text: qsTr("Share")
+        text: qsTr("Share...")
 		onTriggered:
 		{
 			shareClicked(control.item)
@@ -113,7 +113,7 @@ Menu
 	MenuItem
 	{
 		visible: !control.isExec
-        text: qsTr("Preview")
+        text: qsTr("Properties")
 		onTriggered:
 		{
 			previewer.show(control.item.path)

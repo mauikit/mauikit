@@ -100,13 +100,13 @@ Maui.Page
 		
 		MenuItem
 		{
-			text: qsTr("Select all")
+			text: qsTr("Select All")
 			onTriggered: body.selectAll()
 		}
 		
 		MenuItem
 		{
-			text: qsTr("Web search")
+			text: qsTr("Search Selected Text on Google...")
 			onTriggered: Maui.FM.openUrl("https://www.google.com/search?q="+body.selectedText)
 			enabled: body.selectedText.length
 			

@@ -46,7 +46,7 @@ Maui.SideBar
 		
 		MenuItem
 		{
-			text: qsTr("Edit")
+			text: qsTr("Edit...")
 		}
 		
 		MenuItem
@@ -56,7 +56,7 @@ Maui.SideBar
 		
 		MenuItem
 		{
-			text: qsTr("Remove")
+			text: qsTr("Remove...")
 			Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
 			onTriggered: list.removePlace(control.currentIndex)
 		}

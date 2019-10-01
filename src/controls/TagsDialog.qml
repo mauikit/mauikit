@@ -14,6 +14,9 @@ Maui.Dialog
 	property alias taglist :_tagsList
 	property alias listView: _listView
 	property alias composerList: tagListComposer.list
+
+	acceptText: "OK"
+	rejectText: "Cancel"
 	
 	signal tagsReady(var tags)
 	defaultButtons: true
@@ -33,7 +36,7 @@ Maui.Dialog
 			
 			MenuItem
 			{
-				text: qsTr("Name")
+				text: qsTr("Sort by name")
 				checkable: true
 				checked: _tagsList.sortBy === TagsList.TAG
 				onTriggered: _tagsList.sortBy = TagsList.TAG
@@ -41,7 +44,7 @@ Maui.Dialog
 			
 			MenuItem
 			{
-				text: qsTr("Date")
+				text: qsTr("Sort by date")
 				checkable: true
 				checked: _tagsList.sortBy === TagsList.ADD_DATE
 				onTriggered: _tagsList.sortBy = TagsList.ADD_DATE
@@ -53,7 +56,7 @@ Maui.Dialog
 	{
 		id: tagText
 		Layout.fillWidth: true
-		placeholderText: qsTr("New tags...")
+		placeholderText: qsTr("Add a new tag...")
 		onAccepted:
 		{
 			var tags = tagText.text.split(",")

@@ -25,7 +25,7 @@ Maui.Dialog
 		}
 	}
 	rejectButton.visible: false
-	acceptButton.text: qsTr("Add account") 
+	acceptButton.text: qsTr("Add account...") 
 	onAccepted: _syncDialog.open()		
 	
 	Maui.BaseModel
@@ -39,10 +39,10 @@ Maui.Dialog
 		id: _removeDialog
 		
 		maxWidth: Maui.Style.unit * 400
-		title: qsTr("Remove account?")
+		title: qsTr("Remove Account")
 		message: qsTr("Are you sure you want to remove this account?")
 		
-		rejectButton.text: qsTr("Delete account")
+		rejectButton.text: qsTr("Delete Account")
 		// 			rejectButton.visible: false
 		
 		onRejected: 
@@ -56,7 +56,7 @@ Maui.Dialog
 		
 		footBar.rightContent: Button
 		{
-			text: qsTr("Delete account and files")			
+			text: qsTr("Delete Account and Files")			
 			onClicked: 
 			{
 				var account = Maui.App.accounts.get(_listView.currentIndex)
