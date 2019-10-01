@@ -120,12 +120,12 @@ Maui.ListItemDelegate
 	{
 		id: _iconComponent
 		
-		Kirigami.Icon
+        Kirigami.Icon
 		{
-			source: model.icon
-			fallback: "qrc:/assets/application-x-zerosize.svg"
-			height: control.folderSize
-			width: height
+            source: model.icon
+            fallback: "qrc:/assets/application-x-zerosize.svg"
+            height: control.folderSize
+            width: height
 		}
 	}
 	
