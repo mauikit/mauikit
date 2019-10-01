@@ -93,7 +93,7 @@ Maui.AbstractSideBar
             Layout.margins: Maui.Style.unit
             listView.flickableDirection: Flickable.VerticalFlick
 
-            verticalScrollBarPolicy: privateProperties.isCollapsed ? Qt.ScrollBarAlwaysOff : Qt.ScrollBarAsNeeded
+//             verticalScrollBarPolicy: privateProperties.isCollapsed ? Qt.ScrollBarAlwaysOff : Qt.ScrollBarAsNeeded //this make sthe app crash
             
             delegate: Maui.ListDelegate
             {
