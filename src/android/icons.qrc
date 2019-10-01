@@ -692,5 +692,13 @@
         <file>icons/luv-icon-theme/Luv/mimetypes/64/application-vnd.debian.binary-package.svg</file>
         <file>icons/luv-icon-theme/Luv/mimetypes/64/application-vnd.appimage.svg</file>
         <file>icons/luv-icon-theme/Luv/mimetypes/64/application-rtf.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/folder-music-sidebar.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/user-home-sidebar.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/folder-videos-sidebar.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/folder-sidebar.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/folder-pictures-sidebar.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/folder-download-sidebar.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/folder-documents-sidebar.svg</file>
+        <file>icons/luv-icon-theme/Luv/places/22/folder-cloud-sidebar.svg</file>
     </qresource>
 </RCC>
