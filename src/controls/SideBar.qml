@@ -93,7 +93,7 @@ Maui.AbstractSideBar
             Layout.margins: Maui.Style.unit
             listView.flickableDirection: Flickable.VerticalFlick
 
-//             verticalScrollBarPolicy: privateProperties.isCollapsed ? Qt.ScrollBarAlwaysOff : Qt.ScrollBarAsNeeded //this make sthe app crash
+            verticalScrollBarPolicy:  Qt.ScrollBarAlwaysOff  //this make sthe app crash
             
             delegate: Maui.ListDelegate
             {
@@ -158,7 +158,7 @@ Maui.AbstractSideBar
 
                 Kirigami.Icon
                 {
-                    source: "love"
+					source: privateProperties.isCollapsed ? "sidebar-expand" : "sidebar-collapse"
                     color:  _handle.containsMouse || _handle.containsPress ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
                     anchors.centerIn: parent
                     width: Maui.Style.iconSizes.medium

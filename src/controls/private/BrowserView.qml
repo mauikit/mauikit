@@ -112,7 +112,7 @@ Maui.Page
 			topMargin: Maui.Style.contentMargins			
 			showPreviewThumbnails: showThumbnails
 			keepEmblemOverlay: selectionMode
-			leftEmblem: "list-add"
+			leftEmblem: "emblem-select-add"
 			showDetailsInfo: true		
 			holder.visible: !currentFMList.pathExists || currentFMList.pathEmpty || !currentFMList.contentReady
 			holder.emoji: control.holder.emoji
@@ -149,9 +149,7 @@ Maui.Page
              itemSize : thumbnailsSize + Maui.Style.fontSizes.default
 			keepEmblemOverlay: selectionMode
 			showPreviewThumbnails: showThumbnails
-			leftEmblem: "list-add"	
-// 			topMargin: Maui.Style.contentMargins * 2
-			
+			leftEmblem: "emblem-select-add"				
 			holder.visible: !currentFMList.pathExists || currentFMList.pathEmpty || !currentFMList.contentReady
 			holder.emoji: control.holder.emoji
 			holder.title: control.holder.title
@@ -275,7 +273,7 @@ Maui.Page
 						showPreviewThumbnails: showThumbnails
 						keepEmblemOverlay: selectionMode
 						rightEmblem: Kirigami.Settings.isMobile ? "document-share" : ""
-						leftEmblem: "list-add"
+						leftEmblem: "emblem-select-add"
 						showDetailsInfo: true
 // 						currentIndex : _millerControl.currentIndex						
 						holder.visible: !_millersFMList.pathExists || _millersFMList.pathEmpty || !_millersFMList.contentReady

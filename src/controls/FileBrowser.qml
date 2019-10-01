@@ -159,7 +159,7 @@ Maui.Page
     {
         id: _selectAllAction
         text: qsTr("Select all")
-        icon.name: "edit-select"
+        icon.name: "edit-select-all"
         onTriggered: selectAll()
     },
 
@@ -505,7 +505,7 @@ Maui.Page
 
         Kirigami.Action
         {
-            text: qsTr("Select")
+            text: qsTr("Select mode")
             icon.name: "item-select"
             checkable: false
             checked: control.selectionMode
