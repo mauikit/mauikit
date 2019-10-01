@@ -58,7 +58,7 @@ Maui.Dialog
         ToolButton
         {
             icon.name: "love"
-            text: qsTr("Add to Favorites...")
+            text: control.isFav ? qsTr("Remove from Favorites") : qsTr("Add to Favorites")
 			checkable: true
 			checked: control.isFav
 			onClicked: 
