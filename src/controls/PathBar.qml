@@ -142,7 +142,8 @@ Item
 					anchors.centerIn: parent
 					icon.name: "user-home"
 					flat: true
-					icon.color: control.Kirigami.Theme.textColor                
+					icon.color: control.Kirigami.Theme.textColor   
+					icon.width: Maui.Style.iconSizes.medium
 					onClicked: homeClicked()
 				}
 			}

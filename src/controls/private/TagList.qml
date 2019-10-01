@@ -13,7 +13,7 @@ ListView
     orientation: ListView.Horizontal
     clip: true
     spacing: Maui.Style.contentMargins   
-    boundsBehavior: isMobile ?  Flickable.DragOverBounds : Flickable.StopAtBounds
+    boundsBehavior: Kirigami.Settings.isMobile ?  Flickable.DragOverBounds : Flickable.StopAtBounds
 
     property string placeholderText: qsTr("Add tags...")
     property alias list : _tagsList

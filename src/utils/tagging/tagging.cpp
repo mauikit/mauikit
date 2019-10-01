@@ -85,7 +85,7 @@ void Tagging::setApp()
     this->application = UTIL::app->applicationName();
 	this->version = UTIL::app->applicationVersion();
     this->comment = QString();
-	this->uri = UTIL::app->organizationName().isEmpty() ? QString("org.maui.%1").arg(this->application) : UTIL::app->organizationName();
+	this->uri = UTIL::app->organizationDomain().isEmpty() ? QString("org.maui.%1").arg(this->application) : UTIL::app->organizationDomain();
     this->app();
 }
 

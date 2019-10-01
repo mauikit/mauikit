@@ -128,6 +128,15 @@ void PlacesList::setList()
 {		
     this->list.clear();
 
+	//this are default static places
+	this->list << FMH::MODEL
+	{
+		{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::TAGS_PATH]+"fav"},
+		{FMH::MODEL_KEY::ICON, "love"},
+		{FMH::MODEL_KEY::LABEL, "Favorite"},
+		{FMH::MODEL_KEY::TYPE, "Quick"}
+	};
+	
     for(const auto &group : this->groups)
         switch(group)
         {

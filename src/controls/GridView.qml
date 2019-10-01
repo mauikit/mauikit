@@ -18,7 +18,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.0
+import QtQuick 2.5
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.impl 2.3
@@ -59,12 +59,21 @@ Kirigami.ScrollablePage
 
     Kirigami.Theme.backgroundColor: "transparent"
     padding: 0
-    leftPadding: padding
+    leftPadding: control.ScrollBar.visible ? padding : control.ScrollBar.width
     rightPadding: padding
     topPadding: padding
     bottomPadding: padding
     focus: true
 
+	Behavior on cellWidth
+	{
+		NumberAnimation
+		{
+			duration: Kirigami.Units.longDuration 
+			easing.type: Easing.InQuad
+		}
+	}     
+    
     GridView
     {
         id: gridView
@@ -95,50 +104,53 @@ Kirigami.ScrollablePage
             id: _holder
             anchors.fill : parent
         }
-
-        PinchArea
-        {
-            anchors.fill: parent
-            z: -1
-            onPinchStarted:
-            {
-                console.log("pinch started")
-            }
-
-            onPinchUpdated:
-            {
-
-            }
-
-            onPinchFinished:
-            {
-                console.log("pinch finished")
-                 resizeContent(pinch.scale)
-            }
-
-            MouseArea
-            {
-                anchors.fill: parent
-                propagateComposedEvents: true
-                acceptedButtons:  Qt.RightButton | Qt.LeftButton
-                onClicked: control.areaClicked(mouse)
-                onPressAndHold: control.areaRightClicked()
-
-                onWheel:
-                {
-                    if (wheel.modifiers & Qt.ControlModifier)
-                    {
-                        if (wheel.angleDelta.y != 0)
-                        {
-                            var factor = 1 + wheel.angleDelta.y / 600;
-                            control.resizeContent(factor)
-                        }
-                    }else
-                        wheel.accepted = false
-                }
-            }
-        }
+        
+             PinchArea
+    {
+		anchors.fill: parent
+		z: -1
+		onPinchStarted:
+		{
+			console.log("pinch started")
+		}
+		
+		onPinchUpdated:
+		{
+			
+		}
+		
+		onPinchFinished:
+		{
+			console.log("pinch finished")
+			resizeContent(pinch.scale)
+		}
+		
+		MouseArea
+		{
+			anchors.fill: parent
+			propagateComposedEvents: true
+			acceptedButtons:  Qt.RightButton | Qt.LeftButton
+			onClicked: control.areaClicked(mouse)
+			onPressAndHold: control.areaRightClicked()
+// 			scrollGestureEnabled : false 
+			
+			onWheel:
+			{
+				if (wheel.modifiers & Qt.ControlModifier)
+				{
+					if (wheel.angleDelta.y != 0)
+					{
+						var factor = 1 + wheel.angleDelta.y / 600;
+						control.resizeContent(factor)
+					}
+				}else
+					wheel.accepted = false
+			}
+		}
+	}
     }
+    
+
 
     function resizeContent(factor)
     {
@@ -153,7 +165,6 @@ Kirigami.ScrollablePage
 			control.cellHeight = control.cellHeight - 10
         }
 
-//         gridView.size_ = control.itemSize
         if(adaptContent)
             control.adaptGrid()
     }
@@ -163,6 +174,7 @@ Kirigami.ScrollablePage
         var amount = parseInt(gridView.width / (gridView.size_), 10)
         var leftSpace = parseInt(gridView.width  - ( amount * (gridView.size_) ), 10)
 		var size = parseInt((gridView.size_) + (parseInt(leftSpace/amount, 10)), 10)
+// 		size = size > gridView.size_? size : gridView.size_
 		control.cellWidth = size
     }    
 }

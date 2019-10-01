@@ -41,7 +41,8 @@ public:
 	~FM();
 	
 	FMH::MODEL_LIST getTags(const int &limit = 5);	
-	FMH::MODEL_LIST getTagContent(const QString &tag);	
+	FMH::MODEL_LIST getTagContent(const QString &tag);
+	bool addTagToUrl(const QString tag, const QUrl &url);
 //     FMH::MODEL_LIST getBookmarks();
 
     /** Syncing **/

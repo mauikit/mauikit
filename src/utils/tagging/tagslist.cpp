@@ -25,8 +25,7 @@ TAG::DB_LIST TagsList::toModel(const QVariantList& data)
 
 void TagsList::setList()
 {
-	emit this->preListChanged();
-	
+	emit this->preListChanged();	
 	
 	if(this->abstract)
 	{
@@ -42,7 +41,7 @@ void TagsList::setList()
 		else
 		{
 			this->list.clear();
-			for(auto url : this->urls)
+			for(const auto &url : this->urls)
 				this->list << this->toModel(this->tag->getUrlTags(url, this->strict));
 		}
 	}
@@ -111,6 +110,24 @@ void TagsList::refresh()
 	this->setList();
 }
 
+bool TagsList::contains(const QString& tag)
+{		
+	return indexOf(tag) > -1;
+}
+
+int TagsList::indexOf(const QString& tag)
+{
+	int i = 0;
+	for(auto &item : this->list)
+	{
+		if(item.value(TAG::KEYS::TAG) == tag)
+			return i;		
+		i ++;
+	}
+	
+	return -1;
+}
+
 bool TagsList::insert(const QString &tag)
 {	
 	auto _tag = tag.trimmed();
@@ -132,10 +149,8 @@ void TagsList::insertToUrls(const QString& tag)
 	if(this->urls.isEmpty())
 		return;
 	
-	for(auto url : this->urls)
-	{
-		this->tag->tagUrl(url, tag);
-	}
+	for(const auto &url : this->urls)	
+		this->tag->tagUrl(url, tag);	
 	
 	this->refresh();
 }
@@ -196,13 +211,18 @@ void TagsList::removeFromUrls(const int& index)
 		return;
 	
 	const auto tag =  this->list[index][TAG::KEYS::TAG];
-	for(auto url : this->urls)
+	for(const auto &url : this->urls)
 		this->tag->removeUrlTag(url, tag);
 	
 	emit this->preItemRemoved(index);
 	this->list.removeAt(index);
-	emit this->postItemRemoved();
-	
+	emit this->postItemRemoved();	
+}
+
+void TagsList::removeFromUrls(const QString &tag)
+{	
+	const auto index = indexOf(tag);
+	removeFromUrls(index);
 }
 
 bool TagsList::remove(const int& index)

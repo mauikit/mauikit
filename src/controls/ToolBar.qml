@@ -120,7 +120,7 @@ ToolBar
 		Kirigami.Icon
 		{
 			anchors.centerIn: parent
-			source: "arrow-right-double"
+			source: "toolbar-expand-right"
 			width: Maui.Style.iconSizes.small
 			height: Maui.Style.iconSizes.small
 			color: _rightFlickRec.hovered ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor			
@@ -156,7 +156,7 @@ ToolBar
 		Kirigami.Icon
 		{
 			anchors.centerIn: parent
-			source: "arrow-left-double"
+			source: "toolbar-expand-left"
 			width: Maui.Style.iconSizes.small
 			height: Maui.Style.iconSizes.small		
 			color: _leftFlickRec.hovered ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor

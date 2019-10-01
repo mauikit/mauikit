@@ -554,9 +554,7 @@ QString FM::resolveLocalCloudPath(const QString& path)
 
 FMH::MODEL_LIST FM::getTagContent(const QString &tag)
 {
-	FMH::MODEL_LIST content;
-	
-	qDebug()<< "TAG CONTENT FOR TAG"<< tag;
+	FMH::MODEL_LIST content;	
 	
 	for(const auto &data : this->tag->getUrls(tag, false))
 	{
@@ -566,6 +564,11 @@ FMH::MODEL_LIST FM::getTagContent(const QString &tag)
 	}
 	
 	return content;
+}
+
+bool FM::addTagToUrl(const QString tag, const QUrl& url)
+{
+	return this->tag->tagUrl(url.toString(), tag);	
 }
 
 QVariantMap FM::getDirInfo(const QUrl &path, const QString &type)
@@ -880,7 +883,6 @@ bool FM::rename(const QUrl &path, const QString &name)
 bool FM::createDir(const QUrl &path, const QString &name)
 {
     QFileInfo dd(path.toLocalFile());
-    qDebug()<< "Trying to create dir" << path.toLocalFile() << dd.isReadable() << dd.isWritable() << dd.permissions();
     return QDir(path.toLocalFile()).mkdir(name);
 }
 

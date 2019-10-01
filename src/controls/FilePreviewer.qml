@@ -13,6 +13,7 @@ Maui.Dialog
     property url currentUrl: ""
     property var iteminfo : ({})
 
+	property bool isFav : false
     property bool isDir : false
     property string mimetype : ""
     property bool showInfo: true
@@ -58,6 +59,17 @@ Maui.Dialog
         {
             icon.name: "love"
             text: qsTr("Fav")
+			checkable: true
+			checked: control.isFav
+			onClicked: 
+			{
+				if(control.isFav)
+					_tagsBar.list.removeFromUrls("fav")
+				else
+					_tagsBar.list.insertToUrls("fav")
+					
+					control.isFav = !control.isFav
+			}
         }
 
     ]
@@ -231,10 +243,12 @@ Maui.Dialog
         {
             control.mimetype = ""
         }
+        
         control.isDir = mimetype === "inode"
-        control.showInfo = control.mimetype === "audio" || control.mimetype === "image" || control.mimetype === "video" || control.mimetype === "text"? false : true
-       
+        control.showInfo = control.mimetype === "audio" || control.mimetype === "image" || control.mimetype === "video" || control.mimetype === "text"? false : true       
 		control.currentUrl = path
+		control.isFav =  _tagsBar.list.contains("fav")
+		
 		var component;
 		 switch(mimetype)
 		{

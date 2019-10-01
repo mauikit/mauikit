@@ -108,11 +108,14 @@ public slots:
 	void removeFrom(const int &index, const QString &key, const QString &lot);
 	
 	void removeFromUrls(const int &index);
+	void removeFromUrls(const QString &tag);
 	void removeFromAbstract(const int &index);
 	
 	void erase(const int &index);
     void refresh();
-
+	
+	bool contains(const QString &tag);
+	int indexOf(const QString &tag);
 };
 
 #endif // SYNCINGLIST_H
