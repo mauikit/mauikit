@@ -555,7 +555,7 @@ Maui.Page
 
                 MenuItem
                 {
-                    text: qsTr("Copy...")
+                    text: qsTr("Copy")
                     onTriggered: if(control.selectionBar)
                     {
                         control.selectionBar.animate("#6fff80")
@@ -567,7 +567,7 @@ Maui.Page
 
                 MenuItem
                 {
-                    text: qsTr("Cut...")
+                    text: qsTr("Cut")
                     onTriggered: if(control.selectionBar)
                     {
                         control.selectionBar.animate("#fff44f")
@@ -589,7 +589,7 @@ Maui.Page
 
                 MenuItem
                 {
-                    text: qsTr("Tags...")
+                    text: qsTr("Tags")
                     onTriggered: if(control.selectionBar)
                     {
                         dialogLoader.sourceComponent = tagsDialogComponent
@@ -603,7 +603,7 @@ Maui.Page
 
                 MenuItem
                 {
-                    text: qsTr("Remove...")
+                    text: qsTr("Remove")
                     Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
 
                     onTriggered:

@@ -45,7 +45,7 @@ Menu
 	MenuItem
 	{
 		visible: !control.isExec
-		text: qsTr("Copy...")
+        text: qsTr("Copy")
 		onTriggered:
 		{
 			copyClicked(control.item)
@@ -56,7 +56,7 @@ Menu
 	MenuItem
 	{
 		visible: !control.isExec
-		text: qsTr("Cut...")
+        text: qsTr("Cut")
 		onTriggered:
 		{
 			cutClicked(control.item)
@@ -67,7 +67,7 @@ Menu
 	MenuItem
 	{
 		visible: !control.isExec
-		text: qsTr("Rename...")
+        text: qsTr("Rename")
 		onTriggered:
 		{
 			renameClicked(control.item)
@@ -91,7 +91,7 @@ Menu
 	MenuItem
 	{
 		visible: !control.isExec
-		text: qsTr("Tags...")
+        text: qsTr("Tags")
 		onTriggered:
 		{
 			tagsClicked(control.item)
@@ -102,7 +102,7 @@ Menu
 	MenuItem
 	{
 		visible: !control.isExec		
-		text: qsTr("Share...")
+        text: qsTr("Share")
 		onTriggered:
 		{
 			shareClicked(control.item)
@@ -113,7 +113,7 @@ Menu
 	MenuItem
 	{
 		visible: !control.isExec
-		text: qsTr("Preview...")
+        text: qsTr("Preview")
 		onTriggered:
 		{
 			previewer.show(control.item.path)
@@ -125,7 +125,7 @@ Menu
 	
 	MenuItem
 	{
-		text: qsTr("Remove...")
+        text: qsTr("Remove")
 		Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
 		
 		onTriggered:

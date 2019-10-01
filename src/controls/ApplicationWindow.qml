@@ -177,26 +177,18 @@ Kirigami.AbstractApplicationWindow
                     z: 999
                     width: Maui.Style.unit * 200
 
-                    Item
+                    MenuItem
                     {
-                        height: _accountCombobox.visible ? _accountCombobox.implicitHeight + Maui.Style.space.big: 0
-
-                        anchors
-                        {
-                            left: parent.left
-                            right: parent.right
-                            top: parent.top
-                            margins: Maui.Style.space.medium
-                        }
+                        visible: (_accountCombobox.count > 0) && root.showAccounts
+                        height:  visible ? _accountCombobox.implicitHeight + Maui.Style.space.big : 0
 
                         ComboBox
                         {
                             id: _accountCombobox
-                            anchors.centerIn: parent
-                            // 						parent: mainMenu
+                            anchors.fill: parent
+                            anchors.margins: Maui.Style.space.small
                             popup.z: 999
                             width: parent.width
-                            // 						visible: (count > 1) && showAccounts
                             textRole: "user"
                             flat: true
                             model: Maui.BaseModel
