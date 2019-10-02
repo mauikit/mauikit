@@ -58,26 +58,9 @@ Item
 			
 			width: Math.min(parent.width, emojiSize)
 			height: width
-            color: Kirigami.Theme.textColor
+			color: textHolder.color
             opacity: 0.5
-//			sourceSize.width: width
-//			sourceSize.height: height
 			source: emoji
-//            asynchronous: false
-//            cache: true
-//            smooth: true
-//			horizontalAlignment: Qt.AlignHCenter
-			
-//			fillMode: Image.PreserveAspectFit
-			
-//			HueSaturation
-//			{
-//				anchors.fill: parent
-//				source: parent
-//				saturation: -1
-//				lightness: 0.3
-//				visible: isMask
-//			}
 		}
 	}
 	
@@ -103,8 +86,7 @@ Item
 	
 	Column
 	{
-		anchors.centerIn: parent		
-		
+		anchors.centerIn: parent	
 		
 		Loader
 		{
