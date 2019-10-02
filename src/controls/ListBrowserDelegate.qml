@@ -36,6 +36,9 @@ Maui.ListItemDelegate
 	property bool showEmblem : false
 	property bool showTooltip : false
 	property bool showThumbnails : false
+	property bool isSelected : false
+	
+	isCurrentItem : ListView.isCurrentItem || isSelected
 	
 	property bool keepEmblemOverlay : false
 	

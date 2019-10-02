@@ -19,48 +19,6 @@ Maui.Page
 	height: _browserList.height
 	width: _browserList.width
 	
-	property QtObject holder : QtObject 
-	{		
-		property string emoji: 
-		{
-			if(control.currentFMList.pathExists && control.currentFMList.pathEmpty)
-				"qrc:/assets/folder-add.svg" 
-				else if(!control.currentFMList.pathExists)
-					"qrc:/assets/dialog-information.svg"
-					else if(!control.currentFMList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
-						"qrc:/assets/edit-find.svg"
-						else if(!control.currentFMList.contentReady)
-							"qrc:/assets/view-refresh.svg"
-		}
-		
-		property string title :
-		{
-			if(control.currentFMList.pathExists && control.currentFMList.pathEmpty)
-				qsTr("Folder is empty!")
-				else if(!control.currentFMList.pathExists)
-					qsTr("Folder doesn't exists!")
-					else if(!control.currentFMList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
-						qsTr("Searching for content!")
-						else if(!control.currentFMList.contentReady)
-							qsTr("Loading content!")					
-							
-		}
-		
-		property string body:
-		{
-			if(control.currentFMList.pathExists && control.currentFMList.pathEmpty)
-				qsTr("You can add new files to it")
-				else if(!control.currentFMList.pathExists)
-					qsTr("Create Folder?")
-					else if(!control.currentFMList.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
-						qsTr("This might take a while!")
-						else if(!control.currentFMList.contentReady)
-							qsTr("Almost ready!")	
-		}
-		
-		property int emojiSize: Maui.Style.iconSizes.huge
-	}	
-	
 	function setCurrentFMList()
 	{
 		control.currentFMList = currentView.currentFMList	
@@ -112,13 +70,21 @@ Maui.Page
 			topMargin: Maui.Style.contentMargins			
 			showPreviewThumbnails: showThumbnails
 			keepEmblemOverlay: selectionMode
+			
 			leftEmblem: "emblem-select-add"
 			showDetailsInfo: true		
-			holder.visible: !currentFMList.pathExists || currentFMList.pathEmpty || !currentFMList.contentReady
-			holder.emoji: control.holder.emoji
-			holder.title: control.holder.title
-			holder.body: control.holder.body
-			holder.emojiSize: control.holder.emojiSize
+			
+			BrowserHolder
+			{
+				id: _holder
+				browser: currentFMList
+			}
+			
+			holder.visible: _holder.visible
+			holder.emoji: _holder.emoji
+			holder.title: _holder.title
+			holder.body: _holder.body
+			holder.emojiSize: _holder.emojiSize
 			
 			model: Maui.BaseModel
 			{
@@ -146,16 +112,22 @@ Maui.Page
 		Maui.GridBrowser
 		{
 			property alias currentFMList : _browserModel.list
-             itemSize : thumbnailsSize + Maui.Style.fontSizes.default
+			itemSize : thumbnailsSize + Maui.Style.fontSizes.default
 			keepEmblemOverlay: selectionMode
 			showPreviewThumbnails: showThumbnails
-			leftEmblem: "emblem-select-add"				
-			holder.visible: !currentFMList.pathExists || currentFMList.pathEmpty || !currentFMList.contentReady
-			holder.emoji: control.holder.emoji
-			holder.title: control.holder.title
-			holder.body: control.holder.body
-			holder.emojiSize: control.holder.emojiSize
+			leftEmblem: "emblem-select-add"	
 			
+			BrowserHolder
+			{
+				id: _holder
+				browser: currentFMList
+			}
+			
+			holder.visible: _holder.visible
+			holder.emoji: _holder.emoji
+			holder.title: _holder.title
+			holder.body: _holder.body
+			holder.emojiSize: _holder.emojiSize
 			model: Maui.BaseModel
 			{
 				id: _browserModel
@@ -193,9 +165,9 @@ Maui.Page
 				
 				keyNavigationEnabled: true
 				interactive: Kirigami.Settings.isMobile
-
+				
 				orientation: ListView.Horizontal
-                snapMode: ListView.NoSnap
+				snapMode: ListView.NoSnap
 				
 				ScrollBar.horizontal: ScrollBar { }
 				
@@ -203,24 +175,24 @@ Maui.Page
 				{
 					_millerControl.currentFMList = currentItem.currentFMList
 					control.setCurrentFMList()				
-                }
-
-                onCountChanged:
-                {
-                    _millerColumns.currentIndex = _millerColumns.count-1
-                    _millerColumns.positionViewAtEnd()
-                }
-
+				}
+				
+				onCountChanged:
+				{
+					_millerColumns.currentIndex = _millerColumns.count-1
+					_millerColumns.positionViewAtEnd()
+				}
+				
 				Maui.PathList
 				{
 					id: _millerList
 					path: control.path
-
-                    onPathChanged:
-                    {
-                        _millerColumns.currentIndex = _millerColumns.count-1
-                        _millerColumns.positionViewAtEnd()
-                    }
+					
+					onPathChanged:
+					{
+						_millerColumns.currentIndex = _millerColumns.count-1
+						_millerColumns.positionViewAtEnd()
+					}
 				}
 				
 				model: Maui.BaseModel
@@ -240,7 +212,7 @@ Maui.Page
 					background: Rectangle
 					{
 						color: "transparent"
-                    }
+					}
 					
 					Kirigami.Separator
 					{
@@ -280,13 +252,19 @@ Maui.Page
 						rightEmblem: Kirigami.Settings.isMobile ? "document-share" : ""
 						leftEmblem: "emblem-select-add"
 						showDetailsInfo: true
-// 						currentIndex : _millerControl.currentIndex						
-						holder.visible: !_millersFMList.pathExists || _millersFMList.pathEmpty || !_millersFMList.contentReady
-						holder.emoji: control.holder.emoji
-						holder.title: control.holder.title
-						holder.body: control.holder.body
-						holder.emojiSize: control.holder.emojiSize
-
+						// 						currentIndex : _millerControl.currentIndex						
+						BrowserHolder
+						{
+							id: _holder
+							browser: currentFMList
+						}
+						
+						holder.visible: _holder.visible
+						holder.emoji: _holder.emoji
+						holder.title: _holder.title
+						holder.body: _holder.body
+						holder.emojiSize: _holder.emojiSize
+						
 						onItemClicked: 
 						{
 							_millerColumns.currentIndex = _index

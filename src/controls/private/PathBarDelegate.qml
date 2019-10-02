@@ -8,12 +8,12 @@ ItemDelegate
 {
     id: control
     property bool isCurrentListItem : ListView.isCurrentItem
-    property color labelColor : isCurrentListItem ? Kirigami.Theme.highlightColor :  Kirigami.Theme.textColor
+    property color labelColor : Kirigami.Theme.textColor
     anchors.verticalCenter: parent.verticalCenter
     implicitWidth: _label.implicitWidth + Maui.Style.space.big
     background: Rectangle
     {
-		color: isCurrentListItem ? Qt.lighter( Kirigami.Theme.backgroundColor, 1.1) : "transparent"
+		color: isCurrentListItem ? Qt.rgba(Kirigami.Theme.highlightColor.r, Kirigami.Theme.highlightColor.g, Kirigami.Theme.highlightColor.b, 0.2)  : "transparent"
         
         Kirigami.Separator
         {

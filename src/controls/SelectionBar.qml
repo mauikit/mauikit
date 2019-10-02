@@ -322,4 +322,9 @@ Item
         var paths = ""+selectedPaths.join(",")
         return paths
     }
+    
+    function contains(path)
+	{
+		return control.selectedPaths.includes(path)
+	}
 }

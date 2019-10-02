@@ -13,6 +13,7 @@
 		<file alias="private/BrowserMenu.qml">src/controls/private/BrowserMenu.qml</file>
 		<file alias="private/BrowserView.qml">src/controls/private/BrowserView.qml</file>
 		<file alias="private/BrowserSettings.qml">src/controls/private/BrowserSettings.qml</file>
+		<file alias="private/BrowserHolder.qml">src/controls/private/BrowserHolder.qml</file>
 		<file alias="private/FileMenu.qml">src/controls/private/FileMenu.qml</file>
         <file alias="private/AudioPreview.qml">src/controls/private/AudioPreview.qml</file>
         <file alias="private/ImagePreview.qml">src/controls/private/ImagePreview.qml</file>
