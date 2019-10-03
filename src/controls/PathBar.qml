@@ -141,11 +141,11 @@ Item
 				ToolButton
 				{
 					anchors.centerIn: parent
-                    icon.name: isAndroid ? "user-home-sidebar" : "user-home"
+					icon.name: Kirigami.Settings.isMobile ?  "user-home-sidebar" : "user-home"
 					flat: true
 					icon.color: control.Kirigami.Theme.textColor   
 					icon.width: Maui.Style.iconSizes.medium
-					onClicked: homeClicked()
+					onClicked: control.homeClicked()
 				}
 			}
 			

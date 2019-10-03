@@ -57,6 +57,7 @@ Maui.Page
 	signal itemRightEmblemClicked(int index)
 	signal rightClicked()
 	signal newBookmark(var paths)
+	signal newTag(var tag)
 	
 	
 	Kirigami.Theme.colorSet: Kirigami.Theme.View
@@ -118,7 +119,7 @@ Maui.Page
 		id: _bookmarkAction
 		icon.name: "bookmark-new"
 		text: qsTr("Bookmark")
-		onTriggered: newBookmark([currentPath])
+		onTriggered: control.bookmarkFolder([currentPath])
 	},
 	
 	Action
@@ -280,6 +281,8 @@ Maui.Page
 				composerList.updateToUrls(tags)
 				if(previewer.visible)
 					previewer.tagBar.list.refresh()
+					
+				control.newTag(tags)
 			}
 		}
 	}
@@ -299,7 +302,7 @@ Maui.Page
 	{
 		id: itemMenu
 		width: Maui.Style.unit *200
-		onBookmarkClicked: control.newBookmark([item.path])
+		onBookmarkClicked: control.bookmarkFolder([item.path])
 		onCopyClicked:
 		{
 			if(item)
@@ -1033,8 +1036,7 @@ Maui.Page
 	function paste()
 	{
 		if(control.isCopy)
-		{
-			control.currentFMList.copyInto(control.clipboardItems)
+		{			control.currentFMList.copyInto(control.clipboardItems)
 		}
 		else if(control.isCut)
 		{
@@ -1061,9 +1063,9 @@ Maui.Page
 			Maui.FM.moveToTrash(items[i].path)
 	}
 	
-	function bookmarkFolder(paths)
+	function bookmarkFolder(paths) //multiple paths
 	{
-		newBookmark(paths)
+		control.newBookmark(paths)
 	}
 	
 	function zoomIn()
@@ -1104,15 +1106,15 @@ Maui.Page
 				break;
 		}
 		
-		browserView.viewType = Maui.FMList.LIST_VIEW
+		control.browserView.viewType = Maui.FMList.LIST_VIEW
 		
 		if(!prop)
 		{
-			browserView.currentView.section.property = ""
+			control.browserView.currentView.section.property = ""
 			return
 		}
 		
-		browserView.currentView.section.property = prop
-		browserView.currentView.section.criteria = criteria
+		control.browserView.currentView.section.property = prop
+		control.browserView.currentView.section.criteria = criteria
 	}
 }

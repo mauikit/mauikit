@@ -16,6 +16,8 @@ Menu
         action: _hiddenAction
     }
     
+    MenuSeparator {}
+    
     MenuItem
     {
         action: _bookmarkAction
@@ -31,6 +33,7 @@ Menu
         action: _newDocumentAction
     }
     
+    MenuSeparator {}    
     
     MenuItem
     {
