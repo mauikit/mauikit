@@ -25,7 +25,7 @@ import org.kde.mauikit 1.0 as Maui
 import QtGraphicalEffects 1.0
 import "private"
 
-Maui.ListItemDelegate
+Maui.ItemDelegate
 {
 	id: control 
 	
@@ -42,9 +42,7 @@ Maui.ListItemDelegate
 	property string leftEmblem
 	
 	isCurrentItem : ListView.isCurrentItem || isSelected	
-	
-	opacity: (model.hidden == true || model.hidden == "true" )? 0.5 : 1
-	
+		
 	signal emblemClicked(int index)
 	signal rightEmblemClicked(int index)
 	signal leftEmblemClicked(int index)  	
@@ -130,6 +128,7 @@ Maui.ListItemDelegate
 	
 	RowLayout
 	{
+		opacity: (model.hidden == true || model.hidden == "true" )? 0.5 : 1
 		anchors.fill: parent
 		spacing: Maui.Style.space.small
 		Item
@@ -165,7 +164,7 @@ Maui.ListItemDelegate
 			verticalAlignment: Qt.AlignVCenter
 			elide: Qt.ElideRight
 			wrapMode: Text.Wrap
-			color: control.labelColor				
+			color: control.Kirigami.Theme.textColor				
 		}
 		
 		
@@ -183,7 +182,7 @@ Maui.ListItemDelegate
 				elide: Qt.ElideRight
 				wrapMode: Text.NoWrap
 				font.pointSize: Maui.Style.fontSizes.small
-				color: control.labelColor
+				color: control.Kirigami.Theme.textColor
 				opacity: control.isCurrentItem ? 1 : 0.5
 				text: model.mime === "inode/directory" ? (model.count ? model.count + qsTr(" items") : "") : Maui.FM.formatSize(model.size)
 			}
@@ -200,7 +199,7 @@ Maui.ListItemDelegate
 				elide: Qt.ElideRight
 				wrapMode: Text.NoWrap
 				font.pointSize: Maui.Style.fontSizes.small
-				color: control.labelColor
+				color: control.Kirigami.Theme.textColor
 				opacity: control.isCurrentItem ? 1 : 0.5
 			}
 		}

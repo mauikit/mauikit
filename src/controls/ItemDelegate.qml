@@ -32,11 +32,9 @@ ItemDelegate
     default property alias content : _content.data   
     
     property bool draggable: false
-    property bool isCurrentItem :  ListView.isCurrentItem
+    property bool isCurrentItem :  false
 
-    property int radius: Maui.Style.radiusV
-	
-	property color labelColor : Kirigami.Theme.textColor	    
+    property int radius: Maui.Style.radiusV	
     
     //override the itemdelegate default signals to allow dragging content
     signal pressed(var mouse)

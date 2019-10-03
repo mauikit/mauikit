@@ -208,7 +208,6 @@ Item
                     showLabel: true
                     keepEmblemOverlay: true
                     showEmblem: !Kirigami.Settings.isMobile
-                    labelColor: Kirigami.Theme.textColor
                     showTooltip: true
                     showThumbnails: true
                     emblemSize: Maui.Style.iconSizes.small

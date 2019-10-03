@@ -23,7 +23,7 @@ import QtQuick.Controls 2.2
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
-Maui.ListItemDelegate
+Maui.ItemDelegate
 {
 	id: control
 	
@@ -36,70 +36,72 @@ Maui.ListItemDelegate
 	implicitWidth: parent.width
 	implicitHeight: Math.max(control.iconSize + Maui.Style.space.big, Maui.Style.rowHeight)	
 	
+	isCurrentItem : ListView.isCurrentItem 
+	
 	padding: 0
 	leftPadding: Maui.Style.space.tiny
 	rightPadding: Maui.Style.space.tiny
-
+	
 	ToolTip.delay: 1000
 	ToolTip.timeout: 5000
 	ToolTip.visible: hovered 
 	ToolTip.text: qsTr(control.label)
 	
 	RowLayout
+	{
+		anchors.fill: parent
+		
+		Item
 		{
-			anchors.fill: parent
+			Layout.fillHeight: true
+			Layout.fillWidth: !labelVisible
+			Layout.preferredWidth: model.icon ? parent.height : 0
+			visible: model.icon !== typeof("undefined")
 			
-			Item
+			Kirigami.Icon
 			{
-				Layout.fillHeight: true
-				Layout.fillWidth: !labelVisible
-				Layout.preferredWidth: model.icon ? parent.height : 0
-				visible: model.icon !== typeof("undefined")
-				
-				Kirigami.Icon
-				{
-					id: controlIcon
-					anchors.centerIn: parent
-                    source: model.icon ? model.icon : ""
-                    color: control.labelColor
-                    height: control.iconSize
-                    width: height
-                }
+				id: controlIcon
+				anchors.centerIn: parent
+				source: model.icon ? model.icon : ""
+				color: control.Kirigami.Theme.textColor
+				height: control.iconSize
+				width: height
 			}
+		}
+		
+		Label
+		{
+			id: controlLabel
+			visible: control.labelVisible
+			Layout.fillHeight: true
+			Layout.fillWidth: true
+			Layout.alignment: Qt.AlignVCenter
+			verticalAlignment:  Qt.AlignVCenter
+			horizontalAlignment: Qt.AlignLeft
 			
-			Label
+			text: model.label
+			font.bold: false
+			elide: Text.ElideRight
+			wrapMode: Text.NoWrap
+			font.pointSize: Kirigami.Settings.isMobile ? Maui.Style.fontSizes.big :
+			Maui.Style.fontSizes.default
+			color: control.Kirigami.Theme.textColor
+		}
+		
+		Item
+		{
+			visible: typeof model.count !== "undefined" && model.count && model.count > 0 && control.labelVisible
+			Layout.fillHeight: true
+			Layout.preferredWidth: visible ? Math.max(Maui.Style.iconSizes.big + Maui.Style.space.small, _badge.implicitWidth) : 0
+			Layout.alignment: Qt.AlignRight
+			Maui.Badge
 			{
-				id: controlLabel
-				visible: control.labelVisible
-				Layout.fillHeight: true
-				Layout.fillWidth: true
-				Layout.alignment: Qt.AlignVCenter
-				verticalAlignment:  Qt.AlignVCenter
-				horizontalAlignment: Qt.AlignLeft
-				
-				text: model.label
-				font.bold: false
-				elide: Text.ElideRight
-				wrapMode: Text.NoWrap
-				font.pointSize: Kirigami.Settings.isMobile ? Maui.Style.fontSizes.big :
-				Maui.Style.fontSizes.default
-				color: control.labelColor
+				id: _badge
+				anchors.centerIn: parent
+				text: model.count                
 			}
-			
-			Item
-			{
-				visible: typeof model.count !== "undefined" && model.count && model.count > 0 && control.labelVisible
-				Layout.fillHeight: true
-				Layout.preferredWidth: visible ? Math.max(Maui.Style.iconSizes.big + Maui.Style.space.small, _badge.implicitWidth) : 0
-				Layout.alignment: Qt.AlignRight
-				Maui.Badge
-				{
-					id: _badge
-					anchors.centerIn: parent
-					text: model.count                
-				}
-			}		
 		}		
+	}		
 	
 	
 	function clearCount()
