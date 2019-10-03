@@ -99,10 +99,10 @@ Kirigami.AbstractApplicationWindow
     {
         if(!isMobile)
         {
-            var height = root.height
-            var width = root.width
-            var x = root.x
-            var y = root.y
+            const height = root.height
+            const width = root.width
+            const x = root.x
+            const y = root.y
             Maui.FM.saveSettings("GEOMETRY", Qt.rect(x, y, width, height), "WINDOW")
         }
     }
@@ -407,7 +407,7 @@ Kirigami.AbstractApplicationWindow
 
         if(!isMobile)
         {
-            var rect = Maui.FM.loadSettings("GEOMETRY", "WINDOW", Qt.rect(root.x, root.y, root.width, root.height))
+            const rect = Maui.FM.loadSettings("GEOMETRY", "WINDOW", Qt.rect(root.x, root.y, root.width, root.height))
             root.x = rect.x
             root.y = rect.y
             root.width = rect.width

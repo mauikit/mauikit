@@ -59,7 +59,8 @@ Item
 			width: Math.min(parent.width, emojiSize)
 			height: width
 			color: textHolder.color
-            opacity: 0.5
+			isMask: control.isMask
+			opacity: textHolder.opacity
 			source: emoji
 		}
 	}
@@ -77,15 +78,16 @@ Item
 	MouseArea
 	{
 		id: _mouseArea
-		anchors.fill: parent
+		anchors.fill: _layout
 		enabled: control.enabled
 		onClicked: actionTriggered()
-		
+		propagateComposedEvents: true
 		hoverEnabled: true	
 	}
 	
 	Column
 	{
+		id: _layout
 		anchors.centerIn: parent	
 		
 		Loader
@@ -110,10 +112,8 @@ Item
 			textFormat: Text.RichText
 			horizontalAlignment: Qt.AlignHCenter
 			elide: Text.ElideRight
-			color: _mouseArea.hovered ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+			color: _mouseArea.containsMouse ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
 			wrapMode: Text.Wrap				
 		}			
 	}
 }
-
-

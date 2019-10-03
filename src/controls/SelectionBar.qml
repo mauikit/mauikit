@@ -284,8 +284,8 @@ Item
 		if(index < 0)
 			return
 		
-		var item = selectionList.model.get(index)
-        var path = item.path
+		const item = selectionList.model.get(index)
+        const path = item.path
         if(contains(path))
         {
             selectedPaths.splice(index, 1)
@@ -308,7 +308,7 @@ Item
     
     function append(item)
     {
-		var index  = selectedPaths.indexOf(item.path)
+		const index  = selectedPaths.indexOf(item.path)
         if(index < 0)
         {
             if(control.singleSelection)
@@ -342,8 +342,7 @@ Item
     
     function getSelectedPathsString()
     {
-        var paths = ""+selectedPaths.join(",")
-        return paths
+        return String(""+selectedPaths.join(","))
     }
     
     function contains(path)
