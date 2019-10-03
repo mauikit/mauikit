@@ -370,8 +370,16 @@ Maui.Page
 
         onLeftEmblemClicked:
         {
-            control.addToSelection(control.currentFMList.get(index), true)
-            control.itemLeftEmblemClicked(index)
+			var item = control.currentFMList.get(index)
+			
+			if(control.selectionBar && control.selectionBar.contains(item.path))
+			{
+				control.selectionBar.removeAtPath(item.path)
+			}else
+			{
+				control.addToSelection(item)				
+			}
+			control.itemLeftEmblemClicked(index)
         }
 
         onRightEmblemClicked:
@@ -547,7 +555,7 @@ Maui.Page
             anchors.fill: parent
             onIconClicked: _selectionBarmenu.popup()
             onExitClicked: clean()
-            onItemClicked: removeSelection(index)
+            onItemClicked: removeAtIndex(index)
 
             Menu
             {
@@ -883,7 +891,7 @@ Maui.Page
                         break;
             default:
                 if(selectionMode && !Maui.FM.isDir(item.path))
-                    addToSelection(item, true)
+                    addToSelection(item)
                     else
                     {
                         if(item.mime === "inode/directory")
@@ -927,7 +935,7 @@ Maui.Page
         if(!path.length)
             return;
 
-        browserView.currentView.currentIndex = 0
+        browserView.currentView.currentIndex = -1
         setPath(path)
 
 //         if(currentPathType === Maui.FMList.PLACES_PATH)
@@ -969,10 +977,10 @@ Maui.Page
         browserView.currentView.contentY = pos
     }
 
-    function addToSelection(item, append) //TODO append is unsused so remove it
+    function addToSelection(item)
     {
-        if(!selectionBarComponent.item)
-        selectionBarLoader.sourceComponent= selectionBarComponent
+        if(!selectionBar)
+        selectionBarLoader.sourceComponent = selectionBarComponent
 
         selectionBar.singleSelection = control.singleSelection
         selectionBar.append(item)
@@ -1022,7 +1030,7 @@ Maui.Page
     function selectAll() //TODO for now dont select more than 100 items so things dont freeze or break
     {
         for(var i = 0; i < Math.min(control.currentFMList.count, 100); i++)
-            addToSelection(control.currentFMList.get(i), false)
+            addToSelection(control.currentFMList.get(i))
     }
 
     function trash(items)

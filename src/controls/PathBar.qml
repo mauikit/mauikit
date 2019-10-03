@@ -89,9 +89,11 @@ Item
 		Maui.TextField
 		{
 			id: entry
-			text: control.url
 			anchors.fill:  parent			
-			anchors.leftMargin: contentMargins
+			anchors.leftMargin: Maui.Style.contentMargins
+			
+			text: control.url
+			
 			Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
 			Kirigami.Theme.backgroundColor: "transparent"
 			// 				Kirigami.Theme.borderColor: "transparent"
