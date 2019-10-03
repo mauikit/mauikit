@@ -370,7 +370,15 @@ Maui.Page
 
         onLeftEmblemClicked:
         {
-            control.addToSelection(control.currentFMList.get(index), true)
+			const item = control.currentFMList.get(index)
+			
+			if(control.selectionBar && control.selectionBar.contains(item.path))
+			{
+				control.selectionBar.removeAtPath(item.path)
+			}else
+			{
+				control.addToSelection(item)				
+			}
             control.itemLeftEmblemClicked(index)
         }
 
@@ -800,289 +808,313 @@ Maui.Page
                 Maui.FM.saveSettings("IconSize", thumbnailsSize, "SETTINGS")
 
 				if(control.viewType === Maui.FMList.ICON_VIEW)
-                    browserView.currentView.adaptGrid()
-    }
-
-    function setSettings()
-    {
-        if(control.currentFMList !== null)
-        {
-            control.currentFMList.onlyDirs= control.settings.onlyDirs
-            control.currentFMList.filters= control.settings.filters
-            control.currentFMList.sortBy= control.settings.sortBy
-            control.currentFMList.filterType= control.settings.filterType
-            control.currentFMList.trackChanges= control.settings.trackChanges
-            control.currentFMList.saveDirProps= control.settings.saveDirProps
-        }
-    }
-
-    function openTab(path)
-    {
-        var component = Qt.createComponent("private/BrowserView.qml");
-        if (component.status === Component.Ready)
-        {
-            var object = component.createObject(tabsObjectModel);
-            tabsObjectModel.append(object);
-        }
-
-        tabsListModel.append({
-            title: qsTr("Untitled"),
-                             path: path,
-        })
-
-        _browserList.currentIndex = tabsObjectModel.count - 1
-        
-        if(path)
-        {
-            setTabMetadata(path)
+					browserView.currentView.adaptGrid()
+	}
+	
+	function setSettings()
+	{
+		if(control.currentFMList !== null)
+		{
+			control.currentFMList.onlyDirs= control.settings.onlyDirs
+			control.currentFMList.filters= control.settings.filters
+			control.currentFMList.sortBy= control.settings.sortBy
+			control.currentFMList.filterType= control.settings.filterType
+			control.currentFMList.trackChanges= control.settings.trackChanges
+			control.currentFMList.saveDirProps= control.settings.saveDirProps
+		}
+	}
+	
+	function openTab(path)
+	{
+		const component = Qt.createComponent("private/BrowserView.qml");
+		if (component.status === Component.Ready)
+		{
+			const object = component.createObject(tabsObjectModel);
+			tabsObjectModel.append(object);
+		}
+		
+		tabsListModel.append({
+			title: qsTr("Untitled"),
+							 path: path,
+		})
+		
+		_browserList.currentIndex = tabsObjectModel.count - 1
+		
+		if(path)
+		{
+			setTabMetadata(path)
 			browserView.viewType = control.viewType			
-            openFolder(path)
-        }
-    }
-
-    function setTabMetadata(filepath)
-    {
-        tabsListModel.setProperty(tabsBar.currentIndex, "path", filepath)
-    }
-
-
-    function shareFiles(urls)
-    {
-        if(urls.length <= 0)
-            return;
-
-        if(isAndroid)
-            Maui.Android.shareDialog(urls[0])
-            else
-            {
-                dialogLoader.sourceComponent= shareDialogComponent
-                dialog.show(urls)
-            }
-    }
-
-    function openItem(index)
-    {
-        var item = control.currentFMList.get(index)
-        var path = item.path
-
-        console.log("trying to open item<<", path)
-
-        switch(currentPathType)
-        {
-            case Maui.FMList.APPS_PATH:
-                if(item.path.endsWith("/"))
-                    populate(path)
-                    else
-                        Maui.FM.runApplication(path)
-                        break
-            case Maui.FMList.CLOUD_PATH:
-                if(item.mime === "inode/directory")
-                    control.openFolder(path)
-                    else
-                        Maui.FM.openCloudItem(item)
-                        break;
-            default:
-                if(selectionMode && !Maui.FM.isDir(item.path))
-                    addToSelection(item, true)
-                    else
-                    {
-                        if(item.mime === "inode/directory")
-                            control.openFolder(path)
-                            else if(Maui.FM.isApp(path))
-                                control.launchApp(path)
-                                else
-                                {
-                                    if (Kirigami.Settings.isMobile)
-                                        previewer.show(path)
-                                        else
-                                            control.openFile(path)
-                                }
-                    }
-        }
-    }
-
-
-    function launchApp(path)
-    {
-        Maui.FM.runApplication(path, "")
-    }
-
-    function openFile(path)
-    {
-        Maui.FM.openUrl(path)
-    }
-
-    function openFolder(path)
-    {
-        populate(Maui.FM.fileDir(path))// make sure the path is a dir // file to dir
-    }
-
-    function setPath(path)
-    {
-        control.currentPath = path
-    }
-
-    function populate(path)
-    {
-        if(!path.length)
-            return;
-
-        browserView.currentView.currentIndex = 0
-        setPath(path)
-
-//         if(currentPathType === Maui.FMList.PLACES_PATH)
-//         {
-//             if(trackChanges && saveDirProps)
-//             {
-//                 var conf = Maui.FM.dirConf(path+"/.directory")
-// 				var iconsize = conf["iconsize"] ||  Maui.Style.iconSizes.large
-//                 thumbnailsSize = parseInt(iconsize)
-//             }else
-//             {
-//                 thumbnailsSize = parseInt(Maui.FM.loadSettings("IconSize", "SETTINGS", thumbnailsSize))
-//             }
-//         }
-//
-//         if(browserView.viewType == Maui.FMList.ICON_VIEW)
-//             browser.adaptGrid()
-    }
-
-    function goBack()
-    {
-        populate(control.currentFMList.previousPath)
-        browserView.currentView.currentIndex = indexHistory.pop()
-    }
-
-    function goNext()
-    {
-        openFolder(control.currentFMList.posteriorPath)
-    }
-
-    function goUp()
-    {
-        openFolder(control.currentFMList.parentPath)
-    }
-
-    function refresh()
-    {
-        var pos = browserView.currentView.contentY
-        browserView.currentView.contentY = pos
-    }
-
-    function addToSelection(item, append) //TODO append is unsused so remove it
-    {
-        if(!selectionBarComponent.item)
-        selectionBarLoader.sourceComponent= selectionBarComponent
-
-        selectionBar.singleSelection = control.singleSelection
-        selectionBar.append(item)
-    }
-
-    function clean()
-    {
-        copyItems = []
-        cutItems = []
-        browserMenu.pasteFiles = 0
-
-        if(control.selectionBar && control.selectionBar.visible)
-            selectionBar.clear()
-    }
-
-    function copy(items)
-    {
-        copyItems = items
-        isCut = false
-        isCopy = true
-    }
-
-    function cut(items)
-    {
-        cutItems = items
-        isCut = true
-        isCopy = false
-    }
-
-    function paste()
-    {
-        if(isCopy)
-            currentFMList.copyInto(copyItems)
-            else if(isCut)
-            {
-                currentFMList.cutInto(cutItems)
-                clean()
-            }
-    }
-
-    function remove(items)
-    {
-        for(var i in items)
-            Maui.FM.removeFile(items[i].path)
-    }
-
-    function selectAll() //TODO for now dont select more than 100 items so things dont freeze or break
-    {
-        for(var i = 0; i < Math.min(control.currentFMList.count, 100); i++)
-            addToSelection(control.currentFMList.get(i), false)
-    }
-
-    function trash(items)
-    {
-        for(var i in items)
-            Maui.FM.moveToTrash(items[i].path)
-    }
-
-    function bookmarkFolder(paths)
-    {
-        newBookmark(paths)
-    }
-
-    function zoomIn()
-    {
-        control.thumbnailsSize = control.thumbnailsSize + 8
-    }
-
-    function zoomOut()
-    {
-        var newSize = control.thumbnailsSize - 8
-
-        if(newSize >= Maui.Style.iconSizes.small)
-            control.thumbnailsSize = newSize
-    }
-
-    function groupBy()
-    {
-        var prop = ""
-        var criteria = ViewSection.FullString
-
-        switch(control.currentFMList.sortBy)
-        {
-            case Maui.FMList.LABEL:
-                prop = "label"
-                criteria = ViewSection.FirstCharacter
-                break;
-            case Maui.FMList.MIME:
-                prop = "mime"
-                break;
-            case Maui.FMList.SIZE:
-                prop = "size"
-                break;
-            case Maui.FMList.DATE:
-                prop = "date"
-                break;
-            case Maui.FMList.MODIFIED:
-                prop = "modified"
-                break;
-        }
-
-        browserView.viewType = Maui.FMList.LIST_VIEW
-
-        if(!prop)
-        {
-            browserView.currentView.section.property = ""
-            return
-        }
-
-        browserView.currentView.section.property = prop
-        browserView.currentView.section.criteria = criteria
-    }
+			openFolder(path)
+		}
+	}
+	
+	function setTabMetadata(filepath)
+	{
+		tabsListModel.setProperty(tabsBar.currentIndex, "path", filepath)
+	}
+	
+	
+	function shareFiles(urls)
+	{
+		if(urls.length <= 0)
+			return;
+		
+		if(isAndroid)
+		{
+			Maui.Android.shareDialog(urls[0])
+		}
+		else
+		{
+			dialogLoader.sourceComponent= shareDialogComponent
+			dialog.show(urls)
+		}
+	}
+	
+	function openItem(index)
+	{
+		const item = control.currentFMList.get(index)
+		const path = item.path
+		
+		switch(currentPathType)
+		{
+			case Maui.FMList.APPS_PATH:
+				if(item.path.endsWith("/"))
+				{
+					populate(path)
+				}
+				else
+				{
+					Maui.FM.runApplication(path)
+				}
+				break
+			case Maui.FMList.CLOUD_PATH:
+				if(item.mime === "inode/directory")
+				{
+					control.openFolder(path)
+				}
+				else
+				{
+					Maui.FM.openCloudItem(item)		 
+				}
+				break;
+			default:
+				if(selectionMode && !Maui.FM.isDir(item.path))
+				{					
+					if(control.selectionBar && control.selectionBar.contains(item.path))
+					{
+						control.selectionBar.removeAtPath(item.path)
+					}else
+					{
+						control.addToSelection(item)				
+					}
+				}
+				else
+				{
+					if(item.mime === "inode/directory")
+					{	 
+						control.openFolder(path)
+					}
+					else if(Maui.FM.isApp(path))
+					{
+						control.launchApp(path)	
+					}						
+					else
+					{
+						if (Kirigami.Settings.isMobile)
+						{
+							previewer.show(path)
+						}
+						else
+						{
+							control.openFile(path)							
+						}
+					}
+				}
+		}
+	}
+	
+	
+	function launchApp(path)
+	{
+		Maui.FM.runApplication(path, "")
+	}
+	
+	function openFile(path)
+	{
+		Maui.FM.openUrl(path)
+	}
+	
+	function openFolder(path)
+	{
+		populate(Maui.FM.fileDir(path))// make sure the path is a dir // file to dir
+	}
+	
+	function setPath(path)
+	{
+		control.currentPath = path
+	}
+	
+	function populate(path)
+	{
+		if(!path.length)
+			return;
+		
+		browserView.currentView.currentIndex = -1
+		setPath(path)
+		
+		//         if(currentPathType === Maui.FMList.PLACES_PATH)
+		//         {
+		//             if(trackChanges && saveDirProps)
+		//             {
+		//                 var conf = Maui.FM.dirConf(path+"/.directory")
+		// 				var iconsize = conf["iconsize"] ||  Maui.Style.iconSizes.large
+		//                 thumbnailsSize = parseInt(iconsize)
+		//             }else
+		//             {
+		//                 thumbnailsSize = parseInt(Maui.FM.loadSettings("IconSize", "SETTINGS", thumbnailsSize))
+		//             }
+		//         }
+		//
+		//         if(browserView.viewType == Maui.FMList.ICON_VIEW)
+		//             browser.adaptGrid()
+	}
+	
+	function goBack()
+	{
+		populate(control.currentFMList.previousPath)
+		browserView.currentView.currentIndex = indexHistory.pop()
+	}
+	
+	function goNext()
+	{
+		openFolder(control.currentFMList.posteriorPath)
+	}
+	
+	function goUp()
+	{
+		openFolder(control.currentFMList.parentPath)
+	}
+	
+	function refresh()
+	{
+		const pos = browserView.currentView.contentY
+		browserView.currentView.contentY = pos
+	}
+	
+	function addToSelection(item)
+	{
+		if(!selectionBar)
+			selectionBarLoader.sourceComponent = selectionBarComponent
+			
+			selectionBar.singleSelection = control.singleSelection
+			selectionBar.append(item)
+	}
+	
+	function clean()
+	{
+		copyItems = []
+		cutItems = []
+		browserMenu.pasteFiles = 0
+		
+		if(control.selectionBar && control.selectionBar.visible)
+			selectionBar.clear()
+	}
+	
+	function copy(items)
+	{
+		copyItems = items
+		isCut = false
+		isCopy = true
+	}
+	
+	function cut(items)
+	{
+		cutItems = items
+		isCut = true
+		isCopy = false
+	}
+	
+	function paste()
+	{
+		if(isCopy)
+			currentFMList.copyInto(copyItems)
+			else if(isCut)
+			{
+				currentFMList.cutInto(cutItems)
+				clean()
+			}
+	}
+	
+	function remove(items)
+	{
+		for(var i in items)
+			Maui.FM.removeFile(items[i].path)
+	}
+	
+	function selectAll() //TODO for now dont select more than 100 items so things dont freeze or break
+	{
+		for(var i = 0; i < Math.min(control.currentFMList.count, 100); i++)
+			addToSelection(control.currentFMList.get(i))
+	}
+	
+	function trash(items)
+	{
+		for(var i in items)
+			Maui.FM.moveToTrash(items[i].path)
+	}
+	
+	function bookmarkFolder(paths)
+	{
+		newBookmark(paths)
+	}
+	
+	function zoomIn()
+	{
+		control.thumbnailsSize = control.thumbnailsSize + 8
+	}
+	
+	function zoomOut()
+	{
+		const newSize = control.thumbnailsSize - 8
+		
+		if(newSize >= Maui.Style.iconSizes.small)
+			control.thumbnailsSize = newSize
+	}
+	
+	function groupBy()
+	{
+		var prop = ""
+		var criteria = ViewSection.FullString
+		
+		switch(control.currentFMList.sortBy)
+		{
+			case Maui.FMList.LABEL:
+				prop = "label"
+				criteria = ViewSection.FirstCharacter
+				break;
+			case Maui.FMList.MIME:
+				prop = "mime"
+				break;
+			case Maui.FMList.SIZE:
+				prop = "size"
+				break;
+			case Maui.FMList.DATE:
+				prop = "date"
+				break;
+			case Maui.FMList.MODIFIED:
+				prop = "modified"
+				break;
+		}
+		
+		browserView.viewType = Maui.FMList.LIST_VIEW
+		
+		if(!prop)
+		{
+			browserView.currentView.section.property = ""
+			return
+		}
+		
+		browserView.currentView.section.property = prop
+		browserView.currentView.section.criteria = criteria
+	}
 }

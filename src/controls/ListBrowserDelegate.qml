@@ -36,14 +36,12 @@ Maui.ListItemDelegate
 	property bool showEmblem : false
 	property bool showTooltip : false
 	property bool showThumbnails : false
-	property bool isSelected : false
-	
-	isCurrentItem : ListView.isCurrentItem || isSelected
-	
-	property bool keepEmblemOverlay : false
-	
+	property bool isSelected : false	
+	property bool keepEmblemOverlay : false	
 	property string rightEmblem
 	property string leftEmblem
+	
+	isCurrentItem : ListView.isCurrentItem || isSelected	
 	
 	opacity: (model.hidden == true || model.hidden == "true" )? 0.5 : 1
 	
@@ -60,7 +58,7 @@ Maui.ListItemDelegate
 	{
 		id: _leftEmblemIcon
 		iconName: control.leftEmblem
-		visible: (control.hovered || control.keepEmblemOverlay) && control.showEmblem && control.leftEmblem
+		visible: (control.hovered || control.keepEmblemOverlay || control.isSelected) && control.showEmblem  && control.leftEmblem
 		anchors.top: parent.top
 		anchors.left: parent.left
 		onClicked: leftEmblemClicked(index)

@@ -51,10 +51,16 @@ Item
     property bool singleSelection: false
     
     signal iconClicked()
-    signal modelCleared()
+    signal cleared()
     signal exitClicked()
     signal itemClicked(int index)
-    
+	
+	signal itemAdded(var item)
+	signal itemRemoved(var item)
+	
+	signal pathAdded(string path)
+	signal pathRemoved(string path)
+	
     implicitHeight: if(position === Qt.Horizontal)
                 barHeight
             else if(position === Qt.Vertical)
@@ -109,7 +115,7 @@ Item
         z: parent.z +1
         onClicked:
         {
-            selectionList.model.clear()
+            clear()
             exitClicked()
         }
     }
@@ -122,11 +128,7 @@ Item
 
         anchors.verticalCenter: parent.top
         anchors.horizontalCenter: parent.right
-        onClicked:
-        {
-            clear()
-            modelCleared()
-        }
+        onClicked: clear()        
     }
 
     GridLayout
@@ -217,7 +219,7 @@ Item
                     Connections
                     {
                         target: delegate
-                        onLeftEmblemClicked: removeSelection(index)
+                        onLeftEmblemClicked: removeAtIndex(index)
                         onClicked: control.itemClicked(index)
                     }
                 }
@@ -274,22 +276,39 @@ Item
         selectedPaths = []
         selectedItems = []
         selectionList.model.clear()
+		control.cleared()		
     }
     
-    function removeSelection(index)
+    function removeAtIndex(index)
     {
-        var path = selectionList.model.get(index).path
-        if(selectedPaths.indexOf(path) > -1)
+		if(index < 0)
+			return
+		
+		const item = selectionList.model.get(index)
+        const path = item.path
+        if(contains(path))
         {
             selectedPaths.splice(index, 1)
             selectedItems.splice(index, 1)
             selectionList.model.remove(index)
-        }
+			control.itemRemoved(item)
+			control.pathRemoved(path)
+		}
     }
+    
+    function removeAtPath(path)
+	{
+		removeAtIndex(indexOf(path))
+	}	
+	
+	function indexOf(path)
+	{
+		return control.selectedPaths.indexOf(path)
+	}
     
     function append(item)
     {
-		var index  = selectedPaths.indexOf(item.path)
+		const index  = selectedPaths.indexOf(item.path)
         if(index < 0)
         {
             if(control.singleSelection)
@@ -302,11 +321,15 @@ Item
             selectionList.positionViewAtEnd()
 			selectionList.currentIndex = selectionList.count - 1
 			
+			control.itemAdded(item)
+			control.pathAdded(item.path)
+			
         }else
         {
 			selectionList.currentIndex = index
 //             notify(item.icon, qsTr("Item already selected!"), String("The item '%1' is already in the selection box").arg(item.label), null, 4000)
         }
+        
         
         animate(Kirigami.Theme.backgroundColor)
     }
@@ -319,8 +342,7 @@ Item
     
     function getSelectedPathsString()
     {
-        var paths = ""+selectedPaths.join(",")
-        return paths
+        return String(""+selectedPaths.join(","))
     }
     
     function contains(path)

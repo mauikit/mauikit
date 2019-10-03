@@ -35,11 +35,12 @@ Maui.GridItemDelegate
     property bool showEmblem : false
     property bool showTooltip : false
     property bool showThumbnails : false
-    
-    property bool keepEmblemOverlay : false
-    
+    property bool isSelected : false    
+    property bool keepEmblemOverlay : false    
     property string rightEmblem
     property string leftEmblem
+    
+    isCurrentItem : GridView.isCurrentItem || isSelected    
     
     opacity: (model.hidden == true || model.hidden == "true" )? 0.5 : 1
     
@@ -56,7 +57,7 @@ Maui.GridItemDelegate
     {
         id: _leftEmblemIcon
         iconName: control.leftEmblem
-        visible: (control.hovered || control.keepEmblemOverlay) && control.showEmblem && control.leftEmblem
+        visible: (control.hovered || control.keepEmblemOverlay || control.isSelected) && control.showEmblem  && control.leftEmblem
         anchors.top: parent.top
         anchors.left: parent.left
         onClicked: leftEmblemClicked(index)

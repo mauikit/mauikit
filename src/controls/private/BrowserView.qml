@@ -57,7 +57,7 @@ Maui.Page
 				_progressBar.value = 0
 				else
 					_progressBar.value = percent/100
-		}
+		}		
 	}
 	
 	Component
@@ -66,12 +66,11 @@ Maui.Page
 		
 		Maui.ListBrowser
 		{
+			id: _listViewBrowser
 			property alias currentFMList : _browserModel.list
 			topMargin: Maui.Style.contentMargins			
 			showPreviewThumbnails: showThumbnails
-			keepEmblemOverlay: selectionMode
-			
-			leftEmblem: "emblem-select-add"
+			keepEmblemOverlay: selectionMode			
 			showDetailsInfo: true		
 			
 			BrowserHolder
@@ -101,7 +100,86 @@ Maui.Page
 				isSection: true
 				boldLabel: true
 				height: Maui.Style.toolBarHeightAlt
-			}	
+			}
+			
+			delegate: Maui.ListBrowserDelegate
+			{
+				id: delegate
+				property string path : model.path
+				width: parent.width
+				height: _listViewBrowser.itemSize + Maui.Style.space.big
+				leftPadding: Maui.Style.space.small
+				rightPadding: Maui.Style.space.small
+				padding: 0
+				showDetailsInfo: _listViewBrowser.showDetailsInfo
+				folderSize : _listViewBrowser.itemSize
+				showTooltip: true
+				showEmblem: _listViewBrowser.showEmblem
+				keepEmblemOverlay : _listViewBrowser.keepEmblemOverlay
+				showThumbnails: _listViewBrowser.showPreviewThumbnails
+				rightEmblem: _listViewBrowser.rightEmblem
+				isSelected: if(selectionBar) return selectionBar.contains(model.path)
+				leftEmblem: isSelected ? "emblem-select-remove" : "emblem-select-add"
+				
+				Connections
+				{
+					target: selectionBar
+					
+					onPathRemoved: 
+					{
+						if(path === delegate.path)
+							delegate.isSelected = false					
+					}
+					
+					onPathAdded: 
+					{
+						if(path === delegate.path)
+							delegate.isSelected = true					
+					}
+					
+					onCleared: delegate.isSelected = false
+				}
+				
+				Connections
+				{
+					target: delegate
+					onClicked:
+					{
+						_listViewBrowser.currentIndex = index
+						_listViewBrowser.itemClicked(index)
+					}
+					
+					onDoubleClicked:
+					{
+						_listViewBrowser.currentIndex = index
+						_listViewBrowser.itemDoubleClicked(index)
+					}
+					
+					onPressAndHold:
+					{
+						_listViewBrowser.currentIndex = index
+						_listViewBrowser.itemRightClicked(index)
+					}
+					
+					onRightClicked:
+					{
+						_listViewBrowser.currentIndex = index
+						_listViewBrowser.itemRightClicked(index)
+					}
+					
+					onRightEmblemClicked:
+					{
+						_listViewBrowser.currentIndex = index
+						_listViewBrowser.rightEmblemClicked(index)
+					}
+					
+					onLeftEmblemClicked:
+					{
+						_listViewBrowser.currentIndex = index
+						_listViewBrowser.leftEmblemClicked(index)						
+					}
+				}
+			}
 		}
 	}
 	
@@ -111,6 +189,7 @@ Maui.Page
 		
 		Maui.GridBrowser
 		{
+			id: _gridViewBrowser
 			property alias currentFMList : _browserModel.list
 			itemSize : thumbnailsSize + Maui.Style.fontSizes.default
 			keepEmblemOverlay: selectionMode
@@ -132,6 +211,84 @@ Maui.Page
 			{
 				id: _browserModel
 				list: _commonFMList
+			}
+			
+			delegate: Maui.GridBrowserDelegate
+			{
+				id: delegate
+				property string path : model.path
+				
+				folderSize: height * 0.5
+				height: _gridViewBrowser.cellHeight 
+				width: _gridViewBrowser.cellWidth
+				padding: Maui.Style.space.small    
+				
+				showTooltip: true
+				showEmblem: _gridViewBrowser.showEmblem
+				keepEmblemOverlay: _gridViewBrowser.keepEmblemOverlay
+				showThumbnails: _gridViewBrowser.showPreviewThumbnails
+				rightEmblem: _gridViewBrowser.rightEmblem
+				isSelected: if(selectionBar) return selectionBar.contains(model.path)
+				leftEmblem: isSelected ? "emblem-select-remove" : "emblem-select-add"
+				
+				Connections
+				{
+					target: selectionBar
+					
+					onPathRemoved: 
+					{
+						if(path === delegate.path)
+							delegate.isSelected = false					
+					}
+					
+					onPathAdded: 
+					{
+						if(path === delegate.path)
+							delegate.isSelected = true					
+					}
+					
+					onCleared: delegate.isSelected = false
+				}
+				
+				Connections
+				{
+					target: delegate
+					onClicked:
+					{
+						_gridViewBrowser.currentIndex = index
+						_gridViewBrowser.itemClicked(index)
+					}
+					
+					onDoubleClicked:
+					{
+						_gridViewBrowser.currentIndex = index
+						_gridViewBrowser.itemDoubleClicked(index)
+					}
+					
+					onPressAndHold:
+					{
+						_gridViewBrowser.currentIndex = index
+						_gridViewBrowser.itemRightClicked(index)
+					}
+					
+					onRightClicked:
+					{
+						_gridViewBrowser.currentIndex = index
+						_gridViewBrowser.itemRightClicked(index)
+					}
+					
+					onRightEmblemClicked:
+					{
+						_gridViewBrowser.currentIndex = index
+						_gridViewBrowser.rightEmblemClicked(index)
+					}
+					
+					onLeftEmblemClicked:
+					{
+						_gridViewBrowser.currentIndex = index
+						_gridViewBrowser.leftEmblemClicked(index)
+					}
+				}
 			}
 		}
 	}
@@ -201,7 +358,7 @@ Maui.Page
 					list: _millerList
 				}				
 				
-				delegate: ItemDelegate
+				delegate: Item
 				{
 					property alias currentFMList : _millersFMList
 					property int _index : index
@@ -209,10 +366,10 @@ Maui.Page
 					width: Math.min(Kirigami.Units.gridUnit * 22, control.width)
 					height: parent.height
 					
-					background: Rectangle
-					{
-						color: "transparent"
-					}
+// 					background: Rectangle
+// 					{
+// 						color: "transparent"
+// 					}
 					
 					Kirigami.Separator
 					{
@@ -264,42 +421,7 @@ Maui.Page
 						holder.title: _holder.title
 						holder.body: _holder.body
 						holder.emojiSize: _holder.emojiSize
-						
-						onItemClicked: 
-						{
-							_millerColumns.currentIndex = _index
-							_millerListView.currentIndex = index
-							_millerControl.itemClicked(index)							
-						}
-						
-						onItemDoubleClicked: 
-						{
-							_millerColumns.currentIndex = _index
-							_millerListView.currentIndex = index						
-							_millerControl.itemDoubleClicked(index)
-						}
-						
-						onItemRightClicked: 
-						{
-							_millerColumns.currentIndex = _index
-							_millerListView.currentIndex = index							
-							_millerControl.itemRightClicked(index)
-						}
-						
-						onRightEmblemClicked:
-						{
-							_millerColumns.currentIndex = _index
-							_millerListView.currentIndex = index							
-							_millerControl.rightEmblemClicked(index)
-						}
-						
-						onLeftEmblemClicked: 
-						{
-							_millerColumns.currentIndex = _index
-							_millerListView.currentIndex = index							
-							_millerControl.leftEmblemClicked(index)
-						}
-						
+											
 						onAreaClicked:
 						{
 							_millerColumns.currentIndex = _index
@@ -326,6 +448,91 @@ Maui.Page
 							isSection: true
 							boldLabel: true
 							height: Maui.Style.toolBarHeightAlt
+						}
+						
+						delegate: Maui.ListBrowserDelegate
+						{
+							id: delegate
+							property string path : model.path
+							width: parent.width
+							height: _millerListView.itemSize + Maui.Style.space.big
+							leftPadding: Maui.Style.space.small
+							rightPadding: Maui.Style.space.small
+							padding: 0
+							showDetailsInfo: _millerListView.showDetailsInfo
+							folderSize : _millerListView.itemSize
+							showTooltip: true
+							showEmblem: _millerListView.showEmblem
+							keepEmblemOverlay : _millerListView.keepEmblemOverlay
+							showThumbnails: _millerListView.showPreviewThumbnails
+							rightEmblem: _millerListView.rightEmblem
+							isSelected: if(selectionBar) return selectionBar.contains(model.path)
+							leftEmblem: isSelected ? "emblem-select-remove" : "emblem-select-add"
+							
+							Connections
+							{
+								target: selectionBar
+								
+								onPathRemoved: 
+								{
+									if(path === delegate.path)
+										delegate.isSelected = false					
+								}
+								
+								onPathAdded: 
+								{
+									if(path === delegate.path)
+										delegate.isSelected = true					
+								}
+								
+								onCleared: delegate.isSelected = false
+							}
+							
+							Connections
+							{
+								target: delegate
+								onClicked:
+								{
+									_millerColumns.currentIndex = _index
+									_millerListView.currentIndex = index
+									_millerControl.itemClicked(index)				
+								}
+								
+								onDoubleClicked:
+								{
+									_millerColumns.currentIndex = _index
+									_millerListView.currentIndex = index						
+									_millerControl.itemDoubleClicked(index)
+								}
+								
+								onPressAndHold:
+								{
+									_millerColumns.currentIndex = _index
+									_millerListView.currentIndex = index							
+									_millerControl.itemRightClicked(index)
+								}
+								
+								onRightClicked:
+								{
+									_millerColumns.currentIndex = _index
+									_millerListView.currentIndex = index							
+									_millerControl.itemRightClicked(index)
+								}
+								
+								onRightEmblemClicked:
+								{
+									_millerColumns.currentIndex = _index
+									_millerListView.currentIndex = index							
+									_millerControl.rightEmblemClicked(index)
+								}
+								
+								onLeftEmblemClicked:
+								{
+									_millerColumns.currentIndex = _index
+									_millerListView.currentIndex = index							
+									_millerControl.leftEmblemClicked(index)					
+								}
+							}
 						}
 					}
 				}				

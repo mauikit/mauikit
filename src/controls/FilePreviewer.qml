@@ -71,7 +71,6 @@ Maui.Dialog
 					control.isFav = !control.isFav
 			}
         }
-
     ]
 
     footBar.rightContent:  ToolButton

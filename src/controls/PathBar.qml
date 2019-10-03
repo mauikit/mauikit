@@ -89,9 +89,11 @@ Item
 		Maui.TextField
 		{
 			id: entry
-			text: control.url
 			anchors.fill:  parent			
-			anchors.leftMargin: contentMargins
+			anchors.leftMargin: Maui.Style.contentMargins
+			
+			text: control.url
+			
 			Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
 			Kirigami.Theme.backgroundColor: "transparent"
 			// 				Kirigami.Theme.borderColor: "transparent"
@@ -126,10 +128,9 @@ Item
 		RowLayout
 		{
 			anchors.fill: parent
-			spacing: 0
-			property alias listView: _listView
-			clip: true
-			
+			property alias listView: _listView            
+            spacing: 0
+
 			Item
 			{
 				Layout.fillHeight: true
@@ -140,7 +141,7 @@ Item
 				ToolButton
 				{
 					anchors.centerIn: parent
-					icon.name: "user-home"
+                    icon.name: isAndroid ? "user-home-sidebar" : "user-home"
 					flat: true
 					icon.color: control.Kirigami.Theme.textColor   
 					icon.width: Maui.Style.iconSizes.medium
