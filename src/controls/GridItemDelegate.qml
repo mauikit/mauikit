@@ -29,7 +29,7 @@ ItemDelegate
 {
     id: control
     
-    default property alias content : _content.data   
+    default property alias content : _content.data
     
     property bool draggable: false
     property bool isCurrentItem :  GridView.isCurrentItem
@@ -88,11 +88,11 @@ ItemDelegate
 		anchors
 		{
 			fill: parent
-			topMargin: control.topPadding
-			bottomMargin: control.bottomPadding
-			leftMargin: control.leftPadding
-			rightMargin: control.rightPadding
-			margins: control.padding
+            topMargin: control.topPadding
+            bottomMargin: control.bottomPadding
+            leftMargin: control.leftPadding
+            rightMargin: control.rightPadding
+            margins: control.padding
 		}		
 			color: control.isCurrentItem || control.hovered ? Qt.rgba(Kirigami.Theme.highlightColor.r, Kirigami.Theme.highlightColor.g, Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
 					

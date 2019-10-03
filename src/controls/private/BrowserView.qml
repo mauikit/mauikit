@@ -213,17 +213,17 @@ Maui.Page
 				list: _commonFMList
 			}
 			
-			delegate: Maui.GridBrowserDelegate
+            delegate: Maui.GridBrowserDelegate
 			{
 				id: delegate
 				property string path : model.path
-				
-				folderSize: height * 0.5
-				height: _gridViewBrowser.cellHeight 
-				width: _gridViewBrowser.cellWidth
+
+                folderSize: height * 0.5
+                height: _gridViewBrowser.cellHeight
+                width: _gridViewBrowser.cellWidth
 				padding: Maui.Style.space.small    
-				
-				showTooltip: true
+
+                showTooltip: true
 				showEmblem: _gridViewBrowser.showEmblem
 				keepEmblemOverlay: _gridViewBrowser.keepEmblemOverlay
 				showThumbnails: _gridViewBrowser.showPreviewThumbnails
@@ -289,7 +289,7 @@ Maui.Page
 						_gridViewBrowser.leftEmblemClicked(index)
 					}
 				}
-			}
+            }
 		}
 	}
 	
