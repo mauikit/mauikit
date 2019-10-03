@@ -21,6 +21,7 @@ AbstractSideBar 1.0 AbstractSideBar.qml
 GlobalDrawer 1.0 GlobalDrawer.qml
 ListDelegate 1.0 ListDelegate.qml
 ItemDelegate 1.0 ItemDelegate.qml
+SwipeItemDelegate 1.0 SwipeItemDelegate.qml
 ListBrowserDelegate 1.0 ListBrowserDelegate.qml
 GridBrowserDelegate 1.0 GridBrowserDelegate.qml
 SelectionBar 1.0 SelectionBar.qml
