@@ -23,8 +23,7 @@ Maui.Page
 	property int thumbnailsSize : Maui.Style.iconSizes.large * 1.7
 	property bool showThumbnails: true
 	
-	property var copyItems : []
-	property var cutItems : []
+	property var clipboardItems : []
 	
 	property var indexHistory : []
 	
@@ -149,9 +148,9 @@ Maui.Page
 	Action
 	{
 		id: _pasteAction
-		text: qsTr("Paste ")+"["+browserMenu.pasteFiles+"]"
+		text: qsTr("Paste ")+"["+control.clipboardItems.length+"]"
 		icon.name: "edit-paste"
-		enabled: browserMenu.pasteFiles > 0
+		enabled: control.clipboardItems.length > 0
 		onTriggered: paste()
 	},
 	
@@ -288,7 +287,6 @@ Maui.Page
 	BrowserMenu
 	{
 		id: browserMenu
-		z : control.z +1
 	}
 	
 	Maui.FilePreviewer
@@ -568,7 +566,6 @@ Maui.Page
 					{
 						control.selectionBar.animate("#6fff80")
 						control.copy(selectedItems)
-						console.log(selectedItems)
 						_selectionBarmenu.close()
 					}
 				}
@@ -1003,17 +1000,16 @@ Maui.Page
 	
 	function addToSelection(item)
 	{
-		if(!selectionBar)
+		if(!control.selectionBar)
 			selectionBarLoader.sourceComponent = selectionBarComponent
 			
-			selectionBar.singleSelection = control.singleSelection
-			selectionBar.append(item)
+			control.selectionBar.singleSelection = control.singleSelection
+			control.selectionBar.append(item)
 	}
 	
 	function clean()
 	{
-		copyItems = []
-		cutItems = []
+		control.clipboardItems = []
 		browserMenu.pasteFiles = 0
 		
 		if(control.selectionBar && control.selectionBar.visible)
@@ -1022,27 +1018,29 @@ Maui.Page
 	
 	function copy(items)
 	{
-		copyItems = items
-		isCut = false
-		isCopy = true
+		control.clipboardItems = items
+		control.isCut = false
+		control.isCopy = true
 	}
 	
 	function cut(items)
 	{
-		cutItems = items
-		isCut = true
-		isCopy = false
+		control.clipboardItems = items
+		control.isCut = true
+		control.isCopy = false
 	}
 	
 	function paste()
 	{
-		if(isCopy)
-			currentFMList.copyInto(copyItems)
-			else if(isCut)
-			{
-				currentFMList.cutInto(cutItems)
-				clean()
-			}
+		if(control.isCopy)
+		{
+			control.currentFMList.copyInto(control.clipboardItems)
+		}
+		else if(control.isCut)
+		{
+			control.currentFMList.cutInto(control.clipboardItems)
+			control.clean()
+		}
 	}
 	
 	function remove(items)

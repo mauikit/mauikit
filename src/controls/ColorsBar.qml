@@ -93,11 +93,8 @@ Row
 				currentColor = parent.color
 				colorPicked("folder-grey")
 			}
-		}
-		
+		}		
 	}
-	
-	
 	
 	Rectangle
 	{
