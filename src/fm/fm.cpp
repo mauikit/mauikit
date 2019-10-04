@@ -722,7 +722,7 @@ bool FM::copy(const QVariantList &data, const QString &where)
 		const auto path = item[FMH::MODEL_KEY::PATH];
 		if(this->isDir(path))
 		{
-			return FM::copyPath(path, where+"/"+QFileInfo(path).fileName(), false);
+			FM::copyPath(path, where+"/"+QFileInfo(path).fileName(), false);
 			
 		}else if(this->isCloud(path))
 		{

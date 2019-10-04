@@ -6,20 +6,6 @@ import org.kde.kirigami 2.6 as Kirigami
 
 Menu
 { 
-    property int pasteFiles : 0
-    
-    //   popup.z : 999
-    
-    /* Maui.MenuItem
-     *        {
-     *            che
-     *            ckable: true
-     *            checked: saveDirProps
-     *            text: qsTr("Per dir props")
-     *            onTriggered: saveDirProps = !saveDirProps
-}*/
-    // 		property list<QtObject> actions: t_actions
-    
     MenuItem
     {
         action: _previewAction
@@ -29,6 +15,8 @@ Menu
     {
         action: _hiddenAction
     }
+    
+    MenuSeparator {}
     
     MenuItem
     {
@@ -45,6 +33,7 @@ Menu
         action: _newDocumentAction
     }
     
+    MenuSeparator {}    
     
     MenuItem
     {
@@ -56,11 +45,6 @@ Menu
     {
         if(currentPathType === Maui.FMList.PLACES_PATH || currentPathType === Maui.FMList.TAGS_PATH || currentPathType === Maui.FMList.CLOUD_PATH)
         {
-            if(isCopy)
-                pasteFiles = copyItems.length
-                else if(isCut)
-                    pasteFiles = cutItems.length
-                    
                     popup()
         }
     }

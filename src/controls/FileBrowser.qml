@@ -23,8 +23,7 @@ Maui.Page
     property int thumbnailsSize : Maui.Style.iconSizes.large * 1.7
     property bool showThumbnails: true
 
-    property var copyItems : []
-    property var cutItems : []
+    property var clipboardItems : []
 
     property var indexHistory : []
 
@@ -58,6 +57,7 @@ Maui.Page
     signal itemRightEmblemClicked(int index)
     signal rightClicked()
     signal newBookmark(var paths)
+    signal newTag(var tag)
 
 
     Kirigami.Theme.colorSet: Kirigami.Theme.View
@@ -119,7 +119,7 @@ Maui.Page
         id: _bookmarkAction
         icon.name: "bookmark-new"
         text: qsTr("Bookmark Current Path")
-        onTriggered: newBookmark([currentPath])
+        onTriggered: control.bookmarkFolder([currentPath])
     },
 
     Action
@@ -151,7 +151,7 @@ Maui.Page
         id: _pasteAction
         text: qsTr("Paste %n File(s)", "0", browserMenu.pasteFiles)
         icon.name: "edit-paste"
-        enabled: browserMenu.pasteFiles > 0
+        enabled: control.clipboardItems.length > 0
         onTriggered: paste()
     },
 
@@ -281,6 +281,8 @@ Maui.Page
                 composerList.updateToUrls(tags)
                 if(previewer.visible)
                     previewer.tagBar.list.refresh()
+
+                control.newTag(tags)
             }
         }
     }
@@ -288,7 +290,6 @@ Maui.Page
     BrowserMenu
     {
         id: browserMenu
-        z : control.z +1
     }
 
     Maui.FilePreviewer
@@ -301,7 +302,7 @@ Maui.Page
     {
         id: itemMenu
         width: Maui.Style.unit *200
-        onBookmarkClicked: control.newBookmark([item.path])
+        onBookmarkClicked: control.bookmarkFolder([item.path])
         onCopyClicked:
         {
             if(item)
@@ -555,7 +556,7 @@ Maui.Page
             anchors.fill: parent
             onIconClicked: _selectionBarmenu.popup()
             onExitClicked: clean()
-            onItemClicked: removeSelection(index)
+            onItemClicked: removeAtIndex(index)
 
             Menu
             {
@@ -568,7 +569,6 @@ Maui.Page
                     {
                         control.selectionBar.animate("#6fff80")
                         control.copy(selectedItems)
-                        console.log(selectedItems)
                         _selectionBarmenu.close()
                     }
                 }
@@ -733,7 +733,7 @@ Maui.Page
 
                             onClicked:
                             {
-                                var removedIndex = index
+                                const removedIndex = index
                                 tabsObjectModel.remove(removedIndex)
                                 tabsListModel.remove(removedIndex)
                             }
@@ -1003,17 +1003,16 @@ Maui.Page
 	
 	function addToSelection(item)
 	{
-		if(!selectionBar)
+		if(!control.selectionBar)
 			selectionBarLoader.sourceComponent = selectionBarComponent
 			
-			selectionBar.singleSelection = control.singleSelection
-			selectionBar.append(item)
+			control.selectionBar.singleSelection = control.singleSelection
+			control.selectionBar.append(item)
 	}
 	
 	function clean()
 	{
-		copyItems = []
-		cutItems = []
+		control.clipboardItems = []
 		browserMenu.pasteFiles = 0
 		
 		if(control.selectionBar && control.selectionBar.visible)
@@ -1022,27 +1021,28 @@ Maui.Page
 	
 	function copy(items)
 	{
-		copyItems = items
-		isCut = false
-		isCopy = true
+		control.clipboardItems = items
+		control.isCut = false
+		control.isCopy = true
 	}
 	
 	function cut(items)
 	{
-		cutItems = items
-		isCut = true
-		isCopy = false
+		control.clipboardItems = items
+		control.isCut = true
+		control.isCopy = false
 	}
 	
 	function paste()
 	{
-		if(isCopy)
-			currentFMList.copyInto(copyItems)
-			else if(isCut)
-			{
-				currentFMList.cutInto(cutItems)
-				clean()
-			}
+		if(control.isCopy)
+		{			control.currentFMList.copyInto(control.clipboardItems)
+		}
+		else if(control.isCut)
+		{
+			control.currentFMList.cutInto(control.clipboardItems)
+			control.clean()
+		}
 	}
 	
 	function remove(items)
@@ -1063,9 +1063,9 @@ Maui.Page
 			Maui.FM.moveToTrash(items[i].path)
 	}
 	
-	function bookmarkFolder(paths)
+	function bookmarkFolder(paths) //multiple paths
 	{
-		newBookmark(paths)
+		control.newBookmark(paths)
 	}
 	
 	function zoomIn()
@@ -1106,15 +1106,15 @@ Maui.Page
 				break;
 		}
 		
-		browserView.viewType = Maui.FMList.LIST_VIEW
+		control.browserView.viewType = Maui.FMList.LIST_VIEW
 		
 		if(!prop)
 		{
-			browserView.currentView.section.property = ""
+			control.browserView.currentView.section.property = ""
 			return
 		}
 		
-		browserView.currentView.section.property = prop
-		browserView.currentView.section.criteria = criteria
+		control.browserView.currentView.section.property = prop
+		control.browserView.currentView.section.criteria = criteria
 	}
 }
