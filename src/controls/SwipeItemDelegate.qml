@@ -36,7 +36,7 @@ Maui.ItemDelegate
 		property bool showQuickActions : true
 		property list<Action> quickActions
 		
-		property bool collapse : width < Kirigami.Units.gridUnit * 22 
+        property bool collapse : width < Kirigami.Units.gridUnit * 22 || Kirigami.Settings.isMobile
 		
 		onCollapseChanged:
 		{
@@ -60,7 +60,7 @@ Maui.ItemDelegate
 				id: _bg
 				anchors.fill: _swipeDelegate.background
 				z: _swipeDelegate.background.z -1
-				color: control.Kirigami.Theme.backgroundColor
+                color: Kirigami.Theme.backgroundColor
 				radius: Maui.Style.radiusV
 				opacity: Math.abs( _swipeDelegate.swipe.position)
 			}
