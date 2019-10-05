@@ -50,24 +50,6 @@
 #include <QIcon>
 #endif
 
-/*
- * FM *FM::instance = nullptr;
- * 
- * FM* FM::getInstance()
- * {
- *    if(!instance)
- *    {
- *        instance = new FM();
- *        qDebug() << "getInstance(): First instance\n";
- *        instance->init();
- *        return instance;
- *    } else
- *    {
- *        qDebug()<< "getInstance(): previous instance\n";
- *        return instance;
- *    }
- * }*/
-
 #ifdef Q_OS_ANDROID
 FM::FM(QObject *parent) : FMDB(parent),
 sync(new Syncing(this)),
@@ -250,8 +232,6 @@ QVariantList FM::get(const QString &queryTxt)
 	return mapList;
 }
 
-
-
 void FM::getPathContent(const QUrl& path, const bool &hidden, const bool &onlyDirs, const QStringList& filters, const QDirIterator::IteratorFlags &iteratorFlags)
 {	
 	qDebug()<< "Getting async path contents";
@@ -303,7 +283,7 @@ void FM::getPathContent(const QUrl& path, const bool &hidden, const bool &onlyDi
 // 	}
 	
 	if(this->dirLister->openUrl(path))
-		qDebug()<< "GETTING PATH CONTENT" << path;	
+    qDebug()<< "GETTING PATH CONTENT" << path;	
 	
 	#endif	
 	
@@ -489,13 +469,8 @@ void FM::openCloudItem(const QVariantMap &item)
 }
 
 void FM::getCloudItem(const QVariantMap &item)
-{
-	qDebug()<< item;
-	FMH::MODEL data;
-	for(const auto &key : item.keys())
-		data.insert(FMH::MODEL_NAME_KEY[key], item[key].toString());
-	
-	this->sync->resolveFile(data, Syncing::SIGNAL_TYPE::DOWNLOAD);
+{	
+	this->sync->resolveFile(FMH::toModel(item), Syncing::SIGNAL_TYPE::DOWNLOAD);
 }
 
 QVariantList FM::getCloudAccountsList()
@@ -644,7 +619,6 @@ QString FM::fileDir(const QUrl& path)
 	
 	return res;
 }
-
 
 void FM::saveSettings(const QString &key, const QVariant &value, const QString &group)
 {
