@@ -25,7 +25,7 @@ import org.kde.mauikit 1.0 as Maui
 import QtGraphicalEffects 1.0
 import "private"
 
-Maui.GridItemDelegate
+Maui.ItemDelegate
 {
     id: control 
     
@@ -41,8 +41,6 @@ Maui.GridItemDelegate
     property string leftEmblem
     
     isCurrentItem : GridView.isCurrentItem || isSelected    
-    
-    opacity: (model.hidden == true || model.hidden == "true" )? 0.5 : 1
     
     signal emblemClicked(int index)
     signal rightEmblemClicked(int index)
@@ -149,6 +147,7 @@ Maui.GridItemDelegate
         id: _layout
         anchors.fill: parent
         spacing: Maui.Style.space.tiny
+        opacity: (model.hidden == true || model.hidden == "true" )? 0.5 : 1
         
         Loader
         {
@@ -178,7 +177,7 @@ Maui.GridItemDelegate
             verticalAlignment: Qt.AlignVCenter
             elide: Qt.ElideRight
             wrapMode: Text.Wrap
-            color: control.labelColor				
+            color: control.Kirigami.Theme.textColor				
         }
     }        
 

@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.0
+import QtQuick 2.5
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
@@ -32,11 +32,9 @@ ItemDelegate
     default property alias content : _content.data   
     
     property bool draggable: false
-    property bool isCurrentItem :  ListView.isCurrentItem
+    property bool isCurrentItem :  false
 
-    property int radius: Maui.Style.radiusV
-	
-	property color labelColor : Kirigami.Theme.textColor	    
+    property int radius: Maui.Style.radiusV	
     
     //override the itemdelegate default signals to allow dragging content
     signal pressed(var mouse)
@@ -96,9 +94,9 @@ ItemDelegate
 			rightMargin: control.rightPadding
 			margins: control.padding
 		}		
-			color: control.isCurrentItem || control.hovered ? Qt.rgba(Kirigami.Theme.highlightColor.r, Kirigami.Theme.highlightColor.g, Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
+		color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
 					
 			radius: control.radius
-			border.color: control.isCurrentItem ? Kirigami.Theme.highlightColor : "transparent"
+			border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"
     }
 }	
