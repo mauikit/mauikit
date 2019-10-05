@@ -94,9 +94,9 @@ ItemDelegate
 			rightMargin: control.rightPadding
 			margins: control.padding
 		}		
-			color: control.isCurrentItem || control.hovered ? Qt.rgba(Kirigami.Theme.highlightColor.r, Kirigami.Theme.highlightColor.g, Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
+		color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
 					
 			radius: control.radius
-			border.color: control.isCurrentItem ? Kirigami.Theme.highlightColor : "transparent"
+			border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"
     }
 }	

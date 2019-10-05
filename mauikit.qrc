@@ -24,6 +24,7 @@
         <file alias="ListDelegate.qml">src/controls/ListDelegate.qml</file>
 		<file alias="ItemDelegate.qml">src/controls/ItemDelegate.qml</file>
 		<file alias="SwipeItemDelegate.qml">src/controls/SwipeItemDelegate.qml</file>
+		<file alias="SwipeBrowserDelegate.qml">src/controls/SwipeBrowserDelegate.qml</file>
 		<file alias="GridBrowserDelegate.qml">src/controls/GridBrowserDelegate.qml</file>
 		<file alias="ListBrowserDelegate.qml">src/controls/ListBrowserDelegate.qml</file>
         <file alias="GlobalDrawer.qml">src/controls/GlobalDrawer.qml</file>

@@ -31,239 +31,138 @@ Maui.ItemDelegate
 	
 	isCurrentItem : ListView.isCurrentItem
 	
-	property alias quickButtons : _buttonsRow.data
-	property bool showMenuIcon: true
-	
-	property alias label1 : _label1
-	property alias label2 : _label2
-	property alias label3 : _label3
-	property alias label4 : _label4
-	property alias iconImg : _icon
-	property int radius : Maui.Style.radiusV
-	
-	SwipeDelegate
-	{
-		id: _swipeDelegate
-		anchors.fill: parent
-		hoverEnabled: true
-		clip: true
-		Kirigami.Theme.colorSet: Kirigami.Theme.Button
-		Kirigami.Theme.inherit: false
-		swipe.enabled: showMenuIcon
-	
-// 	Rectangle
-// 		{
-// 			id: _bg
-// 			visible: swipe.position < 0
-// 			Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
-// 			Kirigami.Theme.inherit: false
-// 			anchors.fill: parent
-// 			color: Kirigami.Theme.backgroundColor
-// 			border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-// 			radius: control.radius
-// 			z: background.z -1
-// 		}
-// 		
-// 		
-// 		DropShadow
-// 		{
-// 			visible: _bg.visible
-// 			anchors.fill: background
-// 			horizontalOffset: 5
-// 			verticalOffset: 0
-// 			radius: 8.0
-// 			samples: 17
-// 			color: Qt.darker(_bg.color, 5)
-// 			source: background
-// 		}
-
-background: null
+	default property alias content : _content.data
 		
-		RowLayout
+		property bool showQuickActions : true
+		property list<Action> quickActions
+		
+		property bool collapse : width < Kirigami.Units.gridUnit * 22 
+		
+		onCollapseChanged:
 		{
-			id: _layout
+			if(_swipeDelegate.swipe.position < 0)
+				_swipeDelegate.swipe.close() 
+		}	
+		
+		SwipeDelegate
+		{
+			id: _swipeDelegate
 			anchors.fill: parent
-			Item
+			anchors.margins: 1
+			hoverEnabled: true
+			clip: true
+			
+			swipe.enabled: control.collapse && control.showQuickActions
+			padding: 0
+			
+			Rectangle
 			{
-				visible: control.width > Kirigami.Units.gridUnit * 15
-				Layout.preferredWidth: visible ? parent.height : 0
-				Layout.fillHeight: visible
-				Layout.margins: Maui.Style.space.medium
-				
-				Kirigami.Icon
-				{
-					id: _icon
-					width: Maui.Style.iconSizes.large
-					height: width
-					anchors.centerIn: parent
-				}
+				id: _bg
+				anchors.fill: _swipeDelegate.background
+				z: _swipeDelegate.background.z -1
+				color: control.Kirigami.Theme.backgroundColor
+				radius: Maui.Style.radiusV
+				opacity: Math.abs( _swipeDelegate.swipe.position)
 			}
 			
-			
-			Item
+			background: MouseArea
 			{
-				id: _info
+				id: _background
 				
-				Layout.fillHeight: true
-				Layout.fillWidth: true
+				propagateComposedEvents: true
 				
-				ColumnLayout
+				RowLayout
 				{
-					anchors.fill: parent
+					anchors.fill: parent					
+					spacing: 0				
 					
-					Label
+					Item
 					{
-						id: _label1
-						visible: text.length
-						Layout.fillHeight: visible
-						Layout.fillWidth: visible
-						font.pointSize: Maui.Style.fontSizes.big
-						font.bold: true
-						font.weight: Font.Bold
-						elide: Text.ElideMiddle
-						color: Kirigami.Theme.textColor
-					}
+						id: _content
+						Layout.fillWidth: true	
+						Layout.fillHeight: true
+					}				
 					
-					Label
+					Row
 					{
-						id: _label2
-						visible: text.length
-						Layout.fillHeight: visible
-						Layout.fillWidth: visible
-						font.pointSize: Maui.Style.fontSizes.small
-						font.weight: Font.Light
-						wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-						elide: Text.ElideRight
-						color: Kirigami.Theme.textColor
-					}
-				}
-			}
-			
-			Item
-			{
-				visible: control.width >  Kirigami.Units.gridUnit * 30
-				Layout.fillHeight: visible
-				Layout.fillWidth: visible
-				clip: true
-				
-				ColumnLayout
-				{
-					anchors.fill: parent
-					
-					Label
-					{
-						id: _label3
-						visible: text.length
-						Layout.fillHeight: visible
-						Layout.fillWidth: visible
+						id: _buttonsRow
+						visible: hovered && control.showQuickActions && !control.collapse
+						Layout.fillHeight: true
+						Layout.preferredWidth: Math.max(Maui.Style.space.big, _buttonsRow.implicitWidth)
 						Layout.alignment: Qt.AlignRight
-						horizontalAlignment: Qt.AlignRight
-						font.pointSize: Maui.Style.fontSizes.small
-						font.weight: Font.Light
-						wrapMode: Text.WrapAnywhere
-						elide: Text.ElideMiddle
-						color: Kirigami.Theme.textColor
+						Layout.margins: Maui.Style.space.medium
+						
+						Behavior on Layout.preferredWidth
+						{
+							NumberAnimation
+							{
+								duration: Kirigami.Units.longDuration 
+								easing.type: Easing.InOutQuad
+							}
+						}
+						
+						spacing: Maui.Style.space.medium
+						
+						Repeater
+						{
+							model: !control.collapse &&  control.showQuickActions ? control.quickActions : undefined
+							
+							ToolButton
+							{
+								action: modelData
+								anchors.verticalCenter: parent.verticalCenter				
+							}
+						}						
+					}						
+					
+					Item
+					{
+						visible: control.collapse && control.quickActions.length > 0 && control.showQuickActions
+						Layout.fillHeight: true
+						Layout.preferredWidth: Maui.Style.iconSizes.big + Maui.Style.space.small
+						Layout.margins: Maui.Style.space.small
+						
+						ToolButton
+						{
+							anchors.centerIn: parent
+							icon.name: "overflow-menu"
+							onClicked: _swipeDelegate.swipe.position < 0 ? _swipeDelegate.swipe.close() : _swipeDelegate.swipe.open(SwipeDelegate.Right)
+						}
 					}
 					
-					Label
-					{
-						id: _label4
-						visible: text.length
-						Layout.fillHeight: visible
-						Layout.fillWidth: visible
-						Layout.alignment: Qt.AlignRight
-						horizontalAlignment: Qt.AlignRight
-						font.pointSize: Maui.Style.fontSizes.small
-						font.weight: Font.Light
-						wrapMode: Text.WrapAnywhere
-						elide: Text.ElideMiddle
-						color: Kirigami.Theme.textColor
-					}
-				}
+				}				
 			}
 			
-			
-			Item
+			swipe.right: Row
 			{
-				Layout.fillHeight: true
-				Layout.preferredWidth: Math.max(Maui.Style.space.big, _buttonsRow.implicitWidth)
-				Layout.alignment: Qt.AlignRight
-				Layout.margins: Maui.Style.space.big
+				id: _rowActions
+				anchors.right: parent.right
+				anchors.verticalCenter: parent.verticalCenter
+				spacing: Maui.Style.space.big
+				padding: Maui.Style.space.medium
+				visible: _swipeDelegate.swipe.complete
+				opacity: Math.abs(_swipeDelegate.swipe.position)
 				
-				Row
+				Behavior on width
 				{
-					id: _buttonsRow
-					anchors.centerIn: parent
-					spacing: Maui.Style.space.medium
+					NumberAnimation
+					{
+						duration: Kirigami.Units.longDuration 
+						easing.type: Easing.InOutQuad
+					}
+				}
+				
+				Repeater
+				{
+					model: control.collapse && control.showQuickActions ? control.quickActions : undefined
+					
 					ToolButton
 					{
-						visible: showMenuIcon
-						icon.name: "overflow-menu"
-						onClicked: _swipeDelegate.swipe.position < 0 ? _swipeDelegate.swipe.close() : _swipeDelegate.swipe.open(SwipeDelegate.Right)
+						action: modelData
+						anchors.verticalCenter: parent.verticalCenter				
 					}
 				}
 			}
 		}
 		
-		swipe.right: Row
-		{
-			id: _rowActions
-			anchors.right: parent.right
-			anchors.verticalCenter: parent.verticalCenter
-			spacing: Maui.Style.space.big
-			padding: Maui.Style.space.medium
-			
-			ToolButton
-			{
-				icon.name: "draw-star"
-				anchors.verticalCenter: parent.verticalCenter
-				//            onClicked:
-				//            {
-				//                control.favClicked(index)
-				//                swipe.close()
-				//            }
-				
-				//            icon.color: model.fav == "1" ? "yellow" : _bg.Kirigami.Theme.textColor
-			}
-			
-			ToolButton
-			{
-				icon.name: "document-share"
-				anchors.verticalCenter: parent.verticalCenter
-				//            onClicked: if(isAndroid) Maui.Android.shareContact(model.id)
-				//            icon.color: _bg.Kirigami.Theme.textColor
-			}
-			
-			ToolButton
-			{
-				icon.name: "message-new"
-				anchors.verticalCenter: parent.verticalCenter
-				//            icon.color: _bg.Kirigami.Theme.textColor
-				//            onClicked:
-				//            {
-				//                _messageComposer.contact = list.get(index)
-				//                _messageComposer.open()
-				//                swipe.close()
-				//            }
-			}
-			
-			ToolButton
-			{
-				icon.name: "call-start"
-				anchors.verticalCenter: parent.verticalCenter
-				//            icon.color: _bg.Kirigami.Theme.textColor
-				
-				//            onClicked:
-				//            {
-				//                if(isAndroid)
-				//                    Maui.Android.call(model.tel)
-				//                else
-				//                    Qt.openUrlExternally("call://" + model.tel)
-				
-				//                swipe.close()
-				//            }
-			}
-		}
-	}
-	
 }
