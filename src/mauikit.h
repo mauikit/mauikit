@@ -46,7 +46,10 @@ public:
     {
         static MauiKit instance;
         instance.registerTypes("org.kde.mauikit");
-    }
+    }    
+    
+    void initResources();
+	
 
 private:
     QUrl componentUrl(const QString &fileName) const;
