@@ -51,7 +51,7 @@ Maui.SwipeItemDelegate
 				id: img
 				anchors.centerIn: parent
 				source: control.imageSource
-				height: parent.height
+				height: Math.min(parent.height, control.iconSizeHint)
 				width: height
 				sourceSize.width: width
 				sourceSize.height: height
@@ -98,7 +98,7 @@ Maui.SwipeItemDelegate
 			source: control.iconSource
 			anchors.centerIn: parent
 			fallback: "qrc:/assets/application-x-zerosize.svg"
-			height: parent.height
+			height: Math.min(parent.height, control.iconSizeHint)
 			width: height
 		}
 	}
@@ -108,7 +108,8 @@ Maui.SwipeItemDelegate
 	{
 		id: _layout
 		anchors.fill: parent
-		spacing: Maui.Style.space.small
+
+		spacing: Maui.Style.space.small		
 		
 		Item
 		{
@@ -131,7 +132,7 @@ Maui.SwipeItemDelegate
 		{
 			Layout.fillHeight: visible
 			Layout.fillWidth: visible
-			Layout.margins: Maui.Style.space.small
+			Layout.margins: Maui.Style.space.small			
 			
 			Label
 			{
@@ -144,7 +145,7 @@ Maui.SwipeItemDelegate
 				elide: Text.ElideMiddle
 				wrapMode: Text.NoWrap
 				color: control.Kirigami.Theme.textColor
-				font.weight: Font.Regular
+				font.weight: Font.Normal
 				font.pointSize: Maui.Style.fontSizes.default
 			}
 			
@@ -154,17 +155,15 @@ Maui.SwipeItemDelegate
 				visible: text.length
 				Layout.fillWidth: visible
 				Layout.fillHeight: visible
-				font.weight: Font.Regular
+				font.weight: Font.Normal
 				font.pointSize: Maui.Style.fontSizes.medium
 				wrapMode: Text.NoWrap
 				verticalAlignment: _label1.visible ? Qt.AlignTop : Qt.AlignVCenter
 				elide: Text.ElideRight
 				color: control.Kirigami.Theme.textColor
-				opacity: control.isCurrentItem || hovered ? 0.8 : 0.6
+				opacity: control.isCurrentItem || hovered ? 0.8 : 0.6			
 			}
-		}
-		
-		
+		}		
 		
 		ColumnLayout
 		{

@@ -36,7 +36,7 @@ Maui.ItemDelegate
 		property bool showQuickActions : true
 		property list<Action> quickActions
 		
-		property bool collapse : width < Kirigami.Units.gridUnit * 22 
+		property bool collapse : width < Kirigami.Units.gridUnit * 26 
 		
 		onCollapseChanged:
 		{
@@ -80,7 +80,7 @@ Maui.ItemDelegate
 					{
 						id: _content
 						Layout.fillWidth: true	
-						Layout.fillHeight: true
+						Layout.fillHeight: true						
 					}				
 					
 					Row
