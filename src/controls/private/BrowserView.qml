@@ -93,12 +93,13 @@ Maui.Page
 			section.delegate: Maui.LabelDelegate
 			{
 				id: delegate
-				label: section
-				labelTxt.font.pointSize: Maui.Style.fontSizes.big
-				
-				isSection: true
-				boldLabel: true
+				width: parent.width
 				height: Maui.Style.toolBarHeightAlt
+
+				label: String(section).toUpperCase()
+				labelTxt.font.pointSize: Maui.Style.fontSizes.big
+
+				isSection: true
 			}
 			
 			delegate: Maui.ListBrowserDelegate
@@ -365,11 +366,6 @@ Maui.Page
 					width: Math.min(Kirigami.Units.gridUnit * 22, control.width)
 					height: parent.height
 					
-// 					background: Rectangle
-// 					{
-// 						color: "transparent"
-// 					}
-					
 					Kirigami.Separator
 					{
 						anchors.top: parent.top
@@ -436,17 +432,6 @@ Maui.Page
 						model: Maui.BaseModel
 						{							
 							list: _millersFMList
-						}
-						
-						section.delegate: Maui.LabelDelegate
-						{
-							id: delegate
-							label: section
-							labelTxt.font.pointSize: Maui.Style.fontSizes.big
-							
-							isSection: true
-							boldLabel: true
-							height: Maui.Style.toolBarHeightAlt
 						}
 						
 						delegate: Maui.ListBrowserDelegate
