@@ -531,14 +531,6 @@ Maui.Page
 		onClicked: control.goBack()
 	},
 	
-	//     ToolButton
-	//     {
-	//         id: goUpButton
-	//         visible: true
-	//         icon.name: "go-up"
-	//         onClicked: control.goUp()
-	//     },
-	
 	ToolButton
 	{
 		icon.name: "go-next"
@@ -757,11 +749,8 @@ Maui.Page
 			Layout.margins: 0
 			Layout.fillWidth: true
 			Layout.fillHeight: true
-			clip: true
-			
+			clip: true			
 			focus: true
-			// 			Keys.onSpacePressed: previewer.show(control.currentFMList.get(browser.currentIndex).path)
-			
 			orientation: ListView.Horizontal
 			model: tabsObjectModel
 			snapMode: ListView.SnapOneItem
@@ -935,27 +924,11 @@ Maui.Page
 	
 	function populate(path)
 	{
-		if(!path.length)
+		if(!String(path).length)
 			return;
 		
 		browserView.currentView.currentIndex = -1
 		setPath(path)
-		
-		//         if(currentPathType === Maui.FMList.PLACES_PATH)
-		//         {
-		//             if(trackChanges && saveDirProps)
-		//             {
-		//                 var conf = Maui.FM.dirConf(path+"/.directory")
-		// 				var iconsize = conf["iconsize"] ||  Maui.Style.iconSizes.large
-		//                 thumbnailsSize = parseInt(iconsize)
-		//             }else
-		//             {
-		//                 thumbnailsSize = parseInt(Maui.FM.loadSettings("IconSize", "SETTINGS", thumbnailsSize))
-		//             }
-		//         }
-		//
-		//         if(browserView.viewType == Maui.FMList.ICON_VIEW)
-		//             browser.adaptGrid()
 	}
 	
 	function goBack()

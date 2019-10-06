@@ -44,8 +44,8 @@ watcher(new QFileSystemWatcher(this))
 	
 	connect(this->fm, &FM::pathContentReady, [&](const FMH::PATH_CONTENT &res)
 	{		
-// 		if(res.path != this->path)
-// 			return;
+		if(res.path != this->path.toString())
+			return;
 		
 		this->assignList(res.content);
 	});	
@@ -379,6 +379,7 @@ void FMList::setPath(const QUrl &path)
 	
 	this->path = path;
 	this->setPreviousPath(this->path);  
+    
     this->setStatus({STATUS_CODE::LOADING, "Loading content", "Almost ready!", "view-refresh", true, false});
 	
 	const auto __scheme = this->path.scheme();

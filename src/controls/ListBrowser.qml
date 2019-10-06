@@ -71,8 +71,7 @@ Kirigami.ScrollablePage
 	leftPadding: padding
 	rightPadding: padding
 	topPadding: padding
-	bottomPadding: padding	
-
+	bottomPadding: padding
 	
     ListView
     {	

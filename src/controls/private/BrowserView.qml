@@ -17,7 +17,7 @@ Maui.Page
 	property int viewType
 	
 	height: _browserList.height
-	width: _browserList.width
+	width: _browserList.width 
 	
 	function setCurrentFMList()
 	{
@@ -105,7 +105,7 @@ Maui.Page
 			{
 				id: delegate
 				property string path : model.path
-				width: parent.width
+				width: _listViewBrowser.width
 				height: _listViewBrowser.itemSize + Maui.Style.space.big
 				leftPadding: Maui.Style.space.small
 				rightPadding: Maui.Style.space.small
