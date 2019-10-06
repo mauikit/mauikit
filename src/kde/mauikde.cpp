@@ -318,5 +318,5 @@ FMH::MODEL_LIST MAUIKDE::getApps(const QString &groupStr)
 void MAUIKDE::launchApp(const QString &app)
 {
 	KService service(app);
-	KRun::runApplication(service,{}, nullptr);
+	KRun::runApplication(service, {}, nullptr);
 }

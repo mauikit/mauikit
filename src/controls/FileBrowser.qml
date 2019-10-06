@@ -90,7 +90,6 @@ Maui.Page
 	}
 	]
 	
-	headBar.visible: currentPathType !== Maui.FMList.APPS_PATH
 	headBar.position: Kirigami.Settings.isMobile ? ToolBar.Footer : ToolBar.Header
 	property list<QtObject> t_actions:
 	[
@@ -876,17 +875,7 @@ Maui.Page
 		const path = item.path
 		
 		switch(currentPathType)
-		{
-			case Maui.FMList.APPS_PATH:
-				if(item.path.endsWith("/"))
-				{
-					populate(path)
-				}
-				else
-				{
-					Maui.FM.runApplication(path)
-				}
-				break
+		{			
 			case Maui.FMList.CLOUD_PATH:
 				if(item.mime === "inode/directory")
 				{
@@ -898,7 +887,7 @@ Maui.Page
 				}
 				break;
 			default:
-				if(selectionMode && !Maui.FM.isDir(item.path))
+				if(selectionMode && item.mime !== "inode/directory")
 				{					
 					if(control.selectionBar && control.selectionBar.contains(item.path))
 					{
@@ -914,10 +903,6 @@ Maui.Page
 					{	 
 						control.openFolder(path)
 					}
-					else if(Maui.FM.isApp(path))
-					{
-						control.launchApp(path)	
-					}						
 					else
 					{
 						if (Kirigami.Settings.isMobile)
@@ -933,12 +918,6 @@ Maui.Page
 		}
 	}
 	
-	
-	function launchApp(path)
-	{
-		Maui.FM.runApplication(path, "")
-	}
-	
 	function openFile(path)
 	{
 		Maui.FM.openUrl(path)
@@ -946,7 +925,7 @@ Maui.Page
 	
 	function openFolder(path)
 	{
-		populate(Maui.FM.fileDir(path))// make sure the path is a dir // file to dir
+		populate(path)
 	}
 	
 	function setPath(path)
@@ -981,7 +960,7 @@ Maui.Page
 	
 	function goBack()
 	{
-		populate(control.currentFMList.previousPath)
+		openFolder(control.currentFMList.previousPath)
 		browserView.currentView.currentIndex = indexHistory.pop()
 	}
 	
@@ -1013,7 +992,6 @@ Maui.Page
 	function clean()
 	{
 		control.clipboardItems = []
-		browserMenu.pasteFiles = 0
 		
 		if(control.selectionBar && control.selectionBar.visible)
 			selectionBar.clear()
@@ -1036,7 +1014,8 @@ Maui.Page
 	function paste()
 	{
 		if(control.isCopy)
-		{			control.currentFMList.copyInto(control.clipboardItems)
+		{	
+            control.currentFMList.copyInto(control.clipboardItems)
 		}
 		else if(control.isCut)
 		{
@@ -1104,9 +1083,7 @@ Maui.Page
 			case Maui.FMList.MODIFIED:
 				prop = "modified"
 				break;
-		}
-		
-		control.browserView.viewType = Maui.FMList.LIST_VIEW
+		}		
 		
 		if(!prop)
 		{
@@ -1114,6 +1091,7 @@ Maui.Page
 			return
 		}
 		
+        control.browserView.viewType = Maui.FMList.LIST_VIEW
 		control.browserView.currentView.section.property = prop
 		control.browserView.currentView.section.criteria = criteria
 	}

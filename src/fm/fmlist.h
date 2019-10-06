@@ -23,45 +23,67 @@
 #include "fmh.h"
 #include "mauilist.h"
 
-struct PathContent
+
+enum STATUS_CODE : uint_fast8_t
 {
-	QString path;
-	FMH::MODEL_LIST content;
+    LOADING,  
+    ERROR,
+    READY
+}; 
+
+class PathStatus
+{
+    Q_GADGET
+
+    Q_PROPERTY(STATUS_CODE code MEMBER m_code)
+    Q_PROPERTY(QString title MEMBER m_title)
+    Q_PROPERTY(QString message MEMBER m_message)
+    Q_PROPERTY(QString icon MEMBER m_icon)
+    Q_PROPERTY(bool empty MEMBER m_empty)
+    Q_PROPERTY(bool exists MEMBER m_exists)
+
+public:    
+
+    STATUS_CODE m_code;
+    QString m_title;
+    QString m_message;
+    QString m_icon;
+    bool m_empty = false;
+    bool m_exists = false;
 };
+Q_DECLARE_METATYPE(PathStatus)
 
 class FM;
 class QFileSystemWatcher;
 class FMList : public MauiList
 {
 	Q_OBJECT
-
-	Q_PROPERTY(QString path READ getPath WRITE setPath NOTIFY pathChanged)
-	Q_PROPERTY(QString pathName READ getPathName NOTIFY pathNameChanged)
+	
+    //writable
+	Q_PROPERTY(QUrl path READ getPath WRITE setPath NOTIFY pathChanged)
 
 	Q_PROPERTY(bool hidden READ getHidden WRITE setHidden NOTIFY hiddenChanged)
 	Q_PROPERTY(bool onlyDirs READ getOnlyDirs WRITE setOnlyDirs NOTIFY onlyDirsChanged)
-	
-	Q_PROPERTY(int cloudDepth READ getCloudDepth WRITE setCloudDepth NOTIFY cloudDepthChanged)
-	Q_PROPERTY(uint count READ getCount NOTIFY countChanged)
-	
-	Q_PROPERTY(bool contentReady READ getContentReady NOTIFY contentReadyChanged)
-	
-	Q_PROPERTY(QStringList filters READ getFilters WRITE setFilters NOTIFY filtersChanged)
-	Q_PROPERTY(FMList::FILTER filterType READ getFilterType WRITE setFilterType NOTIFY filterTypeChanged)
-	
-	Q_PROPERTY(FMList::SORTBY sortBy READ getSortBy WRITE setSortBy NOTIFY sortByChanged)
     Q_PROPERTY(bool foldersFirst READ getFoldersFirst WRITE setFoldersFirst NOTIFY foldersFirstChanged)
-    Q_PROPERTY(FMList::PATHTYPE pathType READ getPathType NOTIFY pathTypeChanged)
+	Q_PROPERTY(int cloudDepth READ getCloudDepth WRITE setCloudDepth NOTIFY cloudDepthChanged)  
+
+	Q_PROPERTY(QStringList filters READ getFilters WRITE setFilters NOTIFY filtersChanged)
+	Q_PROPERTY(FMList::FILTER filterType READ getFilterType WRITE setFilterType NOTIFY filterTypeChanged)	
+	Q_PROPERTY(FMList::SORTBY sortBy READ getSortBy WRITE setSortBy NOTIFY sortByChanged)
 	
 	Q_PROPERTY(bool trackChanges READ getTrackChanges WRITE setTrackChanges NOTIFY trackChangesChanged)
 	Q_PROPERTY(bool saveDirProps READ getSaveDirProps WRITE setSaveDirProps NOTIFY saveDirPropsChanged)	
 	
-	Q_PROPERTY(bool pathExists READ getPathExists NOTIFY pathExistsChanged)
-	Q_PROPERTY(bool pathEmpty READ getPathEmpty NOTIFY pathEmptyChanged)
-	
-	Q_PROPERTY(QString previousPath READ getPreviousPath)
-	Q_PROPERTY(QString posteriorPath READ getPosteriorPath)
-	Q_PROPERTY(QString parentPath READ getParentPath)
+    //readonly 
+	Q_PROPERTY(uint count READ getCount NOTIFY countChanged)	
+    Q_PROPERTY(QString pathName READ getPathName NOTIFY pathNameChanged)
+    Q_PROPERTY(FMList::PATHTYPE pathType READ getPathType NOTIFY pathTypeChanged)
+    
+    Q_PROPERTY(PathStatus status READ getStatus NOTIFY statusChanged) //TODO status to replace pathExists, pathEmpty and handle errors messaging
+    	
+	Q_PROPERTY(QUrl previousPath READ getPreviousPath)
+	Q_PROPERTY(QUrl posteriorPath READ getPosteriorPath)
+	Q_PROPERTY(QUrl parentPath READ getParentPath)    
 	
 	public:
 		
@@ -101,7 +123,9 @@ class FMList : public MauiList
 			APPS_PATH = FMH::PATHTYPE_KEY::APPS_PATH,
 			TRASH_PATH = FMH::PATHTYPE_KEY::TRASH_PATH,
 			SEARCH_PATH = FMH::PATHTYPE_KEY::SEARCH_PATH,
-			CLOUD_PATH = FMH::PATHTYPE_KEY::CLOUD_PATH
+			CLOUD_PATH = FMH::PATHTYPE_KEY::CLOUD_PATH,
+			QUICK_PATH = FMH::PATHTYPE_KEY::QUICK_PATH,
+			OTHER_PATH = FMH::PATHTYPE_KEY::OTHER_PATH
 			
 		}; Q_ENUM(PATHTYPE)
 		
@@ -112,7 +136,9 @@ class FMList : public MauiList
 			MILLERS_VIEW
 			
 		}; Q_ENUM(VIEW_TYPE)
-		
+        
+        Q_ENUM(STATUS_CODE)        
+        		
 		FMList(QObject *parent = nullptr);
 	
 		~FMList();
@@ -122,8 +148,8 @@ class FMList : public MauiList
 		FMList::SORTBY getSortBy() const;
 		void setSortBy(const FMList::SORTBY &key);
 		
-		QString getPath() const;
-		void setPath(const QString &path);	
+		QUrl getPath() const;
+		void setPath(const QUrl &path);	
         
         QString getPathName() const;
         
@@ -141,17 +167,14 @@ class FMList : public MauiList
 		bool getOnlyDirs() const;
 		void setOnlyDirs(const bool &state);
 		
-		QString getParentPath();
+		QUrl getParentPath();
 		
-		QString getPreviousPath();
-		void setPreviousPath(const QString &path);
+		QUrl getPreviousPath();
+		void setPreviousPath(const QUrl &path);
 		
-		QString getPosteriorPath();
-		void setPosteriorPath(const QString &path);
-		
-		bool getPathEmpty() const;
-		bool getPathExists() const;
-		
+		QUrl getPosteriorPath();
+		void setPosteriorPath(const QUrl &path);
+			
 		bool getTrackChanges() const;
 		void setTrackChanges(const bool &value);
 
@@ -161,50 +184,50 @@ class FMList : public MauiList
 		bool getSaveDirProps() const;
 		void setSaveDirProps(const bool &value);
 		
-		bool getContentReady() const;
-		void setContentReady(const bool &value);
-		
 		int getCloudDepth() const;
 		void setCloudDepth(const int &value);
 		
 		uint getCount() const;
+        
+        void setStatus(const PathStatus &status);
+        PathStatus getStatus() const;
 		
 private:
 	FM *fm;
 	QFileSystemWatcher *watcher;
-	void pre();
-	void pos();
-	
+    
 	void reset();
 	void setList();
+    void assignList(const FMH::MODEL_LIST &list);
 	void sortList();
 	void watchPath(const QString &path, const bool &clear = true);
     void search(const QString &query, const QUrl &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
 	
 	FMH::MODEL_LIST list = {{}};
 	
-	QString path = QString();
+	QUrl path;
     QString pathName = QString();
 	QStringList filters = {};
 	
 	bool onlyDirs = false;
 	bool hidden = false;
-	bool pathExists = false;
-	bool pathEmpty = true;
-	bool trackChanges = true;
+
+    bool trackChanges = true;
     bool foldersFirst = false;
 	bool saveDirProps = false;
-	bool contentReady = false;
 	int cloudDepth = 1;
 	uint count = 0;
-	QString searchPath;
+    
+	QUrl searchPath;
+    
+    PathStatus m_status;
 	
 	FMList::SORTBY sort = FMList::SORTBY::MODIFIED;
 	FMList::FILTER filterType = FMList::FILTER::NONE;
 	FMList::PATHTYPE pathType = FMList::PATHTYPE::PLACES_PATH;
 	
-	QStringList prevHistory = {};
-	QStringList postHistory = {};
+	QList<QUrl> prevHistory = {};
+	QList<QUrl> postHistory = {};
 	
 public slots:
 	QVariantMap get(const int &index) const;
@@ -228,13 +251,10 @@ signals:
 	void trackChangesChanged();
     void foldersFirstChanged();
 	void saveDirPropsChanged();
-	void contentReadyChanged();
+    void statusChanged();
 	void cloudDepthChanged();
 	void countChanged();
-	
-	void pathEmptyChanged();
-	void pathExistsChanged();
-	
+    
 	void warning(QString message);
 	void progress(int percent);
 

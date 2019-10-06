@@ -45,7 +45,6 @@ Maui.Page
 		path: control.path
 		foldersFirst: true
 		onSortByChanged: if(group) groupBy()
-		onContentReadyChanged: console.log("CONTENT READY?", contentReady)
 		onWarning:
 		{			
 			notify("dialog-information", "An error happened", message)

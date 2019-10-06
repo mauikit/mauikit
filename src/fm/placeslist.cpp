@@ -128,7 +128,7 @@ void PlacesList::setList()
 {		
     this->list.clear();
 
-	//this are default static places
+	//this are default static places //TODO move to itws own PATHTYPE_KEY::QUICK
 	this->list << FMH::MODEL
 	{
 		{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::TAGS_PATH]+"fav"},
@@ -136,7 +136,25 @@ void PlacesList::setList()
 		{FMH::MODEL_KEY::LABEL, "Favorite"},
 		{FMH::MODEL_KEY::TYPE, "Quick"}
 	};
-	
+    
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
+    this->list << FMH::MODEL
+	{
+		{FMH::MODEL_KEY::PATH,"recentdocuments:///"},
+		{FMH::MODEL_KEY::ICON, "view-media-recent"},
+		{FMH::MODEL_KEY::LABEL, "Recent"},
+		{FMH::MODEL_KEY::TYPE, "Quick"}
+	};
+    
+//     this->list << FMH::MODEL
+// 	{
+// 		{FMH::MODEL_KEY::PATH,"kdeconnect:///"},
+// 		{FMH::MODEL_KEY::ICON, "phone"},
+// 		{FMH::MODEL_KEY::LABEL, "KDEConnect"},
+// 		{FMH::MODEL_KEY::TYPE, "Quick"}
+// 	};
+#endif
+    
     for(const auto &group : this->groups)
         switch(group)
         {

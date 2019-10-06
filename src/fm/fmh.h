@@ -534,8 +534,10 @@ namespace FMH
 	{
 		FMH::MODEL res;
 		for(const auto &key : keys)
-			if(model.contains(key))
+		{
+            if(model.contains(key))
 				res[key] = model[key];
+		}
 			
 			return res;
 	}	
@@ -560,7 +562,9 @@ namespace FMH
         SEARCH_PATH,
         CLOUD_PATH,
 		FISH_PATH,
-		MTP_PATH
+		MTP_PATH,
+        QUICK_PATH,
+        OTHER_PATH,
 	};
 #else
     enum PATHTYPE_KEY : int
@@ -577,13 +581,16 @@ namespace FMH
 		CLOUD_PATH = 12,
 		FISH_PATH = 13,
 		MTP_PATH = 14,
+        QUICK_PATH = 15,
+        OTHER_PATH = 16,
+
 	};
 #endif
     static const QHash<PATHTYPE_KEY, QString> PATHTYPE_SCHEME =
 	{
 		{PATHTYPE_KEY::PLACES_PATH, "file"},
 		{PATHTYPE_KEY::DRIVES_PATH, "drives"},
-		{PATHTYPE_KEY::APPS_PATH, "apps"},
+		{PATHTYPE_KEY::APPS_PATH, "applications"},
 		{PATHTYPE_KEY::REMOTE_PATH, "remote"},
 		{PATHTYPE_KEY::REMOVABLE_PATH, "removable"},
 		{PATHTYPE_KEY::UNKNOWN_TYPE, "Unkown"},
@@ -624,7 +631,9 @@ namespace FMH
 		{PATHTYPE_KEY::SEARCH_PATH, ("Search")},
 		{PATHTYPE_KEY::CLOUD_PATH, ("Cloud")},
 		{PATHTYPE_KEY::FISH_PATH, ("Remote")},
-		{PATHTYPE_KEY::MTP_PATH, ("Drives")}
+		{PATHTYPE_KEY::MTP_PATH, ("Drives")},
+		{PATHTYPE_KEY::OTHER_PATH, ("Others")},
+		{PATHTYPE_KEY::QUICK_PATH, ("Quick")}
 	};
 	
 	
