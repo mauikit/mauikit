@@ -30,73 +30,77 @@ ItemDelegate
     id: control
     
     default property alias content : _content.data   
-    
-    property bool draggable: false
-    property bool isCurrentItem :  false
-
-    property int radius: Maui.Style.radiusV	
-    
-    //override the itemdelegate default signals to allow dragging content
-    signal pressed(var mouse)
-    signal pressAndHold(var mouse)
-    signal clicked(var mouse)	
-    signal rightClicked(var mouse)
-	signal doubleClicked(var mouse)
-    
-    background: null
-    hoverEnabled: !Kirigami.Settings.isMobile
-
-    padding: 0
-    bottomPadding: padding
-    rightPadding: padding
-    leftPadding: padding
-    topPadding: padding
-    
-    MouseArea
-	{
-        id: _mouseArea
-        anchors.fill: parent
-        acceptedButtons:  Qt.RightButton | Qt.LeftButton
-        onClicked:
+        
+        property bool draggable: false
+        property bool isCurrentItem :  false
+        
+        property int radius: Maui.Style.radiusV	
+        
+        //override the itemdelegate default signals to allow dragging content
+        signal pressed(var mouse)
+        signal pressAndHold(var mouse)
+        signal clicked(var mouse)	
+        signal rightClicked(var mouse)
+        signal doubleClicked(var mouse)
+        
+        background: null
+        hoverEnabled: !Kirigami.Settings.isMobile
+        
+        padding: 0
+        bottomPadding: padding
+        rightPadding: padding
+        leftPadding: padding
+        topPadding: padding
+        
+        Kirigami.Theme.backgroundColor: "transparent"
+        
+        MouseArea
         {
-            if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
-                control.rightClicked(mouse)
-                else	
-                    control.clicked(mouse)
-        }
-        
-        onDoubleClicked: control.doubleClicked(mouse)
-        
-        onPressed: 
-        {	
-            if(control.draggable)
-                loader.grabToImage(function(result)
-                {
-                    parent.Drag.imageSource = result.url
-                })
+            id: _mouseArea
+            anchors.fill: parent
+            acceptedButtons:  Qt.RightButton | Qt.LeftButton
+            onClicked:
+            {
+                if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
+                    control.rightClicked(mouse)
+                    else	
+                        control.clicked(mouse)
+            }
+            
+            onDoubleClicked: control.doubleClicked(mouse)
+            
+            onPressed: 
+            {	
+                if(control.draggable)
+                    loader.grabToImage(function(result)
+                    {
+                        parent.Drag.imageSource = result.url
+                    })
+                    
+                    control.pressed(mouse)			
+            }
+            
+            onPressAndHold : control.pressAndHold(mouse)
+            
+            Rectangle
+            {
+                id: _content
                 
-                control.pressed(mouse)			
-        }
+                anchors
+                {
+                    fill: parent
+                    topMargin: control.topPadding
+                    bottomMargin: control.bottomPadding
+                    leftMargin: control.leftPadding
+                    rightMargin: control.rightPadding
+                    margins: control.padding
+                }		
+                color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
+                
+                radius: control.radius
+                border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"
+            }
+        }	
         
-        onPressAndHold : control.pressAndHold(mouse)
-    }	
-    
-    Rectangle
-	{
-        id: _content
         
-		anchors
-		{
-			fill: parent
-			topMargin: control.topPadding
-			bottomMargin: control.bottomPadding
-			leftMargin: control.leftPadding
-			rightMargin: control.rightPadding
-			margins: control.padding
-		}		
-		color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
-					
-			radius: control.radius
-			border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"
-    }
 }	

@@ -86,13 +86,11 @@ Maui.Dialog
 			
 			ListView
 			{
-				id: _listView
-				clip: true
-				anchors.fill: parent
-				
-				signal tagClicked(int index)
-				
-				focus: true
+                id: _listView                
+                anchors.fill: parent
+                spacing: Maui.Style.space.tiny
+                clip: true
+                focus: true
 				interactive: true
 				highlightFollowsCurrentItem: true
 				highlightMoveDuration: 0
@@ -114,8 +112,8 @@ Maui.Dialog
 					emoji: "qrc:/img/assets/Electricity.png"
 					visible: _listView.count === 0
 					isMask: false
-					title : "No tags!"
-					body: "Start tagging your pics"
+					title : qsTr("No tags!")
+					body: qsTr("Start by creating tags")
 					emojiSize: Maui.Style.iconSizes.huge
 				}
 				
@@ -142,9 +140,9 @@ Maui.Dialog
 		{
 			id: tagListComposer
 			Layout.fillWidth: true
-			Layout.leftMargin: contentMargins
-			Layout.rightMargin: contentMargins
-			height: 64
+			Layout.leftMargin: Maui.Style.contentMargins
+			Layout.rightMargin: Maui.Style.contentMargins
+			height: Maui.Style.rowHeight
 			width: parent.width
 			onTagRemoved: list.remove(index)
 			placeholderText: ""

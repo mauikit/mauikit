@@ -8,43 +8,14 @@ import org.kde.mauikit 1.0 as Maui
 QtObject
 {
 	property Maui.FMList browser
-	property bool visible: !browser.pathExists || browser.pathEmpty || !browser.contentReady
-	property string emoji: 
-	{
-		if(browser.pathExists && browser.pathEmpty)
-			"qrc:/assets/folder-add.svg" 
-			else if(!browser.pathExists)
-				"qrc:/assets/dialog-information.svg"
-				else if(!browser.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
-					"qrc:/assets/edit-find.svg"
-					else if(!browser.contentReady)
-						"qrc:/assets/view-refresh.svg"
-	}
+	property bool visible: browser.status.code === Maui.FMList.LOADING || browser.status.code === Maui.FMList.ERROR || ( browser.status.code === Maui.FMList.READY && browser.status.empty === true)
 	
-	property string title :
-	{
-		if(browser.pathExists && browser.pathEmpty)
-			qsTr("Folder is empty!")
-			else if(!browser.pathExists)
-				qsTr("Folder doesn't exists!")
-				else if(!browser.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
-					qsTr("Searching for content!")
-					else if(!browser.contentReady)
-						qsTr("Loading content!")					
-						
-	}
 	
-	property string body:
-	{
-		if(browser.pathExists && browser.pathEmpty)
-			qsTr("You can add new files to it")
-			else if(!browser.pathExists)
-				qsTr("Create Folder?")
-				else if(!browser.contentReady && currentPathType === Maui.FMList.SEARCH_PATH)
-					qsTr("This might take a while!")
-					else if(!browser.contentReady)
-						qsTr("Almost ready!")	
-	}
+	property string emoji: browser.status.icon
+	
+	property string title : browser.status.title
+	
+	property string body: browser.status.message
 	
 	property int emojiSize: Maui.Style.iconSizes.huge
 	

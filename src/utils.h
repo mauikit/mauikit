@@ -31,9 +31,6 @@
 #include <QApplication>
 #endif
 
-#include <QIcon>
-#include <QQuickStyle>
-
 #define MAUIKIT_MAJOR_VERSION 0
 #define MAUIKIT_MINOR_VERSION 1
 #define MAUIKIT_PATCH_VERSION 0
@@ -43,17 +40,6 @@
 namespace UTIL
 {
 	const auto app = QCoreApplication::instance();	
-	
-	inline void init()
-	{
-		qDebug()<< "INIT STUFF";
-//		Q_INIT_RESOURCE(mauikit);
-//		Q_INIT_RESOURCE(icons);
-//		Q_INIT_RESOURCE(style);
-		QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
-		QIcon::setThemeName("Luv");
-		QQuickStyle::setStyle(":/style");
-	}
 	
     inline bool fileExists(const QString &url)
     {

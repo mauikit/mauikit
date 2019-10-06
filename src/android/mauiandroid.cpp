@@ -37,7 +37,6 @@
 // View
 #define SYSTEM_UI_FLAG_LIGHT_STATUS_BAR 0x00002000
 
-
 class InterfaceConnFailedException : public QException
 {
 public:
@@ -241,7 +240,7 @@ void MAUIAndroid::statusbarColor(const QString &bg, const bool &light)
 
         QtAndroid::runOnAndroidThread([=]() {
             QAndroidJniObject window = getAndroidWindow();
-            QAndroidJniObject view = window.callObjectMethod("getDecorView", "()Landroid/view/View;");
+            QAndroidJniObject view = window.callObjectMethod("getWindow", "()Landroid/view/Window;");
             int visibility = view.callMethod<int>("getSystemUiVisibility", "()I");
             if (light)
                 visibility |= SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
@@ -249,6 +248,27 @@ void MAUIAndroid::statusbarColor(const QString &bg, const bool &light)
                 visibility &= ~SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             view.callMethod<void>("setSystemUiVisibility", "(I)V", visibility);
              window.callMethod<void>("setStatusBarColor", "(I)V", QColor(bg).rgba());
+    });
+}
+
+void MAUIAndroid::navBarColor(const QString &bg, const bool &light)
+{
+    if (QtAndroid::androidSdkVersion() < 23)
+        return;
+    
+    QtAndroid::runOnAndroidThread([=]() {
+        QAndroidJniObject window = getAndroidWindow();
+        QAndroidJniObject view = window.callObjectMethod("getWindow", "()Landroid/view/Window;");
+        int visibility = view.callMethod<int>("getSystemUiVisibility", "()I");
+        if (light)
+            visibility |= SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        else
+            visibility &= ~SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        
+        view.callMethod<void>("setSystemUiVisibility", "(I)V", visibility);            
+        window.callMethod<void>("addFlags", "(I)V", FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.callMethod<void>("clearFlags", "(I)V", FLAG_TRANSLUCENT_STATUS);
+        window.callMethod<void>("setNavigationBarColor", "(I)V", QColor(bg).rgba());
     });
 }
 

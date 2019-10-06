@@ -50,14 +50,13 @@
 #endif
 
 #if defined Q_OS_ANDROID || defined APPIMAGE_PACKAGE
-#include "utils.h"
+#include <QIcon>
+#include <QQuickStyle>
 #endif
 
 #ifdef STATIC_MAUIKIT
 #include "kquicksyntaxhighlighter/kquicksyntaxhighlighter.h"
 #endif
-
-
 
 QUrl MauiKit::componentUrl(const QString &fileName) const
 {
@@ -180,10 +179,22 @@ void MauiKit::registerTypes(const char *uri)
     });
 
 #if defined Q_OS_ANDROID || defined APPIMAGE_PACKAGE
-	UTIL::init();
+	this->initResources();
 #endif
 
     qmlProtectModule(uri, 1);	
+}
+
+void MauiKit::initResources()
+{
+#if defined QICON_H && QQUICKSTYLE_H
+	Q_INIT_RESOURCE(mauikit);
+	Q_INIT_RESOURCE(icons);
+	Q_INIT_RESOURCE(style);
+	QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
+	QIcon::setThemeName("Luv");
+	QQuickStyle::setStyle(":/style");
+#endif
 }
 
 #include "moc_mauikit.cpp"

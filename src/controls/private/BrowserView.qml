@@ -17,7 +17,7 @@ Maui.Page
 	property int viewType
 	
 	height: _browserList.height
-	width: _browserList.width
+	width: _browserList.width 
 	
 	function setCurrentFMList()
 	{
@@ -45,7 +45,6 @@ Maui.Page
 		path: control.path
 		foldersFirst: true
 		onSortByChanged: if(group) groupBy()
-		onContentReadyChanged: console.log("CONTENT READY?", contentReady)
 		onWarning:
 		{			
 			notify("dialog-information", "An error happened", message)
@@ -94,19 +93,20 @@ Maui.Page
 			section.delegate: Maui.LabelDelegate
 			{
 				id: delegate
-				label: section
-				labelTxt.font.pointSize: Maui.Style.fontSizes.big
-				
-				isSection: true
-				boldLabel: true
+				width: parent.width
 				height: Maui.Style.toolBarHeightAlt
+
+				label: String(section).toUpperCase()
+				labelTxt.font.pointSize: Maui.Style.fontSizes.big
+
+				isSection: true
 			}
 			
 			delegate: Maui.ListBrowserDelegate
 			{
 				id: delegate
 				property string path : model.path
-				width: parent.width
+				width: _listViewBrowser.width
 				height: _listViewBrowser.itemSize + Maui.Style.space.big
 				leftPadding: Maui.Style.space.small
 				rightPadding: Maui.Style.space.small
@@ -366,11 +366,6 @@ Maui.Page
 					width: Math.min(Kirigami.Units.gridUnit * 22, control.width)
 					height: parent.height
 					
-// 					background: Rectangle
-// 					{
-// 						color: "transparent"
-// 					}
-					
 					Kirigami.Separator
 					{
 						anchors.top: parent.top
@@ -437,17 +432,6 @@ Maui.Page
 						model: Maui.BaseModel
 						{							
 							list: _millersFMList
-						}
-						
-						section.delegate: Maui.LabelDelegate
-						{
-							id: delegate
-							label: section
-							labelTxt.font.pointSize: Maui.Style.fontSizes.big
-							
-							isSection: true
-							boldLabel: true
-							height: Maui.Style.toolBarHeightAlt
 						}
 						
 						delegate: Maui.ListBrowserDelegate

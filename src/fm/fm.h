@@ -49,9 +49,7 @@ public:
 	bool getCloudServerContent(const QString &server, const QStringList &filters= QStringList(), const int &depth = 0);
     FMH::MODEL_LIST getCloudAccounts();
 	Q_INVOKABLE void createCloudDir(const QString &path, const QString &name);
-	
-	void getTrashContent();
-	
+		
 	/*** START STATIC METHODS ***/
 	static FMH::MODEL_LIST search(const QString &query, const QUrl &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
 	
@@ -94,8 +92,6 @@ signals:
 
     void cloudServerContentReady(FMH::MODEL_LIST list, const QString &url);
 	void cloudItemReady(FMH::MODEL item, QString path); //when a item is downloaded and ready
-	
-	void trashContentReady(FMH::MODEL_LIST list);
 	void pathContentReady(FMH::PATH_CONTENT list);
 	void pathContentChanged(QUrl path);
 	
@@ -140,8 +136,8 @@ public slots:
 	static void setDirConf(const QUrl &path, const QString &group, const QString &key, const QVariant &value);
 	
 	/* ACTIONS */	
-	bool copy(const QVariantList &data, const QString &where);
-	bool cut(const QVariantList &data, const QString &where);
+	bool copy(const QVariantList &data, const QUrl &where);
+	bool cut(const QVariantList &data, const QUrl &where);
 	static bool removeFile(const QUrl &path);
 	void moveToTrash(const QUrl &path);
 	static void emptyTrash();
@@ -149,7 +145,7 @@ public slots:
 	static bool createDir(const QUrl &path, const QString &name);
 	static bool createFile(const QUrl &path, const QString &name);
 	
-	static bool openUrl(const QString &url);
+	static bool openUrl(const QUrl &url);
 	static void openLocation(const QStringList &urls);	
 	static void runApplication(const QString &exec);	
 };

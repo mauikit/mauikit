@@ -71,13 +71,13 @@ Kirigami.ScrollablePage
 	leftPadding: padding
 	rightPadding: padding
 	topPadding: padding
-	bottomPadding: padding	
-
+	bottomPadding: padding
 	
     ListView
     {	
 		id: _listView
         focus: true
+        clip: true
         
         spacing: Maui.Style.space.tiny
         snapMode: ListView.NoSnap

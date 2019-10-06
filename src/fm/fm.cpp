@@ -47,26 +47,9 @@
 #include <KIO/EmptyTrashJob>
 #include <KCoreDirLister>
 #include <KFileItem>
+#include <KRun>
 #include <QIcon>
 #endif
-
-/*
- * FM *FM::instance = nullptr;
- * 
- * FM* FM::getInstance()
- * {
- *    if(!instance)
- *    {
- *        instance = new FM();
- *        qDebug() << "getInstance(): First instance\n";
- *        instance->init();
- *        return instance;
- *    } else
- *    {
- *        qDebug()<< "getInstance(): previous instance\n";
- *        return instance;
- *    }
- * }*/
 
 #ifdef Q_OS_ANDROID
 FM::FM(QObject *parent) : FMDB(parent),
@@ -95,7 +78,7 @@ dirLister(new KCoreDirLister(this))
 			{FMH::MODEL_KEY::DATE, kfile.time(KFileItem::FileTimes::CreationTime).toString(Qt::TextDate)},
 			{FMH::MODEL_KEY::MODIFIED, kfile.time(KFileItem::FileTimes::ModificationTime).toString(Qt::TextDate)},
 			{FMH::MODEL_KEY::LAST_READ, kfile.time(KFileItem::FileTimes::AccessTime).toString(Qt::TextDate)},
-			{FMH::MODEL_KEY::PATH, kfile.url().toString()},
+			{FMH::MODEL_KEY::PATH, kfile.mostLocalUrl().toString()},
 			{FMH::MODEL_KEY::THUMBNAIL, kfile.localPath()},
 			{FMH::MODEL_KEY::SYMLINK, kfile.linkDest()},
 			{FMH::MODEL_KEY::IS_SYMLINK, QVariant(kfile.isLink()).toString()},
@@ -250,8 +233,6 @@ QVariantList FM::get(const QString &queryTxt)
 	return mapList;
 }
 
-
-
 void FM::getPathContent(const QUrl& path, const bool &hidden, const bool &onlyDirs, const QStringList& filters, const QDirIterator::IteratorFlags &iteratorFlags)
 {	
 	qDebug()<< "Getting async path contents";
@@ -303,18 +284,10 @@ void FM::getPathContent(const QUrl& path, const bool &hidden, const bool &onlyDi
 // 	}
 	
 	if(this->dirLister->openUrl(path))
-		qDebug()<< "GETTING PATH CONTENT" << path;	
+    qDebug()<< "GETTING PATH CONTENT" << path;	
 	
 	#endif	
 	
-}
-
-void FM::getTrashContent()
-{	
-	#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)	
-	if(this->dirLister->openUrl(QUrl("trash://")))
-		qDebug()<< "TRASH CONTENT";		
-	#endif
 }
 
 FMH::MODEL_LIST FM::getAppsContent(const QString& path)
@@ -489,13 +462,8 @@ void FM::openCloudItem(const QVariantMap &item)
 }
 
 void FM::getCloudItem(const QVariantMap &item)
-{
-	qDebug()<< item;
-	FMH::MODEL data;
-	for(const auto &key : item.keys())
-		data.insert(FMH::MODEL_NAME_KEY[key], item[key].toString());
-	
-	this->sync->resolveFile(data, Syncing::SIGNAL_TYPE::DOWNLOAD);
+{	
+	this->sync->resolveFile(FMH::toModel(item), Syncing::SIGNAL_TYPE::DOWNLOAD);
 }
 
 QVariantList FM::getCloudAccountsList()
@@ -645,7 +613,6 @@ QString FM::fileDir(const QUrl& path)
 	return res;
 }
 
-
 void FM::saveSettings(const QString &key, const QVariant &value, const QString &group)
 {
 	UTIL::saveSettings(key, value, group);
@@ -677,7 +644,7 @@ QString FM::homePath()
 	return FMH::HomePath;
 }
 
-bool FM::cut(const QVariantList &data, const QString &where)
+bool FM::cut(const QVariantList &data, const QUrl &where)
 {	
 	FMH::MODEL_LIST items;
 	
@@ -691,7 +658,7 @@ bool FM::cut(const QVariantList &data, const QString &where)
 		
 		if(this->isCloud(path))
 		{
-			this->sync->setCopyTo(where);			
+			this->sync->setCopyTo(where.toString());			
 			this->sync->resolveFile(item, Syncing::SIGNAL_TYPE::COPY);
 			
 		}else if(FMH::fileExists(path))
@@ -700,7 +667,7 @@ bool FM::cut(const QVariantList &data, const QString &where)
 			QFile file(QUrl(path).toLocalFile());
 			file.rename(where+"/"+QFileInfo(QUrl(path).toLocalFile()).fileName());
 			#else			
-			auto job = KIO::move(QUrl(path), QUrl(where+"/"+FMH::getFileInfoModel(path)[FMH::MODEL_KEY::LABEL]));
+			auto job = KIO::move(QUrl(path), QUrl(where.toString()+"/"+FMH::getFileInfoModel(path)[FMH::MODEL_KEY::LABEL]));
 			job->start();
 			#endif
 		}
@@ -709,7 +676,7 @@ bool FM::cut(const QVariantList &data, const QString &where)
 	return true;
 }
 
-bool FM::copy(const QVariantList &data, const QString &where)
+bool FM::copy(const QVariantList &data, const QUrl &where)
 {
 	FMH::MODEL_LIST items;
 	for(const auto &k : data)		
@@ -722,11 +689,11 @@ bool FM::copy(const QVariantList &data, const QString &where)
 		const auto path = item[FMH::MODEL_KEY::PATH];
 		if(this->isDir(path))
 		{
-			FM::copyPath(path, where+"/"+QFileInfo(path).fileName(), false);
+			FM::copyPath(path, where.toString()+"/"+QFileInfo(path).fileName(), false);
 			
 		}else if(this->isCloud(path))
 		{
-			this->sync->setCopyTo(where);			
+			this->sync->setCopyTo(where.toString());			
 			this->sync->resolveFile(item, Syncing::SIGNAL_TYPE::COPY);
 			
 		}else if(FMH::fileExists(path))
@@ -734,7 +701,7 @@ bool FM::copy(const QVariantList &data, const QString &where)
 			if(this->isCloud(where))
 				cloudPaths << path;
 			else
-				FM::copyPath(path, where+"/"+FMH::getFileInfoModel(path)[FMH::MODEL_KEY::LABEL], false);			
+				FM::copyPath(path, where.toString()+"/"+FMH::getFileInfoModel(path)[FMH::MODEL_KEY::LABEL], false);			
 		}
 	}
 	
@@ -744,16 +711,16 @@ bool FM::copy(const QVariantList &data, const QString &where)
 		const auto firstPath = cloudPaths.takeLast();
 		this->sync->setUploadQueue(cloudPaths);
 		
-		if(where.split("/").last().contains("."))		
+		if(where.toString().split("/").last().contains("."))		
 		{
-			QStringList whereList = where.split("/");
+			QStringList whereList = where.toString().split("/");
 			whereList.removeLast();
 			auto whereDir = whereList.join("/");			
 			qDebug()<< "Trying ot copy to cloud" << where << whereDir;
 			
 			this->sync->upload(this->resolveLocalCloudPath(whereDir), firstPath);
 		} else
-			this->sync->upload(this->resolveLocalCloudPath(where), firstPath);		
+			this->sync->upload(this->resolveLocalCloudPath(where.toString()), firstPath);		
 	}
 	
 	return true;
@@ -902,13 +869,14 @@ bool FM::createFile(const QUrl &path, const QString &name)
 	return false;
 }
 
-bool FM::openUrl(const QString &url)
+bool FM::openUrl(const QUrl &url)
 {
 #ifdef Q_OS_ANDROID
-    MAUIAndroid::openUrl(url);
+    MAUIAndroid::openUrl(url.toString());
     return true;
-#else
-    return QDesktopServices::openUrl(QUrl::fromUserInput(url));
+#else    
+//     return QDesktopServices::openUrl(QUrl::fromUserInput(url));
+    return KRun::runUrl(url, FMH::getFileInfoModel(url)[FMH::MODEL_KEY::MIME], nullptr, KRun::RunFlag::DeleteTemporaryFiles);
 #endif
 }
 
