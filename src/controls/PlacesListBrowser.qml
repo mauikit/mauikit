@@ -25,7 +25,7 @@ Maui.ListBrowser
 		labelTxt.font.pointSize: Maui.Style.fontSizes.big
 		
 		isSection: true
-		boldLabel: true
+		width: parent.width
 		height: Maui.Style.toolBarHeightAlt
 	}
 	
