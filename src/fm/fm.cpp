@@ -665,7 +665,7 @@ bool FM::cut(const QVariantList &data, const QUrl &where)
 		{
 			#ifdef Q_OS_ANDROID
 			QFile file(QUrl(path).toLocalFile());
-			file.rename(where+"/"+QFileInfo(QUrl(path).toLocalFile()).fileName());
+            file.rename(where.toString()+"/"+QFileInfo(QUrl(path).toLocalFile()).fileName());
 			#else			
 			auto job = KIO::move(QUrl(path), QUrl(where.toString()+"/"+FMH::getFileInfoModel(path)[FMH::MODEL_KEY::LABEL]));
 			job->start();

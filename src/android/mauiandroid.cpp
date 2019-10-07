@@ -36,6 +36,7 @@
 #define FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS 0x80000000
 // View
 #define SYSTEM_UI_FLAG_LIGHT_STATUS_BAR 0x00002000
+#define SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR 0x00000010
 
 class InterfaceConnFailedException : public QException
 {
@@ -240,7 +241,7 @@ void MAUIAndroid::statusbarColor(const QString &bg, const bool &light)
 
         QtAndroid::runOnAndroidThread([=]() {
             QAndroidJniObject window = getAndroidWindow();
-            QAndroidJniObject view = window.callObjectMethod("getWindow", "()Landroid/view/Window;");
+            QAndroidJniObject view = window.callObjectMethod("getDecorView", "()Landroid/view/View;");
             int visibility = view.callMethod<int>("getSystemUiVisibility", "()I");
             if (light)
                 visibility |= SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
@@ -257,18 +258,16 @@ void MAUIAndroid::navBarColor(const QString &bg, const bool &light)
         return;
     
     QtAndroid::runOnAndroidThread([=]() {
-        QAndroidJniObject window = getAndroidWindow();
-        QAndroidJniObject view = window.callObjectMethod("getWindow", "()Landroid/view/Window;");
-        int visibility = view.callMethod<int>("getSystemUiVisibility", "()I");
-        if (light)
-            visibility |= SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-        else
-            visibility &= ~SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-        
-        view.callMethod<void>("setSystemUiVisibility", "(I)V", visibility);            
-        window.callMethod<void>("addFlags", "(I)V", FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.callMethod<void>("clearFlags", "(I)V", FLAG_TRANSLUCENT_STATUS);
-        window.callMethod<void>("setNavigationBarColor", "(I)V", QColor(bg).rgba());
+
+              QAndroidJniObject window = getAndroidWindow();
+              QAndroidJniObject view = window.callObjectMethod("getDecorView", "()Landroid/view/View;");
+              int visibility = view.callMethod<int>("getSystemUiVisibility", "()I");
+              if (light)
+                  visibility |= SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+              else
+                  visibility &= ~SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+              view.callMethod<void>("setSystemUiVisibility", "(I)V", visibility);
+               window.callMethod<void>("setNavigationBarColor", "(I)V", QColor(bg).rgba());
     });
 }
 

@@ -87,8 +87,6 @@ Item
         opacity: 1
         border.color: Kirigami.Theme.backgroundColor
         
-        
-        
         SequentialAnimation
         {
 			id: anim
@@ -199,8 +197,6 @@ Item
                 delegate: Maui.GridBrowserDelegate
                 {
                     id: delegate
-                    anchors.verticalCenter: position === Qt.Horizontal ? parent.verticalCenter : undefined
-                    anchors.horizontalCenter: position === Qt.Vertical ? parent.horizontalCenter : undefined
                     isCurrentItem: ListView.isCurrentItem
                     height: selectionList.height
                     width: height
@@ -211,10 +207,7 @@ Item
                     showTooltip: true
                     showThumbnails: true
                     emblemSize: Maui.Style.iconSizes.small
-                    Kirigami.Theme.highlightColor: Kirigami.Theme.highlightColor
-                    Kirigami.Theme.backgroundColor: Kirigami.Theme.complementaryBackgroundColor
-                    Kirigami.Theme.textColor: Kirigami.Theme.textColor
-                    
+
                     Connections
                     {
                         target: delegate

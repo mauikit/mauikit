@@ -179,6 +179,6 @@ Maui.ItemDelegate
             wrapMode: Text.Wrap
             color: control.Kirigami.Theme.textColor				
         }
-    }        
+    }
 
 }

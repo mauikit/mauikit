@@ -546,7 +546,12 @@ Maui.Page
 		{
 			anchors.fill: parent
 			onIconClicked: _selectionBarmenu.popup()
-			onExitClicked: clean()
+            onExitClicked:
+            {
+                clean()
+                control.selectionMode = false
+            }
+
 			onItemClicked: removeAtIndex(index)
 			
 			Menu

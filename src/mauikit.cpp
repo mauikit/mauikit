@@ -187,7 +187,7 @@ void MauiKit::registerTypes(const char *uri)
 
 void MauiKit::initResources()
 {
-#if defined QICON_H && QQUICKSTYLE_H
+#if defined QICON_H && defined QQUICKSTYLE_H
 	Q_INIT_RESOURCE(mauikit);
 	Q_INIT_RESOURCE(icons);
 	Q_INIT_RESOURCE(style);

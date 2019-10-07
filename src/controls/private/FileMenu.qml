@@ -27,9 +27,10 @@ Menu
 		visible: !control.isExec
 		text: qsTr("Select")
 		onTriggered:
-		{
-			
+		{			
 			addToSelection(currentFMList.get(index))
+            if(Kirigami.Settings.isMobile)
+                selectionMode = true
 		}
 	}
 	MenuSeparator{}

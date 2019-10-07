@@ -143,7 +143,7 @@ void FMList::setList()
 			break; //ASYNC
 			
 		case FMList::PATHTYPE::TAGS_PATH:
-			this->assignList(this->fm->getTagContent(this->path.fileName()));
+            this->assignList(this->fm->getTagContent(this->path.fileName()));
 			break; //SYNC	
 			
 		case FMList::PATHTYPE::CLOUD_PATH:
