@@ -28,7 +28,9 @@ Maui.Page
 		id: _dropMenu
 		property string urls
 		property url target
-				
+		
+		enabled: Maui.FM.getFileInfo(target).isdir == "true"
+		
 		MenuItem
 		{
 			text: qsTr("Copy here")	
