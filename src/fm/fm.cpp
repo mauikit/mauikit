@@ -883,8 +883,7 @@ bool FM::createFile(const QUrl &path, const QString &name)
 bool FM::createSymlink(const QUrl &path, const QUrl &where)
 {
 #ifdef Q_OS_ANDROID
-	const QFile file(path.toLocalFile());
-	return file.link(where.toLocalFile() + "/" + QFileInfo(path.toLocalFile()).fileName());
+    return QFile::link(path.toLocalFile(), where.toLocalFile() + "/" + QFileInfo(path.toLocalFile()).fileName());
 #else
 	const auto job = KIO::link({path}, where);
 	job->start();

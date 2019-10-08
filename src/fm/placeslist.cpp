@@ -270,7 +270,7 @@ void PlacesList::addPlace(const QUrl& path)
 #ifdef Q_OS_ANDROID
 	//do android stuff until cmake works with android 
     auto bookmarks = UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, "FileManager").toStringList();
-    bookmarks << path;
+    bookmarks << path.toString();
     UTIL::saveSettings("BOOKMARKS", bookmarks, "PREFERENCES", "FileManager");
     this->list.insert(index, FMH::getDirInfoModel(path));
 #else

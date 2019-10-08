@@ -177,6 +177,7 @@ Maui.Popup
             Maui.TextField
             {
                 id: _textEntry
+                focus: control.entryField
                 onAccepted: control.accepted()
                 Layout.fillWidth: entryField
                 height: entryField ?  Maui.Style.iconSizes.big : 0

@@ -52,18 +52,18 @@ ItemDelegate
     bottomPadding: padding
     rightPadding: padding
     leftPadding: padding
-    topPadding: padding     
+    topPadding: padding
     
     MouseArea
     {
         id: _mouseArea
         anchors.fill: parent
         acceptedButtons:  Qt.RightButton | Qt.LeftButton
-        drag.target: control.draggable ? parent : undefined
+        drag.target: control.draggable && !Kirigami.Settings.isMobile  ? parent : undefined
 
         property int startX
         property int startY
-        
+
         onClicked:
         {
             if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
@@ -76,7 +76,7 @@ ItemDelegate
 
         onPressed:
         {
-            if(control.draggable)
+            if(control.draggable && !Kirigami.Settings.isMobile )
                 control.grabToImage(function(result)
                 {
                     parent.Drag.imageSource = result.url
@@ -90,8 +90,9 @@ ItemDelegate
         onReleased :
         {
 			control.x = startX
-			control.y = startY
-		}
+            control.y = startY
+        }
+
         onPressAndHold : control.pressAndHold(mouse)
     }
 
