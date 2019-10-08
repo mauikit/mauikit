@@ -26,7 +26,7 @@ Maui.Page
 	Menu
 	{
 		id: _dropMenu
-		property url source
+		property string urls
 		property url target
 				
 		MenuItem
@@ -34,8 +34,12 @@ Maui.Page
 			text: qsTr("Copy here")	
 			onTriggered: 
 			{
-				var sourceItem = {"path" : _dropMenu.source}
-				Maui.FM.copy([sourceItem], _dropMenu.target)
+				const urls = _dropMenu.urls.split(",")
+				for(var i in urls)
+				{
+					var sourceItem = {"path" : urls[i]}
+					Maui.FM.copy([sourceItem], _dropMenu.target)
+				}
 			}
 		}
 		
@@ -44,8 +48,12 @@ Maui.Page
 			text: qsTr("Move here")	
 			onTriggered: 
 			{
-				var sourceItem = {"path" : _dropMenu.source}
-				Maui.FM.cut([sourceItem], _dropMenu.target)
+				const urls = _dropMenu.urls.split(",")
+				for(var i in urls)
+				{
+					var sourceItem = {"path" : urls[i]}
+					Maui.FM.cut([sourceItem], _dropMenu.target)
+				}
 			}
 		}
 		
@@ -54,7 +62,9 @@ Maui.Page
 			text: qsTr("Link here")	
 			onTriggered:
 			{
-				Maui.FM.createSymlink(_dropMenu.source, _dropMenu.target)
+				const urls = _dropMenu.urls.split(",")
+				for(var i in urls)			
+					Maui.FM.createSymlink(_dropMenu.source[i], urls.target)
 			}
 		}
 	}
@@ -224,7 +234,7 @@ Maui.Page
 					
 					onContentDropped:
 					{
-						_dropMenu.source =  drop.text
+						_dropMenu.urls = drop.urls.join(",")
 						_dropMenu.target = model.path
 						_dropMenu.popup()
 					}
@@ -349,10 +359,11 @@ Maui.Page
 					}
 					
 					onContentDropped:
-					{
-						_dropMenu.source =  drop.text
+					{					
+						_dropMenu.urls = drop.urls.join(",")
 						_dropMenu.target = model.path
 						_dropMenu.popup()
+						
 					}
 				}
             }
@@ -593,7 +604,7 @@ Maui.Page
 								
 								onContentDropped:
 								{
-									_dropMenu.source =  drop.text
+									_dropMenu.urls =  drop.urls.join(",")
 									_dropMenu.target = model.path
 									_dropMenu.popup()
 								}

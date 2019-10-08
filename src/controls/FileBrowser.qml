@@ -66,8 +66,7 @@ Maui.Page
 	onGoBackTriggered: control.goBack()
 	onGoForwardTriggered: control.goNext()
 	
-	focus: true
-	
+	focus: true	
 	footBar.visible: false
 	footBar.leftContent: Label
 	{
@@ -764,6 +763,25 @@ Maui.Page
 			highlightFollowsCurrentItem: true
 			highlightMoveDuration: 0
 			onMovementEnded: _browserList.currentIndex = indexAt(contentX, contentY)
+			
+// 			DropArea 
+// 			{
+// 				id: _dropArea
+// 				anchors.fill: parent
+// 				z: parent.z -2
+// 				onDropped:
+// 				{				
+// 					const urls = drop.urls
+// 					for(var i in urls)			
+// 					{
+// 						const item = Maui.FM.getFileInfo(urls[i])
+// 						if(item.isdir == "true")
+// 						{
+// 							control.openTab(urls[i])
+// 						}
+// 					}
+// 				}
+// 			}
 		}
 		
 		Loader

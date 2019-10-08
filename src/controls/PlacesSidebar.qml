@@ -24,8 +24,11 @@ Maui.SideBar
 		labelTxt.font.pointSize: Maui.Style.fontSizes.big		
 		isSection: true
 		height: Maui.Style.toolBarHeightAlt
+	}
+	onContentDropped:
+	{
+		placesList.addPlace(drop.text)
 	}	
-	
 	onItemClicked:
 	{
 		var item = list.get(index)

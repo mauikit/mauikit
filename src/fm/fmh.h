@@ -883,16 +883,11 @@ namespace FMH
 	
 	inline FMH::MODEL getFileInfoModel(const QUrl &path)
 	{		
-		if(!path.isLocalFile())
-		{
-			qWarning() << "URL recived is not a local file" << path;
-			return FMH::MODEL();  
-		}		
 		
+#ifdef Q_OS_ANDROID		
 		const QFileInfo file(path.toLocalFile());
 		if(!file.exists()) 
 			return FMH::MODEL();
-		qDebug()<< "trying to get path info model. exists";		
 		
         const auto mime = FMH::getMime(path);
         return FMH::MODEL
@@ -921,70 +916,52 @@ namespace FMH
                 {FMH::MODEL_KEY::THUMBNAIL, path.toString()},
                 {FMH::MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path.toLocalFile()).count() - 2) : "0"}
                 };
+#else
+				KFileItem kfile(path, KFileItem::MimeTypeDetermination::NormalMimeTypeDetermination);		
+				
+				return FMH::MODEL
+				{
+					{FMH::MODEL_KEY::LABEL, kfile.name()},
+					{FMH::MODEL_KEY::NAME, kfile.name()},
+					{FMH::MODEL_KEY::DATE, kfile.time(KFileItem::FileTimes::CreationTime).toString(Qt::TextDate)},
+					{FMH::MODEL_KEY::MODIFIED, kfile.time(KFileItem::FileTimes::ModificationTime).toString(Qt::TextDate)},
+					{FMH::MODEL_KEY::LAST_READ, kfile.time(KFileItem::FileTimes::AccessTime).toString(Qt::TextDate)},
+					{FMH::MODEL_KEY::PATH, kfile.mostLocalUrl().toString()},
+					{FMH::MODEL_KEY::THUMBNAIL, kfile.localPath()},
+					{FMH::MODEL_KEY::SYMLINK, kfile.linkDest()},
+					{FMH::MODEL_KEY::IS_SYMLINK, QVariant(kfile.isLink()).toString()},
+					{FMH::MODEL_KEY::HIDDEN, QVariant(kfile.isHidden()).toString()},
+					{FMH::MODEL_KEY::IS_DIR, QVariant(kfile.isDir()).toString()},
+					{FMH::MODEL_KEY::IS_FILE, QVariant(kfile.isFile()).toString()},
+					{FMH::MODEL_KEY::WRITABLE, QVariant(kfile.isWritable()).toString()},
+					{FMH::MODEL_KEY::READABLE, QVariant(kfile.isReadable()).toString()},
+					{FMH::MODEL_KEY::EXECUTABLE, QVariant(kfile.isDesktopFile()).toString()},
+					{FMH::MODEL_KEY::MIME, kfile.mimetype()},
+					{FMH::MODEL_KEY::GROUP, kfile.group()},
+					{FMH::MODEL_KEY::ICON, kfile.iconName()},
+					{FMH::MODEL_KEY::SIZE, QString::number(kfile.size())},
+					{FMH::MODEL_KEY::THUMBNAIL, kfile.mostLocalUrl().toString()},
+					{FMH::MODEL_KEY::OWNER, kfile.user()},
+					{FMH::MODEL_KEY::COUNT, kfile.isLocalFile() && kfile.isDir() ?  QString::number(QDir(kfile.localPath()).count() - 2) : "0"}
+				};
+#endif
 	}	
 	
 	inline QVariantMap getFileInfo(const QUrl &path)
-	{		
-		if(!path.isLocalFile())
-		{
-			qWarning() << "URL recived is not a local file" << path;
-			return QVariantMap();	  
-		}	
-		const QFileInfo file(path.toLocalFile());	
-		
-		if(!file.exists()) 
-			return QVariantMap();
-		
-		const auto data = FMH::getFileInfoModel(path);
-		
-		qDebug()<< "getting item info model" << data;
-		
-		QVariantMap res; 
-		for(const auto &key : data.keys())		
-			res.insert(FMH::MODEL_NAME[key], data[key]);
-		
-		return res;
+	{					
+		return FMH::toMap(FMH::getFileInfoModel(path));
 	}
 	
 	inline FMH::MODEL getDirInfoModel(const QUrl &path, const QString &type = QString())
-	{		
-		if(!path.isLocalFile())
-		{
-			qWarning() << "URL recived is not a local file" << path;
-			return FMH::MODEL();	  
-		}		
-		
-		const QDir dir (path.toLocalFile());		
-		if(!dir.exists()) 
-			return FMH::MODEL();
-		
+	{	
 		auto res = getFileInfoModel(path);
-		res[FMH::MODEL_KEY::LABEL] = dir.dirName();
-		res[FMH::MODEL_KEY::TYPE] =  type;
-		
+		res[FMH::MODEL_KEY::TYPE] =  type;		
 		return res;
 	}	
 	
 	inline QVariantMap getDirInfo(const QUrl &path, const QString &type = QString())
 	{
-		if(!path.isLocalFile())
-		{
-			qWarning() << "URL recived is not a local file" << path;
-			return QVariantMap();	  
-		}		
-		
-		const QFileInfo file(path.toLocalFile());	
-		
-		if(!file.exists()) 
-			return QVariantMap();
-		
-		const auto data = FMH::getDirInfoModel(path);
-		
-		QVariantMap res; 
-		for(const auto &key : data.keys())		
-			res.insert(FMH::MODEL_NAME[key], data[key]);
-		
-		return res;
+		return FMH::toMap(FMH::getDirInfoModel(path));
 	}	
 
 	#ifndef STATIC_MAUIKIT
