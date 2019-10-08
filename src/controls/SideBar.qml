@@ -30,7 +30,8 @@ Maui.AbstractSideBar
     implicitWidth: privateProperties.isCollapsed && collapsed && collapsible  ? collapsedSize : preferredWidth
     width: implicitWidth
     modal: false
-    interactive: Kirigami.Settings.isMobile && modal && !collapsible && !collapsed
+    position: 1
+    interactive: false
 
     default property alias content : _content.data
     property alias model : _listBrowser.model
