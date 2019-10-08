@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.12
+import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
@@ -27,8 +27,6 @@ import "private"
 Maui.AbstractSideBar
 {
     id: control
-    
-    //     ApplicationWindow.height -ApplicationWindow.header.height - ApplicationWindow.footer.height
     implicitWidth: privateProperties.isCollapsed && collapsed && collapsible  ? collapsedSize : preferredWidth
     width: implicitWidth
     modal: false
@@ -51,6 +49,12 @@ Maui.AbstractSideBar
 
     signal itemClicked(int index)
     signal itemRightClicked(int index)
+
+//    Connections
+//    {
+//        target: control.Overlay.overlay
+//        onPressed: control.collapse()
+//    }
 
     onModalChanged: visible = true
     visible: true
@@ -94,7 +98,7 @@ Maui.AbstractSideBar
             listView.flickableDirection: Flickable.VerticalFlick
             
             verticalScrollBarPolicy:  Qt.ScrollBarAlwaysOff  //this make sthe app crash
-            
+
             delegate: Maui.ListDelegate
             {
                 id: itemDelegate
@@ -158,7 +162,7 @@ Maui.AbstractSideBar
 
                 Kirigami.Icon
                 {
-					source: privateProperties.isCollapsed ? "sidebar-expand" : "sidebar-collapse"
+                    source: privateProperties.isCollapsed ? "sidebar-expand" : "sidebar-collapse"
                     color:  _handle.containsMouse || _handle.containsPress ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
                     anchors.centerIn: parent
                     width: Maui.Style.iconSizes.medium
@@ -171,15 +175,12 @@ Maui.AbstractSideBar
                 if (!pressed || !control.collapsible || !control.collapsed || !Kirigami.Settings.isMobile)
                     return
 
-                if(mouse.x > (startX * 2))
+                if(mouse.x > control.collapsedSize)
                 {
                     expand()
-                }else
-                {
-                    collapse()
                 }
                 
-                mouse.accepted = true 
+                mouse.accepted = true
             }
 
             onPressed:
@@ -191,24 +192,22 @@ Maui.AbstractSideBar
 
             onReleased:
             {
-
                 if(!control.collapsible)
                     return
 
-                    if(mouse.x !== startX)
-						return
-					
-						if(privateProperties.isCollapsed)
-							expand()
-							else
-								collapse()
-					
-                
-                mouse.accepted = true                
+                if(mouse.x > control.width)
+                    return
+
+                if(privateProperties.isCollapsed)
+                    expand()
+                    else
+                        collapse()
+
+                mouse.accepted = true
             }
         }
-    }    
-	
+    }
+
     MouseArea
     {
         z: control.modal ? applicationWindow().overlay.z + (control.position > 0 ? +1 : -1) : control.background.parent.z + 1
@@ -219,19 +218,30 @@ Maui.AbstractSideBar
         visible: Kirigami.Settings.isMobile
         enabled: control.collapsed && visible
         width: Maui.Style.space.large
+        property int startX
+        property int startY
 
-        onReleased:
+        onPressed:
         {
-            if (!control.collapsible || !control.collapsed || !Kirigami.Settings.isMobile)
+            startY = mouse.y
+            startX = mouse.x
+            mouse.accepted = true
+        }
+
+        onPositionChanged:
+        {
+            if (!pressed || !control.collapsible || !control.collapsed || !Kirigami.Settings.isMobile)
                 return
 
-                if(mouse.x > control.width)
-                {
-                    expand()
-                }else
-                {
-                    collapse()
-                }
+            if(mouse.x > control.collapsedSize)
+            {
+                expand()
+            }else
+            {
+                collapse()
+            }
+
+            mouse.accepted = true
         }
     }
 

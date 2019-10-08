@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.12
+import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
@@ -32,7 +32,7 @@ Drawer
 	implicitHeight: parent.height - ApplicationWindow.header.height - ApplicationWindow.footer.height
 	height: implicitHeight
 	y: ApplicationWindow.header.height
-	
+    closePolicy:  Popup.CloseOnEscape | Popup.CloseOnPressOutside
 	visible: true	
 	
 	property bool collapsible: false
@@ -41,7 +41,7 @@ Drawer
 	property int preferredWidth : Kirigami.Units.gridUnit * 12
 	
 // 	dragMargin: Maui.Style.space.huge	
-// 	dim: false	
+// 	dim: false
 		
 		Behavior on width
 		{
