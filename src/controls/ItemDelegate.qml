@@ -30,7 +30,7 @@ ItemDelegate
     id: control
 
     default property alias content : _content.data
-
+	property alias mouseArea : _mouseArea
     property bool draggable: false
     property bool isCurrentItem :  false
 
@@ -52,13 +52,18 @@ ItemDelegate
     bottomPadding: padding
     rightPadding: padding
     leftPadding: padding
-    topPadding: padding
-
+    topPadding: padding     
+    
     MouseArea
     {
         id: _mouseArea
         anchors.fill: parent
         acceptedButtons:  Qt.RightButton | Qt.LeftButton
+        drag.target: control.draggable ? parent : undefined
+
+        property int startX
+        property int startY
+        
         onClicked:
         {
             if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
@@ -72,14 +77,21 @@ ItemDelegate
         onPressed:
         {
             if(control.draggable)
-                loader.grabToImage(function(result)
+                control.grabToImage(function(result)
                 {
                     parent.Drag.imageSource = result.url
                 })
-
+				
+			startX = control.x
+			startY = control.y
             control.pressed(mouse)
         }
 
+        onReleased :
+        {
+			control.x = startX
+			control.y = startY
+		}
         onPressAndHold : control.pressAndHold(mouse)
     }
 
@@ -94,7 +106,8 @@ ItemDelegate
             leftMargin: control.leftPadding
             rightMargin: control.rightPadding
             margins: control.padding
-        }
+        }  	
+		        
         color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
 
         radius: control.radius

@@ -42,15 +42,45 @@ Maui.ItemDelegate
 	property string leftEmblem
 	
 	isCurrentItem : ListView.isCurrentItem || isSelected	
+	draggable: true
 		
 	signal emblemClicked(int index)
 	signal rightEmblemClicked(int index)
-	signal leftEmblemClicked(int index)  	
+	signal leftEmblemClicked(int index) 
+	signal contentDropped(var drop)
 	
 	ToolTip.delay: 1000
 	ToolTip.timeout: 5000
 	ToolTip.visible: control.hovered && control.showTooltip
 	ToolTip.text: model.tooltip ? model.tooltip : model.path  
+	
+	DropArea 
+	{
+		id: _dropArea
+		anchors.fill: parent
+		enabled: control.draggable
+		
+		Rectangle 
+		{
+			anchors.fill: parent
+			radius: Maui.Style.radiusV
+			color: control.Kirigami.Theme.highlightColor		
+			visible: parent.containsDrag
+		}
+		
+		onDropped:
+		{
+			control.contentDropped(drop)
+		}
+	}
+	
+	Drag.active: mouseArea.drag.active && control.draggable
+	Drag.dragType: Drag.Automatic
+	Drag.supportedActions: Qt.CopyAction
+	Drag.mimeData:
+	{
+		"text/uri-list": model.path
+	}
 	
 	Maui.Badge
 	{
@@ -142,14 +172,6 @@ Maui.ItemDelegate
 			{
 				anchors.centerIn: parent
 				sourceComponent: model.mime ? (model.mime.indexOf("image") > -1 && control.showThumbnails ? _imgComponent : _iconComponent) : _iconComponent 
-			}
-			
-			Maui.Badge
-			{
-				iconName: "link"
-				anchors.left: parent.left
-				anchors.bottom: parent.bottom
-				visible: (model.issymlink == true) || (model.issymlink == "true")
 			}                    
 		}  
 		

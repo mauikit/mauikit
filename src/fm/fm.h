@@ -144,6 +144,7 @@ public slots:
 	static bool rename(const QUrl &path, const QString &name);
 	static bool createDir(const QUrl &path, const QString &name);
 	static bool createFile(const QUrl &path, const QString &name);
+	static bool createSymlink(const QUrl &path, const QUrl &where);
 	
 	static bool openUrl(const QUrl &url);
 	static void openLocation(const QStringList &urls);	

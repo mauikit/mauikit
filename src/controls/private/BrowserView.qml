@@ -23,6 +23,42 @@ Maui.Page
 		control.currentFMList = currentView.currentFMList	
 	}
 	
+	Menu
+	{
+		id: _dropMenu
+		property url source
+		property url target
+				
+		MenuItem
+		{
+			text: qsTr("Copy here")	
+			onTriggered: 
+			{
+				var sourceItem = {"path" : _dropMenu.source}
+				Maui.FM.copy([sourceItem], _dropMenu.target)
+			}
+		}
+		
+		MenuItem
+		{
+			text: qsTr("Move here")	
+			onTriggered: 
+			{
+				var sourceItem = {"path" : _dropMenu.source}
+				Maui.FM.cut([sourceItem], _dropMenu.target)
+			}
+		}
+		
+		MenuItem
+		{
+			text: qsTr("Link here")	
+			onTriggered:
+			{
+				Maui.FM.createSymlink(_dropMenu.source, _dropMenu.target)
+			}
+		}
+	}
+	
 	Loader
 	{
 		id: viewLoader
@@ -104,7 +140,6 @@ Maui.Page
 			delegate: Maui.ListBrowserDelegate
 			{
 				id: delegate
-				property string path : model.path
 				width: _listViewBrowser.width
 				height: _listViewBrowser.itemSize + Maui.Style.space.big
 				leftPadding: Maui.Style.space.small
@@ -120,19 +155,27 @@ Maui.Page
 				isSelected: if(selectionBar) return selectionBar.contains(model.path)
 				leftEmblem: isSelected ? "emblem-select-remove" : "emblem-select-add"
 				
+				Maui.Badge
+				{
+					iconName: "link"
+					anchors.left: parent.left
+					anchors.bottom: parent.bottom
+					visible: (model.issymlink == true) || (model.issymlink == "true")
+				}   				
+				
 				Connections
 				{
 					target: selectionBar
 					
 					onPathRemoved: 
 					{
-						if(path === delegate.path)
+						if(path === model.path)
 							delegate.isSelected = false					
 					}
 					
 					onPathAdded: 
 					{
-						if(path === delegate.path)
+						if(path === model.path)
 							delegate.isSelected = true					
 					}
 					
@@ -177,6 +220,13 @@ Maui.Page
 						_listViewBrowser.currentIndex = index
 						_listViewBrowser.leftEmblemClicked(index)						
 					}
+					
+					onContentDropped:
+					{
+						_dropMenu.source =  drop.text
+						_dropMenu.target = model.path
+						_dropMenu.popup()
+					}
 				}
 			}
 		}
@@ -215,13 +265,12 @@ Maui.Page
             delegate: Maui.GridBrowserDelegate
 			{
 				id: delegate
-				property string path : model.path
 
                 folderSize: height * 0.5
                 height: _gridViewBrowser.cellHeight
                 width: _gridViewBrowser.cellWidth
-				padding: Maui.Style.space.small    
-
+				padding: Maui.Style.space.small
+				
                 showTooltip: true
 				showEmblem: _gridViewBrowser.showEmblem
 				keepEmblemOverlay: _gridViewBrowser.keepEmblemOverlay
@@ -230,23 +279,32 @@ Maui.Page
 				isSelected: if(selectionBar) return selectionBar.contains(model.path)
 				leftEmblem: isSelected ? "emblem-select-remove" : "emblem-select-add"
 				
+				Maui.Badge
+				{
+					iconName: "link"
+					anchors.left: parent.left
+					anchors.bottom: parent.bottom
+					visible: (model.issymlink == true) || (model.issymlink == "true")
+				} 
+				
 				Connections
 				{
 					target: selectionBar
 					
 					onPathRemoved: 
 					{
-						if(path === delegate.path)
+						if(path === model.path)
 							delegate.isSelected = false					
 					}
 					
 					onPathAdded: 
 					{
-						if(path === delegate.path)
+						if(path === model.path)
 							delegate.isSelected = true					
 					}
 					
-					onCleared: delegate.isSelected = false
+					onCleared: delegate.isSelected = false				
+					
 				}
 				
 				Connections
@@ -286,6 +344,13 @@ Maui.Page
 					{
 						_gridViewBrowser.currentIndex = index
 						_gridViewBrowser.leftEmblemClicked(index)
+					}
+					
+					onContentDropped:
+					{
+						_dropMenu.source =  drop.text
+						_dropMenu.target = model.path
+						_dropMenu.popup()
 					}
 				}
             }
@@ -436,7 +501,6 @@ Maui.Page
 						delegate: Maui.ListBrowserDelegate
 						{
 							id: delegate
-							property string path : model.path
 							width: parent.width
 							height: _millerListView.itemSize + Maui.Style.space.big
 							leftPadding: Maui.Style.space.small
@@ -452,19 +516,27 @@ Maui.Page
 							isSelected: if(selectionBar) return selectionBar.contains(model.path)
 							leftEmblem: isSelected ? "emblem-select-remove" : "emblem-select-add"
 							
+							Maui.Badge
+							{
+								iconName: "link"
+								anchors.left: parent.left
+								anchors.bottom: parent.bottom
+								visible: (model.issymlink == true) || (model.issymlink == "true")
+							} 
+							
 							Connections
 							{
 								target: selectionBar
 								
 								onPathRemoved: 
 								{
-									if(path === delegate.path)
+									if(path === model.path)
 										delegate.isSelected = false					
 								}
 								
 								onPathAdded: 
 								{
-									if(path === delegate.path)
+									if(path === model.path)
 										delegate.isSelected = true					
 								}
 								
@@ -514,6 +586,13 @@ Maui.Page
 									_millerColumns.currentIndex = _index
 									_millerListView.currentIndex = index							
 									_millerControl.leftEmblemClicked(index)					
+								}
+								
+								onContentDropped:
+								{
+									_dropMenu.source =  drop.text
+									_dropMenu.target = model.path
+									_dropMenu.popup()
 								}
 							}
 						}

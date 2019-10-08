@@ -43,6 +43,8 @@
 #include "mauikde.h"
 #include <KFilePlacesModel>
 #include <KIO/CopyJob>
+#include <KIO/SimpleJob>
+#include <KIO/MkdirJob>
 #include <KIO/DeleteJob>
 #include <KIO/EmptyTrashJob>
 #include <KCoreDirLister>
@@ -654,20 +656,20 @@ bool FM::cut(const QVariantList &data, const QUrl &where)
 	
 	for(const auto &item : items)
 	{
-		const auto path = item[FMH::MODEL_KEY::PATH];
+		const auto path = QUrl::fromUserInput(item[FMH::MODEL_KEY::PATH]);
 		
-		if(this->isCloud(path))
+		if(this->isCloud(path.toString()))
 		{
 			this->sync->setCopyTo(where.toString());			
 			this->sync->resolveFile(item, Syncing::SIGNAL_TYPE::COPY);
 			
-		}else if(FMH::fileExists(path))
+		}else
 		{
 			#ifdef Q_OS_ANDROID
-			QFile file(QUrl(path).toLocalFile());
-            file.rename(where.toString()+"/"+QFileInfo(QUrl(path).toLocalFile()).fileName());
+			QFile file(path.toLocalFile());
+            file.rename(where.toString()+"/"+QFileInfo(path.toLocalFile()).fileName());
 			#else			
-			auto job = KIO::move(QUrl(path), QUrl(where.toString()+"/"+FMH::getFileInfoModel(path)[FMH::MODEL_KEY::LABEL]));
+			auto job = KIO::move(path, QUrl(where.toString()+"/"+FMH::getFileInfoModel(path)[FMH::MODEL_KEY::LABEL]));
 			job->start();
 			#endif
 		}
@@ -678,6 +680,8 @@ bool FM::cut(const QVariantList &data, const QUrl &where)
 
 bool FM::copy(const QVariantList &data, const QUrl &where)
 {
+	qDebug() << "TRYING TO COPY" << data << where;
+	
 	FMH::MODEL_LIST items;
 	for(const auto &k : data)		
 		items << FM::toModel(k.toMap());
@@ -686,20 +690,20 @@ bool FM::copy(const QVariantList &data, const QUrl &where)
 	QStringList cloudPaths;	
 	for(const auto &item : items)
 	{
-		const auto path = item[FMH::MODEL_KEY::PATH];
+		const auto path = QUrl::fromUserInput(item[FMH::MODEL_KEY::PATH]);
 		if(this->isDir(path))
 		{
-			FM::copyPath(path, where.toString()+"/"+QFileInfo(path).fileName(), false);
+			FM::copyPath(path, where.toString()+"/"+QFileInfo(path.toLocalFile()).fileName(), false);
 			
 		}else if(this->isCloud(path))
 		{
 			this->sync->setCopyTo(where.toString());			
 			this->sync->resolveFile(item, Syncing::SIGNAL_TYPE::COPY);
 			
-		}else if(FMH::fileExists(path))
+		}else
 		{
 			if(this->isCloud(where))
-				cloudPaths << path;
+				cloudPaths << path.toString();
 			else
 				FM::copyPath(path, where.toString()+"/"+FMH::getFileInfoModel(path)[FMH::MODEL_KEY::LABEL], false);			
 		}
@@ -768,8 +772,8 @@ bool FM::copyPath(QUrl sourceDir, QUrl destinationDir, bool overWriteDirectory)
 	
 	return false;
 	#else 	
-	qDebug()<< "TRYING TO COPY" << sourceDir.toLocalFile() << destinationDir.toLocalFile();
-	auto job = KIO::copy(QUrl(sourceDir), QUrl(destinationDir));
+	qDebug()<< "TRYING TO COPY" << sourceDir<< destinationDir;
+	auto job = KIO::copy(sourceDir, destinationDir);
 	job->start();
 	return true;	
 	#endif
@@ -852,8 +856,15 @@ bool FM::rename(const QUrl &path, const QString &name)
 
 bool FM::createDir(const QUrl &path, const QString &name)
 {
-    QFileInfo dd(path.toLocalFile());
-    return QDir(path.toLocalFile()).mkdir(name);
+	#ifdef Q_OS_ANDROID
+	QFileInfo dd(path.toLocalFile());
+	return QDir(path.toLocalFile()).mkdir(name);
+	#else
+	const auto _path = QUrl(path.toString() + "/" + name);
+	auto job = KIO::mkdir(_path);
+	job->start();
+	return true;
+	#endif
 }
 
 bool FM::createFile(const QUrl &path, const QString &name)
@@ -869,6 +880,18 @@ bool FM::createFile(const QUrl &path, const QString &name)
 	return false;
 }
 
+bool FM::createSymlink(const QUrl &path, const QUrl &where)
+{
+#ifdef Q_OS_ANDROID
+	const QFile file(path.toLocalFile());
+	return file.link(where.toLocalFile() + "/" + QFileInfo(path.toLocalFile()).fileName());
+#else
+	const auto job = KIO::link({path}, where);
+	job->start();
+	return true;
+#endif
+}
+
 bool FM::openUrl(const QUrl &url)
 {
 #ifdef Q_OS_ANDROID
@@ -882,7 +905,7 @@ bool FM::openUrl(const QUrl &url)
 
 void FM::openLocation(const QStringList &urls)
 {
-	for(auto url : urls)
+	for(const auto &url : urls)
 		QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(url).dir().absolutePath()));
 }
 
