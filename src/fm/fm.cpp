@@ -898,7 +898,7 @@ bool FM::openUrl(const QUrl &url)
     return true;
 #else    
 //     return QDesktopServices::openUrl(QUrl::fromUserInput(url));
-    return KRun::runUrl(url, FMH::getFileInfoModel(url)[FMH::MODEL_KEY::MIME], nullptr, KRun::RunFlag::DeleteTemporaryFiles);
+    return KRun::runUrl(url, FMH::getFileInfoModel(url)[FMH::MODEL_KEY::MIME], nullptr, false, KRun::RunFlag::DeleteTemporaryFiles);
 #endif
 }
 
