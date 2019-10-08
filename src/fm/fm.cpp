@@ -529,11 +529,13 @@ FMH::MODEL_LIST FM::getTagContent(const QString &tag)
 	for(const auto &data : this->tag->getUrls(tag, false))
 	{
 		const auto url = QUrl(data.toMap().value(TAG::KEYMAP[TAG::KEYS::URL]).toString());
-        if(FMH::fileExists(url))
-        {
-            auto item = FMH::getFileInfoModel(url);
-            content << item;
-        }
+		
+		if(url.isLocalFile() && !FMH::fileExists(url))
+			continue;
+		
+		auto item = FMH::getFileInfoModel(url);
+		content << item;
+        
 	}
 	
 	return content;
