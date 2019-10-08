@@ -103,7 +103,7 @@ void FMList::watchPath(const QString& path, const bool& clear)
 	if(!this->watcher->directories().isEmpty() && clear)
 		this->watcher->removePaths(this->watcher->directories());
 	
-	if(path.isEmpty() || !FMH::fileExists(path))
+	if(path.isEmpty() || !FMH::fileExists(path) || !QUrl(path).isLocalFile())
 		return;
 	
 	this->watcher->addPath(QString(path).replace("file://", ""));

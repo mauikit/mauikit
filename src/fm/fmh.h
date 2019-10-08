@@ -823,10 +823,9 @@ namespace FMH
 	 **/	
 	inline QString getIconName(const QUrl &path)
 	{
-		if(!path.isLocalFile())
-		{
+		if(!path.isLocalFile())		
 			qWarning() << "URL recived is not a local file. FMH::getIconName" << path;
-		}		
+			
 		
 		if(path.isLocalFile() && QFileInfo(path.toLocalFile()).isDir())
 		{

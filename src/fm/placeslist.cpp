@@ -66,7 +66,7 @@ watcher(new QFileSystemWatcher(this))
 
 void PlacesList::watchPath(const QString& path)
 {
-    if(path.isEmpty() || !FMH::fileExists(path))
+    if(path.isEmpty() || !FMH::fileExists(path) || QUrl(path).isLocalFile())
         return;
 
     this->watcher->addPath(path);

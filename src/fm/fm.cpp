@@ -200,13 +200,16 @@ FMH::MODEL_LIST FM::packItems(const QStringList &items, const QString &type)
 {
 	FMH::MODEL_LIST data;
 	
-	for(const auto &path : items)
-		if(FMH::fileExists(path))
-		{
-			auto model = FMH::getFileInfoModel(path);
-			model.insert(FMH::MODEL_KEY::TYPE, type);
-			data << model;
-		}
+	for(const auto &path : items)	
+	{
+		if(QUrl(path).isLocalFile() && !FMH::fileExists(path))
+			continue;
+		
+		auto model = FMH::getFileInfoModel(path);
+		model.insert(FMH::MODEL_KEY::TYPE, type);
+		data << model;
+		
+	}
 		
 		return data;
 }
