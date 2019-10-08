@@ -256,9 +256,6 @@ Item
     onVisibleChanged:
     {
         if(position === Qt.Vertical) return
-			
-		if(control.visible)
-			control.forceActiveFocus()    
     }    
     
     Keys.onEscapePressed:
@@ -266,7 +263,6 @@ Item
 		control.exitClicked();
 		event.accepted = true
 	}
-	
     
     function clear()
     {
@@ -327,9 +323,10 @@ Item
 //             notify(item.icon, qsTr("Item already selected!"), String("The item '%1' is already in the selection box").arg(item.label), null, 4000)
         }
         
-        
+        control.forceActiveFocus()    
         animate(Kirigami.Theme.backgroundColor)
     }
+    
 	function animate(color)
     {
         animColor = color
