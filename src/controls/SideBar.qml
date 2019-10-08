@@ -171,14 +171,15 @@ Maui.AbstractSideBar
                 if (!pressed || !control.collapsible || !control.collapsed || !Kirigami.Settings.isMobile)
                     return
 
-                if(mouse.x > (control.collapsedSize*2))
+                if(mouse.x > (startX * 2))
                 {
                     expand()
-
                 }else
                 {
                     collapse()
                 }
+                
+                mouse.accepted = true 
             }
 
             onPressed:
@@ -190,25 +191,20 @@ Maui.AbstractSideBar
 
             onReleased:
             {
-                mouse.accepted = true
 
                 if(!control.collapsible)
                     return
 
-                if(mouse.x > control.width)
-                {
-                    expand()
-
-                }else if(startX > control.collapsedSize && mouse.x < control.collapsedSize )
-                {
-                    collapse()
-                }else
-                {
-                    if(privateProperties.isCollapsed)
-                        expand()
-                    else
-                        collapse()
-                }
+                    if(mouse.x !== startX)
+						return
+					
+						if(privateProperties.isCollapsed)
+							expand()
+							else
+								collapse()
+					
+                
+                mouse.accepted = true                
             }
         }
     }    
