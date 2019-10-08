@@ -27,7 +27,7 @@ import "private"
 Maui.AbstractSideBar
 {
     id: control
-
+    
     //     ApplicationWindow.height -ApplicationWindow.header.height - ApplicationWindow.footer.height
     implicitWidth: privateProperties.isCollapsed && collapsed && collapsible  ? collapsedSize : preferredWidth
     width: implicitWidth
@@ -82,7 +82,7 @@ Maui.AbstractSideBar
         id: _content
         anchors.fill: parent
         spacing: 0
-
+        
         Maui.ListBrowser
         {
             id: _listBrowser
@@ -92,7 +92,7 @@ Maui.AbstractSideBar
             Layout.bottomMargin: Maui.Style.space.tiny
             Layout.margins: Maui.Style.unit
             listView.flickableDirection: Flickable.VerticalFlick
-
+            
             verticalScrollBarPolicy:  Qt.ScrollBarAlwaysOff  //this make sthe app crash
             
             delegate: Maui.ListDelegate
@@ -139,7 +139,7 @@ Maui.AbstractSideBar
             propagateComposedEvents: false
             property int startX
             property int startY
-
+            
             Rectangle
             {
                 anchors.fill: parent
@@ -211,8 +211,8 @@ Maui.AbstractSideBar
                 }
             }
         }
-    }
-
+    }    
+	
     MouseArea
     {
         z: control.modal ? applicationWindow().overlay.z + (control.position > 0 ? +1 : -1) : control.background.parent.z + 1
@@ -221,7 +221,7 @@ Maui.AbstractSideBar
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         visible: Kirigami.Settings.isMobile
-        enabled: control.collapsed
+        enabled: control.collapsed && visible
         width: Maui.Style.space.large
 
         onReleased:

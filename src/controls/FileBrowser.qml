@@ -826,17 +826,13 @@ Maui.Page
 			tabsObjectModel.append(object);
 		}
 		
-		tabsListModel.append({
-			title: qsTr("Untitled"),
-							 path: path,
-		})
-		
+		tabsListModel.append({title: qsTr("Untitled"), path: path})		
 		_browserList.currentIndex = tabsObjectModel.count - 1
 		
 		if(path)
 		{
 			setTabMetadata(path)
-			browserView.viewType = control.viewType			
+			browserView.viewType = control.viewType
 			openFolder(path)
 		}
 	}
@@ -845,7 +841,6 @@ Maui.Page
 	{
 		tabsListModel.setProperty(tabsBar.currentIndex, "path", filepath)
 	}
-	
 	
 	function shareFiles(urls)
 	{

@@ -27,6 +27,8 @@ import "private"
 Item
 {
     id: control
+    focus: true
+    
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
     readonly property int barHeight : Maui.Style.iconSizes.large  + Maui.Style.space.large
@@ -254,14 +256,17 @@ Item
     onVisibleChanged:
     {
         if(position === Qt.Vertical) return
-        
-        if(typeof(riseContent) === "undefined") return
-        
-        if(control.visible)
-            riseContent()
-        else
-            dropContent()
-    }
+			
+		if(control.visible)
+			control.forceActiveFocus()    
+    }    
+    
+    Keys.onEscapePressed:
+    {
+		control.exitClicked();
+		event.accepted = true
+	}
+	
     
     function clear()
     {
@@ -325,8 +330,7 @@ Item
         
         animate(Kirigami.Theme.backgroundColor)
     }
-    
-    function animate(color)
+	function animate(color)
     {
         animColor = color
         anim.running = true

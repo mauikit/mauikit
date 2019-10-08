@@ -149,8 +149,6 @@ Kirigami.ScrollablePage
 		}
 	}
     }
-    
-
 
     function resizeContent(factor)
     {

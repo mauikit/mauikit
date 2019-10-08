@@ -8,12 +8,11 @@ import QtQuick.Window 2.3
 Page
 {
     id: control
-    
+    focus: true
     leftPadding: control.padding
     rightPadding: control.padding
     topPadding: control.padding
     bottomPadding: control.padding
-    
     signal goBackTriggered();
     signal goForwardTriggered();    
     
@@ -77,12 +76,13 @@ Page
                         else 
                             return []
         }
-    }
+    }    
     
-    
-    Keys.onBackPressed:
+    Keys.onEscapePressed:
     {
         control.goBackTriggered();
+		console.log(control.activeFocus, "ACTIVE FOCUS")
+		
         event.accepted = true
     }
     

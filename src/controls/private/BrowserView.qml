@@ -8,7 +8,6 @@ import org.kde.mauikit 1.0 as Maui
 Maui.Page
 {
 	id: control
-	focus: true
 	
 	property url path
 	property Maui.FMList currentFMList 
@@ -28,7 +27,7 @@ Maui.Page
 	{
 		id: viewLoader
 		anchors.fill: parent
-		
+		focus: true
 		sourceComponent: switch(control.viewType)
 		{
 			case Maui.FMList.ICON_VIEW: return gridViewBrowser

@@ -44,8 +44,8 @@ watcher(new QFileSystemWatcher(this))
 	
 	connect(this->fm, &FM::pathContentReady, [&](const FMH::PATH_CONTENT &res)
 	{		
-		if(res.path != this->path.toString())
-			return;
+// 		if(res.path != this->path.toString())
+// 			return;
 		
 		this->assignList(res.content);
 	});	
