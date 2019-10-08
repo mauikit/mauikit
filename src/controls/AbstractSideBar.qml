@@ -56,6 +56,8 @@ Drawer
 	
 	Behavior on width
 	{
+		enabled: control.collapsible
+		
 		NumberAnimation
 		{
 			duration: Kirigami.Units.longDuration
