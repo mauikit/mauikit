@@ -258,14 +258,13 @@ void PlacesList::clearBadgeCount(const int& index)
     emit this->updateModel(index, {FMH::MODEL_KEY::COUNT});
 }
 
-void PlacesList::addPlace(const QString& path)
+void PlacesList::addPlace(const QUrl& path)
 {    
     const auto it = std::find_if(this->list.rbegin(), this->list.rend(), [](const FMH::MODEL &item) -> bool{
        return item[FMH::MODEL_KEY::TYPE] == FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]; 
     });
     const auto index = std::distance(it, this->list.rend());
     
-    qDebug()<< "trying to add path to places" << path<< QDir(path).dirName();
     emit this->preItemAppendedAt(index);
 	
 #ifdef Q_OS_ANDROID
@@ -276,7 +275,7 @@ void PlacesList::addPlace(const QString& path)
     this->list.insert(index, FMH::getDirInfoModel(path));
 #else
 //     const auto url =  QStringLiteral("file://")+path;
-	this->model->addPlace(QDir(path).dirName(), path);
+	this->model->addPlace(QDir(path.toLocalFile()).dirName(), path);
 	this->list.insert(index, modelPlaceInfo(*this->model, this->model->closestItem(path), FMH::PATHTYPE_KEY::PLACES_PATH));
 #endif
 	

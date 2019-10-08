@@ -24,7 +24,7 @@ Maui.SideBar
 		labelTxt.font.pointSize: Maui.Style.fontSizes.big		
 		isSection: true
 		height: Maui.Style.toolBarHeightAlt
-	}
+	}	
 	
 	onItemClicked:
 	{

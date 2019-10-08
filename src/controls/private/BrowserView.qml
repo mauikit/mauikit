@@ -154,6 +154,7 @@ Maui.Page
 				rightEmblem: _listViewBrowser.rightEmblem
 				isSelected: if(selectionBar) return selectionBar.contains(model.path)
 				leftEmblem: isSelected ? "emblem-select-remove" : "emblem-select-add"
+				draggable: true
 				
 				Maui.Badge
 				{
@@ -278,6 +279,7 @@ Maui.Page
 				rightEmblem: _gridViewBrowser.rightEmblem
 				isSelected: if(selectionBar) return selectionBar.contains(model.path)
 				leftEmblem: isSelected ? "emblem-select-remove" : "emblem-select-add"
+				draggable: true
 				
 				Maui.Badge
 				{
@@ -515,6 +517,7 @@ Maui.Page
 							rightEmblem: _millerListView.rightEmblem
 							isSelected: if(selectionBar) return selectionBar.contains(model.path)
 							leftEmblem: isSelected ? "emblem-select-remove" : "emblem-select-add"
+							draggable: true
 							
 							Maui.Badge
 							{

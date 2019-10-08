@@ -43,7 +43,6 @@ Maui.ItemDelegate
     property alias dropArea : _dropArea    
     
     isCurrentItem : GridView.isCurrentItem || isSelected    
-    draggable: true
     
     signal emblemClicked(int index)
     signal rightEmblemClicked(int index)

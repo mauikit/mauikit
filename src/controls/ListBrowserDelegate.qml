@@ -42,7 +42,6 @@ Maui.ItemDelegate
 	property string leftEmblem
 	
 	isCurrentItem : ListView.isCurrentItem || isSelected	
-	draggable: true
 		
 	signal emblemClicked(int index)
 	signal rightEmblemClicked(int index)

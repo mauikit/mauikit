@@ -43,6 +43,8 @@ Drawer
 	enter: Transition { SmoothedAnimation { velocity: modal ? 5 : 0 } }
 	exit: Transition { SmoothedAnimation { velocity: modal ? 5 : 0 } }
 	
+	signal contentDropped(var drop)
+	
 	Component.onCompleted:
 	{
 		if(!modal)
@@ -62,6 +64,18 @@ Drawer
 		{
 			duration: Kirigami.Units.longDuration
 			easing.type: Easing.InOutQuad
+		}
+	}
+	
+	opacity: _dropArea.containsDrag ? 0.5 : 1
+	
+	DropArea 
+	{
+		id: _dropArea
+		anchors.fill: parent		
+		onDropped:
+		{
+			control.contentDropped(drop)
 		}
 	}
 	
