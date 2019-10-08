@@ -32,7 +32,7 @@ Drawer
 	implicitHeight: parent.height - ApplicationWindow.header.height - ApplicationWindow.footer.height
 	height: implicitHeight
 	y: ApplicationWindow.header.height
-    closePolicy:  Popup.CloseOnEscape | Popup.CloseOnPressOutside
+	closePolicy: modal ?  Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
 	visible: true	
 	
 	property bool collapsible: false
@@ -40,10 +40,46 @@ Drawer
 	property int collapsedSize: Maui.Style.iconSizes.medium + (Maui.Style.space.medium*4) - Maui.Style.space.tiny
 	property int preferredWidth : Kirigami.Units.gridUnit * 12
 	
-// 	dragMargin: Maui.Style.space.huge	
-// 	dim: false
+	enter: Transition { SmoothedAnimation { velocity: modal ? 5 : 0 } }
+	exit: Transition { SmoothedAnimation { velocity: modal ? 5 : 0 } }
+	
+	Component.onCompleted:
+	{
+		if(!modal)
+		{
+			control.enter.enabled = false;
+			control.visible = true;
+			control.position = 1;
+			control.enter.enabled = true;
+		}
+	}
+	
+	Behavior on width
+	{
+		NumberAnimation
+		{
+			duration: Kirigami.Units.longDuration
+			easing.type: Easing.InOutQuad
+		}
+	}
+	
+	EdgeShadow
+	{
+		z: -2
+		visible: control.modal
+		parent: control.background
+		edge: control.edge
+		anchors
+		{
+			right: control.edge == Qt.RightEdge ? parent.left : (control.edge == Qt.LeftEdge ? undefined : parent.right)
+			left: control.edge == Qt.LeftEdge ? parent.right : (control.edge == Qt.RightEdge ? undefined : parent.left)
+			top: control.edge == Qt.TopEdge ? parent.bottom : (control.edge == Qt.BottomEdge ? undefined : parent.top)
+			bottom: control.edge == Qt.BottomEdge ? parent.top : (control.edge == Qt.TopEdge ? undefined : parent.bottom)
+		}
 		
-		Behavior on width
+		opacity: control.position == 0 ? 0 : 1
+		
+		Behavior on opacity
 		{
 			NumberAnimation
 			{
@@ -51,32 +87,7 @@ Drawer
 				easing.type: Easing.InOutQuad
 			}
 		}
-		
-		EdgeShadow
-		{
-			z: -2
-			visible: control.modal
-			parent: control.background
-			edge: control.edge
-			anchors
-			{
-				right: control.edge == Qt.RightEdge ? parent.left : (control.edge == Qt.LeftEdge ? undefined : parent.right)
-				left: control.edge == Qt.LeftEdge ? parent.right : (control.edge == Qt.RightEdge ? undefined : parent.left)
-				top: control.edge == Qt.TopEdge ? parent.bottom : (control.edge == Qt.BottomEdge ? undefined : parent.top)
-				bottom: control.edge == Qt.BottomEdge ? parent.top : (control.edge == Qt.TopEdge ? undefined : parent.bottom)
-			}
-			
-			opacity: control.position == 0 ? 0 : 1
-			
-			Behavior on opacity
-			{
-				NumberAnimation
-				{
-					duration: Kirigami.Units.longDuration
-					easing.type: Easing.InOutQuad
-				}
-			}
-		}
-		   
+	}
+	
 }
 
