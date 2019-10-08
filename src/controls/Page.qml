@@ -13,6 +13,7 @@ Page
     rightPadding: control.padding
     topPadding: control.padding
     bottomPadding: control.padding
+    
     signal goBackTriggered();
     signal goForwardTriggered();    
     
@@ -76,13 +77,12 @@ Page
                         else 
                             return []
         }
-    }    
+    }
     
-    Keys.onEscapePressed:
+    
+    Keys.onBackPressed:
     {
         control.goBackTriggered();
-		console.log(control.activeFocus, "ACTIVE FOCUS")
-		
         event.accepted = true
     }
     
