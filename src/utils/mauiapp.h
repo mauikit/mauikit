@@ -43,6 +43,9 @@ class MAUIKIT_EXPORT MauiApp : public QObject
 	Q_PROPERTY(QString domain READ getDomain CONSTANT)
 	Q_PROPERTY(QString iconName READ getIconName WRITE setIconName NOTIFY iconNameChanged)
 	Q_PROPERTY(QString description READ getDescription WRITE setDescription NOTIFY descriptionChanged)
+	Q_PROPERTY(QString webPage READ getWebPage WRITE setWebPage NOTIFY webPageChanged)
+	Q_PROPERTY(QString reportPage READ getReportPage WRITE setReportPage NOTIFY reportPageChanged)
+	Q_PROPERTY(QString donationPage READ getDonationPage WRITE setDonationPage NOTIFY donationPageChanged)
 	Q_PROPERTY(QString mauikitVersion READ getMauikitVersion CONSTANT)
 	Q_PROPERTY(QString qtVersion READ getQtVersion CONSTANT)
 	Q_PROPERTY(MauiAccounts * accounts READ getAccounts CONSTANT FINAL)
@@ -110,6 +113,48 @@ public:
 		emit this->iconNameChanged(iconName);
 	}
 	
+	QString getWebPage() const
+	{
+		return webPage;
+	}
+	
+	void setWebPage(const QString &value) 
+	{
+		if(webPage == value)
+			return;
+		
+		webPage = value;
+		emit this->webPageChanged(webPage);
+	}
+	
+	QString getDonationPage() const
+	{
+		return donationPage;
+	}
+	
+	void setDonationPage(const QString &value) 
+	{
+		if(donationPage == value)
+			return;
+		
+		donationPage = value;
+		emit this->donationPageChanged(donationPage);
+	}
+	
+	QString getReportPage() const
+	{
+		return reportPage;
+	}
+	
+	void setReportPage(const QString &value) 
+	{
+		if(reportPage == value)
+			return;
+		
+		reportPage = value;
+		emit this->reportPageChanged(reportPage);
+	}
+	
 	MauiAccounts *getAccounts() const;
 	
 	~MauiApp();	
@@ -123,9 +168,16 @@ private:
 	QString description;
 	QString iconName;
 	
+	QString webPage;
+	QString donationPage;
+	QString reportPage;
+	
 signals:
 	void iconNameChanged(QString iconName);
 	void descriptionChanged(QString description);
+	void webPageChanged(QString webPage);
+	void donationPageChanged(QString donationPage);
+	void reportPageChanged(QString reportPage);
 };
 
 
