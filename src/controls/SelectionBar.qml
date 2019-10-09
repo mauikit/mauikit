@@ -56,12 +56,16 @@ Item
     signal cleared()
     signal exitClicked()
     signal itemClicked(int index)
+	signal itemPressAndHold(int index)
 	
 	signal itemAdded(var item)
 	signal itemRemoved(var item)
 	
 	signal pathAdded(string path)
 	signal pathRemoved(string path)
+	
+	signal clicked(var mouse)
+	signal rightClicked(var mouse)
 	
     implicitHeight: if(position === Qt.Horizontal)
                 barHeight
@@ -88,6 +92,29 @@ Item
         radius: Maui.Style.radiusV
         opacity: 1
         border.color: Kirigami.Theme.backgroundColor
+        
+        
+        MouseArea
+        {
+			anchors.fill: parent
+			acceptedButtons: Qt.RightButton | Qt.LeftButton
+			
+			onClicked:
+			{
+				if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
+					control.rightClicked(mouse)
+					else
+						control.clicked(mouse)
+			}
+			
+			onPressAndHold : 
+			{
+				if(Kirigami.Settings.isMobile)
+					control.rightClicked(mouse)
+			}
+			
+			
+        }
         
         SequentialAnimation
         {
@@ -215,6 +242,7 @@ Item
                         target: delegate
                         onLeftEmblemClicked: removeAtIndex(index)
                         onClicked: control.itemClicked(index)
+						onPressAndHold: control.itemPressAndHold(index)
                     }
                 }
             }
@@ -277,6 +305,14 @@ Item
         selectionList.model.clear()
 		control.cleared()		
     }
+    
+    function itemAt(index)
+	{
+		if(index < 0 ||  index > selectionList.count)
+			return
+			
+		return selectionList.model.get(index)		 
+	}
     
     function removeAtIndex(index)
     {

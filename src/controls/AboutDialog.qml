@@ -127,17 +127,6 @@ Maui.Dialog
 						font.pointSize: Maui.Style.fontSizes.default
 						elide: Text.ElideRight
 						wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-					}				
-					
-					Label
-					{
-						color: Kirigami.Theme.textColor
-						Layout.fillWidth: true
-						
-						text: qsTr("By ") + Maui.App.org
-						font.pointSize: Maui.Style.fontSizes.default
-						elide: Text.ElideRight
-						wrapMode: Text.WrapAtWordBoundaryOrAnywhere
 					}
 					
 					Label
@@ -146,6 +135,17 @@ Maui.Dialog
 						Layout.fillWidth: true
 						text:  Maui.App.description
 						color: Kirigami.Theme.textColor
+						font.pointSize: Maui.Style.fontSizes.default
+						elide: Text.ElideRight
+						wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+					}
+					
+					Label
+					{
+						color: Kirigami.Theme.textColor
+						Layout.fillWidth: true
+						
+						text: qsTr("By ") + Maui.App.org
 						font.pointSize: Maui.Style.fontSizes.default
 						elide: Text.ElideRight
 						wrapMode: Text.WrapAtWordBoundaryOrAnywhere

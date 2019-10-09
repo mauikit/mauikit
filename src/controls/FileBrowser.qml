@@ -550,8 +550,18 @@ Maui.Page
                 clean()
                 control.selectionMode = false
             }
+            
+            onRightClicked: _selectionBarmenu.popup()
 
-			onItemClicked: removeAtIndex(index)
+			onItemClicked: 
+			{				
+				previewer.show(itemAt(index).path)
+			}
+			
+			onItemPressAndHold:
+			{
+				removeAtIndex(index)				
+			}
 			
 			Menu
 			{
