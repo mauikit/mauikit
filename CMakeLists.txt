@@ -220,17 +220,14 @@ else()
         KF5::Attica
         KF5::SyntaxHighlighting
         Qt5::WebEngine
-#         /usr/lib/x86_64-linux-gnu/qt5/qml/org/kde/kquicksyntaxhighlighter/libkquicksyntaxhighlighterplugin.so
         )
 endif()
-# set(CMAKE_AUTORCC ON)
 
 qt5_add_resources(mauikit_ASSETS ${CMAKE_CURRENT_SOURCE_DIR}/assets.qrc)
 qt5_add_resources(tagging_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/tagging/tagging.qrc)
 qt5_add_resources(fm_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/fm/fm.qrc)
 qt5_add_resources(store_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/store/store.qrc)
-
-# qt5_add_resources(mauikit_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/mauikit.qrc)
+qt5_add_resources(mauikit_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/mauikit.qrc)
 
 add_library(MauiKit 
 
@@ -278,7 +275,6 @@ target_link_libraries(MauiKit
     Qt5::Xml
     ${MAUIKDE_KF5LIBS}
     ${MAUIANDROID_LIBS}
-# #     webdavclient
     )
     
 if(IS_APPIMAGE_PACKAGE)
@@ -328,8 +324,7 @@ install(FILES
 ##INSTALL MAUI STYLE
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/maui-style DESTINATION ${KDE_INSTALL_QMLDIR}/QtQuick/Controls.2)   
 
-##CMAKE PARTS   
-
+##CMAKE PARTS
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/MauiKit")
 
 ecm_setup_version(${MAUIKIT_VERSION}
