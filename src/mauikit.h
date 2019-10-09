@@ -25,7 +25,16 @@
 #include <QQmlEngine>
 #include <QQmlExtensionPlugin>
 
+#ifndef STATIC_MAUIKIT
+#include "mauikit_export.h"
+#endif
+
+class MauiAccounts;
+#ifdef STATIC_MAUIKIT
 class MauiKit : public QQmlExtensionPlugin
+#else
+class MAUIKIT_EXPORT MauiKit : public QQmlExtensionPlugin
+#endif
 {
     Q_OBJECT
 
