@@ -8,16 +8,6 @@ QT +=  \
     
 CONFIG += c++17
 
-#DEFAULT COMPONENTS DEFINITIONS
-DEFINES += \
-COMPONENT_EDITOR \
-COMPONENT_FM \
-COMPONENT_TERMINAL \
-COMPONENT_STORE \
-COMPONENT_TAGGING \
-COMPONENT_SYNCING \
-
-
 linux:unix:!android {
 
     message(Building Maui helpers for Linux KDE)
@@ -27,11 +17,7 @@ linux:unix:!android {
 
     message(Building Maui helpers for Android)
     include($$PWD/src/android/android.pri)    
-    
-    contains(DEFINES, COMPONENT_EDITOR) 
-    {
     include($$PWD/src/utils/editor/syntaxhighlighter.pri)
-} 
     include($$PWD/src/utils/syncing/openssl/openssl.pri)
     include($$PWD/src/utils/syncing/libwebdavclient/webdavclient.pri)
     include($$PWD/src/utils/store/attica/attica.pri)
@@ -41,20 +27,6 @@ linux:unix:!android {
 }
 
 include($$PWD/src/utils/tagging/tagging.pri)
-
-     contains(DEFINES, COMPONENT_EDITOR) 
-    {
-    HEADERS += \
-    $$PWD/src/utils/editor/documenthandler.h \
-    $$PWD/src/utils/editor/syntaxhighlighterutil.h \
-    
-    SOURCES += \
-    $$PWD/src/utils//editor/documenthandler.cpp \
-    $$PWD/src/utils/editor/syntaxhighlighterutil.cpp \
-    
-    INCLUDEPATH += $$PWD/src/utils/editor \
-
-    }
 
 RESOURCES += \
     $$PWD/mauikit.qrc \
@@ -73,13 +45,15 @@ HEADERS += \
     $$PWD/src/fm/placeslist.h \
     $$PWD/src/utils/model_template/mauimodel.h \
     $$PWD/src/utils/model_template/mauilist.h \
+    $$PWD/src/utils/editor/documenthandler.h \
+    $$PWD/src/utils/editor/syntaxhighlighterutil.h \
     $$PWD/src/utils/handy.h \
     $$PWD/src/utils/mauiapp.h \
     $$PWD/src/utils/mauiaccounts.h \
     $$PWD/src/utils/syncing/syncing.h \
     $$PWD/src/utils/store/store.h \
     $$PWD/src/utils/store/storemodel.h \
-    $$PWD/src/utils/store/storelist.h    
+    $$PWD/src/utils/store/storelist.h
 
 SOURCES += \
     $$PWD/src/mauikit.cpp \
@@ -90,6 +64,8 @@ SOURCES += \
     $$PWD/src/fm/placeslist.cpp \
     $$PWD/src/utils/model_template/mauimodel.cpp \
     $$PWD/src/utils/model_template/mauilist.cpp \
+    $$PWD/src/utils//editor/documenthandler.cpp \
+    $$PWD/src/utils/editor/syntaxhighlighterutil.cpp \
     $$PWD/src/utils/handy.cpp \
     $$PWD/src/utils/mauiapp.cpp \
     $$PWD/src/utils/mauiaccounts.cpp \
@@ -107,6 +83,7 @@ INCLUDEPATH += \
      $$PWD/src \
      $$PWD/src/fm \
      $$PWD/src/utils \
+     $$PWD/src/utils/editor \
      $$PWD/src/utils/syncing \
      $$PWD/src/utils/model_template \
      $$PWD/src/utils/store

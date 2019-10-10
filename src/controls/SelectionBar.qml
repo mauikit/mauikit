@@ -55,10 +55,8 @@ Item
     signal iconClicked()
     signal cleared()
     signal exitClicked()
-	
     signal itemClicked(int index)
 	signal itemPressAndHold(int index)
-	signal itemDoubleClicked(int index)
 	
 	signal itemAdded(var item)
 	signal itemRemoved(var item)
@@ -245,7 +243,6 @@ Item
                         onLeftEmblemClicked: removeAtIndex(index)
                         onClicked: control.itemClicked(index)
 						onPressAndHold: control.itemPressAndHold(index)
-// 						onDoubleClicked: control.itemDoubleClicked(index)
                     }
                 }
             }
@@ -311,7 +308,7 @@ Item
     
     function itemAt(index)
 	{
-		if(index < 0 ||  index > control.count)
+		if(index < 0 ||  index > selectionList.count)
 			return
 			
 		return selectionList.model.get(index)		 

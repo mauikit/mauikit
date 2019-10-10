@@ -37,11 +37,8 @@
 #include "storelist.h"
 
 #include "handy.h"
-
-#ifdef COMPONENT_EDITOR
 #include "documenthandler.h"
 #include "syntaxhighlighterutil.h"
-#endif
 
 #include "mauiaccounts.h"
 #include "mauiapp.h"
@@ -102,8 +99,7 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("GridView.qml")), uri, 1, 0, "GridView");
     qmlRegisterType(componentUrl(QStringLiteral("ColorsBar.qml")), uri, 1, 0, "ColorsBar");
     qmlRegisterType(componentUrl(QStringLiteral("ImageViewer.qml")), uri, 1, 0, "ImageViewer");
-	qmlRegisterType(componentUrl(QStringLiteral("PathBar.qml")), uri, 1, 0, "PathBar");
-	
+
     /** STORE CONTROLS, MODELS AND INTERFACES **/
     qmlRegisterType<StoreList>("StoreList", 1, 0, "StoreList");
     qmlRegisterType<StoreModel>("StoreModel", 1, 0, "StoreModel");
@@ -130,16 +126,15 @@ void MauiKit::registerTypes(const char *uri)
 	qmlRegisterType(componentUrl(QStringLiteral("PlacesListBrowser.qml")), uri, 1, 0, "PlacesListBrowser");
 	qmlRegisterType(componentUrl(QStringLiteral("FilePreviewer.qml")), uri, 1, 0, "FilePreviewer");
     qmlRegisterType(componentUrl(QStringLiteral("FileDialog.qml")), uri, 1, 0, "FileDialog");
+    qmlRegisterType(componentUrl(QStringLiteral("PathBar.qml")), uri, 1, 0, "PathBar");
     qmlRegisterType(componentUrl(QStringLiteral("SyncDialog.qml")), uri, 1, 0, "SyncDialog"); //to be rename to accountsDialog
 
     /** EDITOR CONTROLS **/
-#ifdef COMPONENT_EDITOR
     qmlRegisterType<DocumentHandler>(uri, 1, 0, "DocumentHandler");
     qmlRegisterType<SyntaxHighlighterUtil>();
     qmlRegisterType(componentUrl(QStringLiteral("Editor.qml")), uri, 1, 0, "Editor");
 #ifdef STATIC_MAUIKIT
     qmlRegisterType<KQuickSyntaxHighlighter>("org.kde.kquicksyntaxhighlighter", 0, 1, "KQuickSyntaxHighlighter");
-#endif
 #endif
 
     /** PLATFORMS SPECIFIC CONTROLS **/
@@ -151,9 +146,7 @@ void MauiKit::registerTypes(const char *uri)
         return new MAUIAndroid;
     });
 #else
-#ifdef COMPONENT_TERMINAL
     qmlRegisterType(componentUrl(QStringLiteral("Terminal.qml")), uri, 1, 0, "Terminal");
-#endif
     qmlRegisterSingletonType<MAUIKDE>(uri, 1, 0, "KDE",
                                       [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject* {
         Q_UNUSED(engine)
