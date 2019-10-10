@@ -383,7 +383,7 @@ void FMList::setPath(const QUrl &path)
     this->setStatus({STATUS_CODE::LOADING, "Loading content", "Almost ready!", "view-refresh", true, false});
 	
 	const auto __scheme = this->path.scheme();
-    this->pathName = this->path.fileName();
+    this->pathName = this->path.fileName().isEmpty() ? this->path.toString() : this->path.fileName();
 
     if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::SEARCH_PATH])
 	{

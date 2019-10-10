@@ -17,6 +17,16 @@ project(mauikit VERSION ${MAUIKIT_VERSION})
 find_package(ECM 5.45.0 NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} 
     ${ECM_KDE_MODULE_DIR})
+    
+#DEFAULT COMPONENTS DEFINITIONS
+add_compile_definitions(
+COMPONENT_EDITOR=ON
+COMPONENT_FM=ON
+COMPONENT_TERMINAL=ON
+COMPONENT_STORE=ON
+COMPONENT_TAGGING=ON
+COMPONENT_SYNCING=ON
+)
 
 include(GenerateExportHeader)
 include(ECMSetupVersion)
@@ -30,7 +40,6 @@ include(ECMQtDeclareLoggingCategory)
 include(ECMAddQch)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 
-#options - for the appimage
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Qml 
     Sql Core Quick Gui Svg QuickControls2 Network DBus Xml)
 ecm_find_qmlmodule(QtGraphicalEffects 1.0)
@@ -86,7 +95,9 @@ set(mauikit_HDRS
 	src/utils/model_template/mauilist.h
     src/utils/model_template/mauimodel.h
     )
-
+    
+ if(COMPONENT_EDITOR)
+ message(STATUS "INCLUDING EDITOR COMPONENT")
 set(editor_SRCS
     src/utils/editor/documenthandler.cpp
     src/utils/editor/syntaxhighlighterutil.cpp
@@ -96,6 +107,7 @@ set(editor_HDRS
     src/utils/editor/documenthandler.cpp
     src/utils/editor/syntaxhighlighterutil.h
     )
+    endif()
 
 set(fm_SRCS
     src/fm/fm.cpp
@@ -163,6 +175,8 @@ set(store_HDRS
 
 
 #use dbus on linux, bsd etc, but not andoid and apple stuff
+
+#options - for the appimage
 option(IS_APPIMAGE_PACKAGE "If set to true then the icons and styled is packaged as well")
     
 if(ANDROID OR IS_APPIMAGE_PACKAGE)
@@ -194,7 +208,17 @@ if(ANDROID)
         )
 else()
     find_package(Qt5 REQUIRED COMPONENTS WebEngine)
-    find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets Attica SyntaxHighlighting)
+    
+    if(COMPONENT_EDITOR)
+    
+        find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS SyntaxHighlighting)
+        set(COMPONENT_EDITOR_LIBS
+                KF5::SyntaxHighlighting
+        )
+        
+    endif()
+    
+    find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets Attica)
 
     set(mauikit_KDE_SRCS
         src/kde/mauikde.cpp
@@ -218,7 +242,7 @@ else()
         KF5::KIONTLM
         KF5::ConfigWidgets
         KF5::Attica
-        KF5::SyntaxHighlighting
+        ${COMPONENT_EDITOR_LIBS}
         Qt5::WebEngine
         )
 endif()
