@@ -173,7 +173,6 @@ set(store_HDRS
     src/utils/store/storelist.h
     )
 
-
 #use dbus on linux, bsd etc, but not andoid and apple stuff
 
 #options - for the appimage
