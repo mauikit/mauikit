@@ -1,4 +1,4 @@
-QT +=  \
+QT *=  \
     core \
     qml \
     quick \
@@ -6,22 +6,14 @@ QT +=  \
     svg \
     concurrent
     
-CONFIG += c++17
+CONFIG *= c++17
 
-DEFINES += \
+DEFINES *= \
     MAUI_APP \
     STATIC_MAUIKIT \
     ANDROID_OPENSSL \
     MAUIKIT_STYLE
 
-#DEFAULT COMPONENTS DEFINITIONS
-DEFINES += \
-    COMPONENT_EDITOR \
-    COMPONENT_FM \
-    COMPONENT_TERMINAL \
-    COMPONENT_STORE \
-    COMPONENT_TAGGING \
-    COMPONENT_SYNCING
 
 #REPO VARIABLES
 LUV_REPO = https://github.com/milohr/luv-icon-theme
@@ -47,68 +39,64 @@ linux:unix:!android {
 
     include($$PWD/src/android/android.pri)
 
-    contains(DEFINES, ANDROID_OPENSSL)
-    {
+    contains(DEFINES, ANDROID_OPENSSL):{
         exists($$PWD/src/utils/syncing/openssl/openssl.pri) {
             message("Using OpenSSL for Android")
+            include($$PWD/src/utils/syncing/openssl/openssl.pri)
         }else {
              message("Getting OpenSSL for Android")
              system(git clone $$OPENSSL_REPO $$PWD/src/utils/syncing/openssl)
+            include($$PWD/src/utils/syncing/openssl/openssl.pri)
         }
-
-        include($$PWD/src/utils/syncing/openssl/openssl.pri)
     }
 
-    contains(DEFINES, COMPONENT_EDITOR)
-    {
+    contains(DEFINES, COMPONENT_EDITOR):{
         include($$PWD/src/utils/editor/syntaxhighlighter.pri)
     }
 
-    contains(DEFINES, COMPONENT_STORE)
-    {
-        exists($$PWD/src/utils/store/attica/attica.pri) {
+    contains(DEFINES, COMPONENT_STORE):{
+        exists($$PWD/src/utils/store/attica/attica.pri):{
             message("Using Attica for Android")
+            include($$PWD/src/utils/store/attica/attica.pri)
         }else {
              message("Getting Attica for Android")
              system(git clone $$ATTICA_REPO $$PWD/src/utils/store/attica)
+            include($$PWD/src/utils/store/attica/attica.pri)
         }
-
-        include($$PWD/src/utils/store/attica/attica.pri)
     }
 
-    contains(DEFINES, COMPONENT_SYNCING)
-    {
+    contains(DEFINES, COMPONENT_SYNCING):{
         include($$PWD/src/utils/syncing/libwebdavclient/webdavclient.pri)
     }
-
 
 } else {
     message("Unknown configuration")
 }
 
-contains(DEFINES, COMPONENT_TAGGING)
-{
+contains(DEFINES, COMPONENT_TAGGING):{
     message("INCLUDING TAGGING COMPONENT")
     include($$PWD/src/utils/tagging/tagging.pri)
+} else {
+    warning("SKIPPING TAGGING COMPONENT")
 }
 
-contains(DEFINES, COMPONENT_EDITOR)
-{
+contains(DEFINES, COMPONENT_EDITOR):{
     message("INCLUDING EDITOR COMPONENT")
 
     HEADERS += \
         $$PWD/src/utils/editor/documenthandler.h \
-        $$PWD/src/utils/editor/syntaxhighlighterutil.h \
+        $$PWD/src/utils/editor/syntaxhighlighterutil.h
     
     SOURCES += \
         $$PWD/src/utils//editor/documenthandler.cpp \
-        $$PWD/src/utils/editor/syntaxhighlighterutil.cpp \
+        $$PWD/src/utils/editor/syntaxhighlighterutil.cpp
     
-    INCLUDEPATH += $$PWD/src/utils/editor \
+    INCLUDEPATH += $$PWD/src/utils/editor
+} else {
+    warning("SKIPPING EDITOR COMPONENT")
 }
 
-contains(DEFINES, COMPONENT_STORE)
-{
+contains(DEFINES, COMPONENT_STORE):{
     message("INCLUDING STORE COMPONENT")
 
     HEADERS += \
@@ -124,19 +112,21 @@ contains(DEFINES, COMPONENT_STORE)
     RESOURCES += $$PWD/src/utils/store/store.qrc
 
     INCLUDEPATH += $$PWD/src/utils/store
+} else {
+    warning("SKIPPING STORE COMPONENT")
 }
 
-contains(DEFINES, COMPONENT_SYNCING)
-{
+contains(DEFINES, COMPONENT_SYNCING):{
     message("INCLUDING SYNCING COMPONENT")
 
     HEADERS += $$PWD/src/utils/syncing/syncing.h
     SOURCES += $$PWD/src/utils/syncing/syncing.cpp
     INCLUDEPATH += $$PWD/src/utils/syncing
+} else {
+    warning("SKIPPING SYNCING COMPONENT")
 }
 
-contains(DEFINES, COMPONENT_FM)
-{
+contains(DEFINES, COMPONENT_FM):{
     message("INCLUDING FM COMPONENT")
 
     HEADERS += \
@@ -157,6 +147,8 @@ contains(DEFINES, COMPONENT_FM)
     INCLUDEPATH += $$PWD/src/fm
 
     DEPENDPATH += $$PWD/src/fm
+} else {
+    warning("SKIPPING FM COMPONENT")
 }
 
 RESOURCES += \

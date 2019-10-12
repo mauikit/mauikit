@@ -14,7 +14,7 @@ Syncing::Syncing(QObject *parent) : QObject(parent)
 	this->setCredentials(this->host, this->user, this->password);
 }
 
-void Syncing::listContent(const QString &path, const QStringList &filters, const int &depth)
+void Syncing::listContent(const QUrl &path, const QStringList &filters, const int &depth)
 {
 	this->currentPath = path;
 	
@@ -49,7 +49,7 @@ void Syncing::listDirOutputHandler(WebDAVReply *reply, const QStringList &filter
 			
 			// 			qDebug()<< "PATHS:" << path << this->currentPath;
 			
-			if(QString(url).replace("/remote.php/webdav/", "").isEmpty() || path == this->currentPath)
+            if(QString(url).replace("/remote.php/webdav/", "").isEmpty() || path == this->currentPath.toString())
 				continue;
 			
 			// 			qDebug()<< "FILTERING "<< filters << QString(displayName).right(displayName.length() - displayName.lastIndexOf("."));
@@ -64,8 +64,9 @@ void Syncing::listDirOutputHandler(WebDAVReply *reply, const QStringList &filter
 			{FMH::MODEL_KEY::ICON, FMH::getIconName(url)},
 			{FMH::MODEL_KEY::SIZE, QString::number(item.getContentLength())},
 			{FMH::MODEL_KEY::PATH, path},
-		 {FMH::MODEL_KEY::URL, url},
-		 {FMH::MODEL_KEY::THUMBNAIL, item.getContentType().isEmpty() ? url : this->getCacheFile(url)}};
+         {FMH::MODEL_KEY::URL, url},
+         {FMH::MODEL_KEY::THUMBNAIL, item.getContentType().isEmpty() ? url : this->getCacheFile(url).toString()}
+        };
 		}
 		emit this->listReady(list, this->currentPath);
 		
@@ -76,10 +77,10 @@ void Syncing::listDirOutputHandler(WebDAVReply *reply, const QStringList &filter
 	});
 }
 
-QString Syncing::getCacheFile(const QString& path)
+QUrl Syncing::getCacheFile(const QUrl &path)
 {	
-	const auto directory = FM::resolveUserCloudCachePath(this->host, this->user);
-	const auto file = directory + QString(path).replace("remote.php/webdav/", "");	
+    const auto directory = FM::resolveUserCloudCachePath(this->host, this->user);
+    const auto file = directory + path.toString().replace("remote.php/webdav/", "");
 	
 	qDebug()<< "resolving file"<< file;
 	
@@ -88,9 +89,9 @@ QString Syncing::getCacheFile(const QString& path)
 	else return path;
 }
 
-void Syncing::download(const QString& path)
+void Syncing::download(const QUrl &path)
 {
-	QString url = QString(path).replace("remote.php/webdav/", "");
+    QString url = QString(path.toString()).replace("remote.php/webdav/", "");
 	
 	WebDAVReply *reply = this->client->downloadFrom(url);
 	qDebug()<< "CURRENT CREDENTIALS"<< this->host << this->user;
@@ -132,7 +133,7 @@ void Syncing::download(const QString& path)
 	});
 }
 
-void Syncing::upload(const QString &path, const QString &filePath)
+void Syncing::upload(const QUrl &path, const QUrl &filePath)
 {
 	
 	if(!FMH::fileExists(filePath))
@@ -140,13 +141,13 @@ void Syncing::upload(const QString &path, const QString &filePath)
 		
 	qDebug()<< "Copy to cloud. File exists" << path << filePath;
 	
-	this->mFile.setFileName(filePath);
+    this->mFile.setFileName(filePath.toString());
 
 	if(this->mFile.open(QIODevice::ReadOnly))
 	{		
 		qDebug()<< "Copy to cloud. File could be opened";
 		
-		WebDAVReply *reply = this->client->uploadTo(path, QFileInfo(filePath).fileName(), &this->mFile);	
+        WebDAVReply *reply = this->client->uploadTo(path.toString(), QFileInfo(filePath.toString()).fileName(), &this->mFile);
 	
 		connect(reply, &WebDAVReply::uploadFinished, [=](QNetworkReply *reply)
 	{
@@ -155,7 +156,7 @@ void Syncing::upload(const QString &path, const QString &filePath)
 			qDebug() << "\nUpload Success"
 			<< "\nURL  :" << reply->url() << "\nSize :" << reply->size();
 			
-			auto cachePath = this->saveToCache(filePath, path);
+            auto cachePath = this->saveToCache(filePath.toString(), path);
 			
 			auto item = FMH::getFileInfoModel(cachePath);
 // 			item[FMH::MODEL_KEY::PATH] =  this->currentPath+"/"+QFileInfo(filePath).fileName()+"/";
@@ -181,9 +182,9 @@ void Syncing::upload(const QString &path, const QString &filePath)
 	});}
 }
 
-void Syncing::createDir(const QString &path, const QString &name)
+void Syncing::createDir(const QUrl &path, const QString &name)
 {
-	WebDAVReply *reply = this->client->createDir(path, name);
+    WebDAVReply *reply = this->client->createDir(path.toString(), name);
 	
 	connect(reply, &WebDAVReply::createDirFinished, [=](QNetworkReply *reply) 
 	{
@@ -196,7 +197,7 @@ void Syncing::createDir(const QString &path, const QString &name)
 		 {FMH::MODEL_KEY::DATE, QDateTime::currentDateTime().toString(Qt::TextDate)},
 			{FMH::MODEL_KEY::MIME, "inode/directory"},
 		 {FMH::MODEL_KEY::ICON, "folder"},
-		 {FMH::MODEL_KEY::PATH, this->currentPath+"/"+name+"/"}
+         {FMH::MODEL_KEY::PATH, this->currentPath.toString()+"/"+name+"/"}
 			};
 			emit this->dirCreated(dir, this->currentPath);
 		} else 
@@ -311,16 +312,16 @@ void Syncing::emitError(const QNetworkReply::NetworkError &err)
 }
 
 
-void Syncing::saveTo(const QByteArray &array, const QString& path)
+void Syncing::saveTo(const QByteArray &array, const QUrl &path)
 {
-	QFile file(path);
+    QFile file(path.toLocalFile());
 	
 	if(!file.exists())
 	{
 		QDir dir;
-		uint cut = path.length()- path.lastIndexOf("/") -1;
-		auto newPath = QString(path).right(cut);
-		dir.mkdir(QString(path).replace(newPath, ""));
+        uint cut = path.toString().length()- path.toString().lastIndexOf("/") -1;
+        auto newPath = path.toString().right(cut);
+        dir.mkdir(path.toString().replace(newPath, ""));
 		qDebug()<< newPath << cut;
 		
 	}else file.remove();	
@@ -333,9 +334,9 @@ void Syncing::saveTo(const QByteArray &array, const QString& path)
 	// 	emit this->itemReady(FMH::getFileInfoModel(path));
 }
 
-QString Syncing::saveToCache(const QString& file, const QString &where)
+QString Syncing::saveToCache(const QString& file, const QUrl &where)
 {
-	auto directory = FMH::CloudCachePath+"opendesktop/"+this->user+"/"+where;
+    const auto directory = FMH::CloudCachePath+"opendesktop/"+this->user+"/"+where.toString();
 	
 	QDir dir(directory);
 	
@@ -375,7 +376,7 @@ void Syncing::resolveFile(const FMH::MODEL& item, const Syncing::SIGNAL_TYPE &si
 		this->download(url);
 }
 
-void Syncing::setCopyTo(const QString &path)
+void Syncing::setCopyTo(const QUrl &path)
 {
 	if(this->copyTo == path)
 		return;
@@ -383,7 +384,7 @@ void Syncing::setCopyTo(const QString &path)
 	this->copyTo = path;
 }
 
-QString Syncing::getCopyTo() const
+QUrl Syncing::getCopyTo() const
 {
 	return this->copyTo;
 }

@@ -1,4 +1,4 @@
-QT += core qml quick gui
+QT *= core qml quick gui
 
 exists($$PWD/KSyntaxHighlighting) {
     message("Using KSyntaxHighlighting for Android")

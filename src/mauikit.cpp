@@ -31,7 +31,6 @@
 
 #ifdef COMPONENT_FM
 #include "fm.h"
-#include "fmh.h"
 #include "placeslist.h"
 #include "fmlist.h"
 #endif
@@ -128,11 +127,11 @@ void MauiKit::registerTypes(const char *uri)
 #ifdef COMPONENT_FM
     qmlRegisterType<PlacesList>(uri, 1, 0, "PlacesList");
     qmlRegisterType<FMList>(uri, 1, 0, "FMList");
-    qmlRegisterSingletonType<FM>(uri, 1, 0, "FM",
+    qmlRegisterSingletonType<FM_STATIC>(uri, 1, 0, "FM",
                                  [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject* {
         Q_UNUSED(engine)
         Q_UNUSED(scriptEngine)
-        return new FM;
+        return new FM_STATIC;
     });
     //     qmlRegisterSingletonType(componentUrl(QStringLiteral("private/FileBrowser.qml")), uri, 1, 0, "FileMenu");
     qmlRegisterType(componentUrl(QStringLiteral("FileBrowser.qml")), uri, 1, 0, "FileBrowser");

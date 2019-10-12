@@ -38,14 +38,14 @@ public:
 	
 	
     explicit Syncing(QObject *parent = nullptr);
-	void listContent(const QString &path, const QStringList &filters, const int &depth = 1);
+    void listContent(const QUrl &path, const QStringList &filters, const int &depth = 1);
     void setCredentials(const QString &server, const QString &user, const QString &password);
-	void download(const QString &path);
-	void upload(const QString &path, const QString &filePath);
-	void createDir(const QString &path, const QString &name);
+    void download(const QUrl &path);
+    void upload(const QUrl &path, const QUrl &filePath);
+    void createDir(const QUrl &path, const QString &name);
 	void resolveFile(const FMH::MODEL &item, const Syncing::SIGNAL_TYPE &signalType);
-	void setCopyTo(const QString &path);
-	QString getCopyTo() const;	
+    void setCopyTo(const QUrl &path);
+    QUrl getCopyTo() const;
 	
 	QString getUser() const;
 
@@ -60,12 +60,12 @@ private:
     QString password = "mauitest";
 	void listDirOutputHandler(WebDAVReply *reply, const QStringList &filters = QStringList());
 	
-	void saveTo(const QByteArray &array, const QString& path);
-	QString saveToCache(const QString& file, const QString &where);
-	QString getCacheFile(const QString &path);
+    void saveTo(const QByteArray &array, const QUrl& path);
+    QString saveToCache(const QString& file, const QUrl &where);
+    QUrl getCacheFile(const QUrl &path);
 
-	QString currentPath;
-	QString copyTo;
+    QUrl currentPath;
+    QUrl copyTo;
 	
 	void emitError(const QNetworkReply::NetworkError &err);
 	
@@ -75,10 +75,10 @@ private:
 	
 	
 signals:
-    void listReady(FMH::MODEL_LIST data, QString url);
-	void itemReady(FMH::MODEL item, QString url, Syncing::SIGNAL_TYPE &signalType);	
-	void dirCreated(FMH::MODEL item, QString url);
-	void uploadReady(FMH::MODEL item, QString url);
+    void listReady(FMH::MODEL_LIST data, QUrl url);
+    void itemReady(FMH::MODEL item, QUrl url, Syncing::SIGNAL_TYPE &signalType);
+    void dirCreated(FMH::MODEL item, QUrl url);
+    void uploadReady(FMH::MODEL item, QUrl url);
 	void error(QString message);
 	void progress(int percent);
 	

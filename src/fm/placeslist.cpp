@@ -104,11 +104,11 @@ static FMH::MODEL_LIST getGroup(const KFilePlacesModel &model, const FMH::PATHTY
     switch(type)
     {
         case(FMH::PATHTYPE_KEY::PLACES_PATH):
-            res << FM::getDefaultPaths();
-            res<< FM::packItems(UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, "FileManager").toStringList(), FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]);
+            res << FM_STATIC::getDefaultPaths();
+            res<< FM_STATIC::packItems(UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, "FileManager").toStringList(), FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]);
             break;
         case(FMH::PATHTYPE_KEY::DRIVES_PATH):
-            res = FM::getDevices();
+            res = FM_STATIC::getDevices();
             break;
         default: break;
     }
@@ -196,7 +196,7 @@ void PlacesList::setCount()
     for(auto &data : this->list)
     {
         const auto path = data[FMH::MODEL_KEY::PATH];
-        if(FM::isDir(path))
+        if(FM_STATIC::isDir(path))
         {   
             data.insert(FMH::MODEL_KEY::COUNT, "0");
             const auto count = FMH::getFileInfoModel(path)[FMH::MODEL_KEY::COUNT];
@@ -244,7 +244,7 @@ QVariantMap PlacesList::get(const int& index) const
         return QVariantMap();
 
     const auto model = this->list.at(index);   
-    return FM::toMap(model);
+    return FMH::toMap(model);
 }
 
 void PlacesList::refresh()

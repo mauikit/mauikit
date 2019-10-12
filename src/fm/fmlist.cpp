@@ -34,7 +34,7 @@ MauiList(parent),
 fm(new FM(this)),
 watcher(new QFileSystemWatcher(this))
 {
-	connect(this->fm, &FM::cloudServerContentReady, [&](const FMH::MODEL_LIST &list, const QString &url)
+    connect(this->fm, &FM::cloudServerContentReady, [&](const FMH::MODEL_LIST &list, const QUrl &url)
 	{
 		if(this->path == url)
 		{			
@@ -44,8 +44,8 @@ watcher(new QFileSystemWatcher(this))
 	
 	connect(this->fm, &FM::pathContentReady, [&](const FMH::PATH_CONTENT &res)
 	{		
-// 		if(res.path != this->path.toString())
-// 			return;
+        if(res.path != this->path)
+            return;
 		
 		this->assignList(res.content);
 	});	
@@ -77,7 +77,7 @@ watcher(new QFileSystemWatcher(this))
 	});
 #endif
 	
-	connect(this->fm, &FM::newItem, [&] (const FMH::MODEL &item, const QString &url)
+    connect(this->fm, &FM::newItem, [&] (const FMH::MODEL &item, const QUrl &url)
 	{
 		if(this->path == url)
 		{
@@ -159,8 +159,8 @@ void FMList::setList()
                 this->fm->getPathContent(this->path, this->hidden, this->onlyDirs, this->filters);                
             } 
             break;//ASYNC
-        }			
-			
+        }
+
 	}
 }
 
@@ -524,7 +524,7 @@ QVariantMap FMList::get(const int &index) const
 	
 	const auto model = this->list.at(index);
 	
-	return FM::toMap(model);
+    return FMH::toMap(model);
 }
 
 void FMList::refresh()
@@ -539,7 +539,7 @@ void FMList::createDir(const QString& name)
 		this->fm->createCloudDir(QString(this->path.toString()).replace(FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::CLOUD_PATH]+"/"+this->fm->sync->getUser(), ""), name);
 	}else
 	{
-		this->fm->createDir(this->path, name);	
+        FM_STATIC::createDir(this->path, name);
 	}
 }
 
@@ -565,7 +565,7 @@ void FMList::setDirIcon(const int &index, const QString &iconName)
 	
 	const auto path = QUrl(this->list.at(index)[FMH::MODEL_KEY::PATH]);
 	
-	if(!FM::isDir(path))
+    if(!FM_STATIC::isDir(path))
 		return;	
 
 	FMH::setDirConf(path.toString()+"/.directory", "Desktop Entry", "Icon", iconName);
@@ -579,7 +579,7 @@ QUrl FMList::getParentPath()
 	switch(this->pathType)
 	{		
 		case FMList::PATHTYPE::PLACES_PATH:
-			return FM::parentDir(this->path).toString();
+            return FM_STATIC::parentDir(this->path).toString();
 		default:
 			return this->getPreviousPath();
 	}	
@@ -679,7 +679,8 @@ void FMList::search(const QString& query, const QUrl &path, const bool &hidden, 
 	
 	if(!path.isLocalFile())
 	{
-		qWarning() << "URL recived is not a local file. search" << path;
+        qWarning() << "URL recived is not a local file. So search will only filter the content" << path;
+        this->filterContent(query, path, hidden, onlyDirs, filters);
 		return;	  
 	}	
 	
@@ -704,10 +705,55 @@ void FMList::search(const QString& query, const QUrl &path, const bool &hidden, 
 	{		
 		FMH::PATH_CONTENT res;
 		res.path = path.toString();				
-		res.content = FM::search(query, path, hidden, onlyDirs, filters);
+        res.content = FM_STATIC::search(query, path, hidden, onlyDirs, filters);
 		return res;
 	});
-	watcher->setFuture(t1);
+    watcher->setFuture(t1);
+}
+
+void FMList::filterContent(const QString &query, const QUrl &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)
+{
+    QFutureWatcher<FMH::PATH_CONTENT> *watcher = new QFutureWatcher<FMH::PATH_CONTENT>;
+    connect(watcher, &QFutureWatcher<FMH::MODEL_LIST>::finished, [=]()
+    {
+        if(this->pathType != FMList::PATHTYPE::SEARCH_PATH)
+            return;
+
+        const auto res = watcher->future().result();
+
+        if(res.path != this->searchPath.toString())
+            return;
+
+        this->assignList(res.content);
+        emit this->searchResultReady();
+
+        watcher->deleteLater();
+    });
+
+    QFuture<FMH::PATH_CONTENT> t1 = QtConcurrent::run([=]() -> FMH::PATH_CONTENT
+    {
+        FMH::MODEL_LIST m_content;
+        FMH::PATH_CONTENT res;
+        res.path = path.toString();
+        res.content = m_content;
+        for(const auto &item : this->list)
+        {
+            if(item[FMH::MODEL_KEY::URL].contains(query) || item[FMH::MODEL_KEY::LABEL].contains(query)
+                    || item[FMH::MODEL_KEY::SUFFIX].contains(query) || item[FMH::MODEL_KEY::MIME].contains(query))
+            {
+                if(onlyDirs && item[FMH::MODEL_KEY::IS_DIR] == "true")
+                {
+                    m_content << item;
+                    continue;
+                }
+
+                m_content << item;
+            }
+        }
+        return res;
+    });
+    watcher->setFuture(t1);
+
 }
 
 int FMList::getCloudDepth() const

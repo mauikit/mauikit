@@ -1,5 +1,5 @@
-QT += KService KNotifications KNotifications KI18n
-QT += KIOCore KIOFileWidgets KIOWidgets KNTLM
+QT *= KService KNotifications KNotifications KI18n
+QT *= KIOCore KIOFileWidgets KIOWidgets KNTLM
 
 HEADERS += \
     $$PWD/mauikde.h \

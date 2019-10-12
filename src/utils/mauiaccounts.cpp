@@ -117,6 +117,6 @@ void MauiAccounts::removeAccountAndFiles(const int& index)
 		this->refresh();
 	}	
 	
-	this->fm->removeDir(FM::resolveUserCloudCachePath(this->m_data.at(index)[FMH::MODEL_KEY::SERVER], this->m_data.at(index)[FMH::MODEL_KEY::USER]));
+    FM_STATIC::removeDir(FM::resolveUserCloudCachePath(this->m_data.at(index)[FMH::MODEL_KEY::SERVER], this->m_data.at(index)[FMH::MODEL_KEY::USER]));
 }
 

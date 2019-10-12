@@ -1,4 +1,4 @@
-QT += \
+QT *= \
     sql \
     network
 
@@ -23,10 +23,6 @@ INCLUDEPATH += \
 
 DISTFILES += \
      $$PWD/script.sql \
-    $$PWD/CMakeLists.txt
-
-
-API_VER=1.0
 
 RESOURCES += \
     $$PWD/tagging.qrc
