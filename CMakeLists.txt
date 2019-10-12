@@ -239,6 +239,37 @@ if(ANDROID OR IS_APPIMAGE_PACKAGE OR MAUIKIT_STYLE)
         )
 endif()
 
+find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets)
+
+if(MYDEFS MATCHES "^COMPONENT_EDITOR=ON" OR MYDEFS MATCHES ";COMPONENT_EDITOR=ON")
+    find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS SyntaxHighlighting)
+    set(COMPONENT_EDITOR_LIBS
+        KF5::SyntaxHighlighting
+        )        
+endif()
+
+if(MYDEFS MATCHES "^COMPONENT_STORE=ON" OR MYDEFS MATCHES ";COMPONENT_STORE=ON")
+    find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS Attica)
+    set(COMPONENT_STORE_LIBS
+        KF5::Attica
+        )        
+endif()
+
+set(MAUIKDE_KF5LIBS
+    KF5::ConfigCore
+    KF5::Notifications
+    KF5::I18n
+    KF5::Service
+    KF5::KIOCore
+    KF5::KIOWidgets
+    KF5::KIOFileWidgets
+    KF5::Service
+    KF5::KIONTLM
+    KF5::ConfigWidgets
+    ${COMPONENT_EDITOR_LIBS}
+    ${COMPONENT_STORE_LIBS}
+)
+
 if(ANDROID)
     find_package(Qt5 REQUIRED COMPONENTS AndroidExtras Xml WebView Network)    
     set(MAUIANDROID_LIBS
@@ -247,29 +278,13 @@ if(ANDROID)
         Qt5::Network
         Qt5::WebView
         )  
-    
+
     set(mauikit_Android_SRCS
         src/android/mauiandroid.cpp
         )
 else()
     find_package(Qt5 REQUIRED COMPONENTS WebEngine)
-    
-    if(MYDEFS MATCHES "^COMPONENT_EDITOR=ON" OR MYDEFS MATCHES ";COMPONENT_EDITOR=ON")
-        find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS SyntaxHighlighting)
-        set(COMPONENT_EDITOR_LIBS
-            KF5::SyntaxHighlighting
-            )        
-    endif()
-    
-      if(MYDEFS MATCHES "^COMPONENT_STORE=ON" OR MYDEFS MATCHES ";COMPONENT_STORE=ON")
-        find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS Attica)
-        set(COMPONENT_STORE_LIBS
-            KF5::Attica
-            )        
-    endif()
-    
-    find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets)
-    
+
     set(mauikit_KDE_SRCS
         src/kde/mauikde.cpp
         src/kde/kdeconnect.cpp
@@ -279,20 +294,8 @@ else()
         src/kde/mauikde.h
         src/kde/kdeconnect.h
         )
-    
-    set(MAUIKDE_KF5LIBS
-        KF5::ConfigCore
-        KF5::Notifications
-        KF5::I18n 
-        KF5::Service
-        KF5::KIOCore
-        KF5::KIOWidgets
-        KF5::KIOFileWidgets
-        KF5::Service
-        KF5::KIONTLM
-        KF5::ConfigWidgets
-        ${COMPONENT_EDITOR_LIBS}
-        ${COMPONENT_STORE_LIBS}
+
+    list(APPEND MAUIKDE_KF5LIBS
         Qt5::WebEngine
         )
 endif()
@@ -357,6 +360,9 @@ if(IS_APPIMAGE_PACKAGE)
 endif()
 
 if (ANDROID)
+
+    target_link_libraries(MauiKit PRIVATE jnigraphics)
+
     kde_enable_exceptions(MauiKit PRIVATE)
     target_include_directories(MauiKit PRIVATE src/android)
     install(FILES src/android/mauiandroid.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit COMPONENT Devel)
