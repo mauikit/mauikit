@@ -180,6 +180,23 @@ if(ANDROID OR IS_APPIMAGE_PACKAGE)
         )
 endif()
 
+find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets Attica SyntaxHighlighting)
+
+set(MAUIKDE_KF5LIBS
+    KF5::ConfigCore
+    KF5::Notifications
+    KF5::I18n
+    KF5::Service
+    KF5::KIOCore
+    KF5::KIOWidgets
+    KF5::KIOFileWidgets
+    KF5::Service
+    KF5::KIONTLM
+    KF5::ConfigWidgets
+    KF5::Attica
+    KF5::SyntaxHighlighting
+)
+
 if(ANDROID)
     find_package(Qt5 REQUIRED COMPONENTS AndroidExtras Xml WebView Network)    
     set(MAUIANDROID_LIBS
@@ -188,13 +205,12 @@ if(ANDROID)
         Qt5::Network
         Qt5::WebView
         )  
-    
+
     set(mauikit_Android_SRCS
         src/android/mauiandroid.cpp
         )
 else()
     find_package(Qt5 REQUIRED COMPONENTS WebEngine)
-    find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets Attica SyntaxHighlighting)
 
     set(mauikit_KDE_SRCS
         src/kde/mauikde.cpp
@@ -206,19 +222,7 @@ else()
         src/kde/kdeconnect.h
         )
 
-    set(MAUIKDE_KF5LIBS
-        KF5::ConfigCore
-        KF5::Notifications
-        KF5::I18n 
-        KF5::Service
-        KF5::KIOCore
-        KF5::KIOWidgets
-        KF5::KIOFileWidgets
-        KF5::Service
-        KF5::KIONTLM
-        KF5::ConfigWidgets
-        KF5::Attica
-        KF5::SyntaxHighlighting
+    list(APPEND MAUIKDE_KF5LIBS
         Qt5::WebEngine
         )
 endif()
@@ -282,6 +286,9 @@ if(IS_APPIMAGE_PACKAGE)
 endif()
 
 if (ANDROID)
+
+    target_link_libraries(MauiKit PRIVATE jnigraphics)
+
     kde_enable_exceptions(MauiKit PRIVATE)
     target_include_directories(MauiKit PRIVATE src/android)
     install(FILES src/android/mauiandroid.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit COMPONENT Devel)
