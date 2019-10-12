@@ -21,30 +21,40 @@
 
 #include <QDebug>
 
-#include "fm.h"
-#include "fmh.h"
-
+#include "handy.h"
 #include "mauimodel.h"
 #include "mauilist.h"
-#include "placeslist.h"
-#include "fmlist.h"
 #include "pathlist.h"
 
+#include "mauiaccounts.h"
+#include "mauiapp.h"
+
+#ifdef COMPONENT_FM
+#include "fm.h"
+#include "fmh.h"
+#include "placeslist.h"
+#include "fmlist.h"
+#endif
+
+#ifdef COMPONENT_TAGGING
 #include "tagsmodel.h"
 #include "tagslist.h"
+#endif
 
+#ifdef COMPONENT_STORE
 #include "storemodel.h"
 #include "storelist.h"
-
-#include "handy.h"
+#endif
 
 #ifdef COMPONENT_EDITOR
 #include "documenthandler.h"
 #include "syntaxhighlighterutil.h"
+
+#ifdef STATIC_MAUIKIT
+#include "kquicksyntaxhighlighter/kquicksyntaxhighlighter.h"
 #endif
 
-#include "mauiaccounts.h"
-#include "mauiapp.h"
+#endif
 
 #ifdef Q_OS_ANDROID
 #include "mauiandroid.h"
@@ -52,13 +62,9 @@
 #include "mauikde.h"
 #endif
 
-#if defined Q_OS_ANDROID || defined APPIMAGE_PACKAGE
+#if defined Q_OS_ANDROID || defined APPIMAGE_PACKAGE || defined MAUIKIT_STYLE
 #include <QIcon>
 #include <QQuickStyle>
-#endif
-
-#ifdef STATIC_MAUIKIT
-#include "kquicksyntaxhighlighter/kquicksyntaxhighlighter.h"
 #endif
 
 QUrl MauiKit::componentUrl(const QString &fileName) const
@@ -102,22 +108,26 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("GridView.qml")), uri, 1, 0, "GridView");
     qmlRegisterType(componentUrl(QStringLiteral("ColorsBar.qml")), uri, 1, 0, "ColorsBar");
     qmlRegisterType(componentUrl(QStringLiteral("ImageViewer.qml")), uri, 1, 0, "ImageViewer");
-	qmlRegisterType(componentUrl(QStringLiteral("PathBar.qml")), uri, 1, 0, "PathBar");
-	
+    qmlRegisterType(componentUrl(QStringLiteral("PathBar.qml")), uri, 1, 0, "PathBar");
+    qmlRegisterType<PathList>(uri, 1, 0, "PathList");
+
+
     /** STORE CONTROLS, MODELS AND INTERFACES **/
+#ifdef COMPONENT_STORE
     qmlRegisterType<StoreList>("StoreList", 1, 0, "StoreList");
     qmlRegisterType<StoreModel>("StoreModel", 1, 0, "StoreModel");
     qmlRegisterType(componentUrl(QStringLiteral("private/StoreDelegate.qml")), uri, 1, 0, "StoreDelegate");
     qmlRegisterType(componentUrl(QStringLiteral("Store.qml")), uri, 1, 0, "Store");
+#endif
 
     /** BROWSING CONTROLS **/
     qmlRegisterType(componentUrl(QStringLiteral("ListBrowser.qml")), uri, 1, 0, "ListBrowser");
     qmlRegisterType(componentUrl(QStringLiteral("GridBrowser.qml")), uri, 1, 0, "GridBrowser");
 
     /** FM CONTROLS, MODELS AND INTERFACES **/
+#ifdef COMPONENT_FM
     qmlRegisterType<PlacesList>(uri, 1, 0, "PlacesList");
     qmlRegisterType<FMList>(uri, 1, 0, "FMList");
-    qmlRegisterType<PathList>(uri, 1, 0, "PathList");
     qmlRegisterSingletonType<FM>(uri, 1, 0, "FM",
                                  [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject* {
         Q_UNUSED(engine)
@@ -130,7 +140,7 @@ void MauiKit::registerTypes(const char *uri)
 	qmlRegisterType(componentUrl(QStringLiteral("PlacesListBrowser.qml")), uri, 1, 0, "PlacesListBrowser");
 	qmlRegisterType(componentUrl(QStringLiteral("FilePreviewer.qml")), uri, 1, 0, "FilePreviewer");
     qmlRegisterType(componentUrl(QStringLiteral("FileDialog.qml")), uri, 1, 0, "FileDialog");
-    qmlRegisterType(componentUrl(QStringLiteral("SyncDialog.qml")), uri, 1, 0, "SyncDialog"); //to be rename to accountsDialog
+#endif
 
     /** EDITOR CONTROLS **/
 #ifdef COMPONENT_EDITOR
@@ -167,15 +177,18 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType<MauiModel>(uri, 1, 0, "BaseModel"); //BASE MODEL
 
     /** TAGGING INTERFACES AND MODELS **/
+#ifdef COMPONENT_TAGGING
     qmlRegisterType<TagsList>("TagsList", 1, 0, "TagsList");
     qmlRegisterType<TagsModel>("TagsModel", 1, 0, "TagsModel");
     qmlRegisterType(componentUrl(QStringLiteral("private/TagList.qml")), uri, 1, 0, "TagList");
     qmlRegisterType(componentUrl(QStringLiteral("TagsBar.qml")), uri, 1, 0, "TagsBar");
     qmlRegisterType(componentUrl(QStringLiteral("TagsDialog.qml")), uri, 1, 0, "TagsDialog");
+#endif
 
     /** MAUI APPLICATION SPECIFIC PROPS **/
     qmlRegisterType<MauiAccounts>();
     qmlRegisterUncreatableType<MauiApp>(uri, 1, 0, "App", "Cannot be created App");
+    qmlRegisterType(componentUrl(QStringLiteral("SyncDialog.qml")), uri, 1, 0, "SyncDialog"); //to be rename to accountsDialog
 
     /** HELPERS **/
     qmlRegisterSingletonType<Handy>(uri, 1, 0, "Handy",
@@ -185,7 +198,7 @@ void MauiKit::registerTypes(const char *uri)
         return new Handy;
     });
 
-#if defined Q_OS_ANDROID || defined APPIMAGE_PACKAGE
+#if defined Q_OS_ANDROID || defined APPIMAGE_PACKAGE || defined MAUIKIT_STYLE
 	this->initResources();
 #endif
 
@@ -205,5 +218,3 @@ void MauiKit::initResources()
 }
 
 #include "moc_mauikit.cpp"
-
-
