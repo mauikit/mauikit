@@ -126,12 +126,31 @@ contains(DEFINES, COMPONENT_SYNCING):{
     warning("SKIPPING SYNCING COMPONENT")
 }
 
+contains(DEFINES, COMPONENT_ACCOUNTS):{
+    message("INCLUDING ACCOUNTS COMPONENT")
+    QT += sql
+    HEADERS +=  \
+        $$PWD/src/utils/accounts/mauiaccounts.h \
+        $$PWD/src/utils/accounts/accountsdb.h \
+
+    SOURCES += \
+        $$PWD/src/utils/accounts/mauiaccounts.cpp\
+        $$PWD/src/utils/accounts/accountsdb.cpp
+
+    RESOURCES += $$PWD/src/utils/accounts/accounts.qrc
+    DISTFILES += $$PWD//src/utils/accounts/script.sql
+
+    INCLUDEPATH += $$PWD/src/utils/accounts
+    DEPENDPATH +=  $$PWD/src/utils/accounts
+
+} else {
+    warning("SKIPPING ACCOUNTS COMPONENT")
+}
+
 contains(DEFINES, COMPONENT_FM):{
     message("INCLUDING FM COMPONENT")
-
     HEADERS += \
         $$PWD/src/fm/fm.h \
-        $$PWD/src/fm/fmh.h \
         $$PWD/src/fm/fmdb.h \
         $$PWD/src/fm/fmlist.h \
         $$PWD/src/fm/placeslist.h
@@ -142,7 +161,6 @@ contains(DEFINES, COMPONENT_FM):{
         $$PWD/src/fm/fmlist.cpp \
         $$PWD/src/fm/placeslist.cpp
 
-    RESOURCES += $$PWD/src/fm/fm.qrc
 
     INCLUDEPATH += $$PWD/src/fm
 
@@ -157,22 +175,22 @@ RESOURCES += \
     $$PWD/maui-style/style.qrc
 
 HEADERS += \
-    $$PWD/src/mauikit.h \    
-    $$PWD/src/fm/pathlist.h \
+    $$PWD/src/mauikit.h \
+    $$PWD/src/utils/fmh.h \
     $$PWD/src/utils/model_template/mauimodel.h \
     $$PWD/src/utils/model_template/mauilist.h \
     $$PWD/src/utils/handy.h \
+    $$PWD/src/utils/utils.h \
     $$PWD/src/utils/mauiapp.h \
-    $$PWD/src/utils/mauiaccounts.h
+    $$PWD/src/utils/models/pathlist.h
 
 SOURCES += \
-    $$PWD/src/mauikit.cpp \   
-    $$PWD/src/fm/pathlist.cpp \   
+    $$PWD/src/mauikit.cpp \
     $$PWD/src/utils/model_template/mauimodel.cpp \
     $$PWD/src/utils/model_template/mauilist.cpp \
     $$PWD/src/utils/handy.cpp \
     $$PWD/src/utils/mauiapp.cpp \
-    $$PWD/src/utils/mauiaccounts.cpp
+    $$PWD/src/utils/models/pathlist.cpp
 
 DEPENDPATH += \
     $$PWD/src \
@@ -181,6 +199,7 @@ DEPENDPATH += \
 INCLUDEPATH += \
      $$PWD/src \
      $$PWD/src/utils \
+     $$PWD/src/utils/models \
      $$PWD/src/utils/model_template
 
 API_VER = 1.0

@@ -48,8 +48,10 @@ class MAUIKIT_EXPORT MauiApp : public QObject
 	Q_PROPERTY(QString donationPage READ getDonationPage WRITE setDonationPage NOTIFY donationPageChanged)
 	Q_PROPERTY(QString mauikitVersion READ getMauikitVersion CONSTANT)
 	Q_PROPERTY(QString qtVersion READ getQtVersion CONSTANT)
-	Q_PROPERTY(MauiAccounts * accounts READ getAccounts CONSTANT FINAL)
 
+#ifdef COMPONENT_ACCOUNTS
+	Q_PROPERTY(MauiAccounts * accounts READ getAccounts CONSTANT FINAL)
+#endif
 
 public:  
     static MauiApp *qmlAttachedProperties(QObject *object);
@@ -155,8 +157,10 @@ public:
 		emit this->reportPageChanged(reportPage);
 	}
 	
+#ifdef COMPONENT_ACCOUNTS
 	MauiAccounts *getAccounts() const;
-	
+#endif
+
 	~MauiApp();	
 	
 private:

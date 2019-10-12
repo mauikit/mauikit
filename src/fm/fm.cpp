@@ -213,30 +213,6 @@ FM::FM(QObject *parent) : FMDB(parent)
             return data;
         }
 
-        QVariantList FM::get(const QString &queryTxt)
-        {
-            QVariantList mapList;
-
-            auto query = this->getQuery(queryTxt);
-
-            if(query.exec())
-            {
-                while(query.next())
-                {
-                    QVariantMap data;
-                    for(auto key : FMH::MODEL_NAME.keys())
-                        if(query.record().indexOf(FMH::MODEL_NAME[key]) > -1)
-                            data[FMH::MODEL_NAME[key]] = query.value(FMH::MODEL_NAME[key]).toString();
-
-                    mapList<< data;
-
-                }
-
-            }else qDebug()<< query.lastError()<< query.lastQuery();
-
-            return mapList;
-        }
-
         void FM::getPathContent(const QUrl& path, const bool &hidden, const bool &onlyDirs, const QStringList& filters, const QDirIterator::IteratorFlags &iteratorFlags)
         {
             qDebug()<< "Getting async path contents";
@@ -477,38 +453,6 @@ QVariantList FM::getCloudAccountsList()
     return res;
 }
 
-bool FM::addCloudAccount(const QString &server, const QString &user, const QString &password)
-{
-    const QVariantMap account = {
-        {FMH::MODEL_NAME[FMH::MODEL_KEY::SERVER], server},
-        {FMH::MODEL_NAME[FMH::MODEL_KEY::USER], user},
-        {FMH::MODEL_NAME[FMH::MODEL_KEY::PASSWORD], password}
-    };
-
-    if(this->insert(FMH::TABLEMAP[FMH::TABLE::CLOUDS], account))
-    {
-        emit this->cloudAccountInserted(user);
-        return true;
-    }
-
-    return false;
-}
-
-bool FM::removeCloudAccount(const QString &server, const QString &user)
-{
-    FMH::DB account = {
-        {FMH::MODEL_KEY::SERVER, server},
-        {FMH::MODEL_KEY::USER, user},
-    };
-
-    if(this->remove(FMH::TABLEMAP[FMH::TABLE::CLOUDS], account))
-    {
-        emit this->cloudAccountRemoved(user);
-        return true;
-    }
-
-    return false;
-}
 
 QString FM::resolveUserCloudCachePath(const QString &server, const QString &user)
 {

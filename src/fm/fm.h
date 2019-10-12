@@ -137,8 +137,7 @@ signals:
 	
 public slots:	
 	QVariantList getCloudAccountsList();	
-	bool addCloudAccount(const QString &server, const QString &user, const QString &password);
-	bool removeCloudAccount(const QString &server, const QString &user);
+    bool removeCloudAccount(const QString &server, const QString &user);
 	void openCloudItem(const QVariantMap &item);	
 	void getCloudItem(const QVariantMap &item);	
 	

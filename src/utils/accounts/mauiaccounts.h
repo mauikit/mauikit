@@ -32,7 +32,7 @@
 #include "mauikit_export.h"
 #endif
 
-class FM;
+class AccountsDB;
 #ifdef STATIC_MAUIKIT
 class MauiAccounts : public MauiList
 #else
@@ -73,6 +73,8 @@ public:
 	
 public slots:	
 	QVariantMap get(const int &index) const;
+    QVariantList getCloudAccountsList();
+
 	void registerAccount(const QVariantMap &account);
 	
 	void removeAccount(const int &index);
@@ -80,7 +82,7 @@ public slots:
 	void refresh();
 	
 private:
-	FM *fm;
+    AccountsDB *db;
 	FMH::MODEL_LIST m_data;
 	QVariantMap m_currentAccount;
 	
@@ -88,8 +90,15 @@ private:
 	uint m_count = 0;	
 	
 	void setAccounts();
-	
+    FMH::MODEL_LIST getCloudAccounts();
+    bool addCloudAccount(const QString &server, const QString &user, const QString &password);
+    bool removeCloudAccount(const QString &server, const QString &user);
+
+    QVariantList get(const QString &queryTxt);
+
 signals:
+    void accountAdded(QVariantMap account);
+    void accountRemoved(QVariantMap account);
 	void currentAccountChanged(QVariantMap account);
 	void currentAccountIndexChanged(int index);	
 	void countChanged(uint count);

@@ -848,20 +848,6 @@ inline QString getMime(const QUrl &path)
     return mimedb.mimeTypeForFile(path.toLocalFile()).name();
 }
 
-enum class TABLE : uint
-{
-    CLOUDS
-};
-
-static const QMap<FMH::TABLE, QString> TABLEMAP =
-{
-    {TABLE::CLOUDS, "clouds"}
-};
-
-typedef QMap<FMH::MODEL_KEY, QString> DB;
-
-const QString FMPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/maui/fm/";
-const QString DBName = "fm.db";
 
 inline FMH::MODEL getFileInfoModel(const QUrl &path)
 {
