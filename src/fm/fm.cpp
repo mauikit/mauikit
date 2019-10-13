@@ -310,8 +310,8 @@ FM::FM(QObject *parent) : QObject(parent)
         }
 
         auto user = __list[1];
-        auto data = this->get(QString("select * from clouds where user = '%1'").arg(user));
-
+//        auto data = this->get(QString("select * from clouds where user = '%1'").arg(user));
+        QVariantList data;
         if(data.isEmpty())
             return false;
 
