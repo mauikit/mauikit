@@ -151,19 +151,15 @@ contains(DEFINES, COMPONENT_FM):{
     message("INCLUDING FM COMPONENT")
     HEADERS += \
         $$PWD/src/fm/fm.h \
-        $$PWD/src/fm/fmdb.h \
         $$PWD/src/fm/fmlist.h \
         $$PWD/src/fm/placeslist.h
 
     SOURCES += \
         $$PWD/src/fm/fm.cpp \
-        $$PWD/src/fm/fmdb.cpp \
         $$PWD/src/fm/fmlist.cpp \
         $$PWD/src/fm/placeslist.cpp
 
-
     INCLUDEPATH += $$PWD/src/fm
-
     DEPENDPATH += $$PWD/src/fm
 } else {
     warning("SKIPPING FM COMPONENT")

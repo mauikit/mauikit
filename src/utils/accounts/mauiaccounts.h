@@ -46,22 +46,9 @@ class MAUIKIT_EXPORT MauiAccounts : public MauiList
 	
 	Q_PROPERTY(QVariantMap currentAccount READ getCurrentAccount NOTIFY currentAccountChanged)
 	Q_PROPERTY(uint count READ getCount NOTIFY countChanged)
+
 public:
-    /**
-     * Default constructor
-     */
-    MauiAccounts(QObject *parent = nullptr);
-
-    /**
-     * Destructor
-     */
-    ~MauiAccounts();
-
-    /**
-     * @todo write docs
-     *
-     * @return TODO
-     */
+   static MauiAccounts * instance(QObject *parent = nullptr);
     FMH::MODEL_LIST items() const final override;
 	
 	void setCurrentAccountIndex(const int &index);
@@ -74,7 +61,7 @@ public:
 public slots:	
 	QVariantMap get(const int &index) const;
     QVariantList getCloudAccountsList();
-
+    FMH::MODEL_LIST getCloudAccounts();
 	void registerAccount(const QVariantMap &account);
 	
 	void removeAccount(const int &index);
@@ -82,6 +69,10 @@ public slots:
 	void refresh();
 	
 private:
+    static MauiAccounts *m_instance;
+    MauiAccounts(QObject *parent = nullptr);
+    ~MauiAccounts() override;
+
     AccountsDB *db;
 	FMH::MODEL_LIST m_data;
 	QVariantMap m_currentAccount;
@@ -90,7 +81,7 @@ private:
 	uint m_count = 0;	
 	
 	void setAccounts();
-    FMH::MODEL_LIST getCloudAccounts();
+
     bool addCloudAccount(const QString &server, const QString &user, const QString &password);
     bool removeCloudAccount(const QString &server, const QString &user);
 

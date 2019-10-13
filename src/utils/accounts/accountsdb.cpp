@@ -3,11 +3,21 @@
 
 #include <QUuid>
 
+#ifdef Q_OS_ANDROID
+#include "mauiandroid.h"
+#endif
+
 const QString FMPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/maui/";
 const QString DBName = "accounts.db";
 
 AccountsDB::AccountsDB(QObject *parent) : QObject(parent)
 {
+    //get permissions to read and write
+#ifdef Q_OS_ANDROID
+    MAUIAndroid::checkRunTimePermissions();
+#endif
+
+    qDebug()<< "TRY TO CREATE ACCOUNTS DB";
     QDir collectionDBPath_dir(FMPath);
     if (!collectionDBPath_dir.exists())
         collectionDBPath_dir.mkpath(".");
@@ -46,7 +56,7 @@ void AccountsDB::prepareCollectionDB() const
 {
     QSqlQuery query(this->m_db);
 
-    QFile file(":/fm/script.sql");
+    QFile file(":/accounts/script.sql");
 
     if (!file.exists())
     {
@@ -209,7 +219,7 @@ bool AccountsDB::remove(const QString &tableName, const FMH::MODEL &removeData)
     }
 
     QString strValues;
-        auto i = 0;
+    auto i = 0;
     for (auto key : removeData.keys())
     {
         strValues.append(QString("%1 = \"%2\"").arg(FMH::MODEL_NAME[key], removeData[key]));

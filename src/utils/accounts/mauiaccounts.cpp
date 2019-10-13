@@ -29,6 +29,15 @@ MauiAccounts::~MauiAccounts()
 {
 }
 
+MauiAccounts *MauiAccounts::m_instance = nullptr;
+MauiAccounts *MauiAccounts::instance(QObject *parent)
+{
+    if(MauiAccounts::m_instance == nullptr)
+        MauiAccounts::m_instance = new MauiAccounts(parent);
+
+    return MauiAccounts::m_instance;
+}
+
 FMH::MODEL_LIST MauiAccounts::items() const
 {
 	return this->m_data;
@@ -47,7 +56,7 @@ void MauiAccounts::setAccounts()
 
 FMH::MODEL_LIST MauiAccounts::getCloudAccounts()
 {
-    auto accounts = this->get("select * from clouds");
+    auto accounts = this->get("select * from cloud");
     FMH::MODEL_LIST res;
     for(const auto &account : accounts)
     {

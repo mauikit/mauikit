@@ -60,7 +60,7 @@
 #endif
 
 
-FM::FM(QObject *parent) : FMDB(parent)
+FM::FM(QObject *parent) : QObject(parent)
   #ifdef COMPONENT_SYNCING
   ,sync(new Syncing(this))
   #endif
@@ -140,12 +140,14 @@ FM::FM(QObject *parent) : FMDB(parent)
 
             });
 #endif
+
+
+#ifdef COMPONENT_SYNCING
             connect(this->sync, &Syncing::listReady, [this](const FMH::MODEL_LIST &list, const QUrl &url)
             {
                 emit this->cloudServerContentReady(list, url);
             });
 
-#ifdef COMPONENT_SYNCING
             connect(this->sync, &Syncing::itemReady, [this](const FMH::MODEL &item, const QUrl &url, const Syncing::SIGNAL_TYPE &signalType)
             {
                 switch(signalType)
@@ -398,25 +400,6 @@ FM::FM(QObject *parent) : FMDB(parent)
 #endif
     }
 
-    FMH::MODEL_LIST FM::getCloudAccounts()
-    {
-        auto accounts = this->get("select * from clouds");
-        FMH::MODEL_LIST res;
-        for(const auto &account : accounts)
-        {
-            auto map = account.toMap();
-            res << FMH::MODEL {
-            {FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::CLOUD_PATH]+map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString()},
-        {FMH::MODEL_KEY::ICON, "folder-cloud"},
-        {FMH::MODEL_KEY::LABEL, map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString()},
-        {FMH::MODEL_KEY::USER, map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString()},
-        {FMH::MODEL_KEY::SERVER, map[FMH::MODEL_NAME[FMH::MODEL_KEY::SERVER]].toString()},
-        {FMH::MODEL_KEY::PASSWORD, map[FMH::MODEL_NAME[FMH::MODEL_KEY::PASSWORD]].toString()},
-        {FMH::MODEL_KEY::TYPE,  FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::CLOUD_PATH]}};
-}
-return res;
-}
-
 void FM::createCloudDir(const QString &path, const QString &name)
 {
 #ifdef COMPONENT_SYNCING
@@ -441,18 +424,6 @@ void FM::getCloudItem(const QVariantMap &item)
     this->sync->resolveFile(FMH::toModel(item), Syncing::SIGNAL_TYPE::DOWNLOAD);
 #endif
 }
-
-QVariantList FM::getCloudAccountsList()
-{
-    QVariantList res;
-
-    const auto data = this->getCloudAccounts();
-    for(const auto &item : data)
-        res << FMH::toMap(item);
-
-    return res;
-}
-
 
 QString FM::resolveUserCloudCachePath(const QString &server, const QString &user)
 {

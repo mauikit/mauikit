@@ -8,7 +8,6 @@
 #include <QVector>
 #include <QHash>
 
-#include "fmdb.h"
 #include "fmh.h"
 
 #ifndef STATIC_MAUIKIT
@@ -84,9 +83,9 @@ public slots:
 class Syncing;
 class Tagging;
 #ifdef STATIC_MAUIKIT
-class FM : public FMDB
+class FM : public QObject
 #else
-class MAUIKIT_EXPORT FM : public FMDB
+class MAUIKIT_EXPORT FM : public QObject
 #endif
 {
     Q_OBJECT
@@ -104,7 +103,6 @@ public:
 
     /** Syncing **/
     bool getCloudServerContent(const QUrl &server, const QStringList &filters= QStringList(), const int &depth = 0);
-    FMH::MODEL_LIST getCloudAccounts();
 	Q_INVOKABLE void createCloudDir(const QString &path, const QString &name);
 		
 	void getPathContent(const QUrl &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList(), const QDirIterator::IteratorFlags &iteratorFlags = QDirIterator::NoIteratorFlags);
@@ -136,8 +134,6 @@ signals:
     void newItem(FMH::MODEL item, QUrl path); // when a new item is created
 	
 public slots:	
-	QVariantList getCloudAccountsList();	
-    bool removeCloudAccount(const QString &server, const QString &user);
 	void openCloudItem(const QVariantMap &item);	
 	void getCloudItem(const QVariantMap &item);	
 	

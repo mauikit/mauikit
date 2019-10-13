@@ -24,6 +24,10 @@
 #include <QFileSystemWatcher>
 #include "utils.h"
 
+#ifdef COMPONENT_ACCOUNTS
+#include "mauiaccounts.h"
+#endif
+
 #ifdef Q_OS_ANDROID 
 #else
 #include <KFilePlacesModel>
@@ -182,9 +186,11 @@ void PlacesList::setList()
             this->list << this->fm->getTags();
             break;
 
+#ifdef COMPONENT_ACCOUNTS
         case FMH::PATHTYPE_KEY::CLOUD_PATH:
-            this->list << this->fm->getCloudAccounts();
+            this->list << MauiAccounts::instance()->getCloudAccounts();
             break;
+#endif
         }
 
     this->setCount();

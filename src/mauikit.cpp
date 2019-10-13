@@ -190,9 +190,9 @@ void MauiKit::registerTypes(const char *uri)
 
 #ifdef COMPONENT_ACCOUNTS
     qmlRegisterType<MauiAccounts>();
+    qmlRegisterType(componentUrl(QStringLiteral("SyncDialog.qml")), uri, 1, 0, "SyncDialog"); //to be rename to accountsDialog
 #endif
     qmlRegisterUncreatableType<MauiApp>(uri, 1, 0, "App", "Cannot be created App");
-    qmlRegisterType(componentUrl(QStringLiteral("SyncDialog.qml")), uri, 1, 0, "SyncDialog"); //to be rename to accountsDialog
 
     /** HELPERS **/
     qmlRegisterSingletonType<Handy>(uri, 1, 0, "Handy",

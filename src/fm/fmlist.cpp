@@ -22,7 +22,10 @@
 
 #include <QObject>
 #include <QFileSystemWatcher>
-#include <syncing.h>
+
+#ifdef COMPONENT_SYNCING
+#include "syncing.h"
+#endif
 
 #include <QtConcurrent>
 #include <QtConcurrent/QtConcurrentRun>
@@ -535,9 +538,11 @@ void FMList::refresh()
 void FMList::createDir(const QString& name)
 {
 	if(this->pathType == FMList::PATHTYPE::CLOUD_PATH)		
-	{
-		this->fm->createCloudDir(QString(this->path.toString()).replace(FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::CLOUD_PATH]+"/"+this->fm->sync->getUser(), ""), name);
-	}else
+    {
+#ifdef COMPONENT_SYNCING
+        this->fm->createCloudDir(QString(this->path.toString()).replace(FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::CLOUD_PATH]+"/"+this->fm->sync->getUser(), ""), name);
+#endif
+    }else
 	{
         FM_STATIC::createDir(this->path, name);
 	}

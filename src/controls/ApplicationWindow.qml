@@ -41,8 +41,7 @@ Kirigami.AbstractApplicationWindow
     contentItem.anchors.leftMargin: root.sideBar && !root.globalDrawer ? ((root.sideBar.collapsible && root.sideBar.collapsed) ? root.sideBar.collapsedSize : (root.sideBar.modal ? 0 : root.sideBar.width)) :
                                                                          (!root.sideBar && root.globalDrawer && (root.globalDrawer.modal === false) ? root.globalDrawer.width * root.globalDrawer.position : 0)
 
-    property bool showAccounts : true
-    property Maui.AbstractSideBar sideBar
+   property Maui.AbstractSideBar sideBar
 
     /***************************************************/
     /******************** ALIASES *********************/
@@ -179,7 +178,7 @@ Kirigami.AbstractApplicationWindow
 
                     MenuItem
                     {
-                        visible: (_accountCombobox.count > 0) && root.showAccounts
+                        visible: (_accountCombobox.count > 0) && Maui.App.handleAccounts
                         height:  visible ? _accountCombobox.implicitHeight + Maui.Style.space.big : 0
 
                         ComboBox
@@ -211,7 +210,7 @@ Kirigami.AbstractApplicationWindow
                     MenuItem
                     {
                         text: qsTr("Accounts")
-                        visible: root.showAccounts
+                        visible: Maui.App.handleAccounts
                         icon.name: "list-add-user"
                         onTriggered:
                         {
@@ -279,7 +278,7 @@ Kirigami.AbstractApplicationWindow
     Loader
     {
         id: _accountsDialogLoader
-        sourceComponent: root.showAccounts ? _accountsDialogComponent : undefined
+        sourceComponent: Maui.App.handleAccounts ? _accountsDialogComponent : undefined
     }
 
     Component
