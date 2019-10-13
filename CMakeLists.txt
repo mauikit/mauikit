@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-set(REQUIRED_QT_VERSION 5.8.0)
+set(REQUIRED_QT_VERSION 5.10.0)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -8,9 +8,9 @@ set(MAUIKIT_VERSION 1.0.0)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(AUTOMOC_MOC_OPTIONS -Muri=org.kde.maui)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 project(mauikit VERSION ${MAUIKIT_VERSION})
 
@@ -22,14 +22,17 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH}
 add_compile_definitions(
     COMPONENT_EDITOR=ON
     COMPONENT_FM=ON
+	COMPONENT_ACCOUNTS=ON
     COMPONENT_TERMINAL=ON
     COMPONENT_STORE=ON
     COMPONENT_TAGGING=ON
     COMPONENT_SYNCING=ON
-    COMPONENT_ACCOUNTS=ON
     )
+    
+get_directory_property(MYDEFS COMPILE_DEFINITIONS)    
+    MESSAGE( STATUS "Compile defs contain: " ${MYDEFS} )
 
-include(GenerateExportHeader)
+    include(GenerateExportHeader)
 include(ECMSetupVersion)
 include(ECMGenerateHeaders)
 include(CMakePackageConfigHelpers)
@@ -84,7 +87,7 @@ set(mauikit_HDRS
     src/utils/model_template/mauimodel.h
     )
 
-if(COMPONENT_ACCOUNTS)
+if(MYDEFS MATCHES "^COMPONENT_ACCOUNTS=ON" OR MYDEFS MATCHES ";COMPONENT_ACCOUNTS=ON")
     message(STATUS "INCLUDING ACCOUNTS COMPONENT")
     
     include_directories(        
@@ -101,11 +104,10 @@ if(COMPONENT_ACCOUNTS)
         src/utils/accounts/mauiaccounts.h
         src/utils/accounts/accountsdb.h
         )    
-    qt5_add_resources(accounts_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/accounts/accounts.qrc)    
-    
+    qt5_add_resources(accounts_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/accounts/accounts.qrc) 
 endif()
 
-if(COMPONENT_EDITOR)
+if(MYDEFS MATCHES "^COMPONENT_EDITOR=ON" OR MYDEFS MATCHES ";COMPONENT_EDITOR=ON")
     message(STATUS "INCLUDING EDITOR COMPONENT")
     set(editor_SRCS
         src/utils/editor/documenthandler.cpp
@@ -113,7 +115,7 @@ if(COMPONENT_EDITOR)
         )
     
     set(editor_HDRS
-        src/utils/editor/documenthandler.cpp
+        src/utils/editor/documenthandler.h
         src/utils/editor/syntaxhighlighterutil.h
         )
     
@@ -123,20 +125,17 @@ if(COMPONENT_EDITOR)
         )
 endif()
 
-if(COMPONENT_FM)
+if(MYDEFS MATCHES "^COMPONENT_FM=ON" OR MYDEFS MATCHES ";COMPONENT_FM=ON")
     message(STATUS "INCLUDING FM COMPONENT")
     
     set(fm_SRCS
         src/fm/fm.cpp
-        src/fm/fmdb.cpp
         src/fm/fmlist.cpp
-        src/fm/placeslist.cpp
-        
+        src/fm/placeslist.cpp        
         )
     
     set(fm_HDRS
         src/fm/fm.h
-        src/fm/fmdb.h
         src/fm/fmlist.h
         src/fm/placeslist.h
         )
@@ -146,7 +145,7 @@ if(COMPONENT_FM)
         )
 endif()
 
-if(COMPONENT_TAGGING)
+if(MYDEFS MATCHES "^COMPONENT_TAGGING=ON" OR MYDEFS MATCHES ";COMPONENT_TAGGING=ON")
     message(STATUS "INCLUDING TAGGING COMPONENT")
     set(tagging_SRCS
         src/utils/tagging/tagging.cpp
@@ -169,7 +168,7 @@ if(COMPONENT_TAGGING)
         )
 endif()
 
-if(COMPONENT_SYNCING)
+if(MYDEFS MATCHES "^COMPONENT_SYNCING=ON" OR MYDEFS MATCHES ";COMPONENT_SYNCING=ON")
     message(STATUS "INCLUDING SYNCING COMPONENT")
     set(syncing_SRCS
         src/utils/syncing/syncing.cpp
@@ -199,8 +198,7 @@ if(COMPONENT_SYNCING)
         )
 endif()
 
-
-if(COMPONENT_STORE)
+if(MYDEFS MATCHES "^COMPONENT_STORE=ON" OR MYDEFS MATCHES ";COMPONENT_STORE=ON")
     message(STATUS "INCLUDING STORE COMPONENT")
     set(store_SRCS
         src/utils/store/store.cpp
@@ -256,16 +254,21 @@ if(ANDROID)
 else()
     find_package(Qt5 REQUIRED COMPONENTS WebEngine)
     
-    if(COMPONENT_EDITOR)
-        
+    if(MYDEFS MATCHES "^COMPONENT_EDITOR=ON" OR MYDEFS MATCHES ";COMPONENT_EDITOR=ON")
         find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS SyntaxHighlighting)
         set(COMPONENT_EDITOR_LIBS
             KF5::SyntaxHighlighting
-            )
-        
+            )        
     endif()
     
-    find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets Attica)
+      if(MYDEFS MATCHES "^COMPONENT_STORE=ON" OR MYDEFS MATCHES ";COMPONENT_STORE=ON")
+        find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS Attica)
+        set(COMPONENT_STORE_LIBS
+            KF5::Attica
+            )        
+    endif()
+    
+    find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets)
     
     set(mauikit_KDE_SRCS
         src/kde/mauikde.cpp
@@ -288,8 +291,8 @@ else()
         KF5::Service
         KF5::KIONTLM
         KF5::ConfigWidgets
-        KF5::Attica
         ${COMPONENT_EDITOR_LIBS}
+        ${COMPONENT_STORE_LIBS}
         Qt5::WebEngine
         )
 endif()
@@ -389,6 +392,7 @@ install(FILES
     ${fm_HDRS}
     ${syncing_HDRS}
     ${store_HDRS}
+    ${accounts_HDRS}
     ${CMAKE_CURRENT_BINARY_DIR}/mauikit_export.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit
     COMPONENT Devel)

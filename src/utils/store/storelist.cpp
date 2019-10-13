@@ -47,7 +47,7 @@ StoreList::StoreList(QObject *parent) : QObject(parent)
 	
 	connect(this->store, &Store::downloadReady, [this] (const FMH::MODEL &item)
 	{
-		emit this->downloadReady(FM::toMap(item));
+		emit this->downloadReady(FMH::toMap(item));
 	});
 	
 	connect(this->store, &Store::storeReady, this, &StoreList::setList);
