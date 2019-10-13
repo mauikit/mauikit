@@ -1,12 +1,32 @@
-QT +=  \
+QT *=  \
     core \
     qml \
     quick \
     gui \
     svg \
-    concurrent \
+    concurrent
     
-CONFIG += c++17
+CONFIG *= c++17
+
+DEFINES *= \
+    MAUI_APP \
+    STATIC_MAUIKIT \
+    ANDROID_OPENSSL \
+    MAUIKIT_STYLE
+
+
+#REPO VARIABLES
+LUV_REPO = https://github.com/milohr/luv-icon-theme
+OPENSSL_REPO = https://github.com/mauikit/openssl
+ATTICA_REPO = https://github.com/mauikit/attica
+KQUICKSYNTAXHIGHLIGHTER_REPO = https://github.com/mauikit/kquicksyntaxhighlighter.git
+KSYNTAXHIGHLIGHTING_REPO = https://github.com/mauikit/KSyntaxHighlighting.git
+
+#ANDROID FILES VALUES
+ANDROID_FILES_DIR = $$_PRO_FILE_PWD_/android_files
+ANDROID_FILES_MANIFEST = $$_PRO_FILE_PWD_/android_files/AndroidManifest.xml
+ANDROID_FILES_GRADLE = $$_PRO_FILE_PWD_/android_files/build.gradle
+ANDROID_FILES_RES_DIR = $$_PRO_FILE_PWD_/android_files/res
 
 linux:unix:!android {
 
@@ -16,81 +36,169 @@ linux:unix:!android {
 } else:android {
 
     message(Building Maui helpers for Android)
-    include($$PWD/src/android/android.pri)    
-    include($$PWD/src/utils/editor/syntaxhighlighter.pri)
-    include($$PWD/src/utils/syncing/openssl/openssl.pri)
-    include($$PWD/src/utils/syncing/libwebdavclient/webdavclient.pri)
-    include($$PWD/src/utils/store/attica/attica.pri)
-	
+
+    include($$PWD/src/android/android.pri)
+
+    contains(DEFINES, ANDROID_OPENSSL):{
+        exists($$PWD/src/utils/syncing/openssl/openssl.pri) {
+            message("Using OpenSSL for Android")
+            include($$PWD/src/utils/syncing/openssl/openssl.pri)
+        }else {
+             message("Getting OpenSSL for Android")
+             system(git clone $$OPENSSL_REPO $$PWD/src/utils/syncing/openssl)
+            include($$PWD/src/utils/syncing/openssl/openssl.pri)
+        }
+    }
+
+    contains(DEFINES, COMPONENT_EDITOR):{
+        include($$PWD/src/utils/editor/syntaxhighlighter.pri)
+    }
+
+    contains(DEFINES, COMPONENT_STORE):{
+        exists($$PWD/src/utils/store/attica/attica.pri):{
+            message("Using Attica for Android")
+            include($$PWD/src/utils/store/attica/attica.pri)
+        }else {
+             message("Getting Attica for Android")
+             system(git clone $$ATTICA_REPO $$PWD/src/utils/store/attica)
+            include($$PWD/src/utils/store/attica/attica.pri)
+        }
+    }
+
+    contains(DEFINES, COMPONENT_SYNCING):{
+        include($$PWD/src/utils/syncing/libwebdavclient/webdavclient.pri)
+    }
+
 } else {
     message("Unknown configuration")
 }
 
-include($$PWD/src/utils/tagging/tagging.pri)
+contains(DEFINES, COMPONENT_TAGGING):{
+    message("INCLUDING TAGGING COMPONENT")
+    include($$PWD/src/utils/tagging/tagging.pri)
+} else {
+    warning("SKIPPING TAGGING COMPONENT")
+}
+
+contains(DEFINES, COMPONENT_EDITOR):{
+    message("INCLUDING EDITOR COMPONENT")
+
+    HEADERS += \
+        $$PWD/src/utils/editor/documenthandler.h \
+        $$PWD/src/utils/editor/syntaxhighlighterutil.h
+    
+    SOURCES += \
+        $$PWD/src/utils//editor/documenthandler.cpp \
+        $$PWD/src/utils/editor/syntaxhighlighterutil.cpp
+    
+    INCLUDEPATH += $$PWD/src/utils/editor
+} else {
+    warning("SKIPPING EDITOR COMPONENT")
+}
+
+contains(DEFINES, COMPONENT_STORE):{
+    message("INCLUDING STORE COMPONENT")
+
+    HEADERS += \
+        $$PWD/src/utils/store/store.h \
+        $$PWD/src/utils/store/storemodel.h \
+        $$PWD/src/utils/store/storelist.h
+
+    SOURCES += \
+        $$PWD/src/utils/store/store.cpp \
+        $$PWD/src/utils/store/storemodel.cpp \
+        $$PWD/src/utils/store/storelist.cpp
+
+    RESOURCES += $$PWD/src/utils/store/store.qrc
+
+    INCLUDEPATH += $$PWD/src/utils/store
+} else {
+    warning("SKIPPING STORE COMPONENT")
+}
+
+contains(DEFINES, COMPONENT_SYNCING):{
+    message("INCLUDING SYNCING COMPONENT")
+
+    HEADERS += $$PWD/src/utils/syncing/syncing.h
+    SOURCES += $$PWD/src/utils/syncing/syncing.cpp
+    INCLUDEPATH += $$PWD/src/utils/syncing
+} else {
+    warning("SKIPPING SYNCING COMPONENT")
+}
+
+contains(DEFINES, COMPONENT_ACCOUNTS):{
+    message("INCLUDING ACCOUNTS COMPONENT")
+    QT += sql
+    HEADERS +=  \
+        $$PWD/src/utils/accounts/mauiaccounts.h \
+        $$PWD/src/utils/accounts/accountsdb.h \
+
+    SOURCES += \
+        $$PWD/src/utils/accounts/mauiaccounts.cpp\
+        $$PWD/src/utils/accounts/accountsdb.cpp
+
+    RESOURCES += $$PWD/src/utils/accounts/accounts.qrc
+    DISTFILES += $$PWD//src/utils/accounts/script.sql
+
+    INCLUDEPATH += $$PWD/src/utils/accounts
+    DEPENDPATH +=  $$PWD/src/utils/accounts
+
+} else {
+    warning("SKIPPING ACCOUNTS COMPONENT")
+}
+
+contains(DEFINES, COMPONENT_FM):{
+    message("INCLUDING FM COMPONENT")
+    HEADERS += \
+        $$PWD/src/fm/fm.h \
+        $$PWD/src/fm/fmlist.h \
+        $$PWD/src/fm/placeslist.h
+
+    SOURCES += \
+        $$PWD/src/fm/fm.cpp \
+        $$PWD/src/fm/fmlist.cpp \
+        $$PWD/src/fm/placeslist.cpp
+
+    INCLUDEPATH += $$PWD/src/fm
+    DEPENDPATH += $$PWD/src/fm
+} else {
+    warning("SKIPPING FM COMPONENT")
+}
 
 RESOURCES += \
     $$PWD/mauikit.qrc \
-    $$PWD/assets.qrc \
-    $$PWD/src/fm/fm.qrc \
-    $$PWD/src/utils/store/store.qrc \
+    $$PWD/assets.qrc \    
     $$PWD/maui-style/style.qrc
 
 HEADERS += \
+    $$PWD/src/utils/fmstatic.h \
     $$PWD/src/mauikit.h \
-    $$PWD/src/fm/fm.h \
-    $$PWD/src/fm/fmh.h \
-    $$PWD/src/fm/fmdb.h \
-    $$PWD/src/fm/fmlist.h \
-    $$PWD/src/fm/pathlist.h \
-    $$PWD/src/fm/placeslist.h \
+    $$PWD/src/utils/fmh.h \
     $$PWD/src/utils/model_template/mauimodel.h \
     $$PWD/src/utils/model_template/mauilist.h \
-    $$PWD/src/utils/editor/documenthandler.h \
-    $$PWD/src/utils/editor/syntaxhighlighterutil.h \
     $$PWD/src/utils/handy.h \
+    $$PWD/src/utils/utils.h \
     $$PWD/src/utils/mauiapp.h \
-    $$PWD/src/utils/mauiaccounts.h \
-    $$PWD/src/utils/syncing/syncing.h \
-    $$PWD/src/utils/store/store.h \
-    $$PWD/src/utils/store/storemodel.h \
-    $$PWD/src/utils/store/storelist.h
+    $$PWD/src/utils/models/pathlist.h
 
 SOURCES += \
+    $$PWD/src/utils/fmstatic.cpp \
     $$PWD/src/mauikit.cpp \
-    $$PWD/src/fm/fm.cpp \
-    $$PWD/src/fm/fmdb.cpp \
-    $$PWD/src/fm/fmlist.cpp \
-    $$PWD/src/fm/pathlist.cpp \
-    $$PWD/src/fm/placeslist.cpp \
     $$PWD/src/utils/model_template/mauimodel.cpp \
     $$PWD/src/utils/model_template/mauilist.cpp \
-    $$PWD/src/utils//editor/documenthandler.cpp \
-    $$PWD/src/utils/editor/syntaxhighlighterutil.cpp \
     $$PWD/src/utils/handy.cpp \
     $$PWD/src/utils/mauiapp.cpp \
-    $$PWD/src/utils/mauiaccounts.cpp \
-    $$PWD/src/utils/syncing/syncing.cpp \
-    $$PWD/src/utils/store/store.cpp \
-    $$PWD/src/utils/store/storemodel.cpp \
-    $$PWD/src/utils/store/storelist.cpp
+    $$PWD/src/utils/models/pathlist.cpp
 
 DEPENDPATH += \
     $$PWD/src \
-    $$PWD/src/fm \
     $$PWD/src/utils/model_template
 
 INCLUDEPATH += \
      $$PWD/src \
-     $$PWD/src/fm \
      $$PWD/src/utils \
-     $$PWD/src/utils/editor \
-     $$PWD/src/utils/syncing \
-     $$PWD/src/utils/model_template \
-     $$PWD/src/utils/store
-
-DEFINES += \
-    MAUI_APP \
-    STATIC_MAUIKIT
+     $$PWD/src/utils/models \
+     $$PWD/src/utils/model_template
 
 API_VER = 1.0
 
@@ -201,5 +309,3 @@ DISTFILES += \
 #LIBS += -L$$PWD/libs/bin/ -lKF5ConfigCore
 #INCLUDEPATH += $$PWD/libs/includes/KConfigCore
 #DEPENDPATH += $$PWD/libs/includes/KConfigCore
-
-

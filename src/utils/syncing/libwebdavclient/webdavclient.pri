@@ -1,6 +1,6 @@
 VERSION = $$cat($$PWD/VERSION)
 
-QT += \
+QT *= \
   core \ 
   xml \
   network \

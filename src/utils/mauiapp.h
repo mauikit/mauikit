@@ -48,115 +48,54 @@ class MAUIKIT_EXPORT MauiApp : public QObject
 	Q_PROPERTY(QString donationPage READ getDonationPage WRITE setDonationPage NOTIFY donationPageChanged)
 	Q_PROPERTY(QString mauikitVersion READ getMauikitVersion CONSTANT)
 	Q_PROPERTY(QString qtVersion READ getQtVersion CONSTANT)
+    Q_PROPERTY(bool handleAccounts READ getHandleAccounts WRITE setHandleAccounts NOTIFY handleAccountsChanged)
+#ifdef COMPONENT_ACCOUNTS
 	Q_PROPERTY(MauiAccounts * accounts READ getAccounts CONSTANT FINAL)
-
+#endif
 
 public:  
     static MauiApp *qmlAttachedProperties(QObject *object);
     
 	static MauiApp *instance();
-	static QString getName() 
-	{
-		return Handy::appInfo().value(FMH::MODEL_NAME[FMH::MODEL_KEY::NAME]).toString();
-	}
+    static QString getName();
 	
-	static QString getVersion() 
-	{
-		return Handy::appInfo().value(FMH::MODEL_NAME[FMH::MODEL_KEY::VERSION]).toString();
-	}
+    static QString getVersion();
 	
-	static QString getOrg() 
-	{
-		return Handy::appInfo().value(FMH::MODEL_NAME[FMH::MODEL_KEY::ORG]).toString();
-	}
+    static QString getOrg();
 	
-	static QString getDomain() 
-	{
-		return Handy::appInfo().value(FMH::MODEL_NAME[FMH::MODEL_KEY::DOMAIN]).toString();
-	}
+    static QString getDomain();
 	
-	static QString getMauikitVersion() 
-	{
-		return Handy::appInfo().value("mauikit_version").toString();
-	}	
+    static QString getMauikitVersion();
 	
-	static QString getQtVersion() 
-	{
-		return Handy::appInfo().value("qt_version").toString();
-	}
+    static QString getQtVersion();
 	
-	QString getDescription() const
-	{
-		return description;
-	}
+    QString getDescription() const;
 	
-	void setDescription(const QString &value) 
-	{
-		if(description == value)
-			return;
-		
-		description = value;
-		emit this->descriptionChanged(description);
-	}
+    void setDescription(const QString &value);
 	
-	QString getIconName() const
-	{
-		return iconName;
-	}
+    QString getIconName() const;
 	
-	void setIconName(const QString &value) 
-	{
-		if(iconName == value)
-			return;
-		
-		iconName = value;
-		emit this->iconNameChanged(iconName);
-	}
+    void setIconName(const QString &value);
 	
-	QString getWebPage() const
-	{
-		return webPage;
-	}
+    QString getWebPage() const;
 	
-	void setWebPage(const QString &value) 
-	{
-		if(webPage == value)
-			return;
-		
-		webPage = value;
-		emit this->webPageChanged(webPage);
-	}
+    void setWebPage(const QString &value);
 	
-	QString getDonationPage() const
-	{
-		return donationPage;
-	}
+    QString getDonationPage() const;
 	
-	void setDonationPage(const QString &value) 
-	{
-		if(donationPage == value)
-			return;
-		
-		donationPage = value;
-		emit this->donationPageChanged(donationPage);
-	}
+    void setDonationPage(const QString &value);
 	
-	QString getReportPage() const
-	{
-		return reportPage;
-	}
+    QString getReportPage() const;
 	
-	void setReportPage(const QString &value) 
-	{
-		if(reportPage == value)
-			return;
-		
-		reportPage = value;
-		emit this->reportPageChanged(reportPage);
-	}
+    void setReportPage(const QString &value);
+
+    bool getHandleAccounts() const;
+    void setHandleAccounts(const bool &value);
 	
+#ifdef COMPONENT_ACCOUNTS
 	MauiAccounts *getAccounts() const;
-	
+#endif
+
 	~MauiApp();	
 	
 private:
@@ -170,14 +109,21 @@ private:
 	
 	QString webPage;
 	QString donationPage;
-	QString reportPage;
-	
+    QString reportPage;
+
+#ifdef COMPONENT_ACCOUNTS
+    bool handleAccounts = true;
+#else
+    bool handleAccounts = false;
+#endif
+
 signals:
 	void iconNameChanged(QString iconName);
 	void descriptionChanged(QString description);
 	void webPageChanged(QString webPage);
 	void donationPageChanged(QString donationPage);
 	void reportPageChanged(QString reportPage);
+    void handleAccountsChanged();
 };
 
 

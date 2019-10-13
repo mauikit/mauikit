@@ -24,6 +24,10 @@
 #include <QFileSystemWatcher>
 #include "utils.h"
 
+#ifdef COMPONENT_ACCOUNTS
+#include "mauiaccounts.h"
+#endif
+
 #ifdef Q_OS_ANDROID 
 #else
 #include <KFilePlacesModel>
@@ -53,11 +57,12 @@ watcher(new QFileSystemWatcher(this))
             this->list[index][FMH::MODEL_KEY::COUNT] = QString::number(count);
             emit this->updateModel(index, {FMH::MODEL_KEY::COUNT});
         }
-
     });
 
-    connect(fm, &FM::cloudAccountInserted, this, &PlacesList::reset);
-    connect(fm, &FM::cloudAccountRemoved, this, &PlacesList::reset);
+#ifdef COMPONENT_ACCOUNTS
+    connect(MauiAccounts::instance(), &MauiAccounts::accountAdded, this, &PlacesList::reset);
+    connect(MauiAccounts::instance(), &MauiAccounts::accountRemoved, this, &PlacesList::reset);
+#endif
 
     connect(this, &PlacesList::groupsChanged, this, &PlacesList::reset);
 
@@ -104,11 +109,11 @@ static FMH::MODEL_LIST getGroup(const KFilePlacesModel &model, const FMH::PATHTY
     switch(type)
     {
         case(FMH::PATHTYPE_KEY::PLACES_PATH):
-            res << FM::getDefaultPaths();
-            res<< FM::packItems(UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, "FileManager").toStringList(), FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]);
+            res << FMStatic::getDefaultPaths();
+            res<< FMStatic::packItems(UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, "FileManager").toStringList(), FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]);
             break;
         case(FMH::PATHTYPE_KEY::DRIVES_PATH):
-            res = FM::getDevices();
+            res = FMStatic::getDevices();
             break;
         default: break;
     }
@@ -182,9 +187,11 @@ void PlacesList::setList()
             this->list << this->fm->getTags();
             break;
 
+#ifdef COMPONENT_ACCOUNTS
         case FMH::PATHTYPE_KEY::CLOUD_PATH:
-            this->list << this->fm->getCloudAccounts();
+            this->list << MauiAccounts::instance()->getCloudAccounts();
             break;
+#endif
         }
 
     this->setCount();
@@ -196,7 +203,7 @@ void PlacesList::setCount()
     for(auto &data : this->list)
     {
         const auto path = data[FMH::MODEL_KEY::PATH];
-        if(FM::isDir(path))
+        if(FMStatic::isDir(path))
         {   
             data.insert(FMH::MODEL_KEY::COUNT, "0");
             const auto count = FMH::getFileInfoModel(path)[FMH::MODEL_KEY::COUNT];
@@ -244,7 +251,7 @@ QVariantMap PlacesList::get(const int& index) const
         return QVariantMap();
 
     const auto model = this->list.at(index);   
-    return FM::toMap(model);
+    return FMH::toMap(model);
 }
 
 void PlacesList::refresh()

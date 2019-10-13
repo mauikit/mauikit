@@ -24,31 +24,29 @@ import org.kde.mauikit 1.0 as Maui
 
 Maui.Dialog
 {
-	id: control
+    id: control
 
-	property bool customServer: false
+    property bool customServer: false
     acceptText: qsTr("Sign In")
     rejectText: qsTr("Cancel")
-	rejectButton.visible: false
-	
-	property alias serverField: serverField
-	property alias userField: userField
-	property alias passwordField: passwordField
-	
-    maxHeight: Maui.Style.unit * 300
-    maxWidth: maxHeight	
-	
+    rejectButton.visible: false
 
-		footBar.leftContent: ToolButton
-		{
-			icon.name: "filename-space-amarok"
-			// 		text: qsTr("Custom server")
-			checkable: true
-			checked: customServer
-			onClicked: customServer = !customServer
-		}		
-	
-	
+    property alias serverField: serverField
+    property alias userField: userField
+    property alias passwordField: passwordField
+
+    maxHeight: Maui.Style.unit * 300
+    maxWidth: maxHeight
+
+    footBar.leftContent: ToolButton
+    {
+        icon.name: "filename-space-amarok"
+        // 		text: qsTr("Custom server")
+        checkable: true
+        checked: customServer
+        onClicked: customServer = !customServer
+    }
+
     onRejected:	close()
 
     Item
@@ -62,19 +60,19 @@ Maui.Dialog
             
             Image
             {
-				visible: !customServer
-				Layout.alignment: Qt.AlignCenter
-				Layout.preferredWidth: width
-				Layout.preferredHeight: height
-				Layout.margins: Maui.Style.space.big
-				
-				width: Maui.Style.iconSizes.huge
-				height: width
-				sourceSize.width: width
-				sourceSize.height: height
-				
-				source: "qrc:/assets/opendesktop.png"
-			}
+                visible: !customServer
+                Layout.alignment: Qt.AlignCenter
+                Layout.preferredWidth: width
+                Layout.preferredHeight: height
+                Layout.margins: Maui.Style.space.big
+
+                width: Maui.Style.iconSizes.huge
+                height: width
+                sourceSize.width: width
+                sourceSize.height: height
+
+                source: "qrc:/assets/opendesktop.png"
+            }
             
             Maui.TextField
             {

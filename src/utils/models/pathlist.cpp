@@ -17,7 +17,6 @@
  */
 
 #include "pathlist.h"
-#include "fm.h"
 
 PathList::PathList(QObject *parent) : MauiList(parent)
 {
@@ -34,7 +33,7 @@ QVariantMap PathList::get(const int& index) const
 	}
 	
 	const auto model = this->list.at(index);	
-	return FM::toMap(model);
+    return FMH::toMap(model);
 }
 
 QString PathList::getPath() const
@@ -52,7 +51,7 @@ void PathList::setPath(const QString& path)
 	if(path == this->m_path)
 		return;	
 	
-	if(!this->list.isEmpty() && FM::parentDir(path) == this->m_path)
+    if(!this->list.isEmpty() && QUrl(this->m_path).isParentOf(path))
 	{
 		emit this->preItemAppended();
 		this->list << FMH::getDirInfoModel(path);
@@ -65,8 +64,7 @@ void PathList::setPath(const QString& path)
 	}	
 	
 	this->m_path = path;	
-	emit this->pathChanged();	
-	
+	emit this->pathChanged();		
 }
 
 FMH::MODEL_LIST PathList::splitPath(const QString& path)
@@ -80,11 +78,12 @@ FMH::MODEL_LIST PathList::splitPath(const QString& path)
 		__url = parts[1];
 		__scheme = parts[0];		
 	}
-
-	qDebug()<< "STRING TO SPLIT"<< __url << path << __scheme;
 	
 	const auto paths = __url.split("/", QString::SplitBehavior::SkipEmptyParts);
 	
+    qDebug()<< "STRING TO SPLIT"<< __url << path << __scheme << paths;
+
+
 	if(paths.isEmpty())
 	{
 		return {{{FMH::MODEL_KEY::LABEL, path}, {FMH::MODEL_KEY::PATH, path}}};
@@ -92,7 +91,7 @@ FMH::MODEL_LIST PathList::splitPath(const QString& path)
 	
 	return std::accumulate(paths.constBegin(), paths.constEnd(), FMH::MODEL_LIST(), [__scheme](FMH::MODEL_LIST &list, const QString &part) -> FMH::MODEL_LIST
 	{	
-		const auto url = list.isEmpty() ? QString(__scheme + (__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::PLACES_PATH] ? ":///" : "://")  +part) : list.last()[FMH::MODEL_KEY::PATH] + QString("/"+part);		
+        const auto url = list.isEmpty() ? QString(__scheme +  ":///" +part) : list.last()[FMH::MODEL_KEY::PATH] + QString("/"+part);
 		
 		if(!url.isEmpty())
 			list << FMH::MODEL 

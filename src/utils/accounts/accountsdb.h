@@ -1,5 +1,5 @@
-#ifndef FMDB_H
-#define FMDB_H
+#ifndef ACCOUNTSDB_H
+#define ACCOUNTSDB_H
 
 #include <QObject>
 
@@ -19,15 +19,7 @@
 
 #include "fmh.h"
 
-#ifndef STATIC_MAUIKIT
-#include "mauikit_export.h"
-#endif
-
-#ifdef STATIC_MAUIKIT
-class FMDB : public QObject
-#else
-class MAUIKIT_EXPORT FMDB : public QObject
-#endif
+class AccountsDB : public QObject
 {
     Q_OBJECT
 
@@ -37,25 +29,21 @@ private:
 
 public:
     /* utils*/
-    Q_INVOKABLE bool checkExistance(const QString &tableName, const QString &searchId, const QString &search);
-    Q_INVOKABLE bool checkExistance(const QString &queryStr);
-
-protected:
-    FMDB(QObject *parent = nullptr);
-    ~ FMDB();
-
+    explicit AccountsDB(QObject *parent = nullptr);
+    ~ AccountsDB();
+     bool checkExistance(const QString &tableName, const QString &searchId, const QString &search);
+     bool checkExistance(const QString &queryStr);
     QSqlQuery getQuery(const QString &queryTxt);
     void openDB(const QString &name);
     void prepareCollectionDB() const;
 
     bool insert(const QString &tableName, const QVariantMap &insertData);
-    bool update(const QString &tableName, const FMH::DB &updateData, const QVariantMap &where);
+    bool update(const QString &tableName, const FMH::MODEL &updateData, const QVariantMap &where);
     bool update(const QString &table, const QString &column, const QVariant &newValue, const QVariant &op, const QString &id);
-    bool remove(const QString &tableName, const FMH::DB &removeData);
+    bool remove(const QString &tableName, const FMH::MODEL &removeData);
 
 signals:
 
 public slots:
 };
-
-#endif // FMDB_H
+#endif // ACCOUNTSDB_H
