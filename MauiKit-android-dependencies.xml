@@ -1,0 +1,9 @@
+<rules>
+    <dependencies>
+        <lib name="MauiKit">
+            <depends>
+                <jar bundling="1" file="jar/MauiKit.aar"/>
+            </depends>
+        </lib>
+    </dependencies>
+</rules>
