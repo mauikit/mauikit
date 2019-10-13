@@ -19,7 +19,6 @@
 
 package com.kde.maui.tools;
 import android.util.Log;
-import org.qtproject.qt5.android.QtNative;
 import android.support.v4.content.FileProvider;
 import android.support.v4.app.ShareCompat;
 import android.app.Activity;
@@ -92,13 +91,13 @@ public class SendIntent
             return;
         }
 
-        Intent sendIntent = ShareCompat.IntentBuilder.from(QtNative.activity()).getIntent();
+        Intent sendIntent = ShareCompat.IntentBuilder.from(context).getIntent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
         System.out.println(mime);
         sendIntent.setType(mime);
 
-        if (sendIntent.resolveActivity(QtNative.activity().getPackageManager()) != null)
+        if (sendIntent.resolveActivity(context.getPackageManager()) != null)
         {
             context.startActivity(Intent.createChooser(sendIntent, "Share"));
         } else {

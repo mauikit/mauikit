@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 
 set(REQUIRED_QT_VERSION 5.10.0)
+set(REQUIRED_KF5_VERSION 5.60.0)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -16,7 +17,7 @@ project(mauikit VERSION ${MAUIKIT_VERSION})
 
 find_package(ECM 5.45.0 NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} 
-    ${ECM_KDE_MODULE_DIR})
+    ${ECM_KDE_MODULE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
 #DEFAULT COMPONENTS DEFINITIONS
 add_compile_definitions(
@@ -239,17 +240,17 @@ if(ANDROID OR IS_APPIMAGE_PACKAGE OR MAUIKIT_STYLE)
         )
 endif()
 
-find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets)
+find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets)
 
 if(MYDEFS MATCHES "^COMPONENT_EDITOR=ON" OR MYDEFS MATCHES ";COMPONENT_EDITOR=ON")
-    find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS SyntaxHighlighting)
+    find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS SyntaxHighlighting)
     set(COMPONENT_EDITOR_LIBS
         KF5::SyntaxHighlighting
         )        
 endif()
 
 if(MYDEFS MATCHES "^COMPONENT_STORE=ON" OR MYDEFS MATCHES ";COMPONENT_STORE=ON")
-    find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS Attica)
+    find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS Attica)
     set(COMPONENT_STORE_LIBS
         KF5::Attica
         )        
@@ -271,6 +272,8 @@ set(MAUIKDE_KF5LIBS
 )
 
 if(ANDROID)
+    find_package(Gradle REQUIRED)
+    add_subdirectory(src/android)
     find_package(Qt5 REQUIRED COMPONENTS AndroidExtras Xml WebView Network)    
     set(MAUIANDROID_LIBS
         Qt5::Xml
@@ -368,6 +371,8 @@ if (ANDROID)
     install(FILES src/android/mauiandroid.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit COMPONENT Devel)
     
     install(DIRECTORY src/android/ DESTINATION ${KDE_INSTALL_DATAROOTDIR}/MauiKitAndroid COMPONENT Devel)
+
+    install(FILES MauiKit-android-dependencies.xml DESTINATION ${KDE_INSTALL_LIBDIR})
 endif()
 
 generate_export_header(MauiKit BASE_NAME MauiKit)
