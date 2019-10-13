@@ -54,7 +54,9 @@
 		<file alias="PlacesSidebar.qml">src/controls/PlacesSidebar.qml</file>
 		<file alias="PlacesListBrowser.qml">src/controls/PlacesListBrowser.qml</file>
 		<file alias="Store.qml">src/controls/Store.qml</file>
-        <file alias="ImageViewer.qml">src/controls/ImageViewer.qml</file>
-        <file alias="private/StoreDelegate.qml">src/controls/private/StoreDelegate.qml</file>
+		<file alias="ImageViewer.qml">src/controls/ImageViewer.qml</file>
+		<file alias="TabBar.qml">src/controls/TabBar.qml</file>
+		<file alias="TabButton.qml">src/controls/TabButton.qml</file>
+		<file alias="private/StoreDelegate.qml">src/controls/private/StoreDelegate.qml</file>
     </qresource>
 </RCC>

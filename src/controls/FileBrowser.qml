@@ -638,123 +638,45 @@ Maui.Page
 		anchors.fill: parent
 		spacing: 0
 		
-		TabBar
+		Maui.TabBar
 		{
 			id: tabsBar
 			visible: _browserList.count > 1
 			Layout.fillWidth: true
-			Layout.preferredHeight: visible ? Maui.Style.rowHeight : 0
-			Kirigami.Theme.colorSet: Kirigami.Theme.View
-			Kirigami.Theme.inherit: false
-			
+			Layout.preferredHeight: tabsBar.implicitHeight
+			position: TabBar.Header	
 			currentIndex : _browserList.currentIndex
-			clip: true
 			
-			ListModel { id: tabsListModel }
-			
-			background: null
+			ListModel { id: tabsListModel }			
 			
 			Repeater
 			{
 				id: _repeater
 				model: tabsListModel
 				
-				TabButton
+				Maui.TabButton
 				{
 					id: _tabButton
-					readonly property int minTabWidth: 150 * Maui.Style.unit
+					implicitHeight: tabsBar.implicitHeight
 					implicitWidth: control.width / _repeater.count
-					implicitHeight: Maui.Style.rowHeight
 					checked: index === _browserList.currentIndex
+					
+					text: tabsObjectModel.get(index).currentFMList.pathName
 					
 					onClicked:
 					{
-						_browserList.currentIndex = index
-						
+						_browserList.currentIndex = index						
 						control.currentPath =  tabsObjectModel.get(index).path
 					}
 					
-					background: Rectangle
+					onCloseClicked:
 					{
-						color: "transparent"
-						
-						
-						Kirigami.Separator
-						{
-							z: tabsBar.z + 1
-							width: Maui.Style.unit
-							anchors
-							{
-								bottom: parent.bottom
-								top: parent.top
-								right: parent.right
-							}
-						}
-						
-						Kirigami.Separator
-						{
-							color: Kirigami.Theme.highlightColor
-							z: tabsBar.z + 1
-							height: Maui.Style.unit * 2
-							visible: checked
-							anchors
-							{
-								bottom: parent.bottom
-								left: parent.left
-								right: parent.right
-							}
-						}
-					}
-					
-					contentItem: RowLayout
-					{
-						spacing: 0
-						
-						Label
-						{
-							text: tabsObjectModel.get(index).currentFMList.pathName
-							font.pointSize: Maui.Style.fontSizes.default
-							Layout.fillWidth: true
-							Layout.fillHeight: true
-							Layout.margins: Maui.Style.space.small
-							Layout.alignment: Qt.AlignCenter
-							verticalAlignment: Qt.AlignVCenter
-							horizontalAlignment: Qt.AlignHCenter
-							color: checked ?  Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-							wrapMode: Text.NoWrap
-							elide: Text.ElideRight
-						}
-						
-						ToolButton
-						{
-							Layout.preferredHeight: Maui.Style.iconSizes.medium
-							Layout.preferredWidth: Maui.Style.iconSizes.medium
-							icon.height: Maui.Style.iconSizes.medium
-							icon.width: Maui.Style.iconSizes.width
-							Layout.margins: Maui.Style.space.medium
-							Layout.alignment: Qt.AlignRight
-							
-							icon.name: "dialog-close"
-							
-							onClicked:
-							{
-								const removedIndex = index
-								tabsObjectModel.remove(removedIndex)
-								tabsListModel.remove(removedIndex)
-							}
-						}
+						const removedIndex = index
+						tabsObjectModel.remove(removedIndex)
+						tabsListModel.remove(removedIndex)
 					}
 				}
 			}
-		}
-		
-		
-		Kirigami.Separator
-		{
-			visible: tabsBar.visible
-			color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-			Layout.fillWidth: true
-			Layout.preferredHeight: 1
 		}
 		
 		ListView
