@@ -31,7 +31,7 @@
 #include <QString>
 #include <QVariantList>
 
-class MAUIAndroid : public QObject
+class Q_DECL_EXPORT MAUIAndroid : public QObject
 {
     Q_OBJECT
 public:
