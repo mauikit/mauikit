@@ -39,6 +39,7 @@ Item
 	signal pathChanged(string path)
 	signal homeClicked()
 	signal placeClicked(string path)
+	signal placeRightClicked(string path)
 	
 	onUrlChanged: append()
 	
@@ -48,9 +49,7 @@ Item
 	Rectangle
 	{
 		id: pathBarBG
-		anchors.fill: parent
-		
-		//         z: -1
+		anchors.fill: parent		
 		color: pathEntry ? Kirigami.Theme.backgroundColor : Kirigami.Theme.backgroundColor
 		radius: Maui.Style.radiusV
 		opacity: 1
@@ -89,14 +88,11 @@ Item
 		Maui.TextField
 		{
 			id: entry
-			anchors.fill:  parent			
-			anchors.leftMargin: Maui.Style.contentMargins
-			
+			anchors.fill: parent
 			text: control.url
 			
 			Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
 			Kirigami.Theme.backgroundColor: "transparent"
-			// 				Kirigami.Theme.borderColor: "transparent"
 			horizontalAlignment: Qt.AlignLeft
 			onAccepted:
 			{
@@ -131,22 +127,27 @@ Item
 			property alias listView: _listView            
             spacing: 0
 
-			Item
+            MouseArea
 			{
-				Layout.fillHeight: true
-				Layout.leftMargin: Maui.Style.space.small
-				Layout.rightMargin: Maui.Style.space.small
-				Layout.preferredWidth: Maui.Style.iconSizes.medium
+				Layout.fillHeight: true	
+				Layout.preferredWidth: control.height
+				onClicked: control.homeClicked()					
+				hoverEnabled: true
 				
-				ToolButton
+				Rectangle
 				{
-					anchors.centerIn: parent
-					icon.name: Kirigami.Settings.isMobile ?  "user-home-sidebar" : "user-home"
-					flat: true
-					icon.color: control.Kirigami.Theme.textColor   
-					icon.width: Maui.Style.iconSizes.medium
-					onClicked: control.homeClicked()
-				}
+					anchors.fill: parent
+					radius: Maui.Style.radiusV
+					color: parent.containsMouse ?  Qt.rgba(Kirigami.Theme.highlightColor.r, Kirigami.Theme.highlightColor.g, Kirigami.Theme.highlightColor.b, 0.2)  : "transparent"
+					Kirigami.Icon
+					{
+						anchors.centerIn: parent
+						source: Kirigami.Settings.isMobile ?  "user-home-sidebar" : "user-home"					
+						color: control.Kirigami.Theme.textColor   
+						width: Maui.Style.iconSizes.medium
+						height: width
+					}
+				}				
 			}
 			
 			Kirigami.Separator
@@ -175,15 +176,27 @@ Item
 				delegate: PathBarDelegate
 				{
 					id: delegate
-					height: control.height - (Maui.Style.unit*2)
+					height: parent.height
 					width: Math.max(Maui.Style.iconSizes.medium * 2, implicitWidth)
 					Connections
 					{
 						target: delegate
 						onClicked:
 						{
-							_listView.currentIndex = index
-							placeClicked(_pathList.get(index).path)
+								listView.currentIndex = index
+								control.placeClicked(_pathList.get(index).path)
+							
+						}
+						
+						onRightClicked:
+						{
+							control.placeRightClicked(_pathList.get(index).path)
+							
+						}
+						
+						onPressAndHold:
+						{
+							control.placeRightClicked(_pathList.get(index).path)							
 						}
 					}
 				}
@@ -196,20 +209,27 @@ Item
 				}				
 			}
 			
-			Item
+			MouseArea
 			{
-				Layout.fillHeight: true
-				Layout.leftMargin: Maui.Style.space.small
-				Layout.rightMargin: Maui.Style.space.small
-				Layout.preferredWidth: Maui.Style.iconSizes.medium
-				ToolButton
+				Layout.fillHeight: true				
+				Layout.preferredWidth: control.height
+				onClicked: control.showEntryBar()
+				hoverEnabled: true
+				
+				Rectangle
 				{
-					anchors.centerIn: parent
-					flat: true
-					icon.name: "filename-space-amarok"
-					icon.color: control.Kirigami.Theme.textColor                
-					onClicked: showEntryBar()
-				}
+					anchors.fill: parent
+					radius: Maui.Style.radiusV
+					color: parent.containsMouse ?  Qt.rgba(Kirigami.Theme.highlightColor.r, Kirigami.Theme.highlightColor.g, Kirigami.Theme.highlightColor.b, 0.2)  : "transparent"
+					Kirigami.Icon
+					{
+						anchors.centerIn: parent
+						source: "filename-space-amarok"					
+						color: control.Kirigami.Theme.textColor   
+						width: Maui.Style.iconSizes.medium
+						height: width
+					}
+				}				
 			}
 		}
 	}

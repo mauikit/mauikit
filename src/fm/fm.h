@@ -41,9 +41,11 @@ public:
 	
 	FMH::MODEL_LIST getTags(const int &limit = 5);	
 	FMH::MODEL_LIST getTagContent(const QString &tag);
+	FMH::MODEL_LIST getUrlTags(const QUrl &url);
+	bool urlTagExists(const QUrl& url, const QString tag);
 	bool addTagToUrl(const QString tag, const QUrl &url);
-//     FMH::MODEL_LIST getBookmarks();
-
+	bool removeTagToUrl(const QString tag, const QUrl &url);
+	
     /** Syncing **/
     bool getCloudServerContent(const QUrl &server, const QStringList &filters= QStringList(), const int &depth = 0);
 	Q_INVOKABLE void createCloudDir(const QString &path, const QString &name);
@@ -59,7 +61,6 @@ private:
 	#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)	
 	KCoreDirLister *dirLister;
 	#endif
-	QVariantList get(const QString &queryTxt);	
 
 signals:
     void cloudServerContentReady(FMH::MODEL_LIST list, const QUrl &url);

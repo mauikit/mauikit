@@ -41,7 +41,6 @@ Maui.Dialog
     footBar.leftContent: ToolButton
     {
         icon.name: "filename-space-amarok"
-        // 		text: qsTr("Custom server")
         checkable: true
         checked: customServer
         onClicked: customServer = !customServer

@@ -82,7 +82,6 @@ FM::FM(QObject *parent) : QObject(parent)
         FMH::MODEL_LIST content;
         for(const auto &kfile : dirLister->items())
         {
-            qDebug() << kfile.url() << kfile.name() << kfile.isDir();
             content << FMH::MODEL{ {FMH::MODEL_KEY::LABEL, kfile.name()},
             {FMH::MODEL_KEY::NAME, kfile.name()},
             {FMH::MODEL_KEY::DATE, kfile.time(KFileItem::FileTimes::CreationTime).toString(Qt::TextDate)},
@@ -103,8 +102,9 @@ FM::FM(QObject *parent) : QObject(parent)
             {FMH::MODEL_KEY::ICON, kfile.iconName()},
             {FMH::MODEL_KEY::SIZE, QString::number(kfile.size())},
             {FMH::MODEL_KEY::THUMBNAIL, kfile.mostLocalUrl().toString()},
-            {FMH::MODEL_KEY::OWNER, kfile.user()},
-            {FMH::MODEL_KEY::COUNT, kfile.isLocalFile() && kfile.isDir() ?  QString::number(QDir(kfile.localPath()).count() - 2) : "0"}
+			{FMH::MODEL_KEY::OWNER, kfile.user()},
+// 			{FMH::MODEL_KEY::FAVORITE, QVariant(this->urlTagExists(kfile.mostLocalUrl().toString(), "fav")).toString()},
+			{FMH::MODEL_KEY::COUNT, kfile.isLocalFile() && kfile.isDir() ?  QString::number(QDir(kfile.localPath()).count() - 2) : "0"}
         };
         }
 
@@ -384,11 +384,34 @@ FMH::MODEL_LIST FM::getTagContent(const QString &tag)
     return content;
 }
 
+FMH::MODEL_LIST FM::getUrlTags(const QUrl &url)
+{
+	FMH::MODEL_LIST content;
+	#ifdef COMPONENT_TAGGING
+	content = FMH::toModelList(this->tag->getUrlTags(url.toString(), false));
+	#endif
+	return content;
+}
+
+bool FM::urlTagExists(const QUrl& url, const QString tag)
+{
+	#ifdef COMPONENT_TAGGING
+	return this->tag->urlTagExists(url.toString(), tag, false);
+	#endif
+}
+
 bool FM::addTagToUrl(const QString tag, const QUrl& url)
 {
 #ifdef COMPONENT_TAGGING
     return this->tag->tagUrl(url.toString(), tag);
 #endif
+}
+
+bool FM::removeTagToUrl(const QString tag, const QUrl& url)
+{
+	#ifdef COMPONENT_TAGGING
+	return this->tag->removeUrlTag(url.toString(), tag);
+	#endif
 }
 
 bool FM::cut(const QVariantList &data, const QUrl &where)

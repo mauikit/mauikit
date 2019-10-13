@@ -1,19 +1,20 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.6 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
 ItemDelegate
 {
     id: control
     property bool isCurrentListItem : ListView.isCurrentItem
-    property color labelColor : Kirigami.Theme.textColor
-    anchors.verticalCenter: parent.verticalCenter
     implicitWidth: _label.implicitWidth + Maui.Style.space.big
+    
+    hoverEnabled: true
+    
     background: Rectangle
     {
-		color: isCurrentListItem ? Qt.rgba(Kirigami.Theme.highlightColor.r, Kirigami.Theme.highlightColor.g, Kirigami.Theme.highlightColor.b, 0.2)  : "transparent"
+		color: isCurrentListItem || hovered ? Qt.rgba(Kirigami.Theme.highlightColor.r, Kirigami.Theme.highlightColor.g, Kirigami.Theme.highlightColor.b, 0.2)  : "transparent"
         
         Kirigami.Separator
         {
@@ -26,6 +27,25 @@ ItemDelegate
             color: pathBarBG.border.color
         }
     }
+    
+    signal rightClicked()
+    
+    MouseArea
+    {
+		id: _mouseArea
+		anchors.fill: parent
+		acceptedButtons:  Qt.RightButton | Qt.LeftButton	
+		onClicked:
+		{
+			if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
+				control.rightClicked()
+				else
+					control.clicked()
+		}
+		
+		onDoubleClicked: control.doubleClicked()	
+		onPressAndHold : control.pressAndHold()
+	}
 
     Label
     {
@@ -38,8 +58,6 @@ ItemDelegate
         verticalAlignment:  Qt.AlignVCenter
         elide: Qt.ElideRight
         font.pointSize: Maui.Style.fontSizes.default
-        color: labelColor
-    }
-    
-    
+        color: Kirigami.Theme.textColor
+    }    
 }

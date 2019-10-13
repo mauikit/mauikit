@@ -45,6 +45,10 @@
 #include <KFilePlacesModel>
 #endif
 
+// #ifdef COMPONENT_TAGGING
+// #include "tagging.h"
+// #endif
+
 namespace FMH
 {	
 inline bool isAndroid()
@@ -528,6 +532,17 @@ static const inline FMH::MODEL toModel(const QVariantMap& map)
     return model;
 }
 
+static const inline FMH::MODEL_LIST toModelList(const QVariantList& list)
+{
+	FMH::MODEL_LIST res;
+	
+	for(const auto &data : list)	
+		res << FMH::toModel(data.toMap());
+		
+	return res;
+}
+
+
 static const inline FMH::MODEL filterModel(const FMH::MODEL &model, const QVector<FMH::MODEL_KEY> &keys)
 {
     FMH::MODEL res;
@@ -538,6 +553,16 @@ static const inline FMH::MODEL filterModel(const FMH::MODEL &model, const QVecto
     }
 
     return res;
+}
+
+static const inline QStringList modelToList(const FMH::MODEL &model, const FMH::MODEL_KEY &key)
+{
+	QStringList res;
+	for(const auto &item : model)
+		if(item.contains(key))
+			res << item[key];
+		
+	return res;
 }
 
 struct PATH_CONTENT
@@ -851,14 +876,14 @@ inline QString getMime(const QUrl &path)
 
 inline FMH::MODEL getFileInfoModel(const QUrl &path)
 {
-
+	FMH::MODEL res;
 #ifdef Q_OS_ANDROID		
     const QFileInfo file(path.toLocalFile());
     if(!file.exists())
         return FMH::MODEL();
 
     const auto mime = FMH::getMime(path);
-    return FMH::MODEL
+    res = FMH::MODEL
     {
         {FMH::MODEL_KEY::GROUP, file.group()},
         {FMH::MODEL_KEY::OWNER, file.owner()},
@@ -887,7 +912,7 @@ inline FMH::MODEL getFileInfoModel(const QUrl &path)
 #else
     KFileItem kfile(path, KFileItem::MimeTypeDetermination::NormalMimeTypeDetermination);
 
-    return FMH::MODEL
+    res = FMH::MODEL
     {
         {FMH::MODEL_KEY::LABEL, kfile.name()},
         {FMH::MODEL_KEY::NAME, kfile.name()},
@@ -913,6 +938,13 @@ inline FMH::MODEL getFileInfoModel(const QUrl &path)
         {FMH::MODEL_KEY::COUNT, kfile.isLocalFile() && kfile.isDir() ?  QString::number(QDir(kfile.localPath()).count() - 2) : "0"}
         };
 #endif
+		
+// #ifdef COMPONENT_TAGGING
+// 		const auto _tag = Tagging::getInstance();
+// 		res[FMH::MODEL_KEY::FAVORITE] =  QVariant(_tag->urlTagExists(kfile.mostLocalUrl().toString(), "fav")).toString();
+// #endif
+		
+		return res;
         }
 
         inline QVariantMap getFileInfo(const QUrl &path)

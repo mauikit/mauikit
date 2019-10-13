@@ -13,6 +13,7 @@ Menu
 	property int index : -1
 	property bool isDir : false
 	property bool isExec : false
+	property bool isFav: false
 	
 	signal bookmarkClicked(var item)
 	signal removeClicked(var item)
@@ -31,6 +32,16 @@ Menu
 			addToSelection(currentFMList.get(index))
             if(Kirigami.Settings.isMobile)
                 selectionMode = true
+		}
+	}
+	
+	MenuItem
+	{
+		text: control.isFav ? qsTr("UnFav") : qsTr("Fav")
+		onTriggered:
+		{			
+			if(currentFMList.favItem(item.path))
+				control.isFav = !control.isFav
 		}
 	}
 	MenuSeparator{}
@@ -163,6 +174,7 @@ Menu
 			control.index = index
 			control.isDir = item.isdir == true || item.isdir == "true"
 			control.isExec = item.executable == true || item.executable == "true"
+			control.isFav = currentFMList.itemIsFav(item.path)
 			popup()
 		}
 	}

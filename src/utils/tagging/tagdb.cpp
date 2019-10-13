@@ -117,19 +117,13 @@ void TAGDB::prepareCollectionDB() const
 
 bool TAGDB::checkExistance(const QString &tableName, const QString &searchId, const QString &search)
 {
-    auto queryStr = QString("SELECT %1 FROM %2 WHERE %3 = \"%4\"").arg(searchId, tableName, searchId, search);
-    auto query = this->getQuery(queryStr);
-
-    if (query.exec())
-    {
-        if (query.next()) return true;
-    }else qDebug()<<query.lastError().text();
-
-    return false;
+    const auto queryStr = QString("SELECT %1 FROM %2 WHERE %3 = \"%4\"").arg(searchId, tableName, searchId, search);
+    return this->checkExistance(queryStr);
 }
 
 bool TAGDB::checkExistance(const QString &queryStr)
 {
+	qDebug()<< "CHECKIGN QUERY TAG" << queryStr;
     auto query = this->getQuery(queryStr);
 
     if (query.exec())

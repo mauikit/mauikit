@@ -118,7 +118,6 @@ Maui.Page
 			showPreviewThumbnails: showThumbnails
 			keepEmblemOverlay: selectionMode			
 			showDetailsInfo: true		
-			
 			BrowserHolder
 			{
 				id: _holder
@@ -298,6 +297,7 @@ Maui.Page
 					iconName: "link"
 					anchors.left: parent.left
 					anchors.bottom: parent.bottom
+					anchors.bottomMargin: Maui.Style.space.big
 					visible: (model.issymlink == true) || (model.issymlink == "true")
 				} 
 				

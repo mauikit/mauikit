@@ -86,7 +86,6 @@ class FMList : public MauiList
 	Q_PROPERTY(QUrl parentPath READ getParentPath)    
 	
 	public:
-		
 		enum SORTBY : uint_fast8_t
 		{
 			SIZE = FMH::MODEL_KEY::SIZE,
@@ -239,6 +238,9 @@ public slots:
 	void cutInto(const QVariantList &files);
 	
 	void setDirIcon(const int &index, const QString &iconName);
+	
+	bool itemIsFav(const QUrl &path);
+	bool favItem(const QUrl &path);
 	
 signals:
 	void pathChanged();

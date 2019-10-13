@@ -101,7 +101,7 @@ ItemDelegate
         id: _content
         anchors
         {
-            fill: parent
+            fill: control
             topMargin: control.topPadding
             bottomMargin: control.bottomPadding
             leftMargin: control.leftPadding

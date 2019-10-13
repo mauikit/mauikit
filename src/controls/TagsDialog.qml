@@ -20,6 +20,9 @@ Maui.Dialog
 	maxHeight: Maui.Style.unit * 500
 	page.padding: Maui.Style.space.medium
 	
+	acceptButton.text: qsTr("Add")
+	rejectButton.text: qsTr("Cancel")
+	
 	onAccepted: setTags()
 	onRejected: close()	
 	headBar.leftContent: ToolButton

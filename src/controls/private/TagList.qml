@@ -53,6 +53,12 @@ ListView
         id: delegate
         showDeleteIcon: control.showDeleteIcon
         Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
+        
+        ListView.onAdd:
+        {
+			control.positionViewAtEnd()
+		}
+        
         Connections
         {
             target: delegate

@@ -39,11 +39,11 @@ Maui.ToolBar
     signal tagClicked(string tag)
     signal tagsEdited(var tags)
 
-    Kirigami.Theme.backgroundColor: "transparent"
-    background: Rectangle
-    {
-        color: control.Kirigami.Theme.backgroundColor
-    }
+//     Kirigami.Theme.backgroundColor: "transparent"
+//     background: Rectangle
+//     {
+//         color: control.Kirigami.Theme.backgroundColor
+//     }
 
     leftContent: ToolButton
     {
