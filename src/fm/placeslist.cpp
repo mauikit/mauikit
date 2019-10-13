@@ -57,11 +57,12 @@ watcher(new QFileSystemWatcher(this))
             this->list[index][FMH::MODEL_KEY::COUNT] = QString::number(count);
             emit this->updateModel(index, {FMH::MODEL_KEY::COUNT});
         }
-
     });
 
-    connect(fm, &FM::cloudAccountInserted, this, &PlacesList::reset);
-    connect(fm, &FM::cloudAccountRemoved, this, &PlacesList::reset);
+#ifdef COMPONENT_ACCOUNTS
+    connect(MauiAccounts::instance(), &MauiAccounts::accountAdded, this, &PlacesList::reset);
+    connect(MauiAccounts::instance(), &MauiAccounts::accountRemoved, this, &PlacesList::reset);
+#endif
 
     connect(this, &PlacesList::groupsChanged, this, &PlacesList::reset);
 
@@ -108,11 +109,11 @@ static FMH::MODEL_LIST getGroup(const KFilePlacesModel &model, const FMH::PATHTY
     switch(type)
     {
         case(FMH::PATHTYPE_KEY::PLACES_PATH):
-            res << FM_STATIC::getDefaultPaths();
-            res<< FM_STATIC::packItems(UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, "FileManager").toStringList(), FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]);
+            res << FMStatic::getDefaultPaths();
+            res<< FMStatic::packItems(UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, "FileManager").toStringList(), FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]);
             break;
         case(FMH::PATHTYPE_KEY::DRIVES_PATH):
-            res = FM_STATIC::getDevices();
+            res = FMStatic::getDevices();
             break;
         default: break;
     }
@@ -202,7 +203,7 @@ void PlacesList::setCount()
     for(auto &data : this->list)
     {
         const auto path = data[FMH::MODEL_KEY::PATH];
-        if(FM_STATIC::isDir(path))
+        if(FMStatic::isDir(path))
         {   
             data.insert(FMH::MODEL_KEY::COUNT, "0");
             const auto count = FMH::getFileInfoModel(path)[FMH::MODEL_KEY::COUNT];

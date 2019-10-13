@@ -544,7 +544,7 @@ void FMList::createDir(const QString& name)
 #endif
     }else
 	{
-        FM_STATIC::createDir(this->path, name);
+        FMStatic::createDir(this->path, name);
 	}
 }
 
@@ -570,7 +570,7 @@ void FMList::setDirIcon(const int &index, const QString &iconName)
 	
 	const auto path = QUrl(this->list.at(index)[FMH::MODEL_KEY::PATH]);
 	
-    if(!FM_STATIC::isDir(path))
+    if(!FMStatic::isDir(path))
 		return;	
 
 	FMH::setDirConf(path.toString()+"/.directory", "Desktop Entry", "Icon", iconName);
@@ -584,7 +584,7 @@ QUrl FMList::getParentPath()
 	switch(this->pathType)
 	{		
 		case FMList::PATHTYPE::PLACES_PATH:
-            return FM_STATIC::parentDir(this->path).toString();
+            return FMStatic::parentDir(this->path).toString();
 		default:
 			return this->getPreviousPath();
 	}	
@@ -710,7 +710,7 @@ void FMList::search(const QString& query, const QUrl &path, const bool &hidden, 
 	{		
 		FMH::PATH_CONTENT res;
 		res.path = path.toString();				
-        res.content = FM_STATIC::search(query, path, hidden, onlyDirs, filters);
+        res.content = FMStatic::search(query, path, hidden, onlyDirs, filters);
 		return res;
 	});
     watcher->setFuture(t1);

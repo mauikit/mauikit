@@ -171,6 +171,7 @@ RESOURCES += \
     $$PWD/maui-style/style.qrc
 
 HEADERS += \
+    $$PWD/src/fm/fmstatic.h \
     $$PWD/src/mauikit.h \
     $$PWD/src/utils/fmh.h \
     $$PWD/src/utils/model_template/mauimodel.h \
@@ -181,6 +182,7 @@ HEADERS += \
     $$PWD/src/utils/models/pathlist.h
 
 SOURCES += \
+    $$PWD/src/fm/fmstatic.cpp \
     $$PWD/src/mauikit.cpp \
     $$PWD/src/utils/model_template/mauimodel.cpp \
     $$PWD/src/utils/model_template/mauilist.cpp \

@@ -278,13 +278,7 @@ Kirigami.AbstractApplicationWindow
     Loader
     {
         id: _accountsDialogLoader
-        sourceComponent: Maui.App.handleAccounts ? _accountsDialogComponent : undefined
-    }
-
-    Component
-    {
-        id: _accountsDialogComponent
-        AccountsHelper {}
+        source: Maui.App.handleAccounts ? "private/AccountsHelper.qml" : undefined
     }
 
     Maui.Dialog

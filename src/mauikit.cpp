@@ -26,6 +26,7 @@
 #include "mauilist.h"
 #include "pathlist.h"
 #include "mauiapp.h"
+#include "fmstatic.h"
 
 #ifdef COMPONENT_ACCOUNTS
 #include "mauiaccounts.h"
@@ -129,11 +130,11 @@ void MauiKit::registerTypes(const char *uri)
 #ifdef COMPONENT_FM
     qmlRegisterType<PlacesList>(uri, 1, 0, "PlacesList");
     qmlRegisterType<FMList>(uri, 1, 0, "FMList");
-    qmlRegisterSingletonType<FM_STATIC>(uri, 1, 0, "FM",
+    qmlRegisterSingletonType<FMStatic>(uri, 1, 0, "FM",
                                         [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject* {
         Q_UNUSED(engine)
         Q_UNUSED(scriptEngine)
-        return new FM_STATIC;
+        return new FMStatic;
     });
     //     qmlRegisterSingletonType(componentUrl(QStringLiteral("private/FileBrowser.qml")), uri, 1, 0, "FileMenu");
     qmlRegisterType(componentUrl(QStringLiteral("FileBrowser.qml")), uri, 1, 0, "FileBrowser");
