@@ -870,6 +870,7 @@ Maui.Page
 	function setPath(path)
 	{
 		control.currentPath = path
+		console.log("SETTING PATH")
 	}
 	
 	function populate(path)

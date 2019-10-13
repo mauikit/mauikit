@@ -3,15 +3,13 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
-import QtGraphicalEffects 1.0
 
 ItemDelegate
-{
-	
+{	
 	id: control
 	
 	property int tagWidth: Math.max(Maui.Style.iconSizes.medium * 5, tagLabel.implicitWidth + _closeIcon.width)
-	property int tagHeight: Maui.Style.rowHeight
+	property int tagHeight: Maui.Style.rowHeightAlt
 	property bool showDeleteIcon: true
 	
 	signal removeTag(int index)
@@ -28,22 +26,10 @@ ItemDelegate
 	background: Rectangle
 	{
 		radius: Maui.Style.radiusV
-		color: Qt.darker(Kirigami.Theme.backgroundColor)
+		color: Kirigami.Theme.backgroundColor
 		width: tagWidth
 		height: tagHeight	
-	}
-	
-	DropShadow
-	{
-		anchors.fill: parent
-		cached: true
-		horizontalOffset: 0
-		verticalOffset: 0
-		radius: 8.0
-		samples: 16
-		color: Qt.darker(Kirigami.Theme.backgroundColor)
-		smooth: true
-		source: background
+		border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))		
 	}
 	
 	RowLayout
@@ -83,8 +69,7 @@ ItemDelegate
 				height: Maui.Style.iconSizes.small
 				width: height				
 				color: Kirigami.Theme.textColor
-			}
-			
+			}			
 		}
 	}
 }
