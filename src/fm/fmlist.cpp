@@ -163,7 +163,6 @@ void FMList::setList()
             } 
             break;//ASYNC
         }
-
 	}
 }
 
