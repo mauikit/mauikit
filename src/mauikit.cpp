@@ -55,6 +55,7 @@
 #ifdef STATIC_MAUIKIT
 #include "kquicksyntaxhighlighter/kquicksyntaxhighlighter.h"
 #endif
+
 #endif
 
 #ifdef Q_OS_ANDROID
@@ -144,13 +145,17 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("FilePreviewer.qml")), uri, 1, 0, "FilePreviewer");
     qmlRegisterType(componentUrl(QStringLiteral("FileDialog.qml")), uri, 1, 0, "FileDialog");
 #endif
-
+	
+#ifdef COMPONENT_EDITOR	
     /** EDITOR CONTROLS **/
     qmlRegisterType<DocumentHandler>(uri, 1, 0, "DocumentHandler");
     qmlRegisterType<SyntaxHighlighterUtil>();
     qmlRegisterType(componentUrl(QStringLiteral("Editor.qml")), uri, 1, 0, "Editor");
+	
 #ifdef STATIC_MAUIKIT
     qmlRegisterType<KQuickSyntaxHighlighter>("org.kde.kquicksyntaxhighlighter", 0, 1, "KQuickSyntaxHighlighter");
+#endif
+	
 #endif
 
     /** PLATFORMS SPECIFIC CONTROLS **/
