@@ -62,6 +62,7 @@ Kirigami.ScrollablePage
     
     signal areaClicked(var mouse)
     signal areaRightClicked()   
+	signal keyPress(var key)
 	
    spacing: 0
    focus: true
@@ -73,6 +74,12 @@ Kirigami.ScrollablePage
 	topPadding: padding
 	bottomPadding: padding
 	
+	onKeyPress:
+	{
+		if(key == Qt.Key_Return)
+			control.itemClicked(currentIndex)		
+	}
+	
     ListView
     {	
 		id: _listView
@@ -83,10 +90,13 @@ Kirigami.ScrollablePage
         snapMode: ListView.NoSnap
         boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
 		
-        keyNavigationEnabled: true
         interactive: Kirigami.Settings.isMobile
         highlightFollowsCurrentItem: true
         highlightMoveDuration: 0
+        
+        keyNavigationEnabled : bool
+        keyNavigationWraps : bool
+        Keys.onPressed: control.keyPress(event.key) 		
 
 		Maui.Holder
 		{
@@ -157,7 +167,11 @@ Kirigami.ScrollablePage
             anchors.fill: parent
             z: -1
             acceptedButtons:  Qt.RightButton | Qt.LeftButton
-            onClicked: control.areaClicked(mouse)
+            onClicked: 
+            {
+				control.forceActiveFocus()				
+				control.areaClicked(mouse)
+			}
             onPressAndHold: control.areaRightClicked()
         }
     }  

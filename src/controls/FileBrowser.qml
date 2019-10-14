@@ -343,6 +343,22 @@ Maui.Page
 	{
 		target: browserView.currentView
 		
+		onKeyPress:
+		{
+			if(key == Qt.Key_S)
+			{
+				const item = control.currentFMList.get(browserView.currentView.currentIndex)
+				
+				if(control.selectionBar && control.selectionBar.contains(item.path))
+				{
+					control.selectionBar.removeAtPath(item.path)
+				}else
+				{
+					control.addToSelection(item)				
+				}
+			}
+		}
+		
 		onItemClicked:
 		{
 			console.log("item clicked connections:", index)
@@ -741,6 +757,7 @@ Maui.Page
 		openTab(Maui.FM.homePath())
 		// 		browserView.viewType = control.viewType
 		control.setSettings()
+		_browserList.forceActiveFocus()
 	}
 	
 	onThumbnailsSizeChanged:

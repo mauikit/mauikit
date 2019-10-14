@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 2.2
+import QtQuick 2.9
+import QtQuick.Controls 2.10
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
@@ -38,12 +38,17 @@ Maui.GridView
 	property bool showPreviewThumbnails: true
 	
 	signal itemClicked(int index)
-	signal itemDoubleClicked(int index)
-	
+	signal itemDoubleClicked(int index)	
 	signal rightEmblemClicked(int index)
-	signal leftEmblemClicked(int index)
-	
+	signal leftEmblemClicked(int index)	
 	signal itemRightClicked(int index)
+	
+	onKeyPress:
+	{
+		console.log(Qt.Key_S, Qt.Key_P)
+		if(key == Qt.Key_Return)
+			control.itemClicked(currentIndex)		
+	}
 	
 	delegate: Maui.GridBrowserDelegate
 	{

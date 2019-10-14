@@ -20,7 +20,8 @@ Maui.Page
 	
 	function setCurrentFMList()
 	{
-		control.currentFMList = currentView.currentFMList	
+		control.currentFMList = currentView.currentFMList
+		currentView.forceActiveFocus()
 	}
 	
 	Menu
