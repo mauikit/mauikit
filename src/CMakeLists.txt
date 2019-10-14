@@ -52,6 +52,7 @@ if(${COMPONENT_ACCOUNTS})
         utils/accounts/accountsdb.h
         )
     qt5_add_resources(accounts_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/utils/accounts/accounts.qrc)
+    add_compile_definitions(COMPONENT_ACCOUNTS)
 endif()
 
 if(${COMPONENT_EDITOR})
@@ -70,6 +71,7 @@ if(${COMPONENT_EDITOR})
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/editor
         ${CMAKE_CURRENT_BINARY_DIR}/utils/editor
         )
+    add_compile_definitions(COMPONENT_EDITOR)
 endif()
 
 if(${COMPONENT_FM})
@@ -90,6 +92,7 @@ if(${COMPONENT_FM})
         ${CMAKE_CURRENT_SOURCE_DIR}/fm
         ${CMAKE_CURRENT_BINARY_DIR}/fm
         )
+    add_compile_definitions(COMPONENT_FM)
 endif()
 
 if(${COMPONENT_TAGGING})
@@ -113,6 +116,7 @@ if(${COMPONENT_TAGGING})
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/tagging
         ${CMAKE_CURRENT_BINARY_DIR}/utils/tagging
         )
+    add_compile_definitions(COMPONENT_TAGGING)
 endif()
 
 if(${COMPONENT_SYNCING})
@@ -143,6 +147,7 @@ if(${COMPONENT_SYNCING})
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/syncing/libwebdavclient/lib/utils
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/syncing/libwebdavclient/lib/dto
         )
+    add_compile_definitions(COMPONENT_SYNCING)
 endif()
 
 if(${COMPONENT_STORE})
@@ -165,6 +170,7 @@ if(${COMPONENT_STORE})
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/store
         ${CMAKE_CURRENT_BINARY_DIR}/utils/store
         )
+    add_compile_definitions(COMPONENT_STORE)
 endif()
 #use dbus on linux, bsd etc, but not andoid and apple stuff
 
