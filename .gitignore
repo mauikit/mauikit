@@ -10,12 +10,7 @@ demo/mauikit/
 .swp.*
 
 #android stuff
-src/android/AndroidManifest.xml
-src/android/res/*
-src/android/gradle/*
-src/android/gradle*
-src/android/build.gradle
-src/android/icons/luv-icon-theme/
+android/icons/luv-icon-theme/
 
 
 #third party stuff
