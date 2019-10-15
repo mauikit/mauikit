@@ -364,8 +364,7 @@ Item
 			selectionList.currentIndex = index
 //             notify(item.icon, qsTr("Item already selected!"), String("The item '%1' is already in the selection box").arg(item.label), null, 4000)
         }
-        
-        control.forceActiveFocus()    
+         
         animate(Kirigami.Theme.backgroundColor)
     }
     

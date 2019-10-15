@@ -53,7 +53,7 @@ Kirigami.ScrollablePage
 	
 	signal areaClicked(var mouse)
 	signal areaRightClicked()
-	signal keyPress(var key)
+	signal keyPress(var event)
 	
 	spacing: Maui.Style.space.medium
 	
@@ -101,7 +101,7 @@ Kirigami.ScrollablePage
 		
 		keyNavigationEnabled : bool
 		keyNavigationWraps : bool
-		Keys.onPressed: control.keyPress(event.key) 
+		Keys.onPressed: control.keyPress(event) 
 		
 		Maui.Holder
 		{

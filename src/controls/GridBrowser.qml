@@ -43,12 +43,6 @@ Maui.GridView
 	signal leftEmblemClicked(int index)	
 	signal itemRightClicked(int index)
 	
-	onKeyPress:
-	{
-		console.log(Qt.Key_S, Qt.Key_P)
-		if(key == Qt.Key_Return)
-			control.itemClicked(currentIndex)		
-	}
 	
 	delegate: Maui.GridBrowserDelegate
 	{

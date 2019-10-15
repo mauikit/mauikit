@@ -123,7 +123,7 @@ Maui.Page
 			{
 				id: _holder
 				browser: currentFMList
-			}
+			}			
 			
 			holder.visible: _holder.visible
 			holder.emoji: _holder.emoji

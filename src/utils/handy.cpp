@@ -59,8 +59,7 @@ QVariantMap Handy::userInfo()
 	
     auto res = QVariantMap({{FMH::MODEL_NAME[FMH::MODEL_KEY::NAME], name}});
 	
-	return res;
-	
+	return res;	
 }
 
 

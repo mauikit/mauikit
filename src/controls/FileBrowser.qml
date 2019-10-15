@@ -158,7 +158,7 @@ Maui.Page
 		id: _selectAllAction
 		text: qsTr("Select all")
 		icon.name: "edit-select-all"
-		onTriggered: selectAll()
+		onTriggered: control.selectAll()
 	},
 	
 	Action
@@ -277,8 +277,8 @@ Maui.Page
 			onTagsReady:
 			{
 				composerList.updateToUrls(tags)
-				if(previewer.visible)
-					previewer.tagBar.list.refresh()
+				if(control.previewer.visible)
+					control.previewer.tagBar.list.refresh()
 					
 				control.newTag(tags)
 			}
@@ -345,9 +345,16 @@ Maui.Page
 		
 		onKeyPress:
 		{
-			if(key == Qt.Key_S)
+			console.log(event.key, event.modifier, event.count)
+			const index = browserView.currentView.currentIndex
+			
+			
+			if((event.key == Qt.Key_S) && (event.modifiers & Qt.ShiftModifier))
 			{
-				const item = control.currentFMList.get(browserView.currentView.currentIndex)
+				control.selectAll()
+			}else if(event.key == Qt.Key_S)
+			{
+				const item = control.currentFMList.get(index)
 				
 				if(control.selectionBar && control.selectionBar.contains(item.path))
 				{
@@ -357,11 +364,41 @@ Maui.Page
 					control.addToSelection(item)				
 				}
 			}
+			
+			if((event.key == Qt.Key_T) && (event.modifiers & Qt.ShiftModifier))
+			{
+				control.openTab( (currentPath).toString())
+			}
+			
+			if((event.key == Qt.Key_Return) && (event.modifiers & Qt.ShiftModifier))
+			{
+				control.openTab(control.currentFMList.get(index).path)
+				
+			}else if(event.key == Qt.Key_Return)
+			{
+				indexHistory.push(index)
+				control.itemClicked(index)
+			}
+			
+			if(event.key == Qt.Key_Backspace)
+			{
+				control.goBack()
+			}
+			
+			if(event.key == Qt.Key_Escape)
+			{
+				if(control.selectionBar)
+					control.selectionBar.clear()
+			}
+			
+			if(event.key == Qt.Key_P)
+			{
+				control.previewer.show(control.currentFMList.get(index).path)
+			}
 		}
 		
 		onItemClicked:
-		{
-			console.log("item clicked connections:", index)
+		{			
 			browserView.currentView.currentIndex = index
 			indexHistory.push(index)
 			control.itemClicked(index)
@@ -571,7 +608,7 @@ Maui.Page
 
 			onItemClicked: 
 			{				
-				previewer.show(itemAt(index).path)
+				control.previewer.show(itemAt(index).path)
 			}
 			
 			onItemPressAndHold:
@@ -665,6 +702,15 @@ Maui.Page
 			
 			ListModel { id: tabsListModel }			
 			
+			Keys.onPressed:
+			{
+				if(event.key == Qt.Key_Return)
+				{
+					_browserList.currentIndex = currentIndex						
+					control.currentPath =  tabsObjectModel.get(currentIndex).path
+				}
+			}
+			
 			Repeater
 			{
 				id: _repeater
@@ -757,7 +803,7 @@ Maui.Page
 		openTab(Maui.FM.homePath())
 		// 		browserView.viewType = control.viewType
 		control.setSettings()
-		_browserList.forceActiveFocus()
+		browserView.currentView.forceActiveFocus()
 	}
 	
 	onThumbnailsSizeChanged:
@@ -786,27 +832,21 @@ Maui.Page
 	
 	function openTab(path)
 	{
-		const component = Qt.createComponent("private/BrowserView.qml");
-		if (component.status === Component.Ready)
-		{
-			const object = component.createObject(tabsObjectModel);
-			tabsObjectModel.append(object);
-		}
-		
-		tabsListModel.append({title: qsTr("Untitled"), path: path})		
-		_browserList.currentIndex = tabsObjectModel.count - 1
-		
 		if(path)
 		{
-			setTabMetadata(path)
+			const component = Qt.createComponent("private/BrowserView.qml");
+			if (component.status === Component.Ready)
+			{
+				const object = component.createObject(tabsObjectModel);
+				tabsObjectModel.append(object);
+			}
+			
+			tabsListModel.append({"path": path})
+			_browserList.currentIndex = tabsObjectModel.count - 1
+			
 			browserView.viewType = control.viewType
 			openFolder(path)
 		}
-	}
-	
-	function setTabMetadata(filepath)
-	{
-		tabsListModel.setProperty(tabsBar.currentIndex, "path", filepath)
 	}
 	
 	function shareFiles(urls)
@@ -855,7 +895,7 @@ Maui.Page
 				}
 				else
 				{
-					if(item.mime === "inode/directory")
+					if(item.isdir == "true")
 					{	 
 						control.openFolder(path)
 					}
@@ -863,7 +903,7 @@ Maui.Page
 					{
 						if (Kirigami.Settings.isMobile)
 						{
-							previewer.show(path)
+							control.previewer.show(path)
 						}
 						else
 						{
