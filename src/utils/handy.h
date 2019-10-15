@@ -77,8 +77,9 @@ public slots:
      * \brief Returns the text contained in the clipboard
      * \return QString containing clipboard text
      */
-    static QString getClipboard();
-
+	static QString getClipboardText();
+	static QVariantMap getClipboard();
+	
     /*!
      * \brief Copies text to the clipboard
      * \param text text to be copied to the clipboard

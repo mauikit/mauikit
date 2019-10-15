@@ -63,7 +63,7 @@ QVariantMap Handy::userInfo()
 }
 
 
-QString Handy::getClipboard()
+QString Handy::getClipboardText()
 {
 	#ifdef Q_OS_ANDROID
 	auto clipbopard = QGuiApplication::clipboard();
@@ -76,6 +76,22 @@ QString Handy::getClipboard()
 		return clipbopard->text();
 	
 	return QString();
+}
+
+QVariantMap Handy::getClipboard()
+{
+	QVariantMap res;
+	#ifdef Q_OS_ANDROID
+	auto clipbopard = QGuiApplication::clipboard();
+	#else
+	auto clipbopard = QApplication::clipboard();
+	#endif
+	
+	auto mime = clipbopard->mimeData();
+// 	if(mime->hasText())
+// 		return clipbopard->text();
+	
+	return res;
 }
 
 bool Handy::copyToClipboard(const QString &text)
