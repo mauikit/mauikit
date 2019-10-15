@@ -346,16 +346,17 @@ Maui.Page
 		onKeyPress:
 		{
 			console.log(event.key, event.modifier, event.count)
-			const index = browserView.currentView.currentIndex
+			const index = browserView.currentView.currentIndex			
+			const item = control.currentFMList.get(index)
 			
-			
-			if((event.key == Qt.Key_S) && (event.modifiers & Qt.ShiftModifier))
+			// Shortcuts for selecting file	
+			if((event.key == Qt.Key_A) && (event.modifiers & Qt.ControlModifier))
 			{
 				control.selectAll()
-			}else if(event.key == Qt.Key_S)
-			{
-				const item = control.currentFMList.get(index)
-				
+			}
+			
+			if(event.key == Qt.Key_S)
+			{				
 				if(control.selectionBar && control.selectionBar.contains(item.path))
 				{
 					control.selectionBar.removeAtPath(item.path)
@@ -365,36 +366,65 @@ Maui.Page
 				}
 			}
 			
-			if((event.key == Qt.Key_T) && (event.modifiers & Qt.ShiftModifier))
+			if((event.key == Qt.Key_Left || event.key == Qt.Key_Right || event.key == Qt.Key_Down || event.key == Qt.Key_Up) && (event.modifiers & Qt.ControlModifier) && (event.modifiers & Qt.ShiftModifier))
 			{
-				control.openTab( (currentPath).toString())
+				if(control.selectionBar && control.selectionBar.contains(item.path))
+				{
+					control.selectionBar.removeAtPath(item.path)
+				}else
+				{
+					control.addToSelection(item)				
+				}
 			}
 			
-			if((event.key == Qt.Key_Return) && (event.modifiers & Qt.ShiftModifier))
+			// Shortcut for pasting an item		
+			if((event.key == Qt.Key_V) && (event.modifiers & Qt.ControlModifier))
 			{
-				control.openTab(control.currentFMList.get(index).path)
-				
+				console.log(Maui.Handy.getClipboard())
+			}			
+			
+			// Shortcut for opening new tab			
+			if((event.key == Qt.Key_T) && (event.modifiers & Qt.ControlModifier))
+			{
+				control.openTab((currentPath).toString())
+			}
+			
+			// Shortcut for closing tab	
+			if((event.key == Qt.Key_W) && (event.modifiers & Qt.ControlModifier))
+			{
+				if(tabsBar.count > 1)
+				control.closeTab(tabsBar.currentIndex)
+			}
+			
+			// Shortcut for opening files in new tab , previewing or launching 	
+			if((event.key == Qt.Key_Return) && (event.modifiers & Qt.ControlModifier))
+			{
+				if(item.isdir == "true")
+					control.openTab(item.path)
+					
+			}else if((event.key == Qt.Key_Return) && (event.modifiers & Qt.AltModifier))
+			{
+				control.previewer.show(control.currentFMList.get(index).path)
 			}else if(event.key == Qt.Key_Return)
 			{
 				indexHistory.push(index)
 				control.itemClicked(index)
 			}
 			
+			// Shortcut for going back in browsing history		
 			if(event.key == Qt.Key_Backspace)
 			{
 				control.goBack()
 			}
 			
+			// Shortcut for clearing selection			
 			if(event.key == Qt.Key_Escape)
 			{
 				if(control.selectionBar)
 					control.selectionBar.clear()
 			}
 			
-			if(event.key == Qt.Key_P)
-			{
-				control.previewer.show(control.currentFMList.get(index).path)
-			}
+			
 		}
 		
 		onItemClicked:
@@ -731,12 +761,7 @@ Maui.Page
 						control.currentPath =  tabsObjectModel.get(index).path
 					}
 					
-					onCloseClicked:
-					{
-						const removedIndex = index
-						tabsObjectModel.remove(removedIndex)
-						tabsListModel.remove(removedIndex)
-					}
+					onCloseClicked: control.closeTab(index)
 				}
 			}
 		}
@@ -828,6 +853,12 @@ Maui.Page
 			control.currentFMList.trackChanges= control.settings.trackChanges
 			control.currentFMList.saveDirProps= control.settings.saveDirProps
 		}
+	}
+	
+	function closeTab(index)
+	{
+		tabsObjectModel.remove(index)
+		tabsListModel.remove(index)
 	}
 	
 	function openTab(path)
