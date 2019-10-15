@@ -18,36 +18,34 @@
  */
 
 #include "kaccountsprovider.h"
+#include <Accounts/Account>
+#include <Accounts/AccountService>
+#include <Accounts/Application>
+#include <Accounts/Manager>
 
 #include <QDebug>
 
 KAccountsProvider::KAccountsProvider(QObject *parent) : AccountsProvider(parent)
 {
-    accountsModel = new OnlineAccounts::AccountServiceModel();
 }
 
 QVariant KAccountsProvider::getAccounts(QString service, bool includeDisabled)
 {
-    accountsModel->setService(service);
-    accountsModel->setIncludeDisabled(includeDisabled);
 
-    QVector<int> v;
-
-    const int nbRow = accountsModel->rowCount();
-    v.reserve(nbRow);
 
     qDebug() << "###";
-    qDebug() << nbRow;
+	
+	auto manager = new Accounts::Manager();
+	QList<Accounts::Account *> accounts;
+	
+		foreach (Accounts::AccountId accountId, manager->accountList()) {
+			Accounts::Account *account = manager->account(accountId);
+			accounts.append(account);
+		}
+	
 
-    for (int i = 0; i < nbRow; ++i)
-    {
-        int row = accountsModel->index(i, 0).data().toInt();
-        QVariant account = accountsModel->get(row, "displayName");
 
-        qDebug() << account;
-    }
-
-//    qDebug() << count;
+	qDebug() << accounts.size() << accounts;
 
 //    while (count > 0) {
 //        QString roleName;
