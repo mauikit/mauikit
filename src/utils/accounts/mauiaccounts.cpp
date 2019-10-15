@@ -19,10 +19,16 @@
 #include "mauiaccounts.h"
 #include "accountsdb.h"
 
+#include "accountsprovider/accountsprovider.h"
+#include "accountsprovider/kaccountsprovider.h"
+
 MauiAccounts::MauiAccounts(QObject *parent) : MauiList(parent), 
 db(new AccountsDB(parent))
 {
 	this->setAccounts();
+
+    AccountsProvider *kaccountsProvider = new KAccountsProvider(this);
+    kaccountsProvider->getAccounts("global", true);
 }
 
 MauiAccounts::~MauiAccounts()

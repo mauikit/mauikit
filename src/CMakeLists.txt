@@ -1,3 +1,6 @@
+execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} -query QT_INSTALL_QML OUTPUT_VARIABLE QT_INSTALL_QML_RAW)
+string(STRIP ${QT_INSTALL_QML_RAW} QT_INSTALL_QML)
+
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/utils
     ${CMAKE_CURRENT_BINARY_DIR}/utils
@@ -45,11 +48,20 @@ if(MYDEFS MATCHES "^COMPONENT_ACCOUNTS=ON" OR MYDEFS MATCHES ";COMPONENT_ACCOUNT
     set(accounts_SRCS
         utils/accounts/mauiaccounts.cpp
         utils/accounts/accountsdb.cpp
+
+        utils/accounts/accountsprovider/sqliteprovider.cpp
+        utils/accounts/accountsprovider/androidprovider.cpp
+        utils/accounts/accountsprovider/kaccountsprovider.cpp
         )
 
     set(accounts_HDRS
         utils/accounts/mauiaccounts.h
         utils/accounts/accountsdb.h
+
+        utils/accounts/accountsprovider/accountsprovider.h
+        utils/accounts/accountsprovider/sqliteprovider.h
+        utils/accounts/accountsprovider/androidprovider.h
+        utils/accounts/accountsprovider/kaccountsprovider.h
         )
     qt5_add_resources(accounts_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/utils/accounts/accounts.qrc)
 endif()
@@ -290,6 +302,10 @@ target_link_libraries(MauiKit
     KF5::KIONTLM
     KF5::ConfigWidgets
     )
+
+if(MYDEFS MATCHES "^COMPONENT_ACCOUNTS=ON" OR MYDEFS MATCHES ";COMPONENT_ACCOUNTS=ON")
+    target_link_libraries(MauiKit PUBLIC ${QT_INSTALL_QML}/Ubuntu/OnlineAccounts/libAccounts.so)
+endif()
 
 if(MYDEFS MATCHES "^COMPONENT_EDITOR=ON" OR MYDEFS MATCHES ";COMPONENT_EDITOR=ON")
     find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS SyntaxHighlighting)
