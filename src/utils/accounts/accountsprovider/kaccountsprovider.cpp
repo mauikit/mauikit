@@ -28,8 +28,9 @@ KAccountsProvider::KAccountsProvider(QObject *parent) : AccountsProvider(parent)
 
 QVariant KAccountsProvider::getAccounts(QString service, bool includeDisabled)
 {
-    accountsModel->setService(service);
-    accountsModel->setIncludeDisabled(includeDisabled);
+	accountsModel->componentComplete();
+	accountsModel->setService(service);
+	accountsModel->setIncludeDisabled(includeDisabled);
 
     QVector<int> v;
 
