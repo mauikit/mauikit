@@ -142,6 +142,8 @@ class FMList : public MauiList
 	
 		~FMList();
 		
+		void componentComplete() override final;	
+		
 		FMH::MODEL_LIST items() const final override;
 		
 		FMList::SORTBY getSortBy() const;

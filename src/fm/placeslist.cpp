@@ -74,7 +74,6 @@ watcher(new QFileSystemWatcher(this))
 
     connect(this, &PlacesList::groupsChanged, this, &PlacesList::reset);
 
-    this->setList();
 }
 
 void PlacesList::watchPath(const QString& path)
@@ -83,6 +82,15 @@ void PlacesList::watchPath(const QString& path)
         return;
 
     this->watcher->addPath(path);
+}
+
+void PlacesList::classBegin()
+{
+}
+
+void PlacesList::componentComplete()
+{
+	this->setList();	
 }
 
 PlacesList::~PlacesList() {}

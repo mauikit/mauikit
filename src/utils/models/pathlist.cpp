@@ -18,10 +18,7 @@
 
 #include "pathlist.h"
 
-PathList::PathList(QObject *parent) : MauiList(parent)
-{
-	
-}
+PathList::PathList(QObject *parent) : MauiList(parent) {}
 
 PathList::~PathList() {}
 

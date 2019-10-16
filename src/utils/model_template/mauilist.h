@@ -25,6 +25,8 @@
 #include "mauikit_export.h"
 #endif
 
+#include <QQmlParserStatus>
+
 /**
  * @todo write docs
  */
@@ -33,9 +35,11 @@
 #ifdef STATIC_MAUIKIT
 class MauiList : public QObject
 #else
-class MAUIKIT_EXPORT MauiList : public QObject
+class MAUIKIT_EXPORT MauiList : public QObject, public QQmlParserStatus
 #endif
 {
+	Q_INTERFACES(QQmlParserStatus)
+	
     Q_OBJECT
 
 public:
@@ -46,6 +50,8 @@ public:
 	~MauiList();
 	
 	virtual FMH::MODEL_LIST items() const = 0;
+	void classBegin() override {}
+	void componentComplete() override {}
 	
 signals:
 	void preItemAppended();
