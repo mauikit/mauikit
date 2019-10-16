@@ -89,7 +89,6 @@ watcher(new QFileSystemWatcher(this))
 			emit this->postItemAppended();
 		}
 	});	
-	
     
 	const auto value = UTIL::loadSettings("SaveDirProps", "SETTINGS", this->saveDirProps).toBool();
 	this->setSaveDirProps(value);	

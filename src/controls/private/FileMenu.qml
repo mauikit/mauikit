@@ -169,6 +169,9 @@ Menu
 	{		
 		control.item = currentFMList.get(index)
 
+		if(item.path.startsWith("tags://") || item.path.startsWith("applications://") )
+			return
+		
 		if(item)
 		{
 			control.index = index

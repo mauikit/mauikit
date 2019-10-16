@@ -165,15 +165,18 @@ void PlacesList::setList()
 		{FMH::MODEL_KEY::ICON, "view-media-recent"},
 		{FMH::MODEL_KEY::LABEL, "Recent"},
 		{FMH::MODEL_KEY::TYPE, "Quick"}
-	};
-    
-//     this->list << FMH::MODEL
-// 	{
-// 		{FMH::MODEL_KEY::PATH,"kdeconnect:///"},
-// 		{FMH::MODEL_KEY::ICON, "phone"},
-// 		{FMH::MODEL_KEY::LABEL, "KDEConnect"},
-// 		{FMH::MODEL_KEY::TYPE, "Quick"}
-// 	};
+	};    
+#endif
+	
+	
+#ifdef COMPONENT_TAGGING
+	this->list << FMH::MODEL
+	{
+		{FMH::MODEL_KEY::PATH,"tags:///"},
+		{FMH::MODEL_KEY::ICON, "tag"},
+		{FMH::MODEL_KEY::LABEL, "Tags"},
+		{FMH::MODEL_KEY::TYPE, "Quick"}
+	};    
 #endif
     
     for(const auto &group : this->groups)

@@ -1041,6 +1041,9 @@ Maui.Page
 	
 	function addToSelection(item)
 	{
+		if(item.path.startsWith("tags://") || item.path.startsWith("applications://") )
+			return
+			
 		if(!control.selectionBar)
 			selectionBarLoader.sourceComponent = selectionBarComponent
 			
