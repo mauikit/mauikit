@@ -18,8 +18,9 @@ public slots:
 
     static FMH::MODEL_LIST packItems(const QStringList &items, const QString &type);
 
-    static bool copyPath(QUrl sourceDir, QUrl destinationDir, bool overWriteDirectory);
-    static bool removeDir(const QUrl &path);
+	static bool copy(QUrl sourceDir, QUrl destinationDir, bool overWriteDirectory = false);
+	static bool cut(QUrl url, QUrl where);
+	static bool removeDir(const QUrl &path);
 
     static QString formatSize(const int &size);
     static QString formatDate(const QString &dateStr, const QString &format = QString("dd/MM/yyyy"), const QString &initFormat = QString());

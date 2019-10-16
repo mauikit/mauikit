@@ -22,9 +22,7 @@ Maui.Page
 	property int currentPathType : control.currentFMList.pathType
 	property int thumbnailsSize : Maui.Style.iconSizes.large * 1.7
 	property bool showThumbnails: true
-	
-	property var clipboardItems : []
-	
+		
 	property var indexHistory : []
 	
 	property bool isCopy : false
@@ -147,9 +145,9 @@ Maui.Page
 	Action
 	{
 		id: _pasteAction
-		text: qsTr("Paste ")+"["+control.clipboardItems.length+"]"
+		text: qsTr("Paste")
 		icon.name: "edit-paste"
-		enabled: control.clipboardItems.length > 0
+// 		enabled: control.clipboardItems.length > 0
 		onTriggered: paste()
 	},
 	
@@ -182,9 +180,9 @@ Maui.Page
 		
 		Maui.Dialog
 		{
-			property var items: []
+			property var urls: []
 			
-			title: qsTr(String("Removing %1 files").arg(items.length.toString()))
+			title: qsTr(String("Removing %1 files").arg(urls.length.toString()))
 			message: isAndroid ?  qsTr("This action will completely remove your files from your system. This action can not be undone.") : qsTr("You can move the file to the Trash or Delete it completely from your system. Which one you preffer?")
 			rejectButton.text: qsTr("Delete")
 			acceptButton.text: qsTr("Trash")
@@ -195,11 +193,14 @@ Maui.Page
 			{
 				if(control.selectionBar && control.selectionBar.visible)
 				{
-					control.selectionBar.clear()
 					control.selectionBar.animate(Maui.Style.dangerColor)
+					control.clean()
 				}
 				
-				control.remove(items)
+				
+				for(var i in urls)
+					Maui.FM.removeFile(urls[i])
+					
 				close()
 			}
 			
@@ -207,11 +208,12 @@ Maui.Page
 			{
 				if(control.selectionBar && control.selectionBar.visible)
 				{
-					control.selectionBar.clear()
 					control.selectionBar.animate(Maui.Style.dangerColor)
+					control.clean()					
 				}
 				
-				control.trash(items)
+				for(var i in urls)
+					Maui.FM.moveToTrash(urls[i])
 				close()
 			}
 		}
@@ -304,13 +306,13 @@ Maui.Page
 		onCopyClicked:
 		{
 			if(item)
-				control.copy([item])
+				control.copy([item.path])
 		}
 		
 		onCutClicked:
 		{
 			if(item)
-				control.cut([item])
+				control.cut([item.path])
 		}
 		
 		onTagsClicked:
@@ -330,10 +332,8 @@ Maui.Page
 		}
 		
 		onRemoveClicked:
-		{
-			dialogLoader.sourceComponent= removeDialogComponent
-			dialog.items = [item]
-			dialog.open()
+		{			
+			control.remove([item.path])
 		}
 		
 		onShareClicked: control.shareFiles([item.path])
@@ -380,8 +380,53 @@ Maui.Page
 			// Shortcut for pasting an item		
 			if((event.key == Qt.Key_V) && (event.modifiers & Qt.ControlModifier))
 			{
-				console.log(Maui.Handy.getClipboard())
-			}			
+				control.paste(Maui.Handy.getClipboard().urls)
+			}		
+			
+			// Shortcut for cutting an item				
+			if((event.key == Qt.Key_X) && (event.modifiers & Qt.ControlModifier))
+			{
+				var urls = []
+				if(control.selectionBar)
+				{
+					urls = control.selectionBar.selectedPaths
+				}
+				else 
+				{
+					urls = [item.path]
+				}					
+				control.cut(urls)
+			}		
+			
+			// Shortcut for copying an item				
+			if((event.key == Qt.Key_C) && (event.modifiers & Qt.ControlModifier))
+			{
+				var urls = []
+				if(control.selectionBar)
+				{
+					urls = control.selectionBar.selectedPaths
+				}
+				else 
+				{
+					urls = [item.path]
+				}				
+				control.copy(urls)					
+			}	
+			
+			// Shortcut for removing an item
+			if(event.key == Qt.Key_Delete)
+			{
+				var urls = []
+				if(control.selectionBar)
+				{
+					urls = control.selectionBar.selectedPaths
+				}
+				else 
+				{
+					urls = [item.path]
+				}				
+				control.remove(urls)				
+			}
 			
 			// Shortcut for opening new tab			
 			if((event.key == Qt.Key_T) && (event.modifiers & Qt.ControlModifier))
@@ -421,10 +466,8 @@ Maui.Page
 			if(event.key == Qt.Key_Escape)
 			{
 				if(control.selectionBar)
-					control.selectionBar.clear()
+					control.clean()
 			}
-			
-			
 		}
 		
 		onItemClicked:
@@ -626,14 +669,19 @@ Maui.Page
 		
 		Maui.SelectionBar
 		{
+			id: _selectionBar
 			anchors.fill: parent
 			onIconClicked: _selectionBarmenu.popup()
             onExitClicked:
             {
                 clean()
                 control.selectionMode = false
-            }
-            
+            }            
+            onCountChanged:
+            {
+				if(_selectionBar.count < 1)
+					control.clean()
+			}
             onRightClicked: _selectionBarmenu.popup()
 
 			onItemClicked: 
@@ -656,7 +704,7 @@ Maui.Page
 					onTriggered: if(control.selectionBar)
 					{
 						control.selectionBar.animate("#6fff80")
-						control.copy(selectedItems)
+						control.copy(selectedPaths)
 						_selectionBarmenu.close()
 					}
 				}
@@ -667,7 +715,7 @@ Maui.Page
 					onTriggered: if(control.selectionBar)
 					{
 						control.selectionBar.animate("#fff44f")
-						control.cut(selectedItems)
+						control.cut(selectedPaths)
 						_selectionBarmenu.close()
 					}
 					
@@ -704,9 +752,7 @@ Maui.Page
 					
 					onTriggered:
 					{
-						dialogLoader.sourceComponent= removeDialogComponent
-						dialog.items = selectedItems
-						dialog.open()
+						control.remove(selectedPaths)
 						_selectionBarmenu.close()
 					}
 				}
@@ -966,7 +1012,7 @@ Maui.Page
 		if(!String(path).length)
 			return;
 		
-		browserView.currentView.currentIndex = -1
+		browserView.currentView.currentIndex = 0
 		setPath(path)
 	}
 	
@@ -1002,44 +1048,51 @@ Maui.Page
 	}
 	
 	function clean()
-	{
-		control.clipboardItems = []
-		
+	{		
 		if(control.selectionBar && control.selectionBar.visible)
-			selectionBar.clear()
+		{
+			control.selectionBar.clear()
+			selectionBarLoader.sourceComponent = null
+		}
 	}
 	
-	function copy(items)
-	{
-		control.clipboardItems = items
+	function copy(urls)
+	{		
+		Maui.Handy.copyToClipboard({"urls": urls})	
 		control.isCut = false
 		control.isCopy = true
 	}
 	
-	function cut(items)
+	function cut(urls)
 	{
-		control.clipboardItems = items
+		Maui.Handy.copyToClipboard({"urls": urls})
 		control.isCut = true
 		control.isCopy = false
 	}
 	
 	function paste()
 	{
+		const urls = Maui.Handy.getClipboard().urls
+		
+		if(!urls)
+			return			
+		
 		if(control.isCopy)
 		{	
-            control.currentFMList.copyInto(control.clipboardItems)
+            control.currentFMList.copyInto(urls)
 		}
 		else if(control.isCut)
 		{
-			control.currentFMList.cutInto(control.clipboardItems)
+			control.currentFMList.cutInto(urls)
 			control.clean()
 		}
 	}
 	
-	function remove(items)
+	function remove(urls)
 	{
-		for(var i in items)
-			Maui.FM.removeFile(items[i].path)
+		dialogLoader.sourceComponent= removeDialogComponent
+		dialog.urls = urls
+		dialog.open()	
 	}
 	
 	function selectAll() //TODO for now dont select more than 100 items so things dont freeze or break
@@ -1047,13 +1100,7 @@ Maui.Page
 		for(var i = 0; i < Math.min(control.currentFMList.count, 100); i++)
 			addToSelection(control.currentFMList.get(i))
 	}
-	
-	function trash(items)
-	{
-		for(var i in items)
-			Maui.FM.moveToTrash(items[i].path)
-	}
-	
+		
 	function bookmarkFolder(paths) //multiple paths
 	{
 		control.newBookmark(paths)

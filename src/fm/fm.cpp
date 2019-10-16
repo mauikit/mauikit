@@ -167,7 +167,7 @@ FM::FM(QObject *parent) : QObject(parent)
                         for(auto key : item.keys())
                             data.insert(FMH::MODEL_NAME[key], item[key]);
 
-                        this->copy(QVariantList {data}, this->sync->getCopyTo());
+//                         this->copy(QVariantList {data}, this->sync->getCopyTo());
                         break;
                     }
                     default: return;
@@ -414,68 +414,47 @@ bool FM::removeTagToUrl(const QString tag, const QUrl& url)
 	#endif
 }
 
-bool FM::cut(const QVariantList &data, const QUrl &where)
+bool FM::cut(const QList<QUrl> &urls, const QUrl &where)
 {	
-    FMH::MODEL_LIST items;
 
-    for(const auto &k : data)
-        items << FMH::toModel(k.toMap());
-
-    for(const auto &item : items)
+    for(const auto &url : urls)
     {
-        const auto path = QUrl::fromUserInput(item[FMH::MODEL_KEY::PATH]);
-
-        if(FMStatic::isCloud(path.toString()))
+        if(FMStatic::isCloud(url.toString()))
         {
 #ifdef COMPONENT_SYNCING
             this->sync->setCopyTo(where.toString());
-            this->sync->resolveFile(item, Syncing::SIGNAL_TYPE::COPY);
+//             this->sync->resolveFile(url, Syncing::SIGNAL_TYPE::COPY);
 #endif
-
         }else
         {
-#ifdef Q_OS_ANDROID
-            QFile file(path.toLocalFile());
-            file.rename(where.toString()+"/"+QFileInfo(path.toLocalFile()).fileName());
-#else
-            auto job = KIO::move(path, QUrl(where.toString()+"/"+FMH::getFileInfoModel(path)[FMH::MODEL_KEY::LABEL]));
-            job->start();
-#endif
+			FMStatic::cut(url, where);
         }
     }
 
     return true;
 }
 
-bool FM::copy(const QVariantList &data, const QUrl &where)
+bool FM::copy(const QList<QUrl> &urls, const QUrl &where)
 {
-    qDebug() << "TRYING TO COPY" << data << where;
-
-    FMH::MODEL_LIST items;
-    for(const auto &k : data)
-        items << FMH::toModel(k.toMap());
-
-
     QStringList cloudPaths;
-    for(const auto &item : items)
+    for(const auto &url : urls)
     {
-        const auto path = QUrl::fromUserInput(item[FMH::MODEL_KEY::PATH]);
-        if(FMStatic::isDir(path))
+        if(FMStatic::isDir(url))
         {
-            FMStatic::copyPath(path, where.toString()+"/"+QFileInfo(path.toLocalFile()).fileName(), false);
+            FMStatic::copy(url, where.toString()+"/"+QFileInfo(url.toLocalFile()).fileName(), false);
 
-        }else if(FMStatic::isCloud(path))
+        }else if(FMStatic::isCloud(url))
         {
 #ifdef COMPONENT_SYNCING
             this->sync->setCopyTo(where.toString());
-            this->sync->resolveFile(item, Syncing::SIGNAL_TYPE::COPY);
+//             this->sync->resolveFile(item, Syncing::SIGNAL_TYPE::COPY);
 #endif
         }else
         {
             if(FMStatic::isCloud(where))
-                cloudPaths << path.toString();
+                cloudPaths << url.toString();
             else
-                FMStatic::copyPath(path, where.toString()+"/"+FMH::getFileInfoModel(path)[FMH::MODEL_KEY::LABEL], false);
+                FMStatic::copy(url, where.toString()+"/"+FMH::getFileInfoModel(url)[FMH::MODEL_KEY::LABEL], false);
         }
     }
 

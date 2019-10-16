@@ -79,8 +79,8 @@ public slots:
 	void getCloudItem(const QVariantMap &item);	
 	
 	/* ACTIONS */	
-	bool copy(const QVariantList &data, const QUrl &where);
-	bool cut(const QVariantList &data, const QUrl &where);	
+	bool copy(const QList<QUrl> &urls, const QUrl &where);
+	bool cut(const QList<QUrl> &urls, const QUrl &where);	
 
     friend class FMStatic;
 };

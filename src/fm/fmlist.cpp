@@ -547,15 +547,14 @@ void FMList::createDir(const QString& name)
 	}
 }
 
-void FMList::copyInto(const QVariantList& files)
-{
-		this->fm->copy(files, this->path);		
+void FMList::copyInto(const QStringList& urls)
+{	
+		this->fm->copy(QUrl::fromStringList(urls), this->path);		
 }
 
-void FMList::cutInto(const QVariantList& files)
+void FMList::cutInto(const QStringList& urls)
 {
-	if(this->pathType == FMList::PATHTYPE::PLACES_PATH)
-		this->fm->cut(files, this->path);	
+	this->fm->cut(QUrl::fromStringList(urls), this->path);	
 // 	else if(this->pathType == FMList::PATHTYPE::CLOUD_PATH)		
 // 	{
 // 		this->fm->createCloudDir(QString(this->path).replace(FMH::PATHTYPE_NAME[FMList::PATHTYPE::CLOUD_PATH]+"/"+this->fm->sync->getUser(), ""), name);

@@ -39,10 +39,7 @@ Maui.Page
 			{
 				const urls = _dropMenu.urls.split(",")
 				for(var i in urls)
-				{
-					var sourceItem = {"path" : urls[i]}
-					Maui.FM.copy([sourceItem], _dropMenu.target)
-				}
+					Maui.FM.copy(urls[i], _dropMenu.target, false)				
 			}
 		}
 		
@@ -53,10 +50,7 @@ Maui.Page
 			{
 				const urls = _dropMenu.urls.split(",")
 				for(var i in urls)
-				{
-					var sourceItem = {"path" : urls[i]}
-					Maui.FM.cut([sourceItem], _dropMenu.target)
-				}
+					Maui.FM.cut(urls[i], _dropMenu.target, false)				
 			}
 		}
 		

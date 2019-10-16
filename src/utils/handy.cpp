@@ -82,19 +82,43 @@ QVariantMap Handy::getClipboard()
 {
 	QVariantMap res;
 	#ifdef Q_OS_ANDROID
-	auto clipbopard = QGuiApplication::clipboard();
+	auto clipboard = QGuiApplication::clipboard();
 	#else
-	auto clipbopard = QApplication::clipboard();
+	auto clipboard = QApplication::clipboard();
 	#endif
 	
-	auto mime = clipbopard->mimeData();
+	auto mime = clipboard->mimeData();
+	if(mime->hasUrls())
+		res.insert("urls", QUrl::toStringList(mime->urls()));
+	
+	if(mime->hasText())
+		res.insert("text", mime->text());
 // 	if(mime->hasText())
 // 		return clipbopard->text();
 	
 	return res;
 }
 
-bool Handy::copyToClipboard(const QString &text)
+bool Handy::copyToClipboard(const QVariantMap &value)
+{
+	#ifdef Q_OS_ANDROID
+	auto clipboard = QGuiApplication::clipboard();
+	#else
+	auto clipboard = QApplication::clipboard();
+	#endif
+	QMimeData* mimeData = new QMimeData();
+	
+	if(value.contains("urls"))
+		mimeData->setUrls(QUrl::fromStringList(value["urls"].toStringList()));
+	
+	if(value.contains("text"))
+		mimeData->setText(value["text"].toString());
+	
+	clipboard->setMimeData(mimeData);
+	return true;
+}
+
+bool Handy::copyTextToClipboard(const QString &text)
 {
 	#ifdef Q_OS_ANDROID
 	auto clipbopard = QGuiApplication::clipboard();

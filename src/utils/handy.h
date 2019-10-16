@@ -85,7 +85,8 @@ public slots:
      * \param text text to be copied to the clipboard
      * \return
      */
-    static bool copyToClipboard(const QString &text);
+	static bool copyTextToClipboard(const QString &text);
+	static bool copyToClipboard(const QVariantMap &value);
 };
 
 #endif // HANDY_H

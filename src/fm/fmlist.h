@@ -234,8 +234,8 @@ public slots:
 	void refresh();
 	
 	void createDir(const QString &name);
-	void copyInto(const QVariantList &files);
-	void cutInto(const QVariantList &files);
+	void copyInto(const QStringList &urls);
+	void cutInto(const QStringList &urls);
 	
 	void setDirIcon(const int &index, const QString &iconName);
 	

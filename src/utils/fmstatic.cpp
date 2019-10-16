@@ -198,14 +198,14 @@ QString FMStatic::homePath()
     return FMH::HomePath;
 }
 
-bool FMStatic::copyPath(QUrl sourceDir, QUrl destinationDir, bool overWriteDirectory)
+bool FMStatic::copy(QUrl url, QUrl destinationDir, bool overWriteDirectory)
 {
 #ifdef Q_OS_ANDROID
-    QFileInfo fileInfo(sourceDir.toLocalFile());
+    QFileInfo fileInfo(url.toLocalFile());
     if(fileInfo.isFile())
-        QFile::copy(sourceDir.toLocalFile(), destinationDir.toLocalFile());
+        QFile::copy(url.toLocalFile(), destinationDir.toLocalFile());
 
-    QDir originDirectory(sourceDir.toLocalFile());
+    QDir originDirectory(url.toLocalFile());
 
     if (!originDirectory.exists())
         return false;
@@ -223,12 +223,12 @@ bool FMStatic::copyPath(QUrl sourceDir, QUrl destinationDir, bool overWriteDirec
     {
         QString destinationPath = destinationDir.toLocalFile() + "/" + directoryName;
         originDirectory.mkpath(destinationPath);
-        copyPath(sourceDir.toLocalFile() + "/" + directoryName, destinationPath, overWriteDirectory);
+        copyPath(url.toLocalFile() + "/" + directoryName, destinationPath, overWriteDirectory);
     }
 
     foreach (QString fileName, originDirectory.entryList(QDir::Files))
     {
-        QFile::copy(sourceDir.toLocalFile() + "/" + fileName, destinationDir.toLocalFile() + "/" + fileName);
+        QFile::copy(url.toLocalFile() + "/" + fileName, destinationDir.toLocalFile() + "/" + fileName);
     }
 
     /*! Possible race-condition mitigation? */
@@ -240,11 +240,23 @@ bool FMStatic::copyPath(QUrl sourceDir, QUrl destinationDir, bool overWriteDirec
 
     return false;
 #else
-    qDebug()<< "TRYING TO COPY" << sourceDir<< destinationDir;
-    auto job = KIO::copy(sourceDir, destinationDir);
+    auto job = KIO::copy(url, destinationDir);
     job->start();
     return true;
 #endif
+}
+
+bool FMStatic::cut(QUrl url, QUrl where)
+{
+	#ifdef Q_OS_ANDROID
+	QFile file(url.toLocalFile());
+	file.rename(where.toString()+"/"+QFileInfo(url.toLocalFile()).fileName());
+	#else
+	auto job = KIO::move(url, QUrl(where.toString()+"/"+FMH::getFileInfoModel(url)[FMH::MODEL_KEY::LABEL]));
+	job->start();
+	#endif
+	
+	return true;
 }
 
 bool FMStatic::removeFile(const QUrl &path)

@@ -82,7 +82,7 @@ Item
                undefined
     
     
-    visible: selectionList.count > 0
+    visible: control.count > 0
 
     Rectangle
     {
