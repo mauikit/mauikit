@@ -407,7 +407,6 @@ Maui.Page
 					_millerControl.currentFMList = currentItem.currentFMList
 					control.setCurrentFMList()	
 					currentItem.forceActiveFocus()
-					
 				}
 				
 				onCountChanged:
@@ -487,7 +486,7 @@ Maui.Page
 						leftEmblem: "emblem-select-add"
 						showDetailsInfo: true					
 						onKeyPress: _millerControl.keyPress(event)							
-						// 						currentIndex : _millerControl.currentIndex
+						currentIndex : 0
 						onCurrentIndexChanged: _millerControl.currentIndex = currentIndex
 						BrowserHolder
 						{
