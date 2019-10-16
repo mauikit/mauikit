@@ -34,8 +34,10 @@ class KAccountsProvider : public AccountsProvider {
     Q_OBJECT
 public:
     KAccountsProvider(QObject* parent = nullptr);
-    QVariant getAccounts(QString service, bool includeDisabled = false) override final;
+	FMH::MODEL_LIST getAccounts(QString service, bool includeDisabled = false) override final;
 
+	bool addAccount(const QString &server, const QString &user, const QString &password) override final;
+	bool removeAccount(const QString &server, const QString &user) override final;
 };
 
 #endif

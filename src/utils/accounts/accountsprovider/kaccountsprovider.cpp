@@ -29,7 +29,7 @@ KAccountsProvider::KAccountsProvider(QObject *parent) : AccountsProvider(parent)
 {
 }
 
-QVariant KAccountsProvider::getAccounts(QString service, bool includeDisabled)
+FMH::MODEL_LIST KAccountsProvider::getAccounts(QString service, bool includeDisabled)
 {
 
 
@@ -56,5 +56,17 @@ QVariant KAccountsProvider::getAccounts(QString service, bool includeDisabled)
 
     qDebug() << "###";
 
-    return QVariant();
+	return FMH::MODEL_LIST();
 }
+
+bool KAccountsProvider::addAccount(const QString& server, const QString& user, const QString& password)
+{
+	return false;
+}
+
+bool KAccountsProvider::removeAccount(const QString& server, const QString& user)
+{
+	return false;
+}
+
+
