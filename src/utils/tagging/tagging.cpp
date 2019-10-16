@@ -103,7 +103,7 @@ bool Tagging::tag(const QString &tag, const QString &color, const QString &comme
     {
         {TAG::KEYMAP[TAG::KEYS::TAG], tag},
         {TAG::KEYMAP[TAG::KEYS::COLOR], color},
-        {TAG::KEYMAP[TAG::KEYS::ADD_DATE], QDateTime::currentDateTime()},
+        {TAG::KEYMAP[TAG::KEYS::ADD_DATE], QDateTime::currentDateTime().toString(Qt::TextDate)},
         {TAG::KEYMAP[TAG::KEYS::COMMENT], comment},
     };
 
