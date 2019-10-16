@@ -10,7 +10,7 @@ demo/mauikit/
 .swp.*
 
 #android stuff
-android/icons/luv-icon-theme/
+src/android/icons/luv-icon-theme/
 
 
 #third party stuff
