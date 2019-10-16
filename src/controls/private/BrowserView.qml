@@ -158,7 +158,7 @@ Maui.Page
 				keepEmblemOverlay : _listViewBrowser.keepEmblemOverlay
 				showThumbnails: _listViewBrowser.showPreviewThumbnails
 				rightEmblem: _listViewBrowser.rightEmblem
-				isSelected: if(selectionBar) return selectionBar.contains(model.path)
+				isSelected: if(selectionBar !== null) return selectionBar.contains(model.path)
 				leftEmblem: isSelected ? "emblem-select-remove" : "emblem-select-add"
 				draggable: true
 				
@@ -375,12 +375,12 @@ Maui.Page
 		{
 			id: _millerControl			
 			property Maui.FMList currentFMList
-			property int currentIndex
+			property int currentIndex 
 			
 			signal itemClicked(int index)
 			signal itemDoubleClicked(int index)
 			signal itemRightClicked(int index)
-			
+			signal keyPress(var event)
 			signal rightEmblemClicked(int index)
 			signal leftEmblemClicked(int index)
 			
@@ -405,7 +405,9 @@ Maui.Page
 				onCurrentItemChanged: 
 				{
 					_millerControl.currentFMList = currentItem.currentFMList
-					control.setCurrentFMList()				
+					control.setCurrentFMList()	
+					currentItem.forceActiveFocus()
+					
 				}
 				
 				onCountChanged:
@@ -439,6 +441,12 @@ Maui.Page
 					
 					width: Math.min(Kirigami.Units.gridUnit * 22, control.width)
 					height: parent.height
+					focus: true		
+					
+					function forceActiveFocus()
+					{
+						_millerListView.forceActiveFocus()
+					}
 					
 					Kirigami.Separator
 					{
@@ -477,8 +485,10 @@ Maui.Page
 						keepEmblemOverlay: selectionMode
 						rightEmblem: Kirigami.Settings.isMobile ? "document-share" : ""
 						leftEmblem: "emblem-select-add"
-						showDetailsInfo: true
-						// 						currentIndex : _millerControl.currentIndex						
+						showDetailsInfo: true					
+						onKeyPress: _millerControl.keyPress(event)							
+						// 						currentIndex : _millerControl.currentIndex
+						onCurrentIndexChanged: _millerControl.currentIndex = currentIndex
 						BrowserHolder
 						{
 							id: _holder

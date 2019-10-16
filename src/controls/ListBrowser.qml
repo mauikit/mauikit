@@ -74,7 +74,7 @@ Kirigami.ScrollablePage
 	topPadding: padding
 	bottomPadding: padding
 	
-	Keys.onPressed: control.keyPress(event)
+	Keys.enabled: false
 	
 	ListView
     {	
@@ -92,7 +92,8 @@ Kirigami.ScrollablePage
         
         keyNavigationEnabled : bool
         keyNavigationWraps : bool
-       
+        Keys.onPressed: control.keyPress(event)
+		
 		Maui.Holder
 		{
 			id: _holder
