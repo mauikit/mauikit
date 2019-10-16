@@ -45,6 +45,7 @@ if(${COMPONENT_ACCOUNTS})
     set(accounts_SRCS
         utils/accounts/mauiaccounts.cpp
         utils/accounts/accountsdb.cpp
+        utils/accounts/accounts.qrc
         )
 
     set(accounts_HDRS
@@ -102,6 +103,7 @@ if(${COMPONENT_TAGGING})
         utils/tagging/tagdb.cpp
         utils/tagging/tagsmodel.cpp
         utils/tagging/tagslist.cpp
+        utils/tagging/tagging.qrc
         )
 
     set(tagging_HDRS
@@ -111,7 +113,6 @@ if(${COMPONENT_TAGGING})
         utils/tagging/tagsmodel.h
         utils/tagging/tagslist.h
         )
-    qt5_add_resources(tagging_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/utils/tagging/tagging.qrc)
     include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/tagging
         ${CMAKE_CURRENT_BINARY_DIR}/utils/tagging
@@ -156,6 +157,7 @@ if(${COMPONENT_STORE})
         utils/store/store.cpp
         utils/store/storemodel.cpp
         utils/store/storelist.cpp
+        utils/store/store.qrc
         )
 
     set(store_HDRS
@@ -163,8 +165,6 @@ if(${COMPONENT_STORE})
         utils/store/storemodel.h
         utils/store/storelist.h
         )
-
-    qt5_add_resources(store_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/utils/store/store.qrc)
 
     include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/store
@@ -178,18 +178,10 @@ endif()
 option(IS_APPIMAGE_PACKAGE "If set to true then the icons and styled is packaged as well")
 
 if(ANDROID OR IS_APPIMAGE_PACKAGE OR MAUIKIT_STYLE)
-    qt5_add_resources(MauiIcon_RESOURCES ${CMAKE_SOURCE_DIR}/android/icons.qrc)
-    qt5_add_resources(MauiStyle_RESOURCES ${CMAKE_SOURCE_DIR}/maui-style/style.qrc)
-
     if (NOT EXISTS ${CMAKE_SOURCE_DIR}/android/icons/luv-icon-theme/.git)
         find_package(Git REQUIRED)
         execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/milohr/luv-icon-theme.git ${CMAKE_SOURCE_DIR}/android/icons/luv-icon-theme)
     endif()
-
-    set(mauikit_style_QRCS
-        ${MauiIcon_RESOURCES}
-        ${MauiStyle_RESOURCES}
-        )
 endif()
 
 if (ANDROID)
@@ -200,6 +192,7 @@ if (ANDROID)
 
     set(mauikit_Android_SRCS
         android/mauiandroid.cpp
+        android/icons.qrc
     )
 
     kde_enable_exceptions(MauiKit PRIVATE)
@@ -217,9 +210,6 @@ else()
         )
 endif()
 
-qt5_add_resources(mauikit_ASSETS ${CMAKE_SOURCE_DIR}/assets.qrc)
-qt5_add_resources(mauikit_RESOURCES ${CMAKE_SOURCE_DIR}/mauikit.qrc)
-
 add_library(MauiKit
 
     ${fm_HDRS}
@@ -227,7 +217,6 @@ add_library(MauiKit
 
     ${accounts_HDRS}
     ${accounts_SRCS}
-    ${accounts_RESOURCES}
 
     ${editor_HDRS}
     ${editor_SRCS}
@@ -237,24 +226,21 @@ add_library(MauiKit
 
     ${store_SRCS}
     ${store_HDRS}
-    ${store_RESOURCES}
 
     ${tagging_HDRS}
     ${tagging_SRCS}
-    ${tagging_RESOURCES}
 
     ${mauikit_HDRS}
     ${mauikit_SRCS}
-    ${mauikit_RESOURCES}
-    ${mauikit_ASSETS}
-
-    ${MauiIcon_RESOURCES}
-    ${MauiStyle_RESOURCES}
 
     ${mauikit_Android_SRCS}
 
     ${mauikit_KDE_HDRS}
     ${mauikit_KDE_SRCS}
+
+    maui-style/style.qrc
+    assets.qrc
+    mauikit.qrc
 )
 
 find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets)
@@ -345,4 +331,4 @@ install(FILES
     COMPONENT Devel)
 
 ##INSTALL MAUI STYLE
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/maui-style DESTINATION ${KDE_INSTALL_QMLDIR}/QtQuick/Controls.2)
+install(DIRECTORY maui-style DESTINATION ${KDE_INSTALL_QMLDIR}/QtQuick/Controls.2)
