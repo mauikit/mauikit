@@ -48,11 +48,20 @@ Maui.ToolBar
     leftContent: ToolButton
     {
         Layout.alignment: Qt.AlignLeft
-        visible: allowEditMode && tagsList.visible
+        visible: control.allowEditMode && tagsList.visible
         icon.name: "list-add"
         onClicked: addClicked()
         icon.color: control.Kirigami.Theme.textColor
     }
+    
+    rightContent: ToolButton
+    {
+		Layout.alignment: Qt.AlignRight
+		visible: control.allowEditMode && tagsList.visible
+		icon.name: "document-edit"
+		onClicked: control.goEditMode()
+		icon.color: control.Kirigami.Theme.textColor
+	}
 
     middleContent : [
         TagList

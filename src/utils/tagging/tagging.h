@@ -52,6 +52,8 @@ public:
 
     /* UPDATES */
 	Q_INVOKABLE bool updateUrlTags(const QString &url, const QStringList &tags);
+	Q_INVOKABLE bool updateUrl(const QString &url, const QString &newUrl);
+	
 	Q_INVOKABLE bool updateAbstractTags(const QString &key, const QString &lot, const QStringList &tags);
 	
     /* QUERIES */

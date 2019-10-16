@@ -33,6 +33,10 @@
 #include <KFilePlacesModel>
 #endif
 
+#ifdef COMPONENT_TAGGING
+#include "tagging.h"
+#endif
+
 #ifdef Q_OS_ANDROID 
 PlacesList::PlacesList(QObject *parent) : MauiList(parent),
 fm(new FM(this)),
@@ -58,6 +62,10 @@ watcher(new QFileSystemWatcher(this))
             emit this->updateModel(index, {FMH::MODEL_KEY::COUNT});
         }
     });
+	
+	#ifdef COMPONENT_TAGGING
+	connect(Tagging::getInstance(), &Tagging::tagged, this, &PlacesList::reset);	
+	#endif
 
 #ifdef COMPONENT_ACCOUNTS
     connect(MauiAccounts::instance(), &MauiAccounts::accountAdded, this, &PlacesList::reset);

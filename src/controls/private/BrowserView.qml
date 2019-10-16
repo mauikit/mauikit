@@ -50,7 +50,7 @@ Maui.Page
 			{
 				const urls = _dropMenu.urls.split(",")
 				for(var i in urls)
-					Maui.FM.cut(urls[i], _dropMenu.target, false)				
+					Maui.FM.cut(urls[i], _dropMenu.target)				
 			}
 		}
 		

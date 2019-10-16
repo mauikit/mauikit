@@ -55,7 +55,6 @@ Maui.Page
 	signal itemRightEmblemClicked(int index)
 	signal rightClicked()
 	signal newBookmark(var paths)
-	signal newTag(var tag)	
 	
 	Kirigami.Theme.colorSet: Kirigami.Theme.View
 	Kirigami.Theme.inherit: false
@@ -278,9 +277,7 @@ Maui.Page
 			{
 				composerList.updateToUrls(tags)
 				if(control.previewer.visible)
-					control.previewer.tagBar.list.refresh()
-					
-				control.newTag(tags)
+					control.previewer.tagBar.list.refresh()					
 			}
 		}
 	}
@@ -346,6 +343,12 @@ Maui.Page
 			console.log(event.key, event.modifier, event.count)
 			const index = browserView.currentView.currentIndex			
 			const item = control.currentFMList.get(index)
+			
+			// Shortcuts for refreshing
+			if((event.key == Qt.Key_F5))
+			{
+				control.currentFMList.refresh()
+			}
 			
 			// Shortcuts for selecting file	
 			if((event.key == Qt.Key_A) && (event.modifiers & Qt.ControlModifier))

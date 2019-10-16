@@ -280,7 +280,7 @@ FM::FM(QObject *parent) : QObject(parent)
 #ifdef COMPONENT_TAGGING
             if(this->tag)
             {
-                for(const auto &tag : this->tag->getUrlsTags(false))
+                for(const auto &tag : this->tag->getAllTags(false))
                 {
                     qDebug()<< "TAG << "<< tag;
                     const auto label = tag.toMap().value(TAG::KEYMAP[TAG::KEYS::TAG]).toString();
