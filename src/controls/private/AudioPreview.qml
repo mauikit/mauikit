@@ -15,18 +15,13 @@ Maui.Page
 	{
 		anchors.fill: parent
 		
-		Image
+		Kirigami.Icon
 		{
 			anchors.centerIn: parent
 			width: Math.min(parent.width, 200)
 			height: width
-			source: "qrc:/assets/cover.png"
-			sourceSize.width: width
-			sourceSize.height: height
-			asynchronous: true
+			source: iteminfo.icon			
 			smooth: true
-			fillMode: Image.PerseveAspectRatio
-			cache: true
 			
 			MediaPlayer
 			{
@@ -61,6 +56,11 @@ Maui.Page
 		icon.name: player.playbackState === MediaPlayer.PlayingState ? "media-playback-pause" : "media-playback-start"
 		onClicked: player.playbackState === MediaPlayer.PlayingState ? player.pause() : player.play()
 		
+	}
+	
+	footBar.rightContent: Label
+	{
+		text: Maui.FM.formatTime((player.duration - player.position)/1000)
 	}
 	
 	footBar.middleContent : Slider

@@ -9,7 +9,9 @@ Flickable
 {
 	id: flick
 
-	property alias image: img
+	property alias image: _imageLoader.item
+	property bool animated: false
+	property url source 
 	
 	signal rightClicked();
 	signal pressAndHold();
@@ -112,14 +114,13 @@ Flickable
 			}
 		}
 		
-		Image
+		Loader
 		{
-			id: img
+			id: _imageLoader
 			width: flick.contentWidth
 			height: flick.contentHeight
-			fillMode: Image.PreserveAspectFit
-			autoTransform: true
-			asynchronous: true			
+			
+			sourceComponent: control.animated ? _animatedImageComponent : _stillImageComponent
 			
 			MouseArea
 			{
@@ -176,6 +177,33 @@ Flickable
 				}
 			}
 		}
+		
+		Component
+		{
+			id: _animatedImageComponent
+			AnimatedImage
+			{
+				fillMode: Image.PreserveAspectFit
+				autoTransform: true
+				asynchronous: true
+				source: control.source
+				onStatusChanged: playing = (status == AnimatedImage.Ready)
+				cache: true
+			}
+		}
+		
+		Component
+		{
+			id: _stillImageComponent
+			Image
+			{				
+				fillMode: Image.PreserveAspectFit
+				autoTransform: true
+				asynchronous: true
+				source: control.source
+			}
+		}
+		
 	}	
 	
 	function fit()

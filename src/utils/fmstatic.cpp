@@ -193,6 +193,21 @@ QString FMStatic::formatDate(const QString &dateStr, const QString &format, cons
     return date.toString(format);
 }
 
+QString FMStatic::formatTime(const qint64 &value)
+{
+	QString tStr;
+	if (value)
+	{
+		QTime time((value/3600)%60, (value/60)%60, value%60, (value*1000)%1000);
+		QString format = "mm:ss";
+		if (value > 3600)
+			format = "hh:mm:ss";
+			tStr = time.toString(format);
+	}
+	
+	return tStr.isEmpty() ? "00:00" : tStr;
+}
+
 QString FMStatic::homePath()
 {
     return FMH::HomePath;

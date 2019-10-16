@@ -158,7 +158,7 @@ Maui.Page
 				keepEmblemOverlay : _listViewBrowser.keepEmblemOverlay
 				showThumbnails: _listViewBrowser.showPreviewThumbnails
 				rightEmblem: _listViewBrowser.rightEmblem
-				isSelected: if(selectionBar !== null) return selectionBar.contains(model.path)
+				isSelected: selectionBar ? selectionBar.contains(model.path) : false
 				leftEmblem: isSelected ? "emblem-select-remove" : "emblem-select-add"
 				draggable: true
 				
@@ -283,7 +283,7 @@ Maui.Page
 				keepEmblemOverlay: _gridViewBrowser.keepEmblemOverlay
 				showThumbnails: _gridViewBrowser.showPreviewThumbnails
 				rightEmblem: _gridViewBrowser.rightEmblem
-				isSelected: if(selectionBar) return selectionBar.contains(model.path)
+				isSelected: selectionBar ? selectionBar.contains(model.path) : false
 				leftEmblem: isSelected ? "emblem-select-remove" : "emblem-select-add"
 				draggable: true
 				
@@ -532,7 +532,7 @@ Maui.Page
 							keepEmblemOverlay : _millerListView.keepEmblemOverlay
 							showThumbnails: _millerListView.showPreviewThumbnails
 							rightEmblem: _millerListView.rightEmblem
-							isSelected: if(selectionBar) return selectionBar.contains(model.path)
+							isSelected: selectionBar ? selectionBar.contains(model.path) : false
 							leftEmblem: isSelected ? "emblem-select-remove" : "emblem-select-add"
 							draggable: true
 							

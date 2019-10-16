@@ -12,7 +12,7 @@ import "private"
 Maui.Page
 {
 	id: control
-	
+
 	property url currentPath
 	onCurrentPathChanged: control.browserView.path = control.currentPath
 	
@@ -55,8 +55,7 @@ Maui.Page
 	signal itemRightEmblemClicked(int index)
 	signal rightClicked()
 	signal newBookmark(var paths)
-	signal newTag(var tag)
-	
+	signal newTag(var tag)	
 	
 	Kirigami.Theme.colorSet: Kirigami.Theme.View
 	Kirigami.Theme.inherit: false
@@ -196,7 +195,6 @@ Maui.Page
 					control.selectionBar.animate(Maui.Style.dangerColor)
 					control.clean()
 				}
-				
 				
 				for(var i in urls)
 					Maui.FM.removeFile(urls[i])

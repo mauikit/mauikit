@@ -86,6 +86,11 @@ Maui.Page
 		onClicked: player.playbackState === MediaPlayer.PlayingState ? player.pause() : player.play()
 	}
 	
+	footBar.rightContent: Label
+	{
+		text: Maui.FM.formatTime((player.duration - player.position)/1000)
+	}
+	
 	footBar.middleContent : Slider
 	{
 		id: _slider

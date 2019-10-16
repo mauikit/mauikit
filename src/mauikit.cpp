@@ -151,6 +151,7 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType<DocumentHandler>(uri, 1, 0, "DocumentHandler");
     qmlRegisterType<SyntaxHighlighterUtil>();
     qmlRegisterType(componentUrl(QStringLiteral("Editor.qml")), uri, 1, 0, "Editor");
+	qmlRegisterType(componentUrl(QStringLiteral("private/DocumentPreview.qml")), uri, 1, 0, "DocumentPreview");
 	
 #ifdef STATIC_MAUIKIT
     qmlRegisterType<KQuickSyntaxHighlighter>("org.kde.kquicksyntaxhighlighter", 0, 1, "KQuickSyntaxHighlighter");

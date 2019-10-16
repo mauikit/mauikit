@@ -18,8 +18,10 @@
         <file alias="private/AudioPreview.qml">src/controls/private/AudioPreview.qml</file>
         <file alias="private/ImagePreview.qml">src/controls/private/ImagePreview.qml</file>
         <file alias="private/TextPreview.qml">src/controls/private/TextPreview.qml</file>
-        <file alias="private/VideoPreview.qml">src/controls/private/VideoPreview.qml</file>
-        <file alias="private/AccountsHelper.qml">src/controls/private/AccountsHelper.qml</file>
+		<file alias="private/VideoPreview.qml">src/controls/private/VideoPreview.qml</file>
+		<file alias="private/DocumentPreview.qml">src/controls/private/DocumentPreview.qml</file>
+		<file alias="private/DefaultPreview.qml">src/controls/private/DefaultPreview.qml</file>
+		<file alias="private/AccountsHelper.qml">src/controls/private/AccountsHelper.qml</file>
         <file alias="Holder.qml">src/controls/Holder.qml</file>
         <file alias="ListDelegate.qml">src/controls/ListDelegate.qml</file>
 		<file alias="ItemDelegate.qml">src/controls/ItemDelegate.qml</file>

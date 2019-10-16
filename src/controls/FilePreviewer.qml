@@ -1,4 +1,3 @@
-
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
@@ -15,7 +14,6 @@ Maui.Dialog
 
 	property bool isFav : false
     property bool isDir : false
-    property string mimetype : ""
     property bool showInfo: true
 
     property alias infoModel : _infoModel
@@ -73,7 +71,7 @@ Maui.Dialog
         }
     ]
 
-    footBar.rightContent:  ToolButton
+    footBar.rightContent: ToolButton
     {
         icon.name: "documentinfo"
         text: qsTr("Info")
@@ -82,47 +80,7 @@ Maui.Dialog
         checked: control.showInfo
         onClicked: control.showInfo = !control.showInfo
     }
-
-    Component
-    {
-		id: defaultPreview
-		Item
-		{
-			anchors.fill: parent
-			Kirigami.Icon
-			{
-				anchors.centerIn: parent
-				source:control.iteminfo.icon
-				height: Maui.Style.iconSizes.huge
-				width: height
-			}
-		}
-	}
     
-    Component
-    {
-        id: imagePreview
-        ImagePreview {}
-    }
-
-    Component
-    {
-        id: audioPreview
-        AudioPreview {}
-    }
-
-    Component
-    {
-        id: videoPreview
-        VideoPreview {}
-    }
-
-    Component
-    {
-        id: textPreview
-        TextPreview {}
-    }
-
     ColumnLayout
     {
         anchors.fill: parent
@@ -244,48 +202,82 @@ Maui.Dialog
 		if(previewLoader.item && previewLoader.item.player != null)
             previewLoader.item.player.stop()
 			
-			previewLoader.sourceComponent = null
+			previewLoader.source = ""
     }
 
     function show(path)
     {
         control.iteminfo = Maui.FM.getFileInfo(path)
         control.initModel()
-
-        if(iteminfo.mime.indexOf("/"))
-        {
-            control.mimetype = iteminfo.mime.slice(0, iteminfo.mime.indexOf("/"))
-        }else
-        {
-            control.mimetype = ""
-        }
         
-        control.isDir = mimetype === "inode"
-        control.showInfo = control.mimetype === "audio" || control.mimetype === "image" || control.mimetype === "video" || control.mimetype === "text"? false : true       
+        control.isDir = iteminfo.isdir == "true"          
 		control.currentUrl = path
 		control.isFav =  _tagsBar.list.contains("fav")
 		
-		var component;
-		 switch(mimetype)
+		var source;
+		switch(iteminfo.mime)
 		{
-			case "audio" :
-				component = audioPreview
+			case "audio/mpeg" :
+			case "audio/mp4" :
+			case "audio/flac" :
+			case "audio/ogg" :
+			case "audio/wav" :
+				source = "private/AudioPreview.qml"
 				break
-			case "video" :
-				component = videoPreview
+			case "video/mp4" :
+			case "video/x-matroska" :
+			case "video/webm" :
+			case "video/avi" :
+			case "video/flv" :
+			case "video/mpg" :
+			case "video/wmv" :
+			case "video/mov" :
+			case "video/ogg" :
+			case "video/mpeg" :
+			case "video/jpeg" :
+				source = "private/VideoPreview.qml"
 				break
-			case "text" :
-				component = textPreview
+			case "text/x-c++src" :
+			case "text/x-c++hdr" :
+			case "text/css" :
+			case "text/html" :
+			case "text/plain" :
+			case "text/richtext" :
+			case "text/scriptlet" :
+			case "text/x-vcard" :
+			case "text/x-go" :
+			case "text/x-cmake" :
+			case "text/x-qml" :
+			case "application/xml" :
+			case "application/javascript" :
+			case "application/json" :
+			case "application/pgp-keys" :
+			case "application/x-shellscript" :
+			case "application/x-kicad-project" :
+				source = "private/TextPreview.qml"
 				break
-			case "image" :
-				component = imagePreview
+			case "image/png" :
+			case "image/gif" :
+			case "image/jpeg" :
+			case "image/web" :
+			case "image/svg" :
+			case "image/svg+xml" :
+				source = "private/ImagePreview.qml"
 				break
-			case "inode" :
+			case "application/pdf":			
+			case "application/rtf":			
+			case "application/doc":			
+			case "application/odf":			
+				source = "private/DocumentPreview.qml"
+				break			
+			case "inode/directory" :
 			default:
-				component = defaultPreview
+				source = "private/DefaultPreview.qml"
 		}
 		
-		previewLoader.sourceComponent = component
+		console.log("previe mime", iteminfo.mime)
+		previewLoader.source = source
+		control.showInfo = source === "private/DefaultPreview.qml"
 		open()
     }
 
