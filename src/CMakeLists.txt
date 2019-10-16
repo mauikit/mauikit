@@ -185,10 +185,7 @@ if(ANDROID OR IS_APPIMAGE_PACKAGE OR MAUIKIT_STYLE)
 endif()
 
 if (ANDROID)
-    find_package(Gradle REQUIRED)
     add_subdirectory(android)
-
-    find_package(Qt5 REQUIRED COMPONENTS AndroidExtras WebView)
 
     set(mauikit_Android_SRCS
         android/mauiandroid.cpp
@@ -197,8 +194,6 @@ if (ANDROID)
 
     kde_enable_exceptions(MauiKit PRIVATE)
 else()
-    find_package(Qt5 REQUIRED COMPONENTS WebEngine)
-
     set(mauikit_KDE_SRCS
         kde/mauikde.cpp
         kde/kdeconnect.cpp
@@ -242,8 +237,6 @@ add_library(MauiKit
     assets.qrc
     mauikit.qrc
 )
-
-find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets)
 
 if(ANDROID)
     target_link_libraries(MauiKit PRIVATE Qt5::AndroidExtras Qt5::WebView jnigraphics)
