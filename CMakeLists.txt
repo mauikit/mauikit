@@ -7,10 +7,6 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(MAUIKIT_VERSION 1.0.0)
 
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
 set(AUTOMOC_MOC_OPTIONS -Muri=org.kde.maui)
 
 project(mauikit VERSION ${MAUIKIT_VERSION})
@@ -20,20 +16,15 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH}
     ${ECM_KDE_MODULE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
 #DEFAULT COMPONENTS DEFINITIONS
-add_compile_definitions(
-    COMPONENT_EDITOR=ON
-    COMPONENT_FM=ON
-	COMPONENT_ACCOUNTS=ON
-    COMPONENT_TERMINAL=ON
-    COMPONENT_STORE=ON
-    COMPONENT_TAGGING=ON
-    COMPONENT_SYNCING=ON
-    )
+option(COMPONENT_EDITOR "Build editor component" ON)
+option(COMPONENT_FM "Build filemanager component" ON)
+option(COMPONENT_ACCOUNTS "Build accounts component" ON)
+option(COMPONENT_TERMINAL "Build terminal component" ON)
+option(COMPONENT_STORE "Build store component" ON)
+option(COMPONENT_TAGGING "Build tagging component" ON)
+option(COMPONENT_SYNCING "Build syncing component" ON)
     
-get_directory_property(MYDEFS COMPILE_DEFINITIONS)    
-    MESSAGE( STATUS "Compile defs contain: " ${MYDEFS} )
-
-    include(GenerateExportHeader)
+include(GenerateExportHeader)
 include(ECMSetupVersion)
 include(ECMGenerateHeaders)
 include(CMakePackageConfigHelpers)
