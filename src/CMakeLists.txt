@@ -34,7 +34,7 @@ set(mauikit_HDRS
     utils/model_template/mauimodel.h
     )
 
-if(MYDEFS MATCHES "^COMPONENT_ACCOUNTS=ON" OR MYDEFS MATCHES ";COMPONENT_ACCOUNTS=ON")
+if(${COMPONENT_ACCOUNTS})
     message(STATUS "INCLUDING ACCOUNTS COMPONENT")
 
     include_directories(
@@ -52,9 +52,10 @@ if(MYDEFS MATCHES "^COMPONENT_ACCOUNTS=ON" OR MYDEFS MATCHES ";COMPONENT_ACCOUNT
         utils/accounts/accountsdb.h
         )
     qt5_add_resources(accounts_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/utils/accounts/accounts.qrc)
+    add_compile_definitions(COMPONENT_ACCOUNTS)
 endif()
 
-if(MYDEFS MATCHES "^COMPONENT_EDITOR=ON" OR MYDEFS MATCHES ";COMPONENT_EDITOR=ON")
+if(${COMPONENT_EDITOR})
     message(STATUS "INCLUDING EDITOR COMPONENT")
     set(editor_SRCS
         utils/editor/documenthandler.cpp
@@ -70,9 +71,10 @@ if(MYDEFS MATCHES "^COMPONENT_EDITOR=ON" OR MYDEFS MATCHES ";COMPONENT_EDITOR=ON
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/editor
         ${CMAKE_CURRENT_BINARY_DIR}/utils/editor
         )
+    add_compile_definitions(COMPONENT_EDITOR)
 endif()
 
-if(MYDEFS MATCHES "^COMPONENT_FM=ON" OR MYDEFS MATCHES ";COMPONENT_FM=ON")
+if(${COMPONENT_FM})
     message(STATUS "INCLUDING FM COMPONENT")
 
     set(fm_SRCS
@@ -90,9 +92,10 @@ if(MYDEFS MATCHES "^COMPONENT_FM=ON" OR MYDEFS MATCHES ";COMPONENT_FM=ON")
         ${CMAKE_CURRENT_SOURCE_DIR}/fm
         ${CMAKE_CURRENT_BINARY_DIR}/fm
         )
+    add_compile_definitions(COMPONENT_FM)
 endif()
 
-if(MYDEFS MATCHES "^COMPONENT_TAGGING=ON" OR MYDEFS MATCHES ";COMPONENT_TAGGING=ON")
+if(${COMPONENT_TAGGING})
     message(STATUS "INCLUDING TAGGING COMPONENT")
     set(tagging_SRCS
         utils/tagging/tagging.cpp
@@ -113,9 +116,10 @@ if(MYDEFS MATCHES "^COMPONENT_TAGGING=ON" OR MYDEFS MATCHES ";COMPONENT_TAGGING=
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/tagging
         ${CMAKE_CURRENT_BINARY_DIR}/utils/tagging
         )
+    add_compile_definitions(COMPONENT_TAGGING)
 endif()
 
-if(MYDEFS MATCHES "^COMPONENT_SYNCING=ON" OR MYDEFS MATCHES ";COMPONENT_SYNCING=ON")
+if(${COMPONENT_SYNCING})
     message(STATUS "INCLUDING SYNCING COMPONENT")
     set(syncing_SRCS
         utils/syncing/syncing.cpp
@@ -143,9 +147,10 @@ if(MYDEFS MATCHES "^COMPONENT_SYNCING=ON" OR MYDEFS MATCHES ";COMPONENT_SYNCING=
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/syncing/libwebdavclient/lib/utils
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/syncing/libwebdavclient/lib/dto
         )
+    add_compile_definitions(COMPONENT_SYNCING)
 endif()
 
-if(MYDEFS MATCHES "^COMPONENT_STORE=ON" OR MYDEFS MATCHES ";COMPONENT_STORE=ON")
+if(${COMPONENT_STORE})
     message(STATUS "INCLUDING STORE COMPONENT")
     set(store_SRCS
         utils/store/store.cpp
@@ -165,6 +170,7 @@ if(MYDEFS MATCHES "^COMPONENT_STORE=ON" OR MYDEFS MATCHES ";COMPONENT_STORE=ON")
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/store
         ${CMAKE_CURRENT_BINARY_DIR}/utils/store
         )
+    add_compile_definitions(COMPONENT_STORE)
 endif()
 #use dbus on linux, bsd etc, but not andoid and apple stuff
 
@@ -291,12 +297,12 @@ target_link_libraries(MauiKit
     KF5::ConfigWidgets
     )
 
-if(MYDEFS MATCHES "^COMPONENT_EDITOR=ON" OR MYDEFS MATCHES ";COMPONENT_EDITOR=ON")
+if(${COMPONENT_EDITOR})
     find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS SyntaxHighlighting)
     target_link_libraries(MauiKit PRIVATE KF5::SyntaxHighlighting)
 endif()
 
-if(MYDEFS MATCHES "^COMPONENT_STORE=ON" OR MYDEFS MATCHES ";COMPONENT_STORE=ON")
+if(${COMPONENT_STORE})
     find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS Attica)
     target_link_libraries(MauiKit PUBLIC KF5::Attica)
 endif()
