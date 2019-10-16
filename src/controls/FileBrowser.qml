@@ -951,7 +951,7 @@ Maui.Page
 		switch(currentPathType)
 		{			
 			case Maui.FMList.CLOUD_PATH:
-				if(item.mime === "inode/directory")
+				if(item.isdir === "true")
 				{
 					control.openFolder(path)
 				}
@@ -961,7 +961,7 @@ Maui.Page
 				}
 				break;
 			default:
-				if(selectionMode && item.mime !== "inode/directory")
+				if(selectionMode && item.isdir == "false")
 				{					
 					if(control.selectionBar && control.selectionBar.contains(item.path))
 					{
