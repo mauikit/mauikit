@@ -20,4 +20,29 @@
 
 #ifndef ACCOUNTSPROVIDER_SQLITEPROVIDER_H
 #define ACCOUNTSPROVIDER_SQLITEPROVIDER_H
+
+#include <QObject>
+#include "accountsprovider.h"
+#include "fmh.h"
+
+class AccountsDB; 
+class SQLiteProvider : public AccountsProvider
+{
+	Q_OBJECT
+	
+public:
+	explicit SQLiteProvider(QObject *parent = nullptr);	
+	FMH::MODEL_LIST getAccounts(QString service, bool includeDisabled=false) override final;	
+	
+	bool addAccount(const QString &server, const QString &user, const QString &password) override final;
+	bool removeAccount(const QString &server, const QString &user) override final;
+	
+private:
+	AccountsDB *db;
+	
+	QVariantList get(const QString &queryTxt);
+	
+	
+};
+
 #endif

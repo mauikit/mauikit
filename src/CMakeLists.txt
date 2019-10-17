@@ -304,7 +304,19 @@ target_link_libraries(MauiKit
     )
 
 if(MYDEFS MATCHES "^COMPONENT_ACCOUNTS=ON" OR MYDEFS MATCHES ";COMPONENT_ACCOUNTS=ON")
-    target_link_libraries(MauiKit PUBLIC ${QT_INSTALL_QML}/Ubuntu/OnlineAccounts/libAccounts.so)
+  
+
+find_package(AccountsQt5 1.10 REQUIRED CONFIG)
+find_package(SignOnQt5 8.55 REQUIRED CONFIG)
+find_package(KAccounts REQUIRED)
+
+message(STATUS ${ACCOUNTSQT_LIBRARIES})
+
+if (KAccounts_FOUND AND AccountsQt5_FOUND AND SignOnQt5_FOUND)
+    include_directories(${ACCOUNTSQT_INCLUDE_DIRS} ${SIGNONQT_INCLUDE_DIRS})
+endif()    
+    target_link_libraries(MauiKit PRIVATE ${ACCOUNTSQT_LIBRARIES} ${SIGNONQT_INCLUDE_LIBRARIES} KAccounts)
+    
 endif()
 
 if(MYDEFS MATCHES "^COMPONENT_EDITOR=ON" OR MYDEFS MATCHES ";COMPONENT_EDITOR=ON")

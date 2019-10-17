@@ -542,6 +542,15 @@ static const inline FMH::MODEL_LIST toModelList(const QVariantList& list)
 	return res;
 }
 
+static const inline QVariantList toList(const FMH::MODEL_LIST& list)
+{
+	QVariantList res;
+	
+	for(const auto &data : list)	
+		res << FMH::toMap(data);
+	
+	return res;
+}
 
 static const inline FMH::MODEL filterModel(const FMH::MODEL &model, const QVector<FMH::MODEL_KEY> &keys)
 {

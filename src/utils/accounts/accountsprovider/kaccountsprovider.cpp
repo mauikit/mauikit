@@ -18,46 +18,51 @@
  */
 
 #include "kaccountsprovider.h"
+#include <Accounts/Account>
+#include <Accounts/AccountService>
+#include <Accounts/Application>
+#include <Accounts/Manager>
 
 #include <QDebug>
 
 KAccountsProvider::KAccountsProvider(QObject *parent) : AccountsProvider(parent)
 {
-    accountsModel = new OnlineAccounts::AccountServiceModel();
 }
 
-QVariant KAccountsProvider::getAccounts(QString service, bool includeDisabled)
+FMH::MODEL_LIST KAccountsProvider::getAccounts(QString service, bool includeDisabled)
 {
-	accountsModel->componentComplete();
-	accountsModel->setService(service);
-	accountsModel->setIncludeDisabled(includeDisabled);
-
-    QVector<int> v;
-
-    const int nbRow = accountsModel->rowCount();
-    v.reserve(nbRow);
-
-    qDebug() << "###";
-    qDebug() << nbRow;
-
-    for (int i = 0; i < nbRow; ++i)
-    {
-        int row = accountsModel->index(i, 0).data().toInt();
-        QVariant account = accountsModel->get(row, "displayName");
-
-        qDebug() << account;
+    FMH::MODEL_LIST res;
+	auto manager = new Accounts::Manager();
+	QList<Accounts::Account *> accounts;
+	
+    foreach (Accounts::AccountId accountId, manager->accountList()) {
+        Accounts::Account *account = manager->account(accountId);
+        accounts.append(account);
     }
 
-//    qDebug() << count;
+    for(const auto &account : accounts)
+    {
+        res << FMH::MODEL {
+            {FMH::MODEL_KEY::PATH, "'"},
+            {FMH::MODEL_KEY::ICON, ""},
+            {FMH::MODEL_KEY::LABEL, account->displayName()},
+            {FMH::MODEL_KEY::USER, ""},
+            {FMH::MODEL_KEY::SERVER, ""},
+            {FMH::MODEL_KEY::PASSWORD, ""},
+            {FMH::MODEL_KEY::TYPE, ""}};
+    }
 
-//    while (count > 0) {
-//        QString roleName;
-
-
-//        count--;
-//    }
-
-    qDebug() << "###";
-
-    return QVariant();
+    return res;
 }
+
+bool KAccountsProvider::addAccount(const QString& server, const QString& user, const QString& password)
+{
+	return false;
+}
+
+bool KAccountsProvider::removeAccount(const QString& server, const QString& user)
+{
+	return false;
+}
+
+

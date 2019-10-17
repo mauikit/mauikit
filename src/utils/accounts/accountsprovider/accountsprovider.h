@@ -21,13 +21,20 @@
 #define ACCOUNTSPROVIDER_ACCOUNTSPROVIDER_H
 
 #include <QObject>
+#include "fmh.h"
 
 class AccountsProvider : public QObject {
     Q_OBJECT
 public:
     AccountsProvider(QObject* parent=nullptr) : QObject(parent) {}
 
-    virtual QVariant getAccounts(QString service, bool includeDisabled=false) = 0;
+    virtual FMH::MODEL_LIST getAccounts(QString service, bool includeDisabled=false) = 0;
+	virtual bool addAccount(const QString &server, const QString &user, const QString &password) = 0;
+	virtual bool removeAccount(const QString &server, const QString &user) = 0;
+	
+signals:
+	void accountAdded(QVariantMap account);
+	void accountRemoved(QVariantMap account);
 };
 
 #endif
