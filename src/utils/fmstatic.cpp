@@ -241,7 +241,7 @@ bool FMStatic::copy(const QUrl &url, const QUrl &destinationDir, const bool &ove
     {
         QString destinationPath = destinationDir.toLocalFile() + "/" + directoryName;
         originDirectory.mkpath(destinationPath);
-        copyPath(url.toLocalFile() + "/" + directoryName, destinationPath, overWriteDirectory);
+        copy(url.toLocalFile() + "/" + directoryName, destinationPath, overWriteDirectory);
     }
 
     foreach (QString fileName, originDirectory.entryList(QDir::Files))

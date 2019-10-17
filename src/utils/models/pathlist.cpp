@@ -57,23 +57,23 @@ void PathList::popPaths(const QString &path)
 		return i;
 	}();
 	
-	if(index == 0)
-	{
+    if(index == 0)
+    {
 		emit this->preListChanged();
 		this->list.clear();
 		this->list << PathList::splitPath(path);
 		emit this->postListChanged();
 		return;
-	}
+    }
 	
-	auto _url = QString(this->m_path).left(index);
+    auto _url = QString(this->m_path).left(index);
 	
-	while(_url.endsWith("/"))
-		_url.chop(1);
+    while(_url.endsWith("/"))
+        _url.chop(1);
 	
-	removePaths(_url);
-	this->m_path = _url;
-	appendPaths(path);	
+    removePaths(_url);
+    this->m_path = _url;
+    appendPaths(path);
 }
 
 void PathList::appendPaths(const QString &path)
@@ -97,6 +97,9 @@ void PathList::removePaths(const QString &path)
 	const auto count = _url.count("/");
 	for(auto i = 0; i < count; i++)
 	{	 
+        if(this->list.size() < 1)
+            break;
+
 		emit this->preItemRemoved(this->list.size()-1);
 		this->list.removeAt(this->list.size()-1);
 		emit this->postItemRemoved();
@@ -151,15 +154,15 @@ FMH::MODEL_LIST PathList::splitPath(const QString& path)
 		if(label.isEmpty())
 			continue;
 		
-		if(label.contains(":") && i == count -1)
-  {
-	  res << FMH::MODEL 
-	  {
-		  {FMH::MODEL_KEY::LABEL, "/"},
-		  {FMH::MODEL_KEY::PATH, _url+"/"}
-	  };
-	  break;
-  }
+        if(label.contains(":") && i == count -1)
+        {
+            res << FMH::MODEL
+            {
+            {FMH::MODEL_KEY::LABEL, "/"},
+            {FMH::MODEL_KEY::PATH, _url+"/"}
+        };
+            break;
+        }
 		
 		res << FMH::MODEL 
 		{

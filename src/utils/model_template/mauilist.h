@@ -33,7 +33,7 @@
 #include <QObject>
 
 #ifdef STATIC_MAUIKIT
-class MauiList : public QObject
+class MauiList : public QObject, public QQmlParserStatus
 #else
 class MAUIKIT_EXPORT MauiList : public QObject, public QQmlParserStatus
 #endif
