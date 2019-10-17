@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<provider id="cool">
+  <name>Cool provider</name>
+  <icon>general_myprovider</icon>
+  <single-account>true</single-account>
+  <translations>somewhere</translations>
+</provider>

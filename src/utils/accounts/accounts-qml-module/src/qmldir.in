@@ -1,0 +1,3 @@
+module $${API_URI}
+plugin $${TARGET}
+typeinfo plugin.qmltypes

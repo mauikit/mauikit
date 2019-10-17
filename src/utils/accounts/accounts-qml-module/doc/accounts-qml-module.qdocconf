@@ -1,0 +1,8 @@
+include(accounts-qml-module-common.qdocconf)
+
+HTML.templatedir = .
+HTML.nobreadcrumbs = "true"
+HTML.stylesheets = qtquick.css
+HTML.headerstyles = "  <link rel=\"stylesheet\" type=\"text/css\" href=\"style/qtquick.css\" />\n"
+HTML.endheader = "</head>\n"
+HTML.footer = "<div class=\"footer\">Copyright (C) 2013 Canonical Ltd.</div>\n"

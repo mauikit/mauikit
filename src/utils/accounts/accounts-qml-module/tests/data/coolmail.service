@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<service id="coolmail">
+  <type>e-mail</type>
+  <name>Cool Mail</name>
+  <icon>general_myservice</icon>
+  <provider>cool</provider>
+  <translations>here</translations>
+
+  <template>
+    <group name="auth">
+      <setting name="method">oauth2</setting>
+      <setting name="mechanism">user_agent</setting>
+      <group name="oauth2/user_agent">
+        <setting name="host">coolmail.ex</setting>
+      </group>
+    </group>
+    <setting name="color">green</setting>
+    <setting name="auto-explode-after" type="u">10</setting>
+  </template>
+</service>

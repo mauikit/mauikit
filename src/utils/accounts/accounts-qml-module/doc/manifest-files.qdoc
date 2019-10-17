@@ -1,0 +1,323 @@
+/*
+ * Copyright (C) 2012 Canonical Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*!
+    \page manifest-files.html manifest-files
+    \title Manifest files
+
+    In order to integrate with the Online Accounts framework, one needs to ship
+    a couple of manifest files which describe the online services being used or
+    provided.
+
+    Account plugins must ship a \l{The provider files}{provider file} which
+    can contain account settings readable by applications. Applications must
+    ship an \l{The application files}{application file} which tells which
+    online services the application is able to use, and \l{The service
+    files}{service files} which describes the online services and their
+    settings.
+
+    \section1 The provider files
+
+    A \c .provider file describes an online accounts provider. It's a XML file,
+    typically installed in \c /usr/share/accounts/providers/ or \c
+    ~/.local/share/accounts/providers/ which looks like this:
+
+    \code
+<?xml version="1.0" encoding="UTF-8"?>
+<provider id="facebook">
+  <name>Facebook</name>
+  <icon>facebook</icon>
+  <translations>account-plugins</translations>
+  <domains>.*facebook\.com</domains>
+  <plugin>generic-oauth</plugin>
+  <single-account>true</single-account>
+
+  <template>
+    <group name="auth">
+      <setting name="method">oauth2</setting>
+      <setting name="mechanism">user_agent</setting>
+      <group name="oauth2">
+        <group name="user_agent">
+          <setting name="Host">www.facebook.com</setting>
+          <setting name="AuthPath">/dialog/oauth</setting>
+          <setting name="RedirectUri">https://www.facebook.com/connect/login_success.html</setting>
+          <setting name="Display">popup</setting>
+          <setting type="as" name="Scope">['publish_stream','status_update','user_photos']</setting>
+          <setting name="ClientId">412471239412</setting>
+          <setting type="as" name="AllowedSchemes">['https','http']</setting>
+        </group>
+      </group>
+    </group>
+  </template>
+</provider>
+    \endcode
+
+    This file name must match the value of the \c id tag in the root \c
+    <provider> element, plus the \c ".provider" suffix.
+
+    The only mandatory element is \c <name>, and that's the display name of the
+    provider.
+    Other optional elements are:
+    \list
+    \li \c <icon>: an icon for the account provider.
+    \li \c <translations>: a translation domain for the \c <name> element.
+    \li \c <domains>: a regular expression matching the domain(s) where this
+    account is used.
+    \li \c <plugin>: the ID of the account plugin which must be used to create
+    or edit the accounts for this provider.
+    \li \c <single-account>: whether the account editing UI should prevent the
+    user to create multiple accounts for this provider.
+    \li \c <template>: default settings or authentication parameters for the
+    account. This element is described in \l{The template element} section.
+    \endlist
+
+
+    \section1 The service files
+
+    A \c .service file describes an online service. It's a XML file, typically
+    installed in \c /usr/share/accounts/services/ or \c
+    ~/.local/share/accounts/services/ which looks like this:
+
+    \code
+<?xml version="1.0" encoding="UTF-8"?>
+<service id="picasa">
+  <type>photo-sharing</type>
+  <name>Picasa</name>
+  <icon>icon_picasa</icon>
+  <provider>google</provider>
+  <translations>account-plugins</translations>
+
+  <template>
+    <group name="auth/oauth2/user_agent">
+      <setting type="as" name="Scope">["https://picasaweb.google.com/data/"]</setting>
+    </group>
+    <setting type="i" name="max-resolution">2048</setting>
+  </template>
+
+</service>
+    \endcode
+
+    The name of the file must match the contents of the \c id tag in the root
+    \c <service> element, plus the \c ".service" suffix.
+    Despite the complexity of the example above, only two pieces of information
+    are mandatory:
+    \list
+    \li \c <provider>: the ID of the account provider. See the \l{The provider files}{section about provider files} for more.
+    \li \c <type>: the type of service; some applications don't have a fixed
+    set of supported services, but rather can use any service implementing a
+    certain protocol (for example, IMAP for e-mail clients): in such cases, the
+    different services would use a common type here, and applications would
+    refer to them via this type. Otherwise, the type should be set to a unique
+    string which has low chances of conflicting with other types: for instance,
+    a good practice would be to set it to "\a <provider-id>-<service-id>".
+    \endlist
+
+    Other information which can be embedded in \c .service files:
+    \list
+    \li \c <name>: a display name for the service.
+    \li \c <icon>: an icon name for the service.
+    \li \c <translations>: a translation domain for the \c <name> element.
+    \li \c <template>: default settings or authentication parameters for the
+    service. This element is described in \l{The template element} section.
+    \endlist
+
+
+    \section1 The application files
+
+    An \c .application file describes how an application uses online accounts.
+    It's a XML file, typically installed in \c
+    /usr/share/accounts/applications/ or \c
+    ~/.local/share/accounts/applications/ which looks like this:
+
+    \code
+<?xml version="1.0" encoding="UTF-8" ?>
+<application id="my-photo-manager">
+  <description>My Photo Manager</description>
+  <desktop-entry>photo-manager.desktop</desktop-entry>
+  <translations>photo-manager</translations>
+
+  <services>
+    <service id="photo-instagram">
+      <description>Publish your pictures to Instagram</description>
+    </service>
+    <service id="photo-facebook">
+      <description>Publish your pictures to Facebook</description>
+    </service>
+  </services>
+
+  <service-types>
+    <service-type id="photo-sharing">
+      <description>Publish your pictures to your favorite site</description>
+    </service-type>
+  </service-types>
+
+</application>
+    \endcode
+
+    The name of the file must match the contents of the \c id tag in the root
+    \c <application> element, plus the \c ".application" suffix.
+    None of the elements is mandatory, but in order to be linked to some online
+    accounts there should be at least one valid \c <service> or \c
+    <service-type> element.
+
+    The XML elements that an \c .application file can contain are:
+    \list
+    \li \c <description>: a description of the application; if missing, this
+    will be read from the \c .desktop file associated with the application.
+    \li \c <desktop-entry>: the ID of the \c .desktop file associated with the
+    application (with or without the \c ".desktop" suffix); if missing, it's
+    assumed to be the same application ID specified in the \c id tag of the
+    root \c <application> element.
+    \li \c <translations>: a translation domain for all the \c <description>
+    elements.
+    \li \c <services>: a container for \c <service> elements, which refer to
+    the IDs of the \l{The service files}{services} which the application can
+    use.
+    \li \c <service-types>: a container for \c <service-type> elements, which
+    refer to the IDs of the service types which the application can use. See
+    the documentation for the \c <type> element in \l{The service
+    files}{service files}.
+    \endlist
+
+    \section2 The template element
+
+    Accounts can contain settings which can be useful for applications, for
+    example authentication parameters or server settings (such as the address and
+    port of an IMAP server). These settings are stored in the accounts
+    database, and an application can read them by accessing the \l
+    AccountService::settings property. The \c <template>
+    element in the \c .service or \c .provider files can be used to specify a
+    fallback value for those settings which have not been set in the accounts
+    database.
+
+    A \c .service file \c <template> element is used when the \c id of the \l
+    AccountService::service object matches its ID. The \c .provider file \c
+    <template> element is instead used when the \c id of the \l
+    AccountService::service object is empty, meaning that the \c AccountService
+    is describing the global account, and not a specific service.
+
+    \section3 Format of the default settings
+
+    The \c <template> element describes a dictionary of keys and values, where
+    the key is always a string, and values can be any data type.
+    Keys can contain the "/" character, which can be used to define key groups;
+    for instance:
+
+    \code
+    <setting name="net/server/address">example.com</setting>
+    <setting name="net/server/port" type="u">2500</setting>
+    <setting name="net/use-ssl" type="b">false</setting>
+    \endcode
+
+    is equivalent to
+
+    \code
+    <group name="net">
+      <group name="server">
+        <setting name="address">example.com</setting>
+        <setting name="port" type="u">2500</setting>
+      </group>
+      <setting name="use-ssl" type="b">false</setting>
+    </group>
+    \endcode
+
+    and also to
+
+    \code
+    <group name="net/server">
+        <setting name="address">example.com</setting>
+        <setting name="port" type="u">2500</setting>
+    </group>
+    <setting name="net/use-ssl" type="b">false</setting>
+    \endcode
+
+    Values are always assumed to be strings, unless a \c type attribute is set
+    in the \c <setting> element; the most commonly used types are:
+
+    \table
+    \header
+      \li Type
+      \li Code
+      \li Example
+    \row
+      \li string
+      \li \c s
+      \li \c <setting... \c type="s">Hello \c world!</setting>
+    \row
+      \li boolean
+      \li \c b
+      \li \c <setting... \c type="b">true</setting>
+    \row
+      \li integer
+      \li \c i
+      \li \c <setting... \c type="i">-12</setting>
+    \row
+      \li unsigned
+      \li \c u
+      \li \c <setting... \c type="u">256</setting>
+    \row
+      \li array of strings
+      \li \c as
+      \li \c <setting... \c type="as">["one","two"]</setting>
+    \endtable
+
+    \section3 Authentication data
+
+    The object returned by the \l AccountService::authData property is also
+    built with a similar fallback mechanism as the rest of account settings,
+    but it's a bit more refined to especially address the needs of application
+    developers to override the authentication parameters. A typical example is
+    OAuth 2.0, where the application might need to specify a different \a
+    ClientId and \a ClientSecret than those used by the rest of the system.
+    Another example is that of an account provider offering a REST API with an
+    OAuth 2.0 authentication for publishing pictures, but a basic
+    username/password authentication to access an IMAP mail sever.
+
+    The authentication data consists of:
+    \list
+    \li the \c CredentialsId key: this is the numeric ID of the account
+    credentials in the local machine. This key is usually never stored in the
+    \c <template> element, as its value becomes known only when the account is
+    created.
+    \li the \c auth/method key: a string defining which authentication plugin
+    needs to be used. Please refer to the \l
+    {http://docs.accounts-sso.googlecode.com/git/libsignon-qt/html/index.html}
+    {libsignon-qt documentation}.
+    \li the \c auth/mechanism key: a string defining which authentication
+    mechanism needs to be used. Each authentication plugin defines its own
+    mechanisms, so please refer to the plugin's documentation.
+    \li all the settings defined under the \c "auth/ \a <method> \c / \a
+    <mechanism> \c " group. Each authentication plugin defines its own parameters,
+    so please refer to the plugin's documentation.
+    \endlist
+
+    When the \l AccountService represents the global account, then the
+    authentication data obtained by reading the \l AccountService::authData
+    property follows the usual fallback scheme: the parameters stored in the
+    accounts database have precence over the template parameters defined in the
+    \c .provider file.
+
+    However, if the \l AccountService represent a service within an account,
+    the authentication parameters are read in the following order (higher
+    priority is listed first):
+
+    \list
+    \li parameters stored in the accounts database, for the specific service;
+    \li parameters stored in the \c <template> element of the \c .service file;
+    \li parameters stored in the accounts database, for the global account;
+    \li parameters stored in the \c <template> element of the \c .provider file.
+    \endlist
+ */

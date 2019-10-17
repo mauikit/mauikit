@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<service-type id="sharing">
+  <translations>translation_file</translations>
+  <name>File sharing</name>
+  <icon>sharing_icon</icon>
+</service-type>

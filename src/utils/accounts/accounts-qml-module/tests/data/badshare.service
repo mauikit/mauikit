@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<service id="badshare">
+  <type>sharing</type>
+  <name>Bad Share</name>
+  <icon>general_otherservice</icon>
+  <provider>bad</provider>
+</service>

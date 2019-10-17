@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<service id="badmail">
+  <type>e-mail</type>
+  <name>Bad Mail</name>
+  <icon>general_myservice</icon>
+  <provider>bad</provider>
+</service>

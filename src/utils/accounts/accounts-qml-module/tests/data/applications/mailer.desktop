@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Easy Mailer
+Comment=Send and receive mail
+Exec=/bin/sh
+Icon=mailer-icon
+Terminal=false
+Type=Application
+Categories=Application;Network;Email;

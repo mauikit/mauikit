@@ -1,0 +1,17 @@
+include(accounts-qml-module-common.qdocconf)
+include(ubuntu-appdev-site-header.qdocconf)
+include(ubuntu-appdev-site-footer.qdocconf)
+
+HTML.stylesheets = \
+    doc/css/reset.css \
+    doc/css/qtquick.css \
+    doc/css/base.css \
+    doc/css/scratch.css
+
+HTML.headerstyles = \
+  "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://fonts.googleapis.com/css?family=Ubuntu:400,400italic\">\n" \
+  "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://fonts.googleapis.com/css?family=Ubuntu+Mono:400\">\n" \
+  "<link rel=\"stylesheet\" type=\"text/css\" href=\"style/reset.css\" />\n" \
+  "<link rel=\"stylesheet\" type=\"text/css\" href=\"style/qtquick.css\" />\n" \
+  "<link rel=\"stylesheet\" type=\"text/css\" href=\"style/base.css\" />\n" \
+  "<link rel=\"stylesheet\" type=\"text/css\" href=\"style/scratch.css\" />\n"

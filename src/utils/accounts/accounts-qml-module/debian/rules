@@ -1,0 +1,21 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+override_dh_auto_configure:
+	QT_SELECT=qt5 \
+	dh_auto_configure \
+		-- LIBDIR=/usr/lib/$(DEB_HOST_MULTIARCH) \
+		"QMAKE_CXXFLAGS=$(CFLAGS)" \
+	        CONFIG+=ubuntu-docs \
+		accounts-qml-module.pro
+
+override_dh_install:
+	rm -rf debian/*/usr/bin
+	rm -f debian/*/usr/share/accounts-qml-module/doc/html/.gitignore
+	dh_install --fail-missing
+
+%:
+	dh $@

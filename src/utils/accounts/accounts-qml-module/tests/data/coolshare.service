@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<service id="coolshare">
+  <type>sharing</type>
+  <name>Cool Share</name>
+  <icon>general_otherservice</icon>
+  <provider>cool</provider>
+</service>

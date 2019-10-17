@@ -1,0 +1,35 @@
+HTML.postheader = \
+    "<header>\n" \
+    "	<div class=\"header-login\">\n" \
+    "		<ul>\n" \
+    "			<li><a href=\"https://myapps.developer.ubuntu.com/openid/login/?next\=/dev\">Sign in or register</a></li>\n" \
+    "		</ul>\n" \
+    "	</div>\n" \
+    "	<div class=\"header-navigation\">\n" \
+    "		<div>\n" \
+    "			<nav role=\"navigation\">\n" \
+    "				<ul>\n" \
+    "					<li class=\"page_item page-item-5\"><a href=\"http://developer.ubuntu.com/\">Home</a></li>\n" \
+    "					<li class=\"page_item page-item-7\"><a href=\"http://developer.ubuntu.com/get-started/\">Get started</a></li>\n" \
+    "					<li class=\"page_item page-item-9\"><a href=\"http://developer.ubuntu.com/resources/\">Resources</a></li>\n" \
+    "					<li class=\"page_item page-item-11\"><a href=\"http://developer.ubuntu.com/publish/\">Publish</a></li>\n" \
+    "					<li class=\"page_item page-item-13\"><a href=\"http://developer.ubuntu.com/community/\">Community</a></li>\n" \
+    "					<li><a href=\"https://myapps.developer.ubuntu.com/dev\">My Apps</a></li>\n" \
+    "					<li>\n" \
+    "						<form id=\"form-search\" method=\"get\" action=\"/\">\n" \
+    "							<fieldset>\n" \
+    "								<input id=\"input-search\" type=\"text\" name=\"s\" value=\"Search\" />\n" \
+    "							</fieldset>\n" \
+    "						</form>\n" \
+    "					</li>\n" \
+    "				</ul>\n" \
+    "			</nav>\n" \
+    "			<a class=\"logo-ubuntu\" href=\"/\"><img src=\"http://developer.ubuntu.com/wp-content/themes/wordpress-theme-ubuntudeveloper/img/logo-ubuntu.png\" width=\"119\" height=\"27\" alt=\"Ubuntu logo\" /></a>\n" \
+    "			<h2><a href=\"/\">App Developer</a></h2>\n" \
+    "		</div>\n" \
+    "	</div>\n" \
+    "	\n" \
+    "	</header>\n" \
+    "   <div class=\"wrapper\">\n" \
+    "   <div class=\"main-content\">\n" 
+

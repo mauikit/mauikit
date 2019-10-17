@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<application id="coolpublisher">
+  <description>Cool publisher</description>
+  <translations>mailer-catalog</translations>
+
+  <services>
+    <service id="coolshare">
+      <description>Publish stuff into your Cool account</description>
+    </service>
+  </services>
+
+</application>

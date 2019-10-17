@@ -1,0 +1,264 @@
+accounts-qml-module (0.6+17.04.20170405-0ubuntu1) zesty; urgency=medium
+
+  [ Łukasz 'sil2100' Zemczak ]
+  * Be sure to depend on qttools5-dev-tools to be able to use the qdoc
+    binary. (LP: #1679776)
+
+ -- Łukasz Zemczak <lukasz.zemczak@canonical.com>  Wed, 05 Apr 2017 08:58:21 +0000
+
+accounts-qml-module (0.6+16.04.20151106-0ubuntu1) xenial; urgency=medium
+
+  [ Alberto Mardegan ]
+  * Merge from upstream:
+    - Hide debug messages by default (LP: #1404267)
+
+  [ CI Train Bot ]
+  * No-change rebuild.
+
+ -- David Barth <david.barth@canonical.com>  Fri, 06 Nov 2015 09:55:59 +0000
+
+accounts-qml-module (0.6+16.04.20151028-0ubuntu1) xenial; urgency=medium
+
+  [ Alberto Mardegan ]
+  * New upstream release
+    - AccountService: define an error enum
+
+  [ CI Train Bot ]
+  * New rebuild forced.
+
+ -- David Barth <david.barth@canonical.com>  Wed, 28 Oct 2015 15:58:59 +0000
+
+accounts-qml-module (0.5+15.04.20150415.1-0ubuntu1) vivid; urgency=medium
+
+  [ Alberto Mardegan ]
+  * Merge from upstream:
+    - Make the authentication() parameter optional
+    - Add manifest-files.qdoc to the documentation (LP: #1429038) 
+
+  [ CI Train Bot ]
+  * New rebuild forced.
+
+ -- CI Train Bot <ci-train-bot@canonical.com>  Wed, 15 Apr 2015 13:37:09 +0000
+
+accounts-qml-module (0.5+15.04.20141110-0ubuntu1) vivid; urgency=low
+
+  [ Ubuntu daily release ]
+  * New rebuild forced
+
+  [ Alberto Mardegan ]
+  * Rename QML module (LP: #1342031)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Mon, 10 Nov 2014 09:49:57 +0000
+
+accounts-qml-module (0.5+14.10.20141006-0ubuntu1) utopic; urgency=medium
+
+  [ mardy ]
+  * New upstream release
+    - Add translation information
+    - Add isSingleAccount field to provider map
+    - AccountServiceModel: add filter on application
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Mon, 06 Oct 2014 07:59:43 +0000
+
+accounts-qml-module (0.4+14.10.20140528-0ubuntu2) utopic; urgency=low
+
+  * add "Multi-Arch: same" to qtdeclarative5-accounts-plugin
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Tue, 02 Sep 2014 10:57:59 +0200
+
+accounts-qml-module (0.4+14.10.20140528-0ubuntu1) utopic; urgency=low
+
+  * New rebuild forced
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 28 May 2014 13:55:42 +0000
+
+accounts-qml-module (0.4+14.10.20140513-0ubuntu1) utopic; urgency=medium
+
+  [ Alberto Mardegan ]
+  * Merge from upstream: add filter on application to AccountServiceModel.
+
+  [ Ubuntu daily release ]
+  * New rebuild forced
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 13 May 2014 07:15:46 +0000
+
+accounts-qml-module (0.4+14.04.20140317-0ubuntu1) trusty; urgency=low
+
+  [ Colin Watson ]
+  * Switch back to Architecture: any, as qtdeclarative now supports all
+    architectures.
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Mon, 17 Mar 2014 16:41:49 +0000
+
+accounts-qml-module (0.4+14.04.20140305-0ubuntu1) trusty; urgency=low
+
+  [ CI bot ]
+  * No change rebuild against Qt 5.2.1.
+
+  [ Albert Astals Cid ]
+  * Merge from upstream Do not pass negative ranges to model calls. (LP:
+    #1231697, #1271039, #1255343)
+
+  [ Alberto Mardegan ]
+  * Merge from upstream Do not pass negative ranges to model calls. (LP:
+    #1231697, #1271039, #1255343)
+  * Merge from upstream Fix a regression introduced with latest fix,
+    where empty models wrongly emit the rowsInserted signal. (LP:
+    #1231697, #1271039, #1255343)
+
+  [ Ubuntu daily release ]
+  * New rebuild forced
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 05 Mar 2014 09:15:03 +0000
+
+accounts-qml-module (0.4+14.04.20131127-0ubuntu1) trusty; urgency=low
+
+  [ Alberto Mardegan ]
+  * New upstream release
+    - ProviderModel: add filtering by application
+      This will allow clients to get the list of only those providers which
+      are relevant to them.
+    - Doc: couple of documentation fixes
+    - AccountServiceModel: share account manager when possible
+  * Merge from upstream
+    - ProviderModel: always emit modelReset() signal (LP: #1255343)
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 40
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 27 Nov 2013 17:33:03 +0000
+
+accounts-qml-module (0.3+13.10.20131016.1-0ubuntu1) saucy; urgency=low
+
+  [ Alberto Mardegan ]
+  * New upstream release
+    - AccountServiceModel: emit dataChanged for displayName
+      Fixes: http://code.google.com/p/accounts-sso/issues/detail?id=204
+    - Add isSingleAccount role to ProviderModel
+      Fixes: http://code.google.com/p/accounts-sso/issues/detail?id=202
+    - Fix generation of qmltypes file
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 37
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 16 Oct 2013 14:15:21 +0000
+
+accounts-qml-module (0.2+13.10.20131011-0ubuntu1) saucy; urgency=low
+
+  [ Alberto Mardegan ]
+  * New upstream release
+    - Add a cancelAuthentication() method to AccountService (LP: #1231680)
+    - Install a typeinfo file for QtCreator
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 35
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 11 Oct 2013 04:32:50 +0000
+
+accounts-qml-module (0.1+13.10.20130725-0ubuntu1) saucy; urgency=low
+
+  [ Ken VanDine ]
+  * Bootstrapping the import from upstream git.
+
+  [ Alberto Mardegan ]
+  * Bootstrapping the import from upstream git.
+
+  [ Automatic PS uploader ]
+  * Bootstrapping the import from upstream git.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 33
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Thu, 25 Jul 2013 04:31:50 +0000
+
+accounts-qml-module (0.1+13.10.20130626-0ubuntu1) saucy; urgency=low
+
+  [ Alberto Mardegan ]
+  * Add ApplicationModel component.
+  * AccountServiceModel: add accountHandle and accountServiceHandle
+    roles These roles replace their counterparts which don't have the
+    "Handle" suffix. The deprecated roles still continue to exist, and
+    emit a warning when accessed. .
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 31
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 26 Jun 2013 04:31:04 +0000
+
+accounts-qml-module (0.0bzr13.04.26daily13.06.18-0ubuntu1) saucy; urgency=low
+
+  [ Alberto Mardegan ]
+  * Add ApplicationModel.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 28
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 18 Jun 2013 04:31:03 +0000
+
+accounts-qml-module (0.0bzr13.04.26daily13.06.05.1-0ubuntu1) saucy; urgency=low
+
+  [ Ken VanDine ]
+  * added top-level qdoc to generate a main page .
+
+  [ Alberto Mardegan ]
+  * Implement account editing functionality Introduce a few new objects
+    which provide functionalities exposed by other parts of the
+    framework: Account, Manager, Credentials. Expand the AccountService
+    class with methods to change account settings. Improve the
+    documentation, add one more example file.
+  * Add a way to enumerate the global accounts.
+  * Change license to LGPL 2.1 .
+  * When authenticating, use Credentials object when available When
+    performing an authentication, let the Accountservice use the
+    Credentials object attached to it, falling back to the stored
+    "credentialsId" field only if the Credentials object is not there or
+    hasn't yet been stored to the DB. .
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 26
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 05 Jun 2013 18:49:05 +0000
+
+accounts-qml-module (0.0bzr13.04.26daily13.05.01.1ubuntu.unity.next-0ubuntu1) raring; urgency=low
+
+  * Automatic snapshot from revision 22 (ubuntu-unity/next)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 01 May 2013 07:53:29 +0000
+
+accounts-qml-module (0.0bzr13.04.26-0ubuntu2) raring; urgency=low
+
+  [ Ken VanDine ]
+  * Automatic snapshot from revision 15 (bootstrap)
+  * debian/control
+    - Only build for arches supported by qtdeclarative5
+
+  [ Alberto Mardegan ]
+  * Support the latest libaccounts-qt
+
+ -- Alberto Mardegan <alberto.mardegan@canonical.com>  Tue, 30 Apr 2013 15:18:06 -0700
+
+accounts-qml-module (0.0bzr13.04.25-0ubuntu1) raring; urgency=low
+
+  * Added doc package
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 25 Apr 2013 16:34:16 -0400
+
+accounts-qml-module (0.0bzr13.03.08-0ubuntu1) raring; urgency=low
+
+  * Upload for raring
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Fri, 08 Mar 2013 08:12:25 -0500
+
+accounts-qml-module (0.0bzr13.03.07-0raring1) raring; urgency=low
+
+  * New snapshot
+  * debian/control
+    - added depends for qtdeclarative5-qtquick2-plugin
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 07 Mar 2013 08:52:07 -0500
+
+accounts-qml-module (0.0bzr13.02.20-0raring1) raring; urgency=low
+
+  * Initial release.
+
+ -- Alberto Mardegan <alberto.mardegan@canonical.com>  Tue, 19 Feb 2013 10:23:10 +0400

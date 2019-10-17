@@ -1,0 +1,61 @@
+body {
+	margin: 0;
+}
+
+
+div.toc ul {
+	padding: 0;
+}
+
+div.toc li {
+	margin-bottom: 3px;
+}
+
+h1.title {
+	font-size: 36px;
+	line-height: 1.1;
+	font-weight: normal;
+}
+h0, h2 {
+	font-size: 24px;
+	line-height: 1.2;
+	margin: 14px 0;
+	font-weight: normal;
+	display: block;
+}
+a:hover {
+	color: #dd4814;
+	text-decoration: underline;
+	outline: 0;
+}
+table, pre {
+	border-radius: 0;
+}
+
+.annotated td {
+	padding: 0.8em 1em 0.3em;
+}
+.wrapper {
+	width: 940px;
+	margin: 0 auto;
+}
+.main-content {
+	width: 668px;
+	position: relative;
+	left: 270px;
+}
+.title {
+	margin-left: -270px;
+	margin-top: 30px;
+	margin-bottom: 50px;
+}
+.toc {
+	margin-left: -270px;
+	font-size: 100%;
+	margin-bottom: 40px;
+    padding: 0;
+    z-index: 2;
+    position: absolute;
+    top: 100px;
+    width: 250px;
+}
