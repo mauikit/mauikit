@@ -361,8 +361,7 @@ bool FMStatic::removeDir(const QUrl &path)
 }
 
 bool FMStatic::rename(const QUrl &url, const QString &name)
-{
-	
+{	
 	return FMStatic::cut(url, QUrl(url.toString().left(url.toString().lastIndexOf("/"))), name);
 }
 
