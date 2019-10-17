@@ -73,8 +73,7 @@ FMH::MODEL_LIST FMStatic::search(const QString& query, const QUrl &path, const b
         while (it.hasNext())
         {
             auto url = it.next();
-            auto info = it.fileInfo();
-            if(info.completeBaseName().contains(query, Qt::CaseInsensitive))
+            if(it.fileName().contains(query, Qt::CaseInsensitive))
             {
                 content << FMH::getFileInfoModel(QUrl::fromLocalFile(url));
             }
