@@ -182,6 +182,8 @@ if(ANDROID OR IS_APPIMAGE_PACKAGE OR MAUIKIT_STYLE)
         find_package(Git REQUIRED)
         execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/milohr/luv-icon-theme.git ${CMAKE_CURRENT_SOURCE_DIR}/android/icons/luv-icon-theme)
     endif()
+
+    list(APPEND mauikit_SRCS android/icons.qrc)
 endif()
 
 if (ANDROID)
@@ -189,7 +191,6 @@ if (ANDROID)
 
     set(mauikit_Android_SRCS
         android/mauiandroid.cpp
-        android/icons.qrc
     )
 
     kde_enable_exceptions(MauiKit PRIVATE)
