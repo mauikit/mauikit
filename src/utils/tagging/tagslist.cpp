@@ -112,17 +112,17 @@ void TagsList::refresh()
 
 bool TagsList::contains(const QString& tag)
 {		
-	return indexOf(tag) > -1;
+	return this->indexOf(tag) >= 0;
 }
 
 int TagsList::indexOf(const QString& tag)
 {
 	int i = 0;
-	for(auto &item : this->list)
+	for(const auto &item : this->list)
 	{
 		if(item.value(TAG::KEYS::TAG) == tag)
 			return i;		
-		i ++;
+		i++;
 	}
 	
 	return -1;
@@ -373,11 +373,15 @@ void TagsList::setUrls(const QStringList& value)
 
 void TagsList::append(const QString &tag)
 {
-	if(!this->insert(tag) && !this->contains(tag))
+	
+	if(this->contains(tag))	
+		return;	
+	
+	if(!this->insert(tag))
 	{
 		emit this->preItemAppended();
 		this->list << TAG::DB {{TAG::KEYS::TAG, tag}};
-		this->sortList();
+// 		this->sortList();
 		emit this->postItemAppended();
 	}
 }
