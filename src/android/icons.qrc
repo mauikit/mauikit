@@ -698,5 +698,10 @@
         <file>icons/luv-icon-theme/Luv/mimetypes/64/audio-mpeg.svg</file>
         <file>icons/luv-icon-theme/Luv/mimetypes/64/audio-mp4.svg</file>
         <file>icons/luv-icon-theme/Luv/mimetypes/64/audio-flac.svg</file>
+        <file>icons/luv-icon-theme/Luv/apps/22/utilities-terminal.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/arrow-down.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/edit-paste.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/love.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/64/audio-x-generic.svg</file>
     </qresource>
 </RCC>
