@@ -31,32 +31,28 @@ KAccountsProvider::KAccountsProvider(QObject *parent) : AccountsProvider(parent)
 
 FMH::MODEL_LIST KAccountsProvider::getAccounts(QString service, bool includeDisabled)
 {
-
-
-    qDebug() << "###";
-	
+    FMH::MODEL_LIST res;
 	auto manager = new Accounts::Manager();
 	QList<Accounts::Account *> accounts;
 	
-		foreach (Accounts::AccountId accountId, manager->accountList()) {
-			Accounts::Account *account = manager->account(accountId);
-			accounts.append(account);
-		}
-	
+    foreach (Accounts::AccountId accountId, manager->accountList()) {
+        Accounts::Account *account = manager->account(accountId);
+        accounts.append(account);
+    }
 
+    for(const auto &account : accounts)
+    {
+        res << FMH::MODEL {
+            {FMH::MODEL_KEY::PATH, "'"},
+            {FMH::MODEL_KEY::ICON, ""},
+            {FMH::MODEL_KEY::LABEL, account->displayName()},
+            {FMH::MODEL_KEY::USER, ""},
+            {FMH::MODEL_KEY::SERVER, ""},
+            {FMH::MODEL_KEY::PASSWORD, ""},
+            {FMH::MODEL_KEY::TYPE, ""}};
+    }
 
-	qDebug() << accounts.size() << accounts;
-
-//    while (count > 0) {
-//        QString roleName;
-
-
-//        count--;
-//    }
-
-    qDebug() << "###";
-
-	return FMH::MODEL_LIST();
+    return res;
 }
 
 bool KAccountsProvider::addAccount(const QString& server, const QString& user, const QString& password)

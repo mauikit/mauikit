@@ -24,7 +24,7 @@
 
 MauiAccounts::MauiAccounts(QObject *parent) : MauiList(parent)
 {
-    this->provider = new SQLiteProvider(this);	
+    this->provider = new KAccountsProvider(this);
 	this->setAccounts();	
 }
 
