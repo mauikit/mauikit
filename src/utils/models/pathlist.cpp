@@ -30,7 +30,7 @@ QVariantMap PathList::get(const int& index) const
 	}
 	
 	const auto model = this->list.at(index);	
-    return FMH::toMap(model);
+	return FMH::toMap(model);
 }
 
 QString PathList::getPath() const
@@ -45,35 +45,38 @@ FMH::MODEL_LIST PathList::items() const
 
 void PathList::popPaths(const QString &path)
 {
-	const int index = [&]() -> const int
+	const int index = [m_path = this->m_path, path]() -> const int
 	{
 		int i = 0;
-		for(const auto &c : this->m_path)
-		{
-			if(c != path[i])
-				break;
-			i++;
+		for(const auto &c : m_path)
+		{				
+			if(i < path.length())			
+			{	
+				if(c != path[i])
+					break;
+				i++;
+			}			
 		}
 		return i;
 	}();
 	
-    if(index == 0)
-    {
+	if(index == 0)
+	{
 		emit this->preListChanged();
 		this->list.clear();
 		this->list << PathList::splitPath(path);
 		emit this->postListChanged();
 		return;
-    }
+	}
 	
-    auto _url = QString(this->m_path).left(index);
+	auto _url = QString(this->m_path).left(index);
 	
-    while(_url.endsWith("/"))
-        _url.chop(1);
+	while(_url.endsWith("/"))
+		_url.chop(1);
 	
-    removePaths(_url);
-    this->m_path = _url;
-    appendPaths(path);
+	removePaths(_url);
+	this->m_path = _url;
+	appendPaths(path);
 }
 
 void PathList::appendPaths(const QString &path)
@@ -94,16 +97,22 @@ void PathList::removePaths(const QString &path)
 	
 	while(_url.endsWith("/"))
 		_url.chop(1);
+	
+	while(_url.startsWith("/"))
+		_url.remove(0,1);
+	
+	_url.insert(0, "/");
 	const auto count = _url.count("/");
-	for(auto i = 0; i < count; i++)
-	{	 
-        if(this->list.size() < 1)
-            break;
-
-		emit this->preItemRemoved(this->list.size()-1);
-		this->list.removeAt(this->list.size()-1);
-		emit this->postItemRemoved();
-	}	
+	
+	if(count < this->list.size())
+	{
+		for(auto i = 0; i < count; i++)
+		{
+			emit this->preItemRemoved(this->list.size()-1);
+			this->list.removeAt(this->list.size()-1);
+			emit this->postItemRemoved();
+		}	
+	}
 }
 
 void PathList::setPath(const QString& path)
@@ -112,6 +121,9 @@ void PathList::setPath(const QString& path)
 	
 	while(_url.endsWith("/"))
 		_url.chop(1);
+	
+	while(_url.startsWith("/"))
+		_url.remove(0,1);
 	
 	if(_url == this->m_path)
 		return;	
@@ -154,15 +166,15 @@ FMH::MODEL_LIST PathList::splitPath(const QString& path)
 		if(label.isEmpty())
 			continue;
 		
-        if(label.contains(":") && i == count -1)
-        {
-            res << FMH::MODEL
-            {
-            {FMH::MODEL_KEY::LABEL, "/"},
-            {FMH::MODEL_KEY::PATH, _url+"/"}
-        };
-            break;
-        }
+		if(label.contains(":") && i == count -1)
+		{
+			res << FMH::MODEL
+			{
+				{FMH::MODEL_KEY::LABEL, "/"},
+				{FMH::MODEL_KEY::PATH, _url+"/"}
+			};
+			break;
+		}
 		
 		res << FMH::MODEL 
 		{
