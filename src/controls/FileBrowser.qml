@@ -524,6 +524,19 @@ Maui.Page
 		}
 		
 		onAreaRightClicked: browserMenu.show()
+		
+		onWarning:
+		{			
+			notify("dialog-information", "An error happened", message)
+		}
+		
+		onProgress:
+		{
+			if(percent === 100)
+				_progressBar.value = 0
+				else
+					_progressBar.value = percent/100
+		}	
 	}
 	
 	headBar.rightContent:[
@@ -630,9 +643,9 @@ Maui.Page
 				{
 					control.group = !control.group
 					if(control.group)
-						groupBy()
-						else
-							browserView.currentView.section.property = ""
+						control.groupBy()
+					else
+						browserView.currentView.section.property = ""
 				}
 			}
 		},

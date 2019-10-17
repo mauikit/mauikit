@@ -43,61 +43,133 @@ FMH::MODEL_LIST PathList::items() const
 	return this->list;
 }
 
-void PathList::setPath(const QString& path)
-{	
-	if(path == this->m_path)
-		return;	
-	
-    if(!this->list.isEmpty() && QUrl(this->m_path).isParentOf(path))
+void PathList::popPaths(const QString &path)
+{
+	const int index = [&]() -> const int
 	{
-		emit this->preItemAppended();
-		this->list << FMH::getDirInfoModel(path);
-		emit this->postItemAppended();
-	}else{
+		int i = 0;
+		for(const auto &c : this->m_path)
+		{
+			if(c != path[i])
+				break;
+			i++;
+		}
+		return i;
+	}();
+	
+	if(index == 0)
+	{
 		emit this->preListChanged();
 		this->list.clear();
 		this->list << PathList::splitPath(path);
 		emit this->postListChanged();
-	}	
+		return;
+	}
 	
-	this->m_path = path;	
+	auto _url = QString(this->m_path).left(index);
+	
+	while(_url.endsWith("/"))
+		_url.chop(1);
+	
+	removePaths(_url);
+	this->m_path = _url;
+	appendPaths(path);	
+}
+
+void PathList::appendPaths(const QString &path)
+{
+	const auto _url = QString(path).replace(this->m_path, "");	
+	for(auto &item : splitPath(_url))
+	{
+		emit this->preItemAppended();
+		item[FMH::MODEL_KEY::PATH] = this->m_path + item[FMH::MODEL_KEY::PATH];
+		this->list << item;
+		emit this->postItemAppended();
+	}	
+}
+
+void PathList::removePaths(const QString &path)
+{
+	auto _url = QString(this->m_path).replace(path, "");	
+	
+	while(_url.endsWith("/"))
+		_url.chop(1);
+	const auto count = _url.count("/");
+	for(auto i = 0; i < count; i++)
+	{	 
+		emit this->preItemRemoved(this->list.size()-1);
+		this->list.removeAt(this->list.size()-1);
+		emit this->postItemRemoved();
+	}	
+}
+
+void PathList::setPath(const QString& path)
+{	
+	auto _url = path;
+	
+	while(_url.endsWith("/"))
+		_url.chop(1);
+	
+	if(_url == this->m_path)
+		return;	
+	
+	if(!this->list.isEmpty() && _url.startsWith(this->m_path))
+	{
+		appendPaths(_url);
+	}
+	else if(!this->list.isEmpty() && this->m_path.startsWith(_url))
+	{
+		removePaths(_url);
+	}	
+	else 
+	{
+		popPaths(_url);
+	}
+	
+	this->m_path = _url;	
 	emit this->pathChanged();		
 }
 
 FMH::MODEL_LIST PathList::splitPath(const QString& path)
 {
-	QString __url = path;
-	QString __scheme;
+	FMH::MODEL_LIST res;
 	
-	if(path.contains(":"))	//means it has a scheme
+	QString _url = path;
+	
+	while(_url.endsWith("/"))
+		_url.chop(1);
+	
+	_url += "/";
+	
+	const auto count = _url.count("/");
+	
+	for(auto i = 0; i< count; i++)
 	{
-		const auto parts = QString(path).split(":", QString::SplitBehavior::SkipEmptyParts);
-		__url = parts[1];
-		__scheme = parts[0];		
-	}
-	
-	const auto paths = __url.split("/", QString::SplitBehavior::SkipEmptyParts);
-	
-    qDebug()<< "STRING TO SPLIT"<< __url << path << __scheme << paths;
-
-
-	if(paths.isEmpty())
-	{
-		return {{{FMH::MODEL_KEY::LABEL, path}, {FMH::MODEL_KEY::PATH, path}}};
-	}
-	
-	return std::accumulate(paths.constBegin(), paths.constEnd(), FMH::MODEL_LIST(), [__scheme](FMH::MODEL_LIST &list, const QString &part) -> FMH::MODEL_LIST
-	{	
-        const auto url = list.isEmpty() ? QString(__scheme +  ":///" +part) : list.last()[FMH::MODEL_KEY::PATH] + QString("/"+part);
+		_url =  QString(_url).left(_url.lastIndexOf("/")) ;
+		auto label = QString(_url).right(_url.length() - _url.lastIndexOf("/")-1);
 		
-		if(!url.isEmpty())
-			list << FMH::MODEL 
-			{
-				{FMH::MODEL_KEY::LABEL, part},
-				{FMH::MODEL_KEY::PATH, url}
-			};
+		if(label.isEmpty())
+			continue;
 		
-		return list;
-	});
+		if(label.contains(":") && i == count -1)
+  {
+	  res << FMH::MODEL 
+	  {
+		  {FMH::MODEL_KEY::LABEL, "/"},
+		  {FMH::MODEL_KEY::PATH, _url+"/"}
+	  };
+	  break;
+  }
+		
+		res << FMH::MODEL 
+		{
+			{FMH::MODEL_KEY::LABEL, label},
+			{FMH::MODEL_KEY::PATH, _url}
+		};
+	}
+	std::reverse(res.begin(), res.end());
+	
+	
+	return res;
 }
 

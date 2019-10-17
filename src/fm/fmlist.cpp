@@ -89,18 +89,14 @@ watcher(new QFileSystemWatcher(this))
 			emit this->postItemAppended();
 		}
 	});	
-    
+	
 	const auto value = UTIL::loadSettings("SaveDirProps", "SETTINGS", this->saveDirProps).toBool();
 	this->setSaveDirProps(value);	
+	connect(this, &FMList::pathChanged, this, &FMList::reset);
 }
 
 FMList::~FMList()
 {}
-
-void FMList::componentComplete()
-{
-	connect(this, &FMList::pathChanged, this, &FMList::reset);	
-}
 
 void FMList::watchPath(const QString& path, const bool& clear)
 {	

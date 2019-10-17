@@ -140,9 +140,7 @@ class FMList : public MauiList
         		
 		FMList(QObject *parent = nullptr);
 	
-		~FMList();
-		
-		void componentComplete() override final;	
+		~FMList();		
 		
 		FMH::MODEL_LIST items() const final override;
 		

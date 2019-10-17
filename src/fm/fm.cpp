@@ -288,7 +288,7 @@ FM::FM(QObject *parent) : QObject(parent)
                     {
                     {FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::TAGS_PATH]+label},
 					{FMH::MODEL_KEY::ICON, "tag"},
-					{FMH::MODEL_KEY::MODIFIED, item.value(TAG::KEYMAP[TAG::KEYS::ADD_DATE]).toString()},
+					{FMH::MODEL_KEY::MODIFIED, QDateTime::fromString(item.value(TAG::KEYMAP[TAG::KEYS::ADD_DATE]).toString(), Qt::TextDate).toString()},
 					{FMH::MODEL_KEY::IS_DIR, "true"},
 					{FMH::MODEL_KEY::LABEL, label},
                     {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::TAGS_PATH]}
