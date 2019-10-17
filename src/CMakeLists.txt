@@ -178,9 +178,9 @@ endif()
 option(IS_APPIMAGE_PACKAGE "If set to true then the icons and styled is packaged as well")
 
 if(ANDROID OR IS_APPIMAGE_PACKAGE OR MAUIKIT_STYLE)
-    if (NOT EXISTS ${CMAKE_SOURCE_DIR}/android/icons/luv-icon-theme/.git)
+    if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/android/icons/luv-icon-theme/.git)
         find_package(Git REQUIRED)
-        execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/milohr/luv-icon-theme.git ${CMAKE_SOURCE_DIR}/android/icons/luv-icon-theme)
+        execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/milohr/luv-icon-theme.git ${CMAKE_CURRENT_SOURCE_DIR}/android/icons/luv-icon-theme)
     endif()
 endif()
 
