@@ -34,7 +34,7 @@ set(mauikit_HDRS
     utils/model_template/mauimodel.h
     )
 
-if(MYDEFS MATCHES "^COMPONENT_ACCOUNTS=ON" OR MYDEFS MATCHES ";COMPONENT_ACCOUNTS=ON")
+if(${COMPONENT_ACCOUNTS})
     message(STATUS "INCLUDING ACCOUNTS COMPONENT")
 
     include_directories(
@@ -45,6 +45,7 @@ if(MYDEFS MATCHES "^COMPONENT_ACCOUNTS=ON" OR MYDEFS MATCHES ";COMPONENT_ACCOUNT
     set(accounts_SRCS
         utils/accounts/mauiaccounts.cpp
         utils/accounts/accountsdb.cpp
+        utils/accounts/accounts.qrc
         )
 
     set(accounts_HDRS
@@ -52,9 +53,10 @@ if(MYDEFS MATCHES "^COMPONENT_ACCOUNTS=ON" OR MYDEFS MATCHES ";COMPONENT_ACCOUNT
         utils/accounts/accountsdb.h
         )
     qt5_add_resources(accounts_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/utils/accounts/accounts.qrc)
+    add_compile_definitions(COMPONENT_ACCOUNTS)
 endif()
 
-if(MYDEFS MATCHES "^COMPONENT_EDITOR=ON" OR MYDEFS MATCHES ";COMPONENT_EDITOR=ON")
+if(${COMPONENT_EDITOR})
     message(STATUS "INCLUDING EDITOR COMPONENT")
     set(editor_SRCS
         utils/editor/documenthandler.cpp
@@ -70,9 +72,10 @@ if(MYDEFS MATCHES "^COMPONENT_EDITOR=ON" OR MYDEFS MATCHES ";COMPONENT_EDITOR=ON
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/editor
         ${CMAKE_CURRENT_BINARY_DIR}/utils/editor
         )
+    add_compile_definitions(COMPONENT_EDITOR)
 endif()
 
-if(MYDEFS MATCHES "^COMPONENT_FM=ON" OR MYDEFS MATCHES ";COMPONENT_FM=ON")
+if(${COMPONENT_FM})
     message(STATUS "INCLUDING FM COMPONENT")
 
     set(fm_SRCS
@@ -90,15 +93,17 @@ if(MYDEFS MATCHES "^COMPONENT_FM=ON" OR MYDEFS MATCHES ";COMPONENT_FM=ON")
         ${CMAKE_CURRENT_SOURCE_DIR}/fm
         ${CMAKE_CURRENT_BINARY_DIR}/fm
         )
+    add_compile_definitions(COMPONENT_FM)
 endif()
 
-if(MYDEFS MATCHES "^COMPONENT_TAGGING=ON" OR MYDEFS MATCHES ";COMPONENT_TAGGING=ON")
+if(${COMPONENT_TAGGING})
     message(STATUS "INCLUDING TAGGING COMPONENT")
     set(tagging_SRCS
         utils/tagging/tagging.cpp
         utils/tagging/tagdb.cpp
         utils/tagging/tagsmodel.cpp
         utils/tagging/tagslist.cpp
+        utils/tagging/tagging.qrc
         )
 
     set(tagging_HDRS
@@ -108,14 +113,14 @@ if(MYDEFS MATCHES "^COMPONENT_TAGGING=ON" OR MYDEFS MATCHES ";COMPONENT_TAGGING=
         utils/tagging/tagsmodel.h
         utils/tagging/tagslist.h
         )
-    qt5_add_resources(tagging_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/utils/tagging/tagging.qrc)
     include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/tagging
         ${CMAKE_CURRENT_BINARY_DIR}/utils/tagging
         )
+    add_compile_definitions(COMPONENT_TAGGING)
 endif()
 
-if(MYDEFS MATCHES "^COMPONENT_SYNCING=ON" OR MYDEFS MATCHES ";COMPONENT_SYNCING=ON")
+if(${COMPONENT_SYNCING})
     message(STATUS "INCLUDING SYNCING COMPONENT")
     set(syncing_SRCS
         utils/syncing/syncing.cpp
@@ -143,14 +148,16 @@ if(MYDEFS MATCHES "^COMPONENT_SYNCING=ON" OR MYDEFS MATCHES ";COMPONENT_SYNCING=
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/syncing/libwebdavclient/lib/utils
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/syncing/libwebdavclient/lib/dto
         )
+    add_compile_definitions(COMPONENT_SYNCING)
 endif()
 
-if(MYDEFS MATCHES "^COMPONENT_STORE=ON" OR MYDEFS MATCHES ";COMPONENT_STORE=ON")
+if(${COMPONENT_STORE})
     message(STATUS "INCLUDING STORE COMPONENT")
     set(store_SRCS
         utils/store/store.cpp
         utils/store/storemodel.cpp
         utils/store/storelist.cpp
+        utils/store/store.qrc
         )
 
     set(store_HDRS
@@ -159,12 +166,11 @@ if(MYDEFS MATCHES "^COMPONENT_STORE=ON" OR MYDEFS MATCHES ";COMPONENT_STORE=ON")
         utils/store/storelist.h
         )
 
-    qt5_add_resources(store_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/utils/store/store.qrc)
-
     include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/store
         ${CMAKE_CURRENT_BINARY_DIR}/utils/store
         )
+    add_compile_definitions(COMPONENT_STORE)
 endif()
 #use dbus on linux, bsd etc, but not andoid and apple stuff
 
@@ -172,25 +178,16 @@ endif()
 option(IS_APPIMAGE_PACKAGE "If set to true then the icons and styled is packaged as well")
 
 if(ANDROID OR IS_APPIMAGE_PACKAGE OR MAUIKIT_STYLE)
-    qt5_add_resources(MauiIcon_RESOURCES ${CMAKE_SOURCE_DIR}/android/icons.qrc)
-    qt5_add_resources(MauiStyle_RESOURCES ${CMAKE_SOURCE_DIR}/maui-style/style.qrc)
-
-    if (NOT EXISTS ${CMAKE_SOURCE_DIR}/android/icons/luv-icon-theme/.git)
+    if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/android/icons/luv-icon-theme/.git)
         find_package(Git REQUIRED)
-        execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/milohr/luv-icon-theme.git ${CMAKE_SOURCE_DIR}/android/icons/luv-icon-theme)
+        execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/milohr/luv-icon-theme.git ${CMAKE_CURRENT_SOURCE_DIR}/android/icons/luv-icon-theme)
     endif()
 
-    set(mauikit_style_QRCS
-        ${MauiIcon_RESOURCES}
-        ${MauiStyle_RESOURCES}
-        )
+    list(APPEND mauikit_SRCS android/icons.qrc)
 endif()
 
 if (ANDROID)
-    find_package(Gradle REQUIRED)
     add_subdirectory(android)
-
-    find_package(Qt5 REQUIRED COMPONENTS AndroidExtras WebView)
 
     set(mauikit_Android_SRCS
         android/mauiandroid.cpp
@@ -198,8 +195,6 @@ if (ANDROID)
 
     kde_enable_exceptions(MauiKit PRIVATE)
 else()
-    find_package(Qt5 REQUIRED COMPONENTS WebEngine)
-
     set(mauikit_KDE_SRCS
         kde/mauikde.cpp
         kde/kdeconnect.cpp
@@ -211,9 +206,6 @@ else()
         )
 endif()
 
-qt5_add_resources(mauikit_ASSETS ${CMAKE_SOURCE_DIR}/assets.qrc)
-qt5_add_resources(mauikit_RESOURCES ${CMAKE_SOURCE_DIR}/mauikit.qrc)
-
 add_library(MauiKit
 
     ${fm_HDRS}
@@ -221,7 +213,6 @@ add_library(MauiKit
 
     ${accounts_HDRS}
     ${accounts_SRCS}
-    ${accounts_RESOURCES}
 
     ${editor_HDRS}
     ${editor_SRCS}
@@ -231,27 +222,22 @@ add_library(MauiKit
 
     ${store_SRCS}
     ${store_HDRS}
-    ${store_RESOURCES}
 
     ${tagging_HDRS}
     ${tagging_SRCS}
-    ${tagging_RESOURCES}
 
     ${mauikit_HDRS}
     ${mauikit_SRCS}
-    ${mauikit_RESOURCES}
-    ${mauikit_ASSETS}
-
-    ${MauiIcon_RESOURCES}
-    ${MauiStyle_RESOURCES}
 
     ${mauikit_Android_SRCS}
 
     ${mauikit_KDE_HDRS}
     ${mauikit_KDE_SRCS}
-)
 
-find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets)
+    maui-style/style.qrc
+    assets.qrc
+    mauikit.qrc
+)
 
 if(ANDROID)
     target_link_libraries(MauiKit PRIVATE Qt5::AndroidExtras Qt5::WebView jnigraphics)
@@ -291,12 +277,12 @@ target_link_libraries(MauiKit
     KF5::ConfigWidgets
     )
 
-if(MYDEFS MATCHES "^COMPONENT_EDITOR=ON" OR MYDEFS MATCHES ";COMPONENT_EDITOR=ON")
+if(${COMPONENT_EDITOR})
     find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS SyntaxHighlighting)
     target_link_libraries(MauiKit PRIVATE KF5::SyntaxHighlighting)
 endif()
 
-if(MYDEFS MATCHES "^COMPONENT_STORE=ON" OR MYDEFS MATCHES ";COMPONENT_STORE=ON")
+if(${COMPONENT_STORE})
     find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS Attica)
     target_link_libraries(MauiKit PUBLIC KF5::Attica)
 endif()
@@ -339,4 +325,4 @@ install(FILES
     COMPONENT Devel)
 
 ##INSTALL MAUI STYLE
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/maui-style DESTINATION ${KDE_INSTALL_QMLDIR}/QtQuick/Controls.2)
+install(DIRECTORY maui-style DESTINATION ${KDE_INSTALL_QMLDIR}/QtQuick/Controls.2)
