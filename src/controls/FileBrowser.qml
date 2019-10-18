@@ -432,7 +432,9 @@ Maui.Page
             // Shortcut for opening new tab
             if((event.key == Qt.Key_T) && (event.modifiers & Qt.ControlModifier))
             {
-                control.openTab((currentPath).toString())
+				const _path = (currentPath).toString()
+				control.openTab(" ")
+				control.currentPath = _path
             }
 
             // Shortcut for closing tab

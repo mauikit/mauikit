@@ -114,8 +114,7 @@ Item
 					easing.type: Easing.InOutQuad
 				}
 			}
-		}
-		
+		}		
 		
 		ToolButton
 		{

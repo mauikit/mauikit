@@ -32,7 +32,6 @@ Maui.ItemDelegate
 	
 	property alias label: controlLabel.text
 	property alias iconName: controlIcon.source  	
-	
 	implicitWidth: parent.width
 	implicitHeight: Math.max(control.iconSize + Maui.Style.space.tiny, Maui.Style.rowHeight)	
 	

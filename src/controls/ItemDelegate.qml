@@ -95,6 +95,8 @@ ItemDelegate
 
         onPressAndHold : control.pressAndHold(mouse)
     }
+    
+    contentItem: null
 
     Rectangle
     {
