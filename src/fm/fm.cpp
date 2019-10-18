@@ -280,16 +280,18 @@ FM::FM(QObject *parent) : QObject(parent)
 #ifdef COMPONENT_TAGGING
             if(this->tag)
             {
-                for(const auto &tag : this->tag->getUrlsTags(false))
+                for(const auto &tag : this->tag->getAllTags(false))
                 {
-                    qDebug()<< "TAG << "<< tag;
-                    const auto label = tag.toMap().value(TAG::KEYMAP[TAG::KEYS::TAG]).toString();
+					QVariantMap item = tag.toMap();
+                    const auto label = item.value(TAG::KEYMAP[TAG::KEYS::TAG]).toString();
                     data << FMH::MODEL
                     {
                     {FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::TAGS_PATH]+label},
-                    {FMH::MODEL_KEY::ICON, "tag"},
-                    {FMH::MODEL_KEY::LABEL, label},
-                    {FMH::MODEL_KEY::TYPE,  FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::TAGS_PATH]}
+					{FMH::MODEL_KEY::ICON, "tag"},
+					{FMH::MODEL_KEY::MODIFIED, QDateTime::fromString(item.value(TAG::KEYMAP[TAG::KEYS::ADD_DATE]).toString(), Qt::TextDate).toString()},
+					{FMH::MODEL_KEY::IS_DIR, "true"},
+					{FMH::MODEL_KEY::LABEL, label},
+                    {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::TAGS_PATH]}
                 };
             }
         }
@@ -371,15 +373,22 @@ QString FM::resolveLocalCloudPath(const QString& path)
 FMH::MODEL_LIST FM::getTagContent(const QString &tag)
 {
     FMH::MODEL_LIST content;
-#ifdef COMPONENT_TAGGING
-    for(const auto &data : this->tag->getUrls(tag, false))
-    {
-        const auto url = QUrl(data.toMap()[TAG::KEYMAP[TAG::KEYS::URL]].toString());
-        if(url.isLocalFile() && !FMH::fileExists(url))
-            continue;
-
-        content << FMH::getFileInfoModel(url);
-    }
+	#ifdef COMPONENT_TAGGING
+	if(tag.isEmpty())
+	{
+		return this->getTags();
+		
+	}else		
+	{
+		for(const auto &data : this->tag->getUrls(tag, false))
+		{
+			const auto url = QUrl(data.toMap()[TAG::KEYMAP[TAG::KEYS::URL]].toString());
+			if(url.isLocalFile() && !FMH::fileExists(url))
+				continue;
+			
+			content << FMH::getFileInfoModel(url);
+		}
+	}
 #endif
     return content;
 }

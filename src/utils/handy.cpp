@@ -31,6 +31,18 @@ Handy::Handy(QObject *parent) : QObject(parent) {}
 
 Handy::~Handy() {}
 
+#ifdef Q_OS_ANDROID
+static struct
+{
+    QList<QUrl> urls;
+    QString text;
+
+    bool hasUrls(){ return !urls.isEmpty(); }
+    bool hasText(){ return !text.isEmpty(); }
+
+} _clipboard;
+#endif
+
 QVariantMap Handy::appInfo()
 {
 	auto app =  UTIL::app;
@@ -62,7 +74,6 @@ QVariantMap Handy::userInfo()
 	return res;	
 }
 
-
 QString Handy::getClipboardText()
 {
 	#ifdef Q_OS_ANDROID
@@ -81,41 +92,50 @@ QString Handy::getClipboardText()
 QVariantMap Handy::getClipboard()
 {
 	QVariantMap res;
-	#ifdef Q_OS_ANDROID
-	auto clipboard = QGuiApplication::clipboard();
+	#ifdef Q_OS_ANDROID    
+    if(_clipboard.hasUrls())
+        res.insert("urls", QUrl::toStringList(_clipboard.urls));
+
+    if(_clipboard.hasText())
+        res.insert("text", _clipboard.text);
 	#else
 	auto clipboard = QApplication::clipboard();
-	#endif
-	
-	auto mime = clipboard->mimeData();
-	if(mime->hasUrls())
-		res.insert("urls", QUrl::toStringList(mime->urls()));
-	
-	if(mime->hasText())
-		res.insert("text", mime->text());
-// 	if(mime->hasText())
-// 		return clipbopard->text();
-	
+
+    auto mime = clipboard->mimeData();
+    if(mime->hasUrls())
+        res.insert("urls", QUrl::toStringList(mime->urls()));
+
+    if(mime->hasText())
+        res.insert("text", mime->text());
+    #endif
 	return res;
 }
 
 bool Handy::copyToClipboard(const QVariantMap &value)
 {
 	#ifdef Q_OS_ANDROID
-	auto clipboard = QGuiApplication::clipboard();
+    if(value.contains("urls"))
+        _clipboard.urls = QUrl::fromStringList(value["urls"].toStringList());
+
+    if(value.contains("text"))
+        _clipboard.text = value["text"].toString();
+
+    return true;
 	#else
 	auto clipboard = QApplication::clipboard();
-	#endif
-	QMimeData* mimeData = new QMimeData();
-	
-	if(value.contains("urls"))
-		mimeData->setUrls(QUrl::fromStringList(value["urls"].toStringList()));
-	
-	if(value.contains("text"))
-		mimeData->setText(value["text"].toString());
-	
-	clipboard->setMimeData(mimeData);
-	return true;
+    QMimeData* mimeData = new QMimeData();
+
+    if(value.contains("urls"))
+        mimeData->setUrls(QUrl::fromStringList(value["urls"].toStringList()));
+
+    if(value.contains("text"))
+        mimeData->setText(value["text"].toString());
+
+    clipboard->setMimeData(mimeData);
+    return true;
+	#endif	
+
+    return false;
 }
 
 bool Handy::copyTextToClipboard(const QString &text)

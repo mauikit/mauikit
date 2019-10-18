@@ -50,7 +50,7 @@ Maui.Page
 			{
 				const urls = _dropMenu.urls.split(",")
 				for(var i in urls)
-					Maui.FM.cut(urls[i], _dropMenu.target, false)				
+					Maui.FM.cut(urls[i], _dropMenu.target)				
 			}
 		}
 		
@@ -86,19 +86,7 @@ Maui.Page
 		id: _commonFMList
 		path: control.path
 		foldersFirst: true
-		onSortByChanged: if(group) groupBy()
-		onWarning:
-		{			
-			notify("dialog-information", "An error happened", message)
-		}
-		
-		onProgress:
-		{
-			if(percent === 100)
-				_progressBar.value = 0
-				else
-					_progressBar.value = percent/100
-		}		
+		onSortByChanged: if(group) groupBy()			
 	}
 	
 	Component
@@ -437,7 +425,6 @@ Maui.Page
 				{
 					property alias currentFMList : _millersFMList
 					property int _index : index
-					
 					width: Math.min(Kirigami.Units.gridUnit * 22, control.width)
 					height: parent.height
 					focus: true		
@@ -461,18 +448,6 @@ Maui.Page
 						id: _millersFMList
 						path: model.path
 						foldersFirst: true
-						onWarning:
-						{			
-							notify("dialog-information", "An error happened", message)
-						}
-						
-						onProgress:
-						{
-							if(percent === 100)
-								_progressBar.value = 0
-								else
-									_progressBar.value = percent/100
-						}
 					}
 					
 					Maui.ListBrowser
@@ -499,7 +474,19 @@ Maui.Page
 						holder.title: _holder.title
 						holder.body: _holder.body
 						holder.emojiSize: _holder.emojiSize
-											
+						
+						section.delegate: Maui.LabelDelegate
+						{
+							id: delegate
+							width: parent.width
+							height: Maui.Style.toolBarHeightAlt
+							
+							label: String(section).toUpperCase()
+							labelTxt.font.pointSize: Maui.Style.fontSizes.big
+							
+							isSection: true
+						}
+						
 						onAreaClicked:
 						{
 							_millerColumns.currentIndex = _index

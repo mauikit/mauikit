@@ -90,10 +90,9 @@ watcher(new QFileSystemWatcher(this))
 		}
 	});	
 	
-	connect(this, &FMList::pathChanged, this, &FMList::reset);
-    
 	const auto value = UTIL::loadSettings("SaveDirProps", "SETTINGS", this->saveDirProps).toBool();
 	this->setSaveDirProps(value);	
+	connect(this, &FMList::pathChanged, this, &FMList::reset);
 }
 
 FMList::~FMList()
@@ -132,11 +131,7 @@ void FMList::assignList(const FMH::MODEL_LIST& list)
 }
 
 void FMList::setList()
-{	
-    emit this->preListChanged();
-    this->list.clear();
-    emit this->postListChanged();
-    
+{
     qDebug()<< "PATHTYPE FOR URL"<< pathType << path;
     
 	switch(this->pathType)
@@ -155,6 +150,10 @@ void FMList::setList()
 
         default:
         {
+            emit this->preListChanged();
+            this->list.clear();
+            emit this->postListChanged();
+
             const bool exists = this->path.isLocalFile() ? FMH::fileExists(this->path) : true;
             if(!exists)    
                 this->setStatus({STATUS_CODE::ERROR, "Error", "This URL cannot be listed", "documentinfo", this->list.isEmpty(), exists});
@@ -376,8 +375,7 @@ void FMList::setPath(const QUrl &path)
 	if(this->path == path)
 		return;
 	
-	if(this->pathType == FMList::PATHTYPE::PLACES_PATH)
-		this->searchPath = this->path;
+    this->searchPath = this->path;
 	
 	this->path = path;
 	this->setPreviousPath(this->path);  
@@ -442,7 +440,6 @@ void FMList::setPath(const QUrl &path)
     emit this->pathNameChanged();
     emit this->pathTypeChanged();
     emit this->pathChanged();
-
 }
 
 FMList::PATHTYPE FMList::getPathType() const
@@ -716,6 +713,12 @@ void FMList::search(const QString& query, const QUrl &path, const bool &hidden, 
 
 void FMList::filterContent(const QString &query, const QUrl &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)
 {
+    if(this->list.isEmpty())
+    {
+        qDebug() << "Can not filter content. List is empty";
+        return;
+    }
+
     QFutureWatcher<FMH::PATH_CONTENT> *watcher = new QFutureWatcher<FMH::PATH_CONTENT>;
     connect(watcher, &QFutureWatcher<FMH::MODEL_LIST>::finished, [=]()
     {
@@ -737,12 +740,11 @@ void FMList::filterContent(const QString &query, const QUrl &path, const bool &h
     {
         FMH::MODEL_LIST m_content;
         FMH::PATH_CONTENT res;
-        res.path = path.toString();
-        res.content = m_content;
+
         for(const auto &item : this->list)
         {
-            if(item[FMH::MODEL_KEY::URL].contains(query) || item[FMH::MODEL_KEY::LABEL].contains(query)
-                    || item[FMH::MODEL_KEY::SUFFIX].contains(query) || item[FMH::MODEL_KEY::MIME].contains(query))
+            if(item[FMH::MODEL_KEY::LABEL].contains(query, Qt::CaseInsensitive)
+                    || item[FMH::MODEL_KEY::SUFFIX].contains(query, Qt::CaseInsensitive) || item[FMH::MODEL_KEY::MIME].contains(query, Qt::CaseInsensitive))
             {
                 if(onlyDirs && item[FMH::MODEL_KEY::IS_DIR] == "true")
                 {
@@ -753,10 +755,12 @@ void FMList::filterContent(const QString &query, const QUrl &path, const bool &h
                 m_content << item;
             }
         }
+
+        res.path = path.toString();
+        res.content = m_content;
         return res;
     });
     watcher->setFuture(t1);
-
 }
 
 int FMList::getCloudDepth() const

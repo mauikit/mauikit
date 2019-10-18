@@ -59,10 +59,10 @@ Maui.Dialog
 		placeholderText: qsTr("New tags...")
 		onAccepted:
 		{
-			var tags = tagText.text.split(",")
+			const tags = tagText.text.split(",")
 			for(var i in tags)
 			{
-				var myTag = tags[i].trim()
+				const myTag = tags[i].trim()
 				_tagsList.insert(myTag)
 				tagListComposer.list.append(myTag)
 			}
@@ -74,7 +74,6 @@ Maui.Dialog
 	headBar.rightContent: ToolButton
 	{
 		icon.name: "view-refresh"
-// 		text: qsTr("Refresh...")
 		onClicked: taglist.refresh()
 	}	
 
@@ -132,7 +131,7 @@ Maui.Dialog
 						onClicked:
 						{
 							_listView.currentIndex = index
-							tagListComposer.list.append(_tagsList.get(index).tag)
+							tagListComposer.list.append(_tagsList.get(_listView.currentIndex ).tag)			
 						}
 					}
 				}				
@@ -150,6 +149,11 @@ Maui.Dialog
 			onTagRemoved: list.remove(index)
 			placeholderText: ""
 		}
+	}
+	
+	onClosed:
+	{
+		composerList.urls = []
 	}
 	
 	function setTags()

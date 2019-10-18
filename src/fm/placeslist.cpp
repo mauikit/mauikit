@@ -33,6 +33,10 @@
 #include <KFilePlacesModel>
 #endif
 
+#ifdef COMPONENT_TAGGING
+#include "tagging.h"
+#endif
+
 #ifdef Q_OS_ANDROID 
 PlacesList::PlacesList(QObject *parent) : MauiList(parent),
 fm(new FM(this)),
@@ -58,6 +62,10 @@ watcher(new QFileSystemWatcher(this))
             emit this->updateModel(index, {FMH::MODEL_KEY::COUNT});
         }
     });
+	
+	#ifdef COMPONENT_TAGGING
+	connect(Tagging::getInstance(), &Tagging::tagged, this, &PlacesList::reset);	
+	#endif
 
 #ifdef COMPONENT_ACCOUNTS
     connect(MauiAccounts::instance(), &MauiAccounts::accountAdded, this, &PlacesList::reset);
@@ -66,7 +74,6 @@ watcher(new QFileSystemWatcher(this))
 
     connect(this, &PlacesList::groupsChanged, this, &PlacesList::reset);
 
-    this->setList();
 }
 
 void PlacesList::watchPath(const QString& path)
@@ -75,6 +82,15 @@ void PlacesList::watchPath(const QString& path)
         return;
 
     this->watcher->addPath(path);
+}
+
+void PlacesList::classBegin()
+{
+}
+
+void PlacesList::componentComplete()
+{
+	this->setList();	
 }
 
 PlacesList::~PlacesList() {}
@@ -149,15 +165,18 @@ void PlacesList::setList()
 		{FMH::MODEL_KEY::ICON, "view-media-recent"},
 		{FMH::MODEL_KEY::LABEL, "Recent"},
 		{FMH::MODEL_KEY::TYPE, "Quick"}
-	};
-    
-//     this->list << FMH::MODEL
-// 	{
-// 		{FMH::MODEL_KEY::PATH,"kdeconnect:///"},
-// 		{FMH::MODEL_KEY::ICON, "phone"},
-// 		{FMH::MODEL_KEY::LABEL, "KDEConnect"},
-// 		{FMH::MODEL_KEY::TYPE, "Quick"}
-// 	};
+	};    
+#endif
+	
+	
+#ifdef COMPONENT_TAGGING
+	this->list << FMH::MODEL
+	{
+		{FMH::MODEL_KEY::PATH,"tags:///"},
+		{FMH::MODEL_KEY::ICON, "tag"},
+		{FMH::MODEL_KEY::LABEL, "Tags"},
+		{FMH::MODEL_KEY::TYPE, "Quick"}
+	};    
 #endif
     
     for(const auto &group : this->groups)

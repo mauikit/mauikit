@@ -140,7 +140,7 @@ class FMList : public MauiList
         		
 		FMList(QObject *parent = nullptr);
 	
-		~FMList();
+		~FMList();		
 		
 		FMH::MODEL_LIST items() const final override;
 		

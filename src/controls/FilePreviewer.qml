@@ -256,8 +256,9 @@ Maui.Dialog
 			case "application/x-kicad-project" :
 				source = "private/TextPreview.qml"
 				break
-			case "image/png" :
-			case "image/gif" :
+            case "image/webp" :
+            case "image/png" :
+            case "image/gif" :
 			case "image/jpeg" :
 			case "image/web" :
 			case "image/svg" :
@@ -267,9 +268,12 @@ Maui.Dialog
 			case "application/pdf":			
 			case "application/rtf":			
 			case "application/doc":			
-			case "application/odf":			
-				source = "private/DocumentPreview.qml"
-				break			
+			case "application/odf":		
+				if(!isAndroid)
+				{
+					source = "private/DocumentPreview.qml"
+					break
+                }
 			case "inode/directory" :
 			default:
 				source = "private/DefaultPreview.qml"

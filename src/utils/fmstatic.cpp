@@ -18,6 +18,10 @@
 #include <QIcon>
 #endif
 
+#ifdef COMPONENT_TAGGING
+#include "tagging.h"
+#endif
+
 FMStatic::FMStatic(QObject *parent) : QObject(parent)
 {
 
@@ -35,7 +39,6 @@ FMH::MODEL_LIST FMStatic::packItems(const QStringList &items, const QString &typ
         auto model = FMH::getFileInfoModel(path);
         model.insert(FMH::MODEL_KEY::TYPE, type);
         data << model;
-
     }
 
     return data;
@@ -70,8 +73,7 @@ FMH::MODEL_LIST FMStatic::search(const QString& query, const QUrl &path, const b
         while (it.hasNext())
         {
             auto url = it.next();
-            auto info = it.fileInfo();
-            if(info.completeBaseName().contains(query, Qt::CaseInsensitive))
+            if(it.fileName().contains(query, Qt::CaseInsensitive))
             {
                 content << FMH::getFileInfoModel(QUrl::fromLocalFile(url));
             }
@@ -213,7 +215,7 @@ QString FMStatic::homePath()
     return FMH::HomePath;
 }
 
-bool FMStatic::copy(QUrl url, QUrl destinationDir, bool overWriteDirectory)
+bool FMStatic::copy(const QUrl &url, const QUrl &destinationDir, const bool &overWriteDirectory)
 {
 #ifdef Q_OS_ANDROID
     QFileInfo fileInfo(url.toLocalFile());
@@ -238,7 +240,7 @@ bool FMStatic::copy(QUrl url, QUrl destinationDir, bool overWriteDirectory)
     {
         QString destinationPath = destinationDir.toLocalFile() + "/" + directoryName;
         originDirectory.mkpath(destinationPath);
-        copyPath(url.toLocalFile() + "/" + directoryName, destinationPath, overWriteDirectory);
+        copy(url.toLocalFile() + "/" + directoryName, destinationPath, overWriteDirectory);
     }
 
     foreach (QString fileName, originDirectory.entryList(QDir::Files))
@@ -261,14 +263,29 @@ bool FMStatic::copy(QUrl url, QUrl destinationDir, bool overWriteDirectory)
 #endif
 }
 
-bool FMStatic::cut(QUrl url, QUrl where)
+bool FMStatic::cut(const QUrl &url, const QUrl &where)
 {
+	return FMStatic::cut(url, where, QString());
+}
+
+bool FMStatic::cut(const QUrl &url, const QUrl &where, const QString &name)
+{
+	QUrl _where;
+	if(name.isEmpty())
+		 _where =  QUrl(where.toString()+"/"+FMH::getFileInfoModel(url)[FMH::MODEL_KEY::LABEL]);
+	else
+		_where =  QUrl(where.toString()+"/"+name);	
+	
 	#ifdef Q_OS_ANDROID
 	QFile file(url.toLocalFile());
-	file.rename(where.toString()+"/"+QFileInfo(url.toLocalFile()).fileName());
+	file.rename(_where.toLocalFile());
 	#else
-	auto job = KIO::move(url, QUrl(where.toString()+"/"+FMH::getFileInfoModel(url)[FMH::MODEL_KEY::LABEL]));
+	auto job = KIO::move(url, _where);
 	job->start();
+	#endif
+	
+	#ifdef COMPONENT_TAGGING
+	Tagging::getInstance()->updateUrl(url.toString(), _where.toString());	
 	#endif
 	
 	return true;
@@ -342,11 +359,9 @@ bool FMStatic::removeDir(const QUrl &path)
     return result;
 }
 
-bool FMStatic::rename(const QUrl &path, const QString &name)
-{
-    QFile file(path.toLocalFile());
-    const auto url = QFileInfo(path.toLocalFile()).dir().absolutePath();
-    return file.rename(url+"/"+name);
+bool FMStatic::rename(const QUrl &url, const QString &name)
+{	
+	return FMStatic::cut(url, QUrl(url.toString().left(url.toString().lastIndexOf("/"))), name);
 }
 
 bool FMStatic::createDir(const QUrl &path, const QString &name)
