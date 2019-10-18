@@ -115,15 +115,7 @@ bool FMStatic::isDefaultPath(const QString &path)
 
 QUrl FMStatic::parentDir(const QUrl &path)
 {
-    if(!path.isLocalFile())
-    {
-        qWarning() << "URL recived is not a local file, FM::parentDir" << path;
-        return path;
-    }
-
-    QDir dir(path.toLocalFile());
-    dir.cdUp();
-    return QUrl::fromLocalFile(dir.absolutePath());
+   return FMH::parentDir(path);
 }
 
 bool FMStatic::isDir(const QUrl &path)
@@ -155,18 +147,7 @@ bool FMStatic::fileExists(const QUrl &path)
 
 QString FMStatic::fileDir(const QUrl& path) // the directory path of the file
 {
-    QString res = path.toString();
-    if(path.isLocalFile())
-    {
-        const QFileInfo file(path.toLocalFile());
-        if(file.isDir())
-            res = path.toString();
-        else
-            res = QUrl::fromLocalFile(file.dir().absolutePath()).toString();
-    }else
-        qWarning()<< "The path is not a local one. FM::fileDir";
-
-    return res;
+    return FMH::fileDir(path);
 }
 
 void FMStatic::saveSettings(const QString &key, const QVariant &value, const QString &group)

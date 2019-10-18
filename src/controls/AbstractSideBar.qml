@@ -45,6 +45,12 @@ Drawer
 	
 	signal contentDropped(var drop)
 	
+	onVisibleChanged:
+	{
+		if(control.visible && !control.modal)
+			control.position = 1
+	}
+	
 	Component.onCompleted:
 	{
 		if(!modal)

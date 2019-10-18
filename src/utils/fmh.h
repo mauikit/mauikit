@@ -732,6 +732,34 @@ inline bool fileExists(const QUrl &path)
     return QFileInfo::exists(path.toLocalFile());
 }
 
+inline const QString fileDir(const QUrl& path)// the directory path of the file
+{
+	QString res = path.toString();
+	if(path.isLocalFile())
+	{
+		const QFileInfo file(path.toLocalFile());
+		if(file.isDir())
+			res = path.toString();
+		else
+			res = QUrl::fromLocalFile(file.dir().absolutePath()).toString();
+	}else
+		qWarning()<< "The path is not a local one. FM::fileDir";
+	
+	return res;
+}
+
+inline const QUrl parentDir(const QUrl &path)
+{
+	if(!path.isLocalFile())
+	{
+		qWarning() << "URL recived is not a local file, FM::parentDir" << path;
+		return path;
+	}
+	
+	QDir dir(path.toLocalFile());
+	dir.cdUp();
+	return QUrl::fromLocalFile(dir.absolutePath());
+}
 
 /**
      * Return the configuration of a single directory represented

@@ -76,7 +76,7 @@ Maui.Popup
         onClicked: close()
     }
 
-   Maui.Page
+    contentItem: Maui.Page
     {
         id: page
         anchors.fill: parent
@@ -120,7 +120,7 @@ Maui.Popup
             sourceComponent: control.defaultButtons ? _defaultButtonsComponent : undefined
         }
 
-        ColumnLayout
+       ColumnLayout
         {
             id: _pageContent
             anchors.fill: parent
