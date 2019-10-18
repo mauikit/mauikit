@@ -30,7 +30,7 @@ Item
 	default property list<Action> actions
 	property list<Action> hiddenActions
 	
-	property int currentIndex : -1
+	property int currentIndex : 0
 	readonly property int count : control.actions.length + control.hiddenActions.length
 	
 	signal clicked(int index)
@@ -86,6 +86,7 @@ Item
 	{
 		id: _layout
 		height: parent.height
+// 		width: Math.min(implicitWidth, parent.width)
 		spacing: Maui.Style.space.medium	
 		
 		Repeater
@@ -98,7 +99,7 @@ Item
 		{
 			id: _exposedHiddenActionButton
 			visible: action
-			action: control.currentIndex >= control.actions.length ? control.hiddenActions[control.currentIndex - control.actions.length] : null
+			action: control.currentIndex >= control.actions.length && control.currentIndex < control.count? control.hiddenActions[control.currentIndex - control.actions.length] : null
 			checkable: true
 			checked: visible
 			anchors.verticalCenter: parent.verticalCenter
