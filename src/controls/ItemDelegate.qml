@@ -43,6 +43,7 @@ ItemDelegate
     signal rightClicked(var mouse)
     signal doubleClicked(var mouse)
 
+	Kirigami.Theme.inherit: false
     Kirigami.Theme.backgroundColor: "transparent"
 
     background: null

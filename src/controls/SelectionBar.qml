@@ -236,7 +236,9 @@ Item
                     showTooltip: true
                     showThumbnails: true
                     emblemSize: Maui.Style.iconSizes.small
-
+                    Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
+                    Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
+					
                     Connections
                     {
                         target: delegate
