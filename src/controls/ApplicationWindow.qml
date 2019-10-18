@@ -38,7 +38,7 @@ Kirigami.AbstractApplicationWindow
     visible: true
     width: Screen.width * (Kirigami.Settings.isMobile ? 1 : 0.4)
     height: Screen.height * (Kirigami.Settings.isMobile ? 1 : 0.4)
-    contentItem.anchors.leftMargin: root.sideBar && !root.globalDrawer ? ((root.sideBar.collapsible && root.sideBar.collapsed) ? root.sideBar.collapsedSize : (root.sideBar.modal ? 0 : root.sideBar.width)) :
+	contentItem.anchors.leftMargin: root.sideBar && !root.globalDrawer ? ((root.sideBar.collapsible && root.sideBar.collapsed) ? root.sideBar.collapsedSize : (root.sideBar.modal ? 0 : root.sideBar.width * root.sideBar.position)) :
                                                                          (!root.sideBar && root.globalDrawer && (root.globalDrawer.modal === false) ? root.globalDrawer.width * root.globalDrawer.position : 0)
 
    property Maui.AbstractSideBar sideBar
