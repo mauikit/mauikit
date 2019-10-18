@@ -30,12 +30,15 @@ Maui.Dialog
 
     widthHint: 0.9
     
-    maxHeight: Math.min(grid.implicitHeight, maxWidth) + (page.padding * 2)
+    maxHeight: Math.min(grid.implicitHeight, maxWidth) + (page.padding * 2) + headBar.height
 	maxWidth: Maui.Style.unit * 500
 	
 	verticalAlignment: Qt.AlignBottom
 	
     defaultButtons: false
+		
+	page.title: qsTr("Open with")
+	headBar.visible: true
     
     Maui.GridBrowser
     {

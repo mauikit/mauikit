@@ -41,8 +41,9 @@ public:
 
     Q_INVOKABLE QVariantList get(const QString &query);
 
-    Q_INVOKABLE bool tagExists(const QString &tag, const bool &strict = false);
-
+	Q_INVOKABLE bool tagExists(const QString &tag, const bool &strict = false);
+	Q_INVOKABLE bool urlTagExists(const QString &url, const QString &tag, const bool &strict = false);
+	
     /* INSERTIIONS */
 
     Q_INVOKABLE bool tag(const QString &tag, const QString &color=QString(), const QString &comment=QString());

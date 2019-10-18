@@ -18,15 +18,18 @@
 
 #include "mauiapp.h"
 #include "utils.h"
-#include "mauiaccounts.h"
 
-MauiApp::MauiApp(QObject *parent) : QObject(parent), m_accounts(new MauiAccounts(this))
-{
-    // 	QObject::connect(UTIL::app, &QCoreApplication::aboutToQuit, []()
-    // 	{
-    // 		delete MauiApp::m_instance;
-    // 	});
-}
+#ifdef COMPONENT_ACCOUNTS
+#include "mauiaccounts.h"
+#endif
+
+MauiApp::MauiApp(QObject *parent) : QObject(parent)
+  #ifdef COMPONENT_ACCOUNTS
+  , m_accounts(MauiAccounts::instance(this))
+  #else
+  , m_accounts(nullptr)
+  #endif
+{}
 
 MauiApp::~MauiApp() {}
 
@@ -39,10 +42,128 @@ MauiApp * MauiApp::instance()
     return MauiApp::m_instance;	
 }
 
+QString MauiApp::getName()
+{
+    return Handy::appInfo().value(FMH::MODEL_NAME[FMH::MODEL_KEY::NAME]).toString();
+}
+
+QString MauiApp::getVersion()
+{
+    return Handy::appInfo().value(FMH::MODEL_NAME[FMH::MODEL_KEY::VERSION]).toString();
+}
+
+QString MauiApp::getOrg()
+{
+    return Handy::appInfo().value(FMH::MODEL_NAME[FMH::MODEL_KEY::ORG]).toString();
+}
+
+QString MauiApp::getDomain()
+{
+    return Handy::appInfo().value(FMH::MODEL_NAME[FMH::MODEL_KEY::DOMAIN]).toString();
+}
+
+QString MauiApp::getMauikitVersion()
+{
+    return Handy::appInfo().value("mauikit_version").toString();
+}
+
+QString MauiApp::getQtVersion()
+{
+    return Handy::appInfo().value("qt_version").toString();
+}
+
+QString MauiApp::getDescription() const
+{
+    return description;
+}
+
+void MauiApp::setDescription(const QString &value)
+{
+    if(description == value)
+        return;
+
+    description = value;
+    emit this->descriptionChanged(description);
+}
+
+QString MauiApp::getIconName() const
+{
+    return iconName;
+}
+
+void MauiApp::setIconName(const QString &value)
+{
+    if(iconName == value)
+        return;
+
+    iconName = value;
+    emit this->iconNameChanged(iconName);
+}
+
+QString MauiApp::getWebPage() const
+{
+    return webPage;
+}
+
+void MauiApp::setWebPage(const QString &value)
+{
+    if(webPage == value)
+        return;
+
+    webPage = value;
+    emit this->webPageChanged(webPage);
+}
+
+QString MauiApp::getDonationPage() const
+{
+    return donationPage;
+}
+
+void MauiApp::setDonationPage(const QString &value)
+{
+    if(donationPage == value)
+        return;
+
+    donationPage = value;
+    emit this->donationPageChanged(donationPage);
+}
+
+QString MauiApp::getReportPage() const
+{
+    return reportPage;
+}
+
+void MauiApp::setReportPage(const QString &value)
+{
+    if(reportPage == value)
+        return;
+
+    reportPage = value;
+    emit this->reportPageChanged(reportPage);
+}
+
+bool MauiApp::getHandleAccounts() const
+{
+    return this->handleAccounts;
+}
+
+void MauiApp::setHandleAccounts(const bool &value)
+{
+#ifdef COMPONENT_ACCOUNTS
+    if(this->handleAccounts == value)
+        return;
+
+    this->handleAccounts = value;
+    emit this->handleAccountsChanged();
+#endif
+}
+
+#ifdef COMPONENT_ACCOUNTS
 MauiAccounts * MauiApp::getAccounts() const
 {
     return this->m_accounts;
 }
+#endif
 
 MauiApp * MauiApp::qmlAttachedProperties(QObject* object)
 {

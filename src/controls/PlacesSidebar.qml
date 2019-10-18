@@ -19,14 +19,16 @@ Maui.SideBar
 	section.delegate: Maui.LabelDelegate
 	{
 		id: delegate
+		width: control.width
 		label: section
-		labelTxt.font.pointSize: Maui.Style.fontSizes.big
-		
+		labelTxt.font.pointSize: Maui.Style.fontSizes.big		
 		isSection: true
-		boldLabel: true
 		height: Maui.Style.toolBarHeightAlt
 	}
-	
+	onContentDropped:
+	{
+		placesList.addPlace(drop.text)
+	}	
 	onItemClicked:
 	{
 		var item = list.get(index)

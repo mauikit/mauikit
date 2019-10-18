@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>assets/face-sleeping.png</file>
         <file>assets/face-sleeping.svg</file>
-        <file>assets/tag.svg</file>
         <file>assets/maui-app.colors</file>
         <file>assets/mauikit-logo.png</file>
         <file>assets/ElectricPlug.png</file>

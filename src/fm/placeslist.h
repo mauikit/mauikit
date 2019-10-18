@@ -48,7 +48,7 @@ public slots:
 	void refresh();
 	void clearBadgeCount(const int &index);
     
-    void addPlace(const QString &path);
+    void addPlace(const QUrl &path);
     void removePlace(const int &index);
 	
 private:

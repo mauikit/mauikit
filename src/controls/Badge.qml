@@ -94,7 +94,12 @@ Rectangle
     MouseArea
     {
         id: mouseArea
-        anchors.fill: parent
+        readonly property int targetMargin:  Kirigami.Settings.isMobile ? Maui.Style.space.big : 0
+
+        height: parent.height + targetMargin
+        width: parent.width + targetMargin
+
+        anchors.centerIn: parent
         onClicked: control.clicked()
         onPressed: control.pressed()
         onReleased: control.released()

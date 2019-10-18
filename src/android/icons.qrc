@@ -467,10 +467,6 @@
         <file>icons/luv-icon-theme/Luv/actions/22/zoom.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/22/sms.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/22/email.svg</file>
-        <file>icons/luv-icon-theme/Luv/actions/22/edit-add-effect.svg</file>
-        <file>icons/luv-icon-theme/Luv/actions/22/dialer-call-start.svg</file>
-        <file>icons/luv-icon-theme/Luv/actions/22/dialer-call-pause.svg</file>
-        <file>icons/luv-icon-theme/Luv/actions/22/dialer-call-end.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/22/view-pim-notes.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/22/view-pim-news.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/22/view-pim-journal.svg</file>
@@ -483,7 +479,6 @@
         <file>icons/luv-icon-theme/Luv/actions/22/media-silence.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/22/media-bluetooth.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/22/folder-new.svg</file>
-        <file>icons/luv-icon-theme/Luv/actions/22/email.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/22/edit-add-effect.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/22/dialer-pad.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/22/dialer-call.svg</file>
@@ -700,5 +695,8 @@
         <file>icons/luv-icon-theme/Luv/places/22/folder-download-sidebar.svg</file>
         <file>icons/luv-icon-theme/Luv/places/22/folder-documents-sidebar.svg</file>
         <file>icons/luv-icon-theme/Luv/places/22/folder-cloud-sidebar.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/64/audio-mpeg.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/64/audio-mp4.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/64/audio-flac.svg</file>
     </qresource>
 </RCC>

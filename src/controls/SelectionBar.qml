@@ -27,6 +27,8 @@ import "private"
 Item
 {
     id: control
+    focus: true
+    
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
     readonly property int barHeight : Maui.Style.iconSizes.large  + Maui.Style.space.large
@@ -54,12 +56,16 @@ Item
     signal cleared()
     signal exitClicked()
     signal itemClicked(int index)
+	signal itemPressAndHold(int index)
 	
 	signal itemAdded(var item)
 	signal itemRemoved(var item)
 	
 	signal pathAdded(string path)
 	signal pathRemoved(string path)
+	
+	signal clicked(var mouse)
+	signal rightClicked(var mouse)
 	
     implicitHeight: if(position === Qt.Horizontal)
                 barHeight
@@ -88,6 +94,27 @@ Item
         border.color: Kirigami.Theme.backgroundColor
         
         
+        MouseArea
+        {
+			anchors.fill: parent
+			acceptedButtons: Qt.RightButton | Qt.LeftButton
+			
+			onClicked:
+			{
+				if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
+					control.rightClicked(mouse)
+					else
+						control.clicked(mouse)
+			}
+			
+			onPressAndHold : 
+			{
+				if(Kirigami.Settings.isMobile)
+					control.rightClicked(mouse)
+			}
+			
+			
+        }
         
         SequentialAnimation
         {
@@ -199,8 +226,6 @@ Item
                 delegate: Maui.GridBrowserDelegate
                 {
                     id: delegate
-                    anchors.verticalCenter: position === Qt.Horizontal ? parent.verticalCenter : undefined
-                    anchors.horizontalCenter: position === Qt.Vertical ? parent.horizontalCenter : undefined
                     isCurrentItem: ListView.isCurrentItem
                     height: selectionList.height
                     width: height
@@ -211,15 +236,13 @@ Item
                     showTooltip: true
                     showThumbnails: true
                     emblemSize: Maui.Style.iconSizes.small
-                    Kirigami.Theme.highlightColor: Kirigami.Theme.highlightColor
-                    Kirigami.Theme.backgroundColor: Kirigami.Theme.complementaryBackgroundColor
-                    Kirigami.Theme.textColor: Kirigami.Theme.textColor
-                    
+
                     Connections
                     {
                         target: delegate
                         onLeftEmblemClicked: removeAtIndex(index)
                         onClicked: control.itemClicked(index)
+						onPressAndHold: control.itemPressAndHold(index)
                     }
                 }
             }
@@ -261,13 +284,18 @@ Item
     onVisibleChanged:
     {
         if(position === Qt.Vertical) return
-        
-        if(typeof(riseContent) === "undefined") return
-        
-        if(control.visible)
-            riseContent()
-        else
-            dropContent()
+    }    
+    
+    Keys.onEscapePressed:
+    {
+		control.exitClicked();
+		event.accepted = true
+	}
+
+    Keys.onBackPressed:
+    {
+        control.exitClicked();
+        event.accepted = true
     }
     
     function clear()
@@ -277,6 +305,14 @@ Item
         selectionList.model.clear()
 		control.cleared()		
     }
+    
+    function itemAt(index)
+	{
+		if(index < 0 ||  index > selectionList.count)
+			return
+			
+		return selectionList.model.get(index)		 
+	}
     
     function removeAtIndex(index)
     {
@@ -329,11 +365,11 @@ Item
 //             notify(item.icon, qsTr("Item already selected!"), String("The item '%1' is already in the selection box").arg(item.label), null, 4000)
         }
         
-        
+        control.forceActiveFocus()    
         animate(Kirigami.Theme.backgroundColor)
     }
     
-    function animate(color)
+	function animate(color)
     {
         animColor = color
         anim.running = true

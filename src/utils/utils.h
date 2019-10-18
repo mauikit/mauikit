@@ -23,6 +23,7 @@
 #include <QString>
 #include <QFileInfo>
 #include <QSettings>
+#include <QDebug>
 
 #ifdef Q_OS_ANDROID
 #include <QGuiApplication>

@@ -1,5 +1,5 @@
 import QtQuick 2.9
-import QtQuick.Controls 2.3
+import QtQuick.Controls 2.9
 import QtQuick.Layouts 1.3
 
 import org.kde.kirigami 2.7 as Kirigami
@@ -8,7 +8,6 @@ import org.kde.mauikit 1.0 as Maui
 Maui.Page
 {
 	id: control
-	focus: true
 	
 	property url path
 	property Maui.FMList currentFMList 
@@ -17,18 +16,67 @@ Maui.Page
 	property int viewType
 	
 	height: _browserList.height
-	width: _browserList.width
+	width: _browserList.width 
 	
 	function setCurrentFMList()
 	{
-		control.currentFMList = currentView.currentFMList	
+		control.currentFMList = currentView.currentFMList
+		currentView.forceActiveFocus()
+	}
+	
+	Menu
+	{
+		id: _dropMenu
+		property string urls
+		property url target
+		
+		enabled: Maui.FM.getFileInfo(target).isdir == "true"
+		
+		MenuItem
+		{
+			text: qsTr("Copy here")	
+			onTriggered: 
+			{
+				const urls = _dropMenu.urls.split(",")
+				for(var i in urls)
+				{
+					var sourceItem = {"path" : urls[i]}
+					Maui.FM.copy([sourceItem], _dropMenu.target)
+				}
+			}
+		}
+		
+		MenuItem
+		{
+			text: qsTr("Move here")	
+			onTriggered: 
+			{
+				const urls = _dropMenu.urls.split(",")
+				for(var i in urls)
+				{
+					var sourceItem = {"path" : urls[i]}
+					Maui.FM.cut([sourceItem], _dropMenu.target)
+				}
+			}
+		}
+		
+		MenuItem
+		{
+			text: qsTr("Link here")	
+			onTriggered:
+			{
+				const urls = _dropMenu.urls.split(",")
+				for(var i in urls)			
+					Maui.FM.createSymlink(_dropMenu.source[i], urls.target)
+			}
+		}
 	}
 	
 	Loader
 	{
 		id: viewLoader
 		anchors.fill: parent
-		
+		focus: true
 		sourceComponent: switch(control.viewType)
 		{
 			case Maui.FMList.ICON_VIEW: return gridViewBrowser
@@ -45,7 +93,6 @@ Maui.Page
 		path: control.path
 		foldersFirst: true
 		onSortByChanged: if(group) groupBy()
-		onContentReadyChanged: console.log("CONTENT READY?", contentReady)
 		onWarning:
 		{			
 			notify("dialog-information", "An error happened", message)
@@ -72,7 +119,6 @@ Maui.Page
 			showPreviewThumbnails: showThumbnails
 			keepEmblemOverlay: selectionMode			
 			showDetailsInfo: true		
-			
 			BrowserHolder
 			{
 				id: _holder
@@ -94,19 +140,19 @@ Maui.Page
 			section.delegate: Maui.LabelDelegate
 			{
 				id: delegate
-				label: section
-				labelTxt.font.pointSize: Maui.Style.fontSizes.big
-				
-				isSection: true
-				boldLabel: true
+				width: parent.width
 				height: Maui.Style.toolBarHeightAlt
+
+				label: String(section).toUpperCase()
+				labelTxt.font.pointSize: Maui.Style.fontSizes.big
+
+				isSection: true
 			}
 			
 			delegate: Maui.ListBrowserDelegate
 			{
 				id: delegate
-				property string path : model.path
-				width: parent.width
+				width: _listViewBrowser.width
 				height: _listViewBrowser.itemSize + Maui.Style.space.big
 				leftPadding: Maui.Style.space.small
 				rightPadding: Maui.Style.space.small
@@ -120,6 +166,15 @@ Maui.Page
 				rightEmblem: _listViewBrowser.rightEmblem
 				isSelected: if(selectionBar) return selectionBar.contains(model.path)
 				leftEmblem: isSelected ? "emblem-select-remove" : "emblem-select-add"
+				draggable: true
+				
+				Maui.Badge
+				{
+					iconName: "link"
+					anchors.left: parent.left
+					anchors.bottom: parent.bottom
+					visible: (model.issymlink == true) || (model.issymlink == "true")
+				}   				
 				
 				Connections
 				{
@@ -127,13 +182,13 @@ Maui.Page
 					
 					onPathRemoved: 
 					{
-						if(path === delegate.path)
+						if(path === model.path)
 							delegate.isSelected = false					
 					}
 					
 					onPathAdded: 
 					{
-						if(path === delegate.path)
+						if(path === model.path)
 							delegate.isSelected = true					
 					}
 					
@@ -178,6 +233,13 @@ Maui.Page
 						_listViewBrowser.currentIndex = index
 						_listViewBrowser.leftEmblemClicked(index)						
 					}
+					
+					onContentDropped:
+					{
+						_dropMenu.urls = drop.urls.join(",")
+						_dropMenu.target = model.path
+						_dropMenu.popup()
+					}
 				}
 			}
 		}
@@ -213,23 +275,32 @@ Maui.Page
 				list: _commonFMList
 			}
 			
-			delegate: Maui.GridBrowserDelegate
+            delegate: Maui.GridBrowserDelegate
 			{
 				id: delegate
-				property string path : model.path
+
+                folderSize: height * 0.5
+                height: _gridViewBrowser.cellHeight
+                width: _gridViewBrowser.cellWidth
+				padding: Maui.Style.space.small
 				
-				folderSize: height * 0.5
-				height: _gridViewBrowser.cellHeight 
-				width: _gridViewBrowser.cellWidth
-				padding: Maui.Style.space.small    
-				
-				showTooltip: true
+                showTooltip: true
 				showEmblem: _gridViewBrowser.showEmblem
 				keepEmblemOverlay: _gridViewBrowser.keepEmblemOverlay
 				showThumbnails: _gridViewBrowser.showPreviewThumbnails
 				rightEmblem: _gridViewBrowser.rightEmblem
 				isSelected: if(selectionBar) return selectionBar.contains(model.path)
 				leftEmblem: isSelected ? "emblem-select-remove" : "emblem-select-add"
+				draggable: true
+				
+				Maui.Badge
+				{
+					iconName: "link"
+					anchors.left: parent.left
+					anchors.bottom: parent.bottom
+					anchors.bottomMargin: Maui.Style.space.big
+					visible: (model.issymlink == true) || (model.issymlink == "true")
+				} 
 				
 				Connections
 				{
@@ -237,17 +308,18 @@ Maui.Page
 					
 					onPathRemoved: 
 					{
-						if(path === delegate.path)
+						if(path === model.path)
 							delegate.isSelected = false					
 					}
 					
 					onPathAdded: 
 					{
-						if(path === delegate.path)
+						if(path === model.path)
 							delegate.isSelected = true					
 					}
 					
-					onCleared: delegate.isSelected = false
+					onCleared: delegate.isSelected = false				
+					
 				}
 				
 				Connections
@@ -288,8 +360,16 @@ Maui.Page
 						_gridViewBrowser.currentIndex = index
 						_gridViewBrowser.leftEmblemClicked(index)
 					}
+					
+					onContentDropped:
+					{					
+						_dropMenu.urls = drop.urls.join(",")
+						_dropMenu.target = model.path
+						_dropMenu.popup()
+						
+					}
 				}
-			}
+            }
 		}
 	}
 	
@@ -366,11 +446,6 @@ Maui.Page
 					width: Math.min(Kirigami.Units.gridUnit * 22, control.width)
 					height: parent.height
 					
-// 					background: Rectangle
-// 					{
-// 						color: "transparent"
-// 					}
-					
 					Kirigami.Separator
 					{
 						anchors.top: parent.top
@@ -439,21 +514,9 @@ Maui.Page
 							list: _millersFMList
 						}
 						
-						section.delegate: Maui.LabelDelegate
-						{
-							id: delegate
-							label: section
-							labelTxt.font.pointSize: Maui.Style.fontSizes.big
-							
-							isSection: true
-							boldLabel: true
-							height: Maui.Style.toolBarHeightAlt
-						}
-						
 						delegate: Maui.ListBrowserDelegate
 						{
 							id: delegate
-							property string path : model.path
 							width: parent.width
 							height: _millerListView.itemSize + Maui.Style.space.big
 							leftPadding: Maui.Style.space.small
@@ -468,6 +531,15 @@ Maui.Page
 							rightEmblem: _millerListView.rightEmblem
 							isSelected: if(selectionBar) return selectionBar.contains(model.path)
 							leftEmblem: isSelected ? "emblem-select-remove" : "emblem-select-add"
+							draggable: true
+							
+							Maui.Badge
+							{
+								iconName: "link"
+								anchors.left: parent.left
+								anchors.bottom: parent.bottom
+								visible: (model.issymlink == true) || (model.issymlink == "true")
+							} 
 							
 							Connections
 							{
@@ -475,13 +547,13 @@ Maui.Page
 								
 								onPathRemoved: 
 								{
-									if(path === delegate.path)
+									if(path === model.path)
 										delegate.isSelected = false					
 								}
 								
 								onPathAdded: 
 								{
-									if(path === delegate.path)
+									if(path === model.path)
 										delegate.isSelected = true					
 								}
 								
@@ -531,6 +603,13 @@ Maui.Page
 									_millerColumns.currentIndex = _index
 									_millerListView.currentIndex = index							
 									_millerControl.leftEmblemClicked(index)					
+								}
+								
+								onContentDropped:
+								{
+									_dropMenu.urls =  drop.urls.join(",")
+									_dropMenu.target = model.path
+									_dropMenu.popup()
 								}
 							}
 						}

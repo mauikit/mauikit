@@ -28,21 +28,23 @@ import "private"
 ItemDelegate
 {
     id: control
-    
-    default property alias content : _content.data   
-    
+
+    default property alias content : _content.data
+	property alias mouseArea : _mouseArea
     property bool draggable: false
     property bool isCurrentItem :  false
 
-    property int radius: Maui.Style.radiusV	
-    
+    property int radius: Maui.Style.radiusV
+
     //override the itemdelegate default signals to allow dragging content
     signal pressed(var mouse)
     signal pressAndHold(var mouse)
-    signal clicked(var mouse)	
+    signal clicked(var mouse)
     signal rightClicked(var mouse)
-	signal doubleClicked(var mouse)
-    
+    signal doubleClicked(var mouse)
+
+    Kirigami.Theme.backgroundColor: "transparent"
+
     background: null
     hoverEnabled: !Kirigami.Settings.isMobile
 
@@ -53,50 +55,63 @@ ItemDelegate
     topPadding: padding
     
     MouseArea
-	{
+    {
         id: _mouseArea
         anchors.fill: parent
         acceptedButtons:  Qt.RightButton | Qt.LeftButton
+        drag.target: control.draggable && !Kirigami.Settings.isMobile  ? parent : undefined
+
+        property int startX
+        property int startY
+
         onClicked:
         {
             if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
                 control.rightClicked(mouse)
-                else	
-                    control.clicked(mouse)
+            else
+                control.clicked(mouse)
         }
-        
+
         onDoubleClicked: control.doubleClicked(mouse)
-        
-        onPressed: 
-        {	
-            if(control.draggable)
-                loader.grabToImage(function(result)
+
+        onPressed:
+        {
+            if(control.draggable && !Kirigami.Settings.isMobile )
+                control.grabToImage(function(result)
                 {
                     parent.Drag.imageSource = result.url
                 })
-                
-                control.pressed(mouse)			
+				
+			startX = control.x
+			startY = control.y
+            control.pressed(mouse)
         }
-        
+
+        onReleased :
+        {
+			control.x = startX
+            control.y = startY
+        }
+
         onPressAndHold : control.pressAndHold(mouse)
-    }	
-    
-    Rectangle
-	{
-        id: _content
-        
-		anchors
-		{
-			fill: parent
-			topMargin: control.topPadding
-			bottomMargin: control.bottomPadding
-			leftMargin: control.leftPadding
-			rightMargin: control.rightPadding
-			margins: control.padding
-		}		
-			color: control.isCurrentItem || control.hovered ? Qt.rgba(Kirigami.Theme.highlightColor.r, Kirigami.Theme.highlightColor.g, Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
-					
-			radius: control.radius
-			border.color: control.isCurrentItem ? Kirigami.Theme.highlightColor : "transparent"
     }
-}	
+
+    Rectangle
+    {
+        id: _content
+        anchors
+        {
+            fill: control
+            topMargin: control.topPadding
+            bottomMargin: control.bottomPadding
+            leftMargin: control.leftPadding
+            rightMargin: control.rightPadding
+            margins: control.padding
+        }  	
+		        
+        color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
+
+        radius: control.radius
+        border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"
+    }
+}

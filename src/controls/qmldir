@@ -22,6 +22,7 @@ GlobalDrawer 1.0 GlobalDrawer.qml
 ListDelegate 1.0 ListDelegate.qml
 ItemDelegate 1.0 ItemDelegate.qml
 SwipeItemDelegate 1.0 SwipeItemDelegate.qml
+SwipeBrowserDelegate 1.0 SwipeBrowserDelegate.qml
 ListBrowserDelegate 1.0 ListBrowserDelegate.qml
 GridBrowserDelegate 1.0 GridBrowserDelegate.qml
 SelectionBar 1.0 SelectionBar.qml
@@ -51,3 +52,5 @@ Editor 1.0 Editor.qml
 ColorsBar 1.0 ColorsBar.qml
 Holder 1.0 Holder.qml
 ImageViewer 1.0 ImageViewer.qml
+TabBar 1.0 TabBar.qml
+TabButton 1.0 TabButton.qml

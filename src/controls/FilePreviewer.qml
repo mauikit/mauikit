@@ -85,6 +85,22 @@ Maui.Dialog
 
     Component
     {
+		id: defaultPreview
+		Item
+		{
+			anchors.fill: parent
+			Kirigami.Icon
+			{
+				anchors.centerIn: parent
+				source:control.iteminfo.icon
+				height: Maui.Style.iconSizes.huge
+				width: height
+			}
+		}
+	}
+    
+    Component
+    {
         id: imagePreview
         ImagePreview {}
     }
@@ -205,6 +221,7 @@ Maui.Dialog
         Maui.TagsBar
         {
             id: _tagsBar
+            position: ToolBar.Footer
             Layout.fillWidth: true
             Layout.margins: 0
             list.urls: [control.currentUrl]
@@ -265,7 +282,7 @@ Maui.Dialog
 				break
 			case "inode" :
 			default:
-				component = undefined
+				component = defaultPreview
 		}
 		
 		previewLoader.sourceComponent = component

@@ -1,33 +1,46 @@
-#include "fmdb.h"
-#include"utils.h"
+#include "accountsdb.h"
+#include "utils.h"
 
 #include <QUuid>
 
-FMDB::FMDB(QObject *parent) : QObject(parent)
+#ifdef Q_OS_ANDROID
+#include "mauiandroid.h"
+#endif
+
+const QString FMPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/maui/";
+const QString DBName = "accounts.db";
+
+AccountsDB::AccountsDB(QObject *parent) : QObject(parent)
 {
-    QDir collectionDBPath_dir(FMH::FMPath);
+    //get permissions to read and write
+#ifdef Q_OS_ANDROID
+    MAUIAndroid::checkRunTimePermissions();
+#endif
+
+    qDebug()<< "TRY TO CREATE ACCOUNTS DB";
+    QDir collectionDBPath_dir(FMPath);
     if (!collectionDBPath_dir.exists())
         collectionDBPath_dir.mkpath(".");
 
     this->name = QUuid::createUuid().toString();
-    if(!UTIL::fileExists(FMH::FMPath + FMH::DBName))
+    if(!UTIL::fileExists(FMPath + DBName))
     {
         this->openDB(this->name);
         this->prepareCollectionDB();
     }else this->openDB(this->name);
 }
 
-FMDB::~FMDB()
+AccountsDB::~AccountsDB()
 {
     this->m_db.close();
 }
 
-void FMDB::openDB(const QString &name)
+void AccountsDB::openDB(const QString &name)
 {
     if(!QSqlDatabase::contains(name))
     {
         this->m_db = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), name);
-        this->m_db.setDatabaseName(FMH::FMPath + FMH::DBName);
+        this->m_db.setDatabaseName(FMPath + DBName);
     }
 
     if (!this->m_db.isOpen())
@@ -39,11 +52,11 @@ void FMDB::openDB(const QString &name)
     query.exec();
 }
 
-void FMDB::prepareCollectionDB() const
+void AccountsDB::prepareCollectionDB() const
 {
     QSqlQuery query(this->m_db);
 
-    QFile file(":/fm/script.sql");
+    QFile file(":/accounts/script.sql");
 
     if (!file.exists())
     {
@@ -97,7 +110,7 @@ void FMDB::prepareCollectionDB() const
     file.close();
 }
 
-bool FMDB::checkExistance(const QString &tableName, const QString &searchId, const QString &search)
+bool AccountsDB::checkExistance(const QString &tableName, const QString &searchId, const QString &search)
 {
     auto queryStr = QString("SELECT %1 FROM %2 WHERE %3 = \"%4\"").arg(searchId, tableName, searchId, search);
     auto query = this->getQuery(queryStr);
@@ -110,7 +123,7 @@ bool FMDB::checkExistance(const QString &tableName, const QString &searchId, con
     return false;
 }
 
-bool FMDB::checkExistance(const QString &queryStr)
+bool AccountsDB::checkExistance(const QString &queryStr)
 {
     auto query = this->getQuery(queryStr);
 
@@ -122,13 +135,13 @@ bool FMDB::checkExistance(const QString &queryStr)
     return false;
 }
 
-QSqlQuery FMDB::getQuery(const QString &queryTxt)
+QSqlQuery AccountsDB::getQuery(const QString &queryTxt)
 {
     QSqlQuery query(queryTxt, this->m_db);
     return query;
 }
 
-bool FMDB::insert(const QString &tableName, const QVariantMap &insertData)
+bool AccountsDB::insert(const QString &tableName, const QVariantMap &insertData)
 {
     if (tableName.isEmpty())
     {
@@ -159,7 +172,7 @@ bool FMDB::insert(const QString &tableName, const QVariantMap &insertData)
     return query.exec();
 }
 
-bool FMDB::update(const QString &tableName, const FMH::DB &updateData, const QVariantMap &where)
+bool AccountsDB::update(const QString &tableName, const FMH::MODEL &updateData, const QVariantMap &where)
 {
     if (tableName.isEmpty())
     {
@@ -185,14 +198,14 @@ bool FMDB::update(const QString &tableName, const FMH::DB &updateData, const QVa
     return query.exec();
 }
 
-bool FMDB::update(const QString &table, const QString &column, const QVariant &newValue, const QVariant &op, const QString &id)
+bool AccountsDB::update(const QString &table, const QString &column, const QVariant &newValue, const QVariant &op, const QString &id)
 {
     auto queryStr = QString("UPDATE %1 SET %2 = \"%3\" WHERE %4 = \"%5\"").arg(table, column, newValue.toString().replace("\"","\"\""), op.toString(), id);
     auto query = this->getQuery(queryStr);
     return query.exec();
 }
 
-bool FMDB::remove(const QString &tableName, const FMH::DB &removeData)
+bool AccountsDB::remove(const QString &tableName, const FMH::MODEL &removeData)
 {
     if (tableName.isEmpty())
     {
@@ -206,7 +219,7 @@ bool FMDB::remove(const QString &tableName, const FMH::DB &removeData)
     }
 
     QString strValues;
-        auto i = 0;
+    auto i = 0;
     for (auto key : removeData.keys())
     {
         strValues.append(QString("%1 = \"%2\"").arg(FMH::MODEL_NAME[key], removeData[key]));

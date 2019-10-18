@@ -373,7 +373,7 @@ void TagsList::setUrls(const QStringList& value)
 
 void TagsList::append(const QString &tag)
 {
-	if(!this->insert(tag))
+	if(!this->insert(tag) && !this->contains(tag))
 	{
 		emit this->preItemAppended();
 		this->list << TAG::DB {{TAG::KEYS::TAG, tag}};

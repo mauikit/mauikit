@@ -27,47 +27,40 @@ import "private"
 
 ItemDelegate
 {
-	id: control
-	Kirigami.Theme.backgroundColor: isSection ? "transparent" : (index % 2 === 0 ? Qt.darker(Kirigami.Theme.backgroundColor) : "transparent")				
-	property bool isCurrentListItem :  ListView.isCurrentItem
-	
-    width: parent.width
-    height: Maui.Style.rowHeight
-
+    id: control
+    Kirigami.Theme.backgroundColor: isSection ? "transparent" : (index % 2 === 0 ? Qt.darker(Kirigami.Theme.backgroundColor) : "transparent")				
+    
+    property bool isCurrentListItem :  ListView.isCurrentItem
+    
+    implicitHeight: Maui.Style.rowHeight
+    
     property bool isSection : false
-    property bool boldLabel : false
+    
     property alias label: labelTxt.text
     property alias labelTxt : labelTxt
-    property string labelColor: ListView.isCurrentItem ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.textColor
-
+    
     background: Rectangle
     {
-		color: control.isCurrentListItem ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor
-		opacity: control.isCurrentListItem ? 1 : 0.1
+        color: control.isCurrentListItem ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor
+        opacity: control.isCurrentListItem ? 1 : 0.1
     }
-
-    ColumnLayout
+    
+    Label
     {
+        id: labelTxt
+        anchors.margins: Maui.Style.contentMargins
         anchors.fill: parent
-
-        Label
-        {
-            id: labelTxt
-            Layout.margins: Maui.Style.contentMargins
-            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-
-            width: parent.width
-            height: parent.height
-
-            horizontalAlignment: Qt.AlignLeft
-            verticalAlignment: Qt.AlignVCenter
-            text: labelTxt.text
-            elide: Text.ElideRight
-            color: labelColor
-            font.pointSize: Maui.Style.fontSizes.default
-
-            font.bold: boldLabel
-            font.weight : boldLabel ? Font.Bold : Font.Normal
-        }
+        
+        horizontalAlignment: Qt.AlignLeft
+        verticalAlignment: Qt.AlignVCenter
+        text: labelTxt.text
+        elide: Text.ElideRight
+        wrapMode: Text.NoWrap
+        color:  control.isCurrentListItem ? control.Kirigami.Theme.highlightedTextColor : control.Kirigami.Theme.textColor
+        font.pointSize: Maui.Style.fontSizes.default
+        
+        font.bold: control.isSection
+        font.weight : control.isSection ? Font.Bold : Font.Normal
     }
+    
 }

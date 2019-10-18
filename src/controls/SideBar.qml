@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.12
+import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
@@ -27,12 +27,11 @@ import "private"
 Maui.AbstractSideBar
 {
     id: control
-
-    //     ApplicationWindow.height -ApplicationWindow.header.height - ApplicationWindow.footer.height
     implicitWidth: privateProperties.isCollapsed && collapsed && collapsible  ? collapsedSize : preferredWidth
     width: implicitWidth
     modal: false
-    interactive: Kirigami.Settings.isMobile && modal && !collapsible && !collapsed
+    position: 1
+    interactive: false
 
     default property alias content : _content.data
     property alias model : _listBrowser.model
@@ -51,6 +50,12 @@ Maui.AbstractSideBar
 
     signal itemClicked(int index)
     signal itemRightClicked(int index)
+
+//    Connections
+//    {
+//        target: control.Overlay.overlay
+//        onPressed: control.collapse()
+//    }
 
     onModalChanged: visible = true
     visible: true
@@ -82,7 +87,7 @@ Maui.AbstractSideBar
         id: _content
         anchors.fill: parent
         spacing: 0
-
+        
         Maui.ListBrowser
         {
             id: _listBrowser
@@ -92,9 +97,9 @@ Maui.AbstractSideBar
             Layout.bottomMargin: Maui.Style.space.tiny
             Layout.margins: Maui.Style.unit
             listView.flickableDirection: Flickable.VerticalFlick
-
-            verticalScrollBarPolicy:  Qt.ScrollBarAlwaysOff  //this make sthe app crash
             
+            verticalScrollBarPolicy:  Qt.ScrollBarAlwaysOff  //this make sthe app crash
+
             delegate: Maui.ListDelegate
             {
                 id: itemDelegate
@@ -139,7 +144,7 @@ Maui.AbstractSideBar
             propagateComposedEvents: false
             property int startX
             property int startY
-
+            
             Rectangle
             {
                 anchors.fill: parent
@@ -158,7 +163,7 @@ Maui.AbstractSideBar
 
                 Kirigami.Icon
                 {
-					source: privateProperties.isCollapsed ? "sidebar-expand" : "sidebar-collapse"
+                    source: privateProperties.isCollapsed ? "sidebar-expand" : "sidebar-collapse"
                     color:  _handle.containsMouse || _handle.containsPress ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
                     anchors.centerIn: parent
                     width: Maui.Style.iconSizes.medium
@@ -171,14 +176,12 @@ Maui.AbstractSideBar
                 if (!pressed || !control.collapsible || !control.collapsed || !Kirigami.Settings.isMobile)
                     return
 
-                if(mouse.x > (control.collapsedSize*2))
+                if(mouse.x > control.collapsedSize)
                 {
                     expand()
-
-                }else
-                {
-                    collapse()
                 }
+                
+                mouse.accepted = true
             }
 
             onPressed:
@@ -190,25 +193,18 @@ Maui.AbstractSideBar
 
             onReleased:
             {
-                mouse.accepted = true
-
                 if(!control.collapsible)
                     return
 
                 if(mouse.x > control.width)
-                {
-                    expand()
+                    return
 
-                }else if(startX > control.collapsedSize && mouse.x < control.collapsedSize )
-                {
-                    collapse()
-                }else
-                {
-                    if(privateProperties.isCollapsed)
-                        expand()
+                if(privateProperties.isCollapsed)
+                    expand()
                     else
                         collapse()
-                }
+
+                mouse.accepted = true
             }
         }
     }
@@ -221,21 +217,32 @@ Maui.AbstractSideBar
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         visible: Kirigami.Settings.isMobile
-        enabled: control.collapsed
+        enabled: control.collapsed && visible
         width: Maui.Style.space.large
+        property int startX
+        property int startY
 
-        onReleased:
+        onPressed:
         {
-            if (!control.collapsible || !control.collapsed || !Kirigami.Settings.isMobile)
+            startY = mouse.y
+            startX = mouse.x
+            mouse.accepted = true
+        }
+
+        onPositionChanged:
+        {
+            if (!pressed || !control.collapsible || !control.collapsed || !Kirigami.Settings.isMobile)
                 return
 
-                if(mouse.x > control.width)
-                {
-                    expand()
-                }else
-                {
-                    collapse()
-                }
+            if(mouse.x > control.collapsedSize)
+            {
+                expand()
+            }else
+            {
+                collapse()
+            }
+
+            mouse.accepted = true
         }
     }
 

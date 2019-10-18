@@ -6,7 +6,7 @@ import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 
 
-ColumnLayout
+Maui.Page
 {
     id: control
     property alias player : player
@@ -14,9 +14,7 @@ ColumnLayout
     Video
     {
         id: player
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-
+        anchors.fill: parent
         source: currentUrl
         autoLoad: true
         autoPlay: true
@@ -80,27 +78,24 @@ ColumnLayout
             }
         }
     }
-
-    Maui.ToolBar
+    
+    
+    footBar.leftContent: ToolButton
     {
-        Layout.fillWidth: true
-
-        leftContent: ToolButton
-        {
-            icon.name: player.playbackState === MediaPlayer.PlayingState ? "media-playback-pause" : "media-playback-start"
-            onClicked: player.playbackState === MediaPlayer.PlayingState ? player.pause() : player.play()
-        }
-
-        middleContent : Slider
-        {
-            id: _slider
-            Layout.fillWidth: true
-            orientation: Qt.Horizontal
-            from: 0
-            to: 1000
-            value: (1000 * player.position) / player.duration
-
-            onMoved: player.seek((_slider.value / 1000) * player.duration)
-        }
-    }
+		icon.name: player.playbackState === MediaPlayer.PlayingState ? "media-playback-pause" : "media-playback-start"
+		onClicked: player.playbackState === MediaPlayer.PlayingState ? player.pause() : player.play()
+	}
+	
+	footBar.middleContent : Slider
+	{
+		id: _slider
+		Layout.fillWidth: true
+		orientation: Qt.Horizontal
+		from: 0
+		to: 1000
+		value: (1000 * player.position) / player.duration
+		
+		onMoved: player.seek((_slider.value / 1000) * player.duration)
+	}
+	
 }

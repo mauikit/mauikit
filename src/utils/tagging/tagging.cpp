@@ -79,6 +79,12 @@ bool Tagging::tagExists(const QString &tag, const bool &strict)
             "where au.app = '%1' and au.uri = '%2' and t.tag = '%3'").arg(this->application, this->uri, tag));
 }
 
+bool Tagging::urlTagExists(const QString &url,const QString &tag, const bool &strict)
+{
+	return !strict ? this->checkExistance(QString("select * from TAGS_URLS where url = '%1' and tag = '%2'").arg(url, tag)) :
+	this->checkExistance(QString("select t.tag from TAGS t inner join TAGS_USERS tu on t.tag = tu.tag inner join APPS_USERS au on au.mac = tu.mac "
+	"where au.app = '%1' and au.uri = '%2' and t.tag = '%3'").arg(this->application, this->uri, tag));
+}
 
 void Tagging::setApp()
 {

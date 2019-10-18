@@ -8,7 +8,7 @@ import QtQuick.Window 2.3
 Page
 {
     id: control
-    
+    focus: true
     leftPadding: control.padding
     rightPadding: control.padding
     topPadding: control.padding

@@ -31,7 +31,7 @@
 #include <QString>
 #include <QVariantList>
 
-class MAUIAndroid : public QObject
+class Q_DECL_EXPORT MAUIAndroid : public QObject
 {
     Q_OBJECT
 public:
@@ -59,6 +59,8 @@ public slots:
     static QVariantMap getContact(const QString &id);
 
     static void statusbarColor(const QString &bg, const bool &light);
+    static void navBarColor(const QString &bg, const bool &light);
+    
     static void shareDialog(const QUrl &url);
     static void shareText(const QString &text);
     static void sendSMS(const QString &tel,const QString &subject, const QString &message);

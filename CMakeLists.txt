@@ -1,23 +1,29 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.12)
 
-set(REQUIRED_QT_VERSION 5.8.0)
+set(REQUIRED_QT_VERSION 5.10.0)
+set(REQUIRED_KF5_VERSION 5.60.0)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(MAUIKIT_VERSION 0.0.5)
-
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
+set(MAUIKIT_VERSION 1.0.0)
 
 set(AUTOMOC_MOC_OPTIONS -Muri=org.kde.maui)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 project(mauikit VERSION ${MAUIKIT_VERSION})
 
 find_package(ECM 5.45.0 NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} 
-    ${ECM_KDE_MODULE_DIR})
+    ${ECM_KDE_MODULE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
+#DEFAULT COMPONENTS DEFINITIONS
+option(COMPONENT_EDITOR "Build editor component" ON)
+option(COMPONENT_FM "Build filemanager component" ON)
+option(COMPONENT_ACCOUNTS "Build accounts component" ON)
+option(COMPONENT_TERMINAL "Build terminal component" ON)
+option(COMPONENT_STORE "Build store component" ON)
+option(COMPONENT_TAGGING "Build tagging component" ON)
+option(COMPONENT_SYNCING "Build syncing component" ON)
+    
 include(GenerateExportHeader)
 include(ECMSetupVersion)
 include(ECMGenerateHeaders)
@@ -30,306 +36,22 @@ include(ECMQtDeclareLoggingCategory)
 include(ECMAddQch)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 
-#options - for the appimage
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Qml 
     Sql Core Quick Gui Svg QuickControls2 Network DBus Xml)
 ecm_find_qmlmodule(QtGraphicalEffects 1.0)
 
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_BINARY_DIR}/src
-
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils
-    ${CMAKE_CURRENT_BINARY_DIR}/src/utils
-    
-	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/model_template
-    ${CMAKE_CURRENT_BINARY_DIR}/src/utils/model_template
-    
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/tagging
-    ${CMAKE_CURRENT_BINARY_DIR}/src/utils/tagging
-    
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/editor
-    ${CMAKE_CURRENT_BINARY_DIR}/src/utils/editor
-    
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/syncing
-    ${CMAKE_CURRENT_BINARY_DIR}/src/utils/syncing 
-    
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/store
-    ${CMAKE_CURRENT_BINARY_DIR}/src/utils/store
-    
-	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/syncing/libwebdavclient/lib
-	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/syncing/libwebdavclient/lib/utils
-	${CMAKE_CURRENT_SOURCE_DIR}/src/utils/syncing/libwebdavclient/lib/dto
-    
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/fm
-    ${CMAKE_CURRENT_BINARY_DIR}/src/fm
-
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/kde
-    ${CMAKE_CURRENT_BINARY_DIR}/src/kde
-    )
-
-set(mauikit_SRCS
-    src/mauikit.cpp
-    src/utils/mauiapp.cpp
-    src/utils/mauiaccounts.cpp
-    src/utils/handy.cpp
-    src/utils/model_template/mauilist.cpp
-    src/utils/model_template/mauimodel.cpp
-    )
-
-set(mauikit_HDRS
-    src/mauikit.h
-    src/utils.h
-    src/utils/handy.h
-    src/utils/mauiapp.h
-    src/utils/mauiaccounts.h
-	src/utils/model_template/mauilist.h
-    src/utils/model_template/mauimodel.h
-    )
-
-set(editor_SRCS
-    src/utils/editor/documenthandler.cpp
-    src/utils/editor/syntaxhighlighterutil.cpp
-    )
-
-set(editor_HDRS
-    src/utils/editor/documenthandler.cpp
-    src/utils/editor/syntaxhighlighterutil.h
-    )
-
-set(fm_SRCS
-    src/fm/fm.cpp
-    src/fm/fmdb.cpp
-    src/fm/fmlist.cpp
-    src/fm/placeslist.cpp
-    src/fm/pathlist.cpp
-    )
-
-set(fm_HDRS
-    src/fm/fmh.h
-    src/fm/fm.h
-    src/fm/fmdb.h
-    src/fm/fmlist.h
-    src/fm/placeslist.h
-	src/fm/pathlist.h
-    )
-
-set(tagging_SRCS
-    src/utils/tagging/tagging.cpp
-    src/utils/tagging/tagdb.cpp
-    src/utils/tagging/tagsmodel.cpp
-    src/utils/tagging/tagslist.cpp
-    )
-
-set(tagging_HDRS
-    src/utils/tagging/tag.h
-    src/utils/tagging/tagging.h
-    src/utils/tagging/tagdb.h
-    src/utils/tagging/tagsmodel.h
-    src/utils/tagging/tagslist.h
-    )
-
-set(syncing_SRCS
-    src/utils/syncing/syncing.cpp
-    src/utils/syncing/libwebdavclient/lib/WebDAVClient.cpp
-    src/utils/syncing/libwebdavclient/lib/dto/WebDAVItem.cpp
-    src/utils/syncing/libwebdavclient/lib/utils/Environment.cpp
-    src/utils/syncing/libwebdavclient/lib/utils/NetworkHelper.cpp
-    src/utils/syncing/libwebdavclient/lib/utils/WebDAVReply.cpp
-    src/utils/syncing/libwebdavclient/lib/utils/XMLHelper.cpp
-    )
-
-set(syncing_HDRS
-    src/utils/syncing/syncing.h
-    src/utils/syncing/libwebdavclient/lib/WebDAVClient.hpp
-    src/utils/syncing/libwebdavclient/lib/dto/WebDAVItem.hpp
-    src/utils/syncing/libwebdavclient/lib/utils/Environment.hpp
-    src/utils/syncing/libwebdavclient/lib/utils/NetworkHelper.hpp
-    src/utils/syncing/libwebdavclient/lib/utils/WebDAVReply.hpp
-    src/utils/syncing/libwebdavclient/lib/utils/XMLHelper.hpp
-    )
-
-set(store_SRCS
-    src/utils/store/store.cpp
-    src/utils/store/storemodel.cpp
-    src/utils/store/storelist.cpp
-    )
-
-set(store_HDRS
-    src/utils/store/store.h    
-    src/utils/store/storemodel.h
-    src/utils/store/storelist.h
-    )
-
-
-#use dbus on linux, bsd etc, but not andoid and apple stuff
-option(IS_APPIMAGE_PACKAGE "If set to true then the icons and styled is packaged as well")
-    
-if(ANDROID OR IS_APPIMAGE_PACKAGE)
-	qt5_add_resources(MauiIcon_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/android/icons.qrc)
-    qt5_add_resources(MauiStyle_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/maui-style/style.qrc)
-    
-     if (NOT EXISTS ${CMAKE_SOURCE_DIR}/src/android/icons/luv-icon-theme/.git)
-        find_package(Git REQUIRED)
-        execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/Nitrux/luv-icon-theme.git ${CMAKE_SOURCE_DIR}/src/android/icons/luv-icon-theme)
-    endif()
-    
-    set(mauikit_style_QRCS
-        ${MauiIcon_RESOURCES}
-        ${MauiStyle_RESOURCES}
-        )
-endif()
-
 if(ANDROID)
-    find_package(Qt5 REQUIRED COMPONENTS AndroidExtras Xml WebView Network)    
-    set(MAUIANDROID_LIBS
-        Qt5::Xml
-        Qt5::AndroidExtras
-        Qt5::Network
-        Qt5::WebView
-        )  
-    
-    set(mauikit_Android_SRCS
-        src/android/mauiandroid.cpp
-        )
+    find_package(Qt5 REQUIRED COMPONENTS AndroidExtras WebView)
+    find_package(Gradle REQUIRED)
 else()
     find_package(Qt5 REQUIRED COMPONENTS WebEngine)
-    find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets Attica SyntaxHighlighting)
-
-    set(mauikit_KDE_SRCS
-        src/kde/mauikde.cpp
-        src/kde/kdeconnect.cpp
-        )
-
-    set(mauikit_KDE_HDRS
-        src/kde/mauikde.h
-        src/kde/kdeconnect.h
-        )
-
-    set(MAUIKDE_KF5LIBS
-        KF5::ConfigCore
-        KF5::Notifications
-        KF5::I18n 
-        KF5::Service
-        KF5::KIOCore
-        KF5::KIOWidgets
-        KF5::KIOFileWidgets
-        KF5::Service
-        KF5::KIONTLM
-        KF5::ConfigWidgets
-        KF5::Attica
-        KF5::SyntaxHighlighting
-        Qt5::WebEngine
-#         /usr/lib/x86_64-linux-gnu/qt5/qml/org/kde/kquicksyntaxhighlighter/libkquicksyntaxhighlighterplugin.so
-        )
-endif()
-# set(CMAKE_AUTORCC ON)
-
-qt5_add_resources(mauikit_ASSETS ${CMAKE_CURRENT_SOURCE_DIR}/assets.qrc)
-qt5_add_resources(tagging_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/tagging/tagging.qrc)
-qt5_add_resources(fm_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/fm/fm.qrc)
-qt5_add_resources(store_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/store/store.qrc)
-
-# qt5_add_resources(mauikit_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/mauikit.qrc)
-
-add_library(MauiKit 
-
-    ${fm_HDRS}
-    ${fm_SRCS}
-    ${fm_RESOURCES}
-
-    ${editor_HDRS}
-    ${editor_SRCS}
-
-    ${syncing_HDRS}
-    ${syncing_SRCS}
-    
-    ${store_SRCS}
-    ${store_HDRS}
-	${store_RESOURCES}
-    
-    ${tagging_HDRS}
-    ${tagging_SRCS}
-    ${tagging_RESOURCES}
-
-    ${mauikit_HDRS}
-    ${mauikit_SRCS}
-    ${mauikit_RESOURCES}
-    ${mauikit_ASSETS}
-    ${MauiIcon_RESOURCES}
-    ${MauiStyle_RESOURCES}
-
-    ${mauikit_Android_SRCS}
-
-    ${mauikit_KDE_HDRS}
-    ${mauikit_KDE_SRCS}
-    )
-
-target_link_libraries(MauiKit
-    PUBLIC
-    Qt5::Core
-    Qt5::Sql
-    Qt5::Qml
-    Qt5::Quick
-    Qt5::QuickControls2
-    Qt5::Svg
-    Qt5::Gui
-    Qt5::Network
-    Qt5::Xml
-    ${MAUIKDE_KF5LIBS}
-    ${MAUIANDROID_LIBS}
-# #     webdavclient
-    )
-    
-if(IS_APPIMAGE_PACKAGE)
-    target_compile_definitions(MauiKit PUBLIC APPIMAGE_PACKAGE)
 endif()
 
-if (ANDROID)
-    kde_enable_exceptions(MauiKit PRIVATE)
-    target_include_directories(MauiKit PRIVATE src/android)
-    install(FILES src/android/mauiandroid.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit COMPONENT Devel)
+find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets)
 
-    install(DIRECTORY src/android/ DESTINATION ${KDE_INSTALL_DATAROOTDIR}/MauiKitAndroid COMPONENT Devel)
-endif()
+add_subdirectory(src)
 
-generate_export_header(MauiKit BASE_NAME MauiKit)
-install(TARGETS MauiKit EXPORT MauiKitTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-target_include_directories(MauiKit 
-    INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/MauiKit>")
-
-add_custom_target(copy)
-
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/org/kde/mauikit)
-add_custom_command(TARGET copy PRE_BUILD COMMAND ${CMAKE_COMMAND} 
-    -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/src/controls
-    ${CMAKE_BINARY_DIR}/bin/org/kde/mauikit/)
-
-add_dependencies(MauiKit copy)
-
-install(DIRECTORY src/controls/ DESTINATION 
-    ${KDE_INSTALL_QMLDIR}/org/kde/mauikit)
-
-install(TARGETS MauiKit DESTINATION 
-    ${KDE_INSTALL_QMLDIR}/org/kde/mauikit)
-
-install(FILES
-    ${mauikit_HDRS}
-    ${mauikit_KDE_HDRS}
-    ${tagging_HDRS}
-    ${fm_HDRS}
-    ${syncing_HDRS}
-    ${store_HDRS}
-    ${CMAKE_CURRENT_BINARY_DIR}/mauikit_export.h
-    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit
-    COMPONENT Devel)
-
-##INSTALL MAUI STYLE
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/maui-style DESTINATION ${KDE_INSTALL_QMLDIR}/QtQuick/Controls.2)   
-
-##CMAKE PARTS   
-
+##CMAKE PARTS
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/MauiKit")
 
 ecm_setup_version(${MAUIKIT_VERSION}

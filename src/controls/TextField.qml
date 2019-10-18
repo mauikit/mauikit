@@ -81,7 +81,6 @@ TextField
 		id: _actions	
 		z: parent.z + 1
 		anchors.right: control.right
-		anchors.rightMargin: Maui.Style.space.small
 		anchors.verticalCenter: parent.verticalCenter
 		
 		ToolButton

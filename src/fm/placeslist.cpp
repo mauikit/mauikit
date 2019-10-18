@@ -24,6 +24,10 @@
 #include <QFileSystemWatcher>
 #include "utils.h"
 
+#ifdef COMPONENT_ACCOUNTS
+#include "mauiaccounts.h"
+#endif
+
 #ifdef Q_OS_ANDROID 
 #else
 #include <KFilePlacesModel>
@@ -53,11 +57,12 @@ watcher(new QFileSystemWatcher(this))
             this->list[index][FMH::MODEL_KEY::COUNT] = QString::number(count);
             emit this->updateModel(index, {FMH::MODEL_KEY::COUNT});
         }
-
     });
 
-    connect(fm, &FM::cloudAccountInserted, this, &PlacesList::reset);
-    connect(fm, &FM::cloudAccountRemoved, this, &PlacesList::reset);
+#ifdef COMPONENT_ACCOUNTS
+    connect(MauiAccounts::instance(), &MauiAccounts::accountAdded, this, &PlacesList::reset);
+    connect(MauiAccounts::instance(), &MauiAccounts::accountRemoved, this, &PlacesList::reset);
+#endif
 
     connect(this, &PlacesList::groupsChanged, this, &PlacesList::reset);
 
@@ -66,7 +71,7 @@ watcher(new QFileSystemWatcher(this))
 
 void PlacesList::watchPath(const QString& path)
 {
-    if(path.isEmpty() || !FMH::fileExists(path))
+    if(path.isEmpty() || !FMH::fileExists(path) || QUrl(path).isLocalFile())
         return;
 
     this->watcher->addPath(path);
@@ -104,11 +109,11 @@ static FMH::MODEL_LIST getGroup(const KFilePlacesModel &model, const FMH::PATHTY
     switch(type)
     {
         case(FMH::PATHTYPE_KEY::PLACES_PATH):
-            res << FM::getDefaultPaths();
-            res<< FM::packItems(UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, "FileManager").toStringList(), FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]);
+            res << FMStatic::getDefaultPaths();
+            res<< FMStatic::packItems(UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, "FileManager").toStringList(), FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]);
             break;
         case(FMH::PATHTYPE_KEY::DRIVES_PATH):
-            res = FM::getDevices();
+            res = FMStatic::getDevices();
             break;
         default: break;
     }
@@ -128,7 +133,7 @@ void PlacesList::setList()
 {		
     this->list.clear();
 
-	//this are default static places
+	//this are default static places //TODO move to itws own PATHTYPE_KEY::QUICK
 	this->list << FMH::MODEL
 	{
 		{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::TAGS_PATH]+"fav"},
@@ -136,7 +141,25 @@ void PlacesList::setList()
 		{FMH::MODEL_KEY::LABEL, "Favorite"},
 		{FMH::MODEL_KEY::TYPE, "Quick"}
 	};
-	
+    
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
+    this->list << FMH::MODEL
+	{
+		{FMH::MODEL_KEY::PATH,"recentdocuments:///"},
+		{FMH::MODEL_KEY::ICON, "view-media-recent"},
+		{FMH::MODEL_KEY::LABEL, "Recent"},
+		{FMH::MODEL_KEY::TYPE, "Quick"}
+	};
+    
+//     this->list << FMH::MODEL
+// 	{
+// 		{FMH::MODEL_KEY::PATH,"kdeconnect:///"},
+// 		{FMH::MODEL_KEY::ICON, "phone"},
+// 		{FMH::MODEL_KEY::LABEL, "KDEConnect"},
+// 		{FMH::MODEL_KEY::TYPE, "Quick"}
+// 	};
+#endif
+    
     for(const auto &group : this->groups)
         switch(group)
         {
@@ -164,9 +187,11 @@ void PlacesList::setList()
             this->list << this->fm->getTags();
             break;
 
+#ifdef COMPONENT_ACCOUNTS
         case FMH::PATHTYPE_KEY::CLOUD_PATH:
-            this->list << this->fm->getCloudAccounts();
+            this->list << MauiAccounts::instance()->getCloudAccounts();
             break;
+#endif
         }
 
     this->setCount();
@@ -178,7 +203,7 @@ void PlacesList::setCount()
     for(auto &data : this->list)
     {
         const auto path = data[FMH::MODEL_KEY::PATH];
-        if(FM::isDir(path))
+        if(FMStatic::isDir(path))
         {   
             data.insert(FMH::MODEL_KEY::COUNT, "0");
             const auto count = FMH::getFileInfoModel(path)[FMH::MODEL_KEY::COUNT];
@@ -226,7 +251,7 @@ QVariantMap PlacesList::get(const int& index) const
         return QVariantMap();
 
     const auto model = this->list.at(index);   
-    return FM::toMap(model);
+    return FMH::toMap(model);
 }
 
 void PlacesList::refresh()
@@ -240,25 +265,24 @@ void PlacesList::clearBadgeCount(const int& index)
     emit this->updateModel(index, {FMH::MODEL_KEY::COUNT});
 }
 
-void PlacesList::addPlace(const QString& path)
+void PlacesList::addPlace(const QUrl& path)
 {    
     const auto it = std::find_if(this->list.rbegin(), this->list.rend(), [](const FMH::MODEL &item) -> bool{
        return item[FMH::MODEL_KEY::TYPE] == FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]; 
     });
     const auto index = std::distance(it, this->list.rend());
     
-    qDebug()<< "trying to add path to places" << path<< QDir(path).dirName();
     emit this->preItemAppendedAt(index);
 	
 #ifdef Q_OS_ANDROID
 	//do android stuff until cmake works with android 
     auto bookmarks = UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, "FileManager").toStringList();
-    bookmarks << path;
+    bookmarks << path.toString();
     UTIL::saveSettings("BOOKMARKS", bookmarks, "PREFERENCES", "FileManager");
     this->list.insert(index, FMH::getDirInfoModel(path));
 #else
 //     const auto url =  QStringLiteral("file://")+path;
-	this->model->addPlace(QDir(path).dirName(), path);
+	this->model->addPlace(QDir(path.toLocalFile()).dirName(), path);
 	this->list.insert(index, modelPlaceInfo(*this->model, this->model->closestItem(path), FMH::PATHTYPE_KEY::PLACES_PATH));
 #endif
 	

@@ -84,10 +84,6 @@ Maui.Popup
         padding: Maui.Style.space.medium
         footBar.visible: control.defaultButtons || footBar.count > 1
 
-//        footBar.background: null
-
-//        Kirigami.Theme.backgroundColor: "transparent"
-
         property QtObject _rejectButton : Button
         {
             id: _rejectButton
@@ -97,7 +93,6 @@ Maui.Popup
 
             text: rejectText
             onClicked: rejected()
-
         }
 
         property QtObject _acceptButton: Button
@@ -177,6 +172,7 @@ Maui.Popup
             Maui.TextField
             {
                 id: _textEntry
+                focus: control.entryField
                 onAccepted: control.accepted()
                 Layout.fillWidth: entryField
                 height: entryField ?  Maui.Style.iconSizes.big : 0
