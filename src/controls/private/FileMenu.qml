@@ -37,7 +37,7 @@ Menu
 	
 	MenuItem
 	{
-		text: control.isFav ? qsTr("UnFav") : qsTr("Fav")
+		text: control.isFav ? qsTr("Remove from Favorites") : qsTr("Add to Favorites")
 		onTriggered:
 		{			
 			if(currentFMList.favItem(item.path))
