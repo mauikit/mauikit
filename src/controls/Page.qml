@@ -61,21 +61,22 @@ Page
           height: implicitHeight
     }   
     
-    header: headBar.count && headBar.position === ToolBar.Header ? headBar : undefined
+    header: headBar.count && headBar.position === ToolBar.Header ? headBar : null
     
     footer: Column 
     {
         id: _footer
+        visible : children 
         children:
         {
-            if(headBar.position === ToolBar.Footer && footBar.count) 
-                return [footBar , headBar]
-                else if(headBar.position === ToolBar.Footer)
-                    return [headBar]
-                    else if(footBar.count)
-                        return [footBar]
-                        else 
-                            return []
+			if(headBar.position === ToolBar.Footer && headBar.count && footBar.count)
+				return [footBar , headBar]
+				else if(headBar.position === ToolBar.Footer && headBar.count)
+					return [headBar]
+					else if(footBar.count)
+						return [footBar]
+						else
+							return []
         }
     }
     

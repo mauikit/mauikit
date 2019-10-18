@@ -150,6 +150,7 @@ Kirigami.AbstractApplicationWindow
         visible: count > 1
         position: ToolBar.Header
         width: root.width
+        height: implicitHeight
         // 		Kirigami.Theme.backgroundColor: headBarBGColor
         // 		Kirigami.Theme.textColor: headBarFGColor
         // 		Kirigami.Theme.inherit: true
@@ -249,14 +250,15 @@ Kirigami.AbstractApplicationWindow
         visible: count
         position: ToolBar.Footer
         width: root.width
+        height: implicitHeight
     }
 
-    header: headBar.count && headBar.position === ToolBar.Header ? headBar : undefined
+    header: headBar.count && headBar.position === ToolBar.Header ? headBar : null
 
     footer: Column
     {
         id: _footer
-        visible : children > 0
+        visible : children
         children:
         {
             if(headBar.position === ToolBar.Footer && headBar.count && footBar.count)

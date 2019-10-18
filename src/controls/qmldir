@@ -54,4 +54,5 @@ Holder 1.0 Holder.qml
 ImageViewer 1.0 ImageViewer.qml
 TabBar 1.0 TabBar.qml
 TabButton 1.0 TabButton.qml
+ActionGroup 1.0 ActionGroup.qml
 DocumentPreview 1.0 DocumentPreview.qml

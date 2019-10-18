@@ -59,6 +59,7 @@
 		<file alias="ImageViewer.qml">src/controls/ImageViewer.qml</file>
 		<file alias="TabBar.qml">src/controls/TabBar.qml</file>
 		<file alias="TabButton.qml">src/controls/TabButton.qml</file>
+		<file alias="ActionGroup.qml">src/controls/ActionGroup.qml</file>
 		<file alias="private/StoreDelegate.qml">src/controls/private/StoreDelegate.qml</file>
     </qresource>
 </RCC>
