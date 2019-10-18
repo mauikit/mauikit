@@ -21,6 +21,7 @@
 #define ACCOUNTSPROVIDER_KACCOUNTSPROVIDER_H
 
 #include "accountsprovider.h"
+#include "accounts-qml-module/src/account-service-model.h"
 
 #include <QAbstractListModel>
 #include <QQmlParserStatus>
@@ -37,7 +38,10 @@ public:
 	FMH::MODEL_LIST getAccounts(QString service, bool includeDisabled = false) override final;
 
 	bool addAccount(const QString &server, const QString &user, const QString &password) override final;
-	bool removeAccount(const QString &server, const QString &user) override final;
+    bool removeAccount(FMH::MODEL account) override final;
+
+private:
+    OnlineAccounts::AccountServiceModel *accountsModel;
 };
 
 #endif

@@ -18,38 +18,30 @@
  */
 
 #include "kaccountsprovider.h"
-#include <Accounts/Account>
-#include <Accounts/AccountService>
-#include <Accounts/Application>
-#include <Accounts/Manager>
+#include "accounts-qml-module/src/account.h"
 
 #include <QDebug>
 
 KAccountsProvider::KAccountsProvider(QObject *parent) : AccountsProvider(parent)
 {
+    accountsModel = new OnlineAccounts::AccountServiceModel();
 }
 
 FMH::MODEL_LIST KAccountsProvider::getAccounts(QString service, bool includeDisabled)
 {
     FMH::MODEL_LIST res;
-	auto manager = new Accounts::Manager();
-	QList<Accounts::Account *> accounts;
-	
-    foreach (Accounts::AccountId accountId, manager->accountList()) {
-        Accounts::Account *account = manager->account(accountId);
-        accounts.append(account);
-    }
+    accountsModel->componentComplete();
+    accountsModel->setService(service);
+    accountsModel->setIncludeDisabled(includeDisabled);
 
-    for(const auto &account : accounts)
-    {
+    for (int i = 0; i<accountsModel->rowCount(); i++) {
+        int row = accountsModel->index(i, 0).data().toInt();
+
         res << FMH::MODEL {
-            {FMH::MODEL_KEY::PATH, "'"},
-            {FMH::MODEL_KEY::ICON, ""},
-            {FMH::MODEL_KEY::LABEL, account->displayName()},
-            {FMH::MODEL_KEY::USER, ""},
-            {FMH::MODEL_KEY::SERVER, ""},
-            {FMH::MODEL_KEY::PASSWORD, ""},
-            {FMH::MODEL_KEY::TYPE, ""}};
+            {FMH::MODEL_KEY::ICON, "folder-cloud"},
+            {FMH::MODEL_KEY::LABEL, accountsModel->get(row, accountsModel->roleNames()[OnlineAccounts::AccountServiceModel::Roles::DisplayNameRole]).toString()},
+            {FMH::MODEL_KEY::ACCOUNT, accountsModel->get(row, accountsModel->roleNames()[OnlineAccounts::AccountServiceModel::Roles::AccountHandleRole]).toString()}
+        };
     }
 
     return res;
@@ -60,8 +52,16 @@ bool KAccountsProvider::addAccount(const QString& server, const QString& user, c
 	return false;
 }
 
-bool KAccountsProvider::removeAccount(const QString& server, const QString& user)
+bool KAccountsProvider::removeAccount(FMH::MODEL account)
 {
+    OnlineAccounts::Account _account;
+
+    // FIXME : This setObjectHandle requires the objectHandle which is of type QObject*
+    //         Since FMH::MODEL doesn't support QObject *, accounts cannot be removed yet
+    //         See line 43, the data needs to be stored as an QObject.
+    //_account.setObjectHandle(account[FMH::MODEL_KEY::ACCOUNT]);
+    _account.remove();
+
 	return false;
 }
 

@@ -62,6 +62,9 @@ if(MYDEFS MATCHES "^COMPONENT_ACCOUNTS=ON" OR MYDEFS MATCHES ";COMPONENT_ACCOUNT
         utils/accounts/accountsprovider/sqliteprovider.h
         utils/accounts/accountsprovider/androidprovider.h
         utils/accounts/accountsprovider/kaccountsprovider.h
+
+        utils/accounts/accounts-qml-module/src/account.h
+        utils/accounts/accounts-qml-module/src/account-service-model.h
         )
     qt5_add_resources(accounts_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/utils/accounts/accounts.qrc)
 endif()
@@ -314,8 +317,8 @@ message(STATUS ${ACCOUNTSQT_LIBRARIES})
 
 if (KAccounts_FOUND AND AccountsQt5_FOUND AND SignOnQt5_FOUND)
     include_directories(${ACCOUNTSQT_INCLUDE_DIRS} ${SIGNONQT_INCLUDE_DIRS})
-endif()    
-    target_link_libraries(MauiKit PRIVATE ${ACCOUNTSQT_LIBRARIES} ${SIGNONQT_INCLUDE_LIBRARIES} KAccounts)
+endif()
+    target_link_libraries(MauiKit PRIVATE ${ACCOUNTSQT_LIBRARIES} ${SIGNONQT_INCLUDE_LIBRARIES} ${QT_INSTALL_QML}/Ubuntu/OnlineAccounts/libAccounts.so KAccounts)
     
 endif()
 
