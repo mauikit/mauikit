@@ -30,7 +30,7 @@ public:
 
     virtual FMH::MODEL_LIST getAccounts(QString service, bool includeDisabled=false) = 0;
 	virtual bool addAccount(const QString &server, const QString &user, const QString &password) = 0;
-	virtual bool removeAccount(const QString &server, const QString &user) = 0;
+    virtual bool removeAccount(FMH::MODEL account) = 0;
 	
 signals:
 	void accountAdded(QVariantMap account);

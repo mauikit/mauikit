@@ -86,14 +86,14 @@ bool SQLiteProvider::addAccount(const QString &server, const QString &user, cons
 	return false;
 }
 
-bool SQLiteProvider::removeAccount(const QString &server, const QString &user)
+bool SQLiteProvider::removeAccount(FMH::MODEL account)
 {
-	FMH::MODEL account = {
-		{FMH::MODEL_KEY::SERVER, server},
-		{FMH::MODEL_KEY::USER, user},
-	};
+    FMH::MODEL _account = {
+        {FMH::MODEL_KEY::SERVER, account[FMH::MODEL_KEY::SERVER]},
+        {FMH::MODEL_KEY::USER, account[FMH::MODEL_KEY::USER]},
+    };
 	
-	if(this->db->remove("cloud", account))
+    if(this->db->remove("cloud", _account))
 	{
 		emit this->accountRemoved(FMH::toMap(account));
 		return true;

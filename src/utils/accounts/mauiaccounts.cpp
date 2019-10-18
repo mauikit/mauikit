@@ -122,9 +122,9 @@ void MauiAccounts::refresh()
 void MauiAccounts::removeAccount(const int& index)
 {
 	if(index >= this->m_data.size() || index < 0)
-		return;
-	
-    if(this->provider->removeAccount(this->m_data.at(index)[FMH::MODEL_KEY::SERVER], this->m_data.at(index)[FMH::MODEL_KEY::USER]))
+        return;
+
+    if(this->provider->removeAccount(this->m_data.at(index)))
 	{
 		this->refresh();
 	}
@@ -135,7 +135,7 @@ void MauiAccounts::removeAccountAndFiles(const int& index)
 	if(index >= this->m_data.size() || index < 0)
 		return;
 	
-    if(this->provider->removeAccount(this->m_data.at(index)[FMH::MODEL_KEY::SERVER], this->m_data.at(index)[FMH::MODEL_KEY::USER]))
+    if(this->provider->removeAccount(this->m_data.at(index)))
 	{
 		this->refresh();
 	}	
