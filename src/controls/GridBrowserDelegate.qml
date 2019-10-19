@@ -168,7 +168,7 @@ Maui.ItemDelegate
                 anchors.centerIn: parent
                 source: model.icon
                 fallback: "qrc:/assets/application-x-zerosize.svg"
-                height: control.folderSize
+                height: Math.min(control.folderSize, parent.width)
                 width: height
             }
         }
@@ -183,8 +183,8 @@ Maui.ItemDelegate
         
         Loader
         {
-			sourceComponent: model.mime ? (model.mime.indexOf("image") > -1 && control.showThumbnails ? _imgComponent : _iconComponent) : _iconComponent 
-			Layout.preferredHeight: control.folderSize
+			sourceComponent: model.mime ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails ? _imgComponent : _iconComponent) : _iconComponent 
+			Layout.preferredHeight: Math.min(control.folderSize, width)
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignCenter
             Layout.margins: Maui.Style.unit		

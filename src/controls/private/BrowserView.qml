@@ -236,6 +236,7 @@ Maui.Page
 			id: _gridViewBrowser
 			property alias currentFMList : _browserModel.list
 			itemSize : thumbnailsSize + Maui.Style.fontSizes.default
+			cellHeight: itemSize * 1.5
 			keepEmblemOverlay: selectionMode
 			showPreviewThumbnails: showThumbnails
 			leftEmblem: "emblem-select-add"	

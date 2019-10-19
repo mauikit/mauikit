@@ -214,71 +214,32 @@ Maui.Dialog
 		control.currentUrl = path
 		control.isFav =  _tagsBar.list.contains("fav")
 		
-		var source;
-		switch(iteminfo.mime)
+		var source = "private/DefaultPreview.qml"
+		if(Maui.FM.checkFileType(Maui.FMList.AUDIO, iteminfo.mime))
 		{
-			case "audio/mpeg" :
-			case "audio/mp4" :
-			case "audio/flac" :
-			case "audio/ogg" :
-			case "audio/wav" :
-				source = "private/AudioPreview.qml"
-				break
-			case "video/mp4" :
-			case "video/x-matroska" :
-			case "video/webm" :
-			case "video/avi" :
-			case "video/flv" :
-			case "video/mpg" :
-			case "video/wmv" :
-			case "video/mov" :
-			case "video/ogg" :
-			case "video/mpeg" :
-			case "video/jpeg" :
-				source = "private/VideoPreview.qml"
-				break
-			case "text/x-c++src" :
-			case "text/x-c++hdr" :
-			case "text/css" :
-			case "text/html" :
-			case "text/plain" :
-			case "text/richtext" :
-			case "text/scriptlet" :
-			case "text/x-vcard" :
-			case "text/x-go" :
-			case "text/x-cmake" :
-			case "text/x-qml" :
-			case "application/xml" :
-			case "application/javascript" :
-			case "application/json" :
-			case "application/pgp-keys" :
-			case "application/x-shellscript" :
-			case "application/x-kicad-project" :
-				source = "private/TextPreview.qml"
-				break
-            case "image/webp" :
-            case "image/png" :
-            case "image/gif" :
-			case "image/jpeg" :
-			case "image/web" :
-			case "image/svg" :
-			case "image/svg+xml" :
-				source = "private/ImagePreview.qml"
-				break
-			case "application/pdf":			
-			case "application/rtf":			
-			case "application/doc":			
-			case "application/odf":		
-				if(!isAndroid)
-				{
-					source = "private/DocumentPreview.qml"
-					break
-                }
-			case "inode/directory" :
-			default:
-				source = "private/DefaultPreview.qml"
+			source = "private/AudioPreview.qml"
 		}
 		
+		if(Maui.FM.checkFileType(Maui.FMList.VIDEO, iteminfo.mime))
+		{
+			source = "private/VideoPreview.qml"
+		}
+		
+		if(Maui.FM.checkFileType(Maui.FMList.TEXT, iteminfo.mime))
+		{
+			source = "private/TextPreview.qml"
+		}
+		
+		if(Maui.FM.checkFileType(Maui.FMList.IMAGE, iteminfo.mime))
+		{
+			source = "private/ImagePreview.qml"
+		}
+		
+		if(Maui.FM.checkFileType(Maui.FMList.DOCUMENT, iteminfo.mime) && !isAndroid)
+		{
+			source = "private/DocumentPreview.qml"
+		}
+						
 		console.log("previe mime", iteminfo.mime)
 		previewLoader.source = source
 		control.showInfo = source === "private/DefaultPreview.qml"

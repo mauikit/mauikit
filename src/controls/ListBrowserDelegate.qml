@@ -170,7 +170,7 @@ Maui.ItemDelegate
 			Loader
 			{
 				anchors.centerIn: parent
-				sourceComponent: model.mime ? (model.mime.indexOf("image") > -1 && control.showThumbnails ? _imgComponent : _iconComponent) : _iconComponent 
+				sourceComponent: model.mime ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails ? _imgComponent : _iconComponent) : _iconComponent 
 			}                    
 		}  
 		

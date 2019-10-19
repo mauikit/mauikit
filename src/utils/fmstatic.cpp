@@ -408,3 +408,9 @@ void FMStatic::setDirConf(const QUrl &path, const QString &group, const QString 
 {
     FMH::setDirConf(path, group, key, value);
 }
+
+bool FMStatic::checkFileType(const int& type, const QString& mimeTypeName)
+{
+	return FMH::SUPPORTED_MIMETYPES[static_cast<FMH::FILTER_TYPE>(type)].contains(mimeTypeName);
+}
+
