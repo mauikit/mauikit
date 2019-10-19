@@ -114,7 +114,7 @@ Maui.SwipeItemDelegate
 		Item
 		{
 			id: _iconContainer
-			visible: (control.width > Kirigami.Units.gridUnit * 15) 
+			visible: (control.width > Kirigami.Units.gridUnit * 10) 
 			Layout.preferredWidth: Math.max(control.height, control.iconSizeHint)
 			Layout.fillHeight: true
 			
@@ -130,6 +130,7 @@ Maui.SwipeItemDelegate
 		
 		ColumnLayout
 		{
+			
 			Layout.fillHeight: visible
 			Layout.fillWidth: visible
 			Layout.margins: Maui.Style.space.small			

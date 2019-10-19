@@ -34,7 +34,7 @@ Drawer
 	y: ApplicationWindow.header.height
 	closePolicy: modal ?  Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
 	visible: true	
-	
+	interactive: modal
 	property bool collapsible: false
 	property bool collapsed: false
 	property int collapsedSize: Maui.Style.iconSizes.medium + (Maui.Style.space.medium*4) - Maui.Style.space.tiny
