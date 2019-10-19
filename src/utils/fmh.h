@@ -1015,19 +1015,17 @@ inline FMH::MODEL getFileInfoModel(const QUrl &path)
 
             }
 
-            void setFile(const QString &fileURL, const QString &fileName = QString())
+            void setFile(const QUrl &fileURL, const QUrl &fileName = QString())
             {
-                QString filePath = fileURL;
-
                 if(fileName.isEmpty() || fileURL.isEmpty())
                     return;
 
                 QNetworkRequest request;
-                request.setUrl(QUrl(fileURL));
+                request.setUrl(fileURL);
                 reply = manager->get(request);
 
                 file = new QFile;
-                file->setFileName(fileName);
+                file->setFileName(fileName.toLocalFile());
                 file->open(QIODevice::WriteOnly);
 
                 connect(reply, SIGNAL(downloadProgress(qint64,qint64)),this,SLOT(onDownloadProgress(qint64,qint64)));
@@ -1036,14 +1034,14 @@ inline FMH::MODEL getFileInfoModel(const QUrl &path)
                 connect(reply, SIGNAL(finished()),this,SLOT(onReplyFinished()));
             }
 
-            void getArray(const QString &fileURL, const QMap<QString, QString> &headers = {})
+            void getArray(const QUrl &fileURL, const QMap<QString, QString> &headers = {})
             {
                 qDebug() << fileURL << headers;
                 if(fileURL.isEmpty())
                     return;
 
                 QNetworkRequest request;
-                request.setUrl(QUrl(fileURL));
+                request.setUrl(fileURL);
                 if(!headers.isEmpty())
                 {
                     for(auto key: headers.keys())
