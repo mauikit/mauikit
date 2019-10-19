@@ -1044,7 +1044,7 @@ namespace FMH
 			
 		}
 		
-		void setFile(const QUrl &fileURL, const QUrl &fileName = QString())
+		void setFile(const QUrl &fileURL, const QUrl &fileName = QUrl())
 		{
 			if(fileName.isEmpty() || fileURL.isEmpty())
 				return;
