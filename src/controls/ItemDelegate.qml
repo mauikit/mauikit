@@ -112,6 +112,13 @@ ItemDelegate
             margins: control.padding
         }  	
 		        
+		        Behavior on color
+		        {
+					ColorAnimation
+					{
+						duration: Kirigami.Units.longDuration
+					}
+				}
         color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
 
         radius: control.radius

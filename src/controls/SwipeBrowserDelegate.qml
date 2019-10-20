@@ -108,7 +108,6 @@ Maui.SwipeItemDelegate
 	{
 		id: _layout
 		anchors.fill: parent
-
 		spacing: Maui.Style.space.small		
 		
 		Item
@@ -133,8 +132,9 @@ Maui.SwipeItemDelegate
 			
 			Layout.fillHeight: visible
 			Layout.fillWidth: visible
-			Layout.margins: Maui.Style.space.small			
-			
+			Layout.topMargin: Maui.Style.space.small			
+			Layout.bottomMargin: Maui.Style.space.small			
+			Layout.leftMargin: _iconContainer.visible ? 0 : Maui.Style.space.small
 			Label
 			{
 				id: _label1

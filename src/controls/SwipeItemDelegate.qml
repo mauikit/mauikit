@@ -126,10 +126,8 @@ Maui.ItemDelegate
 						icon.name: "overflow-menu"
 						onClicked: _swipeDelegate.swipe.position < 0 ? _swipeDelegate.swipe.close() : _swipeDelegate.swipe.open(SwipeDelegate.Right)
 					}
-				}
-				
-			}
-			
+				}				
+			}			
 			
 			swipe.right: Row
 			{
@@ -140,16 +138,7 @@ Maui.ItemDelegate
 				padding: Maui.Style.space.medium
 				visible: _swipeDelegate.swipe.complete
 				opacity: Math.abs(_swipeDelegate.swipe.position)
-				
-				Behavior on width
-				{
-					NumberAnimation
-					{
-						duration: Kirigami.Units.longDuration
-						easing.type: Easing.InOutQuad
-					}
-				}
-				
+								
 				Repeater
 				{
 					model: control.collapse && control.showQuickActions ? control.quickActions : undefined
