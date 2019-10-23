@@ -288,9 +288,22 @@ Kirigami.AbstractApplicationWindow
         id: _notify
         property var cb : ({})
         verticalAlignment: Qt.AlignTop
-        defaultButtons: false
+        defaultButtons: _notify.cb !== null
+		rejectButton.visible: false
+		onAccepted: 
+		{
+			if(_notify.cb)
+			{
+				_notify.cb()
+				_notify.close()
+			}
+		}
+		
+		page.padding: Maui.Style.space.medium
+		
+	footBar.background: null
 
-        maxHeight: Math.max( Maui.Style.iconSizes.large + Maui.Style.space.huge, (_notifyLayout.implicitHeight)) + Maui.Style.space.big
+        maxHeight: Math.max(Maui.Style.iconSizes.large + Maui.Style.space.huge, (_notifyLayout.implicitHeight)) + Maui.Style.space.big + footBar.height
         maxWidth: Kirigami.Settings.isMobile ? parent.width * 0.9 : Maui.Style.unit * 500
         widthHint: 0.8
 
@@ -299,26 +312,15 @@ Kirigami.AbstractApplicationWindow
             id: _notifyTimer
             onTriggered:
             {
-                if(!_mouseArea.pressed)
-                    _notify.close()
+				if(_mouseArea.containsPress || _mouseArea.containsMouse)
+					return;
+				
+				_notify.close()
             }
         }
 
         onClosed: _notifyTimer.stop()
-
-        MouseArea
-        {
-            id: _mouseArea
-            anchors.fill: parent
-            onClicked:
-            {
-                if(_notify.cb)
-                {
-                    _notify.cb()
-                    _notify.close()
-                }
-            }
-        }
+        
 
         GridLayout
         {
@@ -339,6 +341,7 @@ Kirigami.AbstractApplicationWindow
                     width: Maui.Style.iconSizes.large
                     height: width
                     anchors.centerIn: parent
+                    fallback : "dialog-warning"
                 }
             }
 
@@ -380,12 +383,18 @@ Kirigami.AbstractApplicationWindow
                 }
             }
         }
+        
+        MouseArea
+        {
+			id: _mouseArea
+			anchors.fill: parent
+			hoverEnabled: true
+		}
 
         function show(callback)
         {
-            _notify.cb = callback
+            _notify.cb = callback || null
             _notifyTimer.start()
-
             _notify.open()
         }
     }
@@ -412,13 +421,13 @@ Kirigami.AbstractApplicationWindow
 
     }
 
-    function notify(icon, title, body, callback, timeout)
+    function notify(icon, title, body, callback, timeout, buttonText)
     {
-        _notifyIcon.source = icon
+		_notifyIcon.source = icon || "emblem-warning"
         _notifyTitle.text = title
         _notifyBody.text = body
         _notifyTimer.interval = timeout ? timeout : 2500
-
+        _notify.acceptButton.text = buttonText || qsTr ("Accept")
         _notify.show(callback)
     }
 }
