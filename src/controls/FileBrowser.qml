@@ -585,6 +585,36 @@ Maui.Page
                     // 			autoExclusive: true
                 },
 
+                Action
+                {
+                    icon.name: "view-file-columns"
+                    onTriggered: control.viewType = Maui.FMList.MILLERS_VIEW
+                    icon.width: Maui.Style.iconSizes.medium
+                    checked: browserView.viewType === Maui.FMList.MILLERS_VIEW
+                    text: qsTr("Column view")
+                    // 			autoExclusive: true
+                },
+
+                Action
+                {
+                    icon.name: "view-file-columns"
+                    onTriggered: control.viewType = Maui.FMList.MILLERS_VIEW
+                    icon.width: Maui.Style.iconSizes.medium
+                    checked: browserView.viewType === Maui.FMList.MILLERS_VIEW
+                    text: qsTr("Column view")
+                    // 			autoExclusive: true
+                },
+
+                Action
+                {
+                    icon.name: "view-file-columns"
+                    onTriggered: control.viewType = Maui.FMList.MILLERS_VIEW
+                    icon.width: Maui.Style.iconSizes.medium
+                    checked: browserView.viewType === Maui.FMList.MILLERS_VIEW
+                    text: qsTr("Column view")
+                    // 			autoExclusive: true
+                },
+
                 Kirigami.Action
                 {
                     icon.name: "view-sort"

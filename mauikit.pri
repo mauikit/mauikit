@@ -166,9 +166,9 @@ contains(DEFINES, COMPONENT_FM):{
 }
 
 RESOURCES += \
-    $$PWD/mauikit.qrc \
-    $$PWD/assets.qrc \    
-    $$PWD/maui-style/style.qrc
+    $$PWD/src/mauikit.qrc \
+    $$PWD/src/assets.qrc \
+    $$PWD/src/maui-style/style.qrc
 
 HEADERS += \
     $$PWD/src/utils/fmstatic.h \
