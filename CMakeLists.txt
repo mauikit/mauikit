@@ -7,10 +7,6 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(MAUIKIT_VERSION 1.0.0)
 
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
 set(AUTOMOC_MOC_OPTIONS -Muri=org.kde.maui)
 
 project(mauikit VERSION ${MAUIKIT_VERSION})
@@ -20,20 +16,15 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH}
     ${ECM_KDE_MODULE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
 #DEFAULT COMPONENTS DEFINITIONS
-add_compile_definitions(
-    COMPONENT_EDITOR=ON
-    COMPONENT_FM=ON
-	COMPONENT_ACCOUNTS=ON
-    COMPONENT_TERMINAL=ON
-    COMPONENT_STORE=ON
-    COMPONENT_TAGGING=ON
-    COMPONENT_SYNCING=ON
-    )
+option(COMPONENT_EDITOR "Build editor component" ON)
+option(COMPONENT_FM "Build filemanager component" ON)
+option(COMPONENT_ACCOUNTS "Build accounts component" ON)
+option(COMPONENT_TERMINAL "Build terminal component" ON)
+option(COMPONENT_STORE "Build store component" ON)
+option(COMPONENT_TAGGING "Build tagging component" ON)
+option(COMPONENT_SYNCING "Build syncing component" ON)
     
-get_directory_property(MYDEFS COMPILE_DEFINITIONS)    
-    MESSAGE( STATUS "Compile defs contain: " ${MYDEFS} )
-
-    include(GenerateExportHeader)
+include(GenerateExportHeader)
 include(ECMSetupVersion)
 include(ECMGenerateHeaders)
 include(CMakePackageConfigHelpers)
@@ -48,6 +39,15 @@ include(KDECompilerSettings NO_POLICY_SCOPE)
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Qml 
     Sql Core Quick Gui Svg QuickControls2 Network DBus Xml)
 ecm_find_qmlmodule(QtGraphicalEffects 1.0)
+
+if(ANDROID)
+    find_package(Qt5 REQUIRED COMPONENTS AndroidExtras WebView)
+    find_package(Gradle REQUIRED)
+else()
+    find_package(Qt5 REQUIRED COMPONENTS WebEngine)
+endif()
+
+find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets)
 
 add_subdirectory(src)
 

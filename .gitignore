@@ -10,7 +10,7 @@ demo/mauikit/
 .swp.*
 
 #android stuff
-src/android/icons/luv-icon-theme/
+luv-icon-theme/
 
 
 #third party stuff
@@ -68,3 +68,6 @@ target_wrapper.*
 
 # QtCreator CMake
 CMakeLists.txt.user*
+
+# Bazaar files
+.bzr
