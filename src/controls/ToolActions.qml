@@ -18,14 +18,14 @@ property int expand : Qt.Horizontal
 
 property Action currentAction
 
-onClicked: _actionsMenu.popup()
-icon.name: "love"
-text: "text"
-
-
-ToolButton
+Kirigami.Icon
 {
-    action: control.currentAction
+    source: control.currentAction.icon.name
+}
+
+Label
+{
+text: control.currentAction.text
 }
 
 Loader
