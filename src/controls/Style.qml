@@ -82,12 +82,12 @@ QtObject
 	
 	readonly property var iconSizes : ({
 		tiny : 8,
-		small :  Kirigami.Units.iconSizes.small,
-		medium : Kirigami.Units.iconSizes.smallMedium,
-		big:  Kirigami.Units.iconSizes.medium,
-		large: Kirigami.Units.iconSizes.large,
-		huge: Kirigami.Units.iconSizes.huge,
-		enormous: Kirigami.Units.iconSizes.enormous
+        small :  Kirigami.Units.iconSizes.small / (isMobile ? 1.5 : 1),
+        medium : Kirigami.Units.iconSizes.smallMedium / (isMobile ? 1.5 : 1),
+        big:  Kirigami.Units.iconSizes.medium / (isMobile ? 1.5 : 1),
+        large: Kirigami.Units.iconSizes.large / (isMobile ? 1.5 : 1),
+        huge: Kirigami.Units.iconSizes.huge / (isMobile ? 1.5 : 1),
+        enormous: Kirigami.Units.iconSizes.enormous / (isMobile ? 1.5 : 1)
 		
 	})
 }

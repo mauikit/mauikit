@@ -241,6 +241,8 @@ Kirigami.AbstractApplicationWindow
             icon.name: "edit-find"
             icon.color: headBarFGColor
             onClicked: searchButtonClicked()
+            icon.width: Maui.Style.iconSizes.medium
+            icon.height: Maui.Style.iconSizes.medium
         }
     }
 

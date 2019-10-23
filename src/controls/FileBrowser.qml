@@ -432,9 +432,9 @@ Maui.Page
             // Shortcut for opening new tab
             if((event.key == Qt.Key_T) && (event.modifiers & Qt.ControlModifier))
             {
-				const _path = (currentPath).toString()
-				control.openTab(" ")
-				control.currentPath = _path
+                const _path = (currentPath).toString()
+                control.openTab(" ")
+                control.currentPath = _path
             }
 
             // Shortcut for closing tab
@@ -544,83 +544,75 @@ Maui.Page
         }
     }
 
+
     headBar.rightContent:[
+
         Kirigami.ActionToolBar
         {
             position: ToolBar.Header
             Layout.fillWidth: true
             hiddenActions: t_actions
 
-            display:  ToolButton.IconOnly
+        }
+    ]    
 
-            actions: [
-                Action
+    headBar.leftContent: [
+        ToolButton
+        {
+            icon.name: "go-previous"
+            onClicked: control.goBack()
+        },
+
+        ToolButton
+        {
+            icon.name: "go-next"
+            onClicked: control.goNext()
+        },
+
+        Maui.ToolActions
+        {
+
+            Action
+            {
+                icon.name: "view-list-icons"
+                text: qsTr("Grid")
+                onTriggered: control.viewType = Maui.FMList.ICON_VIEW
+                checked: browserView.viewType === Maui.FMList.ICON_VIEW
+                icon.width: Maui.Style.iconSizes.medium
+            }
+
+            Action
+            {
+                icon.name: "view-list-details"
+                text: qsTr("List")
+                onTriggered: control.viewType = Maui.FMList.LIST_VIEW
+                icon.width: Maui.Style.iconSizes.medium
+                checkable: true
+                checked: browserView.viewType === Maui.FMList.LIST_VIEW
+            }
+
+            Action
+            {
+                icon.name: "view-file-columns"
+                text: qsTr("Columns")
+                onTriggered: control.viewType = Maui.FMList.MILLERS_VIEW
+                icon.width: Maui.Style.iconSizes.medium
+                checkable: true
+                checked: browserView.viewType === Maui.FMList.MILLERS_VIEW
+            }
+        },
+
+
+            ToolButton
+            {
+                icon.name: "view-sort"
+                onClicked: _sortMenu.popup()
+
+                Menu
                 {
-                    icon.name: "view-list-icons"
-                    onTriggered: control.viewType = Maui.FMList.ICON_VIEW
-                    checkable: false
-                    checked: browserView.viewType === Maui.FMList.ICON_VIEW
-                    icon.width: Maui.Style.iconSizes.medium
-                    text: qsTr("Grid view")
-                    // 			autoExclusive: true
-                },
+                    id: _sortMenu
 
-                Action
-                {
-                    icon.name: "view-list-details"
-                    onTriggered: control.viewType = Maui.FMList.LIST_VIEW
-                    icon.width: Maui.Style.iconSizes.medium
-                    checked: browserView.viewType === Maui.FMList.LIST_VIEW
-                    text: qsTr("List view")
-                    // 			autoExclusive: true
-                },
-
-                Action
-                {
-                    icon.name: "view-file-columns"
-                    onTriggered: control.viewType = Maui.FMList.MILLERS_VIEW
-                    icon.width: Maui.Style.iconSizes.medium
-                    checked: browserView.viewType === Maui.FMList.MILLERS_VIEW
-                    text: qsTr("Column view")
-                    // 			autoExclusive: true
-                },
-
-                Action
-                {
-                    icon.name: "view-file-columns"
-                    onTriggered: control.viewType = Maui.FMList.MILLERS_VIEW
-                    icon.width: Maui.Style.iconSizes.medium
-                    checked: browserView.viewType === Maui.FMList.MILLERS_VIEW
-                    text: qsTr("Column view")
-                    // 			autoExclusive: true
-                },
-
-                Action
-                {
-                    icon.name: "view-file-columns"
-                    onTriggered: control.viewType = Maui.FMList.MILLERS_VIEW
-                    icon.width: Maui.Style.iconSizes.medium
-                    checked: browserView.viewType === Maui.FMList.MILLERS_VIEW
-                    text: qsTr("Column view")
-                    // 			autoExclusive: true
-                },
-
-                Action
-                {
-                    icon.name: "view-file-columns"
-                    onTriggered: control.viewType = Maui.FMList.MILLERS_VIEW
-                    icon.width: Maui.Style.iconSizes.medium
-                    checked: browserView.viewType === Maui.FMList.MILLERS_VIEW
-                    text: qsTr("Column view")
-                    // 			autoExclusive: true
-                },
-
-                Kirigami.Action
-                {
-                    icon.name: "view-sort"
-                    text: qsTr("Sort")
-
-                    Kirigami.Action
+                    MenuItem
                     {
                         text: qsTr("Folders first")
                         checked: control.currentFMList.foldersFirst
@@ -628,7 +620,7 @@ Maui.Page
                         onTriggered: control.currentFMList.foldersFirst = !control.currentFMList.foldersFirst
                     }
 
-                    Kirigami.Action
+                    MenuItem
                     {
                         text: qsTr("Type")
                         checked: control.currentFMList.sortBy === Maui.FMList.MIME
@@ -636,7 +628,7 @@ Maui.Page
                         onTriggered: control.currentFMList.sortBy = Maui.FMList.MIME
                     }
 
-                    Kirigami.Action
+                    MenuItem
                     {
                         text: qsTr("Date")
                         checked: control.currentFMList.sortBy === Maui.FMList.DATE
@@ -644,7 +636,7 @@ Maui.Page
                         onTriggered: control.currentFMList.sortBy = Maui.FMList.DATE
                     }
 
-                    Kirigami.Action
+                    MenuItem
                     {
                         text: qsTr("Modified")
                         checkable: true
@@ -652,7 +644,7 @@ Maui.Page
                         onTriggered: control.currentFMList.sortBy = Maui.FMList.MODIFIED
                     }
 
-                    Kirigami.Action
+                    MenuItem
                     {
                         text: qsTr("Size")
                         checkable: true
@@ -660,7 +652,7 @@ Maui.Page
                         onTriggered: control.currentFMList.sortBy = Maui.FMList.SIZE
                     }
 
-                    Kirigami.Action
+                    MenuItem
                     {
                         text: qsTr("Name")
                         checkable: true
@@ -668,7 +660,7 @@ Maui.Page
                         onTriggered: control.currentFMList.sortBy = Maui.FMList.LABEL
                     }
 
-                    Kirigami.Action
+                    MenuItem
                     {
                         id: groupAction
                         text: qsTr("Group")
@@ -683,34 +675,19 @@ Maui.Page
                             browserView.currentView.section.property = ""
                         }
                     }
-                },
-
-                Kirigami.Action
-                {
-                    text: qsTr("Select mode")
-                    icon.name: "item-select"
-                    checkable: true
-                    checked: control.selectionMode
-                    onTriggered: control.selectionMode = !control.selectionMode
-
                 }
+            },
+
+            ToolButton
+            {
+//                text: qsTr("Select mode")
+                icon.name: "item-select"
+                checkable: true
+                checked: control.selectionMode
+                onClicked: control.selectionMode = !control.selectionMode
+            }
+
             ]
-        }
-    ]
-
-    headBar.leftContent: [
-        ToolButton
-        {
-            icon.name: "go-previous"
-            onClicked: control.goBack()
-        },
-
-        ToolButton
-        {
-            icon.name: "go-next"
-            onClicked: control.goNext()
-        }
-    ]
 
     Component
     {
