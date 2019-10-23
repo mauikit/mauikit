@@ -99,8 +99,8 @@ Kirigami.ScrollablePage
 		interactive: true
 		onWidthChanged: adaptContent? control.adaptGrid() : undefined
 		
-		keyNavigationEnabled : bool
-		keyNavigationWraps : bool
+		keyNavigationEnabled : true
+		keyNavigationWraps : true
 		Keys.onPressed: control.keyPress(event) 
 		
 		Maui.Holder

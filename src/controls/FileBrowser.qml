@@ -547,13 +547,118 @@ Maui.Page
 
     headBar.rightContent:[
 
-        Kirigami.ActionToolBar
-        {
-            position: ToolBar.Header
-            Layout.fillWidth: true
-            hiddenActions: t_actions
-
-        }
+    ToolButton
+    {
+		icon.name: "item-select"
+		checkable: true
+		checked: control.selectionMode
+		onClicked: control.selectionMode = !control.selectionMode
+	},    
+    
+    ToolButton
+    {
+		icon.name: "view-sort"
+		onClicked: 
+		{
+			if(_sortMenu.visible)
+				_sortMenu.close()
+				else
+					_sortMenu.popup(0, height)
+		}
+		checked: _sortMenu.visible
+		checkable: false
+		
+		Menu
+		{
+			id: _sortMenu
+			closePolicy: Controls.Popup.CloseOnEscape | Controls.Popup.CloseOnPressOutsideParent
+			
+			MenuItem
+			{
+				text: qsTr("Folders first")
+				checked: control.currentFMList.foldersFirst
+				checkable: true
+				onTriggered: control.currentFMList.foldersFirst = !control.currentFMList.foldersFirst
+			}
+			
+			MenuItem
+			{
+				text: qsTr("Type")
+				checked: control.currentFMList.sortBy === Maui.FMList.MIME
+				checkable: true
+				onTriggered: control.currentFMList.sortBy = Maui.FMList.MIME
+			}
+			
+			MenuItem
+			{
+				text: qsTr("Date")
+				checked: control.currentFMList.sortBy === Maui.FMList.DATE
+				checkable: true
+				onTriggered: control.currentFMList.sortBy = Maui.FMList.DATE
+			}
+			
+			MenuItem
+			{
+				text: qsTr("Modified")
+				checkable: true
+				checked: control.currentFMList.sortBy === Maui.FMList.MODIFIED
+				onTriggered: control.currentFMList.sortBy = Maui.FMList.MODIFIED
+			}
+			
+			MenuItem
+			{
+				text: qsTr("Size")
+				checkable: true
+				checked: control.currentFMList.sortBy === Maui.FMList.SIZE
+				onTriggered: control.currentFMList.sortBy = Maui.FMList.SIZE
+			}
+			
+			MenuItem
+			{
+				text: qsTr("Name")
+				checkable: true
+				checked: control.currentFMList.sortBy === Maui.FMList.LABEL
+				onTriggered: control.currentFMList.sortBy = Maui.FMList.LABEL
+			}
+			
+			MenuItem
+			{
+				id: groupAction
+				text: qsTr("Group")
+				checkable: true
+				checked: control.group
+				onTriggered:
+				{
+					control.group = !control.group
+					if(control.group)
+						control.groupBy()
+						else
+							browserView.currentView.section.property = ""
+				}
+			}
+		}
+	},
+	
+	ToolButton
+	{
+		//                text: qsTr("Select mode")
+		icon.name: "overflow-menu"
+		onClicked: 
+		{
+			if(_optionsMenu.visible)
+				_optionsMenu.close()
+				else
+					_optionsMenu.popup(0, height)
+		}
+		checked: _optionsMenu.visible
+		checkable: false
+		Menu
+		{
+		id: _optionsMenu
+		closePolicy: Controls.Popup.CloseOnEscape | Controls.Popup.CloseOnPressOutsideParent
+		contentData: t_actions
+		}
+	}
     ]    
 
     headBar.leftContent: [
@@ -571,7 +676,14 @@ Maui.Page
 
         Maui.ToolActions
         {
-
+			direction: Qt.Horizontal
+			currentAction: switch(browserView.viewType)
+			{
+				case Maui.FMList.ICON_VIEW: return actions[0]
+				case Maui.FMList.LIST_VIEW: return actions[1]
+				case Maui.FMList.MILLERS_VIEW: return actions[2]
+			}
+			
             Action
             {
                 icon.name: "view-list-icons"
@@ -600,93 +712,7 @@ Maui.Page
                 checkable: true
                 checked: browserView.viewType === Maui.FMList.MILLERS_VIEW
             }
-        },
-
-
-            ToolButton
-            {
-                icon.name: "view-sort"
-                onClicked: _sortMenu.popup()
-
-                Menu
-                {
-                    id: _sortMenu
-
-                    MenuItem
-                    {
-                        text: qsTr("Folders first")
-                        checked: control.currentFMList.foldersFirst
-                        checkable: true
-                        onTriggered: control.currentFMList.foldersFirst = !control.currentFMList.foldersFirst
-                    }
-
-                    MenuItem
-                    {
-                        text: qsTr("Type")
-                        checked: control.currentFMList.sortBy === Maui.FMList.MIME
-                        checkable: true
-                        onTriggered: control.currentFMList.sortBy = Maui.FMList.MIME
-                    }
-
-                    MenuItem
-                    {
-                        text: qsTr("Date")
-                        checked: control.currentFMList.sortBy === Maui.FMList.DATE
-                        checkable: true
-                        onTriggered: control.currentFMList.sortBy = Maui.FMList.DATE
-                    }
-
-                    MenuItem
-                    {
-                        text: qsTr("Modified")
-                        checkable: true
-                        checked: control.currentFMList.sortBy === Maui.FMList.MODIFIED
-                        onTriggered: control.currentFMList.sortBy = Maui.FMList.MODIFIED
-                    }
-
-                    MenuItem
-                    {
-                        text: qsTr("Size")
-                        checkable: true
-                        checked: control.currentFMList.sortBy === Maui.FMList.SIZE
-                        onTriggered: control.currentFMList.sortBy = Maui.FMList.SIZE
-                    }
-
-                    MenuItem
-                    {
-                        text: qsTr("Name")
-                        checkable: true
-                        checked: control.currentFMList.sortBy === Maui.FMList.LABEL
-                        onTriggered: control.currentFMList.sortBy = Maui.FMList.LABEL
-                    }
-
-                    MenuItem
-                    {
-                        id: groupAction
-                        text: qsTr("Group")
-                        checkable: true
-                        checked: control.group
-                        onTriggered:
-                        {
-                            control.group = !control.group
-                            if(control.group)
-                            control.groupBy()
-                            else
-                            browserView.currentView.section.property = ""
-                        }
-                    }
-                }
-            },
-
-            ToolButton
-            {
-//                text: qsTr("Select mode")
-                icon.name: "item-select"
-                checkable: true
-                checked: control.selectionMode
-                onClicked: control.selectionMode = !control.selectionMode
-            }
-
+        }
             ]
 
     Component

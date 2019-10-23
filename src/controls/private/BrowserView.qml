@@ -100,7 +100,8 @@ Maui.Page
 			topMargin: Maui.Style.contentMargins			
 			showPreviewThumbnails: showThumbnails
 			keepEmblemOverlay: selectionMode			
-			showDetailsInfo: true		
+			showDetailsInfo: true
+			supportsRefreshing: true
 			BrowserHolder
 			{
 				id: _holder
@@ -240,6 +241,7 @@ Maui.Page
 			keepEmblemOverlay: selectionMode
 			showPreviewThumbnails: showThumbnails
 			leftEmblem: "emblem-select-add"	
+			supportsRefreshing: true
 			
 			BrowserHolder
 			{
