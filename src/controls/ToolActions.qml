@@ -171,13 +171,7 @@ MouseArea
 				{
 					action: modelData
 					autoExclusive: control.autoExclusive
-					onTriggered: control.currentAction = action
-					
-					Connections
-					{
-						target: action
-						onTriggered:  control.currentAction = action
-					}
+					onTriggered: control.currentAction = action					
 				}
 			}
 		}

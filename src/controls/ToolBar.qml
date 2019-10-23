@@ -117,6 +117,30 @@ ToolBar
 		
 		z: 999
 		
+		EdgeShadow
+		{
+			visible: true
+			parent: parent
+			edge: Qt.RightEdge
+			anchors
+			{
+				right: parent.right
+				top: parent.top
+				bottom: parent.bottom
+			}
+			
+			opacity: 1
+			
+			Behavior on opacity
+			{
+				NumberAnimation
+				{
+					duration: Kirigami.Units.longDuration
+					easing.type: Easing.InOutQuad
+				}
+			}
+		}
+		
 		Kirigami.Icon
 		{
 			anchors.centerIn: parent
@@ -153,6 +177,30 @@ ToolBar
 		}
 		z: 999
 		
+		EdgeShadow
+		{
+			visible: true
+			parent: parent
+			edge: Qt.LeftEdge
+			anchors
+			{
+				left: parent.left
+				top: parent.top
+				bottom: parent.bottom
+			}
+			
+			opacity: 1
+			
+			Behavior on opacity
+			{
+				NumberAnimation
+				{
+					duration: Kirigami.Units.longDuration
+					easing.type: Easing.InOutQuad
+				}
+			}
+		}
+		
 		Kirigami.Icon
 		{
 			anchors.centerIn: parent
@@ -180,8 +228,8 @@ ToolBar
 		property bool fits : contentWidth < control.width
 		onFitsChanged: returnToBounds()
 		anchors.fill: parent
-		anchors.leftMargin: !fits && _leftFlickRec.visible && control.flickable ? _leftFlickRec.width : margins
-		anchors.rightMargin: !fits && _rightFlickRec.visible && control.flickable ? _rightFlickRec.width : margins
+		anchors.leftMargin: !fits && _leftFlickRec.visible && control.flickable && !Kirigami.Settings.isMobile ? _leftFlickRec.width : margins
+		anchors.rightMargin: !fits && _rightFlickRec.visible && control.flickable && !Kirigami.Settings.isMobile ? _rightFlickRec.width : margins
 		
 		flickableDirection: Flickable.HorizontalFlick
 		interactive: !fits && Kirigami.Settings.isMobile

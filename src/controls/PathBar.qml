@@ -126,6 +126,7 @@ Item
 			anchors.fill: parent
 			property alias listView: _listView            
             spacing: 0
+            clip: true
 
             MouseArea
 			{
