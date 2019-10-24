@@ -376,7 +376,7 @@ Maui.Page
 
         Maui.Dialog
         {
-            maxHeight: _configLayout.implicitHeight + Maui.Style.space.huge
+            maxHeight: _configLayout.implicitHeight * 1.5
             maxWidth: 300
             defaultButtons: false
 
@@ -384,6 +384,7 @@ Maui.Page
             {
                 id: _configLayout
                 width: parent.width
+                anchors.centerIn: parent
 
                 Kirigami.Separator
                 {
