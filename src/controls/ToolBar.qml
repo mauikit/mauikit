@@ -106,7 +106,7 @@ ToolBar
 		id: _rightFlickRec
 		width: Maui.Style.iconSizes.medium
 		height: parent.height
-		visible: /*!mainFlickable.atXEnd && */!mainFlickable.fits && control.flickable
+        visible: !mainFlickable.atXEnd && !mainFlickable.fits && control.flickable
 		hoverEnabled: true
 		anchors 
 		{
@@ -167,7 +167,7 @@ ToolBar
 		id: _leftFlickRec
 		width: Maui.Style.iconSizes.medium
 		height: parent.height
-		visible: /*!mainFlickable.atXBeginning &&*/ !mainFlickable.fits && control.flickable
+        visible: !mainFlickable.atXBeginning && !mainFlickable.fits && control.flickable
 		hoverEnabled: true
 		anchors 
 		{

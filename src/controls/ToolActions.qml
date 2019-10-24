@@ -47,18 +47,25 @@ MouseArea
 	{
 		id: _layout
 		height: parent.height
-		spacing: Maui.Style.space.tiny * 0.5	
+        spacing: 0
 		anchors.centerIn: parent
 		
-		Kirigami.Icon
-		{
-			visible: control.direction === Qt.Vertical || (control.direction === Qt.Horizontal && !control.expanded) 
-			source:  control.currentAction.icon.name
-			width: Maui.Style.iconSizes.medium
-			height: width
-			anchors.verticalCenter: parent.verticalCenter
-		}
-		
+        Item
+        {
+            visible: control.direction === Qt.Vertical || (control.direction === Qt.Horizontal && !control.expanded)
+
+            width: parent.height
+            height: width
+            Kirigami.Icon
+            {
+                source:  control.currentAction.icon.name
+                width: Maui.Style.iconSizes.medium
+                height: width
+                anchors.centerIn: parent
+            }
+
+        }
+
 // 		Label
 // 		{
 // 			visible:  control.direction === Qt.Vertical || (control.direction === Qt.Horizontal && !control.expanded) 
@@ -66,23 +73,21 @@ MouseArea
 // 			height: parent.height
 // 		}
 		
-		Rectangle
-		{		
-			color:/* control.expanded  && control.direction === Qt.Horizontal? Kirigami.Theme.highlightColor :*/ "transparent"
-			height: parent.height
-			width: control.expanded && control.direction === Qt.Horizontal? height : Maui.Style.iconSizes.small
-			radius: Maui.Style.radiusV
-			Kirigami.Icon
-			{
-				source: control.direction === Qt.Horizontal ? ( control.expanded ? "arrow-left" : "arrow-right") : (control.direction === Qt.Vertical ? ( control.expanded ? "arrow-up" : "arrow-down") : "")
-				// 			width: Maui.Style.iconSizes.small
-				// 			height: width
-				width: Maui.Style.iconSizes.small
-				height: width
-				anchors.centerIn: parent
-			}
+        Rectangle
+        {
+            color:/* control.expanded  && control.direction === Qt.Horizontal? Kirigami.Theme.highlightColor :*/ "transparent"
+            height: parent.height
+            width: control.expanded && control.direction === Qt.Horizontal? height : Maui.Style.iconSizes.small
+            radius: Maui.Style.radiusV
+            Kirigami.Icon
+            {
+                source: control.direction === Qt.Horizontal ? ( control.expanded ? "go-previous" : "go-next") : (control.direction === Qt.Vertical ? ( control.expanded ? "go-up" : "go-down") : "")
+                width: Maui.Style.iconSizes.small
+                height: width
+                anchors.centerIn: parent
+            }
 			
-		}	
+        }
 		
 		Loader
 		{
@@ -171,7 +176,11 @@ MouseArea
 				{
 					action: modelData
 					autoExclusive: control.autoExclusive
-					onTriggered: control.currentAction = action					
+                    Connections
+                    {
+                        target: modelData
+                        onTriggered: control.currentAction = action
+                    }
 				}
 			}
 		}

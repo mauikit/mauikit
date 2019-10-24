@@ -51,15 +51,15 @@ T.ToolButton
                              contentItem.implicitHeight + topPadding + bottomPadding)
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
-    padding: Kirigami.Units.smallSpacing
-    spacing: Kirigami.Units.smallSpacing
-
+    padding: Maui.Style.space.tiny
+    spacing: Maui.Style.space.tiny
+    rightPadding: Maui.Style.space.medium
+    leftPadding: Maui.Style.space.medium
     icon.width: Maui.Style.iconSizes.medium
     icon.height: Maui.Style.iconSizes.medium
     icon.color: checked  ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
     
     flat: control.parent === T.ToolBar
-
 
     contentItem: IconLabel
     {

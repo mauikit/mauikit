@@ -236,7 +236,7 @@ static QAndroidJniObject getAndroidWindow()
 
 void MAUIAndroid::statusbarColor(const QString &bg, const bool &light)
 {
-     if (QtAndroid::androidSdkVersion() < 23)
+     if (QtAndroid::androidSdkVersion() <= 23)
             return;
 
         QtAndroid::runOnAndroidThread([=]() {
@@ -254,7 +254,7 @@ void MAUIAndroid::statusbarColor(const QString &bg, const bool &light)
 
 void MAUIAndroid::navBarColor(const QString &bg, const bool &light)
 {
-    if (QtAndroid::androidSdkVersion() < 23)
+    if (QtAndroid::androidSdkVersion() <= 23)
         return;
     
     QtAndroid::runOnAndroidThread([=]() {

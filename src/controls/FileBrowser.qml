@@ -676,7 +676,7 @@ Maui.Page
 
         Maui.ToolActions
         {
-			direction: Qt.Horizontal
+            direction: Qt.Horizontal
 			currentAction: switch(browserView.viewType)
 			{
 				case Maui.FMList.ICON_VIEW: return actions[0]
