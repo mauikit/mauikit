@@ -6,39 +6,81 @@ import org.kde.kirigami 2.6 as Kirigami
 
 Menu
 { 
-    MenuItem
+	contentData: actions
+	property list<Action> actions : [ 
+    Action
     {
-        action: _previewAction
-    }
+		icon.name: "image-preview"
+		text: qsTr("Previews")
+		checkable: true
+		checked: control.showThumbnails
+		onTriggered: control.showThumbnails = !control.showThumbnails
+    },
     
-    MenuItem
+	Action
     {
-        action: _hiddenAction
-    }
+		icon.name: "visibility"
+		text: qsTr("Hidden files")
+		checkable: true
+		checked: control.currentFMList.hidden
+		onTriggered: control.currentFMList.hidden = !control.currentFMList.hidden
+    },
     
-    MenuSeparator {}
     
-    MenuItem
+	Action
     {
-        action: _bookmarkAction
-    }
+		icon.name: "bookmark-new"
+		text: qsTr("Bookmark")
+		onTriggered: control.bookmarkFolder([currentPath])
+    },
     
-    MenuItem
+	Action
     {
-        action: _newFolderAction
-    }
+		icon.name: "folder-add"
+		text: qsTr("New folder")
+		onTriggered:
+		{
+			dialogLoader.sourceComponent= newFolderDialogComponent
+			dialog.open()
+		}
+    },
     
-    MenuItem
+	Action
     {
-        action: _newDocumentAction
-    }
+		icon.name: "document-new"
+		text: qsTr("New file")
+		onTriggered:
+		{
+			dialogLoader.sourceComponent= newFileDialogComponent
+			dialog.open()
+		}
+    },
     
-    MenuSeparator {}    
     
-    MenuItem
+	Action
     {
-        action: _pasteAction
-    }  
+		text: qsTr("Paste")
+		icon.name: "edit-paste"
+		// 		enabled: control.clipboardItems.length > 0
+		onTriggered: paste()
+    },
+    
+	Action
+    {
+		text: qsTr("Select all")
+		icon.name: "edit-select-all"
+		onTriggered: control.selectAll()
+	},
+	
+	Action
+	{
+		text: qsTr("Status bar")
+		icon.name: "settings-configure"
+		checkable: true
+		checked: control.footBar.visible
+		onTriggered: control.footBar.visible = !control.footBar.visible
+	}
+	]
     
     
     function show()

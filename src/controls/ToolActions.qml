@@ -108,6 +108,7 @@ MouseArea
 			spacing: Maui.Style.space.medium
 			clip: true
 			height: parent.height
+			
 			Behavior on width
 			{
 				
@@ -134,6 +135,7 @@ MouseArea
 				{
 					action: modelData
 					autoExclusive: control.autoExclusive
+					anchors.verticalCenter: parent.verticalCenter
 					onClicked: 
 					{
 						control.currentAction = action

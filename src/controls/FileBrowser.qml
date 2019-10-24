@@ -86,87 +86,7 @@ Maui.Page
     ]
 
     headBar.position: Kirigami.Settings.isMobile ? ToolBar.Footer : ToolBar.Header
-    property list<QtObject> t_actions:
-        [
-        Action
-        {
-            id: _previewAction
-            icon.name: "image-preview"
-            text: qsTr("Previews")
-            checkable: true
-            checked: control.showThumbnails
-            onTriggered: control.showThumbnails = !control.showThumbnails
-        },
-
-        Action
-        {
-            id: _hiddenAction
-            icon.name: "visibility"
-            text: qsTr("Hidden files")
-            checkable: true
-            checked: control.currentFMList.hidden
-            onTriggered: control.currentFMList.hidden = !control.currentFMList.hidden
-        },
-
-        Action
-        {
-            id: _bookmarkAction
-            icon.name: "bookmark-new"
-            text: qsTr("Bookmark")
-            onTriggered: control.bookmarkFolder([currentPath])
-        },
-
-        Action
-        {
-            id: _newFolderAction
-            icon.name: "folder-add"
-            text: qsTr("New folder")
-            onTriggered:
-            {
-                dialogLoader.sourceComponent= newFolderDialogComponent
-                dialog.open()
-            }
-        },
-
-        Action
-        {
-            id: _newDocumentAction
-            icon.name: "document-new"
-            text: qsTr("New file")
-            onTriggered:
-            {
-                dialogLoader.sourceComponent= newFileDialogComponent
-                dialog.open()
-            }
-        },
-
-        Action
-        {
-            id: _pasteAction
-            text: qsTr("Paste")
-            icon.name: "edit-paste"
-            // 		enabled: control.clipboardItems.length > 0
-            onTriggered: paste()
-        },
-
-        Action
-        {
-            id: _selectAllAction
-            text: qsTr("Select all")
-            icon.name: "edit-select-all"
-            onTriggered: control.selectAll()
-        },
-
-        Action
-        {
-            text: qsTr("Status bar")
-            icon.name: "settings-configure"
-            checkable: true
-            checked: control.footBar.visible
-            onTriggered: control.footBar.visible = !control.footBar.visible
-        }
-    ]
-
+   
     Loader
     {
         id: dialogLoader
@@ -656,7 +576,7 @@ Maui.Page
 		{
 		id: _optionsMenu
 		closePolicy: Controls.Popup.CloseOnEscape | Controls.Popup.CloseOnPressOutsideParent
-		contentData: t_actions
+		contentData: browserMenu.actions
 		}
 	}
     ]    
@@ -677,6 +597,7 @@ Maui.Page
         Maui.ToolActions
         {
             direction: Qt.Vertical
+
 			currentAction: switch(browserView.viewType)
 			{
 				case Maui.FMList.ICON_VIEW: return actions[0]
