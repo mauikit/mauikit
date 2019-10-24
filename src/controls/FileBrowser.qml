@@ -867,9 +867,9 @@ Maui.Page
         {
             control.currentFMList.onlyDirs= control.settings.onlyDirs
             control.currentFMList.filters= control.settings.filters
-            control.currentFMList.sortBy= control.settings.sortBy
+            control.currentFMList.sortBy= control.settings.sortBy || control.currentFMList.sortBy
             control.currentFMList.filterType= control.settings.filterType
-            control.currentFMList.trackChanges= control.settings.trackChanges
+            control.currentFMList.trackChanges= control.settings.trackChanges || control.currentFMList.trackChanges
             control.currentFMList.saveDirProps= control.settings.saveDirProps
         }
     }

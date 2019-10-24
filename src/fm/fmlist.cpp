@@ -167,46 +167,25 @@ void FMList::setList()
 
 void FMList::reset()
 {	
-	switch(this->pathType)
-	{
-		case FMList::PATHTYPE::APPS_PATH:			
-		case FMList::PATHTYPE::CLOUD_PATH:			
-		case FMList::PATHTYPE::SEARCH_PATH:
-		case FMList::PATHTYPE::TAGS_PATH:			
-			this->hidden = false;			
-			break;
-			
-		case FMList::PATHTYPE::PLACES_PATH:
-		{
-			if(this->saveDirProps)
-			{
-				auto conf = FMH::dirConf(this->path.toString()+"/.directory");				
-				this->hidden = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN]].toBool();				
-				this->foldersFirst = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::FOLDERSFIRST]].toBool();
-			}else
-			{
-				this->hidden = UTIL::loadSettings("HiddenFilesShown", "SETTINGS", this->hidden).toBool();
-				this->foldersFirst = UTIL::loadSettings("FoldersFirst", "SETTINGS", this->foldersFirst).toBool();
-			}
 		
-			break;
-		}
-		
-		default: break;
-	}
-	
 	if(this->saveDirProps)
 	{
 		auto conf = FMH::dirConf(this->path.toString()+"/.directory");	
-		this->sort = static_cast<FMList::SORTBY>(conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SORTBY]].toInt());		
+		this->sort = static_cast<FMList::SORTBY>(conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SORTBY]].toInt());
+        this->hidden = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN]].toBool();				
+        this->foldersFirst = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::FOLDERSFIRST]].toBool();
 	}else
 	{	
+        this->hidden = UTIL::loadSettings("HiddenFilesShown", "SETTINGS", this->hidden).toBool();
+        this->foldersFirst = UTIL::loadSettings("FoldersFirst", "SETTINGS", this->foldersFirst).toBool();
 		this->sort = static_cast<FMList::SORTBY>(UTIL::loadSettings("SortBy", "SETTINGS", this->sort).toInt());
 	}
 	
 	emit this->sortByChanged();
 	emit this->hiddenChanged();
-	
+	emit this->foldersFirstChanged();
+    emit this->hiddenChanged();
+    
 	this->setList();	
 }
 

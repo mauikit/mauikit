@@ -85,7 +85,6 @@ Maui.Page
 	{
 		id: _commonFMList
 		path: control.path
-		foldersFirst: true
 		onSortByChanged: if(group) groupBy()			
 	}
 	
@@ -450,7 +449,6 @@ Maui.Page
 					{	
 						id: _millersFMList
 						path: model.path
-						foldersFirst: true
 					}
 					
 					Maui.ListBrowser
