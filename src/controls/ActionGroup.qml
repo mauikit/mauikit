@@ -106,14 +106,14 @@ Item
 			icon.width: Maui.Style.iconSizes.medium
 			icon.height: Maui.Style.iconSizes.medium
 			display: ToolButton.TextBesideIcon
-			Behavior on implicitWidth
-			{		
-				NumberAnimation
-				{
-					duration: Kirigami.Units.longDuration
-					easing.type: Easing.InOutQuad
-				}
-			}
+//			Behavior on implicitWidth
+//			{
+//				NumberAnimation
+//				{
+//					duration: Kirigami.Units.longDuration
+//					easing.type: Easing.InOutQuad
+//				}
+//			}
 		}		
 		
 		ToolButton

@@ -76,7 +76,7 @@ Maui.Popup
         onClicked: close()
     }
 
-    contentItem: Maui.Page
+    Maui.Page
     {
         id: page
         anchors.fill: parent

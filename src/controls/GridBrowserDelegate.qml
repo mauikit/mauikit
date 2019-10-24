@@ -118,7 +118,7 @@ Maui.ItemDelegate
             {
                 id: img
                 anchors.centerIn: parent
-                source: model.thumbnail ? model.thumbnail : undefined
+                source: model.thumbnail && model.thumbnail.length ? model.thumbnail : ""
                 height: Math.min (parent.height, img.implicitHeight)
                 width: Math.min(parent.width * 0.98, img.implicitWidth)
                 sourceSize.width: width
@@ -151,7 +151,7 @@ Maui.ItemDelegate
             Loader
             {
                 anchors.centerIn: parent				
-                sourceComponent: img.status === Image.Ready ? undefined : _iconComponent
+                sourceComponent: img.status === Image.Ready ? null : _iconComponent
             }
         }
     }
@@ -183,7 +183,7 @@ Maui.ItemDelegate
         
         Loader
         {
-			sourceComponent: model.mime ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails ? _imgComponent : _iconComponent) : _iconComponent 
+            sourceComponent: model.mime ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails && model.thumbnail && model.thumbnail.length? _imgComponent : _iconComponent) : _iconComponent
 			Layout.preferredHeight: Math.min(control.folderSize, width)
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignCenter

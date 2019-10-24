@@ -71,6 +71,14 @@ T.ToolButton
         text: control.text
         font: control.font
         color: control.checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+
+        Behavior on color
+        {
+            ColorAnimation
+            {
+                duration: Kirigami.Units.longDuration
+            }
+        }
     }
 
     background: Rectangle
@@ -81,6 +89,14 @@ T.ToolButton
         radius: height * 0.07
 
         opacity: control.checked ? 0.4 : 1.0
-        color: (control.down || control.checked || control.highlighted ? Kirigami.Theme.buttonHoverColor : "transparent")
+        color: (control.down || control.checked || control.highlighted ? Kirigami.Theme.highlightColor : "transparent")
+
+        Behavior on color
+        {
+            ColorAnimation
+            {
+                duration: Kirigami.Units.longDuration
+            }
+        }
     }
 }

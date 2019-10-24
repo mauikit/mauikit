@@ -13,11 +13,11 @@ MouseArea
 	implicitWidth: _layout.implicitWidth +  Maui.Style.space.medium
 	implicitHeight: parent.height
 	
-	default property list<Action> actions
+    default property list<Action> actions
 	property bool autoExclusive: true
 	
 	property int direction : Qt.Vertical
-	
+
 	property Action currentAction : actions[0]
 	
 	property bool expanded : false
@@ -68,7 +68,7 @@ MouseArea
 
 // 		Label
 // 		{
-// 			visible:  control.direction === Qt.Vertical || (control.direction === Qt.Horizontal && !control.expanded) 
+// 			visible:  control.direction === Qt.Vertical || (control.direction === Qt.Horizontal && !control.expanded)
 // 			text: control.currentAction.text
 // 			height: parent.height
 // 		}
@@ -81,12 +81,11 @@ MouseArea
             radius: Maui.Style.radiusV
             Kirigami.Icon
             {
-                source: control.direction === Qt.Horizontal ? ( control.expanded ? "go-previous" : "go-next") : (control.direction === Qt.Vertical ? ( control.expanded ? "go-up" : "go-down") : "")
+                source: control.direction === Qt.Horizontal ? ( control.expanded ? "go-previous" : "go-next") : (control.direction === Qt.Vertical ? "arrow-down" : "")
                 width: Maui.Style.iconSizes.small
                 height: width
                 anchors.centerIn: parent
-            }
-			
+            }			
         }
 		
 		Loader
