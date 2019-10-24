@@ -498,8 +498,10 @@ Maui.Page
 				text: qsTr("Folders first")
 				checked: control.currentFMList.foldersFirst
 				checkable: true
-				onTriggered: control.currentFMList.foldersFirst = !control.currentFMList.foldersFirst
+				onTriggered: control.currentFMList.foldersFirst = !control.currentFMList.foldersFirst				
 			}
+			
+			MenuSeparator {}
 			
 			MenuItem
 			{
@@ -507,6 +509,7 @@ Maui.Page
 				checked: control.currentFMList.sortBy === Maui.FMList.MIME
 				checkable: true
 				onTriggered: control.currentFMList.sortBy = Maui.FMList.MIME
+				autoExclusive: true
 			}
 			
 			MenuItem
@@ -515,6 +518,7 @@ Maui.Page
 				checked: control.currentFMList.sortBy === Maui.FMList.DATE
 				checkable: true
 				onTriggered: control.currentFMList.sortBy = Maui.FMList.DATE
+				autoExclusive: true
 			}
 			
 			MenuItem
@@ -523,6 +527,7 @@ Maui.Page
 				checkable: true
 				checked: control.currentFMList.sortBy === Maui.FMList.MODIFIED
 				onTriggered: control.currentFMList.sortBy = Maui.FMList.MODIFIED
+				autoExclusive: true
 			}
 			
 			MenuItem
@@ -531,6 +536,7 @@ Maui.Page
 				checkable: true
 				checked: control.currentFMList.sortBy === Maui.FMList.SIZE
 				onTriggered: control.currentFMList.sortBy = Maui.FMList.SIZE
+				autoExclusive: true
 			}
 			
 			MenuItem
@@ -539,7 +545,10 @@ Maui.Page
 				checkable: true
 				checked: control.currentFMList.sortBy === Maui.FMList.LABEL
 				onTriggered: control.currentFMList.sortBy = Maui.FMList.LABEL
+				autoExclusive: true
 			}
+			
+			MenuSeparator{}
 			
 			MenuItem
 			{
