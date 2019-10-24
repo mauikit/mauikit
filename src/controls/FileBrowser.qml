@@ -1026,18 +1026,13 @@ Maui.Page
 
     function openFolder(path)
     {
-        populate(path)
+		if(!String(path).length)
+			return;
+		
+		control.browserView.currentView.currentIndex = 0
+		control.currentPath = path
     }
-
-    function populate(path)
-    {
-        if(!String(path).length)
-            return;
-
-        control.browserView.currentView.currentIndex = 0
-        control.currentPath = path
-    }
-
+    
     function goBack()
     {
         openFolder(control.currentFMList.previousPath)
@@ -1100,16 +1095,15 @@ Maui.Page
 
         if(!urls)
             return
-
-        if(control.isCopy)
-        {
-            control.currentFMList.copyInto(urls)
-        }
-        else if(control.isCut)
-        {
-            control.currentFMList.cutInto(urls)
-            control.clearSelection()
-        }
+            
+            if(control.isCut)
+			{
+				control.currentFMList.cutInto(urls)
+				control.clearSelection()
+			}else
+			{
+				control.currentFMList.copyInto(urls)
+			}
     }
 
     function remove(urls)

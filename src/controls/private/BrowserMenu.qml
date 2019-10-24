@@ -52,7 +52,7 @@ Menu
     {
 		text: qsTr("Select all")
 		icon.name: "edit-select-all"
-		onTriggered: control.selectAll()
+		onTriggered: selectAll()
     }
     
     function show(parent = control, x, y)

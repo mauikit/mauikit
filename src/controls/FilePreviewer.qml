@@ -32,7 +32,6 @@ Maui.Dialog
     {
         icon.name: "document-open"
         text: qsTr("Open")
-        display: footBar.fits ? ToolButton.TextBesideIcon : ToolButton.IconOnly
         onClicked:
         {
             openFile(control.currentUrl)
@@ -47,7 +46,6 @@ Maui.Dialog
             visible: !isDir
             icon.name: "document-share"
             text: qsTr("Share")
-            display: footBar.fits ? ToolButton.TextBesideIcon : ToolButton.IconOnly
             onClicked:
             {
                 shareButtonClicked(currentUrl)
@@ -59,7 +57,6 @@ Maui.Dialog
         {
             icon.name: "love"
             text: qsTr("Fav")
-            display: footBar.fits ? ToolButton.TextBesideIcon : ToolButton.IconOnly
             checkable: true
             checked: control.isFav
             onClicked:
@@ -78,7 +75,6 @@ Maui.Dialog
     {
         icon.name: "documentinfo"
         text: qsTr("Info")
-        display: footBar.fits ? ToolButton.TextBesideIcon : ToolButton.IconOnly
         checkable: true
         checked: control.showInfo
         onClicked: control.showInfo = !control.showInfo

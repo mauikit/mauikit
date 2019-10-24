@@ -181,7 +181,6 @@ void FMList::reset()
 	emit this->sortByChanged();
 	emit this->hiddenChanged();
 	emit this->foldersFirstChanged();
-    emit this->hiddenChanged();
     
 	this->setList();	
 }
@@ -223,7 +222,7 @@ void FMList::sortList()
 	
 	if(this->foldersFirst)
 	{
-        std::sort(this->list.begin(), this->list.end(), [](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
+        qSort(this->list.begin(), this->list.end(), [](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
 		{
             Q_UNUSED(e2)
 			const auto key = FMH::MODEL_KEY::MIME;
@@ -238,7 +237,7 @@ void FMList::sortList()
 				index++;
 			else break;
 			
-        std::sort(this->list.begin(),this->list.begin() + index, [&key](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
+			std::sort(this->list.begin(),this->list.begin() + index, [&key](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
 		{			
             switch(key)
 			{				
