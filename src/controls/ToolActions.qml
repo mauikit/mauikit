@@ -176,6 +176,7 @@ MouseArea
 				MenuItem
 				{
 					action: modelData
+					
 					autoExclusive: control.autoExclusive
                     Connections
                     {

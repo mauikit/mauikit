@@ -71,6 +71,10 @@ watcher(new QFileSystemWatcher(this))
     connect(MauiAccounts::instance(), &MauiAccounts::accountAdded, this, &PlacesList::reset);
     connect(MauiAccounts::instance(), &MauiAccounts::accountRemoved, this, &PlacesList::reset);
 #endif
+    
+// #if defined Q_OS_LINUX && !defined Q_OS_ANDROID
+// connect(this->model, &KFilePlacesModel::dataChanged, this, &PlacesList::reset);
+// #endif
 
     connect(this, &PlacesList::groupsChanged, this, &PlacesList::reset);
 
@@ -301,7 +305,7 @@ void PlacesList::addPlace(const QUrl& path)
     this->list.insert(index, FMH::getDirInfoModel(path));
 #else
 //     const auto url =  QStringLiteral("file://")+path;
-	this->model->addPlace(QDir(path.toLocalFile()).dirName(), path);
+	this->model->addPlace(QDir(path.toLocalFile()).dirName(), path, FMH::getIconName(path));
 	this->list.insert(index, modelPlaceInfo(*this->model, this->model->closestItem(path), FMH::PATHTYPE_KEY::PLACES_PATH));
 #endif
 	
