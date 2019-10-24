@@ -40,7 +40,7 @@ T.Button {
     }
     
     background: Rectangle {
-        implicitWidth:  Maui.Style.iconSizes.medium * 2 + Maui.Style.space.medium
+        implicitWidth:  (Maui.Style.iconSizes.medium * 3) + Maui.Style.space.big
         implicitHeight: Maui.Style.iconSizes.medium + Maui.Style.space.small
      
         color: Kirigami.Theme.backgroundColor

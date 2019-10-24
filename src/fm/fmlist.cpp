@@ -95,9 +95,6 @@ watcher(new QFileSystemWatcher(this))
 	connect(this, &FMList::pathChanged, this, &FMList::reset);
 }
 
-FMList::~FMList()
-{}
-
 void FMList::watchPath(const QString& path, const bool& clear)
 {	
 	#ifdef Q_OS_ANDROID
@@ -122,7 +119,7 @@ void FMList::assignList(const FMH::MODEL_LIST& list)
     this->list =list;
     this->sortList();    
     
-    this->count = this->list.size();		
+    this->count = static_cast<uint>(this->list.size());
     emit this->countChanged();
     
     this->setStatus({STATUS_CODE::READY, this->list.isEmpty() ? "Nothing here!" : "",  this->list.isEmpty() ? "This place seems to be empty" : "",this->list.isEmpty()  ? "folder-add" : "", this->list.isEmpty(), true});  
@@ -221,12 +218,12 @@ void FMList::setSortBy(const FMList::SORTBY &key)
 
 void FMList::sortList()
 {
-	FMH::MODEL_KEY key = static_cast<FMH::MODEL_KEY>(this->sort);
+    const FMH::MODEL_KEY key = static_cast<FMH::MODEL_KEY>(this->sort);
 	auto index = 0;
 	
 	if(this->foldersFirst)
 	{
-		qSort(this->list.begin(), this->list.end(), [](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
+        std::sort(this->list.begin(), this->list.end(), [](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
 		{
             Q_UNUSED(e2)
 			const auto key = FMH::MODEL_KEY::MIME;
@@ -236,20 +233,18 @@ void FMList::sortList()
 			return false;
 		});
 		
-		for(auto item : this->list)
+        for(const auto &item : this->list)
 			if(item[FMH::MODEL_KEY::MIME] == "inode/directory")
 				index++;
 			else break;
 			
-		qSort(this->list.begin(),this->list.begin() + index, [key](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
-		{
-			auto role = key;
-			
-			switch(role)
+        std::sort(this->list.begin(),this->list.begin() + index, [&key](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
+		{			
+            switch(key)
 			{				
 				case FMH::MODEL_KEY::SIZE:
 				{				
-					if(e1[role].toDouble() > e2[role].toDouble())
+                    if(e1[key].toDouble() > e2[key].toDouble())
 						return true;
 					break;
 				}
@@ -259,8 +254,8 @@ void FMList::sortList()
 				{
 					auto currentTime = QDateTime::currentDateTime();
 					
-					auto date1 = QDateTime::fromString(e1[role], Qt::TextDate);
-					auto date2 = QDateTime::fromString(e2[role], Qt::TextDate);
+                    auto date1 = QDateTime::fromString(e1[key], Qt::TextDate);
+                    auto date2 = QDateTime::fromString(e2[key], Qt::TextDate);
 					
 					if(date1.secsTo(currentTime) <  date2.secsTo(currentTime))
 						return true;
@@ -270,8 +265,8 @@ void FMList::sortList()
 				
 				case FMH::MODEL_KEY::LABEL:
 				{
-					const auto str1 = QString(e1[role]).toLower();
-					const auto str2 = QString(e2[role]).toLower();
+                    const auto str1 = QString(e1[key]).toLower();
+                    const auto str2 = QString(e2[key]).toLower();
 					
 					if(str1 < str2)
 						return true;				
@@ -279,7 +274,7 @@ void FMList::sortList()
 				}
 				
 				default:
-					if(e1[role] < e2[role])
+                    if(e1[key] < e2[key])
 						return true;
 			}
 			
@@ -287,9 +282,9 @@ void FMList::sortList()
 		});
 	}
 	
-	qSort(this->list.begin() + index, this->list.end(), [key](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
+    std::sort(this->list.begin() + index, this->list.end(), [key](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
 	{
-		auto role = key;
+        const auto role = key;
 		
 		switch(role)
 		{
@@ -343,7 +338,6 @@ QString FMList::getPathName() const
     return this->pathName;
 }
 
-
 QUrl FMList::getPath() const
 {
 	return this->path;
@@ -357,7 +351,7 @@ void FMList::setPath(const QUrl &path)
     this->searchPath = this->path;
 	
 	this->path = path;
-	this->setPreviousPath(this->path);  
+    NavHistory.appendPath(this->path);
     
     this->setStatus({STATUS_CODE::LOADING, "Loading content", "Almost ready!", "view-refresh", true, false});
 	
@@ -566,34 +560,22 @@ QUrl FMList::getParentPath()
 
 QUrl FMList::getPosteriorPath()
 {
-	if(this->postHistory.isEmpty())
-		return this->path;
-	
-	return this->postHistory.takeAt(this->postHistory.length()-1);
-}
+    const auto url = NavHistory.getPosteriorPath();
 
-void FMList::setPosteriorPath(const QUrl& path)
-{
-	this->postHistory.append(path);
+    if(url.isEmpty())
+        return this->path;
+
+    return url;
 }
 
 QUrl FMList::getPreviousPath() 
 {	
-	if(this->prevHistory.isEmpty())
-		return this->path;
-	
-	if(this->prevHistory.length() < 2)
-		return this->prevHistory.at(0);
-	
-	auto post = this->prevHistory.takeAt(this->prevHistory.length()-1);
-	this->setPosteriorPath(post);
-	
-	return this->prevHistory.takeAt(this->prevHistory.length()-1);
-}
+    const auto url = NavHistory.getPreviousPath();
 
-void FMList::setPreviousPath(const QUrl& path)
-{
-	this->prevHistory.append(path);
+    if(url.isEmpty())
+		return this->path;
+
+    return url;
 }
 
 bool FMList::getTrackChanges() const

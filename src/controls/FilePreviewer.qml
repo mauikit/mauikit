@@ -12,7 +12,7 @@ Maui.Dialog
     property url currentUrl: ""
     property var iteminfo : ({})
 
-	property bool isFav : false
+    property bool isFav : false
     property bool isDir : false
     property bool showInfo: true
 
@@ -32,10 +32,11 @@ Maui.Dialog
     {
         icon.name: "document-open"
         text: qsTr("Open")
+        display: footBar.fits ? ToolButton.TextBesideIcon : ToolButton.IconOnly
         onClicked:
-        {           
+        {
             openFile(control.currentUrl)
-			control.close()
+            control.close()
         }
     }
 
@@ -46,6 +47,7 @@ Maui.Dialog
             visible: !isDir
             icon.name: "document-share"
             text: qsTr("Share")
+            display: footBar.fits ? ToolButton.TextBesideIcon : ToolButton.IconOnly
             onClicked:
             {
                 shareButtonClicked(currentUrl)
@@ -57,17 +59,18 @@ Maui.Dialog
         {
             icon.name: "love"
             text: qsTr("Fav")
-			checkable: true
-			checked: control.isFav
-			onClicked: 
-			{
-				if(control.isFav)
-					_tagsBar.list.removeFromUrls("fav")
-				else
-					_tagsBar.list.insertToUrls("fav")
-					
-					control.isFav = !control.isFav
-			}
+            display: footBar.fits ? ToolButton.TextBesideIcon : ToolButton.IconOnly
+            checkable: true
+            checked: control.isFav
+            onClicked:
+            {
+                if(control.isFav)
+                    _tagsBar.list.removeFromUrls("fav")
+                else
+                    _tagsBar.list.insertToUrls("fav")
+
+                    control.isFav = !control.isFav
+            }
         }
     ]
 
@@ -75,7 +78,7 @@ Maui.Dialog
     {
         icon.name: "documentinfo"
         text: qsTr("Info")
-
+        display: footBar.fits ? ToolButton.TextBesideIcon : ToolButton.IconOnly
         checkable: true
         checked: control.showInfo
         onClicked: control.showInfo = !control.showInfo
@@ -199,10 +202,10 @@ Maui.Dialog
 
     onClosed:
     {
-		if(previewLoader.item && previewLoader.item.player != null)
+        if(previewLoader.item && previewLoader.item.player != null)
             previewLoader.item.player.stop()
-			
-			previewLoader.source = ""
+
+            previewLoader.source = ""
     }
 
     function show(path)
@@ -210,40 +213,40 @@ Maui.Dialog
         control.iteminfo = Maui.FM.getFileInfo(path)
         control.initModel()
         
-        control.isDir = iteminfo.isdir == "true"          
-		control.currentUrl = path
-		control.isFav =  _tagsBar.list.contains("fav")
-		
-		var source = "private/DefaultPreview.qml"
-		if(Maui.FM.checkFileType(Maui.FMList.AUDIO, iteminfo.mime))
-		{
-			source = "private/AudioPreview.qml"
-		}
-		
-		if(Maui.FM.checkFileType(Maui.FMList.VIDEO, iteminfo.mime))
-		{
-			source = "private/VideoPreview.qml"
-		}
-		
-		if(Maui.FM.checkFileType(Maui.FMList.TEXT, iteminfo.mime))
-		{
-			source = "private/TextPreview.qml"
-		}
-		
-		if(Maui.FM.checkFileType(Maui.FMList.IMAGE, iteminfo.mime))
-		{
-			source = "private/ImagePreview.qml"
-		}
-		
-		if(Maui.FM.checkFileType(Maui.FMList.DOCUMENT, iteminfo.mime) && !isAndroid)
-		{
-			source = "private/DocumentPreview.qml"
-		}
-						
-		console.log("previe mime", iteminfo.mime)
-		previewLoader.source = source
-		control.showInfo = source === "private/DefaultPreview.qml"
-		open()
+        control.isDir = iteminfo.isdir == "true"
+        control.currentUrl = path
+        control.isFav =  _tagsBar.list.contains("fav")
+
+        var source = "private/DefaultPreview.qml"
+        if(Maui.FM.checkFileType(Maui.FMList.AUDIO, iteminfo.mime))
+        {
+            source = "private/AudioPreview.qml"
+        }
+
+        if(Maui.FM.checkFileType(Maui.FMList.VIDEO, iteminfo.mime))
+        {
+            source = "private/VideoPreview.qml"
+        }
+
+        if(Maui.FM.checkFileType(Maui.FMList.TEXT, iteminfo.mime))
+        {
+            source = "private/TextPreview.qml"
+        }
+
+        if(Maui.FM.checkFileType(Maui.FMList.IMAGE, iteminfo.mime))
+        {
+            source = "private/ImagePreview.qml"
+        }
+
+        if(Maui.FM.checkFileType(Maui.FMList.DOCUMENT, iteminfo.mime) && !isAndroid)
+        {
+            source = "private/DocumentPreview.qml"
+        }
+
+        console.log("previe mime", iteminfo.mime)
+        previewLoader.source = source
+        control.showInfo = source === "private/DefaultPreview.qml"
+        open()
     }
 
     function initModel()
@@ -256,7 +259,7 @@ Maui.Dialog
         control.infoModel.append({key: "Owner", value: iteminfo.owner})
         control.infoModel.append({key: "Group", value: iteminfo.group})
         control.infoModel.append({key: "Size", value: Maui.FM.formatSize(iteminfo.size)})
-		control.infoModel.append({key: "Symlink", value: iteminfo.symlink})
+        control.infoModel.append({key: "Symlink", value: iteminfo.symlink})
         control.infoModel.append({key: "Path", value: iteminfo.path})
         control.infoModel.append({key: "Icon name", value: iteminfo.icon})
     }

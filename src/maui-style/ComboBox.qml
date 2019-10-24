@@ -42,6 +42,7 @@ import QtQuick.Templates 2.12 as T
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import QtGraphicalEffects 1.0
+import org.kde.mauikit 1.0 as Maui
 
 T.ComboBox
 {
@@ -105,8 +106,8 @@ T.ComboBox
 
     background: Rectangle
     {
-        implicitWidth: (Kirigami.Settings.isMobile ? Kirigami.Units.iconSizes.medium : Kirigami.Units.iconSizes.medium) * 2 + Kirigami.Units.smallSpacing
-        implicitHeight: Kirigami.Settings.isMobile ? Kirigami.Units.iconSizes.medium : Kirigami.Units.iconSizes.medium
+        implicitWidth:  (Maui.Style.iconSizes.medium * 3) + Maui.Style.space.big
+        implicitHeight: Maui.Style.iconSizes.medium + Maui.Style.space.small
 
         radius: height * 0.07
 

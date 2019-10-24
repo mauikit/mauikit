@@ -47,6 +47,8 @@ ToolBar
 	property alias rightLayout : rightRowContent
 	
 	property alias layout : layout
+
+    readonly property alias fits : mainFlickable.fits
 	
     property int margins: Maui.Style.space.medium
 	property int count : leftContent.length + middleContent.length + rightContent.length
@@ -255,7 +257,7 @@ ToolBar
 				Layout.leftMargin: rightRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.leftSretch ? rightRowContent.implicitWidth : undefined
 				Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
 				spacing: leftContent.length > 0 ? control.spacing : 0
-				Layout.minimumWidth: !sticky ? undefined : implicitWidth
+                Layout.minimumWidth: !sticky ? 0 : implicitWidth
 				Layout.fillWidth: control.leftSretch && implicitWidth
 				Layout.fillHeight: true
 			}			
@@ -267,7 +269,7 @@ ToolBar
 				// 					visible: control.middleStrech && implicitWidth
 				Layout.alignment: Qt.AlignCenter					
 				spacing: middleContent.length === 1 ? 0 : control.spacing
-				Layout.minimumWidth: !sticky ? undefined : implicitWidth
+                Layout.minimumWidth: !sticky ? 0 : implicitWidth
 				
 				//                             Layout.maximumWidth: control.width - leftRowContent.implicitWidth - rightRowContent.implicitWidth
 				Layout.fillWidth: control.middleStrech
@@ -282,7 +284,7 @@ ToolBar
 				Layout.rightMargin: leftRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.rightSretch ? leftRowContent.implicitWidth : undefined
 				Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
 				spacing: rightContent.length > 0 ? control.spacing : 0
-				Layout.minimumWidth: !sticky ? undefined : implicitWidth
+                Layout.minimumWidth: !sticky ? 0 : implicitWidth
 				// 					Layout.maximumWidth: !sticky ? rightRowContent.width : implicitWidth
 				Layout.fillWidth: control.rightSretch && implicitWidth
 				Layout.fillHeight: true

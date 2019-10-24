@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQml.Models 2.3
 import QtQml 2.1
 
-import org.kde.kirigami 2.7 as Kirigami
+import org.kde.kirigami 2.8 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
 import "private"
@@ -19,7 +19,6 @@ Maui.Page
     property int viewType : Maui.FMList.LIST_VIEW
     onViewTypeChanged: browserView.viewType = control.viewType
 
-    property int currentPathType : control.currentFMList.pathType
     property int thumbnailsSize : Maui.Style.iconSizes.large * 1.7
     property bool showThumbnails: true
 
@@ -32,16 +31,14 @@ Maui.Page
     property bool singleSelection: false
 
     property bool group : false
-    property bool showEmblems: true
 
     //group properties from the browser since the browser views are loaded async and
-    //their properties can not be accesed inmediately
+    //their properties can not be accesed inmediately, so they are stored here and then when completed they are set
     property BrowserSettings settings : BrowserSettings {}
 
     property alias selectionBar : selectionBarLoader.item
-
     property alias browserView : _browserList.currentItem
-    property Maui.FMList currentFMList : browserView.currentFMList
+    readonly property Maui.FMList currentFMList : browserView.currentFMList
 
     property alias previewer : previewer
     property alias menu : browserMenu.contentData
@@ -86,11 +83,182 @@ Maui.Page
     ]
 
     headBar.position: Kirigami.Settings.isMobile ? ToolBar.Footer : ToolBar.Header
-   
-    Loader
-    {
-        id: dialogLoader
-    }
+
+    headBar.rightContent:[
+
+        ToolButton
+        {
+            icon.name: "item-select"
+            checkable: true
+            checked: control.selectionMode
+            onClicked: control.selectionMode = !control.selectionMode
+        },
+
+        ToolButton
+        {
+            icon.name: "view-sort"
+            onClicked:
+            {
+                if(_sortMenu.visible)
+                    _sortMenu.close()
+                else
+                    _sortMenu.popup(0, height)
+            }
+            checked: _sortMenu.visible
+            checkable: false
+
+            Menu
+            {
+                id: _sortMenu
+                closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
+                MenuItem
+                {
+                    text: qsTr("Folders first")
+                    checked: control.currentFMList.foldersFirst
+                    checkable: true
+                    onTriggered: control.currentFMList.foldersFirst = !control.currentFMList.foldersFirst
+                }
+
+                MenuSeparator {}
+
+                MenuItem
+                {
+                    text: qsTr("Type")
+                    checked: control.currentFMList.sortBy === Maui.FMList.MIME
+                    checkable: true
+                    onTriggered: control.currentFMList.sortBy = Maui.FMList.MIME
+                    autoExclusive: true
+                }
+
+                MenuItem
+                {
+                    text: qsTr("Date")
+                    checked: control.currentFMList.sortBy === Maui.FMList.DATE
+                    checkable: true
+                    onTriggered: control.currentFMList.sortBy = Maui.FMList.DATE
+                    autoExclusive: true
+                }
+
+                MenuItem
+                {
+                    text: qsTr("Modified")
+                    checkable: true
+                    checked: control.currentFMList.sortBy === Maui.FMList.MODIFIED
+                    onTriggered: control.currentFMList.sortBy = Maui.FMList.MODIFIED
+                    autoExclusive: true
+                }
+
+                MenuItem
+                {
+                    text: qsTr("Size")
+                    checkable: true
+                    checked: control.currentFMList.sortBy === Maui.FMList.SIZE
+                    onTriggered: control.currentFMList.sortBy = Maui.FMList.SIZE
+                    autoExclusive: true
+                }
+
+                MenuItem
+                {
+                    text: qsTr("Name")
+                    checkable: true
+                    checked: control.currentFMList.sortBy === Maui.FMList.LABEL
+                    onTriggered: control.currentFMList.sortBy = Maui.FMList.LABEL
+                    autoExclusive: true
+                }
+
+                MenuSeparator{}
+
+                MenuItem
+                {
+                    id: groupAction
+                    text: qsTr("Group")
+                    checkable: true
+                    checked: control.group
+                    onTriggered:
+                    {
+                        control.group = !control.group
+                        if(control.group)
+                            control.groupBy()
+                        else
+                            browserView.currentView.section.property = ""
+                    }
+                }
+            }
+        },
+
+        ToolButton
+        {
+            id: _optionsButton
+            icon.name: "overflow-menu"
+            onClicked:
+            {
+                if(browserMenu.visible)
+                    browserMenu.close()
+                else
+                    browserMenu.show(_optionsButton, 0, height)
+            }
+            checked: browserMenu.visible
+            checkable: false
+        }
+    ]
+
+    headBar.leftContent: [
+        ToolButton
+        {
+            icon.name: "go-previous"
+            onClicked: control.goBack()
+        },
+
+        ToolButton
+        {
+            icon.name: "go-next"
+            onClicked: control.goNext()
+        },
+
+        Maui.ToolActions
+        {
+            direction: Qt.Vertical
+
+            currentAction: switch(browserView.viewType)
+            {
+                case Maui.FMList.ICON_VIEW: return actions[0]
+                case Maui.FMList.LIST_VIEW: return actions[1]
+                case Maui.FMList.MILLERS_VIEW: return actions[2]
+            }
+
+            Action
+            {
+                icon.name: "view-list-icons"
+                text: qsTr("Grid")
+                onTriggered: control.viewType = Maui.FMList.ICON_VIEW
+                checked: browserView.viewType === Maui.FMList.ICON_VIEW
+                icon.width: Maui.Style.iconSizes.medium
+            }
+
+            Action
+            {
+                icon.name: "view-list-details"
+                text: qsTr("List")
+                onTriggered: control.viewType = Maui.FMList.LIST_VIEW
+                icon.width: Maui.Style.iconSizes.medium
+                checkable: true
+                checked: browserView.viewType === Maui.FMList.LIST_VIEW
+            }
+
+            Action
+            {
+                icon.name: "view-file-columns"
+                text: qsTr("Columns")
+                onTriggered: control.viewType = Maui.FMList.MILLERS_VIEW
+                icon.width: Maui.Style.iconSizes.medium
+                checkable: true
+                checked: browserView.viewType === Maui.FMList.MILLERS_VIEW
+            }
+        }
+    ]
+
+    Loader { id: dialogLoader }
 
     Component
     {
@@ -112,7 +280,7 @@ Maui.Page
                 if(control.selectionBar && control.selectionBar.visible)
                 {
                     control.selectionBar.animate(Maui.Style.dangerColor)
-                    control.clean()
+                    control.clearSelection()
                 }
 
                 for(var i in urls)
@@ -126,7 +294,7 @@ Maui.Page
                 if(control.selectionBar && control.selectionBar.visible)
                 {
                     control.selectionBar.animate(Maui.Style.dangerColor)
-                    control.clean()
+                    control.clearSelection()
                 }
 
                 for(var i in urls)
@@ -202,9 +370,60 @@ Maui.Page
         }
     }
 
-    BrowserMenu
+    Component
     {
-        id: browserMenu
+        id: _configDialogComponent
+
+        Maui.Dialog
+        {
+            maxHeight: _configLayout.implicitHeight + Maui.Style.space.huge
+            maxWidth: 300
+            defaultButtons: false
+
+            Kirigami.FormLayout
+            {
+                id: _configLayout
+                width: parent.width
+
+                Kirigami.Separator
+                {
+                    Kirigami.FormData.label: qsTr("Navigation")
+                    Kirigami.FormData.isSection: true
+                }
+
+                Switch
+                {
+                    icon.name: "image-preview"
+                    checkable: true
+                    checked: control.showThumbnails
+                    Kirigami.FormData.label: qsTr("Thumbnails")
+                    onToggled: control.showThumbnails = !control.showThumbnails
+                }
+
+                Switch
+                {
+                    Kirigami.FormData.label: qsTr("Hidden files")
+                    checkable: true
+                    checked: control.currentFMList.hidden
+                    onToggled: control.currentFMList.hidden = !control.currentFMList.hidden
+                }
+
+                Kirigami.Separator
+                {
+                    Kirigami.FormData.label: qsTr("Others")
+                    Kirigami.FormData.isSection: true
+                }
+
+                Switch
+                {
+                    Kirigami.FormData.label: qsTr("Status bar")
+                    checkable: true
+                    checked: control.footBar.visible
+                    onToggled: control.footBar.visible = !control.footBar.visible
+
+                }
+            }
+        }
     }
 
     Maui.FilePreviewer
@@ -212,6 +431,8 @@ Maui.Page
         id: previewer
         onShareButtonClicked: control.shareFiles([url])
     }
+
+    BrowserMenu { id: browserMenu }
 
     FileMenu
     {
@@ -383,7 +604,7 @@ Maui.Page
             if(event.key == Qt.Key_Backspace || event.key == Qt.Key_Back)
             {
                 if(control.selectionBar)
-                    control.clean()
+                    control.clearSelection()
                 else
                     control.goBack()
             }
@@ -392,7 +613,7 @@ Maui.Page
             if(event.key == Qt.Key_Escape)
             {
                 if(control.selectionBar)
-                    control.clean()
+                    control.clearSelection()
             }
         }
 
@@ -412,9 +633,7 @@ Maui.Page
 
         onItemRightClicked:
         {
-            if(currentFMList.pathType !== Maui.FMList.TRASH_PATH &&
-                    currentFMList.pathType !== Maui.FMList.REMOTE_PATH
-                    )
+            if(control.currentFMList.pathType !== Maui.FMList.TRASH_PATH && control.currentFMList.pathType !== Maui.FMList.REMOTE_PATH)
                 itemMenu.show(index)
             control.itemRightClicked(index)
         }
@@ -442,208 +661,27 @@ Maui.Page
         onAreaClicked:
         {
             if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
-                browserMenu.show()
+                browserMenu.show(control)
             else return
 
             control.rightClicked()
         }
 
-        onAreaRightClicked: browserMenu.show()
+        onAreaRightClicked: browserMenu.show(control)
 
-        onWarning:
-        {
-            notify("dialog-information", "An error happened", message)
-        }
+        //        onWarning:
+        //        {
+        //            notify("dialog-information", "An error happened", message)
+        //        }
 
-        onProgress:
-        {
-            if(percent === 100)
-                _progressBar.value = 0
-            else
-                _progressBar.value = percent/100
-        }
+        //        onProgress:
+        //        {
+        //            if(percent === 100)
+        //                _progressBar.value = 0
+        //            else
+        //                _progressBar.value = percent/100
+        //        }
     }
-
-
-    headBar.rightContent:[
-
-    ToolButton
-    {
-		icon.name: "item-select"
-		checkable: true
-		checked: control.selectionMode
-		onClicked: control.selectionMode = !control.selectionMode
-	},    
-    
-    ToolButton
-    {
-		icon.name: "view-sort"
-		onClicked: 
-		{
-			if(_sortMenu.visible)
-				_sortMenu.close()
-				else
-					_sortMenu.popup(0, height)
-		}
-		checked: _sortMenu.visible
-		checkable: false
-		
-		Menu
-		{
-			id: _sortMenu
-			closePolicy: Controls.Popup.CloseOnEscape | Controls.Popup.CloseOnPressOutsideParent
-			
-			MenuItem
-			{
-				text: qsTr("Folders first")
-				checked: control.currentFMList.foldersFirst
-				checkable: true
-				onTriggered: control.currentFMList.foldersFirst = !control.currentFMList.foldersFirst				
-			}
-			
-			MenuSeparator {}
-			
-			MenuItem
-			{
-				text: qsTr("Type")
-				checked: control.currentFMList.sortBy === Maui.FMList.MIME
-				checkable: true
-				onTriggered: control.currentFMList.sortBy = Maui.FMList.MIME
-				autoExclusive: true
-			}
-			
-			MenuItem
-			{
-				text: qsTr("Date")
-				checked: control.currentFMList.sortBy === Maui.FMList.DATE
-				checkable: true
-				onTriggered: control.currentFMList.sortBy = Maui.FMList.DATE
-				autoExclusive: true
-			}
-			
-			MenuItem
-			{
-				text: qsTr("Modified")
-				checkable: true
-				checked: control.currentFMList.sortBy === Maui.FMList.MODIFIED
-				onTriggered: control.currentFMList.sortBy = Maui.FMList.MODIFIED
-				autoExclusive: true
-			}
-			
-			MenuItem
-			{
-				text: qsTr("Size")
-				checkable: true
-				checked: control.currentFMList.sortBy === Maui.FMList.SIZE
-				onTriggered: control.currentFMList.sortBy = Maui.FMList.SIZE
-				autoExclusive: true
-			}
-			
-			MenuItem
-			{
-				text: qsTr("Name")
-				checkable: true
-				checked: control.currentFMList.sortBy === Maui.FMList.LABEL
-				onTriggered: control.currentFMList.sortBy = Maui.FMList.LABEL
-				autoExclusive: true
-			}
-			
-			MenuSeparator{}
-			
-			MenuItem
-			{
-				id: groupAction
-				text: qsTr("Group")
-				checkable: true
-				checked: control.group
-				onTriggered:
-				{
-					control.group = !control.group
-					if(control.group)
-						control.groupBy()
-						else
-							browserView.currentView.section.property = ""
-				}
-			}
-		}
-	},
-	
-	ToolButton
-	{
-		//                text: qsTr("Select mode")
-		icon.name: "overflow-menu"
-		onClicked: 
-		{
-			if(_optionsMenu.visible)
-				_optionsMenu.close()
-				else
-					_optionsMenu.popup(0, height)
-		}
-		checked: _optionsMenu.visible
-		checkable: false
-		Menu
-		{
-		id: _optionsMenu
-		closePolicy: Controls.Popup.CloseOnEscape | Controls.Popup.CloseOnPressOutsideParent
-		contentData: browserMenu.actions
-		}
-	}
-    ]    
-
-    headBar.leftContent: [
-        ToolButton
-        {
-            icon.name: "go-previous"
-            onClicked: control.goBack()
-        },
-
-        ToolButton
-        {
-            icon.name: "go-next"
-            onClicked: control.goNext()
-        },
-
-        Maui.ToolActions
-        {
-            direction: Qt.Vertical
-
-			currentAction: switch(browserView.viewType)
-			{
-				case Maui.FMList.ICON_VIEW: return actions[0]
-				case Maui.FMList.LIST_VIEW: return actions[1]
-				case Maui.FMList.MILLERS_VIEW: return actions[2]
-			}
-			
-            Action
-            {
-                icon.name: "view-list-icons"
-                text: qsTr("Grid")
-                onTriggered: control.viewType = Maui.FMList.ICON_VIEW
-                checked: browserView.viewType === Maui.FMList.ICON_VIEW
-                icon.width: Maui.Style.iconSizes.medium
-            }
-
-            Action
-            {
-                icon.name: "view-list-details"
-                text: qsTr("List")
-                onTriggered: control.viewType = Maui.FMList.LIST_VIEW
-                icon.width: Maui.Style.iconSizes.medium
-                checkable: true
-                checked: browserView.viewType === Maui.FMList.LIST_VIEW
-            }
-
-            Action
-            {
-                icon.name: "view-file-columns"
-                text: qsTr("Columns")
-                onTriggered: control.viewType = Maui.FMList.MILLERS_VIEW
-                icon.width: Maui.Style.iconSizes.medium
-                checkable: true
-                checked: browserView.viewType === Maui.FMList.MILLERS_VIEW
-            }
-        }
-            ]
 
     Component
     {
@@ -654,31 +692,40 @@ Maui.Page
             id: _selectionBar
             anchors.fill: parent
             onIconClicked: _selectionBarmenu.popup()
+            singleSelection: control.singleSelection
             onExitClicked:
             {
-                clean()
+                control.clearSelection()
                 control.selectionMode = false
             }
             onCountChanged:
             {
                 if(_selectionBar.count < 1)
-                    control.clean()
+                    control.clearSelection()
             }
+
             onRightClicked: _selectionBarmenu.popup()
 
-            onItemClicked:
-            {
-                control.previewer.show(itemAt(index).path)
-            }
+            onItemClicked: control.previewer.show(itemAt(index).path)
 
-            onItemPressAndHold:
-            {
-                removeAtIndex(index)
-            }
+            onItemPressAndHold: removeAtIndex(index)
 
             Menu
             {
                 id: _selectionBarmenu
+
+                MenuItem
+                {
+                    text: qsTr("Open")
+                    onTriggered:
+                    {
+                        if(control.selectionBar)
+                        {
+                            for(var i in selectedPaths)
+                                openFile(selectedPaths[i])
+                        }
+                    }
+                }
 
                 MenuItem
                 {
@@ -778,7 +825,7 @@ Maui.Page
                 {
                     id: _tabButton
                     implicitHeight: tabsBar.implicitHeight
-                    implicitWidth: control.width / _repeater.count
+                    implicitWidth: Math.max(control.width / _repeater.count, 120)
                     checked: index === _browserList.currentIndex
 
                     text: tabsObjectModel.get(index).currentFMList.pathName
@@ -854,7 +901,6 @@ Maui.Page
     Component.onCompleted:
     {
         openTab(Maui.FM.homePath())
-        // 		browserView.viewType = control.viewType
         control.setSettings()
         browserView.currentView.forceActiveFocus()
     }
@@ -929,7 +975,7 @@ Maui.Page
         const item = control.currentFMList.get(index)
         const path = item.path
 
-        switch(currentPathType)
+        switch(control.currentFMList.pathType)
         {
         case Maui.FMList.CLOUD_PATH:
             if(item.isdir === "true")
@@ -983,25 +1029,19 @@ Maui.Page
         populate(path)
     }
 
-    function setPath(path)
-    {
-        control.currentPath = path
-        console.log("SETTING PATH")
-    }
-
     function populate(path)
     {
         if(!String(path).length)
             return;
 
-        browserView.currentView.currentIndex = 0
-        setPath(path)
+        control.browserView.currentView.currentIndex = 0
+        control.currentPath = path
     }
 
     function goBack()
     {
         openFolder(control.currentFMList.previousPath)
-        browserView.currentView.currentIndex = indexHistory.pop()
+        //        browserView.currentView.currentIndex = indexHistory.pop()
     }
 
     function goNext()
@@ -1028,13 +1068,12 @@ Maui.Page
         if(!control.selectionBar)
             selectionBarLoader.sourceComponent = selectionBarComponent
 
-        control.selectionBar.singleSelection = control.singleSelection
         control.selectionBar.append(item)
     }
 
-    function clean()
+    function clearSelection()
     {
-        if(control.selectionBar && control.selectionBar.visible)
+        if(control.selectionBar)
         {
             control.selectionBar.clear()
             selectionBarLoader.sourceComponent = null
@@ -1069,7 +1108,7 @@ Maui.Page
         else if(control.isCut)
         {
             control.currentFMList.cutInto(urls)
-            control.clean()
+            control.clearSelection()
         }
     }
 
@@ -1138,5 +1177,11 @@ Maui.Page
         control.browserView.viewType = Maui.FMList.LIST_VIEW
         control.browserView.currentView.section.property = prop
         control.browserView.currentView.section.criteria = criteria
+    }
+
+    function openConfigDialog()
+    {
+        dialogLoader.sourceComponent = _configDialogComponent
+        control.dialog.open()
     }
 }

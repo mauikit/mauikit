@@ -17,8 +17,7 @@ TabButton
 		height: Maui.Style.unit * 2
 		visible: checked
 		anchors
-		{
-			
+		{			
 			bottom: parent.bottom
 			left: parent.left
 			right: parent.right
@@ -54,7 +53,7 @@ TabButton
 			Layout.fillWidth: true
 			Layout.fillHeight: true
 			verticalAlignment: Qt.AlignVCenter
-			horizontalAlignment: Qt.AlignHCenter
+            horizontalAlignment: Qt.AlignHCenter
 			color: control.checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
 			wrapMode: Text.NoWrap
 			elide: Text.ElideMiddle
@@ -63,8 +62,8 @@ TabButton
 		ToolButton
 		{
 			Layout.fillHeight: true
-			Layout.preferredWidth: Maui.Style.iconSizes.medium
-			icon.height: Maui.Style.iconSizes.medium
+            Layout.preferredWidth: Maui.Style.iconSizes.small * 2
+            icon.height: Maui.Style.iconSizes.small
 			icon.width: width
 			Layout.alignment: Qt.AlignRight
 			

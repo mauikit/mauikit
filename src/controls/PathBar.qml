@@ -28,7 +28,7 @@ Item
 {
 	id: control    
 	
-	implicitHeight: Maui.Style.iconSizes.big
+    implicitHeight: Maui.Style.iconSizes.big + Maui.Style.space.small
 	
 	property string url : ""
 	property bool pathEntry: false
@@ -61,8 +61,7 @@ Item
 	{
 		id: _loader        
 		anchors.fill: parent
-		sourceComponent: pathEntry ? _pathEntryComponent : _pathCrumbsComponent
-		
+		sourceComponent: pathEntry ? _pathEntryComponent : _pathCrumbsComponent		
 		onLoaded:
 		{
 			if(sourceComponent === _pathCrumbsComponent)

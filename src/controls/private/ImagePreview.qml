@@ -9,7 +9,7 @@ Maui.ImageViewer
 	id: control
 	anchors.fill: parent
 	source: currentUrl
-    animated: iteminfo.mime === "image/gif" ||  iteminfo.mime === "image/webp"
+    animated: iteminfo.mime === "image/gif"
 }
 	
 

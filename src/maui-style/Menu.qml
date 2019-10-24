@@ -54,6 +54,7 @@ T.Menu {
     verticalPadding: 8
 
     transformOrigin: !cascade ? Item.Top : (mirrored ? Item.TopRight : Item.TopLeft)
+    modal: Kirigami.Settings.isMobile
 
     delegate: MenuItem { }
 

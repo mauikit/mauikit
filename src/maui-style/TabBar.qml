@@ -24,6 +24,9 @@ import QtQuick 2.6
 import org.kde.kirigami 2.2 as Kirigami
 import QtQuick.Templates 2.3 as T
 
+import org.kde.kirigami 2.7 as Kirigami
+import org.kde.mauikit 1.0 as Maui
+
 T.TabBar {
     id: controlRoot
 
@@ -42,7 +45,7 @@ T.TabBar {
         model: controlRoot.contentModel
         currentIndex: controlRoot.currentIndex
 
-        spacing: -styleItem.pixelMetric("tabOverlap")-1
+        spacing: 0
         orientation: ListView.Horizontal
         boundsBehavior: Flickable.StopAtBounds
         flickableDirection: Flickable.AutoFlickIfNeeded
@@ -53,16 +56,6 @@ T.TabBar {
         preferredHighlightBegin: 40
         preferredHighlightEnd: width - 40
     }
-
-//    StylePrivate.StyleItem {
-//        id: styleItem
-//        control: controlRoot
-//        visible: false
-//        elementType: "tabframe"
-//        properties: {
-//            "orientation" : controlRoot.position == T.TabBar.Header ? "Top" : "Bottom"
-//        }
-//    }
 
     background: Item {
         Rectangle {

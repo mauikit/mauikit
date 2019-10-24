@@ -53,6 +53,39 @@ public:
 };
 Q_DECLARE_METATYPE(PathStatus)
 
+static struct
+{
+    void appendPath(const QUrl &path)
+    {
+        this->prev_history.append(path);
+    }
+
+    QUrl getPosteriorPath()
+    {
+        if(this->post_history.isEmpty())
+            return QUrl();
+
+        return this->post_history.takeLast();
+    }
+
+    QUrl getPreviousPath()
+    {
+        if(this->prev_history.isEmpty())
+            return QUrl();
+
+        if(this->prev_history.length() < 2)
+            return this->prev_history.at(0);
+
+        this->post_history.append(this->prev_history.takeLast());
+
+        return this->prev_history.takeLast();
+    }
+
+private:
+    QVector<QUrl> prev_history;
+    QVector<QUrl> post_history;
+}NavHistory;
+
 class FM;
 class QFileSystemWatcher;
 class FMList : public MauiList
@@ -81,8 +114,9 @@ class FMList : public MauiList
     
     Q_PROPERTY(PathStatus status READ getStatus NOTIFY statusChanged) //TODO status to replace pathExists, pathEmpty and handle errors messaging
     	
-	Q_PROPERTY(QUrl previousPath READ getPreviousPath)
-	Q_PROPERTY(QUrl posteriorPath READ getPosteriorPath)
+    Q_PROPERTY(QUrl previousPath READ getPreviousPath) //interface for NavHistory
+    Q_PROPERTY(QUrl posteriorPath READ getPosteriorPath) //interface for NavHistory
+
 	Q_PROPERTY(QUrl parentPath READ getParentPath)    
 	
 	public:
@@ -139,9 +173,7 @@ class FMList : public MauiList
         
         Q_ENUM(STATUS_CODE)        
         		
-		FMList(QObject *parent = nullptr);
-	
-		~FMList();		
+		FMList(QObject *parent = nullptr);	
 		
 		FMH::MODEL_LIST items() const final override;
 		
@@ -169,11 +201,8 @@ class FMList : public MauiList
 		
 		QUrl getParentPath();
 		
-		QUrl getPreviousPath();
-		void setPreviousPath(const QUrl &path);
-		
+		QUrl getPreviousPath();		
 		QUrl getPosteriorPath();
-		void setPosteriorPath(const QUrl &path);
 			
 		bool getTrackChanges() const;
 		void setTrackChanges(const bool &value);

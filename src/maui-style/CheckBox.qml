@@ -43,7 +43,7 @@ T.CheckBox {
 
    indicator: CheckIndicator
    {       
-       root: controlRoot
+       control: controlRoot
    }
 
     contentItem: Label 

@@ -167,7 +167,7 @@ MouseArea
 			}
 			
 			onClosed: control.expanded = false
-			closePolicy: Controls.Popup.CloseOnEscape | Controls.Popup.CloseOnPressOutsideParent
+            closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
 			
 			Repeater
 			{

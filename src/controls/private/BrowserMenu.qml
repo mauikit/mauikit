@@ -5,36 +5,16 @@ import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.6 as Kirigami
 
 Menu
-{ 
-	contentData: actions
-	property list<Action> actions : [ 
-    Action
-    {
-		icon.name: "image-preview"
-		text: qsTr("Previews")
-		checkable: true
-		checked: control.showThumbnails
-		onTriggered: control.showThumbnails = !control.showThumbnails
-    },
-    
-	Action
-    {
-		icon.name: "visibility"
-		text: qsTr("Hidden files")
-		checkable: true
-		checked: control.currentFMList.hidden
-		onTriggered: control.currentFMList.hidden = !control.currentFMList.hidden
-    },
-    
-    
-	Action
+{ 	
+    id: control
+    MenuItem
     {
 		icon.name: "bookmark-new"
 		text: qsTr("Bookmark")
 		onTriggered: control.bookmarkFolder([currentPath])
-    },
+    }
     
-	Action
+    MenuItem
     {
 		icon.name: "folder-add"
 		text: qsTr("New folder")
@@ -43,9 +23,9 @@ Menu
 			dialogLoader.sourceComponent= newFolderDialogComponent
 			dialog.open()
 		}
-    },
+    }
     
-	Action
+    MenuItem
     {
 		icon.name: "document-new"
 		text: qsTr("New file")
@@ -54,40 +34,32 @@ Menu
 			dialogLoader.sourceComponent= newFileDialogComponent
 			dialog.open()
 		}
-    },
+    }
+
+    MenuSeparator {}
     
-    
-	Action
+    MenuItem
     {
 		text: qsTr("Paste")
 		icon.name: "edit-paste"
 		// 		enabled: control.clipboardItems.length > 0
 		onTriggered: paste()
-    },
+    }
+
+    MenuSeparator {}
     
-	Action
+    MenuItem
     {
 		text: qsTr("Select all")
 		icon.name: "edit-select-all"
 		onTriggered: control.selectAll()
-	},
-	
-	Action
-	{
-		text: qsTr("Status bar")
-		icon.name: "settings-configure"
-		checkable: true
-		checked: control.footBar.visible
-		onTriggered: control.footBar.visible = !control.footBar.visible
-	}
-	]
+    }
     
-    
-    function show()
+    function show(parent = control, x, y)
     {
-        if(currentPathType === Maui.FMList.PLACES_PATH || currentPathType === Maui.FMList.TAGS_PATH || currentPathType === Maui.FMList.CLOUD_PATH)
+        if(currentFMList.pathType !== Maui.FMList.TAGS_PATH && currentFMList.pathType !== Maui.FMList.TRASH_PATH && currentFMList.pathType !== Maui.FMList.APPS_PATH)
         {
-                    popup()
+            popup(parent, x, y)
         }
     }
 }
