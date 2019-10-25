@@ -718,6 +718,7 @@ Maui.Page
                 MenuItem
                 {
                     text: qsTr("Open")
+					icon.name: "document-open"
                     onTriggered:
                     {
                         if(control.selectionBar)
@@ -727,10 +728,13 @@ Maui.Page
                         }
                     }
                 }
+                
+                MenuSeparator {}
 
                 MenuItem
                 {
                     text: qsTr("Copy")
+					icon.name: "edit-copy"
                     onTriggered: if(control.selectionBar)
                                  {
                                      control.selectionBar.animate("#6fff80")
@@ -742,6 +746,7 @@ Maui.Page
                 MenuItem
                 {
                     text: qsTr("Cut")
+					icon.name: "edit-cut"
                     onTriggered: if(control.selectionBar)
                                  {
                                      control.selectionBar.animate("#fff44f")
@@ -750,34 +755,39 @@ Maui.Page
                                  }
 
                 }
+                
+                MenuSeparator {}
 
                 MenuItem
                 {
+					text: qsTr("Tags")
+					icon.name: "tag"
+					onTriggered: if(control.selectionBar)
+					{
+						dialogLoader.sourceComponent = tagsDialogComponent
+						dialog.composerList.urls = selectedPaths
+						dialog.open()
+						_selectionBarmenu.close()
+					}
+				}
+				
+                MenuItem
+                {
                     text: qsTr("Share")
+					icon.name: "document-share"
                     onTriggered:
                     {
                         control.shareFiles(selectedPaths)
                         _selectionBarmenu.close()
                     }
-                }
-
-                MenuItem
-                {
-                    text: qsTr("Tags")
-                    onTriggered: if(control.selectionBar)
-                                 {
-                                     dialogLoader.sourceComponent = tagsDialogComponent
-                                     dialog.composerList.urls = selectedPaths
-                                     dialog.open()
-                                     _selectionBarmenu.close()
-                                 }
-                }
+                }              
 
                 MenuSeparator{}
 
                 MenuItem
                 {
                     text: qsTr("Remove")
+					icon.name: "edit-delete"
                     Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
 
                     onTriggered:

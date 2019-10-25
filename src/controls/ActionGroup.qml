@@ -37,9 +37,10 @@ Item
 	signal pressAndHold(int index)
 	signal doubleClicked(int index)
 	
-	
+		
 	property Component delegate : ToolButton
 	{
+		id: _delegate
 		anchors.verticalCenter: parent.verticalCenter
 		action: modelData
 		icon.width: Maui.Style.iconSizes.medium
@@ -47,16 +48,15 @@ Item
 		autoExclusive: true
 		checkable: true
 		checked: index == control.currentIndex
-		display: control.currentIndex === index  ? ToolButton.TextBesideIcon : ToolButton.IconOnly
-		
+		display: control.currentIndex === index ? ToolButton.TextBesideIcon : ToolButton.IconOnly
 		Kirigami.Theme.backgroundColor: modelData.Kirigami.Theme.backgroundColor
-		Kirigami.Theme.highlightColor: modelData.Kirigami.Theme.highlightColor
-		
+		Kirigami.Theme.highlightColor: modelData.Kirigami.Theme.highlightColor		
+	
 		Behavior on implicitWidth
 		{		
 			NumberAnimation
 			{
-				duration: Kirigami.Units.longDuration
+				duration: Kirigami.Units.shortDuration
 				easing.type: Easing.InOutQuad
 			}
 		}
@@ -77,8 +77,8 @@ Item
 	{		
 		NumberAnimation
 		{
-			duration: Kirigami.Units.longDuration
-			easing.type: Easing.Linear
+			duration: Kirigami.Units.shortDuration
+			easing.type: Easing.InOutQuad
 		}
 	}
 	
@@ -106,14 +106,15 @@ Item
 			icon.width: Maui.Style.iconSizes.medium
 			icon.height: Maui.Style.iconSizes.medium
 			display: ToolButton.TextBesideIcon
-//			Behavior on implicitWidth
-//			{
-//				NumberAnimation
-//				{
-//					duration: Kirigami.Units.longDuration
-//					easing.type: Easing.InOutQuad
-//				}
-//			}
+			width: visible ? implicitWidth : 0
+			Behavior on width
+			{
+				NumberAnimation
+				{
+					duration: Kirigami.Units.longDuration
+					easing.type: Easing.InOutQuad
+				}
+			}
 		}		
 		
 		ToolButton
@@ -138,7 +139,7 @@ Item
 			{		
 				NumberAnimation
 				{
-					duration: Kirigami.Units.longDuration
+					duration: Kirigami.Units.shortDuration
 					easing.type: Easing.InOutQuad
 				}
 			}
