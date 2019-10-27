@@ -13,9 +13,8 @@ ToolButton
 	default property list<Item> content
 	checked: _menu.visible
 	checkable: false
-	text: " "
 	display: ToolButton.TextBesideIcon
-	
+	text: " "
 	onClicked:
 	{
 		if(_menu.visible)
@@ -24,11 +23,12 @@ ToolButton
 				_menu.popup(0, height)
 	}
 	
-	Kirigami.Icon
+	indicator: Kirigami.Icon
 	{
 		anchors
 		{
 			right: parent.right
+// 			bottom: parent.bottom
 			verticalCenter: parent.verticalCenter
 		}
 		color: control.Kirigami.Theme.textColor

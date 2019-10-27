@@ -31,7 +31,7 @@ ToolBar
 	
     implicitHeight: visible ? Maui.Style.toolBarHeight : 0
 	height:  implicitHeight 
-    spacing: Maui.Style.space.medium
+    spacing: Maui.Style.space.tiny
     padding: 0
 
 	property alias stickyRightContent : rightRowContent.sticky

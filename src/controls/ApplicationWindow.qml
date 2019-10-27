@@ -232,9 +232,7 @@ Kirigami.AbstractApplicationWindow
                         onTriggered: aboutDialog.open()
                     }
                 }
-            },
-            
-            ToolSeparator{}
+            }
         ]
 
         rightContent: ToolButton

@@ -54,10 +54,9 @@ MouseArea
 		ToolButton
 		{
 			icon.name:  control.currentAction.icon.name
-			text: " "
 			onClicked: 		control.expanded = !control.expanded 
-			
-			Kirigami.Icon
+			text: " "
+			indicator: Kirigami.Icon
 			{
 				anchors
 				{
@@ -69,7 +68,7 @@ MouseArea
 				width: Maui.Style.iconSizes.small
 				height: width
 				isMask: true
-			}	
+			}			
 		}         
 		
 		

@@ -229,7 +229,7 @@ Item
                     id: delegate
                     isCurrentItem: ListView.isCurrentItem
                     height: selectionList.height * 0.95
-                    width: height + Maui.Style.space.big
+                    width: height + Maui.Style.space.medium
                     folderSize: Maui.Style.iconSizes.big
                     showLabel: true
                     keepEmblemOverlay: true
