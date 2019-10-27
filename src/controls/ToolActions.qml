@@ -13,30 +13,30 @@ MouseArea
 	implicitWidth: _layout.implicitWidth +  Maui.Style.space.medium
 	implicitHeight: parent.height
 	
-    default property list<Action> actions
+	default property list<Action> actions
 	property bool autoExclusive: true
 	
 	property int direction : Qt.Vertical
-
+	
 	property Action currentAction : actions[0]
 	
 	property bool expanded : false
 	
-	Rectangle
-	{
-		anchors.fill: parent
-		color: control.expanded ? "#333" : "transparent"
-		opacity: 0.1
-		radius: Math.min(Maui.Style.radiusV, height)
-		
-		Behavior on color
-		{
-			ColorAnimation
-			{
-				duration: Kirigami.Units.longDuration
-			}
-		}
-	}
+	// 	Rectangle
+	// 	{
+	// 		anchors.fill: parent
+	// 		color: control.expanded ? "#333" : "transparent"
+	// 		opacity: 0.1
+	// 		radius: Math.min(Maui.Style.radiusV, height)
+	// 		
+	// 		Behavior on color
+	// 		{
+	// 			ColorAnimation
+	// 			{
+	// 				duration: Kirigami.Units.longDuration
+	// 			}
+	// 		}
+	// 	}
 	
 	onClicked: 
 	{
@@ -47,53 +47,37 @@ MouseArea
 	{
 		id: _layout
 		height: parent.height
-        spacing: 0
+		spacing: Maui.Style.space.small
 		anchors.centerIn: parent
 		
-        Item
-        {
-            visible: control.direction === Qt.Vertical || (control.direction === Qt.Horizontal && !control.expanded)
-
-            width: parent.height
-            height: width
-            Kirigami.Icon
-            {
-                source:  control.currentAction.icon.name
-                width: Maui.Style.iconSizes.medium
-                height: width
-                anchors.centerIn: parent
-            }
-
-        }
-
-// 		Label
-// 		{
-// 			visible:  control.direction === Qt.Vertical || (control.direction === Qt.Horizontal && !control.expanded)
-// 			text: control.currentAction.text
-// 			height: parent.height
-// 		}
 		
-        Rectangle
-        {
-            color:/* control.expanded  && control.direction === Qt.Horizontal? Kirigami.Theme.highlightColor :*/ "transparent"
-            height: parent.height
-            width: control.expanded && control.direction === Qt.Horizontal? height : Maui.Style.iconSizes.small
-            radius: Maui.Style.radiusV
-            Kirigami.Icon
-            {
-                source: control.direction === Qt.Horizontal ? ( control.expanded ? "go-previous" : "go-next") : (control.direction === Qt.Vertical ? "qrc://assets/arrow-down.svg" : "")
-                width: Maui.Style.iconSizes.small
-                height: width
-                anchors.centerIn: parent
-                isMask: true
-            }			
-        }
+		ToolButton
+		{
+			icon.name:  control.currentAction.icon.name
+			text: " "
+			onClicked: 		control.expanded = !control.expanded 
+			
+			Kirigami.Icon
+			{
+				anchors
+				{
+					right: parent.right
+					verticalCenter: parent.verticalCenter
+				}
+				color: control.Kirigami.Theme.textColor
+				source: "qrc://assets/arrow-down.svg"
+				width: Maui.Style.iconSizes.small
+				height: width
+				isMask: true
+			}	
+		}         
+		
 		
 		Loader
 		{
 			id: _loader
 			height: parent.height
-			sourceComponent: control.direction ===  Qt.Horizontal ? _rowComponent : (control.direction === Qt.Vertical ?  _menuComponent : null)
+			sourceComponent: control.direction ===  Qt.Horizontal ? _rowComponent : (control.direction === Qt.Vertical ?  _menuComponent : "")
 		}
 		
 	}
@@ -125,8 +109,7 @@ MouseArea
 				width: 1
 				height: parent.height * 0.7
 				anchors.verticalCenter: parent.verticalCenter
-			}
-			
+			}			
 			
 			Repeater
 			{
@@ -168,7 +151,7 @@ MouseArea
 			}
 			
 			onClosed: control.expanded = false
-            closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+			closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
 			
 			Repeater
 			{
@@ -179,11 +162,11 @@ MouseArea
 					action: modelData
 					
 					autoExclusive: control.autoExclusive
-                    Connections
-                    {
-                        target: modelData
-                        onTriggered: control.currentAction = action
-                    }
+					Connections
+					{
+						target: modelData
+						onTriggered: control.currentAction = action
+					}
 				}
 			}
 		}

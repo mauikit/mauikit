@@ -35,8 +35,7 @@ Item
 	
 	signal clicked(int index)
 	signal pressAndHold(int index)
-	signal doubleClicked(int index)
-	
+	signal doubleClicked(int index)	
 		
 	property Component delegate : ToolButton
 	{

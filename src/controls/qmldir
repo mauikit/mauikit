@@ -58,3 +58,4 @@ ActionGroup 1.0 ActionGroup.qml
 ActionSideBar 1.0 ActionSideBar.qml
 ToolActions 1.0 ToolActions.qml
 DocumentPreview 1.0 DocumentPreview.qml
+ToolButtonMenu 1.0 ToolButtonMenu.qml

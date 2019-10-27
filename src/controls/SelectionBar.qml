@@ -31,7 +31,7 @@ Item
     
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
-    readonly property int barHeight : Maui.Style.iconSizes.large  + (Maui.Style.space.large * 1.8)
+    readonly property int barHeight : Maui.Style.iconSizes.large  + (Maui.Style.space.large * 1.5)
 
     property var selectedPaths: []
     property var selectedItems: []
