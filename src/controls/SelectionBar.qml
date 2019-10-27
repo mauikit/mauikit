@@ -218,8 +218,8 @@ Item
                 
                 ScrollBar.horizontal: ScrollBar 
                 {
-					policy: Kirigami.Settings.isMobile? Qt.ScrollBarAlwaysOff : Qt.ScrollBarAsNeeded		
-					y: -64
+					policy: Kirigami.Settings.isMobile? Qt.ScrollBarAlwaysOff : Qt.ScrollBarAsNeeded
+					
 				}
                 
                 model: ListModel{}

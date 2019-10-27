@@ -28,7 +28,7 @@ Item
 {
 	id: control    
 	
-    implicitHeight: Maui.Style.iconSizes.big + Maui.Style.space.tiny
+    implicitHeight: Maui.Style.rowHeight
 	
 	property string url : ""
 	property bool pathEntry: false
