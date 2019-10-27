@@ -29,9 +29,9 @@ Drawer
 	id: control
 	
 	edge: Qt.LeftEdge
-	implicitHeight: parent.height - ApplicationWindow.header.height - ApplicationWindow.footer.height
+	implicitHeight: parent.height - (ApplicationWindow.header ? ApplicationWindow.header.height : 0) - (ApplicationWindow.footer ? ApplicationWindow.footer.height : 0)
 	height: implicitHeight
-	y: ApplicationWindow.header.height
+	y: (ApplicationWindow.header ? ApplicationWindow.header.height : 0)
 	closePolicy: modal ?  Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
 	visible: true	
 	interactive: modal

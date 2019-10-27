@@ -147,7 +147,7 @@ Maui.Page
                 showThumbnails: _listViewBrowser.showPreviewThumbnails
                 rightEmblem: _listViewBrowser.rightEmblem
                 isSelected: selectionBar ? selectionBar.contains(model.path) : false
-                leftEmblem: isSelected ? "emblem-select-remove" : "emblem-select-add"
+                leftEmblem: isSelected ? "list-remove" : "list-add"
                 draggable: true
 
                 Maui.Badge
@@ -239,8 +239,8 @@ Maui.Page
             cellHeight: itemSize * 1.5
             keepEmblemOverlay: selectionMode
             showPreviewThumbnails: showThumbnails
-            leftEmblem: "emblem-select-add"
-            supportsRefreshing: true
+            leftEmblem: isSelected ? "list-remove" : "list-add"
+			supportsRefreshing: true
 
             BrowserHolder
             {
@@ -266,7 +266,7 @@ Maui.Page
                 folderSize: height * 0.5
                 height: _gridViewBrowser.cellHeight
                 width: _gridViewBrowser.cellWidth
-                padding: Maui.Style.space.small
+                padding: Maui.Style.space.tiny
 
                 showTooltip: true
                 showEmblem: _gridViewBrowser.showEmblem
@@ -274,8 +274,8 @@ Maui.Page
                 showThumbnails: _gridViewBrowser.showPreviewThumbnails
                 rightEmblem: _gridViewBrowser.rightEmblem
                 isSelected: selectionBar ? selectionBar.contains(model.path) : false
-                leftEmblem: isSelected ? "emblem-select-remove" : "emblem-select-add"
-                draggable: true
+                leftEmblem: isSelected ? "list-remove" : "list-add"
+				draggable: true
 
                 Maui.Badge
                 {

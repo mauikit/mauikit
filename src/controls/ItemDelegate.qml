@@ -30,12 +30,13 @@ ItemDelegate
     id: control
 
     default property alias content : _content.data
+		
 	property alias mouseArea : _mouseArea
     property bool draggable: false
     property bool isCurrentItem :  false
 
     property int radius: Maui.Style.radiusV
-
+    highlighted: isCurrentItem
     //override the itemdelegate default signals to allow dragging content
     signal pressed(var mouse)
     signal pressAndHold(var mouse)
@@ -46,7 +47,6 @@ ItemDelegate
 	Kirigami.Theme.inherit: false
     Kirigami.Theme.backgroundColor: "transparent"
 
-    background: null
     hoverEnabled: !Kirigami.Settings.isMobile
 
     padding: 0
@@ -97,11 +97,24 @@ ItemDelegate
         onPressAndHold : control.pressAndHold(mouse)
     }
     
-    contentItem: Item{}
+    contentItem: Item {}
+    
+    Item{
+		id: _content
+		
+		        anchors
+		        {
+		            fill: control
+		            topMargin: control.topPadding
+		            bottomMargin: control.bottomPadding
+		            leftMargin: control.leftPadding
+		            rightMargin: control.rightPadding
+		            margins: control.padding
+		        } 
+	}
 
-    Rectangle
+   background: Rectangle
     {
-        id: _content
         anchors
         {
             fill: control

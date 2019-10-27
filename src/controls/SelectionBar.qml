@@ -31,7 +31,7 @@ Item
     
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
-    readonly property int barHeight : Maui.Style.iconSizes.large  + Maui.Style.space.large
+    readonly property int barHeight : Maui.Style.iconSizes.large  + (Maui.Style.space.large * 1.5)
 
     property var selectedPaths: []
     property var selectedItems: []
@@ -218,7 +218,8 @@ Item
                 
                 ScrollBar.horizontal: ScrollBar 
                 {
-					policy: Kirigami.Settings.isMobile? Qt.ScrollBarAlwaysOff : Qt.ScrollBarAsNeeded				
+					policy: Kirigami.Settings.isMobile? Qt.ScrollBarAlwaysOff : Qt.ScrollBarAsNeeded		
+					y: -64
 				}
                 
                 model: ListModel{}
@@ -228,15 +229,16 @@ Item
                     id: delegate
                     isCurrentItem: ListView.isCurrentItem
                     height: selectionList.height
-                    width: height
+                    width: height + Maui.Style.space.big
                     folderSize: Maui.Style.iconSizes.big
                     showLabel: true
                     keepEmblemOverlay: true
+                    leftEmblem: "list-remove"
                     showEmblem: !Kirigami.Settings.isMobile
                     showTooltip: true
                     showThumbnails: true
                     emblemSize: Maui.Style.iconSizes.small
-                    Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
+                    Kirigami.Theme.backgroundColor: "transparent"
                     Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
 					
                     Connections

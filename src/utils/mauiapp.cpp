@@ -18,6 +18,7 @@
 
 #include "mauiapp.h"
 #include "utils.h"
+#include <QIcon>
 
 #ifdef COMPONENT_ACCOUNTS
 #include "mauiaccounts.h"
@@ -29,7 +30,9 @@ MauiApp::MauiApp(QObject *parent) : QObject(parent)
   #else
   , m_accounts(nullptr)
   #endif
-{}
+{
+	QIcon::setThemeName("Luv");	
+}
 
 MauiApp::~MauiApp() {}
 

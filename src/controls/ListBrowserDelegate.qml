@@ -159,6 +159,7 @@ Maui.ItemDelegate
 	{
 		opacity: (model.hidden == true || model.hidden == "true" )? 0.5 : 1
 		anchors.fill: parent
+
 		spacing: Maui.Style.space.small
 		Item
 		{

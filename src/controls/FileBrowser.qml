@@ -282,7 +282,7 @@ Maui.Page
                     control.selectionBar.animate(Maui.Style.dangerColor)
                     control.clearSelection()
                 }
-
+               
                 for(var i in urls)
                     Maui.FM.removeFile(urls[i])
 
