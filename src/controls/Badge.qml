@@ -33,7 +33,7 @@ Rectangle
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
 
     property alias item : loader.item
-    property bool hovered : false
+    property alias hovered : mouseArea.containsMouse
 
     property int size: Maui.Style.iconSizes.small
     property string iconName : ""
@@ -72,7 +72,7 @@ Rectangle
             font.weight: Font.Bold
             font.bold: true
             font.pointSize: Maui.Style.fontSizes.default
-            color: Kirigami.Theme.textColor
+            color: control.Kirigami.Theme.textColor
             verticalAlignment: Qt.AlignVCenter
             horizontalAlignment: Qt.AlignHCenter
         }
@@ -85,15 +85,18 @@ Rectangle
         {
             anchors.centerIn: parent
             source: control.iconName
-            color: Kirigami.Theme.textColor
+            color: control.Kirigami.Theme.textColor
             width: control.size
             height: width
+            isMask: color !== "transparent"
         }
     }
 
     MouseArea
     {
         id: mouseArea
+        hoverEnabled: true
+        
         readonly property int targetMargin:  Kirigami.Settings.isMobile ? Maui.Style.space.big : 0
 
         height: parent.height + targetMargin
@@ -103,8 +106,5 @@ Rectangle
         onClicked: control.clicked()
         onPressed: control.pressed()
         onReleased: control.released()
-        hoverEnabled: true
-        onEntered: hovered = true
-        onExited: hovered = false
     }
 }

@@ -17,5 +17,7 @@
         <file>assets/edit-find.svg</file>
         <file>assets/dialog-information.svg</file>
         <file>assets/cover.png</file>
+        <file>assets/arrow-down.svg</file>
+        <file>assets/dialog-close.svg</file>
     </qresource>
 </RCC>

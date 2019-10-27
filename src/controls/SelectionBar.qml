@@ -31,7 +31,7 @@ Item
     
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
-    readonly property int barHeight : Maui.Style.iconSizes.large  + (Maui.Style.space.large * 1.5)
+    readonly property int barHeight : Maui.Style.iconSizes.large  + (Maui.Style.space.large * 1.8)
 
     property var selectedPaths: []
     property var selectedItems: []
@@ -136,8 +136,8 @@ Item
         anchors.verticalCenter: parent.top
         anchors.horizontalCenter: parent.left
 
-        iconName: "window-close"
-        Kirigami.Theme.backgroundColor: Kirigami.Theme.negativeTextColor
+        iconName: "qrc://assets/dialog-close.svg"
+		Kirigami.Theme.backgroundColor: Kirigami.Theme.negativeTextColor
         Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
         z: parent.z +1
         onClicked:
@@ -228,7 +228,7 @@ Item
                 {
                     id: delegate
                     isCurrentItem: ListView.isCurrentItem
-                    height: selectionList.height
+                    height: selectionList.height * 0.95
                     width: height + Maui.Style.space.big
                     folderSize: Maui.Style.iconSizes.big
                     showLabel: true

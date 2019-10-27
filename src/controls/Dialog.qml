@@ -61,9 +61,9 @@ Maui.Popup
     Maui.Badge
     {
         id: _closeButton
-        iconName: "window-close"
-        Kirigami.Theme.backgroundColor: hovered ?  Kirigami.Theme.negativeTextColor : Kirigami.Theme.complementaryBackgroundColor
-        Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
+        iconName: "qrc://assets/dialog-close.svg"
+//         Kirigami.Theme.backgroundColor: hovered ?  Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
+//         Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
 
         anchors
         {

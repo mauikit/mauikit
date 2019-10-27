@@ -216,12 +216,8 @@ Maui.ItemDelegate
 				
 				Rectangle
 				{
-					anchors
-					{
-						fill: parent
-						margins: 0
-					}  	
-					
+					anchors.fill: parent
+										
 					Behavior on color
 					{
 						ColorAnimation

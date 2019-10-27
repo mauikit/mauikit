@@ -27,7 +27,7 @@ MouseArea
 		anchors.fill: parent
 		color: control.expanded ? "#333" : "transparent"
 		opacity: 0.1
-		radius: Math.min(Maui.Style.radiusV, )
+		radius: Math.min(Maui.Style.radiusV, height)
 		
 		Behavior on color
 		{
@@ -81,10 +81,11 @@ MouseArea
             radius: Maui.Style.radiusV
             Kirigami.Icon
             {
-                source: control.direction === Qt.Horizontal ? ( control.expanded ? "go-previous" : "go-next") : (control.direction === Qt.Vertical ? "arrow-down" : "")
+                source: control.direction === Qt.Horizontal ? ( control.expanded ? "go-previous" : "go-next") : (control.direction === Qt.Vertical ? "qrc://assets/arrow-down.svg" : "")
                 width: Maui.Style.iconSizes.small
                 height: width
                 anchors.centerIn: parent
+                isMask: true
             }			
         }
 		

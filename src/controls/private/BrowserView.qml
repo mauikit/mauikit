@@ -239,7 +239,6 @@ Maui.Page
             cellHeight: itemSize * 1.5
             keepEmblemOverlay: selectionMode
             showPreviewThumbnails: showThumbnails
-            leftEmblem: isSelected ? "list-remove" : "list-add"
 			supportsRefreshing: true
 
             BrowserHolder
@@ -485,8 +484,6 @@ Maui.Page
                         topMargin: Maui.Style.contentMargins
                         showPreviewThumbnails: showThumbnails
                         keepEmblemOverlay: selectionMode
-                        rightEmblem: Kirigami.Settings.isMobile ? "document-share" : ""
-                        leftEmblem: "emblem-select-add"
                         showDetailsInfo: true
                         onKeyPress: _millerControl.keyPress(event)
                         currentIndex : 0
@@ -548,8 +545,8 @@ Maui.Page
                             showThumbnails: _millerListView.showPreviewThumbnails
                             rightEmblem: _millerListView.rightEmblem
                             isSelected: selectionBar ? selectionBar.contains(model.path) : false
-                            leftEmblem: isSelected ? "emblem-select-remove" : "emblem-select-add"
-                            draggable: true
+                            leftEmblem: isSelected ? "list-remove" : "list-add"
+							draggable: true
 
                             Maui.Badge
                             {
