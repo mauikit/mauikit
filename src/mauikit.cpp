@@ -114,8 +114,9 @@ void MauiKit::registerTypes(const char *uri)
 	qmlRegisterType(componentUrl(QStringLiteral("TabButton.qml")), uri, 1, 0, "TabButton");
 	qmlRegisterType(componentUrl(QStringLiteral("ActionGroup.qml")), uri, 1, 0, "ActionGroup");
     qmlRegisterType(componentUrl(QStringLiteral("ActionSideBar.qml")), uri, 1, 0, "ActionSideBar");
-    qmlRegisterType(componentUrl(QStringLiteral("ToolActions.qml")), uri, 1, 0, "ToolActions");
-
+	qmlRegisterType(componentUrl(QStringLiteral("ToolActions.qml")), uri, 1, 0, "ToolActions");
+	qmlRegisterType(componentUrl(QStringLiteral("ToolButtonMenu.qml")), uri, 1, 0, "ToolButtonMenu");
+	
     qmlRegisterType(componentUrl(QStringLiteral("PathBar.qml")), uri, 1, 0, "PathBar");
     qmlRegisterType<PathList>(uri, 1, 0, "PathList");
 

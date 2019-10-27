@@ -62,6 +62,7 @@
         <file alias="ActionGroup.qml">controls/ActionGroup.qml</file>
         <file alias="ActionSideBar.qml">controls/ActionSideBar.qml</file>
         <file alias="private/StoreDelegate.qml">controls/private/StoreDelegate.qml</file>
-        <file alias="ToolActions.qml">controls/ToolActions.qml</file>
-    </qresource>
+		<file alias="ToolActions.qml">controls/ToolActions.qml</file>
+		<file alias="ToolButtonMenu.qml">controls/ToolButtonMenu.qml</file>
+	</qresource>
 </RCC>
