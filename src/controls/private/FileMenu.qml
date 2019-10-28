@@ -27,6 +27,7 @@ Menu
 	{
 		visible: !control.isExec
 		text: qsTr("Select")
+		icon.name: "edit-select"		
 		onTriggered:
 		{			
 			addToSelection(currentFMList.get(index))
@@ -38,6 +39,7 @@ Menu
 	MenuItem
 	{
 		text: control.isFav ? qsTr("UnFav") : qsTr("Fav")
+		icon.name: "love"		
 		onTriggered:
 		{			
 			if(currentFMList.favItem(item.path))
@@ -49,6 +51,7 @@ Menu
 	MenuItem
 	{
 		visible: control.isDir
+		icon.name: "tab-new"
 		text: qsTr("Open in tab")
 		onTriggered: openTab(item.path)
 	}
@@ -58,6 +61,7 @@ Menu
 	{
 		visible: !control.isExec
         text: qsTr("Copy")
+		icon.name: "edit-copy"
 		onTriggered:
 		{
 			copyClicked(control.item)
@@ -69,6 +73,7 @@ Menu
 	{
 		visible: !control.isExec
         text: qsTr("Cut")
+		icon.name: "edit-cut"
 		onTriggered:
 		{
 			cutClicked(control.item)
@@ -80,6 +85,7 @@ Menu
 	{
 		visible: !control.isExec
         text: qsTr("Rename")
+		icon.name: "edit-rename"
 		onTriggered:
 		{
 			renameClicked(control.item)
@@ -93,6 +99,7 @@ Menu
 	{
 		visible: !control.isExec && control.isDir
 		text: qsTr("Bookmark")
+		icon.name: "bookmark-new"
 		onTriggered:
 		{
 			bookmarkClicked(control.item)
@@ -104,6 +111,7 @@ Menu
 	{
 		visible: !control.isExec
         text: qsTr("Tags")
+		icon.name: "tag"
 		onTriggered:
 		{
 			tagsClicked(control.item)
@@ -115,6 +123,7 @@ Menu
 	{
 		visible: !control.isExec		
         text: qsTr("Share")
+		icon.name: "document-share"
 		onTriggered:
 		{
 			shareClicked(control.item)
@@ -126,6 +135,7 @@ Menu
 	{
 		visible: !control.isExec
         text: qsTr("Preview")
+		icon.name: "view-preview"
 		onTriggered:
 		{
 			previewer.show(control.item.path)
@@ -139,7 +149,7 @@ Menu
 	{
         text: qsTr("Remove")
 		Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
-		
+		icon.name: "edit-delete"
 		onTriggered:
 		{
 			removeClicked(control.item)
