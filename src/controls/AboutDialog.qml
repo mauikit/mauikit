@@ -21,6 +21,8 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import QtGraphicalEffects 1.13
+
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
@@ -63,26 +65,45 @@ Maui.Dialog
 			height: parent.height * 0.7
 			spacing: Maui.Style.space.big
 			
+// 			Behavior on width
+// 			{				
+// 				NumberAnimation
+// 				{
+// 					duration: Kirigami.Units.longDuration
+// 					easing.type: Easing.InOutQuad
+// 				}
+// 			}
+			
 			Item
 			{
-				visible: parent.width > control.maxWidth * 0.7
+				visible:  parent.width > control.maxWidth * 0.7
 				Layout.fillHeight: true
 				Layout.margins: Maui.Style.space.small
 				Layout.alignment: Qt.AlignVCenter          
-				Layout.preferredWidth: Maui.Style.iconSizes.huge
+				Layout.preferredWidth: visible ? Maui.Style.iconSizes.huge : 0				
 				
 				Image
 				{
+					id: _imgIcon
 					anchors.centerIn: parent
 					source: Maui.App.iconName
 					width: Math.max(Maui.Style.iconSizes.huge, parent.width)
 					height: width
 					sourceSize.width: width
-					sourceSize.height: height
-					
-					asynchronous: true
-					
-					fillMode: Image.PreserveAspectFit
+					sourceSize.height: height					
+					asynchronous: true					
+					fillMode: Image.PreserveAspectFit					
+				}
+				
+				DropShadow 
+				{
+					anchors.fill: _imgIcon
+					horizontalOffset: 0
+					verticalOffset: 0
+					radius: 8.0
+					samples: 17
+					color: "#80000000"
+					source: _imgIcon
 				}
 			}    
 			

@@ -7,7 +7,7 @@ import QtQml 2.1
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
-MouseArea
+Item
 {
 	id: control
 	implicitWidth: _layout.implicitWidth +  Maui.Style.space.medium
@@ -37,11 +37,6 @@ MouseArea
 	// 			}
 	// 		}
 	// 	}
-	
-	onClicked: 
-	{
-		control.expanded = !control.expanded
-	}
 	
 	Row
 	{
