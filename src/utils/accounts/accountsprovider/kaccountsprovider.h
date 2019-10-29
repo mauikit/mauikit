@@ -42,6 +42,7 @@ public:
 
 private:
     OnlineAccounts::AccountServiceModel *accountsModel;
+    QMap<QString, QObject*> *accountHandlesMap;
 };
 
 #endif

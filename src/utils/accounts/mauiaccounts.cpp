@@ -116,7 +116,16 @@ uint MauiAccounts::getCount() const
 
 void MauiAccounts::refresh()
 {
-	this->setAccounts();
+    this->setAccounts();
+}
+
+bool MauiAccounts::requiresAddAccountDialog()
+{
+    if (dynamic_cast<KAccountsProvider*>(this->provider)) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 void MauiAccounts::removeAccount(const int& index)

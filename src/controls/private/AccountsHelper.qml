@@ -20,13 +20,21 @@ Maui.Dialog
 		id: _syncDialog
 		onAccepted:
 		{
-			control.addAccount(serverField.text, userField.text, passwordField.text);
+            control.addAccount(serverField.text, userField.text, passwordField.text);
 			close();
 		}
 	}
 	rejectButton.visible: false
 	acceptButton.text: qsTr("Add account") 
-	onAccepted: _syncDialog.open()		
+    onAccepted: {
+        console.log(Maui.App.accounts.requiresAddAccountDialog())
+
+        if (Maui.App.accounts.requiresAddAccountDialog()) {
+            _syncDialog.open()
+        } else {
+            control.addAccount("", "", "");
+        }
+    }
 	
 	Maui.BaseModel
 	{
@@ -48,8 +56,8 @@ Maui.Dialog
 		onRejected: 
 		{
 			var account = Maui.App.accounts.get(_listView.currentIndex)
-			console.log(account.label)
-			control.removeAccount(account.server, account.user)
+            console.log(account)
+            control.removeAccount(account)
 			close()
 		}
 		
@@ -60,7 +68,7 @@ Maui.Dialog
 			onClicked: 
 			{
 				var account = Maui.App.accounts.get(_listView.currentIndex)
-				control.removeAccountAndFiles(account.server, account.user)
+                control.removeAccountAndFiles(account)
 				close()
 			}
 		}
@@ -127,19 +135,21 @@ Maui.Dialog
 	
 	function addAccount(server, user, password)
 	{
-        if(user.length)
+        if(!Maui.App.accounts.requiresAddAccountDialog()
+           || (Maui.App.accounts.requiresAddAccountDialog() && user.length)) {
             Maui.App.accounts.registerAccount({server: server, user: user, password: password})
+        }
 	}
 	
-	function removeAccount(server, user)
+    function removeAccount(account)
 	{
-		if(server.length && user.length)
-			Maui.App.accounts.removeAccount(server, user)
+        if(account)
+            Maui.App.accounts.removeAccount(account)
 	}
 	
-	function removeAccountAndFiles(server, user)
+    function removeAccountAndFiles(account)
 	{
-		if(server.length && user.length)
-			Maui.App.accounts.removeAccountAndFiles(server, user)
+        if(account)
+            Maui.App.accounts.removeAccountAndFiles(account)
 	}
 }

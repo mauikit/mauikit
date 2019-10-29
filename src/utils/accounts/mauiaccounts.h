@@ -67,6 +67,8 @@ public slots:
 	void removeAccount(const int &index);
 	void removeAccountAndFiles(const int &index);
 	void refresh();
+
+    bool requiresAddAccountDialog();
 	
 private:
     static MauiAccounts *m_instance;

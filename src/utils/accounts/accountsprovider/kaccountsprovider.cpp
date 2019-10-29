@@ -25,6 +25,7 @@
 KAccountsProvider::KAccountsProvider(QObject *parent) : AccountsProvider(parent)
 {
     accountsModel = new OnlineAccounts::AccountServiceModel();
+    accountHandlesMap = new QMap<QString, QObject *>();
 }
 
 FMH::MODEL_LIST KAccountsProvider::getAccounts(QString service, bool includeDisabled)
@@ -40,8 +41,13 @@ FMH::MODEL_LIST KAccountsProvider::getAccounts(QString service, bool includeDisa
         res << FMH::MODEL {
             {FMH::MODEL_KEY::ICON, "folder-cloud"},
             {FMH::MODEL_KEY::LABEL, accountsModel->get(row, accountsModel->roleNames()[OnlineAccounts::AccountServiceModel::Roles::DisplayNameRole]).toString()},
-            {FMH::MODEL_KEY::ACCOUNT, accountsModel->get(row, accountsModel->roleNames()[OnlineAccounts::AccountServiceModel::Roles::AccountHandleRole]).toString()}
+            {FMH::MODEL_KEY::ID, accountsModel->get(row, accountsModel->roleNames()[OnlineAccounts::AccountServiceModel::Roles::AccountIdRole]).toString()}
         };
+
+        accountHandlesMap->insert(
+            accountsModel->get(row, accountsModel->roleNames()[OnlineAccounts::AccountServiceModel::Roles::AccountIdRole]).toString(),
+            qvariant_cast<QObject*>(accountsModel->get(row, accountsModel->roleNames()[OnlineAccounts::AccountServiceModel::Roles::AccountHandleRole]))
+        );
     }
 
     return res;
@@ -49,20 +55,26 @@ FMH::MODEL_LIST KAccountsProvider::getAccounts(QString service, bool includeDisa
 
 bool KAccountsProvider::addAccount(const QString& server, const QString& user, const QString& password)
 {
-	return false;
+    Q_UNUSED(server)
+    Q_UNUSED(user)
+    Q_UNUSED(password)
+
+    // NOTE : The system() call is not made in another thread and is intentionally blocking UI
+    //        because the running application should wait until the account is added to system.
+    system("kcmshell5 kcm_kaccounts");
+
+    return true;
 }
 
 bool KAccountsProvider::removeAccount(FMH::MODEL account)
 {
     OnlineAccounts::Account _account;
 
-    // FIXME : This setObjectHandle requires the objectHandle which is of type QObject*
-    //         Since FMH::MODEL doesn't support QObject *, accounts cannot be removed yet
-    //         See line 43, the data needs to be stored as an QObject.
-    //_account.setObjectHandle(account[FMH::MODEL_KEY::ACCOUNT]);
+    _account.setObjectHandle(accountHandlesMap->value(account[FMH::MODEL_KEY::ID]));
     _account.remove();
 
-	return false;
+    emit this->accountRemoved(FMH::toMap(account));
+    return true;
 }
 
 
