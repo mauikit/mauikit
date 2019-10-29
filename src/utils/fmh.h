@@ -1033,7 +1033,7 @@ namespace FMH
 	{
 		Q_OBJECT
 	public:
-		explicit Downloader(QObject *parent = 0) : QObject(parent), manager(new QNetworkAccessManager)
+		explicit Downloader(QObject *parent = 0) : QObject(parent), manager(new QNetworkAccessManager), array(new QByteArray)
 		{}
 		
 		virtual ~Downloader()
@@ -1041,7 +1041,9 @@ namespace FMH
 			qDebug()<< "DELETEING DOWNLOADER";
 			this->manager->deleteLater();
 			// 			this->reply->deleteLater();
-			
+			this->reply->deleteLater();
+			this->reply = nullptr;
+			this->array->clear();			
 		}
 		
 		void setFile(const QUrl &fileURL, const QUrl &fileName = QUrl())
@@ -1073,19 +1075,19 @@ namespace FMH
 			request.setUrl(fileURL);
 			if(!headers.isEmpty())
 			{
-				for(auto key: headers.keys())
+				for(const auto &key: headers.keys())
 					request.setRawHeader(key.toLocal8Bit(), headers[key].toLocal8Bit());
-			}
+			}		
 			
-			reply = manager->get(request);
+			reply = manager->get(request);			
 			
-			connect(reply, &QNetworkReply::readyRead, [this]()
+			connect(reply, &QIODevice::readyRead, [this]()
 			{
 				switch(reply->error())
 				{
 					case QNetworkReply::NoError:
 					{
-						this->array = reply->readAll();
+						this->array->append(reply->readAll());
 						break;
 					}
 					
@@ -1097,19 +1099,21 @@ namespace FMH
 				}
 			});
 			
-			connect(reply, &QNetworkReply::finished, [=]()
+			connect(reply, &QNetworkReply::finished, [this]()
 			{
 				qDebug() << "Array reply is now finished";
-				emit this->dataReady(this->array);
+				
+				emit this->dataReady(*this->array);
 				emit this->done();
 			});
+			
 		}
 		
 	private:
 		QNetworkAccessManager *manager;
 		QNetworkReply *reply;
 		QFile *file;
-		QByteArray array;
+		QByteArray *array;
 		
 	signals:
 		void progress(int percent);
