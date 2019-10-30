@@ -84,7 +84,7 @@ Maui.SwipeItemDelegate
 			{
 				anchors.centerIn: parent				
 				sourceComponent: img.status === Image.Ready ? undefined : _iconComponent
-			}
+			}		
 		}
 	}
 	
@@ -123,6 +123,18 @@ Maui.SwipeItemDelegate
 				anchors.fill: parent
 				anchors.margins:  Maui.Style.space.tiny				
 				sourceComponent: control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : undefined) 
+			}
+			
+			DropShadow
+			{
+				anchors.fill: _iconLoader
+			
+				horizontalOffset: 0
+				verticalOffset: 0
+				radius: 8.0
+				samples: 17
+				color: "#80000000"
+				source: _iconLoader
 			}
 		}	
 		
