@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.5
+import QtQuick 2.12
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
@@ -30,8 +30,9 @@ ItemDelegate
     id: control
 
     default property alias content : _content.data
-		
-	property alias mouseArea : _mouseArea
+
+    property alias mouseArea : _mouseArea
+//    property alias tapArea : _tapArea
     property bool draggable: false
     property bool isCurrentItem :  false
 
@@ -44,7 +45,7 @@ ItemDelegate
     signal rightClicked(var mouse)
     signal doubleClicked(var mouse)
 
-	Kirigami.Theme.inherit: false
+    Kirigami.Theme.inherit: false
     Kirigami.Theme.backgroundColor: "transparent"
 
     hoverEnabled: !Kirigami.Settings.isMobile
@@ -58,6 +59,7 @@ ItemDelegate
     MouseArea
     {
         id: _mouseArea
+//        enabled: !Kirigami.Settings.isMobile
         anchors.fill: parent
         acceptedButtons:  Qt.RightButton | Qt.LeftButton
         drag.target: control.draggable && !Kirigami.Settings.isMobile  ? parent : undefined
@@ -82,38 +84,49 @@ ItemDelegate
                 {
                     parent.Drag.imageSource = result.url
                 })
-				
-			startX = control.x
-			startY = control.y
+
+            startX = control.x
+            startY = control.y
             control.pressed(mouse)
         }
 
         onReleased :
         {
-			control.x = startX
+            control.x = startX
             control.y = startY
         }
 
         onPressAndHold : control.pressAndHold(mouse)
     }
+
+//    TapHandler
+//    {
+//        id: _tapArea
+//        enabled: Kirigami.Settings.isMobile
+//        acceptedButtons: Qt.RightButton
+//        onSingleTapped: control.clicked(eventPoint)
+//        onDoubleTapped: control.doubleClicked(eventPoint)
+//        onLongPressed: control.pressAndHold(eventPoint)
+//    }
     
     contentItem: Item {}
     
-    Item{
-		id: _content
-		
-		        anchors
-		        {
-		            fill: control
-		            topMargin: control.topPadding
-		            bottomMargin: control.bottomPadding
-		            leftMargin: control.leftPadding
-		            rightMargin: control.rightPadding
-		            margins: control.padding
-		        } 
-	}
+    Item
+    {
+        id: _content
 
-   background: Rectangle
+        anchors
+        {
+            fill: control
+            topMargin: control.topPadding
+            bottomMargin: control.bottomPadding
+            leftMargin: control.leftPadding
+            rightMargin: control.rightPadding
+            margins: control.padding
+        }
+    }
+
+    background: Rectangle
     {
         anchors
         {
@@ -123,15 +136,15 @@ ItemDelegate
             leftMargin: control.leftPadding
             rightMargin: control.rightPadding
             margins: control.padding
-        }  	
-		        
-		        Behavior on color
-		        {
-					ColorAnimation
-					{
-						duration: Kirigami.Units.longDuration
-					}
-				}
+        }
+
+        Behavior on color
+        {
+            ColorAnimation
+            {
+                duration: Kirigami.Units.shortDuration
+            }
+        }
         color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
 
         radius: control.radius
