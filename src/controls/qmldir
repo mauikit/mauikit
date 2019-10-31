@@ -59,3 +59,4 @@ ActionSideBar 1.0 ActionSideBar.qml
 ToolActions 1.0 ToolActions.qml
 DocumentPreview 1.0 DocumentPreview.qml
 ToolButtonMenu 1.0 ToolButtonMenu.qml
+ListItemTemplate 1.0 ListItemTemplate.qml
