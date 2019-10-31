@@ -30,7 +30,7 @@ Maui.Page
         property string urls
         property url target
 
-        enabled: Maui.FM.getFileInfo(target).isdir == "true"
+        enabled: Maui.FM.getFileInfo(target).isdir == "true" && !urls.includes(url.toString())
 
         MenuItem
         {

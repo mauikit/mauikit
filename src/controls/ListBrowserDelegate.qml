@@ -63,26 +63,7 @@ Maui.ItemDelegate
 	property alias iconSizeHint : _template.iconSizeHint
 	property alias imageSource : _template.imageSource
 	property alias iconSource : _template.iconSource
-	
-	
-	Maui.ListItemTemplate
-	{
-		id: _template
-		width: parent.width
-		height: parent.height
 		
-		isCurrentItem : control.isCurrentItem
-		
-		iconSizeHint: control.folderSize
-		
-		imageSource:  model.mime &&  model.thumbnail ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails ? model.thumbnail : "") : ""	
-		iconSource: model.icon
-		
-		label1.text: model.label
-		label3.text : model.mime === "inode/directory" ? (model.count ? model.count + qsTr(" items") : "") : Maui.FM.formatSize(model.size)
-		label4.text: Maui.FM.formatDate(model.modified, "MM/dd/yyyy")
-	}
-	
 	DropArea 
 	{
 		id: _dropArea
@@ -120,5 +101,23 @@ Maui.ItemDelegate
 		anchors.left: parent.left
 		onClicked: leftEmblemClicked(index)
         size: Maui.Style.iconSizes.small
-	}	
+	}
+	
+	Maui.ListItemTemplate
+	{
+		id: _template
+		width: parent.width
+		height: parent.height
+		
+		isCurrentItem : control.isCurrentItem
+		
+		iconSizeHint: control.folderSize
+		
+		imageSource:  model.mime &&  model.thumbnail ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails ? model.thumbnail : "") : ""	
+		iconSource: model.icon
+		
+		label1.text: model.label
+		label3.text : model.mime === "inode/directory" ? (model.count ? model.count + qsTr(" items") : "") : Maui.FM.formatSize(model.size)
+		label4.text: Maui.FM.formatDate(model.modified, "MM/dd/yyyy")
+	}
 }
