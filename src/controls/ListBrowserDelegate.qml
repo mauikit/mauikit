@@ -113,7 +113,7 @@ Maui.ItemDelegate
 		
 		iconSizeHint: control.folderSize
 		
-		imageSource:  model.mime &&  model.thumbnail ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails ? model.thumbnail : "") : ""	
+		imageSource: model.mime &&  model.thumbnail ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails ? model.thumbnail : "") : ""	
 		iconSource: model.icon
 		
 		label1.text: model.label

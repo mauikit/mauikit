@@ -137,6 +137,7 @@ Item
             Layout.fillHeight: visible
             Layout.fillWidth: visible
             Layout.margins: Maui.Style.space.small
+            Layout.leftMargin: _iconLoader.visible ? 0 :  Maui.Style.space.small
 
             Label
             {
