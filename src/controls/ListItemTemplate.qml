@@ -38,6 +38,8 @@ Item
     property int iconSizeHint : Maui.Style.iconSizes.big
     property string imageSource
     property string iconSource
+    
+    property bool isCurrentItem: false
 
     Component
     {
@@ -46,6 +48,7 @@ Item
         Item
         {
             anchors.fill: parent
+            
             Image
             {
                 id: img
@@ -121,9 +124,10 @@ Item
             Loader
             {
                 id: _iconLoader
-                anchors.fill: parent
-                anchors.margins:  Maui.Style.space.tiny
-                sourceComponent: control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : undefined)
+                height: control.iconSizeHint
+                width: control.iconSizeHint
+                anchors.centerIn: parent
+                sourceComponent: _iconContainer.visible ? (control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : null) ): null
             }
         }
 
@@ -167,7 +171,7 @@ Item
 
         ColumnLayout
         {
-            visible: control.width >  Kirigami.Units.gridUnit * 30
+            visible: control.width >  Kirigami.Units.gridUnit * 15
             Layout.fillHeight: visible
             Layout.fillWidth: visible
             Layout.margins: Maui.Style.space.small
@@ -185,7 +189,8 @@ Item
                 wrapMode: Text.WrapAnywhere
                 elide: Text.ElideMiddle
                 color: control.Kirigami.Theme.textColor
-            }
+                opacity: control.isCurrentItem || hovered ? 0.8 : 0.6
+			}
 
             Label
             {
@@ -200,8 +205,8 @@ Item
                 wrapMode: Text.WrapAnywhere
                 elide: Text.ElideMiddle
                 color: control.Kirigami.Theme.textColor
-            }
-
+                opacity: control.isCurrentItem || hovered ? 0.8 : 0.6
+			}
         }
     }
 

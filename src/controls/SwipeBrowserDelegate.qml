@@ -43,6 +43,7 @@ Maui.SwipeItemDelegate
     Maui.ListItemTemplate
     {
         id: _template
-        anchors.fill: parent
+        width: parent.width
+        height: parent.height
     }
 }
