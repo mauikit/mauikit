@@ -105,7 +105,7 @@ Maui.AbstractSideBar
                 id: itemDelegate
                 iconSize: control.iconSize
                 labelVisible: control.showLabels
-                iconName: model.icon +  (Kirigami.Settings.isMobile ? ("-sidebar") : "")
+                iconName: model.icon +  (Qt.platform.os == "android" ? ("-sidebar") : "")
                 leftPadding:  Maui.Style.space.tiny
                 rightPadding:  Maui.Style.space.tiny
 

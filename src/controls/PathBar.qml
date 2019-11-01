@@ -142,7 +142,7 @@ Item
 					Kirigami.Icon
 					{
 						anchors.centerIn: parent
-						source: Kirigami.Settings.isMobile ?  "user-home-sidebar" : "user-home"					
+						source: Qt.platform.os == "android" ?  "user-home-sidebar" : "user-home"					
 						color: control.Kirigami.Theme.textColor   
 						width: Maui.Style.iconSizes.medium
 						height: width
