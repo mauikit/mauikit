@@ -86,6 +86,10 @@ Maui.Page
         id: _commonFMList
         path: control.path
         onSortByChanged: if(group) groupBy()
+		onlyDirs: settings.onlyDirs
+		filterType: settings.filterType
+		filters: settings.filters 
+		sortBy: settings.sortBy 
     }
 
     Component
@@ -475,6 +479,10 @@ Maui.Page
                     {
                         id: _millersFMList
                         path: model.path
+                        onlyDirs: settings.onlyDirs
+                        filterType: settings.filterType
+                        filters: settings.filters 
+                        sortBy: settings.sortBy                  
                     }
 
                     Maui.ListBrowser

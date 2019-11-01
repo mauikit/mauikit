@@ -60,6 +60,7 @@ Maui.Page
 	onGoForwardTriggered: control.goNext()
 	
 	focus: true
+	
 	footBar.visible: false
 	footBar.leftContent: Label
 	{
@@ -897,8 +898,9 @@ Maui.Page
 	
 	Component.onCompleted:
 	{
+		console.log("CURRENT FILTER TYPE", settings.filterType)
 		openTab(Maui.FM.homePath())
-		control.setSettings()
+		console.log("SECOND FILTER TYPE", settings.filterType)		
 		browserView.currentView.forceActiveFocus()
 	}
 	
@@ -911,19 +913,6 @@ Maui.Page
 				
 				if(control.viewType === Maui.FMList.ICON_VIEW)
 					browserView.currentView.adaptGrid()
-	}
-	
-	function setSettings()
-	{
-		if(control.currentFMList !== null)
-		{
-			control.currentFMList.onlyDirs= control.settings.onlyDirs
-			control.currentFMList.filters= control.settings.filters || control.settings.filters
-			control.currentFMList.sortBy= control.settings.sortBy || control.currentFMList.sortBy
-			control.currentFMList.filterType = control.settings.filterType || control.currentFMList.filterType
-			control.currentFMList.trackChanges= control.settings.trackChanges || control.currentFMList.trackChanges
-			control.currentFMList.saveDirProps= control.settings.saveDirProps
-		}
 	}
 	
 	function closeTab(index)

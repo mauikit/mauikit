@@ -441,8 +441,8 @@ FMList::FILTER FMList::getFilterType() const
 }
 
 void FMList::setFilterType(const FMList::FILTER &type)
-{
-	if(this->filters == filters || this->filterType == type)
+{	
+	if(this->filterType == type)
 		return;
 	
 	this->filterType = type;
