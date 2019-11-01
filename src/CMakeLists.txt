@@ -52,7 +52,6 @@ if(${COMPONENT_ACCOUNTS})
         utils/accounts/mauiaccounts.h
         utils/accounts/accountsdb.h
         )
-    qt5_add_resources(accounts_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/utils/accounts/accounts.qrc)
     add_compile_definitions(COMPONENT_ACCOUNTS)
 endif()
 

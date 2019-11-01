@@ -58,6 +58,7 @@ void AccountsDB::prepareCollectionDB() const
 
     QFile file(":/accounts/script.sql");
 
+	qDebug()<< "PRERARING COLLECTION";
     if (!file.exists())
     {
         QString log = QStringLiteral("Fatal error on build database. The file '");
