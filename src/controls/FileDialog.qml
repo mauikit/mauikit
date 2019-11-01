@@ -30,7 +30,8 @@ Maui.Dialog
 	maxWidth: Maui.Style.unit * 700
 	page.padding: 0
 	
-	property string initPath
+	property alias currentPath : browser.currentPath
+	property alias browser : browser
 	property string suggestedFileName : ""
 	
 	property alias settings : browser.settings
@@ -238,7 +239,7 @@ Maui.Dialog
 	{
 		if(cb)
 			callback = cb			
-			browser.openFolder(initPath ? initPath :browser.currentPath)
+			browser.openFolder(browser.currentPath)
 			open()
 	}
 	
