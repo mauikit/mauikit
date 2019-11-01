@@ -245,7 +245,7 @@ Maui.Dialog
 	
 	function closeIt()
 	{
-		browser.clean()
+		browser.clear()
 		close()
 	}
 	
