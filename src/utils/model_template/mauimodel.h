@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QAbstractListModel>
+#include <QSortFilterProxyModel>
 #include <QList>
 
 class MauiList;
@@ -30,37 +31,63 @@ class MauiList;
 #endif
 
 #ifdef STATIC_MAUIKIT
-class MauiModel : public QAbstractListModel
+class MauiModel : public QSortFilterProxyModel
 #else
-class MAUIKIT_EXPORT MauiModel : public QAbstractListModel
+class MAUIKIT_EXPORT MauiModel : public QSortFilterProxyModel
 #endif
 {
-	Q_OBJECT
-	Q_PROPERTY(MauiList *list READ getList WRITE setList)
-	
+    Q_OBJECT
+    Q_PROPERTY(MauiList *list READ getList WRITE setList)
+  
+    class PrivateAbstractListModel;    
+    
 public:    
-	MauiModel(QObject *parent = nullptr);
-	~MauiModel();
-	
-	int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-	
-	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-	
-	// Editable:
-	bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
-	
-	Qt::ItemFlags flags(const QModelIndex& index) const override;
-	
-	virtual QHash<int, QByteArray> roleNames() const override;
-	
-	MauiList* getList() const;
-	void setList(MauiList *value);	
-	
+    MauiModel(QObject *parent = nullptr);
+    ~MauiModel();	
+    
+    MauiList* getList() const;
+    void setList(MauiList *value);
+    
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+    
 private:
-	MauiList *list;
-	
+    PrivateAbstractListModel *m_model;    
+    
+public slots:
+    void setFilterString(const QString &string);
+    void setSortOrder(const int &sortOrder);    
+    
+    QVariantMap get(const int &index);
+    QVariantList getAll();
+    
 signals:
-	void listChanged();
+    void listChanged();
+};
+
+class MauiModel::PrivateAbstractListModel : public QAbstractListModel 
+{
+    Q_OBJECT
+public:
+    PrivateAbstractListModel(QObject *parent = nullptr);
+    ~PrivateAbstractListModel();
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    
+    // Editable:
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
+    
+    Qt::ItemFlags flags(const QModelIndex& index) const override;
+    
+    virtual QHash<int, QByteArray> roleNames() const override;
+    
+    MauiList* getList() const;
+    void setList(MauiList *value);	
+    
+private:    
+    MauiList *list;
+    
 };
 
 #endif // MAUIMODEL_H

@@ -191,8 +191,7 @@ Maui.Dialog
                     Maui.FMList.REMOTE_PATH,                                                
                     Maui.FMList.CLOUD_PATH,
                     Maui.FMList.DRIVES_PATH]
-                }
-                
+                }                
                 
                 Maui.FileBrowser
                 {

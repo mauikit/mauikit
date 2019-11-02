@@ -40,7 +40,8 @@ class MAUIKIT_EXPORT MauiList : public QObject, public QQmlParserStatus
 {
 	Q_INTERFACES(QQmlParserStatus)
 	
-    Q_OBJECT
+    Q_OBJECT    
+    Q_PROPERTY(int count READ getCount NOTIFY countChanged)
 
 public:
     /**
@@ -50,8 +51,9 @@ public:
 	~MauiList();
 	
 	virtual FMH::MODEL_LIST items() const = 0;
-	void classBegin() override {}
-	void componentComplete() override {}
+	virtual void classBegin() override {}
+	virtual void componentComplete() override {}
+	int getCount() const {return items().size(); } ;
 	
 signals:
 	void preItemAppended();
@@ -62,7 +64,8 @@ signals:
 	void updateModel(int index, QVector<int> roles);
 	void preListChanged();
 	void postListChanged();
-
+    
+    void countChanged();
 };
 
 #endif // MAUILIST_H
