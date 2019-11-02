@@ -252,7 +252,7 @@ Maui.Dialog
     
     function closeIt()
     {
-        browser.clear()
+        browser.clearSelection()
         close()
     }
     
