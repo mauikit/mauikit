@@ -48,8 +48,8 @@ Item
 		
 		ToolButton
 		{
-			icon.name:  control.currentAction.icon.name
-			onClicked: 		control.expanded = !control.expanded 
+			icon.name: control.currentAction.icon.name
+			onClicked: control.expanded = !control.expanded 
 			text: " "
 			indicator: Kirigami.Icon
 			{
@@ -59,7 +59,7 @@ Item
 					verticalCenter: parent.verticalCenter
 				}
 				color: control.Kirigami.Theme.textColor
-				source: "qrc://assets/arrow-down.svg"
+				source: control.direction === Qt.Vertical ? "qrc://assets/arrow-down.svg" : (control.expanded ? "qrc://assets/arrow-left.svg" : "qrc://assets/arrow-right.svg")
 				width: Maui.Style.iconSizes.small
 				height: width
 				isMask: true
