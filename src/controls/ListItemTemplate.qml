@@ -106,7 +106,6 @@ Item
         }
     }
 
-
     RowLayout
     {
         id: _layout
