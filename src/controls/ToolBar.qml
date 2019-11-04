@@ -144,6 +144,7 @@ ToolBar
         
         Kirigami.Icon
         {
+            visible: !Kirigami.Settings.isMobile
             anchors.centerIn: parent
             source: "qrc://assets/arrow-right.svg"
             isMask: true
@@ -206,6 +207,7 @@ ToolBar
         Kirigami.Icon
         {
             anchors.centerIn: parent
+            visible: !Kirigami.Settings.isMobile
             source: "qrc://assets/arrow-left.svg"
             isMask: true
             width: Maui.Style.iconSizes.small
