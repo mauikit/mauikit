@@ -94,6 +94,10 @@ Maui.ListBrowser
 		iconSize: control.iconSize
 		labelVisible: true
 		
+		label: model.label
+		iconName: model.icon
+		count: model.count
+		
 		leftPadding:  Maui.Style.space.tiny
 		rightPadding: Maui.Style.space.tiny
 		radius : Maui.Style.radiusV

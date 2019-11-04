@@ -566,6 +566,15 @@ namespace FMH
 		return res;
 	}
 	
+	static const inline QVariantList toMapList(const FMH::MODEL_LIST& list)
+	{
+		QVariantList res;
+		
+		for(const auto &data : list)	
+			res << FMH::toMap(data);
+		
+		return res;
+	}
 	
 	static const inline FMH::MODEL filterModel(const FMH::MODEL &model, const QVector<FMH::MODEL_KEY> &keys)
 	{

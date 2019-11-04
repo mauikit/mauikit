@@ -56,6 +56,40 @@ Maui.AbstractSideBar
 //        target: control.Overlay.overlay
 //        onPressed: control.collapse()
 //    }
+	
+	property Component delegate : Maui.ListDelegate
+	{
+		id: itemDelegate
+		iconSize: control.iconSize
+		labelVisible: control.showLabels
+		label: model.label
+		count: model.count > 0 ? model.count : ""
+		iconName: model.icon +  (Qt.platform.os == "android" ? ("-sidebar") : "")
+		leftPadding:  Maui.Style.space.tiny
+		rightPadding:  Maui.Style.space.tiny
+		
+		Connections
+		{
+			target: itemDelegate
+			onClicked:
+			{
+				control.currentIndex = index
+				control.itemClicked(index)
+			}
+			
+			onRightClicked:
+			{
+				control.currentIndex = index
+				control.itemRightClicked(index)
+			}
+			
+			onPressAndHold:
+			{
+				control.currentIndex = index
+				control.itemRightClicked(index)
+			}
+		}
+	}
 
     onModalChanged: visible = true
     visible: true
@@ -100,37 +134,7 @@ Maui.AbstractSideBar
             
             verticalScrollBarPolicy:  Qt.ScrollBarAlwaysOff  //this make sthe app crash
 
-            delegate: Maui.ListDelegate
-            {
-                id: itemDelegate
-                iconSize: control.iconSize
-                labelVisible: control.showLabels
-                iconName: model.icon +  (Qt.platform.os == "android" ? ("-sidebar") : "")
-                leftPadding:  Maui.Style.space.tiny
-                rightPadding:  Maui.Style.space.tiny
-
-                Connections
-                {
-                    target: itemDelegate
-                    onClicked:
-                    {
-                        control.currentIndex = index
-                        control.itemClicked(index)
-                    }
-
-                    onRightClicked:
-                    {
-                        control.currentIndex = index
-                        control.itemRightClicked(index)
-                    }
-
-                    onPressAndHold:
-                    {
-                        control.currentIndex = index
-                        control.itemRightClicked(index)
-                    }
-                }
-            }
+            delegate: control.delegate
         }
 
         MouseArea

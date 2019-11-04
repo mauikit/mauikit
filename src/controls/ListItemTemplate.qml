@@ -28,7 +28,14 @@ import org.kde.mauikit 1.0 as Maui
 Item
 {
     id: control
+    
+    default property alias content: _layout.data
 
+    property alias text1 : _label1.text
+    property alias text2 : _label2.text
+    property alias text3 : _label3.text
+    property alias text4 : _label4.text
+    
     property alias label1 : _label1
     property alias label2 : _label2
     property alias label3 : _label3
@@ -40,6 +47,7 @@ Item
     property string iconSource
     
     property bool isCurrentItem: false
+    property bool labelsVisible: true
 
     Component
     {
@@ -117,8 +125,9 @@ Item
         {
             id: _iconContainer
             visible: (control.width > Kirigami.Units.gridUnit * 10)
-            Layout.preferredWidth: Math.max(control.height, control.iconSizeHint)
+            Layout.preferredWidth: control.labelsVisible && control.iconVisible && (iconSource.length > 0 || imageSource.length > 0) ? Math.max(control.height, control.iconSizeHint) : undefined
             Layout.fillHeight: true
+            Layout.fillWidth: !control.labelsVisible
 
             Loader
             {
@@ -130,13 +139,13 @@ Item
             }
         }
 
-
         ColumnLayout
         {
+			visible: control.labelsVisible
             Layout.fillHeight: visible
             Layout.fillWidth: visible
-            Layout.margins: Maui.Style.space.small
-            Layout.leftMargin: _iconLoader.visible ? 0 :  Maui.Style.space.small
+            Layout.margins: visible ? Maui.Style.space.small : 0
+            Layout.leftMargin: _iconLoader.visible ? 0 : Maui.Style.space.small 
             spacing: 0
 
             Label
@@ -172,10 +181,10 @@ Item
 
         ColumnLayout
         {
-            visible: control.width >  Kirigami.Units.gridUnit * 15
+			visible: control.width >  Kirigami.Units.gridUnit * 15 && control.labelsVisible
             Layout.fillHeight: visible
             Layout.fillWidth: visible
-            Layout.margins: Maui.Style.space.small
+            Layout.margins: visible ? Maui.Style.space.small : 0
             spacing: 0
 
             Label
