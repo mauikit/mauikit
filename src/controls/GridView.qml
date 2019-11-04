@@ -30,7 +30,9 @@ Kirigami.ScrollablePage
 	id: control
 	
 	property int itemSize: 0
-	onItemSizeChanged :  gridView.size_ = itemSize    
+	property int itemWidth : itemSize
+	property int itemHeight : itemSize
+	onItemWidthChanged :  gridView.size_ = itemWidth   
 	
 	property alias cellWidth: gridView.cellWidth
 	property alias cellHeight: gridView.cellHeight
@@ -82,15 +84,15 @@ Kirigami.ScrollablePage
 		property int size_    
 		Component.onCompleted:
 		{
-			gridView.size_ = control.itemSize
+			gridView.size_ = control.itemWidth
 		}
 		
 		flow: GridView.FlowLeftToRight
 		clip: true
 		focus: true
 		
-		cellWidth: control.itemSize
-		cellHeight: control.itemSize
+		cellWidth: control.itemWidth
+		cellHeight: control.itemHeight
 		
 		boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
 		flickableDirection: Flickable.AutoFlickDirection
