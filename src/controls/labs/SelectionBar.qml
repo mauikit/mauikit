@@ -178,6 +178,7 @@ Item
             id: selectionList
             anchors.fill: parent
             anchors.margins: Maui.Style.space.medium
+            anchors.bottomMargin: control.height
             visible: _listContainer.height > 10
             highlightFollowsCurrentItem: true
             highlightMoveDuration: 0
