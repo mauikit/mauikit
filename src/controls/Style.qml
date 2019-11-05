@@ -89,5 +89,5 @@ QtObject
         huge: Kirigami.Units.iconSizes.huge / (isMobile ? 1.5 : 1),
         enormous: Kirigami.Units.iconSizes.enormous / (isMobile ? 1.5 : 1)
 		
-	})
+	})	
 }

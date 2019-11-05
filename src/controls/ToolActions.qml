@@ -14,6 +14,7 @@ Item
 	implicitHeight: parent.height
 	
 	default property list<Action> actions
+	
 	property bool autoExclusive: true
 	
 	property int direction : Qt.Vertical
