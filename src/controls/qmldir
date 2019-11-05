@@ -1,9 +1,9 @@
 module org.kde.mauikit
 plugin MauiKit
 classname MauiKit
-depends QtQuick.Controls 1.4
-depends QtQuick.Controls.Private 1.0
-depends QtQuick.Controls 2.0
+depends QtQuick.Controls 2.10
+depends QtQuick.Controls.Private 2.10
+depends QtQuick.Controls 2.10
 depends QtGraphicalEffects 1.0
 designersupported
 
@@ -60,3 +60,4 @@ ToolActions 1.0 ToolActions.qml
 DocumentPreview 1.0 DocumentPreview.qml
 ToolButtonMenu 1.0 ToolButtonMenu.qml
 ListItemTemplate 1.0 ListItemTemplate.qml
+SelectionBar 1.1 labs/SelectionBar.qml

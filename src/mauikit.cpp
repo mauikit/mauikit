@@ -80,7 +80,6 @@ QUrl MauiKit::componentUrl(const QString &fileName) const
 
 void MauiKit::registerTypes(const char *uri)
 {
-
     Q_ASSERT(uri == QLatin1String("org.kde.mauikit"));
 
     qmlRegisterSingletonType(componentUrl(QStringLiteral("Style.qml")), uri, 1, 0, "Style");
@@ -120,6 +119,11 @@ void MauiKit::registerTypes(const char *uri)
 
     qmlRegisterType(componentUrl(QStringLiteral("PathBar.qml")), uri, 1, 0, "PathBar");
     qmlRegisterType<PathList>(uri, 1, 0, "PathList");
+    
+    
+    /** 1.1 **/        
+    qmlRegisterType(componentUrl(QStringLiteral("labs/SelectionBar.qml")), uri, 1, 1, "SelectionBar");
+
 
     /** STORE CONTROLS, MODELS AND INTERFACES **/
 #ifdef COMPONENT_STORE

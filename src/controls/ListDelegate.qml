@@ -58,7 +58,6 @@ Maui.ItemDelegate
 		Maui.Badge
 		{
 			id: _badge
-			anchors.centerIn: parent
 			text: control.count     
 			
 			visible: control.count.length > 0 && control.labelVisible

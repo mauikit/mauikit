@@ -6,6 +6,7 @@ import QtQml 2.1
 
 import org.kde.kirigami 2.8 as Kirigami
 import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.1 as MauiLab
 
 import "private"
 
@@ -69,6 +70,11 @@ Maui.Page
 	}
 	
 	footBar.rightContent: [
+	
+	MauiLab.SelectionBar
+	{
+        
+    },
 	
 	ToolButton
 	{
