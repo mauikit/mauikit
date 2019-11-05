@@ -45,9 +45,10 @@ Rectangle
     signal released()
 
     z: parent.z+1
-    height: size + Maui.Style.space.small
-    width: Math.max(implicitWidth, height)
-    implicitWidth: (loader.sourceComponent == labelComponent ? Math.max(loader.item.implicitWidth + Maui.Style.space.small, control.height) : control.height)
+    
+    implicitHeight:  size + Maui.Style.space.small
+    implicitWidth: Math.max((loader.sourceComponent == labelComponent ? Math.max(loader.item.implicitWidth + Maui.Style.space.small, control.height) : control.height), implicitHeight)
+    
     radius: Math.min(width, height)
     color: control.Kirigami.Theme.backgroundColor
     border.color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.7))

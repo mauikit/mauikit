@@ -30,6 +30,7 @@ ToolBar
     id: control    
     
     implicitHeight: visible ? Maui.Style.toolBarHeight : 0
+    implicitWidth: mainFlickable.contentWidth
     spacing: Maui.Style.space.small
     padding: 0
     
