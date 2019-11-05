@@ -237,53 +237,63 @@ Item
         anchors.fill: parent
         background: null
 
-        leftContent: Maui.Badge
-        {
-            id: _counter
-            Layout.fillHeight: true
-            Layout.preferredWidth: height
-            Layout.margins: Maui.Style.space.medium
-            text: selectionList.count
-            radius: Maui.Style.radiusV
+        leftContent: [
 
-            Kirigami.Theme.backgroundColor: _listContainer.showList ? Kirigami.Theme.highlightColor : Qt.darker(bg.color)
-            border.color: "transparent"
-
-            onClicked:
+            ToolButton
             {
-                _listContainer.showList = !_listContainer.showList
-            }
+                icon.name: "dialog-close"
+                onClicked: control.exitClicked()
+                Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
+            },
 
-            Component.onCompleted:
+            Maui.Badge
             {
-                _counter.item.font.pointSize= Maui.Style.fontSizes.big
+                id: _counter
+                Layout.fillHeight: true
+                Layout.preferredWidth: height
+                Layout.margins: Maui.Style.space.medium
+                text: selectionList.count
+                radius: Maui.Style.radiusV
 
-            }
+                Kirigami.Theme.backgroundColor: _listContainer.showList ? Kirigami.Theme.highlightColor : Qt.darker(bg.color)
+                border.color: "transparent"
 
-            SequentialAnimation
-            {
-                id: anim
-                //             PropertyAnimation
-                //             {
-                //                 target: _counter
-                //                 property: "opacity"
-                //                 easing.type: Easing.InOutQuad
-                //                 from: 0.5
-                //                 to: 1
-                //                 duration: 600
-                //             }
-                //
-                PropertyAnimation
+                onClicked:
                 {
-                    target: _counter
-                    property: "radius"
-                    easing.type: Easing.InOutQuad
-                    from: target.height
-                    to: Maui.Style.radiusV
-                    duration: 200
+                    _listContainer.showList = !_listContainer.showList
+                }
+
+                Component.onCompleted:
+                {
+                    _counter.item.font.pointSize= Maui.Style.fontSizes.big
+
+                }
+
+                SequentialAnimation
+                {
+                    id: anim
+                    //             PropertyAnimation
+                    //             {
+                    //                 target: _counter
+                    //                 property: "opacity"
+                    //                 easing.type: Easing.InOutQuad
+                    //                 from: 0.5
+                    //                 to: 1
+                    //                 duration: 600
+                    //             }
+                    //
+                    PropertyAnimation
+                    {
+                        target: _counter
+                        property: "radius"
+                        easing.type: Easing.InOutQuad
+                        from: target.height
+                        to: Maui.Style.radiusV
+                        duration: 200
+                    }
                 }
             }
-        }
+        ]
 
         rightContent: [
 
@@ -302,26 +312,13 @@ Item
                 ToolButton
                 {
                     action: modelData
-                    display: control.width > Kirigami.Units.gridUnit * 25 ? ToolButton.TextUnderIcon : ToolButton.IconOnly
+//                    display: control.width > Kirigami.Units.gridUnit * 25 ? ToolButton.TextUnderIcon : ToolButton.IconOnly
+
+                    display: ToolButton.TextUnderIcon
                     onClicked : _listContainer.showList = false
 
                 }
-            },
-
-            ToolButton
-            {
-                icon.name: "edit-clear"
-                onClicked: clear()
-                Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
-            },
-
-            ToolButton
-            {
-                icon.name: "dialog-close"
-                onClicked: control.exitClicked()
-                Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
             }
-
         ]
     }
 

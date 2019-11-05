@@ -705,6 +705,8 @@ Maui.Page
 				if(_selectionBar.count < 1)
 					control.clearSelection()
 			}
+
+            onExitClicked: control.clearSelection()
 			
 			listDelegate: ListBrowserDelegate
 			{
@@ -718,7 +720,7 @@ Maui.Page
 				leftEmblem: "list-remove"
 				folderSize: Maui.Style.iconSizes.big
 				onLeftEmblemClicked: _selectionBar.removeAtIndex(index)
-				
+                keepEmblemOverlay: Kirigami.Settings.isMobile
 				background: null
 				
 				onClicked: control.previewer.show(model.path)
@@ -894,6 +896,7 @@ Maui.Page
 		{
 			id: selectionBarLoader
 			Layout.alignment: Qt.AlignCenter
+            Layout.margins: Maui.Style.space.medium
 			Layout.preferredHeight: control.selectionBar && control.selectionBar.visible ? control.selectionBar.barHeight: 0
 			Layout.maximumWidth: 500
 			Layout.minimumWidth: 100

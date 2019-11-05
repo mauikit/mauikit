@@ -63,6 +63,7 @@ T.ToolButton
     
     flat: control.parent === T.ToolBar
 
+    font.pointSize: control.display === ToolButton.TextUnderIcon ? Maui.Style.fontSizes.small : undefined
     contentItem: IconLabel
     {
         spacing: control.spacing
