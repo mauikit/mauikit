@@ -257,7 +257,7 @@ Maui.Dialog
     
     function done()
     {
-        var paths = browser.selectionBar && browser.selectionBar.visible ? browser.selectionBar.selectedPaths : browser.currentPath
+        var paths = browser.selectionBar && browser.selectionBar.visible ? browser.selectionBar.uris : browser.currentPath
         
         if(control.mode === modes.SAVE)
         {
