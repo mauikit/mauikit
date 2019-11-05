@@ -32,7 +32,7 @@ Maui.ItemDelegate
 	property bool showDetailsInfo: false
 	property int folderSize : Maui.Style.iconSizes.medium
 	property int emblemSize: Maui.Style.iconSizes.medium
-	property bool showLabel : true
+	property alias showLabel : _template.labelsVisible
 	property bool showEmblem : false
 	property bool showTooltip : false
 	property bool showThumbnails : false

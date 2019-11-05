@@ -163,12 +163,12 @@ Maui.Page
 			activeFocusOnTab: true
 			persistentSelection: true
 			
-			background: Rectangle
-			{
-				color: Kirigami.Theme.backgroundColor
-				implicitWidth: 200
-				implicitHeight: 22
-			}
+// 			background: Rectangle
+// 			{
+// 				color: Kirigami.Theme.backgroundColor
+// 				implicitWidth: 200
+// 				implicitHeight: 22
+// 			}
 			
 			// 			onPressAndHold: isMobile ? documentMenu.popup() : undefined
 				Maui.ToolBar

@@ -166,15 +166,15 @@ Maui.Page
                 {
                     target: selectionBar
 
-                    onPathRemoved:
+                    onUriRemoved:
                     {
-                        if(path === model.path)
+                        if(uri === model.path)
                             delegate.isSelected = false
                     }
 
-                    onPathAdded:
+                    onUriAdded:
                     {
-                        if(path === model.path)
+                        if(uri === model.path)
                             delegate.isSelected = true
                     }
 
@@ -293,15 +293,15 @@ Maui.Page
                 {
                     target: selectionBar
 
-                    onPathRemoved:
+                    onUriRemoved:
                     {
-                        if(path === model.path)
+                        if(uri === model.path)
                             delegate.isSelected = false
                     }
 
-                    onPathAdded:
+                    onUriAdded:
                     {
-                        if(path === model.path)
+                        if(uri === model.path)
                             delegate.isSelected = true
                     }
 
@@ -568,15 +568,15 @@ Maui.Page
                             {
                                 target: selectionBar
 
-                                onPathRemoved:
+                                onUriRemoved:
                                 {
-                                    if(path === model.path)
+                                    if(uri === model.path)
                                         delegate.isSelected = false
                                 }
 
-                                onPathAdded:
+                                onUriAdded:
                                 {
-                                    if(path === model.path)
+                                    if(uri === model.path)
                                         delegate.isSelected = true
                                 }
 

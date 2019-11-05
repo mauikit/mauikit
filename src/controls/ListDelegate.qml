@@ -63,10 +63,7 @@ Maui.ItemDelegate
 			visible: control.count.length > 0 && control.labelVisible
 			
 		}
-	}
-	
-	
-	
+	}	
 	
 	function clearCount()
 	{
