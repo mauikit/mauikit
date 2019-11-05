@@ -64,7 +64,8 @@
         <file alias="private/StoreDelegate.qml">controls/private/StoreDelegate.qml</file>
         <file alias="ToolActions.qml">controls/ToolActions.qml</file>
         <file alias="ToolButtonMenu.qml">controls/ToolButtonMenu.qml</file>
-        <file alias="ListItemTemplate.qml">controls/ListItemTemplate.qml</file>
-        <file alias="labs/SelectionBar.qml">controls/labs/SelectionBar.qml</file>
+		<file alias="ListItemTemplate.qml">controls/ListItemTemplate.qml</file>
+		<file alias="FloatingButton.qml">controls/FloatingButton.qml</file>
+		<file alias="labs/SelectionBar.qml">controls/labs/SelectionBar.qml</file>
     </qresource>
 </RCC>

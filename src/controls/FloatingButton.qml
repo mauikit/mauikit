@@ -17,16 +17,52 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQml 2.1
+import QtQuick 2.10
+import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.10
+import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
+import QtGraphicalEffects 1.0
 
-QtObject 
+MouseArea
 {
-    property var filters : []
-    property int filterType : Maui.FMList.NONE
-    property bool onlyDirs : false
-    property int sortBy : Maui.FM.loadSettings("SortBy", "SETTINGS", Maui.FMList.LABEL)
-    property bool trackChanges : false
-    property bool saveDirProps : false
+	id: control
+	z: 999
+	
+	height: Maui.Style.toolBarHeight
+	width: height
+	
+	property alias icon : _button.icon
+	property alias text: _button.text
+	property alias display: _button.display
+	
+	signal clicked()
+	
+	Rectangle
+	{
+		id: _rec
+		anchors.fill: parent
+		color: Kirigami.Theme.highlightColor
+		radius: Maui.Style.radiusV
+		ToolButton
+		{
+			id : _button
+			anchors.centerIn: parent
+			Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
+			onClicked: control.clicked()
+		}
+	}
+	
+	DropShadow
+	{
+		anchors.fill: parent
+		cached: true
+		horizontalOffset: 0
+		verticalOffset: 0
+		radius: 8.0
+		samples: 16
+		color: "#333"
+		smooth: true
+		source: _rec
+	}	
 }
-

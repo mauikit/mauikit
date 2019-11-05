@@ -22,12 +22,12 @@ import QtQuick.Controls 2.10
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
+import QtGraphicalEffects 1.0
 
 Item
 {
 	id: control
 	focus: true
-	
 	default property list<Action> actions
 	
 	Kirigami.Theme.inherit: false
@@ -117,18 +117,33 @@ Item
 	
 	visible: control.count > 0
 	
+	DropShadow
+	{
+		id: rectShadow
+		anchors.fill: _listContainer
+		cached: true
+		horizontalOffset: 0
+		verticalOffset: 0
+		radius: 8.0
+		samples: 16
+		color: "#333"
+		smooth: true
+		source: _listContainer
+	}	
+	
 	Rectangle
 	{
 		id: _listContainer
 		property bool showList : false
-		height: showList ?  Math.min(400, selectionList.contentHeight) + Maui.Style.space.big : 0
+		height: showList ?  Math.min(Math.min(400, ApplicationWindow.overlay.height), selectionList.contentHeight) + control.height + Maui.Style.space.medium : 0
 		width:  showList ? parent.width  : 0
 		color: Qt.lighter(Kirigami.Theme.backgroundColor)
 		radius: Maui.Style.radiusV 
-		
-		y:  ((height) * -1) + Maui.Style.space.small		
+		focus: true
+		y:  ((height) * -1) + control.height 	
 		
 		x: 0
+
 		opacity: showList ? 1 : .97
 		
 		Behavior on height
@@ -296,6 +311,7 @@ Item
 		
 		]
 	}
+	
 	
 	
 	Keys.onEscapePressed:
