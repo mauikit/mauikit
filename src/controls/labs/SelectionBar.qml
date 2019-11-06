@@ -313,7 +313,7 @@ Item
                 {
                     action: modelData
 //                    display: control.width > Kirigami.Units.gridUnit * 25 ? ToolButton.TextUnderIcon : ToolButton.IconOnly
-
+					Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
                     display: ToolButton.TextUnderIcon
                     onClicked : _listContainer.showList = false
 

@@ -11,7 +11,7 @@ Menu
     {
 		icon.name: "bookmark-new"
 		text: qsTr("Bookmark")
-		onTriggered: control.bookmarkFolder([currentPath])
+		onTriggered: bookmarkFolder([currentPath])
     }
     
     MenuItem
