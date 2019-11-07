@@ -35,8 +35,6 @@
 #include <QVariantMap>
 
 #include "tag.h"
-#include "utils.h"
-
 
 class TAGDB : public QObject
 {

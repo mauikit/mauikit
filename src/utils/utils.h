@@ -40,13 +40,6 @@
 namespace UTIL
 {
 	const auto app = QCoreApplication::instance();	
-	
-    inline bool fileExists(const QString &url)
-    {
-        QFileInfo path(url);
-        if (path.exists()) return true;
-        else return false;
-    }
 
     inline QString whoami()
     {

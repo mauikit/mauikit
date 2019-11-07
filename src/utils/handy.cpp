@@ -45,61 +45,61 @@ static struct
 
 QVariantMap Handy::appInfo()
 {
-	auto app =  UTIL::app;
-	
+    const auto app =  UTIL::app;
+
     auto res = QVariantMap({{FMH::MODEL_NAME[FMH::MODEL_KEY::NAME], app->applicationName()},
                            {FMH::MODEL_NAME[FMH::MODEL_KEY::VERSION], app->applicationVersion()},
                            {FMH::MODEL_NAME[FMH::MODEL_KEY::ORG], app->organizationName()},
-                           {FMH::MODEL_NAME[FMH::MODEL_KEY::DOMAIN], app->organizationDomain()},
+                           {FMH::MODEL_NAME[FMH::MODEL_KEY::DOMAIN_M], app->organizationDomain()},
                            {"mauikit_version", MAUIKIT_VERSION_STR},
                            {"qt_version", QT_VERSION_STR} });
-	
-	#ifdef Q_OS_ANDROID
+
+    #ifdef Q_OS_ANDROID
     res.insert(FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], QGuiApplication::windowIcon().name());
-	#else
+    #else
     res.insert(FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], QApplication::windowIcon().name());
-	#endif	
-	
+    #endif
+
     return res;
 }
 
 QVariantMap Handy::userInfo()
 {
-	QString name = qgetenv("USER");
-	if (name.isEmpty())
-		name = qgetenv("USERNAME");
-	
+    QString name = qgetenv("USER");
+    if (name.isEmpty())
+        name = qgetenv("USERNAME");
+
     auto res = QVariantMap({{FMH::MODEL_NAME[FMH::MODEL_KEY::NAME], name}});
-	
-	return res;	
+
+    return res;
 }
 
 QString Handy::getClipboardText()
 {
-	#ifdef Q_OS_ANDROID
-	auto clipbopard = QGuiApplication::clipboard();
-	#else
-	auto clipbopard = QApplication::clipboard();
-	#endif
+    #ifdef Q_OS_ANDROID
+    auto clipbopard = QGuiApplication::clipboard();
+    #else
+    auto clipbopard = QApplication::clipboard();
+    #endif
 
-	auto mime = clipbopard->mimeData();
-	if(mime->hasText())
-		return clipbopard->text();
-	
-	return QString();
+    auto mime = clipbopard->mimeData();
+    if(mime->hasText())
+        return clipbopard->text();
+
+    return QString();
 }
 
 QVariantMap Handy::getClipboard()
 {
-	QVariantMap res;
-	#ifdef Q_OS_ANDROID    
+    QVariantMap res;
+    #ifdef Q_OS_ANDROID
     if(_clipboard.hasUrls())
         res.insert("urls", QUrl::toStringList(_clipboard.urls));
 
     if(_clipboard.hasText())
         res.insert("text", _clipboard.text);
-	#else
-	auto clipboard = QApplication::clipboard();
+    #else
+    auto clipboard = QApplication::clipboard();
 
     auto mime = clipboard->mimeData();
     if(mime->hasUrls())
@@ -108,12 +108,12 @@ QVariantMap Handy::getClipboard()
     if(mime->hasText())
         res.insert("text", mime->text());
     #endif
-	return res;
+    return res;
 }
 
 bool Handy::copyToClipboard(const QVariantMap &value)
 {
-	#ifdef Q_OS_ANDROID
+    #ifdef Q_OS_ANDROID
     if(value.contains("urls"))
         _clipboard.urls = QUrl::fromStringList(value["urls"].toStringList());
 
@@ -121,8 +121,8 @@ bool Handy::copyToClipboard(const QVariantMap &value)
         _clipboard.text = value["text"].toString();
 
     return true;
-	#else
-	auto clipboard = QApplication::clipboard();
+    #else
+    auto clipboard = QApplication::clipboard();
     QMimeData* mimeData = new QMimeData();
 
     if(value.contains("urls"))
@@ -133,21 +133,21 @@ bool Handy::copyToClipboard(const QVariantMap &value)
 
     clipboard->setMimeData(mimeData);
     return true;
-	#endif	
+    #endif
 
     return false;
 }
 
 bool Handy::copyTextToClipboard(const QString &text)
 {
-	#ifdef Q_OS_ANDROID
-	auto clipbopard = QGuiApplication::clipboard();
-	#else
-	auto clipbopard = QApplication::clipboard();
-	#endif
-	
-	clipbopard->setText(text);
-	
+    #ifdef Q_OS_ANDROID
+    auto clipbopard = QGuiApplication::clipboard();
+    #else
+    auto clipbopard = QApplication::clipboard();
+    #endif
+
+    clipbopard->setText(text);
+
     return true;
 }
 

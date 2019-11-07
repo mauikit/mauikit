@@ -11,9 +11,6 @@ CONFIG *= c++17
 DEFINES *= \
     MAUI_APP \
     STATIC_MAUIKIT \
-    ANDROID_OPENSSL \
-    MAUIKIT_STYLE
-
 
 #REPO VARIABLES
 LUV_REPO = https://github.com/milohr/luv-icon-theme
@@ -33,21 +30,26 @@ linux:unix:!android {
     message(Building Maui helpers for Linux KDE)
     include($$PWD/src/kde/kde.pri)
 
-} else:android {
+} else:android|win32 {
 
-    message(Building Maui helpers for Android)
+    message(Building Maui helpers for Android or Windows)
 
-    include($$PWD/src/android/android.pri)
+    android {
+        include($$PWD/src/android/android.pri)
 
-    contains(DEFINES, ANDROID_OPENSSL):{
-        exists($$PWD/src/utils/syncing/openssl/openssl.pri) {
-            message("Using OpenSSL for Android")
-            include($$PWD/src/utils/syncing/openssl/openssl.pri)
-        }else {
-             message("Getting OpenSSL for Android")
-             system(git clone $$OPENSSL_REPO $$PWD/src/utils/syncing/openssl)
-            include($$PWD/src/utils/syncing/openssl/openssl.pri)
+        contains(DEFINES, ANDROID_OPENSSL):{
+            exists($$PWD/src/utils/syncing/openssl/openssl.pri) {
+                message("Using OpenSSL for Android")
+                include($$PWD/src/utils/syncing/openssl/openssl.pri)
+            }else {
+                 message("Getting OpenSSL for Android")
+                 system(git clone $$OPENSSL_REPO $$PWD/src/utils/syncing/openssl)
+                include($$PWD/src/utils/syncing/openssl/openssl.pri)
+            }
         }
+    }else:win32 {
+
+
     }
 
     contains(DEFINES, COMPONENT_EDITOR):{
@@ -56,7 +58,7 @@ linux:unix:!android {
 
     contains(DEFINES, COMPONENT_STORE):{
         exists($$PWD/src/utils/store/attica/attica.pri):{
-            message("Using Attica for Android")
+            message("Using Attica for Android or Windows")
             include($$PWD/src/utils/store/attica/attica.pri)
         }else {
              message("Getting Attica for Android")
@@ -65,13 +67,21 @@ linux:unix:!android {
         }
     }
 
-    contains(DEFINES, COMPONENT_SYNCING):{
-        include($$PWD/src/utils/syncing/libwebdavclient/webdavclient.pri)
-    }
-
 } else {
     message("Unknown configuration")
 }
+
+    contains(DEFINES, MAUIKIT_STYLE):{
+        exists($$PWD/src/maui-style/icons/luv-icon-theme) {
+            message("Using Luv icon theme")
+        }else {
+            message("Getting Luv icon theme")
+            system(git clone $$LUV_REPO $$PWD/src/maui-style/icons/luv-icon-theme)
+        }
+
+        RESOURCES += $$PWD/src/maui-style/icons.qrc \
+                     $$PWD/src/maui-style/style.qrc
+    }
 
 contains(DEFINES, COMPONENT_TAGGING):{
     message("INCLUDING TAGGING COMPONENT")
@@ -119,6 +129,8 @@ contains(DEFINES, COMPONENT_STORE):{
 contains(DEFINES, COMPONENT_SYNCING):{
     message("INCLUDING SYNCING COMPONENT")
 
+    include($$PWD/src/utils/syncing/libwebdavclient/webdavclient.pri)
+
     HEADERS += $$PWD/src/utils/syncing/syncing.h
     SOURCES += $$PWD/src/utils/syncing/syncing.cpp
     INCLUDEPATH += $$PWD/src/utils/syncing
@@ -128,7 +140,7 @@ contains(DEFINES, COMPONENT_SYNCING):{
 
 contains(DEFINES, COMPONENT_ACCOUNTS):{
     message("INCLUDING ACCOUNTS COMPONENT")
-    QT += sql
+    QT *= sql
     HEADERS +=  \
         $$PWD/src/utils/accounts/mauiaccounts.h \
         $$PWD/src/utils/accounts/accountsdb.h \
@@ -152,12 +164,15 @@ contains(DEFINES, COMPONENT_FM):{
     HEADERS += \
         $$PWD/src/fm/fm.h \
         $$PWD/src/fm/fmlist.h \
-        $$PWD/src/fm/placeslist.h
+        $$PWD/src/fm/placeslist.h \
+        $$PWD/src/fm/downloader.h
+
 
     SOURCES += \
         $$PWD/src/fm/fm.cpp \
         $$PWD/src/fm/fmlist.cpp \
-        $$PWD/src/fm/placeslist.cpp
+        $$PWD/src/fm/placeslist.cpp \
+        $$PWD/src/fm/downloader.cpp
 
     INCLUDEPATH += $$PWD/src/fm
     DEPENDPATH += $$PWD/src/fm
@@ -167,8 +182,7 @@ contains(DEFINES, COMPONENT_FM):{
 
 RESOURCES += \
     $$PWD/src/mauikit.qrc \
-    $$PWD/src/assets.qrc \
-    $$PWD/src/maui-style/style.qrc
+    $$PWD/src/assets.qrc
 
 HEADERS += \
     $$PWD/src/utils/fmstatic.h \

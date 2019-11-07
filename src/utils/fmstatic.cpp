@@ -4,7 +4,7 @@
 
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
-#else
+#elif defined Q_OS_LINUX
 #include "mauikde.h"
 #include <KFilePlacesModel>
 #include <KIO/CopyJob>
@@ -115,7 +115,7 @@ bool FMStatic::isDefaultPath(const QString &path)
 
 QUrl FMStatic::parentDir(const QUrl &path)
 {
-   return FMH::parentDir(path);
+    return FMH::parentDir(path);
 }
 
 bool FMStatic::isDir(const QUrl &path)
@@ -178,17 +178,17 @@ QString FMStatic::formatDate(const QString &dateStr, const QString &format, cons
 
 QString FMStatic::formatTime(const qint64 &value)
 {
-	QString tStr;
-	if (value)
-	{
-		QTime time((value/3600)%60, (value/60)%60, value%60, (value*1000)%1000);
-		QString format = "mm:ss";
-		if (value > 3600)
-			format = "hh:mm:ss";
-			tStr = time.toString(format);
-	}
-	
-	return tStr.isEmpty() ? "00:00" : tStr;
+    QString tStr;
+    if (value)
+    {
+        QTime time((value/3600)%60, (value/60)%60, value%60, (value*1000)%1000);
+        QString format = "mm:ss";
+        if (value > 3600)
+            format = "hh:mm:ss";
+        tStr = time.toString(format);
+    }
+
+    return tStr.isEmpty() ? "00:00" : tStr;
 }
 
 QString FMStatic::homePath()
@@ -198,7 +198,7 @@ QString FMStatic::homePath()
 
 bool FMStatic::copy(const QUrl &url, const QUrl &destinationDir, const bool &overWriteDirectory)
 {
-#ifdef Q_OS_ANDROID
+#if defined Q_OS_ANDROID || defined Q_OS_WIN32
     QFileInfo fileInfo(url.toLocalFile());
     if(fileInfo.isFile())
         QFile::copy(url.toLocalFile(), destinationDir.toLocalFile());
@@ -246,30 +246,30 @@ bool FMStatic::copy(const QUrl &url, const QUrl &destinationDir, const bool &ove
 
 bool FMStatic::cut(const QUrl &url, const QUrl &where)
 {
-	return FMStatic::cut(url, where, QString());
+    return FMStatic::cut(url, where, QString());
 }
 
 bool FMStatic::cut(const QUrl &url, const QUrl &where, const QString &name)
 {
-	QUrl _where;
-	if(name.isEmpty())
-		 _where =  QUrl(where.toString()+"/"+FMH::getFileInfoModel(url)[FMH::MODEL_KEY::LABEL]);
-	else
-		_where =  QUrl(where.toString()+"/"+name);	
-	
-	#ifdef Q_OS_ANDROID
-	QFile file(url.toLocalFile());
-	file.rename(_where.toLocalFile());
-	#else
-	auto job = KIO::move(url, _where);
-	job->start();
-	#endif
-	
-	#ifdef COMPONENT_TAGGING
-	Tagging::getInstance()->updateUrl(url.toString(), _where.toString());	
-	#endif
-	
-	return true;
+    QUrl _where;
+    if(name.isEmpty())
+        _where =  QUrl(where.toString()+"/"+FMH::getFileInfoModel(url)[FMH::MODEL_KEY::LABEL]);
+    else
+        _where =  QUrl(where.toString()+"/"+name);
+
+#if defined Q_OS_ANDROID || defined Q_OS_WIN32
+    QFile file(url.toLocalFile());
+    file.rename(_where.toLocalFile());
+#else
+    auto job = KIO::move(url, _where);
+    job->start();
+#endif
+
+#ifdef COMPONENT_TAGGING
+    Tagging::getInstance()->updateUrl(url.toString(), _where.toString());
+#endif
+
+    return true;
 }
 
 bool FMStatic::removeFile(const QUrl &path)
@@ -279,7 +279,7 @@ bool FMStatic::removeFile(const QUrl &path)
 
     qDebug()<< "TRYING TO REMOVE FILE: " << path;
 
-#ifdef Q_OS_ANDROID
+#if defined Q_OS_ANDROID || defined Q_OS_WIN32
     if(QFileInfo(path.toLocalFile()).isDir())
         return FMStatic::removeDir(path);
     else return QFile(path.toLocalFile()).remove();
@@ -295,8 +295,7 @@ void FMStatic::moveToTrash(const QUrl &path)
     if(!path.isLocalFile())
         qWarning() << "URL recived is not a local file, FM::moveToTrash" << path;
 
-#ifdef Q_OS_ANDROID
-#else
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
     auto job = KIO::trash(path);
     job->start();
 #endif
@@ -304,8 +303,7 @@ void FMStatic::moveToTrash(const QUrl &path)
 
 void FMStatic::emptyTrash()
 {
-#ifdef Q_OS_ANDROID
-#else
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
     auto job = KIO::emptyTrash();
     job->start();
 #endif
@@ -342,12 +340,12 @@ bool FMStatic::removeDir(const QUrl &path)
 
 bool FMStatic::rename(const QUrl &url, const QString &name)
 {	
-	return FMStatic::cut(url, QUrl(url.toString().left(url.toString().lastIndexOf("/"))), name);
+    return FMStatic::cut(url, QUrl(url.toString().left(url.toString().lastIndexOf("/"))), name);
 }
 
 bool FMStatic::createDir(const QUrl &path, const QString &name)
 {
-#ifdef Q_OS_ANDROID
+#if defined Q_OS_ANDROID || defined Q_OS_WIN32
     QFileInfo dd(path.toLocalFile());
     return QDir(path.toLocalFile()).mkdir(name);
 #else
@@ -373,7 +371,7 @@ bool FMStatic::createFile(const QUrl &path, const QString &name)
 
 bool FMStatic::createSymlink(const QUrl &path, const QUrl &where)
 {
-#ifdef Q_OS_ANDROID
+#if defined Q_OS_ANDROID || defined Q_OS_WIN32
     return QFile::link(path.toLocalFile(), where.toLocalFile() + "/" + QFileInfo(path.toLocalFile()).fileName());
 #else
     const auto job = KIO::link({path}, where);
@@ -387,9 +385,11 @@ bool FMStatic::openUrl(const QUrl &url)
 #ifdef Q_OS_ANDROID
     MAUIAndroid::openUrl(url.toString());
     return true;
-#else
+#elif defined Q_OS_LINUX
     //     return QDesktopServices::openUrl(QUrl::fromUserInput(url));
     return KRun::runUrl(url, FMH::getFileInfoModel(url)[FMH::MODEL_KEY::MIME], nullptr, false, KRun::RunFlag::DeleteTemporaryFiles);
+#elif defined Q_OS_WIN32
+    return QDesktopServices::openUrl(url);
 #endif
 }
 
@@ -411,6 +411,6 @@ void FMStatic::setDirConf(const QUrl &path, const QString &group, const QString 
 
 bool FMStatic::checkFileType(const int& type, const QString& mimeTypeName)
 {
-	return FMH::SUPPORTED_MIMETYPES[static_cast<FMH::FILTER_TYPE>(type)].contains(mimeTypeName);
+    return FMH::SUPPORTED_MIMETYPES[static_cast<FMH::FILTER_TYPE>(type)].contains(mimeTypeName);
 }
 

@@ -43,7 +43,7 @@
 
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
-#else
+#elif Q_OS_LINUX
 #include "mauikde.h"
 #include <KFilePlacesModel>
 #include <KIO/CopyJob>
@@ -202,7 +202,7 @@ FM::FM(QObject *parent) : QObject(parent)
         {
             qDebug()<< "Getting async path contents";
 
-#ifdef Q_OS_ANDROID
+#if defined Q_OS_ANDROID || defined Q_OS_WIN32
             QFutureWatcher<FMH::PATH_CONTENT> *watcher = new QFutureWatcher<FMH::PATH_CONTENT>;
             connect(watcher, &QFutureWatcher<FMH::PATH_CONTENT>::finished, [this, watcher = std::move(watcher)]()
             {
@@ -257,9 +257,9 @@ FM::FM(QObject *parent) : QObject(parent)
 
         FMH::MODEL_LIST FM::getAppsPath()
         {
-#ifdef Q_OS_ANDROID
+#if defined Q_OS_ANDROID || defined Q_OS_WIN32
             return FMH::MODEL_LIST();
-#endif
+#else
 
             return FMH::MODEL_LIST
             {
@@ -271,6 +271,7 @@ FM::FM(QObject *parent) : QObject(parent)
                     {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]}
                 }
             };
+#endif
         }
 
         FMH::MODEL_LIST FM::getTags(const int &limit)

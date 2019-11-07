@@ -27,7 +27,6 @@
         <file>ScrollView.qml</file>
         <file>Slider.qml</file>
         <file>SpinBox.qml</file>
-        <file>style.qrc</file>
         <file>SwipeView.qml</file>
         <file>Switch.qml</file>
         <file>SwitchDelegate.qml</file>

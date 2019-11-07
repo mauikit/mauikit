@@ -28,7 +28,6 @@
 
 #include <QVariantMap>
 
-#include "utils.h"
 
 /*!
  * \brief The Handy class contains useful static methods to be used as an attached property to the Maui application

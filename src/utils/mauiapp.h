@@ -21,8 +21,6 @@
 #include <QObject>
 #include <QQuickItem>
 
-#include "handy.h"
-#include "fmh.h"
 
 #ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
@@ -38,25 +36,25 @@ class MAUIKIT_EXPORT MauiApp : public QObject
     Q_OBJECT
     
     Q_PROPERTY(QString name READ getName CONSTANT)
-	Q_PROPERTY(QString version READ getVersion CONSTANT)
-	Q_PROPERTY(QString org READ getOrg CONSTANT)
-	Q_PROPERTY(QString domain READ getDomain CONSTANT)
-	Q_PROPERTY(QString iconName READ getIconName WRITE setIconName NOTIFY iconNameChanged)
-	Q_PROPERTY(QString description READ getDescription WRITE setDescription NOTIFY descriptionChanged)
-	Q_PROPERTY(QString webPage READ getWebPage WRITE setWebPage NOTIFY webPageChanged)
-	Q_PROPERTY(QString reportPage READ getReportPage WRITE setReportPage NOTIFY reportPageChanged)
-	Q_PROPERTY(QString donationPage READ getDonationPage WRITE setDonationPage NOTIFY donationPageChanged)
-	Q_PROPERTY(QString mauikitVersion READ getMauikitVersion CONSTANT)
-	Q_PROPERTY(QString qtVersion READ getQtVersion CONSTANT)
+    Q_PROPERTY(QString version READ getVersion CONSTANT)
+    Q_PROPERTY(QString org READ getOrg CONSTANT)
+    Q_PROPERTY(QString domain READ getDomain CONSTANT)
+    Q_PROPERTY(QString iconName READ getIconName WRITE setIconName NOTIFY iconNameChanged)
+    Q_PROPERTY(QString description READ getDescription WRITE setDescription NOTIFY descriptionChanged)
+    Q_PROPERTY(QString webPage READ getWebPage WRITE setWebPage NOTIFY webPageChanged)
+    Q_PROPERTY(QString reportPage READ getReportPage WRITE setReportPage NOTIFY reportPageChanged)
+    Q_PROPERTY(QString donationPage READ getDonationPage WRITE setDonationPage NOTIFY donationPageChanged)
+    Q_PROPERTY(QString mauikitVersion READ getMauikitVersion CONSTANT)
+    Q_PROPERTY(QString qtVersion READ getQtVersion CONSTANT)
     Q_PROPERTY(bool handleAccounts READ getHandleAccounts WRITE setHandleAccounts NOTIFY handleAccountsChanged)
 #ifdef COMPONENT_ACCOUNTS
-	Q_PROPERTY(MauiAccounts * accounts READ getAccounts CONSTANT FINAL)
+    Q_PROPERTY(MauiAccounts * accounts READ getAccounts CONSTANT FINAL)
 #endif
 
 public:  
     static MauiApp *qmlAttachedProperties(QObject *object);
     
-	static MauiApp *instance();
+    static MauiApp *instance();
     static QString getName();
 	
     static QString getVersion();
@@ -93,22 +91,22 @@ public:
     void setHandleAccounts(const bool &value);
 	
 #ifdef COMPONENT_ACCOUNTS
-	MauiAccounts *getAccounts() const;
+    MauiAccounts *getAccounts() const;
 #endif
 
 	~MauiApp();	
 	
 private:
-	static MauiApp *m_instance;
+    static MauiApp *m_instance;
 	MauiApp(QObject *parent = nullptr);
-	MauiApp(const MauiApp &other) = delete;
-	MauiAccounts *m_accounts;
+    MauiApp(const MauiApp &other) = delete;
+    MauiAccounts *m_accounts;
 	
-	QString description;
-	QString iconName;
+    QString description;
+    QString iconName;
 	
-	QString webPage;
-	QString donationPage;
+    QString webPage;
+    QString donationPage;
     QString reportPage;
 
 #ifdef COMPONENT_ACCOUNTS
@@ -118,11 +116,11 @@ private:
 #endif
 
 signals:
-	void iconNameChanged(QString iconName);
-	void descriptionChanged(QString description);
-	void webPageChanged(QString webPage);
-	void donationPageChanged(QString donationPage);
-	void reportPageChanged(QString reportPage);
+    void iconNameChanged(QString iconName);
+    void descriptionChanged(QString description);
+    void webPageChanged(QString webPage);
+    void donationPageChanged(QString donationPage);
+    void reportPageChanged(QString reportPage);
     void handleAccountsChanged();
 };
 
