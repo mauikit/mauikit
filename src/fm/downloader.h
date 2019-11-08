@@ -54,5 +54,7 @@ private slots:
     void onReplyFinished();
 };
 
-#endif // DOWNLOADER_H
 }
+
+#endif // DOWNLOADER_H
+
