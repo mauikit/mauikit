@@ -81,12 +81,14 @@ if(${COMPONENT_FM})
         fm/fm.cpp
         fm/fmlist.cpp
         fm/placeslist.cpp
+        fm/downloader.cpp
         )
 
     set(fm_HDRS
         fm/fm.h
         fm/fmlist.h
         fm/placeslist.h
+        fm/downloader.h
         )
     include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/fm
@@ -174,15 +176,15 @@ endif()
 #use dbus on linux, bsd etc, but not andoid and apple stuff
 
 #options - for the appimage
-option(IS_APPIMAGE_PACKAGE "If set to true then the icons and styled is packaged as well")
+option(IS_APPIMAGE_PACKAGE "If set to true then the icons and styled is packaged as well" OFF)
 
 if(ANDROID OR IS_APPIMAGE_PACKAGE OR MAUIKIT_STYLE)
-    if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/android/icons/luv-icon-theme/.git)
+    if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/maui-style/icons/luv-icon-theme/.git)
         find_package(Git REQUIRED)
-        execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/milohr/luv-icon-theme.git ${CMAKE_CURRENT_SOURCE_DIR}/android/icons/luv-icon-theme)
+        execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/milohr/luv-icon-theme.git ${CMAKE_CURRENT_SOURCE_DIR}/maui-style/icons/luv-icon-theme)
     endif()
 
-    list(APPEND mauikit_SRCS android/icons.qrc)
+    list(APPEND mauikit_SRCS maui-style/icons.qrc)
 endif()
 
 if (ANDROID)

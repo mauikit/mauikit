@@ -20,6 +20,7 @@
 #include "fmh.h"
 #include <QFile>
 #include <QEventLoop>
+#include "downloader.h"
 
 Store::Store(QObject *parent) : QObject(parent)
 {	

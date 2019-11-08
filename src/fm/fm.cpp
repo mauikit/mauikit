@@ -43,7 +43,7 @@
 
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
-#elif Q_OS_LINUX
+#elif defined Q_OS_LINUX
 #include "mauikde.h"
 #include <KFilePlacesModel>
 #include <KIO/CopyJob>
