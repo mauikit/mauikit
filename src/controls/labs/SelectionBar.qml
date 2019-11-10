@@ -135,7 +135,7 @@ Item
     {
         id: _listContainer
         property bool showList : false
-        height: showList ?  Math.min(Math.min(400, ApplicationWindow.overlay.height), selectionList.contentHeight) + control.height + Maui.Style.space.medium : 0
+        height: showList ?  Math.min(Math.min(400, control.parent.parent.height), selectionList.contentHeight) + control.height + Maui.Style.space.medium : 0
         width:  showList ? parent.width  : 0
         color: Qt.lighter(Kirigami.Theme.backgroundColor)
         radius: Maui.Style.radiusV
@@ -232,97 +232,105 @@ Item
 
     }
 
-    Maui.ToolBar
+    RowLayout
     {
-        id: _layout
-        anchors.fill: parent
-        background: null
-
-        leftContent: [
-
-            ToolButton
-            {
-                icon.name: "dialog-close"
-                onClicked: control.exitClicked()
-                Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
-            },
-
-            Maui.Badge
-            {
-                id: _counter
-                Layout.fillHeight: true
-                Layout.preferredWidth: height
-                Layout.margins: Maui.Style.space.medium
-                text: selectionList.count
-                radius: Maui.Style.radiusV
-
-                Kirigami.Theme.backgroundColor: _listContainer.showList ? Kirigami.Theme.highlightColor : Qt.darker(bg.color)
-                border.color: "transparent"
-
-                onClicked:
-                {
-                    _listContainer.showList = !_listContainer.showList
-                }
-
-                Component.onCompleted:
-                {
-                    _counter.item.font.pointSize= Maui.Style.fontSizes.big
-
-                }
-
-                SequentialAnimation
-                {
-                    id: anim
-                    //             PropertyAnimation
-                    //             {
-                    //                 target: _counter
-                    //                 property: "opacity"
-                    //                 easing.type: Easing.InOutQuad
-                    //                 from: 0.5
-                    //                 to: 1
-                    //                 duration: 600
-                    //             }
-                    //
-                    PropertyAnimation
-                    {
-                        target: _counter
-                        property: "radius"
-                        easing.type: Easing.InOutQuad
-                        from: target.height
-                        to: Maui.Style.radiusV
-                        duration: 200
-                    }
-                }
-            }
-        ]
-
-        rightContent: [
-
-            //		Kirigami.ActionToolBar
-            //		{
-            //			display: control.width > Kirigami.Units.gridUnit * 25 ? ToolButton.TextUnderIcon : ToolButton.IconOnly
-            //			actions: control.actions
-            //			Layout.fillWidth: true
-            //			Layout.fillHeight: true
-            //		},
-
-            Repeater
-            {
-                model: control.actions
-
-                ToolButton
-                {
-                    action: modelData
-//                    display: control.width > Kirigami.Units.gridUnit * 25 ? ToolButton.TextUnderIcon : ToolButton.IconOnly
+		anchors.fill: parent
+		
+		ToolButton
+		{
+			icon.name: "dialog-close"
+			Layout.fillHeight: true
+			Layout.preferredWidth: height
+			onClicked: control.exitClicked()
+			Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
+		}
+		
+		Maui.ToolBar
+		{
+			id: _layout
+			background: null
+			Layout.fillHeight: true
+			Layout.fillWidth: true
+			leftContent: [			
+			
+			Maui.Badge
+			{
+				id: _counter
+				Layout.fillHeight: true
+				Layout.preferredWidth: height
+				Layout.margins: Maui.Style.space.medium
+				text: selectionList.count
+				radius: Maui.Style.radiusV
+				
+				Kirigami.Theme.backgroundColor: _listContainer.showList ? Kirigami.Theme.highlightColor : Qt.darker(bg.color)
+				border.color: "transparent"
+				
+				onClicked:
+				{
+					_listContainer.showList = !_listContainer.showList
+				}
+				
+				Component.onCompleted:
+				{
+					_counter.item.font.pointSize= Maui.Style.fontSizes.big
+					
+				}
+				
+				SequentialAnimation
+				{
+					id: anim
+					//             PropertyAnimation
+					//             {
+					//                 target: _counter
+					//                 property: "opacity"
+					//                 easing.type: Easing.InOutQuad
+					//                 from: 0.5
+					//                 to: 1
+					//                 duration: 600
+					//             }
+					//
+					PropertyAnimation
+					{
+						target: _counter
+						property: "radius"
+						easing.type: Easing.InOutQuad
+						from: target.height
+						to: Maui.Style.radiusV
+						duration: 200
+					}
+				}
+			}
+			]
+			
+			rightContent: [
+			
+			//		Kirigami.ActionToolBar
+			//		{
+			//			display: control.width > Kirigami.Units.gridUnit * 25 ? ToolButton.TextUnderIcon : ToolButton.IconOnly
+			//			actions: control.actions
+			//			Layout.fillWidth: true
+			//			Layout.fillHeight: true
+			//		},
+			
+			Repeater
+			{
+				model: control.actions
+				
+				ToolButton
+				{
+					action: modelData
+					//                    display: control.width > Kirigami.Units.gridUnit * 25 ? ToolButton.TextUnderIcon : ToolButton.IconOnly
 					Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
-                    display: ToolButton.TextUnderIcon
-                    onClicked : _listContainer.showList = false
-
-                }
-            }
-        ]
-    }
-
+					display: ToolButton.TextUnderIcon
+					onClicked : _listContainer.showList = false
+					
+				}
+			}
+			]
+		}
+		
+		
+	}
 
 
     Keys.onEscapePressed:
