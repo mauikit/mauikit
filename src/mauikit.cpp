@@ -51,11 +51,7 @@
 #ifdef COMPONENT_EDITOR
 #include "documenthandler.h"
 #include "syntaxhighlighterutil.h"
-
-#ifdef STATIC_MAUIKIT
 #include "kquicksyntaxhighlighter/kquicksyntaxhighlighter.h"
-#endif
-
 #endif
 
 #ifdef Q_OS_ANDROID
@@ -162,11 +158,8 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType<SyntaxHighlighterUtil>();
     qmlRegisterType(componentUrl(QStringLiteral("Editor.qml")), uri, 1, 0, "Editor");
     qmlRegisterType(componentUrl(QStringLiteral("private/DocumentPreview.qml")), uri, 1, 0, "DocumentPreview");
-
-#ifdef STATIC_MAUIKIT
-    qmlRegisterType<KQuickSyntaxHighlighter>("org.kde.kquicksyntaxhighlighter", 0, 1, "KQuickSyntaxHighlighter");
-#endif
-
+    qmlRegisterType<KQuickSyntaxHighlighter>("org.kde.kquicksyntaxhighlighter", 
+0, 1, "KQuickSyntaxHighlighter");
 #endif
 
     /** PLATFORMS SPECIFIC CONTROLS **/
@@ -194,13 +187,11 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType<MauiModel>(uri, 1, 0, "BaseModel"); //BASE MODEL
 
     /** TAGGING INTERFACES AND MODELS **/
-#ifdef COMPONENT_TAGGING
     qmlRegisterType<TagsList>("TagsList", 1, 0, "TagsList");
     qmlRegisterType<TagsModel>("TagsModel", 1, 0, "TagsModel");
     qmlRegisterType(componentUrl(QStringLiteral("private/TagList.qml")), uri, 1, 0, "TagList");
     qmlRegisterType(componentUrl(QStringLiteral("TagsBar.qml")), uri, 1, 0, "TagsBar");
     qmlRegisterType(componentUrl(QStringLiteral("TagsDialog.qml")), uri, 1, 0, "TagsDialog");
-#endif
 
     /** MAUI APPLICATION SPECIFIC PROPS **/
 
