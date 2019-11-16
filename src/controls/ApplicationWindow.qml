@@ -143,6 +143,114 @@ Kirigami.AbstractApplicationWindow
      *        color: bgColor
 }
 */
+    
+    Component
+    {
+        id: _accountsComponent
+        
+        Column
+        {
+            width: parent.width
+//             height: Math.max( 300, implicitHeight + 
+// _accountsListing.contentHeight)
+            spacing: Maui.Style.space.medium
+            
+              Kirigami.Icon
+                {
+                     source: "user-identity"
+                     height:  Maui.Style.iconSizes.huge
+              width: height
+              anchors.horizontalCenter: parent.horizontalCenter
+                
+            }
+            
+             Label
+            {
+                text: currentAccount.user
+                width: parent.width
+                horizontalAlignment: Qt.AlignHCenter
+                elide: Text.ElideMiddle
+                wrapMode: Text.NoWrap
+                font.bold: true
+                font.weight: Font.Bold
+
+            }
+            
+            Kirigami.Separator
+            {
+                width: parent.width
+            }
+            
+            ListBrowser
+            {
+                id: _accountsListing
+                width: parent.width
+                height: Math.min(listView.contentHeight, 300)
+                Kirigami.Theme.backgroundColor: "transparent"
+                model:  Maui.BaseModel
+                {
+                    list: Maui.App.accounts
+                    
+                }
+                
+                delegate: Maui.ListBrowserDelegate
+                {
+                    iconSource: "amarok_artist"
+                    iconSizeHint: Maui.Style.iconSizes.medium
+                    label1.text: model.user
+                    label2.text: model.server                       
+                    width: _accountsListing.width
+                    height: Maui.Style.rowHeight * 1.2
+                    leftPadding: Maui.Style.space.tiny
+                    rightPadding: Maui.Style.space.tiny
+                    
+                    onClicked: 
+                    {
+                        _accountsListing.currentIndex = index
+                        Maui.App.accounts.currentAccountIndex = 
+                        index
+                    }
+                }
+                
+                Component.onCompleted:
+                {
+                    if(_accountsListing.count > 0)
+                    {
+                        _accountsListing.currentIndex = 0
+                        Maui.App.accounts.currentAccountIndex = 
+                        _accountsListing.currentIndex
+                    }
+                }
+            }
+            
+            Kirigami.Separator
+            {
+                width: parent.width
+            }
+            
+            Button
+            {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: qsTr("Manage accounts")
+                visible: Maui.App.handleAccounts
+                icon.name: "list-add-user"
+                onClicked:
+                {
+                    if(root.accounts)
+                        accounts.open()
+                        
+                        mainMenu.close()
+                }
+            }
+            
+            Kirigami.Separator
+            {
+                width: parent.width
+            }
+            
+            
+        }
+    }
 
     property Maui.ToolBar mheadBar : Maui.ToolBar
     {
@@ -165,7 +273,6 @@ Kirigami.AbstractApplicationWindow
                 checked: mainMenu.visible
                 onClicked:
                 {
-
                     menuButtonClicked()
                     mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x , parent.height+ Maui.Style.space.medium)
                 }
@@ -175,56 +282,17 @@ Kirigami.AbstractApplicationWindow
                     id: mainMenu
                     modal: true
                     z: 999
-                    width: Maui.Style.unit * 200
-
-                    MenuItem
+                    width: Maui.Style.unit * 250
+                    
+                    Loader
                     {
-                        visible: (_accountCombobox.count > 0) && Maui.App.handleAccounts
-                        height:  visible ? _accountCombobox.implicitHeight + Maui.Style.space.big : 0
-
-                        ComboBox
-                        {
-                            id: _accountCombobox
-                            anchors.fill: parent
-                            anchors.margins: Maui.Style.space.small
-                            popup.z: 999
-                            width: parent.width
-                            textRole: "user"
-                            flat: true
-                            model: Maui.BaseModel
-                            {
-                                list: Maui.App.accounts
-                            }
-                            onActivated: Maui.App.accounts.currentAccountIndex = index;
-
-                            Component.onCompleted:
-                            {
-                                if(_accountCombobox.count > 0)
-                                {
-                                    _accountCombobox.currentIndex = 0
-                                    Maui.App.accounts.currentAccountIndex = _accountCombobox.currentIndex
-                                }
-                            }
-                        }
+                        id: _accountsMenuLoader
+                        width: parent.width
+                        active: Maui.App.handleAccounts
+                        sourceComponent: Maui.App.handleAccounts ?
+_accountsComponent : null
                     }
-
-                    MenuItem
-                    {
-                        text: qsTr("Accounts")
-                        visible: Maui.App.handleAccounts
-                        icon.name: "list-add-user"
-                        onTriggered:
-                        {
-                            if(root.accounts)
-                                accounts.open()
-                        }
-                    }
-
-                    MenuSeparator
-                    {
-                        visible: _accountCombobox.visible
-                    }
-
+                   
                     MenuItem
                     {
                         text: qsTr("About")

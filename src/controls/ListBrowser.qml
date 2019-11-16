@@ -38,20 +38,20 @@ Kirigami.ScrollablePage
     property bool showPreviewThumbnails: true
     
     property alias model : _listView.model
-	property alias delegate : _listView.delegate
-	property alias section : _listView.section
-	property alias contentY: _listView.contentY
-	property alias currentIndex : _listView.currentIndex
-	property alias currentItem : _listView.currentItem
-	property alias count : _listView.count
-	property alias cacheBuffer : _listView.cacheBuffer
-	
+    property alias delegate : _listView.delegate
+    property alias section : _listView.section
+    property alias contentY: _listView.contentY
+    property alias currentIndex : _listView.currentIndex
+    property alias currentItem : _listView.currentItem
+    property alias count : _listView.count
+    property alias cacheBuffer : _listView.cacheBuffer
+    
     property alias topMargin: _listView.topMargin
     property alias bottomMargin: _listView.bottomMargin
     property alias rightMargin: _listView.rightMargin
     property alias leftMarging: _listView.leftMargin
     property alias listView: _listView
-	property alias holder : _holder
+    property alias holder : _holder
     
     signal itemClicked(int index)
     signal itemDoubleClicked(int index)
@@ -62,30 +62,30 @@ Kirigami.ScrollablePage
     
     signal areaClicked(var mouse)
     signal areaRightClicked()   
-	signal keyPress(var event)
-	
-   spacing: 0
-   focus: true
-	
-	Kirigami.Theme.backgroundColor: "transparent"
-	padding: 0
-	leftPadding: padding
-	rightPadding: padding
-	topPadding: padding
-	bottomPadding: padding
-	
-	Keys.enabled: false
-	
-	ListView
+    signal keyPress(var event)
+    
+    spacing: 0
+    focus: true	
+    padding: 0
+    leftPadding: padding
+    rightPadding: padding
+    topPadding: padding
+    bottomPadding: padding
+    
+    Keys.enabled: false
+    Kirigami.Theme.colorSet: Kirigami.Theme.View    
+    
+    ListView
     {	
-		id: _listView
+        id: _listView
         focus: true
         clip: true
         
         spacing: Maui.Style.space.tiny
         snapMode: ListView.NoSnap
-        boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
-		
+        boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : 
+        Flickable.OvershootBounds
+        
         interactive: Kirigami.Settings.isMobile
         highlightFollowsCurrentItem: true
         highlightMoveDuration: 0
@@ -93,12 +93,12 @@ Kirigami.ScrollablePage
         keyNavigationEnabled : bool
         keyNavigationWraps : bool
         Keys.onPressed: control.keyPress(event)
-		
-		Maui.Holder
-		{
-			id: _holder
-			anchors.fill : parent		
-		}	
+        
+        Maui.Holder
+        {
+            id: _holder
+            anchors.fill : parent		
+        }	
         
         delegate: Maui.ListBrowserDelegate
         {
@@ -157,7 +157,7 @@ Kirigami.ScrollablePage
                 }
             }
         }
-                
+        
         MouseArea
         {
             anchors.fill: parent
@@ -165,9 +165,9 @@ Kirigami.ScrollablePage
             acceptedButtons:  Qt.RightButton | Qt.LeftButton
             onClicked: 
             {
-				control.forceActiveFocus()				
-				control.areaClicked(mouse)
-			}
+                control.forceActiveFocus()				
+                control.areaClicked(mouse)
+            }
             onPressAndHold: control.areaRightClicked()
         }
     }  

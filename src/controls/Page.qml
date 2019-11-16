@@ -31,10 +31,16 @@ Page
     leftPadding: control.padding
     rightPadding: control.padding
     topPadding: control.padding
-    bottomPadding: control.padding
+    
+    Kirigami.Theme.colorSet: Kirigami.Theme.View
     
     signal goBackTriggered();
     signal goForwardTriggered();    
+    
+    background: Rectangle
+    {
+        color: Kirigami.Theme.backgroundColor
+    }
     
     property alias headBar : _headBar
     property alias footBar: _footBar
