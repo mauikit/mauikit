@@ -261,7 +261,6 @@ Item
 			//			Layout.fillWidth: true
 			//			Layout.fillHeight: true
 			//		},
-			
 			Repeater
 			{
 				model: control.actions
@@ -269,6 +268,8 @@ Item
 				ToolButton
 				{
 					action: modelData
+								Layout.preferredWidth: implicitWidth
+Layout.fillHeight: true
 					//                    display: control.width > Kirigami.Units.gridUnit * 25 ? ToolButton.TextUnderIcon : ToolButton.IconOnly
 					Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
 					display: ToolButton.TextUnderIcon

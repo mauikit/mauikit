@@ -150,7 +150,7 @@ Kirigami.AbstractApplicationWindow
         
         Column
         {
-            width: parent.width
+
 //             height: Math.max( 300, implicitHeight + 
 // _accountsListing.contentHeight)
             spacing: Maui.Style.space.medium
@@ -185,6 +185,7 @@ Kirigami.AbstractApplicationWindow
             {
                 id: _accountsListing
                 width: parent.width
+                listView.spacing: Maui.Style.space.medium
                 height: Math.min(listView.contentHeight, 300)
                 Kirigami.Theme.backgroundColor: "transparent"
                 model:  Maui.BaseModel
@@ -287,7 +288,8 @@ Kirigami.AbstractApplicationWindow
                     Loader
                     {
                         id: _accountsMenuLoader
-                        width: parent.width
+                                    width: parent.width * 0.9
+            anchors.horizontalCenter: parent.horizontalCenter
                         active: Maui.App.handleAccounts
                         sourceComponent: Maui.App.handleAccounts ?
 _accountsComponent : null
