@@ -59,7 +59,7 @@ Kirigami.ScrollablePage
 	
 	spacing: Maui.Style.space.medium
 	
-	Kirigami.Theme.backgroundColor: "transparent"
+	Kirigami.Theme.colorSet: Kirigami.Theme.View
 	padding: 0
 	leftPadding: control.ScrollBar.visible ? padding : control.ScrollBar.width
 	rightPadding: padding

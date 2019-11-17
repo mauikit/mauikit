@@ -251,9 +251,35 @@ Item
 			background: null
 			Layout.fillHeight: true
 			Layout.fillWidth: true
-			leftContent: [			
 			
-			Maui.Badge
+			middleContent: [
+			
+			//		Kirigami.ActionToolBar
+			//		{
+			//			display: control.width > Kirigami.Units.gridUnit * 25 ? ToolButton.TextUnderIcon : ToolButton.IconOnly
+			//			actions: control.actions
+			//			Layout.fillWidth: true
+			//			Layout.fillHeight: true
+			//		},
+			
+			Repeater
+			{
+				model: control.actions
+				
+				ToolButton
+				{
+					action: modelData
+					//                    display: control.width > Kirigami.Units.gridUnit * 25 ? ToolButton.TextUnderIcon : ToolButton.IconOnly
+					Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
+					display: ToolButton.TextUnderIcon
+					onClicked : _listContainer.showList = false
+					
+				}
+			}
+			]
+		}
+		
+		Maui.Badge
 			{
 				id: _counter
 				Layout.fillHeight: true
@@ -262,7 +288,8 @@ Item
 				text: selectionList.count
 				radius: Maui.Style.radiusV
 				
-				Kirigami.Theme.backgroundColor: _listContainer.showList ? Kirigami.Theme.highlightColor : Qt.darker(bg.color)
+				Kirigami.Theme.backgroundColor: _listContainer.showList ? 
+Kirigami.Theme.highlightColor : Qt.darker(bg.color)
 				border.color: "transparent"
 				
 				onClicked:
@@ -300,34 +327,6 @@ Item
 					}
 				}
 			}
-			]
-			
-			rightContent: [
-			
-			//		Kirigami.ActionToolBar
-			//		{
-			//			display: control.width > Kirigami.Units.gridUnit * 25 ? ToolButton.TextUnderIcon : ToolButton.IconOnly
-			//			actions: control.actions
-			//			Layout.fillWidth: true
-			//			Layout.fillHeight: true
-			//		},
-			
-			Repeater
-			{
-				model: control.actions
-				
-				ToolButton
-				{
-					action: modelData
-					//                    display: control.width > Kirigami.Units.gridUnit * 25 ? ToolButton.TextUnderIcon : ToolButton.IconOnly
-					Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
-					display: ToolButton.TextUnderIcon
-					onClicked : _listContainer.showList = false
-					
-				}
-			}
-			]
-		}
 		
 		
 	}

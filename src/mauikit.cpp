@@ -160,7 +160,7 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("private/DocumentPreview.qml")), uri, 1, 0, "DocumentPreview");
     qmlRegisterType<KQuickSyntaxHighlighter>("org.kde.kquicksyntaxhighlighter", 
 0, 1, "KQuickSyntaxHighlighter");
-#endif
+#endif 
 
     /** PLATFORMS SPECIFIC CONTROLS **/
 #ifdef Q_OS_ANDROID

@@ -31,6 +31,7 @@ Item
     property list<Action> hiddenActions
     
     property int currentIndex : 0
+    property bool strech: Kirigami.Settings.isMobile
     readonly property int count : control.actions.length + control.hiddenActions.length
     
     signal clicked(int index)
@@ -41,6 +42,7 @@ Item
     {
         id: _delegate
         anchors.verticalCenter: parent.verticalCenter
+        Layout.fillWidth: control.strech
         action: modelData
         icon.width: Maui.Style.iconSizes.medium
         icon.height: Maui.Style.iconSizes.medium
@@ -70,7 +72,8 @@ Item
     }
     
     implicitHeight: parent.height
-    implicitWidth: _layout.implicitWidth
+    implicitWidth: strech ?  parent.width : _layout.implicitWidth
+    
     
     Behavior on implicitWidth
     {		
@@ -81,10 +84,11 @@ Item
         }
     }
     
-    Row
+    RowLayout
     {
         id: _layout
         height: parent.height
+        width: control.strech ? parent.width : undefined
         // 		width: Math.min(implicitWidth, parent.width)
         spacing: Maui.Style.space.medium	
         clip: true
@@ -92,13 +96,15 @@ Item
         Repeater
         {
             model: control.actions
-            delegate: control.delegate			
+            delegate: control.delegate		
         }
         
         ToolButton
         {
             id: _exposedHiddenActionButton
             visible: action
+            Layout.fillWidth: control.strech
+
             action: control.currentIndex >= control.actions.length && control.currentIndex < control.count? control.hiddenActions[control.currentIndex - control.actions.length] : null
             checkable: true
             checked: visible
@@ -121,6 +127,7 @@ Item
         {
             id: _menuButton
             icon.name: "list-add"
+
             visible: control.hiddenActions.length > 0
             onClicked: 
             {
