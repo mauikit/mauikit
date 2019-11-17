@@ -23,8 +23,9 @@ void FMH::Downloader::setFile(const QString &fileURL, const QString &fileName)
     reply = manager->get(request);
 
     file = new QFile;
-    file->setFileName(fileName);
-    file->open(QIODevice::WriteOnly);
+    file->setFileName(QUrl(fileName).toLocalFile());
+    if(!file->open(QIODevice::WriteOnly))
+        qWarning() << "Could not open file to save download";
 
     connect(reply, SIGNAL(downloadProgress(qint64,qint64)),this,SLOT(onDownloadProgress(qint64,qint64)));
     connect(manager, SIGNAL(finished(QNetworkReply*)),this,SLOT(onFinished(QNetworkReply*)));
@@ -62,7 +63,7 @@ void FMH::Downloader::getArray(const QString &fileURL, const QMap<QString, QStri
         {
             qDebug() << reply->errorString();
             emit this->warning(reply->errorString());
-        };
+        }
         }
     });
 
