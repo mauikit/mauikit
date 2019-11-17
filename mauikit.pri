@@ -49,6 +49,11 @@ linux:unix:!android {
         }
     }else:win32 {
 
+        message("Using OpenSSL for Windows")
+
+LIBS += -L$$PWD/../../../../../../Qt/Tools/OpenSSL/Win_x64/lib/ -llibssl
+LIBS += -L$$PWD/../../../../../../Qt/Tools/OpenSSL/Win_x64/lib/ -llibcrypto
+
 
     }
 
@@ -79,8 +84,14 @@ linux:unix:!android {
             system(git clone $$LUV_REPO $$PWD/src/maui-style/icons/luv-icon-theme)
         }
 
-        RESOURCES += $$PWD/src/maui-style/icons.qrc \
-                     $$PWD/src/maui-style/style.qrc
+        RESOURCES += $$PWD/src/maui-style/style.qrc
+
+        win32|android: {
+            DEFINES += ICONS_PNG
+            RESOURCES += $$PWD/src/maui-style/icons_png.qrc
+        }else {
+            RESOURCES += $$PWD/src/maui-style/icons.qrc
+        }
     }
 
 contains(DEFINES, COMPONENT_TAGGING):{
@@ -324,3 +335,4 @@ DISTFILES += \
 #LIBS += -L$$PWD/libs/bin/ -lKF5ConfigCore
 #INCLUDEPATH += $$PWD/libs/includes/KConfigCore
 #DEPENDPATH += $$PWD/libs/includes/KConfigCore
+
