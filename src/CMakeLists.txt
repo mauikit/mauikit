@@ -60,16 +60,19 @@ if(${COMPONENT_EDITOR})
     set(editor_SRCS
         utils/editor/documenthandler.cpp
         utils/editor/syntaxhighlighterutil.cpp
+        utils/editor/kquicksyntaxhighlighter/kquicksyntaxhighlighter.cpp
         )
 
     set(editor_HDRS
         utils/editor/documenthandler.h
         utils/editor/syntaxhighlighterutil.h
+        utils/editor/kquicksyntaxhighlighter/kquicksyntaxhighlighter.h
         )
 
     include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/editor
         ${CMAKE_CURRENT_BINARY_DIR}/utils/editor
+        ${CMAKE_CURRENT_BINARY_DIR}/utils/editor/kquicksyntaxhighlighter
         )
     add_compile_definitions(COMPONENT_EDITOR)
 endif()

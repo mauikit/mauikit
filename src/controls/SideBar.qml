@@ -135,6 +135,7 @@ Maui.AbstractSideBar
             verticalScrollBarPolicy:  Qt.ScrollBarAlwaysOff  //this make sthe app crash
 
             delegate: control.delegate
+            Kirigami.Theme.backgroundColor: "transparent"
         }
 
         MouseArea
