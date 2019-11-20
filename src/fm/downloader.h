@@ -25,16 +25,14 @@ public:
     Downloader(QObject *parent = nullptr);
 
     virtual ~Downloader();
-
-    void setFile(const QString &fileURL, const QString &fileName = QString());
-
-    void getArray(const QString &fileURL, const QMap<QString, QString> &headers = {});
+    void setFile(const QUrl &fileURL, const QUrl &fileName = QUrl());
+    void getArray(const QUrl &fileURL, const QMap<QString, QString> &headers = {});
 
 private:
     QNetworkAccessManager *manager;
     QNetworkReply *reply;
     QFile *file;
-    QByteArray array;
+    QByteArray *array;
 
 signals:
     void progress(int percent);

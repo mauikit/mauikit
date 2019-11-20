@@ -220,7 +220,11 @@ void MauiKit::initResources()
 {
 #if defined QICON_H && defined QQUICKSTYLE_H
     Q_INIT_RESOURCE(mauikit);
+#ifdef ICONS_PNG
+    Q_INIT_RESOURCE(icons_png);
+#else
     Q_INIT_RESOURCE(icons);
+#endif
     Q_INIT_RESOURCE(style);
     QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
     QIcon::setThemeName("Luv");

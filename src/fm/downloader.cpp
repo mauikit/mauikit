@@ -1,31 +1,35 @@
 #include "downloader.h"
 
-FMH::Downloader::Downloader(QObject *parent) : QObject(parent), manager(new QNetworkAccessManager)
+FMH::Downloader::Downloader(QObject *parent) : QObject(parent), manager(new QNetworkAccessManager), array(new QByteArray)
 {}
 
-FMH::Downloader::~Downloader()
+ FMH::Downloader::~Downloader()
 {
     qDebug()<< "DELETEING DOWNLOADER";
     this->manager->deleteLater();
     // 			this->reply->deleteLater();
-
+    this->reply->deleteLater();
+    this->reply = nullptr;
+    this->array->clear();
 }
 
-void FMH::Downloader::setFile(const QString &fileURL, const QString &fileName)
+void FMH::Downloader::setFile(const QUrl &fileURL, const QUrl &fileName)
 {
-    QString filePath = fileURL;
-
     if(fileName.isEmpty() || fileURL.isEmpty())
         return;
 
     QNetworkRequest request;
-    request.setUrl(QUrl(fileURL));
+    request.setUrl(fileURL);
     reply = manager->get(request);
 
     file = new QFile;
-    file->setFileName(QUrl(fileName).toLocalFile());
+    file->setFileName(fileName.toLocalFile());
     if(!file->open(QIODevice::WriteOnly))
-        qWarning() << "Could not open file to save download";
+        qWarning()<< "can not open file to write download";
+
+    qDebug() << QSslSocket::sslLibraryBuildVersionString();
+    qDebug() << QSslSocket::supportsSsl();
+    qDebug() << QSslSocket::sslLibraryVersionString();
 
     connect(reply, SIGNAL(downloadProgress(qint64,qint64)),this,SLOT(onDownloadProgress(qint64,qint64)));
     connect(manager, SIGNAL(finished(QNetworkReply*)),this,SLOT(onFinished(QNetworkReply*)));
@@ -33,29 +37,29 @@ void FMH::Downloader::setFile(const QString &fileURL, const QString &fileName)
     connect(reply, SIGNAL(finished()),this,SLOT(onReplyFinished()));
 }
 
-void FMH::Downloader::getArray(const QString &fileURL, const QMap<QString, QString> &headers)
+void FMH::Downloader::getArray(const QUrl &fileURL, const QMap<QString, QString> &headers)
 {
     qDebug() << fileURL << headers;
     if(fileURL.isEmpty())
         return;
 
     QNetworkRequest request;
-    request.setUrl(QUrl(fileURL));
+    request.setUrl(fileURL);
     if(!headers.isEmpty())
     {
-        for(auto key: headers.keys())
+        for(const auto &key: headers.keys())
             request.setRawHeader(key.toLocal8Bit(), headers[key].toLocal8Bit());
     }
 
     reply = manager->get(request);
 
-    connect(reply, &QNetworkReply::readyRead, [this]()
+    connect(reply, &QIODevice::readyRead, [this]()
     {
         switch(reply->error())
         {
         case QNetworkReply::NoError:
         {
-            this->array = reply->readAll();
+            this->array->append(reply->readAll());
             break;
         }
 
@@ -67,13 +71,15 @@ void FMH::Downloader::getArray(const QString &fileURL, const QMap<QString, QStri
         }
     });
 
-    connect(reply, &QNetworkReply::finished, [=]()
+    connect(reply, &QNetworkReply::finished, [this]()
     {
         qDebug() << "Array reply is now finished";
-        emit this->dataReady(this->array);
+
+        emit this->dataReady(*this->array);
         emit this->done();
     });
 }
+
 
 void FMH::Downloader::onDownloadProgress(qint64 bytesRead, qint64 bytesTotal)
 {
@@ -94,7 +100,7 @@ void FMH::Downloader::onFinished(QNetworkReply *reply)
     default:
     {
         emit this->warning(reply->errorString());
-    };
+    }
     }
 
     if(file->isOpen())
@@ -103,10 +109,12 @@ void FMH::Downloader::onFinished(QNetworkReply *reply)
         emit this->fileSaved(file->fileName());
         file->deleteLater();
     }
+
 }
 
 void FMH::Downloader::onReadyRead()
 {
+    qDebug()<< "WRITTING TO FILE >>>>>";
     file->write(reply->readAll());
     // 			emit this->fileSaved(file->fileName());
 }
