@@ -443,10 +443,10 @@ QStringList MAUIAndroid::sdDirs()
     //    qbDebug::Instance()->msg()<<"TESTED SDPATH"<<QProcessEnvironment::systemEnvironment().value("EXTERNAL_SDCARD_STORAGE",dataAbsPath);
 
     QStringList res;
-    if(UTIL::fileExists("file:///mnt/extSdCard"))
+    if(QFileInfo::exists("file:///mnt/extSdCard"))
         res << "file:///mnt/extSdCard";
 
-    if(UTIL::fileExists("file:///mnt/ext_sdcard"))
+    if(QFileInfo::exists("file:///mnt/ext_sdcard"))
         res << "file:///mnt/ext_sdcard";
 
     return res;
