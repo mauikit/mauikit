@@ -142,8 +142,8 @@ Item
         ColumnLayout
         {
 			visible: control.labelsVisible
-            Layout.fillHeight: visible
-            Layout.fillWidth: visible
+            Layout.fillHeight: true
+            Layout.fillWidth: true
             Layout.margins: visible ? Maui.Style.space.small : 0
             Layout.leftMargin: _iconLoader.visible ? 0 : Maui.Style.space.small 
             spacing: 0
@@ -152,8 +152,8 @@ Item
             {
                 id: _label1
                 visible: text.length
-                Layout.fillWidth: visible
-                Layout.fillHeight: visible
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 verticalAlignment: _label2.visible ? Qt.AlignBottom :  Qt.AlignVCenter
 
                 elide: Text.ElideMiddle
@@ -167,11 +167,11 @@ Item
             {
                 id: _label2
                 visible: text.length
-                Layout.fillWidth: visible
-                Layout.fillHeight: visible
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 font.weight: Font.Normal
                 font.pointSize: Maui.Style.fontSizes.medium
-                wrapMode: Text.NoWrap
+                wrapMode: Text.WrapAnywhere
                 verticalAlignment: _label1.visible ? Qt.AlignTop : Qt.AlignVCenter
                 elide: Text.ElideRight
                 color: control.Kirigami.Theme.textColor
@@ -197,7 +197,7 @@ Item
                 horizontalAlignment: Qt.AlignRight
                 font.pointSize: Maui.Style.fontSizes.small
                 font.weight: Font.Light
-                wrapMode: Text.WrapAnywhere
+                wrapMode: Text.NoWrap
                 elide: Text.ElideMiddle
                 color: control.Kirigami.Theme.textColor
                 opacity: control.isCurrentItem || hovered ? 0.8 : 0.6
@@ -213,7 +213,7 @@ Item
                 horizontalAlignment: Qt.AlignRight
                 font.pointSize: Maui.Style.fontSizes.small
                 font.weight: Font.Light
-                wrapMode: Text.WrapAnywhere
+                wrapMode: Text.NoWrap
                 elide: Text.ElideMiddle
                 color: control.Kirigami.Theme.textColor
                 opacity: control.isCurrentItem || hovered ? 0.8 : 0.6
