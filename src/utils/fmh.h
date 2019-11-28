@@ -49,7 +49,7 @@
 
 namespace FMH
 {
-static const bool isAndroid()
+static bool isAndroid()
 {
 #if defined(Q_OS_ANDROID)
     return true;
@@ -68,7 +68,7 @@ static const bool isAndroid()
 #endif
 }
 
-static const bool isWindows()
+static bool isWindows()
 {
 #if defined(Q_OS_ANDROID)
     return false;
@@ -337,6 +337,7 @@ static const QHash<FMH::MODEL_KEY, QString> MODEL_NAME =
     {MODEL_KEY::SOURCE, "source"},
     {MODEL_KEY::TITLE, "title"},
 	{MODEL_KEY::ID, "id"},
+	{MODEL_KEY::PERSON_ID, "personid"},
 	{MODEL_KEY::PARENT_ID, "parentid"},
 	{MODEL_KEY::LICENSE, "license"},
     {MODEL_KEY::DESCRIPTION, "description"},
@@ -555,8 +556,21 @@ static const QHash<QString, FMH::MODEL_KEY> MODEL_NAME_KEY =
     {MODEL_NAME[MODEL_KEY::EXECUTABLE], MODEL_KEY::EXECUTABLE}
 };
 
-typedef QHash<FMH::MODEL_KEY, QString> MODEL;
+
+//for now here to later on use it to allow auto cast qvariant to qstring
+template<typename Key, typename V>
+class MHash : public QHash<Key,V>
+{
+using QHash<Key,V>::QHash;
+};
+
+typedef MHash<FMH::MODEL_KEY, QString> MODEL;
 typedef QVector<MODEL> MODEL_LIST;
+
+static const inline QString mapValue(const QVariantMap &map, const FMH::MODEL_KEY &key)
+{
+	return map[FMH::MODEL_NAME[key]].toString();
+}
 
 static const inline QVariantMap toMap(const FMH::MODEL& model)
 {
