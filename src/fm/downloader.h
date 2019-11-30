@@ -25,6 +25,8 @@ public:
     Downloader(QObject *parent = nullptr);
 
     virtual ~Downloader();
+
+    void downloadFile(const QUrl &source, const QUrl &destination);
     void setFile(const QUrl &fileURL, const QUrl &fileName = QUrl());
     void getArray(const QUrl &fileURL, const QMap<QString, QString> &headers = {});
 
@@ -36,6 +38,7 @@ private:
 
 signals:
     void progress(int percent);
+    void progress(qulonglong processedSize, unsigned long percent);
     void downloadReady();
     void fileSaved(QString path);
     void warning(QString warning);

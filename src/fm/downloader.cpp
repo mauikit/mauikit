@@ -1,3 +1,6 @@
+#include <KIO/CopyJob>
+#include <KJob>
+
 #include "downloader.h"
 
 FMH::Downloader::Downloader(QObject *parent) : QObject(parent), manager(new QNetworkAccessManager), array(new QByteArray)
@@ -11,6 +14,20 @@ FMH::Downloader::Downloader(QObject *parent) : QObject(parent), manager(new QNet
     this->reply->deleteLater();
     this->reply = nullptr;
     this->array->clear();
+ }
+
+void FMH::Downloader::downloadFile(const QUrl &source, const QUrl &destination) {
+    KIO::CopyJob *downloadJob = KIO::copy(source, destination);
+
+    QObject::connect(downloadJob, &KIO::CopyJob::processedSize, [=](KJob *job, qulonglong size){
+        emit progress(size, job->percent());
+    });
+
+    QObject::connect(downloadJob, &KIO::CopyJob::finished, [=](KJob *job){
+        Q_UNUSED(job)
+
+        emit done();
+    });
 }
 
 void FMH::Downloader::setFile(const QUrl &fileURL, const QUrl &fileName)
