@@ -1,10 +1,10 @@
 #include "downloader.h"
 
-#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
-#include <KIO/CopyJob>
-#include <KJob>
+// #if defined Q_OS_LINUX && !defined Q_OS_ANDROID
+// #include <KIO/CopyJob>
+// #include <KJob>
+// #endif
 
-#endif
 FMH::Downloader::Downloader(QObject *parent) : QObject(parent), manager(new QNetworkAccessManager), array(new QByteArray)
 {}
 
