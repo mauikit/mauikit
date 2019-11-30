@@ -144,7 +144,7 @@ void MauiKit::registerTypes(const char *uri)
         Q_UNUSED(scriptEngine)
         return new FMStatic;
     });
-    //     qmlRegisterSingletonType(componentUrl(QStringLiteral("private/FileBrowser.qml")), uri, 1, 0, "FileMenu");
+
     qmlRegisterType(componentUrl(QStringLiteral("FileBrowser.qml")), uri, 1, 0, "FileBrowser");
     qmlRegisterType(componentUrl(QStringLiteral("PlacesSidebar.qml")), uri, 1, 0, "PlacesSidebar");
     qmlRegisterType(componentUrl(QStringLiteral("PlacesListBrowser.qml")), uri, 1, 0, "PlacesListBrowser");
@@ -158,7 +158,7 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType<SyntaxHighlighterUtil>();
     qmlRegisterType(componentUrl(QStringLiteral("Editor.qml")), uri, 1, 0, "Editor");
     qmlRegisterType(componentUrl(QStringLiteral("private/DocumentPreview.qml")), uri, 1, 0, "DocumentPreview");
-//     qmlRegisterType<KQuickSyntaxHighlighter>("org.kde.kquicksyntaxhighlighter", 0, 1, "KQuickSyntaxHighlighter");
+    qmlRegisterType<KQuickSyntaxHighlighter>("org.kde.kquicksyntaxhighlighter-maui", 0, 1, "KQuickSyntaxHighlighter");
 #endif 
 
     /** PLATFORMS SPECIFIC CONTROLS **/

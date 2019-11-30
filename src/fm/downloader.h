@@ -27,7 +27,6 @@ public:
     virtual ~Downloader();
 
     void downloadFile(const QUrl &source, const QUrl &destination);
-    void setFile(const QUrl &fileURL, const QUrl &fileName = QUrl());
     void getArray(const QUrl &fileURL, const QMap<QString, QString> &headers = {});
 
 private:

@@ -342,7 +342,7 @@ void Store::downloadLink(const QString& url, const QString &fileName)
 // 			
 // 		});
 // 		
-		downloader->setFile(url, FMH::DownloadsPath  + "/" + _fileName);		
+		downloader->downloadFile(url, FMH::DownloadsPath  + "/" + _fileName);		
 }
 
 void Store::projectListResult(Attica::BaseJob *j)

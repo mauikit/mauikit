@@ -562,8 +562,7 @@ namespace FMH
 	{
 	public:
 		using QHash<Key,V>::QHash;
-		MHash(const QHash<Key, V> &other) : QHash<Key, V>(other)
-		{}
+		MHash(const QHash<Key, V> &other) : QHash<Key, V>(other) {}
 	};
 	
 	typedef MHash<FMH::MODEL_KEY, QString> MODEL;
@@ -628,8 +627,10 @@ namespace FMH
 	{
 		QStringList res;
 		for(const auto &item : model)
+		{
 			if(item.contains(key))
 				res << item[key];
+		}
 			
 			return res;
 	}
