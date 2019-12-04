@@ -122,7 +122,7 @@ Maui.ItemDelegate
 			{
 				id: img
 				anchors.centerIn: parent
-				source: model.mime &&  model.thumbnail ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails ? model.thumbnail : "") : ""
+				source: model.thumbnail && model.thumbnail.length ? model.thumbnail : ""
 				height: Math.min (parent.height, img.implicitHeight)
 				width: Math.min(parent.width, img.implicitWidth)
 				sourceSize.width: width
@@ -152,11 +152,11 @@ Maui.ItemDelegate
 				}
 			}
 			
-			Loader
-			{
-				anchors.centerIn: parent				
-				sourceComponent: img.status === Image.Ready ? null : _iconComponent
-			}
+// 			Loader
+// 			{
+// 				anchors.centerIn: parent				
+// 				sourceComponent: img.status === Image.Ready ? null : _iconComponent
+// 			}
 		}
 	}
 	
