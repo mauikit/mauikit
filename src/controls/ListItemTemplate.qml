@@ -59,37 +59,18 @@ Item
             
             Image
             {
-                id: img
-                anchors.centerIn: parent
-                source: control.imageSource
-                height: Math.min(parent.height, control.iconSizeHint)
-                width: height
-                sourceSize.width: width
-                sourceSize.height: height
-                horizontalAlignment: Qt.AlignHCenter
-                verticalAlignment: Qt.AlignVCenter
-                fillMode: Image.PreserveAspectCrop
-                cache: true
-                asynchronous: true
-                smooth: !Kirigami.Settings.isMobile
-
-                layer.enabled: true
-                layer.effect: OpacityMask
-                {
-                    maskSource: Item
-                    {
-                        width: img.width
-                        height: img.height
-                        Rectangle
-                        {
-                            anchors.centerIn: parent
-                            width: img.width
-                            height: img.height
-                            radius: Maui.Style.radiusV
-                        }
-                    }
-                }
-            }
+				id: img
+				anchors.centerIn: parent
+				source: control.imageSource
+				height: Math.min(parent.height, control.iconSizeHint)
+				width: height
+				sourceSize.width: width
+				sourceSize.height: height
+				horizontalAlignment: Qt.AlignHCenter
+				verticalAlignment: Qt.AlignVCenter
+				fillMode: Image.PreserveAspectCrop
+				asynchronous: true
+			}
 
             Loader
             {
@@ -132,27 +113,11 @@ Item
             Loader
             {
                 id: _iconLoader
-                active: false
                 height: control.iconSizeHint
                 width: control.iconSizeHint
                 anchors.centerIn: parent
+                sourceComponent: _imgComponent
             }
-            
-            Image
-            {
-				id: img
-				anchors.centerIn: parent
-				source: control.imageSource
-				height: Math.min(parent.height, control.iconSizeHint)
-				width: height
-				sourceSize.width: width
-				sourceSize.height: height
-				horizontalAlignment: Qt.AlignHCenter
-				verticalAlignment: Qt.AlignVCenter
-				fillMode: Image.PreserveAspectCrop
-				asynchronous: true
-			}
-			
         }
 
         ColumnLayout
