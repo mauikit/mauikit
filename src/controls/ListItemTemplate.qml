@@ -135,7 +135,7 @@ Item
                 height: control.iconSizeHint
                 width: control.iconSizeHint
                 anchors.centerIn: parent
-                sourceComponent: _iconContainer.visible ? (control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : null) ): null
+                sourceComponent: _imgComponent
             }
         }
 

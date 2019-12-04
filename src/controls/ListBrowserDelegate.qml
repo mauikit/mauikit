@@ -113,8 +113,7 @@ Maui.ItemDelegate
 		
 		iconSizeHint: control.folderSize
 		
-		imageSource: model.mime &&  model.thumbnail ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails ? model.thumbnail : "") : ""	
-		iconSource: model.icon
+		imageSource: model.thumbnail 
 		
 		label1.text: model.label
 		label3.text : model.mime === "inode/directory" ? (model.count ? model.count + qsTr(" items") : "") : Maui.FM.formatSize(model.size)

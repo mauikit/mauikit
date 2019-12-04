@@ -148,28 +148,11 @@ Maui.Page
                 showTooltip: true
                 showEmblem: _listViewBrowser.showEmblem
                 keepEmblemOverlay : _listViewBrowser.keepEmblemOverlay
-//                 showThumbnails: _listViewBrowser.showPreviewThumbnails
+                showThumbnails: _listViewBrowser.showPreviewThumbnails
                 rightEmblem: _listViewBrowser.rightEmblem
                 isSelected: selectionBar ? selectionBar.contains(model.path) : false
                 leftEmblem: isSelected ? "list-remove" : "list-add"
-                draggable: true
-                
-                Image
-                {
-					id: img
-					anchors.centerIn: parent
-					source: model.thumbnail
-					height: 64
-					width: height
-					sourceSize.width: width
-					sourceSize.height: height
-					horizontalAlignment: Qt.AlignHCenter
-					verticalAlignment: Qt.AlignVCenter
-					fillMode: Image.PreserveAspectCrop
-					//                 cache: true
-					asynchronous: true
-					//                 smooth: !Kirigami.Settings.isMobile
-				}
+                draggable: true  
 
                 Maui.Badge
                 {
