@@ -65,7 +65,26 @@ Item
 			horizontalAlignment: Qt.AlignHCenter
 			verticalAlignment: Qt.AlignVCenter
 			fillMode: Image.PreserveAspectCrop
+			cache: true
 			asynchronous: true
+			smooth: !Kirigami.Settings.isMobile
+			
+			layer.enabled: true
+			layer.effect: OpacityMask
+			{
+				maskSource: Item
+				{
+					width: img.width
+					height: img.height
+					Rectangle
+					{
+						anchors.centerIn: parent
+						width: img.width
+						height: img.height
+						radius: Maui.Style.radiusV
+					}
+				}
+			}
 		}
     }
 
@@ -105,7 +124,7 @@ Item
                 height: control.iconSizeHint
                 width: control.iconSizeHint
                 anchors.centerIn: parent
-                sourceComponent: _imgComponent
+                sourceComponent: _iconContainer.visible ? (control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : null) ): null
             }
         }
 
