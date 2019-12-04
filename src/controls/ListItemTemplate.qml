@@ -53,31 +53,20 @@ Item
     {
         id: _imgComponent
 
-        Item
+        Image
         {
-            anchors.fill: parent
-            
-            Image
-            {
-				id: img
-				anchors.centerIn: parent
-				source: control.imageSource
-				height: Math.min(parent.height, control.iconSizeHint)
-				width: height
-				sourceSize.width: width
-				sourceSize.height: height
-				horizontalAlignment: Qt.AlignHCenter
-				verticalAlignment: Qt.AlignVCenter
-				fillMode: Image.PreserveAspectCrop
-				asynchronous: true
-			}
-
-            Loader
-            {
-                anchors.centerIn: parent
-                sourceComponent: img.status === Image.Ready ? undefined : _iconComponent
-            }
-        }
+			id: img
+			anchors.centerIn: parent
+			source: control.imageSource
+			height: Math.min(parent.height, control.iconSizeHint)
+			width: height
+			sourceSize.width: width
+			sourceSize.height: height
+			horizontalAlignment: Qt.AlignHCenter
+			verticalAlignment: Qt.AlignVCenter
+			fillMode: Image.PreserveAspectCrop
+			asynchronous: true
+		}
     }
 
 
