@@ -1,9 +1,9 @@
 
-import QtQuick 2.0
+import QtQuick 2.5
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
-import org.kde.kirigami 2.4 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 
 Flickable
 {
@@ -186,7 +186,7 @@ Flickable
 				fillMode: Image.PreserveAspectFit
 				autoTransform: true
 				asynchronous: true
-				source: control.source
+				source: flick.source
 				onStatusChanged: playing = (status == AnimatedImage.Ready)
 				cache: true
 			}
@@ -200,7 +200,7 @@ Flickable
 				fillMode: Image.PreserveAspectFit
 				autoTransform: true
 				asynchronous: true
-				source: control.source
+				source: flick.source
 			}
 		}
 		

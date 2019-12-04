@@ -565,7 +565,7 @@ namespace FMH
 		MHash(const QHash<Key, V> &other) : QHash<Key, V>(other) {}
 	};
 	
-	typedef MHash<FMH::MODEL_KEY, QString> MODEL;
+	typedef QHash<FMH::MODEL_KEY, QString> MODEL;
 	typedef QVector<MODEL> MODEL_LIST;
 	
 	static const inline QString mapValue(const QVariantMap &map, const FMH::MODEL_KEY &key)
