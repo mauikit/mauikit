@@ -122,7 +122,7 @@ Maui.ItemDelegate
 			{
 				id: img
 				anchors.centerIn: parent
-				source: model.thumbnail && model.thumbnail.length ? model.thumbnail : ""
+				source: model.mime &&  model.thumbnail ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails ? model.thumbnail : "") : ""
 				height: Math.min (parent.height, img.implicitHeight)
 				width: Math.min(parent.width, img.implicitWidth)
 				sourceSize.width: width
