@@ -359,6 +359,11 @@ _accountsComponent : null
     {
         id: _notify
         property var cb : ({})
+		
+		property alias iconName : _notifyTemplate.iconSource
+		property alias title : _notifyTemplate.label1
+		property alias body: _notifyTemplate.label2
+		
         verticalAlignment: Qt.AlignTop
         defaultButtons: _notify.cb !== null
 		rejectButton.visible: false
@@ -373,9 +378,9 @@ _accountsComponent : null
 		
 		page.padding: Maui.Style.space.medium
 		
-	footBar.background: null
+		footBar.background: null
 
-        maxHeight: Math.max(Maui.Style.iconSizes.large + Maui.Style.space.huge, (_notifyLayout.implicitHeight)) + Maui.Style.space.big + footBar.height
+		maxHeight: Math.max(Maui.Style.iconSizes.large + Maui.Style.space.huge, (_notifyTemplate.implicitHeight)) + Maui.Style.space.big + footBar.height
         maxWidth: Kirigami.Settings.isMobile ? parent.width * 0.9 : Maui.Style.unit * 500
         widthHint: 0.8
 
@@ -393,73 +398,23 @@ _accountsComponent : null
 
         onClosed: _notifyTimer.stop()
         
-
-        GridLayout
-        {
-            anchors.fill: parent
-            columns: 2
-            rows: 1
-
-            Item
-            {
-                Layout.fillHeight: true
-                Layout.preferredWidth: Maui.Style.iconSizes.large + Maui.Style.space.big
-                Layout.row: 1
-                Layout.column: 1
-
-                Kirigami.Icon
-                {
-                    id: _notifyIcon
-                    width: Maui.Style.iconSizes.large
-                    height: width
-                    anchors.centerIn: parent
-                    fallback : "dialog-warning"
-                }
-            }
-
-            Item
-            {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                Layout.margins: Maui.Style.space.medium
-                Layout.row: 1
-                Layout.column: 2
-
-                ColumnLayout
-                {
-                    id: _notifyLayout
-                    anchors.centerIn: parent
-                    width: parent.width
-
-                    Label
-                    {
-                        id: _notifyTitle
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                        font.weight: Font.Bold
-                        font.bold: true
-                        font.pointSize:Maui.Style.fontSizes.big
-                        elide: Qt.ElideRight
-                        wrapMode: Text.NoWrap
-                    }
-
-                    Label
-                    {
-                        id: _notifyBody
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                        font.pointSize:Maui.Style.fontSizes.default
-                        elide: Qt.ElideRight
-                        wrapMode: Text.Wrap
-                    }
-                }
-            }
-        }
+		Maui.ListItemTemplate
+		{
+			id: _notifyTemplate		
+			anchors.fill: parent
+			iconSizeHint: Maui.Style.iconSizes.huge
+			label1.font.bold: true
+			label1.font.weight: Font.Bold
+			label1.font.pointSize: Maui.Style.fontSizes.big
+			iconSource: "dialog-warning"
+		}
         
         MouseArea
         {
 			id: _mouseArea
-			anchors.fill: parent
+			height: parent.height
+			width: parent.width
+			anchors.centerIn: parent
 			hoverEnabled: true
 		}
 
@@ -492,12 +447,18 @@ _accountsComponent : null
         }
 
     }
+    
+    Connections
+    {
+		target: Maui.App
+		onSendNotification: notify(icon, title, body, callback, timeout, buttonText)
+	}
 
     function notify(icon, title, body, callback, timeout, buttonText)
     {
-		_notifyIcon.source = icon || "emblem-warning"
-        _notifyTitle.text = title
-        _notifyBody.text = body
+		_notify.iconName = icon || "emblem-warning"
+		_notify.title.text = title
+        _notify.body.text = body
         _notifyTimer.interval = timeout ? timeout : 2500
         _notify.acceptButton.text = buttonText || qsTr ("Accept")
         _notify.show(callback)

@@ -179,6 +179,10 @@ MauiApp * MauiApp::qmlAttachedProperties(QObject* object)
     return MauiApp::m_instance;
 }
 
+void MauiApp::notify(const QString &icon, const QString& title, const QString& body, const QJSValue& callback, const int& timeout, const QString& buttonText)
+{
+	emit this->sendNotification(icon, title, body, callback, timeout, buttonText);
+}
 
 
 

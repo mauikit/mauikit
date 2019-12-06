@@ -122,6 +122,10 @@ signals:
     void donationPageChanged(QString donationPage);
     void reportPageChanged(QString reportPage);
     void handleAccountsChanged();
+	void sendNotification(QString iconName, QString title, QString body, QJSValue callback, int timeout, QString buttonText);
+	
+public slots:
+	void notify(const QString &icon = "emblem-warning", const QString &title = "Oops", const QString &body = "Something needs your attention", const QJSValue &callback = {}, const int &timeout = 2500, const QString &buttonText = "Ok");
 };
 
 
