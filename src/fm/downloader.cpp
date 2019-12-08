@@ -1,4 +1,6 @@
 #include "downloader.h"
+#include "fmh.h"
+#include "fmstatic.h"
 
 // #if defined Q_OS_LINUX && !defined Q_OS_ANDROID
 // #include <KIO/CopyJob>
@@ -17,25 +19,28 @@ FMH::Downloader::Downloader(QObject *parent) : QObject(parent), manager(new QNet
     this->array->clear();
  }
 
-void FMH::Downloader::downloadFile(const QUrl &source, const QUrl &destination) {
-    
+void FMH::Downloader::downloadFile(const QUrl &source, const QUrl &destination) 
+{    
 #ifdef KIO_COPYJOB_H
 	KIO::CopyJob *downloadJob = KIO::copy(source, destination);
 
-	QObject::connect(downloadJob, &KIO::CopyJob::warning, [=](KJob *job, QString message){
+	connect(downloadJob, &KIO::CopyJob::warning, [=](KJob *job, QString message)
+    {
 		Q_UNUSED(job)
 		emit this->warning(message);
 	});
 	
-    QObject::connect(downloadJob, &KIO::CopyJob::processedSize, [=](KJob *job, qulonglong size){
+    connect(downloadJob, &KIO::CopyJob::processedSize, [=](KJob *job, qulonglong size)
+    {
         emit this->progress(size, job->percent());
     });
 	
-    QObject::connect(downloadJob, &KIO::CopyJob::finished, [=](KJob *job){
+    connect(downloadJob, &KIO::CopyJob::finished, [=](KJob *job)
+    {
 		emit this->downloadReady();
 		emit this->done();
-		job->deleteLater();
     });
+    
 #else
 	if(destination.isEmpty() || source.isEmpty())
 		return;
