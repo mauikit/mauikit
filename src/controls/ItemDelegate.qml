@@ -62,8 +62,6 @@ ItemDelegate
 //        enabled: !Kirigami.Settings.isMobile
         anchors.fill: parent
         acceptedButtons:  Qt.RightButton | Qt.LeftButton
-        drag.target: control.draggable && !Kirigami.Settings.isMobile  ? parent : undefined
-
         property int startX
         property int startY
 
@@ -79,11 +77,15 @@ ItemDelegate
 
         onPressed:
         {
-            if(control.draggable && !Kirigami.Settings.isMobile )
+            if(control.draggable && mouse.source !== Qt.MouseEventSynthesizedByQt)
+            {
+                drag.target = control
                 control.grabToImage(function(result)
                 {
                     parent.Drag.imageSource = result.url
                 })
+            }else drag.target = null
+
 
             startX = control.x
             startY = control.y
