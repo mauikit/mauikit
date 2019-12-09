@@ -98,7 +98,8 @@ void FMH::Downloader::getArray(const QUrl &fileURL, const QMap<QString, QString>
 
 void FMH::Downloader::onDownloadProgress(qint64 bytesRead, qint64 bytesTotal)
 {
-    emit this->progress((bytesRead * bytesTotal) / 100);
+    qDebug()<< "DOWNLOAD PROGRESS" << ((bytesRead * 100)/ bytesTotal);
+    emit this->progress((bytesRead * 100)/ bytesTotal);
 }
 
 void FMH::Downloader::onFinished(QNetworkReply *reply)

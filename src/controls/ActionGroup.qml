@@ -31,7 +31,7 @@ Item
     property list<Action> hiddenActions
     
     property int currentIndex : 0
-    property bool strech: Kirigami.Settings.isMobile
+    property bool strech: false
     readonly property int count : control.actions.length + control.hiddenActions.length
     
     signal clicked(int index)

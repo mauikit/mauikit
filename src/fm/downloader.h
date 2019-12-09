@@ -37,7 +37,6 @@ private:
 
 signals:
     void progress(int percent);
-    void progress(qulonglong processedSize, unsigned long percent);
     void downloadReady();
     void fileSaved(QString path);
     void warning(QString warning);
