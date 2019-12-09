@@ -3,7 +3,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.6 as Kirigami
-import org.kde.kquicksyntaxhighlighter-maui 0.1
+import org.maui.kquicksyntaxhighlighter 0.1
 import "private"
 
 Maui.Page
