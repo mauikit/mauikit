@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.10)
 
 set(REQUIRED_QT_VERSION 5.10.0)
 set(REQUIRED_KF5_VERSION 5.60.0)
