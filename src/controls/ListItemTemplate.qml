@@ -167,7 +167,7 @@ Item
                 verticalAlignment: _label1.visible ? Qt.AlignTop : Qt.AlignVCenter
                 elide: Text.ElideRight
                 color: control.Kirigami.Theme.textColor
-                opacity: control.isCurrentItem || hovered ? 0.8 : 0.6
+                opacity: control.isCurrentItem ? 0.8 : 0.6
             }
         }
 
@@ -192,7 +192,7 @@ Item
                 wrapMode: Text.NoWrap
                 elide: Text.ElideMiddle
                 color: control.Kirigami.Theme.textColor
-                opacity: control.isCurrentItem || hovered ? 0.8 : 0.6
+                opacity: control.isCurrentItem ? 0.8 : 0.6
 			}
 
             Label
@@ -208,7 +208,7 @@ Item
                 wrapMode: Text.NoWrap
                 elide: Text.ElideMiddle
                 color: control.Kirigami.Theme.textColor
-                opacity: control.isCurrentItem || hovered ? 0.8 : 0.6
+                opacity: control.isCurrentItem ? 0.8 : 0.6
 			}
         }
     }

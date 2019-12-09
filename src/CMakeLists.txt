@@ -52,7 +52,7 @@ if(${COMPONENT_ACCOUNTS})
         utils/accounts/mauiaccounts.h
         utils/accounts/accountsdb.h
         )
-    add_compile_definitions(COMPONENT_ACCOUNTS)
+    add_definitions(-DCOMPONENT_ACCOUNTS)
 endif()
 
 if(${COMPONENT_EDITOR})
@@ -74,7 +74,7 @@ if(${COMPONENT_EDITOR})
         ${CMAKE_CURRENT_BINARY_DIR}/utils/editor
         ${CMAKE_CURRENT_BINARY_DIR}/utils/editor/kquicksyntaxhighlighter
         )
-    add_compile_definitions(COMPONENT_EDITOR)
+    add_definitions(-DCOMPONENT_EDITOR)
 endif()
 
 if(${COMPONENT_FM})
@@ -97,7 +97,7 @@ if(${COMPONENT_FM})
         ${CMAKE_CURRENT_SOURCE_DIR}/fm
         ${CMAKE_CURRENT_BINARY_DIR}/fm
         )
-    add_compile_definitions(COMPONENT_FM)
+    add_definitions(-DCOMPONENT_FM)
 endif()
 
 if(${COMPONENT_TAGGING})
@@ -121,7 +121,7 @@ if(${COMPONENT_TAGGING})
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/tagging
         ${CMAKE_CURRENT_BINARY_DIR}/utils/tagging
         )
-    add_compile_definitions(COMPONENT_TAGGING)
+    add_definitions(-DCOMPONENT_TAGGING)
 endif()
 
 if(${COMPONENT_SYNCING})
@@ -152,7 +152,7 @@ if(${COMPONENT_SYNCING})
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/syncing/libwebdavclient/lib/utils
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/syncing/libwebdavclient/lib/dto
         )
-    add_compile_definitions(COMPONENT_SYNCING)
+    add_definitions(-DCOMPONENT_SYNCING)
 endif()
 
 if(${COMPONENT_STORE})
@@ -174,7 +174,7 @@ if(${COMPONENT_STORE})
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/store
         ${CMAKE_CURRENT_BINARY_DIR}/utils/store
         )
-    add_compile_definitions(COMPONENT_STORE)
+    add_definitions(-DCOMPONENT_STORE)
 endif()
 #use dbus on linux, bsd etc, but not andoid and apple stuff
 
