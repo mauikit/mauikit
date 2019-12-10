@@ -1076,6 +1076,7 @@ Maui.Page
 		{
 			control.selectionBar.clear()
 			selectionBarLoader.sourceComponent = null
+			control.selectionMode = false
 		}
 	}
 	

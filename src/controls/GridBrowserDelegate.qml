@@ -126,7 +126,7 @@ Maui.ItemDelegate
             horizontalAlignment: Qt.AlignHCenter
             verticalAlignment: Qt.AlignVCenter
             fillMode: Image.PreserveAspectCrop
-            cache: false
+            cache: true
             asynchronous: true
             smooth: !Kirigami.Settings.isMobile
             
