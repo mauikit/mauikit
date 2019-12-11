@@ -349,8 +349,7 @@ bool FMStatic::createDir(const QUrl &path, const QString &name)
     QFileInfo dd(path.toLocalFile());
     return QDir(path.toLocalFile()).mkdir(name);
 #else
-    const auto _path = QUrl(path.toString() + "/" + name);
-    auto job = KIO::mkdir(_path);
+    auto job = KIO::mkdir(name.isEmpty() ? path : QUrl(path.toString() + "/" + name));
     job->start();
     return true;
 #endif
