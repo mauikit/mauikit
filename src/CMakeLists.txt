@@ -262,7 +262,6 @@ target_link_libraries(MauiKit
     Qt5::Core
     Qt5::Sql
     Qt5::Gui
-    KF5::Notifications
     KF5::I18n
     KF5::ConfigCore
     KF5::KIOCore
