@@ -39,18 +39,18 @@
 
 namespace UTIL
 {
-	const auto app = QCoreApplication::instance();	
+	static const auto app = QCoreApplication::instance();	
 
-    inline QString whoami()
+    static const inline QString whoami()
     {
 #ifdef Q_OS_UNIX
-        return qgetenv("USER"); ///for MAc or Linux
+        return qgetenv("USER"); ///for Mac or Linux
 #else
         return  qgetenv("USERNAME"); //for windows
 #endif
     }
 
-    inline void saveSettings(const QString &key, const QVariant &value, const QString &group, QString app = UTIL::app->applicationName(), const QString organization = UTIL::app->organizationName())
+    static inline void saveSettings(const QString &key, const QVariant &value, const QString &group, QString app = UTIL::app->applicationName(), const QString organization = UTIL::app->organizationName())
     {
         QSettings setting(organization.isEmpty() ?  QString("org.kde.maui") : organization, app);
         setting.beginGroup(group);
@@ -58,14 +58,13 @@ namespace UTIL
         setting.endGroup();
     }
 
-    inline QVariant loadSettings(const QString &key, const QString &group, const QVariant &defaultValue, const QString app = UTIL::app->applicationName(), const QString organization = UTIL::app->organizationName())
+    static inline const QVariant loadSettings(const QString &key, const QString &group, const QVariant &defaultValue, const QString app = UTIL::app->applicationName(), const QString organization = UTIL::app->organizationName())
     {
         QVariant variant;
 		QSettings setting(organization.isEmpty() ?  QString("org.kde.maui") : organization, app);
 		setting.beginGroup(group);
         variant = setting.value(key,defaultValue);
         setting.endGroup();
-
         return variant;
     }
 }

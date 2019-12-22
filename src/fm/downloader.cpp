@@ -113,8 +113,6 @@ void FMH::Downloader::onFinished(QNetworkReply *reply)
 	{
 		case QNetworkReply::NoError:
 		{
-			emit this->fileSaved(file->fileName());
-			qDebug() << "file is downloaded successfully." << file->fileName();
 			emit this->downloadReady();
 			break;
 		}
@@ -128,6 +126,7 @@ void FMH::Downloader::onFinished(QNetworkReply *reply)
     if(file->isOpen())
     {
         file->close();
+		emit this->fileSaved(file->fileName());		
         file->deleteLater();
     }
 }
