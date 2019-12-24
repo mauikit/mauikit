@@ -53,7 +53,7 @@ public:
 };
 Q_DECLARE_METATYPE(PathStatus)
 
-static struct
+static inline struct
 {
     void appendPath(const QUrl &path)
     {
@@ -84,7 +84,8 @@ static struct
 private:
     QVector<QUrl> prev_history;
     QVector<QUrl> post_history;
-}NavHistory;
+	
+} NavHistory;
 
 class FM;
 class QFileSystemWatcher;
@@ -112,10 +113,12 @@ class FMList : public MauiList
     Q_PROPERTY(QString pathName READ getPathName NOTIFY pathNameChanged)
     Q_PROPERTY(FMList::PATHTYPE pathType READ getPathType NOTIFY pathTypeChanged)
     
-    Q_PROPERTY(PathStatus status READ getStatus NOTIFY statusChanged) //TODO status to replace pathExists, pathEmpty and handle errors messaging
+    Q_PROPERTY(PathStatus status READ getStatus NOTIFY statusChanged) 
     	
-    Q_PROPERTY(QUrl previousPath READ getPreviousPath) //interface for NavHistory
-    Q_PROPERTY(QUrl posteriorPath READ getPosteriorPath) //interface for NavHistory
+	Q_PROPERTY(QList<QUrl> previousPathHistory READ getPreviousPathHistory) //interface for NavHistory
+	Q_PROPERTY(QList<QUrl> posteriorPathHistory READ getPreviousPathHistory) //interface for NavHistory
+	Q_PROPERTY(QUrl previousPath READ getPreviousPath) //interface for NavHistory
+	Q_PROPERTY(QUrl posteriorPath READ getPosteriorPath) //interface for NavHistory
 
 	Q_PROPERTY(QUrl parentPath READ getParentPath)    
 	
@@ -199,10 +202,12 @@ class FMList : public MauiList
 		bool getOnlyDirs() const;
 		void setOnlyDirs(const bool &state);
 		
-		QUrl getParentPath();
+		const QUrl getParentPath();
 		
-		QUrl getPreviousPath();		
-		QUrl getPosteriorPath();
+		static QList<QUrl> getPreviousPathHistory();		
+		static QList<QUrl> getPosteriorPathHistory();
+		const QUrl getPreviousPath();		
+		const QUrl getPosteriorPath();
 			
 		bool getTrackChanges() const;
 		void setTrackChanges(const bool &value);

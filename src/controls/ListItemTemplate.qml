@@ -33,7 +33,7 @@ Item
 		
 		implicitHeight: _layout.implicitHeight
 		implicitWidth: _layout.implicitWidth
-
+		
     property alias text1 : _label1.text
     property alias text2 : _label2.text
     property alias text3 : _label3.text
