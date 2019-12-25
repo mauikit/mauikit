@@ -39,8 +39,9 @@ class MAUIKIT_EXPORT MauiModel : public QSortFilterProxyModel
     Q_OBJECT
     Q_PROPERTY(MauiList *list READ getList WRITE setList)
 	Q_PROPERTY(QString filter READ getFilter WRITE setFilter NOTIFY filterChanged)
-	Q_PROPERTY(Qt::SortOrder sort READ getSort WRITE setSort NOTIFY sortChanged)	
-     
+	Q_PROPERTY(Qt::SortOrder sortOrder READ getSortOrder WRITE setSortOrder NOTIFY sortOrderChanged)	
+	Q_PROPERTY(QString sort READ getSort WRITE setSort NOTIFY sortChanged)	
+	
 public:    
     MauiModel(QObject *parent = nullptr);
     
@@ -54,8 +55,9 @@ private:
 	class PrivateAbstractListModel; 
     PrivateAbstractListModel *m_model;    
 	QString m_filter;
-	Qt::SortOrder m_sort;
-    
+	Qt::SortOrder m_sortOrder;
+	QString m_sort;
+	
 public slots:
     void setFilterString(const QString &string); //deprecrated
     void setSortOrder(const int &sortOrder);    //deprecrated
@@ -66,13 +68,17 @@ public slots:
 	void setFilter(const QString &filter);
 	const QString getFilter() const;
 	
-	void setSort(const Qt::SortOrder &sort);
-	Qt::SortOrder getSort() const;
+	void setSortOrder(const Qt::SortOrder &sortOrder);
+	Qt::SortOrder getSortOrder() const;
+	
+	void setSort(const QString &sort);
+	QString getSort() const;
     
 signals:
     void listChanged();
 	void filterChanged(QString filter);
-	void sortChanged(Qt::SortOrder sort);
+	void sortOrderChanged(Qt::SortOrder sortOrder);
+	void sortChanged(QString sort);
 };
 
 class MauiModel::PrivateAbstractListModel : public QAbstractListModel 

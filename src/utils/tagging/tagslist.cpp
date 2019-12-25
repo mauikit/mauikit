@@ -4,17 +4,23 @@
 TagsList::TagsList(QObject *parent) : QObject(parent)
 {
 	this->tag = Tagging::getInstance();
+	
+	connect(tag, &Tagging::tagged, [&](QString)
+	{
+		this->setList();
+	});
+	
 	this->setList();
 }
 
 TAG::DB_LIST TagsList::toModel(const QVariantList& data)
 {
 	TAG::DB_LIST res;
-	for(auto item : data)
+	for(const auto &item : data)
 	{
 		const auto map = item.toMap();
 		TAG::DB model;
-		for(auto key : map.keys())
+		for(const auto &key : map.keys())
 			model.insert(TAG::MAPKEY[key], map[key].toString());
 		
 		res << model;

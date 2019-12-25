@@ -135,7 +135,7 @@ Item
     {
         id: _listContainer
         property bool showList : false
-        height: showList ?  Math.min(Math.min(400, control.parent.parent.height), selectionList.contentHeight) + control.height + Maui.Style.space.medium : 0
+        height: showList ?  Math.min(Math.min(400, control.parent.parent.height), selectionList.contentHeight) + control.height + Maui.Style.space.big : 0
         width:  showList ? parent.width  : 0
         color: Qt.lighter(Kirigami.Theme.backgroundColor)
         radius: Maui.Style.radiusV
