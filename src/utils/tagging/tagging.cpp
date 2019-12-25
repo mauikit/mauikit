@@ -59,12 +59,11 @@ QVariantList Tagging::get(const QString &queryTxt)
         while(query.next())
         {
             QVariantMap data;
-            for(auto key : TAG::KEYMAP.keys())
+            for(const auto &key : TAG::KEYMAP.keys())
                 if(query.record().indexOf(TAG::KEYMAP[key]) > -1)
                     data[TAG::KEYMAP[key]] = query.value(TAG::KEYMAP[key]).toString();
 
             mapList<< data;
-
         }
 
     }else qDebug()<< query.lastError()<< query.lastQuery();
@@ -92,7 +91,7 @@ void Tagging::setApp()
 	this->version = UTIL::app->applicationVersion();
     this->comment = QString();
 	this->uri = UTIL::app->organizationDomain().isEmpty() ? QString("org.maui.%1").arg(this->application) : UTIL::app->organizationDomain();
-    this->app();
+    this->app(); //here register the app
 }
 
 bool Tagging::tag(const QString &tag, const QString &color, const QString &comment)
@@ -101,8 +100,9 @@ bool Tagging::tag(const QString &tag, const QString &color, const QString &comme
 
     QVariantMap tag_map
     {
-        {TAG::KEYMAP[TAG::KEYS::TAG], tag},
-        {TAG::KEYMAP[TAG::KEYS::COLOR], color},
+		{TAG::KEYMAP[TAG::KEYS::TAG], tag},
+		{TAG::KEYMAP[TAG::KEYS::APP], this->application},
+		{TAG::KEYMAP[TAG::KEYS::COLOR], color},
         {TAG::KEYMAP[TAG::KEYS::ADD_DATE], QDateTime::currentDateTime().toString(Qt::TextDate)},
         {TAG::KEYMAP[TAG::KEYS::COMMENT], comment},
     };

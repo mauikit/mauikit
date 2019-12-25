@@ -48,7 +48,6 @@ public:
      * Default constructor
      */
 	explicit MauiList(QObject *parent = nullptr);
-	~MauiList();
 	
 	virtual FMH::MODEL_LIST items() const = 0;
 	virtual void classBegin() override {}

@@ -27,8 +27,6 @@ MauiModel::MauiModel(QObject *parent)
     this->setDynamicSortFilter(true);
 }
 
-MauiModel::~MauiModel() {}
-
 void MauiModel::setFilterString(const QString& string)
 {
     this->setFilterCaseSensitivity(Qt::CaseInsensitive);
@@ -60,6 +58,36 @@ QVariantList MauiModel::getAll()
         res << this->get(i);
 
     return res;
+}
+
+void MauiModel::setFilter(const QString& filter)
+{
+	if(this->m_filter == filter)
+		return;
+	
+	this->m_filter = filter;
+	emit this->filterChanged(this->m_filter);
+	this->setFilterFixedString(this->m_filter);
+}
+
+const QString MauiModel::getFilter() const
+{
+	return this->m_filter;
+}
+
+void MauiModel::setSort(const Qt::SortOrder& sort)
+{
+	if(this->m_sort == sort)
+		return;
+	
+	this->m_sort = sort;
+	emit this->sortChanged(this->m_sort);
+	this->sort(0, this->m_sort);    
+}
+
+Qt::SortOrder MauiModel::getSort() const
+{
+	return this->m_sort;
 }
 
 bool MauiModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
@@ -160,9 +188,6 @@ void MauiModel::setList(MauiList *value)
 
 MauiModel::PrivateAbstractListModel::PrivateAbstractListModel(QObject *parent)
 : QAbstractListModel(parent), list(nullptr) {}
-
-MauiModel::PrivateAbstractListModel::~PrivateAbstractListModel()
-{}
 
 int MauiModel::PrivateAbstractListModel::rowCount(const QModelIndex &parent) const
 {

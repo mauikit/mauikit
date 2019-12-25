@@ -21,7 +21,3 @@
 MauiList::MauiList(QObject *parent) : QObject(parent)
 {
 }
-
-MauiList::~MauiList()
-{
-}
