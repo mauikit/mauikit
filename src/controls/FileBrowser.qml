@@ -427,8 +427,7 @@ Maui.Page
 						Kirigami.FormData.label: qsTr("Status bar")
 						checkable: true
 						checked: control.footBar.visible
-						onToggled: control.footBar.visible = !control.footBar.visible
-						
+						onToggled: control.footBar.visible = !control.footBar.visible					
 					}
 				}
 		}
