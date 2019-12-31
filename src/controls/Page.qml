@@ -34,8 +34,10 @@ Page
     
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     
-    signal goBackTriggered();
-    signal goForwardTriggered();    
+    property bool showTitle : true
+    
+    signal goBackTriggered()
+    signal goForwardTriggered()	
     
     background: Rectangle
     {
@@ -72,7 +74,7 @@ Page
         {
             Layout.fillWidth: sourceComponent === _titleComponent
             Layout.fillHeight: sourceComponent === _titleComponent
-            sourceComponent: control.title ? _titleComponent : undefined
+            sourceComponent: control.title && control.showTitle ? _titleComponent : undefined
         }
     }
     
