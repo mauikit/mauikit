@@ -86,7 +86,7 @@ LIBS += -L$$PWD/../../../../../../Qt/Tools/OpenSSL/Win_x64/lib/ -llibcrypto
 
         RESOURCES += $$PWD/src/maui-style/style.qrc
 
-        win32|android: {
+        win32 {
             DEFINES += ICONS_PNG
             RESOURCES += $$PWD/src/maui-style/icons_png.qrc
         }else {
