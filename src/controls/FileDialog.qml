@@ -43,8 +43,6 @@ Maui.Dialog
 	property var callback : ({})
 	
 	property alias textField: _textField
-	property alias singleSelection : browser.singleSelection
-	
 	
 	rejectButton.visible: false
 	acceptButton.text: control.mode === modes.SAVE ? qsTr("Save") : qsTr("Open")
@@ -198,7 +196,7 @@ Maui.Dialog
 					id: browser
 					
 					previewer.parent: ApplicationWindow.overlay
-					selectionMode: control.mode === modes.OPEN
+					settings.selectionMode: control.mode === modes.OPEN
 					
 					onNewBookmark: 
 					{
