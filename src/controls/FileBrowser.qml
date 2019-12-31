@@ -372,6 +372,7 @@ Maui.Page
 		id: tagsDialogComponent
 		Maui.TagsDialog
 		{
+			taglist.strict: false
 			onTagsReady:
 			{
 				composerList.updateToUrls(tags)
