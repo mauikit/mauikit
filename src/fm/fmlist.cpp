@@ -27,6 +27,10 @@
 #include "syncing.h"
 #endif
 
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
+#include <KIO/EmptyTrashJob>
+#endif
+
 #include <QtConcurrent>
 #include <QtConcurrent/QtConcurrentRun>
 #include <QFuture>
@@ -780,5 +784,3 @@ bool FMList::favItem(const QUrl &path)
 	
 	return this->fm->addTagToUrl("fav", path);
 }
-
-

@@ -50,7 +50,6 @@
 #include <KIO/SimpleJob>
 #include <KIO/MkdirJob>
 #include <KIO/DeleteJob>
-#include <KIO/EmptyTrashJob>
 #include <KCoreDirLister>
 #include <KFileItem>
 #include <QIcon>

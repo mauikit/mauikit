@@ -413,3 +413,11 @@ bool FMStatic::checkFileType(const int& type, const QString& mimeTypeName)
     return FMH::SUPPORTED_MIMETYPES[static_cast<FMH::FILTER_TYPE>(type)].contains(mimeTypeName);
 }
 
+void FMStatic::emptyThrash()
+{
+	#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
+	auto job = KIO::emptyTrash ();
+	job->start();
+	#endif	
+}
+

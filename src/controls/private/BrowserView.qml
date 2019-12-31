@@ -101,8 +101,8 @@ Maui.Page
             id: _listViewBrowser
             property alias currentFMList : _browserModel.list
             topMargin: Maui.Style.contentMargins
-            showPreviewThumbnails: showThumbnails
-            keepEmblemOverlay: selectionMode
+            showPreviewThumbnails: settings.showThumbnails
+            keepEmblemOverlay: settings.selectionMode
             showDetailsInfo: true
             supportsRefreshing: true
             BrowserHolder
@@ -241,8 +241,8 @@ Maui.Page
             property alias currentFMList : _browserModel.list
             itemSize : thumbnailsSize + Maui.Style.fontSizes.default
             cellHeight: itemSize * 1.5
-            keepEmblemOverlay: selectionMode
-            showPreviewThumbnails: showThumbnails
+            keepEmblemOverlay: settings.selectionMode
+            showPreviewThumbnails: settings.showThumbnails
 			supportsRefreshing: true
 
             BrowserHolder
@@ -490,8 +490,8 @@ Maui.Page
                         id: _millerListView
                         anchors.fill: parent
                         topMargin: Maui.Style.contentMargins
-                        showPreviewThumbnails: showThumbnails
-                        keepEmblemOverlay: selectionMode
+                        showPreviewThumbnails: settings.showThumbnails
+                        keepEmblemOverlay: settings.selectionMode
                         showDetailsInfo: true
                         onKeyPress: _millerControl.keyPress(event)
                         currentIndex : 0

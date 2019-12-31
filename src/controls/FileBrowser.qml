@@ -40,15 +40,11 @@ Maui.Page
 	onViewTypeChanged: browserView.viewType = control.viewType
 	
 	property int thumbnailsSize : Maui.Style.iconSizes.large * 1.7
-	property bool showThumbnails: true
 	
 	property var indexHistory : []
 	
 	property bool isCopy : false
 	property bool isCut : false
-	
-	property bool selectionMode : false
-	property bool singleSelection: false
 	
 	property bool group : false
 	
@@ -81,7 +77,7 @@ Maui.Page
 	
 	focus: true
 	
-	footBar.visible: false
+	footBar.visible: false ||  String(control.currentPath).startsWith("trash:/")
 	footBar.leftContent: Label
 	{
 		Layout.fillWidth: true
@@ -100,6 +96,14 @@ Maui.Page
 	{
 		icon.name: "zoom-out"
 		onClicked: zoomOut()
+	},
+	
+	ToolButton
+	{
+		visible: String(control.currentPath).startsWith("trash:/")
+		icon.name: "trash-empty"	
+		text: qsTr("Empty trash")
+		onClicked: Maui.FM.emptyTrash()
 	}
 	]
 	
@@ -111,8 +115,8 @@ Maui.Page
 	{
 		icon.name: "item-select"
 		checkable: true
-		checked: control.selectionMode
-		onClicked: control.selectionMode = !control.selectionMode
+		checked: settings.selectionMode
+		onClicked: settings.selectionMode = !settings.selectionMode
 	},
 	
 	Maui.ToolButtonMenu
@@ -403,9 +407,9 @@ Maui.Page
 					{
 						icon.name: "image-preview"
 						checkable: true
-						checked: control.showThumbnails
+						checked: settings.showThumbnails
 						Kirigami.FormData.label: qsTr("Thumbnails")
-						onToggled: control.showThumbnails = !control.showThumbnails
+						onToggled: settings.showThumbnails = !settings.showThumbnails
 					}
 					
 					Switch
@@ -697,7 +701,7 @@ Maui.Page
 		MauiLab.SelectionBar
 		{
 			id: _selectionBar			
-			singleSelection: control.singleSelection
+			singleSelection: settings.singleSelection
 			
 			onCountChanged:
 			{
@@ -991,7 +995,7 @@ Maui.Page
 				}
 				break;
 			default:
-				if(selectionMode && item.isdir == "false")
+				if(settings.selectionMode && item.isdir == "false")
 				{
 					if(control.selectionBar && control.selectionBar.contains(item.path))
 					{
@@ -1075,7 +1079,7 @@ Maui.Page
 		{
 			control.selectionBar.clear()
 			selectionBarLoader.sourceComponent = null
-			control.selectionMode = false
+			settings.selectionMode = false
 		}
 	}
 	

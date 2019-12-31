@@ -276,7 +276,7 @@ public slots:
 	
 	bool itemIsFav(const QUrl &path);
 	bool favItem(const QUrl &path);
-	
+		
 signals:
 	void pathChanged();
     void pathNameChanged();

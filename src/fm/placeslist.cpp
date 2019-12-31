@@ -74,7 +74,7 @@ watcher(new QFileSystemWatcher(this))
 	#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
 	connect(this->model, &KFilePlacesModel::rowsInserted, [this](const QModelIndex &parent, int first, int last)
 	{		
-		this->setList();
+		this->reset();
 		/*emit this->preListChanged();
 		
 		for (int i = first; i <= last; i++) 
@@ -340,7 +340,7 @@ void PlacesList::removePlace(const int& index)
 	bookmarks.removeOne(this->list.at(index)[FMH::MODEL_KEY::PATH]);
 	UTIL::saveSettings("BOOKMARKS", bookmarks, "PREFERENCES", "FileManager");
 	#else
-	this->model->removePlace(this->model->index(index, 0));
+	this->model->removePlace(this->model->closestItem(this->list.at(index)[FMH::MODEL_KEY::PATH]));
 	#endif
 	
 	this->list.removeAt(index);
@@ -351,7 +351,16 @@ bool PlacesList::contains(const QUrl& path)
 {
 	return (std::find_if(this->list.rbegin(), this->list.rend(), [&](const FMH::MODEL &item) -> bool 
 	{
-		return item[FMH::MODEL_KEY::URL] == path.toString();
+		return item[FMH::MODEL_KEY::PATH] == path.toString();
 	})) != this->list.rend();
 }
+
+int PlacesList::indexOf(const QUrl& path) //TODO needs tweaking
+{	
+	return std::distance(std::find_if(this->list.rbegin(), this->list.rend(), [&](const FMH::MODEL &item) -> bool 
+	{
+		return item[FMH::MODEL_KEY::PATH] == path.toString();
+	}), this->list.rend());
+}
+
 

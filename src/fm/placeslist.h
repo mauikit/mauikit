@@ -55,6 +55,7 @@ public slots:
 	void addPlace(const QUrl &path);
 	void removePlace(const int &index);
 	bool contains(const QUrl &path);
+	int indexOf(const QUrl &path);
 	
 private:
 	FM *fm;
