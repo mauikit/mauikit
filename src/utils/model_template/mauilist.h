@@ -32,6 +32,7 @@
  */
 #include <QObject>
 
+class PrivateAbstractListModel;
 #ifdef STATIC_MAUIKIT
 class MauiList : public QObject, public QQmlParserStatus
 #else
@@ -53,6 +54,8 @@ public:
 	virtual void classBegin() override {}
 	virtual void componentComplete() override {}
 	int getCount() const {return items().size(); } ;
+	
+	const PrivateAbstractListModel *m_model;
 	
 signals:
 	void preItemAppended();

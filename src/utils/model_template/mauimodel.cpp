@@ -156,6 +156,7 @@ void MauiModel::PrivateAbstractListModel::setList(MauiList* value)
         this->list->disconnect(this);
     
     this->list = value;
+	this->list->m_model = &m_model;
     
     if(this->list)
     {

@@ -56,11 +56,8 @@ Menu
     }
     
     function show(parent = control, x, y)
-    {
-        if(currentFMList.pathType !== Maui.FMList.TAGS_PATH && currentFMList.pathType !== Maui.FMList.TRASH_PATH && currentFMList.pathType !== Maui.FMList.APPS_PATH)
-        {
-            popup(parent, x, y)
-        }
+    {       
+            popup(parent, x, y)        
     }
 }
 
