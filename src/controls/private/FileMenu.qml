@@ -32,7 +32,7 @@ Menu
 		{			
 			addToSelection(currentFMList.get(index))
             if(Kirigami.Settings.isMobile)
-                selectionMode = true
+                settings.selectionMode = true
 		}
 	}
 	
