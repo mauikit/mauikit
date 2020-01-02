@@ -30,9 +30,9 @@ Item
     id: control
     
     default property alias content: _layout.data
-		
-		implicitHeight: _layout.implicitHeight
-		implicitWidth: _layout.implicitWidth
+
+    implicitHeight: _layout.implicitHeight
+    implicitWidth: _layout.implicitWidth
 
     property alias text1 : _label1.text
     property alias text2 : _label2.text
@@ -58,37 +58,37 @@ Item
 
         Image
         {
-			id: img
-			anchors.centerIn: parent
-			source: control.imageSource
-			height: Math.min(parent.height, control.iconSizeHint)
-			width: height
-			sourceSize.width: width
-			sourceSize.height: height
-			horizontalAlignment: Qt.AlignHCenter
-			verticalAlignment: Qt.AlignVCenter
-			fillMode: Image.PreserveAspectCrop
-			cache: true
-			asynchronous: true
-			smooth: !Kirigami.Settings.isMobile
-			
-			layer.enabled: true
-			layer.effect: OpacityMask
-			{
-				maskSource: Item
-				{
-					width: img.width
-					height: img.height
-					Rectangle
-					{
-						anchors.centerIn: parent
-						width: img.width
-						height: img.height
-						radius: Maui.Style.radiusV
-					}
-				}
-			}
-		}
+            id: img
+            anchors.centerIn: parent
+            source: control.imageSource
+            height: Math.min(parent.height, control.iconSizeHint)
+            width: height
+            sourceSize.width: width
+            sourceSize.height: height
+            horizontalAlignment: Qt.AlignHCenter
+            verticalAlignment: Qt.AlignVCenter
+            fillMode: Image.PreserveAspectCrop
+            cache: true
+            asynchronous: true
+            smooth: !Kirigami.Settings.isMobile
+
+            layer.enabled: true
+            layer.effect: OpacityMask
+            {
+                maskSource: Item
+                {
+                    width: img.width
+                    height: img.height
+                    Rectangle
+                    {
+                        anchors.centerIn: parent
+                        width: img.width
+                        height: img.height
+                        radius: Maui.Style.radiusV
+                    }
+                }
+            }
+        }
     }
 
 
@@ -110,7 +110,6 @@ Item
     {
         id: _layout
         anchors.fill: parent
-
         spacing: Maui.Style.space.small
 
         Item
@@ -133,11 +132,11 @@ Item
 
         ColumnLayout
         {
-			visible: control.labelsVisible
+            visible: control.labelsVisible
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.margins: visible ? Maui.Style.space.small : 0
-            Layout.leftMargin: _iconLoader.visible ? 0 : Maui.Style.space.small 
+            Layout.leftMargin: _iconLoader.visible ? 0 : Maui.Style.space.small
             spacing: 0
 
             Label
@@ -173,7 +172,7 @@ Item
 
         ColumnLayout
         {
-			visible: control.width >  Kirigami.Units.gridUnit * 15 && control.labelsVisible
+            visible: control.width >  Kirigami.Units.gridUnit * 15 && control.labelsVisible
             Layout.fillHeight: visible
             Layout.fillWidth: visible
             Layout.margins: visible ? Maui.Style.space.small : 0
@@ -193,7 +192,7 @@ Item
                 elide: Text.ElideMiddle
                 color: control.Kirigami.Theme.textColor
                 opacity: control.isCurrentItem ? 0.8 : 0.6
-			}
+            }
 
             Label
             {
@@ -209,7 +208,7 @@ Item
                 elide: Text.ElideMiddle
                 color: control.Kirigami.Theme.textColor
                 opacity: control.isCurrentItem ? 0.8 : 0.6
-			}
+            }
         }
     }
 

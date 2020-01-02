@@ -38,31 +38,47 @@ class MAUIKIT_EXPORT MauiModel : public QSortFilterProxyModel
 {
     Q_OBJECT
     Q_PROPERTY(MauiList *list READ getList WRITE setList)
-  
-    class PrivateAbstractListModel;    
-    
+	Q_PROPERTY(QString filter READ getFilter WRITE setFilter NOTIFY filterChanged)
+	Q_PROPERTY(Qt::SortOrder sortOrder READ getSortOrder WRITE setSortOrder NOTIFY sortOrderChanged)	
+	Q_PROPERTY(QString sort READ getSort WRITE setSort NOTIFY sortChanged)	
+	
 public:    
     MauiModel(QObject *parent = nullptr);
-    ~MauiModel();	
     
     MauiList* getList() const;
     void setList(MauiList *value);
-    
+
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     
 private:
-    PrivateAbstractListModel *m_model;    
-    
+    class PrivateAbstractListModel;
+    PrivateAbstractListModel *m_model;
+	QString m_filter;
+	Qt::SortOrder m_sortOrder;
+	QString m_sort;
+	
 public slots:
-    void setFilterString(const QString &string);
-    void setSortOrder(const int &sortOrder);    
+    void setFilterString(const QString &string); //deprecrated
+    void setSortOrder(const int &sortOrder);    //deprecrated
     
     QVariantMap get(const int &index);
     QVariantList getAll();
+	
+	void setFilter(const QString &filter);
+	const QString getFilter() const;
+	
+	void setSortOrder(const Qt::SortOrder &sortOrder);
+	Qt::SortOrder getSortOrder() const;
+	
+	void setSort(const QString &sort);
+	QString getSort() const;
     
 signals:
     void listChanged();
+	void filterChanged(QString filter);
+	void sortOrderChanged(Qt::SortOrder sortOrder);
+	void sortChanged(QString sort);
 };
 
 class MauiModel::PrivateAbstractListModel : public QAbstractListModel 
@@ -70,7 +86,6 @@ class MauiModel::PrivateAbstractListModel : public QAbstractListModel
     Q_OBJECT
 public:
     PrivateAbstractListModel(QObject *parent = nullptr);
-    ~PrivateAbstractListModel();
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;

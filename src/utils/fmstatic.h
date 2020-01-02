@@ -69,6 +69,8 @@ public slots:
 
     static bool openUrl(const QUrl &url);
     static void openLocation(const QStringList &urls);
+	
+	static void emptyThrash();	
 };
 
 #endif // FMSTATIC_H

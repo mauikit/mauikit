@@ -27,8 +27,6 @@ MauiModel::MauiModel(QObject *parent)
     this->setDynamicSortFilter(true);
 }
 
-MauiModel::~MauiModel() {}
-
 void MauiModel::setFilterString(const QString& string)
 {
     this->setFilterCaseSensitivity(Qt::CaseInsensitive);
@@ -60,6 +58,63 @@ QVariantList MauiModel::getAll()
         res << this->get(i);
 
     return res;
+}
+
+void MauiModel::setFilter(const QString& filter)
+{
+	if(this->m_filter == filter)
+		return;
+	
+	this->m_filter = filter;
+	emit this->filterChanged(this->m_filter);
+	this->setFilterFixedString(this->m_filter);
+}
+
+const QString MauiModel::getFilter() const
+{
+	return this->m_filter;
+}
+
+void MauiModel::setSortOrder(const Qt::SortOrder& sortOrder)
+{
+	if(this->m_sortOrder == sortOrder)
+		return;
+	
+	this->m_sortOrder = sortOrder;
+	emit this->sortOrderChanged(this->m_sortOrder);
+	this->sort(0, this->m_sortOrder);    
+}
+
+Qt::SortOrder MauiModel::getSortOrder() const
+{
+	return this->m_sortOrder;
+}
+
+void MauiModel::setSort(const QString& sort)
+{
+	if(this->m_sort == sort)
+		return;
+	
+	this->m_sort = sort;
+	emit this->sortChanged(this->m_sort);
+	this->setSortRole([sort, roles = this->roleNames()]() -> int
+	{
+		for(const auto key : roles.keys())
+		{
+			if(roles[key] == sort)
+			{
+				qDebug()<< "FOUND ROLE KEY "<< key << roles[key] << sort;
+				return key;
+			}
+		}
+			return -1;
+	}());	
+	this->sort(0, this->m_sortOrder);
+}
+
+QString MauiModel::getSort() const
+{
+	return this->m_sort;
 }
 
 bool MauiModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
@@ -101,7 +156,7 @@ void MauiModel::PrivateAbstractListModel::setList(MauiList* value)
         this->list->disconnect(this);
     
     this->list = value;
-    
+
     if(this->list)
     {
         connect(this->list, &MauiList::preItemAppendedAt, this, [=](int index)
@@ -156,13 +211,11 @@ void MauiModel::PrivateAbstractListModel::setList(MauiList* value)
 void MauiModel::setList(MauiList *value)
 {
    this->m_model->setList(value);
+   this->getList()->m_model = this;
 }
 
 MauiModel::PrivateAbstractListModel::PrivateAbstractListModel(QObject *parent)
 : QAbstractListModel(parent), list(nullptr) {}
-
-MauiModel::PrivateAbstractListModel::~PrivateAbstractListModel()
-{}
 
 int MauiModel::PrivateAbstractListModel::rowCount(const QModelIndex &parent) const
 {

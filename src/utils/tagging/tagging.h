@@ -38,7 +38,7 @@ class MAUIKIT_EXPORT Tagging : public TAGDB
 public:
     static Tagging *getInstance();
 
-    Q_INVOKABLE QVariantList get(const QString &query);
+	Q_INVOKABLE const QVariantList get(const QString &query,  std::function<bool(QVariantMap &item)> modifier = nullptr);
 
 	Q_INVOKABLE bool tagExists(const QString &tag, const bool &strict = false);
 	Q_INVOKABLE bool urlTagExists(const QString &url, const QString &tag, const bool &strict = false);
@@ -60,7 +60,7 @@ public:
     Q_INVOKABLE QVariantList getUrlsTags(const bool &strict = true);
     Q_INVOKABLE QVariantList getAbstractsTags(const bool &strict = true);
     Q_INVOKABLE QVariantList getAllTags(const bool &strict = true);
-    Q_INVOKABLE QVariantList getUrls(const QString &tag, const bool &strict = true);
+	Q_INVOKABLE QVariantList getUrls(const QString &tag, const bool &strict = true, std::function<bool(QVariantMap &item)> modifier = nullptr);
     Q_INVOKABLE QVariantList getUrlTags(const QString &url, const bool &strict = true);
     Q_INVOKABLE QVariantList getAbstractTags(const QString &key, const QString &lot, const bool &strict = true);
 
@@ -69,8 +69,9 @@ public:
 	Q_INVOKABLE bool removeAbstractTags(const QString &key, const QString &lot);
 	
 	Q_INVOKABLE bool removeUrlTags(const QString &url);
-	Q_INVOKABLE bool removeUrlTag(const QString &url, const QString &tag);
-	
+    Q_INVOKABLE bool removeUrlTag(const QString &url, const QString &tag);
+    Q_INVOKABLE bool removeUrl(const QString &url);
+
     /*STATIC METHODS*/
 
     static QString mac();

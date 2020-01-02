@@ -187,8 +187,9 @@ Flickable
 				autoTransform: true
 				asynchronous: true
 				source: flick.source
-				onStatusChanged: playing = (status == AnimatedImage.Ready)
-				cache: true
+				playing: true
+// 				onStatusChanged: playing = (status == AnimatedImage.Ready)
+				cache: true				
 			}
 		}
 		
@@ -202,8 +203,7 @@ Flickable
 				asynchronous: true
 				source: flick.source
 			}
-		}
-		
+		}		
 	}	
 	
 	function fit()

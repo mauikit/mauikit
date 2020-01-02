@@ -4,17 +4,23 @@
 TagsList::TagsList(QObject *parent) : QObject(parent)
 {
 	this->tag = Tagging::getInstance();
+	
+	connect(tag, &Tagging::tagged, [&](QString)
+	{
+		this->setList();
+	});
+	
 	this->setList();
 }
 
 TAG::DB_LIST TagsList::toModel(const QVariantList& data)
 {
 	TAG::DB_LIST res;
-	for(auto item : data)
+	for(const auto &item : data)
 	{
 		const auto map = item.toMap();
 		TAG::DB model;
-		for(auto key : map.keys())
+		for(const auto &key : map.keys())
 			model.insert(TAG::MAPKEY[key], map[key].toString());
 		
 		res << model;
@@ -130,14 +136,12 @@ int TagsList::indexOf(const QString& tag)
 
 bool TagsList::insert(const QString &tag)
 {	
-	auto _tag = tag.trimmed();
-	
-	if(this->tag->tag(_tag))
+	if(this->tag->tag(tag.trimmed()))
 	{
-		emit this->preItemAppended();		
-		this->list << TAG::DB {{TAG::KEYS::TAG, _tag}};
+// 		emit this->preItemAppended();		
+// 		this->list << TAG::DB {{TAG::KEYS::TAG, _tag}};
 // 		this->sortList();		
-		emit this->postItemAppended();
+// 		emit this->postItemAppended();
 		return true;
 	}
 	
@@ -372,8 +376,7 @@ void TagsList::setUrls(const QStringList& value)
 }
 
 void TagsList::append(const QString &tag)
-{
-	
+{	
 	if(this->contains(tag))	
 		return;	
 	

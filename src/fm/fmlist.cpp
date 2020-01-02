@@ -27,6 +27,10 @@
 #include "syncing.h"
 #endif
 
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
+#include <KIO/EmptyTrashJob>
+#endif
+
 #include <QtConcurrent>
 #include <QtConcurrent/QtConcurrentRun>
 #include <QFuture>
@@ -549,7 +553,7 @@ void FMList::setDirIcon(const int &index, const QString &iconName)
 	emit this->updateModel(index, QVector<int> {FMH::MODEL_KEY::ICON});
 }
 
-QUrl FMList::getParentPath()
+const QUrl FMList::getParentPath()
 {
 	switch(this->pathType)
 	{		
@@ -560,7 +564,17 @@ QUrl FMList::getParentPath()
 	}	
 }
 
-QUrl FMList::getPosteriorPath()
+QList<QUrl> FMList::getPosteriorPathHistory()
+{
+	return QList<QUrl> (); // todo : implement signal
+}
+
+QList<QUrl> FMList::getPreviousPathHistory()
+{
+	return QList<QUrl> (); // todo : implement signal
+}
+
+const QUrl FMList::getPosteriorPath()
 {
     const auto url = NavHistory.getPosteriorPath();
 
@@ -570,7 +584,7 @@ QUrl FMList::getPosteriorPath()
     return url;
 }
 
-QUrl FMList::getPreviousPath() 
+const QUrl FMList::getPreviousPath() 
 {	
     const auto url = NavHistory.getPreviousPath();
 
@@ -770,5 +784,3 @@ bool FMList::favItem(const QUrl &path)
 	
 	return this->fm->addTagToUrl("fav", path);
 }
-
-

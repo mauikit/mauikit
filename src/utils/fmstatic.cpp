@@ -279,6 +279,10 @@ bool FMStatic::removeFile(const QUrl &path)
 
     qDebug()<< "TRYING TO REMOVE FILE: " << path;
 
+#ifdef COMPONENT_TAGGING
+    Tagging::getInstance()->removeUrl(path.toString());
+#endif
+
 #if defined Q_OS_ANDROID || defined Q_OS_WIN32
     if(QFileInfo(path.toLocalFile()).isDir())
         return FMStatic::removeDir(path);
@@ -411,5 +415,13 @@ void FMStatic::setDirConf(const QUrl &path, const QString &group, const QString 
 bool FMStatic::checkFileType(const int& type, const QString& mimeTypeName)
 {
     return FMH::SUPPORTED_MIMETYPES[static_cast<FMH::FILTER_TYPE>(type)].contains(mimeTypeName);
+}
+
+void FMStatic::emptyThrash()
+{
+	#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
+	auto job = KIO::emptyTrash ();
+	job->start();
+	#endif	
 }
 
