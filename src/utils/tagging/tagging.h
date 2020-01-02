@@ -69,8 +69,9 @@ public:
 	Q_INVOKABLE bool removeAbstractTags(const QString &key, const QString &lot);
 	
 	Q_INVOKABLE bool removeUrlTags(const QString &url);
-	Q_INVOKABLE bool removeUrlTag(const QString &url, const QString &tag);
-	
+    Q_INVOKABLE bool removeUrlTag(const QString &url, const QString &tag);
+    Q_INVOKABLE bool removeUrl(const QString &url);
+
     /*STATIC METHODS*/
 
     static QString mac();

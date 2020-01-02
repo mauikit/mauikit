@@ -279,6 +279,10 @@ bool FMStatic::removeFile(const QUrl &path)
 
     qDebug()<< "TRYING TO REMOVE FILE: " << path;
 
+#ifdef COMPONENT_TAGGING
+    Tagging::getInstance()->removeUrl(path.toString());
+#endif
+
 #if defined Q_OS_ANDROID || defined Q_OS_WIN32
     if(QFileInfo(path.toLocalFile()).isDir())
         return FMStatic::removeDir(path);

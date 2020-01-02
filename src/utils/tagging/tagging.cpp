@@ -286,7 +286,12 @@ bool Tagging::removeUrlTags(const QString &url)
 bool Tagging::removeUrlTag(const QString& url, const QString& tag)
 {	
 	TAG::DB data {{TAG::KEYS::URL, url}, {TAG::KEYS::TAG, tag}};
-	return this->remove(TAG::TABLEMAP[TAG::TABLE::TAGS_URLS], data);	
+    return this->remove(TAG::TABLEMAP[TAG::TABLE::TAGS_URLS], data);
+}
+
+bool Tagging::removeUrl(const QString &url)
+{
+    return this->remove(TAG::TABLEMAP[TAG::TABLE::TAGS_URLS],  {{TAG::KEYS::URL, url}});
 }
 
 QString Tagging::mac()

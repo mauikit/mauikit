@@ -47,13 +47,13 @@ public:
     
     MauiList* getList() const;
     void setList(MauiList *value);
-    
+
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     
 private:
-	class PrivateAbstractListModel; 
-    PrivateAbstractListModel *m_model;    
+    class PrivateAbstractListModel;
+    PrivateAbstractListModel *m_model;
 	QString m_filter;
 	Qt::SortOrder m_sortOrder;
 	QString m_sort;

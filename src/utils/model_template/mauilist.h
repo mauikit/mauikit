@@ -32,7 +32,7 @@
  */
 #include <QObject>
 
-class PrivateAbstractListModel;
+class MauiModel;
 #ifdef STATIC_MAUIKIT
 class MauiList : public QObject, public QQmlParserStatus
 #else
@@ -53,10 +53,12 @@ public:
 	virtual FMH::MODEL_LIST items() const = 0;
 	virtual void classBegin() override {}
 	virtual void componentComplete() override {}
-	int getCount() const {return items().size(); } ;
-	
-	const PrivateAbstractListModel *m_model;
-	
+    int getCount() const {return items().size(); }
+
+   const MauiModel *m_model; //becarefull this is owned by qml engine, this is only supossed to be a viewer
+public slots:
+    int mappedIndex(const int &index) const;
+
 signals:
 	void preItemAppended();
 	void postItemAppended();

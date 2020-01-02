@@ -282,6 +282,8 @@ void MAUIAndroid::shareDialog(const QUrl &url)
     }
     if (activity.isValid())
     {
+        qDebug()<< "trying to share dialog << valid";
+
         QMimeDatabase mimedb;
         QString mimeType = mimedb.mimeTypeForFile(url.toLocalFile()).name();
 
@@ -294,7 +296,10 @@ void MAUIAndroid::shareDialog(const QUrl &url)
                                                   QAndroidJniObject::fromString(QString("%1.fileprovider").arg(UTIL::app->organizationDomain())).object<jstring>());
 
 
-        if (_env->ExceptionCheck()) {
+        if (_env->ExceptionCheck())
+        {
+            qDebug()<< "trying to share dialog << exception";
+
             _env->ExceptionClear();
             throw InterfaceConnFailedException();
         }

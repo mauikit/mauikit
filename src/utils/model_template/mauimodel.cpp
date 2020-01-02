@@ -156,8 +156,7 @@ void MauiModel::PrivateAbstractListModel::setList(MauiList* value)
         this->list->disconnect(this);
     
     this->list = value;
-	this->list->m_model = &m_model;
-    
+
     if(this->list)
     {
         connect(this->list, &MauiList::preItemAppendedAt, this, [=](int index)
@@ -212,6 +211,7 @@ void MauiModel::PrivateAbstractListModel::setList(MauiList* value)
 void MauiModel::setList(MauiList *value)
 {
    this->m_model->setList(value);
+   this->getList()->m_model = this;
 }
 
 MauiModel::PrivateAbstractListModel::PrivateAbstractListModel(QObject *parent)
