@@ -46,26 +46,27 @@ MauiApp * MauiApp::instance()
 
 QString MauiApp::getName()
 {
-    return 
-Handy::appInfo().value(FMH::MODEL_NAME[FMH::MODEL_KEY::NAME]).toString();
+    return qApp->applicationName();
+}
+
+QString MauiApp::getDisplayName()
+{
+    return qApp->applicationDisplayName();
 }
 
 QString MauiApp::getVersion()
 {
-    return 
-Handy::appInfo().value(FMH::MODEL_NAME[FMH::MODEL_KEY::VERSION]).toString();
+    return  qApp->applicationVersion();
 }
 
 QString MauiApp::getOrg()
 {
-    return 
-Handy::appInfo().value(FMH::MODEL_NAME[FMH::MODEL_KEY::ORG]).toString();
+    return qApp->organizationName();
 }
 
 QString MauiApp::getDomain()
 {
-    return 
-Handy::appInfo().value(FMH::MODEL_NAME[FMH::MODEL_KEY::DOMAIN_M]).toString();
+    return qApp->organizationDomain();
 }
 
 QString MauiApp::getMauikitVersion()

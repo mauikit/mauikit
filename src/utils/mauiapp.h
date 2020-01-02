@@ -35,17 +35,18 @@ class MAUIKIT_EXPORT MauiApp : public QObject
 {
     Q_OBJECT
     
-    Q_PROPERTY(QString name READ getName CONSTANT)
-    Q_PROPERTY(QString version READ getVersion CONSTANT)
-    Q_PROPERTY(QString org READ getOrg CONSTANT)
-    Q_PROPERTY(QString domain READ getDomain CONSTANT)
+    Q_PROPERTY(QString name READ getName CONSTANT FINAL)
+    Q_PROPERTY(QString displayName READ getDisplayName CONSTANT FINAL)
+    Q_PROPERTY(QString version READ getVersion CONSTANT FINAL)
+    Q_PROPERTY(QString org READ getOrg CONSTANT FINAL)
+    Q_PROPERTY(QString domain READ getDomain CONSTANT FINAL)
     Q_PROPERTY(QString iconName READ getIconName WRITE setIconName NOTIFY iconNameChanged)
     Q_PROPERTY(QString description READ getDescription WRITE setDescription NOTIFY descriptionChanged)
     Q_PROPERTY(QString webPage READ getWebPage WRITE setWebPage NOTIFY webPageChanged)
     Q_PROPERTY(QString reportPage READ getReportPage WRITE setReportPage NOTIFY reportPageChanged)
     Q_PROPERTY(QString donationPage READ getDonationPage WRITE setDonationPage NOTIFY donationPageChanged)
-    Q_PROPERTY(QString mauikitVersion READ getMauikitVersion CONSTANT)
-    Q_PROPERTY(QString qtVersion READ getQtVersion CONSTANT)
+    Q_PROPERTY(QString mauikitVersion READ getMauikitVersion CONSTANT FINAL)
+    Q_PROPERTY(QString qtVersion READ getQtVersion CONSTANT FINAL)
     Q_PROPERTY(bool handleAccounts READ getHandleAccounts WRITE setHandleAccounts NOTIFY handleAccountsChanged)
 #ifdef COMPONENT_ACCOUNTS
     Q_PROPERTY(MauiAccounts * accounts READ getAccounts CONSTANT FINAL)
@@ -56,7 +57,9 @@ public:
     
     static MauiApp *instance();
     static QString getName();
-	
+
+    static QString getDisplayName();
+
     static QString getVersion();
 	
     static QString getOrg();
