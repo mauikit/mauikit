@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 2.3
+import QtQuick 2.5
+import QtQuick.Controls 2.10
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
@@ -53,7 +53,7 @@ Maui.Popup
     clip: false
 
     maxWidth: Maui.Style.unit * 300
-    maxHeight: (_pageContent.implicitHeight * 1.2) + page.footBar.height + Maui.Style.space.huge + page.padding
+    maxHeight: (_pageContent.implicitHeight * 1.2) +( page.footBar.height ) + Maui.Style.space.huge + page.padding
 
     widthHint: 0.9
     heightHint: 0.9
@@ -61,9 +61,9 @@ Maui.Popup
     Maui.Badge
     {
         id: _closeButton
-        iconName: "qrc://assets/dialog-close.svg"
-//         Kirigami.Theme.backgroundColor: hovered ?  Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
-//         Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
+        iconName: "qrc:/assets/dialog-close.svg"
+        //         Kirigami.Theme.backgroundColor: hovered ?  Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
+        //         Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
 
         anchors
         {
@@ -120,7 +120,7 @@ Maui.Popup
             sourceComponent: control.defaultButtons ? _defaultButtonsComponent : undefined
         }
 
-       ColumnLayout
+        ColumnLayout
         {
             id: _pageContent
             anchors.fill: parent
@@ -128,10 +128,10 @@ Maui.Popup
 
             Label
             {
-                width: parent.width
-                height: visible ? implicitHeight : 0
                 visible: title.length > 0
-                Layout.fillWidth: visible
+
+                Layout.fillWidth: true
+                Layout.preferredHeight: visible ? implicitHeight : 0
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
 
                 color: Kirigami.Theme.textColor
@@ -146,8 +146,8 @@ Maui.Popup
             Kirigami.ScrollablePage
             {
                 visible: message.length > 0
-                Layout.fillHeight: visible
-                Layout.fillWidth: visible
+                Layout.fillHeight: true
+                Layout.fillWidth: true
                 Kirigami.Theme.backgroundColor: "transparent"
                 padding: 0
                 leftPadding: padding
@@ -166,17 +166,24 @@ Maui.Popup
                     font.pointSize:Maui.Style.fontSizes.default
                     wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
                     elide: Text.ElideLeft
+                    verticalAlignment: Qt.AlignVCenter
                 }
             }
 
-            Maui.TextField
+            Item
             {
-                id: _textEntry
-                focus: control.entryField
-                onAccepted: control.accepted()
-                Layout.fillWidth: entryField
-                height: entryField ?  Maui.Style.iconSizes.big : 0
-                visible: entryField
+                visible: control.entryField
+
+                Layout.fillWidth: true
+                Layout.preferredHeight: Maui.Style.toolBarHeight
+
+                Maui.TextField
+                {
+                    id: _textEntry
+                    anchors.centerIn: parent
+                    focus: control.entryField
+                    onAccepted: control.accepted()
+                }
             }
         }
     }

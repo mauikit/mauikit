@@ -19,9 +19,8 @@
 #include "mauilist.h"
 #include "mauimodel.h"
 
-MauiList::MauiList(QObject *parent) : QObject(parent)
-{
-}
+MauiList::MauiList(QObject *parent) : QObject(parent), m_model(nullptr)
+{}
 
 int MauiList::mappedIndex(const int &index) const
 {

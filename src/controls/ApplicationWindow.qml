@@ -432,8 +432,13 @@ Kirigami.AbstractApplicationWindow
 
     Component.onCompleted:
     {
-        if(isAndroid && headBar.position === ToolBar.Footer)
-            Maui.Android.statusbarColor(Kirigami.Theme.backgroundColor, true)
+        if(isAndroid)
+        {
+            if(headBar.position === ToolBar.Footer)
+                Maui.Android.statusbarColor(Kirigami.Theme.backgroundColor, true)
+            else
+                 Maui.Android.statusbarColor(headBar.Kirigami.Theme.backgroundColor, true)
+        }
 
         if(!isMobile)
         {

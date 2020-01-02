@@ -57,8 +57,8 @@ Item
             id: img
             anchors.centerIn: parent
             source: control.imageSource
-            height: Math.min (parent.height, img.implicitHeight)
-            width: Math.min(parent.width, img.implicitWidth)
+            height: parent.height
+            width: parent.width
             sourceSize.width: width
             sourceSize.height: height
             horizontalAlignment: Qt.AlignHCenter
@@ -66,7 +66,7 @@ Item
             fillMode: control.fillMode
             cache: true
             asynchronous: true
-            smooth: !Kirigami.Settings.isMobile
+            smooth: true
 
             layer.enabled: true
             layer.effect: OpacityMask

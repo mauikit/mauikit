@@ -55,8 +55,8 @@ T.ToolButton
     spacing: Maui.Style.space.tiny
     rightPadding: Maui.Style.space.medium
     leftPadding: Maui.Style.space.medium
-    topPadding: Maui.Style.space.medium
-    bottomPadding: Maui.Style.space.medium
+    topPadding: Maui.Style.space.small
+    bottomPadding: Maui.Style.space.small
     icon.width: Maui.Style.iconSizes.medium
     icon.height: Maui.Style.iconSizes.medium
     icon.color: checked  ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
