@@ -394,7 +394,7 @@ FM::FM(QObject *parent) : QObject(parent)
         }else
         {
             for(const auto &data : this->tag->getUrls(tag, false, [filters](QVariantMap &item) -> bool
-            { return doNameFilter(FMH::mapValue(item, FMH::MODEL_KEY::URL), filters); }))
+            { return filters.isEmpty() ? true : doNameFilter(FMH::mapValue(item, FMH::MODEL_KEY::URL), filters); }))
             {                
                 const auto url = QUrl(data.toMap()[TAG::KEYMAP[TAG::KEYS::URL]].toString());
                 if(url.isLocalFile() && !FMH::fileExists(url))

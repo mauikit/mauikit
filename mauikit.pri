@@ -10,7 +10,7 @@ CONFIG *= c++17
 
 DEFINES *= \
     MAUI_APP \
-    STATIC_MAUIKIT \
+    STATIC_MAUIKIT
 
 #REPO VARIABLES
 LUV_REPO = https://github.com/milohr/luv-icon-theme

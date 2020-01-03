@@ -34,7 +34,11 @@ Maui.Page
 	id: control
 	
 	property url currentPath
-	onCurrentPathChanged: control.browserView.path = control.currentPath
+    onCurrentPathChanged:
+    {
+        if(control.browserView)
+            control.browserView.path = control.currentPath
+    }
 	
 	property int viewType : Maui.FMList.LIST_VIEW
 	onViewTypeChanged: browserView.viewType = control.viewType
@@ -946,11 +950,11 @@ Maui.Page
 	{
 		if(path)
 		{    
-            console.log(" OPENIGN A PATH")
+            control.currentPath = path
 			const component = Qt.createComponent("private/BrowserView.qml");
 			if (component.status === Component.Ready)
 			{
-				const object = component.createObject(tabsObjectModel, {'path': path});
+                const object = component.createObject(tabsObjectModel, {'path': control.currentPath});
 				tabsObjectModel.append(object)
                 
                 tabsListModel.append({"path": path})
