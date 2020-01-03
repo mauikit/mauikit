@@ -101,9 +101,9 @@ FM::FM(QObject *parent) : QObject(parent)
             {FMH::MODEL_KEY::ICON, kfile.iconName()},
             {FMH::MODEL_KEY::SIZE, QString::number(kfile.size())},
             {FMH::MODEL_KEY::THUMBNAIL, kfile.mostLocalUrl().toString()},
-			{FMH::MODEL_KEY::OWNER, kfile.user()},
-// 			{FMH::MODEL_KEY::FAVORITE, QVariant(this->urlTagExists(kfile.mostLocalUrl().toString(), "fav")).toString()},
-			{FMH::MODEL_KEY::COUNT, kfile.isLocalFile() && kfile.isDir() ?  QString::number(QDir(kfile.localPath()).count() - 2) : "0"}
+            {FMH::MODEL_KEY::OWNER, kfile.user()},
+                       // 			{FMH::MODEL_KEY::FAVORITE, QVariant(this->urlTagExists(kfile.mostLocalUrl().toString(), "fav")).toString()},
+            {FMH::MODEL_KEY::COUNT, kfile.isLocalFile() && kfile.isDir() ?  QString::number(QDir(kfile.localPath()).count() - 2) : "0"}
         };
         }
 
@@ -166,7 +166,7 @@ FM::FM(QObject *parent) : QObject(parent)
                         for(auto key : item.keys())
                             data.insert(FMH::MODEL_NAME[key], item[key]);
 
-//                         this->copy(QVariantList {data}, this->sync->getCopyTo());
+                        //                         this->copy(QVariantList {data}, this->sync->getCopyTo());
                         break;
                     }
                     default: return;
@@ -239,7 +239,7 @@ FM::FM(QObject *parent) : QObject(parent)
 
             this->dirLister->setShowingDotFiles(hidden);
             this->dirLister->setDirOnlyMode(onlyDirs);
-           
+
             this->dirLister->setNameFilter(filters.join(" "));
             qDebug() << "NAME FILTERS SET" << this->dirLister->nameFilter();
             // 	if(this->dirLister->url() == path)
@@ -283,15 +283,15 @@ FM::FM(QObject *parent) : QObject(parent)
             {
                 for(const auto &tag : this->tag->getAllTags(false))
                 {
-					QVariantMap item = tag.toMap();
+                    QVariantMap item = tag.toMap();
                     const auto label = item.value(TAG::KEYMAP[TAG::KEYS::TAG]).toString();
                     data << FMH::MODEL
                     {
                     {FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::TAGS_PATH]+label},
-					{FMH::MODEL_KEY::ICON, "tag"},
-					{FMH::MODEL_KEY::MODIFIED, QDateTime::fromString(item.value(TAG::KEYMAP[TAG::KEYS::ADD_DATE]).toString(), Qt::TextDate).toString()},
-					{FMH::MODEL_KEY::IS_DIR, "true"},
-					{FMH::MODEL_KEY::LABEL, label},
+                    {FMH::MODEL_KEY::ICON, "tag"},
+                    {FMH::MODEL_KEY::MODIFIED, QDateTime::fromString(item.value(TAG::KEYMAP[TAG::KEYS::ADD_DATE]).toString(), Qt::TextDate).toString()},
+                    {FMH::MODEL_KEY::IS_DIR, "true"},
+                    {FMH::MODEL_KEY::LABEL, label},
                     {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::TAGS_PATH]}
                 };
             }
@@ -313,7 +313,7 @@ FM::FM(QObject *parent) : QObject(parent)
         }
 
         auto user = __list[1];
-//        auto data = this->get(QString("select * from clouds where user = '%1'").arg(user));
+        //        auto data = this->get(QString("select * from clouds where user = '%1'").arg(user));
         QVariantList data;
         if(data.isEmpty())
             return false;
@@ -332,163 +332,176 @@ FM::FM(QObject *parent) : QObject(parent)
 #endif
     }
 
-void FM::createCloudDir(const QString &path, const QString &name)
-{
+    void FM::createCloudDir(const QString &path, const QString &name)
+    {
 #ifdef COMPONENT_SYNCING
-    this->sync->createDir(path, name);
+        this->sync->createDir(path, name);
 #endif
-}
+    }
 
-void FM::openCloudItem(const QVariantMap &item)
-{
+    void FM::openCloudItem(const QVariantMap &item)
+    {
 #ifdef COMPONENT_SYNCING
-    FMH::MODEL data;
-    for(const auto &key : item.keys())
-        data.insert(FMH::MODEL_NAME_KEY[key], item[key].toString());
+        FMH::MODEL data;
+        for(const auto &key : item.keys())
+            data.insert(FMH::MODEL_NAME_KEY[key], item[key].toString());
 
-    this->sync->resolveFile(data, Syncing::SIGNAL_TYPE::OPEN);
+        this->sync->resolveFile(data, Syncing::SIGNAL_TYPE::OPEN);
 #endif
-}
+    }
 
-void FM::getCloudItem(const QVariantMap &item)
-{	
+    void FM::getCloudItem(const QVariantMap &item)
+    {
 #ifdef COMPONENT_SYNCING
-    this->sync->resolveFile(FMH::toModel(item), Syncing::SIGNAL_TYPE::DOWNLOAD);
+        this->sync->resolveFile(FMH::toModel(item), Syncing::SIGNAL_TYPE::DOWNLOAD);
 #endif
-}
+    }
 
-QString FM::resolveUserCloudCachePath(const QString &server, const QString &user)
-{
-    return FMH::CloudCachePath+"opendesktop/"+user;
-}
+    QString FM::resolveUserCloudCachePath(const QString &server, const QString &user)
+    {
+        return FMH::CloudCachePath+"opendesktop/"+user;
+    }
 
-QString FM::resolveLocalCloudPath(const QString& path)
-{
+    QString FM::resolveLocalCloudPath(const QString& path)
+    {
 #ifdef COMPONENT_SYNCING
-    return QString(path).replace(FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::CLOUD_PATH]+this->sync->getUser(), "");
+        return QString(path).replace(FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::CLOUD_PATH]+this->sync->getUser(), "");
 #else
-    return QString();
+        return QString();
 #endif
-}
+    }
 
-FMH::MODEL_LIST FM::getTagContent(const QString &tag)
-{
-    FMH::MODEL_LIST content;
-	#ifdef COMPONENT_TAGGING
-	if(tag.isEmpty())
-	{
-		return this->getTags();
-		
-	}else		
-	{
-		for(const auto &data : this->tag->getUrls(tag, false))
-		{
-			const auto url = QUrl(data.toMap()[TAG::KEYMAP[TAG::KEYS::URL]].toString());
-			if(url.isLocalFile() && !FMH::fileExists(url))
-				continue;
-			
-			content << FMH::getFileInfoModel(url);
-		}
-	}
-#endif
-    return content;
-}
+    static bool doNameFilter(const QString &name, const QStringList &filters)
+    {
+        for(const auto &filter : std::accumulate(filters.constBegin(), filters.constEnd(), QVector<QRegExp> {}, [](QVector<QRegExp> &res, const QString &filter) -> QVector<QRegExp>
+        { res.append(QRegExp(filter, Qt::CaseInsensitive, QRegExp::Wildcard)); return res; }))
+        {
+            if(filter.exactMatch(name))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
-FMH::MODEL_LIST FM::getUrlTags(const QUrl &url)
-{
-	FMH::MODEL_LIST content;
-	#ifdef COMPONENT_TAGGING
-	content = FMH::toModelList(this->tag->getUrlTags(url.toString(), false));
-	#endif
-	return content;
-}
-
-bool FM::urlTagExists(const QUrl& url, const QString tag)
-{
-	#ifdef COMPONENT_TAGGING
-	return this->tag->urlTagExists(url.toString(), tag, false);
-	#endif
-}
-
-bool FM::addTagToUrl(const QString tag, const QUrl& url)
-{
+    FMH::MODEL_LIST FM::getTagContent(const QString &tag, const QStringList &filters)
+    {
+        FMH::MODEL_LIST content;
 #ifdef COMPONENT_TAGGING
-    return this->tag->tagUrl(url.toString(), tag);
-#endif
-}
-
-bool FM::removeTagToUrl(const QString tag, const QUrl& url)
-{
-	#ifdef COMPONENT_TAGGING
-	return this->tag->removeUrlTag(url.toString(), tag);
-	#endif
-}
-
-bool FM::cut(const QList<QUrl> &urls, const QUrl &where)
-{	
-
-    for(const auto &url : urls)
-    {
-        if(FMStatic::isCloud(url.toString()))
+        if(tag.isEmpty())
         {
-#ifdef COMPONENT_SYNCING
-            this->sync->setCopyTo(where.toString());
-//             this->sync->resolveFile(url, Syncing::SIGNAL_TYPE::COPY);
-#endif
+            return this->getTags();
         }else
         {
-			FMStatic::cut(url, where);
+            for(const auto &data : this->tag->getUrls(tag, false, [filters](QVariantMap &item) -> bool
+            { return doNameFilter(FMH::mapValue(item, FMH::MODEL_KEY::URL), filters); }))
+            {                
+                const auto url = QUrl(data.toMap()[TAG::KEYMAP[TAG::KEYS::URL]].toString());
+                if(url.isLocalFile() && !FMH::fileExists(url))
+                    continue;
+
+                content << FMH::getFileInfoModel(url);
+            }
         }
+#endif
+        return content;
     }
 
-    return true;
-}
-
-bool FM::copy(const QList<QUrl> &urls, const QUrl &where)
-{
-    QStringList cloudPaths;
-    for(const auto &url : urls)
+    FMH::MODEL_LIST FM::getUrlTags(const QUrl &url)
     {
-        if(FMStatic::isDir(url))
-        {
-            FMStatic::copy(url, where.toString()+"/"+QFileInfo(url.toLocalFile()).fileName(), false);
-
-        }else if(FMStatic::isCloud(url))
-        {
-#ifdef COMPONENT_SYNCING
-            this->sync->setCopyTo(where.toString());
-//             this->sync->resolveFile(item, Syncing::SIGNAL_TYPE::COPY);
+        FMH::MODEL_LIST content;
+#ifdef COMPONENT_TAGGING
+        content = FMH::toModelList(this->tag->getUrlTags(url.toString(), false));
 #endif
-        }else
+        return content;
+    }
+
+    bool FM::urlTagExists(const QUrl& url, const QString tag)
+    {
+#ifdef COMPONENT_TAGGING
+        return this->tag->urlTagExists(url.toString(), tag, false);
+#endif
+    }
+
+    bool FM::addTagToUrl(const QString tag, const QUrl& url)
+    {
+#ifdef COMPONENT_TAGGING
+        return this->tag->tagUrl(url.toString(), tag);
+#endif
+    }
+
+    bool FM::removeTagToUrl(const QString tag, const QUrl& url)
+    {
+#ifdef COMPONENT_TAGGING
+        return this->tag->removeUrlTag(url.toString(), tag);
+#endif
+    }
+
+    bool FM::cut(const QList<QUrl> &urls, const QUrl &where)
+    {
+
+        for(const auto &url : urls)
         {
-            if(FMStatic::isCloud(where))
-                cloudPaths << url.toString();
-            else
-                FMStatic::copy(url, where.toString()+"/"+FMH::getFileInfoModel(url)[FMH::MODEL_KEY::LABEL], false);
+            if(FMStatic::isCloud(url.toString()))
+            {
+#ifdef COMPONENT_SYNCING
+                this->sync->setCopyTo(where.toString());
+                //             this->sync->resolveFile(url, Syncing::SIGNAL_TYPE::COPY);
+#endif
+            }else
+            {
+                FMStatic::cut(url, where);
+            }
         }
+
+        return true;
     }
+
+    bool FM::copy(const QList<QUrl> &urls, const QUrl &where)
+    {
+        QStringList cloudPaths;
+        for(const auto &url : urls)
+        {
+            if(FMStatic::isDir(url))
+            {
+                FMStatic::copy(url, where.toString()+"/"+QFileInfo(url.toLocalFile()).fileName(), false);
+
+            }else if(FMStatic::isCloud(url))
+            {
+#ifdef COMPONENT_SYNCING
+                this->sync->setCopyTo(where.toString());
+                //             this->sync->resolveFile(item, Syncing::SIGNAL_TYPE::COPY);
+#endif
+            }else
+            {
+                if(FMStatic::isCloud(where))
+                    cloudPaths << url.toString();
+                else
+                    FMStatic::copy(url, where.toString()+"/"+FMH::getFileInfoModel(url)[FMH::MODEL_KEY::LABEL], false);
+            }
+        }
 
 #ifdef COMPONENT_SYNCING
-    if(!cloudPaths.isEmpty())
-    {
-        qDebug()<<"UPLOAD QUEUE" << cloudPaths;
-        const auto firstPath = cloudPaths.takeLast();
-        this->sync->setUploadQueue(cloudPaths);
-
-        if(where.toString().split("/").last().contains("."))
+        if(!cloudPaths.isEmpty())
         {
-            QStringList whereList = where.toString().split("/");
-            whereList.removeLast();
-            auto whereDir = whereList.join("/");
-            qDebug()<< "Trying ot copy to cloud" << where << whereDir;
+            qDebug()<<"UPLOAD QUEUE" << cloudPaths;
+            const auto firstPath = cloudPaths.takeLast();
+            this->sync->setUploadQueue(cloudPaths);
 
-            this->sync->upload(this->resolveLocalCloudPath(whereDir), firstPath);
-        } else
-            this->sync->upload(this->resolveLocalCloudPath(where.toString()), firstPath);
-    }
+            if(where.toString().split("/").last().contains("."))
+            {
+                QStringList whereList = where.toString().split("/");
+                whereList.removeLast();
+                auto whereDir = whereList.join("/");
+                qDebug()<< "Trying ot copy to cloud" << where << whereDir;
+
+                this->sync->upload(this->resolveLocalCloudPath(whereDir), firstPath);
+            } else
+                this->sync->upload(this->resolveLocalCloudPath(where.toString()), firstPath);
+        }
 #endif
 
-    return true;
-}
+        return true;
+    }
 
 

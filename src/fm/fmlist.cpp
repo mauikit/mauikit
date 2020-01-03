@@ -142,7 +142,7 @@ void FMList::setList()
 			break; //ASYNC
 			
 		case FMList::PATHTYPE::TAGS_PATH:
-            this->assignList(this->fm->getTagContent(this->path.fileName()));
+            this->assignList(this->fm->getTagContent(this->path.fileName(), QStringList() <<this->filters << FMH::FILTER_LIST[static_cast<FMH::FILTER_TYPE>(this->filterType)]));
 			break; //SYNC	
 			
 		case FMList::PATHTYPE::CLOUD_PATH:
@@ -159,7 +159,7 @@ void FMList::setList()
             if(!exists)    
                 this->setStatus({STATUS_CODE::ERROR, "Error", "This URL cannot be listed", "documentinfo", this->list.isEmpty(), exists});
             else{
-                this->fm->getPathContent(this->path, this->hidden, this->onlyDirs,QStringList() <<this->filters << FMH::FILTER_LIST[static_cast<FMH::FILTER_TYPE>(this->filterType)]);                
+                this->fm->getPathContent(this->path, this->hidden, this->onlyDirs, QStringList() <<this->filters << FMH::FILTER_LIST[static_cast<FMH::FILTER_TYPE>(this->filterType)]);
             } 
             break;//ASYNC
         }
