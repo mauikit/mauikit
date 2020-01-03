@@ -31,7 +31,7 @@ Item
 
     default property alias content: _layout.data
 
-    implicitHeight: _layout.implicitHeight
+//     implicitHeight: _layout.implicitHeight
     implicitWidth: _layout.implicitWidth
 
     property alias text1 : _label1.text
