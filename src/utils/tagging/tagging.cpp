@@ -221,7 +221,7 @@ QVariantList Tagging::getAbstractsTags(const bool &strict)
 
 QVariantList Tagging::getAllTags(const bool &strict)
 {
-	return !strict ? this->get("select * from tags") :
+	return !strict ? this->get("select * from tags group by tag") :
 	this->get(QString("select t.* from TAGS t inner join TAGS_USERS tu on t.tag = tu.tag inner join APPS_USERS au on au.mac = tu.mac and au.app = t.app "
 	"where au.app = '%1' and au.uri = '%2'").arg(this->application, this->uri));
 	
