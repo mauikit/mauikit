@@ -239,8 +239,9 @@ FM::FM(QObject *parent) : QObject(parent)
 
             this->dirLister->setShowingDotFiles(hidden);
             this->dirLister->setDirOnlyMode(onlyDirs);
+           
             this->dirLister->setNameFilter(filters.join(" "));
-
+            qDebug() << "NAME FILTERS SET" << this->dirLister->nameFilter();
             // 	if(this->dirLister->url() == path)
             // 	{
             // 		this->dirLister->emitChanges();

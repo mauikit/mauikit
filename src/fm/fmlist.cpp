@@ -133,7 +133,7 @@ void FMList::assignList(const FMH::MODEL_LIST& list)
 
 void FMList::setList()
 {
-    qDebug()<< "PATHTYPE FOR URL"<< pathType << path;
+    qDebug()<< "PATHTYPE FOR URL"<< pathType << this->path.toString() << this->filters <<  this;
     
 	switch(this->pathType)
 	{			
@@ -159,7 +159,7 @@ void FMList::setList()
             if(!exists)    
                 this->setStatus({STATUS_CODE::ERROR, "Error", "This URL cannot be listed", "documentinfo", this->list.isEmpty(), exists});
             else{
-                this->fm->getPathContent(this->path, this->hidden, this->onlyDirs, this->filters);                
+                this->fm->getPathContent(this->path, this->hidden, this->onlyDirs,QStringList() <<this->filters << FMH::FILTER_LIST[static_cast<FMH::FILTER_TYPE>(this->filterType)]);                
             } 
             break;//ASYNC
         }
@@ -168,7 +168,7 @@ void FMList::setList()
 
 void FMList::reset()
 {	
-		
+		qDebug()<< "RESETING FILE LISTS";
 	if(this->saveDirProps)
 	{
 		auto conf = FMH::dirConf(this->path.toString()+"/.directory");	
@@ -450,9 +450,7 @@ void FMList::setFilterType(const FMList::FILTER &type)
 		return;
 	
 	this->filterType = type;
-	this->filters = FMH::FILTER_LIST[static_cast<FMH::FILTER_TYPE>(this->filterType)];
-	
-	emit this->filtersChanged();
+	    
 	emit this->filterTypeChanged();
 	
 	this->reset();

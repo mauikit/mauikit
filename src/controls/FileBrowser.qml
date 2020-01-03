@@ -921,9 +921,7 @@ Maui.Page
 	
 	Component.onCompleted:
 	{
-		console.log("CURRENT FILTER TYPE", settings.filterType)
 		openTab(Maui.FM.homePath())
-		console.log("SECOND FILTER TYPE", settings.filterType)		
 		browserView.currentView.forceActiveFocus()
 	}
 	
@@ -947,19 +945,19 @@ Maui.Page
 	function openTab(path)
 	{
 		if(path)
-		{
+		{    
+            console.log(" OPENIGN A PATH")
 			const component = Qt.createComponent("private/BrowserView.qml");
 			if (component.status === Component.Ready)
 			{
-				const object = component.createObject(tabsObjectModel);
-				tabsObjectModel.append(object);
-			}
-			
-			tabsListModel.append({"path": path})
-			_browserList.currentIndex = tabsObjectModel.count - 1
-			
-			browserView.viewType = control.viewType
-			openFolder(path)
+				const object = component.createObject(tabsObjectModel, {'path': path});
+				tabsObjectModel.append(object)
+                
+                tabsListModel.append({"path": path})
+                _browserList.currentIndex = tabsObjectModel.count - 1
+                
+                browserView.viewType = control.viewType
+			}		
 		}
 	}
 	
@@ -1038,7 +1036,6 @@ Maui.Page
 		if(!String(path).length)
 			return;
 		
-		control.browserView.currentView.currentIndex = 0
 		control.currentPath = path
 	}
 	

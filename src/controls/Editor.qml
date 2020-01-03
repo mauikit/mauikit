@@ -153,7 +153,7 @@ Maui.Page
 			selectByKeyboard :!Kirigami.Settings.isMobile
 			selectByMouse : !Kirigami.Settings.isMobile
 			textFormat: TextEdit.AutoText
-			
+			palette.text: Kirigami.Theme.textColor
 			color: control.Kirigami.Theme.textColor
 			
 			font.pointSize: Maui.Style.fontSizes.large

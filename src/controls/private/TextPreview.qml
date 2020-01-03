@@ -8,7 +8,7 @@ Maui.Editor
 {
 	id: control
 	anchors.fill: parent	
-	
+	footBar.visible: false
 	body.readOnly: true
 	Kirigami.Theme.backgroundColor: "transparent"
 	

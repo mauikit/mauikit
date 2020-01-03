@@ -10,6 +10,9 @@ Maui.Page
     id: control
 
     property url path
+    
+    onPathChanged: control.currentView.currentIndex = 0
+
     property Maui.FMList currentFMList
 
     property alias currentView : viewLoader.item
