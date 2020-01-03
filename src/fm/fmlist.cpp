@@ -168,7 +168,6 @@ void FMList::setList()
 
 void FMList::reset()
 {	
-		qDebug()<< "RESETING FILE LISTS";
 	if(this->saveDirProps)
 	{
 		auto conf = FMH::dirConf(this->path.toString()+"/.directory");	
