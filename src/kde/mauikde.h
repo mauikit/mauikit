@@ -29,7 +29,6 @@ class MAUIKDE : public QObject
     Q_OBJECT
 public:
     MAUIKDE(QObject *parent = nullptr);
-    ~MAUIKDE();
 	
     Q_INVOKABLE static QVariantList services(const QUrl &url);
     Q_INVOKABLE static QVariantList devices();

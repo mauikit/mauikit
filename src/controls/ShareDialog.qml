@@ -22,6 +22,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
+import org.kde.purpose 1.0 as Purpose
 
 Maui.Dialog
 {
@@ -30,7 +31,7 @@ Maui.Dialog
 
     widthHint: 0.9
     
-    maxHeight: Math.min(grid.implicitHeight, maxWidth) + (page.padding * 2.5) + headBar.height
+    maxHeight: Math.max(_layout.contentHeight, maxWidth) + (page.padding * 2.5) + headBar.height
 	maxWidth: Maui.Style.unit * 500
 	
 	verticalAlignment: Qt.AlignBottom
@@ -40,19 +41,62 @@ Maui.Dialog
 	page.title: qsTr("Open with")
 	headBar.visible: true
     
-    Maui.GridBrowser
+    Kirigami.ScrollablePage
     {
-		id: grid
+		id: _layout
 		anchors.fill: parent
-		showEmblem: false
-		model: ListModel {}
-		onItemClicked:
+		leftPadding: 0
+		rightPadding: 0
+		
+		ColumnLayout
 		{
-			grid.currentIndex = index
-			triggerService(index)
-		}
+			width: parent.width
+			
+			Maui.GridBrowser
+			{
+				id: grid
+				Layout.fillWidth: true
+				Layout.preferredHeight: implicitHeight
+				showEmblem: false
+				model: ListModel {}
+				onItemClicked:
+				{
+					grid.currentIndex = index
+					triggerService(index)
+				}
+			}
+			
+			Purpose.AlternativesView
+			{
+				id: _purpose
+				Layout.fillWidth: true
+				Layout.preferredHeight: 400
+				pluginType: 'Export'
+				clip: true
+				
+				delegate: Maui.ItemDelegate
+				{
+					width: parent.width
+					height: Maui.Style.rowHeight * 1.5
+					
+					Maui.ListItemTemplate
+					{
+						anchors.fill: parent
+						
+						label1.text: model.display
+						iconSource: model.iconName
+						
+						iconSizeHint: Maui.Style.iconSizes.big
+						
+					}
+					
+					onClicked: _purpose.createJob(index)				
+				}
+			}
+		}		
 	}
-
+    
+  
     onOpened: populate()
 
     function show(urls)
@@ -83,6 +127,11 @@ Maui.Dialog
         if(services.length > 0)
             for(i in services)
                 grid.model.append(services[i])
+				
+				_purpose.inputData = {
+					'urls': control.itemUrls,
+					'mimeType': Maui.FM.getFileInfo(control.itemUrls[0]).mime
+				}
 
     }
 
