@@ -6,70 +6,75 @@ import org.kde.mauikit 1.0 as Maui
 
 TabButton
 {
-	id: control
-	implicitWidth:  150 * Maui.Style.unit
-		
-	signal closeClicked(int index)
-		
-	Kirigami.Separator
-	{
-		color: Kirigami.Theme.highlightColor
-		height: Maui.Style.unit * 2
-		visible: checked
-		anchors
-		{			
-			bottom: parent.bottom
-			left: parent.left
-			right: parent.right
-		}
-	}
-	
-	background: Rectangle
-	{
-		color: "transparent"	
-		
-		Kirigami.Separator
-		{
-			width: Maui.Style.unit
-			anchors
-			{
-				bottom: parent.bottom
-				top: parent.top
-				right: parent.right
-			}
-		}
-	}
-	
-	contentItem: RowLayout
-	{
-		anchors.fill: control
-		spacing: Maui.Style.space.small
-		anchors.margins: Maui.Style.space.small	
-		
-		Label
-		{
-			text: control.text
-			font.pointSize: Maui.Style.fontSizes.default
-			Layout.fillWidth: true
-			Layout.fillHeight: true
-			verticalAlignment: Qt.AlignVCenter
+    id: control
+    implicitWidth:  150 * Maui.Style.unit
+
+    signal closeClicked(int index)
+
+    Kirigami.Separator
+    {
+        color: Kirigami.Theme.highlightColor
+        height: Maui.Style.unit * 2
+        visible: checked
+        anchors
+        {
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
+        }
+    }
+
+    background: Rectangle
+    {
+        color: "transparent"
+
+        Kirigami.Separator
+        {
+            width: Maui.Style.unit
+            anchors
+            {
+                bottom: parent.bottom
+                top: parent.top
+                right: parent.right
+            }
+        }
+    }
+
+    contentItem: RowLayout
+    {
+        anchors.fill: control
+        spacing: Maui.Style.space.small
+        anchors.margins: Maui.Style.space.small
+
+        Label
+        {
+            text: control.text
+            font.pointSize: Maui.Style.fontSizes.default
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            verticalAlignment: Qt.AlignVCenter
             horizontalAlignment: Qt.AlignHCenter
-			color: control.checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-			wrapMode: Text.NoWrap
-			elide: Text.ElideMiddle
-		}
-		
-		ToolButton
-		{
-			Layout.fillHeight: true
+            color: control.checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+            wrapMode: Text.NoWrap
+            elide: Text.ElideMiddle
+        }
+
+
+        Item
+        {
+            Layout.fillHeight: true
             Layout.preferredWidth: Maui.Style.iconSizes.small * 2
-            icon.height: Maui.Style.iconSizes.small
-			icon.width: width
-			Layout.alignment: Qt.AlignRight
-			
-			icon.name: "dialog-close"
-			
-			onClicked: control.closeClicked(index)
-		}
-	}
+            Layout.alignment: Qt.AlignRight
+
+            ToolButton
+            {
+                icon.height: Maui.Style.iconSizes.small
+                icon.width: width
+                icon.name: "dialog-close"
+                anchors.centerIn: parent
+
+                onClicked: control.closeClicked(index)
+            }
+        }
+    }
 }
