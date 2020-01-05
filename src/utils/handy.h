@@ -39,7 +39,12 @@ class MAUIKIT_EXPORT Handy : public QObject
 #endif
 {
     Q_OBJECT
-
+    Q_PROPERTY(bool isTouch READ isTouch CONSTANT FINAL)
+	Q_PROPERTY(bool isAndroid READ isAndroid CONSTANT FINAL)
+	Q_PROPERTY(bool isLinux READ isLinux CONSTANT FINAL)
+	Q_PROPERTY(bool isWindows READ isWindows CONSTANT FINAL)
+	Q_PROPERTY(bool isMac READ isMac CONSTANT FINAL)
+	
 public:
     Handy(QObject *parent = nullptr);
     ~Handy();
@@ -86,6 +91,13 @@ public slots:
      */
 	static bool copyTextToClipboard(const QString &text);
 	static bool copyToClipboard(const QVariantMap &value);
+	
+	//TODO move to Device.h the defs and implementation of device specifics
+	static bool isTouch();
+	static bool isAndroid();
+	static bool isWindows();
+	static bool isMac();
+	static bool isLinux();
 };
 
 #endif // HANDY_H

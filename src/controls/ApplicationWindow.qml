@@ -83,7 +83,8 @@ Kirigami.AbstractApplicationWindow
     /*************************************************/
 
     readonly property bool isMobile : Kirigami.Settings.isMobile
-    readonly property bool isAndroid: Qt.platform.os == "android"
+    readonly property bool isAndroid: Maui.Handy.isAndroid
+    readonly property bool isTouch: Maui.Handy.isTouch
 
     readonly property real screenWidth : Screen.width
     readonly property real screenHeight : Screen.height
@@ -96,7 +97,7 @@ Kirigami.AbstractApplicationWindow
 
     onClosing:
     {
-        if(!isMobile)
+        if(!Kirigami.Settings.isMobile)
         {
             const height = root.height
             const width = root.width
@@ -440,7 +441,7 @@ Kirigami.AbstractApplicationWindow
                  Maui.Android.statusbarColor(headBar.Kirigami.Theme.backgroundColor, true)
         }
 
-        if(!isMobile)
+        if(!Kirigami.Settings.isMobile)
         {
             const rect = Maui.FM.loadSettings("GEOMETRY", "WINDOW", Qt.rect(root.x, root.y, root.width, root.height))
             root.x = rect.x

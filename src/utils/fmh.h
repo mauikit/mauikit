@@ -49,7 +49,7 @@
 
 namespace FMH
 {
-	static bool isAndroid()
+	static constexpr bool isAndroid()
 	{
 		#if defined(Q_OS_ANDROID)
 		return true;
@@ -68,7 +68,7 @@ namespace FMH
 		#endif
 	}
 	
-	static bool isWindows()
+	static constexpr bool isWindows()
 	{
 		#if defined(Q_OS_ANDROID)
 		return false;
@@ -80,6 +80,44 @@ namespace FMH
 		return true;
 		#elif defined(Q_OS_MACOS)
 		return false;
+		#elif defined(Q_OS_IOS)
+		return false;
+		#elif defined(Q_OS_HAIKU)
+		return false;
+		#endif
+	}
+	
+	static constexpr bool isLinux()
+	{
+		#if defined(Q_OS_ANDROID)
+		return false;
+		#elif defined(Q_OS_LINUX)
+		return true;
+		#elif defined(Q_OS_WIN32)
+		return false;
+		#elif defined(Q_OS_WIN64)
+		return false;
+		#elif defined(Q_OS_MACOS)
+		return false;
+		#elif defined(Q_OS_IOS)
+		return false;
+		#elif defined(Q_OS_HAIKU)
+		return false;
+		#endif
+	}
+	
+	static constexpr bool isMac()
+	{
+		#if defined(Q_OS_ANDROID)
+		return false;
+		#elif defined(Q_OS_LINUX)
+		return false;
+		#elif defined(Q_OS_WIN32)
+		return false;
+		#elif defined(Q_OS_WIN64)
+		return false;
+		#elif defined(Q_OS_MACOS)
+		return true;
 		#elif defined(Q_OS_IOS)
 		return false;
 		#elif defined(Q_OS_HAIKU)

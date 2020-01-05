@@ -28,7 +28,7 @@ TAGDB::TAGDB(QObject *parent) : QObject(parent)
         collectionDBPath_dir.mkpath(".");
 
     this->name = QUuid::createUuid().toString();
-    if(!FMH::fileExists(TAG::TaggingPath + TAG::DBName))
+    if(!FMH::fileExists(QUrl::fromLocalFile(TAG::TaggingPath + TAG::DBName)))
     {
         this->openDB(this->name);
         qDebug()<<"Collection doesn't exists, trying to create it" << TAG::TaggingPath + TAG::DBName;
