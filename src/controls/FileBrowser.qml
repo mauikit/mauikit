@@ -285,7 +285,7 @@ Maui.Page
 			property var urls: []
 			
 			title: qsTr(String("Removing %1 files").arg(urls.length.toString()))
-			message: isAndroid ?  qsTr("This action will completely remove your files from your system. This action can not be undone.") : qsTr("You can move the file to the Trash or Delete it completely from your system. Which one you preffer?")
+			message: Maui.Handy.isAndroid ?  qsTr("This action will completely remove your files from your system. This action can not be undone.") : qsTr("You can move the file to the Trash or Delete it completely from your system. Which one you preffer?")
 			rejectButton.text: qsTr("Delete")
 			acceptButton.text: qsTr("Trash")
 			acceptButton.visible: !Kirigami.Settings.isMobile
@@ -498,7 +498,6 @@ Maui.Page
 		
 		onKeyPress:
 		{
-			console.log(event.key, event.modifier, event.count)
 			const index = browserView.currentView.currentIndex
 			const item = control.currentFMList.get(index)
 			
@@ -590,9 +589,8 @@ Maui.Page
 			// Shortcut for opening new tab
 			if((event.key == Qt.Key_T) && (event.modifiers & Qt.ControlModifier))
 			{
-				const _path = (currentPath).toString()
-				control.openTab(" ")
-				control.currentPath = _path
+				console.log("OPEN TAB")
+				control.openTab(currentPath)
 			}
 			
 			// Shortcut for closing tab
@@ -671,7 +669,7 @@ Maui.Page
 		
 		onRightEmblemClicked:
 		{
-			isAndroid ? Maui.Android.shareDialog([control.currentFMList.get(index).path]) : shareDialog.show([control.currentFMList.get(index).path])
+			Maui.Handy.isAndroid ? Maui.Android.shareDialog([control.currentFMList.get(index).path]) : shareDialog.show([control.currentFMList.get(index).path])
 			control.itemRightEmblemClicked(index)
 		}
 		
@@ -950,17 +948,17 @@ Maui.Page
 	{
 		if(path)
 		{    
-            control.currentPath = path
 			const component = Qt.createComponent("private/BrowserView.qml");
 			if (component.status === Component.Ready)
 			{
-                const object = component.createObject(tabsObjectModel, {'path': control.currentPath});
+                const object = component.createObject(tabsObjectModel, {'path': path});
 				tabsObjectModel.append(object)
                 
                 tabsListModel.append({"path": path})
                 _browserList.currentIndex = tabsObjectModel.count - 1
                 
-                browserView.viewType = control.viewType
+                browserView.viewType = control.viewType 
+                control.currentPath = path
 			}		
 		}
 	}
@@ -970,7 +968,7 @@ Maui.Page
 		if(urls.length <= 0)
 			return;
 		
-		if(isAndroid)
+		if(Maui.Handy.isAndroid)
 		{
 			Maui.Android.shareDialog(urls[0])
 		}

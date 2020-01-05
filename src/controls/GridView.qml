@@ -67,6 +67,8 @@ Kirigami.ScrollablePage
 	bottomPadding: padding
 	focus: true
 	
+	keyboardNavigationEnabled: false
+	
 	Behavior on cellWidth
 	{
 		NumberAnimation
