@@ -2,7 +2,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
-import org.kde.kirigami 2.6 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 import org.maui.kquicksyntaxhighlighter 0.1
 import "private"
 
@@ -145,6 +145,7 @@ Maui.Page
 		TextArea
 		{
 			id: body
+			width: parent.width
 			topPadding: _editorToolBar.visible ?  _editorToolBar.height : 0
 			topInset: stickyHeadBar ? 0 : topPadding			
 			font.family: languagesListComboBox.currentIndex > 0 ? "Monospace" : undefined		
