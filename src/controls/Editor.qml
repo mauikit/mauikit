@@ -1,5 +1,5 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.5
+import QtQuick 2.10
+import QtQuick.Controls 2.10
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
@@ -11,7 +11,6 @@ Maui.Page
 	id: control
 	
 	property bool showLineCount : true
-	property bool stickyHeadBar : true
 	property bool showSyntaxHighlighting: true
 	
 	property alias body : body
@@ -24,7 +23,6 @@ Maui.Page
 	property alias italic: document.italic
 	property alias bold: document.bold
 	property alias canRedo: body.canRedo	
-	property alias headBar: _editorToolBar	
 	
 	Maui.DocumentHandler
 	{
@@ -114,6 +112,77 @@ Maui.Page
 	}	
 	
 	
+	headBar.visible: !body.readOnly
+	
+		headBar.leftContent: [				
+		
+		ToolButton
+		{
+			icon.name: "edit-undo"
+			enabled: body.canUndo
+			onClicked: body.undo()
+			opacity: enabled ? 1 : 0.5
+			
+		},
+		
+		ToolButton
+		{
+			icon.name: "edit-redo"
+			enabled: body.canRedo
+			onClicked: body.redo()
+			opacity: enabled ? 1 : 0.5
+		},
+		
+		Row
+		{
+			id: _editingActions
+			visible: document.isRich && !body.readOnly
+			
+			ToolButton
+			{
+				icon.name: "format-text-bold"
+				focusPolicy: Qt.TabFocus
+				icon.color: checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+				checkable: false
+				checked: document.bold
+				onClicked: document.bold = !document.bold
+			}
+			
+			ToolButton
+			{
+				icon.name: "format-text-italic"
+				icon.color: checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+				focusPolicy: Qt.TabFocus
+				checkable: false
+				checked: document.italic
+				onClicked: document.italic = !document.italic
+			}
+			
+			ToolButton
+			{
+				icon.name: "format-text-underline"
+				icon.color: checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+				focusPolicy: Qt.TabFocus
+				checkable: true
+				checked: document.underline
+				onClicked: document.underline = !document.underline
+			}
+			
+			ToolButton
+			{
+				icon.name: "format-text-uppercase"
+				icon.color: checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+				focusPolicy: Qt.TabFocus
+				checkable: true
+				checked: document.uppercase
+				onClicked: document.uppercase = !document.uppercase
+			}					
+		}
+		]
+		
+		
+		
+	
 // 	footBar.visible: !body.readOnly
 	footBar.rightContent: [
 	ToolButton
@@ -137,17 +206,22 @@ Maui.Page
 	}	
 	]
 	
-	ScrollView
+	Kirigami.ScrollablePage
 	{
 		id: _scrollView
 		anchors.fill: parent
 		
+		contentWidth: width
+		contentHeight: body.implicitHeight
+		
+		leftPadding: 0
+		rightPadding: 0
+		topPadding: 0
+		bottomPadding: 0
+		
 		TextArea
 		{
 			id: body
-			width: parent.width
-			topPadding: _editorToolBar.visible ?  _editorToolBar.height : 0
-			topInset: stickyHeadBar ? 0 : topPadding			
 			font.family: languagesListComboBox.currentIndex > 0 ? "Monospace" : undefined		
 			placeholderText: qsTr("Body")
 			Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
@@ -164,98 +238,15 @@ Maui.Page
 			activeFocusOnTab: true
 			persistentSelection: true
 			
-// 			background: Rectangle
-// 			{
-// 				color: Kirigami.Theme.backgroundColor
-// 				implicitWidth: 200
-// 				implicitHeight: 22
-// 			}
-			
-			// 			onPressAndHold: isMobile ? documentMenu.popup() : undefined
-				Maui.ToolBar
+			background: Rectangle
 			{
-				id: _editorToolBar
-				visible: !body.readOnly
-				parent: stickyHeadBar ? body : control
-				anchors
-				{
-					left: parent.left
-					right: parent.right
-					top: parent.top
-				}
-				
-				leftContent: [				
-				
-				ToolButton
-				{
-					icon.name: "edit-undo"
-					enabled: body.canUndo
-					onClicked: body.undo()
-					opacity: enabled ? 1 : 0.5
-					
-				},
-				
-				ToolButton
-				{
-					icon.name: "edit-redo"
-					enabled: body.canRedo
-					onClicked: body.redo()
-					opacity: enabled ? 1 : 0.5
-				},
-				
-				Row
-				{
-					id: _editingActions
-					visible: document.isRich && !body.readOnly
-					
-					ToolButton
-					{
-						icon.name: "format-text-bold"
-						focusPolicy: Qt.TabFocus
-						icon.color: checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-						checkable: false
-						checked: document.bold
-						onClicked: document.bold = !document.bold
-					}
-					
-					ToolButton
-					{
-						icon.name: "format-text-italic"
-						icon.color: checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-						focusPolicy: Qt.TabFocus
-						checkable: false
-						checked: document.italic
-						onClicked: document.italic = !document.italic
-					}
-					
-					ToolButton
-					{
-						icon.name: "format-text-underline"
-						icon.color: checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-						focusPolicy: Qt.TabFocus
-						checkable: true
-						checked: document.underline
-						onClicked: document.underline = !document.underline
-					}
-					
-					ToolButton
-					{
-						icon.name: "format-text-uppercase"
-						icon.color: checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-						focusPolicy: Qt.TabFocus
-						checkable: true
-						checked: document.uppercase
-						onClicked: document.uppercase = !document.uppercase
-					}					
-				}
-				]
-				
-				background: Rectangle
-				{
-					color: "transparent"					
-				}				
+				color: Kirigami.Theme.backgroundColor
+				implicitWidth: body.implicitWidth
+				implicitHeight: body.implicitHeight
 			}
 			
+			// 			onPressAndHold: isMobile ? documentMenu.popup() : undefined
+				
 			
 			onPressed:
 			{
@@ -269,8 +260,8 @@ Maui.Page
 				textEdit: body
 			}
 		}
-		ScrollBar.vertical.height: _scrollView.height - body.topPadding
-		ScrollBar.vertical.y: body.topPadding
+// 		ScrollBar.vertical.height: _scrollView.height - body.topPadding
+// 		ScrollBar.vertical.y: body.topPadding
 	}
 	
 	function zoomIn()
