@@ -55,11 +55,25 @@
 #include <QObject>
 #include <QTextCursor>
 #include <QUrl>
+#include <QThread>
 
 QT_BEGIN_NAMESPACE
 class QTextDocument;
 class QQuickTextDocument;
 QT_END_NAMESPACE
+
+
+class FileLoader : public QObject
+{
+    Q_OBJECT
+    
+public slots:
+    void loadFile(const QUrl &url);
+    
+signals:
+    void fileReady(QByteArray array, QUrl url);
+};
+
 
 class SyntaxHighlighterUtil;
 class DocumentHandler : public QObject
@@ -91,7 +105,8 @@ class DocumentHandler : public QObject
 
 public:
     explicit DocumentHandler(QObject *parent = nullptr);
-
+    ~DocumentHandler();
+    
     QQuickTextDocument *document() const;
     void setDocument(QQuickTextDocument *document);
 
@@ -136,11 +151,11 @@ public:
 	
 	static SyntaxHighlighterUtil * getSyntaxHighlighterUtil();
 
-public Q_SLOTS:
+public slots:
     void load(const QUrl &fileUrl);
     void saveAs(const QUrl &fileUrl);
 
-Q_SIGNALS:
+signals:
     void documentChanged();
     void cursorPositionChanged();
     void selectionStartChanged();
@@ -163,6 +178,7 @@ Q_SIGNALS:
 
     void loaded(const QString &text);
     void error(const QString &message);
+    void loadFile(QUrl url);
 
 private:
     void reset();
@@ -181,6 +197,9 @@ private:
     QFont m_font;
     int m_fontSize;
     QUrl m_fileUrl;
+    
+    QThread m_worker;
+    FileLoader *m_loader;
 	
 	static SyntaxHighlighterUtil *syntaxHighlighterUtil;
 };

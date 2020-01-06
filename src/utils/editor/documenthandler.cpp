@@ -62,6 +62,8 @@
 #include <QDebug>
 #include <QUrl>
 
+#include "fmh.h"
+
 #include "syntaxhighlighterutil.h"
 
 /**
@@ -69,14 +71,52 @@
  */
 SyntaxHighlighterUtil *DocumentHandler::syntaxHighlighterUtil = nullptr;
 
+void FileLoader::loadFile(const QUrl& url)
+{
+     if (FMH::fileExists(url))
+	{		
+        QFile file(url.toLocalFile());
+        if (file.open(QFile::ReadOnly))
+		{		
+			qDebug()<< "LOAD FILE OPENDED << ";
+			emit this->fileReady(file.readAll(), url);
+        }
+    }
+}
+
 DocumentHandler::DocumentHandler(QObject *parent)
     : QObject(parent)
     , m_document(nullptr)
     , m_cursorPosition(-1)
     , m_selectionStart(0)
     , m_selectionEnd(0)
+    , m_loader(new FileLoader)
 {
+    m_loader->moveToThread(&m_worker);
+    connect(&m_worker, &QThread::finished, m_loader, &QObject::deleteLater);
+    connect(this, &DocumentHandler::loadFile, m_loader, &FileLoader::loadFile);
+    connect(m_loader, &FileLoader::fileReady, [&](QByteArray array, QUrl url)
+    {
+        QTextCodec *codec = QTextCodec::codecForHtml(array);
+        if (QTextDocument *doc = textDocument())
+            doc->setModified(false);
+        
+        this->isRich = QFileInfo(url.toLocalFile()).suffix().contains(QLatin1String("rtf"));
+        
+        emit this->isRichChanged();
+        emit this->loaded(codec->toUnicode(array));
+        reset();
+    });
+    
+    m_worker.start();
 }
+
+DocumentHandler::~DocumentHandler()
+{
+    m_worker.wait();
+    m_worker.deleteLater();
+}
+
 
 QQuickTextDocument *DocumentHandler::document() const
 {
@@ -313,14 +353,14 @@ SyntaxHighlighterUtil * DocumentHandler::getSyntaxHighlighterUtil()
 }
 
 void DocumentHandler::load(const QUrl &fileUrl)
-{
-	
+{	
 	qDebug()<< "TRYING TO LOAD FILE << " << fileUrl;
     if (fileUrl == m_fileUrl)
         return;
 
     QQmlEngine *engine = qmlEngine(this);
-    if (!engine) {
+    if (!engine) 
+    {
         qWarning() << "load() called before DocumentHandler has QQmlEngine";
         return;
     }
@@ -331,26 +371,7 @@ void DocumentHandler::load(const QUrl &fileUrl)
     m_fileUrl = fileUrl;
     emit fileUrlChanged();
 	
-    if (QFile::exists(fileName))
-	{		
-        QFile file(fileName);
-        if (file.open(QFile::ReadOnly))
-		{
-			
-			qDebug()<< "LOAD FILE OPENDED << ";
-			
-            QByteArray data = file.readAll();
-            QTextCodec *codec = QTextCodec::codecForHtml(data);
-            if (QTextDocument *doc = textDocument())
-                doc->setModified(false);
-
-			this->isRich = QFileInfo(fileName).suffix().contains(QLatin1String("rtf"));
-			
-			emit this->isRichChanged();
-            emit loaded(codec->toUnicode(data));
-            reset();
-        }
-    }
+   emit this->loadFile(m_fileUrl);
 }
 
 void DocumentHandler::saveAs(const QUrl &fileUrl)
