@@ -135,7 +135,7 @@ Item
             visible: control.labelsVisible
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.margins: visible ? Maui.Style.space.small : 0
+            Layout.margins: Maui.Style.space.small 
             Layout.leftMargin: _iconLoader.visible ? 0 : Maui.Style.space.small
             spacing: 0
 
@@ -175,7 +175,7 @@ Item
             visible: control.width >  Kirigami.Units.gridUnit * 15 && control.labelsVisible
             Layout.fillHeight: visible
             Layout.fillWidth: visible
-            Layout.margins: visible ? Maui.Style.space.small : 0
+            Layout.margins: Maui.Style.space.small 
             spacing: 0
 
             Label
