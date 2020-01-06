@@ -58,6 +58,9 @@ public:
    const MauiModel *m_model; //becarefull this is owned by qml engine, this is only supossed to be a viewer
 public slots:
     int mappedIndex(const int &index) const;
+	
+protected:
+	bool exists(const FMH::MODEL_KEY &key, const QString &value) const;
 
 signals:
 	void preItemAppended();

@@ -29,3 +29,13 @@ int MauiList::mappedIndex(const int &index) const
 
     return -1;
 }
+
+bool MauiList::exists(const FMH::MODEL_KEY& key, const QString& value) const
+{
+	return std::find_if(this->items().constBegin(), this->items().constEnd(), [&](const FMH::MODEL &item) -> bool
+	{
+		return item[key] == value;
+		
+	}) != this->items().end();
+}
+

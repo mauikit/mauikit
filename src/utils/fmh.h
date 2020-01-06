@@ -606,6 +606,15 @@ namespace FMH
 	typedef QHash<FMH::MODEL_KEY, QString> MODEL;
 	typedef QVector<MODEL> MODEL_LIST;
 	
+	static const inline QVector<int> modelRoles(const FMH::MODEL &model)
+	{
+		const auto keys = model.keys();
+ 		return  std::accumulate(keys.begin(), keys.end(), QVector<int>(), [](QVector<int> &res, const FMH::MODEL_KEY &key) {
+			res.append(key);
+			return res;
+		});
+	}
+	
 	static const inline QString mapValue(const QVariantMap &map, const FMH::MODEL_KEY &key)
 	{
 		return map[FMH::MODEL_NAME[key]].toString();

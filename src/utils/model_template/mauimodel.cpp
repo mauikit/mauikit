@@ -254,7 +254,7 @@ QHash<int, QByteArray> MauiModel::PrivateAbstractListModel::roleNames() const
 {
     QHash<int, QByteArray> names;
     
-    for(auto key : FMH::MODEL_NAME.keys())
+    for(const auto &key : FMH::MODEL_NAME.keys())
         names[key] = QString(FMH::MODEL_NAME[key]).toUtf8();	
     
     return names;
