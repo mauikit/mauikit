@@ -39,10 +39,9 @@ Maui.Page
 			body.visible = true
 		}
 		
-		onLoaded:
+		onLoaded: //emits the loaded file url
 		{
-			body.text = text
-			var formatName = document.syntaxHighlighterUtil.getLanguageNameFromFileName(document.fileName)
+			const formatName = document.syntaxHighlighterUtil.getLanguageNameFromFileName(url)
 			languagesListComboBox.currentIndex = languagesListComboBox.find(formatName)
 		}
 	}

@@ -181,7 +181,7 @@ signals:
 	void textChanged();
 	void fileUrlChanged();
 	
-	void loaded(const QString &text);
+	void loaded(const QUrl &url);
 	void error(const QString &message);
 	void loadFile(QUrl url);
 		

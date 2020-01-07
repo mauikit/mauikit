@@ -80,7 +80,10 @@ void FileLoader::loadFile(const QUrl& url)
 		{		
 			qDebug()<< "LOAD FILE OPENDED << ";
 			const auto array = file.readAll();
-			QTextCodec *codec = QTextCodec::codecForHtml(array);
+			
+			const bool isHtml = QFileInfo(url.toLocalFile()).suffix().contains(QLatin1String("htm"));			
+			
+			QTextCodec *codec = isHtml ? QTextCodec::codecForHtml(array) : QTextCodec::codecForUtfText(array, QTextCodec::codecForLocale());		
 			
 			emit this->fileReady(codec->toUnicode(array), url);
         }
@@ -100,19 +103,16 @@ DocumentHandler::DocumentHandler(QObject *parent)
     connect(this, &DocumentHandler::loadFile, m_loader, &FileLoader::loadFile);
     connect(m_loader, &FileLoader::fileReady, [&](QString array, QUrl url)
     {       
-		if (QTextDocument *doc = textDocument())
-		{
+		if (QTextDocument *doc = textDocument())		
 			doc->setModified(false);
-		}
-// 		
-        this->isRich = QFileInfo(url.toLocalFile()).suffix().contains(QLatin1String("rtf"));
-//         
+		
+        this->isRich = QFileInfo(url.toLocalFile()).suffix().contains(QLatin1String("rtf"));//         
         emit this->isRichChanged();
 		
-//         emit this->loaded(array);
 		this->setText(array);
+		emit this->loaded(url);
+		
         reset();
-		qDebug()<< array;
     });
     
     m_worker.start();
@@ -397,19 +397,27 @@ void DocumentHandler::saveAs(const QUrl &fileUrl)
 
     const QString filePath = fileUrl.toLocalFile();
     const bool isHtml = QFileInfo(filePath).suffix().contains(QLatin1String("htm"));
-    QFile file(filePath);
-    if (!file.open(QFile::WriteOnly | QFile::Truncate | (isHtml ? QFile::NotOpen : QFile::Text))) {
-        emit error(tr("Cannot save: ") + file.errorString());
-        return;
-    }
-    file.write((isHtml ? doc->toHtml() : doc->toPlainText()).toUtf8());
-    file.close();
-
-    if (fileUrl == m_fileUrl)
-        return;
-
-    m_fileUrl = fileUrl;
-    emit fileUrlChanged();
+	
+	QFile file(filePath);
+	if (!file.open(QFile::WriteOnly | QFile::Truncate | (isHtml ? QFile::NotOpen : QFile::Text)))
+	{
+		emit error(tr("Cannot save: ") + file.errorString());
+	} else 
+	{
+		QTextStream out(&file);
+		out.setCodec("UTF-8");
+		out << (isHtml ? doc->toHtml() : doc->toPlainText()).toUtf8();
+		
+		file.close();
+		
+		if (fileUrl == m_fileUrl)
+			return;
+		
+		m_fileUrl = fileUrl;
+		emit fileUrlChanged();
+		
+		doc->setModified(false);
+	}	
 }
 
 void DocumentHandler::reset()
