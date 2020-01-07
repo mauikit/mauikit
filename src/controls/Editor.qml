@@ -222,6 +222,7 @@ Maui.Page
 		TextArea
 		{
 			id: body
+			text: document.text
 			font.family: languagesListComboBox.currentIndex > 0 ? "Monospace" : undefined		
 			placeholderText: qsTr("Body")
 			Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor

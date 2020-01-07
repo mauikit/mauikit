@@ -79,7 +79,10 @@ void FileLoader::loadFile(const QUrl& url)
         if (file.open(QFile::ReadOnly))
 		{		
 			qDebug()<< "LOAD FILE OPENDED << ";
-			emit this->fileReady(file.readAll(), url);
+			const auto array = file.readAll();
+			QTextCodec *codec = QTextCodec::codecForHtml(array);
+			
+			emit this->fileReady(codec->toUnicode(array), url);
         }
     }
 }
@@ -95,17 +98,21 @@ DocumentHandler::DocumentHandler(QObject *parent)
     m_loader->moveToThread(&m_worker);
     connect(&m_worker, &QThread::finished, m_loader, &QObject::deleteLater);
     connect(this, &DocumentHandler::loadFile, m_loader, &FileLoader::loadFile);
-    connect(m_loader, &FileLoader::fileReady, [&](QByteArray array, QUrl url)
-    {
-        QTextCodec *codec = QTextCodec::codecForHtml(array);
-        if (QTextDocument *doc = textDocument())
-            doc->setModified(false);
-        
+    connect(m_loader, &FileLoader::fileReady, [&](QString array, QUrl url)
+    {       
+		if (QTextDocument *doc = textDocument())
+		{
+			doc->setModified(false);
+		}
+// 		
         this->isRich = QFileInfo(url.toLocalFile()).suffix().contains(QLatin1String("rtf"));
-        
+//         
         emit this->isRichChanged();
-        emit this->loaded(codec->toUnicode(array));
+		
+//         emit this->loaded(array);
+		this->setText(array);
         reset();
+		qDebug()<< array;
     });
     
     m_worker.start();
@@ -117,6 +124,14 @@ DocumentHandler::~DocumentHandler()
 	m_worker.wait();
 }
 
+void DocumentHandler::setText(const QString &text)
+{
+	if (text != m_text)
+	{
+		m_text = text;
+		emit textChanged();
+	}
+}
 
 QQuickTextDocument *DocumentHandler::document() const
 {
