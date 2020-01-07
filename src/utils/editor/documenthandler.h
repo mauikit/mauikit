@@ -100,8 +100,8 @@ class DocumentHandler : public QObject
     Q_PROPERTY(QString fileName READ fileName NOTIFY fileUrlChanged)
     Q_PROPERTY(QString fileType READ fileType NOTIFY fileUrlChanged)
     Q_PROPERTY(QUrl fileUrl READ fileUrl NOTIFY fileUrlChanged)
-	
-	Q_PROPERTY(SyntaxHighlighterUtil * syntaxHighlighterUtil READ getSyntaxHighlighterUtil CONSTANT FINAL)
+
+        Q_PROPERTY(SyntaxHighlighterUtil * syntaxHighlighterUtil READ getSyntaxHighlighterUtil CONSTANT FINAL)
 
 public:
     explicit DocumentHandler(QObject *parent = nullptr);
@@ -148,8 +148,8 @@ public:
     QString fileName() const;
     QString fileType() const;
     QUrl fileUrl() const;
-	
-	static SyntaxHighlighterUtil * getSyntaxHighlighterUtil();
+
+        static SyntaxHighlighterUtil * getSyntaxHighlighterUtil();
 
 public slots:
     void load(const QUrl &fileUrl);
@@ -191,16 +191,15 @@ private:
     int m_cursorPosition;
     int m_selectionStart;
     int m_selectionEnd;
-	
-	bool isRich = false;
-	
+
+        bool isRich = false;
+
     QFont m_font;
     int m_fontSize;
     QUrl m_fileUrl;
-    
+
     QThread m_worker;
-    FileLoader *m_loader;
-	
+
 	static SyntaxHighlighterUtil *syntaxHighlighterUtil;
 };
 

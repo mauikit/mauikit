@@ -90,8 +90,8 @@ DocumentHandler::DocumentHandler(QObject *parent)
     , m_cursorPosition(-1)
     , m_selectionStart(0)
     , m_selectionEnd(0)
-    , m_loader(new FileLoader)
 {
+	FileLoader *m_loader =  new FileLoader;	
     m_loader->moveToThread(&m_worker);
     connect(&m_worker, &QThread::finished, m_loader, &QObject::deleteLater);
     connect(this, &DocumentHandler::loadFile, m_loader, &FileLoader::loadFile);
@@ -113,8 +113,8 @@ DocumentHandler::DocumentHandler(QObject *parent)
 
 DocumentHandler::~DocumentHandler()
 {
-    m_worker.wait();
-    m_worker.deleteLater();
+	m_worker.quit();
+	m_worker.wait();
 }
 
 
