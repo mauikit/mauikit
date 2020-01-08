@@ -198,6 +198,7 @@ class DocumentHandler : public QObject
 	Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
 	
 	Q_PROPERTY(bool externallyModified READ getExternallyModified WRITE setExternallyModified NOTIFY externallyModifiedChanged)
+	Q_PROPERTY(bool modified READ getModified)
 	Q_PROPERTY(bool autoReload READ getAutoReload WRITE setAutoReload NOTIFY autoReloadChanged)	
 	
 	Q_PROPERTY(QString formatName READ formatName WRITE setFormatName NOTIFY formatNameChanged)
@@ -258,6 +259,8 @@ public:
 	bool getAutoReload() const;
 	void setAutoReload(const bool &value);
 	
+	bool getModified() const;
+		
 	bool getExternallyModified() const;
 	void setExternallyModified(const bool &value);	
 	

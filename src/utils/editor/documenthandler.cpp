@@ -78,7 +78,6 @@
 #include <KSyntaxHighlighting/Theme>
 #endif
 
-
 /**
  * Global Variables
  */
@@ -267,7 +266,7 @@ DocumentHandler::~DocumentHandler()
 	{
 		delete DocumentHandler::m_repository;
 		DocumentHandler::m_repository = nullptr;
-	}
+	}	
 }
 
 void DocumentHandler::setText(const QString &text)
@@ -291,6 +290,11 @@ void DocumentHandler::setAutoReload(const bool& value)
 	
 	this->m_autoReload = value;
 	emit this->autoReloadChanged();
+}
+
+bool DocumentHandler::getModified() const
+{
+	return this->textDocument()->isModified();
 }
 
 bool DocumentHandler::getExternallyModified() const
