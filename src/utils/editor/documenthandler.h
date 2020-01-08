@@ -58,6 +58,7 @@
 #include <QThread>
 
 QT_BEGIN_NAMESPACE
+class QFileSystemWatcher;
 class QTextDocument;
 class QQuickTextDocument;
 QT_END_NAMESPACE
@@ -192,6 +193,7 @@ private:
 	void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
 	
 	QQuickTextDocument *m_document;
+	QFileSystemWatcher *m_watcher;
 	
 	int m_cursorPosition;
 	int m_selectionStart;
@@ -203,9 +205,10 @@ private:
 	int m_fontSize;
 	QUrl m_fileUrl;
 	
-	QThread m_worker;
-	
+	QThread m_worker;	
 	QString m_text;
+
+	
 	
 	static SyntaxHighlighterUtil *syntaxHighlighterUtil;
 };
