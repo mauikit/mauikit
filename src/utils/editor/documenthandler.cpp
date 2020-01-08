@@ -85,18 +85,47 @@
 KSyntaxHighlighting::Repository *DocumentHandler::m_repository = nullptr;
 int DocumentHandler::m_instanceCount = 0;
 
-Alerts::Alerts(QObject* parent)
-{
-}
+Alerts::Alerts(QObject* parent) : QAbstractListModel(parent)
+{}
 
 QVariant Alerts::data(const QModelIndex& index, int role) const
 {
+	if(role == ROLES::ALERT)
+		return QVariant::fromValue(this->m_alerts.at(index.row()));
+	
 	return QVariant();
 }
 
 int Alerts::rowCount(const QModelIndex& parent) const
 {
+	if (parent.isValid())
+		return 0;
+	
 	return this->m_alerts.count();
+}
+
+QHash<int, QByteArray> Alerts::roleNames() const
+{
+	return {{ROLES::ALERT, "alert"}};
+}
+
+void Alerts::append(DocumentAlert *alert)
+{
+	const auto index = this->rowCount();
+	beginInsertRows(QModelIndex(), index, index);
+	
+	// watch out for when the alert is done: such as when an action is triggered
+	connect(alert, &DocumentAlert::done, [&](int index)
+	{
+		this->beginRemoveRows(QModelIndex(), index, index);
+		auto item = this->m_alerts.takeAt(index);
+		item->deleteLater();
+		this->endRemoveRows();		
+	});
+	
+	alert->setIndex(index);
+	this->m_alerts << alert;
+	endInsertRows();
 }
 
 void FileLoader::loadFile(const QUrl& url)
@@ -106,7 +135,6 @@ void FileLoader::loadFile(const QUrl& url)
 		QFile file(url.toLocalFile());
 		if (file.open(QFile::ReadOnly))
 		{		
-			qDebug()<< "LOAD FILE OPENDED << ";
 			const auto array = file.readAll();
 			
 			const bool isHtml = QFileInfo(url.toLocalFile()).suffix().contains(QLatin1String("htm"));					
@@ -115,6 +143,41 @@ void FileLoader::loadFile(const QUrl& url)
 			emit this->fileReady(codec->toUnicode(array), url);
 		}
 	}
+}
+
+DocumentAlert * DocumentHandler::externallyModifiedAlert()
+{
+	auto alert = new DocumentAlert(tr("File changed externally"), tr("You can reload the file or save your changes now"), DocumentAlert::WARNING_LEVEL);
+	
+	const auto reloadAction = [&]()
+	{
+		emit this->loadFile(this->fileUrl());
+	};
+	
+	const auto autoReloadAction = [&]()
+	{
+		this->setAutoReload(true);		
+		emit this->loadFile(this->fileUrl());
+	};
+	
+	const auto ignoreAction = [&]()
+	{};
+		
+	alert->setActions({{tr("Reload"), reloadAction}, {tr("Auto Reload"), autoReloadAction}, {tr("Ignore"), ignoreAction}});
+	return alert;
+}
+
+DocumentAlert * DocumentHandler::missingAlert()
+{	
+	auto alert = new DocumentAlert(tr("Your file was removed"), tr("This file does not longer exists in your local storage, however you can save it again"), DocumentAlert::DANGER_LEVEL);
+	
+	const auto saveAction = [&]()
+	{
+		this->saveAs(this->fileUrl());
+	};
+	
+	alert->setActions({{tr("Save"), saveAction}});
+	return alert;
 }
 
 DocumentHandler::DocumentHandler(QObject *parent)
@@ -130,48 +193,54 @@ DocumentHandler::DocumentHandler(QObject *parent)
 	++m_instanceCount;
 	
 	//start file loader thread implementation
-	FileLoader *m_loader =  new FileLoader;	
-	m_loader->moveToThread(&m_worker);
-	connect(&m_worker, &QThread::finished, m_loader, &QObject::deleteLater);
-	connect(this, &DocumentHandler::loadFile, m_loader, &FileLoader::loadFile);
-	connect(m_loader, &FileLoader::fileReady, [&](QString array, QUrl url)
-	{       
-		if (QTextDocument *doc = textDocument())		
-			doc->setModified(false);
-		
-		this->isRich = QFileInfo(url.toLocalFile()).suffix().contains(QLatin1String("rtf"));//         
-		emit this->isRichChanged();
-		
-		this->setText(array);		
-		
-		this->setFormatName(DocumentHandler::getLanguageNameFromFileName(url));
-		
-		emit this->loaded(url);
-		
-		reset();
-	});
-	
-	m_worker.start();
-	
+	{
+		FileLoader *m_loader =  new FileLoader;	
+		m_loader->moveToThread(&m_worker);
+		connect(&m_worker, &QThread::finished, m_loader, &QObject::deleteLater);
+		connect(this, &DocumentHandler::loadFile, m_loader, &FileLoader::loadFile);
+		connect(m_loader, &FileLoader::fileReady, [&](QString array, QUrl url)
+		{       
+			if (QTextDocument *doc = textDocument())		
+				doc->setModified(false);
+			
+			this->isRich = QFileInfo(url.toLocalFile()).suffix().contains(QLatin1String("rtf"));//         
+			emit this->isRichChanged();
+			
+			this->setText(array);		
+			
+			this->setFormatName(DocumentHandler::getLanguageNameFromFileName(url));
+			
+			emit this->loaded(url);
+			
+			reset();
+		});	
+		m_worker.start();	
+	}
 	//end file loader thread implementation
 	
 	connect(this->m_watcher, &QFileSystemWatcher::fileChanged, [&](QString url)
 	{		
 		if(this->fileUrl() == QUrl::fromLocalFile(url))
 		{
+			//THE FILE WAS REMOVED	
+			if(!FMH::fileExists(this->fileUrl()))
+			{				
+				this->m_alerts->append(DocumentHandler::missingAlert());				
+				return;
+			}
+			
+			//THE FILE CHANGED BUT STILL EXISTS LOCALLY
 			if(m_internallyModified)
 			{
 				m_internallyModified = false;
 				return;
 			}
 			
-			this->setExternallyModified(true);
-			
+			this->setExternallyModified(true);			
 			
 			if(!this->m_autoReload)
 			{
-				/*this->m_warning.setWarning("File changed externally", "You can reload the file or save your changes now");	
-				emit this->warningChanged();*/		
+				this->m_alerts->append(DocumentHandler::externallyModifiedAlert());
 				return;				
 			}
 			

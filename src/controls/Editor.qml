@@ -199,6 +199,7 @@ Maui.Page
 	ColumnLayout
 	{
 		anchors.fill: parent
+		spacing: 0
 		
 		Repeater
 		{
@@ -206,17 +207,41 @@ Maui.Page
 			
 			Maui.ToolBar
 			{
+				property var alert : model.alert
+				
 				Layout.fillWidth: true
 				
-				Kirigami.Theme.backgroundColor: Kirigami.Theme.neutralTextColor
+				Kirigami.Theme.backgroundColor: 
+				{
+					switch(alert.level)
+					{
+						case 0: return Kirigami.Theme.positiveTextColor
+						case 1: return Kirigami.Theme.neutralTextColor
+						case 2: return Kirigami.Theme.negativeTextColor							
+					}
+				}
 				
 				leftContent: Maui.ListItemTemplate
 				{
 					Layout.fillWidth: true
 					Layout.fillHeight: true
 					
-					label1.text: model.warning.title
-					label2.text: model.warning.body
+					label1.text: alert.title
+					label2.text: alert.body
+				}
+				
+				rightContent: Repeater
+				{
+					model: alert.actionLabels()
+					
+					Button
+					{
+						text: modelData
+						onClicked: alert.triggerAction(index)
+						
+						Kirigami.Theme.backgroundColor: Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.2)
+						Kirigami.Theme.textColor: Kirigami.Theme.textColor
+					}
 				}
 			}
 		}

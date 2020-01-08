@@ -156,6 +156,7 @@ void MauiKit::registerTypes(const char *uri)
     /** EDITOR CONTROLS **/
 	qmlRegisterType<DocumentHandler>(uri, 1, 0, "DocumentHandler");
 	qmlRegisterType<Alerts>();
+	qmlRegisterAnonymousType<DocumentAlert>(uri, 1);
 	qmlRegisterType(componentUrl(QStringLiteral("Editor.qml")), uri, 1, 0, "Editor");
     qmlRegisterType(componentUrl(QStringLiteral("private/DocumentPreview.qml")), uri, 1, 0, "DocumentPreview");
 #endif 

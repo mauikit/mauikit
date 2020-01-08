@@ -70,43 +70,89 @@ namespace KSyntaxHighlighting
 	class SyntaxHighlighter;
 }
 
-class DocumentAlert
+
+struct AlertAction
 {
-	Q_GADGET	
-	Q_PROPERTY(bool hasWarning MEMBER m_hasWarning)
-	Q_PROPERTY(QString title MEMBER m_title)
-	Q_PROPERTY(QString body MEMBER m_body)
-	bool m_hasWarning = false;
+	QString label;
+	std::function<void ()> action;
+} ;
+
+class DocumentAlert : public QObject
+{	
+	Q_OBJECT	
+	Q_PROPERTY(QString title MEMBER m_title CONSTANT FINAL)
+	Q_PROPERTY(QString body MEMBER m_body CONSTANT FINAL)	
+	Q_PROPERTY(uint level MEMBER m_level CONSTANT FINAL)	
+	
+public:	
+	enum LEVEL : uint
+	{
+		INFO_LEVEL = 0,		
+		WARNING_LEVEL = 1,
+		DANGER_LEVEL = 2
+	};
+	
+	DocumentAlert(const QString &title, const QString &body, const uint &level, QObject *parent = nullptr) : QObject(parent)
+	{
+		this->m_title = title;
+		this->m_body = body;
+		this->m_level = level;		
+	}
+	
+	void setIndex(const int &index)
+	{
+		this->m_index = index;
+	}
+	
+	void setActions(QVector<AlertAction> actions)
+	{
+		this->m_actions = actions;
+	}
+
+private: 
 	QString m_title;
 	QString m_body;
+	uint m_level;
+	int m_index = -1;	
 	
-public:
-// 	DocumentWarning(const QString &title, const QString &body)
-// 	{
-// 		setWarning(title, body);
-// 	}
+	QVector<AlertAction> m_actions;
 	
-	void setWarning(const QString &title, const QString &body)
+public slots:
+	QStringList actionLabels() const
 	{
-		m_title = title;
-		m_body = body;
-		m_hasWarning = true;
+		return std::accumulate(this->m_actions.constBegin(), this->m_actions.constEnd(), QStringList(), [](QStringList &labels, const AlertAction &action) -> QStringList
+		{
+			labels << action.label;
+			return labels;
+		});	
 	}
-	void accept()
-	{}
-	void reject()
-	{}	
+	
+	void triggerAction(const int &index)
+	{
+		this->m_actions.takeAt(index).action();		
+		emit this->done(m_index);
+	}
+	
+signals:
+	void done(int index);
 };
-Q_DECLARE_METATYPE(DocumentAlert)
 
 class Alerts : public QAbstractListModel
 {
-	Q_OBJECT	
+	Q_OBJECT
 	
 public:
+	enum ROLES : uint
+	{
+		ALERT = Qt::DisplayRole + 1
+	};
+	
 	explicit Alerts(QObject *parent = nullptr); 
 	QVariant data(const QModelIndex & index, int role) const override final;
 	int rowCount(const QModelIndex &parent = QModelIndex()) const override final;	
+	QHash<int, QByteArray> roleNames() const override;
+	
+	void append(DocumentAlert *alert);
 
 private:
 	QVector<DocumentAlert*> m_alerts;	
@@ -297,6 +343,8 @@ private:
 	KSyntaxHighlighting::SyntaxHighlighter *m_highlighter;	
 	
 	Alerts *m_alerts;
+	DocumentAlert * missingAlert();
+	DocumentAlert * externallyModifiedAlert();	
 };
 
 #endif // DOCUMENTHANDLER_H
