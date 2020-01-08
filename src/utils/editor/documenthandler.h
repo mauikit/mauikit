@@ -148,6 +148,7 @@ public:
 	};
 	
 	explicit Alerts(QObject *parent = nullptr); 
+	~Alerts();
 	QVariant data(const QModelIndex & index, int role) const override final;
 	int rowCount(const QModelIndex &parent = QModelIndex()) const override final;	
 	QHash<int, QByteArray> roleNames() const override;

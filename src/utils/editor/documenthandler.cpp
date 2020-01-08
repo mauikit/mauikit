@@ -88,6 +88,13 @@ int DocumentHandler::m_instanceCount = 0;
 Alerts::Alerts(QObject* parent) : QAbstractListModel(parent)
 {}
 
+Alerts::~Alerts()
+{
+	qDebug()<< "REMOVING ALL DOCUMENTS ALERTS";
+	for(auto *alert : this->m_alerts)
+		delete alert;
+}
+
 QVariant Alerts::data(const QModelIndex& index, int role) const
 {
 	if(role == ROLES::ALERT)
