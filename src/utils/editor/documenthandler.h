@@ -56,6 +56,7 @@
 #include <QTextCursor>
 #include <QUrl>
 #include <QThread>
+#include <QAbstractListModel>
 
 QT_BEGIN_NAMESPACE
 class QFileSystemWatcher;
@@ -63,6 +64,53 @@ class QTextDocument;
 class QQuickTextDocument;
 QT_END_NAMESPACE
 
+namespace KSyntaxHighlighting 
+{
+	class Repository;
+	class SyntaxHighlighter;
+}
+
+class DocumentAlert
+{
+	Q_GADGET	
+	Q_PROPERTY(bool hasWarning MEMBER m_hasWarning)
+	Q_PROPERTY(QString title MEMBER m_title)
+	Q_PROPERTY(QString body MEMBER m_body)
+	bool m_hasWarning = false;
+	QString m_title;
+	QString m_body;
+	
+public:
+// 	DocumentWarning(const QString &title, const QString &body)
+// 	{
+// 		setWarning(title, body);
+// 	}
+	
+	void setWarning(const QString &title, const QString &body)
+	{
+		m_title = title;
+		m_body = body;
+		m_hasWarning = true;
+	}
+	void accept()
+	{}
+	void reject()
+	{}	
+};
+Q_DECLARE_METATYPE(DocumentAlert)
+
+class Alerts : public QAbstractListModel
+{
+	Q_OBJECT	
+	
+public:
+	explicit Alerts(QObject *parent = nullptr); 
+	QVariant data(const QModelIndex & index, int role) const override final;
+	int rowCount(const QModelIndex &parent = QModelIndex()) const override final;	
+
+private:
+	QVector<DocumentAlert*> m_alerts;	
+}; 
 
 class FileLoader : public QObject
 {
@@ -75,8 +123,6 @@ signals:
 	void fileReady(QString array, QUrl url);
 };
 
-
-class SyntaxHighlighterUtil;
 class DocumentHandler : public QObject
 {
 	Q_OBJECT
@@ -104,7 +150,14 @@ class DocumentHandler : public QObject
 	
 	Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
 	
-	Q_PROPERTY(SyntaxHighlighterUtil * syntaxHighlighterUtil READ getSyntaxHighlighterUtil CONSTANT FINAL)
+	Q_PROPERTY(bool externallyModified READ getExternallyModified WRITE setExternallyModified NOTIFY externallyModifiedChanged)
+	Q_PROPERTY(bool autoReload READ getAutoReload WRITE setAutoReload NOTIFY autoReloadChanged)	
+	
+	Q_PROPERTY(QString formatName READ formatName WRITE setFormatName NOTIFY formatNameChanged)
+	
+	Q_PROPERTY(Alerts *alerts READ getAlerts CONSTANT FINAL)	
+	
+	Q_PROPERTY(QColor backgroundColor READ getBackgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)	
 	
 public:
 	explicit DocumentHandler(QObject *parent = nullptr);
@@ -152,14 +205,29 @@ public:
 	QString fileType() const;
 	QUrl fileUrl() const;
 	
-	inline QString text() { return m_text; }
+	inline QString text() const { return m_text; }
 	void setText(const QString &text);
 	
-	static SyntaxHighlighterUtil * getSyntaxHighlighterUtil();
+	bool getAutoReload() const;
+	void setAutoReload(const bool &value);
+	
+	bool getExternallyModified() const;
+	void setExternallyModified(const bool &value);	
+	
+	QString formatName() const;
+	void setFormatName(const QString &formatName);
+	
+	QColor getBackgroundColor() const;
+	void setBackgroundColor(const QColor &color);	
+	
+	Alerts *getAlerts() const;
 	
 public slots:
 	void load(const QUrl &fileUrl);
 	void saveAs(const QUrl &fileUrl);
+	
+	static const QStringList getLanguageNameList();
+	static const QString getLanguageNameFromFileName(const QUrl &fileName);
 	
 signals:
 	void documentChanged();
@@ -185,9 +253,18 @@ signals:
 	void loaded(const QUrl &url);
 	void error(const QString &message);
 	void loadFile(QUrl url);
-		
+	
+	void autoReloadChanged();
+	void externallyModifiedChanged();
+	
+	void backgroundColorChanged();
+	
+	void formatNameChanged() const;
+			
 private:
 	void reset();
+	void setStyle();	
+	
 	QTextCursor textCursor() const;
 	QTextDocument *textDocument() const;
 	void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
@@ -208,9 +285,18 @@ private:
 	QThread m_worker;	
 	QString m_text;
 
+	bool m_autoReload = false;
+	bool m_externallyModified = false;
+	bool m_internallyModified = false;
 	
+	QColor m_backgroundColor;
 	
-	static SyntaxHighlighterUtil *syntaxHighlighterUtil;
+	static int m_instanceCount;
+	QString m_formatName;
+	static KSyntaxHighlighting::Repository *m_repository;
+	KSyntaxHighlighting::SyntaxHighlighter *m_highlighter;	
+	
+	Alerts *m_alerts;
 };
 
 #endif // DOCUMENTHANDLER_H

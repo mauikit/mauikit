@@ -64,13 +64,40 @@
 #include <QFileSystemWatcher>
 
 #include "fmh.h"
+#include "utils.h"
 
-#include "syntaxhighlighterutil.h"
+#ifdef STATIC_MAUIKIT
+#include <KSyntaxHighlighting/KSyntaxHighlighting/Definition>
+#include <KSyntaxHighlighting/KSyntaxHighlighting/Repository>
+#include <KSyntaxHighlighting/KSyntaxHighlighting/SyntaxHighlighter>
+#include <KSyntaxHighlighting/KSyntaxHighlighting/Theme>
+#else
+#include <KSyntaxHighlighting/Definition>
+#include <KSyntaxHighlighting/Repository>
+#include <KSyntaxHighlighting/SyntaxHighlighter>
+#include <KSyntaxHighlighting/Theme>
+#endif
+
 
 /**
  * Global Variables
  */
-SyntaxHighlighterUtil *DocumentHandler::syntaxHighlighterUtil = nullptr;
+KSyntaxHighlighting::Repository *DocumentHandler::m_repository = nullptr;
+int DocumentHandler::m_instanceCount = 0;
+
+Alerts::Alerts(QObject* parent)
+{
+}
+
+QVariant Alerts::data(const QModelIndex& index, int role) const
+{
+	return QVariant();
+}
+
+int Alerts::rowCount(const QModelIndex& parent) const
+{
+	return this->m_alerts.count();
+}
 
 void FileLoader::loadFile(const QUrl& url)
 {
@@ -82,8 +109,7 @@ void FileLoader::loadFile(const QUrl& url)
 			qDebug()<< "LOAD FILE OPENDED << ";
 			const auto array = file.readAll();
 			
-			const bool isHtml = QFileInfo(url.toLocalFile()).suffix().contains(QLatin1String("htm"));			
-			
+			const bool isHtml = QFileInfo(url.toLocalFile()).suffix().contains(QLatin1String("htm"));					
 			QTextCodec *codec = isHtml ? QTextCodec::codecForHtml(array) : QTextCodec::codecForUtfText(array, QTextCodec::codecForLocale());		
 			
 			emit this->fileReady(codec->toUnicode(array), url);
@@ -98,7 +124,10 @@ DocumentHandler::DocumentHandler(QObject *parent)
 , m_cursorPosition(-1)
 , m_selectionStart(0)
 , m_selectionEnd(0)
+, m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(this))
+, m_alerts(new Alerts(this))
 {
+	++m_instanceCount;
 	
 	//start file loader thread implementation
 	FileLoader *m_loader =  new FileLoader;	
@@ -113,7 +142,10 @@ DocumentHandler::DocumentHandler(QObject *parent)
 		this->isRich = QFileInfo(url.toLocalFile()).suffix().contains(QLatin1String("rtf"));//         
 		emit this->isRichChanged();
 		
-		this->setText(array);
+		this->setText(array);		
+		
+		this->setFormatName(DocumentHandler::getLanguageNameFromFileName(url));
+		
 		emit this->loaded(url);
 		
 		reset();
@@ -124,9 +156,25 @@ DocumentHandler::DocumentHandler(QObject *parent)
 	//end file loader thread implementation
 	
 	connect(this->m_watcher, &QFileSystemWatcher::fileChanged, [&](QString url)
-	{
+	{		
 		if(this->fileUrl() == QUrl::fromLocalFile(url))
 		{
+			if(m_internallyModified)
+			{
+				m_internallyModified = false;
+				return;
+			}
+			
+			this->setExternallyModified(true);
+			
+			
+			if(!this->m_autoReload)
+			{
+				/*this->m_warning.setWarning("File changed externally", "You can reload the file or save your changes now");	
+				emit this->warningChanged();*/		
+				return;				
+			}
+			
 			emit this->loadFile(this->fileUrl());
 		}
 	});
@@ -136,6 +184,14 @@ DocumentHandler::~DocumentHandler()
 {
 	m_worker.quit();
 	m_worker.wait();
+	
+	--m_instanceCount;
+	
+	if (!m_instanceCount)
+	{
+		delete DocumentHandler::m_repository;
+		DocumentHandler::m_repository = nullptr;
+	}
 }
 
 void DocumentHandler::setText(const QString &text)
@@ -145,6 +201,85 @@ void DocumentHandler::setText(const QString &text)
 		m_text = text;
 		emit textChanged();
 	}
+}
+
+bool DocumentHandler::getAutoReload() const
+{
+	return this->m_autoReload;
+}
+
+void DocumentHandler::setAutoReload(const bool& value)
+{
+	if(value == this->m_autoReload)
+		return;
+	
+	this->m_autoReload = value;
+	emit this->autoReloadChanged();
+}
+
+bool DocumentHandler::getExternallyModified() const
+{
+	return this->m_externallyModified;
+}
+
+void DocumentHandler::setExternallyModified(const bool& value)
+{
+	if(value == this->m_externallyModified)
+		return;
+	
+	this->m_externallyModified = value;
+	emit this->externallyModifiedChanged();
+}
+
+void DocumentHandler::setStyle()
+{
+	if (!DocumentHandler::m_repository)		
+		DocumentHandler::m_repository = new KSyntaxHighlighting::Repository();
+	
+	const auto isDark = UTIL::isDark(this->m_backgroundColor);
+	
+	const auto style = DocumentHandler::m_repository->defaultTheme(isDark ?KSyntaxHighlighting::Repository::DarkTheme : KSyntaxHighlighting::Repository::LightTheme);	
+	
+	m_highlighter->setTheme(style);
+	
+	m_highlighter->setDefinition(DocumentHandler::m_repository->definitionForName(this->m_formatName));	
+}
+
+QString DocumentHandler::formatName() const
+{
+	return this->m_formatName;
+}
+
+void DocumentHandler::setFormatName(const QString& formatName)
+{
+	if (m_formatName != formatName)
+	{
+		m_formatName = formatName;
+		emit this->formatNameChanged();
+		
+		this->setStyle();		
+	}
+}
+
+QColor DocumentHandler::getBackgroundColor() const
+{
+	return this->m_backgroundColor;
+}
+
+void DocumentHandler::setBackgroundColor(const QColor& color)
+{
+	if(this->m_backgroundColor == color)
+		return;
+	
+	this->m_backgroundColor = color;
+	emit this->backgroundColorChanged();
+	
+	this->setStyle();
+}
+
+Alerts *DocumentHandler::getAlerts() const
+{
+	return this->m_alerts;
 }
 
 QQuickTextDocument *DocumentHandler::document() const
@@ -159,6 +294,8 @@ void DocumentHandler::setDocument(QQuickTextDocument *document)
 	
 	m_document = document;
 	emit documentChanged();
+	
+	m_highlighter->setDocument(m_document->textDocument());	
 }
 
 int DocumentHandler::cursorPosition() const
@@ -373,14 +510,6 @@ QUrl DocumentHandler::fileUrl() const
 	return m_fileUrl;
 }
 
-SyntaxHighlighterUtil * DocumentHandler::getSyntaxHighlighterUtil()
-{	
-	if (!DocumentHandler::syntaxHighlighterUtil) 	
-		DocumentHandler::syntaxHighlighterUtil = new SyntaxHighlighterUtil();
-	
-	return DocumentHandler::syntaxHighlighterUtil;
-}
-
 void DocumentHandler::load(const QUrl &fileUrl)
 {	
 	qDebug()<< "TRYING TO LOAD FILE << " << fileUrl;
@@ -401,7 +530,7 @@ void DocumentHandler::load(const QUrl &fileUrl)
 	emit fileUrlChanged();
 	
 	this->m_watcher->addPath(m_fileUrl.toLocalFile());
-
+	
 	emit this->loadFile(m_fileUrl);
 }
 
@@ -413,6 +542,8 @@ void DocumentHandler::saveAs(const QUrl &fileUrl)
 	
 	const QString filePath = fileUrl.toLocalFile();
 	const bool isHtml = QFileInfo(filePath).suffix().contains(QLatin1String("htm"));
+	
+	this->m_internallyModified = true;
 	
 	QFile file(filePath);
 	if (!file.open(QFile::WriteOnly | QFile::Truncate | (isHtml ? QFile::NotOpen : QFile::Text)))
@@ -434,6 +565,27 @@ void DocumentHandler::saveAs(const QUrl &fileUrl)
 		
 		doc->setModified(false);
 	}	
+}
+
+const QString DocumentHandler::getLanguageNameFromFileName(const QUrl& fileName)
+{
+	if (!DocumentHandler::m_repository)		
+		DocumentHandler::m_repository = new KSyntaxHighlighting::Repository();
+	
+	return DocumentHandler::m_repository->definitionForFileName(fileName.toString()).name();
+}
+
+const QStringList DocumentHandler::getLanguageNameList()
+{
+	if (!DocumentHandler::m_repository)		
+		m_repository = new KSyntaxHighlighting::Repository();
+	
+	const auto definitions = DocumentHandler::m_repository->definitions();
+	return std::accumulate(definitions.constBegin(), definitions.constEnd(), QStringList(), [](QStringList &languages, const auto &definition ) -> QStringList
+	{
+		languages.append(definition.name());	
+		return languages;
+	});	
 }
 
 void DocumentHandler::reset()

@@ -24,6 +24,7 @@
 #include <QFileInfo>
 #include <QSettings>
 #include <QDebug>
+#include <QColor>
 
 #ifdef Q_OS_ANDROID
 #include <QGuiApplication>
@@ -67,6 +68,12 @@ namespace UTIL
         setting.endGroup();
         return variant;
     }
+    
+    static inline bool isDark(const QColor &color)
+	{
+		const double darkness = 1-(0.299*color.red() + 0.587*color.green() + 0.114*color.blue())/255;
+		return (darkness>0.5);
+	}
 }
 
 

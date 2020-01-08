@@ -50,8 +50,6 @@
 
 #ifdef COMPONENT_EDITOR
 #include "documenthandler.h"
-#include "syntaxhighlighterutil.h"
-#include "kquicksyntaxhighlighter/kquicksyntaxhighlighter.h"
 #endif
 
 #ifdef Q_OS_ANDROID
@@ -82,8 +80,9 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("ToolBar.qml")), uri, 1, 0, "ToolBar");
     qmlRegisterType(componentUrl(QStringLiteral("ApplicationWindow.qml")), uri, 1, 0, "ApplicationWindow");
     qmlRegisterType(componentUrl(QStringLiteral("Page.qml")), uri, 1, 0, "Page");
-    qmlRegisterType(componentUrl(QStringLiteral("ShareDialog.qml")), uri, 1, 0, "ShareDialog");
-    qmlRegisterType(componentUrl(QStringLiteral("PieButton.qml")), uri, 1, 0, "PieButton");
+	qmlRegisterType(componentUrl(QStringLiteral("ShareDialog.qml")), uri, 1, 0, "ShareDialog");
+	qmlRegisterType(componentUrl(QStringLiteral("OpenWithDialog.qml")), uri, 1, 0, "OpenWithDialog");
+	qmlRegisterType(componentUrl(QStringLiteral("PieButton.qml")), uri, 1, 0, "PieButton");
     qmlRegisterType(componentUrl(QStringLiteral("SideBar.qml")), uri, 1, 0, "SideBar");
     qmlRegisterType(componentUrl(QStringLiteral("AbstractSideBar.qml")), uri, 1, 0, "AbstractSideBar");
     qmlRegisterType(componentUrl(QStringLiteral("Holder.qml")), uri, 1, 0, "Holder");
@@ -155,11 +154,10 @@ void MauiKit::registerTypes(const char *uri)
 
 #ifdef COMPONENT_EDITOR	
     /** EDITOR CONTROLS **/
-    qmlRegisterType<DocumentHandler>(uri, 1, 0, "DocumentHandler");
-    qmlRegisterType<SyntaxHighlighterUtil>();
-    qmlRegisterType(componentUrl(QStringLiteral("Editor.qml")), uri, 1, 0, "Editor");
+	qmlRegisterType<DocumentHandler>(uri, 1, 0, "DocumentHandler");
+	qmlRegisterType<Alerts>();
+	qmlRegisterType(componentUrl(QStringLiteral("Editor.qml")), uri, 1, 0, "Editor");
     qmlRegisterType(componentUrl(QStringLiteral("private/DocumentPreview.qml")), uri, 1, 0, "DocumentPreview");
-    qmlRegisterType<KQuickSyntaxHighlighter>("org.maui.kquicksyntaxhighlighter", 0, 1, "KQuickSyntaxHighlighter");
 #endif 
 
     /** PLATFORMS SPECIFIC CONTROLS **/

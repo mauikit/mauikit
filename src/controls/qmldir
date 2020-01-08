@@ -15,6 +15,7 @@ ApplicationWindow 1.0 ApplicationWindow.qml
 ToolBar 1.0 ToolBar.qml
 Page 1.0 Page.qml
 ShareDialog 1.0 ShareDialog.qml
+OpenWithDialog 1.0 OpenWithDialog.qml
 PieButton 1.0 PieButton.qml
 SideBar 1.0 SideBar.qml
 AbstractSideBar 1.0 AbstractSideBar.qml

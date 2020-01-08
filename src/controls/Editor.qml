@@ -3,12 +3,13 @@ import QtQuick.Controls 2.10
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
-import org.maui.kquicksyntaxhighlighter 0.1
 import "private"
 
 Maui.Page
 {
 	id: control
+	Kirigami.Theme.inherit: false
+	Kirigami.Theme.colorSet: Kirigami.Theme.View
 	
 	property bool showLineCount : true
 	property bool showSyntaxHighlighting: true
@@ -23,7 +24,7 @@ Maui.Page
 	property alias italic: document.italic
 	property alias bold: document.bold
 	property alias canRedo: body.canRedo	
-	
+		
 	Maui.DocumentHandler
 	{
 		id: document
@@ -31,18 +32,13 @@ Maui.Page
 		cursorPosition: body.cursorPosition
 		selectionStart: body.selectionStart
 		selectionEnd: body.selectionEnd
-		// textColor: TODO
+		textColor: control.Kirigami.Theme.textColor
+		backgroundColor: control.Kirigami.Theme.backgroundColor
 		
 		onError:
 		{
 			body.text = message
 			body.visible = true
-		}
-		
-		onLoaded: //emits the loaded file url
-		{
-			const formatName = document.syntaxHighlighterUtil.getLanguageNameFromFileName(url)
-			languagesListComboBox.currentIndex = languagesListComboBox.find(formatName)
 		}
 	}
 	
@@ -63,7 +59,7 @@ Maui.Page
 		Label
 		{
 			text: body.length + " / " + body.lineCount
-			color: Kirigami.Theme.textColor
+			color: control.Kirigami.Theme.textColor
 			opacity: 0.5
 			font.pointSize: Maui.Style.fontSizes.medium
 		}		
@@ -104,24 +100,22 @@ Maui.Page
 		MenuItem
 		{
 			text: qsTr("Web search")
-			onTriggered: Maui.FM.openUrl("https://www.google.com/search?q="+body.selectedText)
-			enabled: body.selectedText.length
-			
+			onTriggered: Qt.openUrlExternally("https://www.google.com/search?q="+body.selectedText)
+			enabled: body.selectedText.length			
 		}
 	}	
 	
 	
 	headBar.visible: !body.readOnly
 	
-		headBar.leftContent: [				
-		
+	headBar.leftContent: [				
+	
 		ToolButton
 		{
 			icon.name: "edit-undo"
 			enabled: body.canUndo
 			onClicked: body.undo()
-			opacity: enabled ? 1 : 0.5
-			
+			opacity: enabled ? 1 : 0.5			
 		},
 		
 		ToolButton
@@ -141,7 +135,7 @@ Maui.Page
 			{
 				icon.name: "format-text-bold"
 				focusPolicy: Qt.TabFocus
-				icon.color: checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+				icon.color: checked ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
 				checkable: false
 				checked: document.bold
 				onClicked: document.bold = !document.bold
@@ -150,7 +144,7 @@ Maui.Page
 			ToolButton
 			{
 				icon.name: "format-text-italic"
-				icon.color: checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+				icon.color: checked ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
 				focusPolicy: Qt.TabFocus
 				checkable: false
 				checked: document.italic
@@ -160,7 +154,7 @@ Maui.Page
 			ToolButton
 			{
 				icon.name: "format-text-underline"
-				icon.color: checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+				icon.color: checked ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
 				focusPolicy: Qt.TabFocus
 				checkable: true
 				checked: document.underline
@@ -170,17 +164,14 @@ Maui.Page
 			ToolButton
 			{
 				icon.name: "format-text-uppercase"
-				icon.color: checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+				icon.color: checked ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
 				focusPolicy: Qt.TabFocus
 				checkable: true
 				checked: document.uppercase
 				onClicked: document.uppercase = !document.uppercase
 			}					
 		}
-		]
-		
-		
-		
+		]		
 	
 // 	footBar.visible: !body.readOnly
 	footBar.rightContent: [
@@ -200,69 +191,90 @@ Maui.Page
 	{
 		visible: control.showSyntaxHighlighting
 		id: languagesListComboBox
-		model: document.syntaxHighlighterUtil.getLanguageNameList()
-		onCurrentIndexChanged: syntaxHighlighter.formatName = languagesListComboBox.model[currentIndex]		
+		model: document.getLanguageNameList()
+		onCurrentIndexChanged: document.formatName = languagesListComboBox.model[currentIndex]		
 	}	
 	]
 	
-	Kirigami.ScrollablePage
+	ColumnLayout
 	{
-		id: _scrollView
 		anchors.fill: parent
 		
-		contentWidth: width
-		contentHeight: body.implicitHeight
-		
-		leftPadding: 0
-		rightPadding: 0
-		topPadding: 0
-		bottomPadding: 0
-		
-		TextArea
+		Repeater
 		{
-			id: body
-			text: document.text
-			font.family: languagesListComboBox.currentIndex > 0 ? "Monospace" : undefined		
-			placeholderText: qsTr("Body")
-			Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
-			selectByKeyboard :!Kirigami.Settings.isMobile
-			selectByMouse : !Kirigami.Settings.isMobile
-			textFormat: TextEdit.AutoText
-			palette.text: Kirigami.Theme.textColor
-			color: control.Kirigami.Theme.textColor
+			model: document.alerts
 			
-			font.pointSize: Maui.Style.fontSizes.large
-			wrapMode: TextEdit.WrapAnywhere
-			
-			activeFocusOnPress: true
-			activeFocusOnTab: true
-			persistentSelection: true
-			
-			background: Rectangle
+			Maui.ToolBar
 			{
-				color: Kirigami.Theme.backgroundColor
-				implicitWidth: body.implicitWidth
-				implicitHeight: body.implicitHeight
-			}
-			
-			// 			onPressAndHold: isMobile ? documentMenu.popup() : undefined
+				Layout.fillWidth: true
 				
-			
-			onPressed:
-			{
-				if(!Kirigami.Settings.isMobile && event.button === Qt.RightButton)
-					documentMenu.popup()
-			}
-			
-			KQuickSyntaxHighlighter 
-			{
-				id: syntaxHighlighter
-				textEdit: body
+				Kirigami.Theme.backgroundColor: Kirigami.Theme.neutralTextColor
+				
+				leftContent: Maui.ListItemTemplate
+				{
+					Layout.fillWidth: true
+					Layout.fillHeight: true
+					
+					label1.text: model.warning.title
+					label2.text: model.warning.body
+				}
 			}
 		}
-// 		ScrollBar.vertical.height: _scrollView.height - body.topPadding
-// 		ScrollBar.vertical.y: body.topPadding
+		
+		Kirigami.ScrollablePage
+		{
+			id: _scrollView
+			Layout.fillWidth: true
+			Layout.fillHeight: true
+			
+			contentWidth: width
+			contentHeight: body.implicitHeight
+			
+			leftPadding: 0
+			rightPadding: 0
+			topPadding: 0
+			bottomPadding: 0
+			
+			TextArea
+			{
+				id: body
+				text: document.text
+				font.family: languagesListComboBox.currentIndex > 0 ? "Monospace" : undefined		
+				placeholderText: qsTr("Body")
+				selectByKeyboard :!Kirigami.Settings.isMobile
+				selectByMouse : !Kirigami.Settings.isMobile
+				textFormat: TextEdit.AutoText
+				palette.text: control.Kirigami.Theme.textColor
+				color: control.Kirigami.Theme.textColor
+				
+				font.pointSize: Maui.Style.fontSizes.large
+				wrapMode: TextEdit.WrapAnywhere
+				
+				activeFocusOnPress: true
+				activeFocusOnTab: true
+				persistentSelection: true
+				
+				background: Rectangle
+				{
+					color: document.backgroundColor
+					implicitWidth: body.implicitWidth
+					implicitHeight: Math.max(body.implicitHeight, control.height)
+				}
+				
+				// 			onPressAndHold: isMobile ? documentMenu.popup() : undefined				
+				
+				onPressed:
+				{
+					if(!Kirigami.Settings.isMobile && event.button === Qt.RightButton)
+						documentMenu.popup()
+				}
+			}
+			// 		ScrollBar.vertical.height: _scrollView.height - body.topPadding
+			// 		ScrollBar.vertical.y: body.topPadding
+		}
 	}
+	
+	
 	
 	function zoomIn()
 	{
