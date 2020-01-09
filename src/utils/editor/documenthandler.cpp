@@ -164,12 +164,17 @@ DocumentAlert * DocumentHandler::externallyModifiedAlert()
 	{
 		this->setAutoReload(true);		
 		emit this->loadFile(this->fileUrl());
-	};
-	
-	const auto ignoreAction = [&]()
-	{};
+	};	
 		
-	alert->setActions({{tr("Reload"), reloadAction}, {tr("Auto Reload"), autoReloadAction}, {tr("Ignore"), ignoreAction}});
+	alert->setActions({{tr("Reload"), reloadAction}, {tr("Auto Reload"), autoReloadAction}, {tr("Ignore"), [&](){}}});
+	return alert;
+}
+
+DocumentAlert * DocumentHandler::canNotSaveAlert(const QString &details)
+{
+	auto alert = new DocumentAlert(tr("File can not be saved"), details, DocumentAlert::DANGER_LEVEL);
+	
+	alert->setActions({{tr("Ignore"), [&](){}}});
 	return alert;
 }
 
@@ -616,12 +621,12 @@ void DocumentHandler::load(const QUrl &fileUrl)
 
 void DocumentHandler::saveAs(const QUrl &fileUrl)
 {
-	QTextDocument *doc = textDocument();
+	QTextDocument *doc = this->textDocument();
 	if (!doc)
 		return;
 	
 	const QString filePath = fileUrl.toLocalFile();
-	const bool isHtml = QFileInfo(filePath).suffix().contains(QLatin1String("htm"));
+	const bool isHtml = QFileInfo(filePath).suffix().contains(QLatin1String("html"));
 	
 	this->m_internallyModified = true;
 	
@@ -629,7 +634,8 @@ void DocumentHandler::saveAs(const QUrl &fileUrl)
 	if (!file.open(QFile::WriteOnly | QFile::Truncate | (isHtml ? QFile::NotOpen : QFile::Text)))
 	{
 		emit error(tr("Cannot save: ") + file.errorString());
-	} else 
+		this->m_alerts->append(this->canNotSaveAlert(file.errorString()));
+	}else 
 	{
 		QTextStream out(&file);
 		out.setCodec("UTF-8");

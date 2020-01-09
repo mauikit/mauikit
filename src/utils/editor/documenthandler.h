@@ -349,6 +349,7 @@ private:
 	Alerts *m_alerts;
 	DocumentAlert * missingAlert();
 	DocumentAlert * externallyModifiedAlert();	
+	DocumentAlert * canNotSaveAlert(const QString &details);	
 };
 
 #endif // DOCUMENTHANDLER_H
