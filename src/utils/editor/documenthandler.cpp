@@ -91,7 +91,10 @@ Alerts::~Alerts()
 {
 	qDebug()<< "REMOVING ALL DOCUMENTS ALERTS";
 	for(auto *alert : this->m_alerts)
+	{
 		delete alert;
+		alert = nullptr;
+	}
 }
 
 QVariant Alerts::data(const QModelIndex& index, int role) const
@@ -125,7 +128,11 @@ void Alerts::append(DocumentAlert *alert)
 	{
 		this->beginRemoveRows(QModelIndex(), index, index);
 		auto item = this->m_alerts.takeAt(index);
-		item->deleteLater();
+		if(item)
+		{
+			item->deleteLater();
+			item = nullptr;
+		}
 		this->endRemoveRows();		
 	});
 	
@@ -210,27 +217,26 @@ DocumentHandler::DocumentHandler(QObject *parent)
 		connect(&m_worker, &QThread::finished, m_loader, &QObject::deleteLater);
 		connect(this, &DocumentHandler::loadFile, m_loader, &FileLoader::loadFile);
 		connect(m_loader, &FileLoader::fileReady, [&](QString array, QUrl url)
-		{       
-			if (QTextDocument *doc = textDocument())		
-				doc->setModified(false);
-			
+		{  			
 			this->isRich = QFileInfo(url.toLocalFile()).suffix().contains(QLatin1String("rtf"));//         
 			emit this->isRichChanged();
 			
 			this->setText(array);		
+			if (QTextDocument *doc = this->textDocument())		
+				doc->setModified(false);
 			
 			this->setFormatName(DocumentHandler::getLanguageNameFromFileName(url));
 			
 			emit this->loaded(url);
 			
-			reset();
+			reset();			
 		});	
 		m_worker.start();	
 	}
 	//end file loader thread implementation
 	
 	connect(this->m_watcher, &QFileSystemWatcher::fileChanged, [&](QString url)
-	{		
+	{				
 		if(this->fileUrl() == QUrl::fromLocalFile(url))
 		{
 			//THE FILE WAS REMOVED	
@@ -262,12 +268,12 @@ DocumentHandler::DocumentHandler(QObject *parent)
 
 DocumentHandler::~DocumentHandler()
 {
-	m_worker.quit();
-	m_worker.wait();
+	this->m_worker.quit();
+	this->m_worker.wait();
 	
-	--m_instanceCount;
+	--DocumentHandler::m_instanceCount;
 	
-	if (!m_instanceCount)
+	if (!DocumentHandler::m_instanceCount)
 	{
 		delete DocumentHandler::m_repository;
 		DocumentHandler::m_repository = nullptr;
@@ -276,9 +282,9 @@ DocumentHandler::~DocumentHandler()
 
 void DocumentHandler::setText(const QString &text)
 {
-	if (text != m_text)
+	if (text != this->m_text)
 	{
-		m_text = text;
+		this->m_text = text;
 		emit textChanged();
 	}
 }
@@ -299,7 +305,10 @@ void DocumentHandler::setAutoReload(const bool& value)
 
 bool DocumentHandler::getModified() const
 {
-	return this->textDocument()->isModified();
+	if (auto doc = this->textDocument())		
+		return doc->isModified();	
+	
+	return false;
 }
 
 bool DocumentHandler::getExternallyModified() const
@@ -380,7 +389,12 @@ void DocumentHandler::setDocument(QQuickTextDocument *document)
 	m_document = document;
 	emit documentChanged();
 	
-	m_highlighter->setDocument(m_document->textDocument());	
+	if(auto doc = this->textDocument())
+	{
+		doc->setModified(false);		
+		m_highlighter->setDocument(doc);	
+		connect(doc, &QTextDocument::modificationChanged, this, &DocumentHandler::modifiedChanged);		
+	}
 }
 
 int DocumentHandler::cursorPosition() const
@@ -595,11 +609,24 @@ QUrl DocumentHandler::fileUrl() const
 	return m_fileUrl;
 }
 
+void DocumentHandler::setFileUrl(const QUrl& url)
+{
+	this->load(url);
+}
+
 void DocumentHandler::load(const QUrl &fileUrl)
 {	
-	qDebug()<< "TRYING TO LOAD FILE << " << fileUrl;
+	qDebug()<< "TRYING TO LOAD FILE << " << fileUrl <<  fileUrl.isEmpty();
 	if (fileUrl == m_fileUrl)
 		return;
+	
+	m_fileUrl = fileUrl;
+	emit fileUrlChanged();
+	
+	
+	
+	if(fileUrl.isLocalFile() && !FMH::fileExists(fileUrl))
+		return;	
 	
 	QQmlEngine *engine = qmlEngine(this);
 	if (!engine) 
@@ -608,12 +635,7 @@ void DocumentHandler::load(const QUrl &fileUrl)
 		return;
 	}
 	
-	const QUrl path = QQmlFileSelector::get(engine)->selector()->select(fileUrl);
-	const QString fileName = QQmlFile::urlToLocalFileOrQrc(path);
-	
-	m_fileUrl = fileUrl;
-	emit fileUrlChanged();
-	
+	this->m_watcher->removePaths(this->m_watcher->files());
 	this->m_watcher->addPath(m_fileUrl.toLocalFile());
 	
 	emit this->loadFile(m_fileUrl);
@@ -642,14 +664,13 @@ void DocumentHandler::saveAs(const QUrl &fileUrl)
 		out << (isHtml ? doc->toHtml() : doc->toPlainText()).toUtf8();
 		
 		file.close();
+		doc->setModified(false);
 		
 		if (fileUrl == m_fileUrl)
 			return;
 		
 		m_fileUrl = fileUrl;
-		emit fileUrlChanged();
-		
-		doc->setModified(false);
+		emit fileUrlChanged();		
 	}	
 }
 

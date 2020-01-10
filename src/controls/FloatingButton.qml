@@ -47,8 +47,11 @@ MouseArea
 		ToolButton
 		{
 			id : _button
-			anchors.centerIn: parent
+			anchors.fill: parent
 			Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
+			icon.height: Maui.Style.iconSizes.medium
+			icon.width: Maui.Style.iconSizes.medium
+			
 			onClicked: control.clicked()
 		}
 	}

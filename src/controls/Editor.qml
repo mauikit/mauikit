@@ -24,6 +24,8 @@ Maui.Page
 	property alias italic: document.italic
 	property alias bold: document.bold
 	property alias canRedo: body.canRedo
+	
+	property alias fileUrl : document.fileUrl
 		
 	Maui.DocumentHandler
 	{
@@ -263,7 +265,7 @@ Maui.Page
 			TextArea
 			{
 				id: body
-				text: document.text				
+				text: document.text
 				font.family: languagesListComboBox.currentIndex > 0 ? "Monospace" : undefined		
 				placeholderText: qsTr("Body")
 				selectByKeyboard :!Kirigami.Settings.isMobile

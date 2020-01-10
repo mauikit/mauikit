@@ -318,6 +318,7 @@ install(FILES
     ${fm_HDRS}
     ${syncing_HDRS}
     ${store_HDRS}
+    ${editor_HDRS}
     ${accounts_HDRS}
     ${CMAKE_CURRENT_BINARY_DIR}/mauikit_export.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit

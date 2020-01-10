@@ -58,6 +58,10 @@
 #include <QThread>
 #include <QAbstractListModel>
 
+#ifndef STATIC_MAUIKIT
+#include "mauikit_export.h"
+#endif
+
 QT_BEGIN_NAMESPACE
 class QFileSystemWatcher;
 class QTextDocument;
@@ -69,7 +73,6 @@ namespace KSyntaxHighlighting
 	class Repository;
 	class SyntaxHighlighter;
 }
-
 
 struct AlertAction
 {
@@ -170,7 +173,12 @@ signals:
 	void fileReady(QString array, QUrl url);
 };
 
+
+#ifdef STATIC_MAUIKIT
 class DocumentHandler : public QObject
+#else
+class MAUIKIT_EXPORT DocumentHandler : public QObject
+#endif
 {
 	Q_OBJECT
 	
@@ -193,12 +201,12 @@ class DocumentHandler : public QObject
 	
 	Q_PROPERTY(QString fileName READ fileName NOTIFY fileUrlChanged)
 	Q_PROPERTY(QString fileType READ fileType NOTIFY fileUrlChanged)
-	Q_PROPERTY(QUrl fileUrl READ fileUrl NOTIFY fileUrlChanged)
+	Q_PROPERTY(QUrl fileUrl READ fileUrl WRITE setFileUrl NOTIFY fileUrlChanged)
 	
 	Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
 	
 	Q_PROPERTY(bool externallyModified READ getExternallyModified WRITE setExternallyModified NOTIFY externallyModifiedChanged)
-	Q_PROPERTY(bool modified READ getModified)
+	Q_PROPERTY(bool modified READ getModified NOTIFY modifiedChanged)
 	Q_PROPERTY(bool autoReload READ getAutoReload WRITE setAutoReload NOTIFY autoReloadChanged)	
 	
 	Q_PROPERTY(QString formatName READ formatName WRITE setFormatName NOTIFY formatNameChanged)
@@ -252,6 +260,7 @@ public:
 	QString fileName() const;
 	QString fileType() const;
 	QUrl fileUrl() const;
+	void setFileUrl(const QUrl &url);
 	
 	inline QString text() const { return m_text; }
 	void setText(const QString &text);
@@ -310,6 +319,8 @@ signals:
 	void backgroundColorChanged();
 	
 	void formatNameChanged() const;
+	
+	void modifiedChanged();
 			
 private:
 	void reset();
