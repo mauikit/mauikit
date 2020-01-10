@@ -89,7 +89,7 @@ Alerts::Alerts(QObject* parent) : QAbstractListModel(parent)
 
 Alerts::~Alerts()
 {
-	qDebug()<< "REMOVING ALL DOCUMENTS ALERTS";
+    qDebug()<< "REMOVING ALL DOCUMENTS ALERTS" << this->m_alerts.size();
 	for(auto *alert : this->m_alerts)
 	{
 		delete alert;
@@ -118,8 +118,22 @@ QHash<int, QByteArray> Alerts::roleNames() const
 	return {{ROLES::ALERT, "alert"}};
 }
 
+bool Alerts::contains(DocumentAlert* const alert)
+{        
+    for(const auto &alert_ : this->m_alerts)
+    {
+        if(alert_->getId() == alert->getId())
+            return true;
+    }
+
+    return false;
+}
+
 void Alerts::append(DocumentAlert *alert)
 {
+    if(this->contains(alert))
+		return;	
+	
 	const auto index = this->rowCount();
 	beginInsertRows(QModelIndex(), index, index);
 	
@@ -160,7 +174,7 @@ void FileLoader::loadFile(const QUrl& url)
 
 DocumentAlert * DocumentHandler::externallyModifiedAlert()
 {
-	auto alert = new DocumentAlert(tr("File changed externally"), tr("You can reload the file or save your changes now"), DocumentAlert::WARNING_LEVEL);
+	auto alert = new DocumentAlert(tr("File changed externally"), tr("You can reload the file or save your changes now"), DocumentAlert::WARNING_LEVEL, Alerts::MODIFIED);
 	
 	const auto reloadAction = [&]()
 	{
@@ -179,7 +193,7 @@ DocumentAlert * DocumentHandler::externallyModifiedAlert()
 
 DocumentAlert * DocumentHandler::canNotSaveAlert(const QString &details)
 {
-	auto alert = new DocumentAlert(tr("File can not be saved"), details, DocumentAlert::DANGER_LEVEL);
+	auto alert = new DocumentAlert(tr("File can not be saved"), details, DocumentAlert::DANGER_LEVEL, Alerts::SAVE_ERROR);
 	
 	alert->setActions({{tr("Ignore"), [&](){}}});
 	return alert;
@@ -187,7 +201,7 @@ DocumentAlert * DocumentHandler::canNotSaveAlert(const QString &details)
 
 DocumentAlert * DocumentHandler::missingAlert()
 {	
-	auto alert = new DocumentAlert(tr("Your file was removed"), tr("This file does not longer exists in your local storage, however you can save it again"), DocumentAlert::DANGER_LEVEL);
+	auto alert = new DocumentAlert(tr("Your file was removed"), tr("This file does not longer exists in your local storage, however you can save it again"), DocumentAlert::DANGER_LEVEL, Alerts::MISSING);
 	
 	const auto saveAction = [&]()
 	{
@@ -236,7 +250,7 @@ DocumentHandler::DocumentHandler(QObject *parent)
 	//end file loader thread implementation
 	
 	connect(this->m_watcher, &QFileSystemWatcher::fileChanged, [&](QString url)
-	{				
+	{		
 		if(this->fileUrl() == QUrl::fromLocalFile(url))
 		{
 			//THE FILE WAS REMOVED	

@@ -95,11 +95,12 @@ public:
 		DANGER_LEVEL = 2
 	};
 	
-	DocumentAlert(const QString &title, const QString &body, const uint &level, QObject *parent = nullptr) : QObject(parent)
+	DocumentAlert(const QString &title, const QString &body, const uint &level, const int &id, QObject *parent = nullptr) : QObject(parent)
 	{
 		this->m_title = title;
 		this->m_body = body;
-		this->m_level = level;		
+		this->m_level = level;	
+		this->m_id = id;
 	}
 	
 	void setIndex(const int &index)
@@ -111,12 +112,23 @@ public:
 	{
 		this->m_actions = actions;
 	}
+	
+	int getId() const
+	{
+		return this->m_id;
+	}	
+
+    friend bool operator==(const DocumentAlert &other, const DocumentAlert &other2)
+    {
+        return other.getId()== other2.getId();
+    }
 
 private: 
 	QString m_title;
 	QString m_body;
 	uint m_level;
 	int m_index = -1;	
+	int m_id = -1;
 	
 	QVector<AlertAction> m_actions;
 	
@@ -130,10 +142,10 @@ public slots:
 		});	
 	}
 	
-	void triggerAction(const int &index)
+	void triggerAction(const int &actionIndex, const int &alertIndex)
 	{
-		this->m_actions.takeAt(index).action();		
-		emit this->done(m_index);
+		this->m_actions.takeAt(actionIndex).action();		
+		emit this->done(alertIndex);
 	}
 	
 signals:
@@ -150,6 +162,14 @@ public:
 		ALERT = Qt::DisplayRole + 1
 	};
 	
+	enum ALERT_TYPES : uint 
+	{
+		MISSING,
+		UNSAVED,
+		MODIFIED,
+		SAVE_ERROR
+	};	
+	
 	explicit Alerts(QObject *parent = nullptr); 
 	~Alerts();
 	QVariant data(const QModelIndex & index, int role) const override final;
@@ -160,6 +180,7 @@ public:
 
 private:
 	QVector<DocumentAlert*> m_alerts;	
+    bool contains(DocumentAlert * const alert);
 }; 
 
 class FileLoader : public QObject

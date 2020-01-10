@@ -209,8 +209,9 @@ Maui.Page
 			
 			Maui.ToolBar
 			{
+                id: _alertBar
 				property var alert : model.alert
-				
+                readonly property int index_ : index
 				Layout.fillWidth: true
 				
 				Kirigami.Theme.backgroundColor: 
@@ -234,12 +235,14 @@ Maui.Page
 				
 				rightContent: Repeater
 				{
+                    id: _alertActions
+                    readonly property int index_ : index
 					model: alert.actionLabels()
 					
 					Button
 					{
 						text: modelData
-						onClicked: alert.triggerAction(index)
+                        onClicked: alert.triggerAction(_alertActions.index_, _alertBar.index_)
 						
 						Kirigami.Theme.backgroundColor: Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.2)
 						Kirigami.Theme.textColor: Kirigami.Theme.textColor
