@@ -39,7 +39,7 @@ class MAUIKIT_EXPORT Handy : public QObject
 #endif
 {
     Q_OBJECT
-    Q_PROPERTY(bool isTouch READ isTouch CONSTANT FINAL)
+    Q_PROPERTY(bool isTouch MEMBER m_isTouch CONSTANT FINAL)
 	Q_PROPERTY(bool isAndroid READ isAndroid CONSTANT FINAL)
 	Q_PROPERTY(bool isLinux READ isLinux CONSTANT FINAL)
 	Q_PROPERTY(bool isWindows READ isWindows CONSTANT FINAL)
@@ -47,7 +47,9 @@ class MAUIKIT_EXPORT Handy : public QObject
 	
 public:
     Handy(QObject *parent = nullptr);
-    ~Handy();
+	
+private:
+	bool m_isTouch = false;
 
 public slots:
 

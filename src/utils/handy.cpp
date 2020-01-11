@@ -29,9 +29,8 @@
 
 #include "fmh.h"
 
-Handy::Handy(QObject *parent) : QObject(parent) {}
-
-Handy::~Handy() {}
+Handy::Handy(QObject *parent) : QObject(parent), m_isTouch(Handy::isTouch())
+{}
 
 #ifdef Q_OS_ANDROID
 static inline struct
@@ -172,8 +171,7 @@ bool Handy::isTouch()
 		qDebug()<< "DEVICE CAPABILITIES" << device->capabilities() << device->name();
 	}
 	
-	return false;
-	
+	return false;	
 }
 
 bool Handy::isWindows()

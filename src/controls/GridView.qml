@@ -101,7 +101,7 @@ Kirigami.ScrollablePage
 		snapMode: GridView.NoSnap
 		highlightMoveDuration: 0
 		interactive: true
-		onWidthChanged: adaptContent? control.adaptGrid() : undefined
+		onWidthChanged: if(control.adaptContent) control.adaptGrid()
 		
 		keyNavigationEnabled : true
 		keyNavigationWraps : true

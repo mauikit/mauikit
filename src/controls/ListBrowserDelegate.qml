@@ -106,8 +106,7 @@ Maui.ItemDelegate
 	Maui.ListItemTemplate
 	{
 		id: _template
-		width: parent.width
-		height: parent.height
+		anchors.fill: parent
 		
 		isCurrentItem : control.isCurrentItem
 		
