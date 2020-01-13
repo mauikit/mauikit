@@ -45,13 +45,12 @@ private:
 
 public:
     /* utils*/
+	TAGDB(QObject *parent = nullptr);
+	~ TAGDB();
     Q_INVOKABLE bool checkExistance(const QString &tableName, const QString &searchId, const QString &search);
     Q_INVOKABLE bool checkExistance(const QString &queryStr);
 
 protected:
-    TAGDB(QObject *parent = nullptr);
-    ~ TAGDB();
-
     QSqlQuery getQuery(const QString &queryTxt);
     void openDB(const QString &name);
     void prepareCollectionDB() const;
@@ -61,9 +60,6 @@ protected:
     bool update(const QString &table, const QString &column, const QVariant &newValue, const QVariant &op, const QString &id);
     bool remove(const QString &tableName, const TAG::DB &removeData);
 
-signals:
-
-public slots:
 };
 
 

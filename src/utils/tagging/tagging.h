@@ -40,13 +40,12 @@ public:
 	{
 		static Tagging tag;
 		return &tag;
-	}
+	}	
 	
 	Tagging(const Tagging&) = delete;
 	Tagging& operator=(const Tagging &) = delete;
 	Tagging(Tagging &&) = delete;
-	Tagging & operator=(Tagging &&) = delete;
-	
+	Tagging & operator=(Tagging &&) = delete;	
 	
 	Q_INVOKABLE const QVariantList get(const QString &query,  std::function<bool(QVariantMap &item)> modifier = nullptr);
 
@@ -90,6 +89,7 @@ public:
 
 private: 		
 	Tagging(); 
+	~Tagging();
     void setApp();
 
     QString application = QString();
