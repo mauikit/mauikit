@@ -38,6 +38,7 @@ TAGDB::TAGDB(QObject *parent) : QObject(parent)
 
 TAGDB::~TAGDB()
 {
+	qDebug()<< "CLOSING THE TAGGING DATA BASE";
     this->m_db.close();
 }
 

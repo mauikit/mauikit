@@ -182,6 +182,7 @@ Maui.Dialog
             Layout.fillWidth: true
             Layout.margins: 0
             list.urls: [control.currentUrl]
+            list.strict: false
             allowEditMode: true
             onTagRemovedClicked: list.removeFromUrls(index)
             onTagsEdited: list.updateToUrls(tags)

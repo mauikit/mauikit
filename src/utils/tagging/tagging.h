@@ -36,8 +36,18 @@ class MAUIKIT_EXPORT Tagging : public TAGDB
 {
     Q_OBJECT
 public:
-    static Tagging *getInstance();
-
+    static Tagging *getInstance()
+	{
+		static Tagging tag;
+		return &tag;
+	}
+	
+	Tagging(const Tagging&) = delete;
+	Tagging& operator=(const Tagging &) = delete;
+	Tagging(Tagging &&) = delete;
+	Tagging & operator=(Tagging &&) = delete;
+	
+	
 	Q_INVOKABLE const QVariantList get(const QString &query,  std::function<bool(QVariantMap &item)> modifier = nullptr);
 
 	Q_INVOKABLE bool tagExists(const QString &tag, const bool &strict = false);
@@ -78,10 +88,8 @@ public:
     static QString device();
     static QString id();
 
-private:
-    Tagging(QObject *parent = nullptr);
-    ~Tagging();
-    static Tagging* instance;
+private: 		
+	Tagging(); 
     void setApp();
 
     QString application = QString();

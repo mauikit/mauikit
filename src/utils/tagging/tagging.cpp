@@ -23,29 +23,9 @@
 
 #include "utils.h"
 
-Tagging::Tagging(QObject *parent) : TAGDB(parent)
+Tagging::Tagging() : TAGDB()
 {
 	this->setApp();
-}
-
-Tagging::~Tagging() 
-{
-	// 	delete this->instance;
-}
-
-Tagging *Tagging::instance = nullptr;
-Tagging *Tagging::getInstance()
-{
-	if(!instance)
-	{
-		instance = new Tagging();
-		qDebug() << "getInstance(): First instance\n";
-		return instance;
-	} else
-	{
-		qDebug()<< "getInstance(): previous instance\n";
-		return instance;
-	}
 }
 
 const QVariantList Tagging::get(const QString &queryTxt, std::function<bool(QVariantMap &item)> modifier)

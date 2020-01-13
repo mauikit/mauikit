@@ -37,7 +37,6 @@ public:
 	Syncing *sync;
 	
 	FM(QObject *parent = nullptr);
-	~FM();
 	
 	FMH::MODEL_LIST getTags(const int &limit = 5);	
     FMH::MODEL_LIST getTagContent(const QString &tag, const QStringList &filters = {});
@@ -56,8 +55,11 @@ public:
     static FMH::MODEL_LIST getAppsPath();
     static QString resolveUserCloudCachePath(const QString &server, const QString &user);
 
-private:
-    Tagging *tag;
+private:	
+	#ifdef COMPONENT_TAGGING
+	Tagging *tag;
+	#endif
+	
 	#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)	
 	KCoreDirLister *dirLister;
 	#endif

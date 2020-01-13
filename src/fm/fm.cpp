@@ -195,8 +195,6 @@ FM::FM(QObject *parent) : QObject(parent)
 #endif
         }
 
-        FM::~FM() {}
-
         void FM::getPathContent(const QUrl& path, const bool &hidden, const bool &onlyDirs, const QStringList& filters, const QDirIterator::IteratorFlags &iteratorFlags)
         {
             qDebug()<< "Getting async path contents";
