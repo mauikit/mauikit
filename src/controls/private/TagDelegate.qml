@@ -26,10 +26,11 @@ ItemDelegate
 	background: Rectangle
 	{
 		radius: Maui.Style.radiusV
-		color: Kirigami.Theme.backgroundColor
+		opacity: 0.5
+		color: model.color ? model.color : Kirigami.Theme.backgroundColor
 		width: tagWidth
 		height: tagHeight	
-		border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))		
+		border.color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(color.r, color.g, color.b, 0.7))		
 	}
 	
 	RowLayout
@@ -69,6 +70,7 @@ ItemDelegate
 				height: Maui.Style.iconSizes.small
 				width: height				
 				color: Kirigami.Theme.textColor
+				isMask: true
 			}			
 		}
 	}

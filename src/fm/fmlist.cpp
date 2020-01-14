@@ -771,13 +771,10 @@ void FMList::setStatus(const PathStatus &status)
 
 bool FMList::itemIsFav(const QUrl &path)
 {
-	return this->fm->urlTagExists(path, "fav");
+	return FMStatic::isFav(path);
 }
 
 bool FMList::favItem(const QUrl &path)
 {
-	if(this->itemIsFav(path))
-		return this->fm->removeTagToUrl("fav", path);
-	
-	return this->fm->addTagToUrl("fav", path);
+	return FMStatic::fav(path);
 }

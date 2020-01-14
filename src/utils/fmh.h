@@ -1038,7 +1038,7 @@ namespace FMH
 			{FMH::MODEL_KEY::OWNER, file.owner()},
 			{FMH::MODEL_KEY::SUFFIX, file.completeSuffix()},
 			{FMH::MODEL_KEY::LABEL, /*file.isDir() ? file.baseName() :*/ path == FMH::HomePath ? QStringLiteral("Home") : file.fileName()},
-			{FMH::MODEL_KEY::NAME, file.fileName()},
+			{FMH::MODEL_KEY::NAME, file.baseName()},
 			{FMH::MODEL_KEY::DATE,  file.birthTime().toString(Qt::TextDate)},
 			{FMH::MODEL_KEY::MODIFIED, file.lastModified().toString(Qt::TextDate)},
 			{FMH::MODEL_KEY::LAST_READ, file.lastRead().toString(Qt::TextDate)},
@@ -1064,7 +1064,7 @@ namespace FMH
 		res = FMH::MODEL
 		{
 			{FMH::MODEL_KEY::LABEL, kfile.name()},
-			{FMH::MODEL_KEY::NAME, kfile.name()},
+			{FMH::MODEL_KEY::NAME, kfile.name().remove(kfile.name().lastIndexOf("."), kfile.name().size())},
 			{FMH::MODEL_KEY::DATE, kfile.time(KFileItem::FileTimes::CreationTime).toString(Qt::TextDate)},
 			{FMH::MODEL_KEY::MODIFIED, kfile.time(KFileItem::FileTimes::ModificationTime).toString(Qt::TextDate)},
 			{FMH::MODEL_KEY::LAST_READ, kfile.time(KFileItem::FileTimes::AccessTime).toString(Qt::TextDate)},

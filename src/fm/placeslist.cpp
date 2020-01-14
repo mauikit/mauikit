@@ -202,7 +202,8 @@ void PlacesList::setList()
 	#endif
 	
 	for(const auto &group : this->groups)
-		switch(group)
+	{
+        	switch(group)
 		{
 			case FMH::PATHTYPE_KEY::PLACES_PATH:
 				this->list << getGroup(*this->model, FMH::PATHTYPE_KEY::PLACES_PATH);				
@@ -233,9 +234,10 @@ void PlacesList::setList()
 				this->list << MauiAccounts::instance()->getCloudAccounts();
 				break;
 				#endif
-		}
-		
-		this->setCount();
+		}		
+    }
+    
+    this->setCount();
 }
 
 void PlacesList::setCount()

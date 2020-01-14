@@ -44,13 +44,14 @@ private:
     QSqlDatabase m_db;
 
 public:
-    /* utils*/
-	TAGDB(QObject *parent = nullptr);
-	~ TAGDB();
+    /* utils*/	
     Q_INVOKABLE bool checkExistance(const QString &tableName, const QString &searchId, const QString &search);
     Q_INVOKABLE bool checkExistance(const QString &queryStr);
 
 protected:
+    TAGDB(QObject *parent = nullptr);
+	~ TAGDB();
+    
     QSqlQuery getQuery(const QString &queryTxt);
     void openDB(const QString &name);
     void prepareCollectionDB() const;

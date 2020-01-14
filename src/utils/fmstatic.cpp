@@ -23,9 +23,7 @@
 #endif
 
 FMStatic::FMStatic(QObject *parent) : QObject(parent)
-{
-
-}
+{}
 
 FMH::MODEL_LIST FMStatic::packItems(const QStringList &items, const QString &type)
 {
@@ -402,7 +400,7 @@ void FMStatic::openLocation(const QStringList &urls)
         QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(url).dir().absolutePath()));
 }
 
-QVariantMap FMStatic::dirConf(const QUrl &path)
+const QVariantMap FMStatic::dirConf(const QUrl &path)
 {
     return FMH::dirConf(path);
 }
@@ -417,11 +415,22 @@ bool FMStatic::checkFileType(const int& type, const QString& mimeTypeName)
     return FMH::SUPPORTED_MIMETYPES[static_cast<FMH::FILTER_TYPE>(type)].contains(mimeTypeName);
 }
 
-void FMStatic::emptyThrash()
+bool FMStatic::fav(const QUrl& url)
 {
-	#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
-	auto job = KIO::emptyTrash ();
-	job->start();
-	#endif	
+    #ifdef COMPONENT_TAGGING
+    if(FMStatic::isFav(url))
+		return Tagging::getInstance()->removeUrlTag(url.toString(), "fav");
+	
+	return Tagging::getInstance()->tagUrl(url.toString(), "fav", "#e91e63");
+    #endif
 }
+
+bool FMStatic::isFav(const QUrl& url, const bool &strict)
+{
+    #ifdef COMPONENT_TAGGING
+    return Tagging::getInstance()->urlTagExists(url.toString(), "fav", strict);
+    #endif
+}
+
+
 

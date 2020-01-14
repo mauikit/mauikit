@@ -139,14 +139,8 @@ int TagsList::indexOf(const QString& tag)
 
 bool TagsList::insert(const QString &tag)
 {	
-	if(this->tag->tag(tag.trimmed()))
-	{
-// 		emit this->preItemAppended();		
-// 		this->list << TAG::DB {{TAG::KEYS::TAG, _tag}};
-// 		this->sortList();		
-// 		emit this->postItemAppended();
+	if(this->tag->tag(tag.trimmed()))	
 		return true;
-	}
 	
 	return false;
 }
@@ -377,15 +371,12 @@ void TagsList::setUrls(const QStringList& value)
 void TagsList::append(const QString &tag)
 {	
 	if(this->contains(tag))	
-		return;	
-	
-	if(!this->insert(tag))
-	{
-		emit this->preItemAppended();
-		this->list << TAG::DB {{TAG::KEYS::TAG, tag}};		
-		emit this->postItemAppended();
-		emit this->tagsChanged();
-	}
+		return;	    
+    
+    emit this->preItemAppended();
+    this->list << TAG::DB {{TAG::KEYS::TAG, tag}};
+    emit this->tagsChanged();
+    emit this->postItemAppended();	
 }
 
 void TagsList::append(const QStringList& tags)
