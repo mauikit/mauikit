@@ -41,14 +41,23 @@ class MAUIKIT_EXPORT MauiAccounts : public MauiList
 #endif
 {
     Q_OBJECT
-
     Q_PROPERTY(int currentAccountIndex READ getCurrentAccountIndex WRITE setCurrentAccountIndex NOTIFY currentAccountIndexChanged)
 	
 	Q_PROPERTY(QVariantMap currentAccount READ getCurrentAccount NOTIFY currentAccountChanged)
 	Q_PROPERTY(uint count READ getCount NOTIFY countChanged)
 
 public:
-   static MauiAccounts * instance(QObject *parent = nullptr);
+	static MauiAccounts *instance()
+	{
+		static MauiAccounts accounts;
+		return &accounts;
+	}
+	
+	MauiAccounts(const MauiAccounts&) = delete;
+	MauiAccounts& operator=(const MauiAccounts &) = delete;
+	MauiAccounts(MauiAccounts &&) = delete;
+	MauiAccounts & operator=(MauiAccounts &&) = delete;	
+	
     FMH::MODEL_LIST items() const final override;
 	
 	void setCurrentAccountIndex(const int &index);
@@ -69,10 +78,9 @@ public slots:
 	void refresh();
 	
 private:
-    static MauiAccounts *m_instance;
-    MauiAccounts(QObject *parent = nullptr);
-    ~MauiAccounts() override;
-
+	MauiAccounts();
+	~MauiAccounts();
+	
     AccountsDB *db;
 	FMH::MODEL_LIST m_data;
 	QVariantMap m_currentAccount;
@@ -93,7 +101,6 @@ signals:
 	void currentAccountChanged(QVariantMap account);
 	void currentAccountIndexChanged(int index);	
 	void countChanged(uint count);
-
 };
 
 #endif // MAUIACCOUNTS_H

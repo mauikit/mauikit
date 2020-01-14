@@ -55,7 +55,17 @@ class MAUIKIT_EXPORT MauiApp : public QObject
 public:  
     static MauiApp *qmlAttachedProperties(QObject *object);
     
-    static MauiApp *instance();
+	static MauiApp *instance()
+	{
+		static MauiApp app;
+		return &app;
+	}
+	
+	MauiApp(const MauiApp&) = delete;
+	MauiApp& operator=(const MauiApp &) = delete;
+	MauiApp(MauiApp &&) = delete;
+	MauiApp & operator=(MauiApp &&) = delete;	
+	
     static QString getName();
 
     static QString getDisplayName();
@@ -97,12 +107,8 @@ public:
     MauiAccounts *getAccounts() const;
 #endif
 
-	~MauiApp();	
-	
 private:
-    static MauiApp *m_instance;
-	MauiApp(QObject *parent = nullptr);
-    MauiApp(const MauiApp &other) = delete;
+	MauiApp();
     MauiAccounts *m_accounts;
 	
     QString description;

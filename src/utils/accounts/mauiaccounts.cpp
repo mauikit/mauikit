@@ -19,23 +19,17 @@
 #include "mauiaccounts.h"
 #include "accountsdb.h"
 
-MauiAccounts::MauiAccounts(QObject *parent) : MauiList(parent), 
-db(new AccountsDB(parent))
+MauiAccounts::MauiAccounts() : MauiList(nullptr), 
+db(new AccountsDB(nullptr))
 {
 	this->setAccounts();
 }
 
 MauiAccounts::~MauiAccounts()
 {
-}
-
-MauiAccounts *MauiAccounts::m_instance = nullptr;
-MauiAccounts *MauiAccounts::instance(QObject *parent)
-{
-    if(MauiAccounts::m_instance == nullptr)
-        MauiAccounts::m_instance = new MauiAccounts(parent);
-
-    return MauiAccounts::m_instance;
+	qDebug() << "DELETING MAUI ACCOUNTS INSTANCE";
+	this->db->deleteLater();
+	this->db = nullptr;
 }
 
 FMH::MODEL_LIST MauiAccounts::items() const

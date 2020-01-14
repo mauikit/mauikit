@@ -17,86 +17,112 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.6
-import QtQuick.Controls 2.2
+import QtQuick 2.10
+import QtQuick.Controls 2.10
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
+import QtQuick.Layouts 1.3
+import QtGraphicalEffects 1.0
 
-ToolButton
-{
+
+Item
+{	
 	id: control
-	
 	property int alignment : Qt.AlignLeft
 	
-	property int barHeight : 0
-	property int maxWidth :  ApplicationWindow.overlay.width * (isMobile ? 1 : 0.5)
+	property int maxWidth :  ApplicationWindow.overlay.width * (Kirigami.Settings.isMobile ? 1 : 0.5)
 	
-	property alias content : content.middleContent
-	
-	onClicked: popup.visible ? close(): open()
-	
-	layer.enabled: true
-	clip: true
-		z: 1
+	default property list<Action> actions
 
-	Popup
-	{
-		id: popup
-		height: barHeight
-		implicitWidth: content.middleLayout.implicitWidth + Maui.Style.space.big + Maui.Style.space.small
-		width: implicitWidth > maxWidth ? maxWidth : (content.middleLayout.implicitWidth > ApplicationWindow.overlay.width ? ApplicationWindow.overlay.width  : implicitWidth)		
-		padding: 0
-		margins: 0
-		x: alignment === Qt.AlignLeft ? (control.x - width) - Maui.Style.space.big : (control.x + control.width) + Maui.Style.space.big
-		y:  parent.height / 2 - height / 2
-		background: Rectangle
+	property alias icon : _button.icon
+	property alias text: _button.text
+	property alias display: _button.display
+	
+	implicitWidth: _actionsBar.visible ? Math.min(maxWidth, height + _actionsBar.implicitWidth + Maui.Style.space.big) :  height
+	
+	Behavior on implicitWidth
+	{		
+		NumberAnimation
 		{
-			radius: Maui.Style.radiusV
-			color: Kirigami.Theme.backgroundColor
-			border.color: Kirigami.Theme.borderColor		
+			duration: Kirigami.Units.longDuration
+			easing.type: Easing.InOutQuad
 		}
+	}
+	
+	Rectangle
+	{		
+		id: _background
+		visible: _actionsBar.visible
+		anchors.fill: parent
+		color: _button.Kirigami.Theme.backgroundColor
+		radius: Maui.Style.radiusV
+	}	
+	
+	DropShadow
+	{
+		visible: _actionsBar.visible
+		anchors.fill: _background
+		cached: true
+		horizontalOffset: 0
+		verticalOffset: 0
+		radius: 8.0
+		samples: 16
+		color: "#333"
+		opacity: 0.5
+		smooth: true
+		source: _background
+	}	
+	
+	RowLayout
+	{
+		anchors.fill: parent
 		
-		onFocusChanged: !activeFocus || !focus ? close() : undefined
-	
-	enter: Transition 
-	{
-		// grow_fade_in
-		NumberAnimation { property: "scale"; from: 0.9; to: 1.0; easing.type: Easing.OutQuint; duration: 220 }
-		NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; easing.type: Easing.OutCubic; duration: 150 }
-	}
-	
-	exit: Transition 
-	{
-		// shrink_fade_out
-		NumberAnimation { property: "scale"; from: 1.0; to: 0.9; easing.type: Easing.OutQuint; duration: 220 }
-		NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; easing.type: Easing.OutCubic; duration: 150 }
-	}
-	
-		Maui.ToolBar
+		Maui.ToolBar	
 		{
-			id: content
-			anchors.fill: parent
-			implicitHeight: parent.height
-			spacing: Maui.Style.space.big
-// 			Kirigami.Theme.backgroundColor: "transparent"
+			id: _actionsBar
+			visible: false
+			Layout.fillWidth: true
+			Layout.fillHeight: true
 			
-			background: Rectangle
+			background: null
+			
+			middleContent: Repeater
 			{
-				color: Kirigami.Theme.backgroundColor
-				radius: Maui.Style.radiusV
-				border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+				model: control.actions
 				
+				ToolButton
+				{
+					Layout.fillHeight: true
+					action: modelData
+					display: ToolButton.TextUnderIcon
+					onClicked: control.close()
+				}
 			}
-		}
+		}	
+		
+		Maui.FloatingButton
+		{
+			id: _button	
+			Layout.fillHeight: true
+			Layout.preferredHeight: control.height
+			Layout.alignment:Qt.AlignRight
+			
+			onClicked: _actionsBar.visible = !_actionsBar.visible		
+			
+		}		
 	}
 	
 	function open()
 	{	
-		 popup.open()		
+		_actionsBar.visible = true		
 	}
 	
 	function close()
 	{
-		popup.close()
+		_actionsBar.visible = false
 	}
 }
+
+
+
+

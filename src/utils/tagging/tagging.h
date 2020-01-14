@@ -89,7 +89,6 @@ public:
 
 private: 		
 	Tagging(); 
-	~Tagging();
     void setApp();
 
     QString application = QString();
@@ -107,8 +106,6 @@ signals:
     void urlTagged(const QString &url, const QString &tag);
     void abstractTagged(const QString &key, const QString &lot, const QString &tag);
     void tagged(const QString &tag);
-
-public slots:
 };
 
 #endif // TAGGING_H

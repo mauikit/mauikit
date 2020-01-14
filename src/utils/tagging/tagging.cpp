@@ -28,10 +28,6 @@ Tagging::Tagging() : TAGDB()
 	this->setApp();
 }
 
-Tagging::~Tagging()
-{
-}
-
 const QVariantList Tagging::get(const QString &queryTxt, std::function<bool(QVariantMap &item)> modifier)
 {
 	QVariantList mapList;

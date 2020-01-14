@@ -21,7 +21,7 @@
 #include <QUuid>
 #include "fmh.h"
 
-TAGDB::TAGDB(QObject *parent) : QObject(parent)
+TAGDB::TAGDB() : QObject(nullptr)
 {
     QDir collectionDBPath_dir(TAG::TaggingPath);
     if (!collectionDBPath_dir.exists())

@@ -25,24 +25,13 @@
 #include "mauiaccounts.h"
 #endif
 
-MauiApp::MauiApp(QObject *parent) : QObject(parent)
+MauiApp::MauiApp() : QObject(nullptr)
   #ifdef COMPONENT_ACCOUNTS
-  , m_accounts(MauiAccounts::instance(this))
+  , m_accounts(MauiAccounts::instance())
   #else
   , m_accounts(nullptr)
   #endif
 {}
-
-MauiApp::~MauiApp() {}
-
-MauiApp * MauiApp::m_instance = nullptr;
-MauiApp * MauiApp::instance()
-{
-    if(MauiApp::m_instance == nullptr)
-        MauiApp::m_instance = new MauiApp();
-    
-    return MauiApp::m_instance;
-}
 
 QString MauiApp::getName()
 {
@@ -173,11 +162,9 @@ MauiAccounts * MauiApp::getAccounts() const
 #endif
 
 MauiApp * MauiApp::qmlAttachedProperties(QObject* object)
-{
-     if(MauiApp::m_instance == nullptr)
-        MauiApp::m_instance = new MauiApp(object);
-    
-    return MauiApp::m_instance;
+{ 
+	Q_UNUSED(object)
+    return MauiApp::instance();
 }
 
 void MauiApp::notify(const QString &icon, const QString& title, const QString& body, const QJSValue& callback, const int& timeout, const QString& buttonText)
