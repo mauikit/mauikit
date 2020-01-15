@@ -27,6 +27,12 @@ Maui.Dialog
     rejectButton.visible: false
     acceptButton.text: qsTr("Add account")
     onAccepted: _syncDialog.open()
+    
+    footBar.leftContent: ToolButton
+    {
+        icon.name: "documentinfo"
+        onClicked: Qt.openUrlExternally("https://mauikit.org/cloud")
+    }
 
     Maui.BaseModel
     {
@@ -116,12 +122,12 @@ Maui.Dialog
         Maui.Holder
         {
             visible: _listView.count == 0
-            isMask: false
+            isMask: true
             isGif: false
             emojiSize: Maui.Style.iconSizes.huge
             emoji: "qrc:/assets/dialog-information.svg"
             title: qsTr("No accounts yet!")
-            body: qsTr("Start adding new accounts to sync your files, music, contacts, images, notes, and more...")
+            body: qsTr("Start syncing your documents, music, contacts, images, notes, and more...")
         }
 
     }

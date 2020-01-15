@@ -85,7 +85,7 @@ private:
 	FMH::MODEL_LIST m_data;
 	QVariantMap m_currentAccount;
 	
-	int m_currentAccountIndex = 1;
+	int m_currentAccountIndex = -1;
 	uint m_count = 0;	
 	
 	void setAccounts();

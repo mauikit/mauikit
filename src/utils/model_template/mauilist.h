@@ -61,6 +61,7 @@ public slots:
 	
 protected:
 	bool exists(const FMH::MODEL_KEY &key, const QString &value) const;
+	int indexOf(const FMH::MODEL_KEY &key, const QString &value) const;
 
 signals:
 	void preItemAppended();

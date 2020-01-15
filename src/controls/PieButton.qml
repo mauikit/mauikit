@@ -52,7 +52,7 @@ Item
 	Rectangle
 	{		
 		id: _background
-		visible: _actionsBar.visible
+		visible: control.implicitWidth > height
 		anchors.fill: parent
 		color: _button.Kirigami.Theme.backgroundColor
 		radius: Maui.Style.radiusV

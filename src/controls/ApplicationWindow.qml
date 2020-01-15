@@ -149,26 +149,26 @@ Kirigami.AbstractApplicationWindow
     {
         id: _accountsComponent
         
-        Column
+        ColumnLayout
         {
-			visible: Maui.App.handleAccounts
-			
-            spacing: Maui.Style.space.medium
+			visible: Maui.App.handleAccounts			
+			spacing: Maui.Style.space.medium
+			                    
+			Kirigami.Icon
+			{
+                visible: Maui.App.accounts.currentAccountIndex >= 0
+                source: "user-identity"
+                Layout.preferredHeight: Maui.Style.iconSizes.large
+                Layout.preferredWidth: Maui.Style.iconSizes.large
+                Layout.alignment:  Qt.AlignCenter		
+                Layout.margins: Maui.Style.space.medium
+            }
             
-            Kirigami.Icon
+            Label
             {
-				visible: _accountsListing.count > 0
-				source: "user-identity"
-				height:  Maui.Style.iconSizes.huge
-				width: height
-				anchors.horizontalCenter: parent.horizontalCenter				
-			}
-            
-             Label
-            {
-				visible: _accountsListing.count > 0
+                visible: Maui.App.accounts.currentAccountIndex >= 0
                 text: currentAccount.user
-                width: parent.width
+                Layout.fillWidth: true
                 horizontalAlignment: Qt.AlignHCenter
                 elide: Text.ElideMiddle
                 wrapMode: Text.NoWrap
@@ -179,16 +179,16 @@ Kirigami.AbstractApplicationWindow
             Kirigami.Separator
             {
 				visible: _accountsListing.count > 0
-                width: parent.width
+                Layout.fillWidth: true
             }
             
             ListBrowser
             {
                 id: _accountsListing
                 visible: _accountsListing.count > 0
-                width: parent.width
+                Layout.fillWidth: true
+                Layout.preferredHeight: Math.min(listView.contentHeight, 300)
                 listView.spacing: Maui.Style.space.medium
-                height: Math.min(listView.contentHeight, 300)
                 Kirigami.Theme.backgroundColor: "transparent"
                 model:  Maui.BaseModel
                 {
@@ -228,12 +228,14 @@ Kirigami.AbstractApplicationWindow
             Kirigami.Separator
             {
 				visible: _accountsListing.count > 0
-                width: parent.width
+                Layout.fillWidth: true
             }
             
             Button
             {
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.margins: Maui.Style.space.small
+                Layout.preferredHeight: implicitHeight 
+                Layout.alignment: Qt.AlignCenter
                 text: qsTr("Manage accounts")
                 icon.name: "list-add-user"
                 onClicked:
@@ -243,11 +245,14 @@ Kirigami.AbstractApplicationWindow
                         
                    mainMenu.close()
                 }
+                
+                Kirigami.Theme.backgroundColor: Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.1)
+                Kirigami.Theme.textColor: Kirigami.Theme.textColor
             }
             
             Kirigami.Separator
             {
-                width: parent.width
+                Layout.fillWidth: true
             }          
             
         }
@@ -290,6 +295,7 @@ Kirigami.AbstractApplicationWindow
 						id: _accountsMenuLoader
 						width: parent.width * 0.9
 						anchors.horizontalCenter: parent.horizontalCenter
+						
 						active: Maui.App.handleAccounts
 						sourceComponent: Maui.App.handleAccounts ?
 						_accountsComponent : null

@@ -24,6 +24,9 @@
 #include <QtGlobal>
 #include "tagdb.h"
 
+#include <QThread>
+#include <QCoreApplication>
+
 #ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
 #endif
@@ -37,71 +40,76 @@ class MAUIKIT_EXPORT Tagging : public TAGDB
     Q_OBJECT
 public:
     static Tagging *getInstance()
-	{
-		static Tagging tag;
-		return &tag;
-	}	
-	
-	Tagging(const Tagging&) = delete;
-	Tagging& operator=(const Tagging &) = delete;
-	Tagging(Tagging &&) = delete;
-	Tagging & operator=(Tagging &&) = delete;	
-	
-	Q_INVOKABLE const QVariantList get(const QString &query,  std::function<bool(QVariantMap &item)> modifier = nullptr);
-
-	Q_INVOKABLE bool tagExists(const QString &tag, const bool &strict = false);
-	Q_INVOKABLE bool urlTagExists(const QString &url, const QString &tag, const bool &strict = false);
-	
+    {
+        if(QThread::currentThread() != qApp->thread())
+        {
+            qWarning()<< "Can not get Tagging instance from a thread different than the mian one  " << QThread::currentThread() << qApp->thread();
+            return nullptr;
+        }	
+        static Tagging tag;
+        return &tag;
+    }
+    
+    Q_INVOKABLE const QVariantList get(const QString &query,  std::function<bool(QVariantMap &item)> modifier = nullptr);
+    
+    Q_INVOKABLE bool tagExists(const QString &tag, const bool &strict = false);
+    Q_INVOKABLE bool urlTagExists(const QString &url, const QString &tag, const bool &strict = false);
+    
     /* INSERTIIONS */
-
+    
     Q_INVOKABLE bool tag(const QString &tag, const QString &color=QString(), const QString &comment=QString());
     Q_INVOKABLE bool tagUrl(const QString &url, const QString &tag, const QString &color=QString(), const QString &comment=QString());
     Q_INVOKABLE bool tagAbstract(const QString &tag, const QString &key, const QString &lot, const QString &color = QString(), const QString &comment=QString());
-
+    
     /* UPDATES */
-	Q_INVOKABLE bool updateUrlTags(const QString &url, const QStringList &tags);
-	Q_INVOKABLE bool updateUrl(const QString &url, const QString &newUrl);
-	
-	Q_INVOKABLE bool updateAbstractTags(const QString &key, const QString &lot, const QStringList &tags);
-	
+    Q_INVOKABLE bool updateUrlTags(const QString &url, const QStringList &tags);
+    Q_INVOKABLE bool updateUrl(const QString &url, const QString &newUrl);
+    
+    Q_INVOKABLE bool updateAbstractTags(const QString &key, const QString &lot, const QStringList &tags);
+    
     /* QUERIES */
-
+    
     Q_INVOKABLE QVariantList getUrlsTags(const bool &strict = true);
     Q_INVOKABLE QVariantList getAbstractsTags(const bool &strict = true);
     Q_INVOKABLE QVariantList getAllTags(const bool &strict = true);
-	Q_INVOKABLE QVariantList getUrls(const QString &tag, const bool &strict = true, std::function<bool(QVariantMap &item)> modifier = nullptr);
+    Q_INVOKABLE QVariantList getUrls(const QString &tag, const bool &strict = true, std::function<bool(QVariantMap &item)> modifier = nullptr);
     Q_INVOKABLE QVariantList getUrlTags(const QString &url, const bool &strict = true);
     Q_INVOKABLE QVariantList getAbstractTags(const QString &key, const QString &lot, const bool &strict = true);
-
+    
     /* DELETES */
-	Q_INVOKABLE bool removeAbstractTag(const QString &key, const QString &lot, const QString &tag);
-	Q_INVOKABLE bool removeAbstractTags(const QString &key, const QString &lot);
-	
-	Q_INVOKABLE bool removeUrlTags(const QString &url);
+    Q_INVOKABLE bool removeAbstractTag(const QString &key, const QString &lot, const QString &tag);
+    Q_INVOKABLE bool removeAbstractTags(const QString &key, const QString &lot);
+    
+    Q_INVOKABLE bool removeUrlTags(const QString &url);
     Q_INVOKABLE bool removeUrlTag(const QString &url, const QString &tag);
     Q_INVOKABLE bool removeUrl(const QString &url);
-
+    
     /*STATIC METHODS*/
-
+    
     static QString mac();
     static QString device();
     static QString id();
-
-private: 		
-	Tagging(); 
+    
+private:
+    Tagging();
+    Tagging(const Tagging&) = delete;
+    Tagging& operator=(const Tagging &) = delete;
+    Tagging(Tagging &&) = delete;
+    Tagging & operator=(Tagging &&) = delete;
+    
     void setApp();
-
+    
     QString application = QString();
     QString version = QString();
     QString comment = QString();
     QString uri = QString();
-
+    
     bool app();
     bool user();
-
+    
 protected:
     bool abstract(const QString &key, const QString &lot, const QString &comment);
-
+    
 signals:
     void urlTagged(const QString &url, const QString &tag);
     void abstractTagged(const QString &key, const QString &lot, const QString &tag);
