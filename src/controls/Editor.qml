@@ -235,14 +235,14 @@ Maui.Page
 				
 				rightContent: Repeater
 				{
-                    id: _alertActions
-                    readonly property int index_ : index
 					model: alert.actionLabels()
 					
 					Button
 					{
+						id: _alertAction						
+						property int index_ : index						
 						text: modelData
-                        onClicked: alert.triggerAction(_alertActions.index_, _alertBar.index_)
+                        onClicked: alert.triggerAction(_alertAction.index_, _alertBar.index_)
 						
 						Kirigami.Theme.backgroundColor: Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.2)
 						Kirigami.Theme.textColor: Kirigami.Theme.textColor

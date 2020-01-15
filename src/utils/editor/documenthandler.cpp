@@ -628,18 +628,16 @@ void DocumentHandler::setFileUrl(const QUrl& url)
 	this->load(url);
 }
 
-void DocumentHandler::load(const QUrl &fileUrl)
+void DocumentHandler::load(const QUrl &url)
 {	
-	qDebug()<< "TRYING TO LOAD FILE << " << fileUrl <<  fileUrl.isEmpty();
-	if (fileUrl == m_fileUrl)
+	qDebug()<< "TRYING TO LOAD FILE << " << url <<  url.isEmpty();
+	if (url == m_fileUrl)
 		return;
 	
-	m_fileUrl = fileUrl;
-	emit fileUrlChanged();
+	m_fileUrl = url;
+	emit fileUrlChanged();	
 	
-	
-	
-	if(fileUrl.isLocalFile() && !FMH::fileExists(fileUrl))
+	if(m_fileUrl.isLocalFile() && !FMH::fileExists(m_fileUrl))
 		return;	
 	
 	QQmlEngine *engine = qmlEngine(this);
@@ -655,18 +653,20 @@ void DocumentHandler::load(const QUrl &fileUrl)
 	emit this->loadFile(m_fileUrl);
 }
 
-void DocumentHandler::saveAs(const QUrl &fileUrl)
+void DocumentHandler::saveAs(const QUrl &url)
 {
+	if(url.isEmpty() || !url.isValid())
+		return;	
+	
 	QTextDocument *doc = this->textDocument();
 	if (!doc)
 		return;
 	
-	const QString filePath = fileUrl.toLocalFile();
-	const bool isHtml = QFileInfo(filePath).suffix().contains(QLatin1String("html"));
+	const bool isHtml = QFileInfo(url.toLocalFile()).suffix().contains(QLatin1String("html"));
 	
 	this->m_internallyModified = true;
 	
-	QFile file(filePath);
+	QFile file(url.toLocalFile());
 	if (!file.open(QFile::WriteOnly | QFile::Truncate | (isHtml ? QFile::NotOpen : QFile::Text)))
 	{
 		emit error(tr("Cannot save: ") + file.errorString());
@@ -680,10 +680,10 @@ void DocumentHandler::saveAs(const QUrl &fileUrl)
 		file.close();
 		doc->setModified(false);
 		
-		if (fileUrl == m_fileUrl)
+		if (url == m_fileUrl)
 			return;
 		
-		m_fileUrl = fileUrl;
+		m_fileUrl = url;
 		emit fileUrlChanged();		
 	}	
 }

@@ -259,7 +259,7 @@ bool FMStatic::cut(const QUrl &url, const QUrl &where, const QString &name)
     QFile file(url.toLocalFile());
     file.rename(_where.toLocalFile());
 #else
-    auto job = KIO::move(url, _where);
+	auto job = KIO::move(url, _where, KIO::HideProgressInfo);
     job->start();
 #endif
 

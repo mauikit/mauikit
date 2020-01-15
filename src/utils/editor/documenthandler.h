@@ -57,6 +57,7 @@
 #include <QUrl>
 #include <QThread>
 #include <QAbstractListModel>
+#include <QDebug>
 
 #ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
@@ -144,7 +145,8 @@ public slots:
 	
 	void triggerAction(const int &actionIndex, const int &alertIndex)
 	{
-		this->m_actions.takeAt(actionIndex).action();		
+		qDebug()<< "TRIGGERING DOCUMENT ACTION AT INDEX << " << actionIndex << alertIndex;
+		this->m_actions.at(actionIndex).action();		
 		emit this->done(alertIndex);
 	}
 	
