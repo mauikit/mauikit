@@ -258,25 +258,46 @@ Maui.Page
 			Layout.fillHeight: true
 			
 			contentWidth: width
-			contentHeight: body.implicitHeight
+			contentHeight: body.height
 			
 			leftPadding: 0
 			rightPadding: 0
 			topPadding: 0
 			bottomPadding: 0
 			
+			PinchArea
+			{
+			}
+			
+			PinchArea 
+			{
+				id: pinchArea
+				
+				property real minScale: 1.0
+				property real maxScale: 3.0
+				
+				anchors.fill: parent
+				pinch.target: body
+				pinch.minimumScale: minScale
+				pinch.maximumScale: maxScale
+				pinch.dragAxis: Pinch.XandYAxis
+				
+				// 				onPinchFinished: {
+				// 					imageFlickable.returnToBounds()
+				// 				}
+				// this is the workaround
+				MouseArea{ anchors.fill: parent} 				
+			}
+			
 			TextArea
 			{
 				id: body
 				text: document.text
-				font.family: languagesListComboBox.currentIndex > 0 ? "Monospace" : undefined		
+				font.family: "Source Code Pro"
 				placeholderText: qsTr("Body")
 				selectByKeyboard :!Kirigami.Settings.isMobile
 				selectByMouse : !Kirigami.Settings.isMobile
-				textFormat: TextEdit.AutoText
-				palette.text: control.Kirigami.Theme.textColor
-				color: control.Kirigami.Theme.textColor
-				
+				textFormat: TextEdit.AutoText			
 				font.pointSize: Maui.Style.fontSizes.large
 				wrapMode: TextEdit.WrapAnywhere
 				
@@ -288,11 +309,9 @@ Maui.Page
 				{
 					color: document.backgroundColor
 					implicitWidth: body.implicitWidth
-					implicitHeight: Math.max(body.implicitHeight, control.height)
-				}
-				
-				// 			onPressAndHold: isMobile ? documentMenu.popup() : undefined				
-				
+					implicitHeight: control.height
+				}				
+						
 				onPressed:
 				{
 					if(!Kirigami.Settings.isMobile && event.button === Qt.RightButton)

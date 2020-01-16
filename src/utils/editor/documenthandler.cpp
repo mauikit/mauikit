@@ -237,7 +237,7 @@ DocumentHandler::DocumentHandler(QObject *parent)
 			
 			this->setText(array);		
 			if (QTextDocument *doc = this->textDocument())		
-				doc->setModified(false);
+				doc->setModified(false);			
 			
 			this->setFormatName(DocumentHandler::getLanguageNameFromFileName(url));
 			
@@ -348,9 +348,9 @@ void DocumentHandler::setStyle()
 	
 	const auto style = DocumentHandler::m_repository->defaultTheme(isDark ?KSyntaxHighlighting::Repository::DarkTheme : KSyntaxHighlighting::Repository::LightTheme);	
 	
-	m_highlighter->setTheme(style);
+	this->m_highlighter->setTheme(style);
 	
-	m_highlighter->setDefinition(DocumentHandler::m_repository->definitionForName(this->m_formatName));	
+	this->m_highlighter->setDefinition(DocumentHandler::m_repository->definitionForName(this->m_formatName));	
 }
 
 QString DocumentHandler::formatName() const
@@ -360,9 +360,9 @@ QString DocumentHandler::formatName() const
 
 void DocumentHandler::setFormatName(const QString& formatName)
 {
-	if (m_formatName != formatName)
+	if (this->m_formatName != formatName)
 	{
-		m_formatName = formatName;
+		this->m_formatName = formatName;
 		emit this->formatNameChanged();
 		
 		this->setStyle();		
@@ -692,8 +692,9 @@ const QString DocumentHandler::getLanguageNameFromFileName(const QUrl& fileName)
 {
 	if (!DocumentHandler::m_repository)		
 		DocumentHandler::m_repository = new KSyntaxHighlighting::Repository();
+	const auto res =  DocumentHandler::m_repository->definitionForFileName(fileName.toString());
 	
-	return DocumentHandler::m_repository->definitionForFileName(fileName.toString()).name();
+	return res.isValid() ? res.name() : QString();
 }
 
 const QStringList DocumentHandler::getLanguageNameList()
