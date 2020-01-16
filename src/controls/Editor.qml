@@ -263,35 +263,12 @@ Maui.Page
 			leftPadding: 0
 			rightPadding: 0
 			topPadding: 0
-			bottomPadding: 0
-			
-			PinchArea
-			{
-			}
-			
-			PinchArea 
-			{
-				id: pinchArea
-				
-				property real minScale: 1.0
-				property real maxScale: 3.0
-				
-				anchors.fill: parent
-				pinch.target: body
-				pinch.minimumScale: minScale
-				pinch.maximumScale: maxScale
-				pinch.dragAxis: Pinch.XandYAxis
-				
-				// 				onPinchFinished: {
-				// 					imageFlickable.returnToBounds()
-				// 				}
-				// this is the workaround
-				MouseArea{ anchors.fill: parent} 				
-			}
+			bottomPadding: 0			
 			
 			TextArea
 			{
 				id: body
+                width: parent.width
 				text: document.text
 				font.family: "Source Code Pro"
 				placeholderText: qsTr("Body")
@@ -317,6 +294,30 @@ Maui.Page
 					if(!Kirigami.Settings.isMobile && event.button === Qt.RightButton)
 						documentMenu.popup()
 				}
+
+                PinchArea
+                {
+                    id: pinchArea
+
+                    property real minScale: 1.0
+                    property real maxScale: 3.0
+
+                    anchors.fill: parent
+                    pinch.minimumScale: minScale
+                    pinch.maximumScale: maxScale
+                    pinch.dragAxis: Pinch.XandYAxis
+
+                    onPinchFinished:
+                    {
+                        console.log("pinch.scale", pinch.scale)
+
+                        if(pinch.scale > 1.5)
+                            control.zoomIn()
+                        else control.zoomOut()
+                    }
+                    // this is the workaround
+                    MouseArea{ anchors.fill: parent}
+                }
 			}
 			// 		ScrollBar.vertical.height: _scrollView.height - body.topPadding
 			// 		ScrollBar.vertical.y: body.topPadding
@@ -327,12 +328,12 @@ Maui.Page
 	
 	function zoomIn()
 	{
-		body.font.pointSize = body.font.pointSize + 2
+        body.font.pointSize = body.font.pointSize *1.5
 	}
 	
 	function zoomOut()
 	{
-		body.font.pointSize = body.font.pointSize - 2
+        body.font.pointSize = body.font.pointSize / 1.5
 		
 	}
 }
