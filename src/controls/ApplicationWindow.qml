@@ -190,6 +190,8 @@ Kirigami.AbstractApplicationWindow
                 Layout.preferredHeight: Math.min(listView.contentHeight, 300)
                 listView.spacing: Maui.Style.space.medium
                 Kirigami.Theme.backgroundColor: "transparent"
+				currentIndex: Maui.App.accounts.currentAccountIndex
+				
                 model:  Maui.BaseModel
                 {
                     list: Maui.App.accounts                    
@@ -204,24 +206,14 @@ Kirigami.AbstractApplicationWindow
                     width: _accountsListing.width
                     height: Maui.Style.rowHeight * 1.2
                     leftPadding: Maui.Style.space.tiny
-                    rightPadding: Maui.Style.space.tiny
-                    
-                    onClicked: 
-                    {
-                        _accountsListing.currentIndex = index
-                        Maui.App.accounts.currentAccountIndex = 
-                        index
-                    }
-                }
+                    rightPadding: Maui.Style.space.tiny                    
+                    onClicked: Maui.App.accounts.currentAccountIndex = index
+				}
                 
                 Component.onCompleted:
                 {
-                    if(_accountsListing.count > 0)
-                    {
-                        _accountsListing.currentIndex = 0
-                        Maui.App.accounts.currentAccountIndex = 
-                        _accountsListing.currentIndex
-                    }
+                    if(_accountsListing.count > 0)                    
+                        Maui.App.accounts.currentAccountIndex = 0                    
                 }
             }
             

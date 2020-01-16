@@ -150,6 +150,9 @@ void MauiAccounts::setCurrentAccountIndex(const int& index)
 	if(index >= this->m_data.size() || index < 0)
 		return;	
 	
+	if(index == this->m_currentAccountIndex)
+		return;	
+
 	//make sure the account exists
 	this->m_currentAccountIndex = index;	
 	this->m_currentAccount = FMH::toMap(this->m_data.at(m_currentAccountIndex));

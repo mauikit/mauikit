@@ -305,8 +305,8 @@ public:
 	Alerts *getAlerts() const;
 	
 public slots:
-	void load(const QUrl &fileUrl);
-	void saveAs(const QUrl &fileUrl);
+	void load(const QUrl &url);
+	void saveAs(const QUrl &url);
 	
 	static const QStringList getLanguageNameList();
 	static const QString getLanguageNameFromFileName(const QUrl &fileName);
