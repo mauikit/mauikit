@@ -38,20 +38,22 @@ MouseArea
 	
 	signal clicked()
 	
+	Kirigami.Theme.backgroundColor: Kirigami.Theme.highlightColor
+	Kirigami.Theme.textColor:  Kirigami.Theme.highlightedTextColor
+	
 	Rectangle
 	{
 		id: _rec
 		anchors.fill: parent
-		color: Kirigami.Theme.highlightColor
 		radius: Maui.Style.radiusV
+		color: control.Kirigami.Theme.backgroundColor
 		ToolButton
 		{
 			id : _button
 			anchors.fill: parent
-			Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
 			icon.height: Maui.Style.iconSizes.medium
 			icon.width: Maui.Style.iconSizes.medium
-			
+			Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
 			onClicked: control.clicked()
 		}
 	}
