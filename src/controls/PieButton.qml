@@ -30,7 +30,7 @@ Item
 	id: control
 	property int alignment : Qt.AlignLeft
 	
-	property int maxWidth :  ApplicationWindow.overlay.width * (Kirigami.Settings.isMobile ? 1 : 0.5)
+	property int maxWidth :  ApplicationWindow.overlay.width - control.anchors.margins
 	
 	default property list<Action> actions
 
@@ -54,7 +54,7 @@ Item
 		id: _background
 		visible: control.implicitWidth > height
 		anchors.fill: parent
-		color: _button.Kirigami.Theme.backgroundColor
+		color: control.Kirigami.Theme.backgroundColor
 		radius: Maui.Style.radiusV
 	}	
 	
