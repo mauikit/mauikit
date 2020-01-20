@@ -27,9 +27,9 @@ Maui.Page
 	
 	property alias fileUrl : document.fileUrl
 	
-	focus: true
-	
-	Maui.DocumentHandler
+    focus: true
+
+    Maui.DocumentHandler
 	{
 		id: document
 		document: body.textDocument
@@ -253,37 +253,37 @@ Maui.Page
 			}
 		}
 		
-		PinchArea
-		{
-			id: pinchArea
-			Layout.fillWidth: true
-			Layout.fillHeight: true
+        PinchArea
+        {
+            id: pinchArea
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 // 			enabled: Maui.Handy.hasTouch
-			property real minScale: 1.0
-			property real maxScale: 3.0
-			
+            property real minScale: 1.0
+            property real maxScale: 3.0
+
 // 			anchors.fill: parent
-			pinch.minimumScale: minScale
-			pinch.maximumScale: maxScale
-			pinch.dragAxis: Pinch.XandYAxis
+            pinch.minimumScale: minScale
+            pinch.maximumScale: maxScale
+            pinch.dragAxis: Pinch.XandYAxis
 			
-			onPinchFinished:
-			{
-				console.log("pinch.scale", pinch.scale)
+            onPinchFinished:
+            {
+                console.log("pinch.scale", pinch.scale)
 				
-				if(pinch.scale > 1.5)
-					control.zoomIn()
-					else control.zoomOut()
-			}
+                if(pinch.scale > 1.5)
+                    control.zoomIn()
+                    else control.zoomOut()
+            }
 			
-			MouseArea{ anchors.fill: parent}
+            MouseArea{ anchors.fill: parent}
 			
-			Kirigami.ScrollablePage
+            Kirigami.ScrollablePage
 			{
 				id: _scrollView
-				focus: true
-				anchors.fill: parent
-				
+                focus: true
+                anchors.fill: parent
+
 				contentWidth: width
 				contentHeight: body.height
 				
@@ -299,8 +299,8 @@ Maui.Page
 					text: document.text
 					font.family: "Source Code Pro"
 					placeholderText: qsTr("Body")
-					selectByKeyboard: true
-					selectByMouse : true
+                    selectByKeyboard: !Kirigami.Settings.isMobile
+                    selectByMouse : !Kirigami.Settings.isMobile
 					textFormat: TextEdit.AutoText			
 					font.pointSize: Maui.Style.fontSizes.large
 					wrapMode: TextEdit.WrapAnywhere
@@ -325,7 +325,7 @@ Maui.Page
 			}
 			// 		ScrollBar.vertical.height: _scrollView.height - body.topPadding
 			// 		ScrollBar.vertical.y: body.topPadding
-		}
+        }
 	}
 	
 	
