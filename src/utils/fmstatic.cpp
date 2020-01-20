@@ -415,13 +415,18 @@ bool FMStatic::checkFileType(const int& type, const QString& mimeTypeName)
     return FMH::SUPPORTED_MIMETYPES[static_cast<FMH::FILTER_TYPE>(type)].contains(mimeTypeName);
 }
 
+bool FMStatic::toggleFav(const QUrl& url)
+{
+	if(FMStatic::isFav(url))
+		return FMStatic::unFav(url);
+	
+	return FMStatic::fav(url);
+}
+
 bool FMStatic::fav(const QUrl& url)
 {
     #ifdef COMPONENT_TAGGING
-	if(FMStatic::isFav(url))
-		FMStatic::unFav(url);
-	
-	return Tagging::getInstance()->tagUrl(url.toString(), "fav", "#e91e63");
+		return Tagging::getInstance()->tagUrl(url.toString(), "fav", "#e91e63");
     #endif
 }
 
@@ -438,6 +443,8 @@ bool FMStatic::isFav(const QUrl& url, const bool &strict)
     return Tagging::getInstance()->urlTagExists(url.toString(), "fav", strict);
     #endif
 }
+
+
 
 
 

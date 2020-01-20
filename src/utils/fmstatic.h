@@ -73,6 +73,7 @@ public slots:
 	static bool isFav(const QUrl &url, const bool &strict = false);
 	static bool unFav(const QUrl &url);
 	static bool fav(const QUrl &url);
+	static bool toggleFav(const QUrl &url);
 };
 
 #endif // FMSTATIC_H

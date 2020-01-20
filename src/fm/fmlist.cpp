@@ -776,5 +776,5 @@ bool FMList::itemIsFav(const QUrl &path)
 
 bool FMList::favItem(const QUrl &path)
 {
-	return FMStatic::fav(path);
+	return FMStatic::toggleFav(path);
 }
