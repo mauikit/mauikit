@@ -47,7 +47,7 @@ Item
 			duration: Kirigami.Units.longDuration
 			easing.type: Easing.InOutQuad
 		}
-	}
+	}	
 	
 	Rectangle
 	{		

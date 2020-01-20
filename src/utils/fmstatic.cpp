@@ -418,11 +418,18 @@ bool FMStatic::checkFileType(const int& type, const QString& mimeTypeName)
 bool FMStatic::fav(const QUrl& url)
 {
     #ifdef COMPONENT_TAGGING
-    if(FMStatic::isFav(url))
-		return Tagging::getInstance()->removeUrlTag(url.toString(), "fav");
+	if(FMStatic::isFav(url))
+		FMStatic::unFav(url);
 	
 	return Tagging::getInstance()->tagUrl(url.toString(), "fav", "#e91e63");
     #endif
+}
+
+bool FMStatic::unFav(const QUrl& url)
+{
+	#ifdef COMPONENT_TAGGING	
+		return Tagging::getInstance()->removeUrlTag(url.toString(), "fav");	
+	#endif
 }
 
 bool FMStatic::isFav(const QUrl& url, const bool &strict)

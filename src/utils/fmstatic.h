@@ -70,8 +70,9 @@ public slots:
     static bool openUrl(const QUrl &url);
     static void openLocation(const QStringList &urls);
     
-    static bool isFav(const QUrl &url, const bool &strict = false);
-    static bool fav(const QUrl &url);
+	static bool isFav(const QUrl &url, const bool &strict = false);
+	static bool unFav(const QUrl &url);
+	static bool fav(const QUrl &url);
 };
 
 #endif // FMSTATIC_H
