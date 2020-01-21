@@ -209,7 +209,7 @@ QVariantList Tagging::getAllTags(const bool &strict)
 
 QVariantList Tagging::getUrls(const QString &tag, const bool &strict, std::function<bool(QVariantMap &item)> modifier)
 {
-	return !strict ? this->get(QString("select distinct turl.*, t.color, t.comment as tagComment from TAGS t inner join TAGS_URLS turl on turl.tag = t.tag where t.tag = '%1'").arg(tag), modifier):
+	return !strict ? this->get(QString("select distinct * from TAGS_URLS where tag = '%1'").arg(tag), modifier):
 	this->get(QString("select distinct turl.*, t.color, t.comment as tagComment from TAGS t "
 	"inner join TAGS_USERS tu on t.tag = tu.tag "
 	"inner join APPS_USERS au on au.mac = tu.mac and au.app = t.app "

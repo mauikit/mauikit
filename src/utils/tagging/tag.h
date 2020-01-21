@@ -95,7 +95,6 @@ namespace TAG
 		{TAG::KEYS::LAST_SYNC, "lastSync"},
 		{TAG::KEYS::LOT, "lot"},
 		{TAG::KEYS::KEY, "key"},
-		{TAG::KEYS::NAME, "name"},
 		{TAG::KEYS::APP, "app"},
 		{TAG::KEYS::URI, "uri"},
 		{TAG::KEYS::VERSION, "version"}
@@ -116,7 +115,6 @@ namespace TAG
 		{TAG::KEYMAP[KEYS::LAST_SYNC], KEYS::LAST_SYNC},
 		{TAG::KEYMAP[KEYS::LOT], KEYS::LOT},
 		{TAG::KEYMAP[KEYS::KEY], KEYS::KEY},
-		{TAG::KEYMAP[KEYS::NAME], KEYS::NAME},
 		{TAG::KEYMAP[KEYS::APP], KEYS::APP},
 		{TAG::KEYMAP[KEYS::URI], KEYS::URI},
 		{TAG::KEYMAP[KEYS::VERSION], KEYS::VERSION}

@@ -107,11 +107,12 @@ QVariantMap TagsList::get(const int &index) const
 		return QVariantMap();
 	
 	const auto folder = this->list.at(index);	
-	return std::accumulate(folder.keys().constBegin(), folder.keys().constEnd(), QVariantMap(), [&folder](QVariantMap &res, const TAG::KEYS &key)
+    const auto keys =folder.keys();
+	return std::accumulate(keys.constBegin(), keys.constEnd(), QVariantMap(), [folder](QVariantMap &res, const TAG::KEYS &key)
 	{
 		res.insert(TAG::KEYMAP[key], folder[key]);
 		return res;	 
-	});
+	});   
 }
 
 void TagsList::refresh()

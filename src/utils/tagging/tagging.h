@@ -41,6 +41,8 @@ class MAUIKIT_EXPORT Tagging : public TAGDB
 public:
     static Tagging *getInstance()
     {
+        qWarning()<< "GETTIG TAGGING INSTANCE" << QThread::currentThread() << qApp->thread();
+
         if(QThread::currentThread() != qApp->thread())
         {
             qWarning()<< "Can not get Tagging instance from a thread different than the mian one  " << QThread::currentThread() << qApp->thread();
