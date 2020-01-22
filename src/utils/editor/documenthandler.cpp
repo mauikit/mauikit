@@ -232,6 +232,8 @@ DocumentHandler::DocumentHandler(QObject *parent)
 		{ 			
 			this->setFormatName(DocumentHandler::getLanguageNameFromFileName(url));			
 			this->setText(array);
+			this->isRich = Qt::mightBeRichText(this->text());
+			emit this->isRichChanged();
 			
 			if (this->textDocument())		
 				this->textDocument()->setModified(false);
