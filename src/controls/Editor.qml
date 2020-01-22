@@ -133,7 +133,7 @@ Maui.Page
 	Row
 	{
 		id: _editingActions
-		visible: document.isRich && !body.readOnly
+		visible: (document.isRich || body.textFormat === Text.RichText) && !body.readOnly
 		
 		ToolButton
 		{
