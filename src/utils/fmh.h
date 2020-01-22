@@ -137,7 +137,7 @@ namespace FMH
 	
 	static QStringList AUDIO_MIMETYPES = {"audio/mpeg","audio/mp4","audio/flac","audio/ogg","audio/wav"};
 	static QStringList VIDEO_MIMETYPES = {"video/mp4", "video/x-matroska","video/webm","video/avi","video/flv","video/mpg", "video/wmv","video/mov","video/ogg","video/mpeg", "video/jpeg"};
-	static QStringList TEXT_MIMETYPES = {"text/x-chdr", "text/x-c++src", "text/x-c++hdr", "text/css", "text/html", "text/plain", "text/richtext", "text/scriptlet", "text/x-vcard", "text/x-go", "text/x-cmake", "text/x-qml", "application/xml", "application/javascript", "application/json", "application/pgp-keys", "application/x-shellscript", "application/x-kicad-project"};
+	static QStringList TEXT_MIMETYPES = {"text/markdown","text/x-chdr", "text/x-c++src", "text/x-c++hdr", "text/css", "text/html", "text/plain", "text/richtext", "text/scriptlet", "text/x-vcard", "text/x-go", "text/x-cmake", "text/x-qml", "application/xml", "application/javascript", "application/json", "application/pgp-keys", "application/x-shellscript", "application/x-kicad-project"};
 	static QStringList IMAGE_MIMETYPES = {"image/webp" , "image/png" , "image/gif" , "image/jpeg" , "image/web" , "image/svg" , "image/svg+xml"};
 	static QStringList DOCUMENT_MIMETYPES = {"application/pdf","application/rtf","application/doc","application/odf"};
 	

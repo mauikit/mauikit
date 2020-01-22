@@ -62,6 +62,7 @@
 #include <QDebug>
 #include <QUrl>
 #include <QFileSystemWatcher>
+#include <QTextDocumentWriter>
 
 #include "fmh.h"
 #include "utils.h"
@@ -162,11 +163,8 @@ void FileLoader::loadFile(const QUrl& url)
 		QFile file(url.toLocalFile());
 		if (file.open(QFile::ReadOnly))
 		{		
-			const auto array = file.readAll();
-			
-			const bool isHtml = QFileInfo(url.toLocalFile()).suffix().contains(QLatin1String("htm"));					
-			QTextCodec *codec = isHtml ? QTextCodec::codecForHtml(array) : QTextCodec::codecForUtfText(array, QTextCodec::codecForLocale());		
-			
+			const auto array = file.readAll();			
+			QTextCodec *codec = QTextDocumentWriter(url.toLocalFile()).codec();			
 			emit this->fileReady(codec->toUnicode(array), url);
 		}
 	}
@@ -231,15 +229,12 @@ DocumentHandler::DocumentHandler(QObject *parent)
 		connect(&m_worker, &QThread::finished, m_loader, &QObject::deleteLater);
 		connect(this, &DocumentHandler::loadFile, m_loader, &FileLoader::loadFile);
 		connect(m_loader, &FileLoader::fileReady, [&](QString array, QUrl url)
-		{  			
-			this->isRich = QFileInfo(url.toLocalFile()).suffix().contains(QLatin1String("rtf"));//         
-			emit this->isRichChanged();
+		{ 			
+			this->setFormatName(DocumentHandler::getLanguageNameFromFileName(url));			
+			this->setText(array);
 			
-			this->setText(array);		
-			if (QTextDocument *doc = this->textDocument())		
-				doc->setModified(false);			
-			
-			this->setFormatName(DocumentHandler::getLanguageNameFromFileName(url));
+			if (this->textDocument())		
+				this->textDocument()->setModified(false);
 			
 			emit this->loaded(url);
 			
@@ -344,13 +339,12 @@ void DocumentHandler::setStyle()
 	if (!DocumentHandler::m_repository)		
 		DocumentHandler::m_repository = new KSyntaxHighlighting::Repository();
 	
-	const auto isDark = UTIL::isDark(this->m_backgroundColor);
-	
+	const auto isDark = UTIL::isDark(this->m_backgroundColor);	
 	const auto style = DocumentHandler::m_repository->defaultTheme(isDark ?KSyntaxHighlighting::Repository::DarkTheme : KSyntaxHighlighting::Repository::LightTheme);	
 	
-	this->m_highlighter->setTheme(style);
+	this->m_highlighter->setTheme(style);		
 	
-	this->m_highlighter->setDefinition(DocumentHandler::m_repository->definitionForName(this->m_formatName));	
+	this->m_highlighter->setDefinition(m_repository->definitionForName( this->m_formatName));
 }
 
 QString DocumentHandler::formatName() const
@@ -360,13 +354,12 @@ QString DocumentHandler::formatName() const
 
 void DocumentHandler::setFormatName(const QString& formatName)
 {
-	if (this->m_formatName != formatName)
-	{
-		this->m_formatName = formatName;
-		emit this->formatNameChanged();
-		
-		this->setStyle();		
-	}
+	if (this->m_formatName == formatName)
+		return;
+	
+	this->m_formatName = formatName;
+	emit this->formatNameChanged();	
+	this->setStyle();    
 }
 
 QColor DocumentHandler::getBackgroundColor() const
@@ -382,7 +375,8 @@ void DocumentHandler::setBackgroundColor(const QColor& color)
 	this->m_backgroundColor = color;
 	emit this->backgroundColorChanged();
 	
-	this->setStyle();
+	if (!DocumentHandler::m_repository)		
+		DocumentHandler::m_repository = new KSyntaxHighlighting::Repository();	
 }
 
 Alerts *DocumentHandler::getAlerts() const
@@ -397,17 +391,14 @@ QQuickTextDocument *DocumentHandler::document() const
 
 void DocumentHandler::setDocument(QQuickTextDocument *document)
 {
-	if (document == m_document)
-		return;
-	
-	m_document = document;
+	this->m_document = document;
 	emit documentChanged();
 	
-	if(auto doc = this->textDocument())
+	if(this->textDocument())
 	{
-		doc->setModified(false);		
-		m_highlighter->setDocument(doc);	
-		connect(doc, &QTextDocument::modificationChanged, this, &DocumentHandler::modifiedChanged);		
+		this->textDocument()->setModified(false);		
+		m_highlighter->setDocument(this->textDocument());	
+		connect(this->textDocument(), &QTextDocument::modificationChanged, this, &DocumentHandler::modifiedChanged);		
 	}
 }
 
@@ -660,32 +651,25 @@ void DocumentHandler::saveAs(const QUrl &url)
 	
 	QTextDocument *doc = this->textDocument();
 	if (!doc)
+		return;	
+	
+	this->m_internallyModified = true;	
+	
+	QTextDocumentWriter textWriter(url.toLocalFile());
+	if(!textWriter.write(this->textDocument()))
+	{
+		emit error(tr("Cannot save file ")+ url.toString());
+		this->m_alerts->append(this->canNotSaveAlert(tr("Cannot save file ")+ url.toString()));
+		return;
+	}
+	
+	doc->setModified(false);
+	
+	if (url == m_fileUrl)
 		return;
 	
-	const bool isHtml = QFileInfo(url.toLocalFile()).suffix().contains(QLatin1String("html"));
-	
-	this->m_internallyModified = true;
-	
-	QFile file(url.toLocalFile());
-	if (!file.open(QFile::WriteOnly | QFile::Truncate | (isHtml ? QFile::NotOpen : QFile::Text)))
-	{
-		emit error(tr("Cannot save: ") + file.errorString());
-		this->m_alerts->append(this->canNotSaveAlert(file.errorString()));
-	}else 
-	{
-		QTextStream out(&file);
-		out.setCodec("UTF-8");
-		out << (isHtml ? doc->toHtml() : doc->toPlainText()).toUtf8();
-		
-		file.close();
-		doc->setModified(false);
-		
-		if (url == m_fileUrl)
-			return;
-		
-		m_fileUrl = url;
-		emit fileUrlChanged();		
-	}	
+	m_fileUrl = url;
+	emit fileUrlChanged();	
 }
 
 const QString DocumentHandler::getLanguageNameFromFileName(const QUrl& fileName)

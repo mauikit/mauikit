@@ -36,9 +36,9 @@ Maui.Page
 		cursorPosition: body.cursorPosition
 		selectionStart: body.selectionStart
 		selectionEnd: body.selectionEnd
-		textColor: control.Kirigami.Theme.textColor
+// 		textColor: control.Kirigami.Theme.textColor
 		backgroundColor: control.Kirigami.Theme.backgroundColor
-		
+// 		
 		onError:
 		{
 			body.text = message
@@ -194,9 +194,9 @@ Maui.Page
 	ComboBox
 	{
 		visible: control.showSyntaxHighlighting
-		id: languagesListComboBox
 		model: document.getLanguageNameList()
-		onCurrentIndexChanged: document.formatName = languagesListComboBox.model[currentIndex]		
+		currentIndex: -1
+		onCurrentIndexChanged: document.formatName = model[currentIndex]		
 	}	
 	]
 	
@@ -284,7 +284,7 @@ Maui.Page
                 focus: true
                 anchors.fill: parent
 
-				contentWidth: width
+				contentWidth: control.width
 				contentHeight: body.height
 				
 				leftPadding: 0
@@ -295,14 +295,14 @@ Maui.Page
 				TextArea
 				{
 					id: body
-					width: parent.width
+					implicitWidth: control.width
 					text: document.text
-					font.family: "Source Code Pro"
+// 					font.family: "Source Code Pro"
 					placeholderText: qsTr("Body")
                     selectByKeyboard: !Kirigami.Settings.isMobile
                     selectByMouse : !Kirigami.Settings.isMobile
 					textFormat: TextEdit.AutoText			
-					font.pointSize: Maui.Style.fontSizes.large
+// 					font.pointSize: Maui.Style.fontSizes.large
 					wrapMode: TextEdit.WrapAnywhere
 					
 					activeFocusOnPress: true
