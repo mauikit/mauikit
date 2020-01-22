@@ -116,7 +116,7 @@ Item
         {
             id: _iconContainer
             visible: (control.width > Kirigami.Units.gridUnit * 10)
-            Layout.preferredWidth: control.labelsVisible && control.iconVisible && (iconSource.length > 0 || imageSource.length > 0) ? Math.max(control.height, control.iconSizeHint) : undefined
+            Layout.preferredWidth: control.labelsVisible && control.iconVisible && (iconSource.length > 0 || imageSource.length > 0) ? Math.max(control.height, control.iconSizeHint) : 0
             Layout.fillHeight: true
             Layout.fillWidth: !control.labelsVisible
 
