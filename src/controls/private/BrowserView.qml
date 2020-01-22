@@ -387,11 +387,11 @@ Maui.Page
             {
                 id: _millerColumns
                 anchors.fill: parent
-                boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
+                boundsBehavior: !Maui.Handy.isTouch? Flickable.StopAtBounds : Flickable.OvershootBounds
 
                 keyNavigationEnabled: true
-                interactive: Kirigami.Settings.isMobile
-
+                interactive: Maui.Handy.isTouch
+                
                 orientation: ListView.Horizontal
                 snapMode: ListView.SnapToItem
 

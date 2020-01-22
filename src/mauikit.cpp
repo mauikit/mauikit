@@ -185,12 +185,14 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType<MauiList>(); //ABSTRACT BASE LIST
     qmlRegisterType<MauiModel>(uri, 1, 0, "BaseModel"); //BASE MODEL
 
-    /** TAGGING INTERFACES AND MODELS **/
-    qmlRegisterType<TagsList>("TagsList", 1, 0, "TagsList");
+#ifdef COMPONENT_TAGGING
+	/** TAGGING INTERFACES AND MODELS **/
+	qmlRegisterType<TagsList>("TagsList", 1, 0, "TagsList");
     qmlRegisterType<TagsModel>("TagsModel", 1, 0, "TagsModel");
     qmlRegisterType(componentUrl(QStringLiteral("private/TagList.qml")), uri, 1, 0, "TagList");
     qmlRegisterType(componentUrl(QStringLiteral("TagsBar.qml")), uri, 1, 0, "TagsBar");
     qmlRegisterType(componentUrl(QStringLiteral("TagsDialog.qml")), uri, 1, 0, "TagsDialog");
+#endif 
 
     /** MAUI APPLICATION SPECIFIC PROPS **/
 

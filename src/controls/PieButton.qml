@@ -107,8 +107,7 @@ Item
 			Layout.preferredHeight: control.height
 			Layout.alignment:Qt.AlignRight
 			
-			onClicked: _actionsBar.visible = !_actionsBar.visible		
-			
+			onClicked: _actionsBar.visible = !_actionsBar.visible			
 		}		
 	}
 	
