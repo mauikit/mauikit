@@ -51,16 +51,13 @@ Kirigami.AbstractApplicationWindow
     property alias dialog: dialogLoader.item
 
     property alias leftIcon : menuBtn
-    property alias rightIcon : searchBtn
-
+    property alias menuButton : menuBtn
+    
     property alias mainMenu : mainMenu.contentData
     property alias about : aboutDialog
     property alias accounts: _accountsDialogLoader.item
     property var currentAccount: Maui.App.accounts.currentAccount
     property alias notifyDialog: _notify
-
-    property alias searchButton : searchBtn
-    property alias menuButton : menuBtn
 
     wideScreen: isWide
 
@@ -93,7 +90,6 @@ Kirigami.AbstractApplicationWindow
     /******************** SIGNALS *********************/
     /*************************************************/
     signal menuButtonClicked();
-    signal searchButtonClicked();
 
     onClosing:
     {
@@ -303,15 +299,6 @@ Kirigami.AbstractApplicationWindow
             }
         ]
 
-        rightContent: ToolButton
-        {
-            id: searchBtn
-            icon.name: "edit-find"
-            icon.color: headBarFGColor
-            onClicked: searchButtonClicked()
-            icon.width: Maui.Style.iconSizes.medium
-            icon.height: Maui.Style.iconSizes.medium
-        }
     }
 
     property Maui.ToolBar mfootBar : Maui.ToolBar

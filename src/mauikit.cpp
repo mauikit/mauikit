@@ -119,8 +119,9 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType<PathList>(uri, 1, 0, "PathList");
     
     /** 1.1 **/
-    qmlRegisterType(componentUrl(QStringLiteral("labs/SelectionBar.qml")), uri, 1, 1, "SelectionBar");
-
+	qmlRegisterType(componentUrl(QStringLiteral("labs/SelectionBar.qml")), uri, 1, 1, "SelectionBar");
+	qmlRegisterType(componentUrl(QStringLiteral("labs/ShareDialog.qml")), uri, 1, 1, "ShareDialog");
+	
 
     /** STORE CONTROLS, MODELS AND INTERFACES **/
 #ifdef COMPONENT_STORE

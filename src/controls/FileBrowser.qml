@@ -369,7 +369,7 @@ Maui.Page
 	Component
 	{
 		id: shareDialogComponent
-		Maui.ShareDialog {}
+		MauiLab.ShareDialog {}
 	}
 	
 	Component
@@ -968,15 +968,9 @@ Maui.Page
 		if(urls.length <= 0)
 			return;
 		
-		if(Maui.Handy.isAndroid)
-		{
-			Maui.Android.shareDialog(urls[0])
-		}
-		else
-		{
-			dialogLoader.sourceComponent= shareDialogComponent
-			dialog.show(urls)
-		}
+		dialogLoader.sourceComponent= shareDialogComponent
+		dialog.urls = urls
+		dialog.open()
 	}
 	
 	function openItem(index)

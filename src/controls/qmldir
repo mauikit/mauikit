@@ -65,3 +65,4 @@ GridItemTemplate 1.0 GridItemTemplate.qml
 FloatingButton 1.0 FloatingButton.qml
 
 SelectionBar 1.1 labs/SelectionBar.qml
+ShareDialog 1.1 labs/ShareDialog.qml

@@ -22,7 +22,6 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
-//import org.kde.purpose 1.0 as Purpose
 
 Maui.Dialog
 {
@@ -38,7 +37,7 @@ Maui.Dialog
 
     defaultButtons: false
 
-    page.title: qsTr("Open with")
+    page.title: qsTr("Share with")
     headBar.visible: true
 
     Kirigami.ScrollablePage
@@ -47,53 +46,19 @@ Maui.Dialog
         anchors.fill: parent
         leftPadding: 0
         rightPadding: 0
-
-        ColumnLayout
+        
+        Maui.GridBrowser
         {
-            width: parent.width
-
-            Maui.GridBrowser
-            {
-                id: grid
-                Layout.fillWidth: true
-                Layout.preferredHeight: implicitHeight
-                showEmblem: false
-                model: ListModel {}
-                onItemClicked:
-                {
-                    grid.currentIndex = index
-                    triggerService(index)
-                }
-            }
-
-//			Purpose.AlternativesView
-//			{
-//				id: _purpose
-//				Layout.fillWidth: true
-//				Layout.preferredHeight: 400
-//				pluginType: 'Export'
-//				clip: true
-
-//				delegate: Maui.ItemDelegate
-//				{
-//					width: parent.width
-//					height: Maui.Style.rowHeight * 1.5
-
-//					Maui.ListItemTemplate
-//					{
-//						anchors.fill: parent
-
-//						label1.text: model.display
-//						iconSource: model.iconName
-
-//						iconSizeHint: Maui.Style.iconSizes.big
-
-//					}
-
-//					onClicked: _purpose.createJob(index)
-//				}
-//			}
-        }
+			id: grid
+			width: parent.width
+			showEmblem: false
+			model: ListModel {}
+			onItemClicked:
+			{
+				grid.currentIndex = index
+				triggerService(index)
+			}
+		}
     }
 
 
@@ -127,12 +92,6 @@ Maui.Dialog
         if(services.length > 0)
             for(i in services)
                 grid.model.append(services[i])
-
-//				_purpose.inputData = {
-//					'urls': control.itemUrls,
-//					'mimeType': Maui.FM.getFileInfo(control.itemUrls[0]).mime
-//				}
-
     }
 
     function triggerService(index)

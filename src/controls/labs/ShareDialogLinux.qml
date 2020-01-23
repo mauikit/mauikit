@@ -1,0 +1,103 @@
+/*
+ *   Copyright 2018 Camilo Higuita <milo.h@aol.com>
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU Library General Public License as
+ *   published by the Free Software Foundation; either version 2, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details
+ *
+ *   You should have received a copy of the GNU Library General Public
+ *   License along with this program; if not, write to the
+ *   Free Software Foundation, Inc.,
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
+import QtQuick 2.10
+import QtQuick.Controls 2.10
+import QtQuick.Layouts 1.3
+
+import org.kde.mauikit 1.0 as Maui
+import org.kde.kirigami 2.7 as Kirigami
+import org.kde.purpose 1.0 as Purpose
+
+Maui.Dialog
+{	
+	id: control
+	
+	property var urls : []
+	property string mimeType
+	
+	widthHint: 0.9
+	
+	maxHeight: _purpose.height + (page.padding * 2.5) + headBar.height
+	maxWidth: Maui.Style.unit * 500
+	
+	verticalAlignment: Qt.AlignBottom
+	
+	defaultButtons: false
+		
+		page.title: qsTr("Share with")
+		headBar.visible: true
+		
+		headBar.leftContent: ToolButton
+		{
+			visible: _purpose.depth>1;
+			icon.name: "go-previous"
+			onClicked: _purpose.pop()
+		}
+		
+		footBar.middleContent : Button
+		{
+			text: qsTr("Open with")
+			onClicked: 
+			{
+				_openWithDialog.open()
+				control.close()
+			}
+		}
+		
+		Maui.OpenWithDialog
+		{
+			id: _openWithDialog
+			urls: control.urls			
+		}
+		
+		Purpose.AlternativesView
+		{
+			id: _purpose
+			width: parent.width
+			implicitHeight: 300
+			pluginType: 'Export'
+			clip: true
+			
+			inputData :
+			{
+				'urls': control.urls,
+				'mimeType':control.mimeType
+			}				
+			
+			delegate: Maui.ItemDelegate
+			{
+				width: parent.width
+				height: Maui.Style.rowHeight * 1.5
+				
+				Maui.ListItemTemplate
+				{
+					anchors.fill: parent
+					
+					label1.text: model.display
+					iconSource: model.iconName
+					
+					iconSizeHint: Maui.Style.iconSizes.big					
+				}
+				
+				onClicked: _purpose.createJob(index)
+			}
+		}
+}
+

@@ -31,6 +31,7 @@ Page
     leftPadding: control.padding
     rightPadding: control.padding
     topPadding: control.padding
+    bottomPadding: control.padding
     
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     
