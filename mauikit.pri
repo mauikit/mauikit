@@ -48,13 +48,9 @@ linux:unix:!android {
             }
         }
     }else:win32 {
-
         message("Using OpenSSL for Windows")
-
-LIBS += -L$$PWD/../../../../../../Qt/Tools/OpenSSL/Win_x64/lib/ -llibssl
-LIBS += -L$$PWD/../../../../../../Qt/Tools/OpenSSL/Win_x64/lib/ -llibcrypto
-
-
+        LIBS += -L$$PWD/../../../../../../Qt/Tools/OpenSSL/Win_x64/lib/ -llibssl
+        LIBS += -L$$PWD/../../../../../../Qt/Tools/OpenSSL/Win_x64/lib/ -llibcrypto
     }
 
     contains(DEFINES, COMPONENT_EDITOR):{
