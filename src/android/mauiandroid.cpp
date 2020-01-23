@@ -726,8 +726,8 @@ bool MAUIAndroid::checkRunTimePermissions(const QStringList &permissions)
             r = QtAndroid::checkPermission(permission);
             if(r == QtAndroid::PermissionResult::Denied)
             {
-                qDebug() << "Permission denied";
-                return true;
+                qWarning() << "Permission denied";
+                return false;
             }
         }
     }
