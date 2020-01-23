@@ -89,6 +89,7 @@ Kirigami.ScrollablePage
         interactive: Kirigami.Settings.isMobile
         highlightFollowsCurrentItem: true
         highlightMoveDuration: 0
+        highlightResizeDuration : 0
         
         keyNavigationEnabled : bool
         keyNavigationWraps : bool
