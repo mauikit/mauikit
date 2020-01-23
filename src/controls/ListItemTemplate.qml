@@ -91,7 +91,6 @@ Item
         }
     }
 
-
     Component
     {
         id: _iconComponent
@@ -162,7 +161,7 @@ Item
                 Layout.fillHeight: true
                 font.weight: Font.Normal
                 font.pointSize: Maui.Style.fontSizes.medium
-                wrapMode: Text.WrapAnywhere
+                wrapMode: Text.Wrap
                 verticalAlignment: _label1.visible ? Qt.AlignTop : Qt.AlignVCenter
                 elide: Text.ElideRight
                 color: control.Kirigami.Theme.textColor
@@ -172,9 +171,9 @@ Item
 
         ColumnLayout
         {
-            visible: control.width >  Kirigami.Units.gridUnit * 15 && control.labelsVisible
-            Layout.fillHeight: visible
-            Layout.fillWidth: visible
+			visible: control.width >  Kirigami.Units.gridUnit * 15 && control.labelsVisible
+            Layout.fillHeight: true
+            Layout.fillWidth: true
             Layout.margins: Maui.Style.space.small 
             spacing: 0
 
@@ -182,8 +181,8 @@ Item
             {
                 id: _label3
                 visible: text.length > 0
-                Layout.fillHeight: visible
-                Layout.fillWidth: visible
+                Layout.fillHeight: true
+                Layout.fillWidth: true
                 Layout.alignment: Qt.AlignRight
                 horizontalAlignment: Qt.AlignRight
                 font.pointSize: Maui.Style.fontSizes.small
@@ -198,8 +197,8 @@ Item
             {
                 id: _label4
                 visible: text.length > 0
-                Layout.fillHeight: visible
-                Layout.fillWidth: visible
+                Layout.fillHeight: true
+                Layout.fillWidth: true
                 Layout.alignment: Qt.AlignRight
                 horizontalAlignment: Qt.AlignRight
                 font.pointSize: Maui.Style.fontSizes.small
