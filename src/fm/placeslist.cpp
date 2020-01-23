@@ -111,8 +111,6 @@ void PlacesList::componentComplete()
 	this->setList();
 }
 
-PlacesList::~PlacesList() {}
-
 FMH::MODEL_LIST PlacesList::items() const
 {
 	return this->list;
