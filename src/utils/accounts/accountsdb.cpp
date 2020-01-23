@@ -13,7 +13,7 @@ AccountsDB::AccountsDB(QObject *parent) : QObject(parent)
 {
     //get permissions to read and write
 #ifdef Q_OS_ANDROID
-    MAUIAndroid::checkRunTimePermissions();
+    MAUIAndroid::checkRunTimePermissions({"android.permission.WRITE_EXTERNAL_STORAGE"});
 #endif
 
     qDebug()<< "TRY TO CREATE ACCOUNTS DB";

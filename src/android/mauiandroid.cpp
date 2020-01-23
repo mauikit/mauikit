@@ -696,7 +696,7 @@ QStringList MAUIAndroid::defaultPaths()
 }
 
 
-bool MAUIAndroid::checkRunTimePermissions()
+bool MAUIAndroid::checkRunTimePermissions(const QStringList &permissions)
 {
     qDebug()<< "CHECKIGN PERMISSSIONS";
 
@@ -717,16 +717,18 @@ bool MAUIAndroid::checkRunTimePermissions()
 //                                              "requestPermission",
 //                                              "(Landroid/app/Activity;)V",
 //                                              QtAndroid::androidActivity().object<jobject>());
-
-    QtAndroid::PermissionResult r = QtAndroid::checkPermission("android.permission.WRITE_EXTERNAL_STORAGE");
-    if(r == QtAndroid::PermissionResult::Denied)
-    {
-        QtAndroid::requestPermissionsSync( QStringList() << "android.permission.WRITE_EXTERNAL_STORAGE" );
-        r = QtAndroid::checkPermission("android.permission.WRITE_EXTERNAL_STORAGE");
+    for(const auto  &permission : permissions)
+   {
+        QtAndroid::PermissionResult r = QtAndroid::checkPermission(permission);
         if(r == QtAndroid::PermissionResult::Denied)
         {
-            qDebug() << "Permission denied";
-            return false;
+            QtAndroid::requestPermissionsSync({permission});
+            r = QtAndroid::checkPermission(permission);
+            if(r == QtAndroid::PermissionResult::Denied)
+            {
+                qDebug() << "Permission denied";
+                return true;
+            }
         }
     }
 

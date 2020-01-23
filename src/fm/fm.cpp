@@ -68,7 +68,7 @@ FM::FM(QObject *parent) : QObject(parent)
 {
 
 #ifdef Q_OS_ANDROID
-    MAUIAndroid::checkRunTimePermissions();
+    MAUIAndroid::checkRunTimePermissions({"android.permission.WRITE_EXTERNAL_STORAGE"});
 #endif
 
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
