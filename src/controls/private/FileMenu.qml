@@ -184,6 +184,7 @@ Menu
 		
 		if(item)
 		{
+			console.log("GOT ITEM FILE", index, item.path)
 			control.index = index
 			control.isDir = item.isdir == true || item.isdir == "true"
 			control.isExec = item.executable == true || item.executable == "true"

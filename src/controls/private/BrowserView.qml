@@ -14,7 +14,8 @@ Maui.Page
     onPathChanged: control.currentView.currentIndex = 0
 
     property Maui.FMList currentFMList
-
+    property Maui.BaseModel currentFMModel
+    
     property alias currentView : viewLoader.item
     property int viewType
 
@@ -23,8 +24,9 @@ Maui.Page
 
     function setCurrentFMList()
     {
-        control.currentFMList = currentView.currentFMList
-        currentView.forceActiveFocus()
+		control.currentFMList = currentView.currentFMList
+		control.currentFMModel = currentView.currentFMModel
+		currentView.forceActiveFocus()
     }
 
     Menu
@@ -103,6 +105,7 @@ Maui.Page
         {
             id: _listViewBrowser
             property alias currentFMList : _browserModel.list
+            property alias currentFMModel : _browserModel
             topMargin: Maui.Style.contentMargins
             showPreviewThumbnails: settings.showThumbnails
             keepEmblemOverlay: settings.selectionMode
@@ -124,6 +127,9 @@ Maui.Page
             {
                 id: _browserModel
                 list: _commonFMList
+                recursiveFilteringEnabled: true
+                sortCaseSensitivity: Qt.CaseInsensitive
+                filterCaseSensitivity: Qt.CaseInsensitive
             }
 
             section.delegate: Maui.LabelDelegate
@@ -242,6 +248,7 @@ Maui.Page
         {
             id: _gridViewBrowser
             property alias currentFMList : _browserModel.list
+            property alias currentFMModel : _browserModel
             itemSize : thumbnailsSize + Maui.Style.fontSizes.default
             cellHeight: itemSize * 1.5
             keepEmblemOverlay: settings.selectionMode
@@ -263,6 +270,9 @@ Maui.Page
             {
                 id: _browserModel
                 list: _commonFMList
+                recursiveFilteringEnabled: true
+                sortCaseSensitivity: Qt.CaseInsensitive
+                filterCaseSensitivity: Qt.CaseInsensitive
             }
 
             delegate: Maui.GridBrowserDelegate
@@ -371,6 +381,7 @@ Maui.Page
         {
             id: _millerControl
             property Maui.FMList currentFMList
+            property Maui.BaseModel currentFMModel
             property int currentIndex
 
             signal itemClicked(int index)
@@ -427,8 +438,9 @@ Maui.Page
 
                 onCurrentItemChanged:
                 {
-                    _millerControl.currentFMList = currentItem.currentFMList
-                    control.setCurrentFMList()
+					_millerControl.currentFMList = currentItem.currentFMList
+					_millerControl.currentFMModel = currentItem.currentFMModel
+					control.setCurrentFMList()
                     currentItem.forceActiveFocus()
                 }
 
@@ -458,8 +470,9 @@ Maui.Page
 
                 delegate: Item
                 {
-                    property alias currentFMList : _millersFMList
-                    property int _index : index
+					property alias currentFMList : _millersFMList
+					property alias currentFMModel : _millersFMModel
+					property int _index : index
                     width: Math.min(Kirigami.Units.gridUnit * 22, control.width)
                     height: parent.height
                     focus: true
@@ -537,7 +550,11 @@ Maui.Page
 
                         model: Maui.BaseModel
                         {
+							id: _millersFMModel
                             list: _millersFMList
+                            recursiveFilteringEnabled: true
+                            sortCaseSensitivity: Qt.CaseInsensitive
+                            filterCaseSensitivity: Qt.CaseInsensitive
                         }
 
                         delegate: Maui.ListBrowserDelegate

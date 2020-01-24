@@ -178,7 +178,7 @@ void MauiModel::PrivateAbstractListModel::setList(MauiList* value)
         
         connect(this->list, &MauiList::preItemRemoved, this, [=](int index)
         {
-            beginRemoveRows(QModelIndex(), index, index);
+			beginRemoveRows(QModelIndex(), index,  index);
         });
         
         connect(this->list, &MauiList::postItemRemoved, this, [=]()
@@ -214,8 +214,8 @@ void MauiModel::setList(MauiList *value)
    this->getList()->m_model = this;
 }
 
-MauiModel::PrivateAbstractListModel::PrivateAbstractListModel(QObject *parent)
-: QAbstractListModel(parent), list(nullptr) {}
+MauiModel::PrivateAbstractListModel::PrivateAbstractListModel(MauiModel *model)
+: QAbstractListModel(model), list(nullptr), m_model(model) {}
 
 int MauiModel::PrivateAbstractListModel::rowCount(const QModelIndex &parent) const
 {

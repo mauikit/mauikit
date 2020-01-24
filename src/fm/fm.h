@@ -67,8 +67,11 @@ private:
 signals:
     void cloudServerContentReady(FMH::MODEL_LIST list, const QUrl &url);
     void cloudItemReady(FMH::MODEL item, QUrl path); //when a item is downloaded and ready
-	void pathContentReady(FMH::PATH_CONTENT list);
+	void pathContentReady(QUrl path);
+	void pathContentItemsReady(FMH::PATH_CONTENT list);
 	void pathContentChanged(QUrl path);
+	void pathContentItemsChanged(QVector<QPair<FMH::MODEL, FMH::MODEL>> items);
+	void pathContentItemsRemoved(FMH::PATH_CONTENT list);
 	
 	void warningMessage(QString message);
 	void loadProgress(int percent);

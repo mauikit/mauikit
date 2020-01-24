@@ -272,8 +272,8 @@ bool FMStatic::cut(const QUrl &url, const QUrl &where, const QString &name)
 
 bool FMStatic::removeFile(const QUrl &path)
 {
-    if(!path.isLocalFile())
-        qWarning() << "URL recived is not a local file, FM::removeFile" << path;
+    if(!path.isLocalFile() || !FMH::fileExists(path))
+        qWarning() << "URL recived is not a local file or does not exists, FM::removeFile" << path;
 
     qDebug()<< "TRYING TO REMOVE FILE: " << path;
 
@@ -294,8 +294,8 @@ bool FMStatic::removeFile(const QUrl &path)
 
 void FMStatic::moveToTrash(const QUrl &path)
 {
-    if(!path.isLocalFile())
-        qWarning() << "URL recived is not a local file, FM::moveToTrash" << path;
+	if(!path.isLocalFile() || !FMH::fileExists(path))
+		qWarning() << "URL recived is not a local file or does not exists, FM::moveToTrash" << path;
 
 #if defined Q_OS_LINUX && !defined Q_OS_ANDROID
     auto job = KIO::trash(path);

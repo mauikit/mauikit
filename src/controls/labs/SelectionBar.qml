@@ -115,7 +115,7 @@ Item
 
     implicitWidth: _layout.implicitWidth + Maui.Style.space.big
 
-    visible: control.count > 0
+    visible: control.count > 1
 
     DropShadow
     {

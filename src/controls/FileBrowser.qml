@@ -59,6 +59,7 @@ Maui.Page
 	property alias selectionBar : selectionBarLoader.item
 	property alias browserView : _browserList.currentItem
 	readonly property Maui.FMList currentFMList : browserView.currentFMList
+	readonly property Maui.BaseModel currentFMModel : browserView.currentFMModel
 	
 	property alias previewer : previewer
 	property alias menu : browserMenu.contentData
@@ -82,11 +83,15 @@ Maui.Page
 	focus: true
 	
 	footBar.visible: false ||  String(control.currentPath).startsWith("trash:/")
-	footBar.leftContent: Label
+	
+	footBar.middleContent: Maui.TextField
 	{
 		Layout.fillWidth: true
-		text: control.currentFMList.count + " " + qsTr("items")
-	}
+		visible: control.currentFMList.count > 0
+		placeholderText: qsTr("Filter") + " " + control.currentFMList.count + " " + qsTr("files")
+		onAccepted: control.currentFMModel.filter = text
+		onCleared: control.currentFMModel.filter = ""
+	}	
 	
 	footBar.rightContent: [
 	
@@ -486,6 +491,7 @@ Maui.Page
 		
 		onRemoveClicked:
 		{
+			console.log("REMOVE", item.path)
 			control.remove([item.path])
 		}
 		
@@ -649,8 +655,10 @@ Maui.Page
 		onItemRightClicked:
 		{
 			if(control.currentFMList.pathType !== Maui.FMList.TRASH_PATH && control.currentFMList.pathType !== Maui.FMList.REMOTE_PATH)
+			{
 				itemMenu.show(index)
-				control.itemRightClicked(index)
+			}
+			control.itemRightClicked(index)
 		}
 		
 		onLeftEmblemClicked:

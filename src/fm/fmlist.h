@@ -230,9 +230,11 @@ private:
 	FM *fm;
 	QFileSystemWatcher *watcher;
     
+	void clear();
 	void reset();
 	void setList();
-    void assignList(const FMH::MODEL_LIST &list);
+	void assignList(const FMH::MODEL_LIST &list);
+	void appendToList(const FMH::MODEL_LIST &list);
 	void sortList();
 	void watchPath(const QString &path, const bool &clear = true);
     void search(const QString &query, const QUrl &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
@@ -276,6 +278,10 @@ public slots:
 	
 	bool itemIsFav(const QUrl &path);
 	bool favItem(const QUrl &path);
+	
+	void remove(const int &index);
+	void moveFileToTrash(const int &index);
+	void deleteFile(const int &index);
 		
 signals:
 	void pathChanged();

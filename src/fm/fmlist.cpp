@@ -49,12 +49,47 @@ watcher(new QFileSystemWatcher(this))
 		}	
 	});
 	
-	connect(this->fm, &FM::pathContentReady, [&](const FMH::PATH_CONTENT &res)
+	connect(this->fm, &FM::pathContentReady, [&](QUrl path)
 	{		
-//         if(res.path != this->path)
-//             return;
+		emit this->preListChanged();
+		this->sortList();    
+		this->setStatus({STATUS_CODE::READY, this->list.isEmpty() ? "Nothing here!" : "",  this->list.isEmpty() ? "This place seems to be empty" : "",this->list.isEmpty()  ? "folder-add" : "", this->list.isEmpty(), true});  
+		emit this->postListChanged();
 		
-		this->assignList(res.content);
+	});	
+	
+	connect(this->fm, &FM::pathContentItemsChanged, [&](QVector<QPair<FMH::MODEL, FMH::MODEL>> res)
+	{
+		for(const auto &item : res)
+		{
+			const auto index = this->indexOf(FMH::MODEL_KEY::PATH, item.first[FMH::MODEL_KEY::PATH]);
+			
+			if(index > this->list.size() || index < 0)
+				return;
+			
+			this->list[index] = item.second;			
+			this->updateModel(index, FMH::modelRoles(item.second));
+		}
+	});		
+	
+	connect(this->fm, &FM::pathContentItemsReady, [&](FMH::PATH_CONTENT res)
+	{
+		this->appendToList(res.content);
+	});		
+	
+	connect(this->fm, &FM::pathContentItemsRemoved, [&](FMH::PATH_CONTENT res)
+	{		
+		if(res.path != this->path)
+			return;
+		
+		for(const auto &item : res.content)
+		{
+			const auto index = this->indexOf(FMH::MODEL_KEY::PATH, item[FMH::MODEL_KEY::PATH]);
+			qDebug() << "SUPOSSED TO REMOVED THIS FORM THE LIST" << index << item[FMH::MODEL_KEY::PATH] << this->list[index];
+			;
+			
+			this->remove(index);	  
+		}
 	});	
 	
 	connect(this->fm, &FM::warningMessage, [&](const QString &message)
@@ -131,6 +166,27 @@ void FMList::assignList(const FMH::MODEL_LIST& list)
     emit this->postListChanged();
 }
 
+void FMList::appendToList(const FMH::MODEL_LIST& list)
+{	
+	for(const auto &item : list)
+	{
+		emit this->preItemAppended();
+		this->list << item;
+		
+		this->count = static_cast<uint>(this->list.size());
+		emit this->countChanged();	
+		
+		emit this->postItemAppended();
+	}	
+}
+
+void FMList::clear()
+{
+	emit this->preListChanged();
+	this->list.clear();
+	emit this->postListChanged();
+}
+
 void FMList::setList()
 {
     qDebug()<< "PATHTYPE FOR URL"<< pathType << this->path.toString() << this->filters <<  this;
@@ -151,10 +207,7 @@ void FMList::setList()
 
         default:
         {
-            emit this->preListChanged();
-            this->list.clear();
-            emit this->postListChanged();
-
+			this->clear();
             const bool exists = this->path.isLocalFile() ? FMH::fileExists(this->path) : true;
             if(!exists)    
                 this->setStatus({STATUS_CODE::ERROR, "Error", "This URL cannot be listed", "documentinfo", this->list.isEmpty(), exists});
@@ -495,11 +548,9 @@ void FMList::setOnlyDirs(const bool &state)
 QVariantMap FMList::get(const int &index) const
 {
 	if(index >= this->list.size() || index < 0)
-		return QVariantMap();
+		return QVariantMap();	
 	
-	const auto model = this->list.at(index);
-	
-    return FMH::toMap(model);
+	return FMH::toMap(this->list.at(this->mappedIndex(index)));
 }
 
 void FMList::refresh()
@@ -539,15 +590,17 @@ void FMList::setDirIcon(const int &index, const QString &iconName)
 	if(index >= this->list.size() || index < 0)
 		return;	
 	
-	const auto path = QUrl(this->list.at(index)[FMH::MODEL_KEY::PATH]);
+	const auto index_ = this->mappedIndex(index);
+	
+	const auto path = QUrl(this->list.at(index_)[FMH::MODEL_KEY::PATH]);
 	
     if(!FMStatic::isDir(path))
 		return;	
 
 	FMH::setDirConf(path.toString()+"/.directory", "Desktop Entry", "Icon", iconName);
 	
-	this->list[index][FMH::MODEL_KEY::ICON] = iconName;	
-	emit this->updateModel(index, QVector<int> {FMH::MODEL_KEY::ICON});
+	this->list[index_][FMH::MODEL_KEY::ICON] = iconName;	
+	emit this->updateModel(index_, QVector<int> {FMH::MODEL_KEY::ICON});
 }
 
 const QUrl FMList::getParentPath()
@@ -778,3 +831,39 @@ bool FMList::favItem(const QUrl &path)
 {
 	return FMStatic::toggleFav(path);
 }
+
+void FMList::deleteFile(const int& index)
+{
+	if(index > this->list.size() || index < 0)
+		return;	
+	
+	FMStatic::removeFile(this->list[this->mappedIndex(index)][FMH::MODEL_KEY::PATH]);
+	this->remove(index);	
+}
+
+void FMList::moveFileToTrash(const int& index)
+{
+	if(index > this->list.size() || index < 0)
+		return;
+	
+	FMStatic::moveToTrash(this->list[this->mappedIndex(index)][FMH::MODEL_KEY::PATH]);
+	this->remove(index);	
+}
+
+void FMList::remove(const int& index)
+{
+	if(index > this->list.size() || index < 0)
+		return;
+	
+	const auto index_ = this->mappedIndex(index);
+	
+	emit this->preItemRemoved(index_);
+	const auto item = this->list.takeAt(index_);
+		
+	this->count = static_cast<uint>(this->list.size());
+	emit this->countChanged();
+	
+	emit this->postItemRemoved();	
+}
+
+
