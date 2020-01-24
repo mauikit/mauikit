@@ -274,6 +274,7 @@ target_link_libraries(MauiKit
     KF5::Service
     KF5::KIONTLM
     KF5::ConfigWidgets
+    KF5::Wallet
     )
 
 if(${COMPONENT_EDITOR})

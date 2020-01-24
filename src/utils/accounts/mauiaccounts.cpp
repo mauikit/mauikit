@@ -16,12 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef ANDROID
+#include <KWallet>
+#endif
+
 #include "mauiaccounts.h"
 #include "accountsdb.h"
 
 MauiAccounts::MauiAccounts() : MauiList(nullptr), 
 db(new AccountsDB(nullptr))
 {
+#ifndef ANDROID
+    wallet = KWallet::Wallet::openWallet("Maui Accounts", 0);
+#endif
+
 	this->setAccounts();
 }
 
@@ -55,28 +63,32 @@ FMH::MODEL_LIST MauiAccounts::getCloudAccounts()
     for(const auto &account : accounts)
     {
         auto map = account.toMap();
+        auto user = map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString();
+        auto server = map[FMH::MODEL_NAME[FMH::MODEL_KEY::SERVER]].toString();
         res << FMH::MODEL {
-        {FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::CLOUD_PATH]+map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString()},
-    {FMH::MODEL_KEY::ICON, "folder-cloud"},
-    {FMH::MODEL_KEY::LABEL, map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString()},
-    {FMH::MODEL_KEY::USER, map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString()},
-    {FMH::MODEL_KEY::SERVER, map[FMH::MODEL_NAME[FMH::MODEL_KEY::SERVER]].toString()},
-    {FMH::MODEL_KEY::PASSWORD, map[FMH::MODEL_NAME[FMH::MODEL_KEY::PASSWORD]].toString()},
-    {FMH::MODEL_KEY::TYPE,  FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::CLOUD_PATH]}};
-}
-return res;
+            {FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::CLOUD_PATH]+map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString()},
+            {FMH::MODEL_KEY::ICON, "folder-cloud"},
+            {FMH::MODEL_KEY::LABEL, user},
+            {FMH::MODEL_KEY::USER, user},
+            {FMH::MODEL_KEY::SERVER, server},
+            {FMH::MODEL_KEY::PASSWORD, fetchPassword(QString(user + "@" + server))},
+            {FMH::MODEL_KEY::TYPE,  FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::CLOUD_PATH]}};
+    }
+
+    return res;
 }
 
 bool MauiAccounts::addCloudAccount(const QString &server, const QString &user, const QString &password)
 {
     const QVariantMap account = {
         {FMH::MODEL_NAME[FMH::MODEL_KEY::SERVER], server},
-        {FMH::MODEL_NAME[FMH::MODEL_KEY::USER], user},
-        {FMH::MODEL_NAME[FMH::MODEL_KEY::PASSWORD], password}
+        {FMH::MODEL_NAME[FMH::MODEL_KEY::USER], user}
     };
+
 
     if(this->db->insert("cloud", account))
     {
+        savePassword(QString(user + "@" + server), password);
         emit this->accountAdded(account);
         return true;
     }
@@ -93,6 +105,7 @@ bool MauiAccounts::removeCloudAccount(const QString &server, const QString &user
 
     if(this->db->remove("cloud", account))
     {
+        deletePassword(QString(user + "@" + server));
         emit this->accountRemoved(FMH::toMap(account));
         return true;
     }
@@ -122,6 +135,24 @@ QVariantList MauiAccounts::get(const QString &queryTxt)
     }else qDebug()<< query.lastError()<< query.lastQuery();
 
     return mapList;
+}
+
+void MauiAccounts::savePassword(QString uid, QString password)
+{
+    wallet->writeEntry(uid, QByteArray::fromStdString(password.toStdString()));
+}
+
+QString MauiAccounts::fetchPassword(QString uid)
+{
+    QByteArray val;
+    wallet->readEntry(uid, val);
+
+    return QString::fromStdString(val.toStdString());
+}
+
+void MauiAccounts::deletePassword(QString uid)
+{
+    wallet->removeEntry(uid);
 }
 
 int MauiAccounts::getCurrentAccountIndex() const

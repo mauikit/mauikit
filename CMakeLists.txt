@@ -48,7 +48,7 @@ else()
     find_package(Qt5 REQUIRED COMPONENTS WebEngine)
 endif()
 
-find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets)
+find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets Wallet)
 
 add_subdirectory(src)
 

@@ -32,6 +32,12 @@
 #include "mauikit_export.h"
 #endif
 
+#ifndef ANDROID
+namespace KWallet {
+    class Wallet;
+}
+#endif
+
 class AccountsDB;
 #ifdef STATIC_MAUIKIT
 class MauiAccounts : public MauiList
@@ -57,6 +63,10 @@ public:
 	MauiAccounts& operator=(const MauiAccounts &) = delete;
 	MauiAccounts(MauiAccounts &&) = delete;
 	MauiAccounts & operator=(MauiAccounts &&) = delete;	
+
+#ifndef ANDROID
+    KWallet::Wallet *wallet = nullptr;
+#endif
 	
     FMH::MODEL_LIST items() const final override;
 	
@@ -94,6 +104,10 @@ private:
     bool removeCloudAccount(const QString &server, const QString &user);
 
     QVariantList get(const QString &queryTxt);
+
+    void savePassword(QString uid, QString password);
+    QString fetchPassword(QString uid);
+    void deletePassword(QString uid);
 
 signals:
     void accountAdded(QVariantMap account);
