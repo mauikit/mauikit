@@ -283,6 +283,7 @@ Maui.Page
 				id: _scrollView
                 focus: true
                 anchors.fill: parent
+                flickable.interactive: true
 
 				contentWidth: control.width
 				contentHeight: body.height
