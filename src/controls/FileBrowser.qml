@@ -89,8 +89,8 @@ Maui.Page
 		Layout.fillWidth: true
 		visible: control.currentFMList.count > 0
 		placeholderText: qsTr("Filter") + " " + control.currentFMList.count + " " + qsTr("files")
-		onAccepted: control.currentFMModel.filter = text
-		onCleared: control.currentFMModel.filter = ""
+		onAccepted: control.browserView.filter = text
+		onCleared: control.browserView.filter = ""
 	}	
 	
 	footBar.rightContent: [

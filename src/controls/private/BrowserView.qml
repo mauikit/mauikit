@@ -18,6 +18,7 @@ Maui.Page
     
     property alias currentView : viewLoader.item
     property int viewType
+    property string filter
 
     height: _browserList.height
     width: _browserList.width
@@ -127,6 +128,7 @@ Maui.Page
             {
                 id: _browserModel
                 list: _commonFMList
+                filter: control.filter
                 recursiveFilteringEnabled: true
                 sortCaseSensitivity: Qt.CaseInsensitive
                 filterCaseSensitivity: Qt.CaseInsensitive
@@ -270,6 +272,7 @@ Maui.Page
             {
                 id: _browserModel
                 list: _commonFMList
+                filter: control.filter
                 recursiveFilteringEnabled: true
                 sortCaseSensitivity: Qt.CaseInsensitive
                 filterCaseSensitivity: Qt.CaseInsensitive
@@ -552,6 +555,7 @@ Maui.Page
                         {
 							id: _millersFMModel
                             list: _millersFMList
+                            filter: control.filter
                             recursiveFilteringEnabled: true
                             sortCaseSensitivity: Qt.CaseInsensitive
                             filterCaseSensitivity: Qt.CaseInsensitive
