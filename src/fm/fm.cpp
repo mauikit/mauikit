@@ -211,9 +211,11 @@ void FM::getPathContent(const QUrl& path, const bool &hidden, const bool &onlyDi
 	
 	#if defined Q_OS_ANDROID || defined Q_OS_WIN32
 	QFutureWatcher<FMH::PATH_CONTENT> *watcher = new QFutureWatcher<FMH::PATH_CONTENT>;
-	connect(watcher, &QFutureWatcher<FMH::PATH_CONTENT>::finished, [this, watcher = std::move(watcher)]()
+	connect(watcher, &QFutureWatcher<FMH::PATH_CONTENT>::finished, [this, watcher]()
 	{
-		emit this->pathContentItemsReady(watcher->future().result());
+		const auto res = watcher->future().result();
+		emit this->pathContentItemsReady(res);
+		emit this->pathContentReady(res.path);
 		watcher->deleteLater();
 	});
 	
