@@ -31,7 +31,7 @@ Menu
 		onTriggered:
 		{			
 			addToSelection(currentFMList.get(index))
-            if(Kirigami.Settings.isMobile)
+            if(Maui.Handy.isTouch)
                 settings.selectionMode = true
 		}
 	}

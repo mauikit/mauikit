@@ -727,7 +727,7 @@ Maui.Page
 				leftEmblem: "list-remove"
 				folderSize: Maui.Style.iconSizes.big
 				onLeftEmblemClicked: _selectionBar.removeAtIndex(index)
-                keepEmblemOverlay: Kirigami.Settings.isMobile
+                keepEmblemOverlay: Maui.Handy.isTouch
 				background: null
 				
 				onClicked: control.previewer.show(model.path)
@@ -874,7 +874,7 @@ Maui.Page
 			model: tabsObjectModel
 			snapMode: ListView.SnapOneItem
 			spacing: 0
-			interactive: Kirigami.Settings.isMobile && tabsObjectModel.count > 1
+			interactive: Maui.Handy.isTouch && tabsObjectModel.count > 1
 			highlightFollowsCurrentItem: true
 			highlightMoveDuration: 0
 			onMovementEnded: _browserList.currentIndex = indexAt(contentX, contentY)
