@@ -25,7 +25,15 @@ MauiList::MauiList(QObject *parent) : QObject(parent), m_model(nullptr)
 int MauiList::mappedIndex(const int &index) const
 {
     if(this->m_model)
-        return this->m_model->mapToSource(this->m_model->index(index, 0)).row();
+        return this->m_model->mappedToSource(index);
+
+    return -1;
+}
+
+int MauiList::mappedIndexFromSource(const int &index) const
+{
+    if(this->m_model)
+        return this->m_model->mappedFromSource(index);
 
     return -1;
 }
@@ -40,12 +48,12 @@ int MauiList::indexOf(const FMH::MODEL_KEY& key, const QString& value) const
     const auto items = this->items();
     const auto it = std::find_if(items.constBegin(), items.constEnd(), [&](const FMH::MODEL &item) -> bool
 	{
-		return item[key] == value;
-		
+        return item[key] == value;
+
 	});
     
     if(it != items.constEnd())        
-        return std::distance(items.constBegin(), it);
+        return this->mappedIndexFromSource(std::distance(items.constBegin(), it));
     else return -1;
 }
 

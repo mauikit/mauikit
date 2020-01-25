@@ -73,6 +73,9 @@ public slots:
 	
 	void setSort(const QString &sort);
 	QString getSort() const;
+
+    int mappedFromSource(const int &index) const;
+    int mappedToSource(const int &index) const;
     
 signals:
     void listChanged();

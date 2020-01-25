@@ -114,7 +114,17 @@ void MauiModel::setSort(const QString& sort)
 
 QString MauiModel::getSort() const
 {
-	return this->m_sort;
+    return this->m_sort;
+}
+
+int MauiModel::mappedFromSource(const int &index) const
+{
+    return this->mapFromSource(this->m_model->index(index, 0)).row();
+}
+
+int MauiModel::mappedToSource(const int &index) const
+{
+    return this->mapToSource(this->index(index, 0)).row();
 }
 
 bool MauiModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
