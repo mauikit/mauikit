@@ -151,11 +151,6 @@ FMH::MODEL_LIST PlacesList::getGroup(const KFilePlacesModel &model, const FMH::P
 	
 	return res;
 	#else
-	for(auto i = 0; i < model.rowCount(); i++)
-	{
-		qDebug() << "DEVICESSSS" << model.url(model.index(i, 0)) << model.text(model.index(i, 0));
-	}
-	
 	const auto group = model.groupIndexes(static_cast<KFilePlacesModel::GroupType>(type));
 	return std::accumulate(group.begin(), group.end(), FMH::MODEL_LIST(), [&model, &type](FMH::MODEL_LIST &list, const QModelIndex &index) -> FMH::MODEL_LIST
 	{

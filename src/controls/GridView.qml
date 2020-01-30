@@ -61,7 +61,7 @@ Kirigami.ScrollablePage
 	
 	Kirigami.Theme.colorSet: Kirigami.Theme.View
 	padding: 0
-	leftPadding: control.ScrollBar.visible ? padding : control.ScrollBar.width
+	leftPadding: padding
 	rightPadding: padding
 	topPadding: padding
 	bottomPadding: padding

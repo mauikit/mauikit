@@ -70,23 +70,23 @@ Kirigami.ScrollablePage
     leftPadding: padding
     rightPadding: padding
     topPadding: padding
-    bottomPadding: padding
+    bottomPadding: padding    
     
     Keys.enabled: false
-    Kirigami.Theme.colorSet: Kirigami.Theme.View    
+    Kirigami.Theme.colorSet: Kirigami.Theme.View       
     
     ListView
     {	
         id: _listView
+        contentWidth: parent.width
         focus: true
-        clip: true
-        
+        clip: true           
         spacing: Maui.Style.space.tiny
         snapMode: ListView.NoSnap
         boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : 
         Flickable.OvershootBounds
         
-        interactive: Kirigami.Settings.isMobile
+        interactive: Maui.Handy.isTouch
         highlightFollowsCurrentItem: true
         highlightMoveDuration: 0
         highlightResizeDuration : 0
@@ -94,7 +94,8 @@ Kirigami.ScrollablePage
         keyNavigationEnabled : bool
         keyNavigationWraps : bool
         Keys.onPressed: control.keyPress(event)
-        
+// 		ScrollBar.vertical: ScrollBar { }
+		
         Maui.Holder
         {
             id: _holder

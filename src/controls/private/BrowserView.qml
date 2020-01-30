@@ -149,7 +149,7 @@ Maui.Page
             delegate: Maui.ListBrowserDelegate
             {
                 id: delegate
-                width: _listViewBrowser.width
+                width: parent.width
                 height: _listViewBrowser.itemSize + Maui.Style.space.big
                 leftPadding: Maui.Style.space.small
                 rightPadding: Maui.Style.space.small
