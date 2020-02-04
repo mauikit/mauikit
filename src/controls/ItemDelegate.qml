@@ -111,7 +111,9 @@ ItemDelegate
 //        onLongPressed: control.pressAndHold(eventPoint)
 //    }
     
-    contentItem: Item
+    contentItem: null
+    
+    Item
     {
 		id: _content
 		
