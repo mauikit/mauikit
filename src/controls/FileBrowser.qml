@@ -639,7 +639,7 @@ Maui.Page
 		}
 		
 		onItemClicked:
-		{
+		{            
 			browserView.currentView.currentIndex = index
 			indexHistory.push(index)
 			control.itemClicked(index)

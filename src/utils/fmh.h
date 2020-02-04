@@ -777,6 +777,7 @@ namespace FMH
 	};
 	
 	const QString DataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+	const QString ConfigPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)).toString();
 	const QString CloudCachePath = FMH::DataPath+"/Cloud/";
 	const QString DesktopPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation)).toString();
 	const QString AppsPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation)).toString();

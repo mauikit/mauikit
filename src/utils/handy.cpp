@@ -29,8 +29,40 @@
 
 #include "fmh.h"
 
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
+#include <KSharedConfig>
+#include <QFileSystemWatcher>
+#endif
+
+static const QUrl CONF_FILE = FMH::ConfigPath + "/kdeglobals";
+static const auto confCheck = [](QString key, QVariant defaultValue) -> QVariant
+{
+    auto kconf = KSharedConfig::openConfig("kdeglobals");
+    const auto group = kconf->group("KDE");
+    if( group.hasKey(key))   
+        return  group.readEntry(key, defaultValue); 
+    
+    return defaultValue;
+};  
+
+
 Handy::Handy(QObject *parent) : QObject(parent), m_isTouch(Handy::isTouch())
-{}
+{    
+    #if defined Q_OS_LINUX && !defined Q_OS_ANDROID    
+    
+    auto configWatcher = new QFileSystemWatcher({CONF_FILE.toLocalFile()}, this);    
+    
+    m_singleClick = confCheck("SingleClick", m_singleClick).toBool();
+    emit singleClickChanged();    
+    
+    connect(configWatcher, &QFileSystemWatcher::fileChanged, [&](QString)
+    {
+        m_singleClick = confCheck("SingleClick", m_singleClick).toBool();
+        emit singleClickChanged();        
+    });
+    
+    #endif    
+}
 
 #ifdef Q_OS_ANDROID
 static inline struct

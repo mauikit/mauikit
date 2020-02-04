@@ -44,13 +44,16 @@ class MAUIKIT_EXPORT Handy : public QObject
 	Q_PROPERTY(bool isLinux READ isLinux CONSTANT FINAL)
 	Q_PROPERTY(bool isWindows READ isWindows CONSTANT FINAL)
 	Q_PROPERTY(bool isMac READ isMac CONSTANT FINAL)
+    
+    Q_PROPERTY(bool singleClick MEMBER m_singleClick NOTIFY singleClickChanged CONSTANT)
 	
 public:
     Handy(QObject *parent = nullptr);
 	
 private:
 	bool m_isTouch = false;
-
+    bool m_singleClick = true;
+    
 public slots:
 
     /*!
@@ -100,6 +103,9 @@ public slots:
 	static bool isWindows();
 	static bool isMac();
 	static bool isLinux();
+    
+signals:
+    void singleClickChanged();
 };
 
 #endif // HANDY_H
