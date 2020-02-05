@@ -57,8 +57,7 @@ Page
         property bool updatingContentY: false        
         
         onContentYChanged:
-        {            
-           
+        {   
             if((control.flickable.atYBeginning && !control.flickable.dragging) || (control.flickable.contentHeight <  control.flickable.height*1.5 ))
             {
                 if(control.header)
@@ -66,9 +65,7 @@ Page
                     
                     if(control.footer)
                         control.footer.height = control.footer.implicitHeight
-                        
-                oldContentY = 0
-                updatingContentY = false
+                 
                 return;
             }                
             
@@ -133,7 +130,7 @@ Page
         {
             if (control.headerPositioning === ListView.PullBackHeader && control.header)
             {
-                if (control.header.y > -(control.header.implicitHeight/2) ) 
+                if (control.header.y >= -(control.header.implicitHeight/2) ) 
                 {
                     control.header.y = 0;
                 } else 
@@ -144,7 +141,7 @@ Page
             
             if (control.footerPositioning === ListView.PullBackFooter && control.footer)
             {
-                if (control.footer.height > (control.footer.implicitHeight/2) ) 
+                if (control.footer.height >= (control.footer.implicitHeight/2) ) 
                 {
                     control.footer.height =  control.footer.implicitHeight
                     

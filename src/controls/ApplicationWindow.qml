@@ -267,8 +267,6 @@ Kirigami.AbstractApplicationWindow
                 if(root.footer)
                 root.footer.height = root.footer.implicitHeight
                 
-                oldContentY = 0
-                updatingContentY = false
                 return;
             }                
             
@@ -334,7 +332,7 @@ Kirigami.AbstractApplicationWindow
         {
             if (root.headerPositioning === ListView.PullBackHeader  && root.header)
             {
-                if (root.header.height > (root.header.implicitHeight/2) ) 
+                if (root.header.height >= (root.header.implicitHeight/2) ) 
                 {
                     root.header.height =  root.header.implicitHeight
                     
@@ -346,7 +344,7 @@ Kirigami.AbstractApplicationWindow
             
             if (root.footerPositioning === ListView.PullBackFooter  && root.footer)
             {
-                if (root.footer.height > (root.footer.implicitHeight/2) ) 
+                if (root.footer.height >= (root.footer.implicitHeight/2) ) 
                 {
                     root.footer.height =  root.footer.implicitHeight
                     
