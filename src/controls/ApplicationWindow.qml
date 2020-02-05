@@ -260,8 +260,12 @@ Kirigami.AbstractApplicationWindow
         {            
             if(root.flickable.atYBeginning && !root.flickable.dragging)
             {
-                root.header.y = 0
-                root.footer.height = root.footer.implicitHeight
+                if(root.header)
+                    root.header.y = 0
+                    
+                    if(root.footer)
+                        root.footer.height = root.footer.implicitHeight
+                        
                 oldContentY = 0
                 updatingContentY = false
                 return;
