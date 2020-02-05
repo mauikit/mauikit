@@ -111,10 +111,21 @@ ItemDelegate
 //        onLongPressed: control.pressAndHold(eventPoint)
 //    }
     
-    contentItem: Item
+    contentItem: Item{}
+    
+    Item
     {
-		id: _content		
-	}
+        id: _content
+        anchors
+        {
+            fill: parent
+            topMargin: control.topPadding
+            bottomMargin: control.bottomPadding
+            leftMargin: control.leftPadding
+            rightMargin: control.rightPadding
+            margins: control.padding
+        }
+    }
 
     background: Rectangle
     {
