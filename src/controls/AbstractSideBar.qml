@@ -84,31 +84,31 @@ Drawer
         }
     }
 	
-    EdgeShadow
-    {
-        z: -2
-        visible: control.modal
-        parent: control.background
-        edge: control.edge
-        anchors
-        {
-            right: control.edge == Qt.RightEdge ? parent.left : (control.edge == Qt.LeftEdge ? undefined : parent.right)
-            left: control.edge == Qt.LeftEdge ? parent.right : (control.edge == Qt.RightEdge ? undefined : parent.left)
-            top: control.edge == Qt.TopEdge ? parent.bottom : (control.edge == Qt.BottomEdge ? undefined : parent.top)
-            bottom: control.edge == Qt.BottomEdge ? parent.top : (control.edge == Qt.TopEdge ? undefined : parent.bottom)
-        }
-		
-        opacity: control.position == 0 ? 0 : 1
-		
-        Behavior on opacity
-        {
-            NumberAnimation
-            {
-                duration: Kirigami.Units.longDuration
-                easing.type: Easing.InOutQuad
-            }
-        }
-    }
+//     EdgeShadow
+//     {
+//         z: -2
+//         visible: control.modal
+//         parent: control.background
+//         edge: control.edge
+//         anchors
+//         {
+//             right: control.edge == Qt.RightEdge ? parent.left : (control.edge == Qt.LeftEdge ? undefined : parent.right)
+//             left: control.edge == Qt.LeftEdge ? parent.right : (control.edge == Qt.RightEdge ? undefined : parent.left)
+//             top: control.edge == Qt.TopEdge ? parent.bottom : (control.edge == Qt.BottomEdge ? undefined : parent.top)
+//             bottom: control.edge == Qt.BottomEdge ? parent.top : (control.edge == Qt.TopEdge ? undefined : parent.bottom)
+//         }
+// 		
+//         opacity: control.position == 0 ? 0 : 1
+// 		
+//         Behavior on opacity
+//         {
+//             NumberAnimation
+//             {
+//                 duration: Kirigami.Units.longDuration
+//                 easing.type: Easing.InOutQuad
+//             }
+//         }
+//     }
 	
 }
 
