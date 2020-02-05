@@ -365,6 +365,7 @@ Kirigami.AbstractApplicationWindow
         position: ToolBar.Header
         width: root.width
         height: implicitHeight
+        onImplicitHeightChanged: height = implicitHeight
 
         // 		Kirigami.Theme.backgroundColor: headBarBGColor
         // 		Kirigami.Theme.textColor: headBarFGColor
@@ -421,6 +422,8 @@ Kirigami.AbstractApplicationWindow
         position: ToolBar.Footer
         width: root.width
         height: implicitHeight
+        onImplicitHeightChanged: height = implicitHeight
+
     }
 
     header: headBar.count && headBar.position === ToolBar.Header ? headBar : null

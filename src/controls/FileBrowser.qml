@@ -87,6 +87,7 @@ Maui.Page
 		
 	footBar.visible: Maui.FM.loadSettings("StatusBar", "SETTINGS", false) == "true" ||  String(control.currentPath).startsWith("trash:/")
 	
+    footBar.leftSretch: false
 	footBar.middleContent: Maui.TextField
 	{
 		Layout.fillWidth: true

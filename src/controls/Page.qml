@@ -165,6 +165,8 @@ Page
         height: implicitHeight
         position: ToolBar.Header 
         
+        onImplicitHeightChanged: height = implicitHeight
+        
         readonly property int preferredHeight: Maui.Style.toolBarHeight
         
         Component
@@ -196,8 +198,10 @@ Page
         id: _footBar
         visible: count 
         position: ToolBar.Footer
-          width: control.width
-          height: implicitHeight
+        width: control.width
+        height: implicitHeight
+        onImplicitHeightChanged: height = implicitHeight
+
     }   
 
     header: headBar.count && headBar.position === ToolBar.Header ? headBar : null
