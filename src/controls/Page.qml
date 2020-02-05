@@ -83,46 +83,48 @@ Page
                 return;
             }
             
+            var oldFHeight
+            var oldHY
             
-            if (control.footerPositioning === ListView.InlineFooter && control.footer)
+            if(control.footer) 
             {
-                control.footer.height =  control.footer.implicitHeight
-                
-            } else if (control.footerPositioning === ListView.PullBackFooter && control.footer)
-            {
-                var oldFHeight = control.footer.height;
-                
-                control.footer.height = Math.max(0,
-                                                 Math.min(control.footer.implicitHeight,
-                                                          control.footer.height + oldContentY - control.flickable.contentY));
-                
-                //if the implicitHeight is changed, use that to simulate scroll
-                if (oldFHeight !== control.footer.height) {
-                    updatingContentY = true;
-                    updatingContentY = false;
-                } else {
-                    oldContentY = control.flickable.contentY;
+                if (control.footerPositioning === ListView.InlineFooter )
+                {
+                    control.footer.height =  control.footer.implicitHeight
+                    
+                } else if (control.footerPositioning === ListView.PullBackFooter)
+                {
+                    oldFHeight = control.footer.height;
+                    
+                    control.footer.height = Math.max(0,
+                                                     Math.min(control.footer.implicitHeight,
+                                                              control.footer.height + oldContentY - control.flickable.contentY));  
                 }
             }
             
-            if (control.headerPositioning === ListView.InlineHeader && control.header)
+            if(control.header)           
             {
-                control.header.y = 0;
-                
-            } else if (control.headerPositioning === ListView.PullBackHeader && control.header)
-            {
-                var oldHY = control.header.y                   
-                
-                control.header.y = Math.max(-(control.header.implicitHeight),
-                                            Math.min(0, control.header.y + oldContentY - control.flickable.contentY));                   
-                
-                if (oldHY !== control.header.y) {
-                    updatingContentY = true;
-                    control.flickable.contentY -= (oldHY - control.header.y);                                                               
-                    updatingContentY = false;
-                } else {
-                    oldContentY = control.flickable.contentY;
+                if (control.headerPositioning === ListView.InlineHeader)
+                {
+                    control.header.y = 0;
+                    
+                } else if (control.headerPositioning === ListView.PullBackHeader)
+                {
+                    oldHY = control.header.y                   
+                    
+                    control.header.y = Math.max(-(control.header.implicitHeight),
+                                                Math.min(0, control.header.y + oldContentY - control.flickable.contentY))                     
                 }
+            }
+            
+            //if the implicitHeight is changed, use that to simulate scroll
+            if ((control.footer && oldFHeight !== control.footer.height) || (control.header && oldHY !== control.header.y)) {
+                updatingContentY = true;
+                if(control.header && oldHY !== control.header.y)
+                    control.flickable.contentY -= (oldHY - control.header.y)  
+                    updatingContentY = false;
+            } else {
+                oldContentY = control.flickable.contentY;
             }
         }
         
@@ -160,7 +162,7 @@ Page
         id: _headBar
         visible: count > 1 
         width: control.width
-        height: implicitHeight + y
+        height: implicitHeight
         position: ToolBar.Header 
         
         readonly property int preferredHeight: Maui.Style.toolBarHeight

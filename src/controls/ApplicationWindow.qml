@@ -261,11 +261,11 @@ Kirigami.AbstractApplicationWindow
             if(root.flickable.atYBeginning && !root.flickable.dragging)
             {
                 if(root.header)
-                    root.header.y = 0
-                    
-                    if(root.footer)
-                        root.footer.height = root.footer.implicitHeight
-                        
+                root.header.height = root.header.implicitHeight
+                
+                if(root.footer)
+                root.footer.height = root.footer.implicitHeight
+                
                 oldContentY = 0
                 updatingContentY = false
                 return;
@@ -283,54 +283,55 @@ Kirigami.AbstractApplicationWindow
                 return;
             }
             
+            var oldFHeight
+            var oldHHeight
             
-            if (root.footerPositioning === ListView.InlineFooter && root.footer)
+            if(root.footer && root.footer.visible) 
             {
-                root.footer.height =  root.footer.implicitHeight
-                
-            } else if (root.footerPositioning === ListView.PullBackFooter && root.footer)
-            {
-                var oldFHeight = root.footer.height;
-                
-                root.footer.height = Math.max(0,
-                                                 Math.min(root.footer.implicitHeight,
-                                                          root.footer.height + oldContentY - root.flickable.contentY));
-                
-                //if the implicitHeight is changed, use that to simulate scroll
-                if (oldFHeight !== root.footer.height) {
-                    updatingContentY = true;
-                    updatingContentY = false;
-                } else {
-                    oldContentY = root.flickable.contentY;
+                if (root.footerPositioning === ListView.InlineFooter)
+                {
+                    root.footer.height =  root.footer.implicitHeight
+                    
+                } else if (root.footerPositioning === ListView.PullBackFooter)
+                {
+                    oldFHeight = root.footer.height;
+                    
+                    root.footer.height = Math.max(0,
+                                                  Math.min(root.footer.implicitHeight,
+                                                           root.footer.height + oldContentY - root.flickable.contentY));
                 }
             }
+                
+                if(root.header && root.header.visible)           
+                {
+                    if (root.headerPositioning === ListView.InlineHeader )
+                    {
+                        root.header.height =  root.header.implicitHeight
+                        
+                    } else if (root.headerPositioning === ListView.PullBackHeader)
+                    {
+                        oldHHeight = root.header.height;                
+                        root.header.height = Math.max(0,
+                                                      Math.min(root.header.implicitHeight,
+                                                               root.header.height + oldContentY - root.flickable.contentY));               
+                    }
+                }
             
-            if (root.headerPositioning === ListView.InlineHeader && root.header)
+            //if the implicitHeight is changed, use that to simulate scroll
+            if ((root.footer && oldFHeight !== root.footer.height)|| ( root.header && oldHHeight !== root.header.height))
             {
-                root.header.height =  root.header.implicitHeight
-                
-            } else if (root.headerPositioning === ListView.PullBackHeader && root.header)
-            {
-                var oldHHeight = root.header.height;
-                
-                root.header.height = Math.max(0,
-                                                 Math.min(root.header.implicitHeight,
-                                                          root.header.height + oldContentY - root.flickable.contentY));
-                
-                //if the implicitHeight is changed, use that to simulate scroll
-                if (oldHHeight !== root.header.height) {
-                    updatingContentY = true
+                updatingContentY = true;
+                if(oldHHeight !== root.header.height)
                     root.flickable.contentY -= (oldHHeight - root.header.height) 
                     updatingContentY = false;
-                } else {
-                    oldContentY = root.flickable.contentY;
-                }
+            } else {
+                oldContentY = root.flickable.contentY;
             }
         }
         
         onMovementEnded:
         {
-            if (root.headerPositioning === ListView.PullBackHeader && root.header)
+            if (root.headerPositioning === ListView.PullBackHeader)
             {
                 if (root.header.height > (root.header.implicitHeight/2) ) 
                 {
@@ -342,7 +343,7 @@ Kirigami.AbstractApplicationWindow
                 }
             }
             
-            if (root.footerPositioning === ListView.PullBackFooter && root.footer)
+            if (root.footerPositioning === ListView.PullBackFooter)
             {
                 if (root.footer.height > (root.footer.implicitHeight/2) ) 
                 {
@@ -437,7 +438,7 @@ Kirigami.AbstractApplicationWindow
             else if(footBar.count)
                 return [footBar]
             else
-                return []
+                return null
         }
     }
 
