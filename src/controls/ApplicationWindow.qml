@@ -286,7 +286,7 @@ Kirigami.AbstractApplicationWindow
             var oldFHeight
             var oldHHeight
             
-            if(root.footer && root.footer.visible) 
+            if(root.footer) 
             {
                 if (root.footerPositioning === ListView.InlineFooter)
                 {
@@ -302,7 +302,7 @@ Kirigami.AbstractApplicationWindow
                 }
             }
                 
-                if(root.header && root.header.visible)           
+                if(root.header)           
                 {
                     if (root.headerPositioning === ListView.InlineHeader )
                     {
@@ -331,7 +331,7 @@ Kirigami.AbstractApplicationWindow
         
         onMovementEnded:
         {
-            if (root.headerPositioning === ListView.PullBackHeader)
+            if (root.headerPositioning === ListView.PullBackHeader  && root.header)
             {
                 if (root.header.height > (root.header.implicitHeight/2) ) 
                 {
@@ -343,7 +343,7 @@ Kirigami.AbstractApplicationWindow
                 }
             }
             
-            if (root.footerPositioning === ListView.PullBackFooter)
+            if (root.footerPositioning === ListView.PullBackFooter  && root.footer)
             {
                 if (root.footer.height > (root.footer.implicitHeight/2) ) 
                 {
@@ -365,7 +365,6 @@ Kirigami.AbstractApplicationWindow
         position: ToolBar.Header
         width: root.width
         height: implicitHeight
-        onImplicitHeightChanged: height = implicitHeight
 
         // 		Kirigami.Theme.backgroundColor: headBarBGColor
         // 		Kirigami.Theme.textColor: headBarFGColor
@@ -422,7 +421,6 @@ Kirigami.AbstractApplicationWindow
         position: ToolBar.Footer
         width: root.width
         height: implicitHeight
-        onImplicitHeightChanged: height = implicitHeight
 
     }
 
@@ -432,6 +430,8 @@ Kirigami.AbstractApplicationWindow
     {
         id: _footer
         visible : children
+        onImplicitHeightChanged: height = implicitHeight
+
         children:
         {
             if(headBar.position === ToolBar.Footer && headBar.count && footBar.count)

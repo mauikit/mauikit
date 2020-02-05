@@ -40,8 +40,7 @@ Maui.ItemDelegate
     property string rightEmblem
     property string leftEmblem
     
-    property alias dropArea : _dropArea    
-    
+    property alias dropArea : _dropArea
     
     isCurrentItem : GridView.isCurrentItem || isSelected    
     
@@ -55,7 +54,7 @@ Maui.ItemDelegate
     ToolTip.visible: control.hovered && control.showTooltip
     ToolTip.text: model.tooltip ? model.tooltip : model.path 
     
-    background: null
+   background: Item {}
     
     DropArea 
     {

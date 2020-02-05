@@ -163,11 +163,7 @@ Page
         visible: count > 1 
         width: control.width
         height: implicitHeight
-        position: ToolBar.Header 
-        
-        onImplicitHeightChanged: height = implicitHeight
-        
-        readonly property int preferredHeight: Maui.Style.toolBarHeight
+        position: ToolBar.Header             
         
         Component
         {
@@ -200,8 +196,6 @@ Page
         position: ToolBar.Footer
         width: control.width
         height: implicitHeight
-        onImplicitHeightChanged: height = implicitHeight
-
     }   
 
     header: headBar.count && headBar.position === ToolBar.Header ? headBar : null
@@ -210,6 +204,7 @@ Page
     {
         id: _footer
         visible : children 
+        onImplicitHeightChanged: height = implicitHeight
         children:
         {
 			if(headBar.position === ToolBar.Footer && headBar.count && footBar.count)
