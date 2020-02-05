@@ -60,8 +60,12 @@ Page
         {            
             if(control.flickable.atYBeginning && !control.flickable.dragging)
             {
-                control.header.y = 0
-                control.footer.height = control.footer.implicitHeight
+                if(control.header)
+                    control.header.y = 0
+                    
+                    if(control.footer)
+                        control.footer.height = control.footer.implicitHeight
+                        
                 oldContentY = 0
                 updatingContentY = false
                 return;
