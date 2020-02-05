@@ -258,7 +258,8 @@ Kirigami.AbstractApplicationWindow
         
         onContentYChanged:
         {            
-            if(root.flickable.atYBeginning && !root.flickable.dragging)
+          
+            if((root.flickable.atYBeginning && !root.flickable.dragging) || (root.flickable.contentHeight < root.flickable.height*1.5 ))
             {
                 if(root.header)
                 root.header.height = root.header.implicitHeight

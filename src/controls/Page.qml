@@ -58,7 +58,8 @@ Page
         
         onContentYChanged:
         {            
-            if(control.flickable.atYBeginning && !control.flickable.dragging)
+           
+            if((control.flickable.atYBeginning && !control.flickable.dragging) || (control.flickable.contentHeight <  control.flickable.height*1.5 ))
             {
                 if(control.header)
                     control.header.y = 0
