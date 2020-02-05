@@ -152,7 +152,6 @@ Maui.Page
                 width: parent.width
                 height: _listViewBrowser.itemSize + Maui.Style.space.big
                 leftPadding: Maui.Style.space.small
-                rightPadding: Maui.Style.space.small
                 padding: 0
                 showDetailsInfo: _listViewBrowser.showDetailsInfo
                 folderSize : _listViewBrowser.itemSize
@@ -567,7 +566,6 @@ Maui.Page
                             width: parent.width
                             height: _millerListView.itemSize + Maui.Style.space.big
                             leftPadding: Maui.Style.space.small
-                            rightPadding: Maui.Style.space.small
                             padding: 0
                             showDetailsInfo: _millerListView.showDetailsInfo
                             folderSize : _millerListView.itemSize

@@ -54,7 +54,8 @@ Maui.Page
 	
 	//group properties from the browser since the browser views are loaded async and
 	//their properties can not be accesed inmediately, so they are stored here and then when completed they are set
-	property BrowserSettings settings : BrowserSettings {}
+	property alias settings : _settings
+	BrowserSettings {id: _settings }
 	
 	property alias selectionBar : selectionBarLoader.item
 	property alias browserView : _browserList.currentItem
@@ -82,7 +83,9 @@ Maui.Page
 	
 	focus: true
 	
-	footBar.visible: false ||  String(control.currentPath).startsWith("trash:/")
+	flickable: browserView.currentView.flickable
+		
+	footBar.visible: Maui.FM.loadSettings("StatusBar", "SETTINGS", false) == "true" ||  String(control.currentPath).startsWith("trash:/")
 	
 	footBar.middleContent: Maui.TextField
 	{
@@ -293,7 +296,7 @@ Maui.Page
 			message: Maui.Handy.isAndroid ?  qsTr("This action will completely remove your files from your system. This action can not be undone.") : qsTr("You can move the file to the Trash or Delete it completely from your system. Which one you preffer?")
 			rejectButton.text: qsTr("Delete")
 			acceptButton.text: qsTr("Trash")
-			acceptButton.visible: !Kirigami.Settings.isMobile
+			acceptButton.visible: Maui.Handy.isLinux
 			page.padding: Maui.Style.space.huge
 			
 			onRejected:
@@ -442,7 +445,11 @@ Maui.Page
 						Kirigami.FormData.label: qsTr("Status bar")
 						checkable: true
 						checked: control.footBar.visible
-						onToggled: control.footBar.visible = !control.footBar.visible					
+						onToggled: 
+						{
+                            control.footBar.visible = !control.footBar.visible	
+                            Maui.FM.saveSettings("StatusBar",  control.footBar.visible, "SETTINGS")                            
+                        }
 					}
 				}
 		}

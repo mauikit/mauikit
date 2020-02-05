@@ -78,7 +78,6 @@ Kirigami.ScrollablePage
     ListView
     {	
         id: _listView
-        contentWidth: parent.width
         focus: true
         clip: true           
         spacing: Maui.Style.space.tiny

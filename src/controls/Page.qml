@@ -37,6 +37,10 @@ Page
     
     property bool showTitle : true
     
+    property Flickable flickable : null
+    property int footerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineFooter
+    property int headerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineHeader
+    
     signal goBackTriggered()
     signal goForwardTriggered()	
     
@@ -45,15 +49,117 @@ Page
         color: Kirigami.Theme.backgroundColor
     }
     
+    Connections 
+    {
+        target: control.flickable ? control.flickable : null
+        enabled: control.flickable && (control.header || control.footer)
+        property int oldContentY
+        property bool updatingContentY: false        
+        
+        onContentYChanged:
+        {            
+            if(control.flickable.atYBeginning && !control.flickable.dragging)
+            {
+                control.header.y = 0
+                control.footer.height = control.footer.implicitHeight
+                oldContentY = 0
+                updatingContentY = false
+                return;
+            }                
+            
+            if (updatingContentY || !control.flickable)
+            {
+                oldContentY = control.flickable.contentY;
+                return;
+                //TODO: merge
+                //if moves but not dragging, just update oldContentY
+            } else if (!control.flickable.dragging) 
+            {
+                oldContentY = control.flickable.contentY;    
+                return;
+            }
+            
+            
+            if (control.footerPositioning === ListView.InlineFooter && control.footer)
+            {
+                control.footer.height =  control.footer.implicitHeight
+                
+            } else if (control.footerPositioning === ListView.PullBackFooter && control.footer)
+            {
+                var oldFHeight = control.footer.height;
+                
+                control.footer.height = Math.max(0,
+                                                 Math.min(control.footer.implicitHeight,
+                                                          control.footer.height + oldContentY - control.flickable.contentY));
+                
+                //if the implicitHeight is changed, use that to simulate scroll
+                if (oldFHeight !== control.footer.height) {
+                    updatingContentY = true;
+                    updatingContentY = false;
+                } else {
+                    oldContentY = control.flickable.contentY;
+                }
+            }
+            
+            if (control.headerPositioning === ListView.InlineHeader && control.header)
+            {
+                control.header.y = 0;
+                
+            } else if (control.headerPositioning === ListView.PullBackHeader && control.header)
+            {
+                var oldHY = control.header.y                   
+                
+                control.header.y = Math.max(-(control.header.implicitHeight),
+                                            Math.min(0, control.header.y + oldContentY - control.flickable.contentY));                   
+                
+                if (oldHY !== control.header.y) {
+                    updatingContentY = true;
+                    control.flickable.contentY -= (oldHY - control.header.y);                                                               
+                    updatingContentY = false;
+                } else {
+                    oldContentY = control.flickable.contentY;
+                }
+            }
+        }
+        
+        onMovementEnded:
+        {
+            if (control.headerPositioning === ListView.PullBackHeader && control.header)
+            {
+                if (control.header.y > -(control.header.implicitHeight/2) ) 
+                {
+                    control.header.y = 0;
+                } else 
+                {
+                    control.header.y = -(control.header.implicitHeight)
+                }
+            }
+            
+            if (control.footerPositioning === ListView.PullBackFooter && control.header)
+            {
+                if (control.footer.height > (control.footer.implicitHeight/2) ) 
+                {
+                    control.footer.height =  control.footer.implicitHeight
+                    
+                } else 
+                {
+                    control.footer.height = 0
+                }
+            }            
+        }
+    }
+    
     property alias headBar : _headBar
     property alias footBar: _footBar
     property Maui.ToolBar mheadBar : Maui.ToolBar
     { 
         id: _headBar
-        visible: count > 1
-         width: control.width
-         height: implicitHeight
+        visible: count > 1 
+        width: control.width
+        height: implicitHeight + y
         position: ToolBar.Header 
+        
+        readonly property int preferredHeight: Maui.Style.toolBarHeight
         
         Component
         {
@@ -82,12 +188,12 @@ Page
     property Maui.ToolBar mfootBar : Maui.ToolBar 
     { 
         id: _footBar
-        visible: count
+        visible: count 
         position: ToolBar.Footer
           width: control.width
           height: implicitHeight
     }   
-    
+
     header: headBar.count && headBar.position === ToolBar.Header ? headBar : null
     
     footer: Column 

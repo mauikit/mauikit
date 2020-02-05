@@ -66,8 +66,11 @@ Kirigami.AbstractApplicationWindow
     /*************************************************/
 
     property bool isWide : root.width >= Kirigami.Units.gridUnit * 30
-    property string colorSchemeName : Qt.application.name
-
+    
+    property Flickable flickable : null
+    property int footerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineFooter
+    property int headerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineHeader
+    
     /***************************************************/
     /********************* COLORS *********************/
     /*************************************************/
@@ -245,6 +248,110 @@ Kirigami.AbstractApplicationWindow
             
         }
     }
+    
+    Connections 
+    {
+        target: root.flickable ? root.flickable : null
+        enabled: root.flickable && (root.header || root.footer)
+        property int oldContentY
+        property bool updatingContentY: false        
+        
+        onContentYChanged:
+        {            
+            if(root.flickable.atYBeginning && !root.flickable.dragging)
+            {
+                root.header.y = 0
+                root.footer.height = root.footer.implicitHeight
+                oldContentY = 0
+                updatingContentY = false
+                return;
+            }                
+            
+            if (updatingContentY || !root.flickable)
+            {
+                oldContentY = root.flickable.contentY;
+                return;
+                //TODO: merge
+                //if moves but not dragging, just update oldContentY
+            } else if (!root.flickable.dragging) 
+            {
+                oldContentY = root.flickable.contentY;    
+                return;
+            }
+            
+            
+            if (root.footerPositioning === ListView.InlineFooter && root.footer)
+            {
+                root.footer.height =  root.footer.implicitHeight
+                
+            } else if (root.footerPositioning === ListView.PullBackFooter && root.footer)
+            {
+                var oldFHeight = root.footer.height;
+                
+                root.footer.height = Math.max(0,
+                                                 Math.min(root.footer.implicitHeight,
+                                                          root.footer.height + oldContentY - root.flickable.contentY));
+                
+                //if the implicitHeight is changed, use that to simulate scroll
+                if (oldFHeight !== root.footer.height) {
+                    updatingContentY = true;
+                    updatingContentY = false;
+                } else {
+                    oldContentY = root.flickable.contentY;
+                }
+            }
+            
+            if (root.headerPositioning === ListView.InlineHeader && root.header)
+            {
+                root.header.height =  root.header.implicitHeight
+                
+            } else if (root.headerPositioning === ListView.PullBackHeader && root.header)
+            {
+                var oldHHeight = root.header.height;
+                
+                root.header.height = Math.max(0,
+                                                 Math.min(root.header.implicitHeight,
+                                                          root.header.height + oldContentY - root.flickable.contentY));
+                
+                //if the implicitHeight is changed, use that to simulate scroll
+                if (oldHHeight !== root.header.height) {
+                    updatingContentY = true
+                    root.flickable.contentY -= (oldHHeight - root.header.height) 
+                    updatingContentY = false;
+                } else {
+                    oldContentY = root.flickable.contentY;
+                }
+            }
+        }
+        
+        onMovementEnded:
+        {
+            if (root.headerPositioning === ListView.PullBackHeader && root.header)
+            {
+                if (root.header.height > (root.header.implicitHeight/2) ) 
+                {
+                    root.header.height =  root.header.implicitHeight
+                    
+                } else 
+                {
+                    root.header.height = 0
+                }
+            }
+            
+            if (root.footerPositioning === ListView.PullBackFooter && root.footer)
+            {
+                if (root.footer.height > (root.footer.implicitHeight/2) ) 
+                {
+                    root.footer.height =  root.footer.implicitHeight
+                    
+                } else 
+                {
+                    root.footer.height = 0
+                }
+            }
+            
+        }
+    }
 
     property Maui.ToolBar mheadBar : Maui.ToolBar
     {
@@ -253,6 +360,7 @@ Kirigami.AbstractApplicationWindow
         position: ToolBar.Header
         width: root.width
         height: implicitHeight
+
         // 		Kirigami.Theme.backgroundColor: headBarBGColor
         // 		Kirigami.Theme.textColor: headBarFGColor
         // 		Kirigami.Theme.inherit: true
