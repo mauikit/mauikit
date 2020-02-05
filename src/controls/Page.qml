@@ -49,35 +49,35 @@ Page
         color: Kirigami.Theme.backgroundColor
     }
     
+    onFlickableChanged: returnToBounds()
+    
     Connections 
     {
         target: control.flickable ? control.flickable : null
         enabled: control.flickable && (control.header || control.footer)
         property int oldContentY
+        property int oldContentHeight : control.flickable.height
         property bool updatingContentY: false        
         
         onContentYChanged:
         {   
-            if((control.flickable.atYBeginning && !control.flickable.dragging) || (control.flickable.contentHeight <  control.flickable.height*1.5 ))
+            if((control.flickable.atYBeginning && !control.flickable.dragging) || (control.flickable.contentHeight <  oldContentHeight*1.5 ))
             {
-                if(control.header)
-                    control.header.y = 0
-                    
-                    if(control.footer)
-                        control.footer.height = control.footer.implicitHeight
-                 
+                returnToBounds()                 
                 return;
             }                
             
             if (updatingContentY || !control.flickable)
             {
                 oldContentY = control.flickable.contentY;
+                oldContentHeight =  control.flickable.height
                 return;
                 //TODO: merge
                 //if moves but not dragging, just update oldContentY
             } else if (!control.flickable.dragging) 
             {
-                oldContentY = control.flickable.contentY;    
+                oldContentY = control.flickable.contentY;
+                oldContentHeight =  control.flickable.height
                 return;
             }
             
@@ -123,6 +123,7 @@ Page
                     updatingContentY = false;
             } else {
                 oldContentY = control.flickable.contentY;
+                oldContentHeight =  control.flickable.height
             }
         }
         
@@ -239,5 +240,15 @@ Page
     {
         sequence: StandardKey.Back
         onActivated: control.goBackTriggered();
+    }
+
+    
+    function returnToBounds()
+    {
+        if(control.header)
+            control.header.y = 0
+            
+            if(control.footer)
+                control.footer.height = control.footer.implicitHeight
     }
 }

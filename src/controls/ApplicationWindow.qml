@@ -68,6 +68,8 @@ Kirigami.AbstractApplicationWindow
     property bool isWide : root.width >= Kirigami.Units.gridUnit * 30
     
     property Flickable flickable : null
+    onFlickableChanged: returnToBounds()
+
     property int footerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineFooter
     property int headerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineHeader
     
@@ -252,7 +254,7 @@ Kirigami.AbstractApplicationWindow
     Connections 
     {
         target: root.flickable ? root.flickable : null
-        enabled: root.flickable && (root.header || root.footer)
+        enabled: root.flickable && root.flickable != null && (root.header || root.footer)
         property int oldContentY
         property bool updatingContentY: false        
         
@@ -261,11 +263,7 @@ Kirigami.AbstractApplicationWindow
           
             if((root.flickable.atYBeginning && !root.flickable.dragging) || (root.flickable.contentHeight < root.flickable.height*1.5 ))
             {
-                if(root.header)
-                root.header.height = root.header.implicitHeight
-                
-                if(root.footer)
-                root.footer.height = root.footer.implicitHeight
+                returnToBounds()
                 
                 return;
             }                
@@ -567,5 +565,14 @@ Kirigami.AbstractApplicationWindow
         _notifyTimer.interval = timeout ? timeout : 2500
         _notify.acceptButton.text = buttonText || qsTr ("Accept")
         _notify.show(callback)
+    }
+    
+       function returnToBounds()
+    {
+        if(root.header)
+                root.header.height = root.header.implicitHeight
+                
+                if(root.footer)
+                root.footer.height = root.footer.implicitHeight
     }
 }
