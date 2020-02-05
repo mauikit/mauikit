@@ -141,7 +141,7 @@ Page
                 }
             }
             
-            if (control.footerPositioning === ListView.PullBackFooter && control.header)
+            if (control.footerPositioning === ListView.PullBackFooter && control.footer)
             {
                 if (control.footer.height > (control.footer.implicitHeight/2) ) 
                 {
