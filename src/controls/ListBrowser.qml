@@ -74,6 +74,7 @@ Kirigami.ScrollablePage
     
     Keys.enabled: false
     Kirigami.Theme.colorSet: Kirigami.Theme.View       
+    supportsRefreshing: false 
     
     ListView
     {	

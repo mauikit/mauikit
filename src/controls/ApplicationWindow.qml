@@ -254,31 +254,32 @@ Kirigami.AbstractApplicationWindow
     Connections 
     {
         target: root.flickable ? root.flickable : null
-        enabled: root.flickable && root.flickable != null && (root.header || root.footer)
+        enabled: root.flickable && (root.header || root.footer)
         property int oldContentY
         property bool updatingContentY: false        
-        
+        property int oldContentHeight : root.flickable.height
+
         onContentYChanged:
-        {            
-          
-            if((root.flickable.atYBeginning && !root.flickable.dragging) || (root.flickable.contentHeight < root.flickable.height*1.5 ))
+        {   
+             if(!root.flickable.dragging)
+                return;
+             
+            if((root.flickable.atYBeginning) || (root.flickable.contentHeight <  oldContentHeight*1.5 ))
             {
-                returnToBounds()
-                
+                oldContentHeight =  root.flickable.height
+                returnToBounds()                
                 return;
             }                
             
             if (updatingContentY || !root.flickable)
             {
                 oldContentY = root.flickable.contentY;
+                oldContentHeight =  root.flickable.height
+
                 return;
                 //TODO: merge
                 //if moves but not dragging, just update oldContentY
-            } else if (!root.flickable.dragging) 
-            {
-                oldContentY = root.flickable.contentY;    
-                return;
-            }
+            } 
             
             var oldFHeight
             var oldHHeight
@@ -293,7 +294,7 @@ Kirigami.AbstractApplicationWindow
                 {
                     oldFHeight = root.footer.height;
                     
-                    root.footer.height = Math.max(0,
+                    root.footer.height = Math.max(root.footer.hasOwnProperty("minimumHeight") ? root.footer.minimumHeight : 0,
                                                   Math.min(root.footer.implicitHeight,
                                                            root.footer.height + oldContentY - root.flickable.contentY));
                 }
@@ -308,7 +309,7 @@ Kirigami.AbstractApplicationWindow
                     } else if (root.headerPositioning === ListView.PullBackHeader)
                     {
                         oldHHeight = root.header.height;                
-                        root.header.height = Math.max(0,
+                        root.header.height = Math.max(root.header.hasOwnProperty("minimumHeight") ? root.header.minimumHeight : 0,
                                                       Math.min(root.header.implicitHeight,
                                                                root.header.height + oldContentY - root.flickable.contentY));               
                     }
@@ -318,16 +319,22 @@ Kirigami.AbstractApplicationWindow
             if ((root.footer && oldFHeight !== root.footer.height)|| ( root.header && oldHHeight !== root.header.height))
             {
                 updatingContentY = true;
-                if(oldHHeight !== root.header.height)
+                if(root.header && oldHHeight !== root.header.height)
                     root.flickable.contentY -= (oldHHeight - root.header.height) 
                     updatingContentY = false;
             } else {
-                oldContentY = root.flickable.contentY;
+                oldContentY = root.flickable.contentY
+                oldContentHeight =  root.flickable.height
+
             }
         }
         
         onMovementEnded:
         {
+            
+            if(!root.flickable.dragging)
+                return;
+            
             if (root.headerPositioning === ListView.PullBackHeader  && root.header)
             {
                 if (root.header.height >= (root.header.implicitHeight/2) ) 
@@ -336,7 +343,7 @@ Kirigami.AbstractApplicationWindow
                     
                 } else 
                 {
-                    root.header.height = 0
+                    root.header.height = root.header.hasOwnProperty("minimumHeight") ? root.header.minimumHeight : 0
                 }
             }
             
@@ -348,10 +355,9 @@ Kirigami.AbstractApplicationWindow
                     
                 } else 
                 {
-                    root.footer.height = 0
+                    root.footer.height = root.footer.hasOwnProperty("minimumHeight") ? root.footer.minimumHeight : 0
                 }
-            }
-            
+            }            
         }
     }
 

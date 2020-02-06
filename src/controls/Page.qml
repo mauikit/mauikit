@@ -53,17 +53,21 @@ Page
     
     Connections 
     {
-        target: control.flickable ? control.flickable : null
+     target: control.flickable ? control.flickable : null
         enabled: control.flickable && (control.header || control.footer)
         property int oldContentY
-        property int oldContentHeight : control.flickable.height
         property bool updatingContentY: false        
-        
+        property int oldContentHeight : control.flickable.height
+
         onContentYChanged:
         {   
-            if((control.flickable.atYBeginning && !control.flickable.dragging) || (control.flickable.contentHeight <  oldContentHeight*1.5 ))
+            if(!control.flickable.dragging)
+                return;
+            
+            if((control.flickable.atYBeginning) || (control.flickable.contentHeight <  oldContentHeight*1.5 ))
             {
-                returnToBounds()                 
+                oldContentHeight =  control.flickable.height
+                returnToBounds()                
                 return;
             }                
             
@@ -71,22 +75,18 @@ Page
             {
                 oldContentY = control.flickable.contentY;
                 oldContentHeight =  control.flickable.height
+
                 return;
                 //TODO: merge
                 //if moves but not dragging, just update oldContentY
-            } else if (!control.flickable.dragging) 
-            {
-                oldContentY = control.flickable.contentY;
-                oldContentHeight =  control.flickable.height
-                return;
-            }
+            } 
             
             var oldFHeight
-            var oldHY
+            var oldHHeight
             
             if(control.footer) 
             {
-                if (control.footerPositioning === ListView.InlineFooter )
+                if (control.footerPositioning === ListView.InlineFooter)
                 {
                     control.footer.height =  control.footer.implicitHeight
                     
@@ -94,53 +94,58 @@ Page
                 {
                     oldFHeight = control.footer.height;
                     
-                    control.footer.height = Math.max(0,
-                                                     Math.min(control.footer.implicitHeight,
-                                                              control.footer.height + oldContentY - control.flickable.contentY));  
+                    control.footer.height = Math.max(control.footer.minimumHeight,
+                                                  Math.min(control.footer.implicitHeight,
+                                                           control.footer.height + oldContentY - control.flickable.contentY));
                 }
             }
-            
-            if(control.header)           
-            {
-                if (control.headerPositioning === ListView.InlineHeader)
+                
+                if(control.header)           
                 {
-                    control.header.y = 0;
-                    
-                } else if (control.headerPositioning === ListView.PullBackHeader)
-                {
-                    oldHY = control.header.y                   
-                    
-                    control.header.y = Math.max(-(control.header.implicitHeight),
-                                                Math.min(0, control.header.y + oldContentY - control.flickable.contentY))                     
+                    if (control.headerPositioning === ListView.InlineHeader )
+                    {
+                        control.header.height =  control.header.implicitHeight
+                        
+                    } else if (control.headerPositioning === ListView.PullBackHeader)
+                    {
+                        oldHHeight = control.header.height;                
+                        control.header.height = Math.max(control.header.minimumHeight,
+                                                      Math.min(control.header.implicitHeight,
+                                                               control.header.height + oldContentY - control.flickable.contentY));               
+                    }
                 }
-            }
             
             //if the implicitHeight is changed, use that to simulate scroll
-            if ((control.footer && oldFHeight !== control.footer.height) || (control.header && oldHY !== control.header.y)) {
+            if ((control.footer && oldFHeight !== control.footer.height) || ( control.header && oldHHeight !== control.header.height))
+            {
                 updatingContentY = true;
-                if(control.header && oldHY !== control.header.y)
-                    control.flickable.contentY -= (oldHY - control.header.y)  
+                if(control.header && oldHHeight !== control.header.height)
+                    control.flickable.contentY -= (oldHHeight - control.header.height) 
                     updatingContentY = false;
             } else {
-                oldContentY = control.flickable.contentY;
+                oldContentY = control.flickable.contentY
                 oldContentHeight =  control.flickable.height
             }
         }
         
         onMovementEnded:
         {
-            if (control.headerPositioning === ListView.PullBackHeader && control.header)
+             if(!control.flickable.dragging)
+                return;
+
+            if (control.headerPositioning === ListView.PullBackHeader  && control.header)
             {
-                if (control.header.y >= -(control.header.implicitHeight/2) ) 
+                if (control.header.height >= (control.header.implicitHeight/2) ) 
                 {
-                    control.header.y = 0;
+                    control.header.height =  control.header.implicitHeight
+                    
                 } else 
                 {
-                    control.header.y = -(control.header.implicitHeight)
+                    control.header.height = control.header.minimumHeight
                 }
             }
             
-            if (control.footerPositioning === ListView.PullBackFooter && control.footer)
+            if (control.footerPositioning === ListView.PullBackFooter  && control.footer)
             {
                 if (control.footer.height >= (control.footer.implicitHeight/2) ) 
                 {
@@ -148,9 +153,10 @@ Page
                     
                 } else 
                 {
-                    control.footer.height = 0
+                    control.footer.height = control.header.minimumHeight
                 }
-            }            
+            }
+            
         }
     }
     
@@ -246,9 +252,9 @@ Page
     function returnToBounds()
     {
         if(control.header)
-            control.header.y = 0
-            
-            if(control.footer)
+                control.header.height = control.header.implicitHeight
+                
+                if(control.footer)
                 control.footer.height = control.footer.implicitHeight
     }
 }

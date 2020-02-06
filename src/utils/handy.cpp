@@ -35,16 +35,18 @@
 #endif
 
 static const QUrl CONF_FILE = FMH::ConfigPath + "/kdeglobals";
+
+#ifdef KSHAREDCONFIG_H
 static const auto confCheck = [](QString key, QVariant defaultValue) -> QVariant
 {
-    auto kconf = KSharedConfig::openConfig("kdeglobals");
-    const auto group = kconf->group("KDE");
-    if( group.hasKey(key))   
-        return  group.readEntry(key, defaultValue); 
-    
-    return defaultValue;
-};  
+	auto kconf = KSharedConfig::openConfig("kdeglobals");
+	const auto group = kconf->group("KDE");
+	if( group.hasKey(key))
+		return  group.readEntry(key, defaultValue);
 
+	return defaultValue;
+};
+#endif
 
 Handy::Handy(QObject *parent) : QObject(parent), m_isTouch(Handy::isTouch())
 {    
