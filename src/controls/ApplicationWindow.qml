@@ -258,6 +258,8 @@ Kirigami.AbstractApplicationWindow
         property int oldContentY
         property bool updatingContentY: false        
 
+        onContentHeightChanged: returnToBounds()
+        
         onContentYChanged:
         {   
             if (updatingContentY || !root.flickable || !root.flickable.dragging)
@@ -268,8 +270,7 @@ Kirigami.AbstractApplicationWindow
                 //if moves but not dragging, just update oldContentY
             } 
             
-            if(root.flickable.contentHeight < root.height)
-                return
+           
                 
             var oldFHeight
             var oldHHeight
@@ -307,8 +308,7 @@ Kirigami.AbstractApplicationWindow
         }
         
          onMovementEnded:
-        {  
-
+        {
             if (root.headerPositioning === ListView.PullBackHeader  && root.header)
             {  
                     if (root.header.height >= (root.header.implicitHeight/2) || root.flickable.atYBeginning ) 
@@ -322,20 +322,25 @@ Kirigami.AbstractApplicationWindow
                 
             }
             
-            if (root.footerPositioning === ListView.PullBackFooter  && root.footer)
-            {
-                
-                    if (root.footer.height >= (root.footer.implicitHeight/2) ||  root.flickable.atYEnd) 
+             if (root.footerPositioning === ListView.PullBackFooter  && root.footer)
+            {                
+                if (root.footer.height >= (root.footer.implicitHeight/2) || root.flickable.atYEnd) 
+                {
+                    if(root.flickable.atYEnd)
                     {
-                        root.footer.height =  root.footer.implicitHeight
-                        
-                    } else 
+                        root.footer.height =  root.footer.implicitHeight                        
+                        root.flickable.contentY = root.flickable.contentHeight - root.flickable.height
+                        oldContentY = root.flickable.contentY
+                    }else
                     {
-                        root.footer.height = 0
-                    }                 
-                
-            }
-            
+                        root.footer.height =  root.footer.implicitHeight                        
+                    }
+                    
+                } else 
+                {
+                    root.footer.height = 0
+                }                  
+            }            
         }
     }
 

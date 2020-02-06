@@ -57,9 +57,11 @@ Page
         enabled: control.flickable && (control.header || control.footer)
         property int oldContentY
         property bool updatingContentY: false        
+        onContentHeightChanged: returnToBounds()
         
         onContentYChanged:
         {   
+
             if (updatingContentY || !control.flickable || !control.flickable.dragging)
             {
                 oldContentY = control.flickable.contentY;
@@ -99,7 +101,8 @@ Page
 
                 if(control.header && oldHHeight !== control.header.height)
                     control.flickable.contentY -= (oldHHeight - control.header.height) 
-                    updatingContentY = false               
+                    updatingContentY = false   
+            
 
                     
             } else {
@@ -109,7 +112,10 @@ Page
         
         onMovementEnded:
         {  
+             
 
+          
+            
             if (control.headerPositioning === ListView.PullBackHeader  && control.header)
             {  
                     if (control.header.height >= (control.header.implicitHeight/2) || control.flickable.atYBeginning ) 
@@ -124,19 +130,26 @@ Page
             }
             
             if (control.footerPositioning === ListView.PullBackFooter  && control.footer)
-            {
-                
-                    if (control.footer.height >= (control.footer.implicitHeight/2) ||  control.flickable.atYEnd) 
+            {                
+                if (control.footer.height >= (control.footer.implicitHeight/2) ||  control.flickable.atYEnd) 
+                {
+                    if(control.flickable.atYEnd)
                     {
                         control.footer.height =  control.footer.implicitHeight
-//                          control.flickable.contentY = control.flickable.contentHeight - control.flickable.height
-                    } else 
+                        
+                        control.flickable.contentY = control.flickable.contentHeight - control.flickable.height
+                        oldContentY = control.flickable.contentY
+                    }else
                     {
-                        control.footer.height = 0
-                    }                 
-                
+                        control.footer.height =  control.footer.implicitHeight
+                        
+                    }
+                    
+                } else 
+                {
+                    control.footer.height = 0
+                }                  
             }
-            
         }
     }
     
