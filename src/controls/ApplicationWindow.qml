@@ -274,6 +274,9 @@ Kirigami.AbstractApplicationWindow
             if(root.flickable.contentHeight < root.height)
                 return
                 
+                       if(root.flickable.verticalVelocity < 100)
+                    return;
+                
             var oldFHeight
             var oldHHeight
             
