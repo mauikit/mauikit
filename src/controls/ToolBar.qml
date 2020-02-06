@@ -27,14 +27,10 @@ import "private"
 
 ToolBar
 {
-    id: control  
+    id: control    
     
-    property int minimumHeight: 1
-    property int preferredHeight: Maui.Style.toolBarHeight
-    property int maximumHeight: Kirigami.Units.gridUnit * 3    
-    
-    implicitHeight: preferredHeight
-
+    implicitHeight: Maui.Style.toolBarHeight
+    implicitWidth: mainFlickable.contentWidth
     spacing: Maui.Style.space.small
     padding: 0
     

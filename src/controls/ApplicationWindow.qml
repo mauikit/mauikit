@@ -257,24 +257,15 @@ Kirigami.AbstractApplicationWindow
         enabled: root.flickable && (root.header || root.footer)
         property int oldContentY
         property bool updatingContentY: false        
-        property int oldContentHeight : root.flickable.height
 
         onContentYChanged:
         {   
              if(!root.flickable.dragging)
-                return;
-             
-            if((root.flickable.atYBeginning) || (root.flickable.contentHeight <  oldContentHeight*1.5 ))
-            {
-                oldContentHeight =  root.flickable.height
-                returnToBounds()                
-                return;
-            }                
+                return;                     
             
             if (updatingContentY || !root.flickable)
             {
                 oldContentY = root.flickable.contentY;
-                oldContentHeight =  root.flickable.height
 
                 return;
                 //TODO: merge
@@ -284,36 +275,23 @@ Kirigami.AbstractApplicationWindow
             var oldFHeight
             var oldHHeight
             
-            if(root.footer) 
-            {
-                if (root.footerPositioning === ListView.InlineFooter)
+             if (root.footer && root.footerPositioning === ListView.PullBackFooter)
                 {
-                    root.footer.height =  root.footer.implicitHeight
-                    
-                } else if (root.footerPositioning === ListView.PullBackFooter)
-                {
-                    oldFHeight = root.footer.height;
-                    
-                    root.footer.height = Math.max(root.footer.hasOwnProperty("minimumHeight") ? root.footer.minimumHeight : 0,
+                    oldFHeight = root.footer.height                    
+                    root.footer.height = Math.max(0,
                                                   Math.min(root.footer.implicitHeight,
                                                            root.footer.height + oldContentY - root.flickable.contentY));
                 }
-            }
-                
-                if(root.header)           
-                {
-                    if (root.headerPositioning === ListView.InlineHeader )
+            
+               
+                    if (root.header && root.headerPositioning === ListView.PullBackHeader)
                     {
-                        root.header.height =  root.header.implicitHeight
-                        
-                    } else if (root.headerPositioning === ListView.PullBackHeader)
-                    {
-                        oldHHeight = root.header.height;                
-                        root.header.height = Math.max(root.header.hasOwnProperty("minimumHeight") ? root.header.minimumHeight : 0,
+                        oldHHeight = root.header.height             
+                        root.header.height = Math.max(0,
                                                       Math.min(root.header.implicitHeight,
                                                                root.header.height + oldContentY - root.flickable.contentY));               
                     }
-                }
+                
             
             //if the implicitHeight is changed, use that to simulate scroll
             if ((root.footer && oldFHeight !== root.footer.height)|| ( root.header && oldHHeight !== root.header.height))
@@ -321,19 +299,32 @@ Kirigami.AbstractApplicationWindow
                 updatingContentY = true;
                 if(root.header && oldHHeight !== root.header.height)
                     root.flickable.contentY -= (oldHHeight - root.header.height) 
+                  
                     updatingContentY = false;
+
             } else {
                 oldContentY = root.flickable.contentY
-                oldContentHeight =  root.flickable.height
-
             }
         }
         
         onMovementEnded:
         {
-            
-            if(!root.flickable.dragging)
-                return;
+            if(root.flickable.atYBeginning || root.flickable.atYEnd)
+            {
+                if(root.header)
+                {
+                    root.header.height = root.header.implicitHeight  
+                    
+                }                    
+                if(root.footer && root.footer.height !== root.footer.implicitHeight)
+                {
+                    root.footer.height = root.footer.implicitHeight  
+                    root.flickable.contentY = root.flickable.contentHeight - root.flickable.height
+                    oldContentY = root.flickable.contentY
+                }
+                
+                return
+            }   
             
             if (root.headerPositioning === ListView.PullBackHeader  && root.header)
             {
@@ -343,7 +334,7 @@ Kirigami.AbstractApplicationWindow
                     
                 } else 
                 {
-                    root.header.height = root.header.hasOwnProperty("minimumHeight") ? root.header.minimumHeight : 0
+                    root.header.height = 0
                 }
             }
             
@@ -355,9 +346,10 @@ Kirigami.AbstractApplicationWindow
                     
                 } else 
                 {
-                    root.footer.height = root.footer.hasOwnProperty("minimumHeight") ? root.footer.minimumHeight : 0
+                    root.footer.height = 0
                 }
-            }            
+            }
+            
         }
     }
 

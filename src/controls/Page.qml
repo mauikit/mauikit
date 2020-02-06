@@ -53,29 +53,16 @@ Page
     
     Connections 
     {
-     target: control.flickable ? control.flickable : null
+        target: control.flickable ? control.flickable : null
         enabled: control.flickable && (control.header || control.footer)
         property int oldContentY
         property bool updatingContentY: false        
-        property int oldContentHeight : control.flickable.height
-
+        
         onContentYChanged:
         {   
-            if(!control.flickable.dragging)
-                return;
-            
-            if((control.flickable.atYBeginning) || (control.flickable.contentHeight <  oldContentHeight*1.5 ))
-            {
-                oldContentHeight =  control.flickable.height
-                returnToBounds()                
-                return;
-            }                
-            
-            if (updatingContentY || !control.flickable)
+            if (updatingContentY || !control.flickable || !control.flickable.dragging)
             {
                 oldContentY = control.flickable.contentY;
-                oldContentHeight =  control.flickable.height
-
                 return;
                 //TODO: merge
                 //if moves but not dragging, just update oldContentY
@@ -83,55 +70,59 @@ Page
             
             var oldFHeight
             var oldHHeight
-            
-            if(control.footer) 
-            {
-                if (control.footerPositioning === ListView.InlineFooter)
+           
+               if (control.footer && control.footerPositioning === ListView.PullBackFooter)
                 {
-                    control.footer.height =  control.footer.implicitHeight
-                    
-                } else if (control.footerPositioning === ListView.PullBackFooter)
-                {
-                    oldFHeight = control.footer.height;
-                    
-                    control.footer.height = Math.max(control.footer.minimumHeight,
+                    oldFHeight = control.footer.height                    
+                    control.footer.height = Math.max(0,
                                                   Math.min(control.footer.implicitHeight,
                                                            control.footer.height + oldContentY - control.flickable.contentY));
                 }
-            }
+            
                 
-                if(control.header)           
-                {
-                    if (control.headerPositioning === ListView.InlineHeader )
+                   if (control.header && control.headerPositioning === ListView.PullBackHeader)
                     {
-                        control.header.height =  control.header.implicitHeight
-                        
-                    } else if (control.headerPositioning === ListView.PullBackHeader)
-                    {
-                        oldHHeight = control.header.height;                
-                        control.header.height = Math.max(control.header.minimumHeight,
+                        oldHHeight = control.header.height              
+                        control.header.height = Math.max(0,
                                                       Math.min(control.header.implicitHeight,
                                                                control.header.height + oldContentY - control.flickable.contentY));               
                     }
-                }
+                
             
             //if the implicitHeight is changed, use that to simulate scroll
             if ((control.footer && oldFHeight !== control.footer.height) || ( control.header && oldHHeight !== control.header.height))
             {
-                updatingContentY = true;
+                updatingContentY = true
+
                 if(control.header && oldHHeight !== control.header.height)
                     control.flickable.contentY -= (oldHHeight - control.header.height) 
-                    updatingContentY = false;
+                    updatingContentY = false               
+
+                    
             } else {
                 oldContentY = control.flickable.contentY
-                oldContentHeight =  control.flickable.height
             }
         }
         
         onMovementEnded:
-        {
-             if(!control.flickable.dragging)
-                return;
+        {            
+            if(control.flickable.atYBeginning || control.flickable.atYEnd)
+            {
+                if(control.header)
+                {
+                    control.header.height = control.header.implicitHeight 
+                } 
+                
+                if(control.footer && control.footer.height !==  control.footer.implicitHeight)
+                {
+                    control.footer.height = control.footer.implicitHeight                    
+                    control.flickable.contentY = control.flickable.contentHeight - control.flickable.height
+                    oldContentY = control.flickable.contentY
+                }
+                
+                return
+            }                
+            
 
             if (control.headerPositioning === ListView.PullBackHeader  && control.header)
             {
@@ -141,7 +132,7 @@ Page
                     
                 } else 
                 {
-                    control.header.height = control.header.minimumHeight
+                    control.header.height = 0
                 }
             }
             
@@ -153,7 +144,7 @@ Page
                     
                 } else 
                 {
-                    control.footer.height = control.header.minimumHeight
+                    control.footer.height = 0
                 }
             }
             
