@@ -268,18 +268,14 @@ Kirigami.AbstractApplicationWindow
                 return;
                 //TODO: merge
                 //if moves but not dragging, just update oldContentY
-            } 
+            }             
             
-                   
             if(root.flickable.contentHeight < root.height)
                 return
                 
-                       if(root.flickable.verticalVelocity < 100)
-                    return;
+                var oldFHeight
+                var oldHHeight
                 
-            var oldFHeight
-            var oldHHeight
-            
              if (root.footer && root.footerPositioning === ListView.PullBackFooter)
                 {
                     oldFHeight = root.footer.height                    

@@ -72,10 +72,7 @@ Page
             
             if(control.flickable.contentHeight < control.height)
                 return
-                
-                if(control.flickable.verticalVelocity < 100)
-                    return;
-            
+              
             var oldFHeight
             var oldHHeight
            
