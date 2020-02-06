@@ -270,7 +270,9 @@ Kirigami.AbstractApplicationWindow
                 //if moves but not dragging, just update oldContentY
             } 
             
-           
+                   
+            if(root.flickable.contentHeight < root.height)
+                return
                 
             var oldFHeight
             var oldHHeight
