@@ -68,6 +68,9 @@ Page
                 //if moves but not dragging, just update oldContentY
             } 
             
+            if(control.flickable.contentHeight < control.height)
+                return
+            
             var oldFHeight
             var oldHHeight
            
@@ -105,47 +108,33 @@ Page
         }
         
         onMovementEnded:
-        {            
-            if(control.flickable.atYBeginning || control.flickable.atYEnd)
-            {
-                if(control.header)
-                {
-                    control.header.height = control.header.implicitHeight 
-                } 
-                
-                if(control.footer && control.footer.height !==  control.footer.implicitHeight)
-                {
-                    control.footer.height = control.footer.implicitHeight                    
-                    control.flickable.contentY = control.flickable.contentHeight - control.flickable.height
-                    oldContentY = control.flickable.contentY
-                }
-                
-                return
-            }                
-            
+        {  
 
             if (control.headerPositioning === ListView.PullBackHeader  && control.header)
-            {
-                if (control.header.height >= (control.header.implicitHeight/2) ) 
-                {
-                    control.header.height =  control.header.implicitHeight
-                    
-                } else 
-                {
-                    control.header.height = 0
-                }
+            {  
+                    if (control.header.height >= (control.header.implicitHeight/2) || control.flickable.atYBeginning ) 
+                    {
+                        control.header.height =  control.header.implicitHeight
+                        
+                    } else 
+                    {
+                        control.header.height = 0
+                    }
+                
             }
             
             if (control.footerPositioning === ListView.PullBackFooter  && control.footer)
             {
-                if (control.footer.height >= (control.footer.implicitHeight/2) ) 
-                {
-                    control.footer.height =  control.footer.implicitHeight
-                    
-                } else 
-                {
-                    control.footer.height = 0
-                }
+                
+                    if (control.footer.height >= (control.footer.implicitHeight/2) ||  control.flickable.atYEnd) 
+                    {
+                        control.footer.height =  control.footer.implicitHeight
+//                          control.flickable.contentY = control.flickable.contentHeight - control.flickable.height
+                    } else 
+                    {
+                        control.footer.height = 0
+                    }                 
+                
             }
             
         }

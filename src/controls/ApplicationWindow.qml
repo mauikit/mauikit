@@ -260,18 +260,17 @@ Kirigami.AbstractApplicationWindow
 
         onContentYChanged:
         {   
-             if(!root.flickable.dragging)
-                return;                     
-            
-            if (updatingContentY || !root.flickable)
+            if (updatingContentY || !root.flickable || !root.flickable.dragging)
             {
                 oldContentY = root.flickable.contentY;
-
                 return;
                 //TODO: merge
                 //if moves but not dragging, just update oldContentY
             } 
             
+            if(root.flickable.contentHeight < root.height)
+                return
+                
             var oldFHeight
             var oldHHeight
             
@@ -307,47 +306,34 @@ Kirigami.AbstractApplicationWindow
             }
         }
         
-        onMovementEnded:
-        {
-            if(root.flickable.atYBeginning || root.flickable.atYEnd)
-            {
-                if(root.header)
-                {
-                    root.header.height = root.header.implicitHeight  
-                    
-                }                    
-                if(root.footer && root.footer.height !== root.footer.implicitHeight)
-                {
-                    root.footer.height = root.footer.implicitHeight  
-                    root.flickable.contentY = root.flickable.contentHeight - root.flickable.height
-                    oldContentY = root.flickable.contentY
-                }
-                
-                return
-            }   
-            
+         onMovementEnded:
+        {  
+
             if (root.headerPositioning === ListView.PullBackHeader  && root.header)
-            {
-                if (root.header.height >= (root.header.implicitHeight/2) ) 
-                {
-                    root.header.height =  root.header.implicitHeight
-                    
-                } else 
-                {
-                    root.header.height = 0
-                }
+            {  
+                    if (root.header.height >= (root.header.implicitHeight/2) || root.flickable.atYBeginning ) 
+                    {
+                        root.header.height =  root.header.implicitHeight
+                        
+                    } else 
+                    {
+                        root.header.height = 0
+                    }
+                
             }
             
             if (root.footerPositioning === ListView.PullBackFooter  && root.footer)
             {
-                if (root.footer.height >= (root.footer.implicitHeight/2) ) 
-                {
-                    root.footer.height =  root.footer.implicitHeight
-                    
-                } else 
-                {
-                    root.footer.height = 0
-                }
+                
+                    if (root.footer.height >= (root.footer.implicitHeight/2) ||  root.flickable.atYEnd) 
+                    {
+                        root.footer.height =  root.footer.implicitHeight
+                        
+                    } else 
+                    {
+                        root.footer.height = 0
+                    }                 
+                
             }
             
         }
