@@ -11,7 +11,7 @@ Maui.Page
 
     property url path
     
-    onPathChanged: control.currentView.currentIndex = 0
+    onPathChanged: if(control.currentView) control.currentView.currentIndex = 0
 
     property Maui.FMList currentFMList
     property Maui.BaseModel currentFMModel
@@ -77,12 +77,7 @@ Maui.Page
         id: viewLoader
         anchors.fill: parent
         focus: true
-        sourceComponent: switch(control.viewType)
-                         {
-                         case Maui.FMList.ICON_VIEW: return gridViewBrowser
-                         case Maui.FMList.LIST_VIEW: return listViewBrowser
-                         case Maui.FMList.MILLERS_VIEW: return millerViewBrowser
-                         }
+        sourceComponent: listViewBrowser
 
         onLoaded: setCurrentFMList()
     }
@@ -111,7 +106,7 @@ Maui.Page
             showPreviewThumbnails: settings.showThumbnails
             keepEmblemOverlay: settings.selectionMode
             showDetailsInfo: true
-            supportsRefreshing: true
+
             BrowserHolder
             {
                 id: _holder

@@ -188,8 +188,8 @@ Kirigami.AbstractApplicationWindow
                 id: _accountsListing
                 visible: _accountsListing.count > 0
                 Layout.fillWidth: true
-                Layout.preferredHeight: Math.min(listView.contentHeight, 300)
-                listView.spacing: Maui.Style.space.medium
+                Layout.preferredHeight: Math.min(contentHeight, 300)
+                spacing: Maui.Style.space.medium
                 Kirigami.Theme.backgroundColor: "transparent"
 				currentIndex: Maui.App.accounts.currentAccountIndex
 				
@@ -254,17 +254,18 @@ Kirigami.AbstractApplicationWindow
     Connections 
     {
         target: root.flickable ? root.flickable : null
-        enabled: root.flickable && (root.header || root.footer)
+        enabled: root.flickable && ((root.header && root.headerPositioning === ListView.PullBackHeader) || (root.footer &&  root.footerPositioning === ListView.PullBackFooter))
         property int oldContentY
         property bool updatingContentY: false        
-
-        onContentHeightChanged: returnToBounds()
         
         onContentYChanged:
         {   
+            if(!root.flickable.dragging && root.flickable.atYBeginning)
+                root.returnToBounds()
+
             if (updatingContentY || !root.flickable || !root.flickable.dragging)
             {
-                oldContentY = root.flickable.contentY;
+                oldContentY = root.flickable.contentY
                 return;
                 //TODO: merge
                 //if moves but not dragging, just update oldContentY

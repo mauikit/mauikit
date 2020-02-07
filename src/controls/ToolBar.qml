@@ -233,7 +233,14 @@ ToolBar
         id: mainFlickable       
         property bool fits : contentWidth < control.width
         onFitsChanged: returnToBounds()
-        anchors.fill: parent
+        height: control.implicitHeight
+        anchors {
+            left: parent.left
+            right: parent.right
+            bottom: control.position === ToolBar.Header ? parent.bottom : undefined
+            top: control.position === ToolBar.Footer ? parent.top : undefined
+        }
+
         anchors.leftMargin: !fits && _leftFlickRec.visible && control.flickable && !Kirigami.Settings.isMobile ? _leftFlickRec.width : margins
         anchors.rightMargin: !fits && _rightFlickRec.visible && control.flickable && !Kirigami.Settings.isMobile ? _rightFlickRec.width : margins
         

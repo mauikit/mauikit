@@ -54,14 +54,15 @@ Page
     Connections 
     {
         target: control.flickable ? control.flickable : null
-        enabled: control.flickable && (control.header || control.footer)
+        enabled: control.flickable && ((control.header && control.headerPositioning === ListView.PullBackHeader) || (control.footer &&  control.footerPositioning === ListView.PullBackFooter))
         property int oldContentY
         property bool updatingContentY: false        
-        onContentHeightChanged: returnToBounds()
-        
-        onContentYChanged:
-        {   
 
+        onContentYChanged:
+        {  
+            if(!control.flickable.dragging && control.flickable.atYBeginning)
+                control.returnToBounds()
+            
             if (updatingContentY || !control.flickable || !control.flickable.dragging)
             {
                 oldContentY = control.flickable.contentY;
@@ -82,6 +83,8 @@ Page
                     control.footer.height = Math.max(0,
                                                   Math.min(control.footer.implicitHeight,
                                                            control.footer.height + oldContentY - control.flickable.contentY));
+                    
+
                 }
             
                 
@@ -112,9 +115,6 @@ Page
         
         onMovementEnded:
         {  
-             
-
-          
             
             if (control.headerPositioning === ListView.PullBackHeader  && control.header)
             {  

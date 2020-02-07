@@ -243,7 +243,7 @@ Maui.Dialog
 	{
 		if(cb)
 			callback = cb			
-			browser.openFolder(browser.currentPath)
+// 			browser.openFolder(browser.currentPath)
 			open()
 	}
 	
