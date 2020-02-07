@@ -32,7 +32,6 @@
 #include <KColorScheme>
 #include <KColorSchemeManager>
 #include <QModelIndex>
-#include <QSettings>
 #include <QColor>
 #include <QVariantList>
 #include <KConfig>
