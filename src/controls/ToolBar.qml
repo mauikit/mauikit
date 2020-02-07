@@ -33,6 +33,7 @@ ToolBar
     implicitWidth: mainFlickable.contentWidth
     spacing: Maui.Style.space.small
     padding: 0
+    clip: true
     
     property alias stickyRightContent : rightRowContent.sticky
     property alias stickyLeftContent : leftRowContent.sticky
@@ -228,6 +229,7 @@ ToolBar
         }
     }	
     
+    
     Flickable
     {
         id: mainFlickable       
@@ -240,7 +242,7 @@ ToolBar
             bottom: control.position === ToolBar.Header ? parent.bottom : undefined
             top: control.position === ToolBar.Footer ? parent.top : undefined
         }
-
+        
         anchors.leftMargin: !fits && _leftFlickRec.visible && control.flickable && !Kirigami.Settings.isMobile ? _leftFlickRec.width : margins
         anchors.rightMargin: !fits && _rightFlickRec.visible && control.flickable && !Kirigami.Settings.isMobile ? _rightFlickRec.width : margins
         

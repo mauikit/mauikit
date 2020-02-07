@@ -63,6 +63,7 @@ Maui.Popup
     Maui.Badge
     {
         id: _closeButton
+        parent: Application.Overlay
         iconName: "qrc:/assets/dialog-close.svg"
         //         Kirigami.Theme.backgroundColor: hovered ?  Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
         //         Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
@@ -81,6 +82,7 @@ Maui.Popup
     Maui.Page
     {
         id: page
+        clip: true
         anchors.fill: parent
         anchors.margins: Maui.Style.unit
         padding: Maui.Style.space.medium
