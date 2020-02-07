@@ -23,6 +23,29 @@
 class KCoreDirLister;
 #endif
 
+class QDirLister : public QObject
+{
+    Q_OBJECT
+public:
+    explicit QDirLister(QObject *parent = nullptr);
+    
+public slots:
+    bool openUrl(QUrl url);
+    void setNameFilter(QString filters);
+    void setDirOnlyMode(bool value);
+    void setShowingDotFiles(bool value);
+    
+signals:
+    void itemsReady(FMH::MODEL_LIST items, QUrl url);
+    void itemReady(FMH::MODEL item, QUrl url);
+    
+private:
+    QString m_nameFilters;
+    QUrl m_url;
+    bool m_dirOnly =  false;
+    bool m_showDotFiles = false;
+};
+
 class Syncing;
 class Tagging;
 #ifdef STATIC_MAUIKIT
@@ -58,11 +81,13 @@ public:
 private:	
 	#ifdef COMPONENT_TAGGING
 	Tagging *tag;
-	#endif
-	
-	#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)	
-	KCoreDirLister *dirLister;
-	#endif
+    #endif
+    
+    #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)	
+    KCoreDirLister *dirLister;
+    #else
+    QDirLister *dirLister;
+    #endif
 
 signals:
     void cloudServerContentReady(FMH::MODEL_LIST list, const QUrl &url);

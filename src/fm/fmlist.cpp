@@ -52,7 +52,7 @@ watcher(new QFileSystemWatcher(this))
 	connect(this->fm, &FM::pathContentReady, [&](QUrl path)
 	{		
 		emit this->preListChanged();
-		this->sortList();    
+        this->sortList();   
 		this->setStatus({STATUS_CODE::READY, this->list.isEmpty() ? "Nothing here!" : "",  this->list.isEmpty() ? "This place seems to be empty" : "",this->list.isEmpty()  ? "folder-add" : "", this->list.isEmpty(), true});  
 		emit this->postListChanged();
 		
@@ -338,19 +338,17 @@ void FMList::sortList()
 	}
 	
     std::sort(this->list.begin() + index, this->list.end(), [key](const FMH::MODEL& e1, const FMH::MODEL& e2) -> bool
-	{
-        const auto role = key;
-		
-		switch(role)
+	{		
+		switch(key)
 		{
 			case FMH::MODEL_KEY::MIME:
-				if(e1[role] == "inode/directory")
+				if(e1[key] == "inode/directory")
 					return true;
 				break;
 				
 			case FMH::MODEL_KEY::SIZE:
 			{				
-				if(e1[role].toDouble() > e2[role].toDouble())
+				if(e1[key].toDouble() > e2[key].toDouble())
 					return true;
 				break;
 			}
@@ -360,8 +358,8 @@ void FMList::sortList()
 			{
 				auto currentTime = QDateTime::currentDateTime();
 				
-				auto date1 = QDateTime::fromString(e1[role], Qt::TextDate);
-				auto date2 = QDateTime::fromString(e2[role], Qt::TextDate);
+				auto date1 = QDateTime::fromString(e1[key], Qt::TextDate);
+				auto date2 = QDateTime::fromString(e2[key], Qt::TextDate);
 				
 				if(date1.secsTo(currentTime) <  date2.secsTo(currentTime))
 					return true;
@@ -371,8 +369,8 @@ void FMList::sortList()
 			
 			case FMH::MODEL_KEY::LABEL:
 			{
-				const auto str1 = QString(e1[role]).toLower();
-				const auto str2 = QString(e2[role]).toLower();
+				const auto str1 = QString(e1[key]).toLower();
+				const auto str2 = QString(e2[key]).toLower();
 				
 				if(str1 < str2)
 					return true;				
@@ -380,7 +378,7 @@ void FMList::sortList()
 			}
 			
 			default:
-				if(e1[role] < e2[role])
+				if(e1[key] < e2[key])
 					return true;
 		}
 		

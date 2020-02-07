@@ -55,6 +55,55 @@
 #include <QIcon>
 #endif
 
+
+QDirLister::QDirLister(QObject* parent) : QObject(parent)
+{}
+
+bool QDirLister::openUrl(QUrl url)
+{
+    qDebug() << "GET FILES <<" << m_nameFilters.split(" ");
+    FMH::MODEL_LIST content;
+    
+    if (FMStatic::isDir(url))
+    {
+        QDir::Filters dirFilter;
+        
+        dirFilter = (m_dirOnly ? QDir::AllDirs | QDir::NoDotDot | QDir::NoDot :
+        QDir::Files | QDir::AllDirs | QDir::NoDotDot | QDir::NoDot);
+        
+        if(m_showDotFiles)
+            dirFilter = dirFilter | QDir::Hidden | QDir::System;
+        
+        QDirIterator it (url.toLocalFile(), m_nameFilters.isEmpty() ? QStringList() : m_nameFilters.split(" "), dirFilter, QDirIterator::NoIteratorFlags);
+        while (it.hasNext())
+        {
+            const auto item = FMH::getFileInfoModel(QUrl::fromLocalFile(it.next()));
+                        content << item;                
+
+            emit itemReady(item, url);
+        }
+    } else return false;	
+    
+    emit itemsReady(content, url);
+    return true;
+}
+
+void QDirLister::setDirOnlyMode(bool value)
+{
+    m_dirOnly = value;
+}
+
+void QDirLister::setShowingDotFiles(bool value)
+{
+    m_showDotFiles = value;
+}
+
+void QDirLister::setNameFilter(QString filters)
+{
+    m_nameFilters = filters;
+}
+
+
 FM::FM(QObject *parent) : QObject(parent)
 #ifdef COMPONENT_SYNCING
 ,sync(new Syncing(this))
@@ -63,10 +112,11 @@ FM::FM(QObject *parent) : QObject(parent)
 ,tag(Tagging::getInstance())
 #endif
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
-,dirLister(new KCoreDirLister(this))
+,dirLister( new KCoreDirLister(this))
+#else
+,dirLister( new QDirLister)
 #endif
-{
-	
+{	
 	#ifdef Q_OS_ANDROID
 	MAUIAndroid::checkRunTimePermissions({"android.permission.WRITE_EXTERNAL_STORAGE"});
 	#endif
@@ -111,13 +161,13 @@ FM::FM(QObject *parent) : QObject(parent)
 		});
 	};	
 	
-	connect(dirLister, static_cast<void (KCoreDirLister::*)(const QUrl&)>(&KCoreDirLister::completed), [&](QUrl url)
+	connect(dirLister, static_cast<void (KCoreDirLister::*)(const QUrl&)>(&KCoreDirLister::completed), this, [&](QUrl url)
 	{
 		qDebug()<< "PATH CONTENT READY" << url;		
 		emit this->pathContentReady(url);
 	});
 	
-	connect(dirLister, static_cast<void (KCoreDirLister::*)(const QUrl&, const KFileItemList &items)>(&KCoreDirLister::itemsAdded), [&](QUrl dirUrl, KFileItemList items)
+	connect(dirLister, static_cast<void (KCoreDirLister::*)(const QUrl&, const KFileItemList &items)>(&KCoreDirLister::itemsAdded), this, [&](QUrl dirUrl, KFileItemList items)
 	{
 		qDebug()<< "MORE ITEMS WERE ADDED";		
 		emit this->pathContentItemsReady({dirUrl, packItems(items)});
@@ -132,13 +182,13 @@ FM::FM(QObject *parent) : QObject(parent)
 	//                 emit this->pathContentChanged(dirLister->url());
 	//             });
 	
-	connect(dirLister, static_cast<void (KCoreDirLister::*)(const KFileItemList &items)>(&KCoreDirLister::itemsDeleted), [&](KFileItemList items)
+	connect(dirLister, static_cast<void (KCoreDirLister::*)(const KFileItemList &items)>(&KCoreDirLister::itemsDeleted), this, [&](KFileItemList items)
 	{
 		qDebug()<< "ITEMS WERE DELETED";			
 		emit this->pathContentItemsRemoved({dirLister->url(), packItems(items)});
 	});
 	
-	connect(dirLister, static_cast<void (KCoreDirLister::*)(const QList< QPair< KFileItem, KFileItem > > &items)>(&KCoreDirLister::refreshItems), [&](QList< QPair< KFileItem, KFileItem > > items)
+	connect(dirLister, static_cast<void (KCoreDirLister::*)(const QList< QPair< KFileItem, KFileItem > > &items)>(&KCoreDirLister::refreshItems), this, [&](QList< QPair< KFileItem, KFileItem > > items)
 	{
 		qDebug()<< "ITEMS WERE REFRESHED";
 		
@@ -148,10 +198,20 @@ FM::FM(QObject *parent) : QObject(parent)
 			return list;
 		});	
 		
-		emit this->pathContentItemsChanged(res);
-	});
-	#endif	
-	
+        emit this->pathContentItemsChanged(res);
+    });
+    #else
+    connect(dirLister, &QDirLister::itemReady, this, [&](FMH::MODEL item, QUrl url)
+    {
+        emit this->pathContentItemsReady(FMH::PATH_CONTENT {url, {item}});
+    });
+    
+    connect(dirLister, &QDirLister::itemsReady, this, [&](FMH::MODEL_LIST, QUrl url)
+    {
+        emit this->pathContentReady(url);
+    });    
+    #endif	
+    
 	#ifdef COMPONENT_SYNCING
 	connect(this->sync, &Syncing::listReady, [this](const FMH::MODEL_LIST &list, const QUrl &url)
 	{
@@ -208,45 +268,7 @@ FM::FM(QObject *parent) : QObject(parent)
 void FM::getPathContent(const QUrl& path, const bool &hidden, const bool &onlyDirs, const QStringList& filters, const QDirIterator::IteratorFlags &iteratorFlags)
 {
 	qDebug()<< "Getting async path contents";
-	
-	#if defined Q_OS_ANDROID || defined Q_OS_WIN32
-	QFutureWatcher<FMH::PATH_CONTENT> *watcher = new QFutureWatcher<FMH::PATH_CONTENT>;
-	connect(watcher, &QFutureWatcher<FMH::PATH_CONTENT>::finished, [this, watcher]()
-	{
-		const auto res = watcher->future().result();
-		emit this->pathContentItemsReady(res);
-		emit this->pathContentReady(res.path);
-		watcher->deleteLater();
-	});
-	
-	QFuture<FMH::PATH_CONTENT> t1 = QtConcurrent::run([=]() -> FMH::PATH_CONTENT
-	{
-		FMH::PATH_CONTENT res;
-		res.path = path;
-		
-		FMH::MODEL_LIST content;
-		
-		if (FMStatic::isDir(path))
-		{
-			QDir::Filters dirFilter;
-			
-			dirFilter = (onlyDirs ? QDir::AllDirs | QDir::NoDotDot | QDir::NoDot :
-			QDir::Files | QDir::AllDirs | QDir::NoDotDot | QDir::NoDot);
-			
-			if(hidden)
-				dirFilter = dirFilter | QDir::Hidden | QDir::System;
-			
-			QDirIterator it (path.toLocalFile(), filters, dirFilter, iteratorFlags);
-			while (it.hasNext())
-				content << FMH::getFileInfoModel(QUrl::fromLocalFile(it.next()));
-		}
-		
-		res.content = content;
-		return res;
-	});
-	watcher->setFuture(t1);
-	#else
-	
+
 	this->dirLister->setShowingDotFiles(hidden);
 	this->dirLister->setDirOnlyMode(onlyDirs);
 	
@@ -254,9 +276,7 @@ void FM::getPathContent(const QUrl& path, const bool &hidden, const bool &onlyDi
 	
 	if(this->dirLister->openUrl(path))
 		qDebug()<< "GETTING PATH CONTENT" << path;
-	
-	#endif
-	
+		
 }
 
 FMH::MODEL_LIST FM::getAppsPath()

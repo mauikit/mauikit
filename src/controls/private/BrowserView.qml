@@ -77,7 +77,12 @@ Maui.Page
         id: viewLoader
         anchors.fill: parent
         focus: true
-        sourceComponent: listViewBrowser
+        sourceComponent: switch(control.viewType)
+                         {
+                         case Maui.FMList.ICON_VIEW: return gridViewBrowser
+                         case Maui.FMList.LIST_VIEW: return listViewBrowser
+                         case Maui.FMList.MILLERS_VIEW: return millerViewBrowser
+                         }
 
         onLoaded: setCurrentFMList()
     }
@@ -250,8 +255,7 @@ Maui.Page
             cellHeight: itemSize * 1.5
             keepEmblemOverlay: settings.selectionMode
             showPreviewThumbnails: settings.showThumbnails
-			supportsRefreshing: true
-
+        
             BrowserHolder
             {
                 id: _holder
