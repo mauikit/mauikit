@@ -31,7 +31,7 @@ Maui.Dialog
     footBar.leftContent: ToolButton
     {
         icon.name: "document-open"
-        text: qsTr("Open")
+        text: qsTr("Open...")
         onClicked:
         {
             openFile(control.currentUrl)
@@ -45,7 +45,7 @@ Maui.Dialog
         {
             visible: !isDir
             icon.name: "document-share"
-            text: qsTr("Share")
+            text: qsTr("Share...")
             onClicked:
             {
                 shareButtonClicked(currentUrl)
@@ -56,7 +56,7 @@ Maui.Dialog
         ToolButton
         {
             icon.name: "love"
-            text: qsTr("Fav")
+            text: qsTr("Add to Favourites")
             checkable: true
             checked: control.isFav
             onClicked:
@@ -74,7 +74,7 @@ Maui.Dialog
     footBar.rightContent: ToolButton
     {
         icon.name: "documentinfo"
-        text: qsTr("Info")
+        text: qsTr("Info...")
         checkable: true
         checked: control.showInfo
         onClicked: control.showInfo = !control.showInfo
@@ -252,12 +252,12 @@ Maui.Dialog
         control.infoModel.append({key: "Type", value: iteminfo.mime})
         control.infoModel.append({key: "Date", value: iteminfo.date})
         control.infoModel.append({key: "Modified", value: iteminfo.modified})
-        control.infoModel.append({key: "Last read", value: iteminfo.lastread})
+        control.infoModel.append({key: "Last Read", value: iteminfo.lastread})
         control.infoModel.append({key: "Owner", value: iteminfo.owner})
         control.infoModel.append({key: "Group", value: iteminfo.group})
         control.infoModel.append({key: "Size", value: Maui.FM.formatSize(iteminfo.size)})
-        control.infoModel.append({key: "Symlink", value: iteminfo.symlink})
+		control.infoModel.append({key: "Symbolic Link", value: iteminfo.symlink})
         control.infoModel.append({key: "Path", value: iteminfo.path})
-        control.infoModel.append({key: "Icon name", value: iteminfo.icon})
+        control.infoModel.append({key: "Icon Name", value: iteminfo.icon})
     }
 }

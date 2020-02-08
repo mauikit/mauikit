@@ -30,7 +30,7 @@ Maui.Popup
     property string message : ""
     property string title: ""
     
-    property string acceptText: "Ok"
+    property string acceptText: "Yes"
     property string rejectText: "No"
     
     property bool defaultButtons: true

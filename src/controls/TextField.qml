@@ -128,7 +128,7 @@ TextField
 		
 		MenuItem
 		{
-			text: qsTr("Select all")
+			text: qsTr("Select All")
 			onTriggered: control.selectAll()
 			enabled: control.text.length
 		}
