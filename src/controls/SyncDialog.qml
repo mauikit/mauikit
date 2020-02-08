@@ -86,7 +86,7 @@ Maui.Dialog
             {
                 id: userField
                 Layout.fillWidth: true
-                placeholderText: qsTr("User name...")
+                placeholderText: qsTr("Username...")
                 inputMethodHints: Qt.ImhNoAutoUppercase
             }
 
@@ -94,7 +94,7 @@ Maui.Dialog
             {
                 id: passwordField
                 Layout.fillWidth: true
-                placeholderText: qsTr("User password...")
+                placeholderText: qsTr("Password...")
                 echoMode: TextInput.PasswordEchoOnEdit
                 inputMethodHints: Qt.ImhNoAutoUppercase
 

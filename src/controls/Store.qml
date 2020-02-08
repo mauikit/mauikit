@@ -47,7 +47,7 @@ Maui.Page
 		limit : 20	
 		onDownloadReady:
 		{
-			notify("dialog-information", "Download ready...", item.label + " is ready to use.\nFile has been saved in your machine at:\n"+item.path, function()
+			notify("dialog-information", "Download ready...", qsTr("%1 is ready to use.\nFile has been saved in your machine at:\n %2", item.label, item.path), function()
 			{
 				openFile(item.path)
 			})
