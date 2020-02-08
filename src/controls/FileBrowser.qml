@@ -92,7 +92,7 @@ Maui.Page
 	{
 		Layout.fillWidth: true
 		visible: control.currentFMList.count > 0
-		placeholderText: qsTr("Filter") + " " + control.currentFMList.count + " " + qsTr("files")
+		placeholderText: qsTr("Filter %1 files", control.currentFMList.count)
 		onAccepted: control.browserView.filter = text
 		onCleared: control.browserView.filter = ""
 	}	
@@ -115,7 +115,7 @@ Maui.Page
 	{
 		visible: String(control.currentPath).startsWith("trash:/")
 		icon.name: "trash-empty"	
-		text: qsTr("Empty trash")
+		text: qsTr("Empty Trash")
 		onClicked: Maui.FM.emptyTrash()
 	}
 	]
@@ -138,7 +138,7 @@ Maui.Page
 		
 		MenuItem
 		{
-			text: qsTr("Folders first")
+			text: qsTr("Show Folders First")
 			checked: control.currentFMList.foldersFirst
 			checkable: true
 			onTriggered: control.currentFMList.foldersFirst = !control.currentFMList.foldersFirst
@@ -293,8 +293,8 @@ Maui.Page
 		{
 			property var urls: []
 			
-			title: qsTr(String("Removing %1 files").arg(urls.length.toString()))
-			message: Maui.Handy.isAndroid ?  qsTr("This action will completely remove your files from your system. This action can not be undone.") : qsTr("You can move the file to the Trash or Delete it completely from your system. Which one you preffer?")
+			title: qsTr("Removing %1 files", urls.length)
+			message: Maui.Handy.isAndroid ?  qsTr("This action will completely remove your files from your system. This action can not be undone.") : qsTr("You can move the file to the trash or delete it completely from your system. Which one do you prefer?")
 			rejectButton.text: qsTr("Delete")
 			acceptButton.text: qsTr("Trash")
 			acceptButton.visible: Maui.Handy.isLinux
@@ -335,7 +335,7 @@ Maui.Page
 		
 		Maui.NewDialog
 		{
-			title: qsTr("New folder")
+			title: qsTr("New Folder")
 			message: qsTr("Create a new folder with a custom name")
 			acceptButton.text: qsTr("Create")
 			onFinished: control.currentFMList.createDir(text)
@@ -350,12 +350,12 @@ Maui.Page
 		
 		Maui.NewDialog
 		{
-			title: qsTr("New file")
+			title: qsTr("New File")
 			message: qsTr("Create a new file with a custom name and extension")
 			acceptButton.text: qsTr("Create")
 			onFinished: Maui.FM.createFile(control.currentPath, text)
 			rejectButton.visible: false
-			textEntry.placeholderText: qsTr("File name...")
+			textEntry.placeholderText: qsTr("Filename...")
 		}
 	}
 	
@@ -364,8 +364,8 @@ Maui.Page
 		id: renameDialogComponent
 		Maui.NewDialog
 		{
-			title: qsTr("Rename file")
-			message: qsTr("Rename a file or folder to a new custom name")
+			title: qsTr("Rename File")
+			message: qsTr("Rename a file or folder")
 			textEntry.text: itemMenu.item.label
 			textEntry.placeholderText: qsTr("New name...")
 			onFinished: Maui.FM.rename(itemMenu.item.path, textEntry.text)
@@ -423,13 +423,13 @@ Maui.Page
 						icon.name: "image-preview"
 						checkable: true
 						checked: settings.showThumbnails
-						Kirigami.FormData.label: qsTr("Thumbnails")
+						Kirigami.FormData.label: qsTr("Show Thumbnails")
 						onToggled: settings.showThumbnails = !settings.showThumbnails
 					}
 					
 					Switch
 					{
-						Kirigami.FormData.label: qsTr("Hidden files")
+						Kirigami.FormData.label: qsTr("Show Hidden Files")
 						checkable: true
 						checked: control.currentFMList.hidden
 						onToggled: control.currentFMList.hidden = !control.currentFMList.hidden
@@ -437,13 +437,13 @@ Maui.Page
 					
 					Kirigami.Separator
 					{
-						Kirigami.FormData.label: qsTr("Others")
+						Kirigami.FormData.label: qsTr("Interface")
 						Kirigami.FormData.isSection: true
 					}
 					
 					Switch
 					{
-						Kirigami.FormData.label: qsTr("Status bar")
+						Kirigami.FormData.label: qsTr("Show Status Bar")
 						checkable: true
 						checked: control.footBar.visible
 						onToggled: 
@@ -753,7 +753,7 @@ Maui.Page
 			
 			Action
 			{
-				text: qsTr("Open")
+				text: qsTr("Open...")
 				icon.name: "document-open"
 				onTriggered:
 				{
@@ -789,7 +789,7 @@ Maui.Page
 			
 			Action
 			{
-				text: qsTr("Tags")
+				text: qsTr("Tags...")
 				icon.name: "tag"
 				onTriggered: if(control.selectionBar)
 				{
@@ -801,7 +801,7 @@ Maui.Page
 			
 			Action
 			{
-				text: qsTr("Share")
+				text: qsTr("Share...")
 				icon.name: "document-share"
 				onTriggered:
 				{
@@ -812,7 +812,7 @@ Maui.Page
 			
 			Action
 			{
-				text: qsTr("Remove")
+				text: qsTr("Remove...")
 				icon.name: "edit-delete"
 				Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
 				

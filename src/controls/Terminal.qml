@@ -47,7 +47,7 @@ Item
 		MenuItem
 		{
 			id: searchButton
-			text: qsTr("Find")
+			text: qsTr("Find...")
 			onTriggered: findBar.visible = !findBar.visible
 		}
 	}	

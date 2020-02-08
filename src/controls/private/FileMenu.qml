@@ -38,7 +38,7 @@ Menu
 	
 	MenuItem
 	{
-		text: control.isFav ? qsTr("UnFav") : qsTr("Fav")
+		text: control.isFav ? qsTr("Remove from Favorites") : qsTr("Add to Favorites")
 		icon.name: "love"		
 		onTriggered:
 		{			
@@ -51,8 +51,8 @@ Menu
 	MenuItem
 	{
 		visible: control.isDir
+		text: qsTr("Open in new tab...")
 		icon.name: "tab-new"
-		text: qsTr("Open in tab")
 		onTriggered: openTab(item.path)
 	}
 	
@@ -84,7 +84,7 @@ Menu
 	MenuItem
 	{
 		visible: !control.isExec
-        text: qsTr("Rename")
+        text: qsTr("Rename...")
 		icon.name: "edit-rename"
 		onTriggered:
 		{
@@ -98,7 +98,7 @@ Menu
 	MenuItem
 	{
 		visible: !control.isExec && control.isDir
-		text: qsTr("Bookmark")
+		text: qsTr("Add to Bookmarks")
 		icon.name: "bookmark-new"
 		onTriggered:
 		{
@@ -110,7 +110,7 @@ Menu
 	MenuItem
 	{
 		visible: !control.isExec
-        text: qsTr("Tags")
+        text: qsTr("Tags...")
 		icon.name: "tag"
 		onTriggered:
 		{
@@ -122,7 +122,7 @@ Menu
 	MenuItem
 	{
 		visible: !control.isExec		
-        text: qsTr("Share")
+        text: qsTr("Share...")
 		icon.name: "document-share"
 		onTriggered:
 		{

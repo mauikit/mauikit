@@ -52,7 +52,7 @@ Maui.Dialog
 		id: _textField
 		visible: control.mode === modes.SAVE
 		Layout.fillWidth: true
-		placeholderText: qsTr("File name")
+		placeholderText: qsTr("File name...")
 		text: suggestedFileName
 	}
 	
@@ -73,11 +73,11 @@ Maui.Dialog
 	{
 		id: _confirmationDialog
 		
-		acceptButton.text: qsTr("Accept")
-		rejectButton.text: qsTr("Cancel")
+		acceptButton.text: qsTr("Yes")
+		rejectButton.text: qsTr("No")
 		
-		title: qsTr(textField.text+" already exists!")
-		message: qsTr("If you are sure you want to replace the existing file click on Accept, otherwise click on cancel and change the name of the file to something different...")	
+		title: qsTr("A file named %1 already exists!").arg(textField.text)
+		message: qsTr("This action will overwrite %1. Are you sure you want to do this?").arg(textField.text)	
 		
 		onAccepted: control.done()
 		onRejected: close()

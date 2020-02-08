@@ -67,7 +67,7 @@ Maui.SideBar
 		
 		MenuItem
 		{
-			text: qsTr("Edit")
+			text: qsTr("Edit...")
 		}
 		
 		MenuItem

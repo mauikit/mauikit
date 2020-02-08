@@ -21,7 +21,7 @@ Maui.Editor
 		onLoaded:
 		{
 			infoModel.insert(0, {key:"Length", value: control.body.length.toString()})
-			infoModel.insert(0, {key:"Line count", value: control.body.lineCount.toString()})
+			infoModel.insert(0, {key:"Line Count", value: control.body.lineCount.toString()})
 		}
 	}
 }
