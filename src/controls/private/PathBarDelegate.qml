@@ -7,6 +7,7 @@ import org.kde.mauikit 1.0 as Maui
 ItemDelegate
 {
     id: control
+    property int arrowWidth : 8
     property bool isCurrentListItem : ListView.isCurrentItem
     implicitWidth: _label.implicitWidth + Maui.Style.space.big
     
@@ -14,23 +15,22 @@ ItemDelegate
     ToolTip.delay: 1000
     ToolTip.timeout: 5000
     ToolTip.visible: control.hovered
-    ToolTip.text: model.path  
+    ToolTip.text: model.path 
     
-    background: Rectangle
-    {
-		color: isCurrentListItem || hovered ? Qt.rgba(Kirigami.Theme.highlightColor.r, Kirigami.Theme.highlightColor.g, Kirigami.Theme.highlightColor.b, 0.2)  : "transparent"
+    background: Maui.PathArrowBackground
+    {        
+        arrowWidth: control.arrowWidth
+        color: isCurrentListItem || hovered ? Kirigami.Theme.highlightColor : pathBarBG.border.color
         
-        Kirigami.Separator
+        Maui.PathArrowBackground
         {
-            anchors
-            {
-                top: parent.top
-                bottom: parent.bottom
-                right: parent.right               
-            }            
-            color: pathBarBG.border.color
+            anchors.fill: parent
+            anchors.margins: 1
+            arrowWidth: parent.arrowWidth
+            color:  Kirigami.Theme.backgroundColor
         }
     }
+    
     
     signal rightClicked()
     
@@ -51,7 +51,7 @@ ItemDelegate
 		onPressAndHold : control.pressAndHold()
 	}
 
-    Label
+    contentItem: Label
     {
         id: _label
         text: model.label
@@ -61,6 +61,7 @@ ItemDelegate
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment:  Qt.AlignVCenter
         elide: Qt.ElideRight
+        wrapMode: Text.NoWrap
         font.pointSize: Maui.Style.fontSizes.default
         color: Kirigami.Theme.textColor
     }    

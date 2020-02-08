@@ -252,16 +252,7 @@ Item
 			Layout.fillHeight: true
 			Layout.fillWidth: true
 			
-			middleContent: [
-			
-			//		Kirigami.ActionToolBar
-			//		{
-			//			display: control.width > Kirigami.Units.gridUnit * 25 ? ToolButton.TextUnderIcon : ToolButton.IconOnly
-			//			actions: control.actions
-			//			Layout.fillWidth: true
-			//			Layout.fillHeight: true
-			//		},
-			Repeater
+			middleContent: Repeater
 			{
 				model: control.actions
 				
@@ -269,15 +260,15 @@ Item
 				{
 					action: modelData
 								Layout.preferredWidth: implicitWidth
-Layout.fillHeight: true
+// Layout.fillHeight: true
 					//                    display: control.width > Kirigami.Units.gridUnit * 25 ? ToolButton.TextUnderIcon : ToolButton.IconOnly
 					Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
-					display: ToolButton.TextUnderIcon
+// 					display: ToolButton.TextUnderIcon
 					onClicked : _listContainer.showList = false
 					
 				}
 			}
-			]
+			
 		}
 		
 		Maui.Badge

@@ -260,7 +260,7 @@ ToolBar
         {
             id: layout
             width: control.width - control.margins - Maui.Style.space.medium
-            height: control.height
+            height: mainFlickable.height
             
             RowLayout
             {

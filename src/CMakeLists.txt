@@ -20,6 +20,7 @@ set(mauikit_SRCS
     utils/models/pathlist.cpp
     utils/model_template/mauilist.cpp
     utils/model_template/mauimodel.cpp
+    controls/private/src/patharrowbackground.cpp
     )
 
 set(mauikit_HDRS
@@ -32,6 +33,7 @@ set(mauikit_HDRS
     utils/mauiapp.h
     utils/model_template/mauilist.h
     utils/model_template/mauimodel.h
+    controls/private/src/patharrowbackground.h
     )
 
 if(${COMPONENT_ACCOUNTS})

@@ -50,7 +50,7 @@ Item
 	{
 		id: pathBarBG
 		anchors.fill: parent		
-		color: pathEntry ? Kirigami.Theme.backgroundColor : Kirigami.Theme.backgroundColor
+		color: pathEntry ? Kirigami.Theme.backgroundColor : Qt.darker(Kirigami.Theme.backgroundColor, 1.05)
 		radius: Maui.Style.radiusV
 		opacity: 1
 		border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
@@ -148,24 +148,18 @@ Item
 						height: width
 					}
 				}				
-			}
-			
-			Kirigami.Separator
-			{
-				Layout.fillHeight: true
-				color: pathBarBG.border.color
-			}
-		
+			}		
 			
 			ListView
 			{
 				id: _listView
 				Layout.fillHeight: true
 				Layout.fillWidth: true
+				property int pathArrowWidth: 8
 				
 				orientation: ListView.Horizontal
 				clip: true
-				spacing: 0
+				spacing: -(pathArrowWidth+1)
 				
 				focus: true
 				interactive: true
@@ -176,6 +170,7 @@ Item
 				delegate: PathBarDelegate
 				{
 					id: delegate
+					arrowWidth: _listView.pathArrowWidth
 					height: parent.height
 					width: Math.max(Maui.Style.iconSizes.medium * 2, implicitWidth)
 					Connections
