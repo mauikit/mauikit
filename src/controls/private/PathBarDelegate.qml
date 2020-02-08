@@ -11,6 +11,10 @@ ItemDelegate
     implicitWidth: _label.implicitWidth + Maui.Style.space.big
     
     hoverEnabled: true
+    ToolTip.delay: 1000
+    ToolTip.timeout: 5000
+    ToolTip.visible: control.hovered
+    ToolTip.text: model.path  
     
     background: Rectangle
     {

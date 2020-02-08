@@ -27,17 +27,20 @@ class KFilePlacesModel;
 class QFileSystemWatcher;
 class PlacesList : public MauiList
 {
-    Q_OBJECT
+	Q_OBJECT
+	
 	Q_PROPERTY(QList<int> groups READ getGroups WRITE setGroups NOTIFY groupsChanged())	
-
+	
 public:  
 	PlacesList(QObject *parent = nullptr);
-    ~PlacesList();
 	
 	FMH::MODEL_LIST items() const override;
 	
 	QList<int> getGroups() const;
 	void setGroups(const QList<int> &value);
+	
+	void classBegin() override final;
+	void componentComplete() override final;	
 	
 protected:
 	void setList();
@@ -47,14 +50,16 @@ public slots:
 	QVariantMap get(const int &index) const;
 	void refresh();
 	void clearBadgeCount(const int &index);
-    
-    void addPlace(const QUrl &path);
-    void removePlace(const int &index);
+	
+	void addPlace(const QUrl &path);
+	void removePlace(const int &index);
+	bool contains(const QUrl &path);
+	int indexOf(const QUrl &path);
 	
 private:
 	FM *fm;
 	FMH::MODEL_LIST list;
-    KFilePlacesModel *model;
+	KFilePlacesModel *model;
 	QHash<QString, int> count;
 	QList<int> groups;
 	
@@ -62,7 +67,13 @@ private:
 	void watchPath(const QString &path);
 	
 	void setCount();
-    int indexOf(const QString &path);
+	int indexOf(const QString &path);
+	
+	#if defined Q_OS_LINUX && !defined Q_OS_ANDROID	
+	static FMH::MODEL modelPlaceInfo(const KFilePlacesModel &model, const QModelIndex &index,  const FMH::PATHTYPE_KEY &type);
+	#endif
+	static FMH::MODEL_LIST getGroup(const KFilePlacesModel &model, const FMH::PATHTYPE_KEY &type);	
+	
 	
 signals:
 	void groupsChanged();

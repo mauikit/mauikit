@@ -31,7 +31,7 @@ Item
     
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
-    readonly property int barHeight : Maui.Style.iconSizes.large  + Maui.Style.space.large
+    readonly property int barHeight : Maui.Style.iconSizes.large  + (Maui.Style.space.large * 1.5)
 
     property var selectedPaths: []
     property var selectedItems: []
@@ -82,7 +82,7 @@ Item
                undefined
     
     
-    visible: selectionList.count > 0
+    visible: control.count > 0
 
     Rectangle
     {
@@ -136,8 +136,8 @@ Item
         anchors.verticalCenter: parent.top
         anchors.horizontalCenter: parent.left
 
-        iconName: "window-close"
-        Kirigami.Theme.backgroundColor: Kirigami.Theme.negativeTextColor
+        iconName: "qrc://assets/dialog-close.svg"
+		Kirigami.Theme.backgroundColor: Kirigami.Theme.negativeTextColor
         Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
         z: parent.z +1
         onClicked:
@@ -218,7 +218,8 @@ Item
                 
                 ScrollBar.horizontal: ScrollBar 
                 {
-					policy: Kirigami.Settings.isMobile? Qt.ScrollBarAlwaysOff : Qt.ScrollBarAsNeeded				
+					policy: Kirigami.Settings.isMobile? Qt.ScrollBarAlwaysOff : Qt.ScrollBarAsNeeded
+					
 				}
                 
                 model: ListModel{}
@@ -227,16 +228,19 @@ Item
                 {
                     id: delegate
                     isCurrentItem: ListView.isCurrentItem
-                    height: selectionList.height
-                    width: height
+                    height: selectionList.height * 0.95
+                    width: height + Maui.Style.space.medium
                     folderSize: Maui.Style.iconSizes.big
                     showLabel: true
                     keepEmblemOverlay: true
+                    leftEmblem: "list-remove"
                     showEmblem: !Kirigami.Settings.isMobile
                     showTooltip: true
                     showThumbnails: true
                     emblemSize: Maui.Style.iconSizes.small
-
+                    Kirigami.Theme.backgroundColor: "transparent"
+                    Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
+					
                     Connections
                     {
                         target: delegate
@@ -364,8 +368,7 @@ Item
 			selectionList.currentIndex = index
 //             notify(item.icon, qsTr("Item already selected!"), String("The item '%1' is already in the selection box").arg(item.label), null, 4000)
         }
-        
-        control.forceActiveFocus()    
+         
         animate(Kirigami.Theme.backgroundColor)
     }
     

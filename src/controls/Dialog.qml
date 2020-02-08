@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 2.3
+import QtQuick 2.5
+import QtQuick.Controls 2.10
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
@@ -35,13 +35,15 @@ Maui.Popup
     
     property bool defaultButtons: true
     property bool confirmationDialog: false
-    property bool entryField: false
     
     default property alias content : page.contentData
 
     property alias acceptButton : _acceptButton
     property alias rejectButton : _rejectButton
+    
     property alias textEntry : _textEntry
+    property alias entryField: _textEntry.visible
+    
     property alias page : page
     property alias footBar : page.footBar
     property alias headBar: page.headBar
@@ -53,7 +55,7 @@ Maui.Popup
     clip: false
 
     maxWidth: Maui.Style.unit * 300
-    maxHeight: (_pageContent.implicitHeight * 1.2) + page.footBar.height + Maui.Style.space.huge + page.padding
+    maxHeight: (_pageContent.implicitHeight * 1.2) +( page.footBar.height ) + Maui.Style.space.huge + page.padding
 
     widthHint: 0.9
     heightHint: 0.9
@@ -61,9 +63,10 @@ Maui.Popup
     Maui.Badge
     {
         id: _closeButton
-        iconName: "window-close"
-        Kirigami.Theme.backgroundColor: hovered ?  Kirigami.Theme.negativeTextColor : Kirigami.Theme.complementaryBackgroundColor
-        Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
+        parent: Application.Overlay
+        iconName: "qrc:/assets/dialog-close.svg"
+        //         Kirigami.Theme.backgroundColor: hovered ?  Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
+        //         Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
 
         anchors
         {
@@ -76,9 +79,10 @@ Maui.Popup
         onClicked: close()
     }
 
-   Maui.Page
+    Maui.Page
     {
         id: page
+        clip: true
         anchors.fill: parent
         anchors.margins: Maui.Style.unit
         padding: Maui.Style.space.medium
@@ -89,7 +93,7 @@ Maui.Popup
             id: _rejectButton
             visible: defaultButtons
             Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
-            Kirigami.Theme.backgroundColor: Qt.rgba(Kirigami.Theme.negativeTextColor.r, Kirigami.Theme.negativeTextColor.g, Kirigami.Theme.negativeTextColor.b, 0.2)
+            Kirigami.Theme.backgroundColor: Qt.lighter(Kirigami.Theme.negativeTextColor, 1.7)
 
             text: rejectText
             onClicked: rejected()
@@ -99,8 +103,8 @@ Maui.Popup
         {
             id: _acceptButton
             visible: defaultButtons
-            Kirigami.Theme.backgroundColor: Qt.rgba(Kirigami.Theme.positiveTextColor.r, Kirigami.Theme.positiveTextColor.g, Kirigami.Theme.positiveTextColor.b, 0.2)
-            Kirigami.Theme.textColor: Kirigami.Theme.positiveTextColor
+            Kirigami.Theme.backgroundColor: Qt.lighter(Kirigami.Theme.positiveTextColor, 2)
+			Kirigami.Theme.textColor: Kirigami.Theme.positiveTextColor
             text: acceptText
             onClicked: accepted()
         }
@@ -128,11 +132,10 @@ Maui.Popup
 
             Label
             {
-                width: parent.width
-                height: visible ? implicitHeight : 0
                 visible: title.length > 0
-                Layout.fillWidth: visible
-                Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignCenter
 
                 color: Kirigami.Theme.textColor
                 text: title
@@ -146,19 +149,21 @@ Maui.Popup
             Kirigami.ScrollablePage
             {
                 visible: message.length > 0
-                Layout.fillHeight: visible
-                Layout.fillWidth: visible
+                Layout.preferredHeight: Math.min(contentHeight, 500)
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignCenter
+                
                 Kirigami.Theme.backgroundColor: "transparent"
                 padding: 0
                 leftPadding: padding
                 rightPadding: padding
                 topPadding: padding
                 bottomPadding: padding
-                Layout.alignment: Qt.AlignLeft | Qt.AlignTop
 
                 Label
                 {
                     id: body
+                    width: parent.width
                     padding: 0
                     text: message
                     textFormat : TextEdit.AutoText
@@ -166,18 +171,20 @@ Maui.Popup
                     font.pointSize:Maui.Style.fontSizes.default
                     wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
                     elide: Text.ElideLeft
+                    verticalAlignment: Qt.AlignVCenter
                 }
             }
-
+            
             Maui.TextField
             {
-                id: _textEntry
-                focus: control.entryField
-                onAccepted: control.accepted()
-                Layout.fillWidth: entryField
-                height: entryField ?  Maui.Style.iconSizes.big : 0
-                visible: entryField
-            }
+				id: _textEntry
+				visible: false
+				Layout.fillWidth: true
+				Layout.alignment: Qt.AlignCenter
+				focus: visible
+				onAccepted: control.accepted()
+			}
+            
         }
     }
 }

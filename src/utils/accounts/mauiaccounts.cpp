@@ -19,23 +19,17 @@
 #include "mauiaccounts.h"
 #include "accountsdb.h"
 
-MauiAccounts::MauiAccounts(QObject *parent) : MauiList(parent), 
-db(new AccountsDB(parent))
+MauiAccounts::MauiAccounts() : MauiList(nullptr), 
+db(new AccountsDB(nullptr))
 {
 	this->setAccounts();
 }
 
 MauiAccounts::~MauiAccounts()
 {
-}
-
-MauiAccounts *MauiAccounts::m_instance = nullptr;
-MauiAccounts *MauiAccounts::instance(QObject *parent)
-{
-    if(MauiAccounts::m_instance == nullptr)
-        MauiAccounts::m_instance = new MauiAccounts(parent);
-
-    return MauiAccounts::m_instance;
+	qDebug() << "DELETING MAUI ACCOUNTS INSTANCE";
+	this->db->deleteLater();
+	this->db = nullptr;
 }
 
 FMH::MODEL_LIST MauiAccounts::items() const
@@ -156,6 +150,9 @@ void MauiAccounts::setCurrentAccountIndex(const int& index)
 	if(index >= this->m_data.size() || index < 0)
 		return;	
 	
+	if(index == this->m_currentAccountIndex)
+		return;	
+
 	//make sure the account exists
 	this->m_currentAccountIndex = index;	
 	this->m_currentAccount = FMH::toMap(this->m_data.at(m_currentAccountIndex));

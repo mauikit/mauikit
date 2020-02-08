@@ -28,7 +28,7 @@ Item
 {
 	id: control    
 	
-	implicitHeight: Maui.Style.iconSizes.big
+    implicitHeight: Maui.Style.rowHeight
 	
 	property string url : ""
 	property bool pathEntry: false
@@ -61,8 +61,7 @@ Item
 	{
 		id: _loader        
 		anchors.fill: parent
-		sourceComponent: pathEntry ? _pathEntryComponent : _pathCrumbsComponent
-		
+		sourceComponent: pathEntry ? _pathEntryComponent : _pathCrumbsComponent		
 		onLoaded:
 		{
 			if(sourceComponent === _pathCrumbsComponent)
@@ -126,6 +125,7 @@ Item
 			anchors.fill: parent
 			property alias listView: _listView            
             spacing: 0
+            clip: true
 
             MouseArea
 			{
@@ -142,7 +142,7 @@ Item
 					Kirigami.Icon
 					{
 						anchors.centerIn: parent
-						source: Kirigami.Settings.isMobile ?  "user-home-sidebar" : "user-home"					
+						source: Qt.platform.os == "android" ?  "user-home-sidebar" : "user-home"					
 						color: control.Kirigami.Theme.textColor   
 						width: Maui.Style.iconSizes.medium
 						height: width

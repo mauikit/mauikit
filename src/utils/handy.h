@@ -28,7 +28,6 @@
 
 #include <QVariantMap>
 
-#include "utils.h"
 
 /*!
  * \brief The Handy class contains useful static methods to be used as an attached property to the Maui application
@@ -40,11 +39,21 @@ class MAUIKIT_EXPORT Handy : public QObject
 #endif
 {
     Q_OBJECT
-
+    Q_PROPERTY(bool isTouch MEMBER m_isTouch CONSTANT FINAL)
+	Q_PROPERTY(bool isAndroid READ isAndroid CONSTANT FINAL)
+	Q_PROPERTY(bool isLinux READ isLinux CONSTANT FINAL)
+	Q_PROPERTY(bool isWindows READ isWindows CONSTANT FINAL)
+	Q_PROPERTY(bool isMac READ isMac CONSTANT FINAL)
+    
+    Q_PROPERTY(bool singleClick MEMBER m_singleClick NOTIFY singleClickChanged CONSTANT)
+	
 public:
     Handy(QObject *parent = nullptr);
-    ~Handy();
-
+	
+private:
+	bool m_isTouch = false;
+    bool m_singleClick = true;
+    
 public slots:
 
     /*!
@@ -77,14 +86,26 @@ public slots:
      * \brief Returns the text contained in the clipboard
      * \return QString containing clipboard text
      */
-    static QString getClipboard();
-
+	static QString getClipboardText();
+	static QVariantMap getClipboard();
+	
     /*!
      * \brief Copies text to the clipboard
      * \param text text to be copied to the clipboard
      * \return
      */
-    static bool copyToClipboard(const QString &text);
+	static bool copyTextToClipboard(const QString &text);
+	static bool copyToClipboard(const QVariantMap &value);
+	
+	//TODO move to Device.h the defs and implementation of device specifics
+	static bool isTouch();
+	static bool isAndroid();
+	static bool isWindows();
+	static bool isMac();
+	static bool isLinux();
+    
+signals:
+    void singleClickChanged();
 };
 
 #endif // HANDY_H

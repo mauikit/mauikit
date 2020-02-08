@@ -49,7 +49,7 @@ Rectangle {
     border.color: !control.enabled ? control.Kirigami.Theme.disabledTextColor
         : checked ? control.Kirigami.Theme.highlightColor: control.Kirigami.Theme.textColor
     border.width: 2
-    radius: 2
+    radius: control.autoExclusive ? Math.min(height, width) : 2
 
     property Item control
     property bool checked : control.checked

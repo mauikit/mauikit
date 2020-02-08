@@ -72,7 +72,7 @@ public slots:
     static QStringList sdDirs();
     static void call(const QString &tel);
 
-    static bool checkRunTimePermissions();
+    static bool checkRunTimePermissions(const QStringList &permissions);
 
 
 signals:

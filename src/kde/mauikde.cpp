@@ -32,7 +32,6 @@
 #include <KColorScheme>
 #include <KColorSchemeManager>
 #include <QModelIndex>
-#include <QSettings>
 #include <QColor>
 #include <QVariantList>
 #include <KConfig>
@@ -46,11 +45,6 @@ MAUIKDE::MAUIKDE(QObject *parent) : QObject(parent)
 {
 }
 
-MAUIKDE::~MAUIKDE()
-{
-	
-}
-
 static QVariantMap createActionItem(const QString &label, const QString &actionId, const QVariant &argument = QVariant())
 {
 	QVariantMap map;
@@ -59,8 +53,7 @@ static QVariantMap createActionItem(const QString &label, const QString &actionI
 	map["actionId"] = actionId;
 	
 	if (argument.isValid())
-		map["actionArgument"] = argument;
-	
+		map["actionArgument"] = argument;	
 	
 	return map;
 }
@@ -72,32 +65,27 @@ QVariantList MAUIKDE::services(const QUrl &url)
 	
 	if (url.isValid())
 	{
-		auto fileItem = new KFileItem(url);
-		fileItem->determineMimeType();
+		KFileItem fileItem(url);	
 		
-		KService::List services = KMimeTypeTrader::self()->query(fileItem->mimetype(), "Application");
+		for(const auto &service : KMimeTypeTrader::self()->query(fileItem.mimetype(), "Application"))
+		{
+			const QString text = service->name().replace('&', "&&");
+			QVariantMap item = createActionItem(text, "_kicker_fileItem_openWith", service->entryPath());
+			item["icon"] = service->icon();
+			item["serviceExec"] = service->exec();
+			
+			list << item;
+		}			
 		
-		if (!services.isEmpty())
-			foreach (const KService::Ptr service, services)
-			{
-				const QString text = service->name().replace('&', "&&");
-				QVariantMap item = createActionItem(text, "_kicker_fileItem_openWith", service->entryPath());
-				item["icon"] = service->icon();
-				item["serviceExec"] = service->exec();
-				
-				list << item;
-			}
-			
-			
-			list << createActionItem(i18n("Properties"), "_kicker_fileItem_properties");
-			
-			return list;
-	} else return list;
+		// 		list << createActionItem(i18n("Properties"), "_kicker_fileItem_properties");			
+	} 
+	
+	return list;
 }
 
 bool MAUIKDE::sendToDevice(const QString &device, const QString &id, const QStringList &urls)
 {
-	for(auto url : urls)
+	for(const auto &url : urls)
 		KdeConnect::sendToDevice(device, id, url);
 	
 	return true;

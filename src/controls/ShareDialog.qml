@@ -25,33 +25,42 @@ import org.kde.kirigami 2.7 as Kirigami
 
 Maui.Dialog
 {
-    id: control 
+    id: control
     property var itemUrls : []
 
     widthHint: 0.9
-    
-    maxHeight: Math.min(grid.implicitHeight, maxWidth) + (page.padding * 2) + headBar.height
-	maxWidth: Maui.Style.unit * 500
-	
-	verticalAlignment: Qt.AlignBottom
-	
+
+    maxHeight: Math.max(_layout.contentHeight, maxWidth) + (page.padding * 2.5) + headBar.height
+    maxWidth: Maui.Style.unit * 500
+
+    verticalAlignment: Qt.AlignBottom
+
     defaultButtons: false
-		
-	page.title: qsTr("Open with")
-	headBar.visible: true
-    
-    Maui.GridBrowser
+
+    page.title: qsTr("Share with")
+    headBar.visible: true
+
+    Kirigami.ScrollablePage
     {
-		id: grid
-		anchors.fill: parent
-		showEmblem: false
-		model: ListModel {}
-		onItemClicked:
-		{
-			grid.currentIndex = index
-			triggerService(index)
+        id: _layout
+        anchors.fill: parent
+        leftPadding: 0
+        rightPadding: 0
+        
+        Maui.GridBrowser
+        {
+			id: grid
+			width: parent.width
+			showEmblem: false
+			model: ListModel {}
+			onItemClicked:
+			{
+				grid.currentIndex = index
+				triggerService(index)
+			}
 		}
-	}
+    }
+
 
     onOpened: populate()
 
@@ -83,7 +92,6 @@ Maui.Dialog
         if(services.length > 0)
             for(i in services)
                 grid.model.append(services[i])
-
     }
 
     function triggerService(index)

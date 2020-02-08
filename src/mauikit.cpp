@@ -50,21 +50,15 @@
 
 #ifdef COMPONENT_EDITOR
 #include "documenthandler.h"
-#include "syntaxhighlighterutil.h"
-
-#ifdef STATIC_MAUIKIT
-#include "kquicksyntaxhighlighter/kquicksyntaxhighlighter.h"
-#endif
-
 #endif
 
 #ifdef Q_OS_ANDROID
 #include "mauiandroid.h"
-#else
+#elif defined Q_OS_LINUX
 #include "mauikde.h"
 #endif
 
-#if defined Q_OS_ANDROID || defined APPIMAGE_PACKAGE || defined MAUIKIT_STYLE
+#if defined MAUIKIT_STYLE
 #include <QIcon>
 #include <QQuickStyle>
 #endif
@@ -80,15 +74,15 @@ QUrl MauiKit::componentUrl(const QString &fileName) const
 
 void MauiKit::registerTypes(const char *uri)
 {
-
     Q_ASSERT(uri == QLatin1String("org.kde.mauikit"));
 
     qmlRegisterSingletonType(componentUrl(QStringLiteral("Style.qml")), uri, 1, 0, "Style");
     qmlRegisterType(componentUrl(QStringLiteral("ToolBar.qml")), uri, 1, 0, "ToolBar");
     qmlRegisterType(componentUrl(QStringLiteral("ApplicationWindow.qml")), uri, 1, 0, "ApplicationWindow");
     qmlRegisterType(componentUrl(QStringLiteral("Page.qml")), uri, 1, 0, "Page");
-    qmlRegisterType(componentUrl(QStringLiteral("ShareDialog.qml")), uri, 1, 0, "ShareDialog");
-    qmlRegisterType(componentUrl(QStringLiteral("PieButton.qml")), uri, 1, 0, "PieButton");
+	qmlRegisterType(componentUrl(QStringLiteral("ShareDialog.qml")), uri, 1, 0, "ShareDialog");
+	qmlRegisterType(componentUrl(QStringLiteral("OpenWithDialog.qml")), uri, 1, 0, "OpenWithDialog");
+	qmlRegisterType(componentUrl(QStringLiteral("PieButton.qml")), uri, 1, 0, "PieButton");
     qmlRegisterType(componentUrl(QStringLiteral("SideBar.qml")), uri, 1, 0, "SideBar");
     qmlRegisterType(componentUrl(QStringLiteral("AbstractSideBar.qml")), uri, 1, 0, "AbstractSideBar");
     qmlRegisterType(componentUrl(QStringLiteral("Holder.qml")), uri, 1, 0, "Holder");
@@ -109,12 +103,25 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("Badge.qml")), uri, 1, 0, "Badge");
     qmlRegisterType(componentUrl(QStringLiteral("GridView.qml")), uri, 1, 0, "GridView");
     qmlRegisterType(componentUrl(QStringLiteral("ColorsBar.qml")), uri, 1, 0, "ColorsBar");
-	qmlRegisterType(componentUrl(QStringLiteral("ImageViewer.qml")), uri, 1, 0, "ImageViewer");
-	qmlRegisterType(componentUrl(QStringLiteral("TabBar.qml")), uri, 1, 0, "TabBar");
-	qmlRegisterType(componentUrl(QStringLiteral("TabButton.qml")), uri, 1, 0, "TabButton");
-	
+    qmlRegisterType(componentUrl(QStringLiteral("ImageViewer.qml")), uri, 1, 0, "ImageViewer");
+    qmlRegisterType(componentUrl(QStringLiteral("TabBar.qml")), uri, 1, 0, "TabBar");
+    qmlRegisterType(componentUrl(QStringLiteral("TabButton.qml")), uri, 1, 0, "TabButton");
+    qmlRegisterType(componentUrl(QStringLiteral("ActionGroup.qml")), uri, 1, 0, "ActionGroup");
+    qmlRegisterType(componentUrl(QStringLiteral("ActionSideBar.qml")), uri, 1, 0, "ActionSideBar");
+    qmlRegisterType(componentUrl(QStringLiteral("ToolActions.qml")), uri, 1, 0, "ToolActions");
+    qmlRegisterType(componentUrl(QStringLiteral("ToolButtonMenu.qml")), uri, 1, 0, "ToolButtonMenu");
+    qmlRegisterType(componentUrl(QStringLiteral("ListItemTemplate.qml")), uri, 1, 0, "ListItemTemplate");
+    qmlRegisterType(componentUrl(QStringLiteral("GridItemTemplate.qml")), uri, 1, 0, "GridItemTemplate");
+
+    qmlRegisterType(componentUrl(QStringLiteral("FloatingButton.qml")), uri, 1, 0, "FloatingButton");
+
     qmlRegisterType(componentUrl(QStringLiteral("PathBar.qml")), uri, 1, 0, "PathBar");
     qmlRegisterType<PathList>(uri, 1, 0, "PathList");
+    
+    /** 1.1 **/
+	qmlRegisterType(componentUrl(QStringLiteral("labs/SelectionBar.qml")), uri, 1, 1, "SelectionBar");
+	qmlRegisterType(componentUrl(QStringLiteral("labs/ShareDialog.qml")), uri, 1, 1, "ShareDialog");
+	
 
     /** STORE CONTROLS, MODELS AND INTERFACES **/
 #ifdef COMPONENT_STORE
@@ -133,30 +140,27 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType<PlacesList>(uri, 1, 0, "PlacesList");
     qmlRegisterType<FMList>(uri, 1, 0, "FMList");
     qmlRegisterSingletonType<FMStatic>(uri, 1, 0, "FM",
-                                        [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject* {
+                                       [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject* {
         Q_UNUSED(engine)
         Q_UNUSED(scriptEngine)
         return new FMStatic;
     });
-    //     qmlRegisterSingletonType(componentUrl(QStringLiteral("private/FileBrowser.qml")), uri, 1, 0, "FileMenu");
+
     qmlRegisterType(componentUrl(QStringLiteral("FileBrowser.qml")), uri, 1, 0, "FileBrowser");
     qmlRegisterType(componentUrl(QStringLiteral("PlacesSidebar.qml")), uri, 1, 0, "PlacesSidebar");
     qmlRegisterType(componentUrl(QStringLiteral("PlacesListBrowser.qml")), uri, 1, 0, "PlacesListBrowser");
     qmlRegisterType(componentUrl(QStringLiteral("FilePreviewer.qml")), uri, 1, 0, "FilePreviewer");
     qmlRegisterType(componentUrl(QStringLiteral("FileDialog.qml")), uri, 1, 0, "FileDialog");
 #endif
-	
+
 #ifdef COMPONENT_EDITOR	
     /** EDITOR CONTROLS **/
-    qmlRegisterType<DocumentHandler>(uri, 1, 0, "DocumentHandler");
-    qmlRegisterType<SyntaxHighlighterUtil>();
-    qmlRegisterType(componentUrl(QStringLiteral("Editor.qml")), uri, 1, 0, "Editor");
-	
-#ifdef STATIC_MAUIKIT
-    qmlRegisterType<KQuickSyntaxHighlighter>("org.kde.kquicksyntaxhighlighter", 0, 1, "KQuickSyntaxHighlighter");
-#endif
-	
-#endif
+	qmlRegisterType<DocumentHandler>(uri, 1, 0, "DocumentHandler");
+	qmlRegisterType<Alerts>();
+    qmlRegisterType<DocumentAlert>();
+	qmlRegisterType(componentUrl(QStringLiteral("Editor.qml")), uri, 1, 0, "Editor");
+    qmlRegisterType(componentUrl(QStringLiteral("private/DocumentPreview.qml")), uri, 1, 0, "DocumentPreview");
+#endif 
 
     /** PLATFORMS SPECIFIC CONTROLS **/
 #ifdef Q_OS_ANDROID
@@ -166,7 +170,7 @@ void MauiKit::registerTypes(const char *uri)
         Q_UNUSED(scriptEngine)
         return new MAUIAndroid;
     });
-#else
+#elif defined Q_OS_LINUX
     qmlRegisterType(componentUrl(QStringLiteral("Terminal.qml")), uri, 1, 0, "Terminal");
     qmlRegisterSingletonType<MAUIKDE>(uri, 1, 0, "KDE",
                                       [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject* {
@@ -174,20 +178,22 @@ void MauiKit::registerTypes(const char *uri)
         Q_UNUSED(scriptEngine)
         return new MAUIKDE;
     });
+#elif defined Q_OS_WIN32
+    //here window platform integration interfaces
 #endif
 
     /** DATA MODELING TEMPLATED INTERFACES **/
     qmlRegisterType<MauiList>(); //ABSTRACT BASE LIST
     qmlRegisterType<MauiModel>(uri, 1, 0, "BaseModel"); //BASE MODEL
 
-    /** TAGGING INTERFACES AND MODELS **/
 #ifdef COMPONENT_TAGGING
-    qmlRegisterType<TagsList>("TagsList", 1, 0, "TagsList");
+	/** TAGGING INTERFACES AND MODELS **/
+	qmlRegisterType<TagsList>("TagsList", 1, 0, "TagsList");
     qmlRegisterType<TagsModel>("TagsModel", 1, 0, "TagsModel");
     qmlRegisterType(componentUrl(QStringLiteral("private/TagList.qml")), uri, 1, 0, "TagList");
     qmlRegisterType(componentUrl(QStringLiteral("TagsBar.qml")), uri, 1, 0, "TagsBar");
     qmlRegisterType(componentUrl(QStringLiteral("TagsDialog.qml")), uri, 1, 0, "TagsDialog");
-#endif
+#endif 
 
     /** MAUI APPLICATION SPECIFIC PROPS **/
 
@@ -205,7 +211,7 @@ void MauiKit::registerTypes(const char *uri)
         return new Handy;
     });
 
-#if defined Q_OS_ANDROID || defined APPIMAGE_PACKAGE || defined MAUIKIT_STYLE
+#if defined MAUIKIT_STYLE
     this->initResources();
 #endif
 
@@ -216,7 +222,11 @@ void MauiKit::initResources()
 {
 #if defined QICON_H && defined QQUICKSTYLE_H
     Q_INIT_RESOURCE(mauikit);
+#ifdef ICONS_PNG
+    Q_INIT_RESOURCE(icons_png);
+#else
     Q_INIT_RESOURCE(icons);
+#endif
     Q_INIT_RESOURCE(style);
     QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
     QIcon::setThemeName("Luv");
@@ -224,4 +234,4 @@ void MauiKit::initResources()
 #endif
 }
 
-#include "moc_mauikit.cpp"
+//#include "moc_mauikit.cpp"

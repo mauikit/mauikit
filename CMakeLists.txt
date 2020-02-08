@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.10)
 
 set(REQUIRED_QT_VERSION 5.10.0)
 set(REQUIRED_KF5_VERSION 5.60.0)
@@ -23,7 +23,8 @@ option(COMPONENT_TERMINAL "Build terminal component" ON)
 option(COMPONENT_STORE "Build store component" ON)
 option(COMPONENT_TAGGING "Build tagging component" ON)
 option(COMPONENT_SYNCING "Build syncing component" ON)
-    
+option(MAUIKIT_STYLE "Use Mauikit style and Luv icons" OFF)
+
 include(GenerateExportHeader)
 include(ECMSetupVersion)
 include(ECMGenerateHeaders)

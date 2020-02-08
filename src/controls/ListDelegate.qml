@@ -28,11 +28,11 @@ Maui.ItemDelegate
 	id: control
 	
 	property bool labelVisible : true
-	property int iconSize : Maui.Style.iconSizes.medium    
+	property alias iconSize : _template.iconSizeHint  
 	
-	property alias label: controlLabel.text
-	property alias iconName: controlIcon.source  	
-	
+	property alias label: _template.text1
+	property alias iconName: _template.iconSource  
+	property alias count : _badge.text
 	implicitWidth: parent.width
 	implicitHeight: Math.max(control.iconSize + Maui.Style.space.tiny, Maui.Style.rowHeight)	
 	
@@ -47,66 +47,27 @@ Maui.ItemDelegate
 	ToolTip.visible: hovered 
 	ToolTip.text: qsTr(control.label)
 	
-	RowLayout
-	{
-		anchors.fill: parent
-		
-		Item
-		{
-			Layout.fillHeight: true
-			Layout.fillWidth: !labelVisible
-			Layout.preferredWidth: model.icon ? parent.height : 0
-			visible: model.icon !== typeof("undefined")
-			
-			Kirigami.Icon
-			{
-				id: controlIcon
-				anchors.centerIn: parent
-				source: model.icon ? model.icon : ""
-				color: control.Kirigami.Theme.textColor
-				height: control.iconSize
-				width: height
-			}
-		}
-		
-		Label
-		{
-			id: controlLabel
-			visible: control.labelVisible
-			Layout.fillHeight: true
-			Layout.fillWidth: true
-			Layout.alignment: Qt.AlignVCenter
-			verticalAlignment:  Qt.AlignVCenter
-			horizontalAlignment: Qt.AlignLeft
-			
-			text: model.label
-			font.bold: false
-			elide: Text.ElideRight
-			wrapMode: Text.NoWrap
-			font.pointSize: Kirigami.Settings.isMobile ? Maui.Style.fontSizes.big :
-			Maui.Style.fontSizes.default
-			color: control.Kirigami.Theme.textColor
-		}
-		
-		Item
-		{
-			visible: typeof model.count !== "undefined" && model.count && model.count > 0 && control.labelVisible
-			Layout.fillHeight: true
-			Layout.preferredWidth: visible ? Math.max(Maui.Style.iconSizes.big + Maui.Style.space.small, _badge.implicitWidth) : 0
-			Layout.alignment: Qt.AlignRight
-			Maui.Badge
-			{
-				id: _badge
-				anchors.centerIn: parent
-				text: model.count                
-			}
-		}		
-	}		
 	
+	Maui.ListItemTemplate
+	{
+		id: _template
+		anchors.fill: parent
+		iconVisible: true
+		labelsVisible: control.labelVisible
+		
+		Maui.Badge
+		{
+			id: _badge
+			text: control.count     
+			
+			visible: control.count.length > 0 && control.labelVisible
+			
+		}
+	}	
 	
 	function clearCount()
 	{
 		console.log("CLEANING SIDEBAR COUNT")
-		model.count = 0
+		control.count = ""
 	}
 }

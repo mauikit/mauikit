@@ -22,10 +22,11 @@
 import QtQuick 2.6
 import QtQuick.Templates 2.3 as T
 import org.kde.kirigami 2.3 as Kirigami
+import org.kde.mauikit 1.0 as Maui
 
 T.Button {
     id: controlRoot
-    implicitWidth: Math.max(background.implicitWidth, contentItem.implicitWidth + Kirigami.Units.smallSpacing )
+    implicitWidth: Math.max(background.implicitWidth, contentItem.implicitWidth + Maui.Style.space.medium )
     implicitHeight: background.implicitHeight
     hoverEnabled: true
     contentItem: Label {
@@ -39,8 +40,8 @@ T.Button {
     }
     
     background: Rectangle {
-        implicitWidth: (Kirigami.Settings.isMobile ? Kirigami.Units.iconSizes.medium : Kirigami.Units.iconSizes.medium) * 2 + Kirigami.Units.smallSpacing
-        implicitHeight: Kirigami.Settings.isMobile ? Kirigami.Units.iconSizes.medium : Kirigami.Units.iconSizes.medium
+        implicitWidth:  (Maui.Style.iconSizes.medium * 3) + Maui.Style.space.big
+        implicitHeight: Maui.Style.iconSizes.medium + Maui.Style.space.small
      
         color: Kirigami.Theme.backgroundColor
         border.color: controlRoot.hovered ? Kirigami.Theme.buttonHoverColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))

@@ -8,18 +8,8 @@ Maui.ImageViewer
 {
 	id: control
 	anchors.fill: parent
-	image.source: currentUrl
-	
-// 	Connections:
-// 	{
-// 		target: image
-// 		
-// 		onStatusChanged:		
-// 		{
-// 			if(target.status === Image.Ready)
-// 				infoModel.insert(0, {key:"Dimension", value: control.image.implicitWidth + " x " + control.image.implicitHeight})
-// 		}		
-// 	}
+	source: currentUrl
+    animated: iteminfo.mime === "image/gif"
 }
 	
 

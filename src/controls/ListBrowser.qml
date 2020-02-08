@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.10
+import QtQuick.Controls 2.10
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
@@ -38,20 +38,20 @@ Kirigami.ScrollablePage
     property bool showPreviewThumbnails: true
     
     property alias model : _listView.model
-	property alias delegate : _listView.delegate
-	property alias section : _listView.section
-	property alias contentY: _listView.contentY
-	property alias currentIndex : _listView.currentIndex
-	property alias currentItem : _listView.currentItem
-	property alias count : _listView.count
-	property alias cacheBuffer : _listView.cacheBuffer
-	
+    property alias delegate : _listView.delegate
+    property alias section : _listView.section
+    property alias contentY: _listView.contentY
+    property alias currentIndex : _listView.currentIndex
+    property alias currentItem : _listView.currentItem
+    property alias count : _listView.count
+    property alias cacheBuffer : _listView.cacheBuffer
+    
     property alias topMargin: _listView.topMargin
     property alias bottomMargin: _listView.bottomMargin
     property alias rightMargin: _listView.rightMargin
     property alias leftMarging: _listView.leftMargin
     property alias listView: _listView
-	property alias holder : _holder
+    property alias holder : _holder
     
     signal itemClicked(int index)
     signal itemDoubleClicked(int index)
@@ -62,47 +62,45 @@ Kirigami.ScrollablePage
     
     signal areaClicked(var mouse)
     signal areaRightClicked()   
-	signal keyPress(var key)
-	
-   spacing: 0
-   focus: true
-	
-	Kirigami.Theme.backgroundColor: "transparent"
-	padding: 0
-	leftPadding: padding
-	rightPadding: padding
-	topPadding: padding
-	bottomPadding: padding
-	
-	onKeyPress:
-	{
-		if(key == Qt.Key_Return)
-			control.itemClicked(currentIndex)		
-	}
-	
+    signal keyPress(var event)
+    
+    spacing: 0
+    focus: true	
+    padding: 0
+    leftPadding: padding
+    rightPadding: padding
+    topPadding: padding
+    bottomPadding: padding    
+    
+    Keys.enabled: false
+    Kirigami.Theme.colorSet: Kirigami.Theme.View       
+    supportsRefreshing: false 
+    
     ListView
     {	
-		id: _listView
+        id: _listView
         focus: true
-        clip: true
-        
+        clip: true           
         spacing: Maui.Style.space.tiny
         snapMode: ListView.NoSnap
-        boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
-		
-        interactive: Kirigami.Settings.isMobile
+        boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : 
+        Flickable.OvershootBounds
+        
+        interactive: Maui.Handy.isTouch
         highlightFollowsCurrentItem: true
         highlightMoveDuration: 0
+        highlightResizeDuration : 0
         
         keyNavigationEnabled : bool
         keyNavigationWraps : bool
-        Keys.onPressed: control.keyPress(event.key) 		
-
-		Maui.Holder
-		{
-			id: _holder
-			anchors.fill : parent		
-		}	
+        Keys.onPressed: control.keyPress(event)
+// 		ScrollBar.vertical: ScrollBar { }
+		
+        Maui.Holder
+        {
+            id: _holder
+            anchors.fill : parent		
+        }	
         
         delegate: Maui.ListBrowserDelegate
         {
@@ -161,7 +159,7 @@ Kirigami.ScrollablePage
                 }
             }
         }
-                
+        
         MouseArea
         {
             anchors.fill: parent
@@ -169,9 +167,9 @@ Kirigami.ScrollablePage
             acceptedButtons:  Qt.RightButton | Qt.LeftButton
             onClicked: 
             {
-				control.forceActiveFocus()				
-				control.areaClicked(mouse)
-			}
+                control.forceActiveFocus()				
+                control.areaClicked(mouse)
+            }
             onPressAndHold: control.areaRightClicked()
         }
     }  

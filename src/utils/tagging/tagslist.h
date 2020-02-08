@@ -12,6 +12,7 @@ class TagsList : public QObject
     Q_PROPERTY(bool abstract READ getAbstract WRITE setAbstract NOTIFY abstractChanged)
 	Q_PROPERTY(bool strict READ getStrict WRITE setStrict NOTIFY strictChanged)
 	Q_PROPERTY(QStringList urls READ getUrls WRITE setUrls NOTIFY urlsChanged)
+	Q_PROPERTY(QStringList tags READ getTags NOTIFY tagsChanged)
 	Q_PROPERTY(QString lot READ getLot WRITE setLot NOTIFY lotChanged)
 	Q_PROPERTY(QString key READ getKey WRITE setKey NOTIFY keyChanged)
 	
@@ -40,6 +41,7 @@ public:
     }; Q_ENUM(KEYS)
 	
     explicit TagsList(QObject *parent = nullptr);
+	
 	TAG::DB_LIST items() const;
 	
     TagsList::KEYS getSortBy() const;
@@ -60,6 +62,8 @@ public:
 	QString getKey() const;
 	void setKey(const QString &value);
 	
+	QStringList getTags() const;
+	
 
 private:
     TAG::DB_LIST list;
@@ -67,7 +71,7 @@ private:
 	void sortList();
 	Tagging *tag;
 	
-	TAG::DB_LIST toModel(const QVariantList &data);
+	const TAG::DB_LIST toModel(const QVariantList &data);
    
 	bool abstract = false;
 	bool strict = true;
@@ -93,10 +97,12 @@ signals:
 	void lotChanged();
 	void keyChanged();
 	void sortByChanged();
+	void tagsChanged();
 
 public slots:    
     QVariantMap get(const int &index) const;
 	void append(const QString &tag);
+	void append(const QStringList &tags);
 	bool insert(const QString &tag);
 	void insertToUrls(const QString &tag);
 	void insertToAbstract(const QString &tag);

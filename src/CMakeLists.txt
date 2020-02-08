@@ -52,27 +52,24 @@ if(${COMPONENT_ACCOUNTS})
         utils/accounts/mauiaccounts.h
         utils/accounts/accountsdb.h
         )
-    qt5_add_resources(accounts_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/utils/accounts/accounts.qrc)
-    add_compile_definitions(COMPONENT_ACCOUNTS)
+    add_definitions(-DCOMPONENT_ACCOUNTS)
 endif()
 
 if(${COMPONENT_EDITOR})
     message(STATUS "INCLUDING EDITOR COMPONENT")
     set(editor_SRCS
         utils/editor/documenthandler.cpp
-        utils/editor/syntaxhighlighterutil.cpp
         )
 
     set(editor_HDRS
         utils/editor/documenthandler.h
-        utils/editor/syntaxhighlighterutil.h
         )
 
     include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/editor
         ${CMAKE_CURRENT_BINARY_DIR}/utils/editor
         )
-    add_compile_definitions(COMPONENT_EDITOR)
+    add_definitions(-DCOMPONENT_EDITOR)
 endif()
 
 if(${COMPONENT_FM})
@@ -82,18 +79,20 @@ if(${COMPONENT_FM})
         fm/fm.cpp
         fm/fmlist.cpp
         fm/placeslist.cpp
+        fm/downloader.cpp
         )
 
     set(fm_HDRS
         fm/fm.h
         fm/fmlist.h
         fm/placeslist.h
+        fm/downloader.h
         )
     include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/fm
         ${CMAKE_CURRENT_BINARY_DIR}/fm
         )
-    add_compile_definitions(COMPONENT_FM)
+    add_definitions(-DCOMPONENT_FM)
 endif()
 
 if(${COMPONENT_TAGGING})
@@ -117,7 +116,7 @@ if(${COMPONENT_TAGGING})
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/tagging
         ${CMAKE_CURRENT_BINARY_DIR}/utils/tagging
         )
-    add_compile_definitions(COMPONENT_TAGGING)
+    add_definitions(-DCOMPONENT_TAGGING)
 endif()
 
 if(${COMPONENT_SYNCING})
@@ -148,7 +147,7 @@ if(${COMPONENT_SYNCING})
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/syncing/libwebdavclient/lib/utils
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/syncing/libwebdavclient/lib/dto
         )
-    add_compile_definitions(COMPONENT_SYNCING)
+    add_definitions(-DCOMPONENT_SYNCING)
 endif()
 
 if(${COMPONENT_STORE})
@@ -170,20 +169,20 @@ if(${COMPONENT_STORE})
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/store
         ${CMAKE_CURRENT_BINARY_DIR}/utils/store
         )
-    add_compile_definitions(COMPONENT_STORE)
+    add_definitions(-DCOMPONENT_STORE)
 endif()
 #use dbus on linux, bsd etc, but not andoid and apple stuff
 
 #options - for the appimage
-option(IS_APPIMAGE_PACKAGE "If set to true then the icons and styled is packaged as well")
+option(IS_APPIMAGE_PACKAGE "If set to true then the icons and styled is packaged as well" OFF)
 
 if(ANDROID OR IS_APPIMAGE_PACKAGE OR MAUIKIT_STYLE)
-    if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/android/icons/luv-icon-theme/.git)
+    if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/maui-style/icons/luv-icon-theme/.git)
         find_package(Git REQUIRED)
-        execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/milohr/luv-icon-theme.git ${CMAKE_CURRENT_SOURCE_DIR}/android/icons/luv-icon-theme)
+        execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/milohr/luv-icon-theme.git ${CMAKE_CURRENT_SOURCE_DIR}/maui-style/icons/luv-icon-theme)
     endif()
 
-    list(APPEND mauikit_SRCS android/icons.qrc)
+    list(APPEND mauikit_SRCS maui-style/icons.qrc)
 endif()
 
 if (ANDROID)
@@ -258,7 +257,6 @@ target_link_libraries(MauiKit
     Qt5::Core
     Qt5::Sql
     Qt5::Gui
-    KF5::Notifications
     KF5::I18n
     KF5::ConfigCore
     KF5::KIOCore
@@ -272,6 +270,7 @@ target_link_libraries(MauiKit
     Qt5::Svg
     Qt5::Network
     Qt5::Xml
+    KF5::I18n
     KF5::Service
     KF5::KIONTLM
     KF5::ConfigWidgets
@@ -319,6 +318,7 @@ install(FILES
     ${fm_HDRS}
     ${syncing_HDRS}
     ${store_HDRS}
+    ${editor_HDRS}
     ${accounts_HDRS}
     ${CMAKE_CURRENT_BINARY_DIR}/mauikit_export.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit

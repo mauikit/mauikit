@@ -75,6 +75,6 @@ T.TextArea {
         y: parent.height - height - control.bottomPadding / 2
         implicitWidth: 120
         height: control.activeFocus ? 2 : 1
-        color: control.activeFocus ? control. Kirigami.Theme.highlightColor : control.Kirigami.Theme.disabledTextColor
+        color: control.Kirigami.Theme.backgroundColor
     }
 }

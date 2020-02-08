@@ -30,9 +30,9 @@ Maui.ItemDelegate
 	id: control 
 	
 	property bool showDetailsInfo: false
-	property int folderSize : iconSize
+	property int folderSize : Maui.Style.iconSizes.medium
 	property int emblemSize: Maui.Style.iconSizes.medium
-	property bool showLabel : true
+	property alias showLabel : _template.labelsVisible
 	property bool showEmblem : false
 	property bool showTooltip : false
 	property bool showThumbnails : false
@@ -53,6 +53,17 @@ Maui.ItemDelegate
 	ToolTip.visible: control.hovered && control.showTooltip
 	ToolTip.text: model.tooltip ? model.tooltip : model.path  
 	
+	
+	property alias label1 : _template.label1
+	property alias label2 : _template.label2
+	property alias label3 : _template.label3
+	property alias label4 : _template.label4
+	property alias iconItem : _template.iconItem
+	property alias iconVisible : _template.iconVisible
+	property alias iconSizeHint : _template.iconSizeHint
+	property alias imageSource : _template.imageSource
+	property alias iconSource : _template.iconSource
+		
 	DropArea 
 	{
 		id: _dropArea
@@ -92,137 +103,20 @@ Maui.ItemDelegate
         size: Maui.Style.iconSizes.small
 	}
 	
-	
-	Component
+	Maui.ListItemTemplate
 	{
-		id: _imgComponent
-		
-		Item
-		{
-			anchors.fill: parent
-			Image
-			{
-				id: img
-				anchors.centerIn: parent
-				source: model.thumbnail ? model.thumbnail : undefined
-				height: control.folderSize
-				width: height
-				sourceSize.width: width
-				sourceSize.height: height
-				horizontalAlignment: Qt.AlignHCenter
-				verticalAlignment: Qt.AlignVCenter
-				fillMode: Image.PreserveAspectCrop
-				cache: false
-				asynchronous: true
-				smooth: !Kirigami.Settings.isMobile
-				
-				layer.enabled: true
-				layer.effect: OpacityMask
-				{
-					maskSource: Item
-					{
-						width: img.width
-						height: img.height
-						Rectangle
-						{
-							anchors.centerIn: parent
-							width: img.width
-							height: img.height
-							radius: Maui.Style.radiusV
-						}
-					}
-				}
-			}
-			
-			Loader
-			{
-				anchors.centerIn: parent				
-				sourceComponent: img.status === Image.Ready ? undefined : _iconComponent
-			}
-		}
-	}
-	
-	Component
-	{
-		id: _iconComponent
-		
-        Kirigami.Icon
-		{
-            source: model.icon
-            fallback: "qrc:/assets/application-x-zerosize.svg"
-            height: control.folderSize
-            width: height
-		}
-	}
-	
-	RowLayout
-	{
-		opacity: (model.hidden == true || model.hidden == "true" )? 0.5 : 1
+		id: _template
 		anchors.fill: parent
-		spacing: Maui.Style.space.small
-		Item
-		{
-			Layout.preferredHeight: control.folderSize
-			Layout.preferredWidth: control.folderSize
-			Layout.alignment: Qt.AlignCenter
-			Layout.leftMargin: Maui.Style.space.medium 
-			
-			Loader
-			{
-				anchors.centerIn: parent
-				sourceComponent: model.mime ? (model.mime.indexOf("image") > -1 && control.showThumbnails ? _imgComponent : _iconComponent) : _iconComponent 
-			}                    
-		}  
 		
-		Label
-		{
-			id: label
-			text: model.label
-			Layout.margins: Maui.Style.space.tiny
-			Layout.fillHeight: true
-			Layout.fillWidth: true
-			horizontalAlignment: Qt.AlignLeft
-			verticalAlignment: Qt.AlignVCenter
-			elide: Qt.ElideRight
-			wrapMode: Text.Wrap
-			color: control.Kirigami.Theme.textColor				
-		}
+		isCurrentItem : control.isCurrentItem
 		
+		iconSizeHint: control.folderSize
 		
-		ColumnLayout
-		{
-			Layout.alignment: Qt.AlignRight
-			Layout.rightMargin: Maui.Style.space.medium
-			
-			Label
-			{
-				Layout.alignment: Qt.AlignRight					
-				Layout.fillHeight: true
-				horizontalAlignment: Qt.AlignRight
-				verticalAlignment: Qt.AlignBottom
-				elide: Qt.ElideRight
-				wrapMode: Text.NoWrap
-				font.pointSize: Maui.Style.fontSizes.small
-				color: control.Kirigami.Theme.textColor
-				opacity: control.isCurrentItem ? 1 : 0.5
-				text: model.mime === "inode/directory" ? (model.count ? model.count + qsTr(" items") : "") : Maui.FM.formatSize(model.size)
-			}
-			
-			Label
-			{
-				Layout.alignment: Qt.AlignRight					
-				Layout.fillHeight: true
-				
-				text: Maui.FM.formatDate(model.modified, "MM/dd/yyyy")
-				
-				horizontalAlignment: Qt.AlignRight
-				verticalAlignment: Qt.AlignTop
-				elide: Qt.ElideRight
-				wrapMode: Text.NoWrap
-				font.pointSize: Maui.Style.fontSizes.small
-				color: control.Kirigami.Theme.textColor
-				opacity: control.isCurrentItem ? 1 : 0.5
-			}
-		}
-	}	
+		imageSource: model.mime &&  model.thumbnail ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails ? model.thumbnail : "") : ""	
+		iconSource: model.icon
+		
+		label1.text: model.label
+		label3.text : model.mime === "inode/directory" ? (model.count ? model.count + qsTr(" items") : "") : Maui.FM.formatSize(model.size)
+		label4.text: Maui.FM.formatDate(model.modified, "MM/dd/yyyy")
+	}
 }

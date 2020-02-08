@@ -26,7 +26,8 @@ import org.kde.kirigami 2.7 as Kirigami
 Maui.GridView
 {
 	id: control
-	
+	Kirigami.Theme.colorSet: Kirigami.Theme.View
+
 	itemSize : Maui.Style.iconSizes.large * 2
 	property bool showEmblem : true
 	property bool keepEmblemOverlay : false
@@ -43,12 +44,6 @@ Maui.GridView
 	signal leftEmblemClicked(int index)	
 	signal itemRightClicked(int index)
 	
-	onKeyPress:
-	{
-		console.log(Qt.Key_S, Qt.Key_P)
-		if(key == Qt.Key_Return)
-			control.itemClicked(currentIndex)		
-	}
 	
 	delegate: Maui.GridBrowserDelegate
 	{

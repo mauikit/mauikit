@@ -21,7 +21,6 @@
         <file>icons/luv-icon-theme/Luv/places/16/user-trash.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/22/album.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/22/amarok_artist.svg</file>
-        <file>icons/luv-icon-theme/Luv/actions/22/amarok_clock.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/22/amarok_lyrics.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/22/amarok_playlist_refresh.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/22/application-menu.svg</file>
@@ -258,9 +257,6 @@
         <file>icons/luv-icon-theme/Luv/mimetypes/32/application-vnd.ms-excel.svg</file>
         <file>icons/luv-icon-theme/Luv/mimetypes/32/application-vnd.ms-powerpoint.svg</file>
         <file>icons/luv-icon-theme/Luv/mimetypes/32/application-vnd.ms-word.svg</file>
-        <file>icons/luv-icon-theme/Luv/mimetypes/32/application-vnd.openxmlformats-officedocument.presentationml.presentation.svg</file>
-        <file>icons/luv-icon-theme/Luv/mimetypes/32/application-vnd.openxmlformats-officedocument.spreadsheetml.sheet.svg</file>
-        <file>icons/luv-icon-theme/Luv/mimetypes/32/application-vnd.openxmlformats-officedocument.wordprocessingml.document.svg</file>
         <file>icons/luv-icon-theme/Luv/mimetypes/32/application-wps-office.doc.svg</file>
         <file>icons/luv-icon-theme/Luv/mimetypes/32/application-wps-office.ppt.svg</file>
         <file>icons/luv-icon-theme/Luv/mimetypes/32/application-wps-office.xlsx.svg</file>
@@ -280,9 +276,6 @@
         <file>icons/luv-icon-theme/Luv/mimetypes/48/application-vnd.ms-excel.svg</file>
         <file>icons/luv-icon-theme/Luv/mimetypes/48/application-vnd.ms-powerpoint.svg</file>
         <file>icons/luv-icon-theme/Luv/mimetypes/48/application-vnd.ms-word.svg</file>
-        <file>icons/luv-icon-theme/Luv/mimetypes/48/application-vnd.openxmlformats-officedocument.presentationml.presentation.svg</file>
-        <file>icons/luv-icon-theme/Luv/mimetypes/48/application-vnd.openxmlformats-officedocument.spreadsheetml.sheet.svg</file>
-        <file>icons/luv-icon-theme/Luv/mimetypes/48/application-vnd.openxmlformats-officedocument.wordprocessingml.document.svg</file>
         <file>icons/luv-icon-theme/Luv/mimetypes/48/application-x-cd-image.svg</file>
         <file>icons/luv-icon-theme/Luv/mimetypes/48/application-x-iso.svg</file>
         <file>icons/luv-icon-theme/Luv/mimetypes/48/inode-directory.svg</file>
@@ -483,7 +476,6 @@
         <file>icons/luv-icon-theme/Luv/actions/22/dialer-pad.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/22/dialer-call.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/22/dialer-call-start.svg</file>
-        <file>icons/luv-icon-theme/Luv/actions/22/dialer-call-pause.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/22/dialer-call-end.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/22/add-image.svg</file>
         <file>icons/luv-icon-theme/Luv/apps/22/search.svg</file>
@@ -698,5 +690,10 @@
         <file>icons/luv-icon-theme/Luv/mimetypes/64/audio-mpeg.svg</file>
         <file>icons/luv-icon-theme/Luv/mimetypes/64/audio-mp4.svg</file>
         <file>icons/luv-icon-theme/Luv/mimetypes/64/audio-flac.svg</file>
+        <file>icons/luv-icon-theme/Luv/apps/22/utilities-terminal.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/arrow-down.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/22/edit-paste.svg</file>
+        <file>icons/luv-icon-theme/Luv/actions/16/love.svg</file>
+        <file>icons/luv-icon-theme/Luv/mimetypes/64/audio-x-generic.svg</file>
     </qresource>
 </RCC>

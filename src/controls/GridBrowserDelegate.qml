@@ -40,60 +40,63 @@ Maui.ItemDelegate
     property string rightEmblem
     property string leftEmblem
     
-    property alias dropArea : _dropArea    
+    property alias dropArea : _dropArea
     
     isCurrentItem : GridView.isCurrentItem || isSelected    
     
     signal emblemClicked(int index)
     signal rightEmblemClicked(int index)
     signal leftEmblemClicked(int index)
-	signal contentDropped(var drop)
+    signal contentDropped(var drop)
     
     ToolTip.delay: 1000
     ToolTip.timeout: 5000
     ToolTip.visible: control.hovered && control.showTooltip
     ToolTip.text: model.tooltip ? model.tooltip : model.path 
+    
+   background: Item {}
+    
+    DropArea 
+    {
+        id: _dropArea
+        anchors.fill: parent
+        enabled: control.draggable
         
-        DropArea 
+        Rectangle 
         {
-			id: _dropArea
-			anchors.fill: parent
-			enabled: control.draggable
-			
-			Rectangle 
-			{
-				anchors.fill: parent
-				radius: Maui.Style.radiusV
-				color: control.Kirigami.Theme.highlightColor		
-				visible: parent.containsDrag
-			}
-			
-			onDropped:
-			{
-				control.contentDropped(drop)
-			}
-		}
-		
-		Drag.active: mouseArea.drag.active && control.draggable
-		Drag.dragType: Drag.Automatic
-		Drag.supportedActions: Qt.CopyAction
-		Drag.mimeData:
-		{
-			"text/uri-list": model.path
-		}
-	
-	
+            anchors.fill: parent
+            radius: Maui.Style.radiusV
+            color: control.Kirigami.Theme.highlightColor		
+            visible: parent.containsDrag
+        }
+        
+        onDropped:
+        {
+            control.contentDropped(drop)
+        }
+    }
+    
+    Drag.active: mouseArea.drag.active && control.draggable
+    Drag.dragType: Drag.Automatic
+    Drag.supportedActions: Qt.CopyAction
+    Drag.mimeData:
+    {
+        "text/uri-list": model.path
+    }
+    
+    
     Maui.Badge
     {
         id: _leftEmblemIcon
         iconName: control.leftEmblem
         visible: (control.hovered || control.keepEmblemOverlay || control.isSelected) && control.showEmblem  && control.leftEmblem
+        z: mouseArea.z + 1
         anchors.top: parent.top
         anchors.left: parent.left
         onClicked: leftEmblemClicked(index)
         size: Maui.Style.iconSizes.small
     }
-
+    
     Maui.Badge
     {
         id: _rightEmblemIcon
@@ -105,53 +108,42 @@ Maui.ItemDelegate
         anchors.right: parent.right
         onClicked: rightEmblemClicked(index)
     }
-
+    
     Component
     {
         id: _imgComponent
         
-        Item
+        Image
         {
-            anchors.fill: parent
-
-            Image
+            id: img
+            anchors.centerIn: parent
+            source: model.thumbnail && model.thumbnail.length ? model.thumbnail : ""
+            height: Math.min (parent.height, img.implicitHeight)
+            width: Math.min(parent.width, img.implicitWidth)
+            sourceSize.width: width
+            sourceSize.height: height
+            horizontalAlignment: Qt.AlignHCenter
+            verticalAlignment: Qt.AlignVCenter
+            fillMode: Image.PreserveAspectCrop
+            cache: true
+            asynchronous: true
+            smooth: !Kirigami.Settings.isMobile
+            
+            layer.enabled: true
+            layer.effect: OpacityMask
             {
-                id: img
-                anchors.centerIn: parent
-                source: model.thumbnail ? model.thumbnail : undefined
-                height: Math.min (parent.height, img.implicitHeight)
-                width: Math.min(parent.width * 0.98, img.implicitWidth)
-                sourceSize.width: width
-                sourceSize.height: height
-                horizontalAlignment: Qt.AlignHCenter
-                verticalAlignment: Qt.AlignVCenter
-                fillMode: Image.PreserveAspectCrop
-                cache: false
-                asynchronous: true
-                smooth: !Kirigami.Settings.isMobile
-                
-                layer.enabled: true
-                layer.effect: OpacityMask
+                maskSource: Item
                 {
-                    maskSource: Item
+                    width: img.width
+                    height: img.height
+                    Rectangle
                     {
+                        anchors.centerIn: parent
                         width: img.width
                         height: img.height
-                        Rectangle
-                        {
-                            anchors.centerIn: parent
-                            width: img.width
-                            height: img.height
-                            radius: Maui.Style.radiusV
-                        }
+                        radius: Maui.Style.radiusV
                     }
                 }
-            }
-            
-            Loader
-            {
-                anchors.centerIn: parent				
-                sourceComponent: img.status === Image.Ready ? undefined : _iconComponent
             }
         }
     }
@@ -168,7 +160,7 @@ Maui.ItemDelegate
                 anchors.centerIn: parent
                 source: model.icon
                 fallback: "qrc:/assets/application-x-zerosize.svg"
-                height: control.folderSize
+                height: Math.min(control.folderSize, parent.width)
                 width: height
             }
         }
@@ -183,25 +175,51 @@ Maui.ItemDelegate
         
         Loader
         {
-			sourceComponent: model.mime ? (model.mime.indexOf("image") > -1 && control.showThumbnails ? _imgComponent : _iconComponent) : _iconComponent 
-			Layout.preferredHeight: control.folderSize
+            id: _loader
+            sourceComponent: model.mime ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails && model.thumbnail && model.thumbnail.length? _imgComponent : _iconComponent) : _iconComponent
+            Layout.preferredHeight: Math.min(control.folderSize, width)
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignCenter
             Layout.margins: Maui.Style.unit		
-		}        
+        }        
         
-        Label
+        Item
         {
-            id: label
-            text: model.label
             Layout.margins: Maui.Style.space.tiny
             Layout.fillHeight: true
             Layout.fillWidth: true
-            horizontalAlignment: Qt.AlignHCenter
-            verticalAlignment: Qt.AlignVCenter
-            elide: Qt.ElideRight
-            wrapMode: Text.Wrap
-            color: control.Kirigami.Theme.textColor				
-        }
+            
+            Label
+            {
+                id: label
+                text: model.label
+                width: parent.width
+                anchors.centerIn: parent
+                height: Math.min(implicitHeight + Maui.Style.space.medium, _layout.height - _loader.height)
+                horizontalAlignment: Qt.AlignHCenter
+                verticalAlignment: Qt.AlignVCenter
+                elide: Qt.ElideRight
+                wrapMode: Text.Wrap
+                color: control.Kirigami.Theme.textColor		
+                
+                Rectangle
+                {
+                    anchors.fill: parent
+                    
+                    Behavior on color
+                    {
+                        ColorAnimation
+                        {
+                            duration: Kirigami.Units.longDuration
+                        }
+                    }
+                    color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
+                    
+                    radius: control.radius
+                    border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"
+                }
+            }
+        }        
+        
     }
 }

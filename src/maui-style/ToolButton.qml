@@ -39,6 +39,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Controls.impl 2.3
 import QtQuick.Templates 2.3 as T
 import org.kde.kirigami 2.7 as Kirigami
+import org.kde.mauikit 1.0 as Maui
 
 T.ToolButton
 {
@@ -50,16 +51,19 @@ T.ToolButton
                              contentItem.implicitHeight + topPadding + bottomPadding)
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
-    padding: Kirigami.Units.smallSpacing
-    spacing: Kirigami.Units.smallSpacing
-
-    icon.width: Kirigami.Units.iconSizes.smallMedium
-    icon.height: Kirigami.Units.iconSizes.smallMedium
+    padding: Maui.Style.space.tiny
+    spacing: Maui.Style.space.tiny
+    rightPadding: Maui.Style.space.medium
+    leftPadding: Maui.Style.space.medium
+    topPadding: Maui.Style.space.tiny
+    bottomPadding: Maui.Style.space.tiny
+    icon.width: Maui.Style.iconSizes.medium
+    icon.height: Maui.Style.iconSizes.medium
     icon.color: checked  ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
     
     flat: control.parent === T.ToolBar
 
-
+    font.pointSize: control.display === ToolButton.TextUnderIcon ? Maui.Style.fontSizes.small : undefined
     contentItem: IconLabel
     {
         spacing: control.spacing
@@ -70,16 +74,32 @@ T.ToolButton
         text: control.text
         font: control.font
         color: control.checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+
+        Behavior on color
+        {
+            ColorAnimation
+            {
+                duration: Kirigami.Units.longDuration
+            }
+        }
     }
 
     background: Rectangle
     {
-        implicitWidth: Kirigami.Units.iconSizes.medium
-        implicitHeight: Kirigami.Units.iconSizes.medium
+        implicitWidth: Maui.Style.iconSizes.medium
+        implicitHeight: Maui.Style.iconSizes.medium
         
         radius: height * 0.07
 
         opacity: control.checked ? 0.4 : 1.0
-        color: (control.down || control.checked || control.highlighted ? Kirigami.Theme.buttonHoverColor : "transparent")
+        color: (control.down || control.checked || control.highlighted ? Kirigami.Theme.highlightColor : "transparent")
+
+        Behavior on color
+        {
+            ColorAnimation
+            {
+                duration: Kirigami.Units.longDuration
+            }
+        }
     }
 }

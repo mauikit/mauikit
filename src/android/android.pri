@@ -1,4 +1,4 @@
-QT += androidextras xml
+QT *= androidextras xml
 
 HEADERS += \
     $$PWD/mauiandroid.h\
@@ -23,16 +23,6 @@ INCLUDEPATH += \
 #    error("The application is missing the android files, this files are supossed to be located at $$ANDROID_FILES_DIR")
 #}
 
-contains(DEFINES, MAUIKIT_STYLE):{
-    exists($$PWD/icons/luv-icon-theme) {
-        message("Using Luv icon theme for Android")
-    }else {
-        message("Getting Luv icon theme for Android")
-        system(git clone $$LUV_REPO $$PWD/icons/luv-icon-theme)
-    }
-
-    RESOURCES += $$PWD/icons.qrc
-}
 
 RESOURCES += \
     $$PWD/android.qrc

@@ -15,7 +15,7 @@ luv-icon-theme/
 
 #third party stuff
 src/utils/editor/KSyntaxHighlighting/
-src/utils/editor/kquicksyntaxhighlighter/
+# src/utils/editor/kquicksyntaxhighlighter/
 src/utils/store/attica/
 src/utils/syncing/openssl/
 
@@ -68,3 +68,6 @@ target_wrapper.*
 
 # QtCreator CMake
 CMakeLists.txt.user*
+
+# Bazaar files
+.bzr

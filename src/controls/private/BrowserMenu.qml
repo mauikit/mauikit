@@ -5,48 +5,59 @@ import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.6 as Kirigami
 
 Menu
-{ 
+{ 	
+    id: control
     MenuItem
     {
-        action: _previewAction
+		icon.name: "bookmark-new"
+		text: qsTr("Bookmark")
+		onTriggered: bookmarkFolder([currentPath])
     }
     
     MenuItem
     {
-        action: _hiddenAction
+		icon.name: "folder-add"
+		text: qsTr("New folder")
+		onTriggered:
+		{
+			dialogLoader.sourceComponent= newFolderDialogComponent
+			dialog.open()
+		}
     }
     
+    MenuItem
+    {
+		icon.name: "document-new"
+		text: qsTr("New file")
+		onTriggered:
+		{
+			dialogLoader.sourceComponent= newFileDialogComponent
+			dialog.open()
+		}
+    }
+
     MenuSeparator {}
     
     MenuItem
     {
-        action: _bookmarkAction
+		text: qsTr("Paste")
+		icon.name: "edit-paste"
+		// 		enabled: control.clipboardItems.length > 0
+		onTriggered: paste()
     }
+
+    MenuSeparator {}
     
     MenuItem
     {
-        action: _newFolderAction
+		text: qsTr("Select all")
+		icon.name: "edit-select-all"
+		onTriggered: selectAll()
     }
     
-    MenuItem
-    {
-        action: _newDocumentAction
-    }
-    
-    MenuSeparator {}    
-    
-    MenuItem
-    {
-        action: _pasteAction
-    }  
-    
-    
-    function show()
-    {
-        if(currentPathType === Maui.FMList.PLACES_PATH || currentPathType === Maui.FMList.TAGS_PATH || currentPathType === Maui.FMList.CLOUD_PATH)
-        {
-                    popup()
-        }
+    function show(parent = control, x, y)
+    {       
+            popup(parent, x, y)        
     }
 }
 

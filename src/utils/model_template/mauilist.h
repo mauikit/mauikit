@@ -25,28 +25,45 @@
 #include "mauikit_export.h"
 #endif
 
+#include <QQmlParserStatus>
+
 /**
  * @todo write docs
  */
 #include <QObject>
 
+class MauiModel;
 #ifdef STATIC_MAUIKIT
-class MauiList : public QObject
+class MauiList : public QObject, public QQmlParserStatus
 #else
-class MAUIKIT_EXPORT MauiList : public QObject
+class MAUIKIT_EXPORT MauiList : public QObject, public QQmlParserStatus
 #endif
 {
-    Q_OBJECT
+	Q_INTERFACES(QQmlParserStatus)
+	
+    Q_OBJECT    
+    Q_PROPERTY(int count READ getCount NOTIFY countChanged)
 
 public:
     /**
      * Default constructor
      */
 	explicit MauiList(QObject *parent = nullptr);
-	~MauiList();
 	
 	virtual FMH::MODEL_LIST items() const = 0;
-	
+	virtual void classBegin() override {}
+	virtual void componentComplete() override {}
+    int getCount() const {return items().size(); }
+
+   const MauiModel *m_model; //becarefull this is owned by qml engine, this is only supossed to be a viewer
+public slots:
+	int mappedIndex(const int &index) const;
+    int mappedIndexFromSource(const int &index) const;
+
+protected:
+	bool exists(const FMH::MODEL_KEY &key, const QString &value) const;
+	int indexOf(const FMH::MODEL_KEY &key, const QString &value) const;
+
 signals:
 	void preItemAppended();
 	void postItemAppended();
@@ -56,7 +73,8 @@ signals:
 	void updateModel(int index, QVector<int> roles);
 	void preListChanged();
 	void postListChanged();
-
+    
+    void countChanged();
 };
 
 #endif // MAUILIST_H

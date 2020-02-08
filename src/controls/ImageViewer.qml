@@ -1,15 +1,17 @@
 
-import QtQuick 2.0
+import QtQuick 2.5
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
-import org.kde.kirigami 2.4 as Kirigami
+import org.kde.kirigami 2.7 as Kirigami
 
 Flickable
 {
 	id: flick
 
-	property alias image: img
+	property alias image: _imageLoader.item
+	property bool animated: false
+	property url source 
 	
 	signal rightClicked();
 	signal pressAndHold();
@@ -112,14 +114,13 @@ Flickable
 			}
 		}
 		
-		Image
+		Loader
 		{
-			id: img
+			id: _imageLoader
 			width: flick.contentWidth
 			height: flick.contentHeight
-			fillMode: Image.PreserveAspectFit
-			autoTransform: true
-			asynchronous: true			
+			
+			sourceComponent: control.animated ? _animatedImageComponent : _stillImageComponent
 			
 			MouseArea
 			{
@@ -176,6 +177,33 @@ Flickable
 				}
 			}
 		}
+		
+		Component
+		{
+			id: _animatedImageComponent
+			AnimatedImage
+			{
+				fillMode: Image.PreserveAspectFit
+				autoTransform: true
+				asynchronous: true
+				source: flick.source
+				playing: true
+// 				onStatusChanged: playing = (status == AnimatedImage.Ready)
+				cache: true				
+			}
+		}
+		
+		Component
+		{
+			id: _stillImageComponent
+			Image
+			{				
+				fillMode: Image.PreserveAspectFit
+				autoTransform: true
+				asynchronous: true
+				source: flick.source
+			}
+		}		
 	}	
 	
 	function fit()

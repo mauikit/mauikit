@@ -19,15 +19,16 @@
 
 #include "tagdb.h"
 #include <QUuid>
+#include "fmh.h"
 
-TAGDB::TAGDB(QObject *parent) : QObject(parent)
+TAGDB::TAGDB() : QObject(nullptr)
 {
     QDir collectionDBPath_dir(TAG::TaggingPath);
     if (!collectionDBPath_dir.exists())
         collectionDBPath_dir.mkpath(".");
 
     this->name = QUuid::createUuid().toString();
-    if(!UTIL::fileExists(TAG::TaggingPath + TAG::DBName))
+    if(!FMH::fileExists(QUrl::fromLocalFile(TAG::TaggingPath + TAG::DBName)))
     {
         this->openDB(this->name);
         qDebug()<<"Collection doesn't exists, trying to create it" << TAG::TaggingPath + TAG::DBName;
@@ -37,6 +38,7 @@ TAGDB::TAGDB(QObject *parent) : QObject(parent)
 
 TAGDB::~TAGDB()
 {
+	qDebug()<< "CLOSING THE TAGGING DATA BASE";
     this->m_db.close();
 }
 

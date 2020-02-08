@@ -18,48 +18,44 @@
 
 #include "mauiapp.h"
 #include "utils.h"
-
+#include <QIcon>
+#include "fmh.h"
+#include "handy.h"
 #ifdef COMPONENT_ACCOUNTS
 #include "mauiaccounts.h"
 #endif
 
-MauiApp::MauiApp(QObject *parent) : QObject(parent)
+MauiApp::MauiApp() : QObject(nullptr)
   #ifdef COMPONENT_ACCOUNTS
-  , m_accounts(MauiAccounts::instance(this))
+  , m_accounts(MauiAccounts::instance())
   #else
   , m_accounts(nullptr)
   #endif
 {}
 
-MauiApp::~MauiApp() {}
-
-MauiApp * MauiApp::m_instance = nullptr;
-MauiApp * MauiApp::instance()
-{
-    if(MauiApp::m_instance == nullptr)		 
-        MauiApp::m_instance = new MauiApp();
-    
-    return MauiApp::m_instance;	
-}
-
 QString MauiApp::getName()
 {
-    return Handy::appInfo().value(FMH::MODEL_NAME[FMH::MODEL_KEY::NAME]).toString();
+    return qApp->applicationName();
+}
+
+QString MauiApp::getDisplayName()
+{
+    return qApp->applicationDisplayName();
 }
 
 QString MauiApp::getVersion()
 {
-    return Handy::appInfo().value(FMH::MODEL_NAME[FMH::MODEL_KEY::VERSION]).toString();
+    return  qApp->applicationVersion();
 }
 
 QString MauiApp::getOrg()
 {
-    return Handy::appInfo().value(FMH::MODEL_NAME[FMH::MODEL_KEY::ORG]).toString();
+    return qApp->organizationName();
 }
 
 QString MauiApp::getDomain()
 {
-    return Handy::appInfo().value(FMH::MODEL_NAME[FMH::MODEL_KEY::DOMAIN]).toString();
+    return qApp->organizationDomain();
 }
 
 QString MauiApp::getMauikitVersion()
@@ -166,13 +162,15 @@ MauiAccounts * MauiApp::getAccounts() const
 #endif
 
 MauiApp * MauiApp::qmlAttachedProperties(QObject* object)
-{
-     if(MauiApp::m_instance == nullptr)		 
-        MauiApp::m_instance = new MauiApp(object);
-    
-    return MauiApp::m_instance;	   
+{ 
+	Q_UNUSED(object)
+    return MauiApp::instance();
 }
 
+void MauiApp::notify(const QString &icon, const QString& title, const QString& body, const QJSValue& callback, const int& timeout, const QString& buttonText)
+{
+	emit this->sendNotification(icon, title, body, callback, timeout, buttonText);
+}
 
 
 

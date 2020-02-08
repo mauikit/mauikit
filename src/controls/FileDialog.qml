@@ -30,7 +30,8 @@ Maui.Dialog
 	maxWidth: Maui.Style.unit * 700
 	page.padding: 0
 	
-	property string initPath
+	property alias currentPath : browser.currentPath
+	property alias browser : browser
 	property string suggestedFileName : ""
 	
 	property alias settings : browser.settings
@@ -42,8 +43,6 @@ Maui.Dialog
 	property var callback : ({})
 	
 	property alias textField: _textField
-	property alias singleSelection : browser.singleSelection
-	
 	
 	rejectButton.visible: false
 	acceptButton.text: control.mode === modes.SAVE ? qsTr("Save") : qsTr("Open")
@@ -100,9 +99,6 @@ Maui.Dialog
 			Maui.PathBar
 			{
 				anchors.fill: parent
-				//        colorScheme.backgroundColor: "#fff"
-				//        colorScheme.textColor: "#333"
-				//        colorScheme.borderColor: Qt.darker(headBarBGColor, 1.4)
 				onPathChanged: browser.openFolder(path)
 				url: browser.currentPath
 				onHomeClicked: browser.openFolder(Maui.FM.homePath())
@@ -136,6 +132,13 @@ Maui.Dialog
 			}
 		}
 		
+		headBar.leftContent: ToolButton
+		{
+			icon.name: "application-menu"
+			checked: pageRow.currentIndex === 0
+			onClicked: pageRow.currentIndex = !pageRow.currentIndex
+		}
+		
 		headBar.middleContent: Item
 		{
 			id: _pathBarLoader
@@ -146,7 +149,6 @@ Maui.Dialog
 			{
 				anchors.fill: parent
 				sourceComponent: searchBar ? _searchFieldComponent : _pathBarComponent
-				
 			}
 		}
 		
@@ -156,8 +158,7 @@ Maui.Dialog
 			icon.name: "edit-find"
 			onClicked: searchBar = !searchBar
 			checked: searchBar
-		}
-		
+		}		
 		
 		Kirigami.PageRow
 		{
@@ -167,7 +168,7 @@ Maui.Dialog
 			
 			separatorVisible: wideMode
 			initialPage: [sidebar, browser]
-			defaultColumnWidth:  Kirigami.Units.gridUnit * (isMobile? 15 : 8)		
+			defaultColumnWidth:  Kirigami.Units.gridUnit * (Kirigami.Settings.isMobile? 15 : 8)		
 				
 				Maui.PlacesListBrowser
 				{
@@ -188,15 +189,14 @@ Maui.Dialog
 					Maui.FMList.REMOTE_PATH,                                                
 					Maui.FMList.CLOUD_PATH,
 					Maui.FMList.DRIVES_PATH]
-				}
-				
+				}                
 				
 				Maui.FileBrowser
 				{
 					id: browser
 					
 					previewer.parent: ApplicationWindow.overlay
-					selectionMode: control.mode === modes.OPEN
+					settings.selectionMode: control.mode === modes.OPEN
 					
 					onNewBookmark: 
 					{
@@ -225,10 +225,15 @@ Maui.Dialog
 					}
 					
 					onCurrentPathChanged:
-					{
-						for(var i=0; i < sidebar.count; i++)
-							if(currentPath === sidebar.list.get(i).path)
+					{                        
+						sidebar.currentIndex = -1
+						
+						for(var i = 0; i < sidebar.count; i++)
+							if(String(browser.currentPath) === sidebar.list.get(i).path)
+							{
 								sidebar.currentIndex = i
+								return;
+							}
 					}
 				}			
 		}
@@ -238,30 +243,24 @@ Maui.Dialog
 	{
 		if(cb)
 			callback = cb			
-			browser.openFolder(initPath ? initPath :browser.currentPath)
+// 			browser.openFolder(browser.currentPath)
 			open()
 	}
 	
 	function closeIt()
 	{
-		browser.clean()
+		browser.clearSelection()
 		close()
 	}
 	
 	function done()
 	{
-		var paths = browser.selectionBar && browser.selectionBar.visible ? browser.selectionBar.selectedPaths : browser.currentPath
+		var paths = browser.selectionBar && browser.selectionBar.visible ? browser.selectionBar.uris : [browser.currentPath]
 		
 		if(control.mode === modes.SAVE)
-		{
-			if (typeof paths == 'string')
-			{
-				paths = paths + "/" + textField.text
-			}else
-			{
-				for(var i in paths)
-					paths[i] = paths[i] + "/" + textField.text
-			}
+		{  
+			for(var i in paths)
+				paths[i] = paths[i] + "/" + textField.text            
 		}
 		
 		if(callback)

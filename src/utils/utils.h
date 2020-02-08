@@ -24,6 +24,7 @@
 #include <QFileInfo>
 #include <QSettings>
 #include <QDebug>
+#include <QColor>
 
 #ifdef Q_OS_ANDROID
 #include <QGuiApplication>
@@ -39,25 +40,18 @@
 
 namespace UTIL
 {
-	const auto app = QCoreApplication::instance();	
-	
-    inline bool fileExists(const QString &url)
-    {
-        QFileInfo path(url);
-        if (path.exists()) return true;
-        else return false;
-    }
+	static const auto app = QCoreApplication::instance();	
 
-    inline QString whoami()
+    static const inline QString whoami()
     {
 #ifdef Q_OS_UNIX
-        return qgetenv("USER"); ///for MAc or Linux
+        return qgetenv("USER"); ///for Mac or Linux
 #else
         return  qgetenv("USERNAME"); //for windows
 #endif
     }
 
-    inline void saveSettings(const QString &key, const QVariant &value, const QString &group, QString app = UTIL::app->applicationName(), const QString organization = UTIL::app->organizationName())
+    static inline void saveSettings(const QString &key, const QVariant &value, const QString &group, QString app = UTIL::app->applicationName(), const QString organization = UTIL::app->organizationName())
     {
         QSettings setting(organization.isEmpty() ?  QString("org.kde.maui") : organization, app);
         setting.beginGroup(group);
@@ -65,16 +59,21 @@ namespace UTIL
         setting.endGroup();
     }
 
-    inline QVariant loadSettings(const QString &key, const QString &group, const QVariant &defaultValue, const QString app = UTIL::app->applicationName(), const QString organization = UTIL::app->organizationName())
+    static inline const QVariant loadSettings(const QString &key, const QString &group, const QVariant &defaultValue, const QString app = UTIL::app->applicationName(), const QString organization = UTIL::app->organizationName())
     {
         QVariant variant;
 		QSettings setting(organization.isEmpty() ?  QString("org.kde.maui") : organization, app);
 		setting.beginGroup(group);
         variant = setting.value(key,defaultValue);
         setting.endGroup();
-
         return variant;
     }
+    
+    static inline bool isDark(const QColor &color)
+	{
+		const double darkness = 1-(0.299*color.red() + 0.587*color.green() + 0.114*color.blue())/255;
+		return (darkness>0.5);
+	}
 }
 
 

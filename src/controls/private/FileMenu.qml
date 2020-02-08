@@ -27,17 +27,19 @@ Menu
 	{
 		visible: !control.isExec
 		text: qsTr("Select")
+		icon.name: "edit-select"		
 		onTriggered:
 		{			
 			addToSelection(currentFMList.get(index))
-            if(Kirigami.Settings.isMobile)
-                selectionMode = true
+            if(Maui.Handy.isTouch)
+                settings.selectionMode = true
 		}
 	}
 	
 	MenuItem
 	{
 		text: control.isFav ? qsTr("Remove from Favorites") : qsTr("Add to Favorites")
+		icon.name: "love"		
 		onTriggered:
 		{			
 			if(currentFMList.favItem(item.path))
@@ -50,6 +52,7 @@ Menu
 	{
 		visible: control.isDir
 		text: qsTr("Open in new tab...")
+		icon.name: "tab-new"
 		onTriggered: openTab(item.path)
 	}
 	
@@ -58,6 +61,7 @@ Menu
 	{
 		visible: !control.isExec
         text: qsTr("Copy")
+		icon.name: "edit-copy"
 		onTriggered:
 		{
 			copyClicked(control.item)
@@ -69,6 +73,7 @@ Menu
 	{
 		visible: !control.isExec
         text: qsTr("Cut")
+		icon.name: "edit-cut"
 		onTriggered:
 		{
 			cutClicked(control.item)
@@ -80,6 +85,7 @@ Menu
 	{
 		visible: !control.isExec
         text: qsTr("Rename...")
+		icon.name: "edit-rename"
 		onTriggered:
 		{
 			renameClicked(control.item)
@@ -93,6 +99,7 @@ Menu
 	{
 		visible: !control.isExec && control.isDir
 		text: qsTr("Add to Bookmarks")
+		icon.name: "bookmark-new"
 		onTriggered:
 		{
 			bookmarkClicked(control.item)
@@ -104,6 +111,7 @@ Menu
 	{
 		visible: !control.isExec
         text: qsTr("Tags...")
+		icon.name: "tag"
 		onTriggered:
 		{
 			tagsClicked(control.item)
@@ -115,6 +123,7 @@ Menu
 	{
 		visible: !control.isExec		
         text: qsTr("Share...")
+		icon.name: "document-share"
 		onTriggered:
 		{
 			shareClicked(control.item)
@@ -125,7 +134,8 @@ Menu
 	MenuItem
 	{
 		visible: !control.isExec
-        text: qsTr("Properties")
+        text: qsTr("Preview")
+		icon.name: "view-preview"
 		onTriggered:
 		{
 			previewer.show(control.item.path)
@@ -139,7 +149,7 @@ Menu
 	{
         text: qsTr("Remove")
 		Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
-		
+		icon.name: "edit-delete"
 		onTriggered:
 		{
 			removeClicked(control.item)
@@ -169,8 +179,12 @@ Menu
 	{		
 		control.item = currentFMList.get(index)
 
+		if(item.path.startsWith("tags://") || item.path.startsWith("applications://") )
+			return
+		
 		if(item)
 		{
+			console.log("GOT ITEM FILE", index, item.path)
 			control.index = index
 			control.isDir = item.isdir == true || item.isdir == "true"
 			control.isExec = item.executable == true || item.executable == "true"

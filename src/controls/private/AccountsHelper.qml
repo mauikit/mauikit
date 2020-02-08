@@ -27,7 +27,13 @@ Maui.Dialog
 	rejectButton.visible: false
 	acceptButton.text: qsTr("Add account...") 
 	onAccepted: _syncDialog.open()		
-	
+
+    footBar.leftContent: ToolButton
+    {
+        icon.name: "documentinfo"
+        onClicked: Qt.openUrlExternally("https://mauikit.org/cloud")
+    }
+
 	Maui.BaseModel
 	{
 		id: _syncingModel
@@ -118,8 +124,9 @@ Maui.Dialog
 			visible: _listView.count == 0
 			isMask: false
 			isGif: false
-			emojiSize: Maui.Style.iconSizes.huge
-			title: qsTr("No accounts yet!")
+            emojiSize: Maui.Style.iconSizes.huge
+            emoji: "qrc:/assets/dialog-information.svg"
+            title: qsTr("No accounts yet!")
 			body: qsTr("Start adding new accounts to sync your files, music, contacts, images, notes, etc...")
 		}
 		
@@ -129,17 +136,17 @@ Maui.Dialog
 	{
         if(user.length)
             Maui.App.accounts.registerAccount({server: server, user: user, password: password})
-	}
-	
-	function removeAccount(server, user)
-	{
-		if(server.length && user.length)
-			Maui.App.accounts.removeAccount(server, user)
-	}
-	
-	function removeAccountAndFiles(server, user)
-	{
-		if(server.length && user.length)
-			Maui.App.accounts.removeAccountAndFiles(server, user)
-	}
+    }
+
+    function removeAccount(server, user)
+    {
+        if(server.length && user.length)
+            Maui.App.accounts.removeAccount(server, user)
+    }
+
+    function removeAccountAndFiles(server, user)
+    {
+        if(server.length && user.length)
+            Maui.App.accounts.removeAccountAndFiles(server, user)
+    }
 }

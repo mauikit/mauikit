@@ -1,5 +1,4 @@
 #include "accountsdb.h"
-#include "utils.h"
 
 #include <QUuid>
 
@@ -14,7 +13,7 @@ AccountsDB::AccountsDB(QObject *parent) : QObject(parent)
 {
     //get permissions to read and write
 #ifdef Q_OS_ANDROID
-    MAUIAndroid::checkRunTimePermissions();
+    MAUIAndroid::checkRunTimePermissions({"android.permission.WRITE_EXTERNAL_STORAGE"});
 #endif
 
     qDebug()<< "TRY TO CREATE ACCOUNTS DB";
@@ -23,7 +22,7 @@ AccountsDB::AccountsDB(QObject *parent) : QObject(parent)
         collectionDBPath_dir.mkpath(".");
 
     this->name = QUuid::createUuid().toString();
-    if(!UTIL::fileExists(FMPath + DBName))
+    if(!FMH::fileExists(FMPath + DBName))
     {
         this->openDB(this->name);
         this->prepareCollectionDB();

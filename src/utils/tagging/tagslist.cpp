@@ -4,17 +4,23 @@
 TagsList::TagsList(QObject *parent) : QObject(parent)
 {
 	this->tag = Tagging::getInstance();
+	
+	connect(this->tag, &Tagging::tagged, [&](QString)
+	{
+		this->setList();
+	});
+	
 	this->setList();
 }
 
-TAG::DB_LIST TagsList::toModel(const QVariantList& data)
+const TAG::DB_LIST TagsList::toModel(const QVariantList& data)
 {
 	TAG::DB_LIST res;
-	for(auto item : data)
+	for(const auto &item : data)
 	{
 		const auto map = item.toMap();
 		TAG::DB model;
-		for(auto key : map.keys())
+		for(const auto &key : map.keys())
 			model.insert(TAG::MAPKEY[key], map[key].toString());
 		
 		res << model;
@@ -41,12 +47,16 @@ void TagsList::setList()
 		else
 		{
 			this->list.clear();
-			for(const auto &url : this->urls)
-				this->list << this->toModel(this->tag->getUrlTags(url, this->strict));
+			this->list = std::accumulate(this->urls.constBegin(), this->urls.constEnd(), TAG::DB_LIST(), [&](auto &list, const QString &url)
+			{
+				list << this->toModel(this->tag->getUrlTags(url, this->strict));
+				return list;
+			});			
 		}
 	}
 	
 	this->sortList();
+	emit this->tagsChanged();
 	emit this->postListChanged();
 }
 
@@ -96,13 +106,13 @@ QVariantMap TagsList::get(const int &index) const
 	if(index >= this->list.size() || index < 0)
 		return QVariantMap();
 	
-	const auto folder = this->list.at(index);
-	
-	QVariantMap res;
-	for(auto key : folder.keys())
+	const auto folder = this->list.at(index);	
+    const auto keys =folder.keys();
+	return std::accumulate(keys.constBegin(), keys.constEnd(), QVariantMap(), [folder](QVariantMap &res, const TAG::KEYS &key)
+	{
 		res.insert(TAG::KEYMAP[key], folder[key]);
-	
-	return res;
+		return res;	 
+	});   
 }
 
 void TagsList::refresh()
@@ -112,17 +122,17 @@ void TagsList::refresh()
 
 bool TagsList::contains(const QString& tag)
 {		
-	return indexOf(tag) > -1;
+	return this->indexOf(tag) >= 0;
 }
 
 int TagsList::indexOf(const QString& tag)
 {
 	int i = 0;
-	for(auto &item : this->list)
+	for(const auto &item : this->list)
 	{
 		if(item.value(TAG::KEYS::TAG) == tag)
 			return i;		
-		i ++;
+		i++;
 	}
 	
 	return -1;
@@ -130,16 +140,8 @@ int TagsList::indexOf(const QString& tag)
 
 bool TagsList::insert(const QString &tag)
 {	
-	auto _tag = tag.trimmed();
-	
-	if(this->tag->tag(_tag))
-	{
-		emit this->preItemAppended();		
-		this->list << TAG::DB {{TAG::KEYS::TAG, _tag}};
-// 		this->sortList();		
-		emit this->postItemAppended();
+	if(this->tag->tag(tag.trimmed()))	
 		return true;
-	}
 	
 	return false;
 }
@@ -169,7 +171,7 @@ void TagsList::updateToUrls(const QStringList& tags)
 	if(this->urls.isEmpty())
 		return;
 	
-	for(auto url : this->urls)
+	for(const auto &url : this->urls)
 		this->tag->updateUrlTags(url, tags);
 	
 	this->refresh();
@@ -195,11 +197,7 @@ void TagsList::removeFromAbstract(const int& index)
 
 	const auto tag =  this->list[index][TAG::KEYS::TAG];	
 	if(this->tag->removeAbstractTag(this->key, this->lot, tag))
-	{	
-		emit this->preItemRemoved(index);
-		this->list.removeAt(index);
-		emit this->postItemRemoved();
-	}
+		this->remove(index);
 }
 
 void TagsList::removeFromUrls(const int& index)
@@ -214,9 +212,7 @@ void TagsList::removeFromUrls(const int& index)
 	for(const auto &url : this->urls)
 		this->tag->removeUrlTag(url, tag);
 	
-	emit this->preItemRemoved(index);
-	this->list.removeAt(index);
-	emit this->postItemRemoved();	
+	this->remove(index);	
 }
 
 void TagsList::removeFromUrls(const QString &tag)
@@ -232,6 +228,7 @@ bool TagsList::remove(const int& index)
 	
 	emit this->preItemRemoved(index);
 	this->list.removeAt(index);
+	emit this->tagsChanged();
 	emit this->postItemRemoved();
 	
 	return true;
@@ -243,11 +240,7 @@ void TagsList::removeFrom(const int& index, const QString& key, const QString& l
 		return;	
 	
 	if(this->tag->removeAbstractTag(key, lot, this->list[index][TAG::KEYS::TAG]))
-	{
-		emit this->preItemRemoved(index);
-		this->list.removeAt(index);
-		emit this->postItemRemoved();	 
-	}
+		this->remove(index);
 }
 
 void TagsList::removeFrom(const int& index, const QString& url)
@@ -256,11 +249,7 @@ void TagsList::removeFrom(const int& index, const QString& url)
 			return;
 	
 	if(this->tag->removeUrlTag(url, this->list[index][TAG::KEYS::TAG]))
-	{
-		emit this->preItemRemoved(index);
-		this->list.removeAt(index);
-		emit this->postItemRemoved();
-	}
+		this->remove(index);
 }
 
 void TagsList::erase(const int& index)
@@ -337,6 +326,15 @@ void TagsList::setKey(const QString& value)
 	emit this->keyChanged();
 }
 
+QStringList TagsList::getTags() const
+{
+	return std::accumulate(this->list.constBegin(), this->list.constEnd(), QStringList(), [](QStringList &tags, const TAG::DB &tag)
+	{
+		tags << tag[TAG::KEYS::TAG];
+		return tags;
+	});
+}
+
 QString TagsList::getLot() const
 {
 	return this->lot;
@@ -372,12 +370,19 @@ void TagsList::setUrls(const QStringList& value)
 }
 
 void TagsList::append(const QString &tag)
-{
-	if(!this->insert(tag) && !this->contains(tag))
-	{
-		emit this->preItemAppended();
-		this->list << TAG::DB {{TAG::KEYS::TAG, tag}};
-		this->sortList();
-		emit this->postItemAppended();
-	}
+{	
+	if(this->contains(tag))	
+		return;	    
+    
+    emit this->preItemAppended();
+    this->list << TAG::DB {{TAG::KEYS::TAG, tag}};
+    emit this->tagsChanged();
+    emit this->postItemAppended();	
 }
+
+void TagsList::append(const QStringList& tags)
+{
+	for(const auto &tag : tags)
+		this->append(tag);
+}
+

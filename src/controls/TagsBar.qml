@@ -48,11 +48,20 @@ Maui.ToolBar
     leftContent: ToolButton
     {
         Layout.alignment: Qt.AlignLeft
-        visible: allowEditMode && tagsList.visible
+        visible: control.allowEditMode && tagsList.visible
         icon.name: "list-add"
         onClicked: addClicked()
         icon.color: control.Kirigami.Theme.textColor
     }
+    
+    rightContent: ToolButton
+    {
+		Layout.alignment: Qt.AlignRight
+		visible: control.allowEditMode && tagsList.visible
+		icon.name: "document-edit"
+		onClicked: control.goEditMode()
+		icon.color: control.Kirigami.Theme.textColor
+	}
 
     middleContent : [
         TagList
@@ -86,6 +95,7 @@ Maui.ToolBar
             horizontalAlignment: Text.AlignLeft
             verticalAlignment:  Text.AlignVCenter
             focus: true
+            text: list.tags.join(",")
             color: Kirigami.Theme.textColor
             selectionColor: Kirigami.Theme.highlightColor
             selectedTextColor: Kirigami.Theme.highlightedTextColor
@@ -112,11 +122,6 @@ Maui.ToolBar
 
     function goEditMode()
     {
-        var currentTags = []
-        for(var i = 0 ; i < tagsList.count; i++)
-            currentTags.push(list.get(i).tag)
-
-        editTagsEntry.text = currentTags.join(", ")
         editMode = true
         editTagsEntry.forceActiveFocus()
     }
@@ -138,7 +143,7 @@ Maui.ToolBar
             var list = editTagsEntry.text.split(",")
 
             if(list.length > 0)
-                for(var i in list)
+                for(const i in list)
                     tags.push(list[i].trim())
         }
 

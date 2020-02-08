@@ -1,4 +1,3 @@
-
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
@@ -13,9 +12,8 @@ Maui.Dialog
     property url currentUrl: ""
     property var iteminfo : ({})
 
-	property bool isFav : false
+    property bool isFav : false
     property bool isDir : false
-    property string mimetype : ""
     property bool showInfo: true
 
     property alias infoModel : _infoModel
@@ -35,9 +33,9 @@ Maui.Dialog
         icon.name: "document-open"
         text: qsTr("Open...")
         onClicked:
-        {           
+        {
             openFile(control.currentUrl)
-			control.close()
+            control.close()
         }
     }
 
@@ -58,70 +56,30 @@ Maui.Dialog
         ToolButton
         {
             icon.name: "love"
-			checkable: true
-			checked: control.isFav
-			onClicked: 
-			{
-				if(control.isFav)
-					_tagsBar.list.removeFromUrls("fav")
-				else
-					_tagsBar.list.insertToUrls("fav")
-					
-					control.isFav = !control.isFav
-			}
+            text: qsTr("Add to Favourites")
+            checkable: true
+            checked: control.isFav
+            onClicked:
+            {
+                if(control.isFav)
+                    _tagsBar.list.removeFromUrls("fav")
+                else
+                    _tagsBar.list.insertToUrls("fav")
+
+                    control.isFav = !control.isFav
+            }
         }
     ]
 
-    footBar.rightContent:  ToolButton
+    footBar.rightContent: ToolButton
     {
         icon.name: "documentinfo"
         text: qsTr("Info...")
-
         checkable: true
         checked: control.showInfo
         onClicked: control.showInfo = !control.showInfo
     }
-
-    Component
-    {
-		id: defaultPreview
-		Item
-		{
-			anchors.fill: parent
-			Kirigami.Icon
-			{
-				anchors.centerIn: parent
-				source:control.iteminfo.icon
-				height: Maui.Style.iconSizes.huge
-				width: height
-			}
-		}
-	}
     
-    Component
-    {
-        id: imagePreview
-        ImagePreview {}
-    }
-
-    Component
-    {
-        id: audioPreview
-        AudioPreview {}
-    }
-
-    Component
-    {
-        id: videoPreview
-        VideoPreview {}
-    }
-
-    Component
-    {
-        id: textPreview
-        TextPreview {}
-    }
-
     ColumnLayout
     {
         anchors.fill: parent
@@ -224,6 +182,7 @@ Maui.Dialog
             Layout.fillWidth: true
             Layout.margins: 0
             list.urls: [control.currentUrl]
+            list.strict: false
             allowEditMode: true
             onTagRemovedClicked: list.removeFromUrls(index)
             onTagsEdited: list.updateToUrls(tags)
@@ -240,52 +199,51 @@ Maui.Dialog
 
     onClosed:
     {
-		if(previewLoader.item && previewLoader.item.player != null)
+        if(previewLoader.item && previewLoader.item.player != null)
             previewLoader.item.player.stop()
-			
-			previewLoader.sourceComponent = null
+
+            previewLoader.source = ""
     }
 
     function show(path)
     {
         control.iteminfo = Maui.FM.getFileInfo(path)
         control.initModel()
-
-        if(iteminfo.mime.indexOf("/"))
-        {
-            control.mimetype = iteminfo.mime.slice(0, iteminfo.mime.indexOf("/"))
-        }else
-        {
-            control.mimetype = ""
-        }
         
-        control.isDir = mimetype === "inode"
-        control.showInfo = control.mimetype === "audio" || control.mimetype === "image" || control.mimetype === "video" || control.mimetype === "text"? false : true       
-		control.currentUrl = path
-		control.isFav =  _tagsBar.list.contains("fav")
-		
-		var component;
-		 switch(mimetype)
-		{
-			case "audio" :
-				component = audioPreview
-				break
-			case "video" :
-				component = videoPreview
-				break
-			case "text" :
-				component = textPreview
-				break
-			case "image" :
-				component = imagePreview
-				break
-			case "inode" :
-			default:
-				component = defaultPreview
-		}
-		
-		previewLoader.sourceComponent = component
-		open()
+        control.isDir = iteminfo.isdir == "true"
+        control.currentUrl = path
+        control.isFav =  _tagsBar.list.contains("fav")
+
+        var source = "private/DefaultPreview.qml"
+        if(Maui.FM.checkFileType(Maui.FMList.AUDIO, iteminfo.mime))
+        {
+            source = "private/AudioPreview.qml"
+        }
+
+        if(Maui.FM.checkFileType(Maui.FMList.VIDEO, iteminfo.mime))
+        {
+            source = "private/VideoPreview.qml"
+        }
+
+        if(Maui.FM.checkFileType(Maui.FMList.TEXT, iteminfo.mime))
+        {
+            source = "private/TextPreview.qml"
+        }
+
+        if(Maui.FM.checkFileType(Maui.FMList.IMAGE, iteminfo.mime))
+        {
+            source = "private/ImagePreview.qml"
+        }
+
+        if(Maui.FM.checkFileType(Maui.FMList.DOCUMENT, iteminfo.mime) && !isAndroid)
+        {
+            source = "private/DocumentPreview.qml"
+        }
+
+        console.log("previe mime", iteminfo.mime)
+        previewLoader.source = source
+        control.showInfo = source === "private/DefaultPreview.qml"
+        open()
     }
 
     function initModel()

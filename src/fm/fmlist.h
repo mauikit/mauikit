@@ -53,6 +53,40 @@ public:
 };
 Q_DECLARE_METATYPE(PathStatus)
 
+static inline struct
+{
+    void appendPath(const QUrl &path)
+    {
+        this->prev_history.append(path);
+    }
+
+    QUrl getPosteriorPath()
+    {
+        if(this->post_history.isEmpty())
+            return QUrl();
+
+        return this->post_history.takeLast();
+    }
+
+    QUrl getPreviousPath()
+    {
+        if(this->prev_history.isEmpty())
+            return QUrl();
+
+        if(this->prev_history.length() < 2)
+            return this->prev_history.at(0);
+
+        this->post_history.append(this->prev_history.takeLast());
+
+        return this->prev_history.takeLast();
+    }
+
+private:
+    QVector<QUrl> prev_history;
+    QVector<QUrl> post_history;
+	
+} NavHistory;
+
 class FM;
 class QFileSystemWatcher;
 class FMList : public MauiList
@@ -79,10 +113,13 @@ class FMList : public MauiList
     Q_PROPERTY(QString pathName READ getPathName NOTIFY pathNameChanged)
     Q_PROPERTY(FMList::PATHTYPE pathType READ getPathType NOTIFY pathTypeChanged)
     
-    Q_PROPERTY(PathStatus status READ getStatus NOTIFY statusChanged) //TODO status to replace pathExists, pathEmpty and handle errors messaging
+    Q_PROPERTY(PathStatus status READ getStatus NOTIFY statusChanged) 
     	
-	Q_PROPERTY(QUrl previousPath READ getPreviousPath)
-	Q_PROPERTY(QUrl posteriorPath READ getPosteriorPath)
+	Q_PROPERTY(QList<QUrl> previousPathHistory READ getPreviousPathHistory) //interface for NavHistory
+	Q_PROPERTY(QList<QUrl> posteriorPathHistory READ getPreviousPathHistory) //interface for NavHistory
+	Q_PROPERTY(QUrl previousPath READ getPreviousPath) //interface for NavHistory
+	Q_PROPERTY(QUrl posteriorPath READ getPosteriorPath) //interface for NavHistory
+
 	Q_PROPERTY(QUrl parentPath READ getParentPath)    
 	
 	public:
@@ -106,6 +143,7 @@ class FMList : public MauiList
 			VIDEO= FMH::FILTER_TYPE::VIDEO,
 			TEXT = FMH::FILTER_TYPE::TEXT,
 			IMAGE = FMH::FILTER_TYPE::IMAGE,
+			DOCUMENT = FMH::FILTER_TYPE::DOCUMENT,
 			NONE = FMH::FILTER_TYPE::NONE
 			
 		}; Q_ENUM(FILTER)
@@ -138,9 +176,7 @@ class FMList : public MauiList
         
         Q_ENUM(STATUS_CODE)        
         		
-		FMList(QObject *parent = nullptr);
-	
-		~FMList();
+		FMList(QObject *parent = nullptr);	
 		
 		FMH::MODEL_LIST items() const final override;
 		
@@ -166,13 +202,12 @@ class FMList : public MauiList
 		bool getOnlyDirs() const;
 		void setOnlyDirs(const bool &state);
 		
-		QUrl getParentPath();
+		const QUrl getParentPath();
 		
-		QUrl getPreviousPath();
-		void setPreviousPath(const QUrl &path);
-		
-		QUrl getPosteriorPath();
-		void setPosteriorPath(const QUrl &path);
+		static QList<QUrl> getPreviousPathHistory();		
+		static QList<QUrl> getPosteriorPathHistory();
+		const QUrl getPreviousPath();		
+		const QUrl getPosteriorPath();
 			
 		bool getTrackChanges() const;
 		void setTrackChanges(const bool &value);
@@ -195,9 +230,11 @@ private:
 	FM *fm;
 	QFileSystemWatcher *watcher;
     
+	void clear();
 	void reset();
 	void setList();
-    void assignList(const FMH::MODEL_LIST &list);
+	void assignList(const FMH::MODEL_LIST &list);
+	void appendToList(const FMH::MODEL_LIST &list);
 	void sortList();
 	void watchPath(const QString &path, const bool &clear = true);
     void search(const QString &query, const QUrl &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
@@ -234,14 +271,18 @@ public slots:
 	void refresh();
 	
 	void createDir(const QString &name);
-	void copyInto(const QVariantList &files);
-	void cutInto(const QVariantList &files);
+	void copyInto(const QStringList &urls);
+	void cutInto(const QStringList &urls);
 	
 	void setDirIcon(const int &index, const QString &iconName);
 	
 	bool itemIsFav(const QUrl &path);
 	bool favItem(const QUrl &path);
 	
+	void remove(const int &index);
+	void moveFileToTrash(const int &index);
+	void deleteFile(const int &index);
+		
 signals:
 	void pathChanged();
     void pathNameChanged();

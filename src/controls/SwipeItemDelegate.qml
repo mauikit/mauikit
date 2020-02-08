@@ -74,6 +74,10 @@ Maui.ItemDelegate
 			{
 				spacing: 0
 				id: _background
+
+//                transform: Translate {
+//                           x: _swipeDelegate.swipe.position * control.width * 0.33
+//                       }
 				Item
 				{
 					id: _content
@@ -124,12 +128,10 @@ Maui.ItemDelegate
 					{
 						anchors.centerIn: parent
 						icon.name: "overflow-menu"
-						onClicked: _swipeDelegate.swipe.position < 0 ? _swipeDelegate.swipe.close() : _swipeDelegate.swipe.open(SwipeDelegate.Right)
+                        onClicked: _swipeDelegate.swipe.complete ? _swipeDelegate.swipe.close() : _swipeDelegate.swipe.open(SwipeDelegate.Right)
 					}
-				}
-				
-			}
-			
+				}				
+			}			
 			
 			swipe.right: Row
 			{
@@ -138,18 +140,19 @@ Maui.ItemDelegate
 				anchors.verticalCenter: parent.verticalCenter
 				spacing: Maui.Style.space.big
 				padding: Maui.Style.space.medium
-				visible: _swipeDelegate.swipe.complete
-				opacity: Math.abs(_swipeDelegate.swipe.position)
-				
-				Behavior on width
-				{
-					NumberAnimation
-					{
-						duration: Kirigami.Units.longDuration
-						easing.type: Easing.InOutQuad
-					}
-				}
-				
+//                width:  implicitWidth * Math.abs(_swipeDelegate.swipe.position)
+                height: parent.height
+
+                opacity: Math.abs(_swipeDelegate.swipe.position) > 0.5 ? 1 : 0
+//                Behavior on width
+//                {
+//                    NumberAnimation
+//                    {
+//                        duration: Kirigami.Units.longDuration
+//                        easing.type: Easing.InOutQuad
+//                    }
+//                }
+
 				Repeater
 				{
 					model: control.collapse && control.showQuickActions ? control.quickActions : undefined

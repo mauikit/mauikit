@@ -30,7 +30,9 @@ Kirigami.ScrollablePage
 	id: control
 	
 	property int itemSize: 0
-	onItemSizeChanged :  gridView.size_ = itemSize    
+	property int itemWidth : itemSize
+	property int itemHeight : itemSize
+	onItemWidthChanged :  gridView.size_ = itemWidth   
 	
 	property alias cellWidth: gridView.cellWidth
 	property alias cellHeight: gridView.cellHeight
@@ -53,17 +55,19 @@ Kirigami.ScrollablePage
 	
 	signal areaClicked(var mouse)
 	signal areaRightClicked()
-	signal keyPress(var key)
+	signal keyPress(var event)
 	
 	spacing: Maui.Style.space.medium
 	
-	Kirigami.Theme.backgroundColor: "transparent"
+	Kirigami.Theme.colorSet: Kirigami.Theme.View
 	padding: 0
-	leftPadding: control.ScrollBar.visible ? padding : control.ScrollBar.width
+	leftPadding: padding
 	rightPadding: padding
 	topPadding: padding
 	bottomPadding: padding
 	focus: true
+	
+	keyboardNavigationEnabled: false
 	
 	Behavior on cellWidth
 	{
@@ -82,26 +86,26 @@ Kirigami.ScrollablePage
 		property int size_    
 		Component.onCompleted:
 		{
-			gridView.size_ = control.itemSize
+			gridView.size_ = control.itemWidth
 		}
 		
 		flow: GridView.FlowLeftToRight
 		clip: true
 		focus: true
 		
-		cellWidth: control.itemSize
-		cellHeight: control.itemSize
+		cellWidth: control.itemWidth
+		cellHeight: control.itemHeight
 		
 		boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
 		flickableDirection: Flickable.AutoFlickDirection
 		snapMode: GridView.NoSnap
 		highlightMoveDuration: 0
-		interactive: true
-		onWidthChanged: adaptContent? control.adaptGrid() : undefined
+		interactive: Maui.Handy.isTouch
+		onWidthChanged: if(control.adaptContent) control.adaptGrid()
 		
-		keyNavigationEnabled : bool
-		keyNavigationWraps : bool
-		Keys.onPressed: control.keyPress(event.key) 
+		keyNavigationEnabled : true
+		keyNavigationWraps : true
+		Keys.onPressed: control.keyPress(event) 
 		
 		Maui.Holder
 		{

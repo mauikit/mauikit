@@ -130,7 +130,7 @@ Row
 			anchors.fill: parent
 			onClicked:
 			{
-				currentColor = parent.color
+				currentColor = ""
 				colorPicked("folder")
 			}
 		}

@@ -35,10 +35,16 @@
 #include <QVariantMap>
 
 #include "tag.h"
-#include "utils.h"
 
+#ifndef STATIC_MAUIKIT
+#include "mauikit_export.h"
+#endif
 
+#ifdef STATIC_MAUIKIT
 class TAGDB : public QObject
+#else
+class MAUIKIT_EXPORT TAGDB : public QObject
+#endif
 {
     Q_OBJECT
 private:
@@ -46,14 +52,14 @@ private:
     QSqlDatabase m_db;
 
 public:
-    /* utils*/
-    Q_INVOKABLE bool checkExistance(const QString &tableName, const QString &searchId, const QString &search);
-    Q_INVOKABLE bool checkExistance(const QString &queryStr);
+    /* utils*/	
+    bool checkExistance(const QString &tableName, const QString &searchId, const QString &search);
+    bool checkExistance(const QString &queryStr);
 
 protected:
-    TAGDB(QObject *parent = nullptr);
-    ~ TAGDB();
-
+    TAGDB();
+	~TAGDB();
+    
     QSqlQuery getQuery(const QString &queryTxt);
     void openDB(const QString &name);
     void prepareCollectionDB() const;
@@ -62,10 +68,6 @@ protected:
     bool update(const QString &tableName, const TAG::DB &updateData, const QVariantMap &where);
     bool update(const QString &table, const QString &column, const QVariant &newValue, const QVariant &op, const QString &id);
     bool remove(const QString &tableName, const TAG::DB &removeData);
-
-signals:
-
-public slots:
 };
 
 

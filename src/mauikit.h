@@ -32,9 +32,9 @@
 class MauiAccounts;
 #ifdef STATIC_MAUIKIT
 class MauiKit : public QQmlExtensionPlugin
-#else
+        #else
 class MAUIKIT_EXPORT MauiKit : public QQmlExtensionPlugin
-#endif
+        #endif
 {
     Q_OBJECT
 
@@ -55,10 +55,9 @@ public:
     {
         static MauiKit instance;
         instance.registerTypes("org.kde.mauikit");
-    }    
+    }
     
     void initResources();
-	
 
 private:
     QUrl componentUrl(const QString &fileName) const;

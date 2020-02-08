@@ -236,7 +236,7 @@ static QAndroidJniObject getAndroidWindow()
 
 void MAUIAndroid::statusbarColor(const QString &bg, const bool &light)
 {
-     if (QtAndroid::androidSdkVersion() < 23)
+     if (QtAndroid::androidSdkVersion() <= 23)
             return;
 
         QtAndroid::runOnAndroidThread([=]() {
@@ -254,7 +254,7 @@ void MAUIAndroid::statusbarColor(const QString &bg, const bool &light)
 
 void MAUIAndroid::navBarColor(const QString &bg, const bool &light)
 {
-    if (QtAndroid::androidSdkVersion() < 23)
+    if (QtAndroid::androidSdkVersion() <= 23)
         return;
     
     QtAndroid::runOnAndroidThread([=]() {
@@ -282,6 +282,8 @@ void MAUIAndroid::shareDialog(const QUrl &url)
     }
     if (activity.isValid())
     {
+        qDebug()<< "trying to share dialog << valid";
+
         QMimeDatabase mimedb;
         QString mimeType = mimedb.mimeTypeForFile(url.toLocalFile()).name();
 
@@ -294,7 +296,10 @@ void MAUIAndroid::shareDialog(const QUrl &url)
                                                   QAndroidJniObject::fromString(QString("%1.fileprovider").arg(UTIL::app->organizationDomain())).object<jstring>());
 
 
-        if (_env->ExceptionCheck()) {
+        if (_env->ExceptionCheck())
+        {
+            qDebug()<< "trying to share dialog << exception";
+
             _env->ExceptionClear();
             throw InterfaceConnFailedException();
         }
@@ -443,10 +448,10 @@ QStringList MAUIAndroid::sdDirs()
     //    qbDebug::Instance()->msg()<<"TESTED SDPATH"<<QProcessEnvironment::systemEnvironment().value("EXTERNAL_SDCARD_STORAGE",dataAbsPath);
 
     QStringList res;
-    if(UTIL::fileExists("file:///mnt/extSdCard"))
+    if(QFileInfo::exists("file:///mnt/extSdCard"))
         res << "file:///mnt/extSdCard";
 
-    if(UTIL::fileExists("file:///mnt/ext_sdcard"))
+    if(QFileInfo::exists("file:///mnt/ext_sdcard"))
         res << "file:///mnt/ext_sdcard";
 
     return res;
@@ -691,7 +696,7 @@ QStringList MAUIAndroid::defaultPaths()
 }
 
 
-bool MAUIAndroid::checkRunTimePermissions()
+bool MAUIAndroid::checkRunTimePermissions(const QStringList &permissions)
 {
     qDebug()<< "CHECKIGN PERMISSSIONS";
 
@@ -712,16 +717,18 @@ bool MAUIAndroid::checkRunTimePermissions()
 //                                              "requestPermission",
 //                                              "(Landroid/app/Activity;)V",
 //                                              QtAndroid::androidActivity().object<jobject>());
-
-    QtAndroid::PermissionResult r = QtAndroid::checkPermission("android.permission.WRITE_EXTERNAL_STORAGE");
-    if(r == QtAndroid::PermissionResult::Denied)
-    {
-        QtAndroid::requestPermissionsSync( QStringList() << "android.permission.WRITE_EXTERNAL_STORAGE" );
-        r = QtAndroid::checkPermission("android.permission.WRITE_EXTERNAL_STORAGE");
+    for(const auto  &permission : permissions)
+   {
+        QtAndroid::PermissionResult r = QtAndroid::checkPermission(permission);
         if(r == QtAndroid::PermissionResult::Denied)
         {
-            qDebug() << "Permission denied";
-            return false;
+            QtAndroid::requestPermissionsSync({permission});
+            r = QtAndroid::checkPermission(permission);
+            if(r == QtAndroid::PermissionResult::Denied)
+            {
+                qWarning() << "Permission denied";
+                return false;
+            }
         }
     }
 
