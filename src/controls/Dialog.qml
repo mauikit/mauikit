@@ -26,24 +26,24 @@ import org.kde.kirigami 2.7 as Kirigami
 Maui.Popup
 {
     id: control
-    
+
     property string message : ""
     property string title: ""
-    
+
     property string acceptText: "Yes"
     property string rejectText: "No"
-    
+
     property bool defaultButtons: true
     property bool confirmationDialog: false
-    
+
     default property alias content : page.contentData
 
     property alias acceptButton : _acceptButton
     property alias rejectButton : _rejectButton
-    
+
     property alias textEntry : _textEntry
     property alias entryField: _textEntry.visible
-    
+
     property alias page : page
     property alias footBar : page.footBar
     property alias headBar: page.headBar
@@ -63,7 +63,6 @@ Maui.Popup
     Maui.Badge
     {
         id: _closeButton
-        parent: Application.Overlay
         iconName: "qrc:/assets/dialog-close.svg"
         //         Kirigami.Theme.backgroundColor: hovered ?  Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
         //         Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
@@ -104,7 +103,7 @@ Maui.Popup
             id: _acceptButton
             visible: defaultButtons
             Kirigami.Theme.backgroundColor: Qt.lighter(Kirigami.Theme.positiveTextColor, 2)
-			Kirigami.Theme.textColor: Kirigami.Theme.positiveTextColor
+            Kirigami.Theme.textColor: Kirigami.Theme.positiveTextColor
             text: acceptText
             onClicked: accepted()
         }
@@ -152,7 +151,7 @@ Maui.Popup
                 Layout.preferredHeight: Math.min(contentHeight, 500)
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignCenter
-                
+
                 Kirigami.Theme.backgroundColor: "transparent"
                 padding: 0
                 leftPadding: padding
@@ -174,17 +173,17 @@ Maui.Popup
                     verticalAlignment: Qt.AlignVCenter
                 }
             }
-            
+
             Maui.TextField
             {
-				id: _textEntry
-				visible: false
-				Layout.fillWidth: true
-				Layout.alignment: Qt.AlignCenter
-				focus: visible
-				onAccepted: control.accepted()
-			}
-            
+                id: _textEntry
+                visible: false
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignCenter
+                focus: visible
+                onAccepted: control.accepted()
+            }
+
         }
     }
 }

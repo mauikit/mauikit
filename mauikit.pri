@@ -5,7 +5,7 @@ QT *=  \
     gui \
     svg \
     concurrent
-    
+
 CONFIG *= c++17
 
 DEFINES *= \
@@ -103,11 +103,11 @@ contains(DEFINES, COMPONENT_EDITOR):{
     HEADERS += \
         $$PWD/src/utils/editor/documenthandler.h \
         $$PWD/src/utils/editor/syntaxhighlighterutil.h
-    
+
     SOURCES += \
         $$PWD/src/utils//editor/documenthandler.cpp \
         $$PWD/src/utils/editor/syntaxhighlighterutil.cpp
-    
+
     INCLUDEPATH += $$PWD/src/utils/editor
 } else {
     warning("SKIPPING EDITOR COMPONENT")
@@ -200,7 +200,8 @@ HEADERS += \
     $$PWD/src/utils/handy.h \
     $$PWD/src/utils/utils.h \
     $$PWD/src/utils/mauiapp.h \
-    $$PWD/src/utils/models/pathlist.h
+    $$PWD/src/utils/models/pathlist.h \
+    $$PWD/src/controls/private/src/patharrowbackground.h
 
 SOURCES += \
     $$PWD/src/utils/fmstatic.cpp \
@@ -209,7 +210,8 @@ SOURCES += \
     $$PWD/src/utils/model_template/mauilist.cpp \
     $$PWD/src/utils/handy.cpp \
     $$PWD/src/utils/mauiapp.cpp \
-    $$PWD/src/utils/models/pathlist.cpp
+    $$PWD/src/utils/models/pathlist.cpp \
+    $$PWD/src/controls/private/src/patharrowbackground.cpp
 
 DEPENDPATH += \
     $$PWD/src \

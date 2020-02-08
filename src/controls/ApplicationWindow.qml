@@ -38,7 +38,7 @@ Kirigami.AbstractApplicationWindow
     visible: true
     width: Screen.width * (Kirigami.Settings.isMobile ? 1 : 0.4)
     height: Screen.height * (Kirigami.Settings.isMobile ? 1 : 0.4)
-	contentItem.anchors.leftMargin: root.sideBar && !root.globalDrawer ? ((root.sideBar.collapsible && root.sideBar.collapsed) ? root.sideBar.collapsedSize : (root.sideBar.modal ? 0 : root.sideBar.width * root.sideBar.position)) :
+    contentItem.anchors.leftMargin: root.sideBar && !root.globalDrawer ? ((root.sideBar.collapsible && root.sideBar.collapsed) ? root.sideBar.collapsedSize : (root.sideBar.modal ? 0 : root.sideBar.width * root.sideBar.position)) :
                                                                          (!root.sideBar && root.globalDrawer && (root.globalDrawer.modal === false) ? root.globalDrawer.width * root.globalDrawer.position : 0)
 
    property Maui.AbstractSideBar sideBar
@@ -52,7 +52,7 @@ Kirigami.AbstractApplicationWindow
 
     property alias leftIcon : menuBtn
     property alias menuButton : menuBtn
-    
+
     property alias mainMenu : mainMenu.contentData
     property alias about : aboutDialog
     property alias accounts: _accountsDialogLoader.item
@@ -66,13 +66,13 @@ Kirigami.AbstractApplicationWindow
     /*************************************************/
 
     property bool isWide : root.width >= Kirigami.Units.gridUnit * 30
-    
+
     property Flickable flickable : null
     onFlickableChanged: returnToBounds()
 
     property int footerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineFooter
     property int headerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineHeader
-    
+
     /***************************************************/
     /********************* COLORS *********************/
     /*************************************************/
@@ -145,26 +145,26 @@ Kirigami.AbstractApplicationWindow
      *        color: bgColor
 }
 */
-    
+
     Component
     {
         id: _accountsComponent
-        
+
         ColumnLayout
         {
-			visible: Maui.App.handleAccounts			
-			spacing: Maui.Style.space.medium
-			                    
-			Kirigami.Icon
-			{
+            visible: Maui.App.handleAccounts
+            spacing: Maui.Style.space.medium
+
+            Kirigami.Icon
+            {
                 visible: Maui.App.accounts.currentAccountIndex >= 0
                 source: "user-identity"
                 Layout.preferredHeight: Maui.Style.iconSizes.large
                 Layout.preferredWidth: Maui.Style.iconSizes.large
-                Layout.alignment:  Qt.AlignCenter		
+                Layout.alignment:  Qt.AlignCenter
                 Layout.margins: Maui.Style.space.medium
             }
-            
+
             Label
             {
                 visible: Maui.App.accounts.currentAccountIndex >= 0
@@ -176,13 +176,13 @@ Kirigami.AbstractApplicationWindow
                 font.bold: true
                 font.weight: Font.Bold
             }
-            
+
             Kirigami.Separator
             {
-				visible: _accountsListing.count > 0
+                visible: _accountsListing.count > 0
                 Layout.fillWidth: true
             }
-            
+
             ListBrowser
             {
                 id: _accountsListing
@@ -191,43 +191,43 @@ Kirigami.AbstractApplicationWindow
                 Layout.preferredHeight: Math.min(contentHeight, 300)
                 spacing: Maui.Style.space.medium
                 Kirigami.Theme.backgroundColor: "transparent"
-				currentIndex: Maui.App.accounts.currentAccountIndex
-				
+                currentIndex: Maui.App.accounts.currentAccountIndex
+
                 model:  Maui.BaseModel
                 {
-                    list: Maui.App.accounts                    
-                }                
-                
+                    list: Maui.App.accounts
+                }
+
                 delegate: Maui.ListBrowserDelegate
                 {
                     iconSource: "amarok_artist"
                     iconSizeHint: Maui.Style.iconSizes.medium
                     label1.text: model.user
-                    label2.text: model.server                       
+                    label2.text: model.server
                     width: _accountsListing.width
                     height: Maui.Style.rowHeight * 1.2
                     leftPadding: Maui.Style.space.tiny
-                    rightPadding: Maui.Style.space.tiny                    
+                    rightPadding: Maui.Style.space.tiny
                     onClicked: Maui.App.accounts.currentAccountIndex = index
-				}
-                
+                }
+
                 Component.onCompleted:
                 {
-                    if(_accountsListing.count > 0)                    
-                        Maui.App.accounts.currentAccountIndex = 0                    
+                    if(_accountsListing.count > 0)
+                        Maui.App.accounts.currentAccountIndex = 0
                 }
             }
-            
+
             Kirigami.Separator
             {
-				visible: _accountsListing.count > 0
+                visible: _accountsListing.count > 0
                 Layout.fillWidth: true
             }
-            
+
             Button
             {
                 Layout.margins: Maui.Style.space.small
-                Layout.preferredHeight: implicitHeight 
+                Layout.preferredHeight: implicitHeight
                 Layout.alignment: Qt.AlignCenter
                 text: qsTr("Manage accounts")
                 icon.name: "list-add-user"
@@ -235,31 +235,31 @@ Kirigami.AbstractApplicationWindow
                 {
                     if(root.accounts)
                         accounts.open()
-                        
+
                    mainMenu.close()
                 }
-                
+
                 Kirigami.Theme.backgroundColor: Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.1)
                 Kirigami.Theme.textColor: Kirigami.Theme.textColor
             }
-            
+
             Kirigami.Separator
             {
                 Layout.fillWidth: true
-            }          
-            
+            }
+
         }
     }
-    
-    Connections 
+
+    Connections
     {
         target: root.flickable ? root.flickable : null
         enabled: root.flickable && ((root.header && root.headerPositioning === ListView.PullBackHeader) || (root.footer &&  root.footerPositioning === ListView.PullBackFooter))
         property int oldContentY
-        property bool updatingContentY: false        
-        
+        property bool updatingContentY: false
+
         onContentYChanged:
-        {   
+        {
             if(!root.flickable.dragging && root.flickable.atYBeginning)
                 root.returnToBounds()
 
@@ -269,80 +269,80 @@ Kirigami.AbstractApplicationWindow
                 return;
                 //TODO: merge
                 //if moves but not dragging, just update oldContentY
-            }             
-            
+            }
+
             if(root.flickable.contentHeight < root.height)
                 return
-                
+
                 var oldFHeight
                 var oldHHeight
-                
+
              if (root.footer && root.footerPositioning === ListView.PullBackFooter)
                 {
-                    oldFHeight = root.footer.height                    
+                    oldFHeight = root.footer.height
                     root.footer.height = Math.max(0,
                                                   Math.min(root.footer.implicitHeight,
                                                            root.footer.height + oldContentY - root.flickable.contentY));
                 }
-            
-               
+
+
                     if (root.header && root.headerPositioning === ListView.PullBackHeader)
                     {
-                        oldHHeight = root.header.height             
+                        oldHHeight = root.header.height
                         root.header.height = Math.max(0,
                                                       Math.min(root.header.implicitHeight,
-                                                               root.header.height + oldContentY - root.flickable.contentY));               
+                                                               root.header.height + oldContentY - root.flickable.contentY));
                     }
-                
-            
+
+
             //if the implicitHeight is changed, use that to simulate scroll
             if ((root.footer && oldFHeight !== root.footer.height)|| ( root.header && oldHHeight !== root.header.height))
             {
                 updatingContentY = true;
                 if(root.header && oldHHeight !== root.header.height)
-                    root.flickable.contentY -= (oldHHeight - root.header.height) 
-                  
+                    root.flickable.contentY -= (oldHHeight - root.header.height)
+
                     updatingContentY = false;
 
             } else {
                 oldContentY = root.flickable.contentY
             }
         }
-        
+
          onMovementEnded:
         {
             if (root.headerPositioning === ListView.PullBackHeader  && root.header)
-            {  
-                    if (root.header.height >= (root.header.implicitHeight/2) || root.flickable.atYBeginning ) 
+            {
+                    if (root.header.height >= (root.header.implicitHeight/2) || root.flickable.atYBeginning )
                     {
                         root.header.height =  root.header.implicitHeight
-                        
-                    } else 
+
+                    } else
                     {
                         root.header.height = 0
                     }
-                
+
             }
-            
+
              if (root.footerPositioning === ListView.PullBackFooter  && root.footer)
-            {                
-                if (root.footer.height >= (root.footer.implicitHeight/2) || root.flickable.atYEnd) 
+            {
+                if (root.footer.height >= (root.footer.implicitHeight/2) || root.flickable.atYEnd)
                 {
                     if(root.flickable.atYEnd)
                     {
-                        root.footer.height =  root.footer.implicitHeight                        
+                        root.footer.height =  root.footer.implicitHeight
                         root.flickable.contentY = root.flickable.contentHeight - root.flickable.height
                         oldContentY = root.flickable.contentY
                     }else
                     {
-                        root.footer.height =  root.footer.implicitHeight                        
+                        root.footer.height =  root.footer.implicitHeight
                     }
-                    
-                } else 
+
+                } else
                 {
                     root.footer.height = 0
-                }                  
-            }            
+                }
+            }
         }
     }
 
@@ -378,18 +378,18 @@ Kirigami.AbstractApplicationWindow
                     modal: true
                     z: 999
                     width: Maui.Style.unit * 250
-                    
+
                     Loader
                     {
-						id: _accountsMenuLoader
-						width: parent.width * 0.9
-						anchors.horizontalCenter: parent.horizontalCenter
-						
-						active: Maui.App.handleAccounts
-						sourceComponent: Maui.App.handleAccounts ?
-						_accountsComponent : null
-					}
-					
+                        id: _accountsMenuLoader
+                        width: parent.width * 0.9
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                        active: Maui.App.handleAccounts
+                        sourceComponent: Maui.App.handleAccounts ?
+                        _accountsComponent : null
+                    }
+
                     MenuItem
                     {
                         text: qsTr("About")
@@ -448,28 +448,28 @@ Kirigami.AbstractApplicationWindow
     {
         id: _notify
         property var cb : ({})
-		
-		property alias iconName : _notifyTemplate.iconSource
-		property alias title : _notifyTemplate.label1
-		property alias body: _notifyTemplate.label2
-		
+
+        property alias iconName : _notifyTemplate.iconSource
+        property alias title : _notifyTemplate.label1
+        property alias body: _notifyTemplate.label2
+
         verticalAlignment: Qt.AlignTop
         defaultButtons: _notify.cb !== null
-		rejectButton.visible: false
-		onAccepted: 
-		{
-			if(_notify.cb)
-			{
-				_notify.cb()
-				_notify.close()
-			}
-		}
-		
-		page.padding: Maui.Style.space.medium
-		
-		footBar.background: null
+        rejectButton.visible: false
+        onAccepted:
+        {
+            if(_notify.cb)
+            {
+                _notify.cb()
+                _notify.close()
+            }
+        }
 
-		maxHeight: Math.max(Maui.Style.iconSizes.large + Maui.Style.space.huge, (_notifyTemplate.implicitHeight)) + Maui.Style.space.big + footBar.height
+        page.padding: Maui.Style.space.medium
+
+        footBar.background: null
+
+        maxHeight: Math.max(Maui.Style.iconSizes.large + Maui.Style.space.huge, (_notifyTemplate.implicitHeight)) + Maui.Style.space.big + footBar.height
         maxWidth: Kirigami.Settings.isMobile ? parent.width * 0.9 : Maui.Style.unit * 500
         widthHint: 0.8
 
@@ -478,34 +478,34 @@ Kirigami.AbstractApplicationWindow
             id: _notifyTimer
             onTriggered:
             {
-				if(_mouseArea.containsPress || _mouseArea.containsMouse)
-					return;
-				
-				_notify.close()
+                if(_mouseArea.containsPress || _mouseArea.containsMouse)
+                    return;
+
+                _notify.close()
             }
         }
 
         onClosed: _notifyTimer.stop()
-        
-		Maui.ListItemTemplate
-		{
-			id: _notifyTemplate		
-			anchors.fill: parent
-			iconSizeHint: Maui.Style.iconSizes.huge
-			label1.font.bold: true
-			label1.font.weight: Font.Bold
-			label1.font.pointSize: Maui.Style.fontSizes.big
-			iconSource: "dialog-warning"
-		}
-        
+
+        Maui.ListItemTemplate
+        {
+            id: _notifyTemplate
+            anchors.fill: parent
+            iconSizeHint: Maui.Style.iconSizes.huge
+            label1.font.bold: true
+            label1.font.weight: Font.Bold
+            label1.font.pointSize: Maui.Style.fontSizes.big
+            iconSource: "dialog-warning"
+        }
+
         MouseArea
         {
-			id: _mouseArea
-			height: parent.height
-			width: parent.width
-			anchors.centerIn: parent
-			hoverEnabled: true
-		}
+            id: _mouseArea
+            height: parent.height
+            width: parent.width
+            anchors.centerIn: parent
+            hoverEnabled: true
+        }
 
         function show(callback)
         {
@@ -537,32 +537,24 @@ Kirigami.AbstractApplicationWindow
             root.y = rect.y
             root.width = rect.width
             root.height = rect.height
-
         }
-
     }
-    
-    Connections
-    {
-		target: Maui.App
-		onSendNotification: notify(icon, title, body, callback, timeout, buttonText)
-	}
 
     function notify(icon, title, body, callback, timeout, buttonText)
     {
-		_notify.iconName = icon || "emblem-warning"
-		_notify.title.text = title
+        _notify.iconName = icon || "emblem-warning"
+        _notify.title.text = title
         _notify.body.text = body
         _notifyTimer.interval = timeout ? timeout : 2500
         _notify.acceptButton.text = buttonText || qsTr ("Accept")
         _notify.show(callback)
     }
-    
+
        function returnToBounds()
     {
         if(root.header)
                 root.header.height = root.header.implicitHeight
-                
+
                 if(root.footer)
                 root.footer.height = root.footer.implicitHeight
     }

@@ -10,12 +10,12 @@ Maui.Page
     id: control
 
     property url path
-    
+
     onPathChanged: if(control.currentView) control.currentView.currentIndex = 0
 
     property Maui.FMList currentFMList
     property Maui.BaseModel currentFMModel
-    
+
     property alias currentView : viewLoader.item
     property int viewType
     property string filter
@@ -25,9 +25,12 @@ Maui.Page
 
     function setCurrentFMList()
     {
-		control.currentFMList = currentView.currentFMList
-		control.currentFMModel = currentView.currentFMModel
-		currentView.forceActiveFocus()
+        if(control.currentView)
+        {
+            control.currentFMList = currentView.currentFMList
+            control.currentFMModel = currentView.currentFMModel
+            currentView.forceActiveFocus()
+        }
     }
 
     Menu
@@ -92,10 +95,10 @@ Maui.Page
         id: _commonFMList
         path: control.path
         onSortByChanged: if(group) groupBy()
-		onlyDirs: settings.onlyDirs
-		filterType: settings.filterType
-		filters: settings.filters 
-		sortBy: settings.sortBy 
+        onlyDirs: settings.onlyDirs
+        filterType: settings.filterType
+        filters: settings.filters
+        sortBy: settings.sortBy
     }
 
     Component
@@ -163,7 +166,7 @@ Maui.Page
                 rightEmblem: _listViewBrowser.rightEmblem
                 isSelected: selectionBar ? selectionBar.contains(model.path) : false
                 leftEmblem: isSelected ? "list-remove" : "list-add"
-                draggable: true  
+                draggable: true
 
                 Maui.Badge
                 {
@@ -255,7 +258,7 @@ Maui.Page
             cellHeight: itemSize * 1.5
             keepEmblemOverlay: settings.selectionMode
             showPreviewThumbnails: settings.showThumbnails
-        
+
             BrowserHolder
             {
                 id: _holder
@@ -293,7 +296,7 @@ Maui.Page
                 rightEmblem: _gridViewBrowser.rightEmblem
                 isSelected: selectionBar ? selectionBar.contains(model.path) : false
                 leftEmblem: isSelected ? "list-remove" : "list-add"
-				draggable: true
+                draggable: true
 
                 Maui.Badge
                 {
@@ -404,7 +407,7 @@ Maui.Page
 
                 keyNavigationEnabled: true
                 interactive: Maui.Handy.isTouch
-                
+
                 orientation: ListView.Horizontal
                 snapMode: ListView.SnapToItem
 
@@ -440,9 +443,9 @@ Maui.Page
 
                 onCurrentItemChanged:
                 {
-					_millerControl.currentFMList = currentItem.currentFMList
-					_millerControl.currentFMModel = currentItem.currentFMModel
-					control.setCurrentFMList()
+                    _millerControl.currentFMList = currentItem.currentFMList
+                    _millerControl.currentFMModel = currentItem.currentFMModel
+                    control.setCurrentFMList()
                     currentItem.forceActiveFocus()
                 }
 
@@ -472,9 +475,9 @@ Maui.Page
 
                 delegate: Item
                 {
-					property alias currentFMList : _millersFMList
-					property alias currentFMModel : _millersFMModel
-					property int _index : index
+                    property alias currentFMList : _millersFMList
+                    property alias currentFMModel : _millersFMModel
+                    property int _index : index
                     width: Math.min(Kirigami.Units.gridUnit * 22, control.width)
                     height: parent.height
                     focus: true
@@ -499,8 +502,8 @@ Maui.Page
                         path: model.path
                         onlyDirs: settings.onlyDirs
                         filterType: settings.filterType
-                        filters: settings.filters 
-                        sortBy: settings.sortBy                  
+                        filters: settings.filters
+                        sortBy: settings.sortBy
                     }
 
                     Maui.ListBrowser
@@ -552,7 +555,7 @@ Maui.Page
 
                         model: Maui.BaseModel
                         {
-							id: _millersFMModel
+                            id: _millersFMModel
                             list: _millersFMList
                             filter: control.filter
                             recursiveFilteringEnabled: true
@@ -577,7 +580,7 @@ Maui.Page
                             rightEmblem: _millerListView.rightEmblem
                             isSelected: selectionBar ? selectionBar.contains(model.path) : false
                             leftEmblem: isSelected ? "list-remove" : "list-add"
-							draggable: true
+                            draggable: true
 
                             Maui.Badge
                             {

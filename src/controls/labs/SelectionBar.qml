@@ -234,94 +234,95 @@ Item
 
     RowLayout
     {
-		anchors.fill: parent
-		
-		ToolButton
-		{
-			icon.name: "dialog-close"
-			Layout.fillHeight: true
-			Layout.preferredWidth: height
-			onClicked: control.exitClicked()
-			Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
-		}
-		
-		Maui.ToolBar
-		{
-			id: _layout
-			background: null
-			Layout.fillHeight: true
-			Layout.fillWidth: true
-			
-			middleContent: Repeater
-			{
-				model: control.actions
-				
-				ToolButton
-				{
-					action: modelData
-								Layout.preferredWidth: implicitWidth
+        anchors.fill: parent
+
+        ToolButton
+        {
+            icon.name: "dialog-close"
+            Layout.fillHeight: true
+            Layout.preferredWidth: height
+            onClicked: control.exitClicked()
+            Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
+        }
+
+        Maui.ToolBar
+        {
+            id: _layout
+            background: null
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            preferredHeight: height
+
+            middleContent: Repeater
+            {
+                model: control.actions
+
+                ToolButton
+                {
+                    action: modelData
+
+//                                Layout.preferredWidth: implicitWidth
 // Layout.fillHeight: true
-					//                    display: control.width > Kirigami.Units.gridUnit * 25 ? ToolButton.TextUnderIcon : ToolButton.IconOnly
-					Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
-// 					display: ToolButton.TextUnderIcon
-					onClicked : _listContainer.showList = false
-					
-				}
-			}
-			
-		}
-		
-		Maui.Badge
-			{
-				id: _counter
-				Layout.fillHeight: true
-				Layout.preferredWidth: height
-				Layout.margins: Maui.Style.space.medium
-				text: selectionList.count
-				radius: Maui.Style.radiusV
-				
-				Kirigami.Theme.backgroundColor: _listContainer.showList ? 
+                    display: _layout.width < Kirigami.Units.gridUnit * 25 ? ToolButton.TextUnderIcon : ToolButton.IconOnly
+                    Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
+                    onClicked : _listContainer.showList = false
+
+                }
+            }
+
+        }
+
+        Maui.Badge
+            {
+                id: _counter
+                Layout.fillHeight: true
+                Layout.preferredWidth: height
+                Layout.margins: Maui.Style.space.medium
+                text: selectionList.count
+                radius: Maui.Style.radiusV
+
+                Kirigami.Theme.backgroundColor: _listContainer.showList ?
 Kirigami.Theme.highlightColor : Qt.darker(bg.color)
-				border.color: "transparent"
-				
-				onClicked:
-				{
-					_listContainer.showList = !_listContainer.showList
-				}
-				
-				Component.onCompleted:
-				{
-					_counter.item.font.pointSize= Maui.Style.fontSizes.big
-					
-				}
-				
-				SequentialAnimation
-				{
-					id: anim
-					//             PropertyAnimation
-					//             {
-					//                 target: _counter
-					//                 property: "opacity"
-					//                 easing.type: Easing.InOutQuad
-					//                 from: 0.5
-					//                 to: 1
-					//                 duration: 600
-					//             }
-					//
-					PropertyAnimation
-					{
-						target: _counter
-						property: "radius"
-						easing.type: Easing.InOutQuad
-						from: target.height
-						to: Maui.Style.radiusV
-						duration: 200
-					}
-				}
-			}
-		
-		
-	}
+                border.color: "transparent"
+
+                onClicked:
+                {
+                    _listContainer.showList = !_listContainer.showList
+                }
+
+                Component.onCompleted:
+                {
+                    _counter.item.font.pointSize= Maui.Style.fontSizes.big
+
+                }
+
+                SequentialAnimation
+                {
+                    id: anim
+                    //             PropertyAnimation
+                    //             {
+                    //                 target: _counter
+                    //                 property: "opacity"
+                    //                 easing.type: Easing.InOutQuad
+                    //                 from: 0.5
+                    //                 to: 1
+                    //                 duration: 600
+                    //             }
+                    //
+                    PropertyAnimation
+                    {
+                        target: _counter
+                        property: "radius"
+                        easing.type: Easing.InOutQuad
+                        from: target.height
+                        to: Maui.Style.radiusV
+                        duration: 200
+                    }
+                }
+            }
+
+
+    }
 
 
     Keys.onEscapePressed:
