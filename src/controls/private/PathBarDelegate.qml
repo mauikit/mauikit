@@ -10,7 +10,7 @@ ItemDelegate
     id: control
     property int arrowWidth : 8
     property bool isCurrentListItem : ListView.isCurrentItem
-    implicitWidth: _label.implicitWidth + Maui.Style.space.big
+    implicitWidth: _label.implicitWidth + Maui.Style.space.big + arrowWidth
 
     property color borderColor
 
