@@ -27,7 +27,6 @@
 #include "pathlist.h"
 #include "mauiapp.h"
 #include "fmstatic.h"
-#include "controls/private/src/patharrowbackground.h"
 
 #ifdef COMPONENT_ACCOUNTS
 #include "mauiaccounts.h"
@@ -116,7 +115,6 @@ void MauiKit::registerTypes(const char *uri)
 
     qmlRegisterType(componentUrl(QStringLiteral("FloatingButton.qml")), uri, 1, 0, "FloatingButton");
 
-    qmlRegisterType<PathArrowBackground>(uri, 1, 0, "PathArrowBackground");
     qmlRegisterType(componentUrl(QStringLiteral("PathBar.qml")), uri, 1, 0, "PathBar");
     qmlRegisterType<PathList>(uri, 1, 0, "PathList");
     

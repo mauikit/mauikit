@@ -23,8 +23,9 @@ import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import "private"
+import "private/shapes"
 
-Item
+Rectangle
 {
     id: control
 
@@ -45,17 +46,13 @@ Item
 
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     Kirigami.Theme.inherit: false
-
-    Rectangle
-    {
-        id: pathBarBG
-        anchors.fill: parent
-        color: pathEntry ? Kirigami.Theme.backgroundColor : Qt.darker(Kirigami.Theme.backgroundColor, 1.05)
-        radius: Maui.Style.radiusV
-        opacity: 1
-        border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-        border.width: Maui.Style.unit
-    }
+    
+    color: Kirigami.Theme.backgroundColor
+    radius: Maui.Style.radiusV
+    opacity: 1
+    border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+    border.width: Maui.Style.unit
+    
 
     Loader
     {
@@ -130,23 +127,17 @@ Item
             MouseArea
             {
                 Layout.fillHeight: true
-                Layout.preferredWidth: control.height
+                Layout.preferredWidth: height * 1.5
                 onClicked: control.homeClicked()
                 hoverEnabled: true
 
-                Rectangle
+                Kirigami.Icon
                 {
-                    anchors.fill: parent
-                    radius: Maui.Style.radiusV
-                    color: parent.containsMouse ?  Qt.rgba(Kirigami.Theme.highlightColor.r, Kirigami.Theme.highlightColor.g, Kirigami.Theme.highlightColor.b, 0.2)  : "transparent"
-                    Kirigami.Icon
-                    {
-                        anchors.centerIn: parent
-                        source: Qt.platform.os == "android" ?  "user-home-sidebar" : "user-home"
-                        color: control.Kirigami.Theme.textColor
-                        width: Maui.Style.iconSizes.medium
-                        height: width
-                    }
+                    anchors.centerIn: parent
+                    source: Qt.platform.os == "android" ?  "user-home-sidebar" : "user-home"
+                    color: parent.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
+                    width: Maui.Style.iconSizes.medium
+                    height: width
                 }
             }
 
@@ -156,10 +147,9 @@ Item
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 property int pathArrowWidth: 8
-
                 orientation: ListView.Horizontal
                 clip: true
-                spacing: -(pathArrowWidth+1)
+                spacing: 1 - (pathArrowWidth + 2)
 
                 focus: true
                 interactive: true
@@ -170,8 +160,9 @@ Item
                 delegate: PathBarDelegate
                 {
                     id: delegate
+                    borderColor: control.border.color
                     arrowWidth: _listView.pathArrowWidth
-                    height: parent.height
+                    height: parent.height - 1
                     width: Math.max(Maui.Style.iconSizes.medium * 2, implicitWidth)
                     Connections
                     {
