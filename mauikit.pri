@@ -201,7 +201,6 @@ HEADERS += \
     $$PWD/src/utils/utils.h \
     $$PWD/src/utils/mauiapp.h \
     $$PWD/src/utils/models/pathlist.h \
-    $$PWD/src/controls/private/src/patharrowbackground.h
 
 SOURCES += \
     $$PWD/src/utils/fmstatic.cpp \
@@ -211,7 +210,6 @@ SOURCES += \
     $$PWD/src/utils/handy.cpp \
     $$PWD/src/utils/mauiapp.cpp \
     $$PWD/src/utils/models/pathlist.cpp \
-    $$PWD/src/controls/private/src/patharrowbackground.cpp
 
 DEPENDPATH += \
     $$PWD/src \

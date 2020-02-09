@@ -3,7 +3,6 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
-import QtQuick.Shapes 1.14
 import "shapes"
 
 ItemDelegate
@@ -14,21 +13,21 @@ ItemDelegate
     implicitWidth: _label.implicitWidth + Maui.Style.space.big
 
     property color borderColor
-    
+
     hoverEnabled: true
     ToolTip.delay: 1000
     ToolTip.timeout: 5000
     ToolTip.visible: control.hovered
     ToolTip.text: model.path
-    
+
     background: Arrow
-    {            
+    {
         arrowWidth: control.arrowWidth
         color: control.isCurrentListItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
-        
-        borderColor:control.isCurrentListItem ?  control.Kirigami.Theme.highlightColor :  control.borderColor 
+
+        borderColor:control.isCurrentListItem ?  control.Kirigami.Theme.highlightColor :  control.borderColor
     }
-    
+
     signal rightClicked()
 
     MouseArea
@@ -40,8 +39,8 @@ ItemDelegate
         {
             if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
                 control.rightClicked()
-                else
-                    control.clicked()
+            else
+                control.clicked()
         }
 
         onDoubleClicked: control.doubleClicked()

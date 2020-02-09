@@ -46,17 +46,18 @@ Rectangle
 
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     Kirigami.Theme.inherit: false
-    
+
     color: Kirigami.Theme.backgroundColor
     radius: Maui.Style.radiusV
     opacity: 1
     border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
     border.width: Maui.Style.unit
-    
+
 
     Loader
     {
         id: _loader
+        z: control.z + 999999999999999
         anchors.fill: parent
         sourceComponent: pathEntry ? _pathEntryComponent : _pathCrumbsComponent
         onLoaded:
@@ -122,7 +123,7 @@ Rectangle
             anchors.fill: parent
             property alias listView: _listView
             spacing: 0
-            clip: true
+            clip: false
 
             MouseArea
             {
@@ -149,7 +150,7 @@ Rectangle
                 property int pathArrowWidth: 8
                 orientation: ListView.Horizontal
                 clip: true
-                spacing: 1 - (pathArrowWidth + 2)
+                spacing: 1 - (pathArrowWidth + 1)
 
                 focus: true
                 interactive: true
@@ -162,7 +163,7 @@ Rectangle
                     id: delegate
                     borderColor: control.border.color
                     arrowWidth: _listView.pathArrowWidth
-                    height: parent.height - 1
+                    height: parent.height
                     width: Math.max(Maui.Style.iconSizes.medium * 2, implicitWidth)
                     Connections
                     {

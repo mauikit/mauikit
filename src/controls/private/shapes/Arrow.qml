@@ -3,7 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
-import QtQuick.Shapes 1.14  
+import QtQuick.Shapes 1.12
 
 Shape
 {
@@ -12,10 +12,11 @@ Shape
     property color color : Kirigami.Theme.backgroundColor
     property color borderColor: Kirigami.Theme.backgroundColor
     property int borderWidth: Maui.Style.unit
-    
+
      layer.enabled: true
         layer.samples: 4
-    
+    smooth: true
+
     ShapePath
     {
 //             joinStyle: ShapePath.RoundJoin
