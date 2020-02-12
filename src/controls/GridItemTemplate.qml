@@ -126,7 +126,7 @@ Item
                 Maui.Badge
                 {
                     id: _emblem
-                    
+                    visible: false
                     size: Maui.Style.iconSizes.medium        
                     anchors.margins: Maui.Style.space.medium
                     anchors.horizontalCenter: parent.horizontalCenter

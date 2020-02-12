@@ -34,7 +34,7 @@ Maui.Dialog
 	
 	widthHint: 0.9
 	
-	maxHeight: _purpose.height + (page.padding * 2.5) + headBar.height
+	maxHeight: 500
 	maxWidth: Maui.Style.unit * 500
 	
 	verticalAlignment: Qt.AlignBottom
@@ -70,8 +70,7 @@ Maui.Dialog
 		Purpose.AlternativesView
 		{
 			id: _purpose
-			width: parent.width
-			implicitHeight: 300
+			anchors.fill: parent
 			pluginType: 'Export'
 			clip: true
 			
