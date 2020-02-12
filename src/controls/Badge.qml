@@ -46,8 +46,8 @@ Rectangle
 
     z: parent.z+1
     
-    implicitHeight:  size + Maui.Style.space.small
-    implicitWidth: Math.max((loader.sourceComponent == labelComponent ? Math.max(loader.item.implicitWidth + Maui.Style.space.small, control.height) : control.height), implicitHeight)
+    implicitHeight: size
+    implicitWidth: Math.max((loader.sourceComponent == labelComponent ? Math.max(loader.item.implicitWidth, control.height) : control.height), implicitHeight)
     
     radius: Math.min(width, height)
     color: control.Kirigami.Theme.backgroundColor

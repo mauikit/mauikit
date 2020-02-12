@@ -122,37 +122,37 @@ Item
                 sourceComponent: _iconContainer.visible ? (control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : null) ): null
             }
         }
-
-            Label
+        
+        Label
+        {
+            id: _label1
+            visible: control.labelsVisible
+            Layout.margins: Maui.Style.space.tiny
+            Layout.preferredHeight: Math.min(implicitHeight + Maui.Style.space.medium, parent.height * 0.3)
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignCenter
+            horizontalAlignment: Qt.AlignHCenter
+            verticalAlignment: Qt.AlignVCenter
+            elide: Qt.ElideRight
+            wrapMode: Text.Wrap
+            color: control.Kirigami.Theme.textColor
+            
+            Rectangle
             {
-                id: _label1
-                visible: control.labelsVisible
-                Layout.margins: Maui.Style.space.tiny
-                Layout.preferredHeight: Math.min(implicitHeight + Maui.Style.space.medium, parent.height * 0.3)
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignCenter
-                horizontalAlignment: Qt.AlignHCenter
-                verticalAlignment: Qt.AlignVCenter
-                elide: Qt.ElideRight
-                wrapMode: Text.Wrap
-                color: control.Kirigami.Theme.textColor
-
-                Rectangle
+                anchors.fill: parent
+                
+                Behavior on color
                 {
-                    anchors.fill: parent
-
-                    Behavior on color
+                    ColorAnimation
                     {
-                        ColorAnimation
-                        {
-                            duration: Kirigami.Units.longDuration
-                        }
+                        duration: Kirigami.Units.longDuration
                     }
-                    color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
-
-                    radius: Maui.Style.radiusV
-                    border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"
                 }
+                color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
+                
+                radius: Maui.Style.radiusV
+                border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"
             }
+        }
     }
 }
