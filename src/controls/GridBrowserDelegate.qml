@@ -27,55 +27,55 @@ import "private"
 
 Maui.ItemDelegate
 {
-    id: control 
-    
+    id: control
+
     property int folderSize : Maui.Style.iconSizes.big
     property int emblemSize: Maui.Style.iconSizes.medium
     property bool showLabel : true
     property bool showEmblem : false
     property bool showTooltip : false
     property bool showThumbnails : false
-    property bool isSelected : false    
-    property bool keepEmblemOverlay : false    
+    property bool isSelected : false
+    property bool keepEmblemOverlay : false
     property string rightEmblem
     property string leftEmblem
-    
+
     property alias dropArea : _dropArea
-    
-    isCurrentItem : GridView.isCurrentItem || isSelected    
-    
+
+    isCurrentItem : GridView.isCurrentItem || isSelected
+
     signal emblemClicked(int index)
     signal rightEmblemClicked(int index)
     signal leftEmblemClicked(int index)
     signal contentDropped(var drop)
-    
+
     ToolTip.delay: 1000
     ToolTip.timeout: 5000
     ToolTip.visible: control.hovered && control.showTooltip
-    ToolTip.text: model.tooltip ? model.tooltip : model.path 
-    
+    ToolTip.text: model.tooltip ? model.tooltip : model.path
+
     background: Item {}
-    
-    DropArea 
+
+    DropArea
     {
         id: _dropArea
         anchors.fill: parent
         enabled: control.draggable
-        
-        Rectangle 
+
+        Rectangle
         {
             anchors.fill: parent
             radius: Maui.Style.radiusV
-            color: control.Kirigami.Theme.highlightColor		
+            color: control.Kirigami.Theme.highlightColor
             visible: parent.containsDrag
         }
-        
+
         onDropped:
         {
             control.contentDropped(drop)
         }
     }
-    
+
     Drag.active: mouseArea.drag.active && control.draggable
     Drag.dragType: Drag.Automatic
     Drag.supportedActions: Qt.CopyAction
@@ -83,8 +83,8 @@ Maui.ItemDelegate
     {
         "text/uri-list": model.path
     }
-  
-    
+
+
     Maui.GridItemTemplate
     {
         id: _template
@@ -93,19 +93,19 @@ Maui.ItemDelegate
         iconSource: model.icon
         imageSource : model.mime ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails && model.thumbnail && model.thumbnail.length? model.thumbnail : "") : ""
         label1.text: model.label
-        
+//        label1.elide: Text.ElideMiddle // TODO this is broken ???
         emblem.iconName: control.leftEmblem
         emblem.visible: (control.keepEmblemOverlay || control.isSelected) && control.showEmblem  && control.leftEmblem
         isCurrentItem: control.isCurrentItem
         emblem.border.color: emblem.Kirigami.Theme.textColor
         emblem.color: control.isSelected ? emblem.Kirigami.Theme.highlightColor : emblem.Kirigami.Theme.backgroundColor
-        
+
         Connections
         {
             target: _template.emblem
             onClicked: control.leftEmblemClicked(index)
         }
     }
-    
+
 
 }

@@ -120,6 +120,7 @@ Maui.Page
     }
     ]
 
+    footerPositioning: ListView.InlineFooter
     headBar.position: Kirigami.Settings.isMobile ? ToolBar.Footer : ToolBar.Header
 
     headBar.rightContent:[
