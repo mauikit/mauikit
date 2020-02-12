@@ -27,108 +27,100 @@ import "private"
 
 Maui.ItemDelegate
 {
-	id: control 
-	
-	property bool showDetailsInfo: false
-	property int folderSize : Maui.Style.iconSizes.medium
-	property int emblemSize: Maui.Style.iconSizes.medium
-	property alias showLabel : _template.labelsVisible
-	property bool showEmblem : false
-	property bool showTooltip : false
-	property bool showThumbnails : false
-	property bool isSelected : false	
-	property bool keepEmblemOverlay : false	
-	property string rightEmblem
-	property string leftEmblem
-	
-	isCurrentItem : ListView.isCurrentItem || isSelected	
-		
-	signal emblemClicked(int index)
-	signal rightEmblemClicked(int index)
-	signal leftEmblemClicked(int index) 
-	signal contentDropped(var drop)
-	
-	ToolTip.delay: 1000
-	ToolTip.timeout: 5000
-	ToolTip.visible: control.hovered && control.showTooltip
-	ToolTip.text: model.tooltip ? model.tooltip : model.path  
-	
-	
-	property alias label1 : _template.label1
-	property alias label2 : _template.label2
-	property alias label3 : _template.label3
-	property alias label4 : _template.label4
-	property alias iconItem : _template.iconItem
-	property alias iconVisible : _template.iconVisible
-	property alias iconSizeHint : _template.iconSizeHint
-	property alias imageSource : _template.imageSource
-	property alias iconSource : _template.iconSource
-		
-	DropArea 
-	{
-		id: _dropArea
-		anchors.fill: parent
-		enabled: control.draggable
-		
-		Rectangle 
-		{
-			anchors.fill: parent
-			radius: Maui.Style.radiusV
-			color: control.Kirigami.Theme.highlightColor		
-			visible: parent.containsDrag
-		}
-		
-		onDropped:
-		{
-			control.contentDropped(drop)
-		}
-	}
-	
-	Drag.active: mouseArea.drag.active && control.draggable
-	Drag.dragType: Drag.Automatic
-	Drag.supportedActions: Qt.CopyAction
-	Drag.mimeData:
-	{
-		"text/uri-list": model.path
-	}
-	
-	
-	RowLayout
-	{
+    id: control 
+    
+    property bool showDetailsInfo: false
+    property int folderSize : Maui.Style.iconSizes.medium
+    property int emblemSize: Maui.Style.iconSizes.medium
+    property alias showLabel : _template.labelsVisible
+    property bool showEmblem : false
+    property bool showTooltip : false
+    property bool showThumbnails : false
+    property bool isSelected : false	
+    property bool keepEmblemOverlay : false	
+    property string rightEmblem
+    property string leftEmblem
+    
+    isCurrentItem : ListView.isCurrentItem || isSelected	
+    
+    signal emblemClicked(int index)
+    signal rightEmblemClicked(int index)
+    signal leftEmblemClicked(int index) 
+    signal contentDropped(var drop)
+    
+    ToolTip.delay: 1000
+    ToolTip.timeout: 5000
+    ToolTip.visible: control.hovered && control.showTooltip
+    ToolTip.text: model.tooltip ? model.tooltip : model.path  
+    
+    
+    property alias label1 : _template.label1
+    property alias label2 : _template.label2
+    property alias label3 : _template.label3
+    property alias label4 : _template.label4
+    property alias iconItem : _template.iconItem
+    property alias iconVisible : _template.iconVisible
+    property alias iconSizeHint : _template.iconSizeHint
+    property alias imageSource : _template.imageSource
+    property alias iconSource : _template.iconSource
+    
+    DropArea 
+    {
+        id: _dropArea
         anchors.fill: parent
-        spacing: 0
-        Maui.Badge
+        enabled: control.draggable
+        
+        Rectangle 
         {
-            id: _leftEmblemIcon
-            iconName: control.leftEmblem
-            visible: (control.keepEmblemOverlay || control.isSelected) && control.showEmblem  && control.leftEmblem
-            size: Maui.Style.iconSizes.medium    
-            Layout.alignment: Qt.AlignVCenter
-            Layout.margins: Maui.Style.space.medium
-            border.color: Kirigami.Theme.textColor
-            color: control.isSelected ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor
-            onClicked: leftEmblemClicked(index)
+            anchors.fill: parent
+            radius: Maui.Style.radiusV
+            color: control.Kirigami.Theme.highlightColor		
+            visible: parent.containsDrag
         }
         
-        
-        Maui.ListItemTemplate
+        onDropped:
         {
-            id: _template
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            
-            isCurrentItem : control.isCurrentItem
-            
-            iconSizeHint: control.folderSize
-            
-            imageSource: model.mime &&  model.thumbnail ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails ? model.thumbnail : "") : ""	
-            iconSource: model.icon
-            
-            label1.text: model.label
-            label3.text : model.mime === "inode/directory" ? (model.count ? model.count + qsTr(" items") : "") : Maui.FM.formatSize(model.size)
-            label4.text: Maui.FM.formatDate(model.modified, "MM/dd/yyyy")
+            control.contentDropped(drop)
         }
     }
     
-
+    Drag.active: mouseArea.drag.active && control.draggable
+    Drag.dragType: Drag.Automatic
+    Drag.supportedActions: Qt.CopyAction
+    Drag.mimeData:
+    {
+        "text/uri-list": model.path
+    }
+    
+    
+    Maui.ListItemTemplate
+    {
+        id: _template
+        anchors.fill: parent
+        
+        isCurrentItem : control.isCurrentItem
+        
+        iconSizeHint: control.folderSize
+        
+        imageSource: model.mime &&  model.thumbnail ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails ? model.thumbnail : "") : ""	
+        iconSource: model.icon
+        
+        label1.text: model.label
+        label3.text : model.mime === "inode/directory" ? (model.count ? model.count + qsTr(" items") : "") : Maui.FM.formatSize(model.size)
+        label4.text: Maui.FM.formatDate(model.modified, "MM/dd/yyyy")
+        
+        emblem.iconName: control.leftEmblem
+        emblem.visible: (control.keepEmblemOverlay || control.isSelected) && control.showEmblem  && control.leftEmblem
+        emblem.size: Maui.Style.iconSizes.medium    
+        
+        emblem.border.color: emblem.Kirigami.Theme.textColor
+        emblem.color: control.isSelected ? emblem.Kirigami.Theme.highlightColor : emblem.Kirigami.Theme.backgroundColor
+        
+        Connections
+        {
+            target: _template.emblem
+            onClicked: control.leftEmblemClicked(index)
+        }
+    }   
+    
 }

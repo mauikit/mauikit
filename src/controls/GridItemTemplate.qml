@@ -42,6 +42,8 @@ Item
     property int iconSizeHint : Maui.Style.iconSizes.big
     property string imageSource
     property string iconSource
+    
+    property alias emblem : _emblem
 
     property bool isCurrentItem: false
     property bool labelsVisible: true
@@ -120,6 +122,29 @@ Item
                 width: control.iconSizeHint
                 anchors.centerIn: parent
                 sourceComponent: _iconContainer.visible ? (control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : null) ): null
+                
+                Maui.Badge
+                {
+                    id: _emblem
+                    
+                    size: Maui.Style.iconSizes.medium        
+                    anchors.margins: Maui.Style.space.medium
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottom: parent.bottom
+                    border.color: Kirigami.Theme.textColor                    
+                } 
+                
+                DropShadow
+                {
+                    anchors.fill: _emblem
+                    visible: _emblem.visible
+                    horizontalOffset: 0
+                    verticalOffset: 0
+                    radius: 8.0
+                    samples: 17
+                    color: "#80000000"
+                    source: _emblem
+                }
             }
         }
         

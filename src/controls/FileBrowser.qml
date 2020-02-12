@@ -732,7 +732,7 @@ Maui.Page
 
             onExitClicked: control.clearSelection()
 
-            listDelegate: ListBrowserDelegate
+            listDelegate: Maui.ListBrowserDelegate
             {
                 Kirigami.Theme.inherit: true
                 width: parent.width
@@ -740,12 +740,13 @@ Maui.Page
                 label1.text: model.label
                 label2.text: model.path
                 showEmblem: true
+                keepEmblemOverlay: true
                 showThumbnails: true
                 leftEmblem: "list-remove"
                 folderSize: Maui.Style.iconSizes.big
                 onLeftEmblemClicked: _selectionBar.removeAtIndex(index)
-                keepEmblemOverlay: Maui.Handy.isTouch
                 background: null
+
 
                 onClicked: control.previewer.show(model.path)
 

@@ -54,7 +54,7 @@ Maui.ItemDelegate
     ToolTip.visible: control.hovered && control.showTooltip
     ToolTip.text: model.tooltip ? model.tooltip : model.path 
     
-   background: Item {}
+    background: Item {}
     
     DropArea 
     {
@@ -83,150 +83,29 @@ Maui.ItemDelegate
     {
         "text/uri-list": model.path
     }
+  
     
-    
- 
-    
-    Maui.Badge
+    Maui.GridItemTemplate
     {
-        id: _rightEmblemIcon
-        iconName: rightEmblem
-        visible: (control.hovered || control.keepEmblemOverlay) && control.showEmblem && control.rightEmblem
-        z: 999
-        size: Maui.Style.iconSizes.medium
-        anchors.top: parent.top
-        anchors.right: parent.right
-        onClicked: rightEmblemClicked(index)
-    }
-    
-    Component
-    {
-        id: _imgComponent
-        
-        Image
-        {
-            id: img
-            anchors.centerIn: parent
-            source: model.thumbnail && model.thumbnail.length ? model.thumbnail : ""
-            height: Math.min (parent.height, img.implicitHeight)
-            width: Math.min(parent.width, img.implicitWidth)
-            sourceSize.width: width
-            sourceSize.height: height
-            horizontalAlignment: Qt.AlignHCenter
-            verticalAlignment: Qt.AlignVCenter
-            fillMode: Image.PreserveAspectCrop
-            cache: true
-            asynchronous: true
-            smooth: !Kirigami.Settings.isMobile
-            
-            layer.enabled: true
-            layer.effect: OpacityMask
-            {
-                maskSource: Item
-                {
-                    width: img.width
-                    height: img.height
-                    Rectangle
-                    {
-                        anchors.centerIn: parent
-                        width: img.width
-                        height: img.height
-                        radius: Maui.Style.radiusV
-                    }
-                }
-            }
-        }
-    }
-    
-    Component
-    {
-        id: _iconComponent
-        
-        Item
-        {
-            anchors.fill: parent
-            Kirigami.Icon
-            {
-                anchors.centerIn: parent
-                source: model.icon
-                fallback: "qrc:/assets/application-x-zerosize.svg"
-                height: Math.min(control.folderSize, parent.width)
-                width: height
-            }
-        }
-    }
-    
-    ColumnLayout
-    {
-        id: _layout
+        id: _template
         anchors.fill: parent
-        spacing: Maui.Style.space.tiny
-        opacity: (model.hidden == true || model.hidden == "true" )? 0.5 : 1
+        iconSizeHint: control.folderSize
+        iconSource: model.icon
+        imageSource : model.mime ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails && model.thumbnail && model.thumbnail.length? model.thumbnail : "") : ""
+        label1.text: model.label
         
-        Loader
+        emblem.iconName: control.leftEmblem
+        emblem.visible: (control.keepEmblemOverlay || control.isSelected) && control.showEmblem  && control.leftEmblem
+        isCurrentItem: control.isCurrentItem
+        emblem.border.color: emblem.Kirigami.Theme.textColor
+        emblem.color: control.isSelected ? emblem.Kirigami.Theme.highlightColor : emblem.Kirigami.Theme.backgroundColor
+        
+        Connections
         {
-            id: _loader
-            sourceComponent: model.mime ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails && model.thumbnail && model.thumbnail.length? _imgComponent : _iconComponent) : _iconComponent
-            Layout.preferredHeight: Math.min(control.folderSize, width)
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignCenter
-            Layout.margins: Maui.Style.unit		
-            
-               Maui.Badge
-    {
-        id: _leftEmblemIcon
-        iconName: control.leftEmblem
-        visible: (control.keepEmblemOverlay || control.isSelected) && control.showEmblem  && control.leftEmblem
-        z: mouseArea.z + 1
-      
-        onClicked: leftEmblemClicked(index)
-size: Maui.Style.iconSizes.medium        
-        anchors.margins: Maui.Style.space.medium
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        border.color: Kirigami.Theme.textColor
-        color: control.isSelected ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor
-        
+            target: _template.emblem
+            onClicked: control.leftEmblemClicked(index)
+        }
     }
-        }        
-        
-        Item
-        {
-            Layout.margins: Maui.Style.space.tiny
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            
-            Label
-            {
-                id: label
-                text: model.label
-                width: parent.width
-                anchors.centerIn: parent
-                height: Math.min(implicitHeight + Maui.Style.space.medium, _layout.height - _loader.height)
-                horizontalAlignment: Qt.AlignHCenter
-                verticalAlignment: Qt.AlignVCenter
-                elide: Qt.ElideRight
-                wrapMode: Text.Wrap
-                color: control.Kirigami.Theme.textColor		
-                
-                Rectangle
-                {
-                    anchors.fill: parent
-                    
-                    Behavior on color
-                    {
-                        ColorAnimation
-                        {
-                            duration: Kirigami.Units.longDuration
-                        }
-                    }
-                    color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
-                    
-                    radius: control.radius
-                    border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"
-                }
-            }
-        }        
-        
-    }
+    
+
 }

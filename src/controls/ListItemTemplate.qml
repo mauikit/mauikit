@@ -49,6 +49,8 @@ Item
     property string imageSource
     property string iconSource
     
+    property alias emblem: _emblem
+    
     property bool isCurrentItem: false
     property bool labelsVisible: true
 
@@ -110,6 +112,17 @@ Item
         id: _layout
         anchors.fill: parent
         spacing: Maui.Style.space.small
+        
+           Maui.Badge
+        {
+            id: _emblem
+            visible: false           
+            size: Maui.Style.iconSizes.medium    
+            Layout.alignment: Qt.AlignVCenter
+            Layout.margins: Maui.Style.space.medium
+            Layout.rightMargin: 0
+        }
+        
 
         Item
         {
