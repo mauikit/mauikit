@@ -91,8 +91,8 @@ Kirigami.ScrollablePage
         highlightMoveDuration: 0
         highlightResizeDuration : 0
         
-        keyNavigationEnabled : bool
-        keyNavigationWraps : bool
+        keyNavigationEnabled : true
+        keyNavigationWraps : true
         Keys.onPressed: control.keyPress(event)
 // 		ScrollBar.vertical: ScrollBar { }
 		

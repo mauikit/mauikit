@@ -45,7 +45,7 @@ class MAUIKIT_EXPORT Handy : public QObject
 	Q_PROPERTY(bool isWindows READ isWindows CONSTANT FINAL)
 	Q_PROPERTY(bool isMac READ isMac CONSTANT FINAL)
     
-    Q_PROPERTY(bool singleClick MEMBER m_singleClick NOTIFY singleClickChanged CONSTANT)
+    Q_PROPERTY(bool singleClick MEMBER m_singleClick NOTIFY singleClickChanged)
 	
 public:
     Handy(QObject *parent = nullptr);
