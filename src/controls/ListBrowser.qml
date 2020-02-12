@@ -24,7 +24,7 @@ import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 
 
-Kirigami.ScrollablePage
+ScrollView
 {
     id: control    
     
@@ -74,7 +74,7 @@ Kirigami.ScrollablePage
     
     Keys.enabled: false
     Kirigami.Theme.colorSet: Kirigami.Theme.View       
-    supportsRefreshing: false 
+//     supportsRefreshing: false 
     
     ListView
     {	
@@ -86,13 +86,13 @@ Kirigami.ScrollablePage
         boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : 
         Flickable.OvershootBounds
         
-        interactive: Maui.Handy.isTouch
+        interactive: true
         highlightFollowsCurrentItem: true
         highlightMoveDuration: 0
         highlightResizeDuration : 0
         
-        keyNavigationEnabled : bool
-        keyNavigationWraps : bool
+        keyNavigationEnabled : true
+        keyNavigationWraps : true
         Keys.onPressed: control.keyPress(event)
 // 		ScrollBar.vertical: ScrollBar { }
 		
