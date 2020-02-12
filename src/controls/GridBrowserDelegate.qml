@@ -85,17 +85,7 @@ Maui.ItemDelegate
     }
     
     
-    Maui.Badge
-    {
-        id: _leftEmblemIcon
-        iconName: control.leftEmblem
-        visible: (control.hovered || control.keepEmblemOverlay || control.isSelected) && control.showEmblem  && control.leftEmblem
-        z: mouseArea.z + 1
-        anchors.top: parent.top
-        anchors.left: parent.left
-        onClicked: leftEmblemClicked(index)
-        size: Maui.Style.iconSizes.small
-    }
+ 
     
     Maui.Badge
     {
@@ -181,6 +171,23 @@ Maui.ItemDelegate
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignCenter
             Layout.margins: Maui.Style.unit		
+            
+               Maui.Badge
+    {
+        id: _leftEmblemIcon
+        iconName: control.leftEmblem
+        visible: (control.keepEmblemOverlay || control.isSelected) && control.showEmblem  && control.leftEmblem
+        z: mouseArea.z + 1
+      
+        onClicked: leftEmblemClicked(index)
+size: Maui.Style.iconSizes.medium        
+        anchors.margins: Maui.Style.space.medium
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        border.color: Kirigami.Theme.textColor
+        color: control.isSelected ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor
+        
+    }
         }        
         
         Item

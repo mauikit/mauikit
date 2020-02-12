@@ -92,31 +92,43 @@ Maui.ItemDelegate
 		"text/uri-list": model.path
 	}
 	
-	Maui.Badge
-	{
-		id: _leftEmblemIcon
-		iconName: control.leftEmblem
-		visible: (control.hovered || control.keepEmblemOverlay || control.isSelected) && control.showEmblem  && control.leftEmblem
-		anchors.top: parent.top
-		anchors.left: parent.left
-		onClicked: leftEmblemClicked(index)
-        size: Maui.Style.iconSizes.small
-	}
 	
-	Maui.ListItemTemplate
+	RowLayout
 	{
-		id: _template
-		anchors.fill: parent
-		
-		isCurrentItem : control.isCurrentItem
-		
-		iconSizeHint: control.folderSize
-		
-		imageSource: model.mime &&  model.thumbnail ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails ? model.thumbnail : "") : ""	
-		iconSource: model.icon
-		
-		label1.text: model.label
-		label3.text : model.mime === "inode/directory" ? (model.count ? model.count + qsTr(" items") : "") : Maui.FM.formatSize(model.size)
-		label4.text: Maui.FM.formatDate(model.modified, "MM/dd/yyyy")
-	}
+        anchors.fill: parent
+        spacing: 0
+        Maui.Badge
+        {
+            id: _leftEmblemIcon
+            iconName: control.leftEmblem
+            visible: (control.keepEmblemOverlay || control.isSelected) && control.showEmblem  && control.leftEmblem
+            size: Maui.Style.iconSizes.medium    
+            Layout.alignment: Qt.AlignVCenter
+            Layout.margins: Maui.Style.space.medium
+            border.color: Kirigami.Theme.textColor
+            color: control.isSelected ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor
+            onClicked: leftEmblemClicked(index)
+        }
+        
+        
+        Maui.ListItemTemplate
+        {
+            id: _template
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            
+            isCurrentItem : control.isCurrentItem
+            
+            iconSizeHint: control.folderSize
+            
+            imageSource: model.mime &&  model.thumbnail ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails ? model.thumbnail : "") : ""	
+            iconSource: model.icon
+            
+            label1.text: model.label
+            label3.text : model.mime === "inode/directory" ? (model.count ? model.count + qsTr(" items") : "") : Maui.FM.formatSize(model.size)
+            label4.text: Maui.FM.formatDate(model.modified, "MM/dd/yyyy")
+        }
+    }
+    
+
 }

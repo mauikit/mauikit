@@ -92,7 +92,7 @@ Maui.Page
     {
         Layout.fillWidth: true
         visible: control.currentFMList.count > 0
-        placeholderText: qsTr("Filter %1 files", control.currentFMList.count.toString() )
+        placeholderText: String("Filter %1 files").arg(control.currentFMList ? control.currentFMList.count : 0)
         onAccepted: control.browserView.filter = text
         onCleared: control.browserView.filter = ""
     }
