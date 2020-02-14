@@ -22,6 +22,7 @@ import QtQuick.Controls 2.10
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
+import "private/shapes"
 
 Maui.Popup
 {
@@ -63,10 +64,22 @@ Maui.Popup
     Maui.Badge
     {
         id: _closeButton
-        iconName: "qrc:/assets/dialog-close.svg"
+//         iconName: "qrc:/assets/dialog-close.svg"
         //         Kirigami.Theme.backgroundColor: hovered ?  Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
         //         Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
-
+        
+        color: hovered || pressed ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
+        
+        X
+        {
+            height: Maui.Style.iconSizes.tiny
+            width: height
+            anchors.centerIn: parent
+            color: Kirigami.Theme.textColor            
+        }
+        
+        border.color: Kirigami.Theme.textColor
+        
         anchors
         {
             verticalCenter: parent.top

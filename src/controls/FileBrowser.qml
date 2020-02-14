@@ -57,7 +57,7 @@ Maui.Page
     property alias settings : _settings
     BrowserSettings {id: _settings }
 
-    property alias selectionBar : selectionBarLoader.item
+    property alias selectionBar : _selectionBar
     property alias browserView : _browserList.currentItem
     readonly property Maui.FMList currentFMList : browserView.currentFMList
     readonly property Maui.BaseModel currentFMModel : browserView.currentFMModel
@@ -294,7 +294,7 @@ Maui.Page
         {
             property var urls: []
 
-            title: qsTr("Removing %1 files", urls.length)
+            title:  "Removing %1 files".arg(urls.length)
             message: Maui.Handy.isAndroid ?  qsTr("This action will completely remove your files from your system. This action can not be undone.") : qsTr("You can move the file to the trash or delete it completely from your system. Which one do you prefer?")
             rejectButton.text: qsTr("Delete")
             acceptButton.text: qsTr("Trash")
@@ -716,118 +716,7 @@ Maui.Page
         //        }
     }
 
-    Component
-    {
-        id: selectionBarComponent
-
-        MauiLab.SelectionBar
-        {
-            id: _selectionBar
-            singleSelection: settings.singleSelection
-
-            onCountChanged:
-            {
-                if(_selectionBar.count < 1)
-                    control.clearSelection()
-            }
-
-            onExitClicked: control.clearSelection()
-
-            listDelegate: Maui.ListBrowserDelegate
-            {
-                Kirigami.Theme.inherit: true
-                width: parent.width
-                height: Maui.Style.iconSizes.big + Maui.Style.space.big
-                label1.text: model.label
-                label2.text: model.path
-                showEmblem: true
-                keepEmblemOverlay: true
-                showThumbnails: true
-                leftEmblem: "list-remove"
-                folderSize: Maui.Style.iconSizes.big
-                onLeftEmblemClicked: _selectionBar.removeAtIndex(index)
-                background: null
-
-
-                onClicked: control.previewer.show(model.path)
-
-                onPressAndHold: removeAtIndex(index)
-            }
-
-            Action
-            {
-                text: qsTr("Open")
-                icon.name: "document-open"
-                onTriggered:
-                {
-                    if(control.selectionBar)
-                    {
-                        for(var i in uris)
-                            openFile(uris[i])
-                    }
-                }
-            }
-
-            Action
-            {
-                text: qsTr("Copy")
-                icon.name: "edit-copy"
-                onTriggered: if(control.selectionBar)
-                {
-                    control.selectionBar.animate()
-                    control.copy(uris)
-                }
-            }
-
-            Action
-            {
-                text: qsTr("Cut")
-                icon.name: "edit-cut"
-                onTriggered: if(control.selectionBar)
-                {
-                    control.selectionBar.animate()
-                    control.cut(uris)
-                }
-            }
-
-            Action
-            {
-                text: qsTr("Tags")
-                icon.name: "tag"
-                onTriggered: if(control.selectionBar)
-                {
-                    dialogLoader.sourceComponent = tagsDialogComponent
-                    dialog.composerList.urls = uris
-                    dialog.open()
-                }
-            }
-
-            Action
-            {
-                text: qsTr("Share")
-                icon.name: "document-share"
-                onTriggered:
-                {
-                    control.shareFiles(uris)
-                }
-            }
-
-
-            Action
-            {
-                text: qsTr("Remove")
-                icon.name: "edit-delete"
-                Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
-
-                onTriggered:
-                {
-                    control.remove(uris)
-                }
-            }
-
-        }
-    }
-
+    
     ObjectModel { id: tabsObjectModel }
 
     ColumnLayout
@@ -918,17 +807,52 @@ Maui.Page
             // 			}
         }
 
-        Loader
+       
+            MauiLab.SelectionBar
         {
-            id: selectionBarLoader
-            Layout.alignment: Qt.AlignCenter
+            id: _selectionBar
+            
+             Layout.alignment: Qt.AlignCenter
             Layout.margins: Maui.Style.space.medium
-            Layout.preferredHeight: control.selectionBar && control.selectionBar.visible ? control.selectionBar.barHeight: 0
+            Layout.preferredHeight: barHeight
             Layout.maximumWidth: 500
             Layout.minimumWidth: 100
             Layout.fillWidth: true
-            Layout.bottomMargin: control.selectionBar && control.selectionBar.visible ? Maui.Style.contentMargins*2 : 0
+            Layout.bottomMargin: Maui.Style.contentMargins*2
+            
+            singleSelection: settings.singleSelection
+
+            onCountChanged:
+            {
+                if(_selectionBar.count < 1)
+                    control.clearSelection()
+            }
+
+            onExitClicked: control.clearSelection()
+
+            listDelegate: Maui.ListBrowserDelegate
+            {
+                Kirigami.Theme.inherit: true
+                width: parent.width
+                height: Maui.Style.iconSizes.big + Maui.Style.space.big
+                label1.text: model.label
+                label2.text: model.path
+                showEmblem: true
+                keepEmblemOverlay: true
+                showThumbnails: true
+                leftEmblem: "list-remove"
+                folderSize: Maui.Style.iconSizes.big
+                onLeftEmblemClicked: _selectionBar.removeAtIndex(index)
+                background: null
+
+
+                onClicked: control.previewer.show(model.path)
+
+                onPressAndHold: removeAtIndex(index)
+            }
+
         }
+        
 
         ProgressBar
         {
@@ -980,6 +904,13 @@ Maui.Page
                 control.currentPath = path
             }
         }
+    }
+    
+    function tagFiles(urls)
+    {
+        dialogLoader.sourceComponent = tagsDialogComponent
+                dialog.composerList.urls = urls
+                dialog.open()
     }
 
     function shareFiles(urls)
@@ -1080,21 +1011,14 @@ Maui.Page
     {
         if(item.path.startsWith("tags://") || item.path.startsWith("applications://") )
             return
-
-            if(!control.selectionBar)
-                selectionBarLoader.sourceComponent = selectionBarComponent
-
+        
                 control.selectionBar.append(item.path, item)
     }
 
     function clearSelection()
     {
-        if(control.selectionBar)
-        {
-            control.selectionBar.clear()
-            selectionBarLoader.sourceComponent = null
-            settings.selectionMode = false
-        }
+        control.selectionBar.clear()
+        settings.selectionMode = false
     }
 
     function copy(urls)

@@ -32,7 +32,13 @@ Kirigami.ScrollablePage
 	property int itemSize: 0
 	property int itemWidth : itemSize
 	property int itemHeight : itemSize
-	onItemWidthChanged :  gridView.size_ = itemWidth   
+	
+	onItemSizeChanged : 
+	{
+       gridView.size_ = itemWidth  
+		if(adaptContent)
+			control.adaptGrid()
+    }
 	
 	property alias cellWidth: gridView.cellWidth
 	property alias cellHeight: gridView.cellHeight
@@ -69,15 +75,15 @@ Kirigami.ScrollablePage
 	
 	keyboardNavigationEnabled: false
 	
-	Behavior on cellWidth
-	{
-		NumberAnimation
-		{
-			duration: Kirigami.Units.shortDuration
-			easing.type: Easing.InQuad
-		}
-	}     
-	
+// 	Behavior on cellWidth
+// 	{
+// 		NumberAnimation
+// 		{
+// 			duration: Kirigami.Units.shortDuration
+// 			easing.type: Easing.InQuad
+// 		}
+// 	}     
+// 	
 	GridView
 	{
 		id: gridView
@@ -166,17 +172,13 @@ Kirigami.ScrollablePage
 	{
 		if(factor > 1)
 		{
-			gridView.size_ = gridView.size_ + 10
-			control.cellHeight = control.cellHeight + 10
+            control.itemSize =   control.itemSize + 10
 		}
 		else
 		{
-			gridView.size_ = gridView.size_ - 10
-			control.cellHeight = control.cellHeight - 10
+            control.itemSize =   control.itemSize - 10
 		}
 		
-		if(adaptContent)
-			control.adaptGrid()
 	}
 	
 	function adaptGrid()

@@ -281,101 +281,113 @@ Maui.Page
                 filterCaseSensitivity: Qt.CaseInsensitive
             }
             
-            delegate: Maui.GridBrowserDelegate
+            delegate: Item
             {
-                id: delegate
-                
-                folderSize: height * 0.5
+                property bool isCurrentItem : GridView.isCurrentItem
                 height: _gridViewBrowser.cellHeight
                 width: _gridViewBrowser.cellWidth
-                padding: Maui.Style.space.tiny
                 
-                showTooltip: true
-                showEmblem: _gridViewBrowser.showEmblem
-                keepEmblemOverlay: _gridViewBrowser.keepEmblemOverlay
-                showThumbnails: _gridViewBrowser.showPreviewThumbnails
-                rightEmblem: _gridViewBrowser.rightEmblem
-                isSelected: selectionBar ? selectionBar.contains(model.path) : false
-                leftEmblem: isSelected ? "checkbox" : " "
-                draggable: true
-                
-                Maui.Badge
+                Maui.GridBrowserDelegate
                 {
-                    iconName: "link"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: Maui.Style.space.big
-                    visible: (model.issymlink == true) || (model.issymlink == "true")
-                }
-                
-                Connections
-                {
-                    target: selectionBar
+                    id: delegate
                     
-                    onUriRemoved:
+                    folderSize: height * 0.5
+                    
+                    anchors.centerIn: parent
+                    height: _gridViewBrowser.cellHeight
+                    width: _gridViewBrowser.itemSize
+                    padding: Maui.Style.space.tiny
+                    isCurrentItem: parent.isCurrentItem
+                    showTooltip: true
+                    showEmblem: _gridViewBrowser.showEmblem
+                    keepEmblemOverlay: _gridViewBrowser.keepEmblemOverlay
+                    showThumbnails: _gridViewBrowser.showPreviewThumbnails
+                    rightEmblem: _gridViewBrowser.rightEmblem
+                    isSelected: selectionBar ? selectionBar.contains(model.path) : false
+                    leftEmblem: isSelected ? "checkbox" : " "
+                    draggable: true
+                    
+                    Maui.Badge
                     {
-                        if(uri === model.path)
-                            delegate.isSelected = false
+                        iconName: "link"
+                        anchors.left: parent.left
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: Maui.Style.space.big
+                        visible: (model.issymlink == true) || (model.issymlink == "true")
                     }
                     
-                    onUriAdded:
+                    Connections
                     {
-                        if(uri === model.path)
-                            delegate.isSelected = true
-                    }
-                    
-                    onCleared: delegate.isSelected = false
-                    
-                }
-                
-                Connections
-                {
-                    target: delegate
-                    onClicked:
-                    {
-                        _gridViewBrowser.currentIndex = index
-                        _gridViewBrowser.itemClicked(index)
-                    }
-                    
-                    onDoubleClicked:
-                    {
-                        _gridViewBrowser.currentIndex = index
-                        _gridViewBrowser.itemDoubleClicked(index)
-                    }
-                    
-                    onPressAndHold:
-                    {
-                        _gridViewBrowser.currentIndex = index
-                        _gridViewBrowser.itemRightClicked(index)
-                    }
-                    
-                    onRightClicked:
-                    {
-                        _gridViewBrowser.currentIndex = index
-                        _gridViewBrowser.itemRightClicked(index)
-                    }
-                    
-                    onRightEmblemClicked:
-                    {
-                        _gridViewBrowser.currentIndex = index
-                        _gridViewBrowser.rightEmblemClicked(index)
-                    }
-                    
-                    onLeftEmblemClicked:
-                    {
-                        _gridViewBrowser.currentIndex = index
-                        _gridViewBrowser.leftEmblemClicked(index)
-                    }
-                    
-                    onContentDropped:
-                    {
-                        _dropMenu.urls = drop.urls.join(",")
-                        _dropMenu.target = model.path
-                        _dropMenu.popup()
+                        target: selectionBar
                         
+                        onUriRemoved:
+                        {
+                            if(uri === model.path)
+                                delegate.isSelected = false
+                        }
+                        
+                        onUriAdded:
+                        {
+                            if(uri === model.path)
+                                delegate.isSelected = true
+                        }
+                        
+                        onCleared: delegate.isSelected = false
+                        
+                    }
+                    
+                    Connections
+                    {
+                        target: delegate
+                        onClicked:
+                        {
+                            _gridViewBrowser.currentIndex = index
+                            _gridViewBrowser.itemClicked(index)
+                        }
+                        
+                        onDoubleClicked:
+                        {
+                            _gridViewBrowser.currentIndex = index
+                            _gridViewBrowser.itemDoubleClicked(index)
+                        }
+                        
+                        onPressAndHold:
+                        {
+                            _gridViewBrowser.currentIndex = index
+                            _gridViewBrowser.itemRightClicked(index)
+                        }
+                        
+                        onRightClicked:
+                        {
+                            _gridViewBrowser.currentIndex = index
+                            _gridViewBrowser.itemRightClicked(index)
+                        }
+                        
+                        onRightEmblemClicked:
+                        {
+                            _gridViewBrowser.currentIndex = index
+                            _gridViewBrowser.rightEmblemClicked(index)
+                        }
+                        
+                        onLeftEmblemClicked:
+                        {
+                            _gridViewBrowser.currentIndex = index
+                            _gridViewBrowser.leftEmblemClicked(index)
+                        }
+                        
+                        onContentDropped:
+                        {
+                            _dropMenu.urls = drop.urls.join(",")
+                            _dropMenu.target = model.path
+                            _dropMenu.popup()
+                            
+                        }
                     }
                 }
             }
+            
+            
+            
         }
     }
     

@@ -12,15 +12,15 @@ Shape
     property color color : Kirigami.Theme.backgroundColor
     property color borderColor: Kirigami.Theme.backgroundColor
     property int borderWidth: Maui.Style.unit
-
-     layer.enabled: true
-        layer.samples: 4
+    
+    layer.enabled: true
+    layer.samples: 4
     smooth: true
-
+    
     ShapePath
     {
-//             joinStyle: ShapePath.RoundJoin
-capStyle: ShapePath.RoundCap
+        //             joinStyle: ShapePath.RoundJoin
+        capStyle: ShapePath.RoundCap
         strokeWidth: _shape.borderWidth
         strokeColor: _shape.borderColor
         fillColor: _shape.color

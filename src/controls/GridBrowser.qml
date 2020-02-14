@@ -51,7 +51,7 @@ Maui.GridView
        
        folderSize: height * 0.5
        height: control.cellHeight 
-       width: control.cellWidth
+       width: control.itemSize
        padding: Maui.Style.space.small    
        
 		showTooltip: true
