@@ -25,6 +25,8 @@ import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
+import "private/shapes"
+
 Item
 {
     id: control
@@ -134,7 +136,16 @@ Item
                         anchors.margins: Maui.Style.space.medium
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.bottom: parent.bottom
-                        border.color: Kirigami.Theme.textColor                    
+                        border.color: Kirigami.Theme.textColor 
+                        
+//                         CheckMark
+//                         {
+//                            width: 10
+//                            height: 10
+//                             color: "white"
+//                             anchors.centerIn: parent
+//                         }
+                        
                     } 
                     
                     DropShadow

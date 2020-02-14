@@ -22,10 +22,8 @@ Shape
         fillColor: "transparent"
         strokeStyle: ShapePath.SolidLine
         startX: 0; startY: 0
-        PathLine { x: control.width; y: control.height }
-       
-    }
-    
+        PathLine { x: control.width; y: control.height }       
+    }    
        
    ShapePath
     {
@@ -35,7 +33,6 @@ Shape
         fillColor: "transparent"
         strokeStyle: ShapePath.SolidLine
         startX: control.width; startY: 0
-        PathLine { x: 0; y: control.height }
     }
        
     }
