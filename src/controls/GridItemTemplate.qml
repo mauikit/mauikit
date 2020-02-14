@@ -154,8 +154,8 @@ Item
                         visible: _emblem.visible
                         horizontalOffset: 0
                         verticalOffset: 0
-                        radius: 8.0
-                        samples: 17
+                        radius: 9.0
+                        samples: 18
                         color: "#80000000"
                         source: _emblem
                     }

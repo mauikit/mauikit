@@ -624,7 +624,7 @@ Maui.Page
 
             }else if((event.key == Qt.Key_Return) && (event.modifiers & Qt.AltModifier))
             {
-                control.previewer.show(control.currentFMList.get(index).path)
+                control.previewer.show(currentFMModel, index)
             }else if(event.key == Qt.Key_Return)
             {
                 indexHistory.push(index)
@@ -843,10 +843,12 @@ Maui.Page
                 leftEmblem: "list-remove"
                 folderSize: Maui.Style.iconSizes.big
                 onLeftEmblemClicked: _selectionBar.removeAtIndex(index)
-                background: null
-
-
-                onClicked: control.previewer.show(model.path)
+                background: Item {}
+                onClicked: 
+                {
+                    _selectionBar.selectionList.currentIndex = index
+                    control.previewer.show(_selectionBar.selectionList.model, _selectionBar.selectionList.currentIndex )
+                }
 
                 onPressAndHold: removeAtIndex(index)
             }
@@ -961,7 +963,7 @@ Maui.Page
                     {
                         if (Kirigami.Settings.isMobile)
                         {
-                            control.previewer.show(path)
+                            control.previewer.show(currentFMModel, index)
                         }
                         else
                         {
