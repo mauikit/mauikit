@@ -806,27 +806,27 @@ Maui.Page
             // 				}
             // 			}
         }
-
-       
-            MauiLab.SelectionBar
+        
+        
+        MauiLab.SelectionBar
         {
-            id: _selectionBar
-            
-             Layout.alignment: Qt.AlignCenter
-            Layout.margins: Maui.Style.space.medium
-            Layout.preferredHeight: barHeight
-            Layout.maximumWidth: 500
-            Layout.minimumWidth: 100
-            Layout.fillWidth: true
-            Layout.bottomMargin: Maui.Style.contentMargins*2
-            
-            singleSelection: settings.singleSelection
-
-            onCountChanged:
-            {
-                if(_selectionBar.count < 1)
-                    control.clearSelection()
-            }
+			id: _selectionBar
+			
+			Layout.alignment: Qt.AlignCenter
+			Layout.margins: Maui.Style.space.medium
+			Layout.preferredHeight: barHeight
+			Layout.maximumWidth: 500
+			Layout.minimumWidth: 100
+			Layout.fillWidth: true
+			Layout.bottomMargin: Maui.Style.contentMargins*2
+			
+			singleSelection: settings.singleSelection
+			
+			onCountChanged:
+			{
+				if(_selectionBar.count < 1)
+					control.clearSelection()
+			}
 
             onExitClicked: control.clearSelection()
 

@@ -60,35 +60,26 @@ Item
         onClicked: control.itemClicked(index)
         onPressAndHold: control.itemPressAndHold(index)
 
-        RowLayout
-        {
-            anchors.fill: parent
-
-            Item
-            {
-                Layout.fillHeight: true
-                Layout.preferredWidth: _badge.height + Maui.Style.space.small
-                Maui.Badge
-                {
-                    id: _badge
-                    anchors.centerIn: parent
-                    size: Maui.Style.iconSizes.small
-
-                    iconName: "list-remove"
-                    onClicked: control.removeAtIndex(index)
-                }
-            }
-
             Maui.ListItemTemplate
             {
                 id: _template
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+                anchors.fill: parent                
                 iconVisible: false
                 labelsVisible: true
-                label1.text: model.uri
+                label1.text: model.uri               
+                
+                emblem.visible: true
+                emblem.iconName: "list-remove"
+                emblem.border.color: emblem.Kirigami.Theme.textColor
+              				
+				Connections
+				{
+					target: _template.emblem
+					onClicked: control.removeAtIndex(index)
+				}
+				
             }
-        }
+        
     }
 
     /**
@@ -174,34 +165,20 @@ Item
             }
         }
 
-        ListView
+        Maui.ListBrowser
         {
-            id: selectionList
-            anchors.fill: parent
-            anchors.margins: Maui.Style.space.medium
-            anchors.bottomMargin: control.height
-            visible: _listContainer.height > 10
-            highlightFollowsCurrentItem: true
-            highlightMoveDuration: 0
-            keyNavigationEnabled: true
-            interactive: Kirigami.Settings.isMobile
-            boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
-            orientation: ListView.Vertical
-            clip: true
-            focus: true
-
-            spacing: Maui.Style.space.small
-
-            ScrollBar.vertical: ScrollBar
-            {
-                policy: Qt.ScrollBarAsNeeded
-            }
-
-            model: ListModel{}
-
-            delegate: control.listDelegate
-        }
-
+			anchors.fill: parent
+			anchors.topMargin: Maui.Style.space.medium
+			anchors.bottomMargin: control.height
+			id: selectionList
+			padding: 0
+			visible: _listContainer.height > 10
+			spacing: Maui.Style.space.small
+			model: ListModel{}
+			background: null
+			
+			delegate: control.listDelegate			
+		}   
     }
 
     Rectangle
@@ -402,7 +379,7 @@ Kirigami.Theme.highlightColor : Qt.darker(bg.color)
 
             item.uri = uri
             selectionList.model.append(item)
-            selectionList.positionViewAtEnd()
+            selectionList.listView.positionViewAtEnd()
             selectionList.currentIndex = selectionList.count - 1
 
             control.itemAdded(item)

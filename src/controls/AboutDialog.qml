@@ -37,7 +37,7 @@ Maui.Dialog
     maxWidth: Maui.Style.unit * 400
     maxHeight: Maui.Style.unit * 250
 
-    page.padding: Maui.Style.space.small
+    page.padding: 0
 
     footBar.middleContent: ToolButton
     {
@@ -62,8 +62,8 @@ Maui.Dialog
         id: layout
         anchors.centerIn: parent
         width: parent.width
-        height: parent.height * 0.7
-        spacing: Maui.Style.space.big
+        height: parent.height 
+        spacing: Maui.Style.space.medium
 
         // 			Behavior on width
         // 			{
@@ -78,9 +78,9 @@ Maui.Dialog
         {
             visible:  parent.width > control.maxWidth * 0.7
             Layout.fillHeight: true
-            Layout.margins: Maui.Style.space.small
+            Layout.margins: Maui.Style.space.medium
             Layout.alignment: Qt.AlignVCenter
-            Layout.preferredWidth: visible ? Maui.Style.iconSizes.huge : 0
+            Layout.preferredWidth: Maui.Style.iconSizes.huge + Maui.Style.space.big
 
 
             Image
@@ -88,7 +88,7 @@ Maui.Dialog
                 id: _imgIcon
                 anchors.centerIn: parent
                 source: Maui.App.iconName
-                width: Math.max(Maui.Style.iconSizes.huge, parent.width)
+                width: Math.min(Maui.Style.iconSizes.huge, parent.width)
                 height: width
                 sourceSize.width: width
                 sourceSize.height: height
@@ -115,8 +115,8 @@ Maui.Dialog
             Layout.fillHeight: true
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             Kirigami.Theme.backgroundColor: "transparent"
-            padding: 0
-            leftPadding: padding
+			padding: Maui.Style.space.big
+            leftPadding: 0
             rightPadding: padding
             topPadding: padding
             bottomPadding: padding
