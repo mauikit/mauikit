@@ -3,6 +3,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
+import "private/shapes"
 
 TabButton
 {
@@ -59,21 +60,21 @@ TabButton
             elide: Text.ElideMiddle
         }
 
-
-        Item
+        
+        MouseArea
         {
             Layout.fillHeight: true
             Layout.preferredWidth: Maui.Style.iconSizes.small * 2
-            Layout.alignment: Qt.AlignRight
-
-            ToolButton
+            Layout.alignment: Qt.AlignRight           
+            hoverEnabled: true
+            onClicked: control.closeClicked(index)
+            
+            X
             {
-                icon.height: Maui.Style.iconSizes.small
-                icon.width: width
-                icon.name: "dialog-close"
+                height: Maui.Style.iconSizes.tiny
+                width: height
                 anchors.centerIn: parent
-
-                onClicked: control.closeClicked(index)
+                color: parent.hovered || parent.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor            
             }
         }
     }
