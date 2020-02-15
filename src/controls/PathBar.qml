@@ -52,12 +52,9 @@ Rectangle
     opacity: 1
     border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
     border.width: Maui.Style.unit
-
-
     Loader
     {
         id: _loader
-        z: control.z + 999999999999999
         anchors.fill: parent
         sourceComponent: pathEntry ? _pathEntryComponent : _pathCrumbsComponent
         onLoaded:
@@ -85,7 +82,6 @@ Rectangle
         Maui.TextField
         {
             id: entry
-            anchors.fill: parent
             text: control.url
 
             Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
@@ -120,7 +116,6 @@ Rectangle
 
         RowLayout
         {
-            anchors.fill: parent
             property alias listView: _listView
             spacing: 0
             clip: false

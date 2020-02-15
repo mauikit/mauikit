@@ -15,22 +15,22 @@ Shape
     
     layer.enabled: true
     layer.samples: 4
-    smooth: true
     
     ShapePath
     {
-        //             joinStyle: ShapePath.RoundJoin
+		id: _path
+		joinStyle: ShapePath.RoundJoin
         capStyle: ShapePath.RoundCap
         strokeWidth: _shape.borderWidth
         strokeColor: _shape.borderColor
         fillColor: _shape.color
-        strokeStyle: ShapePath.SolidLine
+
         startX: 0; startY: 0
-        PathLine { x: _shape.width - _shape.arrowWidth; y: 0 }
+        PathLine { x: _shape.width - _shape.arrowWidth; y: _path.startY }
         PathLine { x: _shape.width; y: Math.floor(_shape.height / 2) }
-        PathLine { x: _shape.width - _shape.arrowWidth; y: _shape.height }
-        PathLine { x: 0; y: _shape.height}
+        PathLine { x: _shape.width - _shape.arrowWidth; y: _shape.height}
+        PathLine { x: _path.startX; y: _shape.height}
         PathLine { x: _shape.arrowWidth; y:Math.floor(_shape.height / 2) }
-        PathLine { x: 0; y: 0 }
+        PathLine { x: _path.startX; y: _path.startY }
     }
 }

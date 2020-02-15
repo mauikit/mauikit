@@ -115,8 +115,8 @@ Maui.Dialog
             Layout.fillHeight: true
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             Kirigami.Theme.backgroundColor: "transparent"
-			padding: Maui.Style.space.big
-            leftPadding: 0
+			padding: Maui.Style.space.medium
+            leftPadding: padding
             rightPadding: padding
             topPadding: padding
             bottomPadding: padding
@@ -124,8 +124,9 @@ Maui.Dialog
             ColumnLayout
             {
                 id: _columnInfo
+                width: parent.width
                 spacing: Maui.Style.space.medium
-
+                
                 Label
                 {
                     Layout.fillWidth: true
@@ -166,7 +167,6 @@ Maui.Dialog
                 {
                     color: Kirigami.Theme.textColor
                     Layout.fillWidth: true
-
                     text: qsTr("By ") + Maui.App.org
                     font.pointSize: Maui.Style.fontSizes.default
                     elide: Text.ElideRight

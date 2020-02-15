@@ -19,9 +19,7 @@ Shape
         strokeColor: control.color
         strokeWidth: control.borderWidth
         fillColor: "transparent"
-        capStyle:ShapePath.RoundCap       
-        
-        
+        capStyle:ShapePath.RoundCap
         joinStyle: ShapePath.RoundJoin
         
         startX: 0
