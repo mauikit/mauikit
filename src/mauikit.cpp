@@ -223,7 +223,7 @@ void MauiKit::registerTypes(const char *uri)
 
 void MauiKit::initResources()
 {
-#if Q_OS_ANDROID
+#ifdef Q_OS_ANDROID
     Q_INIT_RESOURCE(mauikit);
 #ifdef ICONS_PNG
     Q_INIT_RESOURCE(icons_png);
