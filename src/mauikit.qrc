@@ -74,8 +74,9 @@
         <file alias="private/shapes/Arrow.qml">controls/private/shapes/Arrow.qml</file>
         <file alias="private/shapes/X.qml">controls/private/shapes/X.qml</file>
         <file alias="private/shapes/Triangle.qml">controls/private/shapes/Triangle.qml</file>
-        <file alias="private/shapes/CheckMark.qml">controls/private/shapes/CheckMark.qml</file>
-
+		<file alias="private/shapes/CheckMark.qml">controls/private/shapes/CheckMark.qml</file>
+		<file alias="private/shapes/PlusSign.qml">controls/private/shapes/PlusSign.qml</file>
+		
     </qresource>
     <qresource prefix="/"/>
 </RCC>

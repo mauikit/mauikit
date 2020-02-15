@@ -66,3 +66,10 @@ FloatingButton 1.0 FloatingButton.qml
 
 SelectionBar 1.1 labs/SelectionBar.qml
 ShareDialog 1.1 labs/ShareDialog.qml
+
+X 1.0 private/shapes/X.qml
+PlusSign 1.0 private/shapes/PlusSign.qml
+Arrow 1.0 private/shapes/Arrow.qml
+Triangle 1.0 private/shapes/Triangle.qml
+CheckMark 1.0 private/shapes/CheckMark.qml
+

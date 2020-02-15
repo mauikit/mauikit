@@ -23,7 +23,6 @@ import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import QtGraphicalEffects 1.0
-import "../private/shapes"
 
 Item
 {
@@ -222,7 +221,7 @@ Item
             Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
             hoverEnabled: true
             
-            X
+            Maui.X
             {
                 height: Maui.Style.iconSizes.medium - 10
                 width: height

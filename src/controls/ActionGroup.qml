@@ -147,6 +147,7 @@ Item
                     easing.type: Easing.InOutQuad
                 }
             }
+            
             Repeater
             {
                 model: control.hiddenActions

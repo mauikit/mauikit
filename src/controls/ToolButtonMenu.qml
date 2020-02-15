@@ -7,8 +7,6 @@ import QtQml 2.1
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
-import "private/shapes"
-
 ToolButton
 {
 	id: control
@@ -25,7 +23,7 @@ ToolButton
 				_menu.popup(0, height)
 	}
 	
-	indicator: Triangle
+	indicator: Maui.Triangle
 	{
 		anchors
 		{

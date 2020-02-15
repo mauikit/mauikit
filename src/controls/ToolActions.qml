@@ -7,9 +7,6 @@ import QtQml 2.1
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
-import "private/shapes"
-
-
 Item
 {
 	id: control
@@ -54,7 +51,7 @@ Item
             icon.name: control.currentAction.icon.name
             onClicked: control.expanded = !control.expanded 
             
-            indicator: Triangle
+            indicator: Maui.Triangle
             {
                 anchors
                 {

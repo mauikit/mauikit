@@ -22,7 +22,6 @@ import QtQuick.Controls 2.10
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
-import "private/shapes"
 
 Maui.Popup
 {
@@ -70,7 +69,7 @@ Maui.Popup
         
         color: hovered || pressed ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
         
-        X
+        Maui.X
         {
             height: Maui.Style.iconSizes.tiny
             width: height
