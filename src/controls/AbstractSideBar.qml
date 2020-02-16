@@ -41,11 +41,20 @@ Drawer
     property alias overlay : _overlay
     
     onCollapsedChanged:  position = collapsed && collapsedSize < 1 ? 0 : 1
+<<<<<<< Updated upstream
+=======
+    
+>>>>>>> Stashed changes
 
     enter: Transition { SmoothedAnimation { velocity: modal ? 5 : 0 } }
     exit: Transition { SmoothedAnimation { velocity: modal ? 5 : 0 } }
 
+<<<<<<< Updated upstream
     signal contentDropped(var drop)	
+=======
+    signal contentDropped(var drop)
+	
+>>>>>>> Stashed changes
 	
 	MouseArea
 	{
@@ -60,7 +69,11 @@ Drawer
 		Rectangle
 		{			
 			color: control.Kirigami.Theme.backgroundColor
+<<<<<<< Updated upstream
             opacity: 0.7 * control.position
+=======
+			opacity: 0.5
+>>>>>>> Stashed changes
 			anchors.fill: parent			
 		}
 		
