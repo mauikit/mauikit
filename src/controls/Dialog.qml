@@ -63,10 +63,22 @@ Maui.Popup
     Maui.Badge
     {
         id: _closeButton
-        iconName: "qrc:/assets/dialog-close.svg"
+//         iconName: "qrc:/assets/dialog-close.svg"
         //         Kirigami.Theme.backgroundColor: hovered ?  Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
         //         Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
-
+        
+        color: hovered || pressed ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
+        
+        Maui.X
+        {
+            height: Maui.Style.iconSizes.tiny
+            width: height
+            anchors.centerIn: parent
+            color: Kirigami.Theme.textColor            
+        }
+        
+        border.color: Kirigami.Theme.textColor
+        
         anchors
         {
             verticalCenter: parent.top

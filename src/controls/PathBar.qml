@@ -56,7 +56,6 @@ Rectangle
     Loader
     {
         id: _loader
-        z: control.z + 999999999999999
         anchors.fill: parent
         sourceComponent: pathEntry ? _pathEntryComponent : _pathCrumbsComponent
         onLoaded:
@@ -84,7 +83,6 @@ Rectangle
         Maui.TextField
         {
             id: entry
-            anchors.fill: parent
             text: control.url
 
             Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
@@ -119,7 +117,6 @@ Rectangle
 
         RowLayout
         {
-            anchors.fill: parent
             property alias listView: _listView
             spacing: 0
             clip: true

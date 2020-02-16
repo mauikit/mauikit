@@ -206,20 +206,21 @@ Maui.Dialog
 					
 					onItemClicked: 
 					{
+                           if(currentFMList.get(index).isdir == "true")
+                                    openItem(index)
+                                    
 						switch(control.mode)
 						{	
 							case modes.OPEN :
-							{								
-								openItem(index)
+							{	
+                                addToSelection(currentFMList.get(index))
 								break
 							}
-							case modes.SAVE:
-							{
-								if(Maui.FM.isDir(currentFMList.get(index).path))
-									openItem(index)
-									else
-										textField.text = currentFMList.get(index).label
-										break
+                            case modes.SAVE:
+                            {
+                               
+                                        textField.text = currentFMList.get(index).label
+                                        break
 							}				
 						}
 					}
@@ -243,7 +244,6 @@ Maui.Dialog
 	{
 		if(cb)
 			callback = cb			
-// 			browser.openFolder(browser.currentPath)
 			open()
 	}
 	

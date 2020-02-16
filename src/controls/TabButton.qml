@@ -59,21 +59,21 @@ TabButton
             elide: Text.ElideMiddle
         }
 
-
-        Item
+        
+        MouseArea
         {
             Layout.fillHeight: true
             Layout.preferredWidth: Maui.Style.iconSizes.small * 2
-            Layout.alignment: Qt.AlignRight
-
-            ToolButton
+            Layout.alignment: Qt.AlignRight           
+            hoverEnabled: true
+            onClicked: control.closeClicked(index)
+            
+            Maui.X
             {
-                icon.height: Maui.Style.iconSizes.small
-                icon.width: width
-                icon.name: "dialog-close"
+                height: Maui.Style.iconSizes.tiny
+                width: height
                 anchors.centerIn: parent
-
-                onClicked: control.closeClicked(index)
+                color: parent.hovered || parent.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor            
             }
         }
     }

@@ -138,7 +138,7 @@ Menu
 		icon.name: "view-preview"
 		onTriggered:
 		{
-			previewer.show(control.item.path)
+			previewer.show(currentFMModel, control.index)
 			close()
 		}
 	}

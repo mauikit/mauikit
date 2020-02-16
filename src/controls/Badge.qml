@@ -34,13 +34,13 @@ Rectangle
 
     property alias item : loader.item
     property alias hovered : mouseArea.containsMouse
-
+    property alias pressed : mouseArea.pressed
+    
     property int size: Maui.Style.iconSizes.medium
     property string iconName : ""
     property string text : ""
 
     signal clicked()
-    signal pressed()
     signal hovered()
     signal released()
 
@@ -105,7 +105,6 @@ Rectangle
 
         anchors.centerIn: parent
         onClicked: control.clicked()
-        onPressed: control.pressed()
         onReleased: control.released()
     }
 }

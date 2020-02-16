@@ -12,7 +12,6 @@
         <file alias="PieButton.qml">controls/PieButton.qml</file>
         <file alias="Page.qml">controls/Page.qml</file>
         <file alias="private/PathBarDelegate.qml">controls/private/PathBarDelegate.qml</file>
-        <file alias="private/shapes/Arrow.qml">controls/private/shapes/Arrow.qml</file>
         <file alias="private/EdgeShadow.qml">controls/private/EdgeShadow.qml</file>
         <file alias="private/BrowserMenu.qml">controls/private/BrowserMenu.qml</file>
         <file alias="private/BrowserView.qml">controls/private/BrowserView.qml</file>
@@ -72,6 +71,12 @@
         <file alias="FloatingButton.qml">controls/FloatingButton.qml</file>
         <file alias="labs/SelectionBar.qml">controls/labs/SelectionBar.qml</file>
         <file alias="GridItemTemplate.qml">controls/GridItemTemplate.qml</file>
+        <file alias="private/shapes/Arrow.qml">controls/private/shapes/Arrow.qml</file>
+        <file alias="private/shapes/X.qml">controls/private/shapes/X.qml</file>
+        <file alias="private/shapes/Triangle.qml">controls/private/shapes/Triangle.qml</file>
+		<file alias="private/shapes/CheckMark.qml">controls/private/shapes/CheckMark.qml</file>
+		<file alias="private/shapes/PlusSign.qml">controls/private/shapes/PlusSign.qml</file>
+		
     </qresource>
     <qresource prefix="/"/>
 </RCC>

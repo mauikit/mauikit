@@ -98,7 +98,7 @@ Maui.ItemDelegate
         emblem.visible: (control.keepEmblemOverlay || control.isSelected) && control.showEmblem  && control.leftEmblem
         isCurrentItem: control.isCurrentItem
         emblem.border.color: emblem.Kirigami.Theme.textColor
-        emblem.color: control.isSelected ? emblem.Kirigami.Theme.highlightColor : emblem.Kirigami.Theme.backgroundColor
+        emblem.color: control.isSelected ? emblem.Kirigami.Theme.highlightColor : Qt.rgba(emblem.Kirigami.Theme.backgroundColor.r, emblem.Kirigami.Theme.backgroundColor.g, emblem.Kirigami.Theme.backgroundColor.b, 0.7)
 
         Connections
         {

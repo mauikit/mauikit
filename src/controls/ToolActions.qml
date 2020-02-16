@@ -44,28 +44,28 @@ Item
 		id: _layout
 		height: parent.height
 		spacing: Maui.Style.space.small
-		anchors.centerIn: parent
-		
+		anchors.centerIn: parent		
 		
 		ToolButton
 		{
-			icon.name: control.currentAction.icon.name
-			onClicked: control.expanded = !control.expanded 
-			text: " "
-			indicator: Kirigami.Icon
-			{
-				anchors
-				{
-					right: parent.right
-					verticalCenter: parent.verticalCenter
-				}
-				color: control.Kirigami.Theme.textColor
-				source: control.direction === Qt.Vertical ? "qrc://assets/arrow-down.svg" : (control.expanded ? "qrc://assets/arrow-left.svg" : "qrc://assets/arrow-right.svg")
-				width: Maui.Style.iconSizes.small
-				height: width
-				isMask: true
-			}			
-		}         
+            icon.name: control.currentAction.icon.name
+            onClicked: control.expanded = !control.expanded 
+            
+            indicator: Maui.Triangle
+            {
+                anchors
+                {
+                    //            rightMargin: 5
+                    right: parent.right
+                    // 			bottom: parent.bottom
+                    verticalCenter: parent.verticalCenter
+                }
+                rotation: control.direction === Qt.Vertical ? -45 : (control.expanded ?- 90 : -135 )
+                color: control.Kirigami.Theme.textColor
+                width: Maui.Style.iconSizes.tiny-2
+                height:  width 
+            }	
+        }         
 		
 		
 		Loader

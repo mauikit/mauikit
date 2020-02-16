@@ -1,26 +1,13 @@
 <RCC>
     <qresource prefix="/">
-        <file>assets/face-sleeping.png</file>
-        <file>assets/face-sleeping.svg</file>
         <file>assets/maui-app.colors</file>
         <file>assets/mauikit-logo.png</file>
-        <file>assets/ElectricPlug.png</file>
-        <file>assets/BugSearch.png</file>
-        <file>assets/MoonSki.png</file>
         <file>assets/application-x-zerosize.svg</file>
-        <file>assets/animat-rocket-color.gif</file>
-        <file>assets/animat-diamond-color.gif</file>
-        <file>assets/animat-search-color.gif</file>
         <file>assets/opendesktop.png</file>
         <file>assets/folder-add.svg</file>
         <file>assets/view-refresh.svg</file>
         <file>assets/edit-find.svg</file>
         <file>assets/dialog-information.svg</file>
         <file>assets/cover.png</file>
-        <file>assets/arrow-down.svg</file>
-        <file>assets/arrow-up.svg</file>
-        <file>assets/arrow-left.svg</file>
-        <file>assets/arrow-right.svg</file>
-        <file>assets/dialog-close.svg</file>
     </qresource>
 </RCC>

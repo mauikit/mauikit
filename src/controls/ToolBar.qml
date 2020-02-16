@@ -143,17 +143,16 @@ ToolBar
                 }
             }
         }
-
-        Kirigami.Icon
+        
+        Maui.Triangle
         {
-            visible: !Kirigami.Settings.isMobile
-            anchors.centerIn: parent
-            source: "qrc:/assets/arrow-right.svg"
-            isMask: true
-            width: Maui.Style.iconSizes.small
-            height: Maui.Style.iconSizes.small
-            color: _rightFlickRec.hovered ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-        }
+			visible: !Kirigami.Settings.isMobile
+			anchors.centerIn: parent
+			rotation: -135
+			color:  _rightFlickRec.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
+			width: Maui.Style.iconSizes.tiny
+			height:  width 
+		}
 
         enabled: !mainFlickable.atXEnd
         opacity: enabled ? 1 : 0.4
@@ -205,17 +204,16 @@ ToolBar
                 }
             }
         }
-
-        Kirigami.Icon
+        
+        Maui.Triangle
         {
-            anchors.centerIn: parent
-            visible: !Kirigami.Settings.isMobile
-            source: "qrc:/assets/arrow-left.svg"
-            isMask: true
-            width: Maui.Style.iconSizes.small
-            height: Maui.Style.iconSizes.small
-            color: _leftFlickRec.hovered ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-        }
+			visible: !Kirigami.Settings.isMobile
+			anchors.centerIn: parent
+			rotation: 45
+			color:  _leftFlickRec.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
+			width: Maui.Style.iconSizes.tiny
+			height:  width 
+		}
 
         enabled: !mainFlickable.atXBeginning
         opacity: enabled ? 1 : 0.4
