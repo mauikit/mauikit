@@ -36,13 +36,39 @@ Drawer
     interactive: modal
     property bool collapsible: false
 	property bool collapsed: false
-	property int collapsedSize: Maui.Style.iconSizes.medium + (Maui.Style.space.medium*4) - Maui.Style.space.tiny
-    property int preferredWidth : Kirigami.Units.gridUnit * 12
+	property int collapsedSize: 0
+    property int preferredWidth : Kirigami.Units.gridUnit * 12 
+    property alias overlay : _overlay
+    
+    onCollapsedChanged:  position = collapsed && collapsedSize < 1 ? 0 : 1
+    
 
     enter: Transition { SmoothedAnimation { velocity: modal ? 5 : 0 } }
     exit: Transition { SmoothedAnimation { velocity: modal ? 5 : 0 } }
 
     signal contentDropped(var drop)
+	
+	
+	MouseArea
+	{
+		id: _overlay
+		anchors.fill: parent
+		anchors.margins: 0
+		anchors.leftMargin: (control.width * control.position)
+		parent: ApplicationWindow.contentItem
+		preventStealing: true
+		propagateComposedEvents: false
+		visible: false
+		Rectangle
+		{			
+			color: control.Kirigami.Theme.backgroundColor
+			opacity: 0.5
+			anchors.fill: parent			
+		}
+		
+// 		onClicked: control.collapsed = false
+	}
+	
 
     onVisibleChanged:
     {
@@ -61,16 +87,16 @@ Drawer
         }
     }
 
-    Behavior on width
+    Behavior on position
     {
-        enabled: control.collapsible
-
-        NumberAnimation
-        {
-            duration: Kirigami.Units.longDuration
-            easing.type: Easing.InOutQuad
-        }
-    }
+		enabled: control.collapsible
+		
+		NumberAnimation
+		{
+			duration: Kirigami.Units.longDuration
+			easing.type: Easing.InOutQuad
+		}
+	}
 
     opacity: _dropArea.containsDrag ? 0.5 : 1
 	
@@ -83,32 +109,5 @@ Drawer
             control.contentDropped(drop)
         }
     }
-	
-//     EdgeShadow
-//     {
-//         z: -2
-//         visible: control.modal
-//         parent: control.background
-//         edge: control.edge
-//         anchors
-//         {
-//             right: control.edge == Qt.RightEdge ? parent.left : (control.edge == Qt.LeftEdge ? undefined : parent.right)
-//             left: control.edge == Qt.LeftEdge ? parent.right : (control.edge == Qt.RightEdge ? undefined : parent.left)
-//             top: control.edge == Qt.TopEdge ? parent.bottom : (control.edge == Qt.BottomEdge ? undefined : parent.top)
-//             bottom: control.edge == Qt.BottomEdge ? parent.top : (control.edge == Qt.TopEdge ? undefined : parent.bottom)
-//         }
-// 		
-//         opacity: control.position == 0 ? 0 : 1
-// 		
-//         Behavior on opacity
-//         {
-//             NumberAnimation
-//             {
-//                 duration: Kirigami.Units.longDuration
-//                 easing.type: Easing.InOutQuad
-//             }
-//         }
-//     }
-	
 }
 

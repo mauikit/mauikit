@@ -38,14 +38,15 @@ Kirigami.AbstractApplicationWindow
     visible: true
     width: Screen.width * (Kirigami.Settings.isMobile ? 1 : 0.4)
     height: Screen.height * (Kirigami.Settings.isMobile ? 1 : 0.4)
-    contentItem.anchors.leftMargin: root.sideBar && !root.globalDrawer ? ((root.sideBar.collapsible && root.sideBar.collapsed) ? root.sideBar.collapsedSize : (root.sideBar.modal ? 0 : root.sideBar.width * root.sideBar.position)) :
-                                                                         (!root.sideBar && root.globalDrawer && (root.globalDrawer.modal === false) ? root.globalDrawer.width * root.globalDrawer.position : 0)
+	
 
    property Maui.AbstractSideBar sideBar
 
     /***************************************************/
     /******************** ALIASES *********************/
     /*************************************************/
+	default property alias content : _content.data
+		
     property alias headBar : _headBar
     property alias footBar: _footBar
     property alias dialog: dialogLoader.item
@@ -107,7 +108,7 @@ Kirigami.AbstractApplicationWindow
             Maui.FM.saveSettings("GEOMETRY", Qt.rect(x, y, width, height), "WINDOW")
         }
     }
-
+    
     property bool isPortrait: Screen.primaryOrientation === Qt.PortraitOrientation || Screen.primaryOrientation === Qt.InvertedPortraitOrientation
     onIsPortraitChanged:
     {
@@ -117,7 +118,19 @@ Kirigami.AbstractApplicationWindow
             width: Screen.width
             height: Screen.height
         }
-    }
+    }    
+    
+	Item
+	{
+		id: _content
+		anchors.fill: parent
+		transform: Translate 
+		{
+			x: root.sideBar.collapsible && root.sideBar.collapsed ? root.sideBar.position * (root.sideBar.width - root.sideBar.collapsedSize) : 0
+		}
+		
+		anchors.leftMargin: root.sideBar && !root.globalDrawer ? ((root.sideBar.collapsible && root.sideBar.collapsed) ? root.sideBar.collapsedSize : root.sideBar.width * root.sideBar.position) : 0
+	}
 
     //     onHeadBarBGColorChanged:
     //     {
@@ -351,7 +364,8 @@ Kirigami.AbstractApplicationWindow
         id: _headBar
         visible: count > 1
         position: ToolBar.Header
-        width: root.width
+        anchors.left: root.left
+        anchors.right: root.right
         height: implicitHeight
 
         // 		Kirigami.Theme.backgroundColor: headBarBGColor
@@ -407,11 +421,11 @@ Kirigami.AbstractApplicationWindow
         id: _footBar
         visible: count
         position: ToolBar.Footer
-        width: root.width
+        anchors.left: root.left
+        anchors.right: root.right
         height: implicitHeight
-
     }
-
+    
     header: headBar.count && headBar.position === ToolBar.Header ? headBar : null
 
     footer: Column

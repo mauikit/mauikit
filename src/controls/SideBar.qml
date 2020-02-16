@@ -31,7 +31,7 @@ Maui.AbstractSideBar
     width: implicitWidth
     modal: false
     position: 1
-    interactive: false
+    interactive: !collapsible
 
     default property alias content : _content.data
     property alias model : _listBrowser.model
@@ -56,6 +56,14 @@ Maui.AbstractSideBar
 //        target: control.Overlay.overlay
 //        onPressed: control.collapse()
 //    }
+	
+	overlay.visible: control.collapsed && control.collapsible && !privateProperties.isCollapsed
+	
+	Connections
+	{
+		target: control.overlay
+		onClicked: control.collapse()
+	}
 	
 	property Component delegate : Maui.ListDelegate
 	{
@@ -98,23 +106,29 @@ Maui.AbstractSideBar
     {
         if(!collapsible)
             return
+            
 
-        if(!collapsed && modal)
+        if(!collapsed)
         {
-            modal = false
-
-        }
-
-        if(!modal && !collapsed)
+			expand()
+        }else
         {
-            privateProperties.isCollapsed = false
-        }
-
-        if(collapsed && !modal)
-        {
-            privateProperties.isCollapsed = true
+			collapse()
+            
         }
     }
+    
+        Behavior on width
+        {
+			id: _widthAnim
+    
+            NumberAnimation
+            {
+                duration: Kirigami.Units.longDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
+        
 
     ColumnLayout
     {
@@ -178,7 +192,7 @@ Maui.AbstractSideBar
 
             onPositionChanged:
             {
-                if (!pressed || !control.collapsible || !control.collapsed || !Kirigami.Settings.isMobile)
+                if (!pressed || !control.collapsible || !control.collapsed)
                     return
 
                 if(mouse.x > control.collapsedSize)
@@ -216,7 +230,7 @@ Maui.AbstractSideBar
 
     MouseArea
     {
-        z: control.modal ? applicationWindow().overlay.z + (control.position > 0 ? +1 : -1) : control.background.parent.z + 1
+        z: control.background.parent.z + 1
         preventStealing: true
         anchors.horizontalCenter: parent.right
         anchors.top: parent.top
@@ -231,41 +245,64 @@ Maui.AbstractSideBar
         {
             startY = mouse.y
             startX = mouse.x
-            mouse.accepted = true
+            _widthAnim.enabled = false
         }
 
         onPositionChanged:
         {
-            if (!pressed || !control.collapsible || !control.collapsed || !Kirigami.Settings.isMobile)
-                return
-
-            if(mouse.x > control.collapsedSize)
-            {
-                expand()
-            }else
-            {
-                collapse()
-            }
-
-            mouse.accepted = true
-        }
-    }
+			
+			if (!pressed || !control.collapsible || !control.collapsed)
+				return
+				
+				var value = control.width + (mouse.x-startX)
+				control.width = value > control.preferredWidth ? control.preferredWidth : (value < control.collapsedSize ? collapsedSize : value)
+				
+		}
+		
+		onReleased: 
+		{
+			_widthAnim.enabled = true			
+			if( privateProperties.isCollapsed)
+			{
+				if(control.width >= control.collapsedSize * 1.2)
+				{				
+					expand()
+					
+				} else 
+				{			
+					collapse()				
+				}
+				
+			}else
+			{
+				if(control.width <= control.preferredWidth * 0.75)
+				{				
+					collapse()	
+					
+				} else 
+				{			
+					expand()			
+				}
+			}
+		}
+	}
 
     function collapse()
     {
-        if(collapsible && !privateProperties.isCollapsed)
-        {
-            modal = false
+        if(collapsible)
+        {			
             privateProperties.isCollapsed  = true
+            control.width = control.collapsedSize	
         }
     }
 
     function expand()
     {
-        if(collapsible && privateProperties.isCollapsed)
+        if(collapsible)
         {
-            modal = true
-            privateProperties.isCollapsed = false
+            privateProperties.isCollapsed = false  
+            control.width = control.preferredWidth			
+            
         }
     }
 }

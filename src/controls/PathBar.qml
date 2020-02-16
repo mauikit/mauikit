@@ -53,7 +53,6 @@ Rectangle
     border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
     border.width: Maui.Style.unit
 
-
     Loader
     {
         id: _loader
@@ -123,7 +122,7 @@ Rectangle
             anchors.fill: parent
             property alias listView: _listView
             spacing: 0
-            clip: false
+            clip: true
 
             MouseArea
             {
