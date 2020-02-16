@@ -26,86 +26,78 @@ import "private"
 
 Drawer
 {
-	id: control
-	
-	edge: Qt.LeftEdge
-	implicitHeight: parent.height - (ApplicationWindow.header ? ApplicationWindow.header.height : 0) - (ApplicationWindow.footer ? ApplicationWindow.footer.height : 0)
-	height: implicitHeight
-	y: (ApplicationWindow.header ? ApplicationWindow.header.height : 0)
-	closePolicy: modal ?  Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
-	interactive: modal
-	property bool collapsible: false
-	property bool collapsed: false
-	property int collapsedSize: 0
-	property int preferredWidth : Kirigami.Units.gridUnit * 12 
-	property alias overlay : _overlay
-	
-	onCollapsedChanged:  position = collapsed && collapsedSize < 1 ? 0 : 1
-	
-	enter: Transition { SmoothedAnimation { velocity: modal ? 5 : 0 } }
-	exit: Transition { SmoothedAnimation { velocity: modal ? 5 : 0 } }
-	
-	signal contentDropped(var drop)	
-	
-	MouseArea
-	{
-		id: _overlay
-		anchors.fill: parent
-		anchors.margins: 0
-		anchors.leftMargin: (control.width * control.position)
-		parent: ApplicationWindow.contentItem
-		preventStealing: true
-		propagateComposedEvents: false
-		visible: false
-		Rectangle
-		{			
-			color: control.Kirigami.Theme.backgroundColor
-			opacity: 0.7 * control.position
-			anchors.fill: parent			
-		}
-		
-		// 		onClicked: control.collapsed = false
-	}
-	
-	
-	onVisibleChanged:
-	{
-		if(control.visible && !control.modal)
-			control.position = 1
-	}
-	
-	Component.onCompleted:
-	{
-		if(!modal)
-		{
-			control.enter.enabled = false;
-			control.visible = true;
-			control.position = 1;
-			control.enter.enabled = true;
-		}
-	}
-	
-	Behavior on position
-	{
-		enabled: control.collapsible && control.position === 1
-		
-		NumberAnimation
-		{
-			duration: Kirigami.Units.longDuration
-			easing.type: Easing.InOutQuad
-		}
-	}
-	
-	opacity: _dropArea.containsDrag ? 0.5 : 1
-	
-	DropArea
-	{
-		id: _dropArea
-		anchors.fill: parent
-		onDropped:
-		{
-			control.contentDropped(drop)
-		}
-	}
+    id: control
+
+    edge: Qt.LeftEdge
+    implicitHeight: parent.height - (ApplicationWindow.header ? ApplicationWindow.header.height : 0) - (ApplicationWindow.footer ? ApplicationWindow.footer.height : 0)
+    height: implicitHeight
+    y: (ApplicationWindow.header ? ApplicationWindow.header.height : 0)
+    closePolicy: modal ?  Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
+    interactive: modal
+    property bool collapsible: false
+    property bool collapsed: false
+    property int collapsedSize: 0
+    property int preferredWidth : Kirigami.Units.gridUnit * 12
+    property alias overlay : _overlay
+
+    onCollapsedChanged: position = collapsed && collapsedSize < 1 ? 0 : 1
+
+    signal contentDropped(var drop)
+
+    MouseArea
+    {
+        id: _overlay
+        anchors.fill: parent
+        anchors.margins: 0
+        anchors.leftMargin: (control.width * control.position)
+        parent: ApplicationWindow.contentItem
+        preventStealing: true
+        propagateComposedEvents: false
+        visible: false
+        Rectangle
+        {
+            color: control.Kirigami.Theme.backgroundColor
+            opacity: 0.7 * control.position
+            anchors.fill: parent
+        }
+    }
+
+    //	onVisibleChanged:
+    //	{
+    //		if(control.visible && !control.modal)
+    //			control.position = 1
+    //	}
+
+    Component.onCompleted:
+    {
+        if(!control.collapsed)
+        {
+            control.visible = true;
+            control.position = 1;
+        }
+    }
+
+    Behavior on position
+    {
+        enabled: control.collapsible && control.position === 1
+
+        NumberAnimation
+        {
+            duration: Kirigami.Units.longDuration
+            easing.type: Easing.InOutQuad
+        }
+    }
+
+    opacity: _dropArea.containsDrag ? 0.5 : 1
+
+    DropArea
+    {
+        id: _dropArea
+        anchors.fill: parent
+        onDropped:
+        {
+            control.contentDropped(drop)
+        }
+    }
 }
 
