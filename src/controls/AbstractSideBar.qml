@@ -87,7 +87,7 @@ Drawer
 
     Behavior on position
     {
-        enabled: control.collapsible && control.position === 0
+        enabled: control.collapsible && control.position === 1
 		
         NumberAnimation
         {
