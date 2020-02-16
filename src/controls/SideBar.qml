@@ -82,7 +82,7 @@ Maui.AbstractSideBar
 				onClicked:
 				{
 					control.currentIndex = index
-					control.itemClicked(index)
+					control.itemClicked(index)					
 				}
 				
 				onRightClicked:

@@ -55,7 +55,9 @@ Maui.SideBar
 		
 		placesList.clearBadgeCount(index)	
 			
-		placeClicked(path)
+		placeClicked(path)	
+		if(control.collapsed)
+			control.collapse()
 	}
 	
 	onItemRightClicked: _menu.popup()

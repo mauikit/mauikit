@@ -32,7 +32,7 @@ import QtQuick.Controls.Material 2.1
 import "private"
 
 
-Kirigami.AbstractApplicationWindow
+ApplicationWindow
 {
     id: root
     visible: true
@@ -60,7 +60,7 @@ Kirigami.AbstractApplicationWindow
     property var currentAccount: Maui.App.accounts.currentAccount
     property alias notifyDialog: _notify
 
-    wideScreen: isWide
+//     wideScreen: isWide
 
     /***************************************************/
     /*********************** UI ***********************/

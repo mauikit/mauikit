@@ -34,6 +34,8 @@ Drawer
     y: (ApplicationWindow.header ? ApplicationWindow.header.height : 0)
     closePolicy: modal ?  Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
     interactive: modal
+    dragMargin: Maui.Style.space.big    
+    
     property bool collapsible: false
     property bool collapsed: false
     property int collapsedSize: 0
