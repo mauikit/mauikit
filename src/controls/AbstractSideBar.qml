@@ -41,13 +41,11 @@ Drawer
     property alias overlay : _overlay
     
     onCollapsedChanged:  position = collapsed && collapsedSize < 1 ? 0 : 1
-    
 
     enter: Transition { SmoothedAnimation { velocity: modal ? 5 : 0 } }
     exit: Transition { SmoothedAnimation { velocity: modal ? 5 : 0 } }
 
-    signal contentDropped(var drop)
-	
+    signal contentDropped(var drop)	
 	
 	MouseArea
 	{
@@ -62,7 +60,7 @@ Drawer
 		Rectangle
 		{			
 			color: control.Kirigami.Theme.backgroundColor
-            opacity: 0.5 * control.position
+            opacity: 0.7 * control.position
 			anchors.fill: parent			
 		}
 		
@@ -89,14 +87,14 @@ Drawer
 
     Behavior on position
     {
-		enabled: control.collapsible
+        enabled: control.collapsible && control.position === 0
 		
-		NumberAnimation
-		{
-			duration: Kirigami.Units.longDuration
-			easing.type: Easing.InOutQuad
-		}
-	}
+        NumberAnimation
+        {
+            duration: Kirigami.Units.longDuration
+            easing.type: Easing.InOutQuad
+        }
+    }
 
     opacity: _dropArea.containsDrag ? 0.5 : 1
 	
