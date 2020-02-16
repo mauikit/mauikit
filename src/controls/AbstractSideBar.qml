@@ -62,7 +62,7 @@ Drawer
 		Rectangle
 		{			
 			color: control.Kirigami.Theme.backgroundColor
-			opacity: 0.5
+            opacity: 0.5 * control.position
 			anchors.fill: parent			
 		}
 		
