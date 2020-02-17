@@ -36,10 +36,9 @@ ApplicationWindow
 {
     id: root
     visible: true
-    width: Screen.width * (Kirigami.Settings.isMobile ? 1 : 0.4)
-    height: Screen.height * (Kirigami.Settings.isMobile ? 1 : 0.4)
+    width: Screen.desktopAvailableWidth * (Kirigami.Settings.isMobile ? 1 : 0.4)
+    height: Screen.desktopAvailableHeight * (Kirigami.Settings.isMobile ? 1 : 0.4)
 	
-
    property Maui.AbstractSideBar sideBar
 
     /***************************************************/
@@ -110,15 +109,18 @@ ApplicationWindow
     }
     
     property bool isPortrait: Screen.primaryOrientation === Qt.PortraitOrientation || Screen.primaryOrientation === Qt.InvertedPortraitOrientation
-    onIsPortraitChanged:
-    {
-        if(isPortrait)
-        {
-            console.log("PORTARIT MODE CHANGED")
-            width: Screen.width
-            height: Screen.height
-        }
-    }    
+//    onIsPortraitChanged:
+//    {
+//        if(isPortrait)
+//        {
+//            console.log("PORTARIT MODE CHANGED", width, height, screenWidth, screenHeight, Screen.width,  Screen.height )
+//            width: Screen.width
+//            height: Screen.height
+
+//            console.log("PORTARIT MODE CHANGED", width, height, screenWidth, screenHeight, Screen.width,  Screen.height )
+
+//        }
+//    }
     
 	Item
 	{

@@ -32,7 +32,7 @@ Drawer
     implicitHeight: parent.height - (ApplicationWindow.header ? ApplicationWindow.header.height : 0) - (ApplicationWindow.footer ? ApplicationWindow.footer.height : 0)
     height: implicitHeight
     y: (ApplicationWindow.header ? ApplicationWindow.header.height : 0)
-    closePolicy: modal || colapsed ?  Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
+    closePolicy: modal || collapsed ?  Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
     interactive: modal || collapsed
     dragMargin: Maui.Style.space.big    
     modal: false
