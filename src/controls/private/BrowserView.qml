@@ -255,7 +255,7 @@ Maui.Page
             id: _gridViewBrowser
             property alias currentFMList : _browserModel.list
             property alias currentFMModel : _browserModel
-            itemSize : thumbnailsSize + Maui.Style.fontSizes.default
+            itemSize : thumbnailsSize + Maui.Style.space.small
             cellHeight: itemSize * 1.5
             keepEmblemOverlay: settings.selectionMode
             showPreviewThumbnails: settings.showThumbnails
@@ -287,7 +287,7 @@ Maui.Page
                 property bool isCurrentItem : GridView.isCurrentItem
                 height: _gridViewBrowser.cellHeight
                 width: _gridViewBrowser.cellWidth
-                
+//                 color: "red"
                 Maui.GridBrowserDelegate
                 {
                     id: delegate
@@ -295,8 +295,8 @@ Maui.Page
                     folderSize: height * 0.5
                     
                     anchors.centerIn: parent
-                    height: _gridViewBrowser.cellHeight
-                    width: _gridViewBrowser.itemSize
+                    height: _gridViewBrowser.cellHeight - 5
+                    width: _gridViewBrowser.itemSize - 5
                     padding: Maui.Style.space.tiny
                     isCurrentItem: parent.isCurrentItem
                     showTooltip: true
@@ -307,6 +307,12 @@ Maui.Page
                     isSelected: (selectionBar ? selectionBar.contains(model.path) : false) 
                     leftEmblem: isSelected ? "checkbox" : " "
                     draggable: true
+                    
+//                     Rectangle
+//                     {
+// 						anchors.fill: parent
+// 						color:"yellow"
+// 					}
                     
                     Maui.Badge
                     {

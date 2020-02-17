@@ -168,7 +168,8 @@ Kirigami.ScrollablePage
             id: _mouseArea
             z: -1
             anchors.fill: parent
-            propagateComposedEvents: true
+            propagateComposedEvents: false
+            preventStealing: true
             acceptedButtons:  Qt.RightButton | Qt.LeftButton
             onClicked: 
             {

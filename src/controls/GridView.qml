@@ -149,7 +149,8 @@ Kirigami.ScrollablePage
                 id: _mouseArea
                 z: -1
                 anchors.fill: parent
-                propagateComposedEvents: true
+                propagateComposedEvents: false
+                preventStealing: true
                 acceptedButtons:  Qt.RightButton | Qt.LeftButton
                 scrollGestureEnabled : false 
                 
@@ -230,9 +231,9 @@ Kirigami.ScrollablePage
                     var limitX = mouse.x === lassoRec.x ? lassoRec.x+lassoRec.width : mouse.x
                     var limitY =  mouse.y === lassoRec.y ?  lassoRec.y+lassoRec.height : mouse.y
                     
-                    for(var i =lassoRec.x; i<=limitX; i+=(lassoRec.width/controlView.cellWidth))
+                    for(var i =lassoRec.x; i<=limitX; i+=(lassoRec.width/(controlView.cellWidth* 0.5)))
                     {
-                        for(var y = lassoRec.y; y<= limitY; y+=(lassoRec.height/controlView.cellHeight))
+                        for(var y = lassoRec.y; y<= limitY; y+=(lassoRec.height/(controlView.cellHeight * 0.5)))
                         {    
                             const index = controlView.indexAt(i,y+controlView.contentY)
                             if(!lassoIndexes.includes(index) && index>-1 && index< controlView.count)

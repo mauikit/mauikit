@@ -82,9 +82,7 @@ Item
                         height: img.height
                         Rectangle
                         {
-                            anchors.centerIn: parent
-                            width: img.width
-                            height: img.height
+                            anchors.fill: parent
                             radius: control.maskRadius
                         }
                     }
