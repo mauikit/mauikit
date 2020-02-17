@@ -289,7 +289,7 @@ Maui.Page
                 property bool isCurrentItem : GridView.isCurrentItem
                 height: _gridViewBrowser.cellHeight
                 width: _gridViewBrowser.cellWidth
-//                 color: "red"
+
                 Maui.GridBrowserDelegate
                 {
                     id: delegate
@@ -309,12 +309,6 @@ Maui.Page
                     isSelected: (selectionBar ? selectionBar.contains(model.path) : false) 
                     leftEmblem: isSelected ? "checkbox" : " "
                     draggable: true
-                    
-//                     Rectangle
-//                     {
-// 						anchors.fill: parent
-// 						color:"yellow"
-// 					}
                     
                     Maui.Badge
                     {
@@ -394,10 +388,7 @@ Maui.Page
                         }
                     }
                 }
-            }
-            
-            
-            
+            }            
         }
     }
     

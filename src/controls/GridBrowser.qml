@@ -34,7 +34,6 @@ Maui.GridView
 	property string rightEmblem
 	property string leftEmblem
 	
-	centerContent: false
 	adaptContent: true
 	property bool showPreviewThumbnails: true
 	

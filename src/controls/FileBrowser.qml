@@ -858,7 +858,6 @@ Maui.Page
 
                 onPressAndHold: removeAtIndex(index)
             }
-
         }
         
 
