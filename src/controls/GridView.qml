@@ -265,7 +265,7 @@ Kirigami.ScrollablePage
                 y: 0
                 visible: false
                 color: Qt.rgba(control.Kirigami.Theme.highlightColor.r,control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2)
-                opacity: 0.5
+                opacity: 0.7
 
                 borderColor: control.Kirigami.Theme.highlightColor
                 borderWidth: 2
