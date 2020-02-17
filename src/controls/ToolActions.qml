@@ -62,7 +62,7 @@ Item
                 }
                 rotation: control.direction === Qt.Vertical ? -45 : (control.expanded ?- 90 : -135 )
                 color: control.Kirigami.Theme.textColor
-                width: Maui.Style.iconSizes.tiny-2
+                width: Maui.Style.iconSizes.tiny-3
                 height:  width 
             }	
         }         

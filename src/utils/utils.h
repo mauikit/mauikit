@@ -25,6 +25,7 @@
 #include <QSettings>
 #include <QDebug>
 #include <QColor>
+#include <QImage>
 
 #ifdef Q_OS_ANDROID
 #include <QGuiApplication>
@@ -40,17 +41,17 @@
 
 namespace UTIL
 {
-	static const auto app = QCoreApplication::instance();	
-
+    static const auto app = QCoreApplication::instance();	
+    
     static const inline QString whoami()
     {
-#ifdef Q_OS_UNIX
+        #ifdef Q_OS_UNIX
         return qgetenv("USER"); ///for Mac or Linux
-#else
+        #else
         return  qgetenv("USERNAME"); //for windows
-#endif
+        #endif
     }
-
+    
     static inline void saveSettings(const QString &key, const QVariant &value, const QString &group, QString app = UTIL::app->applicationName(), const QString organization = UTIL::app->organizationName())
     {
         QSettings setting(organization.isEmpty() ?  QString("org.kde.maui") : organization, app);
@@ -58,22 +59,55 @@ namespace UTIL
         setting.setValue(key,value);
         setting.endGroup();
     }
-
+    
     static inline const QVariant loadSettings(const QString &key, const QString &group, const QVariant &defaultValue, const QString app = UTIL::app->applicationName(), const QString organization = UTIL::app->organizationName())
     {
         QVariant variant;
-		QSettings setting(organization.isEmpty() ?  QString("org.kde.maui") : organization, app);
-		setting.beginGroup(group);
+        QSettings setting(organization.isEmpty() ?  QString("org.kde.maui") : organization, app);
+        setting.beginGroup(group);
         variant = setting.value(key,defaultValue);
         setting.endGroup();
         return variant;
     }
     
     static inline bool isDark(const QColor &color)
-	{
-		const double darkness = 1-(0.299*color.red() + 0.587*color.green() + 0.114*color.blue())/255;
-		return (darkness>0.5);
-	}
+    {
+        const double darkness = 1-(0.299*color.red() + 0.587*color.green() + 0.114*color.blue())/255;
+        return (darkness>0.5);
+    }
+    
+    static inline QColor averageColour(QImage img) 
+    {
+        int r = 0;
+        int g = 0;
+        int b = 0;
+        int c = 0;
+        
+        for (int i = 0; i < img.width(); i++) 
+        {
+            for (int ii = 0; ii < img.height(); ii++) 
+            {
+                QRgb pix = img.pixel(i, ii);
+                if (pix == 0)
+                    continue;
+                
+                c++;
+                r += qRed(pix);
+                g += qGreen(pix);
+                b += qBlue(pix);
+            }
+        }
+        r = r / c;
+        g = g / c;
+        b = b / c;
+        
+        QColor color = QColor::fromRgb(r,g,b);
+        
+        color.setHsv(color.hue(), color.saturation() / 4, color.value());
+        
+        return color;
+        
+    }
 }
 
 

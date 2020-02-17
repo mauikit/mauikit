@@ -26,153 +26,244 @@ import org.kde.kirigami 2.7 as Kirigami
 
 Kirigami.ScrollablePage
 {
-	id: control    
-	
-	property int itemSize : Maui.Style.iconSizes.big
-	property bool showEmblem : true
-	property bool keepEmblemOverlay : false
-	property string rightEmblem
-	property string leftEmblem
-	
-	property bool showDetailsInfo : false
-	property bool showPreviewThumbnails: true
-	
-	property alias model : _listView.model
-	property alias delegate : _listView.delegate
-	property alias section : _listView.section
-	property alias contentY: _listView.contentY
-	property alias currentIndex : _listView.currentIndex
-	property alias currentItem : _listView.currentItem
-	property alias count : _listView.count
-	property alias cacheBuffer : _listView.cacheBuffer
-	
-	property alias topMargin: _listView.topMargin
-	property alias bottomMargin: _listView.bottomMargin
-	property alias rightMargin: _listView.rightMargin
-	property alias leftMarging: _listView.leftMargin
-	property alias listView: _listView
-	property alias holder : _holder
-	
-	signal itemClicked(int index)
-	signal itemDoubleClicked(int index)
-	signal itemRightClicked(int index)
-	
-	signal rightEmblemClicked(int index)
-	signal leftEmblemClicked(int index)
-	
-	signal areaClicked(var mouse)
-	signal areaRightClicked()   
-	signal keyPress(var event)
-	
-	spacing: 0
-	focus: true	
-	padding: 0
-	leftPadding: padding
-	rightPadding: padding
-	topPadding: padding
-	bottomPadding: padding    
-	
-	Keys.enabled: false
-	Kirigami.Theme.colorSet: Kirigami.Theme.View       
-	supportsRefreshing: false 
-	
-	ListView
-	{	
-		id: _listView
-		focus: true
-		clip: true           
-		spacing: Maui.Style.space.tiny
-		snapMode: ListView.NoSnap
-		boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : 
-		Flickable.OvershootBounds
-		
-		interactive: Maui.Handy.isTouch
-		highlightFollowsCurrentItem: true
-		highlightMoveDuration: 0
-		highlightResizeDuration : 0
-		
-		keyNavigationEnabled : true
-		keyNavigationWraps : true
-		Keys.onPressed: control.keyPress(event)
-		// 		ScrollBar.vertical: ScrollBar { }
-		
-		Maui.Holder
-		{
-			id: _holder
-			anchors.fill : parent		
-		}	
-		
-		delegate: Maui.ListBrowserDelegate
-		{
-			id: delegate
-			width: parent.width
-			height: itemSize + Maui.Style.space.big
-			leftPadding: Maui.Style.space.small
-			rightPadding: Maui.Style.space.small
-			padding: 0
-			showDetailsInfo: control.showDetailsInfo
-			folderSize : itemSize
-			showTooltip: true
-			showEmblem: control.showEmblem
-			keepEmblemOverlay : control.keepEmblemOverlay
-			showThumbnails: showPreviewThumbnails
-			rightEmblem: control.rightEmblem
-			leftEmblem: control.leftEmblem
-			
-			Connections
-			{
-				target: delegate
-				onClicked:
-				{
-					control.currentIndex = index
-					control.itemClicked(index)
-				}
-				
-				onDoubleClicked:
-				{
-					control.currentIndex = index
-					control.itemDoubleClicked(index)
-				}
-				
-				onPressAndHold:
-				{
-					control.currentIndex = index
-					control.itemRightClicked(index)
-				}
-				
-				onRightClicked:
-				{
-					control.currentIndex = index
-					control.itemRightClicked(index)
-				}
-				
-				onRightEmblemClicked:
-				{
-					control.currentIndex = index
-					control.rightEmblemClicked(index)
-				}
-				
-				onLeftEmblemClicked:
-				{
-					control.currentIndex = index
-					control.leftEmblemClicked(index)
-				}
-			}
-		}
-		
-		MouseArea
-		{
-			anchors.fill: parent
-			z: -1
-			acceptedButtons:  Qt.RightButton | Qt.LeftButton
-			onClicked: 
-			{
-				control.forceActiveFocus()				
-				control.areaClicked(mouse)
-			}
-			onPressAndHold: control.areaRightClicked()
-		}
-	}  
+    id: control    
+    
+    property int itemSize : Maui.Style.iconSizes.big
+    property bool showEmblem : true
+    property bool keepEmblemOverlay : false
+    property string rightEmblem
+    property string leftEmblem
+    
+    property bool showDetailsInfo : false
+    property bool showPreviewThumbnails: true
+    
+    property alias model : _listView.model
+    property alias delegate : _listView.delegate
+    property alias section : _listView.section
+    property alias contentY: _listView.contentY
+    property alias currentIndex : _listView.currentIndex
+    property alias currentItem : _listView.currentItem
+    property alias count : _listView.count
+    property alias cacheBuffer : _listView.cacheBuffer
+    
+    property alias topMargin: _listView.topMargin
+    property alias bottomMargin: _listView.bottomMargin
+    property alias rightMargin: _listView.rightMargin
+    property alias leftMarging: _listView.leftMargin
+    property alias listView: _listView
+    property alias holder : _holder
+    
+    property alias lassoRec : selectLayer
+    
+    signal itemsSelected(var indexes) 
+    signal itemClicked(int index)
+    signal itemDoubleClicked(int index)
+    signal itemRightClicked(int index)
+    
+    signal rightEmblemClicked(int index)
+    signal leftEmblemClicked(int index)
+    
+    signal areaClicked(var mouse)
+    signal areaRightClicked()   
+    signal keyPress(var event)
+    
+    spacing: 0
+    focus: true	
+    padding: 0
+    leftPadding: padding
+    rightPadding: padding
+    topPadding: padding
+    bottomPadding: padding    
+    
+    Keys.enabled: false
+    Kirigami.Theme.colorSet: Kirigami.Theme.View       
+    supportsRefreshing: false 
+    
+    ListView
+    {	
+        id: _listView
+        focus: true
+        clip: true           
+        spacing: Maui.Style.space.tiny
+        snapMode: ListView.NoSnap
+        boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : 
+        Flickable.OvershootBounds
+        
+        interactive: Maui.Handy.isTouch
+        highlightFollowsCurrentItem: true
+        highlightMoveDuration: 0
+        highlightResizeDuration : 0
+        
+        keyNavigationEnabled : true
+        keyNavigationWraps : true
+        Keys.onPressed: control.keyPress(event)
+        // 		ScrollBar.vertical: ScrollBar { }
+        
+        Maui.Holder
+        {
+            id: _holder
+            anchors.fill : parent		
+        }	
+        
+        delegate: Maui.ListBrowserDelegate
+        {
+            id: delegate
+            width: parent.width
+            height: itemSize + Maui.Style.space.big
+            leftPadding: Maui.Style.space.small
+            rightPadding: Maui.Style.space.small
+            padding: 0
+            showDetailsInfo: control.showDetailsInfo
+            folderSize : itemSize
+            showTooltip: true
+            showEmblem: control.showEmblem
+            keepEmblemOverlay : control.keepEmblemOverlay
+            showThumbnails: showPreviewThumbnails
+            rightEmblem: control.rightEmblem
+            leftEmblem: control.leftEmblem
+            
+            Connections
+            {
+                target: delegate
+                onClicked:
+                {
+                    control.currentIndex = index
+                    control.itemClicked(index)
+                }
+                
+                onDoubleClicked:
+                {
+                    control.currentIndex = index
+                    control.itemDoubleClicked(index)
+                }
+                
+                onPressAndHold:
+                {
+                    control.currentIndex = index
+                    control.itemRightClicked(index)
+                }
+                
+                onRightClicked:
+                {
+                    control.currentIndex = index
+                    control.itemRightClicked(index)
+                }
+                
+                onRightEmblemClicked:
+                {
+                    control.currentIndex = index
+                    control.rightEmblemClicked(index)
+                }
+                
+                onLeftEmblemClicked:
+                {
+                    control.currentIndex = index
+                    control.leftEmblemClicked(index)
+                }
+            }
+        }    
+        
+        MouseArea
+        {
+            id: _mouseArea
+            z: -1
+            anchors.fill: parent
+            propagateComposedEvents: true
+            acceptedButtons:  Qt.RightButton | Qt.LeftButton
+            onClicked: 
+            {
+                control.forceActiveFocus()				
+                control.areaClicked(mouse)
+            }
+            
+            onPressed : mouse.accepted = true		
+            
+            onPositionChanged: 
+            {
+                if(_mouseArea.pressed)
+                {
+                    if(mouseX >= selectLayer.newX)
+                    {
+                        selectLayer.width = (mouseX + 10) < (control.x + control.width) ? (mouseX - selectLayer.x) : selectLayer.width;
+                    } else {
+                        selectLayer.x = mouseX < control.x ? control.x : mouseX;
+                        selectLayer.width = selectLayer.newX - selectLayer.x;
+                    }
+                    
+                    if(mouseY >= selectLayer.newY) {
+                        selectLayer.height = (mouseY + 10) < (control.y + control.height) ? (mouseY - selectLayer.y) : selectLayer.height;
+                        if(!_listView.atYEnd &&  mouseY > (control.y + control.height))
+                            _listView.contentY += 10
+                    } else {
+                        selectLayer.y = mouseY < control.y ? control.y : mouseY;
+                        selectLayer.height = selectLayer.newY - selectLayer.y;
+                        
+                        if(!_listView.atYBeginning && selectLayer.y === 0)
+                            _listView.contentY -= 10                                
+                    }
+                }               
+            }                
+            
+            onPressAndHold:
+            {                 
+                selectLayer.visible = true;
+                selectLayer.x = mouseX;
+                selectLayer.y = mouseY;
+                selectLayer.newX = mouseX;
+                selectLayer.newY = mouseY;
+                selectLayer.width = 60
+                selectLayer.height = 60;
+            }
+            
+            onReleased: 
+            {                    
+                if(!selectLayer.visible)
+                {
+                    return
+                }
+                
+                var lassoIndexes = []
+                var limitY =  mouse.y === lassoRec.y ?  lassoRec.y+lassoRec.height : mouse.y
+                
+                
+                for(var y = lassoRec.y; y<= limitY; y+=10)
+                {    
+                    const index = _listView.indexAt(_listView.width/2,y+_listView.contentY)
+                    if(!lassoIndexes.includes(index) && index>-1 && index< _listView.count)
+                        lassoIndexes.push(index)
+                }                    
+                
+                selectLayer.x = 0;
+                selectLayer.y = 0;
+                selectLayer.newX = 0;
+                selectLayer.newY = 0;
+                selectLayer.visible = false;
+                selectLayer.width = 0;
+                selectLayer.height = 0;
+                
+                control.itemsSelected(lassoIndexes)
+            }            
+        }
+        
+        Maui.Rectangle 
+        {
+            id: selectLayer
+            property int newX: 0
+            property int newY: 0
+            height: 0
+            width: 0
+            x: 0
+            y: 0
+            visible: false
+            color: Qt.rgba(control.Kirigami.Theme.highlightColor.r,control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2)
+            opacity: 0.5
+            
+            borderColor: control.Kirigami.Theme.highlightColor
+            borderWidth: 2
+            solidBorder: false
+        }      
+    }   
+    
 }
 
 

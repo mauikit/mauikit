@@ -34,18 +34,14 @@ ToolButton
 		}
 		rotation: -45
 		color: control.Kirigami.Theme.textColor
-		width: Maui.Style.iconSizes.tiny-2
+		width: Maui.Style.iconSizes.tiny-3
 		height:  width 
 	}	
-	
-	
-// 	
 
 	Menu
 	{
 		id: _menu
-		closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-		
+		closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside	
 		contentData: control.content
 	}
 }

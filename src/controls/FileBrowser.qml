@@ -131,6 +131,7 @@ Maui.Page
         checkable: true
         checked: settings.selectionMode
         onClicked: settings.selectionMode = !settings.selectionMode
+        onPressAndHold: control.selectAll()
     },
 
     Maui.ToolButtonMenu
@@ -647,6 +648,11 @@ Maui.Page
                     control.clearSelection()
             }
         }
+        
+        onItemsSelected:
+        {
+            control.selectIndexes(indexes)
+        }
 
         onItemClicked:
         {
@@ -1012,9 +1018,11 @@ Maui.Page
     function addToSelection(item)
     {
         if(item.path.startsWith("tags://") || item.path.startsWith("applications://") )
+        {
             return
+        }
         
-                control.selectionBar.append(item.path, item)
+        control.selectionBar.append(item.path, item)
     }
 
     function clearSelection()
@@ -1060,11 +1068,16 @@ Maui.Page
         dialog.urls = urls
         dialog.open()
     }
+    
+    function selectIndexes(indexes)
+    {
+        for(var i in indexes)
+             addToSelection(control.currentFMList.get(indexes[i]))
+    }
 
     function selectAll() //TODO for now dont select more than 100 items so things dont freeze or break
     {
-        for(var i = 0; i < Math.min(control.currentFMList.count, 100); i++)
-            addToSelection(control.currentFMList.get(i))
+        selectIndexes([...Array( Math.min(control.currentFMList.count, 100)).keys()])       
     }
 
     function bookmarkFolder(paths) //multiple paths
@@ -1074,15 +1087,13 @@ Maui.Page
 
     function zoomIn()
     {
-        control.thumbnailsSize = control.thumbnailsSize + 8
+        control.browserView.currentView.resizeContent(1.2)
     }
-
+    
     function zoomOut()
     {
-        const newSize = control.thumbnailsSize - 8
-
-        if(newSize >= Maui.Style.iconSizes.small)
-            control.thumbnailsSize = newSize
+        control.browserView.currentView.resizeContent(0.8)
+        
     }
 
     function groupBy()

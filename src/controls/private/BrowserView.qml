@@ -283,6 +283,7 @@ Maui.Page
             
             delegate: Item
             {
+                property alias isSelected: delegate.isSelected
                 property bool isCurrentItem : GridView.isCurrentItem
                 height: _gridViewBrowser.cellHeight
                 width: _gridViewBrowser.cellWidth
@@ -303,7 +304,7 @@ Maui.Page
                     keepEmblemOverlay: _gridViewBrowser.keepEmblemOverlay
                     showThumbnails: _gridViewBrowser.showPreviewThumbnails
                     rightEmblem: _gridViewBrowser.rightEmblem
-                    isSelected: selectionBar ? selectionBar.contains(model.path) : false
+                    isSelected: (selectionBar ? selectionBar.contains(model.path) : false) 
                     leftEmblem: isSelected ? "checkbox" : " "
                     draggable: true
                     
@@ -316,6 +317,7 @@ Maui.Page
                         visible: (model.issymlink == true) || (model.issymlink == "true")
                     }
                     
+                                      
                     Connections
                     {
                         target: selectionBar
@@ -408,6 +410,7 @@ Maui.Page
             signal keyPress(var event)
             signal rightEmblemClicked(int index)
             signal leftEmblemClicked(int index)
+            signal itemsSelected(var indexes)
             
             signal areaClicked(var mouse)
             signal areaRightClicked()
@@ -564,6 +567,12 @@ Maui.Page
                         {
                             _millerColumns.currentIndex = _index
                             _millerControl.areaRightClicked()
+                        }
+                        
+                        onItemsSelected:
+                         {
+                            _millerColumns.currentIndex = _index
+                            _millerControl.itemsSelected(indexes)
                         }
                         
                         model: Maui.BaseModel

@@ -3,7 +3,6 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
-import "shapes"
 
 ItemDelegate
 {
@@ -62,7 +61,7 @@ ItemDelegate
             Layout.alignment: Qt.AlignRight
             onClicked: removeTag(index)
             
-            X
+            Maui.X
             {
                 height: Maui.Style.iconSizes.tiny
                 width: height

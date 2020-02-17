@@ -72,4 +72,5 @@ PlusSign 1.0 private/shapes/PlusSign.qml
 Arrow 1.0 private/shapes/Arrow.qml
 Triangle 1.0 private/shapes/Triangle.qml
 CheckMark 1.0 private/shapes/CheckMark.qml
+Rectangle 1.0 private/shapes/Rectangle.qml
 

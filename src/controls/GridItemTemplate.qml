@@ -25,8 +25,6 @@ import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
-import "private/shapes"
-
 Item
 {
     id: control
@@ -138,7 +136,7 @@ Item
                         anchors.bottom: parent.bottom
                         border.color: Kirigami.Theme.textColor 
                         
-//                         CheckMark
+//                         Maui.CheckMark
 //                         {
 //                            width: 10
 //                            height: 10

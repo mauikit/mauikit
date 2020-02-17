@@ -76,6 +76,7 @@
         <file alias="private/shapes/Triangle.qml">controls/private/shapes/Triangle.qml</file>
 		<file alias="private/shapes/CheckMark.qml">controls/private/shapes/CheckMark.qml</file>
 		<file alias="private/shapes/PlusSign.qml">controls/private/shapes/PlusSign.qml</file>
+		<file alias="private/shapes/Rectangle.qml">controls/private/shapes/Rectangle.qml</file>
 		
     </qresource>
     <qresource prefix="/"/>
