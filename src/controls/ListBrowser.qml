@@ -89,7 +89,7 @@ Kirigami.ScrollablePage
         boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : 
         Flickable.OvershootBounds
         
-        interactive: Maui.Handy.isTouch
+        interactive: Kirigami.Settings.hasTransientTouchInput
         highlightFollowsCurrentItem: true
         highlightMoveDuration: 0
         highlightResizeDuration : 0

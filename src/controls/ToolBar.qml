@@ -245,7 +245,7 @@ ToolBar
         anchors.rightMargin: !fits && _rightFlickRec.visible && control.flickable && !Kirigami.Settings.isMobile ? _rightFlickRec.width : margins
 
         flickableDirection: Flickable.HorizontalFlick
-        interactive: !fits && Maui.Handy.isTouch
+        interactive: !fits && Kirigami.Settings.hasTransientTouchInput
         contentWidth: ((control.margins) + Maui.Style.space.medium)
         + (control.stickyLeftContent ? leftRowContent.implicitWidth : leftRowContent.width)
         + (control.stickyMiddleContent ? middleRowContent.implicitWidth : middleRowContent.width)

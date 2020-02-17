@@ -109,7 +109,7 @@ Kirigami.ScrollablePage
         flickableDirection: Flickable.AutoFlickDirection
         snapMode: GridView.NoSnap
         highlightMoveDuration: 0
-        interactive: Maui.Handy.isTouch
+        interactive: Kirigami.Settings.hasTransientTouchInput
         onWidthChanged: if(control.adaptContent) control.adaptGrid()
         
         keyNavigationEnabled : true

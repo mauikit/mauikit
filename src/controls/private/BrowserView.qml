@@ -422,7 +422,7 @@ Maui.Page
                 boundsBehavior: !Maui.Handy.isTouch? Flickable.StopAtBounds : Flickable.OvershootBounds
                 
                 keyNavigationEnabled: true
-                interactive: Maui.Handy.isTouch
+                interactive: Kirigami.Settings.hasTransientTouchInput
                 
                 orientation: ListView.Horizontal
                 snapMode: ListView.SnapToItem
