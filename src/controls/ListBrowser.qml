@@ -53,6 +53,7 @@ Kirigami.ScrollablePage
     property alias listView: _listView
     property alias holder : _holder
     
+    property bool enableLassoSelection : false  
     property alias lassoRec : selectLayer
     
     signal itemsSelected(var indexes) 
@@ -181,8 +182,8 @@ Kirigami.ScrollablePage
             
             onPositionChanged: 
             {
-                if(_mouseArea.pressed)
-                {
+				if(_mouseArea.pressed && control.enableLassoSelection)
+				{
                     if(mouseX >= selectLayer.newX)
                     {
                         selectLayer.width = (mouseX + 10) < (control.x + control.width) ? (mouseX - selectLayer.x) : selectLayer.width;
@@ -207,14 +208,17 @@ Kirigami.ScrollablePage
             
             onPressAndHold:
             {                 
-                selectLayer.visible = true;
-                selectLayer.x = mouseX;
-                selectLayer.y = mouseY;
-                selectLayer.newX = mouseX;
-                selectLayer.newY = mouseY;
-                selectLayer.width = 60
-                selectLayer.height = 60;
-            }
+				if(control.enableLassoSelection)
+				{
+					selectLayer.visible = true;
+					selectLayer.x = mouseX;
+					selectLayer.y = mouseY;
+					selectLayer.newX = mouseX;
+					selectLayer.newY = mouseY;
+					selectLayer.width = 60
+					selectLayer.height = 60;
+				}
+			}
             
             onReleased: 
             {                    

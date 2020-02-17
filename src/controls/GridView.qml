@@ -58,7 +58,7 @@ Kirigami.ScrollablePage
     
     property bool centerContent: false //deprecrated
     property bool adaptContent: true
-    
+    property bool enableLassoSelection : false    
     property alias lassoRec : selectLayer
     
     signal itemsSelected(var indexes)    
@@ -174,10 +174,8 @@ Kirigami.ScrollablePage
                 }
                 
                 onPositionChanged: 
-                {
-                    mouse.accepted = true
-                    
-                    if(_mouseArea.pressed)
+                {                   
+                    if(_mouseArea.pressed && control.enableLassoSelection)
                     {
                         if(mouseX >= selectLayer.newX)
                         {
@@ -209,15 +207,18 @@ Kirigami.ScrollablePage
                         return
                     }
                     
-                    selectLayer.visible = true;
-                    selectLayer.x = mouseX;
-                    selectLayer.y = mouseY;
-                    selectLayer.newX = mouseX;
-                    selectLayer.newY = mouseY;
-                    selectLayer.width = 60
-                    selectLayer.height = 60;
-                    
-                    mouse.accepted = true
+                    if(control.enableLassoSelection)
+					{
+						selectLayer.visible = true;
+						selectLayer.x = mouseX;
+						selectLayer.y = mouseY;
+						selectLayer.newX = mouseX;
+						selectLayer.newY = mouseY;
+						selectLayer.width = 60
+						selectLayer.height = 60;
+						
+						mouse.accepted = true						
+					}
                 }
                 
                 onReleased: 
