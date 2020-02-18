@@ -679,7 +679,6 @@ Maui.Page
         
         onItemsSelected:
         {
-			console.log(indexes)
             control.selectIndexes(indexes)
         }
 

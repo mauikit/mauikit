@@ -141,8 +141,7 @@ Kirigami.ScrollablePage
 				{
 					control.areaRightClicked()
 					return
-				}
-				
+				}				
             }
 
             onWheel:
@@ -252,11 +251,7 @@ Kirigami.ScrollablePage
             borderColor: control.Kirigami.Theme.highlightColor
             borderWidth: 2
             solidBorder: false
-            
-            Label{
-				text: selectLayer.x + " " + controlView.contentHeight
-			}
-			
+            			
 			function reset()
 			{
 				selectLayer.x = 0;
