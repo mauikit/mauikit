@@ -284,10 +284,12 @@ Kirigami.ScrollablePage
     function adaptGrid()
     {
         var amount = parseInt(controlView.width / (controlView.size_), 10)
+		
+		if(amount-1 >= controlView.count)
+			return;
+					
         var leftSpace = parseInt(controlView.width  - ( amount * (controlView.size_) ), 10)
         var size = parseInt((controlView.size_) + (parseInt(leftSpace/amount, 10)), 10)
-        // 		size = size > controlView.size_? size : controlView.size_
         control.cellWidth = size
-        //         controlView.forceLayout()
     }
 }
