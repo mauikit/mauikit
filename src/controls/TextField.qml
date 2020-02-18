@@ -56,8 +56,15 @@ TextField
     {
         goBackTriggered();
         event.accepted = true
-    }
-
+    }    
+   	
+	Shortcut
+	{
+		sequence: StandardKey.Quit
+		context: Qt.ApplicationShortcut
+		onActivated: control.clear()
+	}
+	
     Shortcut
     {
         sequence: "Forward"

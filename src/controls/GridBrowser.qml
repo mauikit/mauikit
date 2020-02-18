@@ -41,8 +41,7 @@ Maui.GridView
 	signal itemDoubleClicked(int index)	
 	signal rightEmblemClicked(int index)
 	signal leftEmblemClicked(int index)	
-	signal itemRightClicked(int index)
-	
+	signal itemRightClicked(int index)	
 	
 	delegate: Maui.GridBrowserDelegate
 	{

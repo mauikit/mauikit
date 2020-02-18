@@ -73,8 +73,8 @@ Maui.Page
     signal itemLeftEmblemClicked(int index)
     signal itemRightEmblemClicked(int index)
     signal rightClicked()
-    signal newBookmark(var paths)
-
+	signal keyPress(var event)
+	
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     Kirigami.Theme.inherit: false
 
@@ -90,11 +90,28 @@ Maui.Page
     footBar.leftSretch: false
     footBar.middleContent: Maui.TextField
     {
+		id: _filterField
         Layout.fillWidth: true
         visible: control.currentFMList.count > 0
         placeholderText: String("Filter %1 files").arg(control.currentFMList ? control.currentFMList.count : 0)
         onAccepted: control.browserView.filter = text
         onCleared: control.browserView.filter = ""
+		onTextChanged:
+		{
+			if(control.currentFMList.count < 50)
+				_filterField.accepted()
+		}
+		Keys.enabled: true
+		Keys.onPressed:
+		{
+			// Shortcut for clearing selection
+			if(event.key == Qt.Key_Up)
+			{
+// 				_filterField.clear()
+// 				footBar.visible = false
+				browserView.currentView.forceActiveFocus()
+			}
+		}
     }
 
     footBar.rightContent: [
@@ -641,16 +658,28 @@ Maui.Page
                         control.goBack()
             }
 
-            // Shortcut for clearing selection
+            // Shortcut for clearing selection and filtering
             if(event.key == Qt.Key_Escape)
-            {
-                if(control.selectionBar)
-                    control.clearSelection()
-            }
+			{
+				if(control.selectionBar)
+					control.clearSelection()
+					
+					control.browserView.filter = ""
+			}
+            
+            //Shortcut for opening filtering
+            if((event.key == Qt.Key_F) && (event.modifiers & Qt.ControlModifier))
+			{
+				footBar.visible = true
+				_filterField.forceActiveFocus()
+			}
+			
+			control.keyPress(event)
         }
         
         onItemsSelected:
         {
+			console.log(indexes)
             control.selectIndexes(indexes)
         }
 
@@ -788,11 +817,14 @@ Maui.Page
             model: tabsObjectModel
             snapMode: ListView.SnapOneItem
             spacing: 0
-            interactive: Maui.Handy.isTouch && tabsObjectModel.count > 1
+            interactive: Kirigami.Settings.hasTransientTouchInput && tabsObjectModel.count > 1
             highlightFollowsCurrentItem: true
             highlightMoveDuration: 0
+            highlightResizeDuration: 1
+            
             onMovementEnded: _browserList.currentIndex = indexAt(contentX, contentY)
-
+			boundsBehavior: Flickable.StopAtBounds 
+			
             // 			DropArea
             // 			{
             // 				id: _dropArea
@@ -1081,7 +1113,10 @@ Maui.Page
 
     function bookmarkFolder(paths) //multiple paths
     {
-        control.newBookmark(paths)
+        for(var i in paths)
+        {
+			Maui.FM.bookmark(paths[i])
+		}
     }
 
     function zoomIn()

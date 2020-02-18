@@ -76,6 +76,7 @@ Kirigami.ScrollablePage
     focus: true
 
     keyboardNavigationEnabled: false
+    Keys.enabled: false
 
     GridView
     {
@@ -133,8 +134,15 @@ Kirigami.ScrollablePage
 
             onClicked:
             {
-                control.forceActiveFocus()
-                control.areaClicked(mouse)
+				control.areaClicked(mouse)
+				control.forceActiveFocus()
+				
+				if(mouse.button === Qt.RightButton)
+				{
+					control.areaRightClicked()
+					return
+				}
+				
             }
 
             onWheel:
@@ -151,8 +159,8 @@ Kirigami.ScrollablePage
             }
 
             onPositionChanged:
-            {
-                if(_mouseArea.pressed && control.enableLassoSelection)
+            {				
+				if(_mouseArea.pressed && control.enableLassoSelection && selectLayer.visible)
                 {
                     if(mouseX >= selectLayer.newX)
                     {
@@ -173,61 +181,58 @@ Kirigami.ScrollablePage
                         if(!controlView.atYBeginning && selectLayer.y === 0)
                             controlView.contentY -= 10
                     }
-                }
-            }
-
-            onPressAndHold:
+                }                
+            }            
+            
+            onPressed:
             {
-                if(mouse.source !== Qt.MouseEventSynthesizedByQt)
-                {
-                    control.areaRightClicked()
-                    return
-                }
-
-                if(control.enableLassoSelection)
-                {
-                    selectLayer.visible = true;
-                    selectLayer.x = mouseX;
-                    selectLayer.y = mouseY;
-                    selectLayer.newX = mouseX;
-                    selectLayer.newY = mouseY;
-                    selectLayer.width = 60
-                    selectLayer.height = 60;
-
-                    mouse.accepted = true
-                }
-            }
+				if (mouse.source !== Qt.MouseEventNotSynthesized) 
+				{
+					mouse.accepted = false
+				}
+				
+				if(control.enableLassoSelection && mouse.button === Qt.LeftButton )
+				{
+					selectLayer.visible = true;
+					selectLayer.x = mouseX;
+					selectLayer.y = mouseY;
+					selectLayer.newX = mouseX;
+					selectLayer.newY = mouseY;
+					selectLayer.width = 0
+					selectLayer.height = 0;						
+				} 				
+			}
+			
 
             onReleased:
             {
-                if(!selectLayer.visible)
+				if(mouse.button !== Qt.LeftButton || !control.enableLassoSelection || !selectLayer.visible)
                 {
-                    return
+                    mouse.accepted = false
+                    return;
                 }
+                
+                if(selectLayer.y > controlView.contentHeight)
+				{
+					return selectLayer.reset();
+				}
 
                 var lassoIndexes = []
-                var limitX = mouse.x === lassoRec.x ? lassoRec.x+lassoRec.width : mouse.x
-                var limitY =  mouse.y === lassoRec.y ?  lassoRec.y+lassoRec.height : mouse.y
+                const limitX = mouse.x === lassoRec.x ? lassoRec.x+lassoRec.width : mouse.x
+                const limitY =  mouse.y === lassoRec.y ?  lassoRec.y+lassoRec.height : mouse.y
 
-                for(var i =lassoRec.x; i<=limitX; i+=(lassoRec.width/(controlView.cellWidth* 0.5)))
+                for(var i =lassoRec.x; i < limitX; i+=(lassoRec.width/(controlView.cellWidth* 0.5)))
                 {
-                    for(var y = lassoRec.y; y<= limitY; y+=(lassoRec.height/(controlView.cellHeight * 0.5)))
+                    for(var y = lassoRec.y; y < limitY; y+=(lassoRec.height/(controlView.cellHeight * 0.5)))
                     {
                         const index = controlView.indexAt(i,y+controlView.contentY)
                         if(!lassoIndexes.includes(index) && index>-1 && index< controlView.count)
                             lassoIndexes.push(index)
                     }
-                }
-
-                selectLayer.x = 0;
-                selectLayer.y = 0;
-                selectLayer.newX = 0;
-                selectLayer.newY = 0;
-                selectLayer.visible = false;
-                selectLayer.width = 0;
-                selectLayer.height = 0;
-
-                control.itemsSelected(lassoIndexes)
+				}                
+				
+				control.itemsSelected(lassoIndexes)
+				selectLayer.reset()
             }
         }
 
@@ -247,6 +252,21 @@ Kirigami.ScrollablePage
             borderColor: control.Kirigami.Theme.highlightColor
             borderWidth: 2
             solidBorder: false
+            
+            Label{
+				text: selectLayer.x + " " + controlView.contentHeight
+			}
+			
+			function reset()
+			{
+				selectLayer.x = 0;
+				selectLayer.y = 0;
+				selectLayer.newX = 0;
+				selectLayer.newY = 0;
+				selectLayer.visible = false;
+				selectLayer.width = 0;
+				selectLayer.height = 0;
+			}
         }
     }
 

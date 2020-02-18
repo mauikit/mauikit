@@ -47,8 +47,8 @@ fm(new FM(this)),
 model(new KFilePlacesModel(this)),
 watcher(new QFileSystemWatcher(this))
 #endif
-{    
-	connect(watcher, &QFileSystemWatcher::directoryChanged, [this](const QString &path)
+{ 		
+	connect(watcher, &QFileSystemWatcher::directoryChanged, [&](const QString &path)
 	{
 		if(this->count.contains(path))
 		{
@@ -71,6 +71,7 @@ watcher(new QFileSystemWatcher(this))
 	connect(MauiAccounts::instance(), &MauiAccounts::accountRemoved, this, &PlacesList::reset);
 	#endif
 	
+		
 	#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
 	connect(this->model, &KFilePlacesModel::rowsInserted, [this](const QModelIndex &parent, int first, int last)
 	{		
@@ -88,6 +89,12 @@ watcher(new QFileSystemWatcher(this))
 		}		
 		emit this->postListChanged();	*/	
 	}); //TODO improve the usage of the model
+#else
+	watcher->addPath(UTIL::settings().fileName()); 
+	connect(watcher, &QFileSystemWatcher::fileChanged, [&](const QString &path)	
+	{
+		this->reset();
+	});
 	#endif
 	
 	connect(this, &PlacesList::groupsChanged, this, &PlacesList::reset);
@@ -319,7 +326,6 @@ void PlacesList::addPlace(const QUrl& path)
 	emit this->postItemAppended();
 	#else
 	this->model->addPlace(QDir(path.toLocalFile()).dirName(), path, FMH::getIconName(path));
-// 	this->list.insert(index, modelPlaceInfo(*this->model, this->model->closestItem(path), FMH::PATHTYPE_KEY::PLACES_PATH));
 	#endif
 }
 

@@ -98,7 +98,6 @@ Kirigami.ScrollablePage
         keyNavigationEnabled : true
         keyNavigationWraps : true
         Keys.onPressed: control.keyPress(event)
-        // 		ScrollBar.vertical: ScrollBar { }
         
         Maui.Holder
         {
@@ -172,17 +171,23 @@ Kirigami.ScrollablePage
             propagateComposedEvents: false
             preventStealing: true
             acceptedButtons:  Qt.RightButton | Qt.LeftButton
-            onClicked: 
+            
+            
+            onClicked:
             {
-                control.forceActiveFocus()				
-                control.areaClicked(mouse)
-            }
-            
-            onPressed : mouse.accepted = true		
-            
+				control.areaClicked(mouse)
+				control.forceActiveFocus()
+				
+				if(mouse.button === Qt.RightButton)
+				{
+					control.areaRightClicked()
+					return
+				}				
+			}
+			
             onPositionChanged: 
             {
-				if(_mouseArea.pressed && control.enableLassoSelection)
+				if(_mouseArea.pressed && control.enableLassoSelection && selectLayer.visible)
 				{
                     if(mouseX >= selectLayer.newX)
                     {
@@ -206,47 +211,50 @@ Kirigami.ScrollablePage
                 }               
             }                
             
-            onPressAndHold:
-            {                 
-				if(control.enableLassoSelection)
+            onPressed:
+            {
+				if (mouse.source !== Qt.MouseEventNotSynthesized) 
+				{
+					mouse.accepted = false
+				}
+				
+				if(control.enableLassoSelection && mouse.button === Qt.LeftButton )
 				{
 					selectLayer.visible = true;
 					selectLayer.x = mouseX;
 					selectLayer.y = mouseY;
 					selectLayer.newX = mouseX;
 					selectLayer.newY = mouseY;
-					selectLayer.width = 60
-					selectLayer.height = 60;
-				}
+					selectLayer.width = 0
+					selectLayer.height = 0;						
+				} 				
 			}
-            
+			            
             onReleased: 
             {                    
-                if(!selectLayer.visible)
-                {
-                    return
-                }
-                
-                var lassoIndexes = []
+				if(mouse.button !== Qt.LeftButton || !control.enableLassoSelection || !selectLayer.visible)
+				{
+					mouse.accepted = false
+					return;
+				}
+				
+				if(selectLayer.y > _listView.contentHeight)
+				{
+					return selectLayer.reset();
+				}
+				
+				var lassoIndexes = []
                 var limitY =  mouse.y === lassoRec.y ?  lassoRec.y+lassoRec.height : mouse.y
-                
-                
-                for(var y = lassoRec.y; y<= limitY; y+=10)
+                                
+                for(var y = lassoRec.y; y < limitY; y+=10)
                 {    
                     const index = _listView.indexAt(_listView.width/2,y+_listView.contentY)
                     if(!lassoIndexes.includes(index) && index>-1 && index< _listView.count)
                         lassoIndexes.push(index)
                 }                    
                 
-                selectLayer.x = 0;
-                selectLayer.y = 0;
-                selectLayer.newX = 0;
-                selectLayer.newY = 0;
-                selectLayer.visible = false;
-                selectLayer.width = 0;
-                selectLayer.height = 0;
-                
                 control.itemsSelected(lassoIndexes)
+				selectLayer.reset()
             }            
         }
         
@@ -266,6 +274,17 @@ Kirigami.ScrollablePage
             borderColor: control.Kirigami.Theme.highlightColor
             borderWidth: 2
             solidBorder: false
+            
+            function reset()
+			{
+				selectLayer.x = 0;
+				selectLayer.y = 0;
+				selectLayer.newX = 0;
+				selectLayer.newY = 0;
+				selectLayer.visible = false;
+				selectLayer.width = 0;
+				selectLayer.height = 0;
+			}
         }      
     }   
     

@@ -60,15 +60,20 @@ namespace UTIL
         setting.endGroup();
     }
     
+    static inline QSettings settings(const QString app = UTIL::app->applicationName(), const QString organization = UTIL::app->organizationName())
+	{
+		return QSettings (organization.isEmpty() ?  QString("org.kde.maui") : organization, app);
+	}
+    
     static inline const QVariant loadSettings(const QString &key, const QString &group, const QVariant &defaultValue, const QString app = UTIL::app->applicationName(), const QString organization = UTIL::app->organizationName())
     {
         QVariant variant;
-        QSettings setting(organization.isEmpty() ?  QString("org.kde.maui") : organization, app);
+        auto setting = UTIL::settings(app, organization);
         setting.beginGroup(group);
         variant = setting.value(key,defaultValue);
         setting.endGroup();
         return variant;
-    }
+    }  
     
     static inline bool isDark(const QColor &color)
     {

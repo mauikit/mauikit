@@ -444,6 +444,18 @@ bool FMStatic::isFav(const QUrl& url, const bool &strict)
     #endif
 }
 
+void FMStatic::bookmark(const QUrl& url)
+{
+	#if defined Q_OS_ANDROID || defined Q_OS_WIN32
+	//do android stuff until cmake works with android	
+	auto bookmarks = UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, "FileManager").toStringList();
+	bookmarks << path.toString();
+	UTIL::saveSettings("BOOKMARKS", bookmarks, "PREFERENCES", "FileManager");
+	#else
+	KFilePlacesModel model;
+	model.addPlace(QDir(url.toLocalFile()).dirName(), url, FMH::getIconName(url));
+	#endif
+}
 
 
 
