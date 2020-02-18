@@ -90,15 +90,15 @@ watcher(new QFileSystemWatcher(this))
 		emit this->postListChanged();	*/	
 	}); //TODO improve the usage of the model
 #else
-	watcher->addPath(UTIL::settings().fileName()); 
-	connect(watcher, &QFileSystemWatcher::fileChanged, [&](const QString &path)	
-	{
-		this->reset();
-	});
+    connect(&UTIL::Settings::global(), &UTIL::Settings::settingChanged, [&](const QUrl &url, const QString &key, const QVariant &value, const QString &group )
+    {
+        qDebug()<< url << key << value << group;
+        this->reset();
+    });
 	#endif
 	
 	connect(this, &PlacesList::groupsChanged, this, &PlacesList::reset);
-	
+
 }
 
 void PlacesList::watchPath(const QString& path)
@@ -107,10 +107,6 @@ void PlacesList::watchPath(const QString& path)
 		return;
 	
 	this->watcher->addPath(path);
-}
-
-void PlacesList::classBegin()
-{
 }
 
 void PlacesList::componentComplete()
@@ -147,8 +143,8 @@ FMH::MODEL_LIST PlacesList::getGroup(const KFilePlacesModel &model, const FMH::P
 	switch(type)
 	{
 		case(FMH::PATHTYPE_KEY::PLACES_PATH):
-			res << FMStatic::getDefaultPaths();
-			res<< FMStatic::packItems(UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, "FileManager").toStringList(), FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]);
+            res << FMStatic::getDefaultPaths();
+            res<< FMStatic::packItems(UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, true).toStringList(), FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]);
 			break;
 		case(FMH::PATHTYPE_KEY::DRIVES_PATH):
 			res = FMStatic::getDevices();
@@ -188,9 +184,9 @@ void PlacesList::setList()
 		{FMH::MODEL_KEY::LABEL, "Recent"},
 		{FMH::MODEL_KEY::TYPE, "Quick"}
 	};
-	#endif
-	
-	
+    #endif
+
+
 	#ifdef COMPONENT_TAGGING
 	this->list << FMH::MODEL
 	{
@@ -206,8 +202,8 @@ void PlacesList::setList()
         	switch(group)
 		{
 			case FMH::PATHTYPE_KEY::PLACES_PATH:
-				this->list << getGroup(*this->model, FMH::PATHTYPE_KEY::PLACES_PATH);				
-				break;
+                this->list << getGroup(*this->model, FMH::PATHTYPE_KEY::PLACES_PATH);
+                break;
 				
 			case FMH::PATHTYPE_KEY::APPS_PATH:
 				this->list << FM::getAppsPath();
@@ -242,18 +238,18 @@ void PlacesList::setList()
 
 void PlacesList::setCount()
 {
-	this->watcher->removePaths(this->watcher->directories());
-	for(auto &data : this->list)
-	{
-		const auto path = data[FMH::MODEL_KEY::PATH];
-		if(FMStatic::isDir(path))
-		{
-			data.insert(FMH::MODEL_KEY::COUNT, "0");
-			const auto count = FMH::getFileInfoModel(path)[FMH::MODEL_KEY::COUNT];
-			this->count.insert(path, count.toInt());
-			this->watchPath(path);
-		}
-	}
+    this->watcher->removePaths(this->watcher->directories());
+    for(auto &data : this->list)
+    {
+        const auto path = data[FMH::MODEL_KEY::PATH];
+        if(FMStatic::isDir(path))
+        {
+            data.insert(FMH::MODEL_KEY::COUNT, "0");
+            const auto count = FMH::getFileInfoModel(path)[FMH::MODEL_KEY::COUNT];
+            this->count.insert(path, count.toInt());
+            this->watchPath(path);
+        }
+    }
 }
 
 int PlacesList::indexOf(const QString& path)
@@ -310,23 +306,7 @@ void PlacesList::clearBadgeCount(const int& index)
 
 void PlacesList::addPlace(const QUrl& path)
 {
-	#if defined Q_OS_ANDROID || defined Q_OS_WIN32
-	//do android stuff until cmake works with android
-	const auto it = std::find_if(this->list.rbegin(), this->list.rend(), [](const FMH::MODEL &item) -> bool 
-	{
-		return item[FMH::MODEL_KEY::TYPE] == FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH];
-	});
-	const auto index = std::distance(it, this->list.rend());
-	
-	emit this->preItemAppendedAt(index);	
-	auto bookmarks = UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, "FileManager").toStringList();
-	bookmarks << path.toString();
-	UTIL::saveSettings("BOOKMARKS", bookmarks, "PREFERENCES", "FileManager");
-	this->list.insert(index, FMH::getDirInfoModel(path));
-	emit this->postItemAppended();
-	#else
-	this->model->addPlace(QDir(path.toLocalFile()).dirName(), path, FMH::getIconName(path));
-	#endif
+    FMStatic::bookmark(path);
 }
 
 void PlacesList::removePlace(const int& index)
@@ -337,9 +317,9 @@ void PlacesList::removePlace(const int& index)
 	emit this->preItemRemoved(index);
 	
 	#if defined Q_OS_ANDROID || defined Q_OS_WIN32
-	auto bookmarks = UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, "FileManager").toStringList();
+    auto bookmarks = UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, true).toStringList();
 	bookmarks.removeOne(this->list.at(index)[FMH::MODEL_KEY::PATH]);
-	UTIL::saveSettings("BOOKMARKS", bookmarks, "PREFERENCES", "FileManager");
+    UTIL::saveSettings("BOOKMARKS", bookmarks, "PREFERENCES", true);
 	#else
 	this->model->removePlace(this->model->closestItem(this->list.at(index)[FMH::MODEL_KEY::PATH]));
 	#endif

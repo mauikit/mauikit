@@ -26,6 +26,8 @@
 #include <QDebug>
 #include <QColor>
 #include <QImage>
+#include <QUrl>
+#include <QObject>
 
 #ifdef Q_OS_ANDROID
 #include <QGuiApplication>
@@ -52,28 +54,82 @@ namespace UTIL
         #endif
     }
     
-    static inline void saveSettings(const QString &key, const QVariant &value, const QString &group, QString app = UTIL::app->applicationName(), const QString organization = UTIL::app->organizationName())
+
+    class Settings : public QObject
     {
-        QSettings setting(organization.isEmpty() ?  QString("org.kde.maui") : organization, app);
-        setting.beginGroup(group);
-        setting.setValue(key,value);
-        setting.endGroup();
+        Q_OBJECT
+    public:
+        static Settings &local()
+        {
+            static Settings settings;
+            return settings;
+        }
+
+
+        static Settings &global()
+        {
+            static Settings settings("mauiproject");
+            return settings;
+        }
+
+        Settings(const Settings&) = delete;
+        Settings& operator=(const Settings &) = delete;
+        Settings(Settings &&) = delete;
+        Settings & operator=(Settings &&) = delete;
+
+        QUrl url() const
+        {
+            return QUrl::fromLocalFile(m_settings->fileName());
+        }
+
+        QVariant load(const QString &key, const QString &group, const QVariant &defaultValue) const
+        {
+            QVariant variant;
+            m_settings->beginGroup(group);
+            variant = m_settings->value(key,defaultValue);
+            m_settings->endGroup();
+            return variant;
+        }
+        void save(const QString &key, const QVariant &value, const QString &group)
+        {
+            m_settings->beginGroup(group);
+            m_settings->setValue(key, value);
+            m_settings->endGroup();
+            emit this->settingChanged(url(), key, value, group);
+        }
+
+    private:
+        explicit Settings(QString app = UTIL::app->applicationName(), QString org = UTIL::app->organizationName().isEmpty() ? QString("org.kde.maui") : UTIL::app->organizationName()) : QObject(nullptr)
+          ,m_app(app)
+          ,m_org(org)
+          , m_settings(new QSettings(m_org, m_app, this))
+        { }
+
+        ~Settings() {}
+
+        QString m_app;
+        QString m_org;
+        QSettings *m_settings;
+
+    signals:
+        void settingChanged(QUrl url, QString key, QVariant value, QString group);
+    };
+
+    static inline void saveSettings(const QString &key, const QVariant &value, const QString &group, const bool &global = false)
+    {
+        if(global)
+            Settings::global().save(key, value, group);
+        else
+            Settings::local().save(key, value, group);
     }
     
-    static inline QSettings settings(const QString app = UTIL::app->applicationName(), const QString organization = UTIL::app->organizationName())
-	{
-		return QSettings (organization.isEmpty() ?  QString("org.kde.maui") : organization, app);
-	}
-    
-    static inline const QVariant loadSettings(const QString &key, const QString &group, const QVariant &defaultValue, const QString app = UTIL::app->applicationName(), const QString organization = UTIL::app->organizationName())
+    static inline const QVariant loadSettings(const QString &key, const QString &group, const QVariant &defaultValue, const bool &global = false)
     {
-        QVariant variant;
-        auto setting = UTIL::settings(app, organization);
-        setting.beginGroup(group);
-        variant = setting.value(key,defaultValue);
-        setting.endGroup();
-        return variant;
-    }  
+        if(global)
+            return Settings::global().load(key, group, defaultValue);
+        else
+            return Settings::local().load(key, group, defaultValue);
+    }
     
     static inline bool isDark(const QColor &color)
     {
@@ -113,6 +169,7 @@ namespace UTIL
         return color;
         
     }
+
 }
 
 

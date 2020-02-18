@@ -38,9 +38,7 @@ public:
 	
 	QList<int> getGroups() const;
 	void setGroups(const QList<int> &value);
-	
-	void classBegin() override final;
-	void componentComplete() override final;	
+    void componentComplete() override final;
 	
 protected:
 	void setList();
