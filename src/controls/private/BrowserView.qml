@@ -167,7 +167,7 @@ Maui.Page
                 rightEmblem: _listViewBrowser.rightEmblem
                 isSelected: selectionBar ? selectionBar.contains(model.path) : false
                 leftEmblem: isSelected ? "checkbox" : " "
-                
+				opacity: model.hidden == "true" ? 0.5 : 1
                 draggable: true
                 
                 Maui.Badge
@@ -309,6 +309,7 @@ Maui.Page
                     isSelected: (selectionBar ? selectionBar.contains(model.path) : false) 
                     leftEmblem: isSelected ? "checkbox" : " "
                     draggable: true
+                    opacity: model.hidden == "true" ? 0.5 : 1
                     
                     Maui.Badge
                     {
@@ -603,7 +604,7 @@ Maui.Page
                             rightEmblem: _millerListView.rightEmblem
                             isSelected: selectionBar ? selectionBar.contains(model.path) : false
                             leftEmblem: isSelected ? "checkbox" : " "
-                            
+                            opacity: model.hidden == "true" ? 0.5 : 1
                             draggable: true
                             
                             Maui.Badge
