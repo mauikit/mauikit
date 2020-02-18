@@ -92,8 +92,8 @@ watcher(new QFileSystemWatcher(this))
 #else
     connect(&UTIL::Settings::global(), &UTIL::Settings::settingChanged, [&](const QUrl &url, const QString &key, const QVariant &value, const QString &group )
     {
-        qDebug()<< url << key << value << group;
-        this->reset();
+        if(key == "BOOKMARKS" && group == "PREFERENCES")
+            this->reset();
     });
 	#endif
 	
