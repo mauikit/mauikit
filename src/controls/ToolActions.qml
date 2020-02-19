@@ -20,6 +20,11 @@ Item
 	property int direction : Qt.Vertical
 	
 	property Action currentAction : actions[0]
+	property int currentIndex : 0	
+	onCurrentIndexChanged:
+	{
+        control.currentAction = actions[control.currentIndex]
+    }
 	
 	property bool expanded : false
 	
@@ -157,12 +162,13 @@ Item
 					action: modelData
 					
 					autoExclusive: control.autoExclusive
-					Connections
+					checked: index === control.currentIndex
+					checkable: true
+					onTriggered: 
 					{
-						target: modelData
-						onTriggered: control.currentAction = action
-					}
-				}
+                        control.currentIndex = index
+                    }
+                }
 			}
 		}
 	}
