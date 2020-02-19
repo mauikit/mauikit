@@ -113,16 +113,15 @@ Item
         anchors.fill: parent
         spacing: Maui.Style.space.small
         
-           Maui.Badge
+        Maui.Badge
         {
             id: _emblem
-            visible: false           
-            size: Maui.Style.iconSizes.medium    
+            visible: false
+            size: Math.min(Maui.Style.iconSizes.medium, parent.height)
             Layout.alignment: Qt.AlignVCenter
-            Layout.margins: Maui.Style.space.medium
+            Layout.leftMargin: Maui.Style.space.medium
             Layout.rightMargin: 0
         }
-        
 
         Item
         {

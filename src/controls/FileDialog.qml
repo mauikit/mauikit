@@ -197,14 +197,7 @@ Maui.Dialog
 					
 					previewer.parent: ApplicationWindow.overlay
 					settings.selectionMode: control.mode === modes.OPEN
-					
-					onNewBookmark: 
-					{
-						for(var index in paths)
-							sidebar.list.addPlace(paths[index])
-					}
-					
-					onItemClicked: 
+                    onItemClicked:
 					{
                            if(currentFMList.get(index).isdir == "true")
                                     openItem(index)
