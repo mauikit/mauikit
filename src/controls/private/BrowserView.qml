@@ -426,6 +426,7 @@ Maui.Page
                 
                 orientation: ListView.Horizontal
                 snapMode: ListView.SnapToItem
+                clip: true
                 
                 ScrollBar.horizontal: ScrollBar
                 {
