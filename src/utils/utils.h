@@ -41,6 +41,10 @@
 
 #define MAUIKIT_VERSION_STR "0.1.0"
 
+#ifndef STATIC_MAUIKIT
+#include "mauikit_export.h"
+#endif
+
 namespace UTIL
 {
     static const auto app = QCoreApplication::instance();	
@@ -52,10 +56,13 @@ namespace UTIL
         #else
         return  qgetenv("USERNAME"); //for windows
         #endif
-    }
-    
+    }    
 
+    #ifdef STATIC_MAUIKIT
     class Settings : public QObject
+    #else
+    class MAUIKIT_EXPORT Settings : public QObject    
+    #endif
     {
         Q_OBJECT
     public:
@@ -64,7 +71,6 @@ namespace UTIL
             static Settings settings;
             return settings;
         }
-
 
         static Settings &global()
         {
