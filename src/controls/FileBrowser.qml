@@ -634,7 +634,7 @@ Maui.Page
 			}else if(event.key == Qt.Key_Return)
 			{
 				indexHistory.push(index)
-				control.itemClicked(index)
+				control.openItem(index)				
 			}
 			
 			// Shortcut for going back in browsing history
