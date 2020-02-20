@@ -10,6 +10,7 @@ Maui.Page
     id: control
     
     property url path
+    focus: true
     
     onPathChanged: if(control.currentView) control.currentView.currentIndex = 0
     
@@ -73,22 +74,23 @@ Maui.Page
                     Maui.FM.createSymlink(_dropMenu.source[i], urls.target)
             }
         }
-    }
-    
-    Loader
-    {
-        id: viewLoader
-        anchors.fill: parent
-        focus: true
-        sourceComponent: switch(control.viewType)
-        {
-            case Maui.FMList.ICON_VIEW: return gridViewBrowser
-            case Maui.FMList.LIST_VIEW: return listViewBrowser
-            case Maui.FMList.MILLERS_VIEW: return millerViewBrowser
-        }
-        
-        onLoaded: setCurrentFMList()
-    }
+	}    
+	
+	Loader
+	{
+		id: viewLoader
+		anchors.fill: parent
+		focus: true
+		sourceComponent: switch(control.viewType)
+		{
+			case Maui.FMList.ICON_VIEW: return gridViewBrowser
+			case Maui.FMList.LIST_VIEW: return listViewBrowser
+			case Maui.FMList.MILLERS_VIEW: return millerViewBrowser
+		}
+		
+		onLoaded: setCurrentFMList()
+	}
+	
     
     Maui.FMList
     {
