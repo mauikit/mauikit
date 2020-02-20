@@ -309,7 +309,7 @@ Maui.Page
 			
 			onRejected:
 			{
-				if(control.selectionBar && control.selectionBar.visible)
+				if(control.selectionBar.visible)
 				{
 					control.selectionBar.animate()
 					control.clearSelection()
@@ -323,7 +323,7 @@ Maui.Page
 			
 			onAccepted:
 			{
-				if(control.selectionBar && control.selectionBar.visible)
+				if(control.selectionBar.visible)
 				{
 					control.selectionBar.animate()
 					control.clearSelection()
@@ -537,7 +537,7 @@ Maui.Page
 			
 			if(event.key == Qt.Key_S)
 			{
-				if(control.selectionBar && control.selectionBar.contains(item.path))
+				if(control.selectionBar.contains(item.path))
 				{
 					control.selectionBar.removeAtUri(item.path)
 				}else
@@ -548,7 +548,7 @@ Maui.Page
 			
 			if((event.key == Qt.Key_Left || event.key == Qt.Key_Right || event.key == Qt.Key_Down || event.key == Qt.Key_Up) && (event.modifiers & Qt.ControlModifier) && (event.modifiers & Qt.ShiftModifier))
 			{
-				if(control.selectionBar && control.selectionBar.contains(item.path))
+				if(control.selectionBar.contains(item.path))
 				{
 					control.selectionBar.removeAtUri(item.path)
 				}else
@@ -567,7 +567,7 @@ Maui.Page
 			if((event.key == Qt.Key_X) && (event.modifiers & Qt.ControlModifier))
 			{
 				var urls = []
-				if(control.selectionBar)
+				if(control.selectionBar.count > 0)
 				{
 					urls = control.selectionBar.uris
 				}
@@ -582,7 +582,7 @@ Maui.Page
 			if((event.key == Qt.Key_C) && (event.modifiers & Qt.ControlModifier))
 			{
 				var urls = []
-				if(control.selectionBar)
+				if(control.selectionBar.count > 0)
 				{
 					urls = control.selectionBar.uris
 				}
@@ -597,7 +597,7 @@ Maui.Page
 			if(event.key == Qt.Key_Delete)
 			{
 				var urls = []
-				if(control.selectionBar)
+				if(control.selectionBar.count > 0)
 				{
 					urls = control.selectionBar.uris
 				}
@@ -611,7 +611,6 @@ Maui.Page
 			// Shortcut for opening new tab
 			if((event.key == Qt.Key_T) && (event.modifiers & Qt.ControlModifier))
 			{
-				console.log("OPEN TAB")
 				control.openTab(currentPath)
 			}
 			
@@ -640,7 +639,7 @@ Maui.Page
 			// Shortcut for going back in browsing history
 			if(event.key == Qt.Key_Backspace || event.key == Qt.Key_Back)
 			{
-				if(control.selectionBar)
+				if(control.selectionBar.count> 0)
 					control.clearSelection()
 					else
 						control.goBack()
@@ -649,7 +648,7 @@ Maui.Page
 			// Shortcut for clearing selection and filtering
 			if(event.key == Qt.Key_Escape)
 			{
-				if(control.selectionBar)
+				if(control.selectionBar.count > 0)
 					control.clearSelection()
 					
 					control.browserView.filter = ""
@@ -697,7 +696,7 @@ Maui.Page
 		{
 			const item = control.currentFMList.get(index)
 			
-			if(control.selectionBar && control.selectionBar.contains(item.path))
+			if(control.selectionBar.contains(item.path))
 			{
 				control.selectionBar.removeAtUri(item.path)
 			}else
@@ -983,7 +982,7 @@ Maui.Page
             default:
                 if(settings.selectionMode && item.isdir == "false")
                 {
-                    if(control.selectionBar && control.selectionBar.contains(item.path))
+                    if(control.selectionBar.contains(item.path))
                     {
                         control.selectionBar.removeAtPath(item.path)
                     }else
