@@ -40,8 +40,7 @@ Maui.Page
             control.browserView.path = control.currentPath
     }
 
-    property int viewType : Maui.FMList.LIST_VIEW
-    onViewTypeChanged: browserView.viewType = control.viewType
+    property alias viewType : _viewTypeGroup.currentIndex
 
     property int thumbnailsSize : Maui.Style.iconSizes.large * 1.7
 
@@ -262,42 +261,31 @@ Maui.Page
 
     Maui.ToolActions
     {
-        direction: Qt.Vertical
+        id: _viewTypeGroup
 
-        currentAction: switch(browserView.viewType)
+        currentIndex: Maui.FMList.LIST_VIEW
+        onCurrentIndexChanged:
         {
-            case Maui.FMList.ICON_VIEW: return actions[0]
-            case Maui.FMList.LIST_VIEW: return actions[1]
-            case Maui.FMList.MILLERS_VIEW: return actions[2]
+            if(browserView)
+                browserView.viewType = currentIndex             
         }
-
+        
         Action
         {
             icon.name: "view-list-icons"
-            text: qsTr("Grid")
-            onTriggered: control.viewType = Maui.FMList.ICON_VIEW
-            checked: browserView.viewType === Maui.FMList.ICON_VIEW
-            icon.width: Maui.Style.iconSizes.medium
+            text: qsTr("Grid")           
         }
 
         Action
         {
             icon.name: "view-list-details"
             text: qsTr("List")
-            onTriggered: control.viewType = Maui.FMList.LIST_VIEW
-            icon.width: Maui.Style.iconSizes.medium
-            checkable: true
-            checked: browserView.viewType === Maui.FMList.LIST_VIEW
         }
 
         Action
         {
             icon.name: "view-file-columns"
             text: qsTr("Columns")
-            onTriggered: control.viewType = Maui.FMList.MILLERS_VIEW
-            icon.width: Maui.Style.iconSizes.medium
-            checkable: true
-            checked: browserView.viewType === Maui.FMList.MILLERS_VIEW
         }
     }
     ]
@@ -775,7 +763,11 @@ Maui.Page
                 if(event.key == Qt.Key_Return)
                 {
                     _browserList.currentIndex = currentIndex
-                    control.currentPath =  tabsObjectModel.get(currentIndex).path
+                }
+                
+                if(event.key == Qt.Key_Down)
+                {
+                     browserView.currentView.forceActiveFocus()
                 }
             }
 
@@ -796,7 +788,6 @@ Maui.Page
                     onClicked:
                     {
                         _browserList.currentIndex = index
-                        control.currentPath =  tabsObjectModel.get(index).path
                     }
 
                     onCloseClicked: control.closeTab(index)
@@ -823,6 +814,12 @@ Maui.Page
             
             onMovementEnded: _browserList.currentIndex = indexAt(contentX, contentY)
 			boundsBehavior: Flickable.StopAtBounds 
+			
+			onCurrentItemChanged:
+			{  
+                control.currentPath =  tabsObjectModel.get(currentIndex).path
+                _viewTypeGroup.currentIndex = browserView.viewType
+            }
 			
             // 			DropArea
             // 			{
@@ -904,20 +901,20 @@ Maui.Page
 
     Component.onCompleted:
     {
-        openTab(Maui.FM.homePath())
+        openTab(control.currentPath && String(control.currentPath).length > 0 ? control.currentPath : Maui.FM.homePath())
         browserView.currentView.forceActiveFocus()
     }
 
-    onThumbnailsSizeChanged:
-    {
-        if(settings.trackChanges && settings.saveDirProps)
-            Maui.FM.setDirConf(currentPath+"/.directory", "MAUIFM", "IconSize", thumbnailsSize)
-            else
-                Maui.FM.saveSettings("IconSize", thumbnailsSize, "SETTINGS")
-
-                if(control.viewType === Maui.FMList.ICON_VIEW)
-                    browserView.currentView.adaptGrid()
-    }
+//     onThumbnailsSizeChanged:
+//     {
+//         if(settings.trackChanges && settings.saveDirProps)
+//             Maui.FM.setDirConf(currentPath+"/.directory", "MAUIFM", "IconSize", thumbnailsSize)
+//             else
+//                 Maui.FM.saveSettings("IconSize", thumbnailsSize, "SETTINGS")
+// 
+//                 if(browserView.viewType === Maui.FMList.ICON_VIEW)
+//                     browserView.currentView.adaptGrid()
+//     }
 
     function closeTab(index)
     {
@@ -932,14 +929,12 @@ Maui.Page
             const component = Qt.createComponent("private/BrowserView.qml");
             if (component.status === Component.Ready)
             {
-                const object = component.createObject(tabsObjectModel, {'path': path});
+                const object = component.createObject(tabsObjectModel, {'path': path, 'viewType': _viewTypeGroup.currentIndex});
                 tabsObjectModel.append(object)
 
                 tabsListModel.append({"path": path})
                 _browserList.currentIndex = tabsObjectModel.count - 1
 
-                browserView.viewType = control.viewType
-                control.currentPath = path
             }
         }
     }
