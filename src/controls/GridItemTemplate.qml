@@ -53,6 +53,8 @@ Item
         property int fillMode :Image.PreserveAspectCrop
         property int maskRadius: Maui.Style.radiusV
         
+        property bool hovered: false
+        
         Component
         {
             id: _imgComponent
