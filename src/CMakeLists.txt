@@ -239,7 +239,7 @@ add_library(MauiKit
 )
 
 if(ANDROID)
-    target_link_libraries(MauiKit PRIVATE Qt5::AndroidExtras Qt5::WebView jnigraphics)
+    target_link_libraries(MauiKit PRIVATE Qt5::AndroidExtras jnigraphics)
 
     target_include_directories(MauiKit PRIVATE android)
     install(FILES android/mauiandroid.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit COMPONENT Devel)
@@ -247,9 +247,6 @@ if(ANDROID)
     install(DIRECTORY android/ DESTINATION ${KDE_INSTALL_DATAROOTDIR}/MauiKitAndroid COMPONENT Devel)
 
     install(FILES MauiKit-android-dependencies.xml DESTINATION ${KDE_INSTALL_LIBDIR})
-
-else()
-    target_link_libraries(MauiKit PRIVATE Qt5::WebEngine)
 endif()
 
 target_link_libraries(MauiKit

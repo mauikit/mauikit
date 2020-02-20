@@ -42,10 +42,8 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Qml
 ecm_find_qmlmodule(QtGraphicalEffects 1.0)
 
 if(ANDROID)
-    find_package(Qt5 REQUIRED COMPONENTS AndroidExtras WebView)
+    find_package(Qt5 REQUIRED COMPONENTS AndroidExtras)
     find_package(Gradle REQUIRED)
-else()
-    find_package(Qt5 REQUIRED COMPONENTS WebEngine)
 endif()
 
 find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets)
