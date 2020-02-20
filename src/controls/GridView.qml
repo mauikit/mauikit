@@ -79,6 +79,18 @@ Kirigami.ScrollablePage
 
     keyboardNavigationEnabled: false
     Keys.enabled: false
+    
+    
+    Behavior on cellWidth
+    {
+// 		enabled: control.collapsible && control.position === 1
+		
+		NumberAnimation
+		{
+			duration: Kirigami.Units.longDuration
+			easing.type: Easing.InOutQuad
+		}
+	}
 
     GridView
     {
@@ -292,8 +304,8 @@ Kirigami.ScrollablePage
     {
         var amount = parseInt(controlView.width / (controlView.size_), 10)
 		
-		if(amount-1 >= controlView.count)
-			return;
+// 		if(amount-1 >= controlView.count)
+// 			return;
 					
         var leftSpace = parseInt(controlView.width  - ( amount * (controlView.size_) ), 10)
         var size = parseInt((controlView.size_) + (parseInt(leftSpace/amount, 10)), 10)
