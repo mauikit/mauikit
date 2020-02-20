@@ -243,11 +243,11 @@ Page
 
     
     function returnToBounds()
-    {
-        if(control.header)
-                control.header.height = control.header.implicitHeight
-                
-                if(control.footer)
-                control.footer.height = control.footer.implicitHeight
-    }
+	{
+		if(control.header)
+			control.header.height = control.header.implicitHeight
+			
+			if(control.footer)
+				control.footer.height = control.footer.implicitHeight
+	}
 }

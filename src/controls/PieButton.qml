@@ -55,7 +55,7 @@ Item
 		anchors.fill: parent
 		parent: control.parent
 		preventStealing: true
-		propagateComposedEvents: false
+		propagateComposedEvents: true
 		visible: _actionsBar.visible 
 		opacity: visible ? 1 : 0
 		
@@ -74,7 +74,11 @@ Item
 			anchors.fill: parent
 		}
 		
-		onClicked: control.close()
+		onClicked: 
+		{			
+			control.close()
+			mouse.accepted = false
+		}
 	}
 	
 	Rectangle
