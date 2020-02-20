@@ -104,7 +104,7 @@ Item
 
     implicitHeight: barHeight
 
-    implicitWidth: _layout.implicitWidth + Maui.Style.space.big
+    implicitWidth: _layout.implicitWidth + Maui.Style.space.big + (height * 2)
 
     visible: control.count > 0
 
@@ -211,6 +211,7 @@ Item
 
     RowLayout
     {
+		id: _rowLayout
         anchors.fill: parent
 
         MouseArea
@@ -245,16 +246,12 @@ Item
                 ToolButton
                 {
                     action: modelData
-
-//                                Layout.preferredWidth: implicitWidth
-// Layout.fillHeight: true
                     display: _layout.width < Kirigami.Units.gridUnit * 25 ? ToolButton.TextUnderIcon : ToolButton.IconOnly
                     Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
                     onClicked : _listContainer.showList = false
 
                 }
             }
-
         }
 
         Maui.Badge

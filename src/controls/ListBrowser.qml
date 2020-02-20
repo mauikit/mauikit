@@ -46,10 +46,11 @@ Kirigami.ScrollablePage
     property alias count : _listView.count
     property alias cacheBuffer : _listView.cacheBuffer
     
+    property int margins : 0
     property alias topMargin: _listView.topMargin
     property alias bottomMargin: _listView.bottomMargin
     property alias rightMargin: _listView.rightMargin
-    property alias leftMarging: _listView.leftMargin
+    property alias leftMargin: _listView.leftMargin
     property alias listView: _listView
     property alias holder : _holder
     
@@ -98,6 +99,11 @@ Kirigami.ScrollablePage
         keyNavigationEnabled : true
         keyNavigationWraps : true
         Keys.onPressed: control.keyPress(event)
+		
+		topMargin: control.margins
+		bottomMargin: control.margins
+		leftMargin: control.margins
+		rightMargin: control.margins
         
         Maui.Holder
         {

@@ -41,7 +41,7 @@ Item
     property Component delegate : ToolButton
     {
         id: _delegate
-        anchors.verticalCenter: parent.verticalCenter
+        Layout.alignment: Qt.AlignVCenter
         Layout.fillWidth: control.strech
         action: modelData
         icon.width: Maui.Style.iconSizes.medium
@@ -69,6 +69,11 @@ Item
         }
         onPressAndHold: control.pressAndHold(index)
         onDoubleClicked: control.doubleClicked(index)
+		
+		ToolTip.delay: 1000
+		ToolTip.timeout: 5000
+		ToolTip.visible: _delegate.hovered
+		ToolTip.text: action.text
     }
     
     implicitHeight: parent.height

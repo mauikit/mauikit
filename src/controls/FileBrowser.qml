@@ -846,12 +846,9 @@ Maui.Page
         {
 			id: _selectionBar
 			
-			Layout.alignment: Qt.AlignCenter
+			Layout.alignment: Qt.AlignHCenter
 			Layout.margins: Maui.Style.space.medium
-			Layout.preferredHeight: barHeight
-			Layout.maximumWidth: 500
-			Layout.minimumWidth: 100
-			Layout.fillWidth: true
+			Layout.preferredWidth: Math.min(parent.width, implicitWidth)
 			Layout.bottomMargin: Maui.Style.contentMargins*2
 			
 			singleSelection: settings.singleSelection

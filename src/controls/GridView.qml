@@ -52,7 +52,9 @@ Kirigami.ScrollablePage
     property alias topMargin: controlView.topMargin
     property alias bottomMargin: controlView.bottomMargin
     property alias rightMargin: controlView.rightMargin
-    property alias leftMarging: controlView.leftMargin
+    property alias leftMargin: controlView.leftMargin
+    property int margins: 0
+    
     property alias holder : _holder
     property alias controlView : controlView
 
@@ -92,6 +94,11 @@ Kirigami.ScrollablePage
         flow: GridView.FlowLeftToRight
         clip: true
         focus: true
+        
+        topMargin: control.margins
+        bottomMargin: control.margins
+        leftMargin: control.margins
+        rightMargin: control.margins
 
         cellWidth: control.itemWidth
         cellHeight: control.itemHeight
