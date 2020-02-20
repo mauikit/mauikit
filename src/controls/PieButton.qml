@@ -48,6 +48,34 @@ Item
 			easing.type: Easing.InOutQuad
 		}
 	}	
+
+	MouseArea
+	{
+		id: _overlay
+		anchors.fill: parent
+		parent: control.parent
+		preventStealing: true
+		propagateComposedEvents: false
+		visible: _actionsBar.visible 
+		opacity: visible ? 1 : 0
+		
+		Behavior on opacity
+		{		
+			NumberAnimation
+			{
+				duration: Kirigami.Units.longDuration
+				easing.type: Easing.InOutQuad
+			}
+		}	
+		Rectangle
+		{
+			color: control.Kirigami.Theme.backgroundColor
+			opacity: 0.7 
+			anchors.fill: parent
+		}
+		
+		onClicked: control.close()
+	}
 	
 	Rectangle
 	{		
@@ -103,7 +131,7 @@ Item
 		Maui.FloatingButton
 		{
 			id: _button	
-			Layout.fillHeight: true
+			Layout.preferredWidth: control.height
 			Layout.preferredHeight: control.height
 			Layout.alignment:Qt.AlignRight
 			
@@ -113,7 +141,7 @@ Item
 	
 	function open()
 	{	
-		_actionsBar.visible = true		
+		_actionsBar.visible = true	
 	}
 	
 	function close()
