@@ -454,11 +454,8 @@ Maui.Page
 						Kirigami.FormData.label: qsTr("Show Status Bar")
 						checkable: true
 						checked: control.footBar.visible
-						onToggled:
-						{
-							control.footBar.visible = !control.footBar.visible
-							Maui.FM.saveSettings("StatusBar",  control.footBar.visible, "SETTINGS")
-						}
+						onToggled: toogleStatusBar()
+						
 					}
 				}
 		}
@@ -658,8 +655,7 @@ Maui.Page
 			//Shortcut for opening filtering
 			if((event.key == Qt.Key_F) && (event.modifiers & Qt.ControlModifier))
 			{
-				footBar.visible = true
-				_filterField.forceActiveFocus()
+				control.toogleStatusBar()				
 			}
 			
 			control.keyPress(event)
@@ -675,6 +671,7 @@ Maui.Page
 			browserView.currentView.currentIndex = index
 			indexHistory.push(index)
 			control.itemClicked(index)
+			browserView.currentView.forceActiveFocus()
 		}
 		
 		onItemDoubleClicked:
@@ -682,6 +679,7 @@ Maui.Page
 			browserView.currentView.currentIndex = index
 			indexHistory.push(index)
 			control.itemDoubleClicked(index)
+			browserView.currentView.forceActiveFocus()
 		}
 		
 		onItemRightClicked:
@@ -691,6 +689,7 @@ Maui.Page
 				itemMenu.show(index)
 			}
 			control.itemRightClicked(index)
+			browserView.currentView.forceActiveFocus()
 		}
 		
 		onLeftEmblemClicked:
@@ -705,6 +704,7 @@ Maui.Page
 				control.addToSelection(item)
 			}
 			control.itemLeftEmblemClicked(index)
+			browserView.currentView.forceActiveFocus()
 		}
 		
 		onRightEmblemClicked:
@@ -720,6 +720,7 @@ Maui.Page
 				else return
 					
 					control.rightClicked()
+					browserView.currentView.forceActiveFocus()
 		}
 		
 		onAreaRightClicked: browserMenu.show(control)
@@ -762,7 +763,7 @@ Maui.Page
             {
                 if(event.key == Qt.Key_Return)
                 {
-                    _browserList.currentIndex = currentIndex
+                    _browserList.currentIndex = currentIndex                    
                 }
                 
                 if(event.key == Qt.Key_Down)
@@ -829,6 +830,7 @@ Maui.Page
 				{  
 					control.currentPath =  tabsObjectModel.get(currentIndex).path
 					_viewTypeGroup.currentIndex = browserView.viewType
+					browserView.currentView.forceActiveFocus()
 				}
 				
 				// 			DropArea
@@ -1172,4 +1174,18 @@ Maui.Page
         dialogLoader.sourceComponent = _configDialogComponent
         control.dialog.open()
     }
+    
+    function toggleStatusBar()
+	{
+			control.footBar.visible = !control.footBar.visible
+			Maui.FM.saveSettings("StatusBar",  control.footBar.visible, "SETTINGS")	
+			
+			if(control.footBar.visible)
+   {
+	   _filterField.forceActiveFocus()
+}else
+{
+	browserView.currentView.forceActiveFocus()
+}
+	}
 }
