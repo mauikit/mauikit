@@ -79,7 +79,8 @@ Maui.Dialog
                 visible: customServer
                 Layout.fillWidth: true
                 placeholderText: qsTr("Server address...")
-                text: "https://cloud.opendesktop.cc/remote.php/webdav/"
+				inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoAutoUppercase
+                text: "https://cloud.opendesktop.cc/cloud/remote.php/webdav/"
             }
 
             Maui.TextField
@@ -87,7 +88,7 @@ Maui.Dialog
                 id: userField
                 Layout.fillWidth: true
                 placeholderText: qsTr("Username...")
-                inputMethodHints: Qt.ImhNoAutoUppercase
+				inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhSensitiveData
             }
 
             Maui.TextField
@@ -95,9 +96,9 @@ Maui.Dialog
                 id: passwordField
                 Layout.fillWidth: true
                 placeholderText: qsTr("Password...")
-                echoMode: TextInput.PasswordEchoOnEdit
+				echoMode: TextInput.Password
+                passwordMaskDelay: 300
                 inputMethodHints: Qt.ImhNoAutoUppercase
-
             }
         }
     }

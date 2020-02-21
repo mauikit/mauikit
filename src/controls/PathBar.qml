@@ -84,7 +84,7 @@ Rectangle
         {
             id: entry
             text: control.url
-
+            inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoAutoUppercase
             Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
             Kirigami.Theme.backgroundColor: "transparent"
             horizontalAlignment: Qt.AlignLeft

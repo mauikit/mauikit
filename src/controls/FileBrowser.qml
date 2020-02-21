@@ -95,6 +95,7 @@ Maui.Page
 		placeholderText: String("Filter %1 files").arg(control.currentFMList ? control.currentFMList.count : 0)
 		onAccepted: control.browserView.filter = text
 		onCleared: control.browserView.filter = ""
+		inputMethodHints: Qt.ImhNoAutoUppercase
 		onTextChanged:
 		{
 			if(control.currentFMList.count < 50)
