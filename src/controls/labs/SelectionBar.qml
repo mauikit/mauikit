@@ -39,7 +39,9 @@ Item
 
     property alias selectionList : selectionList
     property alias count : selectionList.count
-
+    
+    property int maxListHeight : 400
+    
     readonly property QtObject m_private : QtObject
     {
         id: _private
@@ -126,13 +128,12 @@ Item
     {
         id: _listContainer
         property bool showList : false
-        height: showList ?  Math.min(Math.min(400, control.parent.parent.height), selectionList.contentHeight) + control.height + Maui.Style.space.big : 0
-        width:  showList ? parent.width  : 0
+        height: showList ? Math.min(Math.min(400, control.maxListHeight), selectionList.contentHeight) + control.height + Maui.Style.space.big : 0
+        width: parent.width
         color: Qt.lighter(Kirigami.Theme.backgroundColor)
         radius: Maui.Style.radiusV
         focus: true
         y:  ((height) * -1) + control.height
-
         x: 0
 
         opacity: showList ? 1 : .97

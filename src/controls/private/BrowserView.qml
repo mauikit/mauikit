@@ -12,7 +12,14 @@ Maui.Page
     property url path
     focus: true
     
-    onPathChanged: if(control.currentView) control.currentView.currentIndex = 0
+    onPathChanged:
+    {
+        if(control.currentView) 
+        {
+            control.currentView.currentIndex = 0
+            control.currentView.forceActiveFocus()
+        }
+    }
     
     property Maui.FMList currentFMList
     property Maui.BaseModel currentFMModel

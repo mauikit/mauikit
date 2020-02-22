@@ -58,8 +58,8 @@ Drawer
         visible: false
         Rectangle
         {
-            color: control.Kirigami.Theme.backgroundColor
-            opacity: 0.7 * control.position
+            color: Qt.rgba(control.Kirigami.Theme.backgroundColor.r,control.Kirigami.Theme.backgroundColor.g,control.Kirigami.Theme.backgroundColor.b, 0.3)
+            opacity: control.position
             anchors.fill: parent
         }
     }

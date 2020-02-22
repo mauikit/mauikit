@@ -99,7 +99,7 @@ Maui.ItemDelegate
         anchors.fill: parent
         
         isCurrentItem : control.isCurrentItem
-        
+        hovered: control.hovered
         iconSizeHint: control.folderSize
         
         imageSource: model.mime &&  model.thumbnail ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails ? model.thumbnail : "") : ""	

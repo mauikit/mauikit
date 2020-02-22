@@ -150,8 +150,16 @@ Maui.AbstractSideBar
 				
 				delegate: control.delegate
 				Kirigami.Theme.backgroundColor: "transparent"
-			}
-			
+                
+                onKeyPress:
+                {
+                    if(event.key == Qt.Key_Return)
+                    {
+                        control.itemClicked(control.currentIndex)					
+                    }
+                }
+            }
+            
 			MouseArea
 			{
 				id: _handle

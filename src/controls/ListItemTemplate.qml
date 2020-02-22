@@ -53,6 +53,7 @@ Item
     
     property bool isCurrentItem: false
     property bool labelsVisible: true
+    property bool hovered : false
 
     Component
     {
@@ -104,6 +105,15 @@ Item
             fallback: "qrc:/assets/application-x-zerosize.svg"
             height: Math.min(parent.height, control.iconSizeHint)
             width: height
+            
+            ColorOverlay
+            {
+                visible: control.hovered
+                opacity: 0.3
+                anchors.fill: parent
+                source: parent
+                color: control.Kirigami.Theme.highlightColor
+            }
         }
     }
 

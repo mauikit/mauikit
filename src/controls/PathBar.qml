@@ -58,11 +58,11 @@ Rectangle
         id: _loader
         anchors.fill: parent
         sourceComponent: pathEntry ? _pathEntryComponent : _pathCrumbsComponent
-        onLoaded:
-        {
-            if(sourceComponent === _pathCrumbsComponent)
-                control.append()
-        }
+//         onLoaded:
+//         {
+//             if(sourceComponent === _pathCrumbsComponent)
+//                 control.append()
+//         }
     }
 
     Maui.BaseModel
@@ -84,6 +84,7 @@ Rectangle
         {
             id: entry
             text: control.url
+            focus: true
             inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoAutoUppercase
             Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
             Kirigami.Theme.backgroundColor: "transparent"
@@ -147,7 +148,7 @@ Rectangle
                 orientation: ListView.Horizontal
                 clip: true
                 spacing: 1 - (pathArrowWidth + 1)
-
+                currentIndex: count - 1
                 focus: true
                 interactive: true
                 boundsBehavior: Kirigami.Settings.isMobile ?  Flickable.DragOverBounds : Flickable.StopAtBounds
@@ -173,7 +174,6 @@ Rectangle
                         onRightClicked:
                         {
                             control.placeRightClicked(_pathList.get(index).path)
-
                         }
 
                         onPressAndHold:
@@ -228,9 +228,11 @@ Rectangle
         _loader.item.listView.currentIndex = _loader.item.listView.count-1
         _loader.item.listView.positionViewAtEnd()
     }
-
+    
     function showEntryBar()
     {
         control.pathEntry = !control.pathEntry
+        if(_loader.sourceComponent === _pathEntryComponent)
+            _loader.item.forceActiveFocus()
     }
 }

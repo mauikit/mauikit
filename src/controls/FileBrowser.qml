@@ -454,7 +454,7 @@ Maui.Page
 						Kirigami.FormData.label: qsTr("Show Status Bar")
 						checkable: true
 						checked: control.footBar.visible
-						onToggled: toogleStatusBar()
+						onToggled: toggleStatusBar()
 						
 					}
 				}
@@ -654,13 +654,20 @@ Maui.Page
 			
 			//Shortcut for opening filtering
 			if((event.key == Qt.Key_F) && (event.modifiers & Qt.ControlModifier))
-			{
-				control.toogleStatusBar()				
-			}
-			
-			control.keyPress(event)
-		}
-		
+            {
+                control.toggleStatusBar()				
+            }
+            
+            if(event.key == Qt.Key_Space)
+            {
+                control.previewer.show(currentFMModel, index)
+                
+            }
+            
+            control.keyPress(event)
+            //             event.accepted = true
+        }
+        
 		onItemsSelected:
 		{
 			control.selectIndexes(indexes)
@@ -862,7 +869,7 @@ Maui.Page
 			Layout.margins: Maui.Style.space.medium
 			Layout.preferredWidth: Math.min(parent.width, implicitWidth)
 			Layout.bottomMargin: Maui.Style.contentMargins*2
-			
+			maxListHeight: _browserList.height - (Maui.Style.contentMargins*2)
 			singleSelection: settings.singleSelection
 			
 			onCountChanged:
@@ -1176,16 +1183,16 @@ Maui.Page
     }
     
     function toggleStatusBar()
-	{
-			control.footBar.visible = !control.footBar.visible
-			Maui.FM.saveSettings("StatusBar",  control.footBar.visible, "SETTINGS")	
-			
-			if(control.footBar.visible)
-   {
-	   _filterField.forceActiveFocus()
-}else
-{
-	browserView.currentView.forceActiveFocus()
-}
-	}
+    {
+        control.footBar.visible = !control.footBar.visible
+        Maui.FM.saveSettings("StatusBar",  control.footBar.visible, "SETTINGS")	
+        
+        if(control.footBar.visible)
+        {
+            _filterField.forceActiveFocus()
+        }else
+        {
+            browserView.currentView.forceActiveFocus()
+        }
+    }
 }

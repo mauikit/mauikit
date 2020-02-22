@@ -76,7 +76,8 @@ Kirigami.ScrollablePage
     rightPadding: padding
     topPadding: padding
     bottomPadding: padding    
-    
+    clip: true           
+
     Keys.enabled: false
     Kirigami.Theme.colorSet: Kirigami.Theme.View       
     supportsRefreshing: false 
@@ -85,7 +86,7 @@ Kirigami.ScrollablePage
     {	
         id: _listView
         focus: true
-        clip: true           
+        clip: control.clip           
         spacing: Maui.Style.space.tiny
         snapMode: ListView.NoSnap
         boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : 

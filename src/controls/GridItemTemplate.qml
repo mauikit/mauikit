@@ -103,7 +103,18 @@ Item
                 fallback: "qrc:/assets/application-x-zerosize.svg"
                 height: Math.min(parent.height, control.iconSizeHint)
                 width: height
+                
+                
+                ColorOverlay
+                {
+                    visible: control.hovered
+                    opacity: 0.3
+                    anchors.fill: parent
+                    source: parent
+                    color: control.Kirigami.Theme.highlightColor
+                }
             }
+            
         }
         
         ColumnLayout
@@ -126,6 +137,7 @@ Item
                     anchors.fill: parent
                     sourceComponent: _iconContainer.visible ? (control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : null) ): null
                     
+
                     Maui.Badge
                     {
                         id: _emblem
@@ -149,6 +161,7 @@ Item
                     DropShadow
                     {
                         anchors.fill: _emblem
+                        z: _emblem.z
                         visible: _emblem.visible
                         horizontalOffset: 0
                         verticalOffset: 0
@@ -168,6 +181,25 @@ Item
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 
+                Rectangle
+                {
+                    width: parent.width
+                    height: Math.min(_label1.height + Maui.Style.space.small, parent.height)
+                    anchors.centerIn: parent
+                    Behavior on color
+                    {
+                        ColorAnimation
+                        {
+                            duration: Kirigami.Units.longDuration
+                        }
+                    }
+                    
+                    color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
+                    
+                    radius: Maui.Style.radiusV
+                    border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"                    
+                }  
+ 
                 Label
                 {
                     id: _label1
@@ -178,27 +210,7 @@ Item
                     anchors.centerIn: parent
                     elide: Qt.ElideRight
                     wrapMode: Text.Wrap
-                    color: control.Kirigami.Theme.textColor                   
-                    
-                    Rectangle
-                    {
-                        anchors.fill: parent
-                        
-                        Behavior on color
-                        {
-                            ColorAnimation
-                            {
-                                duration: Kirigami.Units.longDuration
-                            }
-                        }
-                        
-                        color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
-                        
-                        radius: Maui.Style.radiusV
-                        border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"
-                        
-                    }    
-                    
+                    color: control.Kirigami.Theme.textColor                        
                 }
                 
             }

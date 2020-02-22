@@ -76,10 +76,10 @@ Kirigami.ScrollablePage
     topPadding: 0
     bottomPadding: 0
     focus: true
+    clip: true
 
     keyboardNavigationEnabled: false
     Keys.enabled: false
-    
     
     Behavior on cellWidth
     {
@@ -104,7 +104,7 @@ Kirigami.ScrollablePage
         }
 
         flow: GridView.FlowLeftToRight
-        clip: true
+        clip: control.clip
         focus: true
         
         topMargin: control.margins
