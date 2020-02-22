@@ -424,6 +424,7 @@ Maui.Page
             signal areaClicked(var mouse)
             signal areaRightClicked()
             
+            
             ListView
             {
                 id: _millerColumns
@@ -432,7 +433,7 @@ Maui.Page
                 
                 keyNavigationEnabled: true
                 interactive: Kirigami.Settings.hasTransientTouchInput
-                
+                cacheBuffer: contentWidth
                 orientation: ListView.Horizontal
                 snapMode: ListView.SnapToItem
                 clip: true
