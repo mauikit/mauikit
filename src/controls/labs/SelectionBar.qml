@@ -324,6 +324,7 @@ Kirigami.Theme.highlightColor : Qt.darker(bg.color)
     {
         _private._uris = []
         _private._items = []
+        _listContainer.showList = false
         selectionList.model.clear()
         control.cleared()
     }
