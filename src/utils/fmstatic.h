@@ -74,7 +74,7 @@ public slots:
 	static bool unFav(const QUrl &url);
 	static bool fav(const QUrl &url);
 	static bool toggleFav(const QUrl &url);
-	
+	static QList<QUrl> getTagUrls(const QString &tag, const QStringList &filters, const bool &strict = false);
 	static void bookmark(const QUrl &url);
 };
 
