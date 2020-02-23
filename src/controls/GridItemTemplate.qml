@@ -112,7 +112,9 @@ Item
                     anchors.fill: parent
                     source: parent
                     color: control.Kirigami.Theme.highlightColor
-                }
+                }          
+                
+
             }
             
         }
@@ -130,6 +132,7 @@ Item
                 Layout.fillHeight: true
                 Layout.maximumHeight: control.iconSizeHint
                 Layout.minimumHeight: control.iconSizeHint
+   
                 
                 Loader
                 {
