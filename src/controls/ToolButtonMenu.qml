@@ -20,7 +20,7 @@ ToolButton
 		if(_menu.visible)
 			_menu.close()
 			else
-				_menu.popup(0, height)
+                _menu.popup(0, height)
 	}
 	
 	indicator: Maui.Triangle

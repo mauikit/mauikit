@@ -163,7 +163,7 @@ ApplicationWindow
 	
 	overlay.modal: Rectangle 
 	{
-		color: Qt.rgba(root.Kirigami.Theme.backgroundColor.r,root.Kirigami.Theme.backgroundColor.g,root.Kirigami.Theme.backgroundColor.b, 0.3)
+        color: Qt.rgba(root.Kirigami.Theme.backgroundColor.r,root.Kirigami.Theme.backgroundColor.g,root.Kirigami.Theme.backgroundColor.b, 0.5)
 	}
 	
 	overlay.modeless: Rectangle 
