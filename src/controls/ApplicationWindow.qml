@@ -27,10 +27,7 @@ import QtQuick.Window 2.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
-import QtQuick.Controls.Material 2.1
-
 import "private"
-
 
 ApplicationWindow
 {
@@ -163,7 +160,7 @@ ApplicationWindow
 	
 	overlay.modal: Rectangle 
 	{
-		color: Qt.rgba(root.Kirigami.Theme.backgroundColor.r,root.Kirigami.Theme.backgroundColor.g,root.Kirigami.Theme.backgroundColor.b, 0.3)
+        color: Qt.rgba(root.Kirigami.Theme.backgroundColor.r,root.Kirigami.Theme.backgroundColor.g,root.Kirigami.Theme.backgroundColor.b, 0.5)
 	}
 	
 	overlay.modeless: Rectangle 
@@ -274,159 +271,171 @@ ApplicationWindow
             }
 
         }
-    }
-
-    Connections
-    {
-        target: root.flickable ? root.flickable : null
-        enabled: root.flickable && ((root.header && root.headerPositioning === ListView.PullBackHeader) || (root.footer &&  root.footerPositioning === ListView.PullBackFooter))
-        property int oldContentY
-        property bool updatingContentY: false
-
-        onContentYChanged:
-        {
-            if(!root.flickable.dragging && root.flickable.atYBeginning)
-                root.returnToBounds()
-
-            if (updatingContentY || !root.flickable || !root.flickable.dragging)
-            {
-                oldContentY = root.flickable.contentY
-                return;
-                //TODO: merge
-                //if moves but not dragging, just update oldContentY
-            }
-
-            if(root.flickable.contentHeight < root.height)
-                return
-
-                var oldFHeight
-                var oldHHeight
-
-             if (root.footer && root.footerPositioning === ListView.PullBackFooter)
-                {
-                    oldFHeight = root.footer.height
-                    root.footer.height = Math.max(0,
-                                                  Math.min(root.footer.implicitHeight,
-                                                           root.footer.height + oldContentY - root.flickable.contentY));
-                }
-
-
-                    if (root.header && root.headerPositioning === ListView.PullBackHeader)
-                    {
-                        oldHHeight = root.header.height
-                        root.header.height = Math.max(0,
-                                                      Math.min(root.header.implicitHeight,
-                                                               root.header.height + oldContentY - root.flickable.contentY));
-                    }
-
-
-            //if the implicitHeight is changed, use that to simulate scroll
-            if ((root.footer && oldFHeight !== root.footer.height)|| ( root.header && oldHHeight !== root.header.height))
-            {
-                updatingContentY = true;
-                if(root.header && oldHHeight !== root.header.height)
-                    root.flickable.contentY -= (oldHHeight - root.header.height)
-
-                    updatingContentY = false;
-
-            } else {
-                oldContentY = root.flickable.contentY
-            }
-        }
-
-         onMovementEnded:
-        {
-            if (root.headerPositioning === ListView.PullBackHeader  && root.header)
-            {
-                    if (root.header.height >= (root.header.implicitHeight/2) || root.flickable.atYBeginning )
-                    {
-                        root.header.height =  root.header.implicitHeight
-
-                    } else
-                    {
-                        root.header.height = 0
-                    }
-
-            }
-
-             if (root.footerPositioning === ListView.PullBackFooter  && root.footer)
-            {
-                if (root.footer.height >= (root.footer.implicitHeight/2) || root.flickable.atYEnd)
-                {
-                    if(root.flickable.atYEnd)
-                    {
-                        root.footer.height =  root.footer.implicitHeight
-                        root.flickable.contentY = root.flickable.contentHeight - root.flickable.height
-                        oldContentY = root.flickable.contentY
-                    }else
-                    {
-                        root.footer.height =  root.footer.implicitHeight
-                    }
-
-                } else
-                {
-                    root.footer.height = 0
-                }
-            }
-        }
-    }
+	}
+	
+	Connections
+	{
+		target: root.flickable ? root.flickable : null
+		enabled: root.flickable && ((root.header && root.headerPositioning === ListView.PullBackHeader) || (root.footer &&  root.footerPositioning === ListView.PullBackFooter))
+		property int oldContentY
+		property bool updatingContentY: false
+		
+		onContentYChanged:
+		{
+			if(!root.flickable.dragging && root.flickable.atYBeginning)
+				root.returnToBounds()
+				
+				if (updatingContentY || !root.flickable || !root.flickable.dragging)
+				{
+					oldContentY = root.flickable.contentY
+					return;
+					//TODO: merge
+					//if moves but not dragging, just update oldContentY
+				}
+				
+				if(root.flickable.contentHeight < root.height)
+				{
+					return
+				}
+				
+				var oldFHeight
+				var oldHHeight
+								
+				if (root.footer && root.footerPositioning === ListView.PullBackFooter)
+				{
+					oldFHeight = root.footer.height
+					root.footer.height = Math.max(0,
+												  Math.min(root.footer.implicitHeight,
+														   root.footer.height + oldContentY - root.flickable.contentY));
+				}
+				
+				
+				if (root.header && root.headerPositioning === ListView.PullBackHeader)
+				{
+					oldHHeight = root.header.height
+					root.header.height = Math.max(0,
+												  Math.min(root.header.implicitHeight,
+														   root.header.height + oldContentY - root.flickable.contentY));
+				}
+				
+				
+				//if the implicitHeight is changed, use that to simulate scroll
+				if ((root.footer && oldFHeight !== root.footer.height)|| ( root.header && oldHHeight !== root.header.height))
+				{
+					updatingContentY = true;
+					if(root.header && oldHHeight !== root.header.height)
+						root.flickable.contentY -= (oldHHeight - root.header.height)
+						
+						updatingContentY = false;
+					
+				} else {
+					oldContentY = root.flickable.contentY
+				}
+		}
+		
+		onMovementEnded:
+		{
+			if (root.headerPositioning === ListView.PullBackHeader  && root.header)
+			{
+				if (root.header.height >= (root.header.implicitHeight/2) || root.flickable.atYBeginning )
+				{
+					root.header.height =  root.header.implicitHeight
+					
+				} else
+				{
+					root.header.height = 0
+				}				
+			}
+			
+			if (root.footerPositioning === ListView.PullBackFooter  && root.footer)
+			{
+				if (root.footer.height >= (root.footer.implicitHeight/2) || root.flickable.atYEnd)
+				{
+					if(root.flickable.atYEnd)
+					{
+						root.footer.height =  root.footer.implicitHeight
+						root.flickable.contentY = root.flickable.contentHeight - root.flickable.height
+						oldContentY = root.flickable.contentY
+					}else
+					{
+						root.footer.height =  root.footer.implicitHeight
+					}
+					
+				} else
+				{
+					root.footer.height = 0
+				}
+			}
+		}
+	}
 
     property Maui.ToolBar mheadBar : Maui.ToolBar
     {
-        id: _headBar
-        visible: count > 1
-        position: ToolBar.Header
-        anchors.left: root.left
-        anchors.right: root.right
-        height: implicitHeight
-
-        // 		Kirigami.Theme.backgroundColor: headBarBGColor
-        // 		Kirigami.Theme.textColor: headBarFGColor
-        // 		Kirigami.Theme.inherit: true
-
-        leftContent: [ ToolButton
-            {
-                id: menuBtn
-                icon.name: "application-menu"
-                icon.color: headBarFGColor
-                icon.width: Maui.Style.iconSizes.medium
-                icon.height: Maui.Style.iconSizes.medium
-                checked: mainMenu.visible
-                onClicked:
-                {
-                    menuButtonClicked()
-                    mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x , parent.height+ Maui.Style.space.medium)
-                }
-
-                Menu
-                {
-                    id: mainMenu
-                    modal: true
-                    z: 999
-                    width: Maui.Style.unit * 250
-
-                    Loader
-                    {
-                        id: _accountsMenuLoader
-                        width: parent.width * 0.9
-                        anchors.horizontalCenter: parent.horizontalCenter
-
-                        active: Maui.App.handleAccounts
-                        sourceComponent: Maui.App.handleAccounts ?
-                        _accountsComponent : null
-                    }
-
-                    MenuItem
-                    {
-                        text: qsTr("About")
-                        icon.name: "documentinfo"
-                        onTriggered: aboutDialog.open()
-                    }
-                }
-            }
-        ]
-
-    }
+		id: _headBar
+		visible: count > 1
+		position: ToolBar.Header
+		anchors.left: root.left
+		anchors.right: root.right
+		height: implicitHeight
+		
+		// 		Kirigami.Theme.backgroundColor: headBarBGColor
+		// 		Kirigami.Theme.textColor: headBarFGColor
+		// 		Kirigami.Theme.inherit: true
+		
+		Behavior on height
+		{
+			enabled: _headBar.height === _headBar.preferredHeight || _headBar.height === 0
+			
+			NumberAnimation
+			{
+				duration: Kirigami.Units.longDuration
+				easing.type: Easing.InOutQuad
+			}
+		}
+		
+		leftContent: [ ToolButton
+		{
+			id: menuBtn
+			icon.name: "application-menu"
+			icon.color: headBarFGColor
+			icon.width: Maui.Style.iconSizes.medium
+			icon.height: Maui.Style.iconSizes.medium
+			checked: mainMenu.visible
+			onClicked:
+			{
+				menuButtonClicked()
+				mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x , parent.height+ Maui.Style.space.medium)
+			}
+			
+			Menu
+			{
+				id: mainMenu
+				modal: true
+				z: 999
+				width: Maui.Style.unit * 250
+				
+				Loader
+				{
+					id: _accountsMenuLoader
+					width: parent.width * 0.9
+					anchors.horizontalCenter: parent.horizontalCenter
+					
+					active: Maui.App.handleAccounts
+					sourceComponent: Maui.App.handleAccounts ?
+					_accountsComponent : null
+				}
+				
+				MenuItem
+				{
+					text: qsTr("About")
+					icon.name: "documentinfo"
+					onTriggered: aboutDialog.open()
+				}
+			}
+		}
+		]
+		
+	}
 
     property Maui.ToolBar mfootBar : Maui.ToolBar
     {

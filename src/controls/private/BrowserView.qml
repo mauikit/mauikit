@@ -123,7 +123,7 @@ Maui.Page
             showPreviewThumbnails: settings.showThumbnails
             keepEmblemOverlay: settings.selectionMode
             showDetailsInfo: true
-            enableLassoSelection: !Kirigami.Settings.hasTransientTouchInput
+            enableLassoSelection: true
             
             BrowserHolder
             {
@@ -269,7 +269,7 @@ Maui.Page
             cellHeight: itemSize * 1.5
             keepEmblemOverlay: settings.selectionMode
             showPreviewThumbnails: settings.showThumbnails
-            enableLassoSelection: !Kirigami.Settings.hasTransientTouchInput
+            enableLassoSelection: true
             
             BrowserHolder
             {
@@ -544,7 +544,7 @@ Maui.Page
                         onKeyPress: _millerControl.keyPress(event)
                         currentIndex : 0
                         onCurrentIndexChanged: _millerControl.currentIndex = currentIndex
-                        enableLassoSelection: !Kirigami.Settings.hasTransientTouchInput
+                        enableLassoSelection: true
                         
                         BrowserHolder
                         {

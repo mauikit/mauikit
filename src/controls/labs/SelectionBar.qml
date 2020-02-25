@@ -28,8 +28,10 @@ Item
 {
     id: control
     focus: true
-    default property list<Action> actions
-
+    default property alias actions : _layout.actions
+    property alias hiddenActions : _layout.hiddenActions
+    property alias display : _layout.display
+    
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
     readonly property int barHeight : Maui.Style.iconSizes.large  + Maui.Style.space.medium
@@ -106,7 +108,7 @@ Item
 
     implicitHeight: barHeight
 
-    implicitWidth: _layout.implicitWidth + Maui.Style.space.big + (height * 2)
+    implicitWidth: _layout.maximumContentWidth + Maui.Style.space.big + (height * 2)
 
     visible: control.count > 0
 
@@ -207,106 +209,85 @@ Item
                     control.rightClicked(mouse)
             }
         }
-
     }
 
     RowLayout
     {
 		id: _rowLayout
-        anchors.fill: parent
-
-        MouseArea
-        {            
-            Layout.fillHeight: true
-            Layout.preferredWidth: height
-            onClicked: control.exitClicked()
-            Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
-            hoverEnabled: true
-            
-            Maui.X
-            {
-                height: Maui.Style.iconSizes.medium - 10
-                width: height
-                anchors.centerIn: parent
-                color: parent.hovered || parent.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor            
-            }
-        }
-        
-        Maui.ToolBar
-        {
-            id: _layout
-            background: null
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            preferredHeight: height
-
-            middleContent: Repeater
-            {
-                model: control.actions
-
-                ToolButton
-                {
-                    action: modelData
-                    display: _layout.width < Kirigami.Units.gridUnit * 25 ? ToolButton.TextUnderIcon : ToolButton.IconOnly
-                    Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
-                    onClicked : _listContainer.showList = false
-
-                }
-            }
-        }
-
-        Maui.Badge
-            {
-                id: _counter
-                Layout.fillHeight: true
-                Layout.preferredWidth: height
-                Layout.margins: Maui.Style.space.medium
-                text: selectionList.count
-                radius: Maui.Style.radiusV
-
-                Kirigami.Theme.backgroundColor: _listContainer.showList ?
-Kirigami.Theme.highlightColor : Qt.darker(bg.color)
-                border.color: "transparent"
-
-                onClicked:
-                {
-                    _listContainer.showList = !_listContainer.showList
-                }
-
-                Component.onCompleted:
-                {
-                    _counter.item.font.pointSize= Maui.Style.fontSizes.big
-
-                }
-
-                SequentialAnimation
-                {
-                    id: anim
-                    //             PropertyAnimation
-                    //             {
-                    //                 target: _counter
-                    //                 property: "opacity"
-                    //                 easing.type: Easing.InOutQuad
-                    //                 from: 0.5
-                    //                 to: 1
-                    //                 duration: 600
-                    //             }
-                    //
-                    PropertyAnimation
-                    {
-                        target: _counter
-                        property: "radius"
-                        easing.type: Easing.InOutQuad
-                        from: target.height
-                        to: Maui.Style.radiusV
-                        duration: 200
-                    }
-                }
-            }
-
-
-    }
-
+		anchors.fill: parent
+		
+		MouseArea
+		{            
+			Layout.fillHeight: true
+			Layout.preferredWidth: height
+			onClicked: control.exitClicked()
+			Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
+			hoverEnabled: true
+			
+			Maui.X
+			{
+				height: Maui.Style.iconSizes.medium - 10
+				width: height
+				anchors.centerIn: parent
+				color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor            
+			}
+		}		
+		
+		Kirigami.ActionToolBar
+		{
+			id: _layout
+			clip: true
+			position: ToolBar.Footer
+			alignment: Qt.AlignCenter
+			
+			Layout.fillWidth: true
+			Layout.fillHeight: true
+			display: ToolButton.IconOnly
+		}   
+		
+		
+    Maui.Badge
+    {
+		id: _counter
+		Layout.fillHeight: true
+		Layout.preferredWidth: height
+		Layout.margins: Maui.Style.space.medium
+		text: selectionList.count
+		radius: Maui.Style.radiusV
+		
+		Kirigami.Theme.backgroundColor: _listContainer.showList ?
+		Kirigami.Theme.highlightColor : Qt.darker(bg.color)
+		border.color: "transparent"
+		
+		onClicked:
+		{
+			_listContainer.showList = !_listContainer.showList
+		}
+		
+		Component.onCompleted:
+		{
+			_counter.item.font.pointSize= Maui.Style.fontSizes.big
+			
+		}
+		
+		SequentialAnimation
+		{
+			id: anim
+			
+			PropertyAnimation
+			{
+				target: _counter
+				property: "radius"
+				easing.type: Easing.InOutQuad
+				from: target.height
+				to: Maui.Style.radiusV
+				duration: 200
+			}
+		}
+	}	
+	
+	}
+	
 
     Keys.onEscapePressed:
     {

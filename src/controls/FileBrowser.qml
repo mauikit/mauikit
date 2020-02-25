@@ -867,7 +867,7 @@ Maui.Page
 			
 			Layout.alignment: Qt.AlignHCenter
 			Layout.margins: Maui.Style.space.medium
-			Layout.preferredWidth: Math.min(parent.width, implicitWidth)
+			Layout.preferredWidth: Math.min(parent.width-(Maui.Style.space.medium*2), implicitWidth)
 			Layout.bottomMargin: Maui.Style.contentMargins*2
 			maxListHeight: _browserList.height - (Maui.Style.contentMargins*2)
 			singleSelection: settings.singleSelection

@@ -395,19 +395,6 @@ QString FM::resolveLocalCloudPath(const QString& path)
 	#endif
 }
 
-static bool doNameFilter(const QString &name, const QStringList &filters)
-{
-	for(const auto &filter : std::accumulate(filters.constBegin(), filters.constEnd(), QVector<QRegExp> {}, [](QVector<QRegExp> &res, const QString &filter) -> QVector<QRegExp>
-	{ res.append(QRegExp(filter, Qt::CaseInsensitive, QRegExp::Wildcard)); return res; }))
-	{
-		if(filter.exactMatch(name))
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
 FMH::MODEL_LIST FM::getTagContent(const QString &tag, const QStringList &filters)
 {
 	FMH::MODEL_LIST content;
@@ -417,13 +404,8 @@ FMH::MODEL_LIST FM::getTagContent(const QString &tag, const QStringList &filters
 		return this->getTags();
 	}else
 	{
-		for(const auto &data : this->tag->getUrls(tag, false, [filters](QVariantMap &item) -> bool
-		{ return filters.isEmpty() ? true : doNameFilter(FMH::mapValue(item, FMH::MODEL_KEY::URL), filters); }))
-		{                
-			const auto url = QUrl(data.toMap()[TAG::KEYMAP[TAG::KEYS::URL]].toString());
-			if(url.isLocalFile() && !FMH::fileExists(url))
-				continue;
-			
+		for(const auto &url : FMStatic::getTagUrls(tag, filters, false))
+		{
 			content << FMH::getFileInfoModel(url);
 		}
 	}

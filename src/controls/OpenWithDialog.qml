@@ -29,8 +29,8 @@ Maui.Dialog
 	property var urls : []
 	
 	widthHint: 0.9
-	
-	maxHeight: _layout.contentHeight + (page.padding * 2.5) + headBar.height + Maui.Style.space.huge
+	page.padding: 0
+	maxHeight: grid.contentHeight + (page.padding * 2.5) + headBar.height + Maui.Style.space.huge
 	maxWidth: Maui.Style.unit * 500
 	
 	verticalAlignment: Qt.AlignBottom
@@ -40,31 +40,17 @@ Maui.Dialog
 	page.title: qsTr("Open with")
 	headBar.visible: true
 		
-	Kirigami.ScrollablePage
+	Maui.GridBrowser
 	{
-		id: _layout
-		anchors.fill: parent
-		leftPadding: 0
-		rightPadding: 0
-		
-		ColumnLayout
+		id: grid
+		width: parent.width
+// 		Layout.preferredHeight: implicitHeight
+		showEmblem: false
+		model: ListModel {}
+		onItemClicked:
 		{
-			width: parent.width
-			spacing: 0
-			
-			Maui.GridBrowser
-			{
-				id: grid
-				Layout.fillWidth: true
-				Layout.preferredHeight: implicitHeight
-				showEmblem: false
-				model: ListModel {}
-				onItemClicked:
-				{
-					grid.currentIndex = index
-					triggerService(index)
-				}
-			}
+			grid.currentIndex = index
+			triggerService(index)
 		}
 	}
 	
