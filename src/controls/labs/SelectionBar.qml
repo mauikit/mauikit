@@ -29,7 +29,8 @@ Item
     id: control
     focus: true
     default property list<Action> actions
-
+    property list<Action> hiddenActions
+    
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
     readonly property int barHeight : Maui.Style.iconSizes.large  + Maui.Style.space.medium
@@ -106,7 +107,7 @@ Item
 
     implicitHeight: barHeight
 
-    implicitWidth: _layout.implicitWidth + Maui.Style.space.big + (height * 2)
+    implicitWidth: _layout.maximumContentWidth + height + Maui.Style.space.big + (height * 2)
 
     visible: control.count > 0
 
@@ -232,28 +233,22 @@ Item
             }
         }
         
-        Maui.ToolBar
+        
+        Kirigami.ActionToolBar
         {
-            id: _layout
-            background: null
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            preferredHeight: height
-
-            middleContent: Repeater
-            {
-                model: control.actions
-
-                ToolButton
-                {
-                    action: modelData
-                    display: _layout.width < Kirigami.Units.gridUnit * 25 ? ToolButton.TextUnderIcon : ToolButton.IconOnly
-                    Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
-                    onClicked : _listContainer.showList = false
-
-                }
-            }
-        }
+			id: _layout
+			clip: true
+			position: ToolBar.Footer
+			alignment: Qt.AlignCenter
+			actions: control.actions
+			hiddenActions: control.hiddenActions
+			// 			Layout.fillHeight: true
+			Layout.fillWidth: true
+			Layout.fillHeight: true
+			display: ToolButton.IconOnly
+			// 			Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
+		}   
+    
 
         Maui.Badge
             {
