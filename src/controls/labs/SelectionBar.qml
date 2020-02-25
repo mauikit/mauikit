@@ -219,20 +219,23 @@ Item
 		clip: true
 		spacing: 0
 		
-		MouseArea
+		Maui.Badge
 		{            
+			Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
 			Layout.fillHeight: true
 			Layout.preferredWidth: height
+			Layout.margins: Maui.Style.space.medium
+			radius: Maui.Style.radiusV
 			onClicked: control.exitClicked()
-			Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
-			hoverEnabled: true
+			Kirigami.Theme.backgroundColor: Qt.darker(bg.color)
+			border.color: "transparent"
 			
 			Maui.X
 			{
 				height: Maui.Style.iconSizes.medium - 10
 				width: height
 				anchors.centerIn: parent
-				color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor            
+				color: parent.hovered ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor            
 			}
 		}		
 		
@@ -254,7 +257,6 @@ Item
 				
 				ToolButton
 				{
-					anchors.verticalCenter: parent.verticalCenter
 					action: modelData
 					display: control.display
 					Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
@@ -262,11 +264,10 @@ Item
 			}
 			
 			rightContent: Maui.ToolButtonMenu
-		{
-			visible: content.length > 0
-			content: control.hiddenActions
-		}
-		
+			{
+				visible: content.length > 0
+				content: control.hiddenActions
+			}			
 		}  		
 		
     Maui.Badge
