@@ -423,7 +423,7 @@ Maui.Page
 					width: parent.width
 					anchors.centerIn: parent
 					
-					Kirigami.Separator
+					Item
 					{
 						Kirigami.FormData.label: qsTr("Navigation")
 						Kirigami.FormData.isSection: true
@@ -446,7 +446,15 @@ Maui.Page
 						onToggled: control.currentFMList.hidden = !control.currentFMList.hidden
 					}
 					
-					Kirigami.Separator
+					Switch
+					{
+						Kirigami.FormData.label: qsTr("Single Click")
+						checkable: true
+						checked: settings.singleClick
+						onToggled: settings.singleClick = !settings.singleClick						
+					}					
+					
+					Item
 					{
 						Kirigami.FormData.label: qsTr("Interface")
 						Kirigami.FormData.isSection: true

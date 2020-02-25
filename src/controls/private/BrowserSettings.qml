@@ -32,5 +32,8 @@ QtObject
     property bool selectionMode : false
     property bool singleSelection: false
     property bool showThumbnails: true
+    
+    property bool singleClick: Maui.Handy.singleClick   
+    
 }
 
