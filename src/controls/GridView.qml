@@ -78,9 +78,9 @@ Kirigami.ScrollablePage
     focus: true
     clip: true
 
-    keyboardNavigationEnabled: false
-    Keys.enabled: false
-
+//     keyboardNavigationEnabled: false
+//     Keys.enabled: false
+verticalScrollBarPolicy: ScrollBar.AlwaysOn
 
     GridView
     {

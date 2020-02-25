@@ -544,7 +544,7 @@ Maui.Page
 				}
 			}
 			
-			if((event.key == Qt.Key_Left || event.key == Qt.Key_Right || event.key == Qt.Key_Down || event.key == Qt.Key_Up) && (event.modifiers & Qt.ControlModifier) && (event.modifiers & Qt.ShiftModifier))
+			if((event.modifiers & Qt.ControlModifier) && (event.modifiers & Qt.ShiftModifier))
 			{
 				if(control.selectionBar.contains(item.path))
 				{

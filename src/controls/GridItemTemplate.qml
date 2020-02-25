@@ -104,7 +104,6 @@ Item
                 height: Math.min(parent.height, control.iconSizeHint)
                 width: height
                 
-                
                 ColorOverlay
                 {
                     visible: control.hovered
@@ -112,11 +111,8 @@ Item
                     anchors.fill: parent
                     source: parent
                     color: control.Kirigami.Theme.highlightColor
-                }          
-                
-
-            }
-            
+                } 
+            }            
         }
         
         ColumnLayout
