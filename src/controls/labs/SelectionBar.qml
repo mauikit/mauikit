@@ -28,9 +28,10 @@ Item
 {
     id: control
     focus: true
-    default property alias actions : _layout.actions
-    property alias hiddenActions : _layout.hiddenActions
-    property alias display : _layout.display
+    default property list<Action> actions 
+    property list<Action> hiddenActions
+    
+    property int display : ToolButton.IconOnly
     
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
@@ -108,7 +109,7 @@ Item
 
     implicitHeight: barHeight
 
-    implicitWidth: _layout.maximumContentWidth + Maui.Style.space.big + (height * 2)
+    implicitWidth: _layout.implicitWidth + Maui.Style.space.big + (height * 2)
 
     visible: control.count > 0
 
@@ -215,6 +216,8 @@ Item
     {
 		id: _rowLayout
 		anchors.fill: parent
+		clip: true
+		spacing: 0
 		
 		MouseArea
 		{            
@@ -233,18 +236,38 @@ Item
 			}
 		}		
 		
-		Kirigami.ActionToolBar
+		Maui.ToolBar
 		{
 			id: _layout
 			clip: true
 			position: ToolBar.Footer
-			alignment: Qt.AlignCenter
 			
 			Layout.fillWidth: true
 			Layout.fillHeight: true
-			display: ToolButton.IconOnly
-		}   
+			preferredHeight: height
+			background: Item{}
+			leftSretch: false
+			rightSretch: false
+			middleContent: Repeater
+			{
+				model: control.actions
+				
+				ToolButton
+				{
+					anchors.verticalCenter: parent.verticalCenter
+					action: modelData
+					display: control.display
+					Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
+				}
+			}
+			
+			rightContent: Maui.ToolButtonMenu
+		{
+			visible: content.length > 0
+			content: control.hiddenActions
+		}
 		
+		}  		
 		
     Maui.Badge
     {
@@ -286,8 +309,7 @@ Item
 		}
 	}	
 	
-	}
-	
+	}	
 
     Keys.onEscapePressed:
     {
