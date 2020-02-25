@@ -35,7 +35,7 @@ Kirigami.ScrollablePage
 
     onItemSizeChanged :
     {
-        controlView.size_ = itemSize
+        controlView.size_ = itemWidth
         if(adaptContent)
             control.adaptGrid()
     }
