@@ -27,7 +27,7 @@ Maui.GridView
 {
 	id: control
 	Kirigami.Theme.colorSet: Kirigami.Theme.View
-
+	
 	itemSize : Maui.Style.iconSizes.large * 2
 	property bool showEmblem : true
 	property bool keepEmblemOverlay : false
@@ -43,59 +43,69 @@ Maui.GridView
 	signal leftEmblemClicked(int index)	
 	signal itemRightClicked(int index)	
 	
-	delegate: Maui.GridBrowserDelegate
+	delegate: Item
 	{
-		id: delegate
-       
-       folderSize: height * 0.5
-       height: control.cellHeight 
-       width: control.itemSize
-       padding: Maui.Style.space.small    
-       
-		showTooltip: true
-		showEmblem: control.showEmblem
-		keepEmblemOverlay: control.keepEmblemOverlay
-		showThumbnails: control.showPreviewThumbnails
-		rightEmblem: control.rightEmblem
-		leftEmblem: control.leftEmblem
+		property bool isCurrentItem : GridView.isCurrentItem
+		height: control.cellHeight
+		width: control.cellWidth
 		
-		Connections
+		Maui.GridBrowserDelegate
 		{
-			target: delegate
-			onClicked:
-			{
-				control.currentIndex = index
-				itemClicked(index)
-			}
+			id: delegate
 			
-			onDoubleClicked:
-			{
-				control.currentIndex = index
-				itemDoubleClicked(index)
-			}
+			folderSize: height * 0.5
 			
-			onPressAndHold:
-			{
-				control.currentIndex = index
-				control.itemRightClicked(index)
-			}
+			anchors.centerIn: parent
+			height: control.cellHeight - 5
+			width: control.itemSize
+			padding: Maui.Style.space.tiny
+			isCurrentItem: parent.isCurrentItem
 			
-			onRightClicked:
-			{
-				control.currentIndex = index
-				control.itemRightClicked(index)
-			}
+			showTooltip: true
+			showEmblem: control.showEmblem
+			keepEmblemOverlay: control.keepEmblemOverlay
+			showThumbnails: control.showPreviewThumbnails
+			rightEmblem: control.rightEmblem
+			leftEmblem: control.leftEmblem
 			
-			onRightEmblemClicked:
+			Connections
 			{
-				control.currentIndex = index
-				control.rightEmblemClicked(index)
-			}
-			
-			onLeftEmblemClicked:
-			{
-				control.currentIndex = index
-				control.leftEmblemClicked(index)
+				target: delegate
+				onClicked:
+				{
+					control.currentIndex = index
+					itemClicked(index)
+				}
+				
+				onDoubleClicked:
+				{
+					control.currentIndex = index
+					itemDoubleClicked(index)
+				}
+				
+				onPressAndHold:
+				{
+					control.currentIndex = index
+					control.itemRightClicked(index)
+				}
+				
+				onRightClicked:
+				{
+					control.currentIndex = index
+					control.itemRightClicked(index)
+				}
+				
+				onRightEmblemClicked:
+				{
+					control.currentIndex = index
+					control.rightEmblemClicked(index)
+				}
+				
+				onLeftEmblemClicked:
+				{
+					control.currentIndex = index
+					control.leftEmblemClicked(index)
+				}
 			}
 		}
 	}

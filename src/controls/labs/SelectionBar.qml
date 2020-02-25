@@ -108,7 +108,7 @@ Item
 
     implicitHeight: barHeight
 
-    implicitWidth: _layout.maximumContentWidth + height + Maui.Style.space.big + (height * 2)
+    implicitWidth: _layout.maximumContentWidth + Maui.Style.space.big + (height * 2)
 
     visible: control.count > 0
 
@@ -229,10 +229,9 @@ Item
 				height: Maui.Style.iconSizes.medium - 10
 				width: height
 				anchors.centerIn: parent
-				color: parent.hovered || parent.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor            
+				color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor            
 			}
-		}
-		
+		}		
 		
 		Kirigami.ActionToolBar
 		{

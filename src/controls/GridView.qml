@@ -80,17 +80,7 @@ Kirigami.ScrollablePage
 
     keyboardNavigationEnabled: false
     Keys.enabled: false
-    
-    Behavior on cellWidth
-    {
-// 		enabled: control.collapsible && control.position === 1
-		
-		NumberAnimation
-		{
-			duration: Kirigami.Units.longDuration
-			easing.type: Easing.InOutQuad
-		}
-	}
+
 
     GridView
     {
@@ -120,7 +110,8 @@ Kirigami.ScrollablePage
         snapMode: GridView.NoSnap
         highlightMoveDuration: 0
         interactive: Kirigami.Settings.hasTransientTouchInput
-        onWidthChanged: if(control.adaptContent) control.adaptGrid()
+        onWidthChanged: if(adaptContent) control.adaptGrid()
+		onCountChanged: if(adaptContent) control.adaptGrid()
 
         keyNavigationEnabled : true
         keyNavigationWraps : true
@@ -284,7 +275,6 @@ Kirigami.ScrollablePage
         }
     }
 
-
     function resizeContent(factor)
     {
         const newSize= control.itemSize * factor
@@ -302,13 +292,12 @@ Kirigami.ScrollablePage
 
     function adaptGrid()
     {
-        var amount = parseInt(controlView.width / (controlView.size_), 10)
+		var realAmount = parseInt(controlView.width / controlView.size_, 10)				
+		var amount = parseInt(controlView.width / control.cellWidth, 10)	
 		
-// 		if(amount-1 >= controlView.count)
-// 			return;
-					
-        var leftSpace = parseInt(controlView.width  - ( amount * (controlView.size_) ), 10)
-        var size = parseInt((controlView.size_) + (parseInt(leftSpace/amount, 10)), 10)
-        control.cellWidth = size
+		var leftSpace = parseInt(controlView.width  - ( realAmount * controlView.size_ ), 10)
+		var size = Math.min(amount, realAmount) >= control.count ? control.cellWidth : parseInt((controlView.size_) + (parseInt(leftSpace/realAmount, 10)), 10)
+		
+		control.cellWidth = size        
     }
 }
