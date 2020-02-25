@@ -150,15 +150,6 @@ Item
             }
         }
 
-        Behavior on width
-        {
-            NumberAnimation
-            {
-                duration: Kirigami.Units.longDuration
-                easing.type: Easing.InOutQuad
-            }
-        }
-
         Behavior on opacity
         {
             NumberAnimation

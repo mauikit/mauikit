@@ -898,6 +898,8 @@ Maui.Page
                 height: Maui.Style.iconSizes.big + Maui.Style.space.big
                 label1.text: model.label
                 label2.text: model.path
+                label3.text: ""
+				label4.text: ""
                 showEmblem: true
                 keepEmblemOverlay: true
                 showThumbnails: true

@@ -51,7 +51,7 @@ Maui.ItemDelegate
     ToolTip.delay: 1000
     ToolTip.timeout: 5000
     ToolTip.visible: control.hovered && control.showTooltip
-    ToolTip.text: model.tooltip ? model.tooltip : model.path  
+    ToolTip.text: model.tooltip ? model.tooltip : (model.path ? model.path : "")
     
     
     property alias label1 : _template.label1
@@ -84,12 +84,12 @@ Maui.ItemDelegate
         }
     }
     
-    Drag.active: mouseArea.drag.active && control.draggable
+    Drag.active: mouseArea.drag.active && control.draggable && model.path
     Drag.dragType: Drag.Automatic
     Drag.supportedActions: Qt.CopyAction
     Drag.mimeData:
     {
-        "text/uri-list": model.path
+        "text/uri-list": model.path ? model.path : ""
     }
     
     
@@ -105,9 +105,9 @@ Maui.ItemDelegate
         imageSource: model.mime &&  model.thumbnail ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails ? model.thumbnail : "") : ""	
         iconSource: model.icon
         
-        label1.text: model.label
-        label3.text : model.mime === "inode/directory" ? (model.count ? model.count + qsTr(" items") : "") : Maui.FM.formatSize(model.size)
-        label4.text: Maui.FM.formatDate(model.modified, "MM/dd/yyyy")
+        label1.text: model.label ? model.label : ""
+        label3.text : model.mime ? (model.mime === "inode/directory" ? (model.count ? model.count + qsTr(" items") : "") : Maui.FM.formatSize(model.size)) : ""
+        label4.text: model.modified ? Maui.FM.formatDate(model.modified, "MM/dd/yyyy") : ""
         
         emblem.iconName: control.leftEmblem
         emblem.visible: (control.keepEmblemOverlay || control.isSelected) && control.showEmblem  && control.leftEmblem
