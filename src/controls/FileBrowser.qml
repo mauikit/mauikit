@@ -274,19 +274,22 @@ Maui.Page
 		Action
 		{
 			icon.name: "view-list-icons"
-			text: qsTr("Grid")           
+			text: qsTr("Grid") 
+			shortcut: "Ctrl+G"
 		}
 		
 		Action
 		{
 			icon.name: "view-list-details"
 			text: qsTr("List")
+			shortcut: "Ctrl+L"			
 		}
 		
 		Action
 		{
 			icon.name: "view-file-columns"
 			text: qsTr("Columns")
+			shortcut: "Ctrl+M"			
 		}
 	}
 	]
@@ -544,7 +547,7 @@ Maui.Page
 				}
 			}
 			
-			if((event.modifiers & Qt.ControlModifier) && (event.modifiers & Qt.ShiftModifier))
+			if((event.key == Qt.Key_Left || event.key == Qt.Key_Right || event.key == Qt.Key_Down || event.key == Qt.Key_Up) && (event.modifiers & Qt.ControlModifier) && (event.modifiers & Qt.ShiftModifier))
 			{
 				if(control.selectionBar.contains(item.path))
 				{

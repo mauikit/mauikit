@@ -30,8 +30,7 @@ Maui.Page
 	signal keyPressed(var event)
 	
 	Keys.enabled: true
-	
-			
+
 	//Actions
 	Action
 	{

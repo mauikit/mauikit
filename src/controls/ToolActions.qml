@@ -161,7 +161,7 @@ Item
 				{
 // 					action: modelData
 					text:modelData.text
-					icon: modeldata.icon
+					icon: modelData.icon
 					autoExclusive: control.autoExclusive
 					checked: index === control.currentIndex
 					checkable: true
