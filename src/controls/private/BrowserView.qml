@@ -424,6 +424,10 @@ Maui.Page
             signal areaClicked(var mouse)
             signal areaRightClicked()
             
+			function forceActiveFocus()
+			{
+				_millerColumns.currentItem.forceActiveFocus()
+			}
             
             ListView
             {
@@ -583,11 +587,11 @@ Maui.Page
                         }
                         
                         onItemsSelected:
-                         {
-                            _millerColumns.currentIndex = _index
-                            _millerControl.itemsSelected(indexes)
-                        }
-                        
+                        {
+							_millerColumns.currentIndex = _index
+							_millerControl.itemsSelected(indexes)
+						}
+						
                         model: Maui.BaseModel
                         {
                             id: _millersFMModel
