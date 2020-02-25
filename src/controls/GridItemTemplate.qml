@@ -100,7 +100,7 @@ Item
             {
                 anchors.centerIn: parent
                 source: control.iconSource
-                fallback: "qrc:/assets/application-x-zerosize.svg"
+                fallback: "application-x-zerosize"
                 height: Math.min(parent.height, control.iconSizeHint)
                 width: height
                 
