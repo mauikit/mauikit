@@ -94,6 +94,7 @@ Maui.Dialog
 		{
 			id: delegate
 			label: model.label
+			label2: model.server
 			radius: Maui.Style.radiusV
 			Connections
 			{
@@ -113,8 +114,7 @@ Maui.Dialog
 				{
 					_listView.currentIndex = index
 					_menu.popup()	
-				}
-				
+				}				
 			}
 		}
 		
