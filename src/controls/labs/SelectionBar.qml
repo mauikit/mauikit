@@ -106,6 +106,8 @@ Item
 
     signal clicked(var mouse)
     signal rightClicked(var mouse)
+    
+    signal urisDropped(var uris)
 
     implicitHeight: barHeight
 
@@ -299,9 +301,82 @@ Item
 				duration: 200
 			}
 		}
-	}	
-	
-	}	
+		
+		Maui.Rectangle
+		{
+            opacity: 0.3
+            anchors.fill: parent
+            anchors.margins: 4
+            visible: _counter.hovered
+            color: "transparent"
+            borderColor: "white"
+            solidBorder: false
+        }
+		
+		MouseArea
+		{
+            id: _mouseArea
+            anchors.fill: parent
+            propagateComposedEvents: true
+            property int startX
+            property int startY
+            Drag.active: drag.active
+            Drag.hotSpot.x: 0
+            Drag.hotSpot.y: 0
+            Drag.dragType: Drag.Automatic
+            Drag.supportedActions: Qt.CopyAction
+            Drag.keys: ["text/plain","text/uri-list"]
+
+           onPressed: 
+            {
+                if( mouse.source !== Qt.MouseEventSynthesizedByQt)
+                {
+                    drag.target = _counter
+                    _counter.grabToImage(function(result)
+                    {
+                        _mouseArea.Drag.imageSource = result.url
+                    })
+                    
+                    _mouseArea.Drag.mimeData = { "text/uri-list": control.uris.join("\n")}
+
+                    startX = _counter.x
+                    startY = _counter.y
+                    
+                }else mouse.accepted = false
+            }
+            
+            onReleased :
+            {
+                _counter.x = startX
+                _counter.y = startY
+            }
+        }
+    }	
+    
+    }	
+    
+    
+    Maui.Rectangle
+    {
+        opacity: 0.2
+        anchors.fill: parent
+        anchors.margins: 4
+        visible: _dropArea.containsDrag
+        color: "transparent"
+        borderColor: "white"
+        solidBorder: false
+    }		
+    
+    
+    DropArea
+    {
+        id: _dropArea
+        anchors.fill: parent
+        onDropped:
+        {
+            control.urisDropped(drop.urls)
+        }
+    }
 
     Keys.onEscapePressed:
     {

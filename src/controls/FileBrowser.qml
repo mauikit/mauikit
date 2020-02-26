@@ -888,6 +888,20 @@ Maui.Page
 				if(_selectionBar.count < 1)
 					control.clearSelection()
 			}
+			
+			onUrisDropped: 
+			{
+                for(var i in uris)
+                {
+                    console.log(uris[i])
+                    if(!Maui.FM.fileExists(uris[i]))
+                        continue;
+                    
+                    const item = Maui.FM.getFileInfo(uris[i])
+                    control.selectionBar.append(item.path, item)
+                    
+                }
+            }
 
             onExitClicked: control.clearSelection()
 

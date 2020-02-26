@@ -79,11 +79,6 @@ Maui.ItemDelegate
     Drag.active: mouseArea.drag.active && control.draggable
     Drag.dragType: Drag.Automatic
     Drag.supportedActions: Qt.CopyAction
-    Drag.mimeData:
-    {
-        "text/uri-list": model.path
-    }
-
 
     Maui.GridItemTemplate
     {
@@ -107,6 +102,4 @@ Maui.ItemDelegate
             onClicked: control.leftEmblemClicked(index)
         }
     }
-
-
 }

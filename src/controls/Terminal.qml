@@ -240,5 +240,17 @@ Maui.Page
 		}
 	}
 	
+	opacity: _dropArea.containsDrag ? 0.5 : 1
+
+    DropArea
+    {
+        id: _dropArea
+        anchors.fill: parent
+        onDropped:
+        {
+            ksession.sendText(drop.urls.join(" "))
+        }
+    }
+	
 	Component.onCompleted: control.forceActiveFocus();	
 }

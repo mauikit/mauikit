@@ -102,8 +102,7 @@ Kirigami.DelegateRecycler
                         drag.target = _delegate
                         _delegate.grabToImage(function(result)
                         {
-                            console.log(result.url)
-                            parent.Drag.imageSource = result.url
+                            _mouseArea.Drag.imageSource = result.url
                         })
                     }else drag.target = null                        
                         

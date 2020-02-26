@@ -26,7 +26,7 @@ Shape
         fillColor: _shape.color
         strokeStyle: _shape.solidBorder ? ShapePath.SolidLine : ShapePath.DashLine
         dashPattern: [ 1, 4 ]
-        startX: 0; startY: 0
+        startX: 1; startY: 1
         PathLine { x: _shape.width; y:  _path.startY }
         PathLine { x: _shape.width; y: _shape.height }
         PathLine { x:  _path.startX; y: _shape.height}

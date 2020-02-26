@@ -179,6 +179,13 @@ Maui.Page
 				opacity: model.hidden == "true" ? 0.5 : 1
                 draggable: true
                 
+                Drag.keys: ["text/plain","text/uri-list"]
+                Drag.mimeData: 
+                {
+                    "text/plain": model.label,
+                    "text/uri-list": selectionBar.count > 0 && selectionBar.contains(model.path) ? selectionBar.uris.join("\n") : model.path
+                }
+                
                 Maui.Badge
                 {
                     iconName: "link"
@@ -320,6 +327,13 @@ Maui.Page
                     draggable: true
                     opacity: model.hidden == "true" ? 0.5 : 1
                     
+                    Drag.keys: ["text/plain","text/uri-list"]
+                    Drag.mimeData: 
+                    {
+                        "text/plain": model.label,
+                        "text/uri-list": selectionBar.count > 0 && selectionBar.contains(model.path) ? selectionBar.uris.join("\n") : model.path
+                    }
+                    
                     Maui.Badge
                     {
                         iconName: "link"
@@ -327,8 +341,7 @@ Maui.Page
                         anchors.bottom: parent.bottom
                         anchors.bottomMargin: Maui.Style.space.big
                         visible: (model.issymlink == true) || (model.issymlink == "true")
-                    }
-                    
+                    }                    
                                       
                     Connections
                     {
@@ -621,6 +634,13 @@ Maui.Page
                             leftEmblem: isSelected ? "checkbox" : " "
                             opacity: model.hidden == "true" ? 0.5 : 1
                             draggable: true
+                            
+                            Drag.keys: ["text/plain","text/uri-list"]
+                            Drag.mimeData: 
+                            {
+                                "text/plain": model.label,
+                                "text/uri-list": selectionBar.count > 0 && selectionBar.contains(model.path) ? selectionBar.uris.join("\n") : model.path
+                            }
                             
                             Maui.Badge
                             {
