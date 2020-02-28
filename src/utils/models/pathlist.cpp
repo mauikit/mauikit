@@ -20,8 +20,6 @@
 
 PathList::PathList(QObject *parent) : MauiList(parent) {}
 
-PathList::~PathList() {}
-
 QVariantMap PathList::get(const int& index) const
 {
 	if(this->list.isEmpty() || index >= this->list.size() || index < 0)
