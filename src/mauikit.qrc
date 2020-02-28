@@ -48,7 +48,7 @@
         <file alias="PathBar.qml">controls/PathBar.qml</file>
         <file alias="GridBrowser.qml">controls/GridBrowser.qml</file>
         <file alias="Dialog.qml">controls/Dialog.qml</file>
-        <file alias="AboutDialog.qml">controls/AboutDialog.qml</file>
+        <file alias="private/AboutDialog.qml">controls/private/AboutDialog.qml</file>
         <file alias="Popup.qml">controls/Popup.qml</file>
         <file alias="TextField.qml">controls/TextField.qml</file>
         <file alias="Badge.qml">controls/Badge.qml</file>
@@ -56,7 +56,6 @@
         <file alias="SyncDialog.qml">controls/SyncDialog.qml</file>
         <file alias="Terminal.qml">controls/Terminal.qml</file>
         <file alias="Editor.qml">controls/Editor.qml</file>
-        <file alias="PlacesSidebar.qml">controls/PlacesSidebar.qml</file>
         <file alias="PlacesListBrowser.qml">controls/PlacesListBrowser.qml</file>
         <file alias="Store.qml">controls/Store.qml</file>
         <file alias="ImageViewer.qml">controls/ImageViewer.qml</file>

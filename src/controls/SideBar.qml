@@ -158,6 +158,8 @@ Maui.AbstractSideBar
                         control.itemClicked(control.currentIndex)					
                     }
                 }
+                
+               
             }
             
 			MouseArea

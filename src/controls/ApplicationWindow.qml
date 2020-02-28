@@ -468,7 +468,7 @@ ApplicationWindow
         }
     }
 
-    Maui.AboutDialog
+    AboutDialog
     {
         id: aboutDialog
     }

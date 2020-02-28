@@ -96,7 +96,7 @@ Maui.SideBar
 		id: placesList
 		groups: [
 		Maui.FMList.PLACES_PATH, 
-        Maui.FMList.APPS_PATH, 
+//         Maui.FMList.APPS_PATH, 
         Maui.FMList.BOOKMARKS_PATH, 
         Maui.FMList.DRIVES_PATH, 
         Maui.FMList.TAGS_PATH]

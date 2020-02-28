@@ -136,9 +136,10 @@ Maui.Popup
             sourceComponent: control.defaultButtons ? _defaultButtonsComponent : undefined
         }
 
-       contentItem: ColumnLayout
+       ColumnLayout
         {
             id: _pageContent
+            anchors.fill: parent
             spacing: Maui.Style.space.medium
 
             Label

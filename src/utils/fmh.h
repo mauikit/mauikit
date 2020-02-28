@@ -704,6 +704,7 @@ namespace FMH
 		FISH_PATH,
 		MTP_PATH,
 		QUICK_PATH,
+        BOOKMARKS_PATH,
 		OTHER_PATH,
 	};
 	#else
@@ -722,13 +723,14 @@ namespace FMH
 		FISH_PATH = 13,
 		MTP_PATH = 14,
 		QUICK_PATH = 15,
-		OTHER_PATH = 16,
-		
+        BOOKMARKS_PATH = 16,
+		OTHER_PATH = 17		
 	};
 	#endif
 	static const QHash<PATHTYPE_KEY, QString> PATHTYPE_SCHEME =
 	{
 		{PATHTYPE_KEY::PLACES_PATH, "file"},
+		{PATHTYPE_KEY::BOOKMARKS_PATH, "file"},
 		{PATHTYPE_KEY::DRIVES_PATH, "drives"},
 		{PATHTYPE_KEY::APPS_PATH, "applications"},
 		{PATHTYPE_KEY::REMOTE_PATH, "remote"},
@@ -745,6 +747,7 @@ namespace FMH
 	static const QHash<PATHTYPE_KEY, QString> PATHTYPE_URI =
 	{
 		{PATHTYPE_KEY::PLACES_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::PLACES_PATH] + "://"},
+		{PATHTYPE_KEY::BOOKMARKS_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::BOOKMARKS_PATH] + "://"},
 		{PATHTYPE_KEY::DRIVES_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::DRIVES_PATH] + "://"},
 		{PATHTYPE_KEY::APPS_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::APPS_PATH] + ":///"},
 		{PATHTYPE_KEY::REMOTE_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::REMOTE_PATH] + "://"},
@@ -761,6 +764,7 @@ namespace FMH
 	static const QHash<PATHTYPE_KEY, QString> PATHTYPE_LABEL =
 	{
 		{PATHTYPE_KEY::PLACES_PATH, ("Places")},
+		{PATHTYPE_KEY::BOOKMARKS_PATH, ("Bookmarks")},
 		{PATHTYPE_KEY::DRIVES_PATH, ("Drives")},
 		{PATHTYPE_KEY::APPS_PATH, ("Apps")},
 		{PATHTYPE_KEY::REMOTE_PATH, ("Remote")},
@@ -781,7 +785,7 @@ namespace FMH
 	const QString CloudCachePath = FMH::DataPath+"/Cloud/";
 	const QString DesktopPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation)).toString();
 	const QString AppsPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation)).toString();
-	const QString RootPath = "file:///";
+	const QString RootPath = QUrl::fromLocalFile("/").toString();
 	
 	#if defined(Q_OS_ANDROID)
 	const QString PicturesPath = QUrl::fromLocalFile(PATHS::PicturesPath).toString();
@@ -818,7 +822,7 @@ namespace FMH
 		FMH::MusicPath,
 		FMH::VideosPath,
 		FMH::DownloadsPath,
-		FMH::RootPath
+// 		FMH::RootPath
 	};
 	
 	#endif
@@ -933,23 +937,20 @@ namespace FMH
 		count = file.entryMap(QString("MAUIFM"))["Count"].toInt();
 		sortby = file.entryMap(QString("MAUIFM"))["SortBy"].toInt();
 		foldersFirst = file.entryMap(QString("MAUIFM"))["FoldersFirst"] == "true" ? true : false;
-		viewType = file.entryMap(QString("MAUIFM"))["ViewType"].toInt();
-		
+		viewType = file.entryMap(QString("MAUIFM"))["ViewType"].toInt();		
 		#endif
-		
-		return QVariantMap({
-			{FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], icon.isEmpty() ? "folder" : icon},
-						   {FMH::MODEL_NAME[FMH::MODEL_KEY::ICONSIZE], iconsize},
-					 {FMH::MODEL_NAME[FMH::MODEL_KEY::COUNT], count},
-					 {FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTERMINAL], showterminal.isEmpty() ? "false" : showterminal},
-						   {FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTHUMBNAIL], showthumbnail.isEmpty() ? "false" : showthumbnail},
-						   {FMH::MODEL_NAME[FMH::MODEL_KEY::DETAILVIEW], detailview.isEmpty() ? "false" : detailview},
-						   {FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN], hidden.isEmpty() ? false : (hidden == "true" ? true : false)},
-						   {FMH::MODEL_NAME[FMH::MODEL_KEY::SORTBY], sortby},
-					 {FMH::MODEL_NAME[FMH::MODEL_KEY::FOLDERSFIRST], foldersFirst},
-					 {FMH::MODEL_NAME[FMH::MODEL_KEY::VIEWTYPE], viewType}
-		});
-	}
+        
+        return QVariantMap({ {FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], icon.isEmpty() ? "folder" : icon},
+                           {FMH::MODEL_NAME[FMH::MODEL_KEY::ICONSIZE], iconsize},
+                           {FMH::MODEL_NAME[FMH::MODEL_KEY::COUNT], count},
+                           {FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTERMINAL], showterminal.isEmpty() ? "false" : showterminal},
+                           {FMH::MODEL_NAME[FMH::MODEL_KEY::SHOWTHUMBNAIL], showthumbnail.isEmpty() ? "false" : showthumbnail},
+                           {FMH::MODEL_NAME[FMH::MODEL_KEY::DETAILVIEW], detailview.isEmpty() ? "false" : detailview},
+                           {FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN], hidden.isEmpty() ? false : (hidden == "true" ? true : false)},
+                           {FMH::MODEL_NAME[FMH::MODEL_KEY::SORTBY], sortby},
+                           {FMH::MODEL_NAME[FMH::MODEL_KEY::FOLDERSFIRST], foldersFirst},
+                           {FMH::MODEL_NAME[FMH::MODEL_KEY::VIEWTYPE], viewType} });
+    }
 	
 	static inline void setDirConf(const QUrl &path, const QString &group, const QString &key, const QVariant &value)
 	{

@@ -119,21 +119,6 @@ FMH::MODEL_LIST PlacesList::items() const
 	return this->list;
 }
 
-#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
-FMH::MODEL PlacesList::modelPlaceInfo(const KFilePlacesModel &model, const QModelIndex &index,  const FMH::PATHTYPE_KEY &type)
-{
-	return FMH::MODEL
-	{
-		{FMH::MODEL_KEY::PATH, model.url(index).toString()},
-		{FMH::MODEL_KEY::URL, model.url(index).toString()},
-		{FMH::MODEL_KEY::ICON, model.icon(index).name()},
-		{FMH::MODEL_KEY::LABEL, model.text(index)},
-		{FMH::MODEL_KEY::NAME, model.text(index)},
-		{FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_LABEL[type]}
-	};
-}
-#endif
-
 
 FMH::MODEL_LIST PlacesList::getGroup(const KFilePlacesModel &model, const FMH::PATHTYPE_KEY &type)
 {
@@ -144,7 +129,7 @@ FMH::MODEL_LIST PlacesList::getGroup(const KFilePlacesModel &model, const FMH::P
 	{
 		case(FMH::PATHTYPE_KEY::PLACES_PATH):
             res << FMStatic::getDefaultPaths();
-            res<< FMStatic::packItems(UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, true).toStringList(), FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::PLACES_PATH]);
+            res<< FMStatic::packItems(UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, true).toStringList(), FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::BOOKMARKS_PATH]);
 			break;
 		case(FMH::PATHTYPE_KEY::DRIVES_PATH):
 			res = FMStatic::getDevices();
@@ -154,12 +139,32 @@ FMH::MODEL_LIST PlacesList::getGroup(const KFilePlacesModel &model, const FMH::P
 	
 	return res;
 	#else
+    FMH::MODEL_LIST res;
+
+    if(type == FMH::PATHTYPE_KEY::PLACES_PATH)
+    {
+        res << FMStatic::getDefaultPaths();
+    }
+    
 	const auto group = model.groupIndexes(static_cast<KFilePlacesModel::GroupType>(type));
-	return std::accumulate(group.begin(), group.end(), FMH::MODEL_LIST(), [&model, &type](FMH::MODEL_LIST &list, const QModelIndex &index) -> FMH::MODEL_LIST
-	{
-		list << modelPlaceInfo(model, index, type);
+    res << std::accumulate(group.begin(), group.end(), FMH::MODEL_LIST(), [&model, &type](FMH::MODEL_LIST &list, const QModelIndex &index) -> FMH::MODEL_LIST
+    {
+        
+        const QUrl url = model.url(index); 
+        if(type == FMH::PATHTYPE_KEY::PLACES_PATH && FMH::defaultPaths.contains(url.toString()))
+            return list;        
+        
+        list << FMH::MODEL {{FMH::MODEL_KEY::PATH, url.toString()},
+                           {FMH::MODEL_KEY::URL, model.url(index).toString()},
+                           {FMH::MODEL_KEY::ICON, model.icon(index).name()},
+                           {FMH::MODEL_KEY::LABEL, model.text(index)},
+                           {FMH::MODEL_KEY::NAME, model.text(index)},
+                           {FMH::MODEL_KEY::TYPE, type == FMH::PATHTYPE_KEY::PLACES_PATH ? FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::BOOKMARKS_PATH] : FMH::PATHTYPE_LABEL[type]}};
+                           
 		return list;
 	});
+    
+    return res;
 	#endif
 }
 

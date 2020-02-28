@@ -66,10 +66,7 @@ private:
 	
 	void setCount();
 	int indexOf(const QString &path);
-	
-	#if defined Q_OS_LINUX && !defined Q_OS_ANDROID	
-	static FMH::MODEL modelPlaceInfo(const KFilePlacesModel &model, const QModelIndex &index,  const FMH::PATHTYPE_KEY &type);
-	#endif
+
 	static FMH::MODEL_LIST getGroup(const KFilePlacesModel &model, const FMH::PATHTYPE_KEY &type);	
 	
 	
