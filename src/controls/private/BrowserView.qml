@@ -21,11 +21,15 @@ Maui.Page
         }
     }
     
+    //group properties from the browser since the browser views are loaded async and
+    //their properties can not be accesed inmediately, so they are stored here and then when completed they are set
+    property alias settings : _settings
+    BrowserSettings {id: _settings }
+    
     property Maui.FMList currentFMList
     property Maui.BaseModel currentFMModel
     
     property alias currentView : viewLoader.item
-    property int viewType
     property string filter
     
     height: _browserList.height
@@ -108,7 +112,7 @@ Maui.Page
 		id: viewLoader
 		anchors.fill: parent
 		focus: true
-		sourceComponent: switch(control.viewType)
+		sourceComponent: switch(settings.viewType)
 		{
 			case Maui.FMList.ICON_VIEW: return gridViewBrowser
 			case Maui.FMList.LIST_VIEW: return listViewBrowser
@@ -128,6 +132,7 @@ Maui.Page
         filterType: settings.filterType
         filters: settings.filters
         sortBy: settings.sortBy
+        hidden: settings.showHiddenFiles
     }
     
     Component
@@ -141,7 +146,7 @@ Maui.Page
             property alias currentFMModel : _browserModel
             topMargin: Maui.Style.contentMargins
             showPreviewThumbnails: settings.showThumbnails
-            keepEmblemOverlay: settings.selectionMode
+            keepEmblemOverlay: selectionMode
             showDetailsInfo: true
             enableLassoSelection: true
             
@@ -297,7 +302,7 @@ Maui.Page
             property alias currentFMModel : _browserModel
             itemSize : thumbnailsSize + Maui.Style.space.small
             cellHeight: itemSize * 1.5
-            keepEmblemOverlay: settings.selectionMode
+            keepEmblemOverlay: selectionMode
             showPreviewThumbnails: settings.showThumbnails
             enableLassoSelection: true
             
@@ -574,6 +579,7 @@ Maui.Page
                         filterType: settings.filterType
                         filters: settings.filters
                         sortBy: settings.sortBy
+                        hidden: settings.showHiddenFiles
                     }
                     
                     Maui.ListBrowser
@@ -582,7 +588,7 @@ Maui.Page
                         anchors.fill: parent
                         topMargin: Maui.Style.contentMargins
                         showPreviewThumbnails: settings.showThumbnails
-                        keepEmblemOverlay: settings.selectionMode
+                        keepEmblemOverlay: selectionMode
                         showDetailsInfo: true
                         onKeyPress: _millerControl.keyPress(event)
                         currentIndex : 0

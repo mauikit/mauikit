@@ -27,13 +27,9 @@ QtObject
     property bool onlyDirs : false
     property int sortBy : Maui.FM.loadSettings("SortBy", "SETTINGS", Maui.FMList.LABEL)
     property bool trackChanges : false
-    property bool saveDirProps : false    
-    
-    property bool selectionMode : false
-    property bool singleSelection: false
+    property bool saveDirProps : false 
     property bool showThumbnails: true
-    
-    property bool singleClick: Maui.Handy.singleClick   
-    
+    property bool showHiddenFiles: false
+    property int viewType : 0    
 }
 

@@ -27,6 +27,8 @@ Maui.Page
 	property size terminalSize: kterminal.terminalSize
 	property size fontMetrics: kterminal.fontMetrics
 	focus: true	
+	
+	signal urlsDropped(var urls)
 	signal keyPressed(var event)
 	signal clicked()
     
@@ -251,11 +253,12 @@ Maui.Page
 
     DropArea
     {
-        id: _dropArea
-        anchors.fill: parent
-        onDropped:
-        {
-            ksession.sendText(drop.urls.join(" "))
+		id: _dropArea
+		anchors.fill: parent
+		onDropped:
+		{
+			if(drop.urls) 
+				control.urlsDropped(drop.urls)
         }
     }
 	
