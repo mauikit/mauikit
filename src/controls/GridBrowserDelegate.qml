@@ -52,7 +52,7 @@ Maui.ItemDelegate
     ToolTip.delay: 1000
     ToolTip.timeout: 5000
     ToolTip.visible: control.hovered && control.showTooltip
-    ToolTip.text: model.tooltip ? model.tooltip : model.path
+    ToolTip.text: model.tooltip ? model.tooltip : (model.path ? model.path : "")
 
     background: Item {}
 

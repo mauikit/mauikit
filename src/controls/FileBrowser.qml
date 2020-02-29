@@ -388,9 +388,15 @@ Maui.Page
 	
 	Component
 	{
-		id: shareDialogComponent
-		MauiLab.ShareDialog {}
-	}
+        id: shareDialogComponent
+        MauiLab.ShareDialog {}
+    }
+    
+    Component
+    {
+        id: openWithDialogComponent
+        Maui.OpenWithDialog {}
+    }
 	
 	Component
 	{
@@ -454,6 +460,7 @@ Maui.Page
 			control.remove([item.path])
 		}
 		
+		onOpenWithClicked: control.openWith([item.path])
 		onShareClicked: control.shareFiles([item.path])
 	}
 	
@@ -922,6 +929,16 @@ Maui.Page
         dialogLoader.sourceComponent = tagsDialogComponent
                 dialog.composerList.urls = urls
                 dialog.open()
+    }
+    
+    function openWith(urls)
+    {
+        if(urls.length <= 0)
+            return;
+
+        dialogLoader.sourceComponent= openWithDialogComponent
+        dialog.urls = urls
+        dialog.open()
     }
 
     function shareFiles(urls)

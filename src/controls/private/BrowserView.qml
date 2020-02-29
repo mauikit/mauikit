@@ -41,6 +41,26 @@ Maui.Page
         }
     }
     
+    function filterSelectedItems(path)
+    {     
+        if(selectionBar.count > 0 && selectionBar.contains(path))
+        {
+            const uris = selectionBar.uris
+            var res = []
+            for(var i in uris)
+            {
+                if(Maui.FM.parentDir(uris[i]) == control.path)
+                {
+                    res.push(uris[i])                    
+                } 
+            }  
+            
+            return res.join("\n")  
+        }        
+        
+        return path
+    }
+    
     Menu
     {
         id: _dropMenu
@@ -180,11 +200,11 @@ Maui.Page
                 draggable: true
                 
                 Drag.keys: ["text/plain","text/uri-list"]
-                Drag.mimeData: 
+                Drag.mimeData: Drag.active ? 
                 {
                     "text/plain": model.label,
-                    "text/uri-list": selectionBar.count > 0 && selectionBar.contains(model.path) ? selectionBar.uris.join("\n") : model.path
-                }
+                    "text/uri-list": control.filterSelectedItems(model.path) 
+                } : {}
                 
                 Maui.Badge
                 {
@@ -328,11 +348,11 @@ Maui.Page
                     opacity: model.hidden == "true" ? 0.5 : 1
                     
                     Drag.keys: ["text/plain","text/uri-list"]
-                    Drag.mimeData: 
+                    Drag.mimeData: Drag.active ? 
                     {
                         "text/plain": model.label,
-                        "text/uri-list": selectionBar.count > 0 && selectionBar.contains(model.path) ? selectionBar.uris.join("\n") : model.path
-                    }
+                        "text/uri-list": control.filterSelectedItems(model.path) 
+                    } : {}
                     
                     Maui.Badge
                     {
@@ -636,11 +656,11 @@ Maui.Page
                             draggable: true
                             
                             Drag.keys: ["text/plain","text/uri-list"]
-                            Drag.mimeData: 
+                            Drag.mimeData: Drag.active ? 
                             {
                                 "text/plain": model.label,
-                                "text/uri-list": selectionBar.count > 0 && selectionBar.contains(model.path) ? selectionBar.uris.join("\n") : model.path
-                            }
+                                "text/uri-list": control.filterSelectedItems(model.path) 
+                            } : {}
                             
                             Maui.Badge
                             {
