@@ -28,7 +28,8 @@ Maui.Page
 	property size fontMetrics: kterminal.fontMetrics
 	focus: true	
 	signal keyPressed(var event)
-	
+	signal clicked()
+    
 	Keys.enabled: true
 
 	//Actions
@@ -198,9 +199,15 @@ Maui.Page
 					terminalMenu.popup()
 					else if(mouse.button === Qt.LeftButton)
 						kterminal.forceActiveFocus()
+                        
+                        control.clicked()
 			}
 			
-			onPressAndHold: terminalMenu.popup()
+			onPressAndHold: 
+			{
+                if(Maui.Handy.isTouch)
+                    terminalMenu.popup()
+            }
 		}		
 		
 		QMLTermScrollbar

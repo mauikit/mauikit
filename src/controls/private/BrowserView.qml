@@ -250,6 +250,9 @@ Maui.Page
                     
                     onPressAndHold:
                     {
+                         if(!Maui.Handy.isTouch)
+                                return
+                                
                         _listViewBrowser.currentIndex = index
                         _listViewBrowser.itemRightClicked(index)
                     }
@@ -400,6 +403,9 @@ Maui.Page
                         
                         onPressAndHold:
                         {
+                            if(!Maui.Handy.isTouch)
+                                return
+                                
                             _gridViewBrowser.currentIndex = index
                             _gridViewBrowser.itemRightClicked(index)
                         }
@@ -708,6 +714,9 @@ Maui.Page
                                 
                                 onPressAndHold:
                                 {
+                                    if(!Maui.Handy.isTouch)
+                                        return
+                                        
                                     _millerColumns.currentIndex = _index
                                     _millerListView.currentIndex = index
                                     _millerControl.itemRightClicked(index)

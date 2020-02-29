@@ -35,7 +35,7 @@ Rectangle
     property alias list : _pathList
     property alias model : _pathModel
     property alias item : _loader.item
-    
+        
     signal pathChanged(string path)
     signal homeClicked()
     signal placeClicked(string path)

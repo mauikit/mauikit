@@ -375,11 +375,12 @@ Maui.Page
 		id: renameDialogComponent
 		Maui.NewDialog
 		{
+            property var item : control.currentFMList ? control.currentFMList.get(control.browserView.currentView.currentIndex) : ({})
 			title: qsTr("Rename File")
 			message: qsTr("Rename a file or folder")
-			textEntry.text: itemMenu.item.label
+			textEntry.text: item.label
 			textEntry.placeholderText: qsTr("New name")
-			onFinished: Maui.FM.rename(itemMenu.item.path, textEntry.text)
+			onFinished: Maui.FM.rename(item.path, textEntry.text)
 			onRejected: close()
 			acceptText: qsTr("Rename")
 			rejectText: qsTr("Cancel")
@@ -478,6 +479,13 @@ Maui.Page
 			if((event.key == Qt.Key_F5))
 			{
 				control.currentFMList.refresh()
+			}
+			
+			// Shortcuts for renaming
+			if((event.key == Qt.Key_F2))
+			{
+				dialogLoader.sourceComponent = renameDialogComponent
+				dialog.open()
 			}
 			
 			// Shortcuts for selecting file
