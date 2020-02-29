@@ -30,6 +30,7 @@ QtObject
     property bool saveDirProps : false 
     property bool showThumbnails: true
     property bool showHiddenFiles: false
+    property bool group : false
     property int viewType : 0    
 }
 

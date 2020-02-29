@@ -20,27 +20,24 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.10
 import QtQuick.Layouts 1.3
-import QtQml.Models 2.3
-import QtQml 2.12
 
 import org.kde.kirigami 2.8 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import org.kde.mauikit 1.1 as MauiLab
 
-import "private"
+import "private" as Private
 
 Maui.Page
 {
 	id: control
 	
-	//aliases
-	
+	//aliases	
 	property alias currentPath : _browser.path 	
-	property alias settings : _browser.settings
-	
+	property alias settings : _browser.settings	
 	
 	property alias view : _browser
 	property alias currentView : _browser.currentView
+	
 	readonly property Maui.FMList currentFMList : view.currentFMList
 	readonly property Maui.BaseModel currentFMModel : view.currentFMModel
 	
@@ -53,17 +50,17 @@ Maui.Page
 	property var indexHistory : []
 	
 	property bool isCopy : false
-	property bool isCut : false
+	property bool isCut : false	
 	
-	property bool group : false
-	
-	// need to be set by the implementation
+	// need to be set by the implementation as features
 	property MauiLab.SelectionBar selectionBar : null		
 	property Maui.FilePreviewer previewer : null
 
-	property alias menu : browserMenu.contentData
+	//relevant menus to file item and the browserview
 	property alias browserMenu: browserMenu
 	property alias itemMenu: itemMenu
+	
+	//access to the loaded the dialog components
 	property alias dialog : dialogLoader.item	
 	
 	//signals
@@ -74,20 +71,25 @@ Maui.Page
 	signal itemRightEmblemClicked(int index)
 	signal rightClicked()
 	signal keyPress(var event)
+	signal urlsDropped(var urls)
 	
+	//color scheme
 	Kirigami.Theme.colorSet: Kirigami.Theme.View
 	Kirigami.Theme.inherit: false
 	
+	//catch inherited signals from page
 	onGoBackTriggered: control.goBack()
 	onGoForwardTriggered: control.goNext()
 	
-	focus: true
 	
+	focus: true	
 	flickable: control.currentView.flickable
 	
 	footBar.visible: control.showStatusBar ||  String(control.currentPath).startsWith("trash:/")
 	
 	footBar.leftSretch: false
+	footerPositioning: ListView.InlineFooter
+	
 	footBar.middleContent: Maui.TextField
 	{
 		id: _filterField
@@ -115,31 +117,19 @@ Maui.Page
 		}
 	}
 	
-	footBar.rightContent: [
-	
-// 	ToolButton
-// 	{
-// 		icon.name: "zoom-in"
-// 		onClicked: zoomIn()
-// 	},
-// 	
-// 	ToolButton
-// 	{
-// 		icon.name: "zoom-out"
-// 		onClicked: zoomOut()
-// 	},
-// 	
-	ToolButton
+	footBar.rightContent: ToolButton
 	{
 		visible: String(control.currentPath).startsWith("trash:/")
 		icon.name: "trash-empty"
 		text: qsTr("Empty Trash")
 		onClicked: Maui.FM.emptyTrash()
-	}
-	]
+	}	
 	
-	footerPositioning: ListView.InlineFooter
-	Loader { id: dialogLoader }
+	Loader 
+	{ 
+		id: dialogLoader 
+// 		active: item && item.visible
+	}
 	
 	Component
 	{
@@ -259,12 +249,12 @@ Maui.Page
 		}
 	}
 	
-	BrowserMenu { id: browserMenu }
+	Private.BrowserMenu { id: browserMenu }
 	
-	FileMenu
+	Private.FileMenu
 	{
 		id: itemMenu
-		width: Maui.Style.unit *200
+		width: Maui.Style.unit * 200
 		onBookmarkClicked: control.bookmarkFolder([item.path])
 		onCopyClicked:
 		{
@@ -306,7 +296,28 @@ Maui.Page
 	
 	Connections
 	{
-// 		enabled: control.currentView != null
+		target: control.previewer.tagBar
+		enabled: control.previewer
+	
+		onAddClicked:
+		{			
+			dialogLoader.sourceComponent = tagsDialogComponent
+			dialog.composerList.urls = [ control.previewer.currentUrl]
+			dialog.open()			
+		}
+	}
+	
+	Connections
+	{
+		target: control.previewer
+		enabled: control.previewer
+		onShareButtonClicked: control.shareFiles([url])		
+		onOpenButtonClicked: control.openFile(url)		
+	}
+	
+	Connections
+	{
+		enabled: control.currentView
 		target: control.currentView
 		
 		onKeyPress:
@@ -358,7 +369,11 @@ Maui.Page
 			//shortcut for opening files
 			if((event.key == Qt.Key_Return) && (event.modifiers & Qt.AltModifier))
 			{
-				control.previewer.show(currentFMModel, index)
+				if(control.previewer)
+				{
+					control.previewer.show(currentFMModel, index)					
+				}
+				
 			}else if(event.key == Qt.Key_Return)
 			{
 				indexHistory.push(index)
@@ -421,13 +436,17 @@ Maui.Page
 			if(event.key == Qt.Key_Backspace || event.key == Qt.Key_Back)
 			{
 				if(control.selectionBar && control.selectionBar.count> 0)
-					control.clearSelection()
-					else
-						control.goBack()
+				{
+					control.clearSelection()					
+				}				
+				else
+				{
+					control.goBack()					
+				}				
 			}
 			
 			// Shortcut for clearing selection and filtering
-			if(event.key == Qt.Key_Escape)
+			if(event.key == Qt.Key_Escape) //TODO not working, the event is not catched or emitted or is being accepted else where?
 			{
 				if(control.selectionBar && control.selectionBar.count > 0)
 					control.clearSelection()
@@ -449,7 +468,6 @@ Maui.Page
             }
             
             control.keyPress(event)
-            //             event.accepted = true
         }
         
 		onItemsSelected:
@@ -496,14 +514,8 @@ Maui.Page
 			}
 			control.itemLeftEmblemClicked(index)
 			control.currentView.forceActiveFocus()
-		}
-		
-		onRightEmblemClicked:
-		{
-			Maui.Handy.isAndroid ? Maui.Android.shareDialog([control.currentFMList.get(index).path]) : shareDialog.show([control.currentFMList.get(index).path])
-			control.itemRightEmblemClicked(index)
-		}
-		
+		}		
+			
 		onAreaClicked:
 		{
 			if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
@@ -529,16 +541,71 @@ Maui.Page
         //                _progressBar.value = percent/100
         //        }
     }
-
     
-//     ObjectModel { id: tabsObjectModel }
-
-    BrowserView
-    {
-		id: _browser
+   
+	
+	DropArea
+	{
+		id: _dropArea
 		anchors.fill: parent
+		onDropped:
+		{
+			if(drop.urls)
+			{
+				_dropMenu.urls = drop.urls.join(",")
+				_dropMenu.popup()
+				control.urlsDropped(drop.urls)
+			}
+		}
+		
+		opacity:  _dropArea.containsDrag ? 0.5 : 1
+		
+		Private.BrowserView
+		{
+			id: _browser
+			anchors.fill: parent
+		}  		
+		
+		Menu
+		{
+			id: _dropMenu
+			property string urls
+			enabled: Maui.FM.getFileInfo(control.currentPath).isdir == "true" 
+			
+			MenuItem
+			{
+				text: qsTr("Copy here")
+				onTriggered:
+				{
+					const urls = _dropMenu.urls.split(",")
+					for(var i in urls)
+						Maui.FM.copy(urls[i], control.currentPath, false)
+				}
+			}
+			
+			MenuItem
+			{
+				text: qsTr("Move here")
+				onTriggered:
+				{
+					const urls = _dropMenu.urls.split(",")
+					for(var i in urls)
+						Maui.FM.cut(urls[i], control.currentPath)
+				}
+			}
+			
+			MenuItem
+			{
+				text: qsTr("Link here")
+				onTriggered:
+				{
+					const urls = _dropMenu.urls.split(",")
+					for(var i in urls)
+						Maui.FM.createSymlink(url[i], control.currentPath)
+				}
+			}
+		}
 	}
-    
 
     Component.onCompleted:
     {
@@ -555,20 +622,26 @@ Maui.Page
 //                 if(view.viewType === Maui.FMList.ICON_VIEW)
 //                     control.currentView.adaptGrid()
 //     }
-
    
     
     function tagFiles(urls)
-    {
-        dialogLoader.sourceComponent = tagsDialogComponent
-                dialog.composerList.urls = urls
-                dialog.open()
+	{
+		if(urls.length <= 0)
+		{
+			return
+		}
+		
+		dialogLoader.sourceComponent = tagsDialogComponent
+		dialog.composerList.urls = urls
+		dialog.open()
     }
     
     function openWith(urls)
     {
         if(urls.length <= 0)
-            return;
+        {
+			return
+		}
 
         dialogLoader.sourceComponent= openWithDialogComponent
         dialog.urls = urls
@@ -577,13 +650,68 @@ Maui.Page
 
     function shareFiles(urls)
     {
-        if(urls.length <= 0)
-            return;
+		if(urls.length <= 0)
+		{
+			return
+		}
 
         dialogLoader.sourceComponent= shareDialogComponent
         dialog.urls = urls
         dialog.open()
     }
+    
+    function copy(urls)
+	{
+		if(urls.length <= 0)
+		{
+			return
+		}
+		
+		Maui.Handy.copyToClipboard({"urls": urls})
+		control.isCut = false
+		control.isCopy = true
+	}
+	
+	function cut(urls)
+	{
+		if(urls.length <= 0)
+		{
+			return
+		}
+		
+		Maui.Handy.copyToClipboard({"urls": urls})
+		control.isCut = true
+		control.isCopy = false
+	}
+	
+	function paste()
+	{
+		const urls = Maui.Handy.getClipboard().urls
+		
+		if(!urls)
+			return
+			
+			if(control.isCut)
+			{
+				control.currentFMList.cutInto(urls)
+				control.clearSelection()
+			}else
+			{
+				control.currentFMList.copyInto(urls)
+			}
+	}
+	
+	function remove(urls)
+	{
+		if(urls.length <= 0)
+		{
+			return
+		}
+		
+		dialogLoader.sourceComponent= removeDialogComponent
+		dialog.urls = urls
+		dialog.open()
+	}
 
     function openItem(index)
     {
@@ -592,7 +720,7 @@ Maui.Page
 
         switch(control.currentFMList.pathType)
         {
-            case Maui.FMList.CLOUD_PATH:
+            case Maui.FMList.CLOUD_PATH: //TODO deprecrated and needs to be removed or clean up for 1.1
                 if(item.isdir === "true")
                 {
                     control.openFolder(path)
@@ -641,8 +769,10 @@ Maui.Page
 
     function openFolder(path)
     {
-        if(!String(path).length)
-            return;
+		if(!String(path).length)
+		{
+			return;
+		}
 
         control.currentPath = path
     }
@@ -662,24 +792,16 @@ Maui.Page
     {
         openFolder(control.currentFMList.parentPath)
     }
-
-    function refresh()
-    {
-        const pos = control.currentView.contentY
-        control.currentView.contentY = pos
-    }
-
+   
+   // for this to work the implementation needs to have passed a selectionBar   
     function addToSelection(item)
     {
-		if(item.path.startsWith("tags://") || item.path.startsWith("applications://") )
+		if(control.selectionBar == null || item.path.startsWith("tags://") || item.path.startsWith("applications://"))
 		{
 			return
 		}
 		
-		if(control.selectionBar)			
-		{
-			control.selectionBar.append(item.path, item)			
-		} 		
+		control.selectionBar.append(item.path, item)		
 	}
 	
 	function clearSelection()
@@ -687,56 +809,27 @@ Maui.Page
 		if(control.selectionBar)
 		{
 			control.selectionBar.clear()
-			control.selectionMode = false
 		}
 	}
-	
-    function copy(urls)
-    {
-        Maui.Handy.copyToClipboard({"urls": urls})
-        control.isCut = false
-        control.isCopy = true
-    }
-
-    function cut(urls)
-    {
-        Maui.Handy.copyToClipboard({"urls": urls})
-        control.isCut = true
-        control.isCopy = false
-    }
-
-    function paste()
-    {
-        const urls = Maui.Handy.getClipboard().urls
-
-        if(!urls)
-            return
-
-            if(control.isCut)
-            {
-                control.currentFMList.cutInto(urls)
-                control.clearSelection()
-            }else
-            {
-                control.currentFMList.copyInto(urls)
-            }
-    }
-
-    function remove(urls)
-    {
-        dialogLoader.sourceComponent= removeDialogComponent
-        dialog.urls = urls
-        dialog.open()
-    }
-    
+    //given a list inf indexes add them to the selectionBar
     function selectIndexes(indexes)
     {
+		if(control.selectionBar == null)
+		{
+			return
+		}
+		
         for(var i in indexes)
              addToSelection(control.currentFMList.get(indexes[i]))
     }
 
     function selectAll() //TODO for now dont select more than 100 items so things dont freeze or break
     {
+		if(control.selectionBar == null)
+		{
+			return
+		}
+		
         selectIndexes([...Array( Math.min(control.currentFMList.count, 100)).keys()])       
     }
 
@@ -750,50 +843,13 @@ Maui.Page
 
     function zoomIn()
     {
-        control.control.currentView.resizeContent(1.2)
+        control.currentView.resizeContent(1.2)
     }
     
     function zoomOut()
     {
-        control.control.currentView.resizeContent(0.8)
-        
-    }
-
-    function groupBy()
-    {
-        var prop = ""
-        var criteria = ViewSection.FullString
-
-        switch(control.currentFMList.sortBy)
-        {
-            case Maui.FMList.LABEL:
-                prop = "label"
-                criteria = ViewSection.FirstCharacter
-                break;
-            case Maui.FMList.MIME:
-                prop = "mime"
-                break;
-            case Maui.FMList.SIZE:
-                prop = "size"
-                break;
-            case Maui.FMList.DATE:
-                prop = "date"
-                break;
-            case Maui.FMList.MODIFIED:
-                prop = "modified"
-                break;
-        }
-
-        if(!prop)
-        {
-            control.control.currentView.section.property = ""
-            return
-        }
-
-        control.settings.viewType = Maui.FMList.LIST_VIEW
-        control.control.currentView.section.property = prop
-        control.control.currentView.section.criteria = criteria
-    }
+        control.currentView.resizeContent(0.8)        
+    }   
     
     function toggleStatusBar()
     {

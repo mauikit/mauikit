@@ -7,19 +7,19 @@ import "private"
 
 Maui.Dialog
 {
-	id: control
+	id: control	
 	
 	property url currentUrl: ""
 	
 	property alias model : _listView.model
 	property bool isFav : false
 	property bool isDir : false
-	property bool showInfo: true
-	
+	property bool showInfo: true	
 	
 	property alias tagBar : _tagsBar
 	
 	signal shareButtonClicked(url url)
+	signal openButtonClicked(url url)
 	
 	maxHeight: Maui.Style.unit * 800
 	maxWidth: Maui.Style.unit * 500
@@ -31,10 +31,9 @@ Maui.Dialog
 		footBar.leftContent: ToolButton
 		{
 			icon.name: "document-open"
-			//        text: qsTr("Open...")
 			onClicked:
 			{
-				openFile(control.currentUrl)
+				openButtonClicked(control.currentUrl)
 				control.close()
 			}
 		}
@@ -45,18 +44,16 @@ Maui.Dialog
 		{
 			visible: !isDir
 			icon.name: "document-share"
-			//            text: qsTr("Share...")
 			onClicked:
 			{
-				shareButtonClicked(currentUrl)
-				close()
+				shareButtonClicked(control.currentUrl)
+				control.close()
 			}
 		},
 		
 		ToolButton
 		{
 			icon.name: "love"
-			//            text: qsTr("Add to Favourites")
 			checkable: true
 			checked: control.isFav
 			onClicked:
@@ -74,7 +71,6 @@ Maui.Dialog
 		footBar.rightContent: ToolButton
 		{
 			icon.name: "documentinfo"
-			//        text: qsTr("Info...")
 			checkable: true
 			checked: control.showInfo
 			onClicked: control.showInfo = !control.showInfo
@@ -262,8 +258,7 @@ Maui.Dialog
 						infoModel.append({key: "Icon Name", value: iteminfo.icon})
 					} 
 				}                
-			}
-			
+			}			
 			
 			Maui.TagsBar
 			{
@@ -278,14 +273,8 @@ Maui.Dialog
 				onTagsEdited: list.updateToUrls(tags)
 				Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
 				Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
-				onAddClicked:
-				{
-					dialogLoader.sourceComponent = tagsDialogComponent
-					dialog.composerList.urls = [control.currentUrl]
-					dialog.open()
-				}
 			}
-		}        
+		}       
 		
 		
 		function show(model, index)
@@ -295,7 +284,5 @@ Maui.Dialog
 			_listView.positionViewAtIndex(index,ListView.Center )
 			open()            
 			_listView.forceActiveFocus()
-		}
-		
-		
+		}		
 }

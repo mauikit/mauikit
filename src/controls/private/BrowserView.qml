@@ -9,9 +9,7 @@ Maui.Page
 {
     id: control
     
-    property url path
-    focus: true
-    
+    property url path    
     onPathChanged:
     {
         if(control.currentView) 
@@ -24,17 +22,28 @@ Maui.Page
     //group properties from the browser since the browser views are loaded async and
     //their properties can not be accesed inmediately, so they are stored here and then when completed they are set
     property alias settings : _settings
-    BrowserSettings {id: _settings }
+    BrowserSettings 
+    {
+		id: _settings 
+		onGroupChanged:
+		{
+			if(settings.group)
+			{
+				groupBy()				
+			}	
+			else
+			{
+				currentView.section.property = ""				
+			}
+		}
+	}
     
     property Maui.FMList currentFMList
     property Maui.BaseModel currentFMModel
     
     property alias currentView : viewLoader.item
-    property string filter
-    
-    height: _browserList.height
-    width: _browserList.width
-    
+    property string filter    
+   
     function setCurrentFMList()
     {
         if(control.currentView)
@@ -47,7 +56,7 @@ Maui.Page
     
     function filterSelectedItems(path)
     {     
-        if(selectionBar.count > 0 && selectionBar.contains(path))
+        if(selectionBar && selectionBar.count > 0 && selectionBar.contains(path))
         {
             const uris = selectionBar.uris
             var res = []
@@ -64,6 +73,42 @@ Maui.Page
         
         return path
     }
+    
+    function groupBy()
+	{
+		var prop = ""
+		var criteria = ViewSection.FullString
+		
+		switch(control.currentFMList.sortBy)
+		{
+			case Maui.FMList.LABEL:
+				prop = "label"
+				criteria = ViewSection.FirstCharacter
+				break;
+			case Maui.FMList.MIME:
+				prop = "mime"
+				break;
+			case Maui.FMList.SIZE:
+				prop = "size"
+				break;
+			case Maui.FMList.DATE:
+				prop = "date"
+				break;
+			case Maui.FMList.MODIFIED:
+				prop = "modified"
+				break;
+		}
+		
+		if(!prop)
+		{
+			control.currentView.section.property = ""
+			return
+		}
+		
+		control.settings.viewType = Maui.FMList.LIST_VIEW
+		control.currentView.section.property = prop
+		control.currentView.section.criteria = criteria
+	}
     
     Menu
     {
@@ -102,7 +147,7 @@ Maui.Page
             {
                 const urls = _dropMenu.urls.split(",")
                 for(var i in urls)
-                    Maui.FM.createSymlink(_dropMenu.source[i], urls.target)
+					Maui.FM.createSymlink(url[i], _dropMenu.target)
             }
         }
 	}    
@@ -127,7 +172,7 @@ Maui.Page
     {
         id: _commonFMList
         path: control.path
-        onSortByChanged: if(group) groupBy()
+        onSortByChanged: if(settings.group) groupBy()
         onlyDirs: settings.onlyDirs
         filterType: settings.filterType
         filters: settings.filters

@@ -41,6 +41,7 @@ Maui.Dialog
 			{
 				text: qsTr("Sort by name")
 				checkable: true
+				autoExclusive: true
 				checked: _tagsList.sortBy === TagsList.TAG
 				onTriggered: _tagsList.sortBy = TagsList.TAG
 			}
@@ -49,6 +50,7 @@ Maui.Dialog
 			{
 				text: qsTr("Sort by date")
 				checkable: true
+				autoExclusive: true
 				checked: _tagsList.sortBy === TagsList.ADD_DATE
 				onTriggered: _tagsList.sortBy = TagsList.ADD_DATE
 			}
