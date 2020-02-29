@@ -158,9 +158,6 @@ void FMList::assignList(const FMH::MODEL_LIST& list)
     this->list =list;
     this->sortList();    
     
-    this->count = static_cast<uint>(this->list.size());
-    emit this->countChanged();
-    
     this->setStatus({STATUS_CODE::READY, this->list.isEmpty() ? "Nothing here!" : "",  this->list.isEmpty() ? "This place seems to be empty" : "",this->list.isEmpty()  ? "folder-add" : "", this->list.isEmpty(), true});  
 
     emit this->postListChanged();
@@ -172,9 +169,6 @@ void FMList::appendToList(const FMH::MODEL_LIST& list)
 	{
 		emit this->preItemAppended();
 		this->list << item;
-		
-		this->count = static_cast<uint>(this->list.size());
-		emit this->countChanged();	
 		
 		emit this->postItemAppended();
 	}	
@@ -190,7 +184,8 @@ void FMList::clear()
 void FMList::setList()
 {
     qDebug()<< "PATHTYPE FOR URL"<< pathType << this->path.toString() << this->filters <<  this;
-    
+    this->clear();
+
 	switch(this->pathType)
 	{			
 		case FMList::PATHTYPE::SEARCH_PATH:			
@@ -207,7 +202,6 @@ void FMList::setList()
 
         default:
         {
-			this->clear();
             const bool exists = this->path.isLocalFile() ? FMH::fileExists(this->path) : true;
             if(!exists)    
                 this->setStatus({STATUS_CODE::ERROR, "Error", "This URL cannot be listed", "documentinfo", this->list.isEmpty(), exists});
@@ -804,11 +798,6 @@ void FMList::setCloudDepth(const int& value)
 	this->reset();
 }
 
-uint FMList::getCount() const
-{
-	return this->count;
-}
-
 PathStatus FMList::getStatus() const
 {
     return this->m_status;
@@ -857,9 +846,6 @@ void FMList::remove(const int& index)
 	
 	emit this->preItemRemoved(index_);
 	const auto item = this->list.takeAt(index_);
-		
-	this->count = static_cast<uint>(this->list.size());
-	emit this->countChanged();
 	
 	emit this->postItemRemoved();	
 }

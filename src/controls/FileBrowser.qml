@@ -407,71 +407,6 @@ Maui.Page
 		}
 	}
 	
-	Component
-	{
-		id: _configDialogComponent
-		
-		Maui.Dialog
-		{
-			maxHeight: _configLayout.implicitHeight * 1.5
-			maxWidth: 300
-			defaultButtons: false
-				
-				Kirigami.FormLayout
-				{
-					id: _configLayout
-					width: parent.width
-					anchors.centerIn: parent
-					
-					Item
-					{
-						Kirigami.FormData.label: qsTr("Navigation")
-						Kirigami.FormData.isSection: true
-					}
-					
-					Switch
-					{
-						icon.name: "image-preview"
-						checkable: true
-						checked: settings.showThumbnails
-						Kirigami.FormData.label: qsTr("Show Thumbnails")
-						onToggled: settings.showThumbnails = !settings.showThumbnails
-					}
-					
-					Switch
-					{
-						Kirigami.FormData.label: qsTr("Show Hidden Files")
-						checkable: true
-						checked: control.currentFMList.hidden
-						onToggled: control.currentFMList.hidden = !control.currentFMList.hidden
-					}
-					
-					Switch
-					{
-						Kirigami.FormData.label: qsTr("Single Click")
-						checkable: true
-						checked: settings.singleClick
-						onToggled: settings.singleClick = !settings.singleClick						
-					}					
-					
-					Item
-					{
-						Kirigami.FormData.label: qsTr("Interface")
-						Kirigami.FormData.isSection: true
-					}
-					
-					Switch
-					{
-						Kirigami.FormData.label: qsTr("Show Status Bar")
-						checkable: true
-						checked: control.footBar.visible
-						onToggled: toggleStatusBar()
-						
-					}
-				}
-		}
-	}
-	
 	Maui.FilePreviewer
 	{
 		id: previewer
@@ -524,7 +459,7 @@ Maui.Page
 	
 	Connections
 	{
-		enabled: browserView.currentView
+		enabled: browserView.currentView != null
 		target: browserView.currentView
 		
 		onKeyPress:
@@ -1201,12 +1136,6 @@ Maui.Page
         control.browserView.viewType = Maui.FMList.LIST_VIEW
         control.browserView.currentView.section.property = prop
         control.browserView.currentView.section.criteria = criteria
-    }
-
-    function openConfigDialog()
-    {
-        dialogLoader.sourceComponent = _configDialogComponent
-        control.dialog.open()
     }
     
     function toggleStatusBar()

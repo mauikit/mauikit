@@ -109,7 +109,6 @@ class FMList : public MauiList
 	Q_PROPERTY(bool saveDirProps READ getSaveDirProps WRITE setSaveDirProps NOTIFY saveDirPropsChanged)	
 	
     //readonly 
-	Q_PROPERTY(uint count READ getCount NOTIFY countChanged)	
     Q_PROPERTY(QString pathName READ getPathName NOTIFY pathNameChanged)
     Q_PROPERTY(FMList::PATHTYPE pathType READ getPathType NOTIFY pathTypeChanged)
     
@@ -220,9 +219,7 @@ class FMList : public MauiList
 		
 		int getCloudDepth() const;
 		void setCloudDepth(const int &value);
-		
-		uint getCount() const;
-        
+		        
         void setStatus(const PathStatus &status);
         PathStatus getStatus() const;
 		
@@ -253,7 +250,6 @@ private:
     bool foldersFirst = false;
 	bool saveDirProps = false;
 	int cloudDepth = 1;
-	uint count = 0;
     
 	QUrl searchPath;
     
@@ -297,7 +293,6 @@ signals:
 	void saveDirPropsChanged();
     void statusChanged();
 	void cloudDepthChanged();
-	void countChanged();
     
 	void warning(QString message);
 	void progress(int percent);
