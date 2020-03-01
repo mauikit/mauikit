@@ -58,13 +58,17 @@ Maui.Dialog
 
 	function populate()
 	{
-		grid.model.clear()
-		var services = Maui.KDE.services(control.urls[0])
-		
-		for(var i in services)
-			grid.model.append(services[i])
+		if(urls.length > 0)
+		{
+			grid.model.clear()
+			var services = Maui.KDE.services(control.urls[0])
 			
-	}
+			for(var i in services)
+			{
+				grid.model.append(services[i])
+			}
+		}
+	}	
 	
 	function triggerService(index)
 	{

@@ -55,7 +55,10 @@ Maui.Page
 	// need to be set by the implementation as features
 	property MauiLab.SelectionBar selectionBar : null		
 	property Maui.FilePreviewer previewer : null
-
+	property Maui.TagsDialog tagsDialog : null
+	property MauiLab.ShareDialog shareDialog : null
+	property Maui.OpenWithDialog openWithDialog : null
+	
 	//relevant menus to file item and the browserview
 	property alias browserMenu: browserMenu
 	property alias itemMenu: itemMenu
@@ -79,8 +82,7 @@ Maui.Page
 	
 	//catch inherited signals from page
 	onGoBackTriggered: control.goBack()
-	onGoForwardTriggered: control.goNext()
-	
+	onGoForwardTriggered: control.goNext()	
 	
 	focus: true	
 	flickable: control.currentView.flickable
@@ -220,34 +222,7 @@ Maui.Page
 			acceptText: qsTr("Rename")
 			rejectText: qsTr("Cancel")
 		}
-	}
-	
-	Component
-	{
-        id: shareDialogComponent
-        MauiLab.ShareDialog {}
-    }
-    
-    Component
-    {
-        id: openWithDialogComponent
-        Maui.OpenWithDialog {}
-    }
-	
-	Component
-	{
-		id: tagsDialogComponent
-		Maui.TagsDialog
-		{
-			taglist.strict: false
-			onTagsReady:
-			{
-				composerList.updateToUrls(tags)
-				if(control.previewer && control.previewer.visible)
-					control.previewer.tagBar.list.refresh()
-			}
-		}
-	}
+	}		
 	
 	Private.BrowserMenu { id: browserMenu }
 	
@@ -270,11 +245,10 @@ Maui.Page
 		
 		onTagsClicked:
 		{
-			if(item)
+			if(item && control.tagsDialog)
 			{
-				dialogLoader.sourceComponent = tagsDialogComponent
-				dialog.composerList.urls = [item.path]
-				dialog.open()
+				control.tagsDialog.composerList.urls = [item.path]
+				control.tagsDialog.open()
 			}
 		}
 		
@@ -297,13 +271,15 @@ Maui.Page
 	Connections
 	{
 		target: control.previewer.tagBar
-		enabled: control.previewer
+		enabled: control.previewer && control.tagsDialog
 	
 		onAddClicked:
 		{			
-			dialogLoader.sourceComponent = tagsDialogComponent
-			dialog.composerList.urls = [ control.previewer.currentUrl]
-			dialog.open()			
+			if(control.tagsDialog)
+			{
+				control.tagsDialog.composerList.urls = [ control.previewer.currentUrl]
+				control.tagsDialog.open()
+			}			
 		}
 	}
 	
@@ -541,8 +517,6 @@ Maui.Page
         //                _progressBar.value = percent/100
         //        }
     }
-    
-   
 	
 	DropArea
 	{
@@ -631,9 +605,11 @@ Maui.Page
 			return
 		}
 		
-		dialogLoader.sourceComponent = tagsDialogComponent
-		dialog.composerList.urls = urls
-		dialog.open()
+		if(control.tagsDialog)
+		{
+			control.tagsDialog.composerList.urls = urls
+			control.tagsDialog.open()
+		}
     }
     
     function openWith(urls)
@@ -643,10 +619,12 @@ Maui.Page
 			return
 		}
 
-        dialogLoader.sourceComponent= openWithDialogComponent
-        dialog.urls = urls
-        dialog.open()
-    }
+		if(control.openWithDialog)
+		{
+			openWithDialog.urls = urls
+			openWithDialog.open()
+		}
+	}
 
     function shareFiles(urls)
     {
@@ -654,11 +632,13 @@ Maui.Page
 		{
 			return
 		}
-
-        dialogLoader.sourceComponent= shareDialogComponent
-        dialog.urls = urls
-        dialog.open()
-    }
+		
+		if(control.shareDialog)
+		{			
+			control.shareDialog.urls = urls
+			control.shareDialog.open()
+		}
+	}
     
     function copy(urls)
 	{

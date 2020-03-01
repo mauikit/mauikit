@@ -18,6 +18,8 @@ Maui.Dialog
 	
 	property alias tagBar : _tagsBar
 	
+	property Maui.TagsDialog tagsDialog : null
+	
 	signal shareButtonClicked(url url)
 	signal openButtonClicked(url url)
 	
@@ -274,8 +276,7 @@ Maui.Dialog
 				Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
 				Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
 			}
-		}       
-		
+		}  
 		
 		function show(model, index)
 		{

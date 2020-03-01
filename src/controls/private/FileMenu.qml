@@ -23,12 +23,10 @@ Menu
     signal renameClicked(var item)
     signal tagsClicked(var item)	
     signal openWithClicked(var item)
-       
-    
-           
+                      
     MenuItem
     {
-        visible: !control.isExec
+        visible: !control.isExec && selectionBar
         text: qsTr("Select")
         icon.name: "edit-select"		
         onTriggered:
@@ -38,21 +36,20 @@ Menu
                 settings.selectionMode = true
         }
     }
-    
+   /* 
     MenuItem
     {
         visible: control.isDir
         text: qsTr("Open in new tab")
         icon.name: "tab-new"
         onTriggered: openTab(item.path)
-    }
+    }*/
     
-    MenuSeparator{}
-    
+    MenuSeparator{visible: selectionBar}    
     
     MenuItem
     {
-        visible: !control.isExec
+        visible: !control.isExec && tagsDialog
         text: qsTr("Add Tags")
         icon.name: "tag"
         onTriggered:
@@ -71,8 +68,7 @@ Menu
             if(currentFMList.favItem(item.path))
                 control.isFav = !control.isFav
         }
-    }
-    
+    }    
     
     MenuItem
     {
@@ -84,14 +80,13 @@ Menu
             bookmarkClicked(control.item)
             close()
         }
-    }
+    }    
     
-    
-    MenuSeparator{}
+    MenuSeparator{}    
     
     MenuItem
     {
-        visible: !control.isExec		
+        visible: !control.isExec && shareDialog	
         text: qsTr("Share")
         icon.name: "document-share"
         onTriggered:
@@ -101,21 +96,21 @@ Menu
         }
     }
     
-        MenuItem
+    MenuItem
     {
-        visible: !control.isExec
-        text: qsTr("Preview")
-        icon.name: "view-preview"
-        onTriggered:
-        {
-            previewer.show(currentFMModel, control.index)
-            close()
-        }
-    }
+		visible: !control.isExec && previewer
+		text: qsTr("Preview")
+		icon.name: "view-preview"
+		onTriggered:
+		{
+			previewer.show(currentFMModel, control.index)
+			close()
+		}
+	}
     
     MenuItem
     {
-        visible: !control.isExec		
+        visible: !control.isExec && openWithDialog	
         text: qsTr("Open with")
         icon.name: "document-open"
         onTriggered:
@@ -124,9 +119,9 @@ Menu
             close()
         }
     }
-    MenuSeparator{}
     
-    
+    MenuSeparator{visible: tagsDialog  || shareDialog || previewer}
+        
     MenuItem
     {
         visible: !control.isExec
@@ -161,8 +156,7 @@ Menu
             renameClicked(control.item)
             close()
         }
-    } 
-    
+    }     
     
     MenuSeparator{}
     
