@@ -36,15 +36,7 @@ Menu
                 settings.selectionMode = true
         }
     }
-   /* 
-    MenuItem
-    {
-        visible: control.isDir
-        text: qsTr("Open in new tab")
-        icon.name: "tab-new"
-        onTriggered: openTab(item.path)
-    }*/
-    
+       
     MenuSeparator{visible: selectionBar}    
     
     MenuItem
