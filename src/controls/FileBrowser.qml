@@ -285,6 +285,19 @@ Maui.Page
 	
 	Connections
 	{
+		target: control.tagsDialog
+		enabled: control.tagsDialog && control.previewer
+		
+		onTagsReady:
+		{
+			control.tagsDialog.composerList.updateToUrls(tags)
+			if(control.previewer && control.previewer.visible)
+				control.previewer.tagBar.list.refresh()
+		}
+	}
+	
+	Connections
+	{
 		target: control.previewer
 		enabled: control.previewer
 		onShareButtonClicked: control.shareFiles([url])		
