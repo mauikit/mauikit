@@ -44,6 +44,7 @@ Item
     property alias count : selectionList.count
     
     property int maxListHeight : 400
+    property int radius: Maui.Style.radiusV
     
     readonly property QtObject m_private : QtObject
     {
@@ -136,7 +137,7 @@ Item
         height: showList ? Math.min(Math.min(400, control.maxListHeight), selectionList.contentHeight) + control.height + Maui.Style.space.big : 0
         width: parent.width
         color: Qt.lighter(Kirigami.Theme.backgroundColor)
-        radius: Maui.Style.radiusV
+        radius:  control.radius
         focus: true
         y:  ((height) * -1) + control.height
         x: 0
@@ -182,7 +183,7 @@ Item
         id: bg
         anchors.fill: parent
         color: Kirigami.Theme.backgroundColor
-        radius: Maui.Style.radiusV
+        radius: control.radius
 
         MouseArea
         {
@@ -353,8 +354,7 @@ Item
         }
     }	
     
-    }	
-    
+    }
     
     Maui.Rectangle
     {
@@ -365,8 +365,7 @@ Item
         color: "transparent"
         borderColor: "white"
         solidBorder: false
-    }		
-    
+    }	
     
     DropArea
     {

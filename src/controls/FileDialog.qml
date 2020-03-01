@@ -18,9 +18,10 @@
  */
 
 import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.9
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.1 as MauiLab
 import QtQuick.Layouts 1.3
 
 Maui.Dialog
@@ -32,6 +33,8 @@ Maui.Dialog
 	
 	property alias currentPath : browser.currentPath
 	property alias browser : browser
+	property alias selectionBar: _selectionBar
+	
 	property string suggestedFileName : ""
 	
 	property alias settings : browser.settings
@@ -68,6 +71,74 @@ Maui.Dialog
 		}
 	}
 	
+	headBar.implicitHeight: Maui.Style.toolBarHeight + Maui.Style.space.medium
+	Component
+	{
+		id: _pathBarComponent
+		
+		Maui.PathBar
+		{
+			anchors.fill: parent
+			onPathChanged: browser.openFolder(path)
+			url: browser.currentPath
+			onHomeClicked: browser.openFolder(Maui.FM.homePath())
+			onPlaceClicked: browser.openFolder(path)
+		}
+	}
+	
+	Component
+	{
+		id: _searchFieldComponent
+		
+		Maui.TextField
+		{
+			anchors.fill: parent
+			placeholderText: qsTr("Search for files... ")
+			onAccepted: browser.openFolder("search://"+text)
+			//            onCleared: browser.goBack()
+			onGoBackTriggered:
+			{
+				searchBar = false
+				clear()
+				//                browser.goBack()
+			}
+			
+			background: Rectangle
+			{
+				border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+				radius: Maui.Style.radiusV
+				color: Kirigami.Theme.backgroundColor
+			}
+		}
+	}
+	
+	headBar.leftContent: ToolButton
+	{
+		icon.name: "application-menu"
+		checked: pageRow.currentIndex === 0
+		onClicked: pageRow.currentIndex = !pageRow.currentIndex
+	}
+	
+	headBar.middleContent: Item
+	{
+		id: _pathBarLoader
+		Layout.fillWidth: true
+		Layout.margins: Maui.Style.space.medium
+		height: Maui.Style.iconSizes.big
+		Loader
+		{
+			anchors.fill: parent
+			sourceComponent: searchBar ? _searchFieldComponent : _pathBarComponent
+		}
+	}
+	
+	headBar.rightContent: ToolButton
+	{
+		id: searchButton
+		icon.name: "edit-find"
+		onClicked: searchBar = !searchBar
+		checked: searchBar
+	}	
 	
 	Maui.Dialog
 	{
@@ -90,75 +161,7 @@ Maui.Dialog
 		leftPadding: 0
 		rightPadding: leftPadding
 		topPadding: leftPadding
-		bottomPadding: leftPadding
-		headBar.implicitHeight: Maui.Style.toolBarHeight + Maui.Style.space.medium
-		Component
-		{
-			id: _pathBarComponent
-			
-			Maui.PathBar
-			{
-				anchors.fill: parent
-				onPathChanged: browser.openFolder(path)
-				url: browser.currentPath
-				onHomeClicked: browser.openFolder(Maui.FM.homePath())
-				onPlaceClicked: browser.openFolder(path)
-			}
-		}
-		
-		Component
-		{
-			id: _searchFieldComponent
-			
-			Maui.TextField
-			{
-				anchors.fill: parent
-				placeholderText: qsTr("Search for files... ")
-				onAccepted: browser.openFolder("search://"+text)
-				//            onCleared: browser.goBack()
-				onGoBackTriggered:
-				{
-					searchBar = false
-					clear()
-					//                browser.goBack()
-				}
-				
-				background: Rectangle
-				{
-					border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-					radius: Maui.Style.radiusV
-					color: Kirigami.Theme.backgroundColor
-				}
-			}
-		}
-		
-		headBar.leftContent: ToolButton
-		{
-			icon.name: "application-menu"
-			checked: pageRow.currentIndex === 0
-			onClicked: pageRow.currentIndex = !pageRow.currentIndex
-		}
-		
-		headBar.middleContent: Item
-		{
-			id: _pathBarLoader
-			Layout.fillWidth: true
-			Layout.margins: Maui.Style.space.medium
-			height: Maui.Style.iconSizes.big
-			Loader
-			{
-				anchors.fill: parent
-				sourceComponent: searchBar ? _searchFieldComponent : _pathBarComponent
-			}
-		}
-		
-		headBar.rightContent: ToolButton
-		{
-			id: searchButton
-			icon.name: "edit-find"
-			onClicked: searchBar = !searchBar
-			checked: searchBar
-		}		
+		bottomPadding: leftPadding		
 		
 		Kirigami.PageRow
 		{
@@ -167,7 +170,7 @@ Maui.Dialog
 			clip: true
 			
 			separatorVisible: wideMode
-			initialPage: [sidebar, browser]
+			initialPage: [sidebar, _browserLayout]
 			defaultColumnWidth:  Kirigami.Units.gridUnit * (Kirigami.Settings.isMobile? 15 : 8)		
 				
 				Maui.PlacesListBrowser
@@ -189,47 +192,217 @@ Maui.Dialog
 					Maui.FMList.REMOTE_PATH,                                                
 					Maui.FMList.CLOUD_PATH,
 					Maui.FMList.DRIVES_PATH]
-				}                
+				}    
 				
-				Maui.FileBrowser
+				ColumnLayout
 				{
-					id: browser
+					id: _browserLayout
+					spacing: Maui.Style.space.small
 					
-					previewer.parent: ApplicationWindow.overlay
-					settings.selectionMode: control.mode === modes.OPEN
-                    onItemClicked:
+					Maui.FileBrowser
 					{
-                           if(currentFMList.get(index).isdir == "true")
-                                    openItem(index)
-                                    
-						switch(control.mode)
-						{	
-							case modes.OPEN :
-							{	
-                                addToSelection(currentFMList.get(index))
-								break
-							}
-                            case modes.SAVE:
-                            {
-                               
-                                        textField.text = currentFMList.get(index).label
-                                        break
-							}				
-						}
-					}
-					
-					onCurrentPathChanged:
-					{                        
-						sidebar.currentIndex = -1
+						id: browser
+						Layout.fillWidth: true
+						Layout.fillHeight: true
 						
-						for(var i = 0; i < sidebar.count; i++)
-							if(String(browser.currentPath) === sidebar.list.get(i).path)
+						selectionBar: _selectionBar
+						
+						currentPath: Maui.FM.homePath()
+						selectionMode: control.mode === modes.OPEN
+						onItemClicked:
+						{
+							if(currentFMList.get(index).isdir == "true")
 							{
-								sidebar.currentIndex = i
-								return;
+								openItem(index)
 							}
+							
+							switch(control.mode)
+							{	
+								case modes.OPEN :
+								{	
+									addToSelection(currentFMList.get(index))
+									break
+								}
+								case modes.SAVE:
+								{
+									textField.text = currentFMList.get(index).label
+									break
+								}				
+							}
+						}
+						
+						onCurrentPathChanged:
+						{                        
+							sidebar.currentIndex = -1
+							
+							for(var i = 0; i < sidebar.count; i++)
+							{
+								if(String(browser.currentPath) === sidebar.list.get(i).path)
+								{
+									sidebar.currentIndex = i
+									return;
+								}
+							}
+						}
+						
+						headBar.rightContent:[
+						
+						Maui.ToolButtonMenu
+						{
+							icon.name: "view-sort"
+							
+							MenuItem
+							{
+								text: qsTr("Show Folders First")
+								checked: browser.currentFMList.foldersFirst
+								checkable: true
+								onTriggered: browser.currentFMList.foldersFirst = !browser.currentFMList.foldersFirst
+							}
+							
+							MenuSeparator {}
+							
+							MenuItem
+							{
+								text: qsTr("Type")
+								checked: browser.currentFMList.sortBy === Maui.FMList.MIME
+								checkable: true
+								onTriggered: browser.currentFMList.sortBy = Maui.FMList.MIME
+								autoExclusive: true
+							}
+							
+							MenuItem
+							{
+								text: qsTr("Date")
+								checked: browser.currentFMList.sortBy === Maui.FMList.DATE
+								checkable: true
+								onTriggered: browser.currentFMList.sortBy = Maui.FMList.DATE
+								autoExclusive: true
+							}
+							
+							MenuItem
+							{
+								text: qsTr("Modified")
+								checkable: true
+								checked: browser.currentFMList.sortBy === Maui.FMList.MODIFIED
+								onTriggered: browser.currentFMList.sortBy = Maui.FMList.MODIFIED
+								autoExclusive: true
+							}
+							
+							MenuItem
+							{
+								text: qsTr("Size")
+								checkable: true
+								checked: browser.currentFMList.sortBy === Maui.FMList.SIZE
+								onTriggered: browser.currentFMList.sortBy = Maui.FMList.SIZE
+								autoExclusive: true
+							}
+							
+							MenuItem
+							{
+								text: qsTr("Name")
+								checkable: true
+								checked: browser.currentFMList.sortBy === Maui.FMList.LABEL
+								onTriggered: browser.currentFMList.sortBy = Maui.FMList.LABEL
+								autoExclusive: true
+							}
+							
+							MenuSeparator{}
+							
+							MenuItem
+							{
+								id: groupAction
+								text: qsTr("Group")
+								checkable: true
+								checked: browser.settings.group
+								onTriggered:
+								{
+									browser.settings.group = !browser.settings.group
+								}
+							}
+						},
+						
+						ToolButton
+						{
+							id: _optionsButton
+							icon.name: "overflow-menu"
+							enabled: currentFMList.pathType !== Maui.FMList.TAGS_PATH && currentFMList.pathType !== Maui.FMList.TRASH_PATH && currentFMList.pathType !== Maui.FMList.APPS_PATH
+							onClicked:
+							{
+								if(browser.browserMenu.visible)
+									browser.browserMenu.close()
+									else
+										browser.browserMenu.show(_optionsButton, 0, height)
+							}
+							checked: browser.browserMenu.visible
+							checkable: false
+						}
+						]
+						
+						headBar.leftContent: [
+						ToolButton
+						{
+							icon.name: "go-previous"
+							onClicked: browser.goBack()
+						},
+						
+						ToolButton
+						{
+							icon.name: "go-next"
+							onClicked: browser.goNext()
+						},
+						
+						Maui.ToolActions
+						{
+							id: _viewTypeGroup
+							
+							currentIndex: browser.settings.viewType
+							onCurrentIndexChanged: 
+							{
+								if(browser)
+									browser.settings.viewType = currentIndex
+									
+									Maui.FM.saveSettings("VIEW_TYPE", currentIndex, "BROWSER")
+							}
+							
+							Action
+							{
+								icon.name: "view-list-icons"
+								text: qsTr("Grid")
+								shortcut: "Ctrl+G"
+							}
+							
+							Action
+							{
+								icon.name: "view-list-details"
+								text: qsTr("List")
+								shortcut: "Ctrl+L"
+							}
+							
+							Action
+							{
+								icon.name: "view-file-columns"
+								text: qsTr("Columns")
+								shortcut: "Ctrl+M"
+							}
+						}					
+						]
+						
+					}	
+					
+					MauiLab.SelectionBar
+					{
+						id: _selectionBar
+						Layout.preferredHeight: 48
+						Layout.alignment: Qt.AlignCenter
+						onExitClicked: 
+						{
+							_selectionBar.clear()
+						}
+						
 					}
-				}			
+				}
+				
+				
 		}
 	}
 	
