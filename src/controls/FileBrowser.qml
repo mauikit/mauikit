@@ -36,8 +36,8 @@ Maui.Page
 	property alias settings : _browser.settings	
 	
 	property alias view : _stackView.currentItem
-	readonly property QtObject currentView : _stackView.currentItem.currentView
 	
+	readonly property QtObject currentView : _stackView.currentItem.currentView	
 	readonly property Maui.FMList currentFMList : view.currentFMList
 	readonly property Maui.BaseModel currentFMModel : view.currentFMModel
 	readonly property bool isSearchView : _stackView.currentItem.objectName === "searchView"
