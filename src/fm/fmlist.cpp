@@ -36,11 +36,14 @@
 #include <QFuture>
 #include <QThread>
 
+
 FMList::FMList(QObject *parent) : 
 MauiList(parent),
 fm(new FM(this)),
 watcher(new QFileSystemWatcher(this))
 {
+	qRegisterMetaType<FMList*>("const FMList*");
+	
     connect(this->fm, &FM::cloudServerContentReady, [&](const FMH::MODEL_LIST &list, const QUrl &url)
 	{
 		if(this->path == url)
@@ -187,11 +190,7 @@ void FMList::setList()
     this->clear();
 
 	switch(this->pathType)
-	{			
-		case FMList::PATHTYPE::SEARCH_PATH:			
-			this->search(this->path.fileName(), this->searchPath, this->hidden, this->onlyDirs, this->filters);
-			break; //ASYNC
-			
+	{
 		case FMList::PATHTYPE::TAGS_PATH:
             this->assignList(this->fm->getTagContent(this->path.fileName(), QStringList() <<this->filters << FMH::FILTER_LIST[static_cast<FMH::FILTER_TYPE>(this->filterType)]));
 			break; //SYNC	
@@ -393,9 +392,7 @@ QUrl FMList::getPath() const
 void FMList::setPath(const QUrl &path)
 {
 	if(this->path == path)
-		return;
-	
-    this->searchPath = this->path;
+		return;	
 	
 	this->path = path;
     NavHistory.appendPath(this->path);
@@ -405,12 +402,7 @@ void FMList::setPath(const QUrl &path)
 	const auto __scheme = this->path.scheme();
     this->pathName = this->path.fileName();
 
-    if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::SEARCH_PATH])
-	{
-		this->pathType = FMList::PATHTYPE::SEARCH_PATH;
-		this->watchPath(QString());
-		
-	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::CLOUD_PATH])
+    if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::CLOUD_PATH])
 	{
 		this->pathType = FMList::PATHTYPE::CLOUD_PATH;
 		this->watchPath(QString());
@@ -692,6 +684,11 @@ bool FMList::getSaveDirProps() const
 	return this->saveDirProps;
 }
 
+void FMList::search(const QString& query, const FMList* currentFMList)
+{
+	this->search(query, currentFMList->getPath(), currentFMList->getHidden(), currentFMList->getOnlyDirs(), currentFMList->getFilters());
+}
+
 void FMList::search(const QString& query, const QUrl &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)
 {
 	qDebug()<< "SEARCHING FOR" << query << path;
@@ -706,14 +703,8 @@ void FMList::search(const QString& query, const QUrl &path, const bool &hidden, 
 	QFutureWatcher<FMH::PATH_CONTENT> *watcher = new QFutureWatcher<FMH::PATH_CONTENT>;
 	connect(watcher, &QFutureWatcher<FMH::MODEL_LIST>::finished, [=]()
 	{
-		if(this->pathType != FMList::PATHTYPE::SEARCH_PATH)
-			return;
-		
 		const auto res = watcher->future().result();
-		
-		if(res.path != this->searchPath.toString())
-			return;
-		
+			
 		this->assignList(res.content);        
 		emit this->searchResultReady();
 		
@@ -740,14 +731,8 @@ void FMList::filterContent(const QString &query, const QUrl &path, const bool &h
 
     QFutureWatcher<FMH::PATH_CONTENT> *watcher = new QFutureWatcher<FMH::PATH_CONTENT>;
     connect(watcher, &QFutureWatcher<FMH::MODEL_LIST>::finished, [=]()
-    {
-        if(this->pathType != FMList::PATHTYPE::SEARCH_PATH)
-            return;
-
+    {       
         const auto res = watcher->future().result();
-
-        if(res.path != this->searchPath.toString())
-            return;
 
         this->assignList(res.content);
         emit this->searchResultReady();

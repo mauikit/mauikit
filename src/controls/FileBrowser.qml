@@ -35,11 +35,12 @@ Maui.Page
 	property alias currentPath : _browser.path 	
 	property alias settings : _browser.settings	
 	
-	property alias view : _browser
-	property alias currentView : _browser.currentView
+	property alias view : _stackView.currentItem
+	readonly property QtObject currentView : _stackView.currentItem.currentView
 	
 	readonly property Maui.FMList currentFMList : view.currentFMList
 	readonly property Maui.BaseModel currentFMModel : view.currentFMModel
+	readonly property bool isSearchView : _stackView.currentItem.objectName === "searchView"
 	
 	// custom props
 	property bool selectionMode: false	
@@ -84,6 +85,7 @@ Maui.Page
 	onGoBackTriggered: control.goBack()
 	onGoForwardTriggered: control.goNext()	
 	
+	title: view.title
 	focus: true	
 	flickable: control.currentView.flickable
 	
@@ -222,7 +224,7 @@ Maui.Page
 			acceptText: qsTr("Rename")
 			rejectText: qsTr("Cancel")
 		}
-	}		
+	}
 	
 	Private.BrowserMenu { id: browserMenu }
 	
@@ -420,7 +422,6 @@ Maui.Page
 				control.remove(urls)
 			}
 			
-			
 			// Shortcut for going back in browsing history
 			if(event.key == Qt.Key_Backspace || event.key == Qt.Key_Back)
 			{
@@ -530,70 +531,97 @@ Maui.Page
         //                _progressBar.value = percent/100
         //        }
     }
-	
-	DropArea
-	{
-		id: _dropArea
+    
+    StackView
+    {
+		id: _stackView
 		anchors.fill: parent
-		onDropped:
+		
+		initialItem: DropArea
 		{
-			if(drop.urls)
+			id: _dropArea
+			property alias currentView : _browser.currentView
+			property alias currentFMList : _browser.currentFMList
+			property alias currentFMModel: _browser.currentFMModel
+			property alias filter: _browser.filter
+			property alias title : _browser.title
+			
+			onDropped:
 			{
-				_dropMenu.urls = drop.urls.join(",")
-				_dropMenu.popup()
-				control.urlsDropped(drop.urls)
+				if(drop.urls)
+				{
+					_dropMenu.urls = drop.urls.join(",")
+					_dropMenu.popup()
+					control.urlsDropped(drop.urls)
+				}
+			}
+			
+			opacity:  _dropArea.containsDrag ? 0.5 : 1
+			
+			Private.BrowserView
+			{
+				id: _browser
+				anchors.fill: parent
+			}  		
+			
+			Menu
+			{
+				id: _dropMenu
+				property string urls
+				enabled: Maui.FM.getFileInfo(control.currentPath).isdir == "true" 
+				
+				MenuItem
+				{
+					text: qsTr("Copy here")
+					onTriggered:
+					{
+						const urls = _dropMenu.urls.split(",")
+						for(var i in urls)
+							Maui.FM.copy(urls[i], control.currentPath, false)
+					}
+				}
+				
+				MenuItem
+				{
+					text: qsTr("Move here")
+					onTriggered:
+					{
+						const urls = _dropMenu.urls.split(",")
+						for(var i in urls)
+							Maui.FM.cut(urls[i], control.currentPath)
+					}
+				}
+				
+				MenuItem
+				{
+					text: qsTr("Link here")
+					onTriggered:
+					{
+						const urls = _dropMenu.urls.split(",")
+						for(var i in urls)
+							Maui.FM.createSymlink(url[i], control.currentPath)
+					}
+				}
 			}
 		}
 		
-		opacity:  _dropArea.containsDrag ? 0.5 : 1
-		
-		Private.BrowserView
+		Component
 		{
-			id: _browser
-			anchors.fill: parent
-		}  		
-		
-		Menu
-		{
-			id: _dropMenu
-			property string urls
-			enabled: Maui.FM.getFileInfo(control.currentPath).isdir == "true" 
+			id: _searchBrowserComponent
 			
-			MenuItem
+			Private.BrowserView 
 			{
-				text: qsTr("Copy here")
-				onTriggered:
+				objectName: "searchView"
+				headBar.leftContent: ToolButton
 				{
-					const urls = _dropMenu.urls.split(",")
-					for(var i in urls)
-						Maui.FM.copy(urls[i], control.currentPath, false)
-				}
-			}
-			
-			MenuItem
-			{
-				text: qsTr("Move here")
-				onTriggered:
-				{
-					const urls = _dropMenu.urls.split(",")
-					for(var i in urls)
-						Maui.FM.cut(urls[i], control.currentPath)
-				}
-			}
-			
-			MenuItem
-			{
-				text: qsTr("Link here")
-				onTriggered:
-				{
-					const urls = _dropMenu.urls.split(",")
-					for(var i in urls)
-						Maui.FM.createSymlink(url[i], control.currentPath)
+					text: qsTr("Back")
+					icon.name: "go-previous"
+					onClicked: _stackView.pop()					
 				}
 			}
 		}
 	}
-
+	
     Component.onCompleted:
     {
         control.currentView.forceActiveFocus()
@@ -767,6 +795,11 @@ Maui.Page
 			return;
 		}
 
+		if(control.isSearchView)
+		{
+			_stackView.pop(StackView.PopTransition)
+		}
+			
         control.currentPath = path
     }
 
@@ -857,4 +890,11 @@ Maui.Page
             control.currentView.forceActiveFocus()
         }
     }
+    
+    function search(query)
+	{
+		_stackView.push(_searchBrowserComponent)
+		_stackView.currentItem.title = qsTr("Search: %1").arg(query)
+		_stackView.currentItem.currentFMList.search(query, _browser.currentFMList)
+	}	
 }

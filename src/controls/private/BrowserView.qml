@@ -8,6 +8,7 @@ import org.kde.mauikit 1.0 as Maui
 Maui.Page
 {
     id: control
+    title: currentFMList.pathName
     
     property url path    
     onPathChanged:
@@ -20,7 +21,7 @@ Maui.Page
     }
     
     //group properties from the browser since the browser views are loaded async and
-    //their properties can not be accesed inmediately, so they are stored here and then when completed they are set
+    //their properties can not be accesed inmediately, so they are stored here and then when completed they are set    
     property alias settings : _settings
     BrowserSettings 
     {
