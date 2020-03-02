@@ -89,6 +89,25 @@ Maui.Page
 	focus: true	
 	flickable: control.currentView.flickable
 	
+	showTitle: false
+	
+	headBar.visible: false
+	headBar.leftContent: ToolButton
+	{
+		text: qsTr("Back")
+		icon.name: "go-previous"
+		onClicked: control.quitSearch()		
+		visible: control.isSearchView		
+	}
+	
+	headBar.middleContent: Maui.TextField
+	{
+		id: _searchField
+		Layout.fillWidth: true
+		placeholderText: qsTr("Search")
+		onAccepted: control.search(text)
+	}
+	
 	footBar.visible: control.showStatusBar ||  String(control.currentPath).startsWith("trash:/")
 	
 	footBar.leftSretch: false
@@ -535,7 +554,9 @@ Maui.Page
     StackView
     {
 		id: _stackView
+
 		anchors.fill: parent
+		clip: true
 		
 		initialItem: DropArea
 		{
@@ -611,13 +632,9 @@ Maui.Page
 			
 			Private.BrowserView 
 			{
-				objectName: "searchView"
-				headBar.leftContent: ToolButton
-				{
-					text: qsTr("Back")
-					icon.name: "go-previous"
-					onClicked: _stackView.pop()					
-				}
+				id: _searchBrowser
+				objectName: "searchView"	
+				settings.viewType: control.settings.viewType === Maui.FMList.MILLERS_VIEW ? Maui.FMList.LIST_VIEW : control.settings.viewType // do not use millersview it does not makes sense since search does not follow a path url structure
 			}
 		}
 	}
@@ -797,7 +814,7 @@ Maui.Page
 
 		if(control.isSearchView)
 		{
-			_stackView.pop(StackView.PopTransition)
+			control.quitSearch()
 		}
 			
         control.currentPath = path
@@ -891,9 +908,24 @@ Maui.Page
         }
     }
     
+    function openSearch()
+	{
+		if(!control.isSearchView)
+		{
+			_stackView.push(_searchBrowserComponent)			
+		}
+		_searchField.forceActiveFocus()
+	}
+	
+	function quitSearch()
+	{
+		_stackView.pop()
+		control.headBar.visible = false
+	}
+    
     function search(query)
 	{
-		_stackView.push(_searchBrowserComponent)
+		openSearch()
 		_stackView.currentItem.title = qsTr("Search: %1").arg(query)
 		_stackView.currentItem.currentFMList.search(query, _browser.currentFMList)
 	}	
