@@ -94,7 +94,7 @@ Maui.Dialog
 		{
 			anchors.fill: parent
 			placeholderText: qsTr("Search for files... ")
-			onAccepted: browser.openFolder("search://"+text)
+			onAccepted: browser.search(text)
 			//            onCleared: browser.goBack()
 			onGoBackTriggered:
 			{
