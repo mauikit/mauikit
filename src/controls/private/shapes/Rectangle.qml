@@ -27,9 +27,9 @@ Shape
         strokeStyle: _shape.solidBorder ? ShapePath.SolidLine : ShapePath.DashLine
         dashPattern: [ 1, 4 ]
         startX: 1; startY: 1
-        PathLine { x: _shape.width; y:  _path.startY }
-        PathLine { x: _shape.width; y: _shape.height }
-        PathLine { x:  _path.startX; y: _shape.height}
+        PathLine { x: _shape.width-_path.startX; y:  _path.startY }
+        PathLine { x: _shape.width- _path.startX; y: _shape.height-_path.startY;  }
+        PathLine { x:  _path.startX; y: _shape.height - _path.startY}
         PathLine { x: _path.startX; y: _path.startY }
     }
 }
