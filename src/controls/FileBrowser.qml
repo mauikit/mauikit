@@ -634,7 +634,7 @@ Maui.Page
 			{
 				id: _searchBrowser
 				objectName: "searchView"	
-				settings.viewType: control.settings.viewType === Maui.FMList.MILLERS_VIEW ? Maui.FMList.LIST_VIEW : control.settings.viewType // do not use millersview it does not makes sense since search does not follow a path url structure
+				settings.viewType: control.settings.viewType === Maui.FMList.MILLERS_VIEW ? Maui.FMList.LIST_VIEW : control.settings.viewType // do not use millersview it does not makes sense since search does not follow a path url structures
 			}
 		}
 	}
@@ -912,14 +912,14 @@ Maui.Page
 	{
 		if(!control.isSearchView)
 		{
-			_stackView.push(_searchBrowserComponent)			
+			_stackView.push(_searchBrowserComponent, StackView.Immediate)			
 		}
 		_searchField.forceActiveFocus()
 	}
 	
 	function quitSearch()
 	{
-		_stackView.pop()
+		_stackView.pop(StackView.Immediate)
 		control.headBar.visible = false
 	}
     

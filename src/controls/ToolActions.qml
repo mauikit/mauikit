@@ -10,14 +10,12 @@ import org.kde.mauikit 1.0 as Maui
 Item
 {
 	id: control
-	implicitWidth: _layout.implicitWidth +  Maui.Style.space.medium
+	implicitWidth: _layout.implicitWidth
 	implicitHeight: parent.height
 	
 	default property list<Action> actions
 	
-	property bool autoExclusive: true
-	
-	property int direction : Qt.Vertical
+	property bool autoExclusive: true	
 	
 	property Action currentAction : actions[0]
 	property int currentIndex : 0	
@@ -26,35 +24,25 @@ Item
         control.currentAction = actions[control.currentIndex]
     }
 	
-	property bool expanded : false
-	
-	// 	Rectangle
-	// 	{
-	// 		anchors.fill: parent
-	// 		color: control.expanded ? "#333" : "transparent"
-	// 		opacity: 0.1
-	// 		radius: Math.min(Maui.Style.radiusV, height)
-	// 		
-	// 		Behavior on color
-	// 		{
-	// 			ColorAnimation
-	// 			{
-	// 				duration: Kirigami.Units.longDuration
-	// 			}
-	// 		}
-	// 	}
+	property bool expanded : true
 	
 	Row
 	{
 		id: _layout
 		height: parent.height
 		spacing: Maui.Style.space.small
-		anchors.centerIn: parent		
 		
 		ToolButton
 		{
+			visible: !control.expanded
             icon.name: control.currentAction.icon.name
-            onClicked: control.expanded = !control.expanded 
+            onClicked: 
+            {
+				if(!_loader.item.visible)
+					_loader.item.popup(control, 0, control.height)
+					else
+						_loader.item.close()
+			}
             
             indicator: Maui.Triangle
             {
@@ -65,7 +53,7 @@ Item
                     // 			bottom: parent.bottom
                     verticalCenter: parent.verticalCenter
                 }
-                rotation: control.direction === Qt.Vertical ? -45 : (control.expanded ?- 90 : -135 )
+                rotation: -45
                 color: control.Kirigami.Theme.textColor
                 width: Maui.Style.iconSizes.tiny-3
                 height:  width 
@@ -77,7 +65,8 @@ Item
 		{
 			id: _loader
 			height: parent.height
-			sourceComponent: control.direction ===  Qt.Horizontal ? _rowComponent : (control.direction === Qt.Vertical ?  _menuComponent : "")
+			width: control.expanded ? implicitWidth : 0
+			sourceComponent: control.expanded ? _rowComponent : _menuComponent
 		}
 		
 	}
@@ -89,10 +78,10 @@ Item
 		Row
 		{
 			id: _row
-			width: control.expanded ? implicitWidth : 0
-			spacing: Maui.Style.space.medium
-			clip: true
+			spacing: Maui.Style.space.small
 			height: parent.height
+			
+			clip: true
 			
 			Behavior on width
 			{
@@ -104,13 +93,6 @@ Item
 				}
 			}
 			
-			Kirigami.Separator
-			{
-				width: 1
-				height: parent.height * 0.7
-				anchors.verticalCenter: parent.verticalCenter
-			}			
-			
 			Repeater
 			{
 				model: control.actions
@@ -118,13 +100,11 @@ Item
 				ToolButton
 				{
 					action: modelData
+					checked: control.currentIndex === index
 					autoExclusive: control.autoExclusive
 					anchors.verticalCenter: parent.verticalCenter
-					onClicked: 
-					{
-						control.currentAction = action
-						control.expanded = false
-					}
+					onClicked: control.currentIndex = index		
+					display: ToolButton.IconOnly
 				}
 			}
 		}
@@ -137,20 +117,6 @@ Item
 		
 		Menu
 		{
-			id: _actionsMenu
-			Connections
-			{
-				target: control
-				onExpandedChanged:
-				{
-					if(control.expanded)
-						_actionsMenu.popup(0, parent.height)
-						else
-							_actionsMenu.close()
-				}
-			}
-			
-			onClosed: control.expanded = false
 			closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
 			
 			Repeater
@@ -159,7 +125,6 @@ Item
 				
 				MenuItem
 				{
-// 					action: modelData
 					text:modelData.text
 					icon: modelData.icon
 					autoExclusive: control.autoExclusive
