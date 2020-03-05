@@ -290,7 +290,14 @@ Maui.Page
                     onClicked:
                     {
                         _listViewBrowser.currentIndex = index
-                        _listViewBrowser.itemClicked(index)
+						
+						if ((mouse.button == Qt.LeftButton) && (mouse.modifiers & Qt.ControlModifier))
+						{
+							_listViewBrowser.itemsSelected([index])
+						}else						
+						{
+							_listViewBrowser.itemClicked(index)
+						}
                     }
                     
                     onDoubleClicked:
@@ -439,12 +446,19 @@ Maui.Page
                     
                     Connections
                     {
-                        target: delegate
-                        onClicked:
-                        {
-                            _gridViewBrowser.currentIndex = index
-                            _gridViewBrowser.itemClicked(index)
-                        }
+						target: delegate
+						onClicked:
+						{					
+							_gridViewBrowser.currentIndex = index
+							
+							if ((mouse.button == Qt.LeftButton) && (mouse.modifiers & Qt.ControlModifier))
+							{
+								_gridViewBrowser.itemsSelected([index])
+							}else						
+							{
+								_gridViewBrowser.itemClicked(index)
+							}
+						}
                         
                         onDoubleClicked:
                         {
@@ -753,8 +767,15 @@ Maui.Page
                                 onClicked:
                                 {
                                     _millerColumns.currentIndex = _index
-                                    _millerListView.currentIndex = index
-                                    _millerControl.itemClicked(index)
+                                    _millerListView.currentIndex = index  
+									
+									if ((mouse.button == Qt.LeftButton) && (mouse.modifiers & Qt.ControlModifier))
+									{
+										_millerControl.itemsSelected([index])
+									}else						
+									{
+										_millerControl.itemClicked(index)
+									}
                                 }
                                 
                                 onDoubleClicked:
