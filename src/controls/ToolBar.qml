@@ -278,7 +278,7 @@ ToolBar
                 property bool sticky : false
                 // 					visible: control.middleStrech && implicitWidth
                 Layout.alignment: Qt.AlignCenter
-                spacing: middleContent.length === 1 ? 0 : control.spacing
+                spacing: control.spacing
                 Layout.minimumWidth: !sticky ? implicitWidth : implicitWidth
 
                 //                             Layout.maximumWidth: control.width - leftRowContent.implicitWidth - rightRowContent.implicitWidth

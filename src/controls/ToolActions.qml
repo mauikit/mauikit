@@ -33,7 +33,7 @@ Item
 		spacing: Maui.Style.space.small
 		
 		ToolButton
-		{
+		{			
 			visible: !control.expanded
             icon.name: control.currentAction.icon.name
             onClicked: 
@@ -99,6 +99,10 @@ Item
 				
 				ToolButton
 				{
+					ToolTip.delay: 1000
+					ToolTip.timeout: 5000
+					ToolTip.visible: hovered
+					ToolTip.text: modelData.text
 					action: modelData
 					checked: control.currentIndex === index
 					autoExclusive: control.autoExclusive
