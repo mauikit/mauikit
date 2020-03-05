@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.12
+import QtQuick.Controls 2.3
 
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
@@ -29,7 +29,7 @@ import org.kde.mauikit 1.0 as Maui
 
 import "private"
 
-ApplicationWindow
+Window
 {
     id: root
     visible: true
@@ -43,8 +43,11 @@ ApplicationWindow
     /*************************************************/
 	default property alias content : _content.data
 		
-    property alias headBar : _headBar
-    property alias footBar: _footBar
+    property alias headBar : _page.headBar
+    property alias footBar: _page.footBar
+    property alias footer: _page.footer
+    property alias header :_page.header
+    
     property alias dialog: dialogLoader.item
 
     property alias leftIcon : menuBtn
@@ -55,17 +58,14 @@ ApplicationWindow
     property alias accounts: _accountsDialogLoader.item
     property var currentAccount: Maui.App.accounts.currentAccount
     property alias notifyDialog: _notify
-
-//     wideScreen: isWide
-
+    
     /***************************************************/
     /*********************** UI ***********************/
     /*************************************************/
 
     property bool isWide : root.width >= Kirigami.Units.gridUnit * 30
 
-    property Flickable flickable : null
-    onFlickableChanged: returnToBounds()
+    property alias flickable : _page.flickable
 
     property int footerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineFooter
     property int headerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineHeader
@@ -106,30 +106,214 @@ ApplicationWindow
     }
     
     property bool isPortrait: Screen.primaryOrientation === Qt.PortraitOrientation || Screen.primaryOrientation === Qt.InvertedPortraitOrientation
-//    onIsPortraitChanged:
-//    {
-//        if(isPortrait)
-//        {
-//            console.log("PORTARIT MODE CHANGED", width, height, screenWidth, screenHeight, Screen.width,  Screen.height )
-//            width: Screen.width
-//            height: Screen.height
 
-//            console.log("PORTARIT MODE CHANGED", width, height, screenWidth, screenHeight, Screen.width,  Screen.height )
+    color: "transparent"
+	flags: Qt.FramelessWindowHint
+	
 
-//        }
-//    }
-    
-	Item
+Rectangle
+{
+	id: _rect
+	anchors.fill: parent
+	color: Kirigami.Theme.backgroundColor
+	border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+	radius: 6
+	
+	Maui.Page
 	{
-		id: _content
+		id: _page
 		anchors.fill: parent
-		transform: Translate 
+		anchors.margins: 1
+		
+		headBar.leftContent: [ ToolButton
 		{
-			x: root.sideBar && root.sideBar.collapsible && root.sideBar.collapsed ? root.sideBar.position * (root.sideBar.width - root.sideBar.collapsedSize) : 0
+			id: menuBtn
+			icon.name: "application-menu"
+			icon.color: headBarFGColor
+			icon.width: Maui.Style.iconSizes.medium
+			icon.height: Maui.Style.iconSizes.medium
+			checked: mainMenu.visible
+			onClicked:
+			{
+				menuButtonClicked()
+				mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x , parent.height+ Maui.Style.space.medium)
+			}
+			
+			Menu
+			{
+				id: mainMenu
+				modal: true
+				z: 999
+				width: Maui.Style.unit * 250
+				
+				Loader
+				{
+					id: _accountsMenuLoader
+					width: parent.width * 0.9
+					anchors.horizontalCenter: parent.horizontalCenter
+					
+					active: Maui.App.handleAccounts
+					sourceComponent: Maui.App.handleAccounts ?
+					_accountsComponent : null
+				}
+				
+				MenuItem
+				{
+					text: qsTr("About")
+					icon.name: "documentinfo"
+					onTriggered: aboutDialog.open()
+				}
+			}
+		}
+		]
+		
+		headBar.rightContent:  [
+			
+			Kirigami.Separator
+			{
+				Layout.fillHeight: true
+				
+			},
+			Item
+			{
+				Layout.fillHeight: true
+				Layout.preferredWidth: _controlsLayout.implicitWidth
+				
+				TapHandler {
+					onTapped: if (tapCount === 2) toggleMaximized()
+					gesturePolicy: TapHandler.DragThreshold
+				}
+				DragHandler {
+					grabPermissions: TapHandler.CanTakeOverFromAnything
+					onActiveChanged: if (active) { root.startSystemMove(); }
+				}
+				
+				RowLayout {
+					id: _controlsLayout
+					spacing: Maui.Style.space.medium
+					anchors.fill: parent
+					Rectangle
+					{
+						height: 16
+						width: height
+						color: "#4dd0e1"
+						radius: height
+						border.color: Qt.darker(color, 1.2)
+						
+						Maui.Triangle
+						{
+							height: 6
+							width: height
+							anchors.centerIn: parent
+							rotation: -45					
+						}
+						
+						MouseArea
+						{
+							anchors.fill: parent
+							onClicked: root.showMinimized()
+						}
+					}
+					Rectangle
+					{
+						height: 16
+						width: height
+						color: "#42a5f5"
+						radius: height
+						border.color: Qt.darker(color, 1.2)
+						
+						Maui.Triangle
+						{
+							height: 6
+							width: height
+							anchors.centerIn: parent
+							rotation: 90+45
+						}
+						
+						MouseArea
+						{
+							anchors.fill: parent
+							onClicked: root.toggleMaximized()
+						}
+					}
+					
+					MouseArea
+					{
+						id: _closeButton
+						height: 16
+						width: height
+						onClicked: root.close()
+						hoverEnabled: true
+						
+						Rectangle
+						{
+							anchors.fill: parent
+							
+							color: parent.containsMouse || parent.containsPress ? "transparent" : "#f06292"
+							radius: height
+							border.color: Qt.darker("#f06292", 1.2)
+							
+							Maui.X
+							{
+								height: 6
+								width: height
+								anchors.centerIn: parent
+								color: _closeButton.containsMouse || _closeButton.containsPress ? "#f06292" : "white"
+							}							
+						}
+					}
+				}
+			}			
+			
+		]
+				
+		Item
+		{
+			id: _content
+			anchors.fill: parent
+// 			anchors.margins:1 
+			transform: Translate 
+			{
+				x: root.sideBar && root.sideBar.collapsible && root.sideBar.collapsed ? root.sideBar.position * (root.sideBar.width - root.sideBar.collapsedSize) : 0
+			}
+			
+			anchors.leftMargin: root.sideBar ? ((root.sideBar.collapsible && root.sideBar.collapsed) ? root.sideBar.collapsedSize : root.sideBar.width * root.sideBar.position) : 0
 		}
 		
-		anchors.leftMargin: root.sideBar ? ((root.sideBar.collapsible && root.sideBar.collapsed) ? root.sideBar.collapsedSize : root.sideBar.width * root.sideBar.position) : 0
+		
+		layer.enabled: true
+		layer.effect: OpacityMask
+		{
+			maskSource: Item
+			{
+				width: _rect.width
+				height: _rect.height
+				
+				Rectangle
+				{
+					anchors.centerIn: parent
+					width: _rect.width
+					height: _rect.height
+					radius: 6
+				}
+			}
+		}
+		
 	}
+}
+
+// DropShadow 
+// {
+// 	anchors.fill: parent
+// 	horizontalOffset: 0
+// 	verticalOffset: 0
+// 	radius: 8.0
+// 	samples: 17
+// 	color: "#80000000"
+// 	source: _rect
+// }
+
+
 
     //     onHeadBarBGColorChanged:
     //     {
@@ -158,15 +342,15 @@ ApplicationWindow
 }
 */
 	
-	overlay.modal: Rectangle 
-	{
-        color: Qt.rgba(root.Kirigami.Theme.backgroundColor.r,root.Kirigami.Theme.backgroundColor.g,root.Kirigami.Theme.backgroundColor.b, 0.5)
-	}
-	
-	overlay.modeless: Rectangle 
-	{
-		color: "transparent"
-	}
+// 	overlay.modal: Rectangle 
+// 	{
+//         color: Qt.rgba(root.Kirigami.Theme.backgroundColor.r,root.Kirigami.Theme.backgroundColor.g,root.Kirigami.Theme.backgroundColor.b, 0.5)
+// 	}
+// 	
+// 	overlay.modeless: Rectangle 
+// 	{
+// 		color: "transparent"
+// 	}
 
     Component
     {
@@ -273,201 +457,7 @@ ApplicationWindow
         }
 	}
 	
-	Connections
-	{
-		target: root.flickable ? root.flickable : null
-		enabled: root.flickable && ((root.header && root.headerPositioning === ListView.PullBackHeader) || (root.footer &&  root.footerPositioning === ListView.PullBackFooter))
-		property int oldContentY
-		property bool updatingContentY: false
-		
-		onContentYChanged:
-		{
-			if(!root.flickable.dragging && root.flickable.atYBeginning)
-				root.returnToBounds()
-				
-				if (updatingContentY || !root.flickable || !root.flickable.dragging)
-				{
-					oldContentY = root.flickable.contentY
-					return;
-					//TODO: merge
-					//if moves but not dragging, just update oldContentY
-				}
-				
-				if(root.flickable.contentHeight < root.height)
-				{
-					return
-				}
-				
-				var oldFHeight
-				var oldHHeight
-								
-				if (root.footer && root.footerPositioning === ListView.PullBackFooter)
-				{
-					oldFHeight = root.footer.height
-					root.footer.height = Math.max(0,
-												  Math.min(root.footer.implicitHeight,
-														   root.footer.height + oldContentY - root.flickable.contentY));
-				}
-				
-				
-				if (root.header && root.headerPositioning === ListView.PullBackHeader)
-				{
-					oldHHeight = root.header.height
-					root.header.height = Math.max(0,
-												  Math.min(root.header.implicitHeight,
-														   root.header.height + oldContentY - root.flickable.contentY));
-				}
-				
-				
-				//if the implicitHeight is changed, use that to simulate scroll
-				if ((root.footer && oldFHeight !== root.footer.height)|| ( root.header && oldHHeight !== root.header.height))
-				{
-					updatingContentY = true;
-					if(root.header && oldHHeight !== root.header.height)
-						root.flickable.contentY -= (oldHHeight - root.header.height)
-						
-						updatingContentY = false;
-					
-				} else {
-					oldContentY = root.flickable.contentY
-				}
-		}
-		
-		onMovementEnded:
-		{
-			if (root.headerPositioning === ListView.PullBackHeader  && root.header)
-			{
-				if (root.header.height >= (root.header.implicitHeight/2) || root.flickable.atYBeginning )
-				{
-					root.header.height =  root.header.implicitHeight
-					
-				} else
-				{
-					root.header.height = 0
-				}				
-			}
-			
-			if (root.footerPositioning === ListView.PullBackFooter  && root.footer)
-			{
-				if (root.footer.height >= (root.footer.implicitHeight/2) || root.flickable.atYEnd)
-				{
-					if(root.flickable.atYEnd)
-					{
-						root.footer.height =  root.footer.implicitHeight
-						root.flickable.contentY = root.flickable.contentHeight - root.flickable.height
-						oldContentY = root.flickable.contentY
-					}else
-					{
-						root.footer.height =  root.footer.implicitHeight
-					}
-					
-				} else
-				{
-					root.footer.height = 0
-				}
-			}
-		}
-	}
-
-    property Maui.ToolBar mheadBar : Maui.ToolBar
-    {
-		id: _headBar
-		visible: count > 1
-		position: ToolBar.Header
-		anchors.left: root.left
-		anchors.right: root.right
-		height: implicitHeight
-		
-		// 		Kirigami.Theme.backgroundColor: headBarBGColor
-		// 		Kirigami.Theme.textColor: headBarFGColor
-		// 		Kirigami.Theme.inherit: true
-		
-		Behavior on height
-		{
-			enabled: _headBar.height === _headBar.preferredHeight || _headBar.height === 0
-			
-			NumberAnimation
-			{
-				duration: Kirigami.Units.longDuration
-				easing.type: Easing.InOutQuad
-			}
-		}
-		
-		leftContent: [ ToolButton
-		{
-			id: menuBtn
-			icon.name: "application-menu"
-			icon.color: headBarFGColor
-			icon.width: Maui.Style.iconSizes.medium
-			icon.height: Maui.Style.iconSizes.medium
-			checked: mainMenu.visible
-			onClicked:
-			{
-				menuButtonClicked()
-				mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x , parent.height+ Maui.Style.space.medium)
-			}
-			
-			Menu
-			{
-				id: mainMenu
-				modal: true
-				z: 999
-				width: Maui.Style.unit * 250
-				
-				Loader
-				{
-					id: _accountsMenuLoader
-					width: parent.width * 0.9
-					anchors.horizontalCenter: parent.horizontalCenter
-					
-					active: Maui.App.handleAccounts
-					sourceComponent: Maui.App.handleAccounts ?
-					_accountsComponent : null
-				}
-				
-				MenuItem
-				{
-					text: qsTr("About")
-					icon.name: "documentinfo"
-					onTriggered: aboutDialog.open()
-				}
-			}
-		}
-		]
-		
-	}
-
-    property Maui.ToolBar mfootBar : Maui.ToolBar
-    {
-        id: _footBar
-        visible: count
-        position: ToolBar.Footer
-        anchors.left: root.left
-        anchors.right: root.right
-        height: implicitHeight
-    }
-    
-    header: headBar.count && headBar.position === ToolBar.Header ? headBar : null
-
-    footer: Column
-    {
-        id: _footer
-        visible : children
-        onImplicitHeightChanged: height = implicitHeight
-
-        children:
-        {
-            if(headBar.position === ToolBar.Footer && headBar.count && footBar.count)
-                return [footBar , headBar]
-            else if(headBar.position === ToolBar.Footer && headBar.count)
-                return [headBar]
-            else if(footBar.count)
-                return [footBar]
-            else
-                return null
-        }
-    }
-
+	
     AboutDialog
     {
         id: aboutDialog
@@ -585,12 +575,17 @@ ApplicationWindow
         _notify.show(callback)
     }
 
-       function returnToBounds()
-    {
-        if(root.header)
-                root.header.height = root.header.implicitHeight
-
-                if(root.footer)
-                root.footer.height = root.footer.implicitHeight
-    }
+	function toggleMaximized()
+	{
+		if (root.visibility === Window.Maximized) {
+			root.showNormal();
+		} else {
+			root.showMaximized();
+		}
+	}
+	
+	function window()
+	{
+		return _page;
+	}
 }
