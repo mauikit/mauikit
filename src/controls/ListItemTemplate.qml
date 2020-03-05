@@ -31,8 +31,8 @@ Item
     
     default property alias content: _layout.data
 
-//     implicitHeight: _layout.implicitHeight
-//     implicitWidth: _layout.implicitWidth
+    implicitHeight: Maui.Style.rowHeight
+    implicitWidth: _layout.implicitWidth
 
     property alias text1 : _label1.text
     property alias text2 : _label2.text
@@ -54,7 +54,7 @@ Item
     property bool isCurrentItem: false
     property bool labelsVisible: true
     property bool hovered : false
-
+    
     Component
     {
         id: _imgComponent

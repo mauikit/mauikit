@@ -39,6 +39,7 @@ Maui.Dialog
 	
 	property alias settings : browser.settings
 	property bool searchBar : false
+	onSearchBarChanged: if(!searchBar) browser.quitSearch()
 	
 	readonly property var modes : ({OPEN: 0, SAVE: 1})
 	property int mode : modes.OPEN
@@ -71,7 +72,6 @@ Maui.Dialog
 		}
 	}
 	
-	headBar.implicitHeight: Maui.Style.toolBarHeight + Maui.Style.space.medium
 	Component
 	{
 		id: _pathBarComponent
@@ -95,12 +95,11 @@ Maui.Dialog
 			anchors.fill: parent
 			placeholderText: qsTr("Search for files... ")
 			onAccepted: browser.search(text)
-			//            onCleared: browser.goBack()
+			onCleared: browser.quitSearch()
 			onGoBackTriggered:
 			{
 				searchBar = false
 				clear()
-				//                browser.goBack()
 			}
 			
 			background: Rectangle
@@ -152,259 +151,255 @@ Maui.Dialog
 		
 		onAccepted: control.done()
 		onRejected: close()
-	}
+	}	
 	
-	Maui.Page
+	Kirigami.PageRow
 	{
-		id: page
+		id: pageRow
 		anchors.fill: parent
-		leftPadding: 0
-		rightPadding: leftPadding
-		topPadding: leftPadding
-		bottomPadding: leftPadding		
+		clip: true
 		
-		Kirigami.PageRow
-		{
-			id: pageRow
-			anchors.fill: parent
-			clip: true
+		separatorVisible: wideMode
+		initialPage: [sidebar, _browserLayout]
+		defaultColumnWidth:  Kirigami.Units.gridUnit * (Kirigami.Settings.isMobile? 15 : 8)		
 			
-			separatorVisible: wideMode
-			initialPage: [sidebar, _browserLayout]
-			defaultColumnWidth:  Kirigami.Units.gridUnit * (Kirigami.Settings.isMobile? 15 : 8)		
-				
-				Maui.PlacesListBrowser
+			Maui.PlacesListBrowser
+			{
+				id: sidebar	
+				onPlaceClicked: 
 				{
-					id: sidebar	
-					onPlaceClicked: 
-					{
-						pageRow.currentIndex = 1
-						browser.openFolder(path)
-					}
+					pageRow.currentIndex = 1
+					browser.openFolder(path)
+				}
+				
+				list.groups: control.mode === modes.OPEN ? [
+				Maui.FMList.PLACES_PATH,
+				Maui.FMList.CLOUD_PATH,
+				Maui.FMList.REMOTE_PATH,
+				Maui.FMList.DRIVES_PATH,
+				Maui.FMList.TAGS_PATH] : 
+				[Maui.FMList.PLACES_PATH,
+				Maui.FMList.REMOTE_PATH,                                                
+				Maui.FMList.CLOUD_PATH,
+				Maui.FMList.DRIVES_PATH]
+			}    
+			
+			
+			
+			ColumnLayout
+			{
+				id: _browserLayout
+				spacing: Maui.Style.space.small
+				
+				Maui.Page
+				{
+					Layout.fillWidth: true
+					Layout.fillHeight: true
 					
-					list.groups: control.mode === modes.OPEN ? [
-					Maui.FMList.PLACES_PATH,
-					Maui.FMList.CLOUD_PATH,
-					Maui.FMList.REMOTE_PATH,
-					Maui.FMList.DRIVES_PATH,
-					Maui.FMList.TAGS_PATH] : 
-					[Maui.FMList.PLACES_PATH,
-					Maui.FMList.REMOTE_PATH,                                                
-					Maui.FMList.CLOUD_PATH,
-					Maui.FMList.DRIVES_PATH]
-				}    
-				
-				ColumnLayout
-				{
-					id: _browserLayout
-					spacing: Maui.Style.space.small
+					headBar.rightContent:[ Maui.ToolButtonMenu
+					{
+						icon.name: "view-sort"
+						
+						MenuItem
+						{
+							text: qsTr("Show Folders First")
+							checked: browser.currentFMList.foldersFirst
+							checkable: true
+							onTriggered: browser.currentFMList.foldersFirst = !browser.currentFMList.foldersFirst
+						}
+						
+						MenuSeparator {}
+						
+						MenuItem
+						{
+							text: qsTr("Type")
+							checked: browser.currentFMList.sortBy === Maui.FMList.MIME
+							checkable: true
+							onTriggered: browser.currentFMList.sortBy = Maui.FMList.MIME
+							autoExclusive: true
+						}
+						
+						MenuItem
+						{
+							text: qsTr("Date")
+							checked: browser.currentFMList.sortBy === Maui.FMList.DATE
+							checkable: true
+							onTriggered: browser.currentFMList.sortBy = Maui.FMList.DATE
+							autoExclusive: true
+						}
+						
+						MenuItem
+						{
+							text: qsTr("Modified")
+							checkable: true
+							checked: browser.currentFMList.sortBy === Maui.FMList.MODIFIED
+							onTriggered: browser.currentFMList.sortBy = Maui.FMList.MODIFIED
+							autoExclusive: true
+						}
+						
+						MenuItem
+						{
+							text: qsTr("Size")
+							checkable: true
+							checked: browser.currentFMList.sortBy === Maui.FMList.SIZE
+							onTriggered: browser.currentFMList.sortBy = Maui.FMList.SIZE
+							autoExclusive: true
+						}
+						
+						MenuItem
+						{
+							text: qsTr("Name")
+							checkable: true
+							checked: browser.currentFMList.sortBy === Maui.FMList.LABEL
+							onTriggered: browser.currentFMList.sortBy = Maui.FMList.LABEL
+							autoExclusive: true
+						}
+						
+						MenuSeparator{}
+						
+						MenuItem
+						{
+							id: groupAction
+							text: qsTr("Group")
+							checkable: true
+							checked: browser.settings.group
+							onTriggered:
+							{
+								browser.settings.group = !browser.settings.group
+							}
+						}
+					},
+					
+					ToolButton
+					{
+						id: _optionsButton
+						icon.name: "overflow-menu"
+						enabled: currentFMList.pathType !== Maui.FMList.TAGS_PATH && currentFMList.pathType !== Maui.FMList.TRASH_PATH && currentFMList.pathType !== Maui.FMList.APPS_PATH
+						onClicked:
+						{
+							if(browser.browserMenu.visible)
+								browser.browserMenu.close()
+								else
+									browser.browserMenu.show(_optionsButton, 0, height)
+						}
+						checked: browser.browserMenu.visible
+						checkable: false
+					}
+					]
+					
+					headBar.leftContent: [
+					ToolButton
+					{
+						icon.name: "go-previous"
+						onClicked: browser.goBack()
+					},
+					
+					ToolButton
+					{
+						icon.name: "go-next"
+						onClicked: browser.goNext()
+					},
+					
+					Maui.ToolActions
+					{
+						id: _viewTypeGroup
+						expanded: false
+						currentIndex: browser.settings.viewType
+						onCurrentIndexChanged: 
+						{
+							if(browser)
+								browser.settings.viewType = currentIndex
+								
+								Maui.FM.saveSettings("VIEW_TYPE", currentIndex, "BROWSER")
+						}
+						
+						Action
+						{
+							icon.name: "view-list-icons"
+							text: qsTr("Grid")
+							shortcut: "Ctrl+G"
+						}
+						
+						Action
+						{
+							icon.name: "view-list-details"
+							text: qsTr("List")
+							shortcut: "Ctrl+L"
+						}
+						
+						Action
+						{
+							icon.name: "view-file-columns"
+							text: qsTr("Columns")
+							shortcut: "Ctrl+M"
+						}
+					}					
+					]
 					
 					Maui.FileBrowser
-					{
-						id: browser
-						Layout.fillWidth: true
-						Layout.fillHeight: true
-						
-						selectionBar: _selectionBar
-						
-						currentPath: Maui.FM.homePath()
-						selectionMode: control.mode === modes.OPEN
-						onItemClicked:
-						{
-							if(currentFMList.get(index).isdir == "true")
-							{
-								openItem(index)
-							}
-							
-							switch(control.mode)
-							{	
-								case modes.OPEN :
-								{	
-									addToSelection(currentFMList.get(index))
-									break
-								}
-								case modes.SAVE:
-								{
-									textField.text = currentFMList.get(index).label
-									break
-								}				
-							}
-						}
-						
-						onCurrentPathChanged:
-						{                        
-							sidebar.currentIndex = -1
-							
-							for(var i = 0; i < sidebar.count; i++)
-							{
-								if(String(browser.currentPath) === sidebar.list.get(i).path)
-								{
-									sidebar.currentIndex = i
-									return;
-								}
-							}
-						}
-						
-						headBar.rightContent:[
-						
-						Maui.ToolButtonMenu
-						{
-							icon.name: "view-sort"
-							
-							MenuItem
-							{
-								text: qsTr("Show Folders First")
-								checked: browser.currentFMList.foldersFirst
-								checkable: true
-								onTriggered: browser.currentFMList.foldersFirst = !browser.currentFMList.foldersFirst
-							}
-							
-							MenuSeparator {}
-							
-							MenuItem
-							{
-								text: qsTr("Type")
-								checked: browser.currentFMList.sortBy === Maui.FMList.MIME
-								checkable: true
-								onTriggered: browser.currentFMList.sortBy = Maui.FMList.MIME
-								autoExclusive: true
-							}
-							
-							MenuItem
-							{
-								text: qsTr("Date")
-								checked: browser.currentFMList.sortBy === Maui.FMList.DATE
-								checkable: true
-								onTriggered: browser.currentFMList.sortBy = Maui.FMList.DATE
-								autoExclusive: true
-							}
-							
-							MenuItem
-							{
-								text: qsTr("Modified")
-								checkable: true
-								checked: browser.currentFMList.sortBy === Maui.FMList.MODIFIED
-								onTriggered: browser.currentFMList.sortBy = Maui.FMList.MODIFIED
-								autoExclusive: true
-							}
-							
-							MenuItem
-							{
-								text: qsTr("Size")
-								checkable: true
-								checked: browser.currentFMList.sortBy === Maui.FMList.SIZE
-								onTriggered: browser.currentFMList.sortBy = Maui.FMList.SIZE
-								autoExclusive: true
-							}
-							
-							MenuItem
-							{
-								text: qsTr("Name")
-								checkable: true
-								checked: browser.currentFMList.sortBy === Maui.FMList.LABEL
-								onTriggered: browser.currentFMList.sortBy = Maui.FMList.LABEL
-								autoExclusive: true
-							}
-							
-							MenuSeparator{}
-							
-							MenuItem
-							{
-								id: groupAction
-								text: qsTr("Group")
-								checkable: true
-								checked: browser.settings.group
-								onTriggered:
-								{
-									browser.settings.group = !browser.settings.group
-								}
-							}
-						},
-						
-						ToolButton
-						{
-							id: _optionsButton
-							icon.name: "overflow-menu"
-							enabled: currentFMList.pathType !== Maui.FMList.TAGS_PATH && currentFMList.pathType !== Maui.FMList.TRASH_PATH && currentFMList.pathType !== Maui.FMList.APPS_PATH
-							onClicked:
-							{
-								if(browser.browserMenu.visible)
-									browser.browserMenu.close()
-									else
-										browser.browserMenu.show(_optionsButton, 0, height)
-							}
-							checked: browser.browserMenu.visible
-							checkable: false
-						}
-						]
-						
-						headBar.leftContent: [
-						ToolButton
-						{
-							icon.name: "go-previous"
-							onClicked: browser.goBack()
-						},
-						
-						ToolButton
-						{
-							icon.name: "go-next"
-							onClicked: browser.goNext()
-						},
-						
-						Maui.ToolActions
-						{
-							id: _viewTypeGroup
-							
-							currentIndex: browser.settings.viewType
-							onCurrentIndexChanged: 
-							{
-								if(browser)
-									browser.settings.viewType = currentIndex
-									
-									Maui.FM.saveSettings("VIEW_TYPE", currentIndex, "BROWSER")
-							}
-							
-							Action
-							{
-								icon.name: "view-list-icons"
-								text: qsTr("Grid")
-								shortcut: "Ctrl+G"
-							}
-							
-							Action
-							{
-								icon.name: "view-list-details"
-								text: qsTr("List")
-								shortcut: "Ctrl+L"
-							}
-							
-							Action
-							{
-								icon.name: "view-file-columns"
-								text: qsTr("Columns")
-								shortcut: "Ctrl+M"
-							}
-						}					
-						]
-						
-					}	
+				{
+					id: browser
+					anchors.fill: parent				
 					
-					MauiLab.SelectionBar
+					selectionBar: _selectionBar
+					
+					currentPath: Maui.FM.homePath()
+					selectionMode: control.mode === modes.OPEN
+					onItemClicked:
 					{
-						id: _selectionBar
-						Layout.preferredHeight: 48
-						Layout.alignment: Qt.AlignCenter
-						onExitClicked: 
+						if(currentFMList.get(index).isdir == "true")
 						{
-							_selectionBar.clear()
+							openItem(index)
 						}
 						
+						switch(control.mode)
+						{	
+							case modes.OPEN :
+							{	
+								addToSelection(currentFMList.get(index))
+								break
+							}
+							case modes.SAVE:
+							{
+								textField.text = currentFMList.get(index).label
+								break
+							}				
+						}
 					}
+					
+					onCurrentPathChanged:
+					{                        
+						sidebar.currentIndex = -1
+						
+						for(var i = 0; i < sidebar.count; i++)
+						{
+							if(String(browser.currentPath) === sidebar.list.get(i).path)
+							{
+								sidebar.currentIndex = i
+								return;
+							}
+						}
+					}					
+				}	
 				}
 				
 				
-		}
+				MauiLab.SelectionBar
+				{
+					id: _selectionBar
+					Layout.preferredHeight: 48
+					Layout.alignment: Qt.AlignCenter
+					onExitClicked: 
+					{
+						_selectionBar.clear()
+					}
+					
+				}
+			}
+			
+			
 	}
+	
 	
 	function show(cb)
 	{

@@ -133,16 +133,16 @@ Maui.Popup
 
         footBar.rightContent: Loader
         {
-            sourceComponent: control.defaultButtons ? _defaultButtonsComponent : undefined
+            sourceComponent: control.defaultButtons ? _defaultButtonsComponent : null
         }
-
-       ColumnLayout
+        
+        ColumnLayout
         {
-            id: _pageContent
-            anchors.fill: parent
-            spacing: Maui.Style.space.medium
-
-            Label
+			id: _pageContent
+			anchors.fill: parent
+			spacing: Maui.Style.space.medium
+			
+			Label
             {
                 visible: title.length > 0
 
@@ -160,8 +160,9 @@ Maui.Popup
 
             Kirigami.ScrollablePage
             {
+				id: _scrollable
                 visible: message.length > 0
-                Layout.preferredHeight: Math.min(contentHeight, 500)
+                Layout.preferredHeight: Math.min(_scrollable.contentHeight, 500)
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignCenter
 
@@ -196,7 +197,6 @@ Maui.Popup
                 focus: visible
                 onAccepted: control.accepted()
             }
-
         }
     }
 }

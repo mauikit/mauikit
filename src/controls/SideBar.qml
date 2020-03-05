@@ -157,9 +157,7 @@ Maui.AbstractSideBar
                     {
                         control.itemClicked(control.currentIndex)					
                     }
-                }
-                
-               
+                }      
             }
             
 			MouseArea
@@ -173,6 +171,11 @@ Maui.AbstractSideBar
 				propagateComposedEvents: false
 				property int startX
 				property int startY
+				
+				ToolTip.delay: 1000
+				ToolTip.timeout: 5000
+				ToolTip.visible: _handle.containsMouse || _handle.containsPress
+				ToolTip.text: qsTr("Toogle SideBar")
 				
 				Rectangle
 				{
@@ -189,15 +192,32 @@ Maui.AbstractSideBar
 						}
 						height: Maui.Style.unit
 					}
+
 					
-					Kirigami.Icon
+					Rectangle
 					{
-						source: privateProperties.isCollapsed ? "sidebar-expand" : "sidebar-collapse"
-						color:  _handle.containsMouse || _handle.containsPress ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
 						anchors.centerIn: parent
-						width: Maui.Style.iconSizes.medium
-						height: width
+						radius: 2
+						height: 22
+						width: 20
+						
+						color: _handle.containsMouse || _handle.containsPress || !privateProperties.isCollapsed  ?  Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+						border.color: Qt.darker(color, 1.2)
+						
+						Rectangle
+						{
+							radius: 1
+							height: 12
+							width: 3
+							
+							anchors.left: parent.left
+							anchors.verticalCenter: parent.verticalCenter
+							anchors.margins: 6
+							
+							color: _handle.containsMouse || _handle.containsPress || !privateProperties.isCollapsed  ?  Kirigami.Theme.highlightedTextColor : Kirigami.Theme.backgroundColor
+						}
 					}
+					
 				}
 				
 				onClicked:

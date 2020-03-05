@@ -391,10 +391,11 @@ QUrl FMList::getPath() const
 
 void FMList::setPath(const QUrl &path)
 {
-	if(this->path == path)
+	QUrl path_ = QUrl::fromUserInput(path.toString().trimmed());
+	if(this->path == path_)
 		return;	
 	
-	this->path = path;
+	this->path = path_;
     NavHistory.appendPath(this->path);
     
     this->setStatus({STATUS_CODE::LOADING, "Loading content", "Almost ready!", "view-refresh", true, false});
