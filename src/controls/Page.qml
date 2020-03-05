@@ -159,8 +159,8 @@ Page
     { 
         id: _headBar
         visible: count > 1 
-        width: control.width
-        height: implicitHeight
+        width: visible ? control.width : 0
+        height: visible ? implicitHeight : 0
         position: ToolBar.Header             
         
         Component
@@ -202,7 +202,7 @@ Page
     {
         id: _footer
         visible : children 
-        onImplicitHeightChanged: height = implicitHeight
+//         onImplicitHeightChanged: height = implicitHeight
         children:
         {
 			if(headBar.position === ToolBar.Footer && headBar.count && footBar.count)

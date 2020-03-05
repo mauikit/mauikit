@@ -43,8 +43,11 @@ Drawer
     property alias overlay : _overlay
 
     onCollapsedChanged: position = collapsed && collapsedSize < 1 ? 0 : 1
-
+	default property alias content : _content.data
+    
+    
     signal contentDropped(var drop)
+	background: null
 
     MouseArea
     {
@@ -52,7 +55,7 @@ Drawer
         anchors.fill: parent
         anchors.margins: 0
         anchors.leftMargin: (control.width * control.position)
-        parent: ApplicationWindow.contentItem
+        parent: window().contentItem
         preventStealing: true
         propagateComposedEvents: false
         visible: false
@@ -69,6 +72,23 @@ Drawer
     //		if(control.visible && !control.modal)
     //			control.position = 1
     //	}
+    
+    Item
+    {
+		id: _content
+		anchors.fill: parent
+		anchors.leftMargin: 1
+		
+		
+	}   
+	
+	Kirigami.Separator
+	{
+z: control.z + 999		
+		anchors.right: parent.right
+		anchors.top: parent.top
+		anchors.bottom: parent.bottom
+	}
 
     Component.onCompleted:
     {
