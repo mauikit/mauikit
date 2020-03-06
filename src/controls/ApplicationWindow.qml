@@ -67,8 +67,10 @@ Window
 		
 		property alias flickable : _page.flickable
 		
-		property int footerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineFooter
-		property int headerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineHeader
+		property int footerPositioning : _page.footerPositioning
+		property int headerPositioning : _page.headerPositioning
+		
+		property bool csd : false
 		
 		/***************************************************/
 		/********************* COLORS *********************/
@@ -108,7 +110,7 @@ Window
 		property bool isPortrait: Screen.primaryOrientation === Qt.PortraitOrientation || Screen.primaryOrientation === Qt.InvertedPortraitOrientation
 		
 		color: "transparent"
-		flags: Qt.FramelessWindowHint
+		flags: root.csd ? Qt.FramelessWindowHint : undefined
 		
 		
 		Rectangle
@@ -117,7 +119,7 @@ Window
 			anchors.fill: parent
 			color: Kirigami.Theme.backgroundColor
 			border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.5))
-			radius: root.visibility === Window.Maximized ? 0 : 6
+			radius: root.visibility === Window.Maximized || !root.csd ? 0 : 6
 			
 			Maui.Page
 			{
@@ -173,11 +175,13 @@ Window
 				
 				Kirigami.Separator
 				{
+                    visible: root.csd
 					Layout.fillHeight: true
 					
 				},
 				Item
 				{
+                    visible: root.csd
 					Layout.fillHeight: true
 					Layout.preferredWidth: _controlsLayout.implicitWidth
 					
