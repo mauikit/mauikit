@@ -26,6 +26,7 @@ import QtQuick.Window 2.3
 
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.1 as MauiLab
 
 import "private"
 
@@ -107,7 +108,7 @@ Window
 		
 		property bool isPortrait: Screen.primaryOrientation === Qt.PortraitOrientation || Screen.primaryOrientation === Qt.InvertedPortraitOrientation
 		
-		color: "transparent"
+		color: Maui.App.enableCSD ? "transparent" : Kirigami.Theme.backgroundColor
         flags: Maui.App.enableCSD ? Qt.FramelessWindowHint : Qt.Window
 				
 		Rectangle
@@ -126,7 +127,18 @@ Window
 				
 				Kirigami.Theme.colorSet: Kirigami.Theme.Window
 				
-				headBar.leftContent: [ ToolButton
+				headBar.leftContent: [ 
+				Loader
+				{
+					active: Maui.App.enableCSD
+					Layout.fillHeight: true
+					sourceComponent: MauiLab.WindowControls
+					{
+						
+					}
+				},
+				
+				ToolButton
 				{
 					id: menuBtn
 					icon.name: "application-menu"
@@ -168,119 +180,6 @@ Window
 				}
 				]
 				
-				headBar.rightContent:  [
-				
-				Kirigami.Separator
-				{
-					visible: Maui.App.enableCSD
-					Layout.fillHeight: true
-					
-				},
-				Item
-				{
-					visible: Maui.App.enableCSD
-					Layout.fillHeight: true
-					Layout.preferredWidth: _controlsLayout.implicitWidth
-					
-					TapHandler {
-						onTapped: if (tapCount === 2) toggleMaximized()
-						gesturePolicy: TapHandler.DragThreshold
-					}
-					DragHandler {
-						grabPermissions: TapHandler.CanTakeOverFromAnything
-						onActiveChanged: if (active) { root.startSystemMove(); }
-					}
-					
-					RowLayout {
-						id: _controlsLayout
-						spacing: Maui.Style.space.medium
-						anchors.fill: parent
-												
-						MouseArea
-						{
-							id: _minimizeButton
-							height: 16
-							width: height
-							onClicked: root.showMinimized()
-							hoverEnabled: true
-							
-							Rectangle
-							{
-								anchors.fill: parent
-								
-								color: parent.containsMouse || parent.containsPress ? "transparent" : "#4dd0e1"
-								radius: height
-								border.color: Qt.darker("#4dd0e1", 1.2)
-								
-								Maui.Triangle
-								{
-									height: 6
-									width: height
-									anchors.centerIn: parent
-									rotation: -45
-									color: _minimizeButton.containsMouse || _minimizeButton.containsPress ? "#4dd0e1" : "white"
-									
-								}
-							}
-						}
-						
-						MouseArea
-						{
-							id: _maximizeButton
-							height: 16
-							width: height
-							onClicked: root.toggleMaximized()
-							hoverEnabled: true
-							
-							Rectangle
-							{
-								anchors.fill: parent
-								
-								color: parent.containsMouse || parent.containsPress ? "transparent" : "#42a5f5"
-								radius: height
-								border.color: Qt.darker("#42a5f5", 1.2)
-								
-								Maui.Triangle
-								{
-									height: 6
-									width: height
-									anchors.centerIn: parent
-									rotation: 90+45
-									color: _maximizeButton.containsMouse || _maximizeButton.containsPress ? "#42a5f5" : "white"
-									
-								}
-							}
-						}
-						
-						MouseArea
-						{
-							id: _closeButton
-							height: 16
-							width: height
-							onClicked: root.close()
-							hoverEnabled: true
-							
-							Rectangle
-							{
-								anchors.fill: parent
-								
-								color: parent.containsMouse || parent.containsPress ? "transparent" : "#f06292"
-								radius: height
-								border.color: Qt.darker("#f06292", 1.2)
-								
-								Maui.X
-								{
-									height: 6
-									width: height
-									anchors.centerIn: parent
-									color: _closeButton.containsMouse || _closeButton.containsPress ? "#f06292" : "white"
-								}							
-							}
-						}
-					}
-				}			
-				
-				]
 				
 				Item
 				{

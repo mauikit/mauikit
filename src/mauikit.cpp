@@ -124,7 +124,10 @@ void MauiKit::registerTypes(const char *uri)
 	qmlRegisterType(componentUrl(QStringLiteral("private/shapes/Triangle.qml")), uri, 1, 0, "Triangle");
 	qmlRegisterType(componentUrl(QStringLiteral("private/shapes/CheckMark.qml")), uri, 1, 0, "CheckMark");
 	qmlRegisterType(componentUrl(QStringLiteral("private/shapes/Rectangle.qml")), uri, 1, 0, "Rectangle");
-		
+	
+	/** Experimental **/
+	qmlRegisterType(componentUrl(QStringLiteral("labs/CSDControls.qml")), uri, 1, 1, "CSDControls");
+	qmlRegisterType(componentUrl(QStringLiteral("labs/WindowControls.qml")), uri, 1, 1, "WindowControls");
 	
     /** 1.1 **/
 	qmlRegisterType(componentUrl(QStringLiteral("labs/SelectionBar.qml")), uri, 1, 1, "SelectionBar");

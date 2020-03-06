@@ -19,8 +19,7 @@
 #ifndef MAUIAPP_H
 #define MAUIAPP_H
 #include <QObject>
-#include <QQuickItem>
-
+#include <QQmlEngine>
 
 #ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
@@ -33,8 +32,7 @@ class MauiApp : public QObject
 class MAUIKIT_EXPORT MauiApp : public QObject
 #endif
 {
-    Q_OBJECT
-    
+    Q_OBJECT    
     Q_PROPERTY(QString name READ getName CONSTANT FINAL)
     Q_PROPERTY(QString displayName READ getDisplayName CONSTANT FINAL)
     Q_PROPERTY(QString version READ getVersion CONSTANT FINAL)
