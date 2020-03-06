@@ -99,7 +99,6 @@ Drawer
     Behavior on position
     {
         enabled: control.collapsible && control.position === 1
-
         NumberAnimation
         {
             duration: Kirigami.Units.longDuration

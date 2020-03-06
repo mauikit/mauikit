@@ -42,7 +42,7 @@ Page
     property int headerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineHeader
     
     signal goBackTriggered()
-    signal goForwardTriggered()	
+    signal goForwardTriggered()
     
     background: Rectangle
     {
@@ -51,15 +51,16 @@ Page
     
     onFlickableChanged: returnToBounds()
     
-    Connections 
+    Connections
     {
         target: control.flickable ? control.flickable : null
         enabled: control.flickable && ((control.header && control.headerPositioning === ListView.PullBackHeader) || (control.footer &&  control.footerPositioning === ListView.PullBackFooter))
         property int oldContentY
-        property bool updatingContentY: false        
+        property bool updatingContentY: false
 
         onContentYChanged:
-        {  
+        {
+            _headerAnimation.enabled = false
             if(!control.flickable.dragging && control.flickable.atYBeginning)
                 control.returnToBounds()
             
@@ -69,33 +70,29 @@ Page
                 return;
                 //TODO: merge
                 //if moves but not dragging, just update oldContentY
-            } 
+            }
             
             if(control.flickable.contentHeight < control.height)
                 return
-              
+
             var oldFHeight
             var oldHHeight
-           
-               if (control.footer && control.footerPositioning === ListView.PullBackFooter)
-                {
-                    oldFHeight = control.footer.height                    
-                    control.footer.height = Math.max(0,
-                                                  Math.min(control.footer.implicitHeight,
-                                                           control.footer.height + oldContentY - control.flickable.contentY));
-                    
 
-                }
-            
-                
-                   if (control.header && control.headerPositioning === ListView.PullBackHeader)
-                    {
-                        oldHHeight = control.header.height              
-                        control.header.height = Math.max(0,
-                                                      Math.min(control.header.implicitHeight,
-                                                               control.header.height + oldContentY - control.flickable.contentY));               
-                    }
-                
+            if (control.footer && control.footerPositioning === ListView.PullBackFooter)
+            {
+                oldFHeight = control.footer.height
+                control.footer.height = Math.max(0,
+                                                 Math.min(control.footer.implicitHeight,
+                                                          control.footer.height + oldContentY - control.flickable.contentY));
+            }
+
+            if (control.header && control.headerPositioning === ListView.PullBackHeader)
+            {
+                oldHHeight = control.header.height
+                control.header.height = Math.max(0,
+                                                 Math.min(control.header.implicitHeight,
+                                                          control.header.height + oldContentY - control.flickable.contentY));
+            }
             
             //if the implicitHeight is changed, use that to simulate scroll
             if ((control.footer && oldFHeight !== control.footer.height) || ( control.header && oldHHeight !== control.header.height))
@@ -103,35 +100,33 @@ Page
                 updatingContentY = true
 
                 if(control.header && oldHHeight !== control.header.height)
-                    control.flickable.contentY -= (oldHHeight - control.header.height) 
-                    updatingContentY = false   
-            
+                    control.flickable.contentY -= (oldHHeight - control.header.height)
+                updatingContentY = false
 
-                    
             } else {
                 oldContentY = control.flickable.contentY
             }
         }
         
         onMovementEnded:
-        {  
-            
+        {
+            _headerAnimation.enabled = true
             if (control.headerPositioning === ListView.PullBackHeader  && control.header)
-            {  
-                    if (control.header.height >= (control.header.implicitHeight/2) || control.flickable.atYBeginning ) 
-                    {
-                        control.header.height =  control.header.implicitHeight
-                        
-                    } else 
-                    {
-                        control.header.height = 0
-                    }
+            {
+                if (control.header.height >= (control.header.implicitHeight/2) || control.flickable.atYBeginning )
+                {
+                    control.header.height =  control.header.implicitHeight
+
+                } else
+                {
+                    control.header.height = 0
+                }
                 
             }
             
             if (control.footerPositioning === ListView.PullBackFooter  && control.footer)
-            {                
-                if (control.footer.height >= (control.footer.implicitHeight/2) ||  control.flickable.atYEnd) 
+            {
+                if (control.footer.height >= (control.footer.implicitHeight/2) ||  control.flickable.atYEnd)
                 {
                     if(control.flickable.atYEnd)
                     {
@@ -145,10 +140,10 @@ Page
                         
                     }
                     
-                } else 
+                } else
                 {
                     control.footer.height = 0
-                }                  
+                }
             }
         }
     }
@@ -156,13 +151,24 @@ Page
     property alias headBar : _headBar
     property alias footBar: _footBar
     property Maui.ToolBar mheadBar : Maui.ToolBar
-    { 
+    {
         id: _headBar
-        visible: count > 1 
+        visible: count > 1
         width: visible ? control.width : 0
         height: visible ? implicitHeight : 0
-        position: ToolBar.Header             
+        position: ToolBar.Header
         
+        Behavior on height
+        {
+            id: _headerAnimation
+            enabled: false
+            NumberAnimation
+            {
+                duration: Kirigami.Units.shortDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
+
         Component
         {
             id: _titleComponent
@@ -175,7 +181,7 @@ Page
                 color : Kirigami.Theme.textColor
                 font.pointSize: Maui.Style.fontSizes.big
                 horizontalAlignment : Text.AlignHCenter
-                verticalAlignment :  Text.AlignVCenter                
+                verticalAlignment :  Text.AlignVCenter
             }
         }
         
@@ -187,32 +193,32 @@ Page
         }
     }
     
-    property Maui.ToolBar mfootBar : Maui.ToolBar 
-    { 
+    property Maui.ToolBar mfootBar : Maui.ToolBar
+    {
         id: _footBar
-        visible: count 
+        visible: count
         position: ToolBar.Footer
         width: control.width
         height: implicitHeight
-    }   
+    }
 
     header: headBar.count && headBar.position === ToolBar.Header ? headBar : null
     
-    footer: Column 
+    footer: Column
     {
         id: _footer
-        visible : children 
-//         onImplicitHeightChanged: height = implicitHeight
+        visible : children
+        //         onImplicitHeightChanged: height = implicitHeight
         children:
         {
-			if(headBar.position === ToolBar.Footer && headBar.count && footBar.count)
-				return [footBar , headBar]
-				else if(headBar.position === ToolBar.Footer && headBar.count)
-					return [headBar]
-					else if(footBar.count)
-						return [footBar]
-						else
-							return []
+            if(headBar.position === ToolBar.Footer && headBar.count && footBar.count)
+                return [footBar , headBar]
+            else if(headBar.position === ToolBar.Footer && headBar.count)
+                return [headBar]
+            else if(footBar.count)
+                return [footBar]
+            else
+                return []
         }
     }
     
@@ -240,14 +246,13 @@ Page
         sequence: StandardKey.Back
         onActivated: control.goBackTriggered();
     }
-
     
     function returnToBounds()
-	{
-		if(control.header)
-			control.header.height = control.header.implicitHeight
-			
-			if(control.footer)
-				control.footer.height = control.footer.implicitHeight
-	}
+    {
+        if(control.header)
+            control.header.height = control.header.implicitHeight
+
+        if(control.footer)
+            control.footer.height = control.footer.implicitHeight
+    }
 }

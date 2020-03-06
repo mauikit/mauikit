@@ -56,7 +56,7 @@ Window
 		property alias mainMenu : mainMenu.contentData
 		property alias about : aboutDialog
 		property alias accounts: _accountsDialogLoader.item
-		property var currentAccount: Maui.App.accounts.currentAccount
+        property var currentAccount: Maui.App.handleAccounts ? Maui.App.accounts.currentAccount : ({})
 		property alias notifyDialog: _notify
 		
 		/***************************************************/
@@ -108,9 +108,8 @@ Window
 		property bool isPortrait: Screen.primaryOrientation === Qt.PortraitOrientation || Screen.primaryOrientation === Qt.InvertedPortraitOrientation
 		
 		color: "transparent"
-		flags: Maui.App.enableCSD ? Qt.FramelessWindowHint : undefined
-		
-		
+        flags: Maui.App.enableCSD ? Qt.FramelessWindowHint : Qt.Window
+				
 		Rectangle
 		{
 			id: _rect
