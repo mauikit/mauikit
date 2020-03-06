@@ -69,9 +69,7 @@ Window
 		
 		property int footerPositioning : _page.footerPositioning
 		property int headerPositioning : _page.headerPositioning
-		
-		property bool csd : false
-		
+			
 		/***************************************************/
 		/********************* COLORS *********************/
 		/*************************************************/
@@ -110,7 +108,7 @@ Window
 		property bool isPortrait: Screen.primaryOrientation === Qt.PortraitOrientation || Screen.primaryOrientation === Qt.InvertedPortraitOrientation
 		
 		color: "transparent"
-		flags: root.csd ? Qt.FramelessWindowHint : undefined
+		flags: Maui.App.enableCSD ? Qt.FramelessWindowHint : undefined
 		
 		
 		Rectangle
@@ -118,14 +116,14 @@ Window
 			id: _rect
 			anchors.fill: parent
 			color: Kirigami.Theme.backgroundColor
-			border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.5))
-			radius: root.visibility === Window.Maximized || !root.csd ? 0 : 6
+			border.color: Maui.App.enableCSD ? Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.5)) : "transparent"
+			radius: root.visibility === Window.Maximized || !Maui.App.enableCSD ? 0 : 6
 			
 			Maui.Page
 			{
 				id: _page
 				anchors.fill: parent
-				anchors.margins: 1
+				anchors.margins: Maui.App.enableCSD ? 1 : 0
 				
 				Kirigami.Theme.colorSet: Kirigami.Theme.Window
 				
@@ -175,13 +173,13 @@ Window
 				
 				Kirigami.Separator
 				{
-                    visible: root.csd
+					visible: Maui.App.enableCSD
 					Layout.fillHeight: true
 					
 				},
 				Item
 				{
-                    visible: root.csd
+					visible: Maui.App.enableCSD
 					Layout.fillHeight: true
 					Layout.preferredWidth: _controlsLayout.implicitWidth
 					

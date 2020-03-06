@@ -51,6 +51,8 @@ class MAUIKIT_EXPORT MauiApp : public QObject
 #ifdef COMPONENT_ACCOUNTS
     Q_PROPERTY(MauiAccounts * accounts READ getAccounts CONSTANT FINAL)
 #endif
+	
+	Q_PROPERTY(bool enableCSD READ enableCSD WRITE setEnableCSD NOTIFY enableCSDChanged)
 
 public:  
     static MauiApp *qmlAttachedProperties(QObject *object);
@@ -103,6 +105,9 @@ public:
     bool getHandleAccounts() const;
     void setHandleAccounts(const bool &value);
 	
+	bool enableCSD() const;
+	void setEnableCSD(const bool &value);
+	
 #ifdef COMPONENT_ACCOUNTS
     MauiAccounts *getAccounts() const;
 #endif
@@ -117,6 +122,8 @@ private:
     QString webPage;
     QString donationPage;
     QString reportPage;
+	
+	bool m_enableCSD = false;
 
 #ifdef COMPONENT_ACCOUNTS
     bool handleAccounts = true;
@@ -132,6 +139,7 @@ signals:
     void reportPageChanged(QString reportPage);
     void handleAccountsChanged();
 	void sendNotification(QString iconName, QString title, QString body, QJSValue callback, int timeout, QString buttonText);
+	void enableCSDChanged();
 	
 public slots:
 	void notify(const QString &icon = "emblem-warning", const QString &title = "Oops", const QString &body = "Something needs your attention", const QJSValue &callback = {}, const int &timeout = 2500, const QString &buttonText = "Ok");

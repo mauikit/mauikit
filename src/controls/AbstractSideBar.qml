@@ -73,23 +73,20 @@ Drawer
     //			control.position = 1
     //	}
     
-    Item
+    contentItem: Item
     {
 		id: _content
 		anchors.fill: parent
-		anchors.leftMargin: 1
-		
-		
+		anchors.leftMargin: Maui.App.enableCSD ? 1 : 0	
+		Kirigami.Separator
+		{
+			z: control.z + 999		
+			anchors.right: parent.right
+			anchors.top: parent.top
+			anchors.bottom: parent.bottom
+		}
 	}   
 	
-	Kirigami.Separator
-	{
-z: control.z + 999		
-		anchors.right: parent.right
-		anchors.top: parent.top
-		anchors.bottom: parent.bottom
-	}
-
     Component.onCompleted:
     {
         if(!control.collapsed)

@@ -31,7 +31,9 @@ MauiApp::MauiApp() : QObject(nullptr)
   #else
   , m_accounts(nullptr)
   #endif
-{}
+{
+	this->setEnableCSD(UTIL::loadSettings("CSD", "GLOBAL", m_enableCSD).toBool());
+}
 
 QString MauiApp::getName()
 {
@@ -171,6 +173,23 @@ void MauiApp::notify(const QString &icon, const QString& title, const QString& b
 {
 	emit this->sendNotification(icon, title, body, callback, timeout, buttonText);
 }
+
+bool MauiApp::enableCSD() const
+{
+	return m_enableCSD;
+}
+
+void MauiApp::setEnableCSD(const bool& value)
+{
+	if(m_enableCSD == value)
+		return;
+	
+	m_enableCSD = value;
+	UTIL::saveSettings("CSD", m_enableCSD, "GLOBAL");
+	emit enableCSDChanged();
+}
+
+
 
 
 
