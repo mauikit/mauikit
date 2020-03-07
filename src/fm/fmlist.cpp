@@ -82,17 +82,25 @@ watcher(new QFileSystemWatcher(this))
 	
 	connect(this->fm, &FM::pathContentItemsRemoved, [&](FMH::PATH_CONTENT res)
 	{		
-		if(res.path != this->path)
-			return;
-		
+        if(res.path != this->path)
+            return;
+            
+        if(!FMH::fileExists(res.path))
+        {
+            this->setStatus({STATUS_CODE::ERROR, "Error", "This URL cannot be listed", "documentinfo", true, false});
+            return;
+        }
+        
 		for(const auto &item : res.content)
 		{
 			const auto index = this->indexOf(FMH::MODEL_KEY::PATH, item[FMH::MODEL_KEY::PATH]);
 			qDebug() << "SUPOSSED TO REMOVED THIS FORM THE LIST" << index << item[FMH::MODEL_KEY::PATH] << this->list[index];
-			;
-			
+						
 			this->remove(index);	  
 		}
+		
+		 this->setStatus({STATUS_CODE::READY, this->list.isEmpty() ? "Nothing here!" : "",  this->list.isEmpty() ? "This place seems to be empty" : "",this->list.isEmpty()  ? "folder-add" : "", this->list.isEmpty(), true});  
+         
 	});	
 	
 	connect(this->fm, &FM::warningMessage, [&](const QString &message)

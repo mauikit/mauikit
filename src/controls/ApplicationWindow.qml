@@ -171,7 +171,7 @@ Window
 				}
 				]
 				
-				headBar.rightContent: 	Loader
+				headBar.rightContent: Loader
 				{
 					active: Maui.App.enableCSD
 					Layout.preferredWidth: visible ? implicitWidth : 0
@@ -180,8 +180,7 @@ Window
 					{
 						
 					}
-				}
-				
+				}				
 				
 				Item
 				{
