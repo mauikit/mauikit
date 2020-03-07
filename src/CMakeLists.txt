@@ -246,7 +246,11 @@ if(ANDROID)
 
     install(DIRECTORY android/ DESTINATION ${KDE_INSTALL_DATAROOTDIR}/MauiKitAndroid COMPONENT Devel)
 
-    install(FILES MauiKit-android-dependencies.xml DESTINATION ${KDE_INSTALL_LIBDIR})
+    if (Qt5Core_VERSION VERSION_LESS 5.14.0)
+        install(FILES MauiKit-android-dependencies.xml DESTINATION ${KDE_INSTALL_LIBDIR})
+    else()
+        install(FILES MauiKit-android-dependencies.xml DESTINATION ${KDE_INSTALL_LIBDIR} RENAME MauiKit_${CMAKE_ANDROID_ARCH_ABI}-android-dependencies.xml)
+    endif()
 endif()
 
 target_link_libraries(MauiKit
