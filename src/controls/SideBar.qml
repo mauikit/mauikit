@@ -51,11 +51,6 @@ Maui.AbstractSideBar
     signal itemClicked(int index)
     signal itemRightClicked(int index)
 
-    //    Connections
-    //    {
-    //        target: control.Overlay.overlay
-    //        onPressed: control.collapse()
-    //    }
 
     overlay.visible: control.collapsed && control.collapsible && !privateProperties.isCollapsed
 
@@ -182,8 +177,8 @@ Maui.AbstractSideBar
             {
                 anchors.centerIn: parent
                 radius: 2
-                height: 22
-                width: 20
+                height: 18
+                width: 16
 
                 color: _handle.containsMouse || _handle.containsPress || !privateProperties.isCollapsed  ?  Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
                 border.color: Qt.darker(color, 1.2)
@@ -191,12 +186,12 @@ Maui.AbstractSideBar
                 Rectangle
                 {
                     radius: 1
-                    height: 12
+                    height: 10
                     width: 3
 
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
-                    anchors.margins: 6
+                    anchors.margins: 4
 
                     color: _handle.containsMouse || _handle.containsPress || !privateProperties.isCollapsed  ?  Kirigami.Theme.highlightedTextColor : Kirigami.Theme.backgroundColor
                 }

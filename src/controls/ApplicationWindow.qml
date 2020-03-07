@@ -127,16 +127,7 @@ Window
 				
 				Kirigami.Theme.colorSet: Kirigami.Theme.Window
 				
-				headBar.leftContent: [ 
-				Loader
-				{
-					active: Maui.App.enableCSD
-					Layout.fillHeight: true
-					sourceComponent: MauiLab.WindowControls
-					{
-						
-					}
-				},
+				headBar.leftContent: [ 			
 				
 				ToolButton
 				{
@@ -179,6 +170,17 @@ Window
 					}
 				}
 				]
+				
+				headBar.rightContent: 	Loader
+				{
+					active: Maui.App.enableCSD
+					Layout.preferredWidth: visible ? implicitWidth : 0
+					Layout.fillHeight: true
+					sourceComponent: MauiLab.WindowControls
+					{
+						
+					}
+				}
 				
 				
 				Item
