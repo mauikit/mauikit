@@ -87,6 +87,10 @@ function(gradle_add_aar target)
         set(_aar_gradleCmd "assembleRelease")
     endif()
 
+    if (NOT Qt5Core_VERSION VERSION_LESS 5.14.0) # behavior change in Gradle shipped with Qt 5.14
+        set(_aar_suffix "")
+    endif()
+
     file(GLOB_RECURSE _src_files CONFIGURE_DEPENDS "*")
     add_custom_command(
         OUTPUT ${_build_root}/build/outputs/aar/${ARG_NAME}${_aar_suffix}.aar
