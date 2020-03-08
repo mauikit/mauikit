@@ -20,7 +20,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.10
 import QtQuick.Layouts 1.3
-import QtQuick.Controls.impl 2.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.8 as Kirigami
 import QtGraphicalEffects 1.0
@@ -296,8 +295,8 @@ Kirigami.ScrollablePage
 		var amount = parseInt(controlView.width / control.cellWidth, 10)	
 		
 		var leftSpace = parseInt(controlView.width  - ( realAmount * controlView.size_ ), 10)
-		var size = Math.min(amount, realAmount) >= control.count ? control.cellWidth : parseInt((controlView.size_) + (parseInt(leftSpace/realAmount, 10)), 10)
+		var size = Math.min(amount, realAmount) >= control.count ? Math.max(control.cellWidth, control.itemSize) : parseInt((controlView.size_) + (parseInt(leftSpace/realAmount, 10)), 10)
 		
-		control.cellWidth = size        
+		control.cellWidth = size     
     }
 }
