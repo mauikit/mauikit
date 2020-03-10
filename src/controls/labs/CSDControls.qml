@@ -5,13 +5,14 @@ import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import QtQuick.Window 2.3
 import org.kde.mauikit 1.0 as Maui
+import org.kde.kirigami 2.7 as Kirigami
 
 Item
 {
 	id: control
+	
 	implicitWidth: _controlsLayout.implicitWidth
-	property int alignment : Qt.AlignLeft
-	property int orientation: Qt.Horizontal
+	property var order : []
 	// 		TapHandler {
 	// 			onTapped: if (tapCount === 2) toggleMaximized()
 	// 			gesturePolicy: TapHandler.DragThreshold
@@ -21,98 +22,98 @@ Item
 	// 			onActiveChanged: if (active) { root.startSystemMove(); }
 	// 		}
 	
-	property Item closeButton : MouseArea
+	property Component closeButton : Item
 	{
-		id: _closeButton
-		height: 16
-		width: height
-		onClicked: root.close()
-		hoverEnabled: true
+		signal clicked()		
+		onClicked: root.close()	
 		
-		Rectangle
+		Kirigami.Icon
 		{
-			anchors.fill: parent
+			anchors.centerIn: parent
 			
-			color: parent.containsMouse || parent.containsPress ? "transparent" : "#f06292"
-			radius: height
-			border.color: Qt.darker("#f06292", 1.2)
-			
-			Maui.X
-			{
-				height: 6
-				width: height
-				anchors.centerIn: parent
-				color: _closeButton.containsMouse || _closeButton.containsPress ? "#f06292" : "white"
-			}							
+			height: 16
+			width: 16
+			color: hovered ? "#42a5f5" : Kirigami.Theme.textColor		
+			isMask: true
+			source: Maui.App.theme.buttonAsset("Close", "Normal")
 		}
 	}
+		
 	
-	property Item minimizeButton: MouseArea
+	
+	property Component minimizeButton: Item
 	{
-		id: _minimizeButton
-		height: 16
-		width: height
+		signal clicked()
+		
 		onClicked: root.showMinimized()
-		hoverEnabled: true
-		
-		Rectangle
+		Kirigami.Icon
 		{
-			anchors.fill: parent
+			anchors.centerIn: parent
 			
-			color: parent.containsMouse || parent.containsPress ? "transparent" : "#4dd0e1"
-			radius: height
-			border.color: Qt.darker("#4dd0e1", 1.2)
-			
-			Maui.Triangle
-			{
-				height: 6
-				width: height
-				anchors.centerIn: parent
-				rotation: -45
-				color: _minimizeButton.containsMouse || _minimizeButton.containsPress ? "#4dd0e1" : "white"
-				
-			}
+			height: 16
+			width: 16
+			color: hovered ? "#42a5f5" : Kirigami.Theme.textColor		
+			isMask: true
+			source: Maui.App.theme.buttonAsset("Minimize", "Normal")
 		}
 	}
 	
-	property Item maximizeButton: MouseArea
-	{
-		id: _maximizeButton
-		height: 16
-		width: height
+	
+	property Component maximizeButton: Item
+	{	
+		signal clicked()
 		onClicked: root.toggleMaximized()
-		hoverEnabled: true
-		
-		Rectangle
+	
+		Kirigami.Icon
 		{
-			anchors.fill: parent
-			
-			color: parent.containsMouse || parent.containsPress ? "transparent" : "#42a5f5"
-			radius: height
-			border.color: Qt.darker("#42a5f5", 1.2)
-			
-			Maui.Triangle
-			{
-				height: 6
-				width: height
-				anchors.centerIn: parent
-				rotation: 90+45
-				color: _maximizeButton.containsMouse || _maximizeButton.containsPress ? "#42a5f5" : "white"
-				
-			}
+			anchors.centerIn: parent
+			height: 16
+			width: 16
+			color: hovered ? "#42a5f5" : Kirigami.Theme.textColor		
+			isMask: true
+			source: Maui.App.theme.buttonAsset("Maximize", "Normal")
 		}
 	}
 	
-	RowLayout
+	Row
 	{
 		id: _controlsLayout
 		spacing: Maui.Style.space.medium
 		anchors.fill: parent
 		
+		Repeater
+		{
+			model: control.order
+			delegate: MouseArea
+			{
+				id: _delegate
+				height: Maui.Style.iconSizes.medium
+				width: height
+				anchors.verticalCenter: parent.verticalCenter
+				hoverEnabled: true
+				onClicked: _loader.item.clicked()
+				
+				Loader
+				{
+					id: _loader
+					property bool hovered : parent.containsMouse || parent.containsPress
+					signal clicked()
+					
+					anchors.fill: parent
+					sourceComponent: mapControl(modelData)					
+				}
+			}
+		}
 	}
 	
-	Component.onCompleted:
-	{		
-		_controlsLayout.children= control.alignment === Qt.AlignLeft ?  [ closeButton, maximizeButton, minimizeButton] :  [ minimizeButton, maximizeButton, closeButton]
+	function mapControl(key)
+	{
+		switch(key)
+		{
+			case "X": return closeButton;
+			case "I": return minimizeButton;
+			case "A": return maximizeButton;
+			default: return null;			
+		}
 	}
 }

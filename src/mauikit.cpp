@@ -182,12 +182,8 @@ void MauiKit::registerTypes(const char *uri)
     });
 #elif defined Q_OS_LINUX
     qmlRegisterType(componentUrl(QStringLiteral("Terminal.qml")), uri, 1, 0, "Terminal");
-    qmlRegisterSingletonType<MAUIKDE>(uri, 1, 0, "KDE",
-                                      [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject* {
-        Q_UNUSED(engine)
-        Q_UNUSED(scriptEngine)
-        return new MAUIKDE;
-    });
+	qmlRegisterUncreatableType<MAUIKDE>(uri, 1, 0, "KDE", "Cannot be created KDE");
+
 #elif defined Q_OS_WIN32
     //here window platform integration interfaces
 #endif

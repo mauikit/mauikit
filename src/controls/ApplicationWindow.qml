@@ -22,7 +22,7 @@ import QtQuick.Controls 2.3
 
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
-import QtQuick.Window 2.3
+import QtQuick.Window 2.12
 
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
@@ -36,28 +36,35 @@ Window
 	visible: true
 	width: Screen.desktopAvailableWidth * (Kirigami.Settings.isMobile ? 1 : 0.4)
 	height: Screen.desktopAvailableHeight * (Kirigami.Settings.isMobile ? 1 : 0.4)
+	color: Maui.App.enableCSD ? "transparent" : Kirigami.Theme.backgroundColor
+	flags: Maui.App.enableCSD ? Qt.FramelessWindowHint : Qt.Window
 	
-	property Maui.AbstractSideBar sideBar
+	property Maui.AbstractSideBar sideBar	
 	
 	/***************************************************/
 	/******************** ALIASES *********************/
 	/*************************************************/
 	default property alias content : _content.data
 		
+		property alias flickable : _page.flickable
+		
 		property alias headBar : _page.headBar
 		property alias footBar: _page.footBar
+		
 		property alias footer: _page.footer
 		property alias header :_page.header
 		
+		property alias footerPositioning : _page.footerPositioning
+		property alias headerPositioning : _page.headerPositioning
+		
 		property alias dialog: dialogLoader.item
 		
-		property alias leftIcon : menuBtn
-		property alias menuButton : menuBtn
-		
+		property alias menuButton : menuBtn		
 		property alias mainMenu : mainMenu.contentData
-		property alias about : aboutDialog
+
 		property alias accounts: _accountsDialogLoader.item
         property var currentAccount: Maui.App.handleAccounts ? Maui.App.accounts.currentAccount : ({})
+		
 		property alias notifyDialog: _notify
 		
 		/***************************************************/
@@ -65,11 +72,7 @@ Window
 		/*************************************************/
 		
 		property bool isWide : root.width >= Kirigami.Units.gridUnit * 30
-		
-		property alias flickable : _page.flickable
-		
-		property int footerPositioning : _page.footerPositioning
-		property int headerPositioning : _page.headerPositioning
+				
 			
 		/***************************************************/
 		/********************* COLORS *********************/
@@ -80,14 +83,10 @@ Window
 		
 		/***************************************************/
 		/**************** READONLY PROPS ******************/
-		/*************************************************/
-		
+		/*************************************************/		
 		readonly property bool isMobile : Kirigami.Settings.isMobile
 		readonly property bool isAndroid: Maui.Handy.isAndroid
-		readonly property bool isTouch: Maui.Handy.isTouch
-		
-		readonly property real screenWidth : Screen.width
-		readonly property real screenHeight : Screen.height
+		readonly property bool isPortrait: Screen.primaryOrientation === Qt.PortraitOrientation || Screen.primaryOrientation === Qt.InvertedPortraitOrientation
 		
 		/***************************************************/
 		/******************** SIGNALS *********************/
@@ -104,13 +103,8 @@ Window
 				const y = root.y
 				Maui.FM.saveSettings("GEOMETRY", Qt.rect(x, y, width, height), "WINDOW")
 			}
-		}
-		
-		property bool isPortrait: Screen.primaryOrientation === Qt.PortraitOrientation || Screen.primaryOrientation === Qt.InvertedPortraitOrientation
-		
-		color: Maui.App.enableCSD ? "transparent" : Kirigami.Theme.backgroundColor
-        flags: Maui.App.enableCSD ? Qt.FramelessWindowHint : Qt.Window
-				
+		}		
+	
 		Rectangle
 		{
 			id: _rect
@@ -128,14 +122,28 @@ Window
 				Kirigami.Theme.colorSet: Kirigami.Theme.Window
 				
 				headBar.leftContent: [ 			
+				Loader
+				{
+					id: _leftControlsLoader
+					active: Maui.App.enableCSD && Maui.App.leftWindowControls.length
+					Layout.preferredWidth: active ? implicitWidth : 0
+					Layout.fillHeight: true
+					sourceComponent: MauiLab.WindowControls 
+					{
+						order: Maui.App.leftWindowControls
+					}
+				},
+				
+				Kirigami.Separator
+				{
+					visible: _leftControlsLoader.active
+					Layout.fillHeight: true	
+				},
 				
 				ToolButton
 				{
 					id: menuBtn
 					icon.name: "application-menu"
-					icon.color: headBarFGColor
-					icon.width: Maui.Style.iconSizes.medium
-					icon.height: Maui.Style.iconSizes.medium
 					checked: mainMenu.visible
 					onClicked:
 					{
@@ -171,16 +179,26 @@ Window
 				}
 				]
 				
-				headBar.rightContent: Loader
+				headBar.rightContent: [
+				
+				Kirigami.Separator
 				{
-					active: Maui.App.enableCSD
-					Layout.preferredWidth: visible ? implicitWidth : 0
+					visible: _rightControlsLoader.active
+					Layout.fillHeight: true	
+				},
+				
+				Loader
+				{
+					id: _rightControlsLoader
+					active: Maui.App.enableCSD && Maui.App.rightWindowControls.length
+					Layout.preferredWidth: active ? implicitWidth : 0
 					Layout.fillHeight: true
 					sourceComponent: MauiLab.WindowControls
 					{
-						
-					}
-				}				
+						order:  Maui.App.rightWindowControls
+					} 
+				}			
+				]	
 				
 				Item
 				{
@@ -194,10 +212,9 @@ Window
 					}
 					
 					anchors.leftMargin: root.sideBar ? ((root.sideBar.collapsible && root.sideBar.collapsed) ? root.sideBar.collapsedSize : root.sideBar.width * root.sideBar.position) : 0
-				}
+				}				
 				
-				
-				layer.enabled: true
+				layer.enabled: Maui.App.enableCSD
 				layer.effect: OpacityMask
 				{
 					maskSource: Item
@@ -213,24 +230,11 @@ Window
 							radius: _rect.radius
 						}
 					}
-				}
-				
+				}				
 			}
 		}
 		
-		// DropShadow 
-		// {
-		// 	anchors.fill: parent
-		// 	horizontalOffset: 0
-		// 	verticalOffset: 0
-		// 	radius: 8.0
-		// 	samples: 17
-		// 	color: "#80000000"
-		// 	source: _rect
-		// }
-		
-		
-		
+				
 		//     onHeadBarBGColorChanged:
 		//     {
 		//         if(!isMobile && colorSchemeName.length > 0)
@@ -373,7 +377,6 @@ Window
 			}
 		}
 		
-		
 		AboutDialog
 		{
 			id: aboutDialog
@@ -382,7 +385,8 @@ Window
 		Loader
 		{
 			id: _accountsDialogLoader
-			source: Maui.App.handleAccounts ? "private/AccountsHelper.qml" : ""
+			active: Maui.App.handleAccounts 
+			source: "private/AccountsHelper.qml"
 		}
 		
 		Maui.Dialog
@@ -466,9 +470,13 @@ Window
 			if(isAndroid)
 			{
 				if(headBar.position === ToolBar.Footer)
+				{
 					Maui.Android.statusbarColor(Kirigami.Theme.backgroundColor, true)
-					else
-						Maui.Android.statusbarColor(headBar.Kirigami.Theme.backgroundColor, true)
+					
+				} else
+				{
+					Maui.Android.statusbarColor(headBar.Kirigami.Theme.backgroundColor, true)					
+				}				
 			}
 			
 			if(!Kirigami.Settings.isMobile)
@@ -493,9 +501,11 @@ Window
 		
 		function toggleMaximized()
 		{
-			if (root.visibility === Window.Maximized) {
+			if (root.visibility === Window.Maximized)
+			{
 				root.showNormal();
-			} else {
+			} else
+			{
 				root.showMaximized();
 			}
 		}

@@ -136,7 +136,6 @@ Item
             visible: control.hiddenActions.length > 0          
             
             Layout.alignment: Qt.AlignVCenter
-            text: qsTr("More")		
             autoExclusive: false
             checkable: true
             display: checked ? ToolButton.TextBesideIcon : ToolButton.IconOnly

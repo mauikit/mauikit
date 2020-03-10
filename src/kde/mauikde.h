@@ -22,30 +22,44 @@
 
 #include <QObject>
 #include <QVariantList>
+#include <QQmlEngine>
+
 #include "fmh.h"
 
 class MAUIKDE : public QObject
 {
-    Q_OBJECT
+    Q_OBJECT   
+	
 public:
-    MAUIKDE(QObject *parent = nullptr);
+	static MAUIKDE *qmlAttachedProperties(QObject *object);
+	static MAUIKDE *instance()
+	{
+		static MAUIKDE kde;
+		return &kde;
+	}
 	
-    Q_INVOKABLE static QVariantList services(const QUrl &url);
-    Q_INVOKABLE static QVariantList devices();
-    Q_INVOKABLE static bool sendToDevice(const QString &device, const QString &id, const QStringList &urls);
-    Q_INVOKABLE static void openWithApp(const QString &exec, const QStringList &urls);
-    Q_INVOKABLE static void attachEmail(const QStringList &urls);
-	Q_INVOKABLE static void email(const QString &to = "", const QString &cc = "", const QString &bcc = "", const QString &subject = "",const QString &body = "", const QString &messageFile ="", const QStringList &urls = QStringList());
-	
-    Q_INVOKABLE static void setColorScheme(const QString &schemeName, const QString &bg =  QString(), const QString &fg = QString());
-	
+	MAUIKDE(const MAUIKDE&) = delete;
+	MAUIKDE& operator=(const MAUIKDE &) = delete;
+	MAUIKDE(MAUIKDE &&) = delete;
+	MAUIKDE & operator=(MAUIKDE &&) = delete;	
+  
 	static FMH::MODEL_LIST getApps();
 	static FMH::MODEL_LIST getApps(const QString &groupStr);
 	static void launchApp(const QString &app);
-    
-signals:
+	
+private: 
+	MAUIKDE(QObject *parent = nullptr);
 
 public slots:
+	static QVariantList services(const QUrl &url);
+	static QVariantList devices();
+	static bool sendToDevice(const QString &device, const QString &id, const QStringList &urls);
+	static void openWithApp(const QString &exec, const QStringList &urls);
+	static void attachEmail(const QStringList &urls);
+	static void email(const QString &to = "", const QString &cc = "", const QString &bcc = "", const QString &subject = "",const QString &body = "", const QString &messageFile ="", const QStringList &urls = QStringList());
+	
+	static void setColorScheme(const QString &schemeName, const QString &bg =  QString(), const QString &fg = QString());
 };
 
+QML_DECLARE_TYPEINFO(MAUIKDE, QML_HAS_ATTACHED_PROPERTIES)
 #endif // MAUIKDE_H
