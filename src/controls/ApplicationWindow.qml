@@ -134,12 +134,6 @@ Window
 					}
 				},
 				
-				Kirigami.Separator
-				{
-					visible: _leftControlsLoader.active
-					Layout.fillHeight: true	
-				},
-				
 				ToolButton
 				{
 					id: menuBtn
@@ -179,15 +173,7 @@ Window
 				}
 				]
 				
-				headBar.rightContent: [
-				
-				Kirigami.Separator
-				{
-					visible: _rightControlsLoader.active
-					Layout.fillHeight: true	
-				},
-				
-				Loader
+				headBar.rightContent: Loader
 				{
 					id: _rightControlsLoader
 					active: Maui.App.enableCSD && Maui.App.rightWindowControls.length
@@ -196,9 +182,9 @@ Window
 					sourceComponent: MauiLab.WindowControls
 					{
 						order:  Maui.App.rightWindowControls
-					} 
+					} 					
 				}			
-				]	
+				
 				
 				Item
 				{
