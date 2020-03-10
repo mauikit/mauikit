@@ -111,7 +111,7 @@ Window
 			anchors.fill: parent
 			color: Kirigami.Theme.backgroundColor
 			border.color: Maui.App.enableCSD ? Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.5)) : "transparent"
-			radius: root.visibility === Window.Maximized || !Maui.App.enableCSD ? 0 : 6
+			radius: root.visibility === Window.Maximized || !Maui.App.enableCSD ? 0 : Maui.App.theme.borderRadius
 			
 			Maui.Page
 			{

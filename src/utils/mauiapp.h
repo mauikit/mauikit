@@ -33,6 +33,7 @@
 struct MauiTheme 
 {
 	Q_GADGET	
+	Q_PROPERTY(int borderRadius READ getRadius CONSTANT FINAL)
 	
 	static QUrl confFile(const QUrl &path)
 	{
@@ -52,7 +53,6 @@ public:
 	Q_INVOKABLE QUrl buttonAsset(const QString &key, const QString &state)
 	{
 		const auto conf = confFile(path);
-		qDebug() << "LOOKING FOR STYLE IMAGE 1" << conf << path;
 		
 		if(conf.isValid())
 		{			
@@ -84,12 +84,26 @@ public:
 		}
 		
 		return QUrl();
-	}
+	}	
 	
-// 	QColor color(const QString &key, const QString &state)
-// 	{
-// 		
-// 	}
+	int getRadius()
+	{
+		const auto conf = confFile(path);
+		
+		if(conf.isValid())
+		{			
+			QSettings settings(conf.toLocalFile(), QSettings::IniFormat);
+			QVariant res;
+			settings.setDefaultFormat(QSettings::IniFormat);
+			settings.beginGroup("Decoration");
+			res = settings.value("BorderRadius", 6);
+			settings.endGroup();
+			
+			return res.toInt();
+		}
+		
+		return 6;
+	}
 };
 Q_DECLARE_METATYPE(MauiTheme)
 
@@ -124,7 +138,7 @@ class MAUIKIT_EXPORT MauiApp : public QObject
 	Q_PROPERTY(QStringList rightWindowControls MEMBER m_rightWindowControls NOTIFY rightWindowControlsChanged FINAL)
 	
 	// Theming and branding support
-	Q_PROPERTY(MauiTheme theme READ theme FINAL )
+	Q_PROPERTY(MauiTheme theme READ theme NOTIFY themeChanged FINAL )
 
 public:  
     static MauiApp *qmlAttachedProperties(QObject *object);
@@ -231,6 +245,7 @@ signals:
 	void enableCSDChanged();
 	void leftWindowControlsChanged();
 	void rightWindowControlsChanged();
+	void themeChanged();
 	
 public slots:
 	void notify(const QString &icon = "emblem-warning", const QString &title = "Oops", const QString &body = "Something needs your attention", const QJSValue &callback = {}, const int &timeout = 2500, const QString &buttonText = "Ok");
