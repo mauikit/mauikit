@@ -34,6 +34,7 @@ struct MauiTheme
 {
 	Q_GADGET	
 	Q_PROPERTY(int borderRadius READ getRadius CONSTANT FINAL)
+	Q_PROPERTY(bool maskButtons READ getMaskButtons CONSTANT FINAL)
 	
 	static QUrl confFile(const QUrl &path)
 	{
@@ -47,10 +48,8 @@ struct MauiTheme
 		
 		return path;
 	}
-
-public:
-	QUrl path;	
-	Q_INVOKABLE QUrl buttonAsset(const QString &key, const QString &state)
+	
+	QVariant getSettings(const QString &group, const QString &key, const QVariant &defaultValue) const
 	{
 		const auto conf = confFile(path);
 		
@@ -59,50 +58,44 @@ public:
 			QSettings settings(conf.toLocalFile(), QSettings::IniFormat);
 			QVariant res;
 			settings.setDefaultFormat(QSettings::IniFormat);
-			qDebug() << "LOOKING FOR STYLE IMAGE 1"  << settings.allKeys() << settings.format() << settings.isWritable();
-			
-			settings.beginGroup(key);
-			res = settings.value(state, "");
+			settings.beginGroup(group);
+			res = settings.value(key, defaultValue);
 			settings.endGroup();
 			
-			qDebug() << "LOOKING FOR STYLE IMAGE 2" << res << conf.toLocalFile() << settings.childGroups() << settings.childKeys();
+			return res;
+		}
+		
+		return defaultValue;
+	}
+
+public:
+	QUrl path;	
+	Q_INVOKABLE QUrl buttonAsset(const QString &key, const QString &state) const
+	{		
+		auto res = getSettings(key, state, QString());
 			
-			
-			if(!res.toString().isEmpty())
+		if(!res.toString().isEmpty())
+		{			
+			auto imageUrl = QUrl(path.toString()+"/"+res.toString());
+			if(FMH::fileExists(imageUrl))
 			{
-				qDebug() << "LOOKING FOR STYLE IMAGE 3" << res;
-				
-				auto imageUrl = QUrl(path.toString()+"/"+res.toString());
-				
-				qDebug() << "LOOKING FOR STYLE IMAGE IMAGE" << imageUrl;
-				
-				if(FMH::fileExists(imageUrl))
-				{
-					return imageUrl;
-				}				
-			}			
+				return imageUrl;
+			}				
 		}
 		
 		return QUrl();
 	}	
 	
-	int getRadius()
+	int getRadius() const
+	{		
+		auto res = getSettings("Decoration", "BorderRadius", 6);
+		return res.toInt();		
+	}
+	
+	bool getMaskButtons() const
 	{
-		const auto conf = confFile(path);
-		
-		if(conf.isValid())
-		{			
-			QSettings settings(conf.toLocalFile(), QSettings::IniFormat);
-			QVariant res;
-			settings.setDefaultFormat(QSettings::IniFormat);
-			settings.beginGroup("Decoration");
-			res = settings.value("BorderRadius", 6);
-			settings.endGroup();
-			
-			return res.toInt();
-		}
-		
-		return 6;
+		auto res = getSettings("Decoration", "MaskButtons", true);
+		return res.toBool();		
 	}
 };
 Q_DECLARE_METATYPE(MauiTheme)

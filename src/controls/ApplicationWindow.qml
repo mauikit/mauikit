@@ -500,4 +500,9 @@ Window
 		{
 			return _page;
 		}
+		
+		function root()
+		{
+			return root;
+		}
 }

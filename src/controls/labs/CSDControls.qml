@@ -10,6 +10,7 @@ import org.kde.kirigami 2.7 as Kirigami
 Item
 {
 	id: control
+	readonly property bool maskButtons: Maui.App.theme.maskButtons
 	
 	implicitWidth: _controlsLayout.implicitWidth
 	property var order : []
@@ -33,13 +34,11 @@ Item
 			
 			height: 16
 			width: 16
-			color: hovered ? "#42a5f5" : Kirigami.Theme.textColor		
-			isMask: true
-			source: Maui.App.theme.buttonAsset("Close", "Normal")
+			color: isMask ? (hovered ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor) : "transparent"		
+			isMask: control.maskButtons
+			source: Maui.App.theme.buttonAsset("Close", hovered ? "Hover" : "Normal")
 		}
-	}
-		
-	
+	}	
 	
 	property Component minimizeButton: Item
 	{
@@ -52,12 +51,11 @@ Item
 			
 			height: 16
 			width: 16
-			color: hovered ? "#42a5f5" : Kirigami.Theme.textColor		
-			isMask: true
-			source: Maui.App.theme.buttonAsset("Minimize", "Normal")
+			color: isMask ? (hovered ? Kirigami.Theme.neutralTextColor : Kirigami.Theme.textColor) : "transparent"		
+			isMask: control.maskButtons
+			source: Maui.App.theme.buttonAsset("Minimize", hovered ? "Hover" : "Normal")
 		}
-	}
-	
+	}	
 	
 	property Component maximizeButton: Item
 	{	
@@ -69,9 +67,9 @@ Item
 			anchors.centerIn: parent
 			height: 16
 			width: 16
-			color: hovered ? "#42a5f5" : Kirigami.Theme.textColor		
-			isMask: true
-			source: Maui.App.theme.buttonAsset("Maximize", "Normal")
+			color: isMask ? (hovered ? Kirigami.Theme.positiveTextColor : Kirigami.Theme.textColor) : "transparent"		
+			isMask: control.maskButtons
+			source: Maui.App.theme.buttonAsset(Window.window.visibility === Window.Maximized ? "Restore" : "Maximize", hovered ? "Hover" : "Normal")
 		}
 	}
 	
