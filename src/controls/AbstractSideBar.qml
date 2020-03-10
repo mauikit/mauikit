@@ -27,11 +27,11 @@ import "private"
 Drawer
 {
     id: control
-
     edge: Qt.LeftEdge
     implicitHeight: parent.height - (window().header ? window().header.height+1 : 0) - (window().footer ? window().footer.height+1 : 0)
     height: implicitHeight
     y: (window().header ? window().header.height+1 : 0)
+	leftPadding: 100
 //    closePolicy: modal || collapsed ?  Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
     interactive: modal || collapsed || !visible
     dragMargin: Maui.Style.space.big    
@@ -77,7 +77,10 @@ Drawer
     {
 		id: _content
 		anchors.fill: parent
-		anchors.leftMargin: Maui.App.enableCSD ? 1 : 0	
+		anchors.leftMargin: Maui.App.enableCSD ? Maui.Style.space.tiny+1 : 0	
+		anchors.bottomMargin: Maui.App.enableCSD ? Maui.Style.space.tiny : 0	
+		anchors.topMargin: Maui.App.enableCSD ? Maui.Style.space.tiny : 0	
+		anchors.rightMargin: 0	
 		Kirigami.Separator
 		{
 			z: control.z + 999		

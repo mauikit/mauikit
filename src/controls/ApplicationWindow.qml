@@ -28,12 +28,13 @@ import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import org.kde.mauikit 1.1 as MauiLab
 
-import "private"
+import "private" as Private
 
 Window
 {
 	id: root
 	visible: true
+	
 	width: Screen.desktopAvailableWidth * (Kirigami.Settings.isMobile ? 1 : 0.4)
 	height: Screen.desktopAvailableHeight * (Kirigami.Settings.isMobile ? 1 : 0.4)
 	color: Maui.App.enableCSD ? "transparent" : Kirigami.Theme.backgroundColor
@@ -44,6 +45,7 @@ Window
 	/***************************************************/
 	/******************** ALIASES *********************/
 	/*************************************************/
+	
 	default property alias content : _content.data
 		
 		property alias flickable : _page.flickable
@@ -61,9 +63,9 @@ Window
 		
 		property alias menuButton : menuBtn		
 		property alias mainMenu : mainMenu.contentData
-
+		
 		property alias accounts: _accountsDialogLoader.item
-        property var currentAccount: Maui.App.handleAccounts ? Maui.App.accounts.currentAccount : ({})
+		property var currentAccount: Maui.App.handleAccounts ? Maui.App.accounts.currentAccount : ({})
 		
 		property alias notifyDialog: _notify
 		
@@ -72,8 +74,8 @@ Window
 		/*************************************************/
 		
 		property bool isWide : root.width >= Kirigami.Units.gridUnit * 30
-				
-			
+		
+		
 		/***************************************************/
 		/********************* COLORS *********************/
 		/*************************************************/
@@ -104,11 +106,12 @@ Window
 				Maui.FM.saveSettings("GEOMETRY", Qt.rect(x, y, width, height), "WINDOW")
 			}
 		}		
-	
+		
 		Rectangle
 		{
 			id: _rect
 			anchors.fill: parent
+			anchors.margins: Maui.App.enableCSD ? Maui.Style.space.tiny : 0
 			color: Kirigami.Theme.backgroundColor
 			border.color: Maui.App.enableCSD ? Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.5)) : "transparent"
 			radius: root.visibility === Window.Maximized || !Maui.App.enableCSD ? 0 : Maui.App.theme.borderRadius
@@ -183,8 +186,7 @@ Window
 					{
 						order:  Maui.App.rightWindowControls
 					} 					
-				}			
-				
+				}
 				
 				Item
 				{
@@ -197,7 +199,7 @@ Window
 						x: root.sideBar && root.sideBar.collapsible && root.sideBar.collapsed ? root.sideBar.position * (root.sideBar.width - root.sideBar.collapsedSize) : 0
 					}
 					
-					anchors.leftMargin: root.sideBar ? ((root.sideBar.collapsible && root.sideBar.collapsed) ? root.sideBar.collapsedSize : root.sideBar.width * root.sideBar.position) : 0
+					anchors.leftMargin: root.sideBar ?(((root.sideBar.collapsible && root.sideBar.collapsed) ? root.sideBar.collapsedSize : (root.sideBar.width ) * root.sideBar.position)) - (Maui.App.enableCSD ? Maui.Style.space.tiny : 0): 0
 				}				
 				
 				layer.enabled: Maui.App.enableCSD
@@ -214,13 +216,24 @@ Window
 							width: _rect.width
 							height: _rect.height
 							radius: _rect.radius
-						}
+						}						
 					}
 				}				
-			}
+			}			
 		}
 		
-				
+		DropShadow 
+		{
+			enabled: Maui.App.enableCSD
+			anchors.fill: _rect
+			horizontalOffset: 0
+			verticalOffset: 0
+			radius: 5
+			samples: 17
+			color: "#80000000"
+			source: _rect
+		}
+		
 		//     onHeadBarBGColorChanged:
 		//     {
 		//         if(!isMobile && colorSchemeName.length > 0)
@@ -363,7 +376,7 @@ Window
 			}
 		}
 		
-		AboutDialog
+		Private.AboutDialog
 		{
 			id: aboutDialog
 		}
@@ -499,10 +512,5 @@ Window
 		function window()
 		{
 			return _page;
-		}
-		
-		function root()
-		{
-			return root;
 		}
 }

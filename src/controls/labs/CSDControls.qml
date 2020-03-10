@@ -31,9 +31,8 @@ Item
 		Kirigami.Icon
 		{
 			anchors.centerIn: parent
-			
 			height: 16
-			width: 16
+			width: height
 			color: isMask ? (hovered ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor) : "transparent"		
 			isMask: control.maskButtons
 			source: Maui.App.theme.buttonAsset("Close", hovered ? "Hover" : "Normal")
@@ -47,10 +46,9 @@ Item
 		onClicked: root.showMinimized()
 		Kirigami.Icon
 		{
-			anchors.centerIn: parent
-			
+			anchors.centerIn: parent			
 			height: 16
-			width: 16
+			width: height
 			color: isMask ? (hovered ? Kirigami.Theme.neutralTextColor : Kirigami.Theme.textColor) : "transparent"		
 			isMask: control.maskButtons
 			source: Maui.App.theme.buttonAsset("Minimize", hovered ? "Hover" : "Normal")
@@ -66,7 +64,7 @@ Item
 		{
 			anchors.centerIn: parent
 			height: 16
-			width: 16
+			width: height
 			color: isMask ? (hovered ? Kirigami.Theme.positiveTextColor : Kirigami.Theme.textColor) : "transparent"		
 			isMask: control.maskButtons
 			source: Maui.App.theme.buttonAsset(Window.window.visibility === Window.Maximized ? "Restore" : "Maximize", hovered ? "Hover" : "Normal")
@@ -77,7 +75,8 @@ Item
 	{
 		id: _controlsLayout
 		spacing: Maui.Style.space.medium
-		anchors.fill: parent
+		width: parent.width
+		height: parent.height
 		
 		Repeater
 		{
@@ -85,7 +84,7 @@ Item
 			delegate: MouseArea
 			{
 				id: _delegate
-				height: Maui.Style.iconSizes.medium
+				height: 18
 				width: height
 				anchors.verticalCenter: parent.verticalCenter
 				hoverEnabled: true

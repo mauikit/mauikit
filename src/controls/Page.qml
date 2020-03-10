@@ -208,7 +208,7 @@ Page
     {
         id: _footer
         visible : children
-        //         onImplicitHeightChanged: height = implicitHeight
+        onImplicitHeightChanged: height = implicitHeight
         children:
         {
             if(headBar.position === ToolBar.Footer && headBar.count && footBar.count)
