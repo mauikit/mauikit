@@ -56,16 +56,7 @@ void PathList::popPaths(const QString &path)
 			}			
 		}
 		return i;
-	}();
-	
-	if(index == 0)
-	{
-		emit this->preListChanged();
-		this->list.clear();
-		this->list << PathList::splitPath(path);
-		emit this->postListChanged();
-		return;
-	}
+	}();	
 	
 	auto _url = QString(this->m_path).left(index);
 	
@@ -116,13 +107,7 @@ void PathList::removePaths(const QString &path)
 void PathList::setPath(const QString& path)
 {	
 	auto _url = path;
-	
-	while(_url.endsWith("/"))
-		_url.chop(1);
-	
-	while(_url.startsWith("/"))
-		_url.remove(0,1);
-	
+			
 	if(_url == this->m_path)
 		return;	
 	
@@ -134,13 +119,22 @@ void PathList::setPath(const QString& path)
 	{
 		removePaths(_url);
 	}	
-	else 
+	else if(!this->list.isEmpty())
 	{
 		popPaths(_url);
+		
+	}else
+	{
+		emit this->preListChanged();
+		this->list.clear();
+		this->list << PathList::splitPath(path);
+		emit this->postListChanged();		
 	}
 	
 	this->m_path = _url;	
-	emit this->pathChanged();		
+	emit this->pathChanged();
+	
+	qDebug()<< this->list;
 }
 
 FMH::MODEL_LIST PathList::splitPath(const QString& path)
@@ -164,7 +158,7 @@ FMH::MODEL_LIST PathList::splitPath(const QString& path)
 		if(label.isEmpty())
 			continue;
 		
-		if(label.contains(":") && i == count -1)
+		if(label.contains(":") && i == count -1) //handle the protocol 
 		{
 			res << FMH::MODEL
 			{

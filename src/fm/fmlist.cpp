@@ -409,7 +409,7 @@ void FMList::setPath(const QUrl &path)
     this->setStatus({STATUS_CODE::LOADING, "Loading content", "Almost ready!", "view-refresh", true, false});
 	
 	const auto __scheme = this->path.scheme();
-    this->pathName = this->path.fileName();
+    this->pathName = QDir(this->path.toLocalFile()).dirName();
 
     if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::CLOUD_PATH])
 	{
@@ -436,7 +436,6 @@ void FMList::setPath(const QUrl &path)
 	{
 		this->watchPath(this->path.toString());        
 		this->pathType = FMList::PATHTYPE::PLACES_PATH;
-        this->pathName = FMH::getDirInfoModel(this->path)[FMH::MODEL_KEY::LABEL];
 		
 	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::MTP_PATH])		
 	{
