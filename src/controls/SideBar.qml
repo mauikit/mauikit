@@ -27,22 +27,24 @@ import "private"
 Maui.AbstractSideBar
 {
     id: control
+    default property alias content : _content.data
+		
     implicitWidth: privateProperties.isCollapsed && collapsed && collapsible  ? collapsedSize : preferredWidth
     width: implicitWidth
     modal: false
     position: 1
     interactive: !collapsible
-
-    default property alias content : _content.data
+    
     property alias model : _listBrowser.model
+    property alias delegate : _listBrowser.delegate
     property alias count : _listBrowser.count
-
+    
     property alias section : _listBrowser.section
     property alias currentIndex: _listBrowser.currentIndex
-
+    
     property int iconSize : Maui.Style.iconSizes.small
     property bool showLabels: control.width > collapsedSize
-
+    
     property QtObject privateProperties : QtObject
     {
         property bool isCollapsed: control.collapsed
@@ -50,7 +52,6 @@ Maui.AbstractSideBar
 
     signal itemClicked(int index)
     signal itemRightClicked(int index)
-
 
     overlay.visible: control.collapsed && control.collapsible && !privateProperties.isCollapsed
 
