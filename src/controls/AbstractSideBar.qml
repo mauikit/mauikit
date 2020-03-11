@@ -77,10 +77,6 @@ Drawer
     {
 		id: _content
 		anchors.fill: parent
-		anchors.leftMargin: Maui.App.enableCSD ? Maui.Style.space.tiny+1 : 0	
-		anchors.bottomMargin: Maui.App.enableCSD ? Maui.Style.space.tiny : 0	
-		anchors.topMargin: Maui.App.enableCSD ? Maui.Style.space.tiny : 0	
-		anchors.rightMargin: 0	
 		Kirigami.Separator
 		{
 			z: control.z + 999		

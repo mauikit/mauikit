@@ -38,7 +38,7 @@ Window
 	width: Screen.desktopAvailableWidth * (Kirigami.Settings.isMobile ? 1 : 0.4)
 	height: Screen.desktopAvailableHeight * (Kirigami.Settings.isMobile ? 1 : 0.4)
 	color: Maui.App.enableCSD ? "transparent" : Kirigami.Theme.backgroundColor
-	flags: Maui.App.enableCSD ? Qt.FramelessWindowHint : Qt.Window
+// 	flags: Maui.App.enableCSD ? Qt.FramelessWindowHint : Qt.Window
 	
 	property Maui.AbstractSideBar sideBar	
 	
@@ -111,16 +111,16 @@ Window
 		{
 			id: _rect
 			anchors.fill: parent
-			anchors.margins: Maui.App.enableCSD ? Maui.Style.space.tiny : 0
+// 			anchors.margins: 0
 			color: Kirigami.Theme.backgroundColor
-			border.color: Maui.App.enableCSD ? Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.5)) : "transparent"
+// 			border.color: Maui.App.enableCSD ? Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.5)) : "transparent"
 			radius: root.visibility === Window.Maximized || !Maui.App.enableCSD ? 0 : Maui.App.theme.borderRadius
 			
 			Maui.Page
 			{
 				id: _page
 				anchors.fill: parent
-				anchors.margins: Maui.App.enableCSD ? 1 : 0
+// 				anchors.margins: Maui.App.enableCSD ? 1 : 0
 				
 				Kirigami.Theme.colorSet: Kirigami.Theme.Window
 				
@@ -199,7 +199,7 @@ Window
 						x: root.sideBar && root.sideBar.collapsible && root.sideBar.collapsed ? root.sideBar.position * (root.sideBar.width - root.sideBar.collapsedSize) : 0
 					}
 					
-					anchors.leftMargin: root.sideBar ?(((root.sideBar.collapsible && root.sideBar.collapsed) ? root.sideBar.collapsedSize : (root.sideBar.width ) * root.sideBar.position)) - (Maui.App.enableCSD ? Maui.Style.space.tiny : 0): 0
+					anchors.leftMargin: root.sideBar ? ((root.sideBar.collapsible && root.sideBar.collapsed) ? root.sideBar.collapsedSize : (root.sideBar.width ) * root.sideBar.position) : 0
 				}				
 				
 				layer.enabled: Maui.App.enableCSD
@@ -221,7 +221,7 @@ Window
 				}				
 			}			
 		}
-		
+	/*	
 		DropShadow 
 		{
 			enabled: Maui.App.enableCSD
@@ -232,7 +232,7 @@ Window
 			samples: 17
 			color: "#80000000"
 			source: _rect
-		}
+		}*/
 		
 		//     onHeadBarBGColorChanged:
 		//     {
