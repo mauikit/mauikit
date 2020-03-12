@@ -43,7 +43,7 @@ MauiApp::MauiApp() : QObject(nullptr)
 {
 	m_theme.path = QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString("/maui/csd/%1").arg("Default"), QStandardPaths::LocateDirectory));
 	
-	this->setEnableCSD(UTIL::loadSettings("CSD", "GLOBAL", m_enableCSD).toBool());
+// 	this->setEnableCSD(UTIL::loadSettings("CSD", "GLOBAL", m_enableCSD).toBool());
 	
 #if defined Q_OS_LINUX && !defined Q_OS_ANDROID	
 	auto configWatcher = new QFileSystemWatcher({CONF_FILE.toLocalFile()}, this);    
@@ -204,7 +204,7 @@ void MauiApp::setEnableCSD(const bool& value)
 		return;
 	
 	m_enableCSD = value;
-	UTIL::saveSettings("CSD", m_enableCSD, "GLOBAL");
+// 	UTIL::saveSettings("CSD", m_enableCSD, "GLOBAL");
 	emit enableCSDChanged();
 	
 	if(m_enableCSD)

@@ -11,7 +11,7 @@ Maui.Arrow
 
     ToolTip.delay: 1000
     ToolTip.timeout: 5000
-    ToolTip.visible: control.hovered
+    ToolTip.visible: _mouseArea.containsMouse || _mouseArea.containsPress
     ToolTip.text: model.path
 
     signal rightClicked()

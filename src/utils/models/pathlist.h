@@ -42,9 +42,7 @@ private:
 	QString m_path;
 	
 	static FMH::MODEL_LIST splitPath(const QString &path);
-	void appendPaths(const QString &path);
-	void removePaths(const QString &path);
-	void popPaths(const QString &path);
+	void setList();
 	
 public slots:
 	QVariantMap get(const int &index) const;

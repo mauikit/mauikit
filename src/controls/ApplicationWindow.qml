@@ -207,20 +207,7 @@ Window
 				}						
 			}
 		}				
-	}			
-	
-	/*	
-	 *		DropShadow 
-	 *		{
-	 *			enabled: Maui.App.enableCSD
-	 *			anchors.fill: _rect
-	 *			horizontalOffset: 0
-	 *			verticalOffset: 0
-	 *			radius: 5
-	 *			samples: 17
-	 *			color: "#80000000"
-	 *			source: _rect
-}*/
+	}	
 	
 	//     onHeadBarBGColorChanged:
 	//     {
