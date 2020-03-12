@@ -203,7 +203,7 @@ Window
 					anchors.centerIn: parent
 					width: _page.width
 					height: _page.height
-					radius: root.visibility === Window.Maximized || !Maui.App.enableCSD ? 0 : 10
+					radius: root.visibility === Window.Maximized || !Maui.App.enableCSD ? 0 : Maui.App.theme.borderRadius
 				}						
 			}
 		}				
