@@ -266,7 +266,7 @@ ToolBar
                 property bool sticky : false
                 Layout.leftMargin: rightRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.leftSretch ? rightRowContent.implicitWidth : 0
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-                spacing: visibleChildren.length > 2 ? control.spacing : 0
+                spacing: control.spacing
                 Layout.minimumWidth: !sticky ? implicitWidth : implicitWidth
                 Layout.fillWidth: control.leftSretch && implicitWidth
                 Layout.fillHeight: true

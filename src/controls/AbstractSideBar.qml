@@ -47,7 +47,7 @@ Drawer
     
     
     signal contentDropped(var drop)
-	background: null
+// 	background: null
 
     MouseArea
     {

@@ -36,7 +36,6 @@ Maui.AbstractSideBar
     interactive: !collapsible
     
     property alias model : _listBrowser.model
-    property alias delegate : _listBrowser.delegate
     property alias count : _listBrowser.count
     
     property alias section : _listBrowser.section
@@ -62,7 +61,7 @@ Maui.AbstractSideBar
     }
 
     property Component delegate : Maui.ListDelegate
-    {
+    {	
         id: itemDelegate
         iconSize: control.iconSize
         labelVisible: control.showLabels
@@ -145,6 +144,7 @@ Maui.AbstractSideBar
             verticalScrollBarPolicy:  Qt.ScrollBarAlwaysOff  //this make sthe app crash
 
             delegate: control.delegate
+            Kirigami.Theme.inherit: true
             Kirigami.Theme.backgroundColor: "transparent"
 
             onKeyPress:
@@ -172,7 +172,6 @@ Maui.AbstractSideBar
             ToolTip.timeout: 5000
             ToolTip.visible: _handle.containsMouse || _handle.containsPress
             ToolTip.text: qsTr("Toogle SideBar")
-
 
             Rectangle
             {

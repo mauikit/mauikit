@@ -105,6 +105,7 @@ Item
             fallback: "qrc:/assets/application-x-zerosize.svg"
             height: Math.min(parent.height, control.iconSizeHint)
             width: height
+            color: control.Kirigami.Theme.textColor
             
             ColorOverlay
             {
