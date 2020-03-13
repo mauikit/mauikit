@@ -27,22 +27,23 @@ import "private"
 Maui.AbstractSideBar
 {
     id: control
+    default property alias content : _content.data
+		
     implicitWidth: privateProperties.isCollapsed && collapsed && collapsible  ? collapsedSize : preferredWidth
     width: implicitWidth
     modal: false
     position: 1
-    interactive: false
-
-    default property alias content : _content.data
+    interactive: !collapsible
+    
     property alias model : _listBrowser.model
     property alias count : _listBrowser.count
-
+    
     property alias section : _listBrowser.section
     property alias currentIndex: _listBrowser.currentIndex
-
+    
     property int iconSize : Maui.Style.iconSizes.small
     property bool showLabels: control.width > collapsedSize
-
+    
     property QtObject privateProperties : QtObject
     {
         property bool isCollapsed: control.collapsed
@@ -51,45 +52,47 @@ Maui.AbstractSideBar
     signal itemClicked(int index)
     signal itemRightClicked(int index)
 
-//    Connections
-//    {
-//        target: control.Overlay.overlay
-//        onPressed: control.collapse()
-//    }
-	
-	property Component delegate : Maui.ListDelegate
-	{
-		id: itemDelegate
-		iconSize: control.iconSize
-		labelVisible: control.showLabels
-		label: model.label
-		count: model.count > 0 ? model.count : ""
-		iconName: model.icon +  (Qt.platform.os == "android" ? ("-sidebar") : "")
-		leftPadding:  Maui.Style.space.tiny
-		rightPadding:  Maui.Style.space.tiny
-		
-		Connections
-		{
-			target: itemDelegate
-			onClicked:
-			{
-				control.currentIndex = index
-				control.itemClicked(index)
-			}
-			
-			onRightClicked:
-			{
-				control.currentIndex = index
-				control.itemRightClicked(index)
-			}
-			
-			onPressAndHold:
-			{
-				control.currentIndex = index
-				control.itemRightClicked(index)
-			}
-		}
-	}
+    overlay.visible: control.collapsed && control.collapsible && !privateProperties.isCollapsed
+
+    Connections
+    {
+        target: control.overlay
+        onClicked: control.collapse()
+    }
+
+    property Component delegate : Maui.ListDelegate
+    {	
+        id: itemDelegate
+        iconSize: control.iconSize
+        labelVisible: control.showLabels
+        label: model.label
+        count: model.count > 0 ? model.count : ""
+        iconName: model.icon +  (Qt.platform.os == "android" ? ("-sidebar") : "")
+        leftPadding:  Maui.Style.space.tiny
+        rightPadding:  Maui.Style.space.tiny
+
+        Connections
+        {
+            target: itemDelegate
+            onClicked:
+            {
+                control.currentIndex = index
+                control.itemClicked(index)
+            }
+
+            onRightClicked:
+            {
+                control.currentIndex = index
+                control.itemRightClicked(index)
+            }
+
+            onPressAndHold:
+            {
+                control.currentIndex = index
+                control.itemRightClicked(index)
+            }
+        }
+    }
 
     onModalChanged: visible = true
     visible: true
@@ -99,29 +102,35 @@ Maui.AbstractSideBar
         if(!collapsible)
             return
 
-        if(!collapsed && modal)
-        {
-            modal = false
 
-        }
-
-        if(!modal && !collapsed)
+        if(!collapsed)
         {
-            privateProperties.isCollapsed = false
-        }
-
-        if(collapsed && !modal)
+            expand()
+        }else
         {
-            privateProperties.isCollapsed = true
+            collapse()
+
         }
     }
+
+    Behavior on width
+    {
+        id: _widthAnim
+
+        NumberAnimation
+        {
+            duration: Kirigami.Units.longDuration
+            easing.type: Easing.InOutQuad
+        }
+    }
+
 
     ColumnLayout
     {
         id: _content
         anchors.fill: parent
         spacing: 0
-        
+
         Maui.ListBrowser
         {
             id: _listBrowser
@@ -131,11 +140,20 @@ Maui.AbstractSideBar
             Layout.bottomMargin: Maui.Style.space.tiny
             Layout.margins: Maui.Style.unit
             listView.flickableDirection: Flickable.VerticalFlick
-            
+
             verticalScrollBarPolicy:  Qt.ScrollBarAlwaysOff  //this make sthe app crash
 
             delegate: control.delegate
+            Kirigami.Theme.inherit: true
             Kirigami.Theme.backgroundColor: "transparent"
+
+            onKeyPress:
+            {
+                if(event.key == Qt.Key_Return)
+                {
+                    control.itemClicked(control.currentIndex)
+                }
+            }
         }
 
         MouseArea
@@ -149,74 +167,48 @@ Maui.AbstractSideBar
             propagateComposedEvents: false
             property int startX
             property int startY
-            
+
+            ToolTip.delay: 1000
+            ToolTip.timeout: 5000
+            ToolTip.visible: _handle.containsMouse || _handle.containsPress
+            ToolTip.text: qsTr("Toogle SideBar")
+
             Rectangle
             {
-                anchors.fill: parent
-                color:  _handle.containsMouse || _handle.containsPress ? Qt.rgba(Kirigami.Theme.highlightColor.r, Kirigami.Theme.highlightColor.g, Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
+                anchors.centerIn: parent
+                radius: 2
+                height: 18
+                width: 16
 
-                Kirigami.Separator
-                {
-                    anchors
-                    {
-                        left: parent.left
-                        right: parent.right
-                        top: parent.top
-                    }
-                    height: Maui.Style.unit
-                }
+                color: _handle.containsMouse || _handle.containsPress || !privateProperties.isCollapsed  ?  Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+                border.color: Qt.darker(color, 1.2)
 
-                Kirigami.Icon
+                Rectangle
                 {
-                    source: privateProperties.isCollapsed ? "sidebar-expand" : "sidebar-collapse"
-                    color:  _handle.containsMouse || _handle.containsPress ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-                    anchors.centerIn: parent
-                    width: Maui.Style.iconSizes.medium
-                    height: width
+                    radius: 1
+                    height: 10
+                    width: 3
+
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: 4
+
+                    color: _handle.containsMouse || _handle.containsPress || !privateProperties.isCollapsed  ?  Kirigami.Theme.highlightedTextColor : Kirigami.Theme.backgroundColor
                 }
             }
 
-            onPositionChanged:
+            onClicked:
             {
-                if (!pressed || !control.collapsible || !control.collapsed || !Kirigami.Settings.isMobile)
-                    return
-
-                if(mouse.x > control.collapsedSize)
-                {
-                    expand()
-                }
-                
-                mouse.accepted = true
-            }
-
-            onPressed:
-            {
-                startY = mouse.y
-                startX = mouse.x
-                mouse.accepted = true
-            }
-
-            onReleased:
-            {
-                if(!control.collapsible)
-                    return
-
-                if(mouse.x > control.width)
-                    return
-
                 if(privateProperties.isCollapsed)
-                    expand()
-                    else
-                        collapse()
-
-                mouse.accepted = true
+                    control.expand()
+                else control.collapse()
             }
         }
     }
 
     MouseArea
     {
-        z: control.modal ? applicationWindow().overlay.z + (control.position > 0 ? +1 : -1) : control.background.parent.z + 1
+        z: control.background.parent.z + 1
         preventStealing: true
         anchors.horizontalCenter: parent.right
         anchors.top: parent.top
@@ -231,41 +223,63 @@ Maui.AbstractSideBar
         {
             startY = mouse.y
             startX = mouse.x
-            mouse.accepted = true
+            _widthAnim.enabled = false
         }
 
         onPositionChanged:
         {
-            if (!pressed || !control.collapsible || !control.collapsed || !Kirigami.Settings.isMobile)
+            if (!pressed || !control.collapsible || !control.collapsed)
                 return
 
-            if(mouse.x > control.collapsedSize)
+            var value = control.width + (mouse.x-startX)
+            control.width = value > control.preferredWidth ? control.preferredWidth : (value < control.collapsedSize ? collapsedSize : value)
+
+        }
+
+        onReleased:
+        {
+            _widthAnim.enabled = true
+            if( privateProperties.isCollapsed)
             {
-                expand()
+                if(control.width >= control.collapsedSize * 1.2)
+                {
+                    expand()
+
+                } else
+                {
+                    collapse()
+                }
+
             }else
             {
-                collapse()
-            }
+                if(control.width <= control.preferredWidth * 0.75)
+                {
+                    collapse()
 
-            mouse.accepted = true
+                } else
+                {
+                    expand()
+                }
+            }
         }
     }
 
     function collapse()
     {
-        if(collapsible && !privateProperties.isCollapsed)
+        if(collapsible)
         {
-            modal = false
             privateProperties.isCollapsed  = true
+            control.width = control.collapsedSize
         }
     }
 
     function expand()
     {
-        if(collapsible && privateProperties.isCollapsed)
+        if(collapsible)
         {
-            modal = true
             privateProperties.isCollapsed = false
+            control.width = control.preferredWidth
+
         }
     }
 }

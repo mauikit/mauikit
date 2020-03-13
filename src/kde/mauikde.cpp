@@ -39,11 +39,15 @@
 
 #include "kdeconnect.h"
 
-Q_DECLARE_METATYPE(QList<int>)
 
-MAUIKDE::MAUIKDE(QObject *parent) : QObject(parent) 
+MAUIKDE * MAUIKDE::qmlAttachedProperties(QObject* object)
 {
+	Q_UNUSED(object)
+	return MAUIKDE::instance();
 }
+
+MAUIKDE::MAUIKDE(QObject *parent) : QObject(parent)
+{}
 
 static QVariantMap createActionItem(const QString &label, const QString &actionId, const QVariant &argument = QVariant())
 {

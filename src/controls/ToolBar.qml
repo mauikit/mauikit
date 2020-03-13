@@ -143,17 +143,16 @@ ToolBar
                 }
             }
         }
-
-        Kirigami.Icon
+        
+        Maui.Triangle
         {
-            visible: !Kirigami.Settings.isMobile
-            anchors.centerIn: parent
-            source: "qrc:/assets/arrow-right.svg"
-            isMask: true
-            width: Maui.Style.iconSizes.small
-            height: Maui.Style.iconSizes.small
-            color: _rightFlickRec.hovered ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-        }
+			visible: !Kirigami.Settings.isMobile
+			anchors.centerIn: parent
+			rotation: -135
+			color:  _rightFlickRec.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
+			width: Maui.Style.iconSizes.tiny
+			height:  width 
+		}
 
         enabled: !mainFlickable.atXEnd
         opacity: enabled ? 1 : 0.4
@@ -205,17 +204,16 @@ ToolBar
                 }
             }
         }
-
-        Kirigami.Icon
+        
+        Maui.Triangle
         {
-            anchors.centerIn: parent
-            visible: !Kirigami.Settings.isMobile
-            source: "qrc:/assets/arrow-left.svg"
-            isMask: true
-            width: Maui.Style.iconSizes.small
-            height: Maui.Style.iconSizes.small
-            color: _leftFlickRec.hovered ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-        }
+			visible: !Kirigami.Settings.isMobile
+			anchors.centerIn: parent
+			rotation: 45
+			color:  _leftFlickRec.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
+			width: Maui.Style.iconSizes.tiny
+			height:  width 
+		}
 
         enabled: !mainFlickable.atXBeginning
         opacity: enabled ? 1 : 0.4
@@ -228,7 +226,6 @@ ToolBar
                     mainFlickable.returnToBounds()
         }
     }
-
 
     Flickable
     {
@@ -247,7 +244,7 @@ ToolBar
         anchors.rightMargin: !fits && _rightFlickRec.visible && control.flickable && !Kirigami.Settings.isMobile ? _rightFlickRec.width : margins
 
         flickableDirection: Flickable.HorizontalFlick
-        interactive: !fits && Maui.Handy.isTouch
+        interactive: !fits && Kirigami.Settings.hasTransientTouchInput
         contentWidth: ((control.margins) + Maui.Style.space.medium)
         + (control.stickyLeftContent ? leftRowContent.implicitWidth : leftRowContent.width)
         + (control.stickyMiddleContent ? middleRowContent.implicitWidth : middleRowContent.width)
@@ -267,10 +264,10 @@ ToolBar
                 id: leftRowContent
                 // 					visible: control.leftSretch && implicitWidth
                 property bool sticky : false
-                Layout.leftMargin: rightRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.leftSretch ? rightRowContent.implicitWidth : undefined
+                Layout.leftMargin: rightRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.leftSretch ? rightRowContent.implicitWidth : 0
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-                spacing: leftContent.length > 0 ? control.spacing : 0
-                Layout.minimumWidth: !sticky ? undefined : implicitWidth
+                spacing: control.spacing
+                Layout.minimumWidth: !sticky ? implicitWidth : implicitWidth
                 Layout.fillWidth: control.leftSretch && implicitWidth
                 Layout.fillHeight: true
             }
@@ -281,8 +278,8 @@ ToolBar
                 property bool sticky : false
                 // 					visible: control.middleStrech && implicitWidth
                 Layout.alignment: Qt.AlignCenter
-                spacing: middleContent.length === 1 ? 0 : control.spacing
-                Layout.minimumWidth: !sticky ? undefined : implicitWidth
+                spacing: control.spacing
+                Layout.minimumWidth: !sticky ? implicitWidth : implicitWidth
 
                 //                             Layout.maximumWidth: control.width - leftRowContent.implicitWidth - rightRowContent.implicitWidth
                 Layout.fillWidth: control.middleStrech
@@ -294,10 +291,10 @@ ToolBar
                 id: rightRowContent
                 // 					visible: control.rightSretch && implicitWidth
                 property bool sticky : false
-                Layout.rightMargin: leftRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.rightSretch ? leftRowContent.implicitWidth : undefined
+                Layout.rightMargin: leftRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.rightSretch ? leftRowContent.implicitWidth : 0
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
-                spacing: rightContent.length > 0 ? control.spacing : 0
-                Layout.minimumWidth: !sticky ? undefined : implicitWidth
+                spacing: control.spacing
+                Layout.minimumWidth: !sticky ? implicitWidth : implicitWidth
                 // 					Layout.maximumWidth: !sticky ? rightRowContent.width : implicitWidth
                 Layout.fillWidth: control.rightSretch && implicitWidth
                 Layout.fillHeight: true

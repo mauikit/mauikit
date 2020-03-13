@@ -12,12 +12,15 @@ Menu
 		icon.name: "bookmark-new"
 		text: qsTr("Bookmark")
 		onTriggered: bookmarkFolder([currentPath])
+        enabled: _optionsButton.enabled
     }
     
     MenuItem
     {
 		icon.name: "folder-add"
 		text: qsTr("New folder")
+        enabled: _optionsButton.enabled
+
 		onTriggered:
 		{
 			dialogLoader.sourceComponent= newFolderDialogComponent
@@ -29,6 +32,8 @@ Menu
     {
 		icon.name: "document-new"
 		text: qsTr("New file")
+        enabled: _optionsButton.enabled
+
 		onTriggered:
 		{
 			dialogLoader.sourceComponent= newFileDialogComponent
@@ -41,6 +46,8 @@ Menu
     MenuItem
     {
 		text: qsTr("Paste")
+        enabled: _optionsButton.enabled
+
 		icon.name: "edit-paste"
 		// 		enabled: control.clipboardItems.length > 0
 		onTriggered: paste()

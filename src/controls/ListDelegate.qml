@@ -31,6 +31,7 @@ Maui.ItemDelegate
 	property alias iconSize : _template.iconSizeHint  
 	
 	property alias label: _template.text1
+	property alias label2: _template.text2
 	property alias iconName: _template.iconSource  
 	property alias count : _badge.text
 	implicitWidth: parent.width

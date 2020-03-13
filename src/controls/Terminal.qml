@@ -1,21 +1,24 @@
 
 import QMLTermWidget 1.0
 import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.9
+import QtQuick.Layouts 1.1
+import org.kde.kirigami 2.7 as Kirigami
+
 import org.kde.mauikit 1.0 as Maui
 import "private"
 
-Item
+Maui.Page
 {
-	id: terminalContainer
-	
+	id: control
+
 	property size virtualResolution: Qt.size(kterminal.width, kterminal.height)
 	
 	property real fontWidth: 1.0
 	property real screenScaling: 1.0
 	property real scaleTexture: 1.0
 	
-	property alias title: ksession.title
+	title: ksession.title
 	property alias kterminal: kterminal
 	property alias session: ksession
 	property alias findBar : findBar
@@ -23,32 +26,60 @@ Item
 	
 	property size terminalSize: kterminal.terminalSize
 	property size fontMetrics: kterminal.fontMetrics
+	focus: true	
 	
+	signal urlsDropped(var urls)
+	signal keyPressed(var event)
+	signal clicked()
+    
+	Keys.enabled: true
+
+	//Actions
+	Action
+	{
+		id: _copyAction
+		text: qsTr("Copy")
+		icon.name: "edit-copy"
+		onTriggered:  kterminal.copyClipboard();	
+		shortcut: "Ctrl+Shift+C"
+	}
+	
+	Action
+	{
+		id: _pasteAction
+		text: qsTr("Paste")
+		icon.name: "edit-paste"
+		onTriggered: kterminal.pasteClipboard()
+		shortcut: "Ctrl+Shift+V"			
+	}
+	
+	Action
+	{
+		id: _findAction
+		text: qsTr("Find")
+		icon.name: "edit-find"
+		shortcut: "Ctrl+Shift+F"
+		onTriggered: footBar.visible = !footBar.visible
+	}
 	
 	Menu
 	{
 		id: terminalMenu
-		z: 999
 		
 		MenuItem
 		{
-			text: qsTr("Copy")
-			onTriggered:  kterminal.copyClipboard();
+			action: _copyAction	
 		}
 		
-		MenuItem
+		MenuItem		
 		{
-			text: qsTr("Paste")
-			onTriggered: kterminal.pasteClipboard()
-			
+			action: _pasteAction
 		}
 		
 		
-		MenuItem
+		MenuItem		
 		{
-			id: searchButton
-			text: qsTr("Find...")
-			onTriggered: findBar.visible = !findBar.visible
+			action: _findAction
 		}
 	}	
 	
@@ -63,43 +94,49 @@ Item
 		
 		return Qt.point((x - cc.width  * (1+distortion) * distortion) * kterminal.width,
 						(y - cc.height * (1+distortion) * distortion) * kterminal.height)
-	}
-	
+	}	
 	
 	function updateSources()
 	{
 		kterminal.update();
 	}	
 	
-	
-	Maui.TextField
+	footBar.visible: false	
+	footBar.middleContent: Maui.TextField
 	{
 		id: findBar
-		visible: false
-		anchors.bottom: parent.bottom
-		width: parent.width
-		height: visible ?  Maui.Style.iconSizes.big : 0
+		Layout.fillWidth: true
 		placeholderText: qsTr("Find...")
-		horizontalAlignment: Qt.Left
-		
+		horizontalAlignment: Qt.Left		
 		onAccepted: ksession.find(text)
 	}
+	
+// 			Keys.enabled: true	
+// 			Keys.onPressed:
+// 			{
+// 				console.log("key poress", event.key)
+// 				if((event.key == Qt.Key_V) && (event.modifiers & Qt.ControlModifier) && (event.modifiers & Qt.ShiftModifier))
+// 				{
+// 					kterminal.pasteClipboard()
+// 				}
+// 			}
 	
 	QMLTermWidget
 	{
 		id: kterminal	
-		anchors.bottomMargin: findBar.height 
 		anchors.fill: parent
-		
-		focus: true
-		smooth: true
-		
+				
 		enableBold: true
 		fullCursorHeight: true
-		onKeyPressedSignal: ksession.hasDarkBackground
-		// 		terminalUsesMouse: true
+// 		onKeyPressedSignal: console.log(e.key)		
 		
-		// 		colorScheme: "DarkPastels"
+		font.family: "Monospace"
+		font.pixelSize: 12
+		
+		onTerminalUsesMouseChanged: console.log(terminalUsesMouse);		
+		
+		Keys.enabled: true
+		Keys.onPressed: control.keyPressed(event)
 		
 		session: QMLTermSession
 		{
@@ -118,8 +155,7 @@ Item
 			function find(query)
 			{
 				ksession.search(query)
-			}
-			
+			}			
 		}		
 		
 		MouseArea
@@ -165,11 +201,16 @@ Item
 					terminalMenu.popup()
 					else if(mouse.button === Qt.LeftButton)
 						kterminal.forceActiveFocus()
+                        
+                        control.clicked()
 			}
 			
-			onPressAndHold: terminalMenu.popup()
-		}
-		
+			onPressAndHold: 
+			{
+                if(Maui.Handy.isTouch)
+                    terminalMenu.popup()
+            }
+		}		
 		
 		QMLTermScrollbar
 		{
@@ -200,20 +241,26 @@ Item
 		
 		//            kterminal.lineSpacing = lineSpacing;
 		//        }
-		function startSession()
-		{
-			
-			ksession.setShellProgram("/usr/bin/bash");
-			ksession.setArgs("");
-			
-			
-			ksession.startShellProgram();
-			forceActiveFocus();
-		}
 		
 		Component.onCompleted:
 		{
-			startSession()
+			ksession.startShellProgram();
+			forceActiveFocus()
 		}
 	}
+	
+	opacity: _dropArea.containsDrag ? 0.5 : 1
+
+    DropArea
+    {
+		id: _dropArea
+		anchors.fill: parent
+		onDropped:
+		{
+			if(drop.urls) 
+				control.urlsDropped(drop.urls)
+        }
+    }
+	
+	Component.onCompleted: control.forceActiveFocus();	
 }

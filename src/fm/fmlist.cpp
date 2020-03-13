@@ -36,11 +36,14 @@
 #include <QFuture>
 #include <QThread>
 
+
 FMList::FMList(QObject *parent) : 
 MauiList(parent),
 fm(new FM(this)),
 watcher(new QFileSystemWatcher(this))
 {
+	qRegisterMetaType<FMList*>("const FMList*");
+	
     connect(this->fm, &FM::cloudServerContentReady, [&](const FMH::MODEL_LIST &list, const QUrl &url)
 	{
 		if(this->path == url)
@@ -79,17 +82,25 @@ watcher(new QFileSystemWatcher(this))
 	
 	connect(this->fm, &FM::pathContentItemsRemoved, [&](FMH::PATH_CONTENT res)
 	{		
-		if(res.path != this->path)
-			return;
-		
+        if(res.path != this->path)
+            return;
+            
+        if(!FMH::fileExists(res.path))
+        {
+            this->setStatus({STATUS_CODE::ERROR, "Error", "This URL cannot be listed", "documentinfo", true, false});
+            return;
+        }
+        
 		for(const auto &item : res.content)
 		{
 			const auto index = this->indexOf(FMH::MODEL_KEY::PATH, item[FMH::MODEL_KEY::PATH]);
 			qDebug() << "SUPOSSED TO REMOVED THIS FORM THE LIST" << index << item[FMH::MODEL_KEY::PATH] << this->list[index];
-			;
-			
+						
 			this->remove(index);	  
 		}
+		
+		 this->setStatus({STATUS_CODE::READY, this->list.isEmpty() ? "Nothing here!" : "",  this->list.isEmpty() ? "This place seems to be empty" : "",this->list.isEmpty()  ? "folder-add" : "", this->list.isEmpty(), true});  
+         
 	});	
 	
 	connect(this->fm, &FM::warningMessage, [&](const QString &message)
@@ -158,9 +169,6 @@ void FMList::assignList(const FMH::MODEL_LIST& list)
     this->list =list;
     this->sortList();    
     
-    this->count = static_cast<uint>(this->list.size());
-    emit this->countChanged();
-    
     this->setStatus({STATUS_CODE::READY, this->list.isEmpty() ? "Nothing here!" : "",  this->list.isEmpty() ? "This place seems to be empty" : "",this->list.isEmpty()  ? "folder-add" : "", this->list.isEmpty(), true});  
 
     emit this->postListChanged();
@@ -172,9 +180,6 @@ void FMList::appendToList(const FMH::MODEL_LIST& list)
 	{
 		emit this->preItemAppended();
 		this->list << item;
-		
-		this->count = static_cast<uint>(this->list.size());
-		emit this->countChanged();	
 		
 		emit this->postItemAppended();
 	}	
@@ -190,13 +195,10 @@ void FMList::clear()
 void FMList::setList()
 {
     qDebug()<< "PATHTYPE FOR URL"<< pathType << this->path.toString() << this->filters <<  this;
-    
+    this->clear();
+
 	switch(this->pathType)
-	{			
-		case FMList::PATHTYPE::SEARCH_PATH:			
-			this->search(this->path.fileName(), this->searchPath, this->hidden, this->onlyDirs, this->filters);
-			break; //ASYNC
-			
+	{
 		case FMList::PATHTYPE::TAGS_PATH:
             this->assignList(this->fm->getTagContent(this->path.fileName(), QStringList() <<this->filters << FMH::FILTER_LIST[static_cast<FMH::FILTER_TYPE>(this->filterType)]));
 			break; //SYNC	
@@ -207,7 +209,6 @@ void FMList::setList()
 
         default:
         {
-			this->clear();
             const bool exists = this->path.isLocalFile() ? FMH::fileExists(this->path) : true;
             if(!exists)    
                 this->setStatus({STATUS_CODE::ERROR, "Error", "This URL cannot be listed", "documentinfo", this->list.isEmpty(), exists});
@@ -398,25 +399,19 @@ QUrl FMList::getPath() const
 
 void FMList::setPath(const QUrl &path)
 {
-	if(this->path == path)
-		return;
+	QUrl path_ = QUrl::fromUserInput(path.toString().trimmed());
+	if(this->path == path_)
+		return;	
 	
-    this->searchPath = this->path;
-	
-	this->path = path;
+	this->path = path_;
     NavHistory.appendPath(this->path);
     
     this->setStatus({STATUS_CODE::LOADING, "Loading content", "Almost ready!", "view-refresh", true, false});
 	
 	const auto __scheme = this->path.scheme();
-    this->pathName = this->path.fileName();
+    this->pathName = QDir(this->path.toLocalFile()).dirName();
 
-    if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::SEARCH_PATH])
-	{
-		this->pathType = FMList::PATHTYPE::SEARCH_PATH;
-		this->watchPath(QString());
-		
-	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::CLOUD_PATH])
+    if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::CLOUD_PATH])
 	{
 		this->pathType = FMList::PATHTYPE::CLOUD_PATH;
 		this->watchPath(QString());
@@ -441,7 +436,6 @@ void FMList::setPath(const QUrl &path)
 	{
 		this->watchPath(this->path.toString());        
 		this->pathType = FMList::PATHTYPE::PLACES_PATH;
-        this->pathName = FMH::getDirInfoModel(this->path)[FMH::MODEL_KEY::LABEL];
 		
 	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::MTP_PATH])		
 	{
@@ -698,6 +692,11 @@ bool FMList::getSaveDirProps() const
 	return this->saveDirProps;
 }
 
+void FMList::search(const QString& query, const FMList* currentFMList)
+{
+	this->search(query, currentFMList->getPath(), currentFMList->getHidden(), currentFMList->getOnlyDirs(), currentFMList->getFilters());
+}
+
 void FMList::search(const QString& query, const QUrl &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)
 {
 	qDebug()<< "SEARCHING FOR" << query << path;
@@ -712,14 +711,8 @@ void FMList::search(const QString& query, const QUrl &path, const bool &hidden, 
 	QFutureWatcher<FMH::PATH_CONTENT> *watcher = new QFutureWatcher<FMH::PATH_CONTENT>;
 	connect(watcher, &QFutureWatcher<FMH::MODEL_LIST>::finished, [=]()
 	{
-		if(this->pathType != FMList::PATHTYPE::SEARCH_PATH)
-			return;
-		
 		const auto res = watcher->future().result();
-		
-		if(res.path != this->searchPath.toString())
-			return;
-		
+			
 		this->assignList(res.content);        
 		emit this->searchResultReady();
 		
@@ -746,14 +739,8 @@ void FMList::filterContent(const QString &query, const QUrl &path, const bool &h
 
     QFutureWatcher<FMH::PATH_CONTENT> *watcher = new QFutureWatcher<FMH::PATH_CONTENT>;
     connect(watcher, &QFutureWatcher<FMH::MODEL_LIST>::finished, [=]()
-    {
-        if(this->pathType != FMList::PATHTYPE::SEARCH_PATH)
-            return;
-
+    {       
         const auto res = watcher->future().result();
-
-        if(res.path != this->searchPath.toString())
-            return;
 
         this->assignList(res.content);
         emit this->searchResultReady();
@@ -804,11 +791,6 @@ void FMList::setCloudDepth(const int& value)
 	this->reset();
 }
 
-uint FMList::getCount() const
-{
-	return this->count;
-}
-
 PathStatus FMList::getStatus() const
 {
     return this->m_status;
@@ -857,9 +839,6 @@ void FMList::remove(const int& index)
 	
 	emit this->preItemRemoved(index_);
 	const auto item = this->list.takeAt(index_);
-		
-	this->count = static_cast<uint>(this->list.size());
-	emit this->countChanged();
 	
 	emit this->postItemRemoved();	
 }

@@ -444,6 +444,47 @@ bool FMStatic::isFav(const QUrl& url, const bool &strict)
     #endif
 }
 
+static bool doNameFilter(const QString &name, const QStringList &filters)
+{
+	for(const auto &filter : std::accumulate(filters.constBegin(), filters.constEnd(), QVector<QRegExp> {}, [](QVector<QRegExp> &res, const QString &filter) -> QVector<QRegExp>
+	{ res.append(QRegExp(filter, Qt::CaseInsensitive, QRegExp::Wildcard)); return res; }))
+	{
+		if(filter.exactMatch(name))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+QList<QUrl> FMStatic::getTagUrls(const QString& tag, const QStringList& filters, const bool& strict)
+{
+	QList<QUrl> urls;
+	#ifdef COMPONENT_TAGGING
+	for(const auto &data : Tagging::getInstance()->getUrls(tag, strict, [filters](QVariantMap &item) -> bool
+	{ return filters.isEmpty() ? true : doNameFilter(FMH::mapValue(item, FMH::MODEL_KEY::URL), filters); }))
+	{                
+		const auto url = QUrl(data.toMap()[TAG::KEYMAP[TAG::KEYS::URL]].toString());
+		if(url.isLocalFile() && !FMH::fileExists(url))
+			continue;		
+		urls << url;
+	}	
+	#endif
+	return urls;
+}
+
+void FMStatic::bookmark(const QUrl& url)
+{
+	#if defined Q_OS_ANDROID || defined Q_OS_WIN32
+	//do android stuff until cmake works with android	
+    auto bookmarks = UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {},true).toStringList();
+    bookmarks << url.toString();
+    UTIL::saveSettings("BOOKMARKS", bookmarks, "PREFERENCES", true);
+	#else
+	KFilePlacesModel model;
+	model.addPlace(QDir(url.toLocalFile()).dirName(), url, FMH::getIconName(url));
+	#endif
+}
 
 
 

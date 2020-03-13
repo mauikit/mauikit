@@ -171,11 +171,13 @@ void MauiModel::PrivateAbstractListModel::setList(MauiList* value)
     {
         connect(this->list, &MauiList::preItemAppendedAt, this, [=](int index)
         {
+            emit this->list->countChanged();
             beginInsertRows(QModelIndex(), index, index);
         });
         
         connect(this->list, &MauiList::preItemAppended, this, [=]()
         {
+            emit this->list->countChanged();
             const int index = this->list->items().size();
             beginInsertRows(QModelIndex(), index, index);
         });
@@ -204,6 +206,7 @@ void MauiModel::PrivateAbstractListModel::setList(MauiList* value)
         
         connect(this->list, &MauiList::preListChanged, this, [=]()
         {
+            emit this->list->countChanged();
             beginResetModel();
         });
         

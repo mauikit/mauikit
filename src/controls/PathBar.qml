@@ -23,71 +23,69 @@ import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import "private"
-import "private/shapes"
 
 Rectangle
 {
     id: control
-
+    
     implicitHeight: Maui.Style.rowHeight
-
+    
     property string url : ""
     property bool pathEntry: false
     property alias list : _pathList
     property alias model : _pathModel
     property alias item : _loader.item
-
+        
     signal pathChanged(string path)
     signal homeClicked()
     signal placeClicked(string path)
     signal placeRightClicked(string path)
-
+    
     onUrlChanged: append()
-
+    
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     Kirigami.Theme.inherit: false
-
+    
     color: Kirigami.Theme.backgroundColor
     radius: Maui.Style.radiusV
     opacity: 1
     border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
     border.width: Maui.Style.unit
-
-
+    antialiasing: false
+    
     Loader
     {
         id: _loader
-        z: control.z + 999999999999999
         anchors.fill: parent
         sourceComponent: pathEntry ? _pathEntryComponent : _pathCrumbsComponent
-        onLoaded:
-        {
-            if(sourceComponent === _pathCrumbsComponent)
-                control.append()
-        }
+        //         onLoaded:
+        //         {
+        //             if(sourceComponent === _pathCrumbsComponent)
+        //                 control.append()
+        //         }
     }
-
+    
     Maui.BaseModel
     {
         id: _pathModel
         list: _pathList
     }
-
+    
     Maui.PathList
     {
         id: _pathList
     }
-
+    
     Component
     {
         id: _pathEntryComponent
-
+        
         Maui.TextField
         {
             id: entry
-            anchors.fill: parent
             text: control.url
-
+            focus: true
+            inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoAutoUppercase
             Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
             Kirigami.Theme.backgroundColor: "transparent"
             horizontalAlignment: Qt.AlignLeft
@@ -100,7 +98,7 @@ Rectangle
             {
                 color: "transparent"
             }
-
+            
             actions.data: ToolButton
             {
                 icon.name: "go-next"
@@ -113,25 +111,24 @@ Rectangle
             }
         }
     }
-
+    
     Component
     {
         id: _pathCrumbsComponent
-
+        
         RowLayout
         {
-            anchors.fill: parent
             property alias listView: _listView
             spacing: 0
-            clip: false
-
+            clip: true
+            
             MouseArea
             {
                 Layout.fillHeight: true
                 Layout.preferredWidth: height * 1.5
                 onClicked: control.homeClicked()
                 hoverEnabled: true
-
+                
                 Kirigami.Icon
                 {
                     anchors.centerIn: parent
@@ -141,67 +138,75 @@ Rectangle
                     height: width
                 }
             }
-
-            ListView
+            
+            Flickable
             {
-                id: _listView
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                property int pathArrowWidth: 8
-                orientation: ListView.Horizontal
-                clip: true
-                spacing: 1 - (pathArrowWidth + 1)
-
-                focus: true
-                interactive: true
-                boundsBehavior: Kirigami.Settings.isMobile ?  Flickable.DragOverBounds : Flickable.StopAtBounds
-
-                model: _pathModel
-
-                delegate: PathBarDelegate
+                
+                ListView
                 {
-                    id: delegate
-                    borderColor: control.border.color
-                    arrowWidth: _listView.pathArrowWidth
-                    height: parent.height
-                    width: Math.max(Maui.Style.iconSizes.medium * 2, implicitWidth)
-                    Connections
+                    id: _listView
+                    anchors.fill: parent
+                    
+                    property int pathArrowWidth: 8
+                    orientation: ListView.Horizontal
+                    clip: true
+                    spacing: 1 - (pathArrowWidth + 1)
+					currentIndex: _pathModel.count - 1
+                    focus: true
+                    interactive: true
+                    highlightFollowsCurrentItem: true
+                    
+                    boundsBehavior: Kirigami.Settings.isMobile ?  Flickable.DragOverBounds : Flickable.StopAtBounds
+                    
+                    model: _pathModel
+                    
+                    delegate: PathBarDelegate
                     {
-                        target: delegate
-                        onClicked:
+                        id: delegate
+                        borderColor: ListView.isCurrentItem ?  control.Kirigami.Theme.highlightColor :  control.border.color
+                        color: ListView.isCurrentItem ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : Kirigami.Theme.backgroundColor
+						
+                        arrowWidth: _listView.pathArrowWidth
+                        height: parent.height
+                        width: Math.max(Maui.Style.iconSizes.medium * 2, implicitWidth)
+                        Connections
                         {
-                            listView.currentIndex = index
-                            control.placeClicked(_pathList.get(index).path)
-                        }
-
-                        onRightClicked:
-                        {
-                            control.placeRightClicked(_pathList.get(index).path)
-
-                        }
-
-                        onPressAndHold:
-                        {
-                            control.placeRightClicked(_pathList.get(index).path)
+                            target: delegate
+                            onClicked:
+                            {
+                                control.placeClicked(_pathList.get(index).path)
+                            }
+                            
+                            onRightClicked:
+                            {
+                                control.placeRightClicked(_pathList.get(index).path)
+                            }
+                            
+                            onPressAndHold:
+                            {
+                                control.placeRightClicked(_pathList.get(index).path)
+                            }
                         }
                     }
+                    
+                    MouseArea
+                    {
+                        anchors.fill: parent
+                        onClicked: showEntryBar()
+                        z: -1
+                    }
                 }
-
-                MouseArea
-                {
-                    anchors.fill: parent
-                    onClicked: showEntryBar()
-                    z: -1
-                }
-            }
-
+            }         
+            
             MouseArea
             {
                 Layout.fillHeight: true
                 Layout.preferredWidth: control.height
                 onClicked: control.showEntryBar()
                 hoverEnabled: true
-
+                
                 Rectangle
                 {
                     anchors.fill: parent
@@ -219,22 +224,24 @@ Rectangle
             }
         }
     }
-
+    
     Component.onCompleted: control.append()
-
+    
     function append()
     {
         _pathList.path = control.url
-
+        
         if(_loader.sourceComponent !== _pathCrumbsComponent)
             return
-
-        _loader.item.listView.currentIndex = _loader.item.listView.count-1
-        _loader.item.listView.positionViewAtEnd()
+            
+            _loader.item.listView.currentIndex = _loader.item.listView.count-1
+            _loader.item.listView.positionViewAtEnd()
     }
-
+    
     function showEntryBar()
     {
         control.pathEntry = !control.pathEntry
+        if(_loader.sourceComponent === _pathEntryComponent)
+            _loader.item.forceActiveFocus()
     }
 }

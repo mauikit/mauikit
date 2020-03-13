@@ -14,6 +14,7 @@ Maui.Page
 	Item
 	{
 		anchors.fill: parent
+		anchors.margins: Maui.Style.space.big
 		
 		Kirigami.Icon
 		{

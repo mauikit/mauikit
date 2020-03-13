@@ -29,7 +29,7 @@ Maui.SideBar
 	
 	property alias list : placesList
 	property alias itemMenu : _menu
-	
+	collapsedSize: Maui.Style.iconSizes.medium + (Maui.Style.space.medium*4) - Maui.Style.space.tiny
 	signal placeClicked (string path)
 	focus: true
 	model: placesModel
@@ -55,7 +55,9 @@ Maui.SideBar
 		
 		placesList.clearBadgeCount(index)	
 			
-		placeClicked(path)
+		placeClicked(path)	
+		if(control.collapsed)
+			control.collapse()
 	}
 	
 	onItemRightClicked: _menu.popup()
@@ -94,7 +96,7 @@ Maui.SideBar
 		id: placesList
 		groups: [
 		Maui.FMList.PLACES_PATH, 
-        Maui.FMList.APPS_PATH, 
+//         Maui.FMList.APPS_PATH, 
         Maui.FMList.BOOKMARKS_PATH, 
         Maui.FMList.DRIVES_PATH, 
         Maui.FMList.TAGS_PATH]

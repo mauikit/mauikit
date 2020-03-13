@@ -239,17 +239,18 @@ add_library(MauiKit
 )
 
 if(ANDROID)
-    target_link_libraries(MauiKit PRIVATE Qt5::AndroidExtras Qt5::WebView jnigraphics)
+    target_link_libraries(MauiKit PRIVATE Qt5::AndroidExtras jnigraphics)
 
     target_include_directories(MauiKit PRIVATE android)
     install(FILES android/mauiandroid.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit COMPONENT Devel)
 
     install(DIRECTORY android/ DESTINATION ${KDE_INSTALL_DATAROOTDIR}/MauiKitAndroid COMPONENT Devel)
 
-    install(FILES MauiKit-android-dependencies.xml DESTINATION ${KDE_INSTALL_LIBDIR})
-
-else()
-    target_link_libraries(MauiKit PRIVATE Qt5::WebEngine)
+    if (Qt5Core_VERSION VERSION_LESS 5.14.0)
+        install(FILES MauiKit-android-dependencies.xml DESTINATION ${KDE_INSTALL_LIBDIR})
+    else()
+        install(FILES MauiKit-android-dependencies.xml DESTINATION ${KDE_INSTALL_LIBDIR} RENAME MauiKit_${CMAKE_ANDROID_ARCH_ABI}-android-dependencies.xml)
+    endif()
 endif()
 
 target_link_libraries(MauiKit
@@ -326,3 +327,6 @@ install(FILES
 
 ##INSTALL MAUI STYLE
 install(DIRECTORY maui-style DESTINATION ${KDE_INSTALL_QMLDIR}/QtQuick/Controls.2)
+
+##INSTALL THE DECO FOR CSD
+install(DIRECTORY csd DESTINATION ${DATA_INSTALL_DIR}/maui)

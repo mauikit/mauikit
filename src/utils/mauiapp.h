@@ -19,12 +19,86 @@
 #ifndef MAUIAPP_H
 #define MAUIAPP_H
 #include <QObject>
-#include <QQuickItem>
+#include <QQmlEngine>
 
+#include "fmh.h"
 
 #ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
 #endif
+
+#include <QColor>
+#include <QSettings>
+
+struct MauiTheme 
+{
+	Q_GADGET	
+	Q_PROPERTY(int borderRadius READ getRadius CONSTANT FINAL)
+	Q_PROPERTY(bool maskButtons READ getMaskButtons CONSTANT FINAL)
+	
+	static QUrl confFile(const QUrl &path)
+	{
+		const auto conf = QUrl(path.toString()+"/config.conf");
+		qDebug() << "LOOKING FOR STYLE IMAGE" << conf;
+		
+		if(FMH::fileExists(conf))
+		{
+			return conf;
+		}
+		
+		return path;
+	}
+	
+	QVariant getSettings(const QString &group, const QString &key, const QVariant &defaultValue) const
+	{
+		const auto conf = confFile(path);
+		
+		if(conf.isValid())
+		{			
+			QSettings settings(conf.toLocalFile(), QSettings::IniFormat);
+			QVariant res;
+			settings.setDefaultFormat(QSettings::IniFormat);
+			settings.beginGroup(group);
+			res = settings.value(key, defaultValue);
+			settings.endGroup();
+			
+			return res;
+		}
+		
+		return defaultValue;
+	}
+
+public:
+	QUrl path;	
+	Q_INVOKABLE QUrl buttonAsset(const QString &key, const QString &state) const
+	{		
+		auto res = getSettings(key, state, QString());
+			
+		if(!res.toString().isEmpty())
+		{			
+			auto imageUrl = QUrl(path.toString()+"/"+res.toString());
+			if(FMH::fileExists(imageUrl))
+			{
+				return imageUrl;
+			}				
+		}
+		
+		return QUrl();
+	}	
+	
+	int getRadius() const
+	{		
+		auto res = getSettings("Decoration", "BorderRadius", 6);
+		return res.toInt();		
+	}
+	
+	bool getMaskButtons() const
+	{
+		auto res = getSettings("Decoration", "MaskButtons", true);
+		return res.toBool();		
+	}
+};
+Q_DECLARE_METATYPE(MauiTheme)
 
 class MauiAccounts;
 #ifdef STATIC_MAUIKIT
@@ -33,8 +107,7 @@ class MauiApp : public QObject
 class MAUIKIT_EXPORT MauiApp : public QObject
 #endif
 {
-    Q_OBJECT
-    
+    Q_OBJECT    
     Q_PROPERTY(QString name READ getName CONSTANT FINAL)
     Q_PROPERTY(QString displayName READ getDisplayName CONSTANT FINAL)
     Q_PROPERTY(QString version READ getVersion CONSTANT FINAL)
@@ -51,6 +124,14 @@ class MAUIKIT_EXPORT MauiApp : public QObject
 #ifdef COMPONENT_ACCOUNTS
     Q_PROPERTY(MauiAccounts * accounts READ getAccounts CONSTANT FINAL)
 #endif
+	
+	// CSD support
+	Q_PROPERTY(bool enableCSD READ enableCSD WRITE setEnableCSD NOTIFY enableCSDChanged)
+	Q_PROPERTY(QStringList leftWindowControls MEMBER m_leftWindowControls NOTIFY leftWindowControlsChanged FINAL)
+	Q_PROPERTY(QStringList rightWindowControls MEMBER m_rightWindowControls NOTIFY rightWindowControlsChanged FINAL)
+	
+	// Theming and branding support
+	Q_PROPERTY(MauiTheme theme READ theme NOTIFY themeChanged FINAL )
 
 public:  
     static MauiApp *qmlAttachedProperties(QObject *object);
@@ -101,8 +182,18 @@ public:
     void setReportPage(const QString &value);
 
     bool getHandleAccounts() const;
-    void setHandleAccounts(const bool &value);
+    void setHandleAccounts(const bool &value);	
 	
+	//Theming and branding support
+	MauiTheme theme()
+	{
+		return m_theme;
+	}
+	
+	//CSD support
+	bool enableCSD() const;
+	void setEnableCSD(const bool &value);
+
 #ifdef COMPONENT_ACCOUNTS
     MauiAccounts *getAccounts() const;
 #endif
@@ -117,7 +208,17 @@ private:
     QString webPage;
     QString donationPage;
     QString reportPage;
-
+	
+	//Theming and branding support
+	MauiTheme m_theme;
+	
+	//CSD support
+	bool m_enableCSD = false;	
+	QStringList m_leftWindowControls;
+	QStringList m_rightWindowControls;
+	
+	void getWindowControlsSettings();
+	
 #ifdef COMPONENT_ACCOUNTS
     bool handleAccounts = true;
 #else
@@ -132,6 +233,12 @@ signals:
     void reportPageChanged(QString reportPage);
     void handleAccountsChanged();
 	void sendNotification(QString iconName, QString title, QString body, QJSValue callback, int timeout, QString buttonText);
+	
+	// CSD support
+	void enableCSDChanged();
+	void leftWindowControlsChanged();
+	void rightWindowControlsChanged();
+	void themeChanged();
 	
 public slots:
 	void notify(const QString &icon = "emblem-warning", const QString &title = "Oops", const QString &body = "Something needs your attention", const QJSValue &callback = {}, const int &timeout = 2500, const QString &buttonText = "Ok");

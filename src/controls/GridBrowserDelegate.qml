@@ -52,7 +52,7 @@ Maui.ItemDelegate
     ToolTip.delay: 1000
     ToolTip.timeout: 5000
     ToolTip.visible: control.hovered && control.showTooltip
-    ToolTip.text: model.tooltip ? model.tooltip : model.path
+    ToolTip.text: model.tooltip ? model.tooltip : (model.path ? model.path : "")
 
     background: Item {}
 
@@ -79,11 +79,6 @@ Maui.ItemDelegate
     Drag.active: mouseArea.drag.active && control.draggable
     Drag.dragType: Drag.Automatic
     Drag.supportedActions: Qt.CopyAction
-    Drag.mimeData:
-    {
-        "text/uri-list": model.path
-    }
-
 
     Maui.GridItemTemplate
     {
@@ -91,6 +86,7 @@ Maui.ItemDelegate
         anchors.fill: parent
         iconSizeHint: control.folderSize
         iconSource: model.icon
+        hovered: control.hovered
         imageSource : model.mime ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails && model.thumbnail && model.thumbnail.length? model.thumbnail : "") : ""
         label1.text: model.label
 //        label1.elide: Text.ElideMiddle // TODO this is broken ???
@@ -98,7 +94,7 @@ Maui.ItemDelegate
         emblem.visible: (control.keepEmblemOverlay || control.isSelected) && control.showEmblem  && control.leftEmblem
         isCurrentItem: control.isCurrentItem
         emblem.border.color: emblem.Kirigami.Theme.textColor
-        emblem.color: control.isSelected ? emblem.Kirigami.Theme.highlightColor : emblem.Kirigami.Theme.backgroundColor
+        emblem.color: control.isSelected ? emblem.Kirigami.Theme.highlightColor : Qt.rgba(emblem.Kirigami.Theme.backgroundColor.r, emblem.Kirigami.Theme.backgroundColor.g, emblem.Kirigami.Theme.backgroundColor.b, 0.7)
 
         Connections
         {
@@ -106,6 +102,4 @@ Maui.ItemDelegate
             onClicked: control.leftEmblemClicked(index)
         }
     }
-
-
 }

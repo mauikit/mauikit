@@ -6,7 +6,7 @@
 #include "mauiandroid.h"
 #endif
 
-const QString FMPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/maui/";
+const static QUrl FMPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/maui/");
 const QString DBName = "accounts.db";
 
 AccountsDB::AccountsDB(QObject *parent) : QObject(parent)
@@ -17,12 +17,12 @@ AccountsDB::AccountsDB(QObject *parent) : QObject(parent)
 #endif
 
     qDebug()<< "TRY TO CREATE ACCOUNTS DB";
-    QDir collectionDBPath_dir(FMPath);
+    QDir collectionDBPath_dir(FMPath.toLocalFile());
     if (!collectionDBPath_dir.exists())
         collectionDBPath_dir.mkpath(".");
 
     this->name = QUuid::createUuid().toString();
-    if(!FMH::fileExists(FMPath + DBName))
+    if(!FMH::fileExists(FMPath.toLocalFile() + DBName))
     {
         this->openDB(this->name);
         this->prepareCollectionDB();
@@ -39,7 +39,7 @@ void AccountsDB::openDB(const QString &name)
     if(!QSqlDatabase::contains(name))
     {
         this->m_db = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), name);
-        this->m_db.setDatabaseName(FMPath + DBName);
+        this->m_db.setDatabaseName(FMPath.toLocalFile() + DBName);
     }
 
     if (!this->m_db.isOpen())

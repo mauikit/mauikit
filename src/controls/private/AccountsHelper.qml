@@ -82,8 +82,7 @@ Maui.Dialog
 			Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
 			
 			onTriggered: _removeDialog.open()
-		}
-		
+		}		
 	}
 	
 	ListView
@@ -95,6 +94,7 @@ Maui.Dialog
 		{
 			id: delegate
 			label: model.label
+			label2: model.server
 			radius: Maui.Style.radiusV
 			Connections
 			{
@@ -114,22 +114,20 @@ Maui.Dialog
 				{
 					_listView.currentIndex = index
 					_menu.popup()	
-				}
-				
+				}				
 			}
 		}
 		
 		Maui.Holder
 		{
 			visible: _listView.count == 0
-			isMask: false
+			isMask: true
 			isGif: false
             emojiSize: Maui.Style.iconSizes.huge
             emoji: "qrc:/assets/dialog-information.svg"
             title: qsTr("No accounts yet!")
 			body: qsTr("Start adding new accounts to sync your files, music, contacts, images, notes, etc...")
-		}
-		
+		}		
 	}
 	
 	function addAccount(server, user, password)

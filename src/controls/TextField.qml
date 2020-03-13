@@ -37,6 +37,7 @@ TextField
 	signal cleared()
     signal goBackTriggered();
     signal goFowardTriggered();	
+    signal contentDropped(var drop)
 
 //	bottomPadding: Maui.Style.space.tiny
 	rightPadding: _actions.implicitWidth + Maui.Style.space.small
@@ -56,8 +57,15 @@ TextField
     {
         goBackTriggered();
         event.accepted = true
-    }
-
+    }    
+   	
+	Shortcut
+	{
+		sequence: StandardKey.Quit
+		context: Qt.ApplicationShortcut
+		onActivated: control.clear()
+	}
+	
     Shortcut
     {
         sequence: "Forward"
@@ -148,4 +156,24 @@ TextField
 			
 		}
 	}
+	
+	DropArea
+	{
+        anchors.fill: parent
+        
+        onDropped: 
+        {
+            console.log(drop.text, drop.html)
+            if (drop.hasText) 
+            {
+                  control.text += drop.text
+                
+            }else if(drop.hasUrls)
+            {
+                control.text = drop.urls
+            } 
+            
+            control.contentDropped(drop)
+        }        
+    }
 }

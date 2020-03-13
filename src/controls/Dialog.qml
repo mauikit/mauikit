@@ -63,10 +63,19 @@ Maui.Popup
     Maui.Badge
     {
         id: _closeButton
-        iconName: "qrc:/assets/dialog-close.svg"
-        //         Kirigami.Theme.backgroundColor: hovered ?  Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
-        //         Kirigami.Theme.textColor: Kirigami.Theme.highlightedTextColor
-
+        
+        color: hovered || pressed ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
+        
+        Maui.X
+        {
+            height: Maui.Style.iconSizes.tiny
+            width: height
+            anchors.centerIn: parent
+            color: Kirigami.Theme.textColor            
+        }
+        
+        border.color: Kirigami.Theme.textColor
+        
         anchors
         {
             verticalCenter: parent.top
@@ -91,8 +100,9 @@ Maui.Popup
         {
             id: _rejectButton
             visible: defaultButtons
-            Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
-            Kirigami.Theme.backgroundColor: Qt.lighter(Kirigami.Theme.negativeTextColor, 1.7)
+            property color color : Qt.lighter(Kirigami.Theme.negativeTextColor)
+            Kirigami.Theme.textColor: Qt.darker(Kirigami.Theme.negativeTextColor)
+            Kirigami.Theme.backgroundColor: Qt.rgba(color.r,color.g, color.b, 0.4)
 
             text: rejectText
             onClicked: rejected()
@@ -102,8 +112,11 @@ Maui.Popup
         {
             id: _acceptButton
             visible: defaultButtons
-            Kirigami.Theme.backgroundColor: Qt.lighter(Kirigami.Theme.positiveTextColor, 2)
-            Kirigami.Theme.textColor: Kirigami.Theme.positiveTextColor
+            property color color : Qt.lighter(Kirigami.Theme.positiveTextColor)
+
+            Kirigami.Theme.backgroundColor: Qt.rgba(color.r,color.g, color.b, 0.4)
+            Kirigami.Theme.textColor: Qt.darker(Kirigami.Theme.positiveTextColor)
+
             text: acceptText
             onClicked: accepted()
         }
@@ -120,16 +133,16 @@ Maui.Popup
 
         footBar.rightContent: Loader
         {
-            sourceComponent: control.defaultButtons ? _defaultButtonsComponent : undefined
+            sourceComponent: control.defaultButtons ? _defaultButtonsComponent : null
         }
-
+        
         ColumnLayout
         {
-            id: _pageContent
-            anchors.fill: parent
-            spacing: Maui.Style.space.medium
-
-            Label
+			id: _pageContent
+			anchors.fill: parent
+			spacing: Maui.Style.space.medium
+			
+			Label
             {
                 visible: title.length > 0
 
@@ -147,8 +160,9 @@ Maui.Popup
 
             Kirigami.ScrollablePage
             {
+				id: _scrollable
                 visible: message.length > 0
-                Layout.preferredHeight: Math.min(contentHeight, 500)
+                Layout.preferredHeight: Math.min(_scrollable.contentHeight, 500)
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignCenter
 
@@ -183,7 +197,6 @@ Maui.Popup
                 focus: visible
                 onAccepted: control.accepted()
             }
-
         }
     }
 }

@@ -25,13 +25,34 @@
 #include "mauiaccounts.h"
 #endif
 
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
+#include <KConfig>
+#include <KSharedConfig>
+#include <KConfigGroup>
+#include <QFileSystemWatcher>
+#endif
+
+static const QUrl CONF_FILE = FMH::ConfigPath + "/kwinrc";
+
 MauiApp::MauiApp() : QObject(nullptr)
   #ifdef COMPONENT_ACCOUNTS
   , m_accounts(MauiAccounts::instance())
   #else
   , m_accounts(nullptr)
   #endif
-{}
+{
+	m_theme.path = QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString("/maui/csd/%1").arg("Default"), QStandardPaths::LocateDirectory));
+	
+// 	this->setEnableCSD(UTIL::loadSettings("CSD", "GLOBAL", m_enableCSD).toBool());
+	
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID	
+	auto configWatcher = new QFileSystemWatcher({CONF_FILE.toLocalFile()}, this);    
+	connect(configWatcher, &QFileSystemWatcher::fileChanged, [&](QString)
+	{
+		getWindowControlsSettings();
+	});  
+#endif
+}
 
 QString MauiApp::getName()
 {
@@ -171,6 +192,66 @@ void MauiApp::notify(const QString &icon, const QString& title, const QString& b
 {
 	emit this->sendNotification(icon, title, body, callback, timeout, buttonText);
 }
+
+bool MauiApp::enableCSD() const
+{
+	return m_enableCSD;
+}
+
+void MauiApp::setEnableCSD(const bool& value)
+{
+	if(m_enableCSD == value)
+		return;
+	
+	m_enableCSD = value;
+// 	UTIL::saveSettings("CSD", m_enableCSD, "GLOBAL");
+	emit enableCSDChanged();
+	
+	if(m_enableCSD)
+	{
+		getWindowControlsSettings();		
+	}
+}
+
+void MauiApp::getWindowControlsSettings()
+{
+	#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
+	
+	auto kconf = KSharedConfig::openConfig("kwinrc");
+	const auto group = kconf->group("org.kde.kdecoration2");
+	
+	if( group.hasKey("ButtonsOnLeft"))
+	{	
+		m_leftWindowControls = group.readEntry("ButtonsOnLeft", "").split("", QString::SkipEmptyParts);
+		emit this->leftWindowControlsChanged();
+	}
+	
+	if( group.hasKey("ButtonsOnRight"))
+	{
+		m_rightWindowControls = group.readEntry("ButtonsOnRight", "").split("", QString::SkipEmptyParts);
+		emit this->rightWindowControlsChanged();		
+	}
+	
+	/*if( group.hasKey("Theme"))
+	{
+		const auto path = QUrl(FMH::DataPath+"/maui/csd/Default");		
+		if(FMH::fileExists(path))
+		{
+			m_theme.path = path;
+		}
+	}*/	
+	
+// 	m_theme.path = QUrl(FMH::DataPath+"/maui/csd/Default");
+	
+	
+	#else
+	m_leftWindowControls = {"X","I","A"};
+	emit this->leftWindowControlsChanged();
+	#endif
+}
+
+
+
 
 
 

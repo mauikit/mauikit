@@ -31,7 +31,7 @@ Item
     
     default property alias content: _layout.data
 
-//     implicitHeight: _layout.implicitHeight
+    implicitHeight: Maui.Style.rowHeight
 //     implicitWidth: _layout.implicitWidth
 
     property alias text1 : _label1.text
@@ -53,7 +53,8 @@ Item
     
     property bool isCurrentItem: false
     property bool labelsVisible: true
-
+    property bool hovered : false
+    
     Component
     {
         id: _imgComponent
@@ -104,6 +105,16 @@ Item
             fallback: "qrc:/assets/application-x-zerosize.svg"
             height: Math.min(parent.height, control.iconSizeHint)
             width: height
+            color: control.Kirigami.Theme.textColor
+            
+            ColorOverlay
+            {
+                visible: control.hovered
+                opacity: 0.3
+                anchors.fill: parent
+                source: parent
+                color: control.Kirigami.Theme.highlightColor
+            }
         }
     }
 
@@ -113,16 +124,15 @@ Item
         anchors.fill: parent
         spacing: Maui.Style.space.small
         
-           Maui.Badge
+        Maui.Badge
         {
             id: _emblem
-            visible: false           
-            size: Maui.Style.iconSizes.medium    
+            visible: false
+            size: Math.min(Maui.Style.iconSizes.medium, parent.height)
             Layout.alignment: Qt.AlignVCenter
-            Layout.margins: Maui.Style.space.medium
+            Layout.leftMargin: Maui.Style.space.medium
             Layout.rightMargin: 0
         }
-        
 
         Item
         {

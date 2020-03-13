@@ -41,7 +41,7 @@ Item
     property Component delegate : ToolButton
     {
         id: _delegate
-        anchors.verticalCenter: parent.verticalCenter
+        Layout.alignment: Qt.AlignVCenter
         Layout.fillWidth: control.strech
         action: modelData
         icon.width: Maui.Style.iconSizes.medium
@@ -69,6 +69,11 @@ Item
         }
         onPressAndHold: control.pressAndHold(index)
         onDoubleClicked: control.doubleClicked(index)
+		
+		ToolTip.delay: 1000
+		ToolTip.timeout: 5000
+		ToolTip.visible: _delegate.hovered
+		ToolTip.text: action.text
     }
     
     implicitHeight: parent.height
@@ -104,7 +109,7 @@ Item
             id: _exposedHiddenActionButton
             visible: action
             Layout.fillWidth: control.strech
-
+            
             action: control.currentIndex >= control.actions.length && control.currentIndex < control.count? control.hiddenActions[control.currentIndex - control.actions.length] : null
             checkable: true
             checked: visible
@@ -123,40 +128,20 @@ Item
             }
         }		
         
-        ToolButton
+        Maui.ToolButtonMenu
         {
             id: _menuButton
             icon.name: "list-add"
-
-            visible: control.hiddenActions.length > 0
-            onClicked: 
-            {
-                if(_menu.visible)
-                    _menu.close()
-                    else
-                        _menu.popup(_menuButton, 0, _menuButton.height)
-            }
-            anchors.verticalCenter: parent.verticalCenter
-            text: qsTr("More")		
+            
+            visible: control.hiddenActions.length > 0          
+            
+            Layout.alignment: Qt.AlignVCenter
             autoExclusive: false
             checkable: true
-            checked: _menu.visible
             display: checked ? ToolButton.TextBesideIcon : ToolButton.IconOnly
             
-            indicator: Kirigami.Icon
-            {
-                anchors
-                {
-                    right: parent.right
-                    bottom: parent.bottom
-//                     verticalCenter: parent.verticalCenter
-                }
-                color: control.Kirigami.Theme.textColor
-                source: "qrc://assets/arrow-down.svg"
-                width: Maui.Style.iconSizes.small
-                height: width
-                isMask: true
-            }	
+            menu.closePolicy: Popup.CloseOnReleaseOutsideParent
+            
             
             Behavior on implicitWidth
             {		
@@ -166,26 +151,23 @@ Item
                     easing.type: Easing.InOutQuad
                 }
             }
-            Menu
+            
+            Repeater
             {
-                id: _menu
-                closePolicy: Popup.CloseOnReleaseOutsideParent
-                Repeater
+                model: control.hiddenActions
+                
+                MenuItem
                 {
-                    model: control.hiddenActions
+                    text:modelData.text
+					icon: modelData.icon
+                    autoExclusive: true
+                    checkable: true
+                    checked: control.currentIndex === control.actions.length + index
                     
-                    MenuItem
+                    onTriggered:
                     {
-                        action: modelData
-                        checkable: true
-                        autoExclusive: true
-                        checked: control.currentIndex === control.actions.length + index
-                        
-                        onTriggered:
-                        {
-                            control.currentIndex = control.actions.length + index
-                            control.clicked(control.currentIndex)
-                        }
+                        control.currentIndex = control.actions.length + index
+                        control.clicked(control.currentIndex)
                     }
                 }
             }

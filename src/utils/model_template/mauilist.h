@@ -42,7 +42,7 @@ class MAUIKIT_EXPORT MauiList : public QObject, public QQmlParserStatus
 	Q_INTERFACES(QQmlParserStatus)
 	
     Q_OBJECT    
-    Q_PROPERTY(int count READ getCount NOTIFY countChanged)
+    Q_PROPERTY(int count READ getCount NOTIFY countChanged FINAL)
 
 public:
     /**

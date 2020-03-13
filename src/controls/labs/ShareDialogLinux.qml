@@ -54,11 +54,7 @@ Maui.Dialog
 		footBar.middleContent : Button
 		{
 			text: qsTr("Open with")
-			onClicked: 
-			{
-				_openWithDialog.open()
-				control.close()
-			}
+            onClicked:  control.openWith()
 		}
 		
 		Maui.OpenWithDialog
@@ -97,6 +93,12 @@ Maui.Dialog
 				
 				onClicked: _purpose.createJob(index)
 			}
-		}
+        }
+        
+        function openWith()
+        {
+            _openWithDialog.open()
+            control.close()
+        }
 }
 
