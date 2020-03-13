@@ -1,17 +1,17 @@
 /*
  * <one line to give the program's name and a brief idea of what it does.>
  * Copyright (C) 2019  camilo <chiguitar@unal.edu.co>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -42,150 +42,150 @@ MauiApp::MauiApp() : QObject(nullptr)
   #endif
 {
 	m_theme.path = QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString("/maui/csd/%1").arg("Default"), QStandardPaths::LocateDirectory));
-	
+
 // 	this->setEnableCSD(UTIL::loadSettings("CSD", "GLOBAL", m_enableCSD).toBool());
-	
-#if defined Q_OS_LINUX && !defined Q_OS_ANDROID	
-	auto configWatcher = new QFileSystemWatcher({CONF_FILE.toLocalFile()}, this);    
+
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
+	auto configWatcher = new QFileSystemWatcher({CONF_FILE.toLocalFile()}, this);
 	connect(configWatcher, &QFileSystemWatcher::fileChanged, [&](QString)
 	{
 		getWindowControlsSettings();
-	});  
+	});
 #endif
 }
 
 QString MauiApp::getName()
 {
-    return qApp->applicationName();
+	return qApp->applicationName();
 }
 
 QString MauiApp::getDisplayName()
 {
-    return qApp->applicationDisplayName();
+	return qApp->applicationDisplayName();
 }
 
 QString MauiApp::getVersion()
 {
-    return  qApp->applicationVersion();
+	return  qApp->applicationVersion();
 }
 
 QString MauiApp::getOrg()
 {
-    return qApp->organizationName();
+	return qApp->organizationName();
 }
 
 QString MauiApp::getDomain()
 {
-    return qApp->organizationDomain();
+	return qApp->organizationDomain();
 }
 
 QString MauiApp::getMauikitVersion()
 {
-    return Handy::appInfo().value("mauikit_version").toString();
+	return Handy::appInfo().value("mauikit_version").toString();
 }
 
 QString MauiApp::getQtVersion()
 {
-    return Handy::appInfo().value("qt_version").toString();
+	return Handy::appInfo().value("qt_version").toString();
 }
 
 QString MauiApp::getDescription() const
 {
-    return description;
+	return description;
 }
 
 void MauiApp::setDescription(const QString &value)
 {
-    if(description == value)
-        return;
+	if(description == value)
+		return;
 
-    description = value;
-    emit this->descriptionChanged(description);
+	description = value;
+	emit this->descriptionChanged(description);
 }
 
 QString MauiApp::getIconName() const
 {
-    return iconName;
+	return iconName;
 }
 
 void MauiApp::setIconName(const QString &value)
 {
-    if(iconName == value)
-        return;
+	if(iconName == value)
+		return;
 
-    iconName = value;
-    emit this->iconNameChanged(iconName);
+	iconName = value;
+	emit this->iconNameChanged(iconName);
 }
 
 QString MauiApp::getWebPage() const
 {
-    return webPage;
+	return webPage;
 }
 
 void MauiApp::setWebPage(const QString &value)
 {
-    if(webPage == value)
-        return;
+	if(webPage == value)
+		return;
 
-    webPage = value;
-    emit this->webPageChanged(webPage);
+	webPage = value;
+	emit this->webPageChanged(webPage);
 }
 
 QString MauiApp::getDonationPage() const
 {
-    return donationPage;
+	return donationPage;
 }
 
 void MauiApp::setDonationPage(const QString &value)
 {
-    if(donationPage == value)
-        return;
+	if(donationPage == value)
+		return;
 
-    donationPage = value;
-    emit this->donationPageChanged(donationPage);
+	donationPage = value;
+	emit this->donationPageChanged(donationPage);
 }
 
 QString MauiApp::getReportPage() const
 {
-    return reportPage;
+	return reportPage;
 }
 
 void MauiApp::setReportPage(const QString &value)
 {
-    if(reportPage == value)
-        return;
+	if(reportPage == value)
+		return;
 
-    reportPage = value;
-    emit this->reportPageChanged(reportPage);
+	reportPage = value;
+	emit this->reportPageChanged(reportPage);
 }
 
 bool MauiApp::getHandleAccounts() const
 {
-    return this->handleAccounts;
+	return this->handleAccounts;
 }
 
 void MauiApp::setHandleAccounts(const bool &value)
 {
 #ifdef COMPONENT_ACCOUNTS
-    if(this->handleAccounts == value)
-        return;
+	if(this->handleAccounts == value)
+		return;
 
-    this->handleAccounts = value;
-    emit this->handleAccountsChanged();
+	this->handleAccounts = value;
+	emit this->handleAccountsChanged();
 #endif
 }
 
 #ifdef COMPONENT_ACCOUNTS
 MauiAccounts * MauiApp::getAccounts() const
 {
-    return this->m_accounts;
+	return this->m_accounts;
 }
 #endif
 
 MauiApp * MauiApp::qmlAttachedProperties(QObject* object)
-{ 
+{
 	Q_UNUSED(object)
-    return MauiApp::instance();
+	return MauiApp::instance();
 }
 
 void MauiApp::notify(const QString &icon, const QString& title, const QString& body, const QJSValue& callback, const int& timeout, const QString& buttonText)
@@ -202,50 +202,50 @@ void MauiApp::setEnableCSD(const bool& value)
 {
 	if(m_enableCSD == value)
 		return;
-	
+
 	m_enableCSD = value;
 // 	UTIL::saveSettings("CSD", m_enableCSD, "GLOBAL");
 	emit enableCSDChanged();
-	
+
 	if(m_enableCSD)
 	{
-		getWindowControlsSettings();		
+		getWindowControlsSettings();
 	}
 }
 
 void MauiApp::getWindowControlsSettings()
 {
 	#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
-	
+
 	auto kconf = KSharedConfig::openConfig("kwinrc");
 	const auto group = kconf->group("org.kde.kdecoration2");
-	
+
 	if( group.hasKey("ButtonsOnLeft"))
-	{	
+	{
 		m_leftWindowControls = group.readEntry("ButtonsOnLeft", "").split("", QString::SkipEmptyParts);
 		emit this->leftWindowControlsChanged();
 	}
-	
+
 	if( group.hasKey("ButtonsOnRight"))
 	{
 		m_rightWindowControls = group.readEntry("ButtonsOnRight", "").split("", QString::SkipEmptyParts);
-		emit this->rightWindowControlsChanged();		
+		emit this->rightWindowControlsChanged();
 	}
-	
+
 	/*if( group.hasKey("Theme"))
 	{
-		const auto path = QUrl(FMH::DataPath+"/maui/csd/Default");		
+		const auto path = QUrl(FMH::DataPath+"/maui/csd/Default");
 		if(FMH::fileExists(path))
 		{
 			m_theme.path = path;
 		}
-	}*/	
-	
+	}*/
+
 // 	m_theme.path = QUrl(FMH::DataPath+"/maui/csd/Default");
-	
-	
+
+
 	#else
-	m_leftWindowControls = {"X","I","A"};
+	m_leftWindowControls = QStringList{"X","I","A"};
 	emit this->leftWindowControlsChanged();
 	#endif
 }
