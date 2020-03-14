@@ -78,6 +78,8 @@
 		<file alias="private/shapes/Rectangle.qml">controls/private/shapes/Rectangle.qml</file>
 		<file alias="labs/CSDControls.qml">controls/labs/CSDControls.qml</file>
 		<file alias="labs/WindowControls.qml">controls/labs/WindowControls.qml</file>
+		<file alias="labs/ActionToolBar.qml">controls/labs/ActionToolBar.qml</file>
+		<file alias="labs/ToolButtonAction.qml">controls/labs/ToolButtonAction.qml</file>
 		
     </qresource>
     <qresource prefix="/"/>
