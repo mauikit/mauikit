@@ -23,11 +23,14 @@ import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 import QtQuick.Layouts 1.3
+import QtGraphicalEffects 1.0
 
 Page
 {
     id: control
     focus: true
+    clip: true
+    
     leftPadding: control.padding
     rightPadding: control.padding
     topPadding: control.padding
@@ -191,6 +194,38 @@ Page
             Layout.fillHeight: sourceComponent === _titleComponent
             sourceComponent: control.title && control.showTitle ? _titleComponent : undefined
         }
+        
+        background: Rectangle
+        {
+			color: control.Kirigami.Theme.backgroundColor
+			
+			Kirigami.Separator
+			{
+				anchors.bottom: headBar.position === ToolBar.Header ? parent.bottom : parent.top
+				anchors.left: parent.left
+				anchors.right: parent.right
+			}
+			
+			FastBlur
+			{
+				anchors.fill: parent				
+// 				visible: !control.contentItem.clip
+				opacity: 0.15
+				transparentBorder: false 
+				source: ShaderEffectSource
+				{
+					//                     cullMode: ShaderEffect.FrontFaceCulling 
+					//                     hideSource: true
+					samples : 0
+					recursive: true
+					sourceItem: control.contentItem
+					sourceRect: Qt.rect(0, 1-headBar.height,  headBar.width, headBar.height)
+// 					textureSize: Qt.size(headBar.width,headBar.height) 
+				}
+				radius: 64				
+			}
+		}
+		
     }
     
     property Maui.ToolBar mfootBar : Maui.ToolBar

@@ -76,7 +76,6 @@ Kirigami.ScrollablePage
     rightPadding: padding
     topPadding: padding
     bottomPadding: padding    
-    clip: true           
 
     Keys.enabled: false
     Kirigami.Theme.colorSet: Kirigami.Theme.View       

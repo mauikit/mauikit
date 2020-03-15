@@ -20,7 +20,6 @@ Flickable
 	contentHeight: flick.height
 	
 	interactive: contentWidth > width || contentHeight > height
-	clip: true
 	z: 1000
 	
 	ScrollBar.vertical: ScrollBar {}
@@ -120,7 +119,7 @@ Flickable
 			width: flick.contentWidth
 			height: flick.contentHeight
 			
-			sourceComponent: control.animated ? _animatedImageComponent : _stillImageComponent
+			sourceComponent: flick.animated ? _animatedImageComponent : _stillImageComponent
 			
 			MouseArea
 			{
