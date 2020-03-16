@@ -80,6 +80,8 @@
 		<file alias="labs/WindowControls.qml">controls/labs/WindowControls.qml</file>
 		<file alias="labs/ActionToolBar.qml">controls/labs/ActionToolBar.qml</file>
 		<file alias="labs/ToolButtonAction.qml">controls/labs/ToolButtonAction.qml</file>
+		<file alias="labs/AppViews.qml">controls/labs/AppViews.qml</file>
+		<file alias="labs/AppView.qml">controls/labs/AppView.qml</file>
 		
     </qresource>
     <qresource prefix="/"/>

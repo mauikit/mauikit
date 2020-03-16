@@ -24,7 +24,7 @@ import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.8 as Kirigami
 import QtGraphicalEffects 1.0
 
-ScrollView
+Kirigami.ScrollablePage
 {
     id: control
 
@@ -75,12 +75,12 @@ ScrollView
     topPadding: 0
     bottomPadding: 0
     focus: true
-	clip: false
+// 	clip: false
 	
-//     keyboardNavigationEnabled: false
+    keyboardNavigationEnabled: false
     Keys.enabled: false
-//     verticalScrollBarPolicy: ScrollBar.AlwaysOn
-property alias flickable : controlView
+    verticalScrollBarPolicy: ScrollBar.AlwaysOn
+    
     GridView
     {
         id: controlView

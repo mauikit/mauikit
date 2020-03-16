@@ -1,5 +1,5 @@
 /*
- *   Copyright 2018 Camilo Higuita <milo.h@aol.com>
+ *   Copyright 2019 Camilo Higuita <milo.h@aol.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -29,7 +29,7 @@ Page
 {
     id: control
     focus: true
-    clip: true
+//     clip: true
     
     leftPadding: control.padding
     rightPadding: control.padding

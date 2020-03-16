@@ -112,8 +112,8 @@ Item
             
             action: control.currentIndex >= control.actions.length && control.currentIndex < control.count? control.hiddenActions[control.currentIndex - control.actions.length] : null
             checkable: true
-            checked: visible
-            anchors.verticalCenter: parent.verticalCenter
+            checked: true
+            Layout.alignment: Qt.AlignVCenter
             icon.width: Maui.Style.iconSizes.medium
             icon.height: Maui.Style.iconSizes.medium
             display: ToolButton.TextBesideIcon
@@ -166,7 +166,7 @@ Item
                     
                     onTriggered:
                     {
-                        control.currentIndex = control.actions.length + index
+						control.currentIndex = control.actions.length + index
                         control.clicked(control.currentIndex)
                     }
                 }
