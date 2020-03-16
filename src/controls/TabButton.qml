@@ -76,7 +76,7 @@ TabButton
                 height: Maui.Style.iconSizes.tiny
                 width: height
                 anchors.centerIn: parent
-                color: parent.hovered || parent.pressed ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor            
+                color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor            
             }
         }
     }
