@@ -10,6 +10,8 @@ TabButton
     implicitWidth:  150 * Maui.Style.unit
 
     signal closeClicked(int index)
+	
+	default property alias content : _layout.data
 
     Kirigami.Separator
     {
@@ -42,12 +44,14 @@ TabButton
 
     contentItem: RowLayout
     {
+		id: _layout
         anchors.fill: control
         spacing: Maui.Style.space.small
         anchors.margins: Maui.Style.space.small
 
         Label
         {
+			visible: text.length
             text: control.text
             font.pointSize: Maui.Style.fontSizes.default
             Layout.fillWidth: true
@@ -58,7 +62,6 @@ TabButton
             wrapMode: Text.NoWrap
             elide: Text.ElideMiddle
         }
-
         
         MouseArea
         {

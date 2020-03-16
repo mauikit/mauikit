@@ -19,15 +19,12 @@
 
 import QtQuick 2.10
 import QtQuick.Controls 2.10
-import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
-import org.kde.kirigami 2.7 as Kirigami
-import QtQuick.Layouts 1.3
 
 SwipeView
 {
 	id: control
-	interactive: true
+	interactive: Maui.Handy.isTouch
 	clip: true
 	property int maxViews : 4
 	property Maui.ToolBar toolbar : window().headBar
@@ -40,7 +37,12 @@ SwipeView
 	{
 		id: _actionGroup	
 		currentIndex : control.currentIndex
-		onCurrentIndexChanged: control.currentIndex = currentIndex		
+		onCurrentIndexChanged: 
+		{
+			control.currentIndex = currentIndex	
+			_actionGroup.currentIndex = control.currentIndex
+		}
+		
 		Component.onCompleted:
 		{
 			control.toolbar.middleContent.push(_actionGroup)
@@ -48,12 +50,21 @@ SwipeView
 	}	
 	
 	currentIndex: _actionGroup.currentIndex
-	onCurrentIndexChanged: _actionGroup.currentIndex = currentIndex	
+	onCurrentIndexChanged: 
+	{
+		_actionGroup.currentIndex = currentIndex	
+		control.currentIndex = _actionGroup.currentIndex	
+	}
 	
-	onCurrentItemChanged: currentItem.forceActiveFocus()
+	onCurrentItemChanged: 
+	{
+		currentItem.forceActiveFocus()
+		_listView.positionViewAtIndex(control.currentIndex , ListView.SnapPosition)
+	}
 	
 	contentItem: ListView
 	{
+		id: _listView
 		model: control.contentModel
 		interactive: control.interactive
 		currentIndex: control.currentIndex
@@ -65,7 +76,7 @@ SwipeView
 		highlightRangeMode: ListView.StrictlyEnforceRange
 		preferredHighlightBegin: 0
 		highlightMoveDuration: 0
-		
+		highlightFollowsCurrentItem: true
 		highlightResizeDuration: 0		
 		
 		preferredHighlightEnd: width
@@ -73,7 +84,6 @@ SwipeView
 		highlightMoveVelocity: -1
 		highlightResizeVelocity: -1
 		
-// 		resize
 		maximumFlickVelocity: 4 * (control.orientation === Qt.Horizontal ? width : height)	
 	}
 	

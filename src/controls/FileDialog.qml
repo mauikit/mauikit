@@ -379,8 +379,7 @@ Maui.Dialog
 						}
 					}					
 				}	
-				}
-				
+				}				
 				
 				MauiLab.SelectionBar
 				{
@@ -390,12 +389,9 @@ Maui.Dialog
 					onExitClicked: 
 					{
 						_selectionBar.clear()
-					}
-					
+					}					
 				}
-			}
-			
-			
+			}			
 	}
 	
 	
