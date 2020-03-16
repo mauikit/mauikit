@@ -20,6 +20,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.10
 import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.1 as MauiLab
 
 SwipeView
 {
@@ -28,8 +29,6 @@ SwipeView
 	clip: true
 	property int maxViews : 4
 	property Maui.ToolBar toolbar : window().headBar
-	property alias actions : _actionGroup.actions
-	property alias hiddenAction : _actionGroup.hiddenActions
 	
 	readonly property int index : -1
 	
@@ -89,19 +88,18 @@ SwipeView
 	
 	Component.onCompleted:
 	{
-		control.toolbar.middleContent.push(control.actionGroup)
 		for(var i in control.contentChildren)
 		{
 			const obj = control.contentChildren[i]
 			
-			if(obj.hasOwnProperty("action"))
+			if(obj.MauiLab.AppView)
 			{
-				if(control.actions.length < control.maxViews)
+				if(control.actionGroup.items.length < control.maxViews)
 				{
-					control.actions.push(obj.action)
+					control.actionGroup.items.push(obj)
 				}else
 				{
-					control.hiddenAction.push(obj.action)					
+					control.actionGroup.hiddenItems.push(obj)					
 				}
 			}
 		}

@@ -66,7 +66,7 @@ ShareDialog 1.1 labs/ShareDialog.qml
 ActionToolBar 1.1 labs/ActionToolBar.qml
 ToolButtonAction 1.1 labs/ToolButtonAction.qml
 AppViews 1.1 labs/AppViews.qml
-AppView 1.1 labs/AppView.qml
+AppViewLoader 1.1 labs/AppViewLoader.qml
 
 X 1.0 private/shapes/X.qml
 PlusSign 1.0 private/shapes/PlusSign.qml

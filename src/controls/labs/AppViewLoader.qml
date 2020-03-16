@@ -25,13 +25,7 @@ import org.kde.kirigami 2.7 as Kirigami
 Loader
 {
 	id: control	
-	property alias action : _action
 	default property alias content : control.sourceComponent
 	
 		active:	SwipeView.index < SwipeView.view.maxViews ? (  SwipeView.view.interactive ? (SwipeView.isCurrentItem || SwipeView.isPreviousItem || SwipeView.isNextItem || item ) : SwipeView.isCurrentItem || item) || item : SwipeView.isCurrentItem
-		
-		Action
-		{
-			id: _action
-		}
 }

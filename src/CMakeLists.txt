@@ -7,6 +7,9 @@ include_directories(
 
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/model_template
     ${CMAKE_CURRENT_BINARY_DIR}/utils/model_template
+    
+	${CMAKE_CURRENT_SOURCE_DIR}/controls/libs
+    ${CMAKE_CURRENT_BINARY_DIR}/controls/libs
 
     ${CMAKE_CURRENT_SOURCE_DIR}/kde
     ${CMAKE_CURRENT_BINARY_DIR}/kde
@@ -32,6 +35,7 @@ set(mauikit_HDRS
     utils/mauiapp.h
     utils/model_template/mauilist.h
     utils/model_template/mauimodel.h
+    controls/libs/appview.h
     )
 
 if(${COMPONENT_ACCOUNTS})

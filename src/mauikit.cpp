@@ -27,6 +27,7 @@
 #include "pathlist.h"
 #include "mauiapp.h"
 #include "fmstatic.h"
+#include "appview.h"
 
 #ifdef COMPONENT_ACCOUNTS
 #include "mauiaccounts.h"
@@ -131,7 +132,9 @@ void MauiKit::registerTypes(const char *uri)
 	qmlRegisterType(componentUrl(QStringLiteral("labs/ActionToolBar.qml")), uri, 1, 1, "ActionToolBar");
 	qmlRegisterType(componentUrl(QStringLiteral("labs/ToolButtonAction.qml")), uri, 1, 1, "ToolButtonAction");
 	qmlRegisterType(componentUrl(QStringLiteral("labs/AppViews.qml")), uri, 1, 1, "AppViews");
-	qmlRegisterType(componentUrl(QStringLiteral("labs/AppView.qml")), uri, 1, 1, "AppView");
+	qmlRegisterType(componentUrl(QStringLiteral("labs/AppViewLoader.qml")), uri, 1, 1, "AppViewLoader");
+	qmlRegisterUncreatableType<AppView>(uri, 1, 1, "AppView", "Cannot be created App");
+	
 	
 	/** Experimental **/
 	qmlRegisterType(componentUrl(QStringLiteral("labs/CSDControls.qml")), uri, 1, 1, "CSDControls");

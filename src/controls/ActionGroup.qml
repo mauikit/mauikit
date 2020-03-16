@@ -22,17 +22,18 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.1 as MauiLab
 
 Item
 {
     id: control
     
-    default property list<Action> actions
-    property list<Action> hiddenActions
+    default property list<QtObject> items
+    property list<QtObject> hiddenItems
     
     property int currentIndex : 0
     property bool strech: false
-    readonly property int count : control.actions.length + control.hiddenActions.length
+    readonly property int count : control.items.length + control.hiddenItems.length
     
     signal clicked(int index)
     signal pressAndHold(int index)
@@ -41,9 +42,11 @@ Item
     property Component delegate : ToolButton
     {
         id: _delegate
+        visible: modelData.visible
         Layout.alignment: Qt.AlignVCenter
         Layout.fillWidth: control.strech
-        action: modelData
+        icon.name: modelData.MauiLab.AppView.iconName
+        text: modelData.MauiLab.AppView.title
         icon.width: Maui.Style.iconSizes.medium
         icon.height: Maui.Style.iconSizes.medium
         autoExclusive: true
@@ -73,12 +76,11 @@ Item
 		ToolTip.delay: 1000
 		ToolTip.timeout: 5000
 		ToolTip.visible: _delegate.hovered
-		ToolTip.text: action.text
+		ToolTip.text: text
     }
     
     implicitHeight: parent.height
-    implicitWidth: strech ?  parent.width : _layout.implicitWidth
-    
+    implicitWidth: strech ?  parent.width : _layout.implicitWidth    
     
     Behavior on implicitWidth
     {		
@@ -100,17 +102,21 @@ Item
         
         Repeater
         {
-            model: control.actions
+            model: control.items
             delegate: control.delegate		
         }
         
         ToolButton
         {
             id: _exposedHiddenActionButton
-            visible: action
+            visible: obj
             Layout.fillWidth: control.strech
             
-            action: control.currentIndex >= control.actions.length && control.currentIndex < control.count? control.hiddenActions[control.currentIndex - control.actions.length] : null
+            readonly property QtObject obj : control.currentIndex >= control.items.length && control.currentIndex < control.count? control.hiddenItems[control.currentIndex - control.items.length] : null
+            
+            icon.name: obj.MauiLab.AppView.iconName
+            text: obj.MauiLab.AppView.title
+            
             checkable: true
             checked: true
             Layout.alignment: Qt.AlignVCenter
@@ -133,7 +139,7 @@ Item
             id: _menuButton
             icon.name: "list-add"
             
-            visible: control.hiddenActions.length > 0          
+			visible: control.hiddenItems.length > 0          
             
             Layout.alignment: Qt.AlignVCenter
             autoExclusive: false
@@ -154,19 +160,19 @@ Item
             
             Repeater
             {
-                model: control.hiddenActions
+				model: control.hiddenItems
                 
                 MenuItem
                 {
-                    text:modelData.text
-                    icon.name: modelData.icon.name
+					text: modelData.MauiLab.AppView.title
+                    icon.name: modelData.MauiLab.AppView.iconName
                     autoExclusive: true
                     checkable: true
-                    checked: control.currentIndex === control.actions.length + index
+                    checked: control.currentIndex === control.items.length + index
                     
                     onTriggered:
                     {
-						control.currentIndex = control.actions.length + index
+						control.currentIndex = control.items.length + index
                         control.clicked(control.currentIndex)
                     }
                 }
