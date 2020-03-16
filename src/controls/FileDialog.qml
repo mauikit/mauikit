@@ -182,9 +182,7 @@ Maui.Dialog
 				Maui.FMList.REMOTE_PATH,                                                
 				Maui.FMList.CLOUD_PATH,
 				Maui.FMList.DRIVES_PATH]
-			}    
-			
-			
+			}   
 			
 			ColumnLayout
 			{
@@ -337,35 +335,35 @@ Maui.Dialog
 					]
 					
 					Maui.FileBrowser
-				{
-					id: browser
-					anchors.fill: parent				
-					
-					selectionBar: _selectionBar
-					
-					currentPath: Maui.FM.homePath()
-					selectionMode: control.mode === modes.OPEN
-					onItemClicked:
 					{
-						if(currentFMList.get(index).isdir == "true")
-						{
-							openItem(index)
-						}
+						id: browser
+						anchors.fill: parent				
 						
-						switch(control.mode)
-						{	
-							case modes.OPEN :
-							{	
-								addToSelection(currentFMList.get(index))
-								break
-							}
-							case modes.SAVE:
+						selectionBar: _selectionBar
+						
+						currentPath: Maui.FM.homePath()
+						selectionMode: control.mode === modes.OPEN
+						onItemClicked:
+						{
+							if(currentFMList.get(index).isdir == "true")
 							{
-								textField.text = currentFMList.get(index).label
-								break
-							}				
+								openItem(index)
+							}
+							
+							switch(control.mode)
+							{	
+								case modes.OPEN :
+								{	
+									addToSelection(currentFMList.get(index))
+									break
+								}
+								case modes.SAVE:
+								{
+									textField.text = currentFMList.get(index).label
+									break
+								}				
+							}
 						}
-					}
 					
 					onCurrentPathChanged:
 					{                        
