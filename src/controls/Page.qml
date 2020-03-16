@@ -201,8 +201,9 @@ Page
 			
 			Kirigami.Separator
 			{
-				anchors.bottom: headBar.position === ToolBar.Header ? parent.bottom : parent.top
-				anchors.left: parent.left
+                anchors.bottom: headBar.position === ToolBar.Header ? parent.bottom : undefined
+                anchors.top: headBar.position === ToolBar.Footer ? parent.top : undefined
+                anchors.left: parent.left
 				anchors.right: parent.right
 			}
 			
