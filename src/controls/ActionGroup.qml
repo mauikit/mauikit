@@ -159,7 +159,7 @@ Item
                 MenuItem
                 {
                     text:modelData.text
-					icon: modelData.icon
+                    icon.name: modelData.icon.name
                     autoExclusive: true
                     checkable: true
                     checked: control.currentIndex === control.actions.length + index

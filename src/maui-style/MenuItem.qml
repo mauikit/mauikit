@@ -43,7 +43,8 @@ import QtQuick.Controls.Material.impl 2.12
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
-T.MenuItem {
+T.MenuItem
+{
     id: control
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
