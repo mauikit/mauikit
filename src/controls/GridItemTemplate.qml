@@ -24,6 +24,7 @@ import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.1 as MauiLab
 
 Item
 {
@@ -32,28 +33,33 @@ Item
     default property alias content: _layout.data
         
         //     implicitHeight: _layout.implicitHeight
-        implicitWidth: _layout.implicitWidth
+//         implicitWidth: _layout.implicitWidth
         
         property alias text1 : _label1.text
         
         property alias label1 : _label1
+        
         property alias iconItem : _iconLoader.item
         property alias iconVisible : _iconContainer.visible
         property int iconSizeHint : Maui.Style.iconSizes.big
         property int imageWidth : iconSizeHint
         property int imageHeight : iconSizeHint
+        
         property string imageSource
         property string iconSource
         
-        property alias emblem : _emblem
-        
+        property bool checkable : false
+        property bool checked : false
+                
         property bool isCurrentItem: false
         property bool labelsVisible: true
         
-        property int fillMode :Image.PreserveAspectCrop
+        property int fillMode : Image.PreserveAspectCrop
         property int maskRadius: Maui.Style.radiusV
         
         property bool hovered: false
+        
+        signal toggled(bool state)		
         
         Component
         {
@@ -127,34 +133,43 @@ Item
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.maximumHeight: control.iconSizeHint
-                Layout.minimumHeight: control.iconSizeHint
-   
+                Layout.minimumHeight: control.iconSizeHint  
                 
                 Loader
                 {
                     id: _iconLoader
                     anchors.fill: parent
-                    sourceComponent: _iconContainer.visible ? (control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : null) ): null
-                    
+                    sourceComponent: _iconContainer.visible ? (control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : null) ): null                    
 
                     Maui.Badge
                     {
                         id: _emblem
-                        visible: false
+                        
+                        visible: control.checkable || control.checked
+                        
                         size: Maui.Style.iconSizes.medium        
                         anchors.margins: Maui.Style.space.medium
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.bottom: parent.bottom
-                        border.color: Kirigami.Theme.textColor 
                         
-//                         Maui.CheckMark
-//                         {
-//                            width: 10
-//                            height: 10
-//                             color: "white"
-//                             anchors.centerIn: parent
-//                         }
+                        color: control.checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor
                         
+                        border.color: Kirigami.Theme.textColor
+                        
+                        onClicked: 
+                        {
+							control.checked = !control.checked
+							control.toggled(control.checked)
+						}
+						
+                        MauiLab.CheckMark
+                        {
+							visible: control.checked
+							color: Kirigami.Theme.highlightedTextColor
+							anchors.centerIn: parent
+							height: 10
+							width: 10
+						}
                     } 
                     
                     DropShadow

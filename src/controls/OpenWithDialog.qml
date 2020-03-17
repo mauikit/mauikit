@@ -45,7 +45,7 @@ Maui.Dialog
 		id: grid
 		width: parent.width
 // 		Layout.preferredHeight: implicitHeight
-		showEmblem: false
+		checkable: false
 		model: ListModel {}
 		onItemClicked:
 		{

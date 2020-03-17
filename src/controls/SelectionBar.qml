@@ -72,14 +72,14 @@ Item
             else if(position === Qt.Vertical)
                 parent.height
             else
-                undefined
+                0
     
     implicitWidth: if(position === Qt.Horizontal)
                parent.width
            else if(position === Qt.Vertical)
                barHeight
            else
-               undefined
+               0
     
     
     visible: control.count > 0
@@ -232,19 +232,16 @@ Item
                     width: height + Maui.Style.space.medium
                     folderSize: Maui.Style.iconSizes.big
                     showLabel: true
-                    keepEmblemOverlay: true
-                    leftEmblem: "list-remove"
-                    showEmblem: !Kirigami.Settings.isMobile
-                    showTooltip: true
+                    checkable: true
+                    checked: true
                     showThumbnails: true
-                    emblemSize: Maui.Style.iconSizes.small
                     Kirigami.Theme.backgroundColor: "transparent"
                     Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
 					
                     Connections
                     {
                         target: delegate
-                        onLeftEmblemClicked: removeAtIndex(index)
+                        onToggled: removeAtIndex(index)
                         onClicked: control.itemClicked(index)
 						onPressAndHold: control.itemPressAndHold(index)
                     }

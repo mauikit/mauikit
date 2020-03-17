@@ -73,9 +73,8 @@ Item
                 labelsVisible: true
                 label1.text: model.uri               
                 
-                emblem.visible: true
-                emblem.iconName: "list-remove"
-                emblem.border.color: emblem.Kirigami.Theme.textColor
+               checkable: true
+                checked: true
               				
 				Connections
 				{

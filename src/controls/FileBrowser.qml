@@ -510,7 +510,7 @@ Maui.Page
 			control.currentView.forceActiveFocus()
 		}
 		
-		onLeftEmblemClicked:
+		onItemToggled:
 		{
 			const item = control.currentFMList.get(index)
 			

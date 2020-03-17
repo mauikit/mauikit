@@ -114,8 +114,8 @@ Item
             
             readonly property QtObject obj : control.currentIndex >= control.items.length && control.currentIndex < control.count? control.hiddenItems[control.currentIndex - control.items.length] : null
             
-            icon.name: obj.MauiLab.AppView.iconName
-            text: obj.MauiLab.AppView.title
+            icon.name: obj ? obj.MauiLab.AppView.iconName : ""
+            text: obj ? obj.MauiLab.AppView.title : ""
             
             checkable: true
             checked: true

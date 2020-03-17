@@ -28,19 +28,15 @@ Maui.GridView
 	id: control
 	Kirigami.Theme.colorSet: Kirigami.Theme.View
 	
-	itemSize : Maui.Style.iconSizes.large * 2
-	property bool showEmblem : true
-	property bool keepEmblemOverlay : false
-	property string rightEmblem
-	property string leftEmblem
-	
+	itemSize : Maui.Style.iconSizes.large * 2	
 	adaptContent: true
+	
 	property bool showPreviewThumbnails: true
+	property bool checkable : false
 	
 	signal itemClicked(int index)
 	signal itemDoubleClicked(int index)	
-	signal rightEmblemClicked(int index)
-	signal leftEmblemClicked(int index)	
+	signal itemToggled(int index, bool state)	
 	signal itemRightClicked(int index)	
 	
 	delegate: Item
@@ -61,12 +57,8 @@ Maui.GridView
 			padding: Maui.Style.space.tiny
 			isCurrentItem: parent.isCurrentItem
 			
-			showTooltip: true
-			showEmblem: control.showEmblem
-			keepEmblemOverlay: control.keepEmblemOverlay
+			checkable: control.checkable
 			showThumbnails: control.showPreviewThumbnails
-			rightEmblem: control.rightEmblem
-			leftEmblem: control.leftEmblem
 			
 			Connections
 			{
@@ -95,16 +87,10 @@ Maui.GridView
 					control.itemRightClicked(index)
 				}
 				
-				onRightEmblemClicked:
+				onToggled:
 				{
 					control.currentIndex = index
-					control.rightEmblemClicked(index)
-				}
-				
-				onLeftEmblemClicked:
-				{
-					control.currentIndex = index
-					control.leftEmblemClicked(index)
+					control.itemToggled(index, state)
 				}
 			}
 		}

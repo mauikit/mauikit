@@ -29,12 +29,8 @@ Kirigami.ScrollablePage
     id: control    
     
     property int itemSize : Maui.Style.iconSizes.big
-    property bool showEmblem : true
-    property bool keepEmblemOverlay : false
-    property string rightEmblem
-    property string leftEmblem
+    property bool checkable : false
     
-    property bool showDetailsInfo : false
     property bool showPreviewThumbnails: true
     
     property alias model : _listView.model
@@ -61,10 +57,7 @@ Kirigami.ScrollablePage
     signal itemClicked(int index)
     signal itemDoubleClicked(int index)
     signal itemRightClicked(int index)
-    
-    signal rightEmblemClicked(int index)
-    signal leftEmblemClicked(int index)
-    
+	signal itemToggled(int index, bool state)
     signal areaClicked(var mouse)
     signal areaRightClicked()   
     signal keyPress(var event)
@@ -115,18 +108,13 @@ Kirigami.ScrollablePage
         {
             id: delegate
             width: parent.width
-            height: itemSize + Maui.Style.space.big
+            height: control.itemSize + Maui.Style.space.big
             leftPadding: Maui.Style.space.small
             rightPadding: Maui.Style.space.small
             padding: 0
-            showDetailsInfo: control.showDetailsInfo
-            folderSize : itemSize
-            showTooltip: true
-            showEmblem: control.showEmblem
-            keepEmblemOverlay : control.keepEmblemOverlay
-            showThumbnails: showPreviewThumbnails
-            rightEmblem: control.rightEmblem
-            leftEmblem: control.leftEmblem
+            folderSize : control.itemSize
+            checkable: control.checkable
+            showThumbnails: control.showPreviewThumbnails
             
             Connections
             {
@@ -155,17 +143,11 @@ Kirigami.ScrollablePage
                     control.itemRightClicked(index)
                 }
                 
-                onRightEmblemClicked:
+                onToggled:
                 {
-                    control.currentIndex = index
-                    control.rightEmblemClicked(index)
-                }
-                
-                onLeftEmblemClicked:
-                {
-                    control.currentIndex = index
-                    control.leftEmblemClicked(index)
-                }
+					control.currentIndex = index
+					control.itemToggled(index, state)
+				}
             }
         }    
         

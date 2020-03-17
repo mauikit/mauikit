@@ -30,29 +30,33 @@ Maui.ItemDelegate
     id: control
 
     property int folderSize : Maui.Style.iconSizes.big
-    property int emblemSize: Maui.Style.iconSizes.medium
-    property bool showLabel : true
-    property bool showEmblem : false
-    property bool showTooltip : false
-    property bool showThumbnails : false
-    property bool isSelected : false
-    property bool keepEmblemOverlay : false
-    property string rightEmblem
-    property string leftEmblem
 
+    property bool showThumbnails : false
+
+    property string tooltipText  
+    
+    property alias label1 : _template.label1
+
+    property alias iconItem : _template.iconItem
+    property alias iconVisible : _template.iconVisible
+    property alias iconSizeHint : _template.iconSizeHint
+    property alias imageSource : _template.imageSource
+    property alias iconSource : _template.iconSource
+    property alias checkable : _template.checkable
+    property alias checked : _template.checked
+    property alias showLabel : _template.labelsVisible
+    
     property alias dropArea : _dropArea
 
-    isCurrentItem : GridView.isCurrentItem || isSelected
+    isCurrentItem : GridView.isCurrentItem || checked
 
-    signal emblemClicked(int index)
-    signal rightEmblemClicked(int index)
-    signal leftEmblemClicked(int index)
     signal contentDropped(var drop)
-
+	signal toggled(bool state)		
+	
     ToolTip.delay: 1000
     ToolTip.timeout: 5000
-    ToolTip.visible: control.hovered && control.showTooltip
-    ToolTip.text: model.tooltip ? model.tooltip : (model.path ? model.path : "")
+    ToolTip.visible: control.hovered && control.tooltipText
+    ToolTip.text: control.tooltipText
 
     background: Item {}
 
@@ -90,16 +94,7 @@ Maui.ItemDelegate
         imageSource : model.mime ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails && model.thumbnail && model.thumbnail.length? model.thumbnail : "") : ""
         label1.text: model.label
 //        label1.elide: Text.ElideMiddle // TODO this is broken ???
-        emblem.iconName: control.leftEmblem
-        emblem.visible: (control.keepEmblemOverlay || control.isSelected) && control.showEmblem  && control.leftEmblem
         isCurrentItem: control.isCurrentItem
-        emblem.border.color: emblem.Kirigami.Theme.textColor
-        emblem.color: control.isSelected ? emblem.Kirigami.Theme.highlightColor : Qt.rgba(emblem.Kirigami.Theme.backgroundColor.r, emblem.Kirigami.Theme.backgroundColor.g, emblem.Kirigami.Theme.backgroundColor.b, 0.7)
-
-        Connections
-        {
-            target: _template.emblem
-            onClicked: control.leftEmblemClicked(index)
-        }
+        onToggled: control.toggled(state)		
     }
 }

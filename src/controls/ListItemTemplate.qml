@@ -24,6 +24,7 @@ import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.1 as MauiLab
 
 Item
 {
@@ -47,13 +48,16 @@ Item
     property alias iconVisible : _iconContainer.visible
     property int iconSizeHint : Maui.Style.iconSizes.big
     property string imageSource
-    property string iconSource
+    property string iconSource    
     
-    property alias emblem: _emblem
+    property bool checkable : false
+    property bool checked : false
     
     property bool isCurrentItem: false
     property bool labelsVisible: true
     property bool hovered : false
+    
+    signal toggled(bool state)
     
     Component
     {
@@ -127,11 +131,32 @@ Item
         Maui.Badge
         {
             id: _emblem
-            visible: false
+            visible: control.checkable || control.checked
+            
             size: Math.min(Maui.Style.iconSizes.medium, parent.height)
+			
             Layout.alignment: Qt.AlignVCenter
             Layout.leftMargin: Maui.Style.space.medium
             Layout.rightMargin: 0
+            
+            color: control.checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor
+            
+            border.color: Kirigami.Theme.textColor
+            
+            onClicked: 
+            {
+				control.checked = !control.checked
+				control.toggled(control.checked)
+			}
+            
+            MauiLab.CheckMark
+            {
+				visible: control.checked
+				color: Kirigami.Theme.highlightedTextColor
+				anchors.centerIn: parent
+				height: 10
+				width: 10
+			}
         }
 
         Item

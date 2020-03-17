@@ -75,7 +75,6 @@ Kirigami.ScrollablePage
     topPadding: 0
     bottomPadding: 0
     focus: true
-// 	clip: false
 	
     keyboardNavigationEnabled: false
     Keys.enabled: false

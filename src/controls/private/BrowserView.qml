@@ -192,8 +192,7 @@ Maui.Page
             property alias currentFMModel : _browserModel
             topMargin: Maui.Style.contentMargins
             showPreviewThumbnails: settings.showThumbnails
-            keepEmblemOverlay: selectionMode
-            showDetailsInfo: true
+            checkable: selectionMode
             enableLassoSelection: true
             
             BrowserHolder
@@ -235,18 +234,18 @@ Maui.Page
                 id: delegate
                 width: parent.width
                 height: _listViewBrowser.itemSize + Maui.Style.space.big
+                
+                padding: 0
                 leftPadding: Maui.Style.space.small
                 rightPadding: leftPadding
-                padding: 0
-                showDetailsInfo: _listViewBrowser.showDetailsInfo
+                
                 folderSize : _listViewBrowser.itemSize
-                showTooltip: true
-                showEmblem: _listViewBrowser.showEmblem
-                keepEmblemOverlay : _listViewBrowser.keepEmblemOverlay
+                tooltipText: model.path
+                
+                checkable: _listViewBrowser.checkable
                 showThumbnails: _listViewBrowser.showPreviewThumbnails
-                rightEmblem: _listViewBrowser.rightEmblem
-                isSelected: selectionBar ? selectionBar.contains(model.path) : false
-                leftEmblem: isSelected ? "checkbox" : " "
+                
+                checked: selectionBar ? selectionBar.contains(model.path) : false
 				opacity: model.hidden == "true" ? 0.5 : 1
                 draggable: true
                 
@@ -272,16 +271,16 @@ Maui.Page
                     onUriRemoved:
                     {
                         if(uri === model.path)
-                            delegate.isSelected = false
+                            delegate.checked = false
                     }
                     
                     onUriAdded:
                     {
                         if(uri === model.path)
-                            delegate.isSelected = true
+                            delegate.checked = true
                     }
                     
-                    onCleared: delegate.isSelected = false
+                    onCleared: delegate.checked = false
                 }
                 
                 Connections
@@ -321,16 +320,10 @@ Maui.Page
                         _listViewBrowser.itemRightClicked(index)
                     }
                     
-                    onRightEmblemClicked:
+                    onToggled:
                     {
                         _listViewBrowser.currentIndex = index
-                        _listViewBrowser.rightEmblemClicked(index)
-                    }
-                    
-                    onLeftEmblemClicked:
-                    {
-                        _listViewBrowser.currentIndex = index
-                        _listViewBrowser.leftEmblemClicked(index)
+                        _listViewBrowser.itemToggled(index, state)
                     }
                     
                     onContentDropped:
@@ -355,7 +348,7 @@ Maui.Page
             property alias currentFMModel : _browserModel
             itemSize : thumbnailsSize + Maui.Style.space.small
             cellHeight: itemSize * 1.5
-            keepEmblemOverlay: selectionMode
+            checkable: selectionMode
             showPreviewThumbnails: settings.showThumbnails
             enableLassoSelection: true
             
@@ -382,7 +375,6 @@ Maui.Page
             
             delegate: Item
             {
-                property alias isSelected: delegate.isSelected
                 property bool isCurrentItem : GridView.isCurrentItem
                 height: _gridViewBrowser.cellHeight
                 width: _gridViewBrowser.cellWidth
@@ -398,13 +390,10 @@ Maui.Page
                     width: _gridViewBrowser.itemSize - 5
                     padding: Maui.Style.space.tiny
                     isCurrentItem: parent.isCurrentItem
-                    showTooltip: true
-                    showEmblem: _gridViewBrowser.showEmblem
-                    keepEmblemOverlay: _gridViewBrowser.keepEmblemOverlay
+                    tooltipText: model.path
+                    checkable: _gridViewBrowser.checkable
                     showThumbnails: _gridViewBrowser.showPreviewThumbnails
-                    rightEmblem: _gridViewBrowser.rightEmblem
-                    isSelected: (selectionBar ? selectionBar.contains(model.path) : false) 
-                    leftEmblem: isSelected ? "checkbox" : " "
+                    checked: (selectionBar ? selectionBar.contains(model.path) : false) 
                     draggable: true
                     opacity: model.hidden == "true" ? 0.5 : 1
                     
@@ -431,16 +420,16 @@ Maui.Page
                         onUriRemoved:
                         {
                             if(uri === model.path)
-                                delegate.isSelected = false
+                                delegate.checked = false
                         }
                         
                         onUriAdded:
                         {
                             if(uri === model.path)
-                                delegate.isSelected = true
+                                delegate.checked = true
                         }
                         
-                        onCleared: delegate.isSelected = false
+                        onCleared: delegate.checked = false
                         
                     }
                     
@@ -481,16 +470,10 @@ Maui.Page
                             _gridViewBrowser.itemRightClicked(index)
                         }
                         
-                        onRightEmblemClicked:
+                        onToggled:
                         {
                             _gridViewBrowser.currentIndex = index
-                            _gridViewBrowser.rightEmblemClicked(index)
-                        }
-                        
-                        onLeftEmblemClicked:
-                        {
-                            _gridViewBrowser.currentIndex = index
-                            _gridViewBrowser.leftEmblemClicked(index)
+                            _gridViewBrowser.itemToggled(index, state)
                         }
                         
                         onContentDropped:
@@ -521,8 +504,7 @@ Maui.Page
             signal itemDoubleClicked(int index)
             signal itemRightClicked(int index)
             signal keyPress(var event)
-            signal rightEmblemClicked(int index)
-            signal leftEmblemClicked(int index)
+            signal itemToggled(int index, bool state)
             signal itemsSelected(var indexes)
             
             signal areaClicked(var mouse)
@@ -648,8 +630,7 @@ Maui.Page
                         anchors.fill: parent
                         topMargin: Maui.Style.contentMargins
                         showPreviewThumbnails: settings.showThumbnails
-                        keepEmblemOverlay: selectionMode
-                        showDetailsInfo: true
+                        checkable: selectionMode
                         onKeyPress: _millerControl.keyPress(event)
                         currentIndex : 0
                         onCurrentIndexChanged: _millerControl.currentIndex = currentIndex
@@ -712,18 +693,16 @@ Maui.Page
                             id: delegate
                             width: parent.width
                             height: _millerListView.itemSize + Maui.Style.space.big
+                            padding: 0                            
                             leftPadding: Maui.Style.space.small
                             rightPadding: leftPadding
-                            padding: 0
-                            showDetailsInfo: _millerListView.showDetailsInfo
+                            
+                            tooltipText: model.path
                             folderSize : _millerListView.itemSize
-                            showTooltip: true
-                            showEmblem: _millerListView.showEmblem
-                            keepEmblemOverlay : _millerListView.keepEmblemOverlay
+                            
+                            checkable: _millerListView.checkable
                             showThumbnails: _millerListView.showPreviewThumbnails
-                            rightEmblem: _millerListView.rightEmblem
-                            isSelected: selectionBar ? selectionBar.contains(model.path) : false
-                            leftEmblem: isSelected ? "checkbox" : " "
+                            checked: selectionBar ? selectionBar.contains(model.path) : false
                             opacity: model.hidden == "true" ? 0.5 : 1
                             draggable: true
                             
@@ -749,16 +728,16 @@ Maui.Page
                                 onUriRemoved:
                                 {
                                     if(uri === model.path)
-                                        delegate.isSelected = false
+                                        delegate.checked = false
                                 }
                                 
                                 onUriAdded:
                                 {
                                     if(uri === model.path)
-                                        delegate.isSelected = true
+                                        delegate.checked = true
                                 }
                                 
-                                onCleared: delegate.isSelected = false
+                                onCleared: delegate.checked = false
                             }
                             
                             Connections
@@ -801,19 +780,12 @@ Maui.Page
                                     _millerListView.currentIndex = index
                                     _millerControl.itemRightClicked(index)
                                 }
-                                
-                                onRightEmblemClicked:
+                                                                
+                                onToggled:
                                 {
                                     _millerColumns.currentIndex = _index
                                     _millerListView.currentIndex = index
-                                    _millerControl.rightEmblemClicked(index)
-                                }
-                                
-                                onLeftEmblemClicked:
-                                {
-                                    _millerColumns.currentIndex = _index
-                                    _millerListView.currentIndex = index
-                                    _millerControl.leftEmblemClicked(index)
+                                    _millerControl.itemToggled(index, state)
                                 }
                                 
                                 onContentDropped:

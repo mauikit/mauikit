@@ -29,31 +29,20 @@ Maui.ItemDelegate
 {
     id: control 
     
-    property bool showDetailsInfo: false
+    isCurrentItem : ListView.isCurrentItem || checked	
+    
+    signal contentDropped(var drop)	
+	signal toggled(bool state)
+	
+	ToolTip.delay: 1000
+	ToolTip.timeout: 5000
+	ToolTip.visible: control.hovered && control.tooltipText
+	ToolTip.text: control.tooltipText
+    
     property int folderSize : Maui.Style.iconSizes.medium
-    property int emblemSize: Maui.Style.iconSizes.medium
-    property alias showLabel : _template.labelsVisible
-    property bool showEmblem : false
-    property bool showTooltip : false
-    property bool showThumbnails : false
-    property bool isSelected : false	
-    property bool keepEmblemOverlay : false	
-    property string rightEmblem
-    property string leftEmblem
-    
-    isCurrentItem : ListView.isCurrentItem || isSelected	
-    
-    signal emblemClicked(int index)
-    signal rightEmblemClicked(int index)
-    signal leftEmblemClicked(int index) 
-    signal contentDropped(var drop)
-    
-    ToolTip.delay: 1000
-    ToolTip.timeout: 5000
-    ToolTip.visible: control.hovered && control.showTooltip
-    ToolTip.text: model.tooltip ? model.tooltip : (model.path ? model.path : "")
-    
-    
+    property bool showThumbnails : false    
+    property string tooltipText  
+        
     property alias label1 : _template.label1
     property alias label2 : _template.label2
     property alias label3 : _template.label3
@@ -63,6 +52,9 @@ Maui.ItemDelegate
     property alias iconSizeHint : _template.iconSizeHint
     property alias imageSource : _template.imageSource
     property alias iconSource : _template.iconSource
+    property alias checkable : _template.checkable
+    property alias checked : _template.checked
+    property alias showLabel : _template.labelsVisible
     
     DropArea 
     {
@@ -84,14 +76,9 @@ Maui.ItemDelegate
         }
     }
     
-    Drag.active: mouseArea.drag.active && control.draggable && model.path
+    Drag.active: mouseArea.drag.active && control.draggable
     Drag.dragType: Drag.Automatic
-    Drag.supportedActions: Qt.CopyAction
-    Drag.mimeData:
-    {
-        "text/uri-list": model.path ? model.path : ""
-    }
-    
+    Drag.supportedActions: Qt.CopyAction   
     
     Maui.ListItemTemplate
     {
@@ -107,20 +94,8 @@ Maui.ItemDelegate
         
         label1.text: model.label ? model.label : ""
         label3.text : model.mime ? (model.mime === "inode/directory" ? (model.count ? model.count + qsTr(" items") : "") : Maui.FM.formatSize(model.size)) : ""
-        label4.text: model.modified ? Maui.FM.formatDate(model.modified, "MM/dd/yyyy") : ""
-        
-        emblem.iconName: control.leftEmblem
-        emblem.visible: (control.keepEmblemOverlay || control.isSelected) && control.showEmblem  && control.leftEmblem
-        emblem.size: Maui.Style.iconSizes.medium    
-        
-        emblem.border.color: emblem.Kirigami.Theme.textColor
-        emblem.color: control.isSelected ? emblem.Kirigami.Theme.highlightColor : Qt.rgba(emblem.Kirigami.Theme.backgroundColor.r, emblem.Kirigami.Theme.backgroundColor.g, emblem.Kirigami.Theme.backgroundColor.b, 0.7)
-        
-        Connections
-        {
-            target: _template.emblem
-            onClicked: control.leftEmblemClicked(index)
-        }
-    }   
-    
+        label4.text: model.modified ? Maui.FM.formatDate(model.modified, "MM/dd/yyyy") : "" 
+		
+		onToggled: control.toggled(state)
+    } 
 }
