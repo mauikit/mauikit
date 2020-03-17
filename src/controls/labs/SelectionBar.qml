@@ -63,29 +63,22 @@ Item
         Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
 
         onClicked: control.itemClicked(index)
-        onPressAndHold: control.itemPressAndHold(index)
-
-            Maui.ListItemTemplate
-            {
-                id: _template
-                anchors.fill: parent                
-                iconVisible: false
-                labelsVisible: true
-                label1.text: model.uri               
-                
-               checkable: true
-                checked: true
-              				
-				Connections
-				{
-					target: _template.emblem
-					onClicked: control.removeAtIndex(index)
-				}
-				
-            }
-        
-    }
-
+		onPressAndHold: control.itemPressAndHold(index)
+		
+		Maui.ListItemTemplate
+		{
+			id: _template
+			anchors.fill: parent                
+			iconVisible: false
+			labelsVisible: true
+			label1.text: model.uri               
+			
+			checkable: true
+			checked: true
+			onToggled: control.removeAtIndex(index)	
+		}        
+	}
+	
     /**
      * if singleSelection is set to true then only a single item is selected
      * at time, and replaced with a newe item appended
