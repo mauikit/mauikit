@@ -92,7 +92,7 @@ SwipeView
 		{
 			const obj = control.contentChildren[i]
 			
-			if(obj.MauiLab.AppView)
+			if(obj.MauiLab.AppView.title || obj.MauiLab.AppView.iconName)
 			{
 				if(control.actionGroup.items.length < control.maxViews)
 				{
