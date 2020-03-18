@@ -139,7 +139,7 @@ Item
             Layout.leftMargin: Maui.Style.space.medium
             Layout.rightMargin: 0
             
-            color: control.checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor
+            color: control.checked ? Kirigami.Theme.highlightColor : Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.8)
             
             border.color: Kirigami.Theme.textColor
             
@@ -151,11 +151,30 @@ Item
             
             MauiLab.CheckMark
             {
-				visible: control.checked
+				visible: opacity > 0
 				color: Kirigami.Theme.highlightedTextColor
 				anchors.centerIn: parent
-				height: 10
-				width: 10
+				height: control.checked ? 10 : 0
+				width: height
+				opacity: control.checked ? 1 : 0
+				
+				Behavior on height
+				{
+					NumberAnimation
+					{
+						duration: Kirigami.Units.shortDuration
+						easing.type: Easing.InOutQuad
+					}
+				}
+				
+				Behavior on opacity
+				{
+					NumberAnimation
+					{
+						duration: Kirigami.Units.shortDuration
+						easing.type: Easing.InOutQuad
+					}
+				}
 			}
         }
 

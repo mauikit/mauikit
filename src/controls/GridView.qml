@@ -315,8 +315,6 @@ ScrollView
         var leftSpace = parseInt(fullWidth - ( realAmount * controlView.size_ ), 10)
         var size = Math.min(amount, realAmount) >= control.count ? Math.max(control.cellWidth, control.itemSize) : parseInt((controlView.size_) + (parseInt(leftSpace/realAmount, 10)), 10)
 
-        console.log(fullWidth, controlView.width, realAmount, amount)
-
         control.cellWidth = size
     }
 }
