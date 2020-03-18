@@ -33,8 +33,8 @@ T.ScrollView {
     implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(background ? background.implicitHeight : 0, contentHeight + topPadding + bottomPadding)
 
-    contentWidth: scrollHelper.flickableItem ? scrollHelper.flickableItem.contentWidth : 0
-    contentHeight: scrollHelper.flickableItem ? scrollHelper.flickableItem.contentHeight : 0
+//    contentWidth: scrollHelper.flickableItem ? scrollHelper.flickableItem.contentWidth : 0
+//    contentHeight: scrollHelper.flickableItem ? scrollHelper.flickableItem.contentHeight : 0
 
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     Kirigami.Theme.inherit: !background || !background.visible

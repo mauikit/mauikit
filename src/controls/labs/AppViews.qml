@@ -27,6 +27,8 @@ SwipeView
 	id: control
 	interactive: Maui.Handy.isTouch
 	clip: true
+    focus: true
+
 	property int maxViews : 4
 	property Maui.ToolBar toolbar : window().headBar
 	
@@ -50,16 +52,29 @@ SwipeView
 	
 	currentIndex: _actionGroup.currentIndex
 	onCurrentIndexChanged: 
-	{
-		_actionGroup.currentIndex = currentIndex	
-		control.currentIndex = _actionGroup.currentIndex	
+    {
+        _actionGroup.currentIndex = currentIndex
+        control.currentIndex = _actionGroup.currentIndex
 	}
 	
 	onCurrentItemChanged: 
 	{
 		currentItem.forceActiveFocus()
 		_listView.positionViewAtIndex(control.currentIndex , ListView.SnapPosition)
-	}
+        history.push(control.currentIndex)
+    }
+
+    Keys.onBackPressed:
+    {
+        control.goBack()
+        event.accepted = true
+    }
+
+    Shortcut
+    {
+        sequence: StandardKey.Back
+        onActivated: control.goBack()
+    }
 	
 	contentItem: ListView
 	{
@@ -104,4 +119,31 @@ SwipeView
 			}
 		}
 	}
+
+    readonly property QtObject history : QtObject
+    {
+        property var historyIndexes : []
+
+        function pop()
+        {
+            historyIndexes.pop()
+           return historyIndexes.pop()
+        }
+
+        function push(index)
+        {
+            historyIndexes.push(index)
+        }
+
+        function indexes()
+        {
+            return historyIndexes
+        }
+    }
+
+    function goBack()
+    {
+        console.log("TRYING TO GO BACK", history.indexes())
+        control.setCurrentIndex(history.pop())
+    }
 }
