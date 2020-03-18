@@ -49,9 +49,10 @@ T.ScrollBar {
     padding: control.interactive ? 1 : 2
     visible: control.policy !== T.ScrollBar.AlwaysOff
 
-    contentItem: Rectangle {
-        implicitWidth: control.interactive ? 13 : 4
-        implicitHeight: control.interactive ? 13 : 4
+    contentItem: Rectangle
+    {
+        implicitWidth: 4
+        implicitHeight: 4
 
         color: control.pressed ? control.Material.scrollBarPressedColor :
                control.interactive && control.hovered ? control.Material.scrollBarHoveredColor : control.Material.scrollBarColor
@@ -59,14 +60,14 @@ T.ScrollBar {
         radius: Math.min(control.width, control.height)
     }
 
-    background: Rectangle {
-        implicitWidth: control.interactive ? 16 : 4
-        implicitHeight: control.interactive ? 16 : 4
+    background: Rectangle
+    {
+        implicitWidth: 4
+        implicitHeight:  4
         color: "#0e000000"
         opacity: 0.0
         visible: control.interactive
         radius: Math.min(control.width, control.height)
-
     }
 
     states: State {
