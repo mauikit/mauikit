@@ -32,7 +32,8 @@ ScrollView
     property int itemWidth : itemSize
     property int itemHeight : itemSize
     contentWidth: width
-
+    contentHeight: controlView.contentHeight
+    
     onItemSizeChanged :
     {
         controlView.size_ = itemWidth
