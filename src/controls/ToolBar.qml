@@ -28,7 +28,7 @@ import "private"
 ToolBar
 {
     id: control
-    property int preferredHeight: Maui.Style.toolBarHeight
+    property int preferredHeight: Maui.Style.toolBarHeight 
     implicitHeight: preferredHeight
     implicitWidth: mainFlickable.contentWidth
     spacing: Maui.Style.space.small

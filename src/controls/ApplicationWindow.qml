@@ -133,7 +133,7 @@ Window
             onClicked:
             {
                 menuButtonClicked()
-                mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x , parent.height+ Maui.Style.space.medium)
+                mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, parent.x , root.headBar.height)
             }
 
             Menu
