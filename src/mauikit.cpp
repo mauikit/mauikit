@@ -28,7 +28,6 @@
 #include "mauiapp.h"
 #include "fmstatic.h"
 #include "appview.h"
-#include "imagepalette.h"
 
 #ifdef COMPONENT_ACCOUNTS
 #include "mauiaccounts.h"
@@ -82,9 +81,9 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("ToolBar.qml")), uri, 1, 0, "ToolBar");
     qmlRegisterType(componentUrl(QStringLiteral("ApplicationWindow.qml")), uri, 1, 0, "ApplicationWindow");
     qmlRegisterType(componentUrl(QStringLiteral("Page.qml")), uri, 1, 0, "Page");
-	qmlRegisterType(componentUrl(QStringLiteral("ShareDialog.qml")), uri, 1, 0, "ShareDialog");
-	qmlRegisterType(componentUrl(QStringLiteral("OpenWithDialog.qml")), uri, 1, 0, "OpenWithDialog");
-	qmlRegisterType(componentUrl(QStringLiteral("PieButton.qml")), uri, 1, 0, "PieButton");
+    qmlRegisterType(componentUrl(QStringLiteral("ShareDialog.qml")), uri, 1, 0, "ShareDialog");
+    qmlRegisterType(componentUrl(QStringLiteral("OpenWithDialog.qml")), uri, 1, 0, "OpenWithDialog");
+    qmlRegisterType(componentUrl(QStringLiteral("PieButton.qml")), uri, 1, 0, "PieButton");
     qmlRegisterType(componentUrl(QStringLiteral("SideBar.qml")), uri, 1, 0, "SideBar");
     qmlRegisterType(componentUrl(QStringLiteral("AbstractSideBar.qml")), uri, 1, 0, "AbstractSideBar");
     qmlRegisterType(componentUrl(QStringLiteral("Holder.qml")), uri, 1, 0, "Holder");
@@ -118,30 +117,28 @@ void MauiKit::registerTypes(const char *uri)
 
     qmlRegisterType(componentUrl(QStringLiteral("PathBar.qml")), uri, 1, 0, "PathBar");
     qmlRegisterType<PathList>(uri, 1, 0, "PathList");
-    
-	/** Shapes **/
-	qmlRegisterType(componentUrl(QStringLiteral("private/shapes/X.qml")), uri, 1, 0, "X");
-	qmlRegisterType(componentUrl(QStringLiteral("private/shapes/PlusSign.qml")), uri, 1, 0, "PlusSign");
-	qmlRegisterType(componentUrl(QStringLiteral("private/shapes/Arrow.qml")), uri, 1, 0, "Arrow");
-	qmlRegisterType(componentUrl(QStringLiteral("private/shapes/Triangle.qml")), uri, 1, 0, "Triangle");
-	qmlRegisterType(componentUrl(QStringLiteral("private/shapes/CheckMark.qml")), uri, 1, 0, "CheckMark");
-	qmlRegisterType(componentUrl(QStringLiteral("private/shapes/Rectangle.qml")), uri, 1, 0, "Rectangle");
-	
+
+    /** Shapes **/
+    qmlRegisterType(componentUrl(QStringLiteral("private/shapes/X.qml")), uri, 1, 0, "X");
+    qmlRegisterType(componentUrl(QStringLiteral("private/shapes/PlusSign.qml")), uri, 1, 0, "PlusSign");
+    qmlRegisterType(componentUrl(QStringLiteral("private/shapes/Arrow.qml")), uri, 1, 0, "Arrow");
+    qmlRegisterType(componentUrl(QStringLiteral("private/shapes/Triangle.qml")), uri, 1, 0, "Triangle");
+    qmlRegisterType(componentUrl(QStringLiteral("private/shapes/CheckMark.qml")), uri, 1, 0, "CheckMark");
+    qmlRegisterType(componentUrl(QStringLiteral("private/shapes/Rectangle.qml")), uri, 1, 0, "Rectangle");
+
     /** 1.1 **/
-	qmlRegisterType(componentUrl(QStringLiteral("labs/SelectionBar.qml")), uri, 1, 1, "SelectionBar");
-	qmlRegisterType(componentUrl(QStringLiteral("labs/ShareDialog.qml")), uri, 1, 1, "ShareDialog");
-	qmlRegisterType(componentUrl(QStringLiteral("labs/ActionToolBar.qml")), uri, 1, 1, "ActionToolBar");
-	qmlRegisterType(componentUrl(QStringLiteral("labs/ToolButtonAction.qml")), uri, 1, 1, "ToolButtonAction");
-	qmlRegisterType(componentUrl(QStringLiteral("labs/AppViews.qml")), uri, 1, 1, "AppViews");
-	qmlRegisterType(componentUrl(QStringLiteral("labs/AppViewLoader.qml")), uri, 1, 1, "AppViewLoader");
-	qmlRegisterUncreatableType<AppView>(uri, 1, 1, "AppView", "Cannot be created App");
-	qmlRegisterType<ImagePalette>(uri, 1, 1, "ImagePalette");
-	
-	
-	/** Experimental **/
-	qmlRegisterType(componentUrl(QStringLiteral("labs/CSDControls.qml")), uri, 1, 1, "CSDControls");
-	qmlRegisterType(componentUrl(QStringLiteral("labs/WindowControls.qml")), uri, 1, 1, "WindowControls");
-    
+    qmlRegisterType(componentUrl(QStringLiteral("labs/SelectionBar.qml")), uri, 1, 1, "SelectionBar");
+    qmlRegisterType(componentUrl(QStringLiteral("labs/ShareDialog.qml")), uri, 1, 1, "ShareDialog");
+    qmlRegisterType(componentUrl(QStringLiteral("labs/ActionToolBar.qml")), uri, 1, 1, "ActionToolBar");
+    qmlRegisterType(componentUrl(QStringLiteral("labs/ToolButtonAction.qml")), uri, 1, 1, "ToolButtonAction");
+    qmlRegisterType(componentUrl(QStringLiteral("labs/AppViews.qml")), uri, 1, 1, "AppViews");
+    qmlRegisterType(componentUrl(QStringLiteral("labs/AppViewLoader.qml")), uri, 1, 1, "AppViewLoader");
+    qmlRegisterUncreatableType<AppView>(uri, 1, 1, "AppView", "Cannot be created App");
+
+    /** Experimental **/
+    qmlRegisterType(componentUrl(QStringLiteral("labs/CSDControls.qml")), uri, 1, 1, "CSDControls");
+    qmlRegisterType(componentUrl(QStringLiteral("labs/WindowControls.qml")), uri, 1, 1, "WindowControls");
+
     /** STORE CONTROLS, MODELS AND INTERFACES **/
 #ifdef COMPONENT_STORE
     qmlRegisterType<StoreList>("StoreList", 1, 0, "StoreList");

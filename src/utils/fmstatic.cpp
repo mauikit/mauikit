@@ -196,7 +196,7 @@ QString FMStatic::homePath()
 
 bool FMStatic::copy(const QUrl &url, const QUrl &destinationDir, const bool &overWriteDirectory)
 {
-#if defined Q_OS_ANDROID || defined Q_OS_WIN32
+#if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
     QFileInfo fileInfo(url.toLocalFile());
     if(fileInfo.isFile())
         QFile::copy(url.toLocalFile(), destinationDir.toLocalFile());
@@ -255,7 +255,7 @@ bool FMStatic::cut(const QUrl &url, const QUrl &where, const QString &name)
     else
         _where =  QUrl(where.toString()+"/"+name);
 
-#if defined Q_OS_ANDROID || defined Q_OS_WIN32
+#if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
     QFile file(url.toLocalFile());
     file.rename(_where.toLocalFile());
 #else
@@ -281,7 +281,7 @@ bool FMStatic::removeFile(const QUrl &path)
     Tagging::getInstance()->removeUrl(path.toString());
 #endif
 
-#if defined Q_OS_ANDROID || defined Q_OS_WIN32
+#if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
     if(QFileInfo(path.toLocalFile()).isDir())
         return FMStatic::removeDir(path);
     else return QFile(path.toLocalFile()).remove();
@@ -347,7 +347,7 @@ bool FMStatic::rename(const QUrl &url, const QString &name)
 
 bool FMStatic::createDir(const QUrl &path, const QString &name)
 {
-#if defined Q_OS_ANDROID || defined Q_OS_WIN32
+#if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
     QFileInfo dd(path.toLocalFile());
     return QDir(path.toLocalFile()).mkdir(name);
 #else
@@ -372,7 +372,7 @@ bool FMStatic::createFile(const QUrl &path, const QString &name)
 
 bool FMStatic::createSymlink(const QUrl &path, const QUrl &where)
 {
-#if defined Q_OS_ANDROID || defined Q_OS_WIN32
+#if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
     return QFile::link(path.toLocalFile(), where.toLocalFile() + "/" + QFileInfo(path.toLocalFile()).fileName());
 #else
     const auto job = KIO::link({path}, where);
@@ -389,7 +389,7 @@ bool FMStatic::openUrl(const QUrl &url)
 #elif defined Q_OS_LINUX
     //     return QDesktopServices::openUrl(QUrl::fromUserInput(url));
     return KRun::runUrl(url, FMH::getFileInfoModel(url)[FMH::MODEL_KEY::MIME], nullptr, false, KRun::RunFlag::DeleteTemporaryFiles);
-#elif defined Q_OS_WIN32
+#elif defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
     return QDesktopServices::openUrl(url);
 #endif
 }
@@ -475,7 +475,7 @@ QList<QUrl> FMStatic::getTagUrls(const QString& tag, const QStringList& filters,
 
 void FMStatic::bookmark(const QUrl& url)
 {
-	#if defined Q_OS_ANDROID || defined Q_OS_WIN32
+    #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
 	//do android stuff until cmake works with android	
     auto bookmarks = UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {},true).toStringList();
     bookmarks << url.toString();
