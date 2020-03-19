@@ -61,7 +61,7 @@
         <file alias="ImageViewer.qml">controls/ImageViewer.qml</file>
         <file alias="TabBar.qml">controls/TabBar.qml</file>
         <file alias="TabButton.qml">controls/TabButton.qml</file>
-        <file alias="ActionGroup.qml">controls/ActionGroup.qml</file>
+        <file alias="private/ActionGroup.qml">controls/private/ActionGroup.qml</file>
         <file alias="ActionSideBar.qml">controls/ActionSideBar.qml</file>
         <file alias="private/StoreDelegate.qml">controls/private/StoreDelegate.qml</file>
         <file alias="ToolActions.qml">controls/ToolActions.qml</file>

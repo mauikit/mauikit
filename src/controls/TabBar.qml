@@ -3,6 +3,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
+import "private"
 
 TabBar
 {
@@ -28,6 +29,16 @@ TabBar
 				bottom: control.position == TabBar.Header ? parent.bottom : undefined
 			}
 			height: Maui.Style.unit
-		}		
+		}	
+		
+		EdgeShadow
+		{
+			edge: Qt.TopEdge		
+			anchors.top: parent.top
+			anchors.left: parent.left
+			anchors.right: parent.right
+			opacity: 0.2
+		}
+		
 	}
 }

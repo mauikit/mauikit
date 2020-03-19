@@ -56,6 +56,7 @@ TabButton
             font.pointSize: Maui.Style.fontSizes.default
             Layout.fillWidth: true
             Layout.fillHeight: true
+            Layout.alignment: Qt.AlignHCenter
             verticalAlignment: Qt.AlignVCenter
             horizontalAlignment: Qt.AlignHCenter
             color: control.checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
@@ -73,10 +74,11 @@ TabButton
             
             Maui.X
             {
+				visible: Kirigami.Settings.isMobile ? true : control.hovered || control.checked
                 height: Maui.Style.iconSizes.tiny
                 width: height
                 anchors.centerIn: parent
-                color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor            
+                color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor            
             }
         }
     }

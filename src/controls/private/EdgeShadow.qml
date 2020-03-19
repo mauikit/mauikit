@@ -42,7 +42,7 @@ LinearGradient {
     end: Qt.point((edge !== Qt.LeftEdge ? 0 : width), (edge !== Qt.TopEdge ? 0 : height))
     gradient: Gradient {
         GradientStop {
-            position: 0.0
+            position: 0.1
             color: Qt.rgba(0, 0, 0, 0.2)
         }
         GradientStop {

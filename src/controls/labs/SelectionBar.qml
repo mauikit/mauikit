@@ -176,8 +176,9 @@ Item
         anchors.fill: parent
         color: Kirigami.Theme.backgroundColor
         radius: control.radius
-
-        MouseArea
+        border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+		
+		MouseArea
         {
             anchors.fill: parent
             acceptedButtons: Qt.RightButton | Qt.LeftButton
@@ -246,6 +247,11 @@ Item
 					action: modelData
 					display: control.display
 					Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
+					
+					ToolTip.delay: 1000
+					ToolTip.timeout: 5000
+					ToolTip.visible: hovered && action.text
+					ToolTip.text: action.text
 				}
 			}
 			

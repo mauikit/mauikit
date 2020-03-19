@@ -21,6 +21,7 @@ import QtQuick 2.10
 import QtQuick.Controls 2.10
 import org.kde.mauikit 1.0 as Maui
 import org.kde.mauikit 1.1 as MauiLab
+import "../private"
 
 SwipeView
 {
@@ -34,7 +35,7 @@ SwipeView
 	
 	readonly property int index : -1
 	
-	readonly property QtObject actionGroup : Maui.ActionGroup
+	readonly property QtObject actionGroup : ActionGroup
 	{
 		id: _actionGroup	
 		currentIndex : control.currentIndex

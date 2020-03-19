@@ -49,6 +49,9 @@ Item
 	property alias cacheBuffer : controlView.cacheBuffer
 	property alias flickable : controlView
 	
+	property alias contentHeight: _scrollView.contentHeight
+	property alias contentWidth: _scrollView.contentWidth
+	
 	property int topMargin: margins
 	property int bottomMargin: margins
 	property int rightMargin: margins
@@ -70,9 +73,14 @@ Item
 	
 	focus: true
 	
+	Keys.enabled : true
+	Keys.forwardTo : controlView
+	
+	
 	ScrollView
 	{
 		id: _scrollView
+		focus: true
 		width: parent.width
 		height: parent.height
 		contentWidth: width
@@ -134,9 +142,7 @@ Item
 			
 			keyNavigationEnabled : true
 			keyNavigationWraps : true
-			Keys.onPressed: control.keyPress(event)
-			
-			
+			Keys.onPressed: control.keyPress(event)		
 			
 			Maui.Holder
 			{

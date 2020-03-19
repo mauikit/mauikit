@@ -82,7 +82,6 @@ Maui.Dialog
             Layout.alignment: Qt.AlignVCenter
             Layout.preferredWidth: Maui.Style.iconSizes.huge + Maui.Style.space.big
 
-
             Image
             {
                 id: _imgIcon

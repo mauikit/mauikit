@@ -80,7 +80,7 @@ Item
     }
     
     implicitHeight: parent.height
-    implicitWidth: strech ?  parent.width : _layout.implicitWidth    
+    implicitWidth: strech ? parent.width : _layout.implicitWidth    
     
     Behavior on implicitWidth
     {		
