@@ -35,7 +35,7 @@ Item
     
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
-    readonly property int barHeight : Maui.Style.iconSizes.large  + Maui.Style.space.medium
+    readonly property int barHeight : Maui.Style.toolBarHeight + Maui.Style.space.tiny
 
     readonly property alias uris: _private._uris
     readonly property alias items: _private._items

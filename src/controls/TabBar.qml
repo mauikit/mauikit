@@ -7,7 +7,7 @@ import org.kde.mauikit 1.0 as Maui
 TabBar
 {
 	id: control
-	implicitHeight: Maui.Style.rowHeight + Maui.Style.space.small
+	implicitHeight: Maui.Style.rowHeight + Maui.Style.space.tiny
 	Kirigami.Theme.colorSet: Kirigami.Theme.View
 	Kirigami.Theme.inherit: false	
 	clip: true	

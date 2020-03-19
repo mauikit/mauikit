@@ -424,6 +424,7 @@ void FMList::setPath(const QUrl &path)
 	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::TAGS_PATH])
 	{
 		this->pathType = FMList::PATHTYPE::TAGS_PATH;
+        this->pathName = this->path.path();
 		this->watchPath(QString());
 		
 	}else if(__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::TRASH_PATH])
