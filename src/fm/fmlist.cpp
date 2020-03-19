@@ -114,7 +114,7 @@ watcher(new QFileSystemWatcher(this))
 	});
 	
 	// with kio based on android it watches the directory itself, so better relay on that
-#ifdef Q_OS_ANDROID
+#if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS //for android, windows and mac use this for now
 	connect(this->watcher, &QFileSystemWatcher::directoryChanged, [&](const QString &path)
 	{
 		qDebug()<< "FOLDER PATH CHANGED" << path;
@@ -147,8 +147,7 @@ watcher(new QFileSystemWatcher(this))
 
 void FMList::watchPath(const QString& path, const bool& clear)
 {	
-	#ifdef Q_OS_ANDROID
-	
+    #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS //for android, windows and mac use this for now
 	if(!this->watcher->directories().isEmpty() && clear)
 		this->watcher->removePaths(this->watcher->directories());
 	

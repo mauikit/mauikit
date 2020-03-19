@@ -281,7 +281,8 @@ void FM::getPathContent(const QUrl& path, const bool &hidden, const bool &onlyDi
 
 FMH::MODEL_LIST FM::getAppsPath()
 {
-	#if defined Q_OS_ANDROID || defined Q_OS_WIN32
+    #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS //for android, windows and mac use this for now
+
 	return FMH::MODEL_LIST();
 	#else
 	
