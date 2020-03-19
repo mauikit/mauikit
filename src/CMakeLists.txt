@@ -23,6 +23,8 @@ set(mauikit_SRCS
     utils/models/pathlist.cpp
     utils/model_template/mauilist.cpp
     utils/model_template/mauimodel.cpp
+    controls/libs/imagepalette.cpp
+
     )
 
 set(mauikit_HDRS
@@ -36,6 +38,7 @@ set(mauikit_HDRS
     utils/model_template/mauilist.h
     utils/model_template/mauimodel.h
     controls/libs/appview.h
+    controls/libs/imagepalette.h
     )
 
 if(${COMPONENT_ACCOUNTS})
