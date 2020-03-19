@@ -51,79 +51,52 @@ namespace FMH
 {
 	static constexpr bool isAndroid()
 	{
-		#if defined(Q_OS_ANDROID)
-		return true;
-		#elif defined(Q_OS_LINUX)
-		return false;
-		#elif defined(Q_OS_WIN32)
-		return false;
-		#elif defined(Q_OS_WIN64)
-		return false;
-		#elif defined(Q_OS_MACOS)
-		return false;
-		#elif defined(Q_OS_IOS)
-		return false;
-		#elif defined(Q_OS_HAIKU)
+        #if defined(Q_OS_ANDROID)
+        #else
 		return false;
 		#endif
 	}
 	
 	static constexpr bool isWindows()
 	{
-		#if defined(Q_OS_ANDROID)
-		return false;
-		#elif defined(Q_OS_LINUX)
-		return false;
-		#elif defined(Q_OS_WIN32)
+        #if defined(Q_OS_WIN32)
 		return true;
 		#elif defined(Q_OS_WIN64)
 		return true;
-		#elif defined(Q_OS_MACOS)
-		return false;
-		#elif defined(Q_OS_IOS)
-		return false;
-		#elif defined(Q_OS_HAIKU)
-		return false;
+        #else
+        return false;
 		#endif
 	}
 	
 	static constexpr bool isLinux()
 	{
-		#if defined(Q_OS_ANDROID)
-		return false;
-		#elif defined(Q_OS_LINUX)
+        #if defined Q_OS_LINUX && !defined Q_OS_ANDROID
 		return true;
-		#elif defined(Q_OS_WIN32)
-		return false;
-		#elif defined(Q_OS_WIN64)
-		return false;
-		#elif defined(Q_OS_MACOS)
-		return false;
-		#elif defined(Q_OS_IOS)
-		return false;
-		#elif defined(Q_OS_HAIKU)
+        #else
 		return false;
 		#endif
 	}
 	
 	static constexpr bool isMac()
 	{
-		#if defined(Q_OS_ANDROID)
-		return false;
-		#elif defined(Q_OS_LINUX)
-		return false;
-		#elif defined(Q_OS_WIN32)
-		return false;
-		#elif defined(Q_OS_WIN64)
-		return false;
-		#elif defined(Q_OS_MACOS)
-		return true;
-		#elif defined(Q_OS_IOS)
-		return false;
-		#elif defined(Q_OS_HAIKU)
+#if defined(Q_OS_MACOS)
+        return true;
+#elif defined(Q_OS_MAC)
+        return true;
+        #else
 		return false;
 		#endif
 	}
+
+    static constexpr bool isIPhone()
+    {
+
+#if defined(Q_OS_iOS)
+        return true;
+#else
+        return false;
+        #endif
+    }
 	
 	enum FILTER_TYPE : int
 	{
@@ -606,7 +579,7 @@ namespace FMH
 	typedef QHash<FMH::MODEL_KEY, QString> MODEL;
 	typedef QVector<MODEL> MODEL_LIST;
 	
-	static const inline QVector<int> modelRoles(const FMH::MODEL &model)
+    static const  QVector<int> modelRoles(const FMH::MODEL &model)
 	{
 		const auto keys = model.keys();
  		return  std::accumulate(keys.begin(), keys.end(), QVector<int>(), [](QVector<int> &res, const FMH::MODEL_KEY &key) {
@@ -615,12 +588,12 @@ namespace FMH
 		});
 	}
 	
-	static const inline QString mapValue(const QVariantMap &map, const FMH::MODEL_KEY &key)
+    static const  QString mapValue(const QVariantMap &map, const FMH::MODEL_KEY &key)
 	{
 		return map[FMH::MODEL_NAME[key]].toString();
 	}
 	
-	static const inline QVariantMap toMap(const FMH::MODEL& model)
+    static const  QVariantMap toMap(const FMH::MODEL& model)
 	{
 		QVariantMap map;
 		for(const auto &key : model.keys())
@@ -629,7 +602,7 @@ namespace FMH
 		return map;
 	}
 	
-	static const inline FMH::MODEL toModel(const QVariantMap& map)
+    static const  FMH::MODEL toModel(const QVariantMap& map)
 	{
 		FMH::MODEL model;
 		for(const auto &key : map.keys())
@@ -638,7 +611,7 @@ namespace FMH
 		return model;
 	}
 	
-	static const inline FMH::MODEL_LIST toModelList(const QVariantList& list)
+    static const  FMH::MODEL_LIST toModelList(const QVariantList& list)
 	{
 		FMH::MODEL_LIST res;
 		
@@ -648,7 +621,7 @@ namespace FMH
 		return res;
 	}
 	
-	static const inline QVariantList toMapList(const FMH::MODEL_LIST& list)
+    static const  QVariantList toMapList(const FMH::MODEL_LIST& list)
 	{
 		QVariantList res;
 		
@@ -658,7 +631,7 @@ namespace FMH
 		return res;
 	}
 	
-	static const inline FMH::MODEL filterModel(const FMH::MODEL &model, const QVector<FMH::MODEL_KEY> &keys)
+    static const  FMH::MODEL filterModel(const FMH::MODEL &model, const QVector<FMH::MODEL_KEY> &keys)
 	{
 		FMH::MODEL res;
 		for(const auto &key : keys)
@@ -670,7 +643,7 @@ namespace FMH
 		return res;
 	}
 	
-	static const inline QStringList modelToList(const FMH::MODEL &model, const FMH::MODEL_KEY &key)
+    static const  QStringList modelToList(const FMH::MODEL &model, const FMH::MODEL_KEY &key)
 	{
 		QStringList res;
 		for(const auto &item : model)
@@ -688,7 +661,7 @@ namespace FMH
 		FMH::MODEL_LIST content; // the content from the url
 	};
 	
-	#if defined Q_OS_ANDROID || defined Q_OS_WIN32
+    #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS //for android, windows and mac use this for now
 	enum PATHTYPE_KEY : int
 	{
 		PLACES_PATH,
@@ -844,7 +817,7 @@ namespace FMH
 	 * Checks if a local file exists.
 	 * The URL must represent a local file path, by using the scheme file://
 	 **/
-	static inline bool fileExists(const QUrl &path)
+    static  bool fileExists(const QUrl &path)
 	{
 		if(!path.isLocalFile())
 		{
@@ -854,7 +827,7 @@ namespace FMH
 		return QFileInfo::exists(path.toLocalFile());
 	}
 	
-	static inline const QString fileDir(const QUrl& path)// the directory path of the file
+    static  const QString fileDir(const QUrl& path)// the directory path of the file
 	{
 		QString res = path.toString();
 		if(path.isLocalFile())
@@ -870,7 +843,7 @@ namespace FMH
 		return res;
 	}
 	
-	static inline const QUrl parentDir(const QUrl &path)
+    static  const QUrl parentDir(const QUrl &path)
 	{
 		if(!path.isLocalFile())
 		{
@@ -888,7 +861,7 @@ namespace FMH
 	 * by a QVariantMap.
 	 * The passed path must be a local file URL.
 	 **/
-	static inline QVariantMap dirConf(const QUrl &path)
+    static  QVariantMap dirConf(const QUrl &path)
 	{
 		if(!path.isLocalFile())
 		{
@@ -905,7 +878,7 @@ namespace FMH
 		
 		bool foldersFirst = false;
 		
-		#if defined Q_OS_ANDROID || defined Q_OS_WIN32
+        #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
 		QSettings file(path.toLocalFile(), QSettings::Format::NativeFormat);
 		file.beginGroup(QString("Desktop Entry"));
 		icon = file.value("Icon").toString();
@@ -952,7 +925,7 @@ namespace FMH
                            {FMH::MODEL_NAME[FMH::MODEL_KEY::VIEWTYPE], viewType} });
     }
 	
-	static inline void setDirConf(const QUrl &path, const QString &group, const QString &key, const QVariant &value)
+    static  void setDirConf(const QUrl &path, const QString &group, const QString &key, const QVariant &value)
 	{
 		if(!path.isLocalFile())
 		{
@@ -960,7 +933,7 @@ namespace FMH
 			return;
 		}
 		
-		#if defined Q_OS_ANDROID || defined Q_OS_WIN32
+        #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
 		QSettings file(path.toLocalFile(), QSettings::Format::IniFormat);
 		file.beginGroup(group);
 		file.setValue(key, value);
@@ -980,7 +953,7 @@ namespace FMH
 	 * The file path must be represented as a local file URL.
 	 * It also looks into the directory config file to get custom set icons
 	 **/
-	static inline QString getIconName(const QUrl &path)
+    static  QString getIconName(const QUrl &path)
 	{
 		if(!path.isLocalFile())
 			qWarning() << "URL recived is not a local file. FMH::getIconName" << path;
@@ -997,7 +970,7 @@ namespace FMH
 			
 		}else {
 			
-			#if defined Q_OS_ANDROID || defined Q_OS_WIN32
+            #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
 			QMimeDatabase mime;
 			const auto type = mime.mimeTypeForFile(path.toString());
 			return type.iconName();
@@ -1008,7 +981,7 @@ namespace FMH
 		}
 	}
 	
-	static inline QString getMime(const QUrl &path)
+    static  QString getMime(const QUrl &path)
 	{
 		if(!path.isLocalFile())
 		{
@@ -1020,16 +993,16 @@ namespace FMH
 		return mimedb.mimeTypeForFile(path.toLocalFile()).name();
 	}
 	
-	static inline bool mimeInherits(const QString baseType, const QString &type)
+    static  bool mimeInherits(const QString baseType, const QString &type)
 	{
 		const QMimeDatabase _m;
 		return _m.mimeTypeForName(baseType).inherits(type);
 	}
 	
-	static inline FMH::MODEL getFileInfoModel(const QUrl &path)
+    static  FMH::MODEL getFileInfoModel(const QUrl &path)
 	{
 		FMH::MODEL res;
-		#if defined Q_OS_ANDROID || defined Q_OS_WIN32
+        #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
 		const QFileInfo file(path.toLocalFile());
 		if(!file.exists())
 			return FMH::MODEL();
@@ -1092,19 +1065,19 @@ namespace FMH
 		return res;
 	}
 	
-	static  inline QVariantMap getFileInfo(const QUrl &path)
+    static   QVariantMap getFileInfo(const QUrl &path)
 	{
 		return FMH::toMap(FMH::getFileInfoModel(path));
 	}
 	
-	static inline FMH::MODEL getDirInfoModel(const QUrl &path, const QString &type = QString())
+    static  FMH::MODEL getDirInfoModel(const QUrl &path, const QString &type = QString())
 	{
 		auto res = getFileInfoModel(path);
 		res[FMH::MODEL_KEY::TYPE] =  type;
 		return res;
 	}
 	
-	static           inline QVariantMap getDirInfo(const QUrl &path, const QString &type = QString())
+    static            QVariantMap getDirInfo(const QUrl &path, const QString &type = QString())
 	{
 		return FMH::toMap(FMH::getDirInfoModel(path));
 	}

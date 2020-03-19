@@ -36,7 +36,7 @@
 #include "tagging.h"
 #endif
 
-#if defined Q_OS_ANDROID || defined Q_OS_WIN32
+#if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
 PlacesList::PlacesList(QObject *parent) : MauiList(parent),
 fm(new FM(this)),
 model(nullptr),
@@ -122,7 +122,7 @@ FMH::MODEL_LIST PlacesList::items() const
 
 FMH::MODEL_LIST PlacesList::getGroup(const KFilePlacesModel &model, const FMH::PATHTYPE_KEY &type)
 {
-	#if defined Q_OS_ANDROID || defined Q_OS_WIN32
+    #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
 	Q_UNUSED(model)
 	FMH::MODEL_LIST res;
 	switch(type)
@@ -321,7 +321,7 @@ void PlacesList::removePlace(const int& index)
 	
 	emit this->preItemRemoved(index);
 	
-	#if defined Q_OS_ANDROID || defined Q_OS_WIN32
+    #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
     auto bookmarks = UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, true).toStringList();
 	bookmarks.removeOne(this->list.at(index)[FMH::MODEL_KEY::PATH]);
     UTIL::saveSettings("BOOKMARKS", bookmarks, "PREFERENCES", true);

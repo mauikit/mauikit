@@ -30,9 +30,9 @@ linux:unix:!android {
     message(Building Maui helpers for Linux KDE)
     include($$PWD/src/kde/kde.pri)
 
-} else:android|win32 {
+} else:android|win32|macos|ios {
 
-    message(Building Maui helpers for Android or Windows)
+    message(Building Maui helpers for Android or Windows or Mac or iOS)
 
     android {
         include($$PWD/src/android/android.pri)
@@ -51,6 +51,12 @@ linux:unix:!android {
         message("Using OpenSSL for Windows")
         LIBS += -L$$PWD/../../../../../../Qt/Tools/OpenSSL/Win_x64/lib/ -llibssl
         LIBS += -L$$PWD/../../../../../../Qt/Tools/OpenSSL/Win_x64/lib/ -llibcrypto
+    }else:macos {
+        message("Setting up components for Mac")
+QMAKE_APPLE_SIMULATOR_ARCHS = x86_64
+    }else:ios {
+        message("Setting up components for iOS")
+
     }
 
     contains(DEFINES, COMPONENT_EDITOR):{
