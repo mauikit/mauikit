@@ -35,7 +35,7 @@ Item
     
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
-    readonly property int barHeight : Maui.Style.toolBarHeight + Maui.Style.space.tiny
+    readonly property int barHeight : Maui.Style.toolBarHeight
 
     readonly property alias uris: _private._uris
     readonly property alias items: _private._items
@@ -211,7 +211,7 @@ Item
 			Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
 			Layout.fillHeight: true
 			Layout.preferredWidth: height
-			Layout.margins: Maui.Style.space.medium
+			Layout.margins: Maui.Style.space.tiny
 			radius: Maui.Style.radiusV
 			onClicked: control.exitClicked()
 			Kirigami.Theme.backgroundColor: Qt.darker(bg.color)
@@ -267,7 +267,7 @@ Item
 		id: _counter
 		Layout.fillHeight: true
 		Layout.preferredWidth: height
-		Layout.margins: Maui.Style.space.medium
+		Layout.margins: Maui.Style.space.tiny
 		text: selectionList.count
 		radius: Maui.Style.radiusV
 		
