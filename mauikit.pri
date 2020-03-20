@@ -53,7 +53,7 @@ linux:unix:!android {
         LIBS += -L$$PWD/../../../../../../Qt/Tools/OpenSSL/Win_x64/lib/ -llibcrypto
     }else:macos {
         message("Setting up components for Mac")
-QMAKE_APPLE_SIMULATOR_ARCHS = x86_64
+        include($$PWD/src/macos/macos.pri)
     }else:ios {
         message("Setting up components for iOS")
 
