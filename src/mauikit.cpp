@@ -177,6 +177,10 @@ void MauiKit::registerTypes(const char *uri)
 #endif 
 
     /** PLATFORMS SPECIFIC CONTROLS **/
+#if defined Q_OS_LINUX || defined Q_OS_MACOS
+    qmlRegisterType(componentUrl(QStringLiteral("Terminal.qml")), uri, 1, 0, "Terminal");
+#endif
+
 #ifdef Q_OS_ANDROID
     qmlRegisterSingletonType<MAUIAndroid>(uri, 1, 0, "Android",
                                           [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject* {
@@ -185,7 +189,6 @@ void MauiKit::registerTypes(const char *uri)
         return new MAUIAndroid;
     });
 #elif defined Q_OS_LINUX
-    qmlRegisterType(componentUrl(QStringLiteral("Terminal.qml")), uri, 1, 0, "Terminal");
 	qmlRegisterUncreatableType<MAUIKDE>(uri, 1, 0, "KDE", "Cannot be created KDE");
 
 #elif defined Q_OS_WIN32
@@ -206,7 +209,6 @@ void MauiKit::registerTypes(const char *uri)
 #endif 
 
     /** MAUI APPLICATION SPECIFIC PROPS **/
-
 #ifdef COMPONENT_ACCOUNTS
     qmlRegisterType<MauiAccounts>();
     qmlRegisterType(componentUrl(QStringLiteral("SyncDialog.qml")), uri, 1, 0, "SyncDialog"); //to be rename to accountsDialog
