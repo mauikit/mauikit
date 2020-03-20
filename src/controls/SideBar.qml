@@ -67,7 +67,7 @@ Maui.AbstractSideBar
         labelVisible: control.showLabels
         label: model.label
         count: model.count > 0 ? model.count : ""
-        iconName: model.icon +  (Qt.platform.os == "android" ? ("-sidebar") : "")
+        iconName: model.icon +  (Qt.platform.os == "android" || Qt.platform.os == "osx" ? ("-sidebar") : "")
         leftPadding:  Maui.Style.space.tiny
         rightPadding:  Maui.Style.space.tiny
 
