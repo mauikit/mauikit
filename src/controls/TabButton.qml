@@ -78,7 +78,7 @@ TabButton
                 height: Maui.Style.iconSizes.tiny
                 width: height
                 anchors.centerIn: parent
-                color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor            
+                color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.negativeTextColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))        
             }
         }
     }

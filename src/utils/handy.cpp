@@ -83,7 +83,6 @@ QVariantMap Handy::appInfo()
 						   {FMH::MODEL_NAME[FMH::MODEL_KEY::VERSION], qApp->applicationVersion()},
 						   {FMH::MODEL_NAME[FMH::MODEL_KEY::ORG], qApp->organizationName()},
 						   {FMH::MODEL_NAME[FMH::MODEL_KEY::DOMAIN_M], qApp->organizationDomain()},
-						   {"mauikit_version", MAUIKIT_VERSION_STR},
 						{"qt_version", QT_VERSION_STR} });
 	
 	#ifdef Q_OS_ANDROID

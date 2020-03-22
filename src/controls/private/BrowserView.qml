@@ -249,10 +249,9 @@ Maui.Page
 				opacity: model.hidden == "true" ? 0.5 : 1
                 draggable: true
                 
-                Drag.keys: ["text/plain","text/uri-list"]
+                Drag.keys: ["text/uri-list"]
                 Drag.mimeData: Drag.active ? 
                 {
-                    "text/plain": model.label,
                     "text/uri-list": control.filterSelectedItems(model.path) 
                 } : {}
                 
@@ -397,10 +396,9 @@ Maui.Page
                     draggable: true
                     opacity: model.hidden == "true" ? 0.5 : 1
                     
-                    Drag.keys: ["text/plain","text/uri-list"]
+                    Drag.keys: ["text/uri-list"]
                     Drag.mimeData: Drag.active ? 
                     {
-                        "text/plain": model.label,
                         "text/uri-list": control.filterSelectedItems(model.path) 
                     } : {}
                     
@@ -706,10 +704,9 @@ Maui.Page
                             opacity: model.hidden == "true" ? 0.5 : 1
                             draggable: true
                             
-                            Drag.keys: ["text/plain","text/uri-list"]
+                            Drag.keys: ["text/uri-list"]
                             Drag.mimeData: Drag.active ? 
                             {
-                                "text/plain": model.label,
                                 "text/uri-list": control.filterSelectedItems(model.path) 
                             } : {}
                             

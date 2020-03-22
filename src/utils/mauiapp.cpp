@@ -32,6 +32,10 @@
 #include <QFileSystemWatcher>
 #endif
 
+#ifndef STATIC_MAUIKIT
+#include "../mauikit_version.h"
+#endif
+
 static const QUrl CONF_FILE = FMH::ConfigPath + "/kwinrc";
 
 MauiApp::MauiApp() : QObject(nullptr)
@@ -81,7 +85,7 @@ QString MauiApp::getDomain()
 
 QString MauiApp::getMauikitVersion()
 {
-	return Handy::appInfo().value("mauikit_version").toString();
+    return MAUIKIT_VERSION_STRING;
 }
 
 QString MauiApp::getQtVersion()
