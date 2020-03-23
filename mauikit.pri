@@ -11,6 +11,16 @@ CONFIG *= c++17
 DEFINES *= \
     MAUI_APP \
     STATIC_MAUIKIT
+    
+#set the version for static builds too
+VERSION_MAJOR = 1
+VERSION_MINOR = 0
+VERSION_BUILD = 0
+
+VERSION = $${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_BUILD}
+
+DEFINES += MAUIKIT_VERSION_STRING=\\\"$$VERSION\\\"
+
 
 #REPO VARIABLES
 LUV_REPO = https://github.com/milohr/luv-icon-theme
