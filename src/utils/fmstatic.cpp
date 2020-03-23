@@ -375,6 +375,7 @@ bool FMStatic::createSymlink(const QUrl &path, const QUrl &where)
 #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
     return QFile::link(path.toLocalFile(), where.toLocalFile() + "/" + QFileInfo(path.toLocalFile()).fileName());
 #else
+	qDebug()<< "trying to create symlink" << path << where;
     const auto job = KIO::link({path}, where);
     job->start();
     return true;

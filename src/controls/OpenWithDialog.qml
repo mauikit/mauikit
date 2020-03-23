@@ -53,7 +53,7 @@ Maui.Dialog
 		}
 	}
 	
-	onUrlsChanged: populate()
+	onOpened: populate()
 
 	function populate()
 	{

@@ -620,7 +620,7 @@ Maui.Page
 					{
 						const urls = _dropMenu.urls.split(",")
 						for(var i in urls)
-							Maui.FM.createSymlink(url[i], control.currentPath)
+							Maui.FM.createSymlink(urls[i], control.currentPath)
 					}
 				}
 			}
