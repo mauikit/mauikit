@@ -102,7 +102,7 @@ Maui.Dialog
 				keyNavigationWraps : true
 				onMovementEnded: currentIndex = indexAt(contentX, contentY) 
 				
-				delegate: ColumnLayout
+				delegate: Maui.Page
 				{
 					id: _delegate
 					property bool isCurrentItem : ListView.isCurrentItem
@@ -113,30 +113,16 @@ Maui.Dialog
 					height: _listView.height
 					width: _listView.width
 					
-					Label
-					{
-						Layout.fillWidth: true
-						Layout.margins: Maui.Style.space.big
-						horizontalAlignment: Qt.AlignHCenter
-						verticalAlignment: Qt.AlignVCenter
-						elide: Qt.ElideMiddle
-						wrapMode: Text.Wrap
-						font.pointSize: Maui.Style.fontSizes.big
-						font.weight: Font.Bold
-						font.bold: true
-						text: model.label
-						color: Kirigami.Theme.textColor
-					}
-					
-					
+					title: model.label
+					headBar.visible: true
+
 					Loader
 					{
 						id: previewLoader
 						active: _delegate.isCurrentItem && control.visible
 						visible: !control.showInfo
-						Layout.fillHeight: true
-						Layout.fillWidth: true
-						
+						anchors.fill: parent
+						clip: false
 						onActiveChanged: if(active) show(currentUrl)
 					}
 					
@@ -144,8 +130,7 @@ Maui.Dialog
 					{
 						id: _infoContent
 						visible: control.showInfo
-						Layout.fillHeight: true
-						Layout.fillWidth: true
+						anchors.fill: parent
 						
 						Kirigami.Theme.backgroundColor: "transparent"
 						padding:  Maui.Style.space.big
@@ -201,8 +186,7 @@ Maui.Dialog
 										font.weight: Font.Light
 									}
 								}
-							}
-							
+							}							
 						}
 					}
 					
