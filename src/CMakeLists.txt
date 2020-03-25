@@ -176,7 +176,7 @@ endif()
 #options - for the appimage
 option(IS_APPIMAGE_PACKAGE "If set to true then the icons and styled is packaged as well" OFF)
 
-if(ANDROID OR IS_APPIMAGE_PACKAGE OR MAUIKIT_STYLE)
+if(ANDROID OR IS_APPIMAGE_PACKAGE)
     if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/maui-style/icons/luv-icon-theme/.git)
         find_package(Git REQUIRED)
         execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/milohr/luv-icon-theme.git ${CMAKE_CURRENT_SOURCE_DIR}/maui-style/icons/luv-icon-theme)
