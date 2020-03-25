@@ -258,6 +258,11 @@ bool FMStatic::cut(const QList<QUrl> &urls, const QUrl &where, const QString &na
 #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
 	for(const auto &url : urls)
 	{
+		if(name.isEmpty())
+			_where =  QUrl(where.toString()+"/"+FMH::getFileInfoModel(url)[FMH::MODEL_KEY::LABEL]);
+		else
+			_where =  QUrl(where.toString()+"/"+name);
+		
 		QFile file(url.toLocalFile());
 		file.rename(_where.toLocalFile());
 	}
@@ -269,6 +274,10 @@ bool FMStatic::cut(const QList<QUrl> &urls, const QUrl &where, const QString &na
 #ifdef COMPONENT_TAGGING
 	for(const auto &url : urls)		
 	{
+		if(name.isEmpty())
+			_where =  QUrl(where.toString()+"/"+FMH::getFileInfoModel(url)[FMH::MODEL_KEY::LABEL]);
+		else
+			_where =  QUrl(where.toString()+"/"+name);
 		Tagging::getInstance()->updateUrl(url.toString(), _where.toString());
 	}
 #endif
