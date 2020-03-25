@@ -24,6 +24,7 @@ ItemDelegate
     
     background: Rectangle
     {
+        id: _background
         radius: Maui.Style.radiusV
         opacity: 0.5
         color: model.color ? model.color : Kirigami.Theme.backgroundColor        
@@ -66,7 +67,7 @@ ItemDelegate
                 height: Maui.Style.iconSizes.tiny
                 width: height
                 anchors.centerIn: parent
-                color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.negativeTextColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))        
+                color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.negativeTextColor : _background.border.color
             }
         }
     }

@@ -270,37 +270,36 @@ bool FMStatic::cut(const QList<QUrl> &urls, const QUrl &where)
 
 bool FMStatic::cut(const QList<QUrl> &urls, const QUrl &where, const QString &name)
 {
-    QUrl _where = where;
-    if(!name.isEmpty())
-    {
-		_where =  QUrl(where.toString()+"/"+name);
-	}
-
 #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
 	for(const auto &url : urls)
 	{
+        QUrl _where;
 		if(name.isEmpty())
 			_where =  QUrl(where.toString()+"/"+FMH::getFileInfoModel(url)[FMH::MODEL_KEY::LABEL]);
 		else
 			_where =  QUrl(where.toString()+"/"+name);
 		
 		QFile file(url.toLocalFile());
-		file.rename(_where.toLocalFile());
+        file.rename(_where.toLocalFile());
+
+#ifdef COMPONENT_TAGGING
+        Tagging::getInstance()->updateUrl(url.toString(), _where.toString());
+#endif
 	}
 #else
 	auto job = KIO::move(urls, _where, KIO::HideProgressInfo);
     job->start();
-#endif
 
 #ifdef COMPONENT_TAGGING
-	for(const auto &url : urls)		
-	{
-		if(name.isEmpty())
-			_where =  QUrl(where.toString()+"/"+FMH::getFileInfoModel(url)[FMH::MODEL_KEY::LABEL]);
-		else
-			_where =  QUrl(where.toString()+"/"+name);
-		Tagging::getInstance()->updateUrl(url.toString(), _where.toString());
-	}
+    for(const auto &url : urls)
+    {
+        QUrl where_ = QUrl(where.toString()+"/"+FMH::getFileInfoModel(url)[FMH::MODEL_KEY::LABEL]);
+        if(!name.isEmpty())
+            where_ =  QUrl(where.toString()+"/"+name);
+
+        Tagging::getInstance()->updateUrl(url.toString(), where_.toString());
+    }
+#endif
 #endif
 
     return true;

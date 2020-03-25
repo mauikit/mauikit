@@ -34,144 +34,145 @@ Kirigami.DelegateRecycler
     Kirigami.Theme.backgroundColor: "transparent"
     
     default property alias content : _content.data
-        
-        property alias mouseArea : _mouseArea
-        //    property alias tapArea : _tapArea
-        property bool draggable: false
-        property bool isCurrentItem :  false
-        
-        property int radius: Maui.Style.radiusV
-        
-        property alias padding: _delegate.padding
-        property alias leftPadding: _delegate.leftPadding
-        property alias rightPadding: _delegate.rightPadding
-        property alias topPadding: _delegate.topPadding
-        property alias bottomPadding: _delegate.bottomPadding
-        
-        property alias hovered: _delegate.hovered
-        property alias hoverEnabled: _delegate.hoverEnabled
-        property alias highlighted: _delegate.highlighted
-        
-        signal pressed(var mouse)
-        signal pressAndHold(var mouse)
-        signal clicked(var mouse)
-        signal rightClicked(var mouse)
-        signal doubleClicked(var mouse)       
-        
-        property alias background : _delegate.background
-        
-        ItemDelegate
+
+    property alias mouseArea : _mouseArea
+    //    property alias tapArea : _tapArea
+    property bool draggable: false
+    property bool isCurrentItem :  false
+
+    property int radius: Maui.Style.radiusV
+
+    property alias padding: _delegate.padding
+    property alias leftPadding: _delegate.leftPadding
+    property alias rightPadding: _delegate.rightPadding
+    property alias topPadding: _delegate.topPadding
+    property alias bottomPadding: _delegate.bottomPadding
+
+    property alias hovered: _delegate.hovered
+    property alias pressed: _mouseArea.containsPress
+    property alias hoverEnabled: _delegate.hoverEnabled
+    property alias highlighted: _delegate.highlighted
+
+    signal pressed(var mouse)
+    signal pressAndHold(var mouse)
+    signal clicked(var mouse)
+    signal rightClicked(var mouse)
+    signal doubleClicked(var mouse)
+
+    property alias background : _delegate.background
+
+    ItemDelegate
+    {
+        id: _delegate
+        anchors.fill: parent
+
+        highlighted: control.isCurrentItem
+        //override the itemdelegate default signals to allow dragging content
+
+        hoverEnabled: !Kirigami.Settings.isMobile
+
+        padding: 0
+        bottomPadding: padding
+        rightPadding: padding
+        leftPadding: padding
+        topPadding: padding
+
+        MouseArea
         {
-            id: _delegate
+            id: _mouseArea
+            //        enabled: !Kirigami.Settings.isMobile
             anchors.fill: parent
-            
-            highlighted: control.isCurrentItem
-            //override the itemdelegate default signals to allow dragging content
-            
-            hoverEnabled: !Kirigami.Settings.isMobile
-            
-            padding: 0
-            bottomPadding: padding
-            rightPadding: padding
-            leftPadding: padding
-            topPadding: padding            
-            
-            MouseArea
+            acceptedButtons:  Qt.RightButton | Qt.LeftButton
+            property int startX
+            property int startY
+
+            onClicked:
             {
-                id: _mouseArea
-                //        enabled: !Kirigami.Settings.isMobile
-                anchors.fill: parent
-                acceptedButtons:  Qt.RightButton | Qt.LeftButton
-                property int startX
-                property int startY
-                
-                onClicked:
+                if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
+                    control.rightClicked(mouse)
+                else
+                    control.clicked(mouse)
+            }
+
+            onDoubleClicked: control.doubleClicked(mouse)
+
+            onPressed:
+            {
+                if(control.draggable && mouse.source !== Qt.MouseEventSynthesizedByQt)
                 {
-                    if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
-                        control.rightClicked(mouse)
-                        else
-                            control.clicked(mouse)
-                }
-                
-                onDoubleClicked: control.doubleClicked(mouse)
-                
-                onPressed:
-                {
-                    if(control.draggable && mouse.source !== Qt.MouseEventSynthesizedByQt)
+                    drag.target = _delegate
+                    _delegate.grabToImage(function(result)
                     {
-                        drag.target = _delegate
-                        _delegate.grabToImage(function(result)
-                        {
-                            _mouseArea.Drag.imageSource = result.url
-                        })
-                    }else drag.target = null                        
-                        
-                        startX = control.x
-                        startY = control.y
-                        control.pressed(mouse)                        
-                }
-                
-                onReleased :
-                {
-                    control.x = startX
-                    control.y = startY
-                }
-                
-                onPressAndHold : control.pressAndHold(mouse)
+                        _mouseArea.Drag.imageSource = result.url
+                    })
+                }else drag.target = null
+
+                startX = control.x
+                startY = control.y
+                control.pressed(mouse)
             }
-            
-            //    TapHandler
-            //    {
-            //        id: _tapArea
-            //        enabled: Kirigami.Settings.isMobile
-            //        acceptedButtons: Qt.RightButton
-            //        onSingleTapped: control.clicked(eventPoint)
-            //        onDoubleTapped: control.doubleClicked(eventPoint)
-            //        onLongPressed: control.pressAndHold(eventPoint)
-            //    }
-            
-            contentItem: Item{}
-            
-            Item
+
+            onReleased :
             {
-                id: _content
-                anchors
-                {
-                    fill: parent
-                    topMargin: _delegate.topPadding
-                    bottomMargin: _delegate.bottomPadding
-                    leftMargin: _delegate.leftPadding
-                    rightMargin: _delegate.rightPadding
-                    margins: _delegate.padding
-                }
+                control.x = startX
+                control.y = startY
             }
-            
-            background: Rectangle
-            {
-                anchors
-                {
-                    fill: parent
-                    topMargin: _delegate.topPadding
-                    bottomMargin: _delegate.bottomPadding
-                    leftMargin: _delegate.leftPadding
-                    rightMargin: _delegate.rightPadding
-                    margins: _delegate.padding
-                }
-                
-                Behavior on color
-                {
-                    ColorAnimation
-                    {
-                        duration: Kirigami.Units.shortDuration
-                    }
-                }
-                color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
-                
-                radius: control.radius
-                border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"
-            }
-            
+
+            onPressAndHold : control.pressAndHold(mouse)
         }
-        
+
+        //    TapHandler
+        //    {
+        //        id: _tapArea
+        //        enabled: Kirigami.Settings.isMobile
+        //        acceptedButtons: Qt.RightButton
+        //        onSingleTapped: control.clicked(eventPoint)
+        //        onDoubleTapped: control.doubleClicked(eventPoint)
+        //        onLongPressed: control.pressAndHold(eventPoint)
+        //    }
+
+        contentItem: Item{}
+
+        Item
+        {
+            id: _content
+            anchors
+            {
+                fill: parent
+                topMargin: _delegate.topPadding
+                bottomMargin: _delegate.bottomPadding
+                leftMargin: _delegate.leftPadding
+                rightMargin: _delegate.rightPadding
+                margins: _delegate.padding
+            }
+        }
+
+        background: Rectangle
+        {
+            anchors
+            {
+                fill: parent
+                topMargin: _delegate.topPadding
+                bottomMargin: _delegate.bottomPadding
+                leftMargin: _delegate.leftPadding
+                rightMargin: _delegate.rightPadding
+                margins: _delegate.padding
+            }
+
+            Behavior on color
+            {
+                ColorAnimation
+                {
+                    duration: Kirigami.Units.shortDuration
+                }
+            }
+            color: control.isCurrentItem || control.hovered || _mouseArea.containsPress ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
+
+            radius: control.radius
+            border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"
+        }
+
+    }
+
 }
 
