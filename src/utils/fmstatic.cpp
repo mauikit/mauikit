@@ -287,6 +287,10 @@ bool FMStatic::cut(const QList<QUrl> &urls, const QUrl &where, const QString &na
 #endif
 	}
 #else
+	QUrl _where = where;
+	if(!name.isEmpty())
+		_where =  QUrl(where.toString()+"/"+name);
+	
 	auto job = KIO::move(urls, _where, KIO::HideProgressInfo);
     job->start();
 
