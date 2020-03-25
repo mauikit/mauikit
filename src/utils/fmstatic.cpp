@@ -194,47 +194,68 @@ QString FMStatic::homePath()
     return FMH::HomePath;
 }
 
+
+static bool copyRecursively(QString sourceFolder, QString destFolder)
+{
+    bool success = false;
+    QDir sourceDir(sourceFolder);
+
+    if(!sourceDir.exists())
+        return false;
+
+    QDir destDir(destFolder);
+    if(!destDir.exists())
+        destDir.mkdir(destFolder);
+
+    QStringList files = sourceDir.entryList(QDir::Files);
+    for(int i = 0; i< files.count(); i++) {
+        QString srcName = sourceFolder + QDir::separator() + files[i];
+        QString destName = destFolder + QDir::separator() + files[i];
+        success = QFile::copy(srcName, destName);
+        if(!success)
+            return false;
+    }
+
+    files.clear();
+    files = sourceDir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
+    for(int i = 0; i< files.count(); i++)
+    {
+        QString srcName = sourceFolder + QDir::separator() + files[i];
+        QString destName = destFolder + QDir::separator() + files[i];
+        success = copyRecursively(srcName, destName);
+        if(!success)
+            return false;
+    }
+
+    return true;
+}
+
+
 bool FMStatic::copy(const QList<QUrl> &urls, const QUrl &destinationDir, const bool &overWriteDirectory)
 {
 #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
-   for(const auto &url : urls)
-   {
-	   QFileInfo fileInfo(url.toLocalFile());
-	   if(fileInfo.isFile())
-		   QFile::copy(url.toLocalFile(), destinationDir.toLocalFile());
-	   
-	   QDir originDirectory(url.toLocalFile());
-	   
-	   if (!originDirectory.exists())
-		   continue;
-	   
-	   QDir destinationDirectory(destinationDir.toLocalFile());
-	   
-	   if(destinationDirectory.exists() && !overWriteDirectory)
-		   continue;
-	   else if(destinationDirectory.exists() && overWriteDirectory)
-		   destinationDirectory.removeRecursively();
-	   
-	   originDirectory.mkpath(destinationDir.toLocalFile());
-	   
-	   foreach(QString directoryName, originDirectory.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
-	   {
-		   QString destinationPath = destinationDir.toLocalFile() + "/" + directoryName;
-		   originDirectory.mkpath(destinationPath);
-		   copy(url.toLocalFile() + "/" + directoryName, destinationPath, overWriteDirectory);
-	   }
-	   
-	   foreach (QString fileName, originDirectory.entryList(QDir::Files))
-	   {
-		   QFile::copy(url.toLocalFile() + "/" + fileName, destinationDir.toLocalFile() + "/" + fileName);
-	   }
-	   
-	   /*! Possible race-condition mitigation? */
-	   QDir finalDestination(destinationDir.toLocalFile());
-	   finalDestination.refresh();
-	   
-// 	   if(finalDestination.exists())
-		   return true;	   
+    for(const auto &url : urls)
+    {
+        QFileInfo srcFileInfo(url.toLocalFile());
+        if (!srcFileInfo.isDir() && srcFileInfo.isFile())
+        {
+            const auto _destination = QUrl(destinationDir.toString()+"/"+FMH::getFileInfoModel(url)[FMH::MODEL_KEY::LABEL]);
+            if (!QFile::copy(url.toLocalFile(), _destination.toLocalFile()))
+            {
+                continue;
+            }
+        }else
+        {
+            const auto _destination = QUrl(destinationDir.toString()+"/"+FMH::getFileInfoModel(url)[FMH::MODEL_KEY::LABEL]);
+            QDir destDir(_destination.toLocalFile());
+            if(!destDir.exists())
+                destDir.mkdir(_destination.toLocalFile());
+
+            if(!copyRecursively(url.toLocalFile(), _destination.toLocalFile()))
+                continue;
+        }
+    }
+    return true;
 #else
 	   auto job = KIO::copy(urls, destinationDir);
 	   job->start();
@@ -287,20 +308,29 @@ bool FMStatic::cut(const QList<QUrl> &urls, const QUrl &where, const QString &na
 
 bool FMStatic::removeFiles(const QList<QUrl> &urls)
 {
-	#ifdef COMPONENT_TAGGING
-	for(const auto &url : urls)		
-	{
-		Tagging::getInstance()->removeUrl(url.toString());
-	}
+#ifdef COMPONENT_TAGGING
+    for(const auto &url : urls)
+    {
+        Tagging::getInstance()->removeUrl(url.toString());
+    }
 #endif
 
 #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
-for(const auto &url : urls)		
-{
-	if(QFileInfo(url.toLocalFile()).isDir())
-		return FMStatic::removeDir(url);
-	else return QFile(url.toLocalFile()).remove();
-}
+
+    qDebug()<< "ASKED GTO DELETE FILES" << urls;
+    for(const auto &url : urls)
+    {
+        if(QFileInfo(url.toLocalFile()).isDir())
+        {
+            if(!FMStatic::removeDir(url)) continue;
+        }
+        else
+        {
+            if(!QFile(url.toLocalFile()).remove())
+                continue;
+        }
+    }
+return true;
 #else
     auto job = KIO::del(urls);
     job->start();
