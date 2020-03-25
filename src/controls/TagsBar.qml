@@ -39,11 +39,17 @@ Maui.ToolBar
     signal tagClicked(string tag)
     signal tagsEdited(var tags)
 
-//     Kirigami.Theme.backgroundColor: "transparent"
-//     background: Rectangle
-//     {
-//         color: control.Kirigami.Theme.backgroundColor
-//     }
+    background: Rectangle
+    {
+        color: control.hovered || control.editMode ?  Qt.darker(control.Kirigami.Theme.backgroundColor, 1.1): control.Kirigami.Theme.backgroundColor
+        
+        Kirigami.Separator
+        {
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+        }
+    }
 
     leftContent: ToolButton
     {
@@ -57,7 +63,7 @@ Maui.ToolBar
     rightContent: ToolButton
     {
 		Layout.alignment: Qt.AlignRight
-		visible: control.allowEditMode && tagsList.visible
+		visible: control.allowEditMode && tagsList.visible && (tagsList.contentWidth > tagsList.width)
 		icon.name: "document-edit"
 		onClicked: control.goEditMode()
 		icon.color: control.Kirigami.Theme.textColor

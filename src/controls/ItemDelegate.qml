@@ -49,7 +49,7 @@ Kirigami.DelegateRecycler
     property alias bottomPadding: _delegate.bottomPadding
 
     property alias hovered: _delegate.hovered
-    property alias pressed: _mouseArea.containsPress
+    property alias containsPress: _mouseArea.containsPress
     property alias hoverEnabled: _delegate.hoverEnabled
     property alias highlighted: _delegate.highlighted
 

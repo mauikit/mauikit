@@ -90,7 +90,7 @@ Maui.ItemDelegate
         anchors.fill: parent
         iconSizeHint: control.folderSize
         iconSource: model.icon
-        hovered: control.hovered || control.pressed
+        hovered: control.hovered || control.containsPress
         imageSource : model.mime ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails && model.thumbnail && model.thumbnail.length? model.thumbnail : "") : ""
         label1.text: model.label
 //        label1.elide: Text.ElideMiddle // TODO this is broken ???

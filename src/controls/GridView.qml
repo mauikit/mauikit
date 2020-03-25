@@ -83,7 +83,7 @@ Item
 		focus: true
 		width: parent.width
 		height: parent.height
-		contentWidth: width
+		contentWidth: controlView.width
 		contentHeight: controlView.contentHeight
 		
 		ScrollBar.vertical: ScrollBar
