@@ -817,7 +817,7 @@ void FMList::deleteFile(const int& index)
 	if(index > this->list.size() || index < 0)
 		return;	
 	
-	FMStatic::removeFile(this->list[this->mappedIndex(index)][FMH::MODEL_KEY::PATH]);
+	FMStatic::removeFiles({this->list[this->mappedIndex(index)][FMH::MODEL_KEY::PATH]});
 	this->remove(index);	
 }
 

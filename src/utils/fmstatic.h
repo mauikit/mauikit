@@ -26,9 +26,11 @@ public slots:
     
     static FMH::MODEL_LIST packItems(const QStringList &items, const QString &type);
     
-    static bool copy(const QUrl &url, const QUrl &destinationDir, const bool &overWriteDirectory = false);
-    static bool cut(const QUrl &url, const QUrl &where);
-    static bool cut(const QUrl &url, const QUrl &where, const QString &name);
+	static bool copy(const QList<QUrl> &urls, const QUrl &destinationDir, const bool &overWriteDirectory = false);
+	static bool cut(const QList<QUrl> &urls, const QUrl &where);
+	static bool cut(const QList<QUrl> &urls, const QUrl &where, const QString &name);
+	static bool removeFiles(const QList<QUrl> &urls);
+	
     static bool removeDir(const QUrl &path);
     
     static QString formatSize(const int &size);
@@ -59,7 +61,6 @@ public slots:
     static const QVariantMap dirConf(const QUrl &path);
     static void setDirConf(const QUrl &path, const QString &group, const QString &key, const QVariant &value);
     static bool checkFileType(const int &type, const QString &mimeTypeName);
-    static bool removeFile(const QUrl &path);
     static void moveToTrash(const QUrl &path);
     static void emptyTrash();
     static bool rename(const QUrl &url, const QString &name);

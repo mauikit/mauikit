@@ -446,69 +446,34 @@ bool FM::removeTagToUrl(const QString tag, const QUrl& url)
 
 bool FM::cut(const QList<QUrl> &urls, const QUrl &where)
 {
-	
-	for(const auto &url : urls)
-	{
-		if(FMStatic::isCloud(url.toString()))
-		{
-			#ifdef COMPONENT_SYNCING
-			this->sync->setCopyTo(where.toString());
-			//             this->sync->resolveFile(url, Syncing::SIGNAL_TYPE::COPY);
-			#endif
-		}else
-		{
-			FMStatic::cut(url, where);
-		}
-	}
-	
-	return true;
+	return FMStatic::cut(urls, where);	
 }
 
 bool FM::copy(const QList<QUrl> &urls, const QUrl &where)
 {
-	QStringList cloudPaths;
-	for(const auto &url : urls)
-	{
-		if(FMStatic::isDir(url))
-		{
-			FMStatic::copy(url, where.toString()+"/"+QFileInfo(url.toLocalFile()).fileName(), false);
-			
-		}else if(FMStatic::isCloud(url))
-		{
-			#ifdef COMPONENT_SYNCING
-			this->sync->setCopyTo(where.toString());
-			//             this->sync->resolveFile(item, Syncing::SIGNAL_TYPE::COPY);
-			#endif
-		}else
-		{
-			if(FMStatic::isCloud(where))
-				cloudPaths << url.toString();
-			else
-				FMStatic::copy(url, where.toString()+"/"+FMH::getFileInfoModel(url)[FMH::MODEL_KEY::LABEL], false);
-		}
-	}
+// 	QStringList cloudPaths;
+
+	return FMStatic::copy(urls, where, false);		
 	
 	#ifdef COMPONENT_SYNCING
-	if(!cloudPaths.isEmpty())
-	{
-		qDebug()<<"UPLOAD QUEUE" << cloudPaths;
-		const auto firstPath = cloudPaths.takeLast();
-		this->sync->setUploadQueue(cloudPaths);
-		
-		if(where.toString().split("/").last().contains("."))
-		{
-			QStringList whereList = where.toString().split("/");
-			whereList.removeLast();
-			auto whereDir = whereList.join("/");
-			qDebug()<< "Trying ot copy to cloud" << where << whereDir;
-			
-			this->sync->upload(this->resolveLocalCloudPath(whereDir), firstPath);
-		} else
-			this->sync->upload(this->resolveLocalCloudPath(where.toString()), firstPath);
-	}
-	#endif
-	
-	return true;
+// 	if(!cloudPaths.isEmpty())
+// 	{
+// 		qDebug()<<"UPLOAD QUEUE" << cloudPaths;
+// 		const auto firstPath = cloudPaths.takeLast();
+// 		this->sync->setUploadQueue(cloudPaths);
+// 		
+// 		if(where.toString().split("/").last().contains("."))
+// 		{
+// 			QStringList whereList = where.toString().split("/");
+// 			whereList.removeLast();
+// 			auto whereDir = whereList.join("/");
+// 			qDebug()<< "Trying ot copy to cloud" << where << whereDir;
+// 			
+// 			this->sync->upload(this->resolveLocalCloudPath(whereDir), firstPath);
+// 		} else
+// 			this->sync->upload(this->resolveLocalCloudPath(where.toString()), firstPath);
+// 	}
+	#endif	
 }
 
 

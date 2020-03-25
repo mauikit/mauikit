@@ -194,99 +194,106 @@ QString FMStatic::homePath()
     return FMH::HomePath;
 }
 
-bool FMStatic::copy(const QUrl &url, const QUrl &destinationDir, const bool &overWriteDirectory)
+bool FMStatic::copy(const QList<QUrl> &urls, const QUrl &destinationDir, const bool &overWriteDirectory)
 {
 #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
-    QFileInfo fileInfo(url.toLocalFile());
-    if(fileInfo.isFile())
-        QFile::copy(url.toLocalFile(), destinationDir.toLocalFile());
-
-    QDir originDirectory(url.toLocalFile());
-
-    if (!originDirectory.exists())
-        return false;
-
-    QDir destinationDirectory(destinationDir.toLocalFile());
-
-    if(destinationDirectory.exists() && !overWriteDirectory)
-        return false;
-    else if(destinationDirectory.exists() && overWriteDirectory)
-        destinationDirectory.removeRecursively();
-
-    originDirectory.mkpath(destinationDir.toLocalFile());
-
-    foreach(QString directoryName, originDirectory.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
-    {
-        QString destinationPath = destinationDir.toLocalFile() + "/" + directoryName;
-        originDirectory.mkpath(destinationPath);
-        copy(url.toLocalFile() + "/" + directoryName, destinationPath, overWriteDirectory);
-    }
-
-    foreach (QString fileName, originDirectory.entryList(QDir::Files))
-    {
-        QFile::copy(url.toLocalFile() + "/" + fileName, destinationDir.toLocalFile() + "/" + fileName);
-    }
-
-    /*! Possible race-condition mitigation? */
-    QDir finalDestination(destinationDir.toLocalFile());
-    finalDestination.refresh();
-
-    if(finalDestination.exists())
-        return true;
-
-    return false;
+   for(const auto &url : urls)
+   {
+	   QFileInfo fileInfo(url.toLocalFile());
+	   if(fileInfo.isFile())
+		   QFile::copy(url.toLocalFile(), destinationDir.toLocalFile());
+	   
+	   QDir originDirectory(url.toLocalFile());
+	   
+	   if (!originDirectory.exists())
+		   continue;
+	   
+	   QDir destinationDirectory(destinationDir.toLocalFile());
+	   
+	   if(destinationDirectory.exists() && !overWriteDirectory)
+		   continue;
+	   else if(destinationDirectory.exists() && overWriteDirectory)
+		   destinationDirectory.removeRecursively();
+	   
+	   originDirectory.mkpath(destinationDir.toLocalFile());
+	   
+	   foreach(QString directoryName, originDirectory.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
+	   {
+		   QString destinationPath = destinationDir.toLocalFile() + "/" + directoryName;
+		   originDirectory.mkpath(destinationPath);
+		   copy(url.toLocalFile() + "/" + directoryName, destinationPath, overWriteDirectory);
+	   }
+	   
+	   foreach (QString fileName, originDirectory.entryList(QDir::Files))
+	   {
+		   QFile::copy(url.toLocalFile() + "/" + fileName, destinationDir.toLocalFile() + "/" + fileName);
+	   }
+	   
+	   /*! Possible race-condition mitigation? */
+	   QDir finalDestination(destinationDir.toLocalFile());
+	   finalDestination.refresh();
+	   
+// 	   if(finalDestination.exists())
+		   return true;	   
 #else
-    auto job = KIO::copy(url, destinationDir);
-    job->start();
-    return true;
+	   auto job = KIO::copy(urls, destinationDir);
+	   job->start();
+	   return true;
 #endif
 }
 
-bool FMStatic::cut(const QUrl &url, const QUrl &where)
+bool FMStatic::cut(const QList<QUrl> &urls, const QUrl &where)
 {
-    return FMStatic::cut(url, where, QString());
+    return FMStatic::cut(urls, where, QString());
 }
 
-bool FMStatic::cut(const QUrl &url, const QUrl &where, const QString &name)
+bool FMStatic::cut(const QList<QUrl> &urls, const QUrl &where, const QString &name)
 {
-    QUrl _where;
-    if(name.isEmpty())
-        _where =  QUrl(where.toString()+"/"+FMH::getFileInfoModel(url)[FMH::MODEL_KEY::LABEL]);
-    else
-        _where =  QUrl(where.toString()+"/"+name);
+    QUrl _where = where;
+    if(!name.isEmpty())
+    {
+		_where =  QUrl(where.toString()+"/"+name);
+	}
 
 #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
-    QFile file(url.toLocalFile());
-    file.rename(_where.toLocalFile());
+	for(const auto &url : urls)
+	{
+		QFile file(url.toLocalFile());
+		file.rename(_where.toLocalFile());
+	}
 #else
-	auto job = KIO::move(url, _where, KIO::HideProgressInfo);
+	auto job = KIO::move(urls, _where, KIO::HideProgressInfo);
     job->start();
 #endif
 
 #ifdef COMPONENT_TAGGING
-    Tagging::getInstance()->updateUrl(url.toString(), _where.toString());
+	for(const auto &url : urls)		
+	{
+		Tagging::getInstance()->updateUrl(url.toString(), _where.toString());
+	}
 #endif
 
     return true;
 }
 
-bool FMStatic::removeFile(const QUrl &path)
+bool FMStatic::removeFiles(const QList<QUrl> &urls)
 {
-    if(!path.isLocalFile() || !FMH::fileExists(path))
-        qWarning() << "URL recived is not a local file or does not exists, FM::removeFile" << path;
-
-    qDebug()<< "TRYING TO REMOVE FILE: " << path;
-
-#ifdef COMPONENT_TAGGING
-    Tagging::getInstance()->removeUrl(path.toString());
+	#ifdef COMPONENT_TAGGING
+	for(const auto &url : urls)		
+	{
+		Tagging::getInstance()->removeUrl(url.toString());
+	}
 #endif
 
 #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
-    if(QFileInfo(path.toLocalFile()).isDir())
-        return FMStatic::removeDir(path);
-    else return QFile(path.toLocalFile()).remove();
+for(const auto &url : urls)		
+{
+	if(QFileInfo(url.toLocalFile()).isDir())
+		return FMStatic::removeDir(url);
+	else return QFile(url.toLocalFile()).remove();
+}
 #else
-    auto job = KIO::del(path);
+    auto job = KIO::del(urls);
     job->start();
     return true;
 #endif
@@ -342,7 +349,7 @@ bool FMStatic::removeDir(const QUrl &path)
 
 bool FMStatic::rename(const QUrl &url, const QString &name)
 {	
-    return FMStatic::cut(url, QUrl(url.toString().left(url.toString().lastIndexOf("/"))), name);
+    return FMStatic::cut({url}, QUrl(url.toString().left(url.toString().lastIndexOf("/"))), name);
 }
 
 bool FMStatic::createDir(const QUrl &path, const QString &name)
@@ -486,7 +493,3 @@ void FMStatic::bookmark(const QUrl& url)
 	model.addPlace(QDir(url.toLocalFile()).dirName(), url, FMH::getIconName(url));
 	#endif
 }
-
-
-
-

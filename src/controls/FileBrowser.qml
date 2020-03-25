@@ -175,12 +175,9 @@ Maui.Page
 				{
 					control.selectionBar.animate()
 					control.clearSelection()
-				}
-				
-				for(var i in urls)
-					Maui.FM.removeFile(urls[i])
-					
-					close()
+				}				
+				Maui.FM.removeFiles(urls)					
+				close()
 			}
 			
 			onAccepted:
@@ -597,8 +594,7 @@ Maui.Page
 					onTriggered:
 					{
 						const urls = _dropMenu.urls.split(",")
-						for(var i in urls)
-							Maui.FM.copy(urls[i], control.currentPath, false)
+						Maui.FM.copy(urls, control.currentPath, false)
 					}
 				}
 				
@@ -609,7 +605,7 @@ Maui.Page
 					{
 						const urls = _dropMenu.urls.split(",")
 						for(var i in urls)
-							Maui.FM.cut(urls[i], control.currentPath)
+						Maui.FM.cut(urls, control.currentPath)
 					}
 				}
 				
