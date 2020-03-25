@@ -23,7 +23,6 @@ option(COMPONENT_TERMINAL "Build terminal component" ON)
 option(COMPONENT_STORE "Build store component" ON)
 option(COMPONENT_TAGGING "Build tagging component" ON)
 option(COMPONENT_SYNCING "Build syncing component" ON)
-option(MAUIKIT_STYLE "Use Mauikit style and Luv icons" OFF)
 
 include(GenerateExportHeader)
 include(ECMSetupVersion)

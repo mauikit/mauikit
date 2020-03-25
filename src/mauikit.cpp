@@ -55,13 +55,10 @@
 
 #ifdef Q_OS_ANDROID
 #include "mauiandroid.h"
-#elif defined Q_OS_LINUX
-#include "mauikde.h"
-#endif
-
-#if defined MAUIKIT_STYLE
 #include <QIcon>
 #include <QQuickStyle>
+#elif defined Q_OS_LINUX
+#include "mauikde.h"
 #endif
 
 QUrl MauiKit::componentUrl(const QString &fileName) const
@@ -223,16 +220,14 @@ void MauiKit::registerTypes(const char *uri)
         return new Handy;
     });
 
-#if defined MAUIKIT_STYLE
     this->initResources();
-#endif
 
     qmlProtectModule(uri, 1);
 }
 
 void MauiKit::initResources()
 {
-#if defined QICON_H && defined QQUICKSTYLE_H
+#ifdef Q_OS_ANDROID
     Q_INIT_RESOURCE(mauikit);
 #ifdef ICONS_PNG
     Q_INIT_RESOURCE(icons_png);
