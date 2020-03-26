@@ -70,6 +70,7 @@ static inline struct
 {
 	QList<QUrl> urls;
 	QString text;
+    bool cut = false;
 	
 	bool hasUrls(){ return !urls.isEmpty(); }
 	bool hasText(){ return !text.isEmpty(); }
@@ -127,6 +128,8 @@ QVariantMap Handy::getClipboard()
 	
 	if(_clipboard.hasText())
 		res.insert("text", _clipboard.text);
+    
+    res.insert("cut", _clipboard.cut);
 	#else
 	auto clipboard = QApplication::clipboard();
 	
@@ -136,11 +139,15 @@ QVariantMap Handy::getClipboard()
 	
 	if(mime->hasText())
 		res.insert("text", mime->text());
+    
+    const QByteArray a = mime->data(QStringLiteral("application/x-kde-cutselection"));   
+  
+    res.insert("cut", (!a.isEmpty() && a.at(0) == '1'));
 	#endif
 	return res;
 }
 
-bool Handy::copyToClipboard(const QVariantMap &value)
+bool Handy::copyToClipboard(const QVariantMap &value, const bool &cut )
 {
 	#ifdef Q_OS_ANDROID
 	if(value.contains("urls"))
@@ -148,6 +155,8 @@ bool Handy::copyToClipboard(const QVariantMap &value)
 	
 	if(value.contains("text"))
 		_clipboard.text = value["text"].toString();
+    
+    _clipboard.cut = cut;
 	
 	return true;
 	#else
@@ -160,7 +169,9 @@ bool Handy::copyToClipboard(const QVariantMap &value)
 	if(value.contains("text"))
 		mimeData->setText(value["text"].toString());
 	
-	clipboard->setMimeData(mimeData);
+    mimeData->setData(QStringLiteral("application/x-kde-cutselection"), cut ? "1" : "0");
+	clipboard->setMimeData(mimeData);    
+    
 	return true;
 	#endif
 	

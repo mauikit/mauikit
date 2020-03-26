@@ -50,9 +50,6 @@ Maui.Page
 	
 	property var indexHistory : []
 	
-	property bool isCopy : false
-	property bool isCut : false	
-	
 	// need to be set by the implementation as features
 	property MauiLab.SelectionBar selectionBar : null		
 	property Maui.FilePreviewer previewer : null
@@ -604,7 +601,6 @@ Maui.Page
 					onTriggered:
 					{
 						const urls = _dropMenu.urls.split(",")
-						for(var i in urls)
 						Maui.FM.cut(urls, control.currentPath)
 					}
 				}
@@ -701,9 +697,7 @@ Maui.Page
 			return
 		}
 		
-		Maui.Handy.copyToClipboard({"urls": urls})
-		control.isCut = false
-		control.isCopy = true
+		Maui.Handy.copyToClipboard({"urls": urls}, false)
 	}
 	
 	function cut(urls)
@@ -713,27 +707,27 @@ Maui.Page
 			return
 		}
 		
-		Maui.Handy.copyToClipboard({"urls": urls})
-		control.isCut = true
-		control.isCopy = false
+		Maui.Handy.copyToClipboard({"urls": urls}, true)
 	}
 	
 	function paste()
-	{
-		const urls = Maui.Handy.getClipboard().urls
-		
-		if(!urls)
-			return
-			
-			if(control.isCut)
-			{
-				control.currentFMList.cutInto(urls)
-				control.clearSelection()
-			}else
-			{
-				control.currentFMList.copyInto(urls)
-			}
-	}
+    {
+        const data = Maui.Handy.getClipboard()
+        const urls = data.urls
+        
+        if(!urls)
+        {
+            return
+        }
+        if(data.cut)
+        {
+            control.currentFMList.cutInto(urls)
+            control.clearSelection()
+        }else
+        {
+            control.currentFMList.copyInto(urls)
+        }
+    }
 	
 	function remove(urls)
 	{

@@ -95,7 +95,7 @@ public slots:
      * \return
      */
 	static bool copyTextToClipboard(const QString &text);
-	static bool copyToClipboard(const QVariantMap &value);
+	static bool copyToClipboard(const QVariantMap &value, const bool &cut = false);
 	
 	//TODO move to Device.h the defs and implementation of device specifics
 	static bool isTouch();
