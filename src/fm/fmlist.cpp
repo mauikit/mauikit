@@ -826,7 +826,7 @@ void FMList::moveFileToTrash(const int& index)
     if(index > this->list.size() || index < 0)
         return;
 
-    FMStatic::moveToTrash(this->list[this->mappedIndex(index)][FMH::MODEL_KEY::PATH]);
+    FMStatic::moveToTrash({this->list[this->mappedIndex(index)][FMH::MODEL_KEY::PATH]});
     this->remove(index);
 }
 

@@ -36,7 +36,7 @@ Maui.Popup
     property bool defaultButtons: true
     property bool confirmationDialog: false
 
-    default property alias content : page.contentData
+    default property alias content : _pageContent.data
 
     property alias acceptButton : _acceptButton
     property alias rejectButton : _rejectButton

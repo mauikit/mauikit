@@ -157,6 +157,7 @@ Maui.Page
 		
 		Maui.Dialog
 		{
+            id: _removeDialog
 			property var urls: []
 			
 			title:  "Removing %1 files".arg(urls.length)
@@ -166,13 +167,48 @@ Maui.Page
 			acceptButton.visible: Maui.Handy.isLinux
 			page.padding: Maui.Style.space.huge
 			
+			ColumnLayout
+			{
+                Layout.fillWidth: true
+                
+                
+                CheckBox
+                {
+                    id: _removeDialogFilesCheckBox
+                    Layout.fillWidth: true
+                    
+                    text: qsTr("List files")
+                }
+                
+                Kirigami.ScrollablePage
+                {
+                    visible: _removeDialogFilesCheckBox.checked
+                    
+                    Layout.fillWidth: true
+                    Layout.maximumHeight: 200
+                    padding: 0
+                    topPadding: 0
+                    leftPadding: 0
+                    rightPadding: 0
+                                        
+                    TextArea
+                    {
+                        wrapMode: Text.WordWrap
+                        text: urls.join("\n\n")
+                        readOnly: true
+                        background: null
+                    }
+                }               
+            }
+			
 			onRejected:
 			{
 				if(control.selectionBar && control.selectionBar.visible)
 				{
 					control.selectionBar.animate()
 					control.clearSelection()
-				}				
+				}	
+				
 				Maui.FM.removeFiles(urls)					
 				close()
 			}
@@ -185,10 +221,9 @@ Maui.Page
 					control.clearSelection()
 				}
 				
-				for(var i in urls)
-					Maui.FM.moveToTrash(urls[i])
-					close()
-			}
+				Maui.FM.moveToTrash(urls)
+                close()
+            }
 		}
 	}
 	

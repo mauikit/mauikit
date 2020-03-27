@@ -341,13 +341,10 @@ return true;
 #endif
 }
 
-void FMStatic::moveToTrash(const QUrl &path)
+void FMStatic::moveToTrash(const QList<QUrl> &urls)
 {
-	if(!path.isLocalFile() || !FMH::fileExists(path))
-		qWarning() << "URL recived is not a local file or does not exists, FM::moveToTrash" << path;
-
 #if defined Q_OS_LINUX && !defined Q_OS_ANDROID
-    auto job = KIO::trash(path);
+    auto job = KIO::trash(urls);
     job->start();
 #endif
 }

@@ -61,7 +61,7 @@ public slots:
     static const QVariantMap dirConf(const QUrl &path);
     static void setDirConf(const QUrl &path, const QString &group, const QString &key, const QVariant &value);
     static bool checkFileType(const int &type, const QString &mimeTypeName);
-    static void moveToTrash(const QUrl &path);
+    static void moveToTrash(const QList<QUrl> &urls);
     static void emptyTrash();
     static bool rename(const QUrl &url, const QString &name);
     static bool createDir(const QUrl &path, const QString &name);
