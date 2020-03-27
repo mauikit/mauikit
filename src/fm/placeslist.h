@@ -68,9 +68,9 @@ private:
 	int indexOf(const QString &path);
 
 	static FMH::MODEL_LIST getGroup(const KFilePlacesModel &model, const FMH::PATHTYPE_KEY &type);	
-	
-	
+		
 signals:
 	void groupsChanged();
+    void bookmarksChanged();
 };
 #endif // PLACESLIST_H

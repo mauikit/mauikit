@@ -76,6 +76,8 @@ watcher(new QFileSystemWatcher(this))
 	connect(this->model, &KFilePlacesModel::rowsInserted, [this](const QModelIndex &parent, int first, int last)
 	{		
 		this->reset();
+        emit this->bookmarksChanged();
+        
 		/*emit this->preListChanged();
 		
 		for (int i = first; i <= last; i++) 
@@ -93,7 +95,10 @@ watcher(new QFileSystemWatcher(this))
     connect(&UTIL::Settings::global(), &UTIL::Settings::settingChanged, [&](const QUrl &url, const QString &key, const QVariant &value, const QString &group )
     {
         if(key == "BOOKMARKS" && group == "PREFERENCES")
+        {
             this->reset();
+            emit this->bookmarksChanged();
+        }
     });
 	#endif
 	
