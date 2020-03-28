@@ -60,16 +60,8 @@ Maui.Popup
     maxHeight: (_pageContent.implicitHeight * 1.2) + ( _page.footBar.height ) + Maui.Style.space.huge + _page.padding
 
     widthHint: 0.9
-    heightHint: 0.9
+    heightHint: 0.9  
     
-    background: Rectangle
-    {
-        color: Kirigami.Theme.backgroundColor
-        radius: Maui.Style.radiusV
-        border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-
-    }
-
     Maui.Badge
     {
         id: _closeButton
@@ -207,7 +199,7 @@ Maui.Popup
             }
         }
         
-        layer.enabled: true
+        layer.enabled: control.background.radius
         layer.effect: OpacityMask
         {
             maskSource: Item
@@ -220,7 +212,7 @@ Maui.Popup
                     anchors.centerIn: parent
                     width: _page.width
                     height: _page.height
-                    radius: Maui.Style.radiusV
+                    radius: control.background.radius
                 }
             }
         }
