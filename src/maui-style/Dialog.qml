@@ -66,14 +66,14 @@ T.Dialog
         color: Kirigami.Theme.viewBackgroundColor
         property color borderColor: Kirigami.Theme.textColor
         border.color: Qt.rgba(borderColor.r, borderColor.g, borderColor.b, 0.3)
-        layer.enabled: true
 
+        layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
             radius: 8
             samples: 16
             horizontalOffset: 0
-            verticalOffset: 4
+            verticalOffset: 0
             color: Qt.rgba(0, 0, 0, 0.3)
         }
     }

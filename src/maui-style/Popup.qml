@@ -77,7 +77,7 @@ T.Popup
             radius: 8
             samples: 16
             horizontalOffset: 0
-            verticalOffset: 4
+            verticalOffset: 0
             color: Qt.rgba(0, 0, 0, 0.3)
         }
     }
