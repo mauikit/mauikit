@@ -101,7 +101,7 @@ Maui.Popup
     {
         id: _page
         anchors.fill: parent
-        padding: 0
+        padding: Maui.Style.space.medium
         footBar.visible: control.defaultButtons || footBar.count > 1
 
         property QtObject _rejectButton : Button

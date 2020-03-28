@@ -60,19 +60,9 @@ Maui.Dialog
     RowLayout
     {
         id: layout
-        anchors.centerIn: parent
-        width: parent.width
-        height: parent.height 
+        Layout.fillWidth: true
+        Layout.fillHeight: true
         spacing: Maui.Style.space.medium
-
-        // 			Behavior on width
-        // 			{
-        // 				NumberAnimation
-        // 				{
-        // 					duration: Kirigami.Units.longDuration
-        // 					easing.type: Easing.InOutQuad
-        // 				}
-        // 			}
 
         Item
         {

@@ -409,7 +409,7 @@ Window
             Maui.ListItemTemplate
             {
                 id: _notifyTemplate
-                  Layout.fillHeight: true
+                Layout.fillHeight: true
                 Layout.fillWidth: true
                 iconSizeHint: Maui.Style.iconSizes.huge
                 label1.font.bold: true
@@ -420,7 +420,8 @@ Window
                 MouseArea
                 {
                     id: _mouseArea
-                    anchors.fill: parent
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
                     hoverEnabled: true
                 }                
             }

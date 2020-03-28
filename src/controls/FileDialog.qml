@@ -122,8 +122,8 @@ Maui.Dialog
 	{
 		id: _pathBarLoader
 		Layout.fillWidth: true
-		Layout.margins: Maui.Style.space.medium
-		height: Maui.Style.iconSizes.big
+		Layout.preferredHeight: Maui.Style.iconSizes.big
+		
 		Loader
 		{
 			anchors.fill: parent
@@ -155,13 +155,14 @@ Maui.Dialog
 	
 	Kirigami.PageRow
 	{
-		id: pageRow
-		anchors.fill: parent
-		clip: true
-		
-		separatorVisible: wideMode
-		initialPage: [sidebar, _browserLayout]
-		defaultColumnWidth:  Kirigami.Units.gridUnit * (Kirigami.Settings.isMobile? 15 : 8)		
+        id: pageRow
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        clip: true
+        
+        separatorVisible: wideMode
+        initialPage: [sidebar, _browserLayout]
+        defaultColumnWidth:  Kirigami.Units.gridUnit * (Kirigami.Settings.isMobile? 15 : 8)		
 			
 			Maui.PlacesListBrowser
 			{

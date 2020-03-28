@@ -51,7 +51,8 @@ Maui.Dialog
 
     Kirigami.ScrollablePage
     {
-        anchors.fill: parent
+        Layout.fillHeight: true
+        Layout.fillWidth: true
         padding: 0
         rightPadding: 0
         leftPadding: 0

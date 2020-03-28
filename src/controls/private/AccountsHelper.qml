@@ -24,6 +24,7 @@ Maui.Dialog
 			close();
 		}
 	}
+	
 	rejectButton.visible: false
 	acceptButton.text: qsTr("Add account...") 
 	onAccepted: _syncDialog.open()		
@@ -88,7 +89,8 @@ Maui.Dialog
 	ListView
 	{
 		id: _listView
-		anchors.fill: parent
+		Layout.fillHeight: true
+		Layout.fillWidth: true
 		model: _syncingModel
 		delegate: Maui.ListDelegate 
 		{
