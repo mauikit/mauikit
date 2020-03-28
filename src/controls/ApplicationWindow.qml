@@ -383,15 +383,15 @@ Window
                     _notify.close()
                 }
             }
-
+            
             page.padding: Maui.Style.space.medium
 
             footBar.background: null
-
+            
             maxHeight: Math.max(Maui.Style.iconSizes.large + Maui.Style.space.huge, (_notifyTemplate.implicitHeight)) + Maui.Style.space.big + footBar.height
             maxWidth: Kirigami.Settings.isMobile ? parent.width * 0.9 : Maui.Style.unit * 500
             widthHint: 0.8
-
+            
             Timer
             {
                 id: _notifyTimer
@@ -409,22 +409,22 @@ Window
             Maui.ListItemTemplate
             {
                 id: _notifyTemplate
-                anchors.fill: parent
+                  Layout.fillHeight: true
+                Layout.fillWidth: true
                 iconSizeHint: Maui.Style.iconSizes.huge
                 label1.font.bold: true
                 label1.font.weight: Font.Bold
                 label1.font.pointSize: Maui.Style.fontSizes.big
                 iconSource: "dialog-warning"
+                
+                MouseArea
+                {
+                    id: _mouseArea
+                    anchors.fill: parent
+                    hoverEnabled: true
+                }                
             }
 
-            MouseArea
-            {
-                id: _mouseArea
-                height: parent.height
-                width: parent.width
-                anchors.centerIn: parent
-                hoverEnabled: true
-            }
 
             function show(callback)
             {

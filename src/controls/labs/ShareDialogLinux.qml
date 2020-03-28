@@ -66,7 +66,8 @@ Maui.Dialog
 		Purpose.AlternativesView
 		{
 			id: _purpose
-			anchors.fill: parent
+			Layout.fillWidth: true
+			Layout.fillHeight: true
 			pluginType: 'Export'
 			clip: true
 			

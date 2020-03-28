@@ -43,7 +43,8 @@ Maui.Dialog
 	Maui.GridBrowser
 	{
 		id: grid
-		anchors.fill: parent
+		Layout.fillWidth: true
+		Layout.fillHeight: true
 		checkable: false
 		model: ListModel {}
 		onItemClicked:

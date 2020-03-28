@@ -84,7 +84,8 @@ Maui.Dialog
 
 	ColumnLayout
 	{
-		anchors.fill: parent
+		Layout.fillWidth: true
+		Layout.fillHeight: true
 		
 		Item
 		{

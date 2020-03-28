@@ -23,6 +23,8 @@ import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 
+import QtGraphicalEffects 1.0
+
 Maui.Popup
 {
     id: control
@@ -44,9 +46,9 @@ Maui.Popup
     property alias textEntry : _textEntry
     property alias entryField: _textEntry.visible
 
-    property alias page : page
-    property alias footBar : page.footBar
-    property alias headBar: page.headBar
+    property alias page : _page
+    property alias footBar : _page.footBar
+    property alias headBar: _page.headBar
     property alias closeButton: _closeButton
 
     signal accepted()
@@ -55,10 +57,18 @@ Maui.Popup
     clip: false
 
     maxWidth: Maui.Style.unit * 300
-    maxHeight: (_pageContent.implicitHeight * 1.2) +( page.footBar.height ) + Maui.Style.space.huge + page.padding
+    maxHeight: (_pageContent.implicitHeight * 1.2) + ( _page.footBar.height ) + Maui.Style.space.huge + _page.padding
 
     widthHint: 0.9
     heightHint: 0.9
+    
+    background: Rectangle
+    {
+        color: Kirigami.Theme.backgroundColor
+        radius: Maui.Style.radiusV
+        border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+
+    }
 
     Maui.Badge
     {
@@ -89,11 +99,9 @@ Maui.Popup
 
     Maui.Page
     {
-        id: page
-        clip: true
+        id: _page
         anchors.fill: parent
-        anchors.margins: Maui.Style.unit
-        padding: Maui.Style.space.medium
+        padding: 0
         footBar.visible: control.defaultButtons || footBar.count > 1
 
         property QtObject _rejectButton : Button
@@ -196,6 +204,24 @@ Maui.Popup
                 Layout.alignment: Qt.AlignCenter
                 focus: visible
                 onAccepted: control.accepted()
+            }
+        }
+        
+        layer.enabled: true
+        layer.effect: OpacityMask
+        {
+            maskSource: Item
+            {
+                width: _page.width
+                height: _page.height
+
+                Rectangle
+                {
+                    anchors.centerIn: parent
+                    width: _page.width
+                    height: _page.height
+                    radius: Maui.Style.radiusV
+                }
             }
         }
     }
