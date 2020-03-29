@@ -66,15 +66,16 @@ TabButton
         
         MouseArea
         {
+            visible: Kirigami.Settings.isMobile ? true : control.hovered || control.checked
+
             Layout.fillHeight: true
-            Layout.preferredWidth: Maui.Style.iconSizes.small * 2
+            Layout.preferredWidth: visible ? Maui.Style.iconSizes.small * 2 : 0
             Layout.alignment: Qt.AlignRight           
             hoverEnabled: true
             onClicked: control.closeClicked(index)
             
             Maui.X
             {
-				visible: Kirigami.Settings.isMobile ? true : control.hovered || control.checked
                 height: Maui.Style.iconSizes.tiny
                 width: height
                 anchors.centerIn: parent
