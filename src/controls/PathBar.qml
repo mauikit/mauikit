@@ -139,6 +139,11 @@ Rectangle
                 }
             }
             
+            Kirigami.Separator
+            {
+                Layout.fillHeight: true
+            }            
+            
             Flickable
             {
                 Layout.fillHeight: true
