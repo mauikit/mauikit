@@ -169,8 +169,7 @@ Maui.Page
 			
 			ColumnLayout
 			{
-                Layout.fillWidth: true
-                
+                Layout.fillWidth: true                
                 
                 CheckBox
                 {

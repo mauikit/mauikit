@@ -4,10 +4,10 @@ import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
-Maui.Arrow
+Rectangle
 {
     id: control
-    implicitWidth: _label.implicitWidth + Maui.Style.space.big + arrowWidth
+    implicitWidth: _label.implicitWidth + Maui.Style.space.big 
     
     readonly property bool hovered: _mouseArea.containsMouse
     

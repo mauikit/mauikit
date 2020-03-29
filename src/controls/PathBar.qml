@@ -152,7 +152,7 @@ Rectangle
                     property int pathArrowWidth: 8
                     orientation: ListView.Horizontal
                     clip: true
-                    spacing: 1 - (pathArrowWidth+1)
+                    spacing: 0
 					currentIndex: _pathModel.count - 1
                     focus: true
                     interactive: Maui.Handy.isTouch
@@ -165,14 +165,20 @@ Rectangle
                     delegate: PathBarDelegate
                     {
                         id: delegate
-                         borderColor: ListView.isCurrentItem ?  control.Kirigami.Theme.highlightColor :  control.border.color
+//                         borderColor: ListView.isCurrentItem ?  control.Kirigami.Theme.highlightColor :  control.border.color
                         color: ListView.isCurrentItem || hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
-                        smooth: true
-                        arrowWidth: _listView.pathArrowWidth
+//                         smooth: true
+//                         arrowWidth: _listView.pathArrowWidth
                         height: parent.height
-                        width: Math.max(Maui.Style.iconSizes.medium * 2, implicitWidth)
-                        anchors.verticalCenter: parent.verticalCenter
-
+                        width: Math.max(Maui.Style.iconSizes.medium * 2, implicitWidth)                        
+                        
+                        Kirigami.Separator
+                        {
+                            anchors.top: parent.top
+                            anchors.bottom: parent.bottom
+                            anchors.right: parent.right
+                        }
+                        
                         Connections
                         {
                             target: delegate

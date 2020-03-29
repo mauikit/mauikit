@@ -25,7 +25,7 @@ Shape
         strokeColor: _shape.borderColor
         fillColor: _shape.color
 
-        startX: 0; startY: 0
+        startX: 0; startY: 1
         PathLine { x: _shape.width - _shape.arrowWidth; y: _path.startY }
         PathLine { x: _shape.width; y: Math.floor(_shape.height / 2) }
         PathLine { x: _shape.width - _shape.arrowWidth; y: _shape.height}
