@@ -8,7 +8,9 @@ Maui.Arrow
 {
     id: control
     implicitWidth: _label.implicitWidth + Maui.Style.space.big + arrowWidth
-
+    
+    readonly property bool hovered: _mouseArea.containsMouse
+    
     ToolTip.delay: 1000
     ToolTip.timeout: 5000
     ToolTip.visible: _mouseArea.containsMouse || _mouseArea.containsPress
