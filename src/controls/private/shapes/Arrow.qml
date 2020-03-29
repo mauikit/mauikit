@@ -13,7 +13,7 @@ Shape
     property color borderColor: Kirigami.Theme.backgroundColor
     property int borderWidth: Maui.Style.unit
     
-    layer.enabled: true
+    layer.enabled: _shape.smooth
     layer.samples: 4
     
     ShapePath

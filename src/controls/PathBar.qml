@@ -167,7 +167,7 @@ Rectangle
                         id: delegate
 //                         borderColor: ListView.isCurrentItem ?  control.Kirigami.Theme.highlightColor :  control.border.color
                         color: ListView.isCurrentItem || hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : Qt.rgba(control.border.color.r, control.border.color.g, control.border.color.b, 0.4)
-						
+						smooth: false
                         arrowWidth: _listView.pathArrowWidth
                         height: parent.height - 2
                         width: Math.max(Maui.Style.iconSizes.medium * 2, implicitWidth)
