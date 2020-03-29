@@ -12,10 +12,10 @@ Shape
     property color color : Kirigami.Theme.backgroundColor
     property color borderColor: Kirigami.Theme.backgroundColor
     property int borderWidth: Maui.Style.unit
-    
+
     layer.enabled: _shape.smooth
     layer.samples: 4
-    
+
     ShapePath
     {
 		id: _path
@@ -25,7 +25,7 @@ Shape
         strokeColor: _shape.borderColor
         fillColor: _shape.color
 
-        startX: 0; startY: 1
+        startX: 0; startY: 0
         PathLine { x: _shape.width - _shape.arrowWidth; y: _path.startY }
         PathLine { x: _shape.width; y: Math.floor(_shape.height / 2) }
         PathLine { x: _shape.width - _shape.arrowWidth; y: _shape.height}
