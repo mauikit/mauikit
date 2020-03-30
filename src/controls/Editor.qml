@@ -27,6 +27,8 @@ Maui.Page
 	
 	property alias fileUrl : document.fileUrl
 	
+	property alias showLineNumbers : _linesCounter.visible
+	
     focus: true
     title: document.fileName
     showTitle: false
@@ -333,16 +335,17 @@ Maui.Page
                         id: _linesCounter
                         anchors.left: parent.left
                         height: Math.max(parent.contentHeight, control.height)
-                        width: 28
+                        width: visible ? 28 : 0
                         
                         Kirigami.Theme.inherit: false
-                        Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
-                        color: Kirigami.Theme.backgroundColor
+                        Kirigami.Theme.colorSet: Kirigami.Theme.Window
+                        color: Qt.darker(Kirigami.Theme.backgroundColor, 1)
                         
                         Column
                         {
                             anchors.fill: parent
                             anchors.topMargin: 5
+
                             Repeater 
                             {
                                 model:  body.lineCount
