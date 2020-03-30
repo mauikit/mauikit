@@ -69,8 +69,8 @@ TabButton
         
         Rectangle
         {            
-            visible: Kirigami.Settings.isMobile ? true : control.hovered || control.checked
-            
+            visible:  opacity > 0
+            opacity: Kirigami.Settings.isMobile ? 1 : (control.hovered || control.checked ? 1 : 0)
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.right: parent.right
@@ -78,6 +78,15 @@ TabButton
             
             width: visible ? Maui.Style.iconSizes.small * 2 : 0
             color: Kirigami.Theme.backgroundColor
+            
+            Behavior on opacity
+            {
+                NumberAnimation
+                {
+                    duration: Kirigami.Units.longDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
             
             MouseArea
             {                
