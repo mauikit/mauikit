@@ -196,7 +196,6 @@ signals:
 	void fileReady(QString array, QUrl url);
 };
 
-
 #ifdef STATIC_MAUIKIT
 class DocumentHandler : public QObject
 #else
@@ -233,6 +232,8 @@ class MAUIKIT_EXPORT DocumentHandler : public QObject
 	Q_PROPERTY(bool autoReload READ getAutoReload WRITE setAutoReload NOTIFY autoReloadChanged)	
 	
 	Q_PROPERTY(QString formatName READ formatName WRITE setFormatName NOTIFY formatNameChanged)
+    
+    Q_PROPERTY(int currentLineIndex READ getCurrentLineIndex NOTIFY currentLineIndexChanged)
 	
 	Q_PROPERTY(Alerts *alerts READ getAlerts CONSTANT FINAL)	
 	
@@ -307,6 +308,9 @@ public:
 public slots:
 	void load(const QUrl &url);
 	void saveAs(const QUrl &url);
+    void find(const QString &query);
+    int lineHeight(const int &line);
+    int getCurrentLineIndex();
 	
 	static const QStringList getLanguageNameList();
 	static const QString getLanguageNameFromFileName(const QUrl &fileName);
@@ -344,6 +348,8 @@ signals:
 	void formatNameChanged() const;
 	
 	void modifiedChanged();
+    
+    void currentLineIndexChanged();
 			
 private:
 	void reset();

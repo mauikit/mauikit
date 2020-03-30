@@ -63,6 +63,8 @@
 #include <QUrl>
 #include <QFileSystemWatcher>
 #include <QTextDocumentWriter>
+#include <QAbstractTextDocumentLayout>
+#include <QTextEdit>
 
 #include "fmh.h"
 #include "utils.h"
@@ -246,6 +248,12 @@ DocumentHandler::DocumentHandler(QObject *parent)
 	}
 	//end file loader thread implementation
 	
+	
+	connect(this, &DocumentHandler::cursorPositionChanged, [&]()
+    {
+        emit this->currentLineIndexChanged();    
+    });
+    
 	connect(this->m_watcher, &QFileSystemWatcher::fileChanged, [&](QString url)
 	{		
 		if(this->fileUrl() == QUrl::fromLocalFile(url))
@@ -402,6 +410,9 @@ void DocumentHandler::setDocument(QQuickTextDocument *document)
 		m_highlighter->setDocument(this->textDocument());	
 		connect(this->textDocument(), &QTextDocument::modificationChanged, this, &DocumentHandler::modifiedChanged);		
 	}
+	
+	// 	connect(this->textDocument(), &QTextDocument::blockCountChanged, [](){});
+	//     connect(this->textDocument(), &QTextDocument::updateRequest, [](){});
 }
 
 int DocumentHandler::cursorPosition() const
@@ -737,4 +748,58 @@ void DocumentHandler::mergeFormatOnWordOrSelection(const QTextCharFormat &format
 	if (!cursor.hasSelection())
 		cursor.select(QTextCursor::WordUnderCursor);
 	cursor.mergeCharFormat(format);
+}
+
+void DocumentHandler::find(const QString& query)
+{
+    qDebug() << "Asked to find" << query;
+    QTextDocument *doc = textDocument();
+    
+    if(!doc)
+    {
+        return;
+    }
+    
+    doc->undo();    
+    
+    QTextCursor highlightCursor(doc);
+    QTextCursor cursor(doc);
+    
+    cursor.beginEditBlock();
+    
+    QTextCharFormat plainFormat(highlightCursor.charFormat());
+    QTextCharFormat colorFormat = plainFormat;
+    colorFormat.setBackground(Qt::yellow);
+    
+    while (!highlightCursor.isNull() && !highlightCursor.atEnd()) 
+    {
+        highlightCursor = doc->find(query, highlightCursor, QTextDocument::FindWholeWords);
+        
+        if (!highlightCursor.isNull()) 
+        {
+//             found = true;
+            highlightCursor.movePosition(QTextCursor::WordRight,
+                                         QTextCursor::KeepAnchor);
+            highlightCursor.mergeCharFormat(colorFormat);
+        }
+    }
+    
+    cursor.endEditBlock();
+}
+
+int DocumentHandler::lineHeight(const int& line)
+{
+    QTextDocument *doc = textDocument();
+    
+    if(!doc)
+    {
+        return 0;
+    }
+    
+    return int(doc->documentLayout()->blockBoundingRect(doc->findBlockByNumber(line)).height());
+}
+
+int DocumentHandler::getCurrentLineIndex()
+{   
+    return textCursor().blockNumber();
 }

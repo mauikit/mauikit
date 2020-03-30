@@ -324,6 +324,49 @@ Maui.Page
 						if(!Kirigami.Settings.isMobile && event.button === Qt.RightButton)
 							documentMenu.popup()
 					}
+					
+					leftInset: leftPadding
+					leftPadding: _linesCounter.width + Maui.Style.space.small
+										
+					Rectangle
+					{
+                        id: _linesCounter
+                        anchors.left: parent.left
+                        height: Math.max(parent.contentHeight, control.height)
+                        width: 28
+                        
+                        Kirigami.Theme.inherit: false
+                        Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
+                        color: Kirigami.Theme.backgroundColor
+                        
+                        Column
+                        {
+                            anchors.fill: parent
+                            anchors.topMargin: 5
+                            Repeater 
+                            {
+                                model:  body.lineCount
+                                delegate: Label 
+                                {
+                                    color: index ===  document.currentLineIndex ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+                                    font: body.font
+                                    width: parent.width
+                                    height: document.lineHeight(index)
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    renderType: Text.NativeRendering
+                                    text: index+1                                    
+                                }
+                            }
+                        } 
+                        
+                        Kirigami.Separator
+                        {
+                            anchors.top: parent.top
+                            anchors.bottom: parent.bottom
+                            anchors.right: parent.right
+                        }
+                    }				
 				}
 			}
 			// 		ScrollBar.vertical.height: _scrollView.height - body.topPadding
