@@ -262,7 +262,6 @@ Page
     Keys.onBackPressed:
     {
         control.goBackTriggered();
-        event.accepted = true
     }
     
     Shortcut
