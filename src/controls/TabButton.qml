@@ -41,46 +41,58 @@ TabButton
             }
         }
     }
-
-    contentItem: RowLayout
-    {
-		id: _layout
-        anchors.fill: control
-        spacing: Maui.Style.space.small
-        anchors.margins: Maui.Style.space.small
-
-        Label
+    
+    contentItem: Item
+    {   
+        RowLayout
         {
-			visible: text.length
-            text: control.text
-            font.pointSize: Maui.Style.fontSizes.default
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.alignment: Qt.AlignHCenter
-            verticalAlignment: Qt.AlignVCenter
-            horizontalAlignment: Qt.AlignHCenter
-            color: control.checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-            wrapMode: Text.NoWrap
-            elide: Text.ElideMiddle
+            id: _layout
+            anchors.fill: parent
+            spacing: Maui.Style.space.small
+            anchors.margins: Maui.Style.space.small
+            
+            Label
+            {
+                visible: text.length
+                text: control.text
+                font.pointSize: Maui.Style.fontSizes.default
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.alignment: Qt.AlignHCenter
+                verticalAlignment: Qt.AlignVCenter
+                horizontalAlignment: Qt.AlignHCenter
+                color: control.checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+                wrapMode: Text.NoWrap
+                elide: Text.ElideMiddle
+            }       
         }
         
-        MouseArea
-        {
+        Rectangle
+        {            
             visible: Kirigami.Settings.isMobile ? true : control.hovered || control.checked
-
-            Layout.fillHeight: true
-            Layout.preferredWidth: visible ? Maui.Style.iconSizes.small * 2 : 0
-            Layout.alignment: Qt.AlignRight           
-            hoverEnabled: true
-            onClicked: control.closeClicked(index)
             
-            Maui.X
-            {
-                height: Maui.Style.iconSizes.tiny
-                width: height
-                anchors.centerIn: parent
-                color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.negativeTextColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))        
-            }
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.margins: Maui.Style.space.tiny
+            
+            width: visible ? Maui.Style.iconSizes.small * 2 : 0
+            color: Kirigami.Theme.backgroundColor
+            
+            MouseArea
+            {                
+                hoverEnabled: true
+                onClicked: control.closeClicked(index)
+                anchors.fill: parent
+                
+                Maui.X
+                {
+                    height: Maui.Style.iconSizes.tiny
+                    width: height
+                    anchors.centerIn: parent
+                    color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.negativeTextColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))        
+                }
+            }            
         }
     }
 }
