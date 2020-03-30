@@ -74,11 +74,7 @@ Maui.ItemDelegate
         {
             control.contentDropped(drop)
         }
-    }
-    
-    Drag.active: mouseArea.drag.active && control.draggable
-    Drag.dragType: Drag.Automatic
-    Drag.supportedActions: Qt.CopyAction   
+    }  
     
     Maui.ListItemTemplate
     {

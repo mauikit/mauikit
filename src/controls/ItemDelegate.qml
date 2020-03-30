@@ -26,8 +26,7 @@ import QtGraphicalEffects 1.0
 import "private"
 
 Kirigami.DelegateRecycler
-{
-    
+{    
     id: control
     
     Kirigami.Theme.inherit: false
@@ -60,6 +59,10 @@ Kirigami.DelegateRecycler
     signal doubleClicked(var mouse)
 
     property alias background : _delegate.background
+    
+    Drag.active: mouseArea.drag.active && control.draggable
+    Drag.dragType: Drag.Automatic
+    Drag.supportedActions: Qt.CopyAction   
 
     ItemDelegate
     {

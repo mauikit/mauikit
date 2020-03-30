@@ -58,11 +58,6 @@ Rectangle
         id: _loader
         anchors.fill: parent
         sourceComponent: pathEntry ? _pathEntryComponent : _pathCrumbsComponent
-        //         onLoaded:
-        //         {
-        //             if(sourceComponent === _pathCrumbsComponent)
-        //                 control.append()
-        //         }
     }
     
     Maui.BaseModel
@@ -94,6 +89,7 @@ Rectangle
                 pathChanged(text)
                 showEntryBar()
             }
+            
             background: Rectangle
             {
                 color: "transparent"
@@ -109,6 +105,13 @@ Rectangle
                     showEntryBar()
                 }
             }
+            
+//             Keys.enabled: true
+//             Keys.onPressed:
+//             {
+//                 console.log(event.key)
+//                 pathEntry = false
+//             }
         }
     }
     
@@ -237,9 +240,7 @@ Rectangle
             }
         }
     }
-    
-    Component.onCompleted: control.append()
-    
+       
     function append()
     {
         _pathList.path = control.url

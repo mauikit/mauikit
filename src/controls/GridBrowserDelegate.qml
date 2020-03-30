@@ -80,10 +80,6 @@ Maui.ItemDelegate
         }
     }
 
-    Drag.active: mouseArea.drag.active && control.draggable
-    Drag.dragType: Drag.Automatic
-    Drag.supportedActions: Qt.CopyAction
-
     Maui.GridItemTemplate
     {
         id: _template

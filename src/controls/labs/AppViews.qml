@@ -68,7 +68,6 @@ SwipeView
     Keys.onBackPressed:
     {
         control.goBack()
-        event.accepted = true
     }
 
     Shortcut

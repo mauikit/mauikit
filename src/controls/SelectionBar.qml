@@ -290,13 +290,11 @@ Item
     Keys.onEscapePressed:
     {
 		control.exitClicked();
-		event.accepted = true
 	}
 
     Keys.onBackPressed:
     {
         control.exitClicked();
-        event.accepted = true
     }
     
     function clear()

@@ -56,7 +56,6 @@ TextField
     Keys.onBackPressed:
     {
         goBackTriggered();
-        event.accepted = true
     }    
    	
 	Shortcut

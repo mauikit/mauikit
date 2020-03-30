@@ -378,7 +378,6 @@ Item
     Keys.onEscapePressed:
     {
         control.exitClicked();
-        event.accepted = true
     }
 
     Keys.onBackPressed:
