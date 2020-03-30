@@ -29,6 +29,7 @@ Maui.Page
 	
     focus: true
     title: document.fileName
+    showTitle: false
 
     Maui.DocumentHandler
 	{
