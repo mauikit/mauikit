@@ -113,11 +113,15 @@ class MAUIKIT_EXPORT MauiApp : public QObject
     Q_PROPERTY(QString version READ getVersion CONSTANT FINAL)
     Q_PROPERTY(QString org READ getOrg CONSTANT FINAL)
     Q_PROPERTY(QString domain READ getDomain CONSTANT FINAL)
+
+    Q_PROPERTY(QVariantList credits READ getCredits CONSTANT FINAL)
+    
     Q_PROPERTY(QString iconName READ getIconName WRITE setIconName NOTIFY iconNameChanged)
     Q_PROPERTY(QString description READ getDescription WRITE setDescription NOTIFY descriptionChanged)
     Q_PROPERTY(QString webPage READ getWebPage WRITE setWebPage NOTIFY webPageChanged)
     Q_PROPERTY(QString reportPage READ getReportPage WRITE setReportPage NOTIFY reportPageChanged)
     Q_PROPERTY(QString donationPage READ getDonationPage WRITE setDonationPage NOTIFY donationPageChanged)
+   
     Q_PROPERTY(QString mauikitVersion READ getMauikitVersion CONSTANT FINAL)
     Q_PROPERTY(QString qtVersion READ getQtVersion CONSTANT FINAL)
     Q_PROPERTY(bool handleAccounts READ getHandleAccounts WRITE setHandleAccounts NOTIFY handleAccountsChanged)
@@ -183,6 +187,9 @@ public:
 
     bool getHandleAccounts() const;
     void setHandleAccounts(const bool &value);	
+    
+    QVariantList getCredits() const { return m_credits; }
+    void setCredits(const QVariantList &credits) { m_credits = credits; }
 	
 	//Theming and branding support
 	MauiTheme theme()
@@ -208,6 +215,7 @@ private:
     QString webPage;
     QString donationPage;
     QString reportPage;
+    QVariantList m_credits;
 	
 	//Theming and branding support
 	MauiTheme m_theme;

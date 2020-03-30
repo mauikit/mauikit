@@ -174,11 +174,69 @@ Maui.Dialog
                     color: Kirigami.Theme.textColor
                     Layout.fillWidth: true
 
-                    text: qsTr("Powered by") + " MauiKit " +
-                          Maui.App.mauikitVersion + " and Kirigami."
+                    text: qsTr("Powered by") + " <a href='https://mauikit.org'>MauiKit</a> " +
+                          Maui.App.mauikitVersion + " and  <a href='https://kde.org/products/kirigami'>Kirigami</a>"
                     font.pointSize: Maui.Style.fontSizes.default
                     elide: Text.ElideRight
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    
+                    onLinkActivated: Qt.openUrlExternally(link)
+                }
+                
+                Kirigami.Separator
+                {
+                    Layout.fillWidth: true
+                    Layout.margins: Maui.Style.space.tiny
+                    opacity: 0.4
+                }
+                
+                Label
+                {
+                    color: Kirigami.Theme.textColor
+                    Layout.fillWidth: true
+                    text: qsTr("Credits")
+                    font.pointSize: Maui.Style.fontSizes.default
+                    elide: Text.ElideRight
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                }
+                
+                Repeater
+                {
+                    model: Maui.App.credits
+                    
+                    Column
+                    {
+                        Label
+                        {
+                            color: Kirigami.Theme.textColor
+                            Layout.fillWidth: true
+                            text: modelData.name
+                            font.pointSize: Maui.Style.fontSizes.default
+                            elide: Text.ElideRight
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        }  
+                        
+                        Label
+                        {
+                            color: Kirigami.Theme.textColor
+                            Layout.fillWidth: true
+                            text: modelData.email
+                            font.pointSize: Maui.Style.fontSizes.default
+                            elide: Text.ElideRight
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        }
+                        
+                        Label
+                        {
+                            color: Kirigami.Theme.textColor
+                            Layout.fillWidth: true
+                            text: modelData.year
+                            font.pointSize: Maui.Style.fontSizes.default
+                            elide: Text.ElideRight
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        }
+                    }
+                    
                 }
             }
         }
