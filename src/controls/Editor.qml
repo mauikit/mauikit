@@ -28,6 +28,7 @@ Maui.Page
 	property alias fileUrl : document.fileUrl
 	
     focus: true
+    title: document.fileName
 
     Maui.DocumentHandler
 	{

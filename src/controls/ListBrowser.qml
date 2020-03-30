@@ -62,7 +62,7 @@ Kirigami.ScrollablePage
     signal areaRightClicked()   
     signal keyPress(var event)
     
-    spacing: 0
+    spacing: Maui.Style.space.tiny
     focus: true	
     padding: 0
     leftPadding: padding
@@ -79,7 +79,7 @@ Kirigami.ScrollablePage
         id: _listView
         focus: true
         clip: control.clip           
-        spacing: Maui.Style.space.tiny
+        spacing: control.spacing
         snapMode: ListView.NoSnap
         boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : 
         Flickable.OvershootBounds
