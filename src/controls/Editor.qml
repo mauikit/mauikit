@@ -344,15 +344,16 @@ Maui.Page
                         Column
                         {
                             anchors.fill: parent
-                            anchors.topMargin: 5
+                            anchors.topMargin: 7
 
                             Repeater 
                             {
                                 model:  body.lineCount
                                 delegate: Label 
                                 {
+                                    opacity: index ===  document.currentLineIndex ? 1 : 0.7
                                     color: index ===  document.currentLineIndex ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-                                    font: body.font
+                                    font.pointSize: Math.min(Maui.Style.fontSizes.medium, body.font.pointSize)
                                     width: parent.width
                                     height: document.lineHeight(index)
                                     horizontalAlignment: Text.AlignHCenter
