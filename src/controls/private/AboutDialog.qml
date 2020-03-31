@@ -107,7 +107,7 @@ Maui.Dialog
 			padding: Maui.Style.space.medium
             leftPadding: padding
             rightPadding: padding
-            topPadding: padding
+            topPadding: padding*3
             bottomPadding: padding
 
             ColumnLayout
@@ -124,7 +124,7 @@ Maui.Dialog
                     text: Maui.App.displayName
                     font.weight: Font.Bold
                     font.bold: true
-                    font.pointSize: Maui.Style.fontSizes.huge
+                    font.pointSize: Maui.Style.fontSizes.enormous
                     elide: Text.ElideRight
                     wrapMode: Text.NoWrap
                 }
@@ -161,28 +161,7 @@ Maui.Dialog
                     elide: Text.ElideRight
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 }
-
-                Kirigami.Separator
-                {
-                    Layout.fillWidth: true
-                    Layout.margins: Maui.Style.space.tiny
-                    opacity: 0.4
-                }
-
-                Label
-                {
-                    color: Kirigami.Theme.textColor
-                    Layout.fillWidth: true
-
-                    text: qsTr("Powered by") + " <a href='https://mauikit.org'>MauiKit</a> " +
-                          Maui.App.mauikitVersion + " and  <a href='https://kde.org/products/kirigami'>Kirigami</a>"
-                    font.pointSize: Maui.Style.fontSizes.default
-                    elide: Text.ElideRight
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    
-                    onLinkActivated: Qt.openUrlExternally(link)
-                }
-                
+               
                 Kirigami.Separator
                 {
                     Layout.fillWidth: true
@@ -192,6 +171,7 @@ Maui.Dialog
                 
                 Label
                 {
+                    visible: _creditsRepeater.count > 0
                     color: Kirigami.Theme.textColor
                     Layout.fillWidth: true
                     text: qsTr("Credits")
@@ -202,6 +182,7 @@ Maui.Dialog
                 
                 Repeater
                 {
+                    id: _creditsRepeater
                     model: Maui.App.credits
                     
                     Column
@@ -235,9 +216,30 @@ Maui.Dialog
                             elide: Text.ElideRight
                             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                         }
-                    }
-                    
+                    }                    
                 }
+                
+                Kirigami.Separator
+                {
+                    Layout.fillWidth: true
+                    Layout.margins: Maui.Style.space.tiny
+                    opacity: 0.4
+                }
+                
+                Label
+                {
+                    color: Kirigami.Theme.textColor
+                    Layout.fillWidth: true
+                    
+                    text: qsTr("Powered by") + " <a href='https://mauikit.org'>MauiKit</a> " +
+                    Maui.App.mauikitVersion + " and  <a href='https://kde.org/products/kirigami'>Kirigami</a>"
+                    font.pointSize: Maui.Style.fontSizes.default
+                    elide: Text.ElideRight
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    
+                    onLinkActivated: Qt.openUrlExternally(link)
+                }
+                
             }
         }
     }
