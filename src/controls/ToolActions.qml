@@ -112,7 +112,7 @@ Rectangle
                     property Action action : modelData
                     property bool checked: control.autoExclusive ? control.currentIndex === index : false
                     hoverEnabled: true
-                    width: height + Maui.Style.space.medium
+                    width: height + Maui.Style.space.tiny
                     height: parent.height
                     
                     onClicked: 
