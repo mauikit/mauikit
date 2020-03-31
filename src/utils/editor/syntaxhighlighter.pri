@@ -11,12 +11,19 @@ android {
 
     ANDROID_EXTRA_LIBS += $$PWD/KSyntaxHighlighting/libKF5SyntaxHighlighting.so
 
+    LIBS += -L$$PWD/KSyntaxHighlighting/ -lKF5SyntaxHighlighting
+
+    INCLUDEPATH += $$PWD/KSyntaxHighlighting/KSyntaxHighlighting
+
+    DEPENDPATH += $$PWD/KSyntaxHighlighting/KSyntaxHighlighting
 }else:win32 {
+
+}else:macos {
+
+    LIBS += -L$$PWD/../../../../../../../../../usr/local/Cellar/kf5-syntax-highlighting/5.68.0/lib/ -lKF5SyntaxHighlighting.5.68.0
+
+    INCLUDEPATH += $$PWD/../../../../../../../../../usr/local/Cellar/kf5-syntax-highlighting/5.68.0/include
+    DEPENDPATH += $$PWD/../../../../../../../../../usr/local/Cellar/kf5-syntax-highlighting/5.68.0/include
 
 }
 
-LIBS += -L$$PWD/KSyntaxHighlighting/ -lKF5SyntaxHighlighting
-
-INCLUDEPATH += $$PWD/KSyntaxHighlighting/KSyntaxHighlighting 
-
-DEPENDPATH += $$PWD/KSyntaxHighlighting/KSyntaxHighlighting 

@@ -3,9 +3,12 @@
 #include <QDebug>
 #include <QVector>
 
-#ifdef STATIC_MAUIKIT
+#ifdef Q_OS_ANDROID
 #include "KSyntaxHighlighting/KSyntaxHighlighting/Repository"
 #include "KSyntaxHighlighting/KSyntaxHighlighting/Definition"
+#elif defined Q_OS_MACOS
+#include <KF5/KSyntaxHighlighting/Repository>
+#include <KF5/KSyntaxHighlighting/Definition>
 #else
 #include <KSyntaxHighlighting/Repository>
 #include <KSyntaxHighlighting/Definition>

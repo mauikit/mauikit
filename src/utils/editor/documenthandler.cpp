@@ -69,7 +69,12 @@
 #include "fmh.h"
 #include "utils.h"
 
-#ifdef STATIC_MAUIKIT
+#if defined Q_OS_MACOS
+#include <KF5/KSyntaxHighlighting/Repository>
+#include <KF5/KSyntaxHighlighting/Definition>
+#include <KF5/KSyntaxHighlighting/Theme>
+#include <KF5/KSyntaxHighlighting/SyntaxHighlighter>
+#elif
 #include <KSyntaxHighlighting/KSyntaxHighlighting/Definition>
 #include <KSyntaxHighlighting/KSyntaxHighlighting/Repository>
 #include <KSyntaxHighlighting/KSyntaxHighlighting/SyntaxHighlighter>

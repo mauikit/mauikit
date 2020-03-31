@@ -125,6 +125,8 @@ contains(DEFINES, COMPONENT_EDITOR):{
         $$PWD/src/utils/editor/syntaxhighlighterutil.cpp
 
     INCLUDEPATH += $$PWD/src/utils/editor
+
+
 } else {
     warning("SKIPPING EDITOR COMPONENT")
 }
