@@ -11,7 +11,7 @@ Rectangle
 {
 	id: control
 	implicitWidth: _layout.implicitWidth
-	implicitHeight: _dummy.height - 2
+    implicitHeight: Maui.Style.iconSizes.medium + Maui.Style.space.medium
 	
 	default property list<Action> actions
 	Kirigami.Theme.inherit: false
@@ -43,6 +43,7 @@ Rectangle
 		ToolButton
 		{			
 			visible: !control.expanded
+            anchors.verticalCenter: parent.verticalCenter
 			icon.name: control.currentAction ? control.currentAction.icon.name : "application-menu"
             onClicked: 
             {
