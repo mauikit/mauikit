@@ -110,10 +110,9 @@ Rectangle
                 {
                     id: _buttonMouseArea
                     property Action action : modelData
-                    property bool checked: control.currentIndex === index
-                    property bool autoExclusive: control.autoExclusive
+                    property bool checked: control.autoExclusive ? control.currentIndex === index : false
                     hoverEnabled: true
-                    width: height + Maui.Style.space.big
+                    width: height + Maui.Style.space.medium
                     height: parent.height
                     
                     onClicked: 
@@ -130,7 +129,7 @@ Rectangle
                     Rectangle
                     {
                         anchors.fill: parent
-                        color: checked || _buttonMouseArea.containsMouse || _buttonMouseArea.containsPress ? Kirigami.Theme.highlightColor : "transparent"
+                        color: _buttonMouseArea.checked || _buttonMouseArea.containsMouse || _buttonMouseArea.containsPress ? Kirigami.Theme.highlightColor : "transparent"
                         opacity: 0.15
                     }
                     
@@ -139,7 +138,7 @@ Rectangle
                         anchors.centerIn: parent
                         width: Maui.Style.iconSizes.medium
                         height: width
-                        color: checked ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
+                        color: _buttonMouseArea.checked ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
                         source: action.icon.name
                     }
                     
