@@ -74,7 +74,7 @@
 #include <KF5/KSyntaxHighlighting/Definition>
 #include <KF5/KSyntaxHighlighting/Theme>
 #include <KF5/KSyntaxHighlighting/SyntaxHighlighter>
-#elif
+#elif defined Q_OS_ANDROID
 #include <KSyntaxHighlighting/KSyntaxHighlighting/Definition>
 #include <KSyntaxHighlighting/KSyntaxHighlighting/Repository>
 #include <KSyntaxHighlighting/KSyntaxHighlighting/SyntaxHighlighter>
