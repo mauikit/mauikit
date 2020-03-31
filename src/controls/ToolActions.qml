@@ -11,11 +11,11 @@ Rectangle
 {
 	id: control
 	implicitWidth: _layout.implicitWidth
-    implicitHeight: Maui.Style.iconSizes.medium + Maui.Style.space.medium
+    implicitHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.15)
 	
 	default property list<Action> actions
-	Kirigami.Theme.inherit: false
-	Kirigami.Theme.colorSet: Kirigami.Theme.Button
+//	Kirigami.Theme.inherit: false
+//	Kirigami.Theme.colorSet: Kirigami.Theme.Button
 	
 	property bool autoExclusive: true	
 	
@@ -113,7 +113,7 @@ Rectangle
                     property bool checked: control.currentIndex === index
                     property bool autoExclusive: control.autoExclusive
                     hoverEnabled: true
-                    width: height + Maui.Style.space.medium
+                    width: height + Maui.Style.space.big
                     height: parent.height
                     
                     onClicked: 
@@ -139,7 +139,7 @@ Rectangle
                         anchors.centerIn: parent
                         width: Maui.Style.iconSizes.medium
                         height: width
-                        color: checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+                        color: checked ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
                         source: action.icon.name
                     }
                     
