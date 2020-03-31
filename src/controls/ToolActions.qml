@@ -7,13 +7,15 @@ import QtQml 2.1
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
-Item
+Rectangle
 {
 	id: control
 	implicitWidth: _layout.implicitWidth
-	implicitHeight: parent.height
+	implicitHeight: _dummy.height - 2
 	
 	default property list<Action> actions
+	Kirigami.Theme.inherit: false
+	Kirigami.Theme.colorSet: Kirigami.Theme.Button
 	
 	property bool autoExclusive: true	
 	
@@ -24,8 +26,14 @@ Item
         control.currentAction = actions[control.currentIndex]
     }
 	
-	property bool expanded : true
-	
+	property bool expanded : true	
+
+	border.color: expanded ? Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7)) : "transparent"
+    radius: Maui.Style.radiusV
+    color: expanded ? Kirigami.Theme.backgroundColor : "transparent"
+    
+    ToolButton {id: _dummy}
+    
 	Row
 	{
 		id: _layout
@@ -35,7 +43,7 @@ Item
 		ToolButton
 		{			
 			visible: !control.expanded
-            icon.name: control.currentAction.icon.name
+			icon.name: control.currentAction ? control.currentAction.icon.name : "application-menu"
             onClicked: 
             {
 				if(!_loader.item.visible)
@@ -68,7 +76,6 @@ Item
 			width: control.expanded ? implicitWidth : 0
 			sourceComponent: control.expanded ? _rowComponent : _menuComponent
 		}
-		
 	}
 	
 	Component
@@ -78,7 +85,7 @@ Item
 		Row
 		{
 			id: _row
-			spacing: Maui.Style.space.small
+			spacing: 0
 			height: parent.height
 			
 			clip: true
@@ -95,24 +102,57 @@ Item
 			
 			Repeater
 			{
-				model: control.actions
-				
-				ToolButton
-				{
-					ToolTip.delay: 1000
-					ToolTip.timeout: 5000
-					ToolTip.visible: hovered
-					ToolTip.text: modelData.text
-					action: modelData
-					checked: control.currentIndex === index
-					autoExclusive: control.autoExclusive
-					anchors.verticalCenter: parent.verticalCenter
-					onClicked: control.currentIndex = index		
-					display: ToolButton.IconOnly
-				}
+                id: _repeater
+                model: control.actions
+                
+                MouseArea
+                {
+                    id: _buttonMouseArea
+                    property Action action : modelData
+                    property bool checked: control.currentIndex === index
+                    property bool autoExclusive: control.autoExclusive
+                    hoverEnabled: true
+                    width: height + Maui.Style.space.medium
+                    height: parent.height
+                    
+                    onClicked: 
+                    {
+                        control.currentIndex = index	
+                        action.triggered()
+                    }
+                    
+                    ToolTip.delay: 1000
+                    ToolTip.timeout: 5000
+                    ToolTip.visible:  _buttonMouseArea.containsMouse || _buttonMouseArea.containsPress
+                    ToolTip.text: modelData.text
+                    
+                    Rectangle
+                    {
+                        anchors.fill: parent
+                        color: checked || _buttonMouseArea.containsMouse || _buttonMouseArea.containsPress ? Kirigami.Theme.highlightColor : "transparent"
+                        opacity: 0.15
+                    }
+                    
+                    Kirigami.Icon
+                    {
+                        anchors.centerIn: parent
+                        width: Maui.Style.iconSizes.medium
+                        height: width
+                        color: checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+                        source: action.icon.name
+                    }
+                    
+                    Kirigami.Separator
+                    {
+                        color: control.border.color
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        anchors.right: parent.right
+                        visible: index < _repeater.count-1
+                    }
+                }                
 			}
-		}
-		
+		}		
 	}
 	
 	Component
@@ -137,6 +177,7 @@ Item
 					onTriggered: 
 					{
                         control.currentIndex = index
+                        modelData.triggered()                        
                     }
                 }
 			}
