@@ -18,6 +18,7 @@ Rectangle
 //	Kirigami.Theme.colorSet: Kirigami.Theme.Button
 	
 	property bool autoExclusive: true	
+	property bool checkable: true
 	
 	property Action currentAction : actions[0]
 	property int currentIndex : 0	
@@ -110,7 +111,7 @@ Rectangle
                 {
                     id: _buttonMouseArea
                     property Action action : modelData
-                    property bool checked: control.autoExclusive ? control.currentIndex === index : false
+                    property bool checked: control.checkable && control.autoExclusive ? control.currentIndex === index : action.checked
                     hoverEnabled: true
                     width: height + Maui.Style.space.tiny
                     height: parent.height
@@ -118,12 +119,17 @@ Rectangle
                     onClicked: 
                     {
                         control.currentIndex = index	
+                        if(control.checkable && !control.autoExclusive)
+                        {
+                            checked = !checked
+                        }
+                        
                         action.triggered()
                     }
                     
                     ToolTip.delay: 1000
                     ToolTip.timeout: 5000
-                    ToolTip.visible:  _buttonMouseArea.containsMouse || _buttonMouseArea.containsPress
+                    ToolTip.visible:  (_buttonMouseArea.containsMouse || _buttonMouseArea.containsPress) && modelData.text
                     ToolTip.text: modelData.text
                     
                     Rectangle
@@ -138,7 +144,7 @@ Rectangle
                         anchors.centerIn: parent
                         width: Maui.Style.iconSizes.medium
                         height: width
-                        color: _buttonMouseArea.checked ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
+                        color: action.icon.color? action.icon.color : ( _buttonMouseArea.checked ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor)
                         source: action.icon.name
                     }
                     
