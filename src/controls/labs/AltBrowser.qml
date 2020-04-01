@@ -9,7 +9,7 @@ Maui.Page
 {
     id: control    
     
-    property alias currentView : viewLoader.item
+    readonly property alias currentView : viewLoader.item
     enum ViewType 
     {
         Grid,
@@ -27,12 +27,12 @@ Maui.Page
     property alias holder : _holder
    
     
-    property Maui.GridView gridView : Maui.GridView
+    readonly property Maui.GridView gridView : Maui.GridView
     {
         id: _dummyGridView
     }
     
-    property Maui.ListBrowser listView : Maui.ListBrowser
+    readonly property Maui.ListBrowser listView : Maui.ListBrowser
     {
         id: _dummyListBrowser
     }    
@@ -69,7 +69,7 @@ Maui.Page
             cellWidth: _dummyGridView.cellWidth
             itemSize: _dummyGridView.itemSize  
             margins: _dummyGridView.margins
-            topPadding: _dummyGridView.topPadding            
+            topMargin: _dummyGridView.topMargin            
         }
     }
     
@@ -88,7 +88,7 @@ Maui.Page
 //             section: _dummyListBrowser.section
             margins: _dummyListBrowser.margins
             spacing: _dummyListBrowser.spacing
-            topPadding: _dummyListBrowser.topPadding            
+            topMargin: _dummyListBrowser.topMargin            
         }
     }    
 }
