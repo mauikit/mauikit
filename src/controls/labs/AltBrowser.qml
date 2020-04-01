@@ -24,18 +24,26 @@ Maui.Page
     property var model : null
     
     property bool enableLassoSelection: false    
-    property alias holder : _holder
-   
+    property alias holder : _holder   
     
-    readonly property Maui.GridView gridView : Maui.GridView
+    readonly property alias gridView : private_.gridView
+    readonly property alias listView : private_.listView
+    
+    QtObject 
     {
-        id: _dummyGridView
+        //before loading the view we use a dummy representation of the possible views, in order to store the properties data. Once the actual view has been loaded then the exposed properties are changed from the dummy representation to the actual view loaded, this allows to preserve and use the bindings for the actual view. The dummy representations are within a private object and exposed as readonly properties to avoid those being changed externally
+        
+        id: private_
+        property Maui.GridView gridView : Maui.GridView
+        {
+            id: _dummyGridView
+        }
+        
+        property Maui.ListBrowser listView :  Maui.ListBrowser
+        {
+            id: _dummyListBrowser
+        } 
     }
-    
-    readonly property Maui.ListBrowser listView : Maui.ListBrowser
-    {
-        id: _dummyListBrowser
-    }    
        
     Loader
     {
@@ -46,6 +54,29 @@ Maui.Page
         {
             case AltBrowser.ViewType.Grid: return gridViewComponent
             case AltBrowser.ViewType.List: return listViewComponent
+        }
+        
+        onLoaded: 
+        {
+            if(control.currentView)
+            {
+                switch(control.viewType)
+                {
+                    case AltBrowser.ViewType.Grid: 
+                    {
+                        private_.gridView = control.currentView
+                        private_.listView = _dummyListBrowser
+                        
+                        break
+                    }
+                    case AltBrowser.ViewType.List: 
+                    {
+                        private_.listView = control.currentView
+                        private_.gridView = _dummyGridView                        
+                        break
+                    }
+                }                
+            }
         }
     }
     
@@ -69,7 +100,8 @@ Maui.Page
             cellWidth: _dummyGridView.cellWidth
             itemSize: _dummyGridView.itemSize  
             margins: _dummyGridView.margins
-            topMargin: _dummyGridView.topMargin            
+            topMargin: _dummyGridView.topMargin  
+            adaptContent: true
         }
     }
     

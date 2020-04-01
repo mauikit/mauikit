@@ -81,7 +81,7 @@ Item
                 asynchronous: true
                 smooth: false
                 
-                layer.enabled: true
+                layer.enabled: control.maskRadius
                 layer.effect: OpacityMask
                 {
                     maskSource: Item
@@ -91,10 +91,30 @@ Item
                         Rectangle
                         {
                             anchors.fill: parent
-                            radius: control.maskRadius
+                            radius: control.maskRadius                          
                         }
                     }
                 }
+                
+                Rectangle
+                {
+                    anchors.fill: parent
+                    border.color: Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.8)   
+                    radius: control.maskRadius
+                    opacity: 0.2
+                    color: control.hovered ? control.Kirigami.Theme.highlightColor : "transparent"
+                    
+                    Kirigami.Icon
+                    {
+                        anchors.centerIn: parent
+                        height: Math.min(22, parent.height * 0.4)
+                        width: height
+                        source: "viewimage"
+                        isMask: true
+                        color: parent.border.color
+                        opacity: 1 - img.progress
+                    }
+                }               
             }
         }
         

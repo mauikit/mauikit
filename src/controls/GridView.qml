@@ -34,7 +34,9 @@ Item
 	
 	onItemSizeChanged :
 	{
-		controlView.size_ = itemWidth
+		controlView.size_ = itemSize
+		control.itemWidth = itemSize
+		control.cellWidth = itemWidth
 		if(adaptContent)
 			control.adaptGrid()
 	}
