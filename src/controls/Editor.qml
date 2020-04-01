@@ -118,65 +118,60 @@ Maui.Page
 	
 	headBar.leftContent: [				
 	
-	ToolButton
+	Maui.ToolActions
 	{
-		icon.name: "edit-undo"
-		enabled: body.canUndo
-		onClicked: body.undo()
-		opacity: enabled ? 1 : 0.5			
-	},
-	
-	ToolButton
+        expanded: true
+        autoExclusive: false
+        checkable: false
+        
+        Action
+        {
+            icon.name: "edit-undo"
+            enabled: body.canUndo
+            onTriggered: body.undo()
+        }
+        
+        Action
+        {
+            icon.name: "edit-redo"
+            enabled: body.canRedo
+            onTriggered: body.redo()
+        }
+    },
+    
+	Maui.ToolActions
 	{
-		icon.name: "edit-redo"
-		enabled: body.canRedo
-		onClicked: body.redo()
-		opacity: enabled ? 1 : 0.5
-	},
-	
-	Row
-	{
-		id: _editingActions
 		visible: (document.isRich || body.textFormat === Text.RichText) && !body.readOnly
+		expanded: true
+		autoExclusive: false
+		checkable: false
 		
-		ToolButton
+		Action
 		{
 			icon.name: "format-text-bold"
-			focusPolicy: Qt.TabFocus
-			icon.color: checked ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
-			checkable: false
 			checked: document.bold
-			onClicked: document.bold = !document.bold
+			onTriggered: document.bold = !document.bold
 		}
 		
-		ToolButton
+		Action
 		{
 			icon.name: "format-text-italic"
-			icon.color: checked ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
-			focusPolicy: Qt.TabFocus
-			checkable: false
 			checked: document.italic
-			onClicked: document.italic = !document.italic
+			onTriggered: document.italic = !document.italic
 		}
 		
-		ToolButton
+		Action
 		{
 			icon.name: "format-text-underline"
-			icon.color: checked ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
-			focusPolicy: Qt.TabFocus
-			checkable: true
 			checked: document.underline
-			onClicked: document.underline = !document.underline
+			onTriggered: document.underline = !document.underline
 		}
 		
-		ToolButton
+		Action
 		{
 			icon.name: "format-text-uppercase"
-			icon.color: checked ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
-			focusPolicy: Qt.TabFocus
-			checkable: true
 			checked: document.uppercase
-			onClicked: document.uppercase = !document.uppercase
+			onTriggered: document.uppercase = !document.uppercase
 		}					
 	}
 	]		
