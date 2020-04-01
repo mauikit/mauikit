@@ -53,13 +53,25 @@ TabBar
     {
         spacing: 0
         
-        Row
+        Flickable
         {
-            id: _content
+            id: _flickable
             Layout.fillWidth: true
             Layout.fillHeight: true
-        }        
-        
+            
+            contentHeight: height
+            contentWidth: _content.implicitWidth
+            clip: true
+            
+            Row
+            {
+                id: _content
+               width: _flickable.width
+               height: _flickable.height
+            }        
+            
+        }
+    
         MouseArea
         {           
             visible: control.showNewTabButton
