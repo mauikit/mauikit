@@ -144,7 +144,7 @@ Rectangle
                         anchors.centerIn: parent
                         width: Maui.Style.iconSizes.medium
                         height: width
-                        color: action.icon.color? action.icon.color : ( _buttonMouseArea.checked ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor)
+                        color: action.icon.color && action.icon.color.length ? action.icon.color : ( _buttonMouseArea.checked ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor)
                         source: action.icon.name
                         enabled: action.enabled
                     }
