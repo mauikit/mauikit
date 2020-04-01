@@ -109,7 +109,7 @@ Item
                         anchors.centerIn: parent
                         height: Math.min(22, parent.height * 0.4)
                         width: height
-                        source: "viewimage"
+                        source: "folder-images"
                         isMask: true
                         color: parent.border.color
                         opacity: 1 - img.progress
