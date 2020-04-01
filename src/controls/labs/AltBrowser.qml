@@ -84,6 +84,7 @@ Maui.Page
     Maui.Holder
     {
         id: _holder
+        anchors.fill: parent
     }
     
     Component
