@@ -135,7 +135,7 @@ Rectangle
                     Rectangle
                     {
                         anchors.fill: parent
-                        color: _buttonMouseArea.checked || _buttonMouseArea.containsMouse || _buttonMouseArea.containsPress ? Kirigami.Theme.highlightColor : "transparent"
+                        color: action.enabled && (_buttonMouseArea.checked || _buttonMouseArea.containsMouse || _buttonMouseArea.containsPress) ? Kirigami.Theme.highlightColor : "transparent"
                         opacity: 0.15
                     }
                     
