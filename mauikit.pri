@@ -23,7 +23,7 @@ DEFINES += MAUIKIT_VERSION_STRING=\\\"$$VERSION\\\"
 
 
 #REPO VARIABLES
-LUV_REPO = https://github.com/milohr/luv-icon-theme
+LUV_REPO = https://github.com/Nitrux/luv-icon-theme
 OPENSSL_REPO = https://github.com/mauikit/openssl
 ATTICA_REPO = https://github.com/mauikit/attica
 KQUICKSYNTAXHIGHLIGHTER_REPO = https://github.com/mauikit/kquicksyntaxhighlighter.git

@@ -69,7 +69,7 @@
 #include "fmh.h"
 #include "utils.h"
 
-#if defined Q_OS_MACOS
+#if defined Q_OS_MACOS || defined Q_OS_WIN32
 #include <KF5/KSyntaxHighlighting/Repository>
 #include <KF5/KSyntaxHighlighting/Definition>
 #include <KF5/KSyntaxHighlighting/Theme>

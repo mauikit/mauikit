@@ -1,6 +1,6 @@
-QT *= core qml quick gui
+QT *= core quick gui
 
-android {
+android { #from the kde android docker
     exists($$PWD/KSyntaxHighlighting) {
         message("Using KSyntaxHighlighting for Android")
 
@@ -14,11 +14,16 @@ android {
     LIBS += -L$$PWD/KSyntaxHighlighting/ -lKF5SyntaxHighlighting
 
     INCLUDEPATH += $$PWD/KSyntaxHighlighting/KSyntaxHighlighting
-
     DEPENDPATH += $$PWD/KSyntaxHighlighting/KSyntaxHighlighting
-}else:win32 {
 
-}else:macos {
+}else:win32 { #from craft kde
+
+    LIBS += -L$$PWD/../../../../../../../../../CraftRoot/lib/ -lKF5SyntaxHighlighting
+
+    INCLUDEPATH += $$PWD/../../../../../../../../../CraftRoot/include
+    DEPENDPATH += $$PWD/../../../../../../../../../CraftRoot/include
+
+}else:macos { #from homebrew
 
     LIBS += -L$$PWD/../../../../../../../../../usr/local/Cellar/kf5-syntax-highlighting/5.68.0/lib/ -lKF5SyntaxHighlighting.5.68.0
 
@@ -26,4 +31,3 @@ android {
     DEPENDPATH += $$PWD/../../../../../../../../../usr/local/Cellar/kf5-syntax-highlighting/5.68.0/include
 
 }
-

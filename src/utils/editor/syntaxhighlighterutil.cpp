@@ -6,7 +6,7 @@
 #ifdef Q_OS_ANDROID
 #include "KSyntaxHighlighting/KSyntaxHighlighting/Repository"
 #include "KSyntaxHighlighting/KSyntaxHighlighting/Definition"
-#elif defined Q_OS_MACOS
+#elif defined Q_OS_MACOS || defined Q_OS_WIN32
 #include <KF5/KSyntaxHighlighting/Repository>
 #include <KF5/KSyntaxHighlighting/Definition>
 #else
