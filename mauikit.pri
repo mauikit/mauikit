@@ -98,12 +98,9 @@ linux:unix:!android {
 
         RESOURCES += $$PWD/src/maui-style/style.qrc
 
-        win32 {
-            DEFINES += ICONS_PNG
-            RESOURCES += $$PWD/src/maui-style/icons_png.qrc
-        }else {
+
             RESOURCES += $$PWD/src/maui-style/icons.qrc
-        }
+
     }
 
 contains(DEFINES, COMPONENT_TAGGING):{

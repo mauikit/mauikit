@@ -233,15 +233,12 @@ void MauiKit::initResources()
 {
 #ifdef MAUIKIT_STYLE
     Q_INIT_RESOURCE(mauikit);
-#ifdef ICONS_PNG
-    Q_INIT_RESOURCE(icons_png);
-#else
-    Q_INIT_RESOURCE(icons);
-#endif
+
+        Q_INIT_RESOURCE(icons);
     Q_INIT_RESOURCE(style);
     QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
     QIcon::setThemeName("Luv");
-    QQuickStyle::setStyle(":/style");
+//    QQuickStyle::setStyle("Universal");
 #endif
 }
 
