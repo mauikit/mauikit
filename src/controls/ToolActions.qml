@@ -41,7 +41,7 @@ Rectangle
         {
             id: _defaultButtonMouseArea
             hoverEnabled: true
-            width: height + Maui.Style.space.big
+            width: height + Maui.Style.space.tiny + Maui.Style.iconSizes.small
             height: parent.height
             
             visible: !control.expanded
