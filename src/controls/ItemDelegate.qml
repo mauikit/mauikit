@@ -103,10 +103,10 @@ Kirigami.DelegateRecycler
             {
                 if(control.draggable && mouse.source !== Qt.MouseEventSynthesizedByQt)
                 {
-                    drag.target = _delegate
-                    _delegate.grabToImage(function(result)
+                    drag.target = _mouseArea
+                    control.grabToImage(function(result)
                     {
-                        _mouseArea.Drag.imageSource = result.url
+                        control.Drag.imageSource = result.url
                     })
                 }else drag.target = null
 
@@ -135,7 +135,7 @@ Kirigami.DelegateRecycler
         //    }
 
         contentItem: Item{}
-
+        
         Item
         {
             id: _content
@@ -149,7 +149,7 @@ Kirigami.DelegateRecycler
                 margins: _delegate.padding
             }
         }
-
+        
         background: Rectangle
         {
             anchors

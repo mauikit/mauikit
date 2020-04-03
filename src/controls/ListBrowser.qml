@@ -63,6 +63,7 @@ Kirigami.ScrollablePage
     signal keyPress(var event)
     
     spacing: Maui.Style.space.tiny
+    
     focus: true	
     padding: 0
     leftPadding: padding

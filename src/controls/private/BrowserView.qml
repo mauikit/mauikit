@@ -125,8 +125,7 @@ Maui.Page
             onTriggered:
             {
                 const urls = _dropMenu.urls.split(",")
-                for(var i in urls)
-                    Maui.FM.copy(urls[i], _dropMenu.target, false)
+                Maui.FM.copy(urls, _dropMenu.target, false)
             }
         }
         
@@ -136,8 +135,7 @@ Maui.Page
             onTriggered:
             {
                 const urls = _dropMenu.urls.split(",")
-                for(var i in urls)
-                    Maui.FM.cut(urls[i], _dropMenu.target)
+                Maui.FM.cut(urls, _dropMenu.target)
             }
         }
         
@@ -194,6 +192,7 @@ Maui.Page
             showPreviewThumbnails: settings.showThumbnails
             checkable: selectionMode
             enableLassoSelection: true
+            spacing: Kirigami.Settings.isMobile ? Maui.Style.space.small : Maui.Style.space.medium
             
             BrowserHolder
             {
@@ -233,7 +232,7 @@ Maui.Page
             {
                 id: delegate
                 width: parent.width
-                height: _listViewBrowser.itemSize + Maui.Style.space.big
+                height: _listViewBrowser.itemSize + (Maui.Style.space.medium * 1.4 )
                 
                 padding: 0
                 leftPadding: Maui.Style.space.small
