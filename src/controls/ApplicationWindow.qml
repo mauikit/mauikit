@@ -113,17 +113,18 @@ Window
         Kirigami.Theme.colorSet: Kirigami.Theme.Window
 
         headBar.leftContent: [
-//		Loader
-//		{
-//			id: _leftControlsLoader
-//			active: Maui.App.enableCSD && Maui.App.leftWindowControls.length
-//			Layout.preferredWidth: active ? implicitWidth : 0
-//			Layout.fillHeight: true
-//			sourceComponent: MauiLab.WindowControls
-//			{
-//				order: Maui.App.leftWindowControls
-//			}
-//		},
+		Loader
+		{
+			id: _leftControlsLoader
+			visible: active
+			active: Maui.App.enableCSD && Maui.App.leftWindowControls.length
+			Layout.preferredWidth: active ? implicitWidth : 0
+			Layout.fillHeight: true
+			sourceComponent: MauiLab.WindowControls
+			{
+				order: Maui.App.leftWindowControls
+			}
+		},
 
         ToolButton
         {
@@ -164,17 +165,18 @@ Window
         }
         ]
 
-//		headBar.rightContent: Loader
-//		{
-//			id: _rightControlsLoader
-//			active: Maui.App.enableCSD && Maui.App.rightWindowControls.length
-//			Layout.preferredWidth: active ? implicitWidth : 0
-//			Layout.fillHeight: true
-//			sourceComponent: MauiLab.WindowControls
-//			{
-//				order:  Maui.App.rightWindowControls
-//			}
-//		}
+		headBar.rightContent: Loader
+		{
+			id: _rightControlsLoader
+			visible: active
+			active: Maui.App.enableCSD && Maui.App.rightWindowControls.length
+			Layout.preferredWidth: active ? implicitWidth : 0
+			Layout.fillHeight: true
+			sourceComponent: MauiLab.WindowControls
+			{
+				order:  Maui.App.rightWindowControls
+			}
+		}
 
         Item
         {
