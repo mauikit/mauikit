@@ -198,7 +198,7 @@ Maui.Popup
                 onAccepted: control.accepted()
             }
         }
-        
+       /* 
         layer.enabled: control.background.radius
         layer.samples: 4
         layer.effect: OpacityMask
@@ -216,6 +216,6 @@ Maui.Popup
                     radius: control.background.radius
                 }
             }
-        }
+        }*/
     }
 }

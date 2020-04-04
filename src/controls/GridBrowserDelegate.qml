@@ -29,8 +29,6 @@ Maui.ItemDelegate
 {
     id: control
 
-    property int folderSize : Maui.Style.iconSizes.big
-
     property bool showThumbnails : false
 
     property string tooltipText  
@@ -39,7 +37,10 @@ Maui.ItemDelegate
 
     property alias iconItem : _template.iconItem
     property alias iconVisible : _template.iconVisible
+    
     property alias iconSizeHint : _template.iconSizeHint
+    property alias imageSizeHint : _template.imageSizeHint
+    
     property alias imageSource : _template.imageSource
     property alias iconSource : _template.iconSource
     property alias checkable : _template.checkable
@@ -84,7 +85,6 @@ Maui.ItemDelegate
     {
         id: _template
         anchors.fill: parent
-        iconSizeHint: control.folderSize
         iconSource: model.icon
         hovered: control.hovered || control.containsPress
         imageSource : model.mime ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails && model.thumbnail && model.thumbnail.length? model.thumbnail : "") : ""

@@ -149,6 +149,14 @@ Maui.Page
 					Maui.FM.createSymlink(url[i], _dropMenu.target)
             }
         }
+        
+        MenuSeparator {}
+        
+        MenuItem
+        {
+            text: qsTr("Cancel")
+            onTriggered: _dropMenu.close()
+        }
 	}    
 	
 	Loader
@@ -232,13 +240,15 @@ Maui.Page
             {
                 id: delegate
                 width: parent.width
-                height: _listViewBrowser.itemSize + (Maui.Style.space.medium * 1.4 )
+                height: implicitHeight
                 
                 padding: 0
                 leftPadding: Maui.Style.space.small
                 rightPadding: leftPadding
                 
-                folderSize : _listViewBrowser.itemSize
+                iconSizeHint : Maui.Style.iconSizes.medium
+                imageSizeHint : height * 0.7
+                
                 tooltipText: model.path
                 
                 checkable: _listViewBrowser.checkable
@@ -381,7 +391,7 @@ Maui.Page
                 {
                     id: delegate
                     
-                    folderSize: height * 0.5
+                    iconSizeHint: height * 0.5
                     
                     anchors.centerIn: parent
                     height: _gridViewBrowser.cellHeight - 5
@@ -689,13 +699,15 @@ Maui.Page
                         {
                             id: delegate
                             width: parent.width
-                            height: _millerListView.itemSize + Maui.Style.space.big
+                            height: implicitHeight
                             padding: 0                            
                             leftPadding: Maui.Style.space.small
                             rightPadding: leftPadding
                             
                             tooltipText: model.path
-                            folderSize : _millerListView.itemSize
+                            
+                            iconSizeHint : Maui.Style.iconSizes.medium
+                            imageSizeHint : height * 0.7
                             
                             checkable: _millerListView.checkable
                             showThumbnails: _millerListView.showPreviewThumbnails

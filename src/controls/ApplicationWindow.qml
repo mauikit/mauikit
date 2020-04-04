@@ -110,8 +110,8 @@ Window
     {
         id: _page
         anchors.fill: parent
-        Kirigami.Theme.colorSet: Kirigami.Theme.Window
-
+        Kirigami.Theme.colorSet: Kirigami.Theme.View
+        
         headBar.leftContent: [
 		Loader
 		{

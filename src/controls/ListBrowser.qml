@@ -109,11 +109,10 @@ Kirigami.ScrollablePage
         {
             id: delegate
             width: parent.width
-            height: control.itemSize + Maui.Style.space.big
             leftPadding: Maui.Style.space.small
             rightPadding: Maui.Style.space.small
             padding: 0
-            folderSize : control.itemSize
+            iconSizeHint : height
             checkable: control.checkable
             showThumbnails: control.showPreviewThumbnails
             

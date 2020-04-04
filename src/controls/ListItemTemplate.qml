@@ -46,7 +46,13 @@ Item
     property alias label4 : _label4
     property alias iconItem : _iconLoader.item
     property alias iconVisible : _iconContainer.visible
+    
     property int iconSizeHint : Maui.Style.iconSizes.big
+    property int imageSizeHint : Maui.Style.iconSizes.big
+    
+    property int imageWidth : imageSizeHint
+    property int imageHeight : imageSizeHint
+    
     property string imageSource
     property string iconSource    
     
@@ -57,6 +63,9 @@ Item
     property bool labelsVisible: true
     property bool hovered : false
     
+    property int fillMode : Image.PreserveAspectCrop
+    property int maskRadius: Maui.Style.radiusV
+        
     signal toggled(bool state)
     
     Component
@@ -68,18 +77,18 @@ Item
             id: img
             anchors.centerIn: parent
             source: control.imageSource
-            height: Math.min(parent.height, control.iconSizeHint)
+            height: Math.min(parent.height, control.imageSizeHint)
             width: height
-            sourceSize.width: width
-            sourceSize.height: height
+            sourceSize.width:control.imageWidth
+            sourceSize.height: control.imageHeight
             horizontalAlignment: Qt.AlignHCenter
             verticalAlignment: Qt.AlignVCenter
-            fillMode: Image.PreserveAspectCrop
+            fillMode: control.fillMode
             cache: true
             asynchronous: true
-            smooth: !Kirigami.Settings.isMobile
+            smooth: false
 
-            layer.enabled: true
+            layer.enabled: control.maskRadius
             layer.effect: OpacityMask
             {
                 maskSource: Item
@@ -88,13 +97,31 @@ Item
                     height: img.height
                     Rectangle
                     {
-                        anchors.centerIn: parent
-                        width: img.width
-                        height: img.height
-                        radius: Maui.Style.radiusV
+                        anchors.fill: parent
+                        radius: control.maskRadius                          
                     }
                 }
             }
+            
+            Rectangle
+            {
+                anchors.fill: parent
+                border.color: Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.8)   
+                radius: control.maskRadius
+                opacity: 0.2
+                color: control.hovered ? control.Kirigami.Theme.highlightColor : "transparent"
+                
+                Kirigami.Icon
+                {
+                    anchors.centerIn: parent
+                    height: Math.min(22, parent.height * 0.7)
+                    width: height
+                    source: "folder-images"
+                    isMask: true
+                    color: parent.border.color
+                    opacity: 1 - img.progress
+                }
+            } 
         }
     }
 
@@ -182,15 +209,15 @@ Item
         {
             id: _iconContainer
             visible: (control.width > Kirigami.Units.gridUnit * 10)
-            Layout.preferredWidth: control.labelsVisible && control.iconVisible && (iconSource.length > 0 || imageSource.length > 0) ? Math.max(control.height, control.iconSizeHint) : 0
+            Layout.preferredWidth: control.labelsVisible && control.iconVisible && (iconSource.length > 0 || imageSource.length > 0) ? Math.max(control.height, control.imageSource ? control.imageSizeHint : control.iconSizeHint) : 0
             Layout.fillHeight: true
             Layout.fillWidth: !control.labelsVisible
 
             Loader
             {
                 id: _iconLoader
-                height: control.iconSizeHint
-                width: control.iconSizeHint
+                height: width
+                width: parent.width
                 anchors.centerIn: parent
                 sourceComponent: _iconContainer.visible ? (control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : null) ): null
             }
@@ -256,7 +283,7 @@ Item
                 font.weight: Font.Light
                 wrapMode: Text.NoWrap
                 elide: Text.ElideMiddle
-                color: control.Kirigami.Theme.textColor
+                color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
                 opacity: control.isCurrentItem ? 0.8 : 0.6
             }
 
@@ -272,7 +299,7 @@ Item
                 font.weight: Font.Light
                 wrapMode: Text.NoWrap
                 elide: Text.ElideMiddle
-                color: control.Kirigami.Theme.textColor
+                color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
                 opacity: control.isCurrentItem ? 0.8 : 0.6
             }
         }

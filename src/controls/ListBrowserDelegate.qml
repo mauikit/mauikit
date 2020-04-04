@@ -29,6 +29,7 @@ Maui.ItemDelegate
 {
     id: control 
     
+    implicitHeight: Maui.Style.rowHeight + (Maui.Style.space.medium * 1.5)
     isCurrentItem : ListView.isCurrentItem || checked	
     
     signal contentDropped(var drop)	
@@ -39,7 +40,6 @@ Maui.ItemDelegate
 	ToolTip.visible: control.hovered && control.tooltipText
 	ToolTip.text: control.tooltipText
     
-    property int folderSize : Maui.Style.iconSizes.medium
     property bool showThumbnails : false    
     property string tooltipText  
         
@@ -50,6 +50,7 @@ Maui.ItemDelegate
     property alias iconItem : _template.iconItem
     property alias iconVisible : _template.iconVisible
     property alias iconSizeHint : _template.iconSizeHint
+    property alias imageSizeHint : _template.imageSizeHint
     property alias imageSource : _template.imageSource
     property alias iconSource : _template.iconSource
     property alias checkable : _template.checkable
@@ -83,7 +84,6 @@ Maui.ItemDelegate
         
         isCurrentItem : control.isCurrentItem
         hovered: control.hovered
-        iconSizeHint: control.folderSize
         
         imageSource: model.mime &&  model.thumbnail ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails ? model.thumbnail : "") : ""	
         iconSource: model.icon

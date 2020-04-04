@@ -79,8 +79,8 @@ T.Popup
             horizontalOffset: 0
             verticalOffset: 0
             color: Qt.rgba(0, 0, 0, 0.3)
-        }
-    }
+        }        
+    }    
     
     T.Overlay.modal: Rectangle 
     {

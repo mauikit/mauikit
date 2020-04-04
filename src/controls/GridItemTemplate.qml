@@ -41,7 +41,10 @@ Item
         
         property alias iconItem : _iconLoader.item
         property alias iconVisible : _iconContainer.visible
+        
         property int iconSizeHint : Maui.Style.iconSizes.big
+        property int imageSizeHint : iconSizeHint
+        
         property int imageWidth : iconSizeHint
         property int imageHeight : iconSizeHint
         
@@ -153,8 +156,8 @@ Item
                 id: _iconContainer
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.maximumHeight: control.iconSizeHint
-                Layout.minimumHeight: control.iconSizeHint  
+                Layout.maximumHeight: control.imageSource ? control.imageSizeHint : control.iconSizeHint
+                Layout.minimumHeight: control.imageSource ? control.imageSizeHint : control.iconSizeHint 
                 
                 Loader
                 {

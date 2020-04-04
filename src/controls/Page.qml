@@ -153,13 +153,15 @@ Page
     
     property alias headBar : _headBar
     property alias footBar: _footBar
-    property Maui.ToolBar mheadBar : Maui.ToolBar
+    readonly property Maui.ToolBar mheadBar : Maui.ToolBar
     {
         id: _headBar
         visible: count > 1
         width: visible ? control.width : 0
         height: visible ? implicitHeight : 0
         position: ToolBar.Header
+        Kirigami.Theme.inherit: false
+        Kirigami.Theme.colorSet: Kirigami.Theme.Window        
         
         Behavior on height
         {
@@ -197,7 +199,7 @@ Page
         
         background: Rectangle
         {
-			color: control.Kirigami.Theme.backgroundColor
+            color: _headBar.Kirigami.Theme.backgroundColor
 			
 			Kirigami.Separator
 			{

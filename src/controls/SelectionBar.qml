@@ -230,7 +230,7 @@ Item
                     isCurrentItem: ListView.isCurrentItem
                     height: selectionList.height * 0.95
                     width: height + Maui.Style.space.medium
-                    folderSize: Maui.Style.iconSizes.big
+                    iconSizeHint: Maui.Style.iconSizes.big
                     showLabel: true
                     checkable: true
                     checked: true

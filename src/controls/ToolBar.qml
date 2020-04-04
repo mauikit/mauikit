@@ -59,7 +59,7 @@ ToolBar
     property bool leftSretch: strech
     property bool rightSretch: strech
     property bool middleStrech: strech
-
+    
     //    leftPadding: Kirigami.Units.smallSpacing*2
     //    rightPadding: Kirigami.Units.smallSpacing*2
 
@@ -267,7 +267,7 @@ ToolBar
                 Layout.leftMargin: rightRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.leftSretch ? rightRowContent.implicitWidth : 0
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
                 spacing: visibleChildren.length > 1 ? control.spacing : 0
-                Layout.minimumWidth: !sticky ? implicitWidth : implicitWidth
+                Layout.minimumWidth: implicitWidth
                 Layout.fillWidth: control.leftSretch && implicitWidth
                 Layout.fillHeight: true
             }
@@ -279,7 +279,7 @@ ToolBar
                 // 					visible: control.middleStrech && implicitWidth
                 Layout.alignment: Qt.AlignCenter
                 spacing: visibleChildren.length > 1 ? control.spacing : 0
-                Layout.minimumWidth: !sticky ? implicitWidth : implicitWidth
+                Layout.minimumWidth: implicitWidth
 
                 //                             Layout.maximumWidth: control.width - leftRowContent.implicitWidth - rightRowContent.implicitWidth
                 Layout.fillWidth: control.middleStrech
@@ -294,7 +294,7 @@ ToolBar
                 Layout.rightMargin: leftRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.rightSretch ? leftRowContent.implicitWidth : 0
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                 spacing: visibleChildren.length > 1 ? control.spacing : 0
-                Layout.minimumWidth: !sticky ? implicitWidth : implicitWidth
+                Layout.minimumWidth: implicitWidth
                 // 					Layout.maximumWidth: !sticky ? rightRowContent.width : implicitWidth
                 Layout.fillWidth: control.rightSretch && implicitWidth
                 Layout.fillHeight: true

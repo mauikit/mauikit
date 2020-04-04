@@ -287,17 +287,24 @@ Maui.Dialog
 					]
 					
 					headBar.leftContent: [
-					ToolButton
+					Maui.ToolActions
 					{
-						icon.name: "go-previous"
-						onClicked: browser.goBack()
-					},
-					
-					ToolButton
-					{
-						icon.name: "go-next"
-						onClicked: browser.goNext()
-					},
+                        expanded: true
+                        autoExclusive: false
+                        checkable: false
+                        
+                        Action
+                        {
+                            icon.name: "go-previous"
+                            onTriggered : browser.goBack()
+                        }
+                        
+                        Action
+                        {
+                            icon.name: "go-next"
+                            onTriggered: browser.goNext()
+                        }
+                    },                    
 					
 					Maui.ToolActions
 					{

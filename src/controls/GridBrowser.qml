@@ -49,7 +49,7 @@ Maui.GridView
 		{
 			id: delegate
 			
-			folderSize: height * 0.5
+			iconSizeHint: height * 0.5
 			
 			anchors.centerIn: parent
 			height: control.cellHeight - 5
