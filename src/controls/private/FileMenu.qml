@@ -33,7 +33,7 @@ Menu
         {			
             addToSelection(currentFMList.get(index))
             if(Maui.Handy.isTouch)
-                settings.selectionMode = true
+                selectionMode = true
         }
     }
        
