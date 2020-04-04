@@ -247,7 +247,7 @@ Maui.Page
                 rightPadding: leftPadding
                 
                 iconSizeHint : Maui.Style.iconSizes.medium
-                imageSizeHint : height * 0.7
+                imageSizeHint : height * 0.8
                 
                 tooltipText: model.path
                 
@@ -707,7 +707,7 @@ Maui.Page
                             tooltipText: model.path
                             
                             iconSizeHint : Maui.Style.iconSizes.medium
-                            imageSizeHint : height * 0.7
+                            imageSizeHint : height * 0.8
                             
                             checkable: _millerListView.checkable
                             showThumbnails: _millerListView.showPreviewThumbnails
