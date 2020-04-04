@@ -174,7 +174,7 @@ Rectangle
                     {
                         id: delegate
 //                         borderColor: ListView.isCurrentItem ?  control.Kirigami.Theme.highlightColor :  control.border.color
-                        color: ListView.isCurrentItem || hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
+                        color: ListView.isCurrentItem || hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.15) : "transparent"
 //                         smooth: true
 //                         arrowWidth: _listView.pathArrowWidth
                         height: parent.height

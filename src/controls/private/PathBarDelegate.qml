@@ -10,6 +10,7 @@ Rectangle
     implicitWidth: _label.implicitWidth + Maui.Style.space.big 
     
     readonly property bool hovered: _mouseArea.containsMouse
+    property bool checked :  ListView.isCurrentItem
     
     ToolTip.delay: 1000
     ToolTip.timeout: 5000
@@ -51,6 +52,6 @@ Rectangle
         elide: Qt.ElideRight
         wrapMode: Text.NoWrap
         font.pointSize: Maui.Style.fontSizes.default
-        color: Kirigami.Theme.textColor
+        color: control.checked ?Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
     }
 }

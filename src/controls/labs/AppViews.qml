@@ -21,21 +21,21 @@ import QtQuick 2.10
 import QtQuick.Controls 2.10
 import org.kde.mauikit 1.0 as Maui
 import org.kde.mauikit 1.1 as MauiLab
-import "../private"
+import "../private" as Private
 
 SwipeView
 {
 	id: control
 	interactive: Maui.Handy.isTouch
-	clip: true
-    focus: true
-
+// 	clip: true
+//     focus: true
+    
 	property int maxViews : 4
 	property Maui.ToolBar toolbar : window().headBar
 	
 	readonly property int index : -1
 	
-	readonly property QtObject actionGroup : ActionGroup
+	readonly property QtObject actionGroup : Private.ActionGroup
 	{
 		id: _actionGroup	
 		currentIndex : control.currentIndex

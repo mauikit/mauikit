@@ -25,6 +25,7 @@
         <file alias="private/DocumentPreview.qml">controls/private/DocumentPreview.qml</file>
         <file alias="private/DefaultPreview.qml">controls/private/DefaultPreview.qml</file>
         <file alias="private/AccountsHelper.qml">controls/private/AccountsHelper.qml</file>
+        <file alias="private/BasicToolButton.qml">controls/private/BasicToolButton.qml</file>
         <file alias="Holder.qml">controls/Holder.qml</file>
         <file alias="ListDelegate.qml">controls/ListDelegate.qml</file>
         <file alias="ItemDelegate.qml">controls/ItemDelegate.qml</file>

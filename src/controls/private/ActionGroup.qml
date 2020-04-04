@@ -1,5 +1,5 @@
 /*
- *   Copyright 2018 Camilo Higuita <milo.h@aol.com>
+ *   Copyright 2018-2020 Camilo Higuita <milo.h@aol.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -23,11 +23,12 @@ import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import org.kde.mauikit 1.1 as MauiLab
+import "."
 
 Item
 {
     id: control
-    
+    Layout.fillHeight: true
     default property list<QtObject> items
     property list<QtObject> hiddenItems
     
@@ -39,44 +40,24 @@ Item
     signal pressAndHold(int index)
     signal doubleClicked(int index)	
     
-    property Component delegate : ToolButton
+    property Component delegate : BasicToolButton 
     {
-        id: _delegate
+         Layout.alignment: Qt.AlignVCenter
+    Layout.fillWidth: control.strech
+    Layout.preferredHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
+    
         visible: modelData.visible
-        Layout.alignment: Qt.AlignVCenter
-        Layout.fillWidth: control.strech
-        icon.name: modelData.MauiLab.AppView.iconName
-        text: modelData.MauiLab.AppView.title
-        icon.width: Maui.Style.iconSizes.medium
-        icon.height: Maui.Style.iconSizes.medium
-        autoExclusive: true
-        checkable: true
-        checked: index == control.currentIndex
-        display: control.currentIndex === index ? ToolButton.TextBesideIcon : ToolButton.IconOnly
+        checked:  index == control.currentIndex
         Kirigami.Theme.backgroundColor: modelData.Kirigami.Theme.backgroundColor
-        Kirigami.Theme.highlightColor: modelData.Kirigami.Theme.highlightColor		
+        Kirigami.Theme.highlightColor: modelData.Kirigami.Theme.highlightColor
+        iconName: modelData.MauiLab.AppView.iconName
+        text: modelData.MauiLab.AppView.title 
         
-        Behavior on implicitWidth
-        {		
-            NumberAnimation
-            {
-                duration: Kirigami.Units.shortDuration
-                easing.type: Easing.InOutQuad
-            }
-        }
-        
-        onClicked: 
-        {
-            control.currentIndex = index
-            control.clicked(index)
-        }
-        onPressAndHold: control.pressAndHold(index)
-        onDoubleClicked: control.doubleClicked(index)
-		
-		ToolTip.delay: 1000
-		ToolTip.timeout: 5000
-		ToolTip.visible: _delegate.hovered
-		ToolTip.text: text
+            onClicked: 
+    {
+        control.currentIndex = index
+        control.clicked(index)
+    }
     }
     
     implicitHeight: parent.height
@@ -106,34 +87,29 @@ Item
             delegate: control.delegate		
         }
         
-        ToolButton
-        {
-            id: _exposedHiddenActionButton
-            visible: obj
-            Layout.fillWidth: control.strech
-            
+        BasicToolButton 
+        {            
             readonly property QtObject obj : control.currentIndex >= control.items.length && control.currentIndex < control.count? control.hiddenItems[control.currentIndex - control.items.length] : null
             
-            icon.name: obj ? obj.MauiLab.AppView.iconName : ""
-            text: obj ? obj.MauiLab.AppView.title : ""
+            visible: obj
+            Layout.fillWidth: control.strech
+            Layout.preferredWidth: visible ? implicitWidth : 0
             
-            checkable: true
             checked: true
-            Layout.alignment: Qt.AlignVCenter
-            icon.width: Maui.Style.iconSizes.medium
-            icon.height: Maui.Style.iconSizes.medium
-            display: ToolButton.TextBesideIcon
-            width: visible ? implicitWidth : 0
-            Behavior on width
+            iconName: obj ? obj.MauiLab.AppView.iconName : ""
+            text: obj ? obj.MauiLab.AppView.title : ""            
+            
+            Kirigami.Theme.backgroundColor: obj ? obj.Kirigami.Theme.backgroundColor : undefined
+            Kirigami.Theme.highlightColor: obj ? obj.Kirigami.Theme.highlightColor: undefined
+            
+            onClicked: 
             {
-                NumberAnimation
-                {
-                    duration: Kirigami.Units.longDuration
-                    easing.type: Easing.InOutQuad
-                }
+                control.currentIndex = index
+                control.clicked(index)
             }
-        }		
-        
+            
+        }        
+       
         Maui.ToolButtonMenu
         {
             id: _menuButton

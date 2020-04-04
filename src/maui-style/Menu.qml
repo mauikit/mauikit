@@ -101,13 +101,16 @@ T.Menu {
         }
     }
 
-//    T.Overlay.modal: Rectangle {
-//        color: "#333"
-//        Behavior on opacity { NumberAnimation { duration: 150 } }
-//    }
+    T.Overlay.modal: Rectangle 
+    {
+        color: Qt.rgba( control.Kirigami.Theme.backgroundColor.r,  control.Kirigami.Theme.backgroundColor.g,  control.Kirigami.Theme.backgroundColor.b, 0.4)
 
-//    T.Overlay.modeless: Rectangle {
-//        color: "#333"
-//        Behavior on opacity { NumberAnimation { duration: 150 } }
-//    }
+        Behavior on opacity { NumberAnimation { duration: 150 } }
+    }
+
+    T.Overlay.modeless: Rectangle
+    {
+        color: Qt.rgba( control.Kirigami.Theme.backgroundColor.r,  control.Kirigami.Theme.backgroundColor.g,  control.Kirigami.Theme.backgroundColor.b, 0.4)
+        Behavior on opacity { NumberAnimation { duration: 150 } }
+    }
 }

@@ -24,8 +24,6 @@ import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
-import "private"
-
 Item
 {
 	id: control
@@ -44,9 +42,6 @@ Item
 	property bool enabled: true
 	
 	signal actionTriggered()
-	
-	clip: true
-	focus: true
 	
 	Component
 	{
