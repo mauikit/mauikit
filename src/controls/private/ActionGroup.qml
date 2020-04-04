@@ -32,7 +32,7 @@ Item
     default property list<QtObject> items
     property list<QtObject> hiddenItems
     
-    property int currentIndex : 0
+     property int currentIndex : 0
     property bool strech: false
     readonly property int count : control.items.length + control.hiddenItems.length
     
@@ -108,7 +108,35 @@ Item
                 control.clicked(index)
             }
             
-        }        
+        }  
+        
+        /*Repeater
+        {
+            
+            model: control.hiddenItems
+            delegate: BasicToolButton 
+            {
+                
+                Layout.alignment: Qt.AlignVCenter
+                Layout.fillWidth: control.strech
+                Layout.preferredHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
+                
+                visible: modelData.visible && _menuButton.checked
+                
+                Kirigami.Theme.backgroundColor: modelData.Kirigami.Theme.backgroundColor
+                Kirigami.Theme.highlightColor: modelData.Kirigami.Theme.highlightColor
+                iconName: modelData.MauiLab.AppView.iconName
+                text: modelData.MauiLab.AppView.title 
+                
+                checked: control.currentIndex === control.items.length + index
+                
+                onClicked:
+                {
+                    control.currentIndex = control.items.length + index
+                    control.clicked(control.currentIndex)
+                }
+            }	
+        }  */ 
        
         Maui.ToolButtonMenu
         {

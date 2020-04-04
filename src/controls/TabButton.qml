@@ -50,6 +50,7 @@ TabButton
             anchors.fill: parent
             spacing: Maui.Style.space.small
             anchors.margins: Maui.Style.space.small
+            opacity: control.hovered || control.checked ? 1 : 0.7
             
             Label
             {

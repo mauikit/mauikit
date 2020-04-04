@@ -129,6 +129,7 @@ Item
                 fallback: "application-x-zerosize"
                 height: Math.min(parent.height, control.iconSizeHint)
                 width: height
+                color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
                 
                 ColorOverlay
                 {
@@ -283,8 +284,7 @@ Item
                     anchors.centerIn: parent
                     elide: Qt.ElideRight
                     wrapMode: Text.Wrap
-                    color: control.Kirigami.Theme.textColor                        
-                }
+                    color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor                }
                 
             }
         }

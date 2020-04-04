@@ -109,7 +109,7 @@ Item
             fallback: "qrc:/assets/application-x-zerosize.svg"
             height: Math.min(parent.height, control.iconSizeHint)
             width: height
-            color: control.Kirigami.Theme.textColor
+            color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
             
             ColorOverlay
             {
@@ -215,7 +215,7 @@ Item
 
                 elide: Text.ElideMiddle
                 wrapMode: Text.NoWrap
-                color: control.Kirigami.Theme.textColor
+                color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
                 font.weight: Font.Normal
                 font.pointSize: Maui.Style.fontSizes.default
             }
@@ -231,7 +231,7 @@ Item
                 wrapMode: Text.Wrap
                 verticalAlignment: _label1.visible ? Qt.AlignTop : Qt.AlignVCenter
                 elide: Text.ElideRight
-                color: control.Kirigami.Theme.textColor
+                color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
                 opacity: control.isCurrentItem ? 0.8 : 0.6
             }
         }

@@ -27,7 +27,6 @@ import "private"
 Maui.ToolBar
 {
     id: control
-
     property alias listView : tagsList
     property alias count : tagsList.count
     property bool editMode : false

@@ -385,7 +385,6 @@ Maui.Dialog
 				MauiLab.SelectionBar
 				{
 					id: _selectionBar
-					Layout.preferredHeight: 48
 					Layout.alignment: Qt.AlignCenter
 					onExitClicked: 
 					{

@@ -200,6 +200,7 @@ Maui.Popup
         }
         
         layer.enabled: control.background.radius
+        layer.samples: 4
         layer.effect: OpacityMask
         {
             maskSource: Item

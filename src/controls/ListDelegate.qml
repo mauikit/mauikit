@@ -55,6 +55,8 @@ Maui.ItemDelegate
 		anchors.fill: parent
 		iconVisible: true
 		labelsVisible: control.labelVisible
+		hovered: control.hovered
+		isCurrentItem: control.isCurrentItem
 		
 		Maui.Badge
 		{

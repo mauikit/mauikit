@@ -17,20 +17,15 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.2
-import QtQuick.Controls.Material 2.1
+import QtQuick 2.13
+import QtQuick.Controls 2.13
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
-import QtGraphicalEffects 1.0
-import "private"
 
 Popup
 {
     id: control
     
-    // 	property alias backgroudItem: popupBackground.data
     property int maxWidth : parent.width
     property int maxHeight : parent.height
     property double hint : 0.9
@@ -60,8 +55,8 @@ Popup
                 focus: true
                 clip: true
                 
-                margins: Maui.Style.unit 
-                padding: Maui.Style.unit 
+                margins: 1
+                padding: 1 
                 
                 //     topPadding: popupBackground.radius
                 //     bottomPadding: popupBackground.radius
