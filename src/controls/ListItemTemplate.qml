@@ -216,8 +216,8 @@ Item
             Loader
             {
                 id: _iconLoader
+                width: parent.width                
                 height: width
-                width: parent.width
                 anchors.centerIn: parent
                 sourceComponent: _iconContainer.visible ? (control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : null) ): null
             }
