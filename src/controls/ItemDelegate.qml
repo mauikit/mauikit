@@ -152,6 +152,7 @@ Kirigami.DelegateRecycler
         
         background: Rectangle
         {
+            opacity: 0.5
             anchors
             {
                 fill: parent
@@ -174,8 +175,6 @@ Kirigami.DelegateRecycler
             radius: control.radius
             border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"
         }
-
     }
-
 }
 
