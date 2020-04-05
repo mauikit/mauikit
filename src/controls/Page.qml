@@ -161,7 +161,7 @@ Page
         height: visible ? implicitHeight : 0
         position: ToolBar.Header
         Kirigami.Theme.inherit: false
-        Kirigami.Theme.colorSet: Kirigami.Theme.Window        
+        Kirigami.Theme.colorSet: Kirigami.Theme.Window
         
         Behavior on height
         {

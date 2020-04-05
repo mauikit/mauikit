@@ -79,7 +79,6 @@ Item
         width: control.strech ? parent.width : undefined
         // 		width: Math.min(implicitWidth, parent.width)
         spacing: Maui.Style.space.medium	
-        clip: true
         
         Repeater
         {
@@ -94,7 +93,6 @@ Item
             visible: obj
             Layout.fillWidth: control.strech
             Layout.preferredWidth: visible ? implicitWidth : 0
-            
             checked: true
             iconName: obj ? obj.MauiLab.AppView.iconName : ""
             text: obj ? obj.MauiLab.AppView.title : ""            
@@ -107,7 +105,6 @@ Item
                 control.currentIndex = index
                 control.clicked(index)
             }
-            
         }  
         
         /*Repeater

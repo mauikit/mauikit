@@ -63,9 +63,9 @@ MouseArea
     {
         id: _layoutButton
         anchors.centerIn: parent
-        clip: true
+        height: parent.height
         spacing: _delegate.checked ? Maui.Style.space.tiny : 0  
-        
+
         Item
         {
             Layout.preferredWidth: Maui.Style.iconSizes.medium
@@ -76,7 +76,7 @@ MouseArea
                 id: _icon 
                 anchors.centerIn: parent
                 width: Maui.Style.iconSizes.medium
-                height: Maui.Style.iconSizes.medium
+                height: width
                 color: checked || _delegate.containsMouse || _delegate.containsPress ? _delegate.Kirigami.Theme.highlightColor : _delegate.Kirigami.Theme.textColor
                 
             }                

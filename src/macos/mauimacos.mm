@@ -14,7 +14,7 @@ void MAUIMacOS::removeTitlebarFromWindow(long winId)
  NSView *nativeView = reinterpret_cast<NSView *>(winId);
  NSWindow* nativeWindow = [nativeView window];
 
- [nativeWindow setStyleMask:[nativeWindow styleMask] | NSFullSizeContentViewWindowMask | NSWindowTitleHidden];
+ [nativeWindow setStyleMask:[nativeWindow styleMask] | NSFullSizeContentViewWindowMask | NSWindowTitleHidden ];
  [nativeWindow setTitlebarAppearsTransparent:YES];
  [nativeWindow setMovableByWindowBackground:YES];
 }
