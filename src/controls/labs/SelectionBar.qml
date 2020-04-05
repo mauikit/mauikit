@@ -27,24 +27,33 @@ import QtGraphicalEffects 1.0
 Item
 {
     id: control
-    focus: true
+    
+    implicitHeight: Maui.Style.toolBarHeight    
+    implicitWidth: _layout.implicitWidth + Maui.Style.space.big + (height * 2)
+    
+    visible: control.count > 0    
+    focus: true    
+    
+    Kirigami.Theme.inherit: false
+    Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
+    
     default property list<Action> actions 
     property list<Action> hiddenActions
     
     property int display : ToolButton.IconOnly
+    property int maxListHeight : 400
+    property int radius: Maui.Style.radiusV
+    /**
+     * if singleSelection is set to true then only a single item is selected
+     * at time, and replaced with a newe item appended
+     **/
+    property bool singleSelection: false
     
-    Kirigami.Theme.inherit: false
-    Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
-    readonly property int barHeight : Maui.Style.toolBarHeight
-
     readonly property alias uris: _private._uris
     readonly property alias items: _private._items
 
-    property alias selectionList : selectionList
-    property alias count : selectionList.count
-    
-    property int maxListHeight : 400
-    property int radius: Maui.Style.radiusV
+    readonly property alias selectionList : selectionList
+    readonly property alias count : selectionList.count       
     
     readonly property QtObject m_private : QtObject
     {
@@ -78,12 +87,6 @@ Item
 			onToggled: control.removeAtIndex(index)	
 		}        
 	}
-	
-    /**
-     * if singleSelection is set to true then only a single item is selected
-     * at time, and replaced with a newe item appended
-     **/
-    property bool singleSelection: false
 
     signal iconClicked()
     signal cleared()
@@ -101,12 +104,6 @@ Item
     signal rightClicked(var mouse)
     
     signal urisDropped(var uris)
-
-    implicitHeight: barHeight
-
-    implicitWidth: _layout.implicitWidth + Maui.Style.space.big + (height * 2)
-
-    visible: control.count > 0
 
     DropShadow
     {

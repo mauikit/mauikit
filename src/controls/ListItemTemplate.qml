@@ -48,7 +48,7 @@ Item
     property alias iconVisible : _iconContainer.visible
     
     property int iconSizeHint : Maui.Style.iconSizes.big
-    property int imageSizeHint : Maui.Style.iconSizes.big
+    property int imageSizeHint : iconSizeHint
     
     property int imageWidth : imageSizeHint
     property int imageHeight : imageSizeHint
@@ -129,24 +129,27 @@ Item
     {
         id: _iconComponent
 
-        Kirigami.Icon
+        Item
         {
-            source: control.iconSource
-            anchors.centerIn: parent
-            fallback: "qrc:/assets/application-x-zerosize.svg"
-            height: Math.min(parent.height, control.iconSizeHint)
-            width: height
-            color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
-            
-            ColorOverlay
+            Kirigami.Icon
             {
-                visible: control.hovered
-                opacity: 0.3
-                anchors.fill: parent
-                source: parent
-                color: control.Kirigami.Theme.highlightColor
+                source: control.iconSource
+                anchors.centerIn: parent
+                fallback: "qrc:/assets/application-x-zerosize.svg"
+                height: Math.min(parent.height, control.iconSizeHint)
+                width: height
+                color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
+                
+                ColorOverlay
+                {
+                    visible: control.hovered
+                    opacity: 0.3
+                    anchors.fill: parent
+                    source: parent
+                    color: control.Kirigami.Theme.highlightColor
+                }
             }
-        }
+        }        
     }
 
     RowLayout
@@ -208,15 +211,16 @@ Item
         Item
         {
             id: _iconContainer
-            visible: (control.width > Kirigami.Units.gridUnit * 10)
-            Layout.preferredWidth: control.labelsVisible && control.iconVisible && (iconSource.length > 0 || imageSource.length > 0) ? Math.max(control.height, control.imageSource ? control.imageSizeHint : control.iconSizeHint) : 0
+            visible: (control.width > Kirigami.Units.gridUnit * 10) && (iconSource.length > 0 || imageSource.length > 0)
             Layout.fillHeight: true
             Layout.fillWidth: !control.labelsVisible
-
+            
+            Layout.preferredWidth: height
+            
             Loader
-            {
+            {                
                 id: _iconLoader
-                width: parent.width                
+                width: Math.min(parent.height, Math.max(control.iconSizeHint, imageSizeHint) )           
                 height: width
                 anchors.centerIn: parent
                 sourceComponent: _iconContainer.visible ? (control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : null) ): null
