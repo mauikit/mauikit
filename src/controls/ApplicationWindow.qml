@@ -111,9 +111,10 @@ Window
         id: _page
         anchors.fill: parent
         Kirigami.Theme.colorSet: Kirigami.Theme.View
-        
+
         headBar.leftContent: [
-		Loader
+
+        Loader
 		{
 			id: _leftControlsLoader
 			visible: active

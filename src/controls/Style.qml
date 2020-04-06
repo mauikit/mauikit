@@ -27,12 +27,7 @@ QtObject
 	id: style
 	readonly property bool isAndroid: Qt.platform.os == "android"
 	readonly property bool isMobile : Kirigami.Settings.isMobile
-	
-	property color warningColor : "#FFB300"
-	property color dangerColor : "#D81B60"
-	property color infoColor : "#4caf50"
-	property color suggestedColor : "#039BE5"
-	
+
 	property int unit : Kirigami.Units.devicePixelRatio
 	property int radiusV : unit * 4
 	
@@ -40,7 +35,7 @@ QtObject
 	readonly property int rowHeightAlt: rowHeight * 0.8
 	readonly property int contentMargins: space.medium
 	
-	readonly property int toolBarHeight: (iconSizes.medium * 2)
+    readonly property int toolBarHeight: (iconSizes.medium * 2)
 	readonly property int toolBarHeightAlt: toolBarHeight * 0.9
 	
 	readonly property int defaultFontSize: Kirigami.Theme.defaultFont.pointSize

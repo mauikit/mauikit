@@ -43,7 +43,7 @@ T.Drawer {
 
     background: Rectangle 
     {
-        color: Kirigami.Theme.viewBackgroundColor
+        color: Kirigami.Theme.backgroundColor
          Kirigami.Separator 
         {
             anchors 
