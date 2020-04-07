@@ -53,7 +53,6 @@ Maui.ItemDelegate
 	{
 		id: _template
 		anchors.fill: parent
-		iconVisible: true
 		labelsVisible: control.labelVisible
 		hovered: control.hovered
 		isCurrentItem: control.isCurrentItem
@@ -61,10 +60,8 @@ Maui.ItemDelegate
 		Maui.Badge
 		{
 			id: _badge
-			text: control.count     
-			
-			visible: control.count.length > 0 && control.labelVisible
-			
+			text: control.count     			
+			visible: control.count.length > 0 && control.labelVisible			
 		}
 	}	
 	
