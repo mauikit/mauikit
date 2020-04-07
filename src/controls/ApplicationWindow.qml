@@ -106,6 +106,7 @@ Window
         }
     }
 
+    Kirigami.Theme.colorSet: Kirigami.Theme.View
     Maui.Page
     {
         id: _page
