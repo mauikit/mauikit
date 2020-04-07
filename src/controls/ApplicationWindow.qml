@@ -223,18 +223,21 @@ Window
     
     Overlay.overlay.modal: Rectangle 
     {
-        anchors.fill: _page
         color: Qt.rgba( root.Kirigami.Theme.backgroundColor.r,  root.Kirigami.Theme.backgroundColor.g,  root.Kirigami.Theme.backgroundColor.b, 0.5)
         
         Behavior on opacity { NumberAnimation { duration: 150 } }
+        
+        radius: Maui.App.enableCSD ?  Maui.App.theme.borderRadius : 0
     }
     
     Overlay.overlay.modeless: Rectangle 
     {
-        anchors.fill: _page
+        radius: Maui.App.enableCSD ?  Maui.App.theme.borderRadius : 0
+
         color: Qt.rgba( root.Kirigami.Theme.backgroundColor.r,  root.Kirigami.Theme.backgroundColor.g,  root.Kirigami.Theme.backgroundColor.b, 0.5)
         Behavior on opacity { NumberAnimation { duration: 150 } }
     }
+    
     
     //     onHeadBarBGColorChanged:
     //     {
