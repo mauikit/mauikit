@@ -213,7 +213,7 @@ Page
 			{
 				anchors.fill: parent				
 // 				visible: !control.contentItem.clip
-				opacity: 0.25
+				opacity: 0.2
 				transparentBorder: false 
 				source: ShaderEffectSource
 				{

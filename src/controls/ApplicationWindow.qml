@@ -39,7 +39,7 @@ Window
     width: Screen.desktopAvailableWidth * (Kirigami.Settings.isMobile ? 1 : 0.4)
     height: Screen.desktopAvailableHeight * (Kirigami.Settings.isMobile ? 1 : 0.4)
     color: Maui.App.enableCSD ? "transparent" : Kirigami.Theme.backgroundColor
-// 	flags: Maui.App.enableCSD ? Qt.FramelessWindowHint : Qt.Window
+	flags: Maui.App.enableCSD ? Qt.FramelessWindowHint : Qt.Window
 
     property Maui.AbstractSideBar sideBar
 
@@ -110,8 +110,8 @@ Window
     {
         id: _page
         anchors.fill: parent
-        Kirigami.Theme.colorSet: Kirigami.Theme.View
-
+        Kirigami.Theme.colorSet: root.Kirigami.Theme.colorSet
+               
         headBar.leftContent: [
 
         Loader
@@ -203,15 +203,39 @@ Window
 
                 Rectangle
                 {
-                    anchors.centerIn: parent
-                    width: _page.width
-                    height: _page.height
+                    anchors.fill: parent
                     radius: root.visibility === Window.Maximized || !Maui.App.enableCSD ? 0 : Maui.App.theme.borderRadius
                 }
             }
-        }
+        }  
     }
-
+    
+    Rectangle
+    {
+        visible: Maui.App.enableCSD
+        z: ApplicationWindow.overlay.z + 9999
+        anchors.fill: parent
+        radius: Maui.App.theme.borderRadius
+        color: "transparent"
+        border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+    }
+    
+    
+    Overlay.overlay.modal: Rectangle 
+    {
+        anchors.fill: _page
+        color: Qt.rgba( root.Kirigami.Theme.backgroundColor.r,  root.Kirigami.Theme.backgroundColor.g,  root.Kirigami.Theme.backgroundColor.b, 0.5)
+        
+        Behavior on opacity { NumberAnimation { duration: 150 } }
+    }
+    
+    Overlay.overlay.modeless: Rectangle 
+    {
+        anchors.fill: _page
+        color: Qt.rgba( root.Kirigami.Theme.backgroundColor.r,  root.Kirigami.Theme.backgroundColor.g,  root.Kirigami.Theme.backgroundColor.b, 0.5)
+        Behavior on opacity { NumberAnimation { duration: 150 } }
+    }
+    
     //     onHeadBarBGColorChanged:
     //     {
     //         if(!isMobile && colorSchemeName.length > 0)
@@ -238,16 +262,6 @@ Window
      *        color: bgColor
 }
 */
-
-    // 	overlay.modal: Rectangle
-    // 	{
-    //         color: Qt.rgba(root.Kirigami.Theme.backgroundColor.r,root.Kirigami.Theme.backgroundColor.g,root.Kirigami.Theme.backgroundColor.b, 0.5)
-    // 	}
-    //
-    // 	overlay.modeless: Rectangle
-    // 	{
-    // 		color: "transparent"
-    // 	}
 
     Component
     {
