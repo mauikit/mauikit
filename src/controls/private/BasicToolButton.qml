@@ -65,6 +65,7 @@ MouseArea
         anchors.centerIn: parent
         height: parent.height
         spacing: _delegate.checked ? Maui.Style.space.tiny : 0  
+        clip: true
 
         Item
         {
