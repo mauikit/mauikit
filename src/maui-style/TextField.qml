@@ -37,7 +37,7 @@ T.TextField
                             placeholderText ? placeholder.implicitWidth + leftPadding + rightPadding : 0)
                             || contentWidth + leftPadding + rightPadding
     implicitHeight: Math.max(contentHeight + topPadding + bottomPadding,
-                             background ? Maui.Style.iconSizes.medium : 0,
+                             background ? background.implicitHeight : 0,
                              placeholder.implicitHeight + topPadding + bottomPadding)
 
     padding: 6
@@ -80,7 +80,7 @@ T.TextField
 	background: Rectangle 
 	{        
         implicitWidth: Maui.Style.unit * 120
-        implicitHeight: Maui.Style.iconSizes.medium
+        implicitHeight: Maui.Style.iconSizes.medium + Maui.Style.space.small
         color: control.activeFocus ? Qt.lighter(Kirigami.Theme.backgroundColor, 1.4)
         : (control.hovered ? Qt.lighter(Kirigami.Theme.backgroundColor, 1.3) : Kirigami.Theme.backgroundColor)
         border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))

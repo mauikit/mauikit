@@ -27,8 +27,8 @@ SwipeView
 {
 	id: control
 	interactive: Maui.Handy.isTouch
-// 	clip: true
-//     focus: true
+    clip: true
+    focus: true
     
 	property int maxViews : 4
 	property Maui.ToolBar toolbar : window().headBar
@@ -47,7 +47,7 @@ SwipeView
 		
 		Component.onCompleted:
 		{
-			control.toolbar.middleContent.push(_actionGroup)
+            control.toolbar.middleContent.push(_actionGroup)
 		}
 	}	
 	
