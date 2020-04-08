@@ -57,14 +57,15 @@ T.MenuItem
     //    verticalPadding: Material.menuItemVerticalPadding
     spacing: Maui.Style.space.small
 
-    icon.width: Maui.Style.iconSizes.medium
-    icon.height: Maui.Style.iconSizes.medium
-    icon.color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightedTextColor : control.Kirigami.Theme.textColor) :
+    icon.width: Kirigami.Settings.isMobile ? Maui.Style.iconSizes.medium : Maui.Style.iconSizes.small
+    icon.height: Kirigami.Settings.isMobile ? Maui.Style.iconSizes.medium : Maui.Style.iconSizes.small
+
+    icon.color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor) :
                              control.Kirigami.Theme.disabledTextColor
 
     indicator: CheckIndicator
     {
-        x: text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding + (control.availableWidth - width) / 2
+        x: text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding  + Maui.Style.space.small) : control.leftPadding + (control.availableWidth - width) / 2
         y: control.topPadding + (control.availableHeight - height) / 2
         visible: control.checkable
         control: control
@@ -86,8 +87,8 @@ T.MenuItem
     {
         readonly property real arrowPadding: control.subMenu && control.arrow ? control.arrow.width + control.spacing : 0
         readonly property real indicatorPadding: control.checkable && control.indicator ? control.indicator.width + control.spacing : 0
-        leftPadding: !control.mirrored ? indicatorPadding : arrowPadding
-        rightPadding: control.mirrored ? indicatorPadding : arrowPadding
+        leftPadding: !control.mirrored ? indicatorPadding + Maui.Style.space.small : arrowPadding
+        rightPadding: control.mirrored ? indicatorPadding : arrowPadding + Maui.Style.space.small
 
         spacing: control.spacing
         mirrored: control.mirrored
@@ -97,7 +98,7 @@ T.MenuItem
         icon: control.icon
         text: control.text
         font: control.font
-        color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightedTextColor : control.Kirigami.Theme.textColor) :
+        color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor) :
                                  control.Kirigami.Theme.disabledTextColor
     }
 
@@ -105,7 +106,26 @@ T.MenuItem
     {
         implicitWidth: 200
         implicitHeight: Maui.Style.rowHeightAlt
-        color: control.highlighted ? control.Kirigami.Theme.highlightColor : "transparent"
+        radius: Maui.Style.radiusV
 
+        opacity: 0.5
+        anchors
+        {
+            fill: parent
+
+            leftMargin: Maui.Style.space.small
+            rightMargin: Maui.Style.space.small
+        }
+
+        Behavior on color
+        {
+            ColorAnimation
+            {
+                duration: Kirigami.Units.shortDuration
+            }
+        }
+
+        color: control.highlighted ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
+        border.color: control.highlighted ? control.Kirigami.Theme.highlightColor : "transparent"
     }
 }

@@ -79,7 +79,7 @@ T.ToolButton
         {
             ColorAnimation
             {
-                duration: Kirigami.Units.longDuration
+                duration: Kirigami.Units.shortDuration
             }
         }
     }
@@ -89,16 +89,16 @@ T.ToolButton
         implicitWidth: Maui.Style.iconSizes.medium
         implicitHeight: Maui.Style.iconSizes.medium
         
-        radius: height * 0.07
+        radius: Maui.Style.radiusV
 
-        opacity: control.checked ? 0.4 : 1.0
-        color: (control.down || control.checked || control.highlighted ? Kirigami.Theme.highlightColor : "transparent")
+        color: control.down || control.checked || control.highlighted || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
+        border.color: control.down || control.checked ? control.Kirigami.Theme.highlightColor : "transparent"
 
         Behavior on color
         {
             ColorAnimation
             {
-                duration: Kirigami.Units.longDuration
+                duration: Kirigami.Units.shortDuration
             }
         }
     }

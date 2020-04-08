@@ -27,8 +27,9 @@ import QtQuick.Templates 2.3 as T
 import org.kde.kirigami 2.2 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
-T.TextField {
-    id: controlRoot
+T.TextField
+{
+    id: control
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     Kirigami.Theme.inherit: false
 
@@ -53,7 +54,7 @@ T.TextField {
     selectedTextColor: Kirigami.Theme.highlightedTextColor
 	
 	verticalAlignment: TextInput.AlignVCenter
-	horizontalAlignment: Text.AlignHCenter
+    horizontalAlignment: Text.AlignLeft
 	
 // 	cursorDelegate: CursorDelegate { }
 
@@ -67,12 +68,12 @@ T.TextField {
 		
 		text: control.placeholderText
 		font: control.font
-        color: Qt.lighter(Kirigami.Theme.textColor, 1.4)
+        color: Kirigami.Theme.textColor
 		opacity: 0.4
-		horizontalAlignment: control.horizontalAlignment
+        horizontalAlignment: !control.length ? Text.AlignHCenter : Text.AlignLeft
 		verticalAlignment: control.verticalAlignment
-		visible: !control.length && !control.preeditText && (!control.activeFocus || control.horizontalAlignment !== Qt.AlignHCenter)
-		elide: Text.ElideRight
+        visible: !control.length && !control.preeditText && (!control.activeFocus || control.horizontalAlignment !== Qt.AlignHCenter)
+        elide: Text.ElideRight
 		wrapMode: Text.NoWrap
 	}	
 

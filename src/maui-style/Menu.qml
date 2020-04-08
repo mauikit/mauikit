@@ -42,7 +42,8 @@ import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import QtGraphicalEffects 1.0
 
-T.Menu {
+T.Menu
+{
     id: control
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
@@ -70,7 +71,8 @@ T.Menu {
         NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; easing.type: Easing.OutCubic; duration: 150 }
     }
 
-    contentItem: ListView {
+    contentItem: ListView
+    {
         implicitHeight: contentHeight
 
         model: control.contentModel
@@ -91,12 +93,13 @@ T.Menu {
         border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
         layer.enabled: true
 
-        layer.effect: DropShadow {
+        layer.effect: DropShadow
+        {
             transparentBorder: true
             radius: 8
             samples: 16
             horizontalOffset: 0
-            verticalOffset: 4
+            verticalOffset: 0
             color: Qt.rgba(0, 0, 0, 0.3)
         }
     }
