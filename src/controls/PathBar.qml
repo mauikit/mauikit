@@ -29,7 +29,8 @@ Rectangle
     id: control
     
     implicitHeight: Maui.Style.rowHeight
-    
+//     implicitWidth: Math.max(200, _loader.item.implicitWidth)
+        
     property string url : ""
     property bool pathEntry: false
     property alias list : _pathList
@@ -121,6 +122,7 @@ Rectangle
         
         RowLayout
         {
+//             implicitWidth: _listView.contentWidth
             property alias listView: _listView
             spacing: 0
             clip: true

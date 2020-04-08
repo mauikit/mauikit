@@ -51,10 +51,11 @@ T.ToolButton
                              contentItem.implicitHeight + topPadding + bottomPadding)
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
+    hoverEnabled: true
     padding: Maui.Style.space.tiny
     spacing: Maui.Style.space.tiny
-    rightPadding: Maui.Style.space.medium
-    leftPadding: Maui.Style.space.medium
+    rightPadding: Maui.Style.space.tiny
+    leftPadding: Maui.Style.space.tiny
     topPadding: Maui.Style.space.tiny
     bottomPadding: Maui.Style.space.tiny
     icon.width: Maui.Style.iconSizes.medium

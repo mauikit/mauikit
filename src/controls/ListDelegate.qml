@@ -29,7 +29,7 @@ Maui.ItemDelegate
 	
 	property bool labelVisible : true
 	property alias iconSize : _template.iconSizeHint  
-	
+	property alias iconVisible : _template.iconVisible
 	property alias label: _template.text1
 	property alias label2: _template.text2
 	property alias iconName: _template.iconSource  

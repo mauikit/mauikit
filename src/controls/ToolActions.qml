@@ -154,7 +154,7 @@ Rectangle
                     property Action action : modelData
                     property bool checked: control.checkable && control.autoExclusive ? control.currentIndex === index : action.checked
                     hoverEnabled: true
-                    width: height + Maui.Style.space.small
+                    width: height + Maui.Style.space.tiny
                     height: parent.height
                     enabled: action.enabled
                     opacity: enabled ? 1 : 0.5

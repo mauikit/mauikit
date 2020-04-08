@@ -47,14 +47,15 @@ T.MenuItem
 {
     id: control
 
+    hoverEnabled: true
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             implicitContentWidth + leftPadding + rightPadding)
     implicitHeight: visible ? Math.max(implicitBackgroundHeight + topInset + bottomInset,
-                             implicitContentHeight + topPadding + bottomPadding,
-                             implicitIndicatorHeight + topPadding + bottomPadding) : 0
-
-    padding: Maui.Style.space.small
-    //    verticalPadding: Material.menuItemVerticalPadding
+                                       implicitContentHeight + topPadding + bottomPadding,
+                                       implicitIndicatorHeight + topPadding + bottomPadding) : 0
+                                       
+                                       padding: Kirigami.Settings.isMobile ? Maui.Style.space.small : Maui.Style.space.tiny
+    verticalPadding: Kirigami.Settings.isMobile ? Maui.Style.space.small : Maui.Style.space.tiny
     spacing: Maui.Style.space.small
 
     icon.width: Kirigami.Settings.isMobile ? Maui.Style.iconSizes.medium : Maui.Style.iconSizes.small
@@ -98,14 +99,14 @@ T.MenuItem
         icon: control.icon
         text: control.text
         font: control.font
-        color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor) :
+        color: control.enabled ? (control.highlighted || control.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor) :
                                  control.Kirigami.Theme.disabledTextColor
     }
 
     background: Rectangle
     {
         implicitWidth: 200
-        implicitHeight: Maui.Style.rowHeightAlt
+        implicitHeight: Maui.Style.rowHeightAlt 
         radius: Maui.Style.radiusV
 
         opacity: 0.5
@@ -125,7 +126,7 @@ T.MenuItem
             }
         }
 
-        color: control.highlighted ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
-        border.color: control.highlighted ? control.Kirigami.Theme.highlightColor : "transparent"
+        color: control.highlighted || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
+        border.color: control.highlighted || control.hovered ? control.Kirigami.Theme.highlightColor : "transparent"
     }
 }
