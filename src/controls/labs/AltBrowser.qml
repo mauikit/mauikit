@@ -78,8 +78,7 @@ Maui.Page
                 }                
             }
         }
-    }
-    
+    }    
     
     Maui.Holder
     {
