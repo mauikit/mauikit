@@ -185,7 +185,7 @@ Rectangle
                     Kirigami.Icon
                     {
                         anchors.centerIn: parent
-                        width: Maui.Style.iconSizes.medium
+                        width: Maui.Style.iconSizes.small
                         height: width
                         color: (action.icon.color && action.icon.color.length ) ? action.icon.color : ( (_buttonMouseArea.checked || _buttonMouseArea.containsPress) && enabled ) ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
                         source: action.icon.name
