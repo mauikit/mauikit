@@ -500,7 +500,7 @@ Maui.Page
     {
         id: millerViewBrowser
         
-        Item
+        ScrollView
         {
             id: _millerControl
             property Maui.FMList currentFMList
@@ -521,11 +521,56 @@ Maui.Page
 			{
 				_millerColumns.currentItem.forceActiveFocus()
 			}
+			
+			contentWidth: _millerColumns.contentWidth
+			contentHeight: height
+			
+			ScrollBar.horizontal: ScrollBar
+			{
+                id: horizontalScrollBar
+                height: visible ? implicitHeight: 0
+                parent: _millerControl
+                x: 0
+                y: _millerControl.height - height
+                width: _millerControl.width
+                active: _millerControl.ScrollBar.horizontal || _millerControl.ScrollBar.horizontal.active
+            }
+			
+// 			ScrollBar.horizontal: ScrollBar
+// 			{
+//                 id: _scrollBar
+//                 snapMode: ScrollBar.SnapAlways
+//                 policy: ScrollBar.AlwaysOn
+//                 
+//                 contentItem: Rectangle
+//                 {
+//                     implicitWidth: _scrollBar.interactive ? 13 : 4
+//                     implicitHeight: _scrollBar.interactive ? 13 : 4
+//                     
+//                     color: "#333"
+//                     
+//                     opacity: _scrollBar.pressed ? 0.7 :
+//                     _scrollBar.interactive && _scrollBar.hovered ? 0.5 : 0.2
+//                     radius: 0
+//                 }
+//                 
+//                 background: Rectangle
+//                 {
+//                     implicitWidth: _scrollBar.interactive ? 16 : 4
+//                     implicitHeight: _scrollBar.interactive ? 16 : 4
+//                     color: "#0e000000"
+//                     opacity: 0.0
+//                     visible: _scrollBar.interactive
+//                     radius: 0
+//                     
+//                 }
+//             }
             
             ListView
             {
                 id: _millerColumns
                 anchors.fill: parent
+                anchors.bottomMargin: horizontalScrollBar.height
                 boundsBehavior: !Maui.Handy.isTouch? Flickable.StopAtBounds : Flickable.OvershootBounds
                 
                 keyNavigationEnabled: true
@@ -533,37 +578,7 @@ Maui.Page
                 cacheBuffer: contentWidth
                 orientation: ListView.Horizontal
                 snapMode: ListView.SnapToItem
-                clip: true
-                
-                ScrollBar.horizontal: ScrollBar
-                {
-                    id: _scrollBar
-                    snapMode: ScrollBar.SnapAlways
-                    policy: ScrollBar.AlwaysOn
-                    
-                    contentItem: Rectangle
-                    {
-                        implicitWidth: _scrollBar.interactive ? 13 : 4
-                        implicitHeight: _scrollBar.interactive ? 13 : 4
-                        
-                        color: "#333"
-                        
-                        opacity: _scrollBar.pressed ? 0.7 :
-                        _scrollBar.interactive && _scrollBar.hovered ? 0.5 : 0.2
-                        radius: 0
-                    }
-                    
-                    background: Rectangle
-                    {
-                        implicitWidth: _scrollBar.interactive ? 16 : 4
-                        implicitHeight: _scrollBar.interactive ? 16 : 4
-                        color: "#0e000000"
-                        opacity: 0.0
-                        visible: _scrollBar.interactive
-                        radius: 0
-                        
-                    }
-                }
+                clip: true               
                 
                 onCurrentItemChanged:
                 {
