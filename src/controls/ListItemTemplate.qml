@@ -47,6 +47,9 @@ Item
     property alias iconItem : _iconLoader.item
     property alias iconVisible : _iconContainer.visible
     
+    property alias leftLabels : _leftLabels
+    property alias rightLabels : _rightLabels
+    
     property int iconSizeHint : Maui.Style.iconSizes.big
     property int imageSizeHint : iconSizeHint
     
@@ -229,6 +232,7 @@ Item
 
         ColumnLayout
         {
+            id: _leftLabels
             visible: control.labelsVisible
             Layout.fillHeight: true
             Layout.fillWidth: true
@@ -269,6 +273,7 @@ Item
 
         ColumnLayout
         {
+            id: _rightLabels
 			visible: control.width >  Kirigami.Units.gridUnit * 15 && control.labelsVisible
             Layout.fillHeight: true
             Layout.fillWidth: true

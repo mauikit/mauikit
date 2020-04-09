@@ -29,7 +29,7 @@ Maui.ItemDelegate
 {
     id: control 
     
-    implicitHeight: Maui.Style.rowHeight + (Maui.Style.space.medium * 1.5)
+    implicitHeight: label4.visible || label2.visible ?  Maui.Style.rowHeight + (Maui.Style.space.medium * 1.5) : Maui.Style.rowHeight
     isCurrentItem : ListView.isCurrentItem || checked	
     
     signal contentDropped(var drop)	
@@ -56,6 +56,9 @@ Maui.ItemDelegate
     property alias checkable : _template.checkable
     property alias checked : _template.checked
     property alias showLabel : _template.labelsVisible
+    
+    property alias leftLabels: _template.leftLabels
+    property alias rightLabels: _template.rightLabels    
     
     DropArea 
     {
