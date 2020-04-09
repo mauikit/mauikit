@@ -76,7 +76,7 @@ Rectangle
                         id: _defaultButtonIcon
                         
                         anchors.centerIn: parent
-                        width: Maui.Style.iconSizes.medium
+                        width: Maui.Style.iconSizes.small
                         height: width
                         color: control.currentAction ? (control.currentAction .icon.color && control.currentAction.icon.color.length ? control.currentAction.icon.color : ( _defaultButtonMouseArea.containsPress ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor)) :  control.Kirigami.Theme.textColor
                         
