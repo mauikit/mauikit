@@ -67,6 +67,8 @@ Window
     property var currentAccount: Maui.App.handleAccounts ? Maui.App.accounts.currentAccount : ({})
 
     property alias notifyDialog: _notify
+    
+    property alias background : _page.background
 
     /***************************************************/
     /*********************** UI ***********************/
