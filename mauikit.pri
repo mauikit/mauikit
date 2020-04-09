@@ -245,6 +245,7 @@ DISTFILES += \
     $$PWD/CMakeLists.txt \
     $$PWD/src/controls/qmldir
 
+
 #ANDROID_EXTRA_LIBS += $$PWD/libs/bin/libKF5KIOFileWidgets.so
 #ANDROID_EXTRA_LIBS += $$PWD/libs/bin/libKF5KIOWidgets.so
 #ANDROID_EXTRA_LIBS += $$PWD/libs/bin/libKF5Bookmarks.so

@@ -23,7 +23,6 @@ import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 
-
 Kirigami.ScrollablePage
 {
     id: control    
@@ -69,11 +68,11 @@ Kirigami.ScrollablePage
     leftPadding: padding
     rightPadding: padding
     topPadding: padding
-    bottomPadding: padding    
+    bottomPadding: padding
 
     Keys.enabled: false
     Kirigami.Theme.colorSet: Kirigami.Theme.View       
-    supportsRefreshing: false 
+    supportsRefreshing: false
     
     ListView
     {	

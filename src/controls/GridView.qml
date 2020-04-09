@@ -21,7 +21,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.10
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
-import org.kde.kirigami 2.8 as Kirigami
+import org.kde.kirigami 2.9 as Kirigami
 import QtGraphicalEffects 1.0
 
 Item
@@ -77,7 +77,12 @@ Item
 	
 	Keys.enabled : true
 	Keys.forwardTo : controlView
-	
+
+    Kirigami.WheelHandler
+    {
+        id: wheelHandler
+        target: control.flickable
+    }
 	
 	ScrollView
 	{
