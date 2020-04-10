@@ -69,7 +69,7 @@ Window
     property alias notifyDialog: _notify
     
     property alias background : _page.background
-
+    
     /***************************************************/
     /*********************** UI ***********************/
     /*************************************************/
