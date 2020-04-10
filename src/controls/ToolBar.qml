@@ -19,7 +19,7 @@
 
 import QtQuick 2.6
 import QtQuick.Controls 2.2
-import org.kde.kirigami 2.7 as Kirigami
+import org.kde.kirigami 2.9 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
@@ -33,27 +33,26 @@ ToolBar
     implicitWidth: mainFlickable.contentWidth
     spacing: Maui.Style.space.small
     padding: 0
-    clip: true
-
-    property alias stickyRightContent : rightRowContent.sticky
-    property alias stickyLeftContent : leftRowContent.sticky
-    property alias stickyMiddleContent : middleRowContent.sticky
-
+    
+//     property alias stickyRightContent : rightRowContent.sticky
+//     property alias stickyLeftContent : leftRowContent.sticky
+//     property alias stickyMiddleContent : middleRowContent.sticky
+    
     property alias leftContent : leftRowContent.data
     property alias middleContent : middleRowContent.data
     property alias rightContent : rightRowContent.data
-
+    
     property alias middleLayout : middleRowContent
     property alias leftLayout : leftRowContent
     property alias rightLayout : rightRowContent
-
+    
     property alias layout : layout
-
-    readonly property alias fits : mainFlickable.fits
-
+    
+    readonly property alias fits : _scrollView.fits
+    
     property int margins: Maui.Style.space.medium
     property int count : leftContent.length + middleContent.length + rightContent.length
-
+    
     property bool flickable: true
     property bool strech : true
     property bool leftSretch: strech
@@ -62,7 +61,7 @@ ToolBar
     
     //    leftPadding: Kirigami.Units.smallSpacing*2
     //    rightPadding: Kirigami.Units.smallSpacing*2
-
+    
     // 	background: Rectangle
     // 	{
     // 		id: headBarBG
@@ -102,14 +101,14 @@ ToolBar
     // 			source: headBarBG
     // 		}
     // 	}
-
-
+    
+    
     MouseArea
     {
         id: _rightFlickRec
         width: Maui.Style.iconSizes.medium
         height: parent.height
-        visible: !mainFlickable.atXEnd && !mainFlickable.fits && control.flickable
+        visible: !mainFlickable.atXEnd && !control.fits && control.flickable
         hoverEnabled: true
         anchors
         {
@@ -117,9 +116,9 @@ ToolBar
             bottom: parent.bottom
             right: parent.right
         }
-
+        
         z: 999
-
+        
         EdgeShadow
         {
             visible: true
@@ -131,9 +130,9 @@ ToolBar
                 top: parent.top
                 bottom: parent.bottom
             }
-
+            
             opacity: 1
-
+            
             Behavior on opacity
             {
                 NumberAnimation
@@ -146,32 +145,37 @@ ToolBar
         
         Maui.Triangle
         {
-			visible: !Kirigami.Settings.isMobile
-			anchors.centerIn: parent
-			rotation: -135
-			color:  _rightFlickRec.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
-			width: Maui.Style.iconSizes.tiny
-			height:  width 
-		}
-
+            visible: !Kirigami.Settings.isMobile
+            anchors.centerIn: parent
+            rotation: -135
+            color:  _rightFlickRec.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
+            width: Maui.Style.iconSizes.tiny
+            height:  width 
+        }
+        
         enabled: !mainFlickable.atXEnd
         opacity: enabled ? 1 : 0.4
         onClicked:
         {
             if(!mainFlickable.atXEnd)
-                mainFlickable.contentX += control.height
-                if(mainFlickable.atXEnd)
-                    mainFlickable.returnToBounds()
+            {
+                mainFlickable.contentX += Math.min( mainFlickable.contentWidth - mainFlickable.contentX,  mainFlickable.contentWidth)
+            }
+            
+            if(mainFlickable.atXEnd)
+            {
+                mainFlickable.returnToBounds()
+            }
         }
-
+        
     }
-
+    
     MouseArea
     {
         id: _leftFlickRec
         width: Maui.Style.iconSizes.medium
         height: parent.height
-        visible: !mainFlickable.atXBeginning && !mainFlickable.fits && control.flickable
+        visible: !mainFlickable.atXBeginning && !control.fits && control.flickable
         hoverEnabled: true
         anchors
         {
@@ -180,7 +184,7 @@ ToolBar
             left: parent.left
         }
         z: 999
-
+        
         EdgeShadow
         {
             visible: true
@@ -192,9 +196,9 @@ ToolBar
                 top: parent.top
                 bottom: parent.bottom
             }
-
+            
             opacity: 1
-
+            
             Behavior on opacity
             {
                 NumberAnimation
@@ -207,101 +211,117 @@ ToolBar
         
         Maui.Triangle
         {
-			visible: !Kirigami.Settings.isMobile
-			anchors.centerIn: parent
-			rotation: 45
-			color:  _leftFlickRec.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
-			width: Maui.Style.iconSizes.tiny
-			height:  width 
-		}
-
+            visible: !Kirigami.Settings.isMobile
+            anchors.centerIn: parent
+            rotation: 45
+            color:  _leftFlickRec.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
+            width: Maui.Style.iconSizes.tiny
+            height:  width 
+        }
+        
         enabled: !mainFlickable.atXBeginning
         opacity: enabled ? 1 : 0.4
         onClicked:
         {
             if(!mainFlickable.atXBeginning)
                 mainFlickable.contentX -= control.height
-
+                
                 if(mainFlickable.atXBeginning)
                     mainFlickable.returnToBounds()
         }
     }
-
-    Flickable
+    
+    Kirigami.WheelHandler
     {
-        id: mainFlickable
-        property bool fits : contentWidth < control.width
-        onFitsChanged: returnToBounds()
-        height: control.preferredHeight
-        anchors {
-            left: parent.left
-            right: parent.right
-            bottom: control.position === ToolBar.Header ? parent.bottom : undefined
-            top: control.position === ToolBar.Footer ? parent.top : undefined
-        }
-
-        anchors.leftMargin: !fits && _leftFlickRec.visible && control.flickable && !Kirigami.Settings.isMobile ? _leftFlickRec.width : margins
-        anchors.rightMargin: !fits && _rightFlickRec.visible && control.flickable && !Kirigami.Settings.isMobile ? _rightFlickRec.width : margins
-
-        flickableDirection: Flickable.HorizontalFlick
-        interactive: !fits && Maui.Handy.isTouch
-        contentWidth: ((control.margins) + Maui.Style.space.medium)
-        + (control.stickyLeftContent ? leftRowContent.implicitWidth : leftRowContent.width)
-        + (control.stickyMiddleContent ? middleRowContent.implicitWidth : middleRowContent.width)
-        + (control.stickyRightContent ? rightRowContent.implicitWidth : rightRowContent.width)
-
-        boundsBehavior: Kirigami.Settings.isMobile ? Flickable.DragOverBounds : Flickable.StopAtBounds
-        clip: true
-
-        RowLayout
-        {
-            id: layout
-            width: control.width - control.margins - Maui.Style.space.medium
-            height: mainFlickable.height
-
-            RowLayout
-            {
-                id: leftRowContent
-                // 					visible: control.leftSretch && implicitWidth
-                property bool sticky : false
-                Layout.leftMargin: rightRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.leftSretch ? rightRowContent.implicitWidth : 0
-                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-                spacing: visibleChildren.length > 1 ? control.spacing : 0
-                Layout.minimumWidth: implicitWidth
-                Layout.fillWidth: control.leftSretch && implicitWidth
-                Layout.fillHeight: true
-            }
-
-            RowLayout
-            {
-                id: middleRowContent
-                property bool sticky : false
-                // 					visible: control.middleStrech && implicitWidth
-                Layout.alignment: Qt.AlignCenter
-                spacing: visibleChildren.length > 1 ? control.spacing : 0
-                Layout.minimumWidth: implicitWidth
-
-                //                             Layout.maximumWidth: control.width - leftRowContent.implicitWidth - rightRowContent.implicitWidth
-                Layout.fillWidth: control.middleStrech
-                Layout.fillHeight: true
-            }
-
-            RowLayout
-            {
-                id: rightRowContent
-                // 					visible: control.rightSretch && implicitWidth
-                property bool sticky : false
-                Layout.rightMargin: leftRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.rightSretch ? leftRowContent.implicitWidth : 0
-                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
-                spacing: visibleChildren.length > 1 ? control.spacing : 0
-                Layout.minimumWidth: implicitWidth
-                // 					Layout.maximumWidth: !sticky ? rightRowContent.width : implicitWidth
-                Layout.fillWidth: control.rightSretch && implicitWidth
-                Layout.fillHeight: true
-            }
-        }
-
-        // 			ScrollBar.horizontal: ScrollBar { visible: false}
+        id: wheelHandler
+        target: control.mainFlickable
     }
-
+    
+    ScrollView
+    {
+        id: _scrollView
+        property bool fits : mainFlickable.contentWidth < control.width
+        onFitsChanged: mainFlickable.returnToBounds()        
+        
+        anchors.fill: parent
+        contentWidth: mainFlickable.contentWidth 
+        contentHeight: height        
+     
+        ScrollBar.horizontal: ScrollBar
+        {
+            parent: _scrollView
+            x: 0
+            y: _scrollView.height - height
+            width: control.width
+            height: visible ? 2: 0
+            active: _scrollView.ScrollBar.horizontal || _scrollView.ScrollBar.horizontal.active
+        }
+        
+        ScrollBar.vertical: ScrollBar {parent: _scrollView; visible: false}        
+                
+        Flickable
+        {
+            id: mainFlickable
+           
+            anchors.fill: parent
+            anchors.leftMargin: control.margins
+            anchors.rightMargin: control.margins
+         
+            flickableDirection: Flickable.HorizontalFlick
+            interactive: !fits && Maui.Handy.isTouch
+            contentWidth: layout.implicitWidth
+            
+            boundsBehavior: Kirigami.Settings.isMobile ? Flickable.DragOverBounds : Flickable.StopAtBounds
+            clip: true
+            
+            RowLayout
+            {
+                id: layout
+                width: mainFlickable.width 
+                height: mainFlickable.height
+                
+                RowLayout
+                {
+                    id: leftRowContent
+                    // 					visible: control.leftSretch && implicitWidth
+                    property bool sticky : false
+                    Layout.leftMargin: rightRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.leftSretch ? rightRowContent.implicitWidth : 0
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                    spacing: visibleChildren.length > 1 ? control.spacing : 0
+                    Layout.minimumWidth: implicitWidth
+                    Layout.fillWidth: control.leftSretch && implicitWidth
+                    Layout.fillHeight: true
+                }
+                
+                RowLayout
+                {
+                    id: middleRowContent
+                    property bool sticky : false
+                    // 					visible: control.middleStrech && implicitWidth
+                    Layout.alignment: Qt.AlignCenter
+                    spacing: visibleChildren.length > 1 ? control.spacing : 0
+                    Layout.minimumWidth: implicitWidth
+                    
+                    //                             Layout.maximumWidth: control.width - leftRowContent.implicitWidth - rightRowContent.implicitWidth
+                    Layout.fillWidth: control.middleStrech
+                    Layout.fillHeight: true
+                }
+                
+                RowLayout
+                {
+                    id: rightRowContent
+                    // 					visible: control.rightSretch && implicitWidth
+                    property bool sticky : false
+                    Layout.rightMargin: leftRowContent.implicitWidth && implicitWidth === 0 && middleRowContent.implicitWidth && control.rightSretch ? leftRowContent.implicitWidth : 0
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+                    spacing: visibleChildren.length > 1 ? control.spacing : 0
+                    Layout.minimumWidth: implicitWidth
+                    // 					Layout.maximumWidth: !sticky ? rightRowContent.width : implicitWidth
+                    Layout.fillWidth: control.rightSretch && implicitWidth
+                    Layout.fillHeight: true
+                }
+            }            
+        }
+    }
+    
 }
