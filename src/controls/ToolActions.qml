@@ -18,14 +18,18 @@ Rectangle
     property bool autoExclusive: true	
     property bool checkable: true
     
-    property Action currentAction : actions[0]
+    property Action currentAction : control.autoExclusive ? actions[0] : null
     property int currentIndex : 0	
     onCurrentIndexChanged:
     {
-        control.currentAction = actions[control.currentIndex]
+        if(control.autoExclusive)
+        {            
+            control.currentAction = actions[control.currentIndex]
+        }
     }
     
     property bool expanded : true	
+    property string defaultIconName: "application-menu"
     
     border.color:  Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
     radius: Maui.Style.radiusV
@@ -78,9 +82,9 @@ Rectangle
                         anchors.centerIn: parent
                         width: Maui.Style.iconSizes.small
                         height: width
-                        color: control.currentAction ? (control.currentAction .icon.color && control.currentAction.icon.color.length ? control.currentAction.icon.color : ( _defaultButtonMouseArea.containsPress ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor)) :  control.Kirigami.Theme.textColor
+                        color: control.currentAction ? (control.currentAction.icon.color && control.currentAction.icon.color.length ? control.currentAction.icon.color : ( _defaultButtonMouseArea.containsPress ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor)) :  control.Kirigami.Theme.textColor
                         
-                        source: control.currentAction ? control.currentAction.icon.name : "application-menu"
+                        source: control.currentAction ? control.currentAction.icon.name : control.defaultIconName
                         
                         enabled: control.currentAction ? control.currentAction.enabled : true
                     }  
@@ -223,7 +227,7 @@ Rectangle
                     icon.name: modelData.icon.name
                     autoExclusive: control.autoExclusive
                     checked: index === control.currentIndex
-                    checkable: true
+                    checkable: control.checkable
                     onTriggered: 
                     {
                         control.currentIndex = index

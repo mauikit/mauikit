@@ -234,7 +234,7 @@ ToolBar
     Kirigami.WheelHandler
     {
         id: wheelHandler
-        target: control.mainFlickable
+        target: mainFlickable
     }
     
     ScrollView

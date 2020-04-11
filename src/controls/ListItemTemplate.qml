@@ -177,9 +177,9 @@ Item
                 
                 anchors.centerIn: parent
                 
-                color: control.checked ? Kirigami.Theme.highlightColor : Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.8)
+                color: control.checked ? control.Kirigami.Theme.highlightColor : Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.8)
                 
-                border.color: Kirigami.Theme.textColor
+                border.color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.7))
                 
                 onClicked: 
                 {
@@ -270,7 +270,7 @@ Item
                 verticalAlignment: _label1.visible ? Qt.AlignTop : Qt.AlignVCenter
                 
                 elide: Text.ElideRight
-                wrapMode: height > implicitHeight ? Text.WrapAnywhere : Text.NoWrap
+                wrapMode: Text.NoWrap
                 
                 color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
                 opacity: control.isCurrentItem ? 0.8 : 0.6
