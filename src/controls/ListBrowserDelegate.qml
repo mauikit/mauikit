@@ -58,8 +58,10 @@ Maui.ItemDelegate
     property alias showLabel : _template.labelsVisible
     
     property alias leftLabels: _template.leftLabels
-    property alias rightLabels: _template.rightLabels    
+    property alias rightLabels: _template.rightLabels   
     
+    default property alias content : _template.content
+            
     DropArea 
     {
         id: _dropArea

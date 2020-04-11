@@ -159,57 +159,63 @@ Item
     {
         id: _layout
         anchors.fill: parent
-        spacing: Maui.Style.space.small
+        spacing: Maui.Style.space.tiny
         
-        Maui.Badge
+        Item
         {
-            id: _emblem
+            id: _checkBoxContainer
             visible: control.checkable || control.checked
             
-            size: Math.min(Maui.Style.iconSizes.medium, parent.height)
-			
-            Layout.alignment: Qt.AlignVCenter
-            Layout.leftMargin: Maui.Style.space.medium
-            Layout.rightMargin: 0
+            Layout.fillHeight: true
+            Layout.preferredWidth: height
             
-            color: control.checked ? Kirigami.Theme.highlightColor : Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.8)
-            
-            border.color: Kirigami.Theme.textColor
-            
-            onClicked: 
+            Maui.Badge
             {
-				control.checked = !control.checked
-				control.toggled(control.checked)
-			}
-            
-            MauiLab.CheckMark
-            {
-				visible: opacity > 0
-				color: Kirigami.Theme.highlightedTextColor
-				anchors.centerIn: parent
-				height: control.checked ? 10 : 0
-				width: height
-				opacity: control.checked ? 1 : 0
-				
-				Behavior on height
-				{
-					NumberAnimation
-					{
-						duration: Kirigami.Units.shortDuration
-						easing.type: Easing.InOutQuad
-					}
-				}
-				
-				Behavior on opacity
-				{
-					NumberAnimation
-					{
-						duration: Kirigami.Units.shortDuration
-						easing.type: Easing.InOutQuad
-					}
-				}
-			}
-        }
+                id: _emblem
+                
+                size: Math.min(Maui.Style.iconSizes.medium, parent.height)
+                
+                anchors.centerIn: parent
+                
+                color: control.checked ? Kirigami.Theme.highlightColor : Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.8)
+                
+                border.color: Kirigami.Theme.textColor
+                
+                onClicked: 
+                {
+                    control.checked = !control.checked
+                    control.toggled(control.checked)
+                }
+                
+                MauiLab.CheckMark
+                {
+                    visible: opacity > 0
+                    color: Kirigami.Theme.highlightedTextColor
+                    anchors.centerIn: parent
+                    height: control.checked ? 10 : 0
+                    width: height
+                    opacity: control.checked ? 1 : 0
+                    
+                    Behavior on height
+                    {
+                        NumberAnimation
+                        {
+                            duration: Kirigami.Units.shortDuration
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
+                    
+                    Behavior on opacity
+                    {
+                        NumberAnimation
+                        {
+                            duration: Kirigami.Units.shortDuration
+                            easing.type: Easing.InOutQuad
+                        }
+                    }
+                }
+            }
+        }      
 
         Item
         {
@@ -236,8 +242,8 @@ Item
             visible: control.labelsVisible
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.margins: Maui.Style.space.small 
-            Layout.leftMargin: _iconLoader.visible ? 0 : Maui.Style.space.small
+            Layout.margins: Maui.Style.space.tiny 
+            Layout.leftMargin: _iconContainer.visible || _checkBoxContainer.visible ? 0 : Maui.Style.space.small
             spacing: 0
 
             Label
@@ -261,13 +267,16 @@ Item
                 visible: text.length
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                font.weight: Font.Normal
-                font.pointSize: Maui.Style.fontSizes.medium
-                wrapMode: Text.Wrap
                 verticalAlignment: _label1.visible ? Qt.AlignTop : Qt.AlignVCenter
+                
                 elide: Text.ElideRight
+                wrapMode: height > implicitHeight ? Text.WrapAnywhere : Text.NoWrap
+                
                 color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
                 opacity: control.isCurrentItem ? 0.8 : 0.6
+                
+                font.weight: Font.Normal
+                font.pointSize: Maui.Style.fontSizes.medium
             }
         }
 
@@ -277,7 +286,7 @@ Item
 			visible: control.width >  Kirigami.Units.gridUnit * 15 && control.labelsVisible
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.margins: Maui.Style.space.small 
+            Layout.margins: Maui.Style.space.tiny 
             spacing: 0
 
             Label

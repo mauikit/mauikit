@@ -264,12 +264,20 @@ Maui.Page
                     "text/uri-list": control.filterSelectedItems(model.path) 
                 } : {}
                 
-                Maui.Badge
+                Item
                 {
-                    iconName: "link"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
+                    Layout.fillHeight: true
+                    Layout.preferredWidth: height
                     visible: (model.issymlink == true) || (model.issymlink == "true")
+                    
+                    Kirigami.Icon
+                    {
+                        source: "link"
+                        height: Maui.Style.iconSizes.small
+                        width: Maui.Style.iconSizes.small
+                        anchors.centerIn: parent
+                        color: label1.color
+                    }
                 }
                 
                 Connections
@@ -736,12 +744,20 @@ Maui.Page
                                 "text/uri-list": control.filterSelectedItems(model.path) 
                             } : {}
                             
-                            Maui.Badge
+                            Item
                             {
-                                iconName: "link"
-                                anchors.left: parent.left
-                                anchors.bottom: parent.bottom
+                                Layout.fillHeight: true
+                                Layout.preferredWidth: height
                                 visible: (model.issymlink == true) || (model.issymlink == "true")
+                                
+                                Kirigami.Icon
+                                {
+                                    source: "link"
+                                    height: Maui.Style.iconSizes.small
+                                    width: Maui.Style.iconSizes.small
+                                    anchors.centerIn: parent
+                                    color: label1.color
+                                }
                             }
                             
                             Connections
