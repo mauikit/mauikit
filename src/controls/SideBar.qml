@@ -52,7 +52,7 @@ Maui.AbstractSideBar
     signal itemClicked(int index)
     signal itemRightClicked(int index)
 
-    overlay.visible: (control.collapsed && control.collapsible && (!privateProperties.isCollapsed)) || (collapsed && position > 0 && visible&& !stick)
+    overlay.visible: stick ? (control.collapsed && control.collapsible && !privateProperties.isCollapsed) : (collapsed && position > 0 && visible)
 
     Connections
     {
