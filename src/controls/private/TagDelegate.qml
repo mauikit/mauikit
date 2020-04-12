@@ -22,13 +22,15 @@ ItemDelegate
     ToolTip.visible: hovered
     ToolTip.text: model.tag
     
+    Kirigami.Theme.inherit: false
+    Kirigami.Theme.colorSet: Kirigami.Theme.Window
+    
     background: Rectangle
     {
         id: _background
         radius: Maui.Style.radiusV
         opacity: 0.5
-        color: model.color ? model.color : Kirigami.Theme.backgroundColor        
-        border.color:  Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(color.r, color.g, color.b, control.hovered ?  0.4 : 0.7))
+        color: model.color ? model.color : Qt.darker(Kirigami.Theme.backgroundColor, 1.1)       
     }
     
     RowLayout
@@ -68,7 +70,7 @@ ItemDelegate
                 height: Maui.Style.iconSizes.tiny
                 width: height
                 anchors.centerIn: parent
-                color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.negativeTextColor : _background.border.color
+                color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.negativeTextColor : Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(_background.color.r, _background.color.g, _background.color.b, control.hovered ?  0.4 : 0.7))
             }
         }
     }
