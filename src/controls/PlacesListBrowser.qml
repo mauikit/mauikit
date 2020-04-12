@@ -93,7 +93,7 @@ Maui.ListBrowser
         id: itemDelegate
         iconSize: control.iconSize
         labelVisible: true
-
+        iconVisible: true
         label: model.label
         iconName: model.icon
         count: model.count > 0 ? model.count : ""

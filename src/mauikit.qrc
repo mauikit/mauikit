@@ -85,6 +85,8 @@
         <file alias="labs/AppViewLoader.qml">controls/labs/AppViewLoader.qml</file>
         <file alias="labs/AltBrowser.qml">controls/labs/AltBrowser.qml</file>        
         <file alias="labs/TabsBrowser.qml">controls/labs/TabsBrowser.qml</file>        
+        <file alias="labs/SettingsDialog.qml">controls/labs/SettingsDialog.qml</file>        
+        <file alias="labs/SettingsSection.qml">controls/labs/SettingsSection.qml</file>        
     </qresource>
     <qresource prefix="/"/>
 </RCC>

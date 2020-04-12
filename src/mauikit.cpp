@@ -133,6 +133,10 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("labs/AppViews.qml")), uri, 1, 1, "AppViews");
     qmlRegisterType(componentUrl(QStringLiteral("labs/AppViewLoader.qml")), uri, 1, 1, "AppViewLoader");
     qmlRegisterType(componentUrl(QStringLiteral("labs/AltBrowser.qml")), uri, 1, 1, "AltBrowser");
+    qmlRegisterType(componentUrl(QStringLiteral("labs/TabsBrowser.qml")), uri, 1, 1, "TabsBrowser");
+    qmlRegisterType(componentUrl(QStringLiteral("labs/SettingsDialog.qml")), uri, 1, 1, "SettingsDialog");
+    qmlRegisterType(componentUrl(QStringLiteral("labs/SettingsSection.qml")), uri, 1, 1, "SettingsSection");
+    
     qmlRegisterUncreatableType<AppView>(uri, 1, 1, "AppView", "Cannot be created App");
     
     /** Experimental **/

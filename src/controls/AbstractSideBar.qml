@@ -42,7 +42,7 @@ Drawer
     property int preferredWidth : Kirigami.Units.gridUnit * 12
     property alias overlay : _overlay
 
-    onCollapsedChanged: position = collapsed && collapsedSize < 1 ? 0 : 1
+    onCollapsedChanged: position = (collapsed && collapsedSize < 1) ? 0 : 1
 	default property alias content : _content.data
     
     
@@ -90,7 +90,7 @@ Drawer
     {
         if(!control.collapsed)
         {
-            control.visible = true;
+            control.open()
             control.position = 1;
         }
     }

@@ -69,6 +69,8 @@ AppViews 1.1 labs/AppViews.qml
 AppViewLoader 1.1 labs/AppViewLoader.qml
 AltBrowser 1.1 labs/AltBrowser.qml
 TabsBrowser 1.1 labs/TabsBrowser.qml
+SettingsDialog 1.1 labs/SettingsDialog.qml
+SettingsSection 1.1 labs/SettingsSection.qml
 
 X 1.0 private/shapes/X.qml
 PlusSign 1.0 private/shapes/PlusSign.qml
