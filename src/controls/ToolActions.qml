@@ -34,7 +34,8 @@ Rectangle
     border.color:  Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
     radius: Maui.Style.radiusV
     color: expanded ? Kirigami.Theme.backgroundColor : "transparent"
-       
+       Kirigami.Theme.colorSet: Kirigami.Theme.View
+       Kirigami.Theme.inherit: false
     Row
     {
         id: _layout
