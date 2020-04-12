@@ -64,10 +64,9 @@ Maui.Popup
     
     Maui.Badge
     {
-        id: _closeButton
-        
+        id: _closeButton        
         color: hovered || pressed ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
-        
+        property int position : Maui.App.leftWindowControls.includes("X") ? Qt.AlignLeft : Qt.AlignRight
         Maui.X
         {
             height: Maui.Style.iconSizes.tiny
@@ -81,7 +80,7 @@ Maui.Popup
         anchors
         {
             verticalCenter: parent.top
-            horizontalCenter: parent.left
+            horizontalCenter: _closeButton.position === Qt.AlignLeft ? parent.left : parent.right
             horizontalCenterOffset: control.width === control.parent.width ? _closeButton.width : 0
         }
 

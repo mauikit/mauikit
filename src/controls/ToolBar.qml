@@ -247,18 +247,19 @@ ToolBar
         contentWidth: mainFlickable.contentWidth 
         contentHeight: height        
      
-        ScrollBar.horizontal: ScrollBar
-        {
-            parent: _scrollView
-            x: 0
-            y: _scrollView.height - height
-            width: control.width
-            height: visible ? 2: 0
-            active: _scrollView.ScrollBar.horizontal || _scrollView.ScrollBar.horizontal.active
-        }
+//         ScrollBar.horizontal: ScrollBar
+//         {
+//             parent: _scrollView
+//             x: 0
+//             y: _scrollView.height - height
+//             width: control.width
+//             height: visible ? 2: 0
+//             active: _scrollView.ScrollBar.horizontal || _scrollView.ScrollBar.horizontal.active
+//         }
         
+        ScrollBar.horizontal: ScrollBar {parent: _scrollView; visible: false}        
         ScrollBar.vertical: ScrollBar {parent: _scrollView; visible: false}        
-                
+        
         Flickable
         {
             id: mainFlickable

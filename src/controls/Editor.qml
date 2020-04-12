@@ -12,7 +12,7 @@ Maui.Page
 	Kirigami.Theme.colorSet: Kirigami.Theme.View
 	
 	property bool showLineCount : true
-	property bool showSyntaxHighlighting: true
+	property bool showSyntaxHighlightingLanguages: false
 	
 	property alias body : body
 	property alias document : document
@@ -41,8 +41,8 @@ Maui.Page
 		selectionStart: body.selectionStart
 		selectionEnd: body.selectionEnd
 // 		textColor: control.Kirigami.Theme.textColor
-		backgroundColor: control.Kirigami.Theme.backgroundColor
-// 		
+        backgroundColor: document.enableSyntaxHighlighting ? control.Kirigami.Theme.backgroundColor : undefined
+		theme: "Default"
 		onError:
 		{
 			body.text = message
@@ -192,7 +192,7 @@ Maui.Page
 	
 	ComboBox
 	{
-		visible: control.showSyntaxHighlighting
+        visible: control.showSyntaxHighlightingLanguages
 		model: document.getLanguageNameList()
 		currentIndex: -1
 		onCurrentIndexChanged: document.formatName = model[currentIndex]		
@@ -290,19 +290,22 @@ Maui.Page
 				leftPadding: 0
 				rightPadding: 0
 				topPadding: 0
-				bottomPadding: 0				
+				bottomPadding: 0
+				
+				background: Rectangle
+				{
+                    color: document.backgroundColor                   
+                }	
 				
 				TextArea
 				{
 					id: body
 					implicitWidth: control.width
 					text: document.text
-// 					font.family: "Source Code Pro"
 					placeholderText: qsTr("Body")
                     selectByKeyboard: !Kirigami.Settings.isMobile
                     selectByMouse : !Kirigami.Settings.isMobile
 					textFormat: TextEdit.AutoText			
-// 					font.pointSize: Maui.Style.fontSizes.large
 					wrapMode: TextEdit.WrapAnywhere
 					
 					activeFocusOnPress: true
@@ -311,7 +314,7 @@ Maui.Page
 					
 					background: Rectangle
 					{
-						color: document.backgroundColor
+                        color: "transparent"
 						implicitWidth: body.implicitWidth
 						implicitHeight: control.height
 					}				
@@ -329,7 +332,7 @@ Maui.Page
 					{
                         id: _linesCounter
                         anchors.left: parent.left
-                        height: Math.max(parent.contentHeight, control.height)
+                        height: Math.max(body.height, control.height)
                         width: visible ? 28 : 0
                         
                         Kirigami.Theme.inherit: false

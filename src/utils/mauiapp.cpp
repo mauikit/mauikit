@@ -49,13 +49,15 @@ MauiApp::MauiApp() : QObject(nullptr)
 
 // 	this->setEnableCSD(UTIL::loadSettings("CSD", "GLOBAL", m_enableCSD).toBool());
 
-#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID    
 	auto configWatcher = new QFileSystemWatcher({CONF_FILE.toLocalFile()}, this);
 	connect(configWatcher, &QFileSystemWatcher::fileChanged, [&](QString)
 	{
 		getWindowControlsSettings();
 	});
 #endif
+    
+    getWindowControlsSettings();    
 }
 
 QString MauiApp::getName()
@@ -248,9 +250,13 @@ void MauiApp::getWindowControlsSettings()
 // 	m_theme.path = QUrl(FMH::DataPath+"/maui/csd/Default");
 
 
-	#else
+	#elif Q_OS_MACOS
 	m_leftWindowControls = QStringList{"X","I","A"};
 	emit this->leftWindowControlsChanged();
+    
+    #elif Q_OS_WIN32
+    m_rightWindowControls = QStringList{,"I","A","X"};
+    emit this->rightWindowControlsChanged();
 	#endif
 }
 

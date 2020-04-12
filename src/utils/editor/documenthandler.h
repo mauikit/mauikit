@@ -238,6 +238,11 @@ class MAUIKIT_EXPORT DocumentHandler : public QObject
 	Q_PROPERTY(Alerts *alerts READ getAlerts CONSTANT FINAL)	
 	
 	Q_PROPERTY(QColor backgroundColor READ getBackgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)	
+    
+    Q_PROPERTY(QString theme READ theme WRITE setTheme NOTIFY themeChanged)	
+    
+    Q_PROPERTY(bool enableSyntaxHighlighting READ enableSyntaxHighlighting WRITE setEnableSyntaxHighlighting NOTIFY enableSyntaxHighlightingChanged)	
+    
 	
 public:
 	explicit DocumentHandler(QObject *parent = nullptr);
@@ -304,6 +309,12 @@ public:
 	void setBackgroundColor(const QColor &color);	
 	
 	Alerts *getAlerts() const;
+    
+    QString theme() const;
+    void setTheme(const QString &theme);
+    
+    bool enableSyntaxHighlighting() const;
+    void setEnableSyntaxHighlighting(const bool &value);
 	
 public slots:
 	void load(const QUrl &url);
@@ -314,7 +325,8 @@ public slots:
 	
 	static const QStringList getLanguageNameList();
 	static const QString getLanguageNameFromFileName(const QUrl &fileName);
-	
+    static const QStringList getThemes();
+    
 signals:
 	void documentChanged();
 	void cursorPositionChanged();
@@ -350,6 +362,9 @@ signals:
 	void modifiedChanged();
     
     void currentLineIndexChanged();
+    
+    void enableSyntaxHighlightingChanged();
+    void themeChanged();
 			
 private:
 	void reset();
@@ -385,6 +400,9 @@ private:
 	QString m_formatName;
 	static KSyntaxHighlighting::Repository *m_repository;
 	KSyntaxHighlighting::SyntaxHighlighter *m_highlighter;	
+    
+    bool m_enableSyntaxHighlighting = true;
+    QString m_theme;
 	
 	Alerts *m_alerts;
 	DocumentAlert * missingAlert();

@@ -237,10 +237,18 @@ DocumentHandler::DocumentHandler(QObject *parent)
 		connect(this, &DocumentHandler::loadFile, m_loader, &FileLoader::loadFile);
 		connect(m_loader, &FileLoader::fileReady, [&](QString array, QUrl url)
 		{ 			
-			this->setFormatName(DocumentHandler::getLanguageNameFromFileName(url));			
-			this->setText(array);
-			this->isRich = Qt::mightBeRichText(this->text());
+           
+            this->setText(array);
+			this->isRich = Qt::mightBeRichText(this->text());            
 			emit this->isRichChanged();
+            
+            this->setEnableSyntaxHighlighting(!isRich);
+            
+            if(m_enableSyntaxHighlighting)
+            {
+                this->setFormatName(DocumentHandler::getLanguageNameFromFileName(url));
+            }
+            
 			
 			if (this->textDocument())		
 				this->textDocument()->setModified(false);
@@ -252,7 +260,6 @@ DocumentHandler::DocumentHandler(QObject *parent)
 		m_worker.start();	
 	}
 	//end file loader thread implementation
-	
 	
 	connect(this, &DocumentHandler::cursorPositionChanged, [&]()
     {
@@ -351,14 +358,33 @@ void DocumentHandler::setExternallyModified(const bool& value)
 
 void DocumentHandler::setStyle()
 {
+
 	if (!DocumentHandler::m_repository)		
 		DocumentHandler::m_repository = new KSyntaxHighlighting::Repository();
-	
-	const auto isDark = UTIL::isDark(this->m_backgroundColor);	
-	const auto style = DocumentHandler::m_repository->defaultTheme(isDark ?KSyntaxHighlighting::Repository::DarkTheme : KSyntaxHighlighting::Repository::LightTheme);	
-	
-	this->m_highlighter->setTheme(style);		
-	
+    
+    if(!m_enableSyntaxHighlighting)
+    {
+        this->m_highlighter->setTheme(KSyntaxHighlighting::Theme());     
+        this->m_highlighter->setDefinition(m_repository->definitionForName( this->m_formatName ));
+        
+        return;
+    }
+    
+    
+    if(m_theme.isEmpty())
+    {
+        const auto isDark = UTIL::isDark(this->m_backgroundColor);	
+        const auto style = DocumentHandler::m_repository->defaultTheme(isDark ?KSyntaxHighlighting::Repository::DarkTheme : KSyntaxHighlighting::Repository::LightTheme);	
+        this->m_highlighter->setTheme(style);		
+        
+    }else
+    {
+        qDebug()<< "Applying theme << "<< m_theme << DocumentHandler::m_repository->theme(m_theme).isValid();
+        const auto style =DocumentHandler::m_repository->theme(m_theme);	        
+        this->m_highlighter->setTheme(style);
+    }
+    
+    this->m_highlighter->rehighlight(); 
 	this->m_highlighter->setDefinition(m_repository->definitionForName( this->m_formatName));
 }
 
@@ -712,6 +738,19 @@ const QStringList DocumentHandler::getLanguageNameList()
 	});	
 }
 
+const QStringList DocumentHandler::getThemes()
+{
+    if (!DocumentHandler::m_repository)		
+        DocumentHandler::m_repository = new KSyntaxHighlighting::Repository();
+    
+    const auto themes = DocumentHandler::m_repository->themes();
+    return std::accumulate(themes.constBegin(), themes.constEnd(), QStringList(), [](QStringList &res, const KSyntaxHighlighting::Theme &theme) -> QStringList
+    {
+        res << theme.name();
+        return res;
+    });
+}
+
 void DocumentHandler::reset()
 {
 	emit fontFamilyChanged();
@@ -808,3 +847,48 @@ int DocumentHandler::getCurrentLineIndex()
 {   
     return textCursor().blockNumber();
 }
+
+void DocumentHandler::setEnableSyntaxHighlighting(const bool& value)
+{
+    if(m_enableSyntaxHighlighting == value)
+        return;
+    
+    m_enableSyntaxHighlighting = value;
+    
+    if(m_enableSyntaxHighlighting)
+    {
+        this->setFormatName(DocumentHandler::getLanguageNameFromFileName(m_fileUrl));	
+        
+    }else
+    {
+        setFormatName("None");
+    }
+    
+    emit enableSyntaxHighlightingChanged();
+}
+
+bool DocumentHandler::enableSyntaxHighlighting() const
+{
+    return m_enableSyntaxHighlighting;
+}
+
+void DocumentHandler::setTheme(const QString& theme)
+{
+    if(m_theme == theme)
+        return;
+    
+    m_theme = theme;
+    setStyle();
+    qDebug()<< "changinf the theme<< " << theme << m_theme;
+    emit themeChanged();
+}
+
+QString DocumentHandler::theme() const
+{
+    return m_theme;
+}
+
+
+
+
+

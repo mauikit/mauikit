@@ -43,7 +43,7 @@ Rectangle
             font.bold: false
             visible: text.length
             wrapMode: Text.WordWrap
-            elide: Qt.ELideRight
+            elide: Qt.ElideRight
             opacity: 0.7
         }  
         
