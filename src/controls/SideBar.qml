@@ -52,12 +52,12 @@ Maui.AbstractSideBar
     signal itemClicked(int index)
     signal itemRightClicked(int index)
 
-    overlay.visible: control.collapsed && control.collapsible && (!privateProperties.isCollapsed || !stick)
+    overlay.visible: (control.collapsed && control.collapsible && (!privateProperties.isCollapsed)) || (collapsed && position > 0 && visible&& !stick)
 
     Connections
     {
         target: control.overlay
-        onClicked: control.collapse()
+        onClicked: control.stick ? control.collapse() : control.close()
     }
 
     property Component delegate : Maui.ListDelegate
@@ -97,6 +97,16 @@ Maui.AbstractSideBar
 
 //     onModalChanged: visible = true
     visible: true
+    onStickChanged:
+    {
+        if(stick && collapsed)
+        {
+            control.collapse()
+        }else
+        {
+            control.expand()
+        }
+    }
 
     onCollapsedChanged :
     {
