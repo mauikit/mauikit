@@ -114,12 +114,10 @@ contains(DEFINES, COMPONENT_EDITOR):{
     message("INCLUDING EDITOR COMPONENT")
 
     HEADERS += \
-        $$PWD/src/utils/editor/documenthandler.h \
-        $$PWD/src/utils/editor/syntaxhighlighterutil.h
+        $$PWD/src/utils/editor/documenthandler.h
 
     SOURCES += \
-        $$PWD/src/utils//editor/documenthandler.cpp \
-        $$PWD/src/utils/editor/syntaxhighlighterutil.cpp
+        $$PWD/src/utils//editor/documenthandler.cpp
 
     INCLUDEPATH += $$PWD/src/utils/editor
 

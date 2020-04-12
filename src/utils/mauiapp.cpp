@@ -250,11 +250,11 @@ void MauiApp::getWindowControlsSettings()
 // 	m_theme.path = QUrl(FMH::DataPath+"/maui/csd/Default");
 
 
-	#elif Q_OS_MACOS
+    #elif defined Q_OS_MACOS
 	m_leftWindowControls = QStringList{"X","I","A"};
 	emit this->leftWindowControlsChanged();
     
-    #elif Q_OS_WIN32
+    #elif defined  Q_OS_WIN32
     m_rightWindowControls = QStringList{,"I","A","X"};
     emit this->rightWindowControlsChanged();
 	#endif
