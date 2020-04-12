@@ -45,7 +45,6 @@ Drawer
     onCollapsedChanged: position = (collapsed && collapsedSize < 1) ? 0 : 1
 	default property alias content : _content.data
     
-    
     signal contentDropped(var drop)
 // 	background: null
 

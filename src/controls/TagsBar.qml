@@ -17,10 +17,10 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 2.2
+import QtQuick 2.13
+import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.6 as Kirigami
+import org.kde.kirigami 2.9 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import "private"
 
@@ -32,12 +32,14 @@ Maui.ToolBar
     property bool editMode : false
     property bool allowEditMode : false
     property alias list : tagsList.list
-
+    
     signal addClicked()
     signal tagRemovedClicked(int index)
     signal tagClicked(string tag)
     signal tagsEdited(var tags)
-
+    
+    preferredHeight: Maui.Style.rowHeight + Maui.Style.space.tiny
+    
     background: Rectangle
     {
         color: control.hovered || control.editMode ?  Qt.darker(control.Kirigami.Theme.backgroundColor, 1.1): control.Kirigami.Theme.backgroundColor
@@ -49,109 +51,128 @@ Maui.ToolBar
             anchors.right: parent.right
         }
     }
-
-    leftContent: ToolButton
-    {
-        Layout.alignment: Qt.AlignLeft
-        visible: control.allowEditMode && tagsList.visible
-        icon.name: "list-add"
-        onClicked: addClicked()
-        icon.color: control.Kirigami.Theme.textColor
-    }
     
-    rightContent: ToolButton
+    leftSretch: false
+    rightContent: [/*ToolButton
     {
-		Layout.alignment: Qt.AlignRight
-		visible: control.allowEditMode && tagsList.visible && (tagsList.contentWidth > tagsList.width)
-		icon.name: "document-edit"
-		onClicked: control.goEditMode()
-		icon.color: control.Kirigami.Theme.textColor
-	}
-
-    middleContent : [
-        TagList
+        Layout.alignment: Qt.AlignRight
+        visible: false
+//         visible: control.allowEditMode && tagsList.visible && (tagsList.contentWidth > tagsList.width)
+        icon.name: "document-edit"
+        onClicked: control.goEditMode()
+        icon.color: control.Kirigami.Theme.textColor
+    },
+    */
+    
+    MouseArea
+    {           
+        visible: control.allowEditMode && tagsList.visible
+        hoverEnabled: true
+        onClicked: addClicked()
+        Layout.fillHeight: true
+        Layout.preferredWidth: visible ? height : 0
+        
+        Maui.PlusSign
         {
-            id: tagsList
-            visible: !control.editMode
-            Layout.leftMargin: Maui.Style.space.medium
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            showPlaceHolder: allowEditMode
-            showDeleteIcon: allowEditMode
-            onTagRemoved: tagRemovedClicked(index)
-            onTagClicked: control.tagClicked(tagsList.list.get(index).tag)
-            Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
-            Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
-            MouseArea
-            {
-                anchors.fill: parent
-                z: tagsList.z -1
-                propagateComposedEvents: true
-                onClicked: if(allowEditMode) goEditMode()
-            }
-        },
-
-        Maui.TextField
-        {
-            id: editTagsEntry
-            visible: control.editMode
-            Layout.fillHeight: true
-            Layout.fillWidth:true
-            horizontalAlignment: Text.AlignLeft
-            verticalAlignment:  Text.AlignVCenter
-            focus: true
-            text: list.tags.join(",")
-            color: Kirigami.Theme.textColor
-            selectionColor: Kirigami.Theme.highlightColor
-            selectedTextColor: Kirigami.Theme.highlightedTextColor
-            onAccepted: control.saveTags()
-
-            actions.data: ToolButton
-            {
-                Layout.alignment: Qt.AlignLeft
-                icon.name: "checkbox"
-                onClicked: editTagsEntry.accepted()
-            }
-
-            background: Rectangle
-            {
-                color: "transparent"
-            }
+            height: Maui.Style.iconSizes.tiny
+            width: height
+            anchors.centerIn: parent
+            color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.highlightColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))    
         }
+    } 
     ]
-
+    
+    middleContent : [
+    TagList
+    {
+        id: tagsList
+        visible: !control.editMode
+        Layout.leftMargin: Maui.Style.space.medium
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        showPlaceHolder: allowEditMode
+        showDeleteIcon: allowEditMode
+        onTagRemoved: tagRemovedClicked(index)
+        onTagClicked: control.tagClicked(tagsList.list.get(index).tag)
+        Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
+        Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
+        MouseArea
+        {
+            anchors.fill: parent
+            z: tagsList.z -1
+            propagateComposedEvents: true
+            onClicked: if(allowEditMode) goEditMode()
+        }
+    },
+    
+    Maui.TextField
+    {
+        id: editTagsEntry
+        visible: control.editMode
+        Layout.fillHeight: true
+        Layout.fillWidth:true
+        horizontalAlignment: Text.AlignLeft
+        verticalAlignment:  Text.AlignVCenter
+        focus: true
+        text: list.tags.join(",")
+        color: Kirigami.Theme.textColor
+        selectionColor: Kirigami.Theme.highlightColor
+        selectedTextColor: Kirigami.Theme.highlightedTextColor
+        onAccepted: control.saveTags()
+        
+        actions.data: ToolButton
+        {
+            Layout.alignment: Qt.AlignLeft
+            icon.name: "checkbox"
+            onClicked: editTagsEntry.accepted()
+        }
+        
+        background: Rectangle
+        {
+            color: "transparent"
+        }
+    }
+    ]
+    
     function clear()
     {
         //         tagsList.model.clear()
     }
-
+    
     function goEditMode()
     {
         editMode = true
         editTagsEntry.forceActiveFocus()
     }
-
+    
     function saveTags()
     {
         control.tagsEdited(control.getTags())
         editMode = false
     }
-
+    
     function getTags()
     {
         if(!editTagsEntry.text.length > 0)
+        {
             return
-
+        }
+        
         var tags = []
         if(editTagsEntry.text.trim().length > 0)
         {
             var list = editTagsEntry.text.split(",")
-
+            
             if(list.length > 0)
-                for(const i in list)
+            {
+                for(var i in list)
+                {
                     tags.push(list[i].trim())
+                    
+                }                
+            }
         }
-
+        
         return tags
     }
 }

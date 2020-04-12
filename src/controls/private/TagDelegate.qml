@@ -28,7 +28,7 @@ ItemDelegate
         radius: Maui.Style.radiusV
         opacity: 0.5
         color: model.color ? model.color : Kirigami.Theme.backgroundColor        
-        border.color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(color.r, color.g, color.b, 0.7))
+        border.color:  Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(color.r, color.g, color.b, control.hovered ?  0.4 : 0.7))
     }
     
     RowLayout
@@ -49,6 +49,7 @@ ItemDelegate
             wrapMode: Text.NoWrap
             font.pointSize: Maui.Style.fontSizes.medium
             color: Kirigami.Theme.textColor
+            opacity: control.hovered ? 1 : 0.6
         }
         
         MouseArea

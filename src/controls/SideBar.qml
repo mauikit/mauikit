@@ -29,11 +29,10 @@ Maui.AbstractSideBar
     id: control
     default property alias content : _content.data
 		
-    implicitWidth: privateProperties.isCollapsed && collapsed && collapsible  ? collapsedSize : preferredWidth
+    implicitWidth: privateProperties.isCollapsed && collapsed && collapsible && stick ? collapsedSize : preferredWidth
     width: implicitWidth
-    modal: false
     position: 1
-    interactive: !collapsible
+    interactive: !stick && (modal || collapsed || !visible)
     
     property alias model : _listBrowser.model
     property alias count : _listBrowser.count
@@ -43,6 +42,7 @@ Maui.AbstractSideBar
     
     property int iconSize : Maui.Style.iconSizes.small
     property bool showLabels: control.width > collapsedSize
+    property bool stick : true
     
     property QtObject privateProperties : QtObject
     {
@@ -52,7 +52,7 @@ Maui.AbstractSideBar
     signal itemClicked(int index)
     signal itemRightClicked(int index)
 
-    overlay.visible: control.collapsed && control.collapsible && !privateProperties.isCollapsed
+    overlay.visible: control.collapsed && control.collapsible && (!privateProperties.isCollapsed || !stick)
 
     Connections
     {
@@ -95,22 +95,23 @@ Maui.AbstractSideBar
         }
     }
 
-    onModalChanged: visible = true
+//     onModalChanged: visible = true
     visible: true
 
     onCollapsedChanged :
     {
         if(!collapsible)
+        {
             return
-
+        }
 
         if(!collapsed)
         {
+            control.visible = true
             expand()
         }else
         {
             collapse()
-
         }
     }
 
@@ -160,7 +161,7 @@ Maui.AbstractSideBar
         MouseArea
         {
             id: _handle
-            visible: collapsible && collapsed
+            visible: control.collapsed && control.stick
             Layout.preferredHeight: Maui.Style.toolBarHeight
             Layout.fillWidth: true
             hoverEnabled: true
@@ -214,8 +215,8 @@ Maui.AbstractSideBar
         anchors.horizontalCenter: parent.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        visible: Kirigami.Settings.isMobile
-        enabled: control.collapsed && visible
+        visible: Maui.Handy.isTouch
+        enabled: Maui.Handy.isTouch
         width: Maui.Style.space.large
         property int startX
         property int startY
@@ -270,7 +271,7 @@ Maui.AbstractSideBar
         if(collapsible)
         {
             privateProperties.isCollapsed  = true
-            control.width = control.collapsedSize
+            control.width = control.stick ? control.collapsedSize : control.preferredWidth
         }
     }
 
@@ -280,7 +281,6 @@ Maui.AbstractSideBar
         {
             privateProperties.isCollapsed = false
             control.width = control.preferredWidth
-
         }
     }
 }
