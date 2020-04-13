@@ -7,6 +7,8 @@ import QtQml 2.1
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
+import "private" as Private
+
 Rectangle
 {
     id: control
@@ -17,6 +19,7 @@ Rectangle
     
     property bool autoExclusive: true	
     property bool checkable: true
+    property int display: ToolButton.IconOnly
     
     property Action currentAction : control.autoExclusive ? actions[0] : null
     property int currentIndex : 0	
@@ -34,8 +37,9 @@ Rectangle
     border.color:  Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
     radius: Maui.Style.radiusV
     color: expanded ? Kirigami.Theme.backgroundColor : "transparent"
-       Kirigami.Theme.colorSet: Kirigami.Theme.View
-       Kirigami.Theme.inherit: false
+    Kirigami.Theme.colorSet: Kirigami.Theme.View
+    Kirigami.Theme.inherit: false
+    
     Row
     {
         id: _layout
@@ -139,8 +143,7 @@ Rectangle
             clip: true
             
             Behavior on width
-            {
-                
+            {                
                 NumberAnimation
                 {
                     duration: Kirigami.Units.longDuration
@@ -153,17 +156,23 @@ Rectangle
                 id: _repeater
                 model: control.actions
                 
-                MouseArea
+                Private.BasicToolButton
                 {
                     id: _buttonMouseArea
                     property Action action : modelData
-                    property bool checked: control.checkable && control.autoExclusive ? control.currentIndex === index : action.checked
-                    hoverEnabled: true
-                    width: height + Maui.Style.space.tiny
+                    checked: control.checkable && control.autoExclusive ? control.currentIndex === index : action.checked
+                    width: implicitWidth
                     height: parent.height
                     enabled: action.enabled
                     opacity: enabled ? 1 : 0.5
-
+                    text: action.text
+                    display: control.display === ToolButton.IconOnly ? control.display : (checked ? ToolButton.TextBesideIcon : ToolButton.IconOnly)
+                    icon.name: action.icon.name
+                    icon.width: Maui.Style.iconSizes.small
+                    icon.height: Maui.Style.iconSizes.small
+                    
+                    background.border.color: "transparent"
+                    
                     onClicked: 
                     {
                         control.currentIndex = index	
@@ -173,29 +182,7 @@ Rectangle
                         }
                         
                         action.triggered()
-                    }
-                    
-                    ToolTip.delay: 1000
-                    ToolTip.timeout: 5000
-                    ToolTip.visible:  (_buttonMouseArea.containsMouse || _buttonMouseArea.containsPress) && modelData.text
-                    ToolTip.text: modelData.text
-                    
-                    Rectangle
-                    {
-                        anchors.fill: parent
-                        color: action.enabled && (_buttonMouseArea.checked || _buttonMouseArea.containsMouse || _buttonMouseArea.containsPress) ? Kirigami.Theme.highlightColor : "transparent"
-                        opacity: 0.15
-                    }
-                    
-                    Kirigami.Icon
-                    {
-                        anchors.centerIn: parent
-                        width: Maui.Style.iconSizes.small
-                        height: width
-                        color: (action.icon.color && action.icon.color.length ) ? action.icon.color : ( (_buttonMouseArea.checked || _buttonMouseArea.containsPress) && enabled ) ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
-                        source: action.icon.name
-                        enabled: action.enabled
-                    }
+                    }                 
                     
                     Kirigami.Separator
                     {

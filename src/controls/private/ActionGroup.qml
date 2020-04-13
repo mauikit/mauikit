@@ -32,7 +32,7 @@ Item
     default property list<QtObject> items
     property list<QtObject> hiddenItems
     
-     property int currentIndex : 0
+    property int currentIndex : 0
     property bool strech: false
     readonly property int count : control.items.length + control.hiddenItems.length
     
@@ -42,35 +42,36 @@ Item
     
     property Component delegate : BasicToolButton 
     {
-         Layout.alignment: Qt.AlignVCenter
-    Layout.fillWidth: control.strech
-    Layout.preferredHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
-    
+        Layout.alignment: Qt.AlignVCenter
+        Layout.fillWidth: control.strech
+        Layout.preferredHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
+        
         visible: modelData.visible
         checked:  index == control.currentIndex
         Kirigami.Theme.backgroundColor: modelData.Kirigami.Theme.backgroundColor
         Kirigami.Theme.highlightColor: modelData.Kirigami.Theme.highlightColor
-        iconName: modelData.MauiLab.AppView.iconName
+        icon.name: modelData.MauiLab.AppView.iconName
         text: modelData.MauiLab.AppView.title 
+        display: checked ? ToolButton.TextBesideIcon : ToolButton.IconOnly
         
-            onClicked: 
-    {
-        control.currentIndex = index
-        control.clicked(index)
-    }
+        onClicked: 
+        {
+            control.currentIndex = index
+            control.clicked(index)
+        }
     }
     
     implicitHeight: parent.height
     implicitWidth: strech ? parent.width : _layout.implicitWidth    
     
-    Behavior on implicitWidth
-    {		
-        NumberAnimation
-        {
-            duration: Kirigami.Units.shortDuration
-            easing.type: Easing.InOutQuad
-        }
-    }
+//     Behavior on implicitWidth
+//     {		
+//         NumberAnimation
+//         {
+//             duration: Kirigami.Units.shortDuration
+//             easing.type: Easing.InOutQuad
+//         }
+//     }
     
     RowLayout
     {
@@ -92,9 +93,14 @@ Item
             
             visible: obj
             Layout.fillWidth: control.strech
-            Layout.preferredWidth: visible ? implicitWidth : 0
+            Layout.preferredWidth: visible ? implicitWidth * (checked ? 2.5 :  1) : 0
             checked: true
-            iconName: obj ? obj.MauiLab.AppView.iconName : ""
+            icon.name: obj ? obj.MauiLab.AppView.iconName : ""
+            icon.width: Maui.Style.iconSizes.medium
+            icon.height: Maui.Style.iconSizes.medium
+            
+            display: checked ? ToolButton.TextBesideIcon : ToolButton.IconOnly
+            
             text: obj ? obj.MauiLab.AppView.title : ""            
             
             Kirigami.Theme.backgroundColor: obj ? obj.Kirigami.Theme.backgroundColor : undefined
@@ -108,39 +114,39 @@ Item
         }  
         
         /*Repeater
-        {
-            
-            model: control.hiddenItems
-            delegate: BasicToolButton 
-            {
-                
-                Layout.alignment: Qt.AlignVCenter
-                Layout.fillWidth: control.strech
-                Layout.preferredHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
-                
-                visible: modelData.visible && _menuButton.checked
-                
-                Kirigami.Theme.backgroundColor: modelData.Kirigami.Theme.backgroundColor
-                Kirigami.Theme.highlightColor: modelData.Kirigami.Theme.highlightColor
-                iconName: modelData.MauiLab.AppView.iconName
-                text: modelData.MauiLab.AppView.title 
-                
-                checked: control.currentIndex === control.items.length + index
-                
-                onClicked:
-                {
-                    control.currentIndex = control.items.length + index
-                    control.clicked(control.currentIndex)
-                }
-            }	
-        }  */ 
-       
+         *        {
+         *            
+         *            model: control.hiddenItems
+         *            delegate: BasicToolButton 
+         *            {
+         *                
+         *                Layout.alignment: Qt.AlignVCenter
+         *                Layout.fillWidth: control.strech
+         *                Layout.preferredHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
+         *                
+         *                visible: modelData.visible && _menuButton.checked
+         *                
+         *                Kirigami.Theme.backgroundColor: modelData.Kirigami.Theme.backgroundColor
+         *                Kirigami.Theme.highlightColor: modelData.Kirigami.Theme.highlightColor
+         *                iconName: modelData.MauiLab.AppView.iconName
+         *                text: modelData.MauiLab.AppView.title 
+         *                
+         *                checked: control.currentIndex === control.items.length + index
+         *                
+         *                onClicked:
+         *                {
+         *                    control.currentIndex = control.items.length + index
+         *                    control.clicked(control.currentIndex)
+    }
+    }	
+    }  */ 
+        
         Maui.ToolButtonMenu
         {
             id: _menuButton
             icon.name: "list-add"
             
-			visible: control.hiddenItems.length > 0          
+            visible: control.hiddenItems.length > 0          
             
             Layout.alignment: Qt.AlignVCenter
             autoExclusive: false
@@ -161,11 +167,11 @@ Item
             
             Repeater
             {
-				model: control.hiddenItems
+                model: control.hiddenItems
                 
                 MenuItem
                 {
-					text: modelData.MauiLab.AppView.title
+                    text: modelData.MauiLab.AppView.title
                     icon.name: modelData.MauiLab.AppView.iconName
                     autoExclusive: true
                     checkable: true
@@ -173,7 +179,7 @@ Item
                     
                     onTriggered:
                     {
-						control.currentIndex = control.items.length + index
+                        control.currentIndex = control.items.length + index
                         control.clicked(control.currentIndex)
                     }
                 }

@@ -26,29 +26,41 @@ import org.kde.mauikit 1.1 as MauiLab
 
 MouseArea
 {
-    id: _delegate
+    id: control
     
-     property bool checked : false
-    property alias text : _label.text
-    property alias iconName : _icon.source
+    property bool checked : false
+    property alias text : _label.text   
+    property alias icon : _dummy.icon
+    
+    property int display : ToolButton.TextBesideIcon
     
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Button
     
     hoverEnabled: true
     implicitHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
-    implicitWidth: _layoutButton.implicitWidth  + (Maui.Style.space.medium * (checked ? 2.5 : 1))
+    implicitWidth: _layoutButton.implicitWidth  + (Maui.Style.space.medium *  1.2)
 
     onPressAndHold: control.pressAndHold(index)
     onDoubleClicked: control.doubleClicked(index)
     
+    Action
+    {
+        id: _dummy
+        icon.width: Maui.Style.iconSizes.medium
+        icon.height: Maui.Style.iconSizes.medium
+    }
+    
+    readonly property alias background : _background
+    
     Rectangle
     {
+        id: _background
         anchors.fill: parent
         opacity: 0.5
         radius: Maui.Style.radiusV
-        color: checked || _delegate.containsMouse || _delegate.containsPress ? Qt.rgba( _delegate.Kirigami.Theme.highlightColor.r,  _delegate.Kirigami.Theme.highlightColor.g,  _delegate.Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
-        border.color:  checked ?  _delegate.Kirigami.Theme.highlightColor : "transparent"            
+        color: checked || control.containsMouse || control.containsPress ? Qt.rgba( control.Kirigami.Theme.highlightColor.r,  control.Kirigami.Theme.highlightColor.g,  control.Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
+        border.color:  checked ?  control.Kirigami.Theme.highlightColor : "transparent"            
         
         Behavior on color
         {
@@ -64,34 +76,40 @@ MouseArea
         id: _layoutButton
         anchors.centerIn: parent
         height: parent.height
-        spacing: _delegate.checked ? Maui.Style.space.tiny : 0  
+        spacing: control.checked ? Maui.Style.space.tiny : 0  
         clip: true
 
         Item
         {
-            Layout.preferredWidth: Maui.Style.iconSizes.medium
+            Layout.preferredWidth: visible ? Maui.Style.iconSizes.medium : 0
             Layout.alignment: Qt.AlignRight
+            
+            visible: _icon.source && _icon.source.length && (control.display === ToolButton.TextBesideIcon || control.display === ToolButton.IconOnly)
             
             Kirigami.Icon
             {
-                id: _icon 
+                id: _icon                 
                 anchors.centerIn: parent
-                width: Maui.Style.iconSizes.medium
-                height: width
-                color: checked || _delegate.containsMouse || _delegate.containsPress ? _delegate.Kirigami.Theme.highlightColor : _delegate.Kirigami.Theme.textColor
+                width: control.icon.width
+                height: control.icon.height
+               
+                color: (control.icon.color && control.icon.color.length ) ? control.icon.color : ( (control.checked || control.containsMouse || control.containsPress ) && enabled ) ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
                 
+                source: control.icon.name                
             }                
         }            
         
         Label
         {
             id: _label
-            opacity: checked ? 1 : 0
+            visible: text.length && (control.display === ToolButton.TextOnly || control.display === ToolButton.TextBesideIcon || !_icon.visible)
+            opacity: visible ? 1 : 0
             horizontalAlignment: Qt.AlignLeft
-            Layout.fillWidth: checked
-            Layout.preferredWidth: checked ? implicitWidth : 0
-            color: checked ? _delegate.Kirigami.Theme.highlightColor : _delegate.Kirigami.Theme.textColor
-            Behavior on Layout.preferredWidth
+            Layout.fillWidth: visible
+            Layout.preferredWidth: visible ? implicitWidth+ Maui.Style.space.small : 0
+            color: control.checked || control.containsMouse || control.containsPress  ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
+           
+           Behavior on Layout.preferredWidth
             {		
                 NumberAnimation
                 {
@@ -113,6 +131,6 @@ MouseArea
     
     ToolTip.delay: 1000
     ToolTip.timeout: 5000
-    ToolTip.visible: ( _delegate.containsMouse || _delegate.containsPress ) && !checked
-    ToolTip.text: _delegate.text
+    ToolTip.visible: ( control.containsMouse || control.containsPress ) && control.text.length && (control.display === ToolButton.IconOnly ? true : !checked)
+    ToolTip.text: control.text
 }
