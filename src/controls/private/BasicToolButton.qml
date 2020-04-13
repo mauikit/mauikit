@@ -104,9 +104,9 @@ MouseArea
             id: _label
             visible: text.length && (control.display === ToolButton.TextOnly || control.display === ToolButton.TextBesideIcon || !_icon.visible)
             opacity: visible ? 1 : 0
-            horizontalAlignment: Qt.AlignLeft
+            horizontalAlignment: _icon.visible ? Qt.AlignLeft : Qt.AlignHCenter
             Layout.fillWidth: visible
-            Layout.preferredWidth: visible ? implicitWidth+ Maui.Style.space.small : 0
+            Layout.preferredWidth: visible ? implicitWidth + Maui.Style.space.small : 0
             color: control.checked || control.containsMouse || control.containsPress  ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
            
            Behavior on Layout.preferredWidth

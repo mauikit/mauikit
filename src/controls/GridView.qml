@@ -66,6 +66,8 @@ Item
 	property bool enableLassoSelection : false
 	property alias lassoRec : selectLayer
 	
+	property alias pinchEnabled : _pinchArea.enabled
+	
 	signal itemsSelected(var indexes)
 	signal areaClicked(var mouse)
 	signal areaRightClicked()
@@ -105,11 +107,6 @@ Item
 		}
 		
 		ScrollBar.horizontal: ScrollBar {parent: _scrollView; visible: false}
-		// 	Kirigami.WheelHandler
-		// 	{
-		// 		id: wheelHandler
-		// 		target: controlView
-		// 	}
 		
 		GridView
 		{
@@ -159,6 +156,7 @@ Item
 			
 			PinchArea
 			{
+                id: _pinchArea
 				anchors.fill: parent
 				z: -1
 				onPinchFinished:
