@@ -236,8 +236,7 @@ DocumentHandler::DocumentHandler(QObject *parent)
 		connect(&m_worker, &QThread::finished, m_loader, &QObject::deleteLater);
 		connect(this, &DocumentHandler::loadFile, m_loader, &FileLoader::loadFile);
 		connect(m_loader, &FileLoader::fileReady, [&](QString array, QUrl url)
-		{ 			
-           
+		{ 
             this->setText(array);
 			this->isRich = Qt::mightBeRichText(this->text());            
 			emit this->isRichChanged();
@@ -247,8 +246,7 @@ DocumentHandler::DocumentHandler(QObject *parent)
             if(m_enableSyntaxHighlighting)
             {
                 this->setFormatName(DocumentHandler::getLanguageNameFromFileName(url));
-            }
-            
+            }            
 			
 			if (this->textDocument())		
 				this->textDocument()->setModified(false);
@@ -368,8 +366,7 @@ void DocumentHandler::setStyle()
         this->m_highlighter->setDefinition(m_repository->definitionForName( this->m_formatName ));
         
         return;
-    }
-    
+    }    
     
     if(m_theme.isEmpty())
     {
@@ -384,7 +381,7 @@ void DocumentHandler::setStyle()
         this->m_highlighter->setTheme(style);
     }
     
-    this->m_highlighter->rehighlight(); 
+//     this->m_highlighter->rehighlight(); 
 	this->m_highlighter->setDefinition(m_repository->definitionForName( this->m_formatName));
 }
 

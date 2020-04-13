@@ -240,7 +240,6 @@ Maui.Page
             {
                 id: delegate
                 width: parent.width
-                height: implicitHeight
                 
                 padding: 0
                 leftPadding: Maui.Style.space.small

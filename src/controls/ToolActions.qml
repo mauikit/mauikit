@@ -166,7 +166,7 @@ Rectangle
                     enabled: action.enabled
                     opacity: enabled ? 1 : 0.5
                     text: action.text
-                    display: control.display === ToolButton.IconOnly ? control.display : (checked ? ToolButton.TextBesideIcon : ToolButton.IconOnly)
+                    display: control.autoExclusive ? (checked ? control.display : ToolButton.IconOnly) : control.display
                     icon.name: action.icon.name
                     icon.width: Maui.Style.iconSizes.small
                     icon.height: Maui.Style.iconSizes.small

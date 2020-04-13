@@ -43,11 +43,11 @@ Maui.Page
 // 		textColor: control.Kirigami.Theme.textColor
         backgroundColor: document.enableSyntaxHighlighting ? control.Kirigami.Theme.backgroundColor : undefined
 		theme: "Default"
-		onError:
-		{
-			body.text = message
-			body.visible = true
-		}
+// 		onError:
+// 		{
+// 			body.text = message
+// 			body.visible = true
+// 		}
 	}
 	
 	Row

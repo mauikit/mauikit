@@ -8,7 +8,7 @@ import org.kde.mauikit 1.1 as MauiLab
 Maui.Dialog
 {
     id: control
-    maxHeight: Math.min(_scrollView.contentHeight+ Maui.Style.space.small, 500)
+    maxHeight: Math.min(_scrollView.contentHeight + Maui.Style.space.big, 500) + headBar.height
     maxWidth: 350
     defaultButtons: false
         
