@@ -397,11 +397,11 @@ private:
 	QColor m_backgroundColor;
 	
 	static int m_instanceCount;
-	QString m_formatName;
+	QString m_formatName = "None";
 	static KSyntaxHighlighting::Repository *m_repository;
 	KSyntaxHighlighting::SyntaxHighlighter *m_highlighter;	
     
-    bool m_enableSyntaxHighlighting = true;
+    bool m_enableSyntaxHighlighting = false;
     QString m_theme;
 	
 	Alerts *m_alerts;

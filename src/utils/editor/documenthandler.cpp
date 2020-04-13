@@ -239,14 +239,7 @@ DocumentHandler::DocumentHandler(QObject *parent)
 		{ 
             this->setText(array);
 			this->isRich = Qt::mightBeRichText(this->text());            
-			emit this->isRichChanged();
-            
-            this->setEnableSyntaxHighlighting(!isRich);
-            
-            if(m_enableSyntaxHighlighting)
-            {
-                this->setFormatName(DocumentHandler::getLanguageNameFromFileName(url));
-            }            
+			emit this->isRichChanged();            
 			
 			if (this->textDocument())		
 				this->textDocument()->setModified(false);
@@ -356,17 +349,35 @@ void DocumentHandler::setExternallyModified(const bool& value)
 
 void DocumentHandler::setStyle()
 {
-
 	if (!DocumentHandler::m_repository)		
-		DocumentHandler::m_repository = new KSyntaxHighlighting::Repository();
-    
+		DocumentHandler::m_repository = new KSyntaxHighlighting::Repository();    
+               
     if(!m_enableSyntaxHighlighting)
     {
         this->m_highlighter->setTheme(KSyntaxHighlighting::Theme());     
-        this->m_highlighter->setDefinition(m_repository->definitionForName( this->m_formatName ));
-        
+        this->m_highlighter->setDefinition(m_repository->definitionForName( "None" ));
+        this->m_highlighter->rehighlight();
         return;
     }    
+    
+    qDebug() << "Setting the style for syntax highligthing";
+    
+    const auto def = m_repository->definitionForName(this->m_formatName);    
+    if(!def.isValid())
+    {
+        qDebug() << "Highliging definition is not valid" << def.name() << def.filePath() << def.author() << m_formatName;
+        return;
+    }    
+    
+    if(!this->m_highlighter->document())
+    {
+        qDebug() << "Not document to highlight";
+        return;
+    }
+    
+    qDebug() << "Highliging definition info" << def.name() << def.filePath() << def.author() << m_formatName;
+    
+    this->m_highlighter->setDefinition(def);        
     
     if(m_theme.isEmpty())
     {
@@ -379,10 +390,8 @@ void DocumentHandler::setStyle()
         qDebug()<< "Applying theme << "<< m_theme << DocumentHandler::m_repository->theme(m_theme).isValid();
         const auto style =DocumentHandler::m_repository->theme(m_theme);	        
         this->m_highlighter->setTheme(style);
-    }
-    
-//     this->m_highlighter->rehighlight(); 
-	this->m_highlighter->setDefinition(m_repository->definitionForName( this->m_formatName));
+        this->m_highlighter->rehighlight();
+    }      
 }
 
 QString DocumentHandler::formatName() const
@@ -435,7 +444,7 @@ void DocumentHandler::setDocument(QQuickTextDocument *document)
 	if(this->textDocument())
 	{
 		this->textDocument()->setModified(false);		
-		m_highlighter->setDocument(this->textDocument());	
+		this->m_highlighter->setDocument(this->textDocument());	
 		connect(this->textDocument(), &QTextDocument::modificationChanged, this, &DocumentHandler::modifiedChanged);		
 	}
 	
@@ -683,6 +692,11 @@ void DocumentHandler::load(const QUrl &url)
 	this->m_watcher->addPath(m_fileUrl.toLocalFile());
 	
 	emit this->loadFile(m_fileUrl);
+    
+    if(m_enableSyntaxHighlighting)
+    {
+        this->setFormatName(DocumentHandler::getLanguageNameFromFileName(m_fileUrl));	        
+    }
 }
 
 void DocumentHandler::saveAs(const QUrl &url)
@@ -846,19 +860,20 @@ int DocumentHandler::getCurrentLineIndex()
 }
 
 void DocumentHandler::setEnableSyntaxHighlighting(const bool& value)
-{
+{    
     if(m_enableSyntaxHighlighting == value)
+    {
         return;
+    }   
     
     m_enableSyntaxHighlighting = value;
-    
-    if(m_enableSyntaxHighlighting)
-    {
-        this->setFormatName(DocumentHandler::getLanguageNameFromFileName(m_fileUrl));	
         
+    if(!m_enableSyntaxHighlighting)
+    {
+        this->setFormatName("None");
     }else
     {
-        setFormatName("None");
+        this->setFormatName(DocumentHandler::getLanguageNameFromFileName(m_fileUrl)); 
     }
     
     emit enableSyntaxHighlightingChanged();
@@ -874,8 +889,8 @@ void DocumentHandler::setTheme(const QString& theme)
     if(m_theme == theme)
         return;
     
-    m_theme = theme;
-    setStyle();
+    m_theme = theme;    
+    setStyle();    
     qDebug()<< "changinf the theme<< " << theme << m_theme;
     emit themeChanged();
 }

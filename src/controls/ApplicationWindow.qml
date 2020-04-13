@@ -226,7 +226,7 @@ Window
     
     Overlay.overlay.modal: Rectangle 
     {
-        color: Qt.rgba( root.Kirigami.Theme.backgroundColor.r,  root.Kirigami.Theme.backgroundColor.g,  root.Kirigami.Theme.backgroundColor.b, 0.5)
+        color: Qt.rgba( root.Kirigami.Theme.backgroundColor.r,  root.Kirigami.Theme.backgroundColor.g,  root.Kirigami.Theme.backgroundColor.b, 0.7)
         
         Behavior on opacity { NumberAnimation { duration: 150 } }
         
@@ -237,7 +237,7 @@ Window
     {
         radius: Maui.App.enableCSD ?  Maui.App.theme.borderRadius : 0
 
-        color: Qt.rgba( root.Kirigami.Theme.backgroundColor.r,  root.Kirigami.Theme.backgroundColor.g,  root.Kirigami.Theme.backgroundColor.b, 0.5)
+        color: Qt.rgba( root.Kirigami.Theme.backgroundColor.r,  root.Kirigami.Theme.backgroundColor.g,  root.Kirigami.Theme.backgroundColor.b, 0.7)
         Behavior on opacity { NumberAnimation { duration: 150 } }
     }
     

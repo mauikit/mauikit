@@ -56,6 +56,8 @@ Maui.Popup
 
     clip: false
 
+    closePolicy: Popup.NoAutoClose | Popup.CloseOnEscape
+    
     maxWidth: Maui.Style.unit * 300
     maxHeight: (_pageContent.implicitHeight * 1.2) + ( _page.footBar.height ) + Maui.Style.space.huge + _page.padding
 
@@ -66,7 +68,9 @@ Maui.Popup
     {
         id: _closeButton        
         color: hovered || pressed ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
+        
         property int position : Maui.App.leftWindowControls.includes("X") ? Qt.AlignLeft : Qt.AlignRight
+        
         Maui.X
         {
             height: Maui.Style.iconSizes.tiny

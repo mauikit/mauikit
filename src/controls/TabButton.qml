@@ -8,92 +8,96 @@ TabButton
 {
     id: control
     implicitWidth:  150 * Maui.Style.unit
-
+    
     signal closeClicked(int index)
-	
-	default property alias content : _layout.data
-
-    Kirigami.Separator
-    {
-        color: Kirigami.Theme.highlightColor
-        height: Maui.Style.unit * 2
-        visible: checked
-        anchors
-        {
-            bottom: parent.bottom
-            left: parent.left
-            right: parent.right
-        }
-    }
-
-    background: Rectangle
-    {
-        color: "transparent"
-
+    
+    default property alias content : _layout.data
+        
         Kirigami.Separator
         {
-            width: Maui.Style.unit
+            color: Kirigami.Theme.highlightColor
+            height: Maui.Style.unit * 2
+            visible: checked
             anchors
             {
                 bottom: parent.bottom
-                top: parent.top
+                left: parent.left
                 right: parent.right
             }
         }
-    }
-    
-    contentItem: Item
-    {   
-        RowLayout
-        {
-            id: _layout
-            anchors.fill: parent
-            spacing: Maui.Style.space.small
-            anchors.margins: Maui.Style.space.small
-            opacity: control.hovered || control.checked ? 1 : 0.7
-            
-            Label
-            {
-                visible: text.length
-                text: control.text
-                font.pointSize: Maui.Style.fontSizes.default
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.alignment: Qt.AlignHCenter
-                verticalAlignment: Qt.AlignVCenter
-                horizontalAlignment: Qt.AlignHCenter
-                color: control.checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-                wrapMode: Text.NoWrap
-                elide: Text.ElideMiddle
-            }       
-        }
         
-        Rectangle
-        {            
-            visible:  opacity > 0
-            opacity: Kirigami.Settings.isMobile ? 1 : (control.hovered || control.checked ? 1 : 0)
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            anchors.margins: Maui.Style.space.tiny
+        background: Rectangle
+        {
+            color: "transparent"
             
-            width: visible ? Maui.Style.iconSizes.small * 2 : 0
-            color: Kirigami.Theme.backgroundColor
-            
-            Behavior on opacity
+            Kirigami.Separator
             {
-                NumberAnimation
+                width: Maui.Style.unit
+                anchors
                 {
-                    duration: Kirigami.Units.longDuration
-                    easing.type: Easing.InOutQuad
+                    bottom: parent.bottom
+                    top: parent.top
+                    right: parent.right
                 }
             }
+        }
+        
+        contentItem: Item
+        {   
+            RowLayout
+            {
+                id: _layout
+                anchors.fill: parent
+                spacing: Maui.Style.space.small
+                anchors.margins: Maui.Style.space.small
+                anchors.leftMargin: height
+                anchors.rightMargin: height
+                
+                opacity: control.hovered || control.checked ? 1 : 0.7
+                
+                Label
+                {
+                    visible: text.length
+                    text: control.text
+                    font.pointSize: Maui.Style.fontSizes.default
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.alignment: Qt.AlignHCenter
+                    verticalAlignment: Qt.AlignVCenter
+                    horizontalAlignment: Qt.AlignHCenter
+                    color: control.checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+                    wrapMode: Text.NoWrap
+                    elide: Text.ElideMiddle
+                }       
+            }
+            
             
             MouseArea
-            {                
+            {             
+                id: _closeButton        
+                
+                property int position : Maui.App.leftWindowControls.includes("X") ? Qt.AlignLeft : Qt.AlignRight
+                
                 hoverEnabled: true
                 onClicked: control.closeClicked(index)
-                anchors.fill: parent
+                width: height
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.left:  _closeButton.position === Qt.AlignLeft ? parent.left : undefined
+                anchors.right:  _closeButton.position === Qt.AlignRight ? parent.right : undefined
+                anchors.margins: Maui.Style.space.tiny
+                
+                visible:  opacity > 0
+                opacity: Kirigami.Settings.isMobile ? 1 : (control.hovered || control.checked ? 1 : 0)                
+                
+                Behavior on opacity
+                {
+                    NumberAnimation
+                    {
+                        duration: Kirigami.Units.longDuration
+                        easing.type: Easing.InOutQuad
+                    }
+                }
                 
                 Maui.X
                 {
@@ -103,6 +107,6 @@ TabButton
                     color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.negativeTextColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))        
                 }
             }            
+            
         }
-    }
 }

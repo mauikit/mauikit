@@ -52,8 +52,7 @@ Popup
 
                 
                 modal: control.width !== control.parent.width && control.height !== control.parent.height
-                focus: true
-                clip: true
+            
                 
                 margins: 1
                 padding: 1 

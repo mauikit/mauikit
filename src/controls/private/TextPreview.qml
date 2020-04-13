@@ -10,6 +10,7 @@ Maui.Editor
 	anchors.fill: parent	
 	footBar.visible: false
 	body.readOnly: true
+	document.enableSyntaxHighlighting: true
 	Kirigami.Theme.backgroundColor: "transparent"
 	
 	Component.onCompleted: document.load(currentUrl) 
