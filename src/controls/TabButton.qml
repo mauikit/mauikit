@@ -52,7 +52,7 @@ TabButton
                 anchors.margins: Maui.Style.space.small
                 anchors.leftMargin: height
                 anchors.rightMargin: height
-                
+                clip: true
                 opacity: control.hovered || control.checked ? 1 : 0.7
                 
                 Label
@@ -85,7 +85,6 @@ TabButton
                 anchors.bottom: parent.bottom
                 anchors.left:  _closeButton.position === Qt.AlignLeft ? parent.left : undefined
                 anchors.right:  _closeButton.position === Qt.AlignRight ? parent.right : undefined
-                anchors.margins: Maui.Style.space.tiny
                 
                 visible:  opacity > 0
                 opacity: Kirigami.Settings.isMobile ? 1 : (control.hovered || control.checked ? 1 : 0)                

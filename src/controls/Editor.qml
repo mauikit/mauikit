@@ -177,27 +177,13 @@ Maui.Page
 	]		
 	
 	// 	footBar.visible: !body.readOnly
-	footBar.rightContent: [
-	ToolButton
-	{
-		icon.name: "zoom-in"
-		onClicked: zoomIn()
-	},
-	
-	ToolButton
-	{
-		icon.name: "zoom-out"
-		onClicked: zoomOut()
-	},
-	
-	ComboBox
+    footBar.rightContent: ComboBox
 	{
         visible: control.showSyntaxHighlightingLanguages
 		model: document.getLanguageNameList()
 		currentIndex: -1
 		onCurrentIndexChanged: document.formatName = model[currentIndex]		
-	}	
-	]
+    }
 	
 	ColumnLayout
 	{

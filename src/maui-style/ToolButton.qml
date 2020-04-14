@@ -51,7 +51,7 @@ T.ToolButton
                              contentItem.implicitHeight + topPadding + bottomPadding)
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
-    hoverEnabled: true
+    hoverEnabled: !Kirigami.Settings.isMobile
     padding: Maui.Style.space.tiny
     spacing: Maui.Style.space.tiny
     rightPadding: Maui.Style.space.tiny
