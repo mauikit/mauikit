@@ -470,10 +470,12 @@ Window
             if(headBar.position === ToolBar.Footer)
             {
                 Maui.Android.statusbarColor(Kirigami.Theme.backgroundColor, true)
+                Maui.Android.navBarColor(headBar.visible ? headBar.Kirigami.Theme.backgroundColor : Kirigami.Theme.backgroundColor, true)
 
             } else
             {
                 Maui.Android.statusbarColor(headBar.Kirigami.Theme.backgroundColor, true)
+                Maui.Android.navBarColor(footBar.visible ? footBar.Kirigami.Theme.backgroundColor : Kirigami.Theme.backgroundColor, true)
             }
         }
 
