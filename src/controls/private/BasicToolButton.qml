@@ -17,6 +17,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+
+//this basic toolbutton provides a basic anima
+
 import QtQuick 2.9
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
@@ -28,9 +31,15 @@ MouseArea
 {
     id: control
     
+    property alias extraContent : _layoutButton.data
+    
     property bool checked : false
     property alias text : _label.text   
     property alias icon : _dummy.icon
+    property alias spacing: _layoutButton.spacing
+    
+    readonly property alias label : _label
+    readonly property alias kicon : _icon
     
     property int display : ToolButton.TextBesideIcon
     
@@ -44,7 +53,7 @@ MouseArea
     onPressAndHold: control.pressAndHold(index)
     onDoubleClicked: control.doubleClicked(index)
     
-    Action
+    property Action action : Action
     {
         id: _dummy
         icon.width: Maui.Style.iconSizes.medium
@@ -52,7 +61,7 @@ MouseArea
     }
     
     readonly property alias background : _background
-    
+        
     Rectangle
     {
         id: _background
@@ -76,13 +85,13 @@ MouseArea
         id: _layoutButton
         anchors.centerIn: parent
         height: parent.height
-        spacing: control.checked ? Maui.Style.space.tiny : 0  
+        spacing: Maui.Style.space.tiny
         clip: true
 
         Item
         {
             Layout.preferredWidth: visible ? Maui.Style.iconSizes.medium : 0
-            Layout.alignment: Qt.AlignRight
+            Layout.alignment: Qt.AlignCenter
             
             visible: _icon.source && _icon.source.length && (control.display === ToolButton.TextBesideIcon || control.display === ToolButton.IconOnly)
             
@@ -95,7 +104,8 @@ MouseArea
                
                 color: (control.icon.color && control.icon.color.length ) ? control.icon.color : ( (control.checked || control.containsMouse || control.containsPress ) && enabled ) ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
                 
-                source: control.icon.name                
+                source: control.icon.name  
+                isMask: true
             }                
         }            
         
@@ -104,12 +114,12 @@ MouseArea
             id: _label
             visible: text.length && (control.display === ToolButton.TextOnly || control.display === ToolButton.TextBesideIcon || !_icon.visible)
             opacity: visible ? 1 : 0
-            horizontalAlignment: _icon.visible ? Qt.AlignLeft : Qt.AlignHCenter
+            horizontalAlignment: Qt.AlignHCenter
             Layout.fillWidth: visible
             Layout.preferredWidth: visible ? implicitWidth + Maui.Style.space.small : 0
             color: control.checked || control.containsMouse || control.containsPress  ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
-           
-           Behavior on Layout.preferredWidth
+            
+            Behavior on Layout.preferredWidth
             {		
                 NumberAnimation
                 {

@@ -22,7 +22,7 @@ Rectangle
     property int display: ToolButton.IconOnly
     
     property Action currentAction : control.autoExclusive ? actions[0] : null
-    property int currentIndex : 0	
+    property int currentIndex : -1
     onCurrentIndexChanged:
     {
         if(control.autoExclusive)
@@ -34,7 +34,7 @@ Rectangle
     property bool expanded : true	
     property string defaultIconName: "application-menu"
     
-    border.color:  Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+    border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
     radius: Maui.Style.radiusV
     color: expanded ? Kirigami.Theme.backgroundColor : "transparent"
     Kirigami.Theme.colorSet: Kirigami.Theme.View
@@ -80,16 +80,16 @@ Rectangle
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     
-                    Kirigami.Icon
+                    Private.BasicToolButton
                     {
                         id: _defaultButtonIcon
                         
                         anchors.centerIn: parent
-                        width: Maui.Style.iconSizes.small
-                        height: width
-                        color: control.currentAction ? (control.currentAction.icon.color && control.currentAction.icon.color.length ? control.currentAction.icon.color : ( _defaultButtonMouseArea.containsPress ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor)) :  control.Kirigami.Theme.textColor
+                        icon.width: Maui.Style.iconSizes.small
+                        icon.height: width
+                        icon.color: control.currentAction ? (control.currentAction.icon.color && control.currentAction.icon.color.length ? control.currentAction.icon.color : ( _defaultButtonMouseArea.containsPress ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor)) :  control.Kirigami.Theme.textColor
                         
-                        source: control.currentAction ? control.currentAction.icon.name : control.defaultIconName
+                        icon.name: control.currentAction ? control.currentAction.icon.name : control.defaultIconName
                         
                         enabled: control.currentAction ? control.currentAction.enabled : true
                     }  
@@ -112,7 +112,7 @@ Rectangle
                     {
                         anchors.centerIn: parent
                         rotation: -45
-                        color: _defaultButtonIcon.color
+                        color: _defaultButtonIcon.icon.color
                         width: Maui.Style.iconSizes.tiny-3
                         height:  width 
                     }	
@@ -159,7 +159,7 @@ Rectangle
                 Private.BasicToolButton
                 {
                     id: _buttonMouseArea
-                    property Action action : modelData
+                    action : modelData
                     checked: control.checkable && control.autoExclusive ? control.currentIndex === index : action.checked
                     width: implicitWidth
                     height: parent.height
@@ -224,6 +224,5 @@ Rectangle
                 }
             }
         }
-    }
-    
+    }    
 }

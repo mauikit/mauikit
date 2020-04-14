@@ -93,7 +93,7 @@ Item
             
             visible: obj
             Layout.fillWidth: control.strech
-            Layout.preferredWidth: visible ? implicitWidth * (checked ? 2.5 :  1) : 0
+            Layout.preferredWidth: visible ? implicitWidth : 0
             checked: true
             icon.name: obj ? obj.MauiLab.AppView.iconName : ""
             icon.width: Maui.Style.iconSizes.medium
@@ -111,35 +111,7 @@ Item
                 control.currentIndex = index
                 control.clicked(index)
             }
-        }  
-        
-        /*Repeater
-         *        {
-         *            
-         *            model: control.hiddenItems
-         *            delegate: BasicToolButton 
-         *            {
-         *                
-         *                Layout.alignment: Qt.AlignVCenter
-         *                Layout.fillWidth: control.strech
-         *                Layout.preferredHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
-         *                
-         *                visible: modelData.visible && _menuButton.checked
-         *                
-         *                Kirigami.Theme.backgroundColor: modelData.Kirigami.Theme.backgroundColor
-         *                Kirigami.Theme.highlightColor: modelData.Kirigami.Theme.highlightColor
-         *                iconName: modelData.MauiLab.AppView.iconName
-         *                text: modelData.MauiLab.AppView.title 
-         *                
-         *                checked: control.currentIndex === control.items.length + index
-         *                
-         *                onClicked:
-         *                {
-         *                    control.currentIndex = control.items.length + index
-         *                    control.clicked(control.currentIndex)
-    }
-    }	
-    }  */ 
+        } 
         
         Maui.ToolButtonMenu
         {
@@ -149,8 +121,6 @@ Item
             visible: control.hiddenItems.length > 0          
             
             Layout.alignment: Qt.AlignVCenter
-            autoExclusive: false
-            checkable: true
             display: checked ? ToolButton.TextBesideIcon : ToolButton.IconOnly
             
             menu.closePolicy: Popup.CloseOnReleaseOutsideParent
