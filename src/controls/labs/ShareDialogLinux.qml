@@ -89,7 +89,7 @@ Maui.Dialog
 					label1.text: model.display
 					iconSource: model.iconName
 					
-					iconSizeHint: Maui.Style.iconSizes.big					
+					iconSizeHint: Maui.Style.iconSizes.medium					
 				}
 				
 				onClicked: _purpose.createJob(index)
