@@ -37,6 +37,7 @@ Pane
     bottomPadding: control.padding
     
     default property alias content: _content.data
+        property alias headerBackground : _headerBackground
         readonly property alias internalHeight : _content.height
         property Flickable flickable : null
         property int footerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineFooter
@@ -166,8 +167,9 @@ Pane
         }
         
         property alias headBar : _headBar
-        property alias footBar: _footBar
-        readonly property Maui.ToolBar mheadBar : Maui.ToolBar
+        property alias footBar: _footBar        
+        
+        property Item header : Maui.ToolBar
         {
             id: _headBar
             visible: count > 1
@@ -222,13 +224,26 @@ Pane
             
             background: Rectangle
             {
+                id: _headerBackground
                 color: _headBar.Kirigami.Theme.backgroundColor
-                opacity: 1
+                
                 Kirigami.Separator
                 {
-                    id: _border               
+                    id: _border  
+                    opacity: 0.6
+                    color: Qt.darker(parent.color, 2)                    
                     anchors.left: parent.left
                     anchors.right: parent.right
+                }
+                
+                Kirigami.Separator
+                {
+                    id: _border2  
+                    opacity: 0.5             
+                    color: Qt.lighter(parent.color, 2.5)
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottomMargin: 1
                 }
                 
                 FastBlur
@@ -254,17 +269,14 @@ Pane
             
         }
         
-        readonly property Maui.ToolBar mfootBar : Maui.ToolBar
+        property Item footer : Maui.ToolBar
         {
             id: _footBar
             visible: count
             position: ToolBar.Footer
             width: visible ? parent.width : 0
             height: visible ? implicitHeight : 0
-        }   
-        
-        property Item header : headBar
-        property Item footer : footBar
+        }     
         
         Item
         {
@@ -295,10 +307,17 @@ Pane
                 anchors.bottom: parent.bottom
             }
             
+            AnchorChanges 
+            {
+                target: _border2
+                anchors.top: undefined
+                anchors.bottom: parent.bottom
+            }
+            
             PropertyChanges 
             {
                 target: _layout
-                anchors.topMargin: control.floatingHeader ? 0 : control. header.height 
+                anchors.topMargin: control.floatingHeader ? 0 : _headerContent.height 
                 anchors.bottomMargin: 0           
             }    
             
@@ -306,7 +325,7 @@ Pane
             {
                 target: _headBar
                 position: ToolBar.Header        
-            }  
+            } 
         },
         
         State 
@@ -328,19 +347,26 @@ Pane
                 anchors.bottom: undefined
             }
             
+            AnchorChanges 
+            {
+                target: _border2
+                anchors.top: parent.top
+                anchors.bottom: undefined
+            }
+            
             PropertyChanges 
             {
                 target: _layout
                 anchors.topMargin: 0
-                anchors.bottomMargin: header.height            
+                anchors.bottomMargin: _headerContent.height            
             } 
             
             PropertyChanges 
             {
                 target: _headBar
                 position: ToolBar.Footer        
-            }  
-            
+            } 
+                        
         } ]
         
         //        transitions: Transition {
@@ -372,7 +398,7 @@ Pane
             {
                 id: _footerContent
                 Layout.fillWidth: true
-                Layout.preferredHeight: visible ? footer.height : 0
+                Layout.preferredHeight:  footer && footer.visible ? footer.height : 0
                 visible: footer && footer.visible
                 data: footer ? [footer] : []
             }

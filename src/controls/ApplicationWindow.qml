@@ -122,7 +122,7 @@ Window
         id: _page
         anchors.fill: parent
         Kirigami.Theme.colorSet: root.Kirigami.Theme.colorSet
-               
+        headerBackground.color: Maui.App.enableCSD ? Qt.darker(Kirigami.Theme.backgroundColor, 1.1) : headBar.Kirigami.Theme.backgroundColor
         headBar.leftContent: [
 
         Loader
@@ -228,7 +228,18 @@ Window
         anchors.fill: parent
         radius: Maui.App.theme.borderRadius
         color: "transparent"
-        border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+        border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.5)
+        opacity: 0.5
+        
+        Rectangle
+        {
+            anchors.fill: parent
+            anchors.margins: 1
+            color: "transparent"
+            radius: parent.radius - 0.5
+            border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+            opacity: 0.8
+        }
     }
     
     

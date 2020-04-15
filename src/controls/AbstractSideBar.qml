@@ -28,7 +28,7 @@ Drawer
 {
     id: control
     edge: Qt.LeftEdge
-    implicitHeight: parent.height - (window().header ? window().header.height : 0) - (window().footer ? window().footer.height : 0)
+    implicitHeight: window().internalHeight
     height: implicitHeight
     y: (window().header ? window().header.height : 0)
 	leftPadding: 100
