@@ -54,7 +54,15 @@ Window
 
     property alias footer: _page.footer
     property alias header :_page.header
-
+    property alias floatingHeader: _page.floatingHeader
+    property alias autoHideHeader: _page.autoHideHeader
+    property alias altHeader: _page.altHeader
+    property alias margins : _page.margins
+    property alias leftMargin : _page.leftMargin
+    property alias rightMargin: _page.rightMargin
+    property alias topMargin: _page.topMargin
+    property alias bottomMargin: _page.bottomMargin
+    
     property alias footerPositioning : _page.footerPositioning
     property alias headerPositioning : _page.headerPositioning
 
@@ -109,7 +117,7 @@ Window
     }
 
     Kirigami.Theme.colorSet: Kirigami.Theme.View
-    Maui.Page
+    MauiLab.Page
     {
         id: _page
         anchors.fill: parent

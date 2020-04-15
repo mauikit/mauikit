@@ -87,6 +87,7 @@
         <file alias="labs/TabsBrowser.qml">controls/labs/TabsBrowser.qml</file>        
         <file alias="labs/SettingsDialog.qml">controls/labs/SettingsDialog.qml</file>        
         <file alias="labs/SettingsSection.qml">controls/labs/SettingsSection.qml</file>        
+        <file alias="labs/Page.qml">controls/labs/Page.qml</file>        
     </qresource>
     <qresource prefix="/"/>
 </RCC>
