@@ -239,7 +239,7 @@ Pane
                 Kirigami.Separator
                 {
                     id: _border2  
-                    opacity: 0.5             
+                    opacity: 0.4             
                     color: Qt.lighter(parent.color, 2.5)
                     anchors.left: parent.left
                     anchors.right: parent.right
