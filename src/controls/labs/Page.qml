@@ -52,6 +52,7 @@ Pane
         
         property bool altHeader : false
         property bool autoHideHeader : false
+        onAutoHideHeaderChanged: header.opacity = 1
         property bool floatingHeader : false    
         property bool showTitle : true
         
@@ -383,7 +384,11 @@ Pane
             interval: 1000
             onTriggered: 
             {
-                header.opacity = 0
+                if(control.autoHideHeader)
+                {
+                    header.opacity = 0
+                }
+                
                 stop()
             }
         }
@@ -392,11 +397,16 @@ Pane
         {
             id: _hoverhandler
             target: parent
-            enabled: control.autoHideHeader
+            enabled: control.autoHideHeader && !control.altHeader
             acceptedDevices: PointerDevice.Mouse | PointerDevice.Stylus
-            
+                     
             onHoveredChanged:
             {
+                if(!control.autoHideHeader)
+                {
+                    return
+                }
+                
                 if(!hovered)
                 {
                     _timer.start()
