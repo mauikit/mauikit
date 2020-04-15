@@ -17,7 +17,7 @@ Rectangle
     
     default property list<Action> actions
     
-    property bool autoExclusive: true	
+    property bool autoExclusive: true
     property bool checkable: true
     property int display: ToolButton.IconOnly
     
@@ -26,12 +26,12 @@ Rectangle
     onCurrentIndexChanged:
     {
         if(control.autoExclusive)
-        {            
+        {
             control.currentAction = actions[control.currentIndex]
         }
     }
     
-    property bool expanded : true	
+    property bool expanded : true
     property string defaultIconName: "application-menu"
     
     border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
@@ -55,13 +55,17 @@ Rectangle
             
             visible: !control.expanded
             anchors.verticalCenter: parent.verticalCenter
-            onClicked: 
+            onClicked:
             {
                 if(!_loader.item.visible)
+                {
                     _loader.item.popup(control, 0, control.height)
-                    else
-                        _loader.item.close()
-            }  
+
+                }else
+                {
+                    _loader.item.close()
+                }
+            }
             
             Rectangle
             {
@@ -83,7 +87,18 @@ Rectangle
                     Private.BasicToolButton
                     {
                         id: _defaultButtonIcon
-                        
+                        onClicked:
+                        {
+                            if(!_loader.item.visible)
+                            {
+                                _loader.item.popup(control, 0, control.height)
+
+                            }else
+                            {
+                                _loader.item.close()
+                            }
+                        }
+
                         anchors.centerIn: parent
                         icon.width: Maui.Style.iconSizes.small
                         icon.height: width
@@ -92,7 +107,7 @@ Rectangle
                         icon.name: control.currentAction ? control.currentAction.icon.name : control.defaultIconName
                         
                         enabled: control.currentAction ? control.currentAction.enabled : true
-                    }  
+                    }
                 }
                 
                 Kirigami.Separator
@@ -114,12 +129,12 @@ Rectangle
                         rotation: -45
                         color: _defaultButtonIcon.icon.color
                         width: Maui.Style.iconSizes.tiny-3
-                        height:  width 
-                    }	
+                        height:  width
+                    }
                 }
             }
             
-        }  	
+        }
         
         Loader
         {
@@ -143,7 +158,7 @@ Rectangle
             clip: true
             
             Behavior on width
-            {                
+            {
                 NumberAnimation
                 {
                     duration: Kirigami.Units.longDuration
@@ -173,16 +188,16 @@ Rectangle
                     
                     background.border.color: "transparent"
                     
-                    onClicked: 
+                    onClicked:
                     {
-                        control.currentIndex = index	
+                        control.currentIndex = index
                         if(control.checkable && !control.autoExclusive)
                         {
                             checked = !checked
                         }
                         
                         action.triggered()
-                    }                 
+                    }
                     
                     Kirigami.Separator
                     {
@@ -192,9 +207,9 @@ Rectangle
                         anchors.right: parent.right
                         visible: index < _repeater.count-1
                     }
-                }                
+                }
             }
-        }		
+        }
     }
     
     Component
@@ -216,13 +231,13 @@ Rectangle
                     autoExclusive: control.autoExclusive
                     checked: index === control.currentIndex
                     checkable: control.checkable
-                    onTriggered: 
+                    onTriggered:
                     {
                         control.currentIndex = index
-                        modelData.triggered()                        
+                        modelData.triggered()
                     }
                 }
             }
         }
-    }    
+    }
 }

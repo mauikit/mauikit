@@ -117,7 +117,7 @@ Maui.Dialog
 					title: model.label
 					headBar.visible: true
 					autoHideHeader: true
-					floatingHeader: true
+                    floatingHeader: false //TODO needs some upstream fixes to work properly
 
 					Loader
 					{
