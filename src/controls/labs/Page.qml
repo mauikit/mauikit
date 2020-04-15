@@ -37,7 +37,7 @@ Pane
     bottomPadding: control.padding
     
     default property alias content: _content.data
-        
+        readonly property alias internalHeight : _content.height
         property Flickable flickable : null
         property int footerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineFooter
         property int headerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineHeader
@@ -170,7 +170,7 @@ Pane
         readonly property Maui.ToolBar mheadBar : Maui.ToolBar
         {
             id: _headBar
-            visible: count > 1 && opacity > 0
+            visible: count > 1
             width: visible ? parent.width : 0
             height: visible ? implicitHeight : 0
             position: ToolBar.Header
@@ -386,7 +386,7 @@ Pane
             {
                 if(control.autoHideHeader)
                 {
-                    header.opacity = 0
+                    header.visible = false
                 }
                 
                 stop()
@@ -395,9 +395,8 @@ Pane
         
         HoverHandler
         {
-            id: _hoverhandler
             target: parent
-            enabled: control.autoHideHeader && !control.altHeader
+            enabled: control.autoHideHeader && !control.altHeader && !Kirigami.Settings.isMobile
             acceptedDevices: PointerDevice.Mouse | PointerDevice.Stylus
                      
             onHoveredChanged:
@@ -413,9 +412,26 @@ Pane
                     
                 }else
                 {
-                    header.opacity = 1
+                    header.visible = true
                     _timer.stop()
                 }
+            } 
+        }
+        
+        TapHandler
+        {
+            target: parent
+            enabled: control.autoHideHeader && !control.altHeader 
+            acceptedPointerTypes: PointerDevice.GenericPointer | PointerDevice.Finger | PointerDevice.Pen
+            grabPermissions: PointerHandler.CanTakeOverFromAnything
+            onTapped:
+            {
+                if(!control.autoHideHeader)
+                {
+                    return
+                }
+                console.log("Pgae tapped")
+                header.visible = !header.visible
             } 
         }
         
