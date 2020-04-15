@@ -398,7 +398,7 @@ Pane
             target: parent
             enabled: control.autoHideHeader && !control.altHeader && !Kirigami.Settings.isMobile
             acceptedDevices: PointerDevice.Mouse | PointerDevice.Stylus
-                     
+            
             onHoveredChanged:
             {
                 if(!control.autoHideHeader)
@@ -420,19 +420,19 @@ Pane
         
         TapHandler
         {
-            target: parent
             enabled: control.autoHideHeader && !control.altHeader 
-            acceptedPointerTypes: PointerDevice.GenericPointer | PointerDevice.Finger | PointerDevice.Pen
-            grabPermissions: PointerHandler.CanTakeOverFromAnything
-            onTapped:
+            
+            grabPermissions: PointerHandler.TakeOverForbidden | PointerHandler.ApprovesTakeOverByHandlersOfSameType | PointerHandler.CanTakeOverFromAnything
+            
+            onSingleTapped:
             {
                 if(!control.autoHideHeader)
                 {
                     return
                 }
-                console.log("Pgae tapped")
+                console.log("Pgae tapped")                
                 header.visible = !header.visible
-            } 
+            }
         }
         
         Keys.onBackPressed:
