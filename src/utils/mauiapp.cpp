@@ -206,6 +206,10 @@ bool MauiApp::enableCSD() const
 
 void MauiApp::setEnableCSD(const bool& value)
 {
+#if defined Q_OS_ANDROID || defined Q_OS_IOS // ignore csd for those
+    return;
+#else
+
 	if(m_enableCSD == value)
 		return;
 
@@ -217,6 +221,7 @@ void MauiApp::setEnableCSD(const bool& value)
 	{
 		getWindowControlsSettings();
 	}
+#endif
 }
 
 void MauiApp::getWindowControlsSettings()
