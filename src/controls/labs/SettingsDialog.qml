@@ -15,7 +15,6 @@ Maui.Dialog
         page.title: qsTr("Settings")
         headBar.visible: true
         
-        page.padding: 0 
         default property alias content : _layout.data
             
             

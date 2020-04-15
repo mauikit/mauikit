@@ -13,7 +13,7 @@ Maui.Dialog
     rejectText: qsTr("Cancel")
 	onAccepted: done()
 	onRejected: textEntry.clear()
-    page.padding: Maui.Style.space.huge
+    page.margins: Maui.Style.space.huge
 	
 	function done()
 	{

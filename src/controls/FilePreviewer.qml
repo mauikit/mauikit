@@ -116,6 +116,8 @@ Maui.Dialog
 					
 					title: model.label
 					headBar.visible: true
+					autoHideHeader: true
+					floatingHeader: true
 
 					Loader
 					{

@@ -45,7 +45,7 @@ MauiApp::MauiApp() : QObject(nullptr)
   , m_accounts(nullptr)
   #endif
 {
-	m_theme.path = QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString("/maui/csd/%1").arg("Default"), QStandardPaths::LocateDirectory));
+	m_theme.path = QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString("/maui/csd/%1").arg("Nitrux"), QStandardPaths::LocateDirectory));
 
 // 	this->setEnableCSD(UTIL::loadSettings("CSD", "GLOBAL", m_enableCSD).toBool());
 

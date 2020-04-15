@@ -272,7 +272,7 @@ Pane
         property Item footer : Maui.ToolBar
         {
             id: _footBar
-            visible: count
+            visible: _footBar.count > 1
             position: ToolBar.Footer
             width: visible ? parent.width : 0
             height: visible ? implicitHeight : 0
@@ -398,8 +398,7 @@ Pane
             {
                 id: _footerContent
                 Layout.fillWidth: true
-                Layout.preferredHeight:  footer && footer.visible ? footer.height : 0
-                visible: footer && footer.visible
+                Layout.preferredHeight: footer && footer.visible ? footer.height : 0                
                 data: footer ? [footer] : []
             }
         }   

@@ -165,7 +165,7 @@ Maui.Page
 			rejectButton.text: qsTr("Delete")
 			acceptButton.text: qsTr("Trash")
 			acceptButton.visible: Maui.Handy.isLinux
-			page.padding: Maui.Style.space.huge
+			page.margins: Maui.Style.space.huge
 			
 			ColumnLayout
 			{
