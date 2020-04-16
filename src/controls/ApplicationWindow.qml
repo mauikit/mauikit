@@ -226,9 +226,9 @@ Window
         visible: Maui.App.enableCSD
         z: ApplicationWindow.overlay.z + 9999
         anchors.fill: parent
-        radius: Maui.App.theme.borderRadius
+        radius: Maui.App.theme.borderRadius - 0.5
         color: "transparent"
-        border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.5)
+        border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
         opacity: 0.5
         
         Rectangle
