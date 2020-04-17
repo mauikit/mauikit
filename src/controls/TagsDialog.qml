@@ -21,7 +21,7 @@ Maui.Dialog
 	signal tagsReady(var tags)
 	defaultButtons: true
 	maxHeight: Maui.Style.unit * 500
-	page.padding: Maui.Style.space.medium
+	page.margins: Maui.Style.space.medium
 	
 	acceptButton.text: qsTr("Add")
 	rejectButton.text: qsTr("Cancel")

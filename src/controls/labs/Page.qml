@@ -418,7 +418,16 @@ Pane
             }
         }
         
-        HoverHandler
+        Item
+        {
+            anchors.top: parent.top
+            
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: control.height * 0.1
+            z: _content.z + 9999
+            
+               HoverHandler
         {
             target: parent
             enabled: control.autoHideHeader && !control.altHeader && !Kirigami.Settings.isMobile
@@ -442,6 +451,9 @@ Pane
                 }
             } 
         }
+        }
+        
+     
         
         TapHandler
         {
