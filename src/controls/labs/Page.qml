@@ -53,8 +53,8 @@ Pane
         
         property bool altHeader : false
         property bool autoHideHeader : false
-        onAutoHideHeaderChanged: header.opacity = 1
-        property bool floatingHeader : false    
+
+        property bool floatingHeader : control.flickable ? !control.flickable.atYBeginning : false    
         property bool showTitle : true
         
         Kirigami.Theme.colorSet: Kirigami.Theme.View    
@@ -310,7 +310,7 @@ Pane
             anchors.right: parent.right
             height: header && header.visible ? header.height : 0
             data: header
-            z: _content.z+1
+            z: _content.z+9999
         }    
         
         states: [  State 

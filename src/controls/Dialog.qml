@@ -59,7 +59,7 @@ Maui.Popup
         closePolicy: Popup.NoAutoClose | Popup.CloseOnEscape
         
         maxWidth: Maui.Style.unit * 300
-        maxHeight: (_pageContent.implicitHeight * 1.2) + ( _page.footBar.height + _defaultButtonsLayout.implicitHeight ) + Maui.Style.space.huge + _page.padding
+        maxHeight: (_pageContent.implicitHeight * 1.2) + ( _page.footBar.height + _defaultButtonsLayout.implicitHeight ) + Maui.Style.space.huge + _page.margins
         
         widthHint: 0.9
         heightHint: 0.9  
@@ -106,6 +106,7 @@ Maui.Popup
                 Layout.fillHeight: true
                 footBar.visible: footBar.count > 1
                 headBar.visible: headBar.count > 1
+                padding: 0
                 
                 ColumnLayout
                 {
@@ -168,8 +169,6 @@ Maui.Popup
                         focus: visible
                         onAccepted: control.accepted()
                     }
-                    
-                    
                 }
                 /* 
                  *        layer.enabled: control.background.radius

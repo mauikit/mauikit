@@ -29,6 +29,8 @@ Maui.Page
     readonly property alias gridView : private_.gridView
     readonly property alias listView : private_.listView
     
+    flickable: viewLoader.item ? viewLoader.item.flickable : null
+    
     QtObject 
     {
         //before loading the view we use a dummy representation of the possible views, in order to store the properties data. Once the actual view has been loaded then the exposed properties are changed from the dummy representation to the actual view loaded, this allows to preserve and use the bindings for the actual view. The dummy representations are within a private object and exposed as readonly properties to avoid those being changed externally
