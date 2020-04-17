@@ -176,13 +176,24 @@ Pane
         property Item header : Maui.ToolBar
         {
             id: _headBar
-            visible: visibleCount > 0 // coutn down the possible title loader
             width: visible ? parent.width : 0
             height: visible ? implicitHeight : 0
-            anchors.bottom: parent.bottom
-            position: ToolBar.Header
+            
             Kirigami.Theme.inherit: false
             Kirigami.Theme.colorSet: Kirigami.Theme.Window
+            
+            /** to not break the visible binding just check the count state of the header and act upon it **/
+            readonly property bool hide : visibleCount === 0 
+            onHideChanged:
+            {
+                if(hide)
+                {
+                    pullBackHeader()
+                }else
+                {
+                    pullDownHeader()
+                }
+            }
             
             Behavior on height
             {
@@ -194,6 +205,14 @@ Pane
                     easing.type: Easing.InOutQuad
                 }
             }
+            
+//             Label
+//             {
+//                 id: _counterLabel
+//                 text:  _headBar.visibleCount + " - " + _headBar.count
+//                 color: "yellow"
+//                 visible: _headBar.visibleCount > 0
+//             }
             
             Behavior on opacity
             {
@@ -290,7 +309,7 @@ Pane
             anchors.left: parent.left
             anchors.right: parent.right
             height: header && header.visible ? header.height : 0
-            data: header ? [header] : []
+            data: header
             z: _content.z+1
         }    
         

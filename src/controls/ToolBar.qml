@@ -54,7 +54,10 @@ ToolBar
     
     property int margins: Maui.Style.space.medium
     readonly property int count : leftContent.length + middleContent.length + rightContent.length
-    property int visibleCount : leftRowContent.visibleChildren.length + middleRowContent.visibleChildren.length + rightRowContent.visibleChildren.length
+    readonly property int visibleCount : leftRowContent.visibleCount + middleRowContent.visibleCount + rightRowContent.visibleCount
+    
+    
+    
     
     property bool flickable: true
     property bool strech : true
@@ -316,6 +319,8 @@ ToolBar
                 RowLayout
                 {
                     id: leftRowContent
+                    property int visibleCount : visibleChildren.length
+//                     onVisibleChildrenChanged: visibleCount = visibleChildren.length
                     // 					visible: control.leftSretch && implicitWidth
                     property bool sticky : false                    
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
@@ -336,6 +341,8 @@ ToolBar
                 RowLayout
                 {
                     id: middleRowContent
+                    property int visibleCount : visibleChildren.length
+//                     onVisibleChildrenChanged: visibleCount = visibleChildren.length
                     property bool sticky : false
                     Layout.alignment: Qt.AlignCenter
                     spacing: visibleChildren.length > 1 ? control.spacing : 0
@@ -355,7 +362,8 @@ ToolBar
                 RowLayout
                 {
                     id: rightRowContent
-                    // 					visible: control.rightSretch && implicitWidth
+                    property int visibleCount : visibleChildren.length
+//                     onVisibleChildrenChanged: visibleCount = visibleChildren.length                    
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                     spacing: visibleChildren.length > 1 ? control.spacing : 0
                     Layout.minimumWidth: implicitWidth
