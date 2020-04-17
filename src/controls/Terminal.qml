@@ -19,6 +19,8 @@ Maui.Page
 	property real scaleTexture: 1.0
 	
 	title: ksession.title
+	showTitle: false
+	
 	property alias kterminal: kterminal
 	property alias session: ksession
 	property alias findBar : findBar
