@@ -113,7 +113,7 @@ MouseArea
         {
             id: _label
             visible: text.length && (control.display === ToolButton.TextOnly || control.display === ToolButton.TextBesideIcon || !_icon.visible)
-            opacity: visible ? 1 : 0
+            opacity: visible ? ( enabled ? 1 : 0.5) : 0
             horizontalAlignment: Qt.AlignHCenter
             Layout.fillWidth: visible
             Layout.preferredWidth: visible ? implicitWidth + Maui.Style.space.small : 0
