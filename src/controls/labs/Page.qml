@@ -275,7 +275,7 @@ Pane
                 {
                     anchors.fill: parent				
                     visible: control.floatingHeader && !altHeader
-                    opacity: 0.2
+                    opacity: 0.25
                     
                     transparentBorder: false 
                     source: ShaderEffectSource
