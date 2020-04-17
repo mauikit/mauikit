@@ -78,7 +78,6 @@ Maui.Dialog
 		
 		Maui.PathBar
 		{
-			anchors.fill: parent
 			onPathChanged: browser.openFolder(path)
 			url: browser.currentPath
 			onHomeClicked: browser.openFolder(Maui.FM.homePath())
@@ -92,7 +91,6 @@ Maui.Dialog
 		
 		Maui.TextField
 		{
-			anchors.fill: parent
 			placeholderText: qsTr("Search for files... ")
 			onAccepted: browser.search(text)
 			onCleared: browser.quitSearch()
@@ -118,18 +116,12 @@ Maui.Dialog
 		onClicked: pageRow.currentIndex = !pageRow.currentIndex
 	}
 	
-	headBar.middleContent: Item
-	{
-		id: _pathBarLoader
-		Layout.fillWidth: true
-		Layout.preferredHeight: Maui.Style.iconSizes.big
-		
-		Loader
-		{
-			anchors.fill: parent
-			sourceComponent: searchBar ? _searchFieldComponent : _pathBarComponent
-		}
-	}
+	headBar.middleContent: Loader
+	{            
+        Layout.fillWidth: true
+        Layout.preferredHeight: Maui.Style.iconSizes.big
+        sourceComponent: searchBar ? _searchFieldComponent : _pathBarComponent
+    }    
 	
 	headBar.rightContent: ToolButton
 	{

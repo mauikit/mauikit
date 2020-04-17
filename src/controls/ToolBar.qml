@@ -53,7 +53,8 @@ ToolBar
     readonly property alias fits : _scrollView.fits
     
     property int margins: Maui.Style.space.medium
-    property int count : leftContent.length + middleContent.length + rightContent.length
+    readonly property int count : leftContent.length + middleContent.length + rightContent.length
+    property int visibleCount : leftRowContent.visibleChildren.length + middleRowContent.visibleChildren.length + rightRowContent.visibleChildren.length
     
     property bool flickable: true
     property bool strech : true
@@ -245,9 +246,37 @@ ToolBar
         property bool fits : mainFlickable.contentWidth < control.width
         onFitsChanged: mainFlickable.returnToBounds()        
         
-        anchors.fill: parent
+        height: control.implicitHeight
+        width: control.width
+              
         contentWidth: mainFlickable.contentWidth 
         contentHeight: height        
+        
+        states: [State 
+        {
+            when: control.position === ToolBar.Header
+            
+            AnchorChanges 
+            {
+                target: _scrollView
+                anchors.top: undefined
+                anchors.bottom: parent.bottom  
+            }
+        },
+        
+        State 
+        {
+            when: control.position === ToolBar.Footer
+            
+            AnchorChanges 
+            {
+                target: _scrollView
+                anchors.top: parent.top
+                anchors.bottom: undefined
+            }
+        }
+        ]
+     
      
 //         ScrollBar.horizontal: ScrollBar
 //         {
@@ -267,6 +296,7 @@ ToolBar
             id: mainFlickable
            
             anchors.fill: parent
+
             anchors.leftMargin: control.margins
             anchors.rightMargin: control.margins
          
@@ -310,7 +340,7 @@ ToolBar
                     Layout.alignment: Qt.AlignCenter
                     spacing: visibleChildren.length > 1 ? control.spacing : 0
                     Layout.minimumWidth: implicitWidth                    
-                    Layout.fillWidth: control.middleStrech && implicitWidth
+                    Layout.fillWidth: control.middleStrech
                     Layout.fillHeight: true
                 }
                 

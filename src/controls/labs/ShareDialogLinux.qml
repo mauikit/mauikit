@@ -36,6 +36,7 @@ Maui.Dialog
 	
 	maxHeight: 500
 	maxWidth: Maui.Style.unit * 500
+	page.margins: Maui.Style.space.medium
 	
 	verticalAlignment: Qt.AlignBottom
 	

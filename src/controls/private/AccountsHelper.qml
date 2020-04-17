@@ -49,6 +49,7 @@ Maui.Dialog
 		maxWidth: Maui.Style.unit * 400
 		title: qsTr("Remove Account")
 		message: qsTr("Are you sure you want to remove this account?")
+		page.margins: control.page.margins
 		
 		rejectButton.text: qsTr("Delete Account")
 		// 			rejectButton.visible: false

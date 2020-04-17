@@ -31,7 +31,8 @@ Maui.Dialog
     acceptText: qsTr("Sign In")
     rejectText: qsTr("Cancel")
     rejectButton.visible: false
-
+    page.margins: Maui.Style.space.medium
+    
     property alias serverField: serverField
     property alias userField: userField
     property alias passwordField: passwordField

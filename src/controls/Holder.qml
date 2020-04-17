@@ -83,7 +83,6 @@ Item
 	{
 		id: _layout
 		anchors.centerIn: parent	
-		clip: true
 		
 		Loader
 		{

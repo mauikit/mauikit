@@ -80,50 +80,54 @@ Pane
             {
                 _headerAnimation.enabled = false
                 if(!control.flickable.dragging && control.flickable.atYBeginning)
+                {
                     control.returnToBounds()
+                }
+                
+                if (updatingContentY || !control.flickable || !control.flickable.dragging)
+                {
+                    oldContentY = control.flickable.contentY;
+                    return;
+                    //TODO: merge
+                    //if moves but not dragging, just update oldContentY
+                }
+                
+                if(control.flickable.contentHeight < control.height)
+                {
+                    return
+                }
+                
+                var oldFHeight
+                var oldHHeight
+                
+                if (control.footer && control.footerPositioning === ListView.PullBackFooter)
+                {
+                    oldFHeight = control.footer.height
+                    control.footer.height = Math.max(0,
+                                                     Math.min(control.footer.implicitHeight,
+                                                              control.footer.height + oldContentY - control.flickable.contentY));
+                }
+                
+                if (control.header && control.headerPositioning === ListView.PullBackHeader)
+                {
+                    oldHHeight = control.header.height
+                    control.header.height = Math.max(0,
+                                                     Math.min(control.header.implicitHeight,
+                                                              control.header.height + oldContentY - control.flickable.contentY));
+                }
+                
+                //if the implicitHeight is changed, use that to simulate scroll
+                if ((control.footer && oldFHeight !== control.footer.height) || ( control.header && oldHHeight !== control.header.height))
+                {
+                    updatingContentY = true
                     
-                    if (updatingContentY || !control.flickable || !control.flickable.dragging)
-                    {
-                        oldContentY = control.flickable.contentY;
-                        return;
-                        //TODO: merge
-                        //if moves but not dragging, just update oldContentY
-                    }
-                    
-                    if(control.flickable.contentHeight < control.height)
-                        return
+                    if(control.header && oldHHeight !== control.header.height)
+                        control.flickable.contentY -= (oldHHeight - control.header.height)
+                        updatingContentY = false
                         
-                        var oldFHeight
-                        var oldHHeight
-                        
-                        if (control.footer && control.footerPositioning === ListView.PullBackFooter)
-                        {
-                            oldFHeight = control.footer.height
-                            control.footer.height = Math.max(0,
-                                                             Math.min(control.footer.implicitHeight,
-                                                                      control.footer.height + oldContentY - control.flickable.contentY));
-                        }
-                        
-                        if (control.header && control.headerPositioning === ListView.PullBackHeader)
-                        {
-                            oldHHeight = control.header.height
-                            control.header.height = Math.max(0,
-                                                             Math.min(control.header.implicitHeight,
-                                                                      control.header.height + oldContentY - control.flickable.contentY));
-                        }
-                        
-                        //if the implicitHeight is changed, use that to simulate scroll
-                        if ((control.footer && oldFHeight !== control.footer.height) || ( control.header && oldHHeight !== control.header.height))
-                        {
-                            updatingContentY = true
-                            
-                            if(control.header && oldHHeight !== control.header.height)
-                                control.flickable.contentY -= (oldHHeight - control.header.height)
-                                updatingContentY = false
-                                
-                        } else {
-                            oldContentY = control.flickable.contentY
-                        }
+                } else {
+                    oldContentY = control.flickable.contentY
+                }
             }
             
             onMovementEnded:
@@ -172,9 +176,10 @@ Pane
         property Item header : Maui.ToolBar
         {
             id: _headBar
-            visible: count > 1
+            visible: visibleCount > 0 // coutn down the possible title loader
             width: visible ? parent.width : 0
             height: visible ? implicitHeight : 0
+            anchors.bottom: parent.bottom
             position: ToolBar.Header
             Kirigami.Theme.inherit: false
             Kirigami.Theme.colorSet: Kirigami.Theme.Window
@@ -185,7 +190,7 @@ Pane
                 enabled: false
                 NumberAnimation
                 {
-                    duration: Kirigami.Units.shortDuration
+                    duration: Kirigami.Units.longDuration
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -217,9 +222,10 @@ Pane
             
             middleContent: Loader
             {
+                visible: item
                 Layout.fillWidth: sourceComponent === _titleComponent
                 Layout.fillHeight: sourceComponent === _titleComponent
-                sourceComponent: control.title && control.showTitle ? _titleComponent : undefined
+                sourceComponent: control.title && control.showTitle ? _titleComponent : null
             }
             
             background: Rectangle
@@ -272,7 +278,7 @@ Pane
         property Item footer : Maui.ToolBar
         {
             id: _footBar
-            visible: _footBar.count > 1
+            visible: _footBar.visibleCount > 0
             position: ToolBar.Footer
             width: visible ? parent.width : 0
             height: visible ? implicitHeight : 0
@@ -290,7 +296,6 @@ Pane
         
         states: [  State 
         {
-            name: "topHeader"
             when: !altHeader
             
             AnchorChanges 
@@ -330,7 +335,6 @@ Pane
         
         State 
         {
-            name: "bottomHeader"
             when: altHeader
             
             AnchorChanges 
@@ -366,7 +370,7 @@ Pane
                 target: _headBar
                 position: ToolBar.Footer        
             } 
-                        
+            
         } ]
         
         //        transitions: Transition {
@@ -411,7 +415,7 @@ Pane
             {
                 if(control.autoHideHeader)
                 {
-                    header.visible = false
+                    pullBackHeader()
                 }
                 
                 stop()
@@ -420,57 +424,66 @@ Pane
         
         Item
         {
-            anchors.top: parent.top
-            
+            anchors.top: parent.top            
             anchors.left: parent.left
             anchors.right: parent.right
             height: control.height * 0.1
             z: _content.z + 9999
+            visible: control.autoHideHeader && !control.altHeader && !Kirigami.Settings.isMobile
             
-               HoverHandler
-        {
-            target: parent
-            enabled: control.autoHideHeader && !control.altHeader && !Kirigami.Settings.isMobile
-            acceptedDevices: PointerDevice.Mouse | PointerDevice.Stylus
-            
-            onHoveredChanged:
+            HoverHandler
             {
-                if(!control.autoHideHeader)
-                {
-                    return
-                }
+                target: parent
                 
-                if(!hovered)
+                acceptedDevices: PointerDevice.Mouse | PointerDevice.Stylus
+                
+                onHoveredChanged:
                 {
-                    _timer.start()
+                    if(!control.autoHideHeader)
+                    {
+                        return
+                    }
                     
-                }else
-                {
-                    header.visible = true
-                    _timer.stop()
-                }
-            } 
-        }
-        }
-        
-     
-        
-        TapHandler
-        {
-            enabled: control.autoHideHeader && !control.altHeader 
-            
-            grabPermissions: PointerHandler.TakeOverForbidden | PointerHandler.ApprovesTakeOverByHandlersOfSameType | PointerHandler.CanTakeOverFromAnything
-            
-            onSingleTapped:
-            {
-                if(!control.autoHideHeader)
-                {
-                    return
-                }
-                console.log("Pgae tapped")                
-                header.visible = !header.visible
+                    if(!hovered)
+                    {
+                        _timer.start()
+                        
+                    }else
+                    {
+                        pullDownHeader()
+                        _timer.stop()
+                    }
+                } 
             }
-        }
+        }   
+        
+        //         Item
+        //         {
+        //             anchors.fill: parent
+        //             anchors.topMargin: header.height
+        //             anchors.bottomMargin: footer.height
+        //             z: _content.z + 9999
+        //             
+        //             TapHandler
+        //             {
+        //                 target: parent
+        //                 enabled: control.autoHideHeader && !control.altHeader 
+        //                 
+        //                 grabPermissions: PointerHandler.TakeOverForbidden | PointerHandler.ApprovesTakeOverByHandlersOfSameType | PointerHandler.CanTakeOverFromAnything
+        //                 
+        //                 onSingleTapped:
+        //                 {
+        //                     if(!control.autoHideHeader)
+        //                     {
+        //                         return
+        //                     }
+        //                     console.log("Pgae tapped")                
+        //                     header.visible = !header.visible
+        //                 }
+        //             }
+        //         }
+        
+        
         
         Keys.onBackPressed:
         {
@@ -506,5 +519,17 @@ Pane
             {
                 control.footer.height = control.footer.implicitHeight            
             }           
+        }
+        
+        function pullBackHeader()
+        {
+            _headerAnimation.enabled = true
+            header.height= 0
+        }
+        
+        function pullDownHeader()
+        {
+            _headerAnimation.enabled = true
+            header.height= header.implicitHeight           
         }
 }
