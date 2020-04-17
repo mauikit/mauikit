@@ -59,7 +59,7 @@ Maui.Popup
         closePolicy: Popup.NoAutoClose | Popup.CloseOnEscape
         
         maxWidth: Maui.Style.unit * 300
-        maxHeight: (_pageContent.implicitHeight * 1.2) + ( _page.footBar.height + _defaultButtonsLayout.implicitHeight ) + Maui.Style.space.huge + _page.margins
+        maxHeight: (_pageContent.implicitHeight * 1.2) + ( _page.footBar.height + _defaultButtonsLayout.implicitHeight ) + Maui.Style.space.huge + _page.margins + _page.padding
         
         widthHint: 0.9
         heightHint: 0.9  
@@ -209,6 +209,7 @@ Maui.Popup
                 {
                     Layout.fillWidth: true                  
                     Layout.fillHeight: true
+                    implicitWidth: width
                     id: _rejectButton
                     text: control.rejectText
                     background: Rectangle
@@ -253,6 +254,7 @@ Maui.Popup
                 {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+                    implicitWidth: width
                     text: acceptText
                     id: _acceptButton
                     
