@@ -8,27 +8,27 @@ import org.kde.mauikit 1.1 as MauiLab
 Maui.Dialog
 {
     id: control
+    default property alias content : _layout.data
+        
     maxHeight: Math.min(_scrollView.contentHeight + Maui.Style.space.big, 500) + headBar.height
     maxWidth: 350
     defaultButtons: false
         
         page.title: qsTr("Settings")
-        headBar.visible: true
+        page.flickable: _scrollView
+        headBar.visible: true        
         
-        default property alias content : _layout.data
-            
-            
-            acceptButton.text: qsTr("Apply")
-            rejectButton.text: qsTr("Cancel")
-            
-            ScrollView
-            {
-                id: _scrollView
+        acceptButton.text: qsTr("Apply")
+        rejectButton.text: qsTr("Cancel")
+        
+        ScrollView
+        {
+            id: _scrollView
             Layout.fillWidth: true
             Layout.fillHeight: true
-           
+            
             contentHeight: _layout.implicitHeight
-//             contentWidth: _layout.width
+            //             contentWidth: _layout.width
             
             ColumnLayout
             {
