@@ -187,6 +187,7 @@ Maui.Dialog
 					Layout.fillWidth: true
 					Layout.fillHeight: true
 					
+					headBar.visible: true
 					headBar.rightContent:[ Maui.ToolButtonMenu
 					{
 						icon.name: "view-sort"

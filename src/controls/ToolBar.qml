@@ -236,8 +236,10 @@ ToolBar
         }
         ]
         
-        ScrollBar.horizontal: ScrollBar {parent: _scrollView; visible: false}        
-        ScrollBar.vertical: ScrollBar {parent: _scrollView; visible: false}        
+        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+        ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+       /* ScrollBar.horizontal: ScrollBar {parent: _scrollView; visible: false;}        
+        ScrollBar.vertical: ScrollBar {parent: _scrollView; visible: false}     */   
         
         Flickable
         {

@@ -95,24 +95,13 @@ Item
 		contentWidth: controlView.width
 		contentHeight: controlView.contentHeight
 		
-		ScrollBar.vertical: ScrollBar
-		{
-			id: verticalScrollBar
-			width: visible ? implicitWidth : 0
-			parent: _scrollView
-			x: _scrollView.mirrored ? 0 : _scrollView.width - width
-			y: _scrollView.topPadding
-			height: _scrollView.availableHeight
-			active: _scrollView.ScrollBar.horizontal || _scrollView.ScrollBar.horizontal.active
-		}
-		
-		ScrollBar.horizontal: ScrollBar {parent: _scrollView; visible: false}
-		
+		ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+
 		GridView
 		{
 			id: controlView
 			anchors.fill: parent
-			anchors.rightMargin: Kirigami.Settings.isMobile ? 0 : verticalScrollBar.width
+			anchors.rightMargin: Kirigami.Settings.isMobile ? 0 : parent.ScrollBar.vertical.visible ? parent.ScrollBar.vertical.width : 0
 			anchors.leftMargin: control.leftMargin
 			anchors.bottomMargin: control.bottomMargin
 			anchors.topMargin: control.topMargin
