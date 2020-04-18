@@ -195,6 +195,7 @@ Maui.Popup
             Kirigami.Separator
             {
                 Layout.fillWidth: true
+                visible: control.defaultButtons
             }
             
             RowLayout
@@ -276,6 +277,4 @@ Maui.Popup
                 }
             }
         }
-        
-      
 }

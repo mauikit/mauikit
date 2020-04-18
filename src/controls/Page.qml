@@ -21,7 +21,4 @@
 import org.kde.mauikit 1.1 as MauiLab
 
 MauiLab.Page
-{
-    id: control
-   
-}
+{ }

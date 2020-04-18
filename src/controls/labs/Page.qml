@@ -182,8 +182,8 @@ Pane
             
             Kirigami.Theme.inherit: false
             Kirigami.Theme.colorSet: Kirigami.Theme.Window
-            
-            /** to not break the visible binding just check the count state of the header and act upon it **/
+                        
+              /** to not break the visible binding just check the count state of the header and act upon it **/
             readonly property bool hide : visibleCount === 0 
             onHideChanged:
             {
@@ -195,7 +195,7 @@ Pane
                     pullDownHeader()
                 }
             }
-            
+                        
             Behavior on height
             {
                 id: _headerAnimation
@@ -206,14 +206,6 @@ Pane
                     easing.type: Easing.InOutQuad
                 }
             }
-            
-//             Label
-//             {
-//                 id: _counterLabel
-//                 text:  _headBar.visibleCount + " - " + _headBar.count
-//                 color: "yellow"
-//                 visible: _headBar.visibleCount > 0
-//             }
             
             Behavior on opacity
             {
