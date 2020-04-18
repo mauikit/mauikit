@@ -32,6 +32,7 @@ Maui.Page
     focus: true
     title: document.fileName
     showTitle: false
+    flickable: _scrollView.flickable
 
     Maui.DocumentHandler
 	{

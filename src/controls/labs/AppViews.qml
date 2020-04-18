@@ -43,7 +43,10 @@ SwipeView
 		{
 			control.currentIndex = currentIndex	
 			_actionGroup.currentIndex = control.currentIndex
-		}
+		}		
+		
+// 		onPressAndHold: control.pressAndHold(index)
+//         onDoubleClicked: control.doubleClicked(index)
 		
 		Component.onCompleted:
 		{

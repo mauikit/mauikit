@@ -56,7 +56,10 @@ Pane
 
         property bool floatingHeader : control.flickable && control.headerPositioning === ListView.InlineHeader ? !control.flickable.atYBeginning : false
         property bool floatingFooter : control.flickable && control.footerPositioning === ListView.InlineFooter ? !control.flickable.atYEnd : false
-        property bool showTitle : true
+        property bool showTitle : true        
+        
+        property alias headBar : _headBar
+        property alias footBar: _footBar   
         
         Kirigami.Theme.colorSet: Kirigami.Theme.View    
         
@@ -101,7 +104,7 @@ Pane
                 var oldFHeight
                 var oldHHeight
                 
-                if (control.footer && control.footerPositioning === ListView.PullBackFooter)
+                if (control.footer && control.footerPositioning === ListView.PullBackFooter && control.footer.visible)
                 {
                     oldFHeight = control.footer.height
                     control.footer.height = Math.max(0,
@@ -109,7 +112,7 @@ Pane
                                                               control.footer.height + oldContentY - control.flickable.contentY));
                 }
                 
-                if (control.header && control.headerPositioning === ListView.PullBackHeader)
+                if (control.header && control.headerPositioning === ListView.PullBackHeader && control.header.visible)
                 {
                     oldHHeight = control.header.height
                     control.header.height = Math.max(0,
@@ -118,13 +121,11 @@ Pane
                 }
                 
                 //if the implicitHeight is changed, use that to simulate scroll
-                if ((control.footer && oldFHeight !== control.footer.height) || ( control.header && oldHHeight !== control.header.height))
+                if (control.header && oldHHeight !== control.header.height && control.header.visible)
                 {
-                    updatingContentY = true
-                    
-                    if(control.header && oldHHeight !== control.header.height)
-                        control.flickable.contentY -= (oldHHeight - control.header.height)
-                        updatingContentY = false
+                    updatingContentY = true                    
+                    control.flickable.contentY -= (oldHHeight - control.header.height)
+                    updatingContentY = false
                         
                 } else {
                     oldContentY = control.flickable.contentY
@@ -133,9 +134,10 @@ Pane
             
             onMovementEnded:
             {
-                _headerAnimation.enabled = true
-                if (control.headerPositioning === ListView.PullBackHeader  && control.header)
+                if (control.header && control.header.visible && control.headerPositioning === ListView.PullBackHeader )
                 {
+                    _headerAnimation.enabled = true                
+                    
                     if (control.header.height >= (control.header.implicitHeight/2) || control.flickable.atYBeginning )
                     {
                         control.header.height =  control.header.implicitHeight
@@ -143,11 +145,10 @@ Pane
                     } else
                     {
                         control.header.height = 0
-                    }
-                    
+                    }                        
                 }
                 
-                if (control.footerPositioning === ListView.PullBackFooter  && control.footer)
+                if (control.footer && control.footer.visible && control.footerPositioning === ListView.PullBackFooter)
                 {
                     if (control.footer.height >= (control.footer.implicitHeight/2) ||  control.flickable.atYEnd)
                     {
@@ -167,16 +168,22 @@ Pane
                     {
                         control.footer.height = 0
                     }
-                }
+                }                
             }
         }
-        
-        property alias headBar : _headBar
-        property alias footBar: _footBar        
+      /*  
+        Component.onCompleted:
+        {
+            if(control.header && control.header instanceof Maui.ToolBar)
+            {
+                control.header.visible = header.visibleCount > 0
+            }
+        }*/
         
         property Item header : Maui.ToolBar
         {
             id: _headBar
+            visible: visibleCount > 0
             width: visible ? parent.width : 0
             height: visible ? implicitHeight : 0
             
@@ -184,17 +191,29 @@ Pane
             Kirigami.Theme.colorSet: Kirigami.Theme.Window
                         
               /** to not break the visible binding just check the count state of the header and act upon it **/
-            readonly property bool hide : visibleCount === 0 
-            onHideChanged:
-            {
-                if(hide)
-                {
-                    pullBackHeader()
-                }else
-                {
-                    pullDownHeader()
-                }
-            }
+//             readonly property bool hide : visibleCount === 0 
+//             onHideChanged:
+//             {
+//                 if(!header.visible)
+//                 {
+//                     return
+//                 }
+//                 
+//                 if(hide)
+//                 {
+//                     pullBackHeader()
+//                 }else
+//                 {
+//                     pullDownHeader()
+//                 }
+//             }
+            
+//             Label
+//             {
+//                 visible: false
+//                 color: "yellow"
+//                 text: _headBar.visibleCount + " / " + _headBar.count + " - " + _headBar.height + " / " + header.height + " - " + _headBar.visible + " / " + header.visible
+//             }
                         
             Behavior on height
             {
@@ -322,21 +341,11 @@ Pane
                     radius: 64				
                 }
             }
-        }     
-        
-        Item
-        {
-            id: _headerContent
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: header && header.visible ? header.height : 0
-            data: header
-            z: _content.z+9999
-        }    
+        }  
         
         states: [  State 
         {
-            when: !altHeader
+            when: !altHeader && header.visible
             
             AnchorChanges 
             {
@@ -362,7 +371,7 @@ Pane
             PropertyChanges 
             {
                 target: _layout
-                anchors.topMargin: control.floatingHeader ? 0 : _headerContent.height 
+                anchors.topMargin: control.floatingHeader ? 0 : _headerContent.height
                 anchors.bottomMargin: 0           
             }    
             
@@ -375,7 +384,7 @@ Pane
         
         State 
         {
-            when: altHeader
+            when: altHeader && header.visible
             
             AnchorChanges 
             {
@@ -402,7 +411,7 @@ Pane
             {
                 target: _layout
                 anchors.topMargin: 0
-                anchors.bottomMargin: _headerContent.height            
+                anchors.bottomMargin: header.height            
             }
             
             PropertyChanges 
@@ -424,12 +433,28 @@ Pane
         //         AnchorAnimation { duration: 1000 }
         //     }
         
+        Column
+        {
+            id: _headerContent
+            anchors.left: parent.left
+            anchors.right: parent.right
+            children: header
+            z: _content.z+9999
+        }  
         
+//         Label
+//         {
+//             anchors.centerIn: _headerContent
+//             text: header.height + "/" + _headerContent.height + " - " + _layout.anchors.topMargin
+//             color: "orange"
+//             z: _headerContent.z + 1
+//             visible: header.visible
+//         }
         
         Item
         {
             id: _layout
-            anchors.fill: parent            
+            anchors.fill: parent 
             
             Item
             {
@@ -442,14 +467,13 @@ Pane
                 anchors.bottomMargin: control.bottomMargin + (control.floatingFooter ? 0 : _footerContent.height)
             }   
             
-            Item
+            Column
             {
                 id: _footerContent
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
-                height: footer && footer.visible ? footer.height : 0                
-                data: footer
+                children: footer
             }
         }   
         
@@ -576,6 +600,6 @@ Pane
         function pullDownHeader()
         {
             _headerAnimation.enabled = true
-            header.height= header.implicitHeight           
+            header.height = header.implicitHeight           
         }
 }

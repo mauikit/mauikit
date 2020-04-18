@@ -44,6 +44,9 @@ ToolBar
     property alias middleContent : middleRowContent.data
     property alias rightContent : rightRowContent.data
     
+    property alias farLeftContent : farLeftRowContent.data
+    property alias farRightContent : farRightRowContent.data
+    
     property alias middleLayout : middleRowContent
     property alias leftLayout : leftRowContent
     property alias rightLayout : rightRowContent
@@ -53,58 +56,14 @@ ToolBar
     readonly property alias fits : _scrollView.fits
     
     property int margins: Maui.Style.space.medium
-    readonly property int count : leftContent.length + middleContent.length + rightContent.length
-    readonly property int visibleCount : leftRowContent.visibleChildren.length + middleRowContent.visibleChildren.length  + rightRowContent.visibleChildren.length 
+    readonly property int count : leftContent.length + middleContent.length + rightContent.length + farLeftContent.length + farRightContent.length
+    readonly property int visibleCount : leftRowContent.visibleChildren.length + middleRowContent.visibleChildren.length  + rightRowContent.visibleChildren.length + farLeftRowContent.visibleChildren.length  + farRightRowContent.visibleChildren.length 
     
     property bool flickable: true
     property bool strech : true
     property bool leftSretch: strech
     property bool rightSretch: strech
     property bool middleStrech: strech
-    
-    //    leftPadding: Kirigami.Units.smallSpacing*2
-    //    rightPadding: Kirigami.Units.smallSpacing*2
-    
-    // 	background: Rectangle
-    // 	{
-    // 		id: headBarBG
-    // 		color: colorScheme.backgroundColor
-    // 		implicitHeight: Maui.Style.toolBarHeightAlt
-    // 		radius: floating ? Maui.Style.radiusV : 0
-    // 		border.color: floating ? colorScheme.borderColor : "transparent"
-    //
-    // 		SequentialAnimation on radius
-    // 		{
-    // 			ColorAnimation { to: colorScheme.backgroundColor ; duration: 1000 }
-    // 		}
-    //
-    // 		Kirigami.Separator
-    // 		{
-    // 			visible: drawBorder
-    // 			color: colorScheme.borderColor
-    // 			height: Maui.Style.unit
-    // 			anchors
-    // 			{
-    // 				left: parent.left
-    // 				right: parent.right
-    // 				bottom: control.position == ToolBar.Footer ? undefined : parent.bottom
-    // 				top: control.position == ToolBar.Footer ? parent.top : undefined
-    // 			}
-    // 		}
-    //
-    // 		layer.enabled: dropShadow
-    // 		layer.effect: DropShadow
-    // 		{
-    // 			anchors.fill: headBarBG
-    // 			horizontalOffset: 0
-    // 			verticalOffset:  Maui.Style.unit * (altToolBars ? -1 : 1)
-    // 			radius: 8
-    // 			samples: 25
-    // 			color: Qt.darker(colorScheme.backgroundColor, 1.4)
-    // 			source: headBarBG
-    // 		}
-    // 	}
-    
     
     MouseArea
     {
@@ -276,17 +235,6 @@ ToolBar
             }
         }
         ]
-     
-     
-//         ScrollBar.horizontal: ScrollBar
-//         {
-//             parent: _scrollView
-//             x: 0
-//             y: _scrollView.height - height
-//             width: control.width
-//             height: visible ? 2: 0
-//             active: _scrollView.ScrollBar.horizontal || _scrollView.ScrollBar.horizontal.active
-//         }
         
         ScrollBar.horizontal: ScrollBar {parent: _scrollView; visible: false}        
         ScrollBar.vertical: ScrollBar {parent: _scrollView; visible: false}        
@@ -299,7 +247,7 @@ ToolBar
 
             anchors.leftMargin: control.margins
             anchors.rightMargin: control.margins
-         
+            
             flickableDirection: Flickable.HorizontalFlick
             interactive: !fits && Maui.Handy.isTouch
             contentWidth: layout.implicitWidth
@@ -313,37 +261,43 @@ ToolBar
                 width: mainFlickable.width 
                 height: mainFlickable.height
                 
-                RowLayout
+                Row
                 {
-                    id: leftRowContent
-//                     onVisibleChildrenChanged: visibleCount = visibleChildren.length
-                    // 					visible: control.leftSretch && implicitWidth
-                    property bool sticky : false                    
+                    id: _leftContent
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-                    spacing: visibleChildren.length > 1 ? control.spacing : 0
-                    Layout.minimumWidth: implicitWidth
-                    Layout.fillWidth: implicitWidth && control.leftSretch
                     Layout.fillHeight: true
-                }
+                    spacing: visibleChildren.length > 1 ? control.spacing : 0
+                    
+                    RowLayout
+                    {
+                        id: farLeftRowContent
+                        spacing: visibleChildren.length > 1 ? control.spacing : 0                    
+                        height: parent.height
+                    }
+                    
+                    RowLayout
+                    {
+                        id: leftRowContent
+                        spacing: visibleChildren.length > 1 ? control.spacing : 0
+                        height: parent.height
+                    } 
+                }                  
                 
                 Item //helper to force center middle content
                 {
                     visible: control.forceCenterMiddleContent && control.leftSretch
                     Layout.minimumWidth: 0
                     Layout.fillWidth: visible
-                    Layout.maximumWidth: visible ? Math.max(rightRowContent.implicitWidth - leftRowContent.implicitWidth, 0) : 0
+                    Layout.maximumWidth: visible ? Math.max(_rightContent.implicitWidth - _leftContent.implicitWidth, 0) : 0
                 }
                 
                 RowLayout
                 {
                     id: middleRowContent
-//                     onVisibleChildrenChanged: visibleCount = visibleChildren.length
-                    property bool sticky : false
-                    Layout.alignment: Qt.AlignCenter
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     spacing: visibleChildren.length > 1 ? control.spacing : 0
-                    Layout.minimumWidth: implicitWidth                    
-                    Layout.fillWidth: control.middleStrech
                     Layout.fillHeight: true
+                    Layout.fillWidth: true
                 }
                 
                 Item //helper to force center middle content
@@ -351,19 +305,31 @@ ToolBar
                     visible: control.forceCenterMiddleContent && control.rightSretch
                     Layout.minimumWidth: 0
                     Layout.fillWidth: visible
-                    Layout.maximumWidth: visible ? Math.max(leftRowContent.implicitWidth-rightRowContent.implicitWidth, 0) : 0
+                    Layout.maximumWidth: visible ? Math.max(_leftContent.implicitWidth-_rightContent.implicitWidth, 0) : 0
                 }
                 
-                RowLayout
+                Row
                 {
-                    id: rightRowContent
-//                     onVisibleChildrenChanged: visibleCount = visibleChildren.length                    
-                    Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
-                    spacing: visibleChildren.length > 1 ? control.spacing : 0
-                    Layout.minimumWidth: implicitWidth
-                    Layout.fillWidth: implicitWidth && control.rightSretch
+                    id: _rightContent
                     Layout.fillHeight: true
-                }
+                    spacing: visibleChildren.length > 1 ? control.spacing : 0
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+                    
+                    RowLayout
+                    {
+                        id: rightRowContent  
+                        spacing: visibleChildren.length > 1 ? control.spacing : 0     
+                        height: parent.height
+                    }
+                    
+                    RowLayout
+                    {
+                        id: farRightRowContent                       
+                        spacing: visibleChildren.length > 1 ? control.spacing : 0                    
+                        height: parent.height
+                    }
+                }                
+                
             }            
         }
     }

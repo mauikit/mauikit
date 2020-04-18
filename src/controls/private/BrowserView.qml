@@ -9,8 +9,7 @@ Maui.Page
 {
     id: control
     title: currentFMList.pathName
-    showTitle: false
-    property url path    
+    property url path 
     onPathChanged:
     {
         if(control.currentView) 

@@ -56,6 +56,11 @@ Item
         
         onClicked: 
         {
+            if(index == control.currentIndex )
+            {
+                return
+            }
+            
             control.currentIndex = index
             control.clicked(index)
         }

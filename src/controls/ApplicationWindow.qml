@@ -123,20 +123,21 @@ Window
         anchors.fill: parent
         Kirigami.Theme.colorSet: root.Kirigami.Theme.colorSet
         headerBackground.color: Maui.App.enableCSD ? Qt.darker(Kirigami.Theme.backgroundColor, 1.1) : headBar.Kirigami.Theme.backgroundColor
+        
+        headBar.farLeftContent: Loader
+        {
+            id: _leftControlsLoader
+            visible: active
+            active: Maui.App.enableCSD && Maui.App.leftWindowControls.length
+            Layout.preferredWidth: active ? implicitWidth : 0
+            Layout.fillHeight: true
+            sourceComponent: MauiLab.WindowControls
+            {
+                order: Maui.App.leftWindowControls
+            }
+        }
+        
         headBar.leftContent: [
-
-        Loader
-		{
-			id: _leftControlsLoader
-			visible: active
-			active: Maui.App.enableCSD && Maui.App.leftWindowControls.length
-			Layout.preferredWidth: active ? implicitWidth : 0
-			Layout.fillHeight: true
-			sourceComponent: MauiLab.WindowControls
-			{
-				order: Maui.App.leftWindowControls
-			}
-		},
 
         ToolButton
         {
@@ -177,7 +178,7 @@ Window
         }
         ]
 
-		headBar.rightContent: Loader
+		headBar.farRightContent: Loader
 		{
 			id: _rightControlsLoader
 			visible: active

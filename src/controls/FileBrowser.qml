@@ -87,7 +87,6 @@ Maui.Page
 	flickable: control.currentView.flickable
 	
 	showTitle: false
-	
 	headBar.visible: false
 	headBar.leftContent: ToolButton
 	{
