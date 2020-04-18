@@ -107,6 +107,7 @@ Maui.Popup
                 footBar.visible: footBar.count > 1
                 headBar.visible: headBar.count > 1
                 padding: 0
+                clip: true
                 
                 ColumnLayout
                 {

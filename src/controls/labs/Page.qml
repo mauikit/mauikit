@@ -55,6 +55,7 @@ Pane
         property bool autoHideHeader : false
 
         property bool floatingHeader : control.flickable ? !control.flickable.atYBeginning : false    
+        property bool floatingFooter : control.flickable ? !control.flickable.atYEnd : false    
         property bool showTitle : true
         
         Kirigami.Theme.colorSet: Kirigami.Theme.View    
@@ -301,6 +302,34 @@ Pane
             position: ToolBar.Footer
             width: visible ? parent.width : 0
             height: visible ? implicitHeight : 0
+            
+            background: Rectangle
+            {
+                color: _footBar.Kirigami.Theme.backgroundColor
+             
+                Kirigami.Separator
+                {
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                }
+                
+                FastBlur
+                {
+                    anchors.fill: parent				
+                    visible: control.floatingFooter
+                    opacity: 0.4
+                    transparentBorder: false 
+                    source: ShaderEffectSource
+                    {
+                        samples : 0
+                        recursive: true
+                        sourceItem: _content
+                        sourceRect: Qt.rect(0, control.height - (footBar.height), footBar.width, footBar.height)
+                    }
+                    radius: 64				
+                }
+            }
         }     
         
         Item
@@ -399,30 +428,30 @@ Pane
         
         
         
-        ColumnLayout
+        Item
         {
             id: _layout
             anchors.fill: parent            
-            spacing: 0       
             
             Item
             {
                 id: _content
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                Layout.margins: control.margins
-                Layout.leftMargin: control.leftMargin
-                Layout.rightMargin: control.rightMargin
-                Layout.topMargin: control.topMargin
-                Layout.bottomMargin: control.bottomMargin
+                anchors.fill: parent
+                anchors.margins: control.margins
+                anchors.leftMargin: control.leftMargin
+                anchors.rightMargin: control.rightMargin
+                anchors.topMargin: control.topMargin
+                anchors.bottomMargin: control.bottomMargin + (control.floatingFooter ? 0 : _footerContent.height)
             }   
             
             Item
             {
                 id: _footerContent
-                Layout.fillWidth: true
-                Layout.preferredHeight: footer && footer.visible ? footer.height : 0                
-                data: footer ? [footer] : []
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                height: footer && footer.visible ? footer.height : 0                
+                data: footer
             }
         }   
         
