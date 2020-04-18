@@ -54,8 +54,8 @@ Pane
         property bool altHeader : false
         property bool autoHideHeader : false
 
-        property bool floatingHeader : control.flickable ? !control.flickable.atYBeginning : false    
-        property bool floatingFooter : control.flickable ? !control.flickable.atYEnd : false    
+        property bool floatingHeader : control.flickable && control.headerPositioning === ListView.InlineHeader ? !control.flickable.atYBeginning : false
+        property bool floatingFooter : control.flickable && control.footerPositioning === ListView.InlineFooter ? !control.flickable.atYEnd : false
         property bool showTitle : true
         
         Kirigami.Theme.colorSet: Kirigami.Theme.View    
