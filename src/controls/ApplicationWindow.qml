@@ -38,7 +38,7 @@ Window
     visible: true
     width: Screen.desktopAvailableWidth * (Kirigami.Settings.isMobile ? 1 : 0.4)
     height: Screen.desktopAvailableHeight * (Kirigami.Settings.isMobile ? 1 : 0.4)
-    color: Maui.App.enableCSD ? "transparent" : Kirigami.Theme.backgroundColor
+    color: "transparent" 
 	flags: Maui.App.enableCSD ? Qt.FramelessWindowHint : Qt.Window
 
     property Maui.AbstractSideBar sideBar
@@ -137,9 +137,7 @@ Window
             }
         }
         
-        headBar.leftContent: [
-
-        ToolButton
+        headBar.leftContent: ToolButton
         {
             id: menuBtn
             icon.name: "application-menu"
@@ -175,8 +173,7 @@ Window
                     onTriggered: aboutDialog.open()
                 }
             }
-        }
-        ]
+        }        
 
 		headBar.farRightContent: Loader
 		{
@@ -204,6 +201,13 @@ Window
 
             anchors.leftMargin: root.sideBar ? ((root.sideBar.collapsible && root.sideBar.collapsed) ? root.sideBar.collapsedSize : (root.sideBar.width ) * root.sideBar.position) : 0
         }
+        
+        background: Rectangle
+        {
+            id: _pageBackground
+            color: Kirigami.Theme.backgroundColor
+            radius: root.visibility === Window.Maximized || !Maui.App.enableCSD ? 0 : Maui.App.theme.borderRadius
+        }
 
         layer.enabled: Maui.App.enableCSD
         layer.effect: OpacityMask
@@ -216,7 +220,7 @@ Window
                 Rectangle
                 {
                     anchors.fill: parent
-                    radius: root.visibility === Window.Maximized || !Maui.App.enableCSD ? 0 : Maui.App.theme.borderRadius
+                    radius: _pageBackground.radius
                 }
             }
         }  
@@ -227,7 +231,7 @@ Window
         visible: Maui.App.enableCSD
         z: ApplicationWindow.overlay.z + 9999
         anchors.fill: parent
-        radius: Maui.App.theme.borderRadius - 0.5
+        radius: _pageBackground.radius - 0.5
         color: "transparent"
         border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
         opacity: 0.5
