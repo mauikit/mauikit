@@ -403,6 +403,12 @@ Pane
                 target: _layout
                 anchors.topMargin: 0
                 anchors.bottomMargin: _headerContent.height            
+            }
+            
+            PropertyChanges 
+            {
+                target: header
+                height: header.implicitHeight           
             } 
             
             PropertyChanges 

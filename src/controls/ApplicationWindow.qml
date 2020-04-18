@@ -310,7 +310,7 @@ Window
             Label
             {
                 visible: Maui.App.accounts.currentAccountIndex >= 0
-                text: currentAccount.user
+                text: currentAccount ? currentAccount.user : ""
                 Layout.fillWidth: true
                 horizontalAlignment: Qt.AlignHCenter
                 elide: Text.ElideMiddle
