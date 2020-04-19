@@ -34,9 +34,9 @@ ToolBar
     spacing: Maui.Style.space.small
     padding: 0
     
-//     property alias stickyRightContent : rightRowContent.sticky
-//     property alias stickyLeftContent : leftRowContent.sticky
-//     property alias stickyMiddleContent : middleRowContent.sticky
+    //     property alias stickyRightContent : rightRowContent.sticky
+    //     property alias stickyLeftContent : leftRowContent.sticky
+    //     property alias stickyMiddleContent : middleRowContent.sticky
     
     property bool forceCenterMiddleContent : true
     
@@ -207,7 +207,7 @@ ToolBar
         
         height: control.implicitHeight
         width: control.width
-              
+        
         contentWidth: mainFlickable.contentWidth 
         contentHeight: height        
         
@@ -238,15 +238,15 @@ ToolBar
         
         ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
         ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-       /* ScrollBar.horizontal: ScrollBar {parent: _scrollView; visible: false;}        
-        ScrollBar.vertical: ScrollBar {parent: _scrollView; visible: false}     */   
+        /* ScrollBar.horizontal: ScrollBar {parent: _scrollView; visible: false;}        
+         *        ScrollBar.vertical: ScrollBar {parent: _scrollView; visible: false}     */   
         
         Flickable
         {
             id: mainFlickable
-           
+            
             anchors.fill: parent
-
+            
             anchors.leftMargin: control.margins
             anchors.rightMargin: control.margins
             
@@ -262,26 +262,35 @@ ToolBar
                 id: layout
                 width: mainFlickable.width 
                 height: mainFlickable.height
+                spacing: control.spacing
                 
-                Row
+                RowLayout
                 {
                     id: _leftContent
-                    Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
                     Layout.fillHeight: true
-                    spacing: visibleChildren.length > 1 ? control.spacing : 0
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                    spacing: farLeftRowContent.visibleChildren.length > 0 ? control.spacing : 0
                     
                     RowLayout
                     {
                         id: farLeftRowContent
-                        spacing: visibleChildren.length > 1 ? control.spacing : 0                    
-                        height: parent.height
+                        spacing: control.spacing                  
+                        Layout.fillHeight: true
+                        Layout.fillWidth: visibleChildren.length > 0 
+                        Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0
+                        Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
                     }
                     
                     RowLayout
                     {
                         id: leftRowContent
-                        spacing: visibleChildren.length > 1 ? control.spacing : 0
-                        height: parent.height
+                        spacing: control.spacing
+                        Layout.fillHeight: true
+                        Layout.fillWidth: visibleChildren.length > 0  
+                        Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0                        
+                        Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft                    
+                        
                     } 
                 }                  
                 
@@ -299,7 +308,8 @@ ToolBar
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     spacing: visibleChildren.length > 1 ? control.spacing : 0
                     Layout.fillHeight: true
-                    Layout.fillWidth: true
+                    Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0
+                    Layout.fillWidth:  visibleChildren.length > 0
                 }
                 
                 Item //helper to force center middle content
@@ -310,25 +320,33 @@ ToolBar
                     Layout.maximumWidth: visible ? Math.max(_leftContent.implicitWidth-_rightContent.implicitWidth, 0) : 0
                 }
                 
-                Row
+                RowLayout
                 {
                     id: _rightContent
                     Layout.fillHeight: true
-                    spacing: visibleChildren.length > 1 ? control.spacing : 0
+                    Layout.fillWidth: true
+                    spacing: farRightRowContent.visibleChildren.length > 0 ? control.spacing : 0
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                     
                     RowLayout
                     {
                         id: rightRowContent  
                         spacing: visibleChildren.length > 1 ? control.spacing : 0     
-                        height: parent.height
+                        Layout.fillHeight: true
+                        Layout.fillWidth: visibleChildren.length > 0   
+                        Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0 
+                        Layout.alignment: Qt.AlignVCenter | Qt.AlignRight                        
                     }
                     
                     RowLayout
                     {
                         id: farRightRowContent                       
                         spacing: visibleChildren.length > 1 ? control.spacing : 0                    
-                        height: parent.height
+                        Layout.fillHeight: true
+                        Layout.fillWidth: visibleChildren.length > 0
+                        Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0                        
+                        Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+                        
                     }
                 }                
                 

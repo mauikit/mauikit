@@ -88,6 +88,7 @@
         <file alias="labs/SettingsDialog.qml">controls/labs/SettingsDialog.qml</file>        
         <file alias="labs/SettingsSection.qml">controls/labs/SettingsSection.qml</file>        
         <file alias="labs/Page.qml">controls/labs/Page.qml</file>        
+        <file alias="labs/Doodle.qml">controls/labs/Doodle.qml</file>        
     </qresource>
     <qresource prefix="/"/>
 </RCC>
