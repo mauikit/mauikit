@@ -52,6 +52,7 @@ Maui.Dialog
 			onClicked: _purpose.pop()
 		}
 		
+		footBar.visible: true
 		footBar.middleContent : Button
 		{
 			text: qsTr("Open with")
