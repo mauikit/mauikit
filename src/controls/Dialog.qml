@@ -94,8 +94,7 @@ Maui.Popup
         
         
         ColumnLayout
-        {
-            
+        {            
             anchors.fill: parent
             spacing: 0
             
@@ -202,6 +201,7 @@ Maui.Popup
             {
                 id: _defaultButtonsLayout
                 spacing: 0
+                Layout.margins: 1
                 Layout.fillWidth: true
                 Layout.preferredHeight: Maui.Style.toolBarHeightAlt - Maui.Style.space.medium
                 Layout.maximumHeight: Maui.Style.toolBarHeightAlt - Maui.Style.space.medium

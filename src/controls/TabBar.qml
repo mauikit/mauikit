@@ -38,14 +38,14 @@ TabBar
             height: Maui.Style.unit
         }	
         
-        EdgeShadow
+        /*EdgeShadow
         {
             edge: Qt.TopEdge		
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
             opacity: 0.2
-        }		
+        }	*/	
     }
     
     
