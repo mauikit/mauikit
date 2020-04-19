@@ -22,20 +22,21 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
-import "private"
+import "private" as Private
 
 Rectangle
 {
     id: control
     
     implicitHeight: Maui.Style.rowHeight
-//     implicitWidth: Math.max(200, _loader.item.implicitWidth)
+//     implicitWidth:  _loader.item.implicitWidth
         
     property string url : ""
     property bool pathEntry: false
-    property alias list : _pathList
-    property alias model : _pathModel
-    property alias item : _loader.item
+    
+    readonly property alias list : _pathList
+    readonly property alias model : _pathModel
+    readonly property alias item : _loader.item
         
     signal pathChanged(string path)
     signal homeClicked()
@@ -49,10 +50,7 @@ Rectangle
     
     color: Kirigami.Theme.backgroundColor
     radius: Maui.Style.radiusV
-    opacity: 1
     border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-    border.width: Maui.Style.unit
-    antialiasing: false
     
     Loader
     {
@@ -122,17 +120,16 @@ Rectangle
         
         RowLayout
         {
-//             implicitWidth: _listView.contentWidth
+            implicitWidth: _listView.contentWidth + (height * 2) + Maui.Style.space.small
             property alias listView: _listView
             spacing: 0
-            clip: true
             
             MouseArea
             {
                 Layout.fillHeight: true
                 Layout.preferredWidth: height * 1.5
                 onClicked: control.homeClicked()
-                hoverEnabled: true
+                hoverEnabled: Kirigami.Settings.isMobile
                 
                 Kirigami.Icon
                 {
@@ -172,7 +169,7 @@ Rectangle
                     
                     model: _pathModel
                     
-                    delegate: PathBarDelegate
+                    delegate: Private.PathBarDelegate
                     {
                         id: delegate
 //                         borderColor: ListView.isCurrentItem ?  control.Kirigami.Theme.highlightColor :  control.border.color
@@ -223,7 +220,7 @@ Rectangle
                 Layout.fillHeight: true
                 Layout.preferredWidth: control.height
                 onClicked: control.showEntryBar()
-                hoverEnabled: true
+                hoverEnabled: Kirigami.Settings.isMobile
                 
                 Rectangle
                 {
@@ -242,22 +239,26 @@ Rectangle
             }
         }
     }
-       
+    
     function append()
     {
         _pathList.path = control.url
         
         if(_loader.sourceComponent !== _pathCrumbsComponent)
+        {
             return
-            
-            _loader.item.listView.currentIndex = _loader.item.listView.count-1
-            _loader.item.listView.positionViewAtEnd()
+        }
+        
+        _loader.item.listView.currentIndex = _loader.item.listView.count-1
+        _loader.item.listView.positionViewAtEnd()
     }
     
     function showEntryBar()
     {
         control.pathEntry = !control.pathEntry
         if(_loader.sourceComponent === _pathEntryComponent)
-            _loader.item.forceActiveFocus()
+        {
+             _loader.item.forceActiveFocus()
+        }
     }
 }

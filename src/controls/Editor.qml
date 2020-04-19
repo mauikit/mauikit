@@ -177,7 +177,6 @@ Maui.Page
 	}
 	]		
 	
-	// 	footBar.visible: !body.readOnly
     footBar.rightContent: ComboBox
 	{
         visible: control.showSyntaxHighlightingLanguages
@@ -270,7 +269,7 @@ Maui.Page
                 focus: true
                 anchors.fill: parent
 				contentWidth: control.width
-				contentHeight: body.height
+				contentHeight: body.contentHeight
 				
 				leftPadding: 0
 				rightPadding: 0
@@ -285,7 +284,7 @@ Maui.Page
 				TextArea
 				{
 					id: body
-					implicitWidth: control.width
+					width: control.width
 					text: document.text
 					placeholderText: qsTr("Body")
                     selectByKeyboard: !Kirigami.Settings.isMobile
@@ -300,8 +299,6 @@ Maui.Page
 					background: Rectangle
 					{
                         color: "transparent"
-						implicitWidth: body.implicitWidth
-						implicitHeight: control.height
 					}				
 					
 					onPressed:
