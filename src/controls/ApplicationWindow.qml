@@ -385,9 +385,6 @@ Window
 
                         mainMenu.close()
                 }
-
-                Kirigami.Theme.backgroundColor: Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.1)
-                Kirigami.Theme.textColor: Kirigami.Theme.textColor
             }
 
             Kirigami.Separator

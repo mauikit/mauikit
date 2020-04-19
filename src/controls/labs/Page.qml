@@ -497,7 +497,7 @@ Pane
             anchors.top: parent.top            
             anchors.left: parent.left
             anchors.right: parent.right
-            height: control.height * 0.1
+            height: _headerContent.height + Maui.Style.toolBarHeight
             z: _content.z + 9999
             visible: control.autoHideHeader && !control.altHeader && !Kirigami.Settings.isMobile
             
