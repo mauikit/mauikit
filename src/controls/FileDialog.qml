@@ -50,11 +50,11 @@ Maui.Dialog
 	
 	rejectButton.visible: false
 	acceptButton.text: control.mode === modes.SAVE ? qsTr("Save") : qsTr("Open")
-	footBar.leftSretch: false
-	footBar.middleContent: Maui.TextField
+
+    footBar.visible: control.mode === modes.SAVE
+    footBar.middleContent: Maui.TextField
 	{
 		id: _textField
-		visible: control.mode === modes.SAVE
 		Layout.fillWidth: true
 		placeholderText: qsTr("File name...")
 		text: suggestedFileName
