@@ -55,6 +55,7 @@ Window
     property alias footer: _page.footer
     property alias header :_page.header
     property alias floatingHeader: _page.floatingHeader
+    property alias floatingFooter: _page.floatingHeader
     property alias autoHideHeader: _page.autoHideHeader
     property alias altHeader: _page.altHeader
     property alias margins : _page.margins
