@@ -1,15 +1,21 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.13
+import QtQuick.Layouts 1.3
+
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 
-Maui.Page 
+Maui.Dialog
 {
     id: control
     readonly property color bgColor : "#333"
     Kirigami.Theme.backgroundColor: Qt.rgba(bgColor.r, bgColor.g, bgColor.b, 0.85)
     Kirigami.Theme.textColor:"#fefefe"
+//     deafultButtons: false
     
+	maxHeight: img.height
+	maxWidth: img.width
+	
     property Item sourceItem : null
     property alias source : img.source
     
@@ -18,25 +24,43 @@ Maui.Page
     property int brushShape : 1 //0 -Circular, 1 - rectangular.
     property int maxBrushSize: 100
     property color paintColor: "red"
-    
-    
-    onVisibleChanged:
+        
+    onOpened:
     {
-        if(control.visible && control.sourceItem)
+        if(control.visible)
         {
-            control.sourceItem.grabToImage(function(result) {
+            if(control.sourceItem)
+            {
+                control.sourceItem.grabToImage(function(result) {
                 img.source = result.url;
             })
+            }
+        }else
+        {
+            buffer.clear()
         }
     }
     
-    Label
+    onSourceItemChanged:
     {
-        color: "yellow"
-        text: parent.height + "-" + parent.width + " / " + control.height + "-" + control.width + " / " + buffer.width + "-"+ buffer.height
+       if(control.visible)
+        {
+            if(control.sourceItem)
+            {
+                control.sourceItem.grabToImage(function(result) {
+                img.source = result.url;
+            })
+            }
+        }
+    }
+
+    footBar.visible: true
+    footBar.rightContent: ToolButton
+    {
+        icon.name: "document-share"
+        onClicked: {}
     }
     
-    footBar.visible: true
     footBar.middleContent:[ 
     
     Maui.ToolActions
@@ -126,13 +150,14 @@ Maui.Page
     ]
     
     
-    
-    Flickable
-    
+    headBar.visible: false
+    ScrollView    
     {
-        anchors.fill: parent
+        Layout.fillHeight: true
+        Layout.fillWidth: true
         
-        
+                contentHeight: img.height
+                contentWidth: img.width
         Image
         {
             
@@ -152,6 +177,13 @@ Maui.Page
                 visible: false
             }
             
+                
+//     Label
+//     {
+//         color: "yellow"
+//         text: parent.height + "-" + parent.width + " / " + control.height + "-" + control.width + " / " + buffer.width + "-"+ buffer.height
+//     }
+    
             
             Canvas
             {
@@ -164,6 +196,13 @@ Maui.Page
                 property color paintColor: control.paintColor
                 smooth: false
                 opacity: control.brushOpacity // Stroke Opacity while drawing
+                
+                function clear()
+                {
+                    var bufferCtx = buffer.getContext("2d")
+                    bufferCtx.clearRect(0, 0, width, height)
+                    buffer.requestPaint()
+                }
                 
                 MouseArea 
                 {
