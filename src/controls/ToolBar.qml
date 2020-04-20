@@ -33,6 +33,7 @@ ToolBar
     implicitWidth: mainFlickable.contentWidth
     spacing: Maui.Style.space.small
     padding: 0
+    default property alias content : leftRowContent.data
     
     //     property alias stickyRightContent : rightRowContent.sticky
     //     property alias stickyLeftContent : leftRowContent.sticky
