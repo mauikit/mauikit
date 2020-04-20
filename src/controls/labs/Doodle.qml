@@ -43,13 +43,11 @@ Maui.Dialog
     
     onSourceItemChanged:
     {
-        if(control.visible)
+        if(control.visible && control.opened)
         {
             if(control.sourceItem)
             {
-                control.sourceItem.grabToImage(function(result) {
-                    img.source = result.url;
-                })
+                control.sourceItem.grabToImage(function(result) { img.source = result.url })
             }
         }
     }
