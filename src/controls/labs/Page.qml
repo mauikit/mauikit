@@ -42,7 +42,7 @@ Pane
         property Flickable flickable : null
         property int footerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineFooter
         property int headerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineHeader
-        
+                
         property string title
         
         property int margins: 0
@@ -53,7 +53,11 @@ Pane
         
         property bool altHeader : false
         property bool autoHideHeader : false
-
+        property bool autoHideFooter : false
+        
+        property int autoHideHeaderMargins : Maui.Style.toolBarHeight
+        property int autoHideFooterMargins : Maui.Style.toolBarHeight
+        
         property bool floatingHeader : control.flickable && control.headerPositioning === ListView.InlineHeader ? !control.flickable.atYBeginning && control.flickable.contentHeight > control.height : false
         property bool floatingFooter : control.flickable && control.footerPositioning === ListView.InlineFooter ? !control.flickable.atYEnd : false
         property bool showTitle : true        
@@ -83,6 +87,8 @@ Pane
             onContentYChanged:
             {
                 _headerAnimation.enabled = false
+                _footerAnimation.enabled = false
+                
                 if(!control.flickable.dragging && control.flickable.atYBeginning)
                 {
                     control.returnToBounds()
@@ -150,6 +156,8 @@ Pane
                 
                 if (control.footer && control.footer.visible && control.footerPositioning === ListView.PullBackFooter)
                 {
+                    _footerAnimation.enabled = true
+                    
                     if (control.footer.height >= (control.footer.implicitHeight/2) ||  control.flickable.atYEnd)
                     {
                         if(control.flickable.atYEnd)
@@ -320,6 +328,17 @@ Pane
             
             position: ToolBar.Footer
             
+            Behavior on height
+            {
+                id: _footerAnimation
+                enabled: false
+                NumberAnimation
+                {
+                    duration: Kirigami.Units.longDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            
             background: Rectangle
             {
                 color: _footBar.Kirigami.Theme.backgroundColor
@@ -485,7 +504,7 @@ Pane
         
         Timer
         {
-            id: _timer
+            id: _autoHideHeaderTimer
             interval: 1000
             onTriggered: 
             {
@@ -498,15 +517,30 @@ Pane
             }
         }
         
+        Timer
+        {
+            id: _autoHideFooterTimer
+            interval: 1000
+            onTriggered: 
+            {
+                if(control.autoHideFooter)
+                {
+                    pullBackFooter()
+                }
+                
+                stop()
+            }
+        }
+      
         Item
         {
             anchors.top: parent.top            
             anchors.left: parent.left
             anchors.right: parent.right
-            height: _headerContent.height + Maui.Style.toolBarHeight
-            z: _content.z + 9999
+            height: visible ? _headerContent.height + control.autoHideHeaderMargins : 0
+            z: _content.z +1
             visible: control.autoHideHeader && !control.altHeader && !Kirigami.Settings.isMobile
-            
+
             HoverHandler
             {
                 target: parent
@@ -522,16 +556,53 @@ Pane
                     
                     if(!hovered)
                     {
-                        _timer.start()
+                        _autoHideHeaderTimer.start()
                         
                     }else
                     {
                         pullDownHeader()
-                        _timer.stop()
+                        _autoHideHeaderTimer.stop()
                     }
                 } 
             }
         }   
+        
+        Item
+        {
+            anchors.bottom: parent.bottom            
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: visible ? _footerContent.height + control.autoHideFooterMargins : 0
+            z: _footerContent.z - 1
+            visible: control.autoHideFooter && !control.altHeader && !Kirigami.Settings.isMobile 
+
+            HoverHandler
+            {
+                target: parent
+                
+                acceptedDevices: PointerDevice.Mouse | PointerDevice.Stylus
+                
+                onHoveredChanged:
+                {
+                    if(!control.autoHideFooter)
+                    {
+                        return
+                    }
+                    
+                    if(!hovered)
+                    {
+                        _autoHideFooterTimer.start()
+                        
+                    }else
+                    {
+                        pullDownFooter()
+                        _autoHideFooterTimer.stop()
+                    }
+                } 
+            }
+        }  
+        
+         
         
         //         Item
         //         {
@@ -588,12 +659,12 @@ Pane
         {
             if(control.header)
             {
-                control.header.height = control.header.implicitHeight
+                pullDownHeader()
             }            
             
             if(control.footer)
             {
-                control.footer.height = control.footer.implicitHeight            
+                pullDownFooter()        
             }           
         }
         
@@ -607,5 +678,17 @@ Pane
         {
             _headerAnimation.enabled = true
             header.height = header.implicitHeight           
+        }
+        
+        function pullBackFooter()
+        {
+            _footerAnimation.enabled = true
+            footer.height= 0
+        }
+        
+        function pullDownFooter()
+        {
+            _footerAnimation.enabled = true            
+            footer.height = footer.implicitHeight           
         }
 }

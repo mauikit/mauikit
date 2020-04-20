@@ -75,7 +75,7 @@ Maui.Dialog
             onTriggered: 
             {                    
                 control.paintColor = "yellow"
-                control.brushOpacity = 0.7
+                control.brushOpacity = 0.4
                 control.brushShape = 1
                 control.brushSize = 30
             }
@@ -195,7 +195,6 @@ Maui.Dialog
                 property real lastY
                 property color paintColor: control.paintColor
                 smooth: false
-                opacity: control.brushOpacity // Stroke Opacity while drawing
                 
                 function clear()
                 {
@@ -350,7 +349,7 @@ Maui.Dialog
                         
                         //Simple dab
                         var size = control.brushSize
-                        ctx.fillStyle = control.paintColor
+                        ctx.fillStyle =  Qt.rgba(control.paintColor.r, control.paintColor.g, control.paintColor.b, control.brushOpacity);
                         var x = point.x - size / 2
                         var y = point.y - size / 2
                         

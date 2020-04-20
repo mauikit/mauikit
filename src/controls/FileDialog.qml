@@ -32,12 +32,16 @@ Maui.Dialog
 	page.padding: 0
 	
 	property alias currentPath : browser.currentPath
-	property alias browser : browser
-	property alias selectionBar: _selectionBar
+	
+	readonly property alias browser : browser
+	readonly property alias selectionBar: _selectionBar
+	
+	property alias singleSelection : _selectionBar.singleSelection
 	
 	property string suggestedFileName : ""
 	
-	property alias settings : browser.settings
+	readonly property alias settings : browser.settings
+	
 	property bool searchBar : false
 	onSearchBarChanged: if(!searchBar) browser.quitSearch()
 	
@@ -48,7 +52,9 @@ Maui.Dialog
 	
 	property alias textField: _textField
 	
-	rejectButton.visible: false
+	signal urlsSelected(var urls)
+	
+	rejectButton.text: qsTr("Cancel")
 	acceptButton.text: control.mode === modes.SAVE ? qsTr("Save") : qsTr("Open")
 
     footBar.visible: control.mode === modes.SAVE
@@ -60,6 +66,8 @@ Maui.Dialog
 		text: suggestedFileName
 	}
 	
+	onRejected: control.close()
+    
 	onAccepted:  
 	{									
 		console.log("CURRENT PATHb", browser.currentPath+"/"+textField.text)
@@ -108,6 +116,7 @@ Maui.Dialog
 			}
 		}
 	}
+	
 	headBar.visible: true
 	headBar.leftContent: ToolButton
 	{
@@ -155,32 +164,32 @@ Maui.Dialog
         separatorVisible: wideMode
         initialPage: [sidebar, _browserLayout]
         defaultColumnWidth:  Kirigami.Units.gridUnit * (Kirigami.Settings.isMobile? 15 : 8)		
-			
-			Maui.PlacesListBrowser
-			{
-				id: sidebar	
-				onPlaceClicked: 
-				{
-					pageRow.currentIndex = 1
-					browser.openFolder(path)
-				}
-				
-				list.groups: control.mode === modes.OPEN ? [
-				Maui.FMList.PLACES_PATH,
-				Maui.FMList.CLOUD_PATH,
-				Maui.FMList.REMOTE_PATH,
-				Maui.FMList.DRIVES_PATH,
-				Maui.FMList.TAGS_PATH] : 
-				[Maui.FMList.PLACES_PATH,
-				Maui.FMList.REMOTE_PATH,                                                
-				Maui.FMList.CLOUD_PATH,
-				Maui.FMList.DRIVES_PATH]
-			}   
+            
+            Maui.PlacesListBrowser
+            {
+                id: sidebar	
+                onPlaceClicked: 
+                {
+                    pageRow.currentIndex = 1
+                    browser.openFolder(path)
+                }
+                
+                list.groups: control.mode === modes.OPEN ? [
+                Maui.FMList.PLACES_PATH,
+                Maui.FMList.CLOUD_PATH,
+                Maui.FMList.REMOTE_PATH,
+                Maui.FMList.DRIVES_PATH,
+                Maui.FMList.TAGS_PATH] : 
+                [Maui.FMList.PLACES_PATH,
+                Maui.FMList.REMOTE_PATH,                                                
+                Maui.FMList.CLOUD_PATH,
+                Maui.FMList.DRIVES_PATH]
+            }   
 			
 			ColumnLayout
 			{
 				id: _browserLayout
-				spacing: Maui.Style.space.small
+				spacing: 0
 				
 				Maui.Page
 				{
@@ -396,11 +405,13 @@ Maui.Dialog
 	
 	
 	function show(cb)
-	{
-		if(cb)
-			callback = cb			
-			open()
-	}
+    {
+        if(cb)
+        {
+            callback = cb	
+        }		
+        open()
+    }
 	
 	function closeIt()
 	{
@@ -409,18 +420,23 @@ Maui.Dialog
 	}
 	
 	function done()
-	{
-		var paths = browser.selectionBar && browser.selectionBar.visible ? browser.selectionBar.uris : [browser.currentPath]
-		
-		if(control.mode === modes.SAVE)
-		{  
-			for(var i in paths)
-				paths[i] = paths[i] + "/" + textField.text            
-		}
-		
-		if(callback)
-			callback(paths)	
-			
-			control.closeIt()
+    {
+        var paths = browser.selectionBar && browser.selectionBar.visible ? browser.selectionBar.uris : [browser.currentPath]
+        
+        if(control.mode === modes.SAVE)
+        {  
+            for(var i in paths)
+            {
+                paths[i] = paths[i] + "/" + textField.text 
+            }           
+        }
+        
+        if(callback instanceof Function)
+        {
+            callback(paths)	
+        }
+        
+        control.urlsSelected(paths)        
+        control.closeIt()
 	}
 }
