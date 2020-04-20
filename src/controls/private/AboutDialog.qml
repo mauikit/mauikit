@@ -38,10 +38,11 @@ Maui.Dialog
     maxHeight: Maui.Style.unit * 250
 
     page.padding: 0
-
+    footBar.visible: true
     footBar.middleContent: ToolButton
     {
         icon.name: "link"
+        visible: true
         onClicked: Qt.openUrlExternally(Maui.App.webPage)
     }
 

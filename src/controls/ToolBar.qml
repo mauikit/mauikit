@@ -34,325 +34,325 @@ ToolBar
     spacing: Maui.Style.space.small
     padding: 0
     default property alias content : leftRowContent.data
-    
-    //     property alias stickyRightContent : rightRowContent.sticky
-    //     property alias stickyLeftContent : leftRowContent.sticky
-    //     property alias stickyMiddleContent : middleRowContent.sticky
-    
-    property bool forceCenterMiddleContent : true
-    
-    property alias leftContent : leftRowContent.data
-    property alias middleContent : middleRowContent.data
-    property alias rightContent : rightRowContent.data
-    
-    property alias farLeftContent : farLeftRowContent.data
-    property alias farRightContent : farRightRowContent.data
-    
-    property alias middleLayout : middleRowContent
-    property alias leftLayout : leftRowContent
-    property alias rightLayout : rightRowContent
-    
-    property alias layout : layout
-    
-    readonly property alias fits : _scrollView.fits
-    
-    property int margins: Maui.Style.space.medium
-    readonly property int count : leftContent.length + middleContent.length + rightContent.length + farLeftContent.length + farRightContent.length
-    readonly property int visibleCount : leftRowContent.visibleChildren.length + middleRowContent.visibleChildren.length  + rightRowContent.visibleChildren.length + farLeftRowContent.visibleChildren.length  + farRightRowContent.visibleChildren.length 
-    
-    property bool flickable: true
-    property bool strech : true
-    property bool leftSretch: strech
-    property bool rightSretch: strech
-    property bool middleStrech: strech
-    
-    MouseArea
-    {
-        id: _rightFlickRec
-        width: Maui.Style.iconSizes.medium
-        height: parent.height
-        visible: !mainFlickable.atXEnd && !control.fits && control.flickable
-        hoverEnabled: true
-        anchors
-        {
-            top: parent.top
-            bottom: parent.bottom
-            right: parent.right
-        }
         
-        z: 999
+        //     property alias stickyRightContent : rightRowContent.sticky
+        //     property alias stickyLeftContent : leftRowContent.sticky
+        //     property alias stickyMiddleContent : middleRowContent.sticky
         
-        EdgeShadow
+        property bool forceCenterMiddleContent : true
+        
+        property alias leftContent : leftRowContent.data
+        property alias middleContent : middleRowContent.data
+        property alias rightContent : rightRowContent.data
+        
+        property alias farLeftContent : farLeftRowContent.data
+        property alias farRightContent : farRightRowContent.data
+        
+        property alias middleLayout : middleRowContent
+        property alias leftLayout : leftRowContent
+        property alias rightLayout : rightRowContent
+        
+        property alias layout : layout
+        
+        readonly property alias fits : _scrollView.fits
+        
+        property int margins: Maui.Style.space.medium
+        readonly property int count : leftContent.length + middleContent.length + rightContent.length + farLeftContent.length + farRightContent.length
+        readonly property int visibleCount : leftRowContent.visibleChildren.length + middleRowContent.visibleChildren.length  + rightRowContent.visibleChildren.length + farLeftRowContent.visibleChildren.length  + farRightRowContent.visibleChildren.length 
+        
+        property bool flickable: true
+        property bool strech : true
+        property bool leftSretch: strech
+        property bool rightSretch: strech
+        property bool middleStrech: strech
+        
+        MouseArea
         {
-            visible: true
-            parent: parent
-            edge: Qt.RightEdge
+            id: _rightFlickRec
+            width: Maui.Style.iconSizes.medium
+            height: parent.height
+            visible: !mainFlickable.atXEnd && !control.fits && control.flickable
+            hoverEnabled: true
             anchors
             {
+                top: parent.top
+                bottom: parent.bottom
                 right: parent.right
-                top: parent.top
-                bottom: parent.bottom
             }
             
-            opacity: 1
+            z: 999
             
-            Behavior on opacity
+            EdgeShadow
             {
-                NumberAnimation
+                visible: true
+                parent: parent
+                edge: Qt.RightEdge
+                anchors
                 {
-                    duration: Kirigami.Units.longDuration
-                    easing.type: Easing.InOutQuad
+                    right: parent.right
+                    top: parent.top
+                    bottom: parent.bottom
+                }
+                
+                opacity: 1
+                
+                Behavior on opacity
+                {
+                    NumberAnimation
+                    {
+                        duration: Kirigami.Units.longDuration
+                        easing.type: Easing.InOutQuad
+                    }
                 }
             }
-        }
-        
-        Maui.Triangle
-        {
-            visible: !Kirigami.Settings.isMobile
-            anchors.centerIn: parent
-            rotation: -135
-            color:  _rightFlickRec.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
-            width: Maui.Style.iconSizes.tiny
-            height:  width 
-        }
-        
-        enabled: !mainFlickable.atXEnd
-        opacity: enabled ? 1 : 0.4
-        onClicked:
-        {
-            if(!mainFlickable.atXEnd)
+            
+            Maui.Triangle
             {
-                mainFlickable.contentX += Math.min( mainFlickable.contentWidth - mainFlickable.contentX,  mainFlickable.contentWidth)
+                visible: !Kirigami.Settings.isMobile
+                anchors.centerIn: parent
+                rotation: -135
+                color:  _rightFlickRec.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
+                width: Maui.Style.iconSizes.tiny
+                height:  width 
             }
             
-            if(mainFlickable.atXEnd)
+            enabled: !mainFlickable.atXEnd
+            opacity: enabled ? 1 : 0.4
+            onClicked:
             {
-                mainFlickable.returnToBounds()
+                if(!mainFlickable.atXEnd)
+                {
+                    mainFlickable.contentX += Math.min( mainFlickable.contentWidth - mainFlickable.contentX,  mainFlickable.contentWidth)
+                }
+                
+                if(mainFlickable.atXEnd)
+                {
+                    mainFlickable.returnToBounds()
+                }
             }
+            
         }
         
-    }
-    
-    MouseArea
-    {
-        id: _leftFlickRec
-        width: Maui.Style.iconSizes.medium
-        height: parent.height
-        visible: !mainFlickable.atXBeginning && !control.fits && control.flickable
-        hoverEnabled: true
-        anchors
+        MouseArea
         {
-            top: parent.top
-            bottom: parent.bottom
-            left: parent.left
-        }
-        z: 999
-        
-        EdgeShadow
-        {
-            visible: true
-            parent: parent
-            edge: Qt.LeftEdge
+            id: _leftFlickRec
+            width: Maui.Style.iconSizes.medium
+            height: parent.height
+            visible: !mainFlickable.atXBeginning && !control.fits && control.flickable
+            hoverEnabled: true
             anchors
             {
-                left: parent.left
                 top: parent.top
                 bottom: parent.bottom
+                left: parent.left
             }
+            z: 999
             
-            opacity: 1
-            
-            Behavior on opacity
+            EdgeShadow
             {
-                NumberAnimation
+                visible: true
+                parent: parent
+                edge: Qt.LeftEdge
+                anchors
                 {
-                    duration: Kirigami.Units.longDuration
-                    easing.type: Easing.InOutQuad
+                    left: parent.left
+                    top: parent.top
+                    bottom: parent.bottom
+                }
+                
+                opacity: 1
+                
+                Behavior on opacity
+                {
+                    NumberAnimation
+                    {
+                        duration: Kirigami.Units.longDuration
+                        easing.type: Easing.InOutQuad
+                    }
                 }
             }
+            
+            Maui.Triangle
+            {
+                visible: !Kirigami.Settings.isMobile
+                anchors.centerIn: parent
+                rotation: 45
+                color:  _leftFlickRec.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
+                width: Maui.Style.iconSizes.tiny
+                height:  width 
+            }
+            
+            enabled: !mainFlickable.atXBeginning
+            opacity: enabled ? 1 : 0.4
+            onClicked:
+            {
+                if(!mainFlickable.atXBeginning)
+                    mainFlickable.contentX -= control.height
+                    
+                    if(mainFlickable.atXBeginning)
+                        mainFlickable.returnToBounds()
+            }
         }
         
-        Maui.Triangle
+        Kirigami.WheelHandler
         {
-            visible: !Kirigami.Settings.isMobile
-            anchors.centerIn: parent
-            rotation: 45
-            color:  _leftFlickRec.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
-            width: Maui.Style.iconSizes.tiny
-            height:  width 
+            id: wheelHandler
+            target: mainFlickable
         }
         
-        enabled: !mainFlickable.atXBeginning
-        opacity: enabled ? 1 : 0.4
-        onClicked:
+        ScrollView
         {
-            if(!mainFlickable.atXBeginning)
-                mainFlickable.contentX -= control.height
+            id: _scrollView
+            property bool fits : mainFlickable.contentWidth < control.width
+            onFitsChanged: mainFlickable.returnToBounds()        
+            
+            height: control.implicitHeight
+            width: control.width
+            
+            contentWidth: mainFlickable.contentWidth 
+            contentHeight: height        
+            
+            states: [State 
+            {
+                when: control.position === ToolBar.Header
                 
-                if(mainFlickable.atXBeginning)
-                    mainFlickable.returnToBounds()
-        }
-    }
-    
-    Kirigami.WheelHandler
-    {
-        id: wheelHandler
-        target: mainFlickable
-    }
-    
-    ScrollView
-    {
-        id: _scrollView
-        property bool fits : mainFlickable.contentWidth < control.width
-        onFitsChanged: mainFlickable.returnToBounds()        
-        
-        height: control.implicitHeight
-        width: control.width
-        
-        contentWidth: mainFlickable.contentWidth 
-        contentHeight: height        
-        
-        states: [State 
-        {
-            when: control.position === ToolBar.Header
+                AnchorChanges 
+                {
+                    target: _scrollView
+                    anchors.top: undefined
+                    anchors.bottom: parent.bottom  
+                }
+            },
             
-            AnchorChanges 
+            State 
             {
-                target: _scrollView
-                anchors.top: undefined
-                anchors.bottom: parent.bottom  
+                when: control.position === ToolBar.Footer
+                
+                AnchorChanges 
+                {
+                    target: _scrollView
+                    anchors.top: parent.top
+                    anchors.bottom: undefined
+                }
             }
-        },
-        
-        State 
-        {
-            when: control.position === ToolBar.Footer
+            ]
             
-            AnchorChanges 
+            ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+            ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+            /* ScrollBar.horizontal: ScrollBar {parent: _scrollView; visible: false;}        
+             *        ScrollBar.vertical: ScrollBar {parent: _scrollView; visible: false}     */   
+            
+            Flickable
             {
-                target: _scrollView
-                anchors.top: parent.top
-                anchors.bottom: undefined
-            }
-        }
-        ]
-        
-        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-        ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-        /* ScrollBar.horizontal: ScrollBar {parent: _scrollView; visible: false;}        
-         *        ScrollBar.vertical: ScrollBar {parent: _scrollView; visible: false}     */   
-        
-        Flickable
-        {
-            id: mainFlickable
-            
-            anchors.fill: parent
-            
-            anchors.leftMargin: control.margins
-            anchors.rightMargin: control.margins
-            
-            flickableDirection: Flickable.HorizontalFlick
-            interactive: !fits && Maui.Handy.isTouch
-            contentWidth: layout.implicitWidth
-            
-            boundsBehavior: Kirigami.Settings.isMobile ? Flickable.DragOverBounds : Flickable.StopAtBounds
-            clip: true
-            
-            RowLayout
-            {
-                id: layout
-                width: mainFlickable.width 
-                height: mainFlickable.height
-                spacing: control.spacing
+                id: mainFlickable
+                
+                anchors.fill: parent
+                
+                anchors.leftMargin: control.margins
+                anchors.rightMargin: control.margins
+                
+                flickableDirection: Flickable.HorizontalFlick
+                interactive: !fits && Maui.Handy.isTouch
+                contentWidth: layout.implicitWidth
+                
+                boundsBehavior: Kirigami.Settings.isMobile ? Flickable.DragOverBounds : Flickable.StopAtBounds
+                clip: true
                 
                 RowLayout
                 {
-                    id: _leftContent
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-                    spacing: farLeftRowContent.visibleChildren.length > 0 ? control.spacing : 0
+                    id: layout
+                    width: mainFlickable.width 
+                    height: mainFlickable.height
+                    spacing: control.spacing
                     
                     RowLayout
                     {
-                        id: farLeftRowContent
-                        spacing: control.spacing                  
+                        id: _leftContent
                         Layout.fillHeight: true
-                        Layout.fillWidth: visibleChildren.length > 0 
-                        Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0
+                        Layout.fillWidth: true
                         Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-                    }
-                    
-                    RowLayout
-                    {
-                        id: leftRowContent
-                        spacing: control.spacing
-                        Layout.fillHeight: true
-                        Layout.fillWidth: visibleChildren.length > 0  
-                        Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0                        
-                        Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft                    
+                        spacing: farLeftRowContent.visibleChildren.length > 0 ? control.spacing : 0
                         
-                    } 
-                }                  
-                
-                Item //helper to force center middle content
-                {
-                    visible: control.forceCenterMiddleContent && control.leftSretch
-                    Layout.minimumWidth: 0
-                    Layout.fillWidth: visible
-                    Layout.maximumWidth: visible ? Math.max(_rightContent.implicitWidth - _leftContent.implicitWidth, 0) : 0
-                }
-                
-                RowLayout
-                {
-                    id: middleRowContent
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    spacing: visibleChildren.length > 1 ? control.spacing : 0
-                    Layout.fillHeight: true
-                    Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0
-                    Layout.fillWidth:  visibleChildren.length > 0
-                }
-                
-                Item //helper to force center middle content
-                {
-                    visible: control.forceCenterMiddleContent && control.rightSretch
-                    Layout.minimumWidth: 0
-                    Layout.fillWidth: visible
-                    Layout.maximumWidth: visible ? Math.max(_leftContent.implicitWidth-_rightContent.implicitWidth, 0) : 0
-                }
-                
-                RowLayout
-                {
-                    id: _rightContent
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                    spacing: farRightRowContent.visibleChildren.length > 0 ? control.spacing : 0
-                    Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+                        RowLayout
+                        {
+                            id: farLeftRowContent
+                            spacing: control.spacing                  
+                            Layout.fillHeight: true
+                            Layout.fillWidth: visibleChildren.length > 0 
+                            Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0
+                            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                        }
+                        
+                        RowLayout
+                        {
+                            id: leftRowContent
+                            spacing: control.spacing
+                            Layout.fillHeight: true
+                            Layout.fillWidth: visibleChildren.length > 0  
+                            Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0                        
+                            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft                    
+                            
+                        } 
+                    }                  
                     
-                    RowLayout
+                    Item //helper to force center middle content
                     {
-                        id: rightRowContent  
-                        spacing: visibleChildren.length > 1 ? control.spacing : 0     
-                        Layout.fillHeight: true
-                        Layout.fillWidth: visibleChildren.length > 0   
-                        Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0 
-                        Layout.alignment: Qt.AlignVCenter | Qt.AlignRight                        
+                        visible: control.forceCenterMiddleContent && control.leftSretch
+                        Layout.minimumWidth: 0
+                        Layout.fillWidth: visible
+                        Layout.maximumWidth: visible ? Math.max(_rightContent.implicitWidth - _leftContent.implicitWidth, 0) : 0
                     }
                     
                     RowLayout
                     {
-                        id: farRightRowContent                       
-                        spacing: visibleChildren.length > 1 ? control.spacing : 0                    
+                        id: middleRowContent
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        spacing: visibleChildren.length > 1 ? control.spacing : 0
                         Layout.fillHeight: true
-                        Layout.fillWidth: visibleChildren.length > 0
-                        Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0                        
+                        Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0
+                        Layout.fillWidth:  visibleChildren.length > 0
+                    }
+                    
+                    Item //helper to force center middle content
+                    {
+                        visible: control.forceCenterMiddleContent && control.rightSretch
+                        Layout.minimumWidth: 0
+                        Layout.fillWidth: visible
+                        Layout.maximumWidth: visible ? Math.max(_leftContent.implicitWidth-_rightContent.implicitWidth, 0) : 0
+                    }
+                    
+                    RowLayout
+                    {
+                        id: _rightContent
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        spacing: farRightRowContent.visibleChildren.length > 0 ? control.spacing : 0
                         Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                         
-                    }
-                }                
-                
-            }            
+                        RowLayout
+                        {
+                            id: rightRowContent  
+                            spacing: visibleChildren.length > 1 ? control.spacing : 0     
+                            Layout.fillHeight: true
+                            Layout.fillWidth: visibleChildren.length > 0   
+                            Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0 
+                            Layout.alignment: Qt.AlignVCenter | Qt.AlignRight                        
+                        }
+                        
+                        RowLayout
+                        {
+                            id: farRightRowContent                       
+                            spacing: visibleChildren.length > 1 ? control.spacing : 0                    
+                            Layout.fillHeight: true
+                            Layout.fillWidth: visibleChildren.length > 0
+                            Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0                        
+                            Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+                            
+                        }
+                    }                
+                    
+                }            
+            }
         }
-    }
-    
+        
 }

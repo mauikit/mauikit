@@ -11,11 +11,11 @@ Maui.Dialog
     readonly property color bgColor : "#333"
     Kirigami.Theme.backgroundColor: Qt.rgba(bgColor.r, bgColor.g, bgColor.b, 0.85)
     Kirigami.Theme.textColor:"#fefefe"
-//     deafultButtons: false
+    //     deafultButtons: false
     
-	maxHeight: img.height
-	maxWidth: img.width
-	
+    maxHeight: img.height
+    maxWidth: img.width
+    
     property Item sourceItem : null
     property alias source : img.source
     
@@ -24,7 +24,7 @@ Maui.Dialog
     property int brushShape : 1 //0 -Circular, 1 - rectangular.
     property int maxBrushSize: 100
     property color paintColor: "red"
-        
+    
     onOpened:
     {
         if(control.visible)
@@ -32,8 +32,8 @@ Maui.Dialog
             if(control.sourceItem)
             {
                 control.sourceItem.grabToImage(function(result) {
-                img.source = result.url;
-            })
+                    img.source = result.url;
+                })
             }
         }else
         {
@@ -43,17 +43,17 @@ Maui.Dialog
     
     onSourceItemChanged:
     {
-       if(control.visible)
+        if(control.visible)
         {
             if(control.sourceItem)
             {
                 control.sourceItem.grabToImage(function(result) {
-                img.source = result.url;
-            })
+                    img.source = result.url;
+                })
             }
         }
     }
-
+    
     footBar.visible: true
     footBar.rightContent: ToolButton
     {
@@ -156,8 +156,8 @@ Maui.Dialog
         Layout.fillHeight: true
         Layout.fillWidth: true
         
-                contentHeight: img.height
-                contentWidth: img.width
+        contentHeight: img.height
+        contentWidth: img.width
         Image
         {
             
@@ -177,13 +177,13 @@ Maui.Dialog
                 visible: false
             }
             
-                
-//     Label
-//     {
-//         color: "yellow"
-//         text: parent.height + "-" + parent.width + " / " + control.height + "-" + control.width + " / " + buffer.width + "-"+ buffer.height
-//     }
-    
+            
+            //     Label
+            //     {
+            //         color: "yellow"
+            //         text: parent.height + "-" + parent.width + " / " + control.height + "-" + control.width + " / " + buffer.width + "-"+ buffer.height
+            //     }
+            
             
             Canvas
             {

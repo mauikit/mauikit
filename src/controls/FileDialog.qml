@@ -108,7 +108,7 @@ Maui.Dialog
 			}
 		}
 	}
-	
+	headBar.visible: true
 	headBar.leftContent: ToolButton
 	{
 		icon.name: "application-menu"

@@ -30,6 +30,7 @@ Maui.Dialog
 		
 		page.padding: 0
 		
+		footBar.visible: true
 		footBar.leftContent: ToolButton
 		{
 			icon.name: "document-open"

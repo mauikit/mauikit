@@ -292,13 +292,10 @@ Pane
                     transparentBorder: false 
                     source: ShaderEffectSource
                     {
-                        //                                         cullMode: ShaderEffect.FrontFaceCulling 
-                        //                     hideSource: true
                         samples : 0
                         recursive: true
                         sourceItem: _content
                         sourceRect: Qt.rect(0, 0-control.topMargin, headBar.width, headBar.height)
-                        // 					textureSize: Qt.size(headBar.width,headBar.height) 
                     }
                     radius: 64				
                 }
@@ -306,13 +303,22 @@ Pane
             
         }
         
+//           Label
+//             {
+// //                 visible: false
+//                 z: 999999999999
+//                 color: "yellow"
+//                 text: _footBar.visibleCount + " / " + _footBar.count + " - " + _footBar.height + " / " + footer.height + " - " + _footBar.visible + " / " + footer.visible
+//             }
+        
         property Item footer : Maui.ToolBar
         {
             id: _footBar
-            visible: _footBar.visibleCount > 0
-            position: ToolBar.Footer
+            visible: visibleCount > 0
             width: visible ? parent.width : 0
             height: visible ? implicitHeight : 0
+            
+            position: ToolBar.Footer
             
             background: Rectangle
             {
