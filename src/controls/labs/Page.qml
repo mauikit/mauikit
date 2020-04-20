@@ -52,11 +52,15 @@ Pane
         property int bottomMargin: margins
         
         property bool altHeader : false
+        
         property bool autoHideHeader : false
         property bool autoHideFooter : false
         
         property int autoHideHeaderMargins : Maui.Style.toolBarHeight
         property int autoHideFooterMargins : Maui.Style.toolBarHeight
+        
+        property int autoHideFooterDelay : 1000
+        property int autoHideHeaderDelay : 1000
         
         property bool floatingHeader : control.flickable && control.headerPositioning === ListView.InlineHeader ? !control.flickable.atYBeginning && control.flickable.contentHeight > control.height : false
         property bool floatingFooter : control.flickable && control.footerPositioning === ListView.InlineFooter ? !control.flickable.atYEnd : false
@@ -505,7 +509,7 @@ Pane
         Timer
         {
             id: _autoHideHeaderTimer
-            interval: 1000
+            interval: autoHideHeaderDelay
             onTriggered: 
             {
                 if(control.autoHideHeader)
@@ -520,7 +524,7 @@ Pane
         Timer
         {
             id: _autoHideFooterTimer
-            interval: 1000
+            interval: control.autoHideFooterDelay
             onTriggered: 
             {
                 if(control.autoHideFooter)
