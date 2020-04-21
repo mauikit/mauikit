@@ -462,6 +462,10 @@ Pane
         //         AnchorAnimation { duration: 1000 }
         //     }
         
+        onAutoHideHeaderChanged: pullDownHeader()
+        onAutoHideFooterChanged: pullDownFooter()
+        
+        
         Column
         {
             id: _headerContent
