@@ -28,7 +28,7 @@ Maui.AbstractSideBar
 {
     id: control
     default property alias content : _content.data
-		
+
     implicitWidth: privateProperties.isCollapsed && collapsed && collapsible && stick ? collapsedSize : preferredWidth
     width: implicitWidth
     position: 1
@@ -61,7 +61,7 @@ Maui.AbstractSideBar
     }
 
     property Component delegate : Maui.ListDelegate
-    {	
+    {
         id: itemDelegate
         iconSize: control.iconSize
         labelVisible: control.showLabels
@@ -174,6 +174,7 @@ Maui.AbstractSideBar
             visible: control.collapsed && control.stick
             Layout.preferredHeight: Maui.Style.toolBarHeight
             Layout.fillWidth: true
+            Layout.alignment: Qt.AlignBottom
             hoverEnabled: true
             preventStealing: true
             propagateComposedEvents: false

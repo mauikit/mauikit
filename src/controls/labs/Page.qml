@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.14
+import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
@@ -40,7 +40,7 @@ Pane
         property alias headerBackground : _headerBackground
         readonly property alias internalHeight : _content.height
         property Flickable flickable : null
-        property int footerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineFooter
+        property int footerPositioning : ListView.InlineFooter
         property int headerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineHeader
                 
         property string title
@@ -62,9 +62,9 @@ Pane
         property int autoHideFooterDelay : 1000
         property int autoHideHeaderDelay : 1000
         
-        property bool floatingHeader : control.flickable && control.headerPositioning === ListView.InlineHeader && (control.flickable.contentY > (_headerContent.height /2)) && control.flickable.contentHeight > control.height && !altHeader
+        property bool floatingHeader : control.flickable && control.headerPositioning === ListView.InlineHeader && (control.flickable.contentY > (Maui.Style.space.medium)) && control.flickable.contentHeight > control.height && !altHeader
         
-        property bool floatingFooter: control.flickable && control.footerPositioning === ListView.InlineFooter && ((flickable.contentHeight - flickable.contentY) >(control.height+ (_footerContent.height/2))) && control.flickable.contentHeight > control.height
+        property bool floatingFooter: control.flickable && control.footerPositioning === ListView.InlineFooter && ((flickable.contentHeight - flickable.contentY) >(control.height+ (Maui.Style.space.medium))) && control.flickable.contentHeight > control.height
        
         property bool showTitle : true        
         
@@ -124,7 +124,7 @@ Pane
                                                               control.footer.height + oldContentY - control.flickable.contentY));
                 }
                 
-                if (control.header && control.headerPositioning === ListView.PullBackHeader && control.header.visible)
+                if (control.header && control.headerPositioning === ListView.PullBackHeader && control.header.visible && !control.altHeader)
                 {
                     oldHHeight = control.header.height
                     control.header.height = Math.max(0,
@@ -133,7 +133,7 @@ Pane
                 }
                 
                 //if the implicitHeight is changed, use that to simulate scroll
-                if (control.header && oldHHeight !== control.header.height && control.header.visible)
+                if (control.header && oldHHeight !== control.header.height && control.header.visible && !control.altHeader)
                 {
                     updatingContentY = true                    
                     control.flickable.contentY -= (oldHHeight - control.header.height)
@@ -146,7 +146,7 @@ Pane
             
             onMovementEnded:
             {
-                if (control.header && control.header.visible && control.headerPositioning === ListView.PullBackHeader )
+                if (control.header && control.header.visible && control.headerPositioning === ListView.PullBackHeader && !control.altHeader)
                 {
                     _headerAnimation.enabled = true                
                     
