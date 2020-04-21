@@ -43,7 +43,8 @@ class MAUIKIT_EXPORT Handy : public QObject
 	Q_PROPERTY(bool isAndroid READ isAndroid CONSTANT FINAL)
 	Q_PROPERTY(bool isLinux READ isLinux CONSTANT FINAL)
 	Q_PROPERTY(bool isWindows READ isWindows CONSTANT FINAL)
-	Q_PROPERTY(bool isMac READ isMac CONSTANT FINAL)
+    Q_PROPERTY(bool isMac READ isMac CONSTANT FINAL)
+    Q_PROPERTY(bool isIOS READ isIOS CONSTANT FINAL)
     
     Q_PROPERTY(bool singleClick MEMBER m_singleClick NOTIFY singleClickChanged)
 	
@@ -102,7 +103,8 @@ public slots:
 	static bool isAndroid();
 	static bool isWindows();
 	static bool isMac();
-	static bool isLinux();
+    static bool isLinux();
+    static bool isIOS();
     
 signals:
     void singleClickChanged();

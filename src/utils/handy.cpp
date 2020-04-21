@@ -208,6 +208,11 @@ bool Handy::isLinux()
 	return FMH::isLinux();
 }
 
+bool Handy::isIOS()
+{
+    return FMH::isIOS();
+}
+
 bool Handy::isTouch()
 {
 	qDebug()<< "CHECKIGN IS IT IS TROYCH";

@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.13
+import QtQuick 2.14
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
@@ -62,8 +62,10 @@ Pane
         property int autoHideFooterDelay : 1000
         property int autoHideHeaderDelay : 1000
         
-        property bool floatingHeader : control.flickable && control.headerPositioning === ListView.InlineHeader ? !control.flickable.atYBeginning && control.flickable.contentHeight > control.height : false
-        property bool floatingFooter : control.flickable && control.footerPositioning === ListView.InlineFooter ? !control.flickable.atYEnd : false
+        property bool floatingHeader : control.flickable && control.headerPositioning === ListView.InlineHeader && (control.flickable.contentY > (_headerContent.height /2)) && control.flickable.contentHeight > control.height && !altHeader
+        
+        property bool floatingFooter: control.flickable && control.footerPositioning === ListView.InlineFooter && ((flickable.contentHeight - flickable.contentY) >(control.height+ (_footerContent.height/2))) && control.flickable.contentHeight > control.height
+       
         property bool showTitle : true        
         
         property alias headBar : _headBar
@@ -399,13 +401,6 @@ Pane
             
             PropertyChanges 
             {
-                target: _layout
-                anchors.topMargin: control.floatingHeader ? 0 : _headerContent.height
-                anchors.bottomMargin: 0           
-            }    
-            
-            PropertyChanges 
-            {
                 target: _headBar
                 position: ToolBar.Header        
             } 
@@ -436,13 +431,7 @@ Pane
                 anchors.bottom: undefined
             }
             
-            PropertyChanges 
-            {
-                target: _layout
-                anchors.topMargin: 0
-                anchors.bottomMargin: header.height            
-            }
-            
+                       
             PropertyChanges 
             {
                 target: header
@@ -453,9 +442,11 @@ Pane
             {
                 target: _headBar
                 position: ToolBar.Footer        
-            } 
-            
-        } ]
+            }
+        }
+    
+        
+        ]
         
         //        transitions: Transition {
         //         // smoothly reanchor myRect and move into new position
@@ -464,6 +455,7 @@ Pane
         
         onAutoHideHeaderChanged: pullDownHeader()
         onAutoHideFooterChanged: pullDownFooter()
+        onAltHeaderChanged: pullDownHeader()
         
         
         Column
@@ -472,7 +464,7 @@ Pane
             anchors.left: parent.left
             anchors.right: parent.right
             children: header
-            z: _content.z+9999
+            z: _content.z+1
         }  
         
 //         Label
@@ -489,6 +481,18 @@ Pane
             id: _layout
             anchors.fill: parent 
             
+            Binding on anchors.bottomMargin
+            {
+                value: control.altHeader ? _headerContent.height : 0
+                delayed: true
+            } 
+            
+            Binding on anchors.topMargin
+            {
+                value: !control.altHeader ? (control.floatingHeader ? 0 : _headerContent.height) : 0
+                delayed: true
+            } 
+           
             Item
             {
                 id: _content
@@ -497,7 +501,11 @@ Pane
                 anchors.leftMargin: control.leftMargin
                 anchors.rightMargin: control.rightMargin
                 anchors.topMargin: control.topMargin
-                anchors.bottomMargin: control.bottomMargin + (control.floatingFooter ? 0 : _footerContent.height)
+                Binding on anchors.bottomMargin
+                {
+                    value: control.floatingFooter ? control.bottomMargin : control.bottomMargin +  _footerContent.height    
+                    delayed: true
+                }                
             }   
             
             Column
@@ -516,7 +524,7 @@ Pane
             interval: autoHideHeaderDelay
             onTriggered: 
             {
-                if(control.autoHideHeader)
+                if(control.autoHideHeader && !control.altHeader)
                 {
                     pullBackHeader()
                 }
@@ -551,14 +559,14 @@ Pane
 
             HoverHandler
             {
-                target: parent
-                
+                target: parent                
                 acceptedDevices: PointerDevice.Mouse | PointerDevice.Stylus
                 
                 onHoveredChanged:
                 {
-                    if(!control.autoHideHeader)
+                    if(!control.autoHideHeader || control.altHeader)
                     {
+                        _autoHideHeaderTimer.stop()
                         return
                     }
                     

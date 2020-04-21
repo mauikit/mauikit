@@ -89,9 +89,8 @@ static constexpr bool isMac()
 #endif
 }
 
-static constexpr bool isIPhone()
+static constexpr bool isIOS()
 {
-
 #if defined(Q_OS_iOS)
     return true;
 #else

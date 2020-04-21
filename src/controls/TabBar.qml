@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.7 as Kirigami
+import org.kde.kirigami 2.9 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import "private"
 
@@ -48,29 +48,38 @@ TabBar
         }	*/	
     }
     
+    Kirigami.WheelHandler
+    {
+        target: _flickable
+    }
     
     contentItem: RowLayout
     {
         spacing: 0
         
-        Flickable
-        {
-            id: _flickable
+        ScrollView
+        {            
             Layout.fillWidth: true
             Layout.fillHeight: true
+            ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+            ScrollBar.vertical.policy: ScrollBar.AlwaysOff
             
-            contentHeight: height
-            contentWidth: _content.implicitWidth
-            clip: true
-            
-            Row
+            Flickable
             {
-                id: _content
-               width: _flickable.width
-               height: _flickable.height
-            }        
-            
-        }
+                id: _flickable                
+                anchors.fill: parent
+                contentHeight: height
+                contentWidth: _content.implicitWidth
+                clip: true
+                
+                Row
+                {
+                    id: _content
+                    width: _flickable.width
+                    height: _flickable.height
+                } 
+            }
+        }       
     
         MouseArea
         {           
