@@ -113,7 +113,7 @@ Maui.Page
 	{
 		id: _filterField
 		Layout.fillWidth: true
-		visible: control.currentFMList.count > 0
+		enabled: control.currentFMList.count > 0
 		placeholderText: String("Filter %1 files").arg(control.currentFMList ? control.currentFMList.count : 0)
 		onAccepted: control.view.filter = text
 		onCleared: control.view.filter = ""

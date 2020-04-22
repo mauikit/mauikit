@@ -47,7 +47,7 @@ MauiApp::MauiApp() : QObject(nullptr)
 {
 	m_theme.path = QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString("/maui/csd/%1").arg("Nitrux"), QStandardPaths::LocateDirectory));
 
-// 	this->setEnableCSD(UTIL::loadSettings("CSD", "GLOBAL", m_enableCSD).toBool());
+    this->setEnableCSD(UTIL::loadSettings("CSD", "GLOBAL", m_enableCSD, true).toBool());
 
 #if defined Q_OS_LINUX && !defined Q_OS_ANDROID    
 	auto configWatcher = new QFileSystemWatcher({CONF_FILE.toLocalFile()}, this);

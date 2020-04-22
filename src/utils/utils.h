@@ -100,9 +100,9 @@ namespace UTIL
 
     private:
         explicit Settings(QString app = UTIL::app->applicationName(), QString org = UTIL::app->organizationName().isEmpty() ? QString("org.kde.maui") : UTIL::app->organizationName()) : QObject(nullptr)
-          ,m_app(app)
-          ,m_org(org)
-          , m_settings(new QSettings(m_org, m_app, this))
+        ,m_app(app)
+        ,m_org(org)
+        ,m_settings(new QSettings(m_org, m_app, this))
         { }
 
         ~Settings() {}

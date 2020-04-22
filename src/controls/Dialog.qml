@@ -199,7 +199,6 @@ Maui.Popup
             {
                 id: _defaultButtonsLayout
                 spacing: 0
-                Layout.margins: 1
                 Layout.fillWidth: true
                 Layout.preferredHeight: Maui.Style.toolBarHeightAlt - Maui.Style.space.medium
                 Layout.maximumHeight: Maui.Style.toolBarHeightAlt - Maui.Style.space.medium
@@ -248,6 +247,7 @@ Maui.Popup
                 Kirigami.Separator
                 {
                     Layout.fillHeight: true
+                    visible: _defaultButtonsLayout.visibleChildren > 1
                 }
                 
                 Button

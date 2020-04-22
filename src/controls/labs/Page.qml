@@ -72,13 +72,13 @@ Pane
         Connections
         {
             target: control.flickable
-            enabled: control.flickable 
+            enabled: control.flickable && control.flickable.contentHeight > control.height
             
             onAtYBeginningChanged:
             {
                 console.log("AT START CHANGES", control.flickableAtStart, control.flickable.atYBeginning, control.floatingHeader)
                 
-                if(control.headerPositioning !== ListView.InlineHeader || !control.header.visible || control.altHeader)
+                if(control.headerPositioning !== ListView.InlineHeader || !control.header.visible || control.altHeader || control.flickable.contentHeight <= control.height)
                 {
                     return
                 }
@@ -90,10 +90,11 @@ Pane
             {
                 console.log("AT ENBD CHANGES", control.flickableAtEnd, control.flickable.atYEnd, control.floatingFooter)
                 
-                if(control.footerPositioning !== ListView.InlineFooter || !control.footer.visible)
+                if(control.footerPositioning !== ListView.InlineFooter || !control.footer.visible || control.flickable.contentHeight <= control.height)
                 {
                     return
                 }
+                
                 
                 if(control.floatingFooter)
                 {
