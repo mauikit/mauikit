@@ -275,7 +275,7 @@ Maui.Dialog
 					{
 						id: _optionsButton
 						icon.name: "overflow-menu"
-						enabled: currentFMList.pathType !== Maui.FMList.TAGS_PATH && currentFMList.pathType !== Maui.FMList.TRASH_PATH && currentFMList.pathType !== Maui.FMList.APPS_PATH
+                        enabled: browser.currentFMList.pathType !== Maui.FMList.TAGS_PATH && browser.currentFMList.pathType !== Maui.FMList.TRASH_PATH && browser.currentFMList.pathType !== Maui.FMList.APPS_PATH
 						onClicked:
 						{
 							if(browser.browserMenu.visible)

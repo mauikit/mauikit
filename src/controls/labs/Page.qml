@@ -62,9 +62,59 @@ Pane
         property int autoHideFooterDelay : 1000
         property int autoHideHeaderDelay : 1000
         
-        property bool floatingHeader : control.flickable && control.headerPositioning === ListView.InlineHeader && (control.flickable.contentY > (Maui.Style.space.medium)) && control.flickable.contentHeight > control.height && !altHeader
+        property bool floatingHeader : control.flickable && control.flickable.contentHeight > control.height && !altHeader ? !flickableAtStart  : false     
         
-        property bool floatingFooter: control.flickable && control.footerPositioning === ListView.InlineFooter && ((flickable.contentHeight - flickable.contentY) >(control.height+ (Maui.Style.space.medium))) && control.flickable.contentHeight > control.height
+        property bool floatingFooter: control.flickable && control.flickable.contentHeight > control.height ? !flickableAtEnd : false
+        
+        property bool flickableAtEnd : control.flickable ? control.flickable.atYEnd : true
+        property bool flickableAtStart : control.flickable ? control.flickable.atYBeginning : true
+                
+        Connections
+        {
+            target: control.flickable
+            enabled: control.flickable 
+            
+            onAtYBeginningChanged:
+            {
+                console.log("AT START CHANGES", control.flickableAtStart, control.flickable.atYBeginning, control.floatingHeader)
+                
+                if(control.headerPositioning !== ListView.InlineHeader || !control.header.visible || control.altHeader)
+                {
+                    return
+                }
+                 
+                 control.flickableAtStart = flickable.atYBeginning 
+            }
+            
+            onAtYEndChanged:
+            {
+                console.log("AT ENBD CHANGES", control.flickableAtEnd, control.flickable.atYEnd, control.floatingFooter)
+                
+                if(control.footerPositioning !== ListView.InlineFooter || !control.footer.visible)
+                {
+                    return
+                }
+                
+                if(control.floatingFooter)
+                {
+                    if(control.flickable.atYEnd)
+                    {
+                        control.flickableAtEnd = true                    
+                        control.flickable.contentY += control.footer.height
+                    }else
+                    {
+                        control.flickableAtEnd = false  
+                        control.flickable.contentY -= control.footer.height
+                    }
+                }
+                else
+                {
+                    control.flickableAtEnd = flickable.atYEnd  
+                    control.flickable.contentY -= control.footer.height
+                }                
+            }
+        }        
+      
        
         property bool showTitle : true        
         
@@ -82,7 +132,7 @@ Pane
         }
         
         onFlickableChanged: returnToBounds()
-        
+              
         Connections
         {
             target: control.flickable ? control.flickable : null
