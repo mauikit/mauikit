@@ -29,6 +29,8 @@ Maui.Page
     readonly property alias gridView : private_.gridView
     readonly property alias listView : private_.listView
     
+//     readonly property var section : listView.section
+    
     flickable: viewLoader.item ? viewLoader.item.flickable : null
     
     QtObject 
@@ -41,10 +43,22 @@ Maui.Page
             id: _dummyGridView
         }
         
+        Binding on gridView
+        {
+            delayed: true
+            value: control.viewType === AltBrowser.ViewType.Grid ? control.currentView : _dummyGridView 
+        }        
+        
         property Maui.ListBrowser listView :  Maui.ListBrowser
         {
             id: _dummyListBrowser
         } 
+        
+        Binding on listView
+        {
+            delayed: true
+            value: control.viewType === AltBrowser.ViewType.List ? control.currentView : _dummyListBrowser 
+        }        
     }
        
     Loader
@@ -58,28 +72,28 @@ Maui.Page
             case AltBrowser.ViewType.List: return listViewComponent
         }
         
-        onLoaded: 
-        {
-            if(control.currentView)
-            {
-                switch(control.viewType)
-                {
-                    case AltBrowser.ViewType.Grid: 
-                    {
-                        private_.gridView = control.currentView
-                        private_.listView = _dummyListBrowser
-                        
-                        break
-                    }
-                    case AltBrowser.ViewType.List: 
-                    {
-                        private_.listView = control.currentView
-                        private_.gridView = _dummyGridView                        
-                        break
-                    }
-                }                
-            }
-        }
+//         onLoaded: 
+//         {
+//             if(control.currentView)
+//             {
+//                 switch(control.viewType)
+//                 {
+//                     case AltBrowser.ViewType.Grid: 
+//                     {
+//                         private_.gridView = control.currentView
+//                         private_.listView = _dummyListBrowser
+//                         
+//                         break
+//                     }
+//                     case AltBrowser.ViewType.List: 
+//                     {
+//                         private_.listView = control.currentView
+//                         private_.gridView = _dummyGridView                        
+//                         break
+//                     }
+//                 }                
+//             }
+//         }
     }    
     
     Maui.Holder
@@ -119,7 +133,9 @@ Maui.Page
             enableLassoSelection: control.enableLassoSelection
             
             itemSize: _dummyListBrowser.itemSize
-//             section: _dummyListBrowser.section
+            section.delegate: _dummyListBrowser.section.delegate
+            section.property: _dummyListBrowser.section.property
+            section.criteria: _dummyListBrowser.section.criteria
             margins: _dummyListBrowser.margins
             spacing: _dummyListBrowser.spacing
             topMargin: _dummyListBrowser.topMargin            
