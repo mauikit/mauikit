@@ -33,6 +33,8 @@ Maui.Page
 	
 	//aliases	
 	property alias currentPath : _browser.path 	
+	onCurrentPathChanged : _filterField.clear()
+    
 	property alias settings : _browser.settings	
 	
 	property alias view : _stackView.currentItem
