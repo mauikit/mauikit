@@ -62,13 +62,39 @@ Pane
         property int autoHideFooterDelay : 1000
         property int autoHideHeaderDelay : 1000
         
-        property bool floatingHeader : control.flickable && control.flickable.contentHeight > control.height && !altHeader ? !flickableAtStart  : false     
+        property bool floatingHeader : control.flickable && control.flickable.contentHeight > control.height && !altHeader ? !_private.flickableAtStart  : false     
         
-        property bool floatingFooter: control.flickable && control.flickable.contentHeight > control.height ? !flickableAtEnd : false
+        property bool floatingFooter: control.flickable && control.flickable.contentHeight > control.height ? !_private.flickableAtEnd : false
         
-        property bool flickableAtEnd : control.flickable ? control.flickable.atYEnd : true
-        property bool flickableAtStart : control.flickable ? control.flickable.atYBeginning : true
-                
+        QtObject
+        {
+            id: _private
+            
+            property bool flickableAtEnd : control.flickable ? control.flickable.atYEnd : true
+            property bool flickableAtStart : control.flickable ? control.flickable.atYBeginning : true
+            
+            property int topMargin : !control.altHeader ? (control.floatingHeader ? 0 : _headerContent.height) : 0
+//             property int bottomMargin: 
+            
+            Behavior on topMargin
+            {
+                NumberAnimation
+                {
+                    duration: Kirigami.Units.longDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            
+//              Behavior on bottomMargin
+//             {
+//                 NumberAnimation
+//                 {
+//                     duration: Kirigami.Units.longDuration * 10
+//                     easing.type: Easing.InOutQuad
+//                 }
+//             }
+        }
+        
         Connections
         {
             target: control.flickable
@@ -76,41 +102,50 @@ Pane
             
             onAtYBeginningChanged:
             {
-                console.log("AT START CHANGES", control.flickableAtStart, control.flickable.atYBeginning, control.floatingHeader)
+                console.log("AT START CHANGES", _private.flickableAtStart, control.flickable.atYBeginning, control.floatingHeader)
                 
                 if(control.headerPositioning !== ListView.InlineHeader || !control.header.visible || control.altHeader || control.flickable.contentHeight <= control.height)
                 {
                     return
                 }
                  
-                 control.flickableAtStart = flickable.atYBeginning 
+                 _private.flickableAtStart = flickable.atYBeginning 
             }
             
             onAtYEndChanged:
             {
-                console.log("AT ENBD CHANGES", control.flickableAtEnd, control.flickable.atYEnd, control.floatingFooter)
+                console.log("AT ENBD CHANGES", _private.flickableAtEnd, control.flickable.atYEnd, control.floatingFooter)
                 
                 if(control.footerPositioning !== ListView.InlineFooter || !control.footer.visible || control.flickable.contentHeight <= control.height)
                 {
                     return
                 }
                 
+                if(control.flickable.atYEnd && !control.floatingFooter)
+                {
+                    return
+                }
+                
+                 if(!control.flickable.atYEnd && control.floatingFooter)
+                {
+                    return
+                }
                 
                 if(control.floatingFooter)
                 {
                     if(control.flickable.atYEnd)
                     {
-                        control.flickableAtEnd = true                    
+                        _private.flickableAtEnd = true                    
                         control.flickable.contentY += control.footer.height
                     }else
                     {
-                        control.flickableAtEnd = false  
+                        _private.flickableAtEnd = false  
                         control.flickable.contentY -= control.footer.height
                     }
                 }
                 else
                 {
-                    control.flickableAtEnd = flickable.atYEnd  
+                    _private.flickableAtEnd = false 
                     control.flickable.contentY -= control.footer.height
                 }                
             }
@@ -532,17 +567,8 @@ Pane
             id: _layout
             anchors.fill: parent 
             
-            Binding on anchors.bottomMargin
-            {
-                value: control.altHeader ? _headerContent.height : 0
-                delayed: true
-            } 
-            
-            Binding on anchors.topMargin
-            {
-                value: !control.altHeader ? (control.floatingHeader ? 0 : _headerContent.height) : 0
-                delayed: true
-            } 
+            anchors.bottomMargin: control.altHeader ? _headerContent.height : 0
+            anchors.topMargin: _private.topMargin
            
             Item
             {
