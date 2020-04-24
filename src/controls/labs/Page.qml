@@ -64,7 +64,7 @@ Pane
         
         property bool floatingHeader : control.flickable && control.flickable.contentHeight > control.height && !altHeader ? !_private.flickableAtStart  : false     
         
-        property bool floatingFooter: control.flickable ? !_private.flickableAtEnd : false
+        property bool floatingFooter: !_private.flickableAtEnd 
         
         QtObject
         {
@@ -74,7 +74,7 @@ Pane
             property bool flickableAtStart : control.flickable ? true : true
             
             property int topMargin : !control.altHeader ? (control.floatingHeader ? 0 : _headerContent.height) : 0
-            property int bottomMargin: control.floatingFooter ? control.bottomMargin : control.bottomMargin +  _footerContent.height    
+            property int bottomMargin: control.floatingFooter ? control.bottomMargin : control.bottomMargin + _footerContent.height    
             
             Behavior on topMargin
             {
@@ -98,10 +98,10 @@ Pane
         Timer
         {
             id: _flickTimer
-            interval: 500
+            interval: 700
             onTriggered:
             {
-                if(control.footerPositioning !== ListView.InlineFooter || !control.footer.visible || control.flickable.contentHeight <= _content.height)
+                if(control.footerPositioning !== ListView.InlineFooter)
                 {
                     _flickTimer.stop()
                     return
@@ -126,7 +126,7 @@ Pane
         Connections
         {
             target: control.flickable
-            enabled: control.flickable && control.flickable.contentHeight > _content.height
+            enabled: control.flickable && control.flickable.contentHeight > control.height
             
             onAtYBeginningChanged:
             {
@@ -157,7 +157,7 @@ Pane
                  
             }
             
-            onAtYEndChanged: control.evaluateFloatingFooter()
+            onAtYEndChanged: control.evaluateFloatingFooter(500)
         }        
       
        
@@ -178,13 +178,13 @@ Pane
         
         onFlickableChanged: returnToBounds()
         
-        Connections
-        {
-            target: control.footer
-            enabled: control.footer
-            
-            onVisibleChanged: evaluateFloatingFooter()
-        }
+//         Connections
+//         {
+//             target: control.footer
+//             enabled: control.footer
+//             
+//             onVisibleChanged: evaluateFloatingFooter()
+//         }
               
         Connections
         {
@@ -773,7 +773,7 @@ Pane
                 pullDownFooter()        
             }   
             
-            evaluateFloatingFooter
+            evaluateFloatingFooter(0)
         }
         
         function pullBackHeader()
@@ -800,8 +800,9 @@ Pane
             footer.height = footer.implicitHeight           
         }
         
-        function evaluateFloatingFooter()
+        function evaluateFloatingFooter(interval)
         {
+            _flickTimer.interval = interval
             if(!control.flickable)
             {
                 _flickTimer.stop()                    
