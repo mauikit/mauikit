@@ -78,6 +78,7 @@ Pane
             
             Behavior on topMargin
             {
+                enabled: control.header.visible && control.headerPositioning === ListView.InlineHeader
                 NumberAnimation
                 {
                     duration: Kirigami.Units.shortDuration
@@ -101,7 +102,7 @@ Pane
             interval: 700
             onTriggered:
             {
-                if(control.footerPositioning !== ListView.InlineFooter)
+                if(control.footerPositioning !== ListView.InlineFooter || !control.footer.visible)
                 {
                     _flickTimer.stop()
                     return
@@ -158,9 +159,8 @@ Pane
             }
             
             onAtYEndChanged: control.evaluateFloatingFooter(500)
-        }        
-      
-       
+        }
+
         property bool showTitle : true        
         
         property alias headBar : _headBar
@@ -802,6 +802,12 @@ Pane
         
         function evaluateFloatingFooter(interval)
         {
+            if(control.footerPositioning !== ListView.InlineFooter)
+            {
+                _flickTimer.stop()
+                return
+            }
+
             _flickTimer.interval = interval
             if(!control.flickable)
             {
