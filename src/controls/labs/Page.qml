@@ -64,17 +64,17 @@ Pane
         
         property bool floatingHeader : control.flickable && control.flickable.contentHeight > control.height && !altHeader ? !_private.flickableAtStart  : false     
         
-        property bool floatingFooter: control.flickable && control.flickable.contentHeight > control.height ? !_private.flickableAtEnd : false
+        property bool floatingFooter: control.flickable ? !_private.flickableAtEnd : false
         
         QtObject
         {
             id: _private
             
-            property bool flickableAtEnd : control.flickable ? control.flickable.atYEnd : true
-            property bool flickableAtStart : control.flickable ? control.flickable.atYBeginning : true
+            property bool flickableAtEnd : control.flickable ? control.flickable.atYBeginning : true
+            property bool flickableAtStart : control.flickable ? true : true
             
             property int topMargin : !control.altHeader ? (control.floatingHeader ? 0 : _headerContent.height) : 0
-//             property int bottomMargin: 
+            property int bottomMargin: control.floatingFooter ? control.bottomMargin : control.bottomMargin +  _footerContent.height    
             
             Behavior on topMargin
             {
@@ -89,66 +89,75 @@ Pane
 //             {
 //                 NumberAnimation
 //                 {
-//                     duration: Kirigami.Units.longDuration * 10
+//                     duration: Kirigami.Units.shortDuration
 //                     easing.type: Easing.InOutQuad
 //                 }
 //             }
         }
         
+        Timer
+        {
+            id: _flickTimer
+            interval: 500
+            onTriggered:
+            {
+                if(control.footerPositioning !== ListView.InlineFooter || !control.footer.visible || control.flickable.contentHeight <= _content.height)
+                {
+                    _flickTimer.stop()
+                    return
+                }          
+                
+                if(control.flickable.atYEnd)
+                {
+                    _private.flickableAtEnd = true  
+                    control.flickable.contentY += control.bottomMargin +  _footerContent.height 
+                    
+                }else
+                {
+                    _private.flickableAtEnd = false                    
+                    control.flickable.contentY -= control.bottomMargin +  _footerContent.height
+                    
+                }
+                
+                console.log("AT ENBD CHANGES", _private.flickableAtEnd, control.flickable.atYEnd, control.floatingFooter)  
+            }
+        }
+        
         Connections
         {
             target: control.flickable
-            enabled: control.flickable && control.flickable.contentHeight > control.height
+            enabled: control.flickable && control.flickable.contentHeight > _content.height
             
             onAtYBeginningChanged:
             {
-                console.log("AT START CHANGES", _private.flickableAtStart, control.flickable.atYBeginning, control.floatingHeader)
                 
                 if(control.headerPositioning !== ListView.InlineHeader || !control.header.visible || control.altHeader || control.flickable.contentHeight <= control.height)
                 {
                     return
                 }
+                
+                if(control.flickable.atYBeginning && !control.floatingHeader)
+                {
+                    return
+                }
+                
+                if(!control.flickable.atYBeginning && control.floatingHeader)
+                {
+                    return
+                }
+                
+                if(_private.flickableAtStart === control.flickable.atYBeginning)
+                {
+                    return
+                }
                  
                  _private.flickableAtStart = flickable.atYBeginning 
+                 
+                 console.log("AT START CHANGES", _private.flickableAtStart, control.flickable.atYBeginning, control.floatingHeader)
+                 
             }
             
-            onAtYEndChanged:
-            {
-                console.log("AT ENBD CHANGES", _private.flickableAtEnd, control.flickable.atYEnd, control.floatingFooter)
-                
-                if(control.footerPositioning !== ListView.InlineFooter || !control.footer.visible || control.flickable.contentHeight <= control.height)
-                {
-                    return
-                }
-                
-                if(control.flickable.atYEnd && !control.floatingFooter)
-                {
-                    return
-                }
-                
-                 if(!control.flickable.atYEnd && control.floatingFooter)
-                {
-                    return
-                }
-                
-                if(control.floatingFooter)
-                {
-                    if(control.flickable.atYEnd)
-                    {
-                        _private.flickableAtEnd = true                    
-                        control.flickable.contentY += control.footer.height
-                    }else
-                    {
-                        _private.flickableAtEnd = false  
-                        control.flickable.contentY -= control.footer.height
-                    }
-                }
-                else
-                {
-                    _private.flickableAtEnd = false 
-                    control.flickable.contentY -= control.footer.height
-                }                
-            }
+            onAtYEndChanged: control.evaluateFloatingFooter()
         }        
       
        
@@ -168,6 +177,14 @@ Pane
         }
         
         onFlickableChanged: returnToBounds()
+        
+        Connections
+        {
+            target: control.footer
+            enabled: control.footer
+            
+            onVisibleChanged: evaluateFloatingFooter()
+        }
               
         Connections
         {
@@ -578,11 +595,7 @@ Pane
                 anchors.leftMargin: control.leftMargin
                 anchors.rightMargin: control.rightMargin
                 anchors.topMargin: control.topMargin
-                Binding on anchors.bottomMargin
-                {
-                    value: control.floatingFooter ? control.bottomMargin : control.bottomMargin +  _footerContent.height    
-                    delayed: true
-                }                
+                anchors.bottomMargin: _private.bottomMargin      
             }   
             
             Column
@@ -758,7 +771,9 @@ Pane
             if(control.footer)
             {
                 pullDownFooter()        
-            }           
+            }   
+            
+            evaluateFloatingFooter
         }
         
         function pullBackHeader()
@@ -783,5 +798,34 @@ Pane
         {
             _footerAnimation.enabled = true            
             footer.height = footer.implicitHeight           
+        }
+        
+        function evaluateFloatingFooter()
+        {
+            if(!control.flickable)
+            {
+                _flickTimer.stop()                    
+                return
+            }
+            
+            if(control.flickable.atYEnd && !control.floatingFooter)
+            {
+                _flickTimer.stop()                    
+                return
+            }
+            
+            if(!control.flickable.atYEnd && control.floatingFooter)
+            {
+                _flickTimer.stop()                    
+                return
+            }
+            
+            if(_private.flickableAtEnd === control.flickable.atYEnd)
+            {
+                _flickTimer.stop()                    
+                return
+            }
+            
+            _flickTimer.restart()
         }
 }
