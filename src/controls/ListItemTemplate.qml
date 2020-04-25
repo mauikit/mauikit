@@ -167,7 +167,7 @@ Item
             visible: control.checkable || control.checked
             
             Layout.fillHeight: true
-            Layout.preferredWidth: height
+            Layout.preferredWidth: Math.min(height, Maui.Style.iconSizes.big + Maui.Style.space.medium)
             
             Maui.Badge
             {
@@ -224,7 +224,7 @@ Item
             Layout.fillHeight: true
             Layout.fillWidth: !control.labelsVisible
             
-            Layout.preferredWidth: height
+            Layout.preferredWidth: Math.min(parent.height, Math.max(control.iconSizeHint, imageSizeHint) + Maui.Style.space.medium)  
             
             Loader
             {                

@@ -127,7 +127,7 @@ Pane
         Connections
         {
             target: control.flickable
-            enabled: control.flickable && control.flickable.contentHeight > control.height
+            enabled: control.flickable && control.flickable.contentHeight > _content.height
             
             onAtYBeginningChanged:
             {

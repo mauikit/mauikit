@@ -40,6 +40,7 @@ Kirigami.ScrollablePage
     property alias currentItem : _listView.currentItem
     property alias count : _listView.count
     property alias cacheBuffer : _listView.cacheBuffer
+    property alias orientation: _listView.orientation
     
     property int margins : 0
     property alias topMargin: _listView.topMargin
@@ -62,6 +63,7 @@ Kirigami.ScrollablePage
     signal keyPress(var event)
     
     spacing: Maui.Style.space.tiny
+    contentWidth: _listView.contentWidth
     
     focus: true	
     padding: 0
