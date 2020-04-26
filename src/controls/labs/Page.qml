@@ -18,6 +18,7 @@
  */
 
 import QtQuick 2.13
+import QtQml 2.14
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
@@ -64,65 +65,37 @@ Pane
         
         property bool floatingHeader : control.flickable && control.flickable.contentHeight > control.height && !altHeader ? !_private.flickableAtStart  : false     
         
-        property bool floatingFooter: !_private.flickableAtEnd 
+        property bool floatingFooter: control.flickable
         
         QtObject
         {
             id: _private
-            
-            property bool flickableAtEnd : control.flickable ? control.flickable.atYBeginning : true
             property bool flickableAtStart : control.flickable ? true : true
             
             property int topMargin : !control.altHeader ? (control.floatingHeader ? 0 : _headerContent.height) : 0
-            property int bottomMargin: control.floatingFooter ? control.bottomMargin : control.bottomMargin + _footerContent.height    
+            property int bottomMargin: control.floatingFooter && control.footerPositioning === ListView.InlineFooter  ? control.bottomMargin : control.bottomMargin + _footerContent.height
             
-            Behavior on topMargin
-            {
-                enabled: control.header.visible && control.headerPositioning === ListView.InlineHeader
-                NumberAnimation
-                {
-                    duration: Kirigami.Units.shortDuration
-                    easing.type: Easing.InOutQuad
-                }
-            }
-            
-//              Behavior on bottomMargin
+//             Behavior on topMargin
 //             {
+//                 enabled: control.header.visible && control.headerPositioning === ListView.InlineHeader
 //                 NumberAnimation
 //                 {
 //                     duration: Kirigami.Units.shortDuration
 //                     easing.type: Easing.InOutQuad
 //                 }
 //             }
+            
         }
         
-        Timer
+        Binding 
         {
-            id: _flickTimer
-            interval: 700
-            onTriggered:
-            {
-                if(control.footerPositioning !== ListView.InlineFooter || !control.footer.visible)
-                {
-                    _flickTimer.stop()
-                    return
-                }          
-                
-                if(control.flickable.atYEnd)
-                {
-                    _private.flickableAtEnd = true  
-                    control.flickable.contentY += control.bottomMargin +  _footerContent.height 
-                    
-                }else
-                {
-                    _private.flickableAtEnd = false                    
-                    control.flickable.contentY -= control.bottomMargin +  _footerContent.height
-                    
-                }
-                
-                console.log("AT ENBD CHANGES", _private.flickableAtEnd, control.flickable.atYEnd, control.floatingFooter)  
-            }
-        }
+            delayed: false
+            when: control.floatingFooter
+            target: control.flickable
+            property: "bottomMargin"
+            value: control.flickable && control.footer.visible && control.footerPositioning === ListView.InlineFooter ? _footerContent.height : 0
+            restoreMode: Binding.RestoreBindingOrValue
+        }        
         
         Connections
         {
@@ -157,12 +130,9 @@ Pane
                  console.log("AT START CHANGES", _private.flickableAtStart, control.flickable.atYBeginning, control.floatingHeader)
                  
             }
-            
-            onAtYEndChanged: control.evaluateFloatingFooter(500)
         }
 
-        property bool showTitle : true        
-        
+        property bool showTitle : true
         property alias headBar : _headBar
         property alias footBar: _footBar   
         
@@ -176,15 +146,11 @@ Pane
             color: Kirigami.Theme.backgroundColor
         }
         
-        onFlickableChanged: returnToBounds()
-        
-//         Connections
-//         {
-//             target: control.footer
-//             enabled: control.footer
-//             
-//             onVisibleChanged: evaluateFloatingFooter()
-//         }
+        onFlickableChanged:
+        {
+//             control.flickable.bottomMargin += control.floatingFooter && control.footer.visible ? _footerContent.height : 0
+             returnToBounds()
+        }
               
         Connections
         {
@@ -338,7 +304,7 @@ Pane
                 enabled: false
                 NumberAnimation
                 {
-                    duration: Kirigami.Units.longDuration
+                    duration: Kirigami.Units.shortDuration
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -347,7 +313,7 @@ Pane
             {
                 NumberAnimation
                 {
-                    duration: Kirigami.Units.longDuration
+                    duration: Kirigami.Units.shortDuration
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -443,7 +409,7 @@ Pane
                 enabled: false
                 NumberAnimation
                 {
-                    duration: Kirigami.Units.longDuration
+                    duration: Kirigami.Units.shortDuration
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -546,16 +512,9 @@ Pane
                 target: _headBar
                 position: ToolBar.Footer        
             }
-        }
-    
+        } ]
         
-        ]
-        
-        //        transitions: Transition {
-        //         // smoothly reanchor myRect and move into new position
-        //         AnchorAnimation { duration: 1000 }
-        //     }
-        
+      
         onAutoHideHeaderChanged: pullDownHeader()
         onAutoHideFooterChanged: pullDownFooter()
         onAltHeaderChanged: pullDownHeader()
@@ -772,8 +731,6 @@ Pane
             {
                 pullDownFooter()        
             }   
-            
-            evaluateFloatingFooter(0)
         }
         
         function pullBackHeader()
@@ -800,39 +757,5 @@ Pane
             footer.height = footer.implicitHeight           
         }
         
-        function evaluateFloatingFooter(interval)
-        {
-            if(control.footerPositioning !== ListView.InlineFooter)
-            {
-                _flickTimer.stop()
-                return
-            }
-
-            _flickTimer.interval = interval
-            if(!control.flickable)
-            {
-                _flickTimer.stop()                    
-                return
-            }
-            
-            if(control.flickable.atYEnd && !control.floatingFooter)
-            {
-                _flickTimer.stop()                    
-                return
-            }
-            
-            if(!control.flickable.atYEnd && control.floatingFooter)
-            {
-                _flickTimer.stop()                    
-                return
-            }
-            
-            if(_private.flickableAtEnd === control.flickable.atYEnd)
-            {
-                _flickTimer.stop()                    
-                return
-            }
-            
-            _flickTimer.restart()
-        }
+       
 }

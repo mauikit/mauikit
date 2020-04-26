@@ -13,7 +13,7 @@ Maui.Dialog
     Kirigami.Theme.textColor:"#fefefe"
     //     deafultButtons: false
     
-    maxHeight: img.height
+    maxHeight: img.height + footer.height + Maui.Style.toolBarHeight + Maui.Style.space.medium
     maxWidth: img.width
     
     property Item sourceItem : null
@@ -156,6 +156,7 @@ Maui.Dialog
         
         contentHeight: img.height
         contentWidth: img.width
+        
         Image
         {
             
