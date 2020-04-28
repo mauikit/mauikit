@@ -199,11 +199,17 @@ QVariantList Tagging::getAbstractsTags(const bool &strict)
 	"where au.app = '%1' and au.uri = '%2'").arg(this->application, this->uri));
 }
 
+static bool setTagIconName(QVariantMap &item)
+{
+    item.insert("icon", item.value("tag").toString() == "fav" ? "love" : "tag");
+    return true;
+}
+
 QVariantList Tagging::getAllTags(const bool &strict)
 {
-	return !strict ? this->get("select * from tags group by tag") :
+	return !strict ? this->get("select * from tags group by tag", &setTagIconName) :
 	this->get(QString("select t.* from TAGS t inner join TAGS_USERS tu on t.tag = tu.tag inner join APPS_USERS au on au.mac = tu.mac and au.app = t.app "
-	"where au.app = '%1' and au.uri = '%2'").arg(this->application, this->uri));
+	"where au.app = '%1' and au.uri = '%2'").arg(this->application, this->uri), &setTagIconName);
 	
 }
 

@@ -308,12 +308,13 @@ FMH::MODEL_LIST FM::getTags(const int &limit)
 	{
 		for(const auto &tag : this->tag->getAllTags(false))
 		{
-			QVariantMap item = tag.toMap();
+			const QVariantMap item = tag.toMap();
 			const auto label = item.value(TAG::KEYMAP[TAG::KEYS::TAG]).toString();
+            
 			data << FMH::MODEL
 			{
 				{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::TAGS_PATH]+label},
-				{FMH::MODEL_KEY::ICON, "tag"},
+				{FMH::MODEL_KEY::ICON, item.value(TAG::KEYMAP[TAG::KEYS::ICON], "tag").toString()},
 				{FMH::MODEL_KEY::MODIFIED, QDateTime::fromString(item.value(TAG::KEYMAP[TAG::KEYS::ADD_DATE]).toString(), Qt::TextDate).toString()},
 				{FMH::MODEL_KEY::IS_DIR, "true"},
 				{FMH::MODEL_KEY::LABEL, label},

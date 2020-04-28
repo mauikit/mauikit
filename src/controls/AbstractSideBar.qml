@@ -78,7 +78,7 @@ Drawer
 		anchors.fill: parent
 		Kirigami.Separator
 		{
-			z: control.z + 999		
+			z: parent.z + 999		
 			anchors.right: parent.right
 			anchors.top: parent.top
 			anchors.bottom: parent.bottom

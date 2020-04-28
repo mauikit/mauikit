@@ -75,15 +75,15 @@ Pane
             property int topMargin : !control.altHeader ? (control.floatingHeader ? 0 : _headerContent.height) : 0
             property int bottomMargin: control.floatingFooter && control.footerPositioning === ListView.InlineFooter  ? control.bottomMargin : control.bottomMargin + _footerContent.height
             
-//             Behavior on topMargin
-//             {
-//                 enabled: control.header.visible && control.headerPositioning === ListView.InlineHeader
-//                 NumberAnimation
-//                 {
-//                     duration: Kirigami.Units.shortDuration
-//                     easing.type: Easing.InOutQuad
-//                 }
-//             }
+            Behavior on topMargin
+            {
+                enabled: control.header.visible && control.headerPositioning === ListView.InlineHeader
+                NumberAnimation
+                {
+                    duration: Kirigami.Units.shortDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
             
         }
         

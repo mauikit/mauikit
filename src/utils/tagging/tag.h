@@ -60,6 +60,7 @@ namespace TAG
 	enum KEYS : uint_fast8_t
     {
         URL,
+        ICON,
         APP,
         URI,
         MAC,
@@ -84,6 +85,7 @@ namespace TAG
     {
         {TAG::KEYS::URL, "url"},
 		{TAG::KEYS::TAG, "tag"},
+		{TAG::KEYS::ICON, "icon"},
 		{TAG::KEYS::COLOR, "color"},
 		{TAG::KEYS::ADD_DATE, "addDate"},
 		{TAG::KEYS::COMMENT, "comment"},
@@ -104,6 +106,7 @@ namespace TAG
 	{
 		{TAG::KEYMAP[KEYS::URL], KEYS::URL},
 		{TAG::KEYMAP[KEYS::TAG], KEYS::TAG},
+		{TAG::KEYMAP[KEYS::ICON], KEYS::ICON},
 		{TAG::KEYMAP[KEYS::COLOR], KEYS::COLOR},
 		{TAG::KEYMAP[KEYS::ADD_DATE], KEYS::ADD_DATE},
 		{TAG::KEYMAP[KEYS::COMMENT], KEYS::COMMENT},
