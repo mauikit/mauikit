@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.13
-import QtQml 2.14
+//import QtQml 2.14
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
@@ -94,7 +94,7 @@ Pane
             target: control.flickable
             property: "bottomMargin"
             value: control.flickable && control.footer.visible && control.footerPositioning === ListView.InlineFooter ? _footerContent.height : 0
-            restoreMode: Binding.RestoreBindingOrValue
+//            restoreMode: Binding.RestoreBindingOrValue
         }        
         
         Connections
