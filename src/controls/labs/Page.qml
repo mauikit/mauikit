@@ -77,7 +77,7 @@ Pane
             
             Behavior on topMargin
             {
-                enabled: control.header.visible && control.headerPositioning === ListView.InlineHeader
+                enabled: control.header.visible && control.headerPositioning === ListView.InlineHeader && control.floatingHeader
                 NumberAnimation
                 {
                     duration: Kirigami.Units.shortDuration
