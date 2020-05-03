@@ -41,9 +41,10 @@ Maui.Page
 		cursorPosition: body.cursorPosition
 		selectionStart: body.selectionStart
 		selectionEnd: body.selectionEnd
-// 		textColor: control.Kirigami.Theme.textColor
-        backgroundColor: document.enableSyntaxHighlighting ? control.Kirigami.Theme.backgroundColor : undefined
+// 		textColor:"red"
+        backgroundColor: control.Kirigami.Theme.backgroundColor
 		theme: "Default"
+        enableSyntaxHighlighting: false
 // 		onError:
 // 		{
 // 			body.text = message
@@ -291,7 +292,7 @@ Maui.Page
                     selectByMouse : !Kirigami.Settings.isMobile
 					textFormat: TextEdit.AutoText			
 					wrapMode: TextEdit.WrapAnywhere
-					
+					color: control.Kirigami.Theme.textColor
 					activeFocusOnPress: true
 					activeFocusOnTab: true
 					persistentSelection: true

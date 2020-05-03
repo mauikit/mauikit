@@ -352,15 +352,18 @@ void DocumentHandler::setStyle()
 	if (!DocumentHandler::m_repository)		
 		DocumentHandler::m_repository = new KSyntaxHighlighting::Repository();    
                
-    if(!m_enableSyntaxHighlighting)
+    qDebug() << "Setting ths tyle" << m_formatName ;
+    if(!m_enableSyntaxHighlighting || m_formatName == "None")
     {
-        this->m_highlighter->setTheme(KSyntaxHighlighting::Theme());     
-        this->m_highlighter->setDefinition(m_repository->definitionForName( "None" ));
-        this->m_highlighter->rehighlight();
+        this->m_highlighter->setDocument(nullptr);
+//         this->m_highlighter->setTheme(KSyntaxHighlighting::Theme());     
+//         this->m_highlighter->setDefinition(m_repository->definitionForName( "None" ));
+//         this->m_highlighter->rehighlight();
         return;
     }    
     
     qDebug() << "Setting the style for syntax highligthing";
+ 
     
     const auto def = m_repository->definitionForName(this->m_formatName);    
     if(!def.isValid())
@@ -369,8 +372,10 @@ void DocumentHandler::setStyle()
         return;
     }    
     
-    if(!this->m_highlighter->document())
+    if(!m_highlighter->document() && this->textDocument())
     {
+        this->m_highlighter->setDocument(this->textDocument());
+    }else{
         qDebug() << "Not document to highlight";
         return;
     }
@@ -444,7 +449,6 @@ void DocumentHandler::setDocument(QQuickTextDocument *document)
 	if(this->textDocument())
 	{
 		this->textDocument()->setModified(false);		
-		this->m_highlighter->setDocument(this->textDocument());	
 		connect(this->textDocument(), &QTextDocument::modificationChanged, this, &DocumentHandler::modifiedChanged);		
 	}
 	
@@ -710,13 +714,27 @@ void DocumentHandler::saveAs(const QUrl &url)
 	
 	this->m_internallyModified = true;	
 	
-	QTextDocumentWriter textWriter(url.toLocalFile());
-	if(!textWriter.write(this->textDocument()))
-	{
-		emit error(tr("Cannot save file ")+ url.toString());
-		this->m_alerts->append(this->canNotSaveAlert(tr("Cannot save file ")+ url.toString()));
-		return;
-	}
+// 	QTextDocumentWriter textWriter(url.toLocalFile());
+// 	if(!textWriter.write(this->textDocument()))
+// 	{
+// 		emit error(tr("Cannot save file ")+ url.toString());
+//         qWarning() << "can not save file" << textWriter.supportedDocumentFormats() << textWriter.format();
+// 		this->m_alerts->append(this->canNotSaveAlert(tr("Cannot save file ")+ url.toString()));
+// 		return;
+// 	}
+	
+
+    const QString filePath = url.toLocalFile();
+    const bool isHtml = QFileInfo(filePath).suffix().contains(QLatin1String("htm"));
+    QFile file(filePath);
+    if (!file.open(QFile::WriteOnly | QFile::Truncate | (isHtml ? QFile::NotOpen : QFile::Text))) {
+        emit error(tr("Cannot save: ") + file.errorString());
+        this->m_alerts->append(this->canNotSaveAlert(tr("Cannot save file ") + file.errorString() + url.toString()));
+
+        return;
+    }
+    file.write((isHtml ? doc->toHtml() : doc->toPlainText()).toUtf8());
+    file.close();
 	
 	doc->setModified(false);
 	
@@ -725,6 +743,11 @@ void DocumentHandler::saveAs(const QUrl &url)
 	
 	m_fileUrl = url;
 	emit fileUrlChanged();	
+    
+    if(m_enableSyntaxHighlighting)
+    {
+        this->setFormatName(DocumentHandler::getLanguageNameFromFileName(m_fileUrl));
+    }
 }
 
 const QString DocumentHandler::getLanguageNameFromFileName(const QUrl& fileName)
