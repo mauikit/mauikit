@@ -21,6 +21,7 @@ Maui.Page
     
     property Component listDelegate : null
     property Component gridDelegate : null
+    
     property var model : null
     
     property bool enableLassoSelection: false    

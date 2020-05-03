@@ -99,7 +99,7 @@ void MauiModel::setSort(const QString& sort)
 	emit this->sortChanged(this->m_sort);
 	this->setSortRole([sort, roles = this->roleNames()]() -> int
 	{
-		for(const auto key : roles.keys())
+		for(const auto &key : roles.keys())
 		{
 			if(roles[key] == sort)
 			{
@@ -243,7 +243,16 @@ QVariant MauiModel::PrivateAbstractListModel::data(const QModelIndex &index, int
     if (!index.isValid() || !list)
         return QVariant();
     
-    return list->items().at(index.row())[static_cast<FMH::MODEL_KEY>(role)];
+    auto value = list->items().at(index.row())[static_cast<FMH::MODEL_KEY>(role)];
+    
+    if(role == FMH::MODEL_KEY::ADDDATE || role == FMH::MODEL_KEY::DATE || role == FMH::MODEL_KEY::MODIFIED || role == FMH::MODEL_KEY::RELEASEDATE)
+    {
+        const auto date = QDateTime::fromString(value, Qt::TextDate);
+        if(date.isValid())
+            return date;        
+    }
+    
+    return value;
 }
 
 bool MauiModel::PrivateAbstractListModel::setData(const QModelIndex &index, const QVariant &value, int role)
