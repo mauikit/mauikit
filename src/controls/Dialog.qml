@@ -247,7 +247,7 @@ Maui.Popup
                 Kirigami.Separator
                 {
                     Layout.fillHeight: true
-                    visible: _defaultButtonsLayout.visibleChildren > 1
+                    visible: _defaultButtonsLayout.visibleChildren.length > 1
                 }
                 
                 Button
