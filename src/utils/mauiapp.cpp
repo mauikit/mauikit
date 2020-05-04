@@ -260,7 +260,7 @@ void MauiApp::getWindowControlsSettings()
 	emit this->leftWindowControlsChanged();
     
     #elif defined  Q_OS_WIN32
-    m_rightWindowControls = QStringList{,"I","A","X"};
+    m_rightWindowControls = QStringList{"I","A","X"};
     emit this->rightWindowControlsChanged();
 	#endif
 }

@@ -62,7 +62,7 @@ Handy::Handy(QObject *parent) : QObject(parent), m_isTouch(Handy::isTouch())
         m_singleClick = confCheck("SingleClick", m_singleClick).toBool();
         emit singleClickChanged();
     });
-#elif defined Q_OS_MAC || Q_OS_WIN32
+#elif defined Q_OS_MAC || defined Q_OS_WIN32
 
     m_singleClick = false;
     emit singleClickChanged();
