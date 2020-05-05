@@ -31,7 +31,6 @@ Drawer
     implicitHeight: window().internalHeight
     height: implicitHeight
     y: (window().header ? window().header.height : 0)
-	leftPadding: 100
 //    closePolicy: modal || collapsed ?  Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
     interactive: modal || collapsed || !visible
     dragMargin: Maui.Style.space.big    
@@ -40,7 +39,7 @@ Drawer
     property bool collapsed: false
     property int collapsedSize: 0
     property int preferredWidth : Kirigami.Units.gridUnit * 12
-    property alias overlay : _overlay
+    readonly property alias overlay : _overlay
 
     onCollapsedChanged: position = (collapsed && collapsedSize < 1) ? 0 : 1
 	default property alias content : _content.data
@@ -51,6 +50,7 @@ Drawer
     MouseArea
     {
         id: _overlay
+        enabled: control.visible
         anchors.fill: parent
         anchors.margins: 0
         anchors.leftMargin: (control.width * control.position)
@@ -87,7 +87,7 @@ Drawer
 	
     Component.onCompleted:
     {
-        if(!control.collapsed)
+        if(!control.collapsed && control.visible)
         {
             control.open()
             control.position = 1;

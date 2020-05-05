@@ -372,12 +372,9 @@ void DocumentHandler::setStyle()
         return;
     }    
     
-    if(!m_highlighter->document() && this->textDocument())
+    if(!m_highlighter->document())
     {
         this->m_highlighter->setDocument(this->textDocument());
-    }else{
-        qDebug() << "Not document to highlight";
-        return;
     }
     
     qDebug() << "Highliging definition info" << def.name() << def.filePath() << def.author() << m_formatName;

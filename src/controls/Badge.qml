@@ -33,8 +33,8 @@ Rectangle
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
 
     property alias item : loader.item
-    property alias hovered : mouseArea.containsMouse
-    property alias pressed : mouseArea.pressed
+    readonly property alias hovered : mouseArea.containsMouse
+    readonly property alias pressed : mouseArea.pressed
     
     property int size: Maui.Style.iconSizes.medium
     property string iconName : ""
@@ -47,13 +47,11 @@ Rectangle
     z: parent.z+1
     
     implicitHeight: size
-    implicitWidth: Math.max((loader.sourceComponent == labelComponent ? Math.max(loader.item.implicitWidth, control.height) : control.height), implicitHeight)
+    implicitWidth: loader.sourceComponent == labelComponent ? Math.max(loader.item.implicitWidth, size) : size
     
     radius: Math.min(width, height)
     color: control.Kirigami.Theme.backgroundColor
     border.color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.7))
-
-    clip: false
 
     Loader
     {
