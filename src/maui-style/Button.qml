@@ -35,9 +35,8 @@ T.Button
     icon.width: Kirigami.Settings.isMobile ? Maui.Style.iconSizes.medium : Maui.Style.iconSizes.small
     icon.height: Kirigami.Settings.isMobile ? Maui.Style.iconSizes.medium : Maui.Style.iconSizes.small
 
-    icon.color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor) :
-                             control.Kirigami.Theme.disabledTextColor
-
+    icon.color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor) : control.Kirigami.Theme.disabledTextColor
+    spacing: Maui.Style.space.medium
 
     contentItem: IconLabel
     {
@@ -45,7 +44,7 @@ T.Button
         font: control.font
         icon: control.icon
         color: !control.enabled ? control.Kirigami.Theme.disabledTextColor :
-            control.highlighted || control.down ? control.Kirigami.Theme.highlightedTextColor : control.Kirigami.Theme.textColor
+        control.highlighted || control.down ? control.Kirigami.Theme.highlightedTextColor : control.Kirigami.Theme.textColor
         spacing: control.spacing
         mirrored: control.mirrored
         display: control.display

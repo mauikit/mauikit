@@ -82,7 +82,7 @@ MouseArea
         id: _layoutButton
         anchors.centerIn: parent
         height: parent.height
-        spacing: Maui.Style.space.tiny
+        spacing: 0
         clip: true
 
         Item

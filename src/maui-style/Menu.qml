@@ -53,7 +53,7 @@ T.Menu
 
     margins: 0
     verticalPadding: 8
-
+    spacing: Maui.Style.space.small
     transformOrigin: !cascade ? Item.Top : (mirrored ? Item.TopRight : Item.TopLeft)
     modal: Kirigami.Settings.isMobile
 
@@ -79,7 +79,7 @@ T.Menu
         interactive: Window.window ? contentHeight > Window.window.height : false
         clip: true
         currentIndex: control.currentIndex
-
+        spacing: control.spacing
         ScrollIndicator.vertical: ScrollIndicator {}
     }
 

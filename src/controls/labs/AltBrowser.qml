@@ -137,6 +137,7 @@ Maui.Page
             section.delegate: _dummyListBrowser.section.delegate
             section.property: _dummyListBrowser.section.property
             section.criteria: _dummyListBrowser.section.criteria
+            section.labelPositioning: _dummyListBrowser.section.labelPositioning
             margins: _dummyListBrowser.margins
             spacing: _dummyListBrowser.spacing
             topMargin: _dummyListBrowser.topMargin            
