@@ -18,6 +18,11 @@ Maui.Page
     
     property int viewType: AltBrowser.ViewType.List
     property int currentIndex : -1
+    Binding on currentIndex
+    {
+        when: control.currentView
+        value: control.currentView.currentIndex        
+    }
     
     property Component listDelegate : null
     property Component gridDelegate : null
