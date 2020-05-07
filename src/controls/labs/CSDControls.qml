@@ -6,6 +6,8 @@ import QtGraphicalEffects 1.0
 import QtQuick.Window 2.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
+import org.kde.appletdecoration 0.1 as AppletDecoration
+// import org.kde.plasma.plasmoid 2.0
 
 Item
 {
@@ -23,53 +25,6 @@ Item
 	// 			onActiveChanged: if (active) { root.startSystemMove(); }
 	// 		}
 	
-	property Component closeButton : Item
-	{
-		signal clicked()		
-		onClicked: root.close()	
-		
-		Kirigami.Icon
-		{
-			anchors.centerIn: parent
-			height: 16
-			width: height
-			color: isMask ? (hovered ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor) : "transparent"		
-			isMask: control.maskButtons
-			source: Maui.App.theme.buttonAsset("Close", hovered ? "Hover" : "Normal")
-		}
-	}	
-	
-	property Component minimizeButton: Item
-	{
-		signal clicked()
-		
-		onClicked: root.showMinimized()
-		Kirigami.Icon
-		{
-			anchors.centerIn: parent			
-			height: 16
-			width: height
-			color: isMask ? (hovered ? Kirigami.Theme.neutralTextColor : Kirigami.Theme.textColor) : "transparent"		
-			isMask: control.maskButtons
-			source: Maui.App.theme.buttonAsset("Minimize", hovered ? "Hover" : "Normal")
-		}
-	}	
-	
-	property Component maximizeButton: Item
-	{	
-		signal clicked()
-		onClicked: root.toggleMaximized()
-	
-		Kirigami.Icon
-		{
-			anchors.centerIn: parent
-			height: 16
-			width: height
-			color: isMask ? (hovered ? Kirigami.Theme.positiveTextColor : Kirigami.Theme.textColor) : "transparent"		
-			isMask: control.maskButtons
-			source: Maui.App.theme.buttonAsset(Window.window.visibility === Window.Maximized ? "Restore" : "Maximize", hovered ? "Hover" : "Normal")
-		}
-	}
 	
 	Row
 	{
@@ -80,37 +35,91 @@ Item
 		
 		Repeater
 		{
-			model: control.order
-			delegate: MouseArea
-			{
-				id: _delegate
-				height: 18
-				width: height
-				anchors.verticalCenter: parent.verticalCenter
-				hoverEnabled: true
-				onClicked: _loader.item.clicked()
-				
-				Loader
-				{
-					id: _loader
-					property bool hovered : parent.containsMouse || parent.containsPress
-					signal clicked()
-					
-					anchors.fill: parent
-					sourceComponent: mapControl(modelData)					
-				}
-			}
-		}
-	}
+            model: control.order
+            delegate: AppletDecoration.Button
+            {               
+                width: 16                
+                height: 16            
+                anchors.verticalCenter: parent.verticalCenter
+                bridge: bridgeItem.bridge
+                sharedDecoration: sharedDecorationItem
+                scheme: plasmaThemeExtended.colors.schemeFile
+                type: mapControl(modelData)
+//                 isOnAllDesktops: root.isLastActiveWindowPinned
+                isMaximized: Window.window.visibility === Window.Maximized 
+//                 isKeepAbove: root.isLastActiveWindowKeepAbove
+                
+                localX: x
+                localY: y
+                isActive: Window.window.active
+                
+                onClicked: performActiveWindowAction(type)                  
+            }            
+        }
+    }
+    
+    AppletDecoration.PlasmaThemeExtended {
+        id: plasmaThemeExtended
+        
+        //             readonly property bool isActive: plasmoid.configuration.selectedScheme === "_plasmatheme_"
+        //             
+        //             function triggerUpdate() {
+        //                 if (isActive) {
+        //                     initButtons();
+        //                 }
+        //             }
+        //             
+        //             onThemeChanged: triggerUpdate();
+        //             onColorsChanged: triggerUpdate();
+    }
+    
+    AppletDecoration.Bridge {
+        id: bridgeItem
+        plugin: decorations.currentPlugin
+        theme: decorations.currentTheme 
+    }
+    
+    AppletDecoration.Settings {
+        id: settingsItem
+        bridge: bridgeItem.bridge
+        borderSizesIndex: 0 // Normal
+    }
+    
+    AppletDecoration.SharedDecoration {
+        id: sharedDecorationItem
+        bridge: bridgeItem.bridge
+        settings: settingsItem
+    }
+    
+    AppletDecoration.DecorationsModel {
+        id: decorations
+    }
+    
+//     PlasmaTasksModel{id: windowInfo}
 	
 	function mapControl(key)
 	{
-		switch(key)
-		{
-			case "X": return closeButton;
-			case "I": return minimizeButton;
-			case "A": return maximizeButton;
-			default: return null;			
-		}
+        switch(key)
+        {
+            case "X": return  AppletDecoration.Types.Close;
+            case "I": return  AppletDecoration.Types.Minimize;
+            case "A": return  AppletDecoration.Types.Maximize;
+            default: return null;			
+        }
 	}
+	
+	function performActiveWindowAction(type)
+    {
+        if (type === AppletDecoration.Types.Close) {
+            root.close()
+        } else if (type === AppletDecoration.Types.Maximize) {
+            root.toggleMaximized()
+        } else if (type ===  AppletDecoration.Types.Minimize) {
+            root.showMinimized()
+        } else if (type === AppletDecoration.Types.TogglePinToAllDesktops) {
+            windowInfo.togglePinToAllDesktops();
+        } else if (type === AppletDecoration.Types.ToggleKeepAbove){
+            windowInfo.toggleKeepAbove();
+        }
+    }
 }
