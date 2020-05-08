@@ -36,63 +36,116 @@ Item
 		Repeater
 		{
             model: control.order
-            delegate: AppletDecoration.Button
-            {               
-                width: 16                
-                height: 16            
-                anchors.verticalCenter: parent.verticalCenter
-                bridge: bridgeItem.bridge
-                sharedDecoration: sharedDecorationItem
-                scheme: plasmaThemeExtended.colors.schemeFile
-                type: mapControl(modelData)
-//                 isOnAllDesktops: root.isLastActiveWindowPinned
-                isMaximized: Window.window.visibility === Window.Maximized 
-//                 isKeepAbove: root.isLastActiveWindowKeepAbove
-                
-                localX: x
-                localY: y
-                isActive: Window.window.active
-                
-                onClicked: performActiveWindowAction(type)                  
-            }            
+            delegate: auroraeThemeEngine.isEnabled ? auroraeButton : pluginButton     
         }
     }
     
-    AppletDecoration.PlasmaThemeExtended {
-        id: plasmaThemeExtended
+    Component
+    {
+        id: pluginButton
         
-        //             readonly property bool isActive: plasmoid.configuration.selectedScheme === "_plasmatheme_"
-        //             
-        //             function triggerUpdate() {
-        //                 if (isActive) {
-        //                     initButtons();
-        //                 }
-        //             }
-        //             
-        //             onThemeChanged: triggerUpdate();
-        //             onColorsChanged: triggerUpdate();
+        
+        AppletDecoration.Button
+        {               
+            width: 22                
+            height: 22            
+            anchors.verticalCenter: parent.verticalCenter
+            bridge: bridgeItem.bridge
+            sharedDecoration: sharedDecorationItem
+            scheme: plasmaThemeExtended.colors.schemeFile
+            type: mapControl(modelData)
+            //                 isOnAllDesktops: root.isLastActiveWindowPinned
+            isMaximized: Window.window.visibility === Window.Maximized 
+            //                 isKeepAbove: root.isLastActiveWindowKeepAbove
+            
+            //                 localX: x
+            //                 localY: y
+            isActive: Window.window.active
+            
+            onClicked: performActiveWindowAction(type)                  
+        }    
     }
     
-    AppletDecoration.Bridge {
+    Component
+    {
+        id: auroraeButton
+        Item {}
+//         AppletDecoration.AuroraeButton
+//         {
+//             width: 22            
+//             height: 22
+//             
+//             isMaximized: Window.window.visibility === Window.Maximized 
+//             //                 isKeepAbove: root.isLastActiveWindowKeepAbove
+//             
+//             //                 localX: x
+//             //                 localY: y
+//             isActive: Window.window.active
+//             
+//             onClicked: performActiveWindowAction(buttonType)  
+//             
+//             buttonType: mapControl(modelData)
+//             auroraeTheme: auroraeThemeEngine
+//             
+//         }
+    }
+    
+    AppletDecoration.WindowSystem 
+    {
+        id: windowSystem
+    }
+    
+    AppletDecoration.PlasmaThemeExtended 
+    {
+        id: plasmaThemeExtended
+        
+                readonly property bool isActive: plasmoid.configuration.selectedScheme === "_plasmatheme_"
+                    
+                    function triggerUpdate() 
+                    {
+                        if (isActive) 
+                        {
+//                             initButtons();
+                            sharedDecorationItem.createDecoration();
+                        }
+                    }
+                    
+                    onThemeChanged: triggerUpdate();
+                    onColorsChanged: triggerUpdate();
+    }
+    
+    AppletDecoration.Bridge 
+    {
         id: bridgeItem
         plugin: decorations.currentPlugin
         theme: decorations.currentTheme 
     }
     
-    AppletDecoration.Settings {
+    AppletDecoration.Settings 
+    {
         id: settingsItem
         bridge: bridgeItem.bridge
         borderSizesIndex: 0 // Normal
     }
     
-    AppletDecoration.SharedDecoration {
+    AppletDecoration.SharedDecoration 
+    {
         id: sharedDecorationItem
         bridge: bridgeItem.bridge
         settings: settingsItem
     }
     
-    AppletDecoration.DecorationsModel {
+    AppletDecoration.DecorationsModel 
+    {
         id: decorations
+    }
+    
+    AppletDecoration.AuroraeTheme 
+    {
+        id: auroraeThemeEngine
+        theme: isEnabled ? decorations.currentTheme : ""
+        
+        readonly property bool isEnabled: decorations.isAurorae(decorations.currentPlugin, decorations.currentTheme);
     }
     
 //     PlasmaTasksModel{id: windowInfo}
@@ -104,6 +157,8 @@ Item
             case "X": return  AppletDecoration.Types.Close;
             case "I": return  AppletDecoration.Types.Minimize;
             case "A": return  AppletDecoration.Types.Maximize;
+            case "F": return  AppletDecoration.Types.KeepAbove;
+            case "S": return  AppletDecoration.Types.OnAllDesktops;
             default: return null;			
         }
 	}
