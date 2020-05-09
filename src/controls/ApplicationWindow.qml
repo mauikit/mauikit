@@ -140,7 +140,7 @@ Window
             active: Maui.App.enableCSD && Maui.App.leftWindowControls.length
             Layout.preferredWidth: active ? implicitWidth : 0
             Layout.fillHeight: true
-            sourceComponent: MauiLab.WindowControlsWindows
+            sourceComponent: MauiLab.WindowControls
             {
                 order: Maui.App.leftWindowControls
             }
@@ -191,7 +191,7 @@ Window
             active: Maui.App.enableCSD && Maui.App.rightWindowControls.length
             Layout.preferredWidth: active ? implicitWidth : 0
             Layout.fillHeight: true
-            sourceComponent: MauiLab.WindowControlsWindows
+            sourceComponent: MauiLab.WindowControls
             {
                 order:  Maui.App.rightWindowControls
             }

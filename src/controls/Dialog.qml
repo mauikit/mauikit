@@ -57,10 +57,11 @@ Maui.Popup
         closePolicy: Popup.NoAutoClose | Popup.CloseOnEscape
         
         maxWidth: Maui.Style.unit * 300
-        maxHeight: _layout.implicitHeight * 2
+        maxHeight: _layout.implicitHeight 
         
         widthHint: 0.9
         heightHint: 0.9  
+        clip: false
         
         Maui.Badge
         {
@@ -105,7 +106,7 @@ Maui.Popup
                 padding: 0
                 clip: true
 
-                implicitHeight: _pageContent.implicitHeight
+                implicitHeight: _pageContent.implicitHeight + topPadding + bottomPadding + topMargin + bottomMargin + footer.height + _pageContent.spacing + header.height
                 
                 ColumnLayout
                 {
@@ -133,7 +134,7 @@ Maui.Popup
                     {
                         id: _scrollable
                         visible: message.length > 0
-                        Layout.preferredHeight: Math.min(_scrollable.contentHeight, 500)
+                        Layout.maximumHeight: Math.min(_scrollable.contentHeight, 500)
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignCenter
                         
@@ -201,9 +202,9 @@ Maui.Popup
                 id: _defaultButtonsLayout
                 spacing: 0
                 Layout.fillWidth: true
-                Layout.preferredHeight: Maui.Style.toolBarHeightAlt - Maui.Style.space.medium
+                Layout.preferredHeight:  Maui.Style.toolBarHeightAlt - Maui.Style.space.medium
                 Layout.maximumHeight: Maui.Style.toolBarHeightAlt - Maui.Style.space.medium
-                visible: defaultButtons
+                visible: control.defaultButtons
                 
                 Button
                 {
