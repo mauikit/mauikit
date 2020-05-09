@@ -97,9 +97,7 @@ linux:unix:!android {
         }
 
         RESOURCES += $$PWD/src/maui-style/style.qrc
-
-
-            RESOURCES += $$PWD/src/maui-style/icons.qrc
+        RESOURCES += $$PWD/src/maui-style/icons.qrc
 
     }
 
