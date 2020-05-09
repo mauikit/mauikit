@@ -74,21 +74,23 @@
         <file alias="private/shapes/Arrow.qml">controls/private/shapes/Arrow.qml</file>
         <file alias="private/shapes/X.qml">controls/private/shapes/X.qml</file>
         <file alias="private/shapes/Triangle.qml">controls/private/shapes/Triangle.qml</file>
-		<file alias="private/shapes/CheckMark.qml">controls/private/shapes/CheckMark.qml</file>
-		<file alias="private/shapes/PlusSign.qml">controls/private/shapes/PlusSign.qml</file>
-		<file alias="private/shapes/Rectangle.qml">controls/private/shapes/Rectangle.qml</file>
-		<file alias="labs/CSDControls.qml">controls/labs/CSDControls.qml</file>
-		<file alias="labs/WindowControls.qml">controls/labs/WindowControls.qml</file>
-		<file alias="labs/ActionToolBar.qml">controls/labs/ActionToolBar.qml</file>
-		<file alias="labs/ToolButtonAction.qml">controls/labs/ToolButtonAction.qml</file>
-		<file alias="labs/AppViews.qml">controls/labs/AppViews.qml</file>
+        <file alias="private/shapes/CheckMark.qml">controls/private/shapes/CheckMark.qml</file>
+        <file alias="private/shapes/PlusSign.qml">controls/private/shapes/PlusSign.qml</file>
+        <file alias="private/shapes/Rectangle.qml">controls/private/shapes/Rectangle.qml</file>
+        <file alias="labs/CSDControls.qml">controls/labs/CSDControls.qml</file>
+        <file alias="labs/ActionToolBar.qml">controls/labs/ActionToolBar.qml</file>
+        <file alias="labs/ToolButtonAction.qml">controls/labs/ToolButtonAction.qml</file>
+        <file alias="labs/AppViews.qml">controls/labs/AppViews.qml</file>
         <file alias="labs/AppViewLoader.qml">controls/labs/AppViewLoader.qml</file>
-        <file alias="labs/AltBrowser.qml">controls/labs/AltBrowser.qml</file>        
-        <file alias="labs/TabsBrowser.qml">controls/labs/TabsBrowser.qml</file>        
-        <file alias="labs/SettingsDialog.qml">controls/labs/SettingsDialog.qml</file>        
-        <file alias="labs/SettingsSection.qml">controls/labs/SettingsSection.qml</file>        
-        <file alias="labs/Page.qml">controls/labs/Page.qml</file>        
-        <file alias="labs/Doodle.qml">controls/labs/Doodle.qml</file>        
+        <file alias="labs/AltBrowser.qml">controls/labs/AltBrowser.qml</file>
+        <file alias="labs/TabsBrowser.qml">controls/labs/TabsBrowser.qml</file>
+        <file alias="labs/SettingsDialog.qml">controls/labs/SettingsDialog.qml</file>
+        <file alias="labs/SettingsSection.qml">controls/labs/SettingsSection.qml</file>
+        <file alias="labs/Page.qml">controls/labs/Page.qml</file>
+        <file alias="labs/Doodle.qml">controls/labs/Doodle.qml</file>
+        <file alias="labs/WindowControlsLinux.qml">controls/labs/WindowControlsLinux.qml</file>
+        <file alias="labs/WindowControlsMac.qml">controls/labs/WindowControlsMac.qml</file>
+        <file alias="labs/WindowControlsWindows.qml">controls/labs/WindowControlsWindows.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

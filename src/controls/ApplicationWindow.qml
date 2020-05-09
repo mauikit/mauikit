@@ -140,7 +140,7 @@ Window
             active: Maui.App.enableCSD && Maui.App.leftWindowControls.length
             Layout.preferredWidth: active ? implicitWidth : 0
             Layout.fillHeight: true
-            sourceComponent: MauiLab.WindowControls
+            sourceComponent: MauiLab.WindowControlsWindows
             {
                 order: Maui.App.leftWindowControls
             }
@@ -184,18 +184,18 @@ Window
             }
         }        
 
-		headBar.farRightContent: Loader
-		{
-			id: _rightControlsLoader
-			visible: active
-			active: Maui.App.enableCSD && Maui.App.rightWindowControls.length
-			Layout.preferredWidth: active ? implicitWidth : 0
-			Layout.fillHeight: true
-			sourceComponent: MauiLab.WindowControls
-			{
-				order:  Maui.App.rightWindowControls
-			}
-		}
+        headBar.farRightContent: Loader
+        {
+            id: _rightControlsLoader
+            visible: active
+            active: Maui.App.enableCSD && Maui.App.rightWindowControls.length
+            Layout.preferredWidth: active ? implicitWidth : 0
+            Layout.fillHeight: true
+            sourceComponent: MauiLab.WindowControlsWindows
+            {
+                order:  Maui.App.rightWindowControls
+            }
+        }
 
         Item
         {

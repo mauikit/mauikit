@@ -21,6 +21,7 @@ pragma Singleton
 
 import QtQuick 2.4
 import org.kde.kirigami 2.7 as Kirigami
+import org.kde.mauikit 1.0 as Maui
 
 QtObject
 {
@@ -29,7 +30,7 @@ QtObject
 	readonly property bool isMobile : Kirigami.Settings.isMobile
 
 	property int unit : Kirigami.Units.devicePixelRatio
-	property int radiusV : unit * 4
+    property int radiusV : Maui.Handy.isWindows ? 2 : 4
 	
 	readonly property int rowHeight: iconSizes.big * 0.95
 	readonly property int rowHeightAlt: rowHeight * 0.8

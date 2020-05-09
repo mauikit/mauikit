@@ -142,8 +142,14 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterUncreatableType<AppView>(uri, 1, 1, "AppView", "Cannot be created App");
     
     /** Experimental **/
+#ifdef Q_OS_WIN32
+    qmlRegisterType(componentUrl(QStringLiteral("labs/WindowControlsWindows.qml")), uri, 1, 1, "WindowControlsWindows");
+#elif defined Q_OS_MAC
+    qmlRegisterType(componentUrl(QStringLiteral("labs/WindowControlsMac.qml")), uri, 1, 1, "WindowControlsMac");
+#elif defined Q_OS_LINUX
     qmlRegisterType(componentUrl(QStringLiteral("labs/CSDControls.qml")), uri, 1, 1, "CSDControls");
     qmlRegisterType(componentUrl(QStringLiteral("labs/WindowControls.qml")), uri, 1, 1, "WindowControls");
+#endif
 
     /** STORE CONTROLS, MODELS AND INTERFACES **/
 #ifdef COMPONENT_STORE

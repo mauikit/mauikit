@@ -271,7 +271,7 @@ Pane
             height: visible ? implicitHeight : 0
             
             Kirigami.Theme.inherit: false
-            Kirigami.Theme.colorSet: Kirigami.Theme.Window
+            Kirigami.Theme.colorSet: Maui.Handy.isWindows ? Kirigami.Theme.View : Kirigami.Theme.Window
                         
               /** to not break the visible binding just check the count state of the header and act upon it **/
 //             readonly property bool hide : visibleCount === 0 
