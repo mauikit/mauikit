@@ -74,7 +74,6 @@ T.Menu
     contentItem: ListView
     {
         implicitHeight: contentHeight
-
         model: control.contentModel
         interactive: Window.window ? contentHeight > Window.window.height : false
         clip: true

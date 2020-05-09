@@ -47,7 +47,7 @@ T.MenuItem
 {
     id: control
 
-    hoverEnabled: true
+    hoverEnabled: !Kirigami.Settings.isMobile
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             implicitContentWidth + leftPadding + rightPadding)
     implicitHeight: visible ? Math.max(implicitBackgroundHeight + topInset + bottomInset,
@@ -106,7 +106,7 @@ T.MenuItem
     background: Rectangle
     {
         implicitWidth: 200
-        implicitHeight: Maui.Style.rowHeightAlt 
+        implicitHeight: control.visible ? Maui.Style.rowHeightAlt : 0
         radius: Maui.Style.radiusV
 
         opacity: 0.5

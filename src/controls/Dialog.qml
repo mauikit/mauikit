@@ -53,13 +53,11 @@ Maui.Popup
         
         signal accepted()
         signal rejected()
-        
-        clip: false
-        
+
         closePolicy: Popup.NoAutoClose | Popup.CloseOnEscape
         
         maxWidth: Maui.Style.unit * 300
-        maxHeight: (_pageContent.implicitHeight * 1.2) + ( _page.footBar.height + _defaultButtonsLayout.implicitHeight ) + Maui.Style.space.huge + _page.margins + _page.padding
+        maxHeight: _layout.implicitHeight * 2
         
         widthHint: 0.9
         heightHint: 0.9  
@@ -94,7 +92,8 @@ Maui.Popup
         
         
         ColumnLayout
-        {            
+        {
+            id: _layout
             anchors.fill: parent
             spacing: 0
             
@@ -105,6 +104,8 @@ Maui.Popup
                 Layout.fillHeight: true
                 padding: 0
                 clip: true
+
+                implicitHeight: _pageContent.implicitHeight
                 
                 ColumnLayout
                 {
