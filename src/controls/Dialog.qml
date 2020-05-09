@@ -106,7 +106,7 @@ Maui.Popup
                 padding: 0
                 clip: true
 
-                implicitHeight: _pageContent.implicitHeight + topPadding + bottomPadding + topMargin + bottomMargin + footer.height + _pageContent.spacing + header.height
+                implicitHeight: Maui.Style.space.big + _pageContent.implicitHeight + topPadding + bottomPadding + topMargin + bottomMargin + footer.height + _pageContent.spacing + header.height
                 
                 ColumnLayout
                 {

@@ -48,7 +48,7 @@ MouseArea
     
     hoverEnabled: true
     implicitHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
-    implicitWidth: _layoutButton.implicitWidth  + (Maui.Style.space.medium *  1.2)
+    implicitWidth: _layoutButton.implicitWidth  + (Maui.Style.space.medium *  1.25)
         
     property Action action : Action
     {
@@ -113,7 +113,7 @@ MouseArea
             opacity: visible ? ( enabled ? 1 : 0.5) : 0
             horizontalAlignment: Qt.AlignHCenter
             Layout.fillWidth: visible
-            Layout.preferredWidth: visible ? implicitWidth + Maui.Style.space.small : 0
+            Layout.preferredWidth: visible ? implicitWidth + Maui.Style.space.big : 0
             color: control.checked || control.containsMouse || control.containsPress  ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
             
             Behavior on Layout.preferredWidth

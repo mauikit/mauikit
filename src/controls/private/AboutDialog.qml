@@ -125,7 +125,7 @@ Maui.Dialog
                     text: Maui.App.displayName
                     font.weight: Font.Bold
                     font.bold: true
-                    font.pointSize: Maui.Style.fontSizes.enormous
+                    font.pointSize: Maui.Style.fontSizes.enormous * 1.3
                     elide: Text.ElideRight
                     wrapMode: Text.NoWrap
                 }
