@@ -64,6 +64,12 @@ Item
             control.currentIndex = index
             control.clicked(index)
         }
+        
+        DropArea
+        {
+            anchors.fill: parent
+            onEntered: control.currentIndex = index
+        }
     }
     
     implicitHeight: parent.height
