@@ -146,11 +146,14 @@ Rectangle
                 Layout.fillHeight: true
             }            
             
-            Flickable
+            ScrollView
             {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                
+                ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+                ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+                contentWidth: _listView.contentWidth
+                contentHeight: height
                 ListView
                 {
                     id: _listView

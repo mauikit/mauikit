@@ -43,7 +43,6 @@ Maui.Page
 		selectionEnd: body.selectionEnd
 // 		textColor:"red"
         backgroundColor: control.Kirigami.Theme.backgroundColor
-		theme: "Default"
         enableSyntaxHighlighting: false
 // 		onError:
 // 		{
