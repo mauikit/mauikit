@@ -67,4 +67,9 @@ target_link_libraries(appletdecorationplugin
                       KF5::Service
                       KDecoration2::KDecoration
                       KDecoration2::KDecoration2Private)
+                      
+install(TARGETS appletdecorationplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/appletdecoration)
 
+install(DIRECTORY qml/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/appletdecoration)
+
+install(FILES qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/appletdecoration)
