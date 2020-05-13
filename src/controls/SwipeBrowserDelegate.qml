@@ -36,6 +36,7 @@ Maui.SwipeItemDelegate
     property alias iconItem : _template.iconItem
     property alias iconVisible : _template.iconVisible
     property alias iconSizeHint : _template.iconSizeHint
+    property alias imageSizeHint : _template.imageSizeHint
     property alias imageSource : _template.imageSource
     property alias iconSource : _template.iconSource
 	
