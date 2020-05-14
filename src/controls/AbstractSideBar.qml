@@ -30,7 +30,7 @@ Drawer
     edge: Qt.LeftEdge
     implicitHeight: window().internalHeight
     height: implicitHeight
-    y: (window().header ? window().header.height : 0)
+    y: (window().header && !window().altHeader ? window().header.height : 0)
 //    closePolicy: modal || collapsed ?  Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
     interactive: modal || collapsed || !visible
     dragMargin: Maui.Style.space.big    
