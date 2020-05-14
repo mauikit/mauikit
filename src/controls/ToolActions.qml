@@ -229,7 +229,7 @@ Rectangle
                     text:modelData.text
                     icon.name: modelData.icon.name
                     autoExclusive: control.autoExclusive
-                    checked: index === control.currentIndex
+                    checked: index === control.currentIndex && control.checkable
                     checkable: control.checkable
                     onTriggered:
                     {
