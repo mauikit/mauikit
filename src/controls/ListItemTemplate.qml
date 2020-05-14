@@ -167,7 +167,7 @@ Item
             visible: control.checkable || control.checked
             
             Layout.fillHeight: true
-            Layout.preferredWidth: Math.min(height, Maui.Style.iconSizes.big + Maui.Style.space.medium)
+            Layout.preferredWidth: _emblem.size * 2
             
             Maui.Badge
             {
