@@ -21,22 +21,26 @@ Maui.Dialog
         acceptButton.text: qsTr("Apply")
         rejectButton.text: qsTr("Cancel")
         
-        Kirigami.ScrollablePage
+        ScrollView
         {
             id: _scrollView
             Layout.fillWidth: true
             Layout.fillHeight: true
-            leftPadding: 0
-            rightPadding: 0
-            //             contentWidth: _layout.width
-
-            ColumnLayout
+            contentHeight: _layout.implicitHeight
+            
+            Flickable
             {
-                id: _layout
-                width: parent.width
-                spacing: 0
+                id: _flickable
+                
+                ColumnLayout
+                {
+                    id: _layout
+                    width: parent.width
+                    spacing: 0
+                }
+                
             }
-
+           
         }
 
         
