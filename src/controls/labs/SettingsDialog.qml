@@ -15,36 +15,30 @@ Maui.Dialog
     defaultButtons: false
         
         page.title: qsTr("Settings")
-        page.flickable: _flickable
+//        page.flickable: _flickable
         headBar.visible: true        
         
         acceptButton.text: qsTr("Apply")
         rejectButton.text: qsTr("Cancel")
         
-        ScrollView
+        Kirigami.ScrollablePage
         {
             id: _scrollView
             Layout.fillWidth: true
             Layout.fillHeight: true
-            
-            contentHeight: _layout.implicitHeight
+            leftPadding: 0
+            rightPadding: 0
             //             contentWidth: _layout.width
-            
-            Flickable
+
+            ColumnLayout
             {
-                id: _flickable
-                anchors.fill: parent
-                
-                ColumnLayout
-                {
-                    id: _layout
-                    width: parent.width
-                    spacing: 0
-                } 
+                id: _layout
+                width: parent.width
+                spacing: 0
             }
-                       
-        }   
-        
+
+        }
+
         
         Component.onCompleted:
         {

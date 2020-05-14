@@ -6,7 +6,6 @@ import org.kde.mauikit 1.0 as Maui
 import TagsModel 1.0
 import TagsList 1.0
 
-
 Maui.Dialog
 {	
     id: control
@@ -94,17 +93,12 @@ Maui.Dialog
 			Layout.fillHeight: true
 			Layout.fillWidth: true
 			
-			ListView
+            Maui.ListBrowser
 			{
                 id: _listView                
                 anchors.fill: parent
                 spacing: Maui.Style.space.tiny
-                clip: true
-                focus: true
-				interactive: true
-				highlightFollowsCurrentItem: true
-				highlightMoveDuration: 0
-				
+
 				TagsModel
 				{
 					id: _tagsModel
@@ -116,22 +110,20 @@ Maui.Dialog
 					id: _tagsList
 				}				
 				
-				Maui.Holder
-				{
-					id: holder
-					emoji: "qrc:/img/assets/Electricity.png"
-					visible: _listView.count === 0
-					isMask: false
-					title : qsTr("No tags!")
-					body: qsTr("Start by creating tags")
-					emojiSize: Maui.Style.iconSizes.huge
-				}
+                holder.emoji: "qrc:/assets/Electricity.png"
+                holder.visible: _listView.count === 0
+                holder.isMask: false
+                holder.title : qsTr("No tags!")
+                holder.body: qsTr("Start by creating tags")
+                holder.emojiSize: Maui.Style.iconSizes.huge
 				
 				model: _tagsModel
 				delegate: Maui.ListDelegate
 				{
 					id: delegate
-					label: tag
+                    label: model.tag
+                    iconName: model.icon
+                    iconSize: Maui.Style.iconSizes.small
 					radius: Maui.Style.radiusV
 					Connections
 					{
