@@ -15,7 +15,7 @@ Maui.Dialog
     defaultButtons: false
         
         page.title: qsTr("Settings")
-        page.flickable: _flickable
+//        page.flickable: _flickable
         headBar.visible: true        
         
         acceptButton.text: qsTr("Apply")
@@ -26,25 +26,23 @@ Maui.Dialog
             id: _scrollView
             Layout.fillWidth: true
             Layout.fillHeight: true
-            
             contentHeight: _layout.implicitHeight
-            //             contentWidth: _layout.width
             
             Flickable
             {
                 id: _flickable
-                anchors.fill: parent
                 
                 ColumnLayout
                 {
                     id: _layout
                     width: parent.width
                     spacing: 0
-                } 
+                }
+                
             }
-                       
-        }   
-        
+           
+        }
+
         
         Component.onCompleted:
         {

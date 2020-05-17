@@ -6,7 +6,7 @@ import QtGraphicalEffects 1.0
 import QtQuick.Window 2.3
 import org.kde.mauikit 1.1 as MauiLab
 
-MauiLab.CSDControls
+Item
 {
-	id: control
+    id: control
 }

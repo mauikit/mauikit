@@ -161,7 +161,7 @@ MauiList * MauiModel::PrivateAbstractListModel::getList() const
 void MauiModel::PrivateAbstractListModel::setList(MauiList* value)
 {
      beginResetModel();
-    
+
     if(this->list)
         this->list->disconnect(this);
     
