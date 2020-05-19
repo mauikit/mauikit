@@ -261,7 +261,16 @@ Maui.Page
                     else control.zoomOut()
             }
 			
-            MouseArea{ anchors.fill: parent}
+            MouseArea
+            {
+                anchors.fill: parent
+                onPressed:
+                {
+                    console.log("Editor")
+                    body.forceActiveFocus()
+                }
+                
+            }
 			
             Kirigami.ScrollablePage
 			{
@@ -285,6 +294,7 @@ Maui.Page
 				{
 					id: body
 					width: control.width
+					implicitHeight: Math.max( control.height, contentHeight)
 					text: document.text
 					placeholderText: qsTr("Body")
                     selectByKeyboard: !Kirigami.Settings.isMobile
