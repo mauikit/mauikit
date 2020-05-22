@@ -92,6 +92,29 @@ TextField
 		
 		ToolButton
 		{
+            property int previousEchoMode
+            icon.name: control.echoMode === TextInput.Normal ? "view-hidden" : "view-visible" 
+            icon.color: control.color
+            onClicked: 
+            {
+                if(control.echoMode === TextInput.Normal)
+                {
+                    control.echoMode = previousEchoMode
+                }else
+                {
+                    control.echoMode = TextInput.Normal                     
+                }
+            }
+            
+            Component.onCompleted:
+            {
+                previousEchoMode = control.echoMode
+                visible =  control.echoMode === TextInput.Password || control.echoMode === TextInput.PasswordEchoOnEdit 		
+            }
+        }
+		
+		ToolButton
+		{
 			id: clearButton
 			visible: control.text.length			
 			icon.name: "edit-clear"
@@ -101,7 +124,7 @@ TextField
 				control.clear()
 				cleared()            
 			}
-		}
+		}		
     }
 	
 	Menu

@@ -108,13 +108,13 @@ enum FILTER_TYPE : int
     NONE
 };
 
-static QStringList AUDIO_MIMETYPES = {"audio/mpeg","audio/mp4","audio/flac","audio/ogg","audio/wav"};
-static QStringList VIDEO_MIMETYPES = {"video/mp4", "video/x-matroska","video/webm","video/avi","video/flv","video/mpg", "video/wmv","video/mov","video/ogg","video/mpeg", "video/jpeg"};
-static QStringList TEXT_MIMETYPES = {"text/markdown","text/x-chdr", "text/x-c++src", "text/x-c++hdr", "text/css", "text/html", "text/plain", "text/richtext", "text/scriptlet", "text/x-vcard", "text/x-go", "text/x-cmake", "text/x-qml", "application/xml", "application/javascript", "application/json", "application/pgp-keys", "application/x-shellscript", "application/x-cmakecache", "application/x-kicad-project"};
-static QStringList IMAGE_MIMETYPES = {"image/webp" , "image/png" , "image/gif" , "image/jpeg" , "image/web" , "image/svg" , "image/svg+xml"};
-static QStringList DOCUMENT_MIMETYPES = {"application/pdf","application/rtf","application/doc","application/odf"};
+static inline const QStringList AUDIO_MIMETYPES = {"audio/mpeg","audio/mp4","audio/flac","audio/ogg","audio/wav"};
+static inline const QStringList VIDEO_MIMETYPES = {"video/mp4", "video/x-matroska","video/webm","video/avi","video/flv","video/mpg", "video/wmv","video/mov","video/ogg","video/mpeg", "video/jpeg"};
+static inline const QStringList TEXT_MIMETYPES = {"text/markdown","text/x-chdr", "text/x-c++src", "text/x-c++hdr", "text/css", "text/html", "text/plain", "text/richtext", "text/scriptlet", "text/x-vcard", "text/x-go", "text/x-cmake", "text/x-qml", "application/xml", "application/javascript", "application/json", "application/pgp-keys", "application/x-shellscript", "application/x-cmakecache", "application/x-kicad-project"};
+static inline const QStringList IMAGE_MIMETYPES = {"image/webp" , "image/png" , "image/gif" , "image/jpeg" , "image/web" , "image/svg" , "image/svg+xml"};
+static inline const QStringList DOCUMENT_MIMETYPES = {"application/pdf","application/rtf","application/doc","application/odf"};
 
-static QMap<FMH::FILTER_TYPE, QStringList> SUPPORTED_MIMETYPES
+static inline const QMap<FMH::FILTER_TYPE, QStringList> SUPPORTED_MIMETYPES
 {
     {FMH::FILTER_TYPE::AUDIO, AUDIO_MIMETYPES},
     {FMH::FILTER_TYPE::VIDEO, VIDEO_MIMETYPES},
@@ -123,7 +123,7 @@ static QMap<FMH::FILTER_TYPE, QStringList> SUPPORTED_MIMETYPES
     {FMH::FILTER_TYPE::DOCUMENT, DOCUMENT_MIMETYPES}
 };
 
-static const QStringList getMimeTypeSuffixes(const FMH::FILTER_TYPE &type, QString(*cb)(QString) = nullptr)
+static inline const QStringList getMimeTypeSuffixes(const FMH::FILTER_TYPE &type, QString(*cb)(QString) = nullptr)
 {
     QStringList res;
     QMimeDatabase mimedb;
@@ -134,15 +134,15 @@ static const QStringList getMimeTypeSuffixes(const FMH::FILTER_TYPE &type, QStri
                 res << cb(_suffix);
         else
             res << mimedb.mimeTypeForName(mime).suffixes();
-    }
+    }    
     return res;
 }
 
-static const QHash<FMH::FILTER_TYPE, QStringList> FILTER_LIST =
+static inline const QHash<FMH::FILTER_TYPE, QStringList> FILTER_LIST =
 {
     {FILTER_TYPE::AUDIO, FMH::getMimeTypeSuffixes(FMH::FILTER_TYPE::AUDIO, [](QString suffix) -> QString {return "*."+suffix;})},
     {FILTER_TYPE::VIDEO, FMH::getMimeTypeSuffixes(FMH::FILTER_TYPE::VIDEO, [](QString suffix)-> QString{return "*."+suffix;})},
-    {FILTER_TYPE::TEXT, FMH::getMimeTypeSuffixes(FMH::FILTER_TYPE::TEXT, [](QString suffix)-> QString{return "*."+suffix;})},
+    {FILTER_TYPE::TEXT, QStringList() << FMH::getMimeTypeSuffixes(FMH::FILTER_TYPE::TEXT, [](QString suffix)-> QString{return "*."+suffix;}) << "*.conf"},
     {FILTER_TYPE::DOCUMENT, FMH::getMimeTypeSuffixes(FMH::FILTER_TYPE::DOCUMENT, [](QString suffix)-> QString{return "*."+suffix;})},
     {FILTER_TYPE::IMAGE, FMH::getMimeTypeSuffixes(FMH::FILTER_TYPE::IMAGE, [](QString suffix)-> QString{return "*."+suffix;})},
     {FILTER_TYPE::NONE, QStringList()}

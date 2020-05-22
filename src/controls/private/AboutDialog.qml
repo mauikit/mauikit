@@ -54,7 +54,7 @@ Maui.Dialog
 
     footBar.leftContent: ToolButton
     {
-        icon.name: "documentinfo"
+        icon.name: "tools-report-bug"
         onClicked: Qt.openUrlExternally(Maui.App.reportPage)
     }
 
