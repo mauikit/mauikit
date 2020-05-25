@@ -215,16 +215,14 @@ bool Handy::isIOS()
 
 bool Handy::isTouch()
 {
-	qDebug()<< "CHECKIGN IS IT IS TROYCH";
 	for(const auto &device : QTouchDevice::devices())
 	{
 		if(device->type() == QTouchDevice::TouchScreen)
 			return true;
-		
 		qDebug()<< "DEVICE CAPABILITIES" << device->capabilities() << device->name();
 	}
-	
-	return false;	
+
+	return false;
 }
 
 bool Handy::isWindows()
