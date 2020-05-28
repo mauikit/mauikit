@@ -27,14 +27,15 @@
 
 #include "previewbridge.h"
 
-
-namespace KDecoration2 {
+namespace KDecoration2
+{
 class Decoration;
 }
 
-namespace Decoration {
-namespace Applet {
-
+namespace Decoration
+{
+namespace Applet
+{
 class PreviewBridge;
 class PreviewButton;
 class Settings;

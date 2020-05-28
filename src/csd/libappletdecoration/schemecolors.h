@@ -21,13 +21,14 @@
 #ifndef SCHEMECOLORS_H
 #define SCHEMECOLORS_H
 
-#include <QObject>
 #include <QColor>
+#include <QObject>
 
-namespace Decoration {
-namespace Applet {
-
-class SchemeColors: public QObject
+namespace Decoration
+{
+namespace Applet
+{
+class SchemeColors : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString schemeFile READ schemeFile NOTIFY schemeFileChanged)
@@ -83,7 +84,7 @@ public slots:
     void updateScheme();
 
 private:
-    bool m_basedOnPlasmaTheme{false};
+    bool m_basedOnPlasmaTheme {false};
 
     QString m_schemeName;
     QString m_schemeFile;

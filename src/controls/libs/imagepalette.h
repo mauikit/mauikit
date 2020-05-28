@@ -18,12 +18,12 @@
 
 #pragma once
 
-#include <QObject>
 #include <QColor>
 #include <QImage>
+#include <QObject>
+#include <QPointer>
 #include <QQuickItem>
 #include <QQuickItemGrabResult>
-#include <QPointer>
 #include <QQuickWindow>
 
 class QTimer;
@@ -40,7 +40,7 @@ class ImagePalette : public QObject
     Q_PROPERTY(QColor closestToBlack READ closestToBlack NOTIFY closestToBlackChanged)
 
 public:
-    explicit ImagePalette(QObject* parent = nullptr);
+    explicit ImagePalette(QObject *parent = nullptr);
     ~ImagePalette();
 
     void setSource(const QVariant &source);
@@ -96,4 +96,3 @@ private:
     QColor m_closestToBlack;
     QColor m_closestToWhite;
 };
-

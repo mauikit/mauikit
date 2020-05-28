@@ -24,18 +24,20 @@
 #ifndef KDECOARTIONS_PREVIEW_SETTINGS_H
 #define KDECOARTIONS_PREVIEW_SETTINGS_H
 
-#include <KDecoration2/Private/DecorationSettingsPrivate>
 #include <KDecoration2/DecorationSettings>
-#include <QObject>
+#include <KDecoration2/Private/DecorationSettingsPrivate>
 #include <QAbstractListModel>
+#include <QObject>
 
-namespace KDecoration2 {
+namespace KDecoration2
+{
 class DecorationSettings;
 }
 
-namespace Decoration {
-namespace Applet {
-
+namespace Decoration
+{
+namespace Applet
+{
 class ButtonsModel;
 class PreviewBridge;
 
@@ -47,19 +49,18 @@ public:
     virtual ~BorderSizesModel();
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    QHash< int, QByteArray > roleNames() const override;
+    QHash<int, QByteArray> roleNames() const override;
+
 private:
-    QList<KDecoration2::BorderSize> m_borders = QList<KDecoration2::BorderSize>({
-        KDecoration2::BorderSize::None,
-        KDecoration2::BorderSize::NoSides,
-        KDecoration2::BorderSize::Tiny,
-        KDecoration2::BorderSize::Normal,
-        KDecoration2::BorderSize::Large,
-        KDecoration2::BorderSize::VeryLarge,
-        KDecoration2::BorderSize::Huge,
-        KDecoration2::BorderSize::VeryHuge,
-        KDecoration2::BorderSize::Oversized
-    });
+    QList<KDecoration2::BorderSize> m_borders = QList<KDecoration2::BorderSize>({KDecoration2::BorderSize::None,
+                                                                                 KDecoration2::BorderSize::NoSides,
+                                                                                 KDecoration2::BorderSize::Tiny,
+                                                                                 KDecoration2::BorderSize::Normal,
+                                                                                 KDecoration2::BorderSize::Large,
+                                                                                 KDecoration2::BorderSize::VeryLarge,
+                                                                                 KDecoration2::BorderSize::Huge,
+                                                                                 KDecoration2::BorderSize::VeryHuge,
+                                                                                 KDecoration2::BorderSize::Oversized});
 };
 
 class PreviewSettings : public QObject, public KDecoration2::DecorationSettingsPrivate
@@ -79,7 +80,8 @@ public:
     virtual ~PreviewSettings();
     bool isAlphaChannelSupported() const override;
     bool isOnAllDesktopsAvailable() const override;
-    bool isCloseOnDoubleClickOnMenu() const override {
+    bool isCloseOnDoubleClickOnMenu() const override
+    {
         return m_closeOnDoubleClick;
     }
     KDecoration2::BorderSize borderSize() const override;
@@ -91,22 +93,25 @@ public:
     QAbstractItemModel *leftButtonsModel() const;
     QAbstractItemModel *rightButtonsModel() const;
     QAbstractItemModel *availableButtonsModel() const;
-    QAbstractItemModel *borderSizesModel() const {
+    QAbstractItemModel *borderSizesModel() const
+    {
         return m_borderSizes;
     }
 
-    QVector< KDecoration2::DecorationButtonType > decorationButtonsLeft() const override;
-    QVector< KDecoration2::DecorationButtonType > decorationButtonsRight() const override;
+    QVector<KDecoration2::DecorationButtonType> decorationButtonsLeft() const override;
+    QVector<KDecoration2::DecorationButtonType> decorationButtonsRight() const override;
 
     Q_INVOKABLE void addButtonToLeft(int row);
     Q_INVOKABLE void addButtonToRight(int row);
 
-    int borderSizesIndex() const {
+    int borderSizesIndex() const
+    {
         return m_borderSize;
     }
     void setBorderSizesIndex(int index);
 
-    QFont font() const override{
+    QFont font() const override
+    {
         return m_font;
     }
     void setFont(const QFont &font);
@@ -145,7 +150,8 @@ public:
 
     QSharedPointer<KDecoration2::DecorationSettings> settings() const;
     KDecoration2::DecorationSettings *settingsPointer() const;
-    int borderSizesIndex() const {
+    int borderSizesIndex() const
+    {
         return m_borderSize;
     }
     void setBorderSizesIndex(int index);

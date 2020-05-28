@@ -23,9 +23,10 @@
 
 #include <QObject>
 
-namespace Decoration {
-namespace Applet {
-
+namespace Decoration
+{
+namespace Applet
+{
 class WindowSystem : public QObject
 {
     Q_OBJECT
@@ -44,4 +45,3 @@ private:
 }
 
 #endif
-
