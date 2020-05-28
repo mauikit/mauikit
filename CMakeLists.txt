@@ -30,6 +30,7 @@ include(ECMGenerateHeaders)
 include(CMakePackageConfigHelpers)
 include(ECMPoQmTools)
 include(ECMQMLModules)
+include(KDEClangFormat)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(ECMQtDeclareLoggingCategory)
@@ -79,3 +80,6 @@ install(EXPORT MauiKitTargets
     DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
     FILE MauiKitTargets.cmake
     )
+
+file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h)
+kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
