@@ -21,44 +21,44 @@
 #define MAUIKDE_H
 
 #include <QObject>
-#include <QVariantList>
 #include <QQmlEngine>
+#include <QVariantList>
 
 #include "fmh.h"
 
 class MAUIKDE : public QObject
 {
-    Q_OBJECT   
-	
+    Q_OBJECT
+
 public:
-	static MAUIKDE *qmlAttachedProperties(QObject *object);
-	static MAUIKDE *instance()
-	{
-		static MAUIKDE kde;
-		return &kde;
-	}
-	
-	MAUIKDE(const MAUIKDE&) = delete;
-	MAUIKDE& operator=(const MAUIKDE &) = delete;
-	MAUIKDE(MAUIKDE &&) = delete;
-	MAUIKDE & operator=(MAUIKDE &&) = delete;	
-  
-	static FMH::MODEL_LIST getApps();
-	static FMH::MODEL_LIST getApps(const QString &groupStr);
-	static void launchApp(const QString &app);
-	
-private: 
-	MAUIKDE(QObject *parent = nullptr);
+    static MAUIKDE *qmlAttachedProperties(QObject *object);
+    static MAUIKDE *instance()
+    {
+        static MAUIKDE kde;
+        return &kde;
+    }
+
+    MAUIKDE(const MAUIKDE &) = delete;
+    MAUIKDE &operator=(const MAUIKDE &) = delete;
+    MAUIKDE(MAUIKDE &&) = delete;
+    MAUIKDE &operator=(MAUIKDE &&) = delete;
+
+    static FMH::MODEL_LIST getApps();
+    static FMH::MODEL_LIST getApps(const QString &groupStr);
+    static void launchApp(const QString &app);
+
+private:
+    MAUIKDE(QObject *parent = nullptr);
 
 public slots:
-	static QVariantList services(const QUrl &url);
-	static QVariantList devices();
-	static bool sendToDevice(const QString &device, const QString &id, const QStringList &urls);
-	static void openWithApp(const QString &exec, const QStringList &urls);
-	static void attachEmail(const QStringList &urls);
-	static void email(const QString &to = "", const QString &cc = "", const QString &bcc = "", const QString &subject = "",const QString &body = "", const QString &messageFile ="", const QStringList &urls = QStringList());
-	
-	static void setColorScheme(const QString &schemeName, const QString &bg =  QString(), const QString &fg = QString());
+    static QVariantList services(const QUrl &url);
+    static QVariantList devices();
+    static bool sendToDevice(const QString &device, const QString &id, const QStringList &urls);
+    static void openWithApp(const QString &exec, const QStringList &urls);
+    static void attachEmail(const QStringList &urls);
+    static void email(const QString &to = "", const QString &cc = "", const QString &bcc = "", const QString &subject = "", const QString &body = "", const QString &messageFile = "", const QStringList &urls = QStringList());
+
+    static void setColorScheme(const QString &schemeName, const QString &bg = QString(), const QString &fg = QString());
 };
 
 QML_DECLARE_TYPEINFO(MAUIKDE, QML_HAS_ATTACHED_PROPERTIES)

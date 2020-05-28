@@ -23,20 +23,18 @@
 #include <QTimer>
 #include <cmath>
 
-
 ImagePalette::ImagePalette(QObject *parent)
     : QObject(parent)
 {
     m_imageSyncTimer = new QTimer(this);
     m_imageSyncTimer->setSingleShot(true);
     m_imageSyncTimer->setInterval(100);
-    connect(m_imageSyncTimer, &QTimer::timeout, this, [this]() {
-       generatePalette();
-    });
+    connect(m_imageSyncTimer, &QTimer::timeout, this, [this]() { generatePalette(); });
 }
 
 ImagePalette::~ImagePalette()
-{}
+{
+}
 
 void ImagePalette::setSource(const QVariant &source)
 {
@@ -45,9 +43,9 @@ void ImagePalette::setSource(const QVariant &source)
     } else if (source.canConvert<QImage>()) {
         setSourceImage(source.value<QImage>());
     } else if (source.canConvert<QIcon>()) {
-        setSourceImage(source.value<QIcon>().pixmap(32,32).toImage());
+        setSourceImage(source.value<QIcon>().pixmap(32, 32).toImage());
     } else if (source.canConvert<QString>()) {
-        setSourceImage(QIcon::fromTheme(source.toString()).pixmap(32,32).toImage());
+        setSourceImage(QIcon::fromTheme(source.toString()).pixmap(32, 32).toImage());
     } else {
         return;
     }
@@ -106,19 +104,17 @@ void ImagePalette::setSourceItem(QQuickItem *source)
     update();
 
     if (m_sourceItem) {
-        auto syncWindow = [this] () {
+        auto syncWindow = [this]() {
             if (m_window) {
                 disconnect(m_window.data(), nullptr, this, nullptr);
             }
             m_window = m_sourceItem->window();
             if (m_window) {
-                connect(m_window, &QWindow::visibleChanged,
-                        this, &ImagePalette::update);
+                connect(m_window, &QWindow::visibleChanged, this, &ImagePalette::update);
             }
         };
 
-        connect(m_sourceItem, &QQuickItem::windowChanged,
-                this, syncWindow);
+        connect(m_sourceItem, &QQuickItem::windowChanged, this, syncWindow);
         syncWindow();
     }
 }
@@ -139,7 +135,7 @@ void ImagePalette::update()
         m_grabResult.clear();
     }
 
-    m_grabResult = m_sourceItem->grabToImage(QSize(32,32));
+    m_grabResult = m_sourceItem->grabToImage(QSize(32, 32));
 
     if (m_grabResult) {
         connect(m_grabResult.data(), &QQuickItemGrabResult::ready, this, [this]() {
@@ -154,13 +150,9 @@ inline int squareDistance(QRgb color1, QRgb color2)
 {
     // https://en.wikipedia.org/wiki/Color_difference
     if (qRed(color1) - qRed(color2) < 128) {
-        return 2 * pow(qRed(color1) - qRed(color2), 2) +
-            4 * pow(qGreen(color1) - qGreen(color2), 2) +
-            3 * pow(qBlue(color1) - qBlue(color2), 2);
+        return 2 * pow(qRed(color1) - qRed(color2), 2) + 4 * pow(qGreen(color1) - qGreen(color2), 2) + 3 * pow(qBlue(color1) - qBlue(color2), 2);
     } else {
-        return 3 * pow(qRed(color1) - qRed(color2), 2) +
-            4 * pow(qGreen(color1) - qGreen(color2), 2) +
-            2 * pow(qBlue(color1) - qBlue(color2), 2);
+        return 3 * pow(qRed(color1) - qRed(color2), 2) + 4 * pow(qGreen(color1) - qGreen(color2), 2) + 2 * pow(qBlue(color1) - qBlue(color2), 2);
     }
 }
 
@@ -225,9 +217,7 @@ void ImagePalette::generatePalette()
         }
     }
 
-    std::sort(m_clusters.begin(), m_clusters.end(), [](const colorStat &a, const colorStat &b) {
-        return a.colors.size() > b.colors.size();   
-    });
+    std::sort(m_clusters.begin(), m_clusters.end(), [](const colorStat &a, const colorStat &b) { return a.colors.size() > b.colors.size(); });
 
     // compress blocks that became too similar
     auto sourceIt = m_clusters.end();
@@ -237,12 +227,9 @@ void ImagePalette::generatePalette()
         for (auto destIt = m_clusters.begin(); destIt != m_clusters.end() && destIt != sourceIt; destIt++) {
             if (squareDistance((*sourceIt).centroid, (*destIt).centroid) < s_minimumSquareDistance) {
                 const qreal ratio = (*sourceIt).ratio / (*destIt).ratio;
-                const int r = ratio * qreal(qRed((*sourceIt).centroid)) +
-                    (1 - ratio) * qreal(qRed((*destIt).centroid));
-                const int g = ratio * qreal(qGreen((*sourceIt).centroid)) +
-                    (1 - ratio) * qreal(qGreen((*destIt).centroid));
-                const int b = ratio * qreal(qBlue((*sourceIt).centroid)) +
-                    (1 - ratio) * qreal(qBlue((*destIt).centroid));
+                const int r = ratio * qreal(qRed((*sourceIt).centroid)) + (1 - ratio) * qreal(qRed((*destIt).centroid));
+                const int g = ratio * qreal(qGreen((*sourceIt).centroid)) + (1 - ratio) * qreal(qGreen((*destIt).centroid));
+                const int b = ratio * qreal(qBlue((*sourceIt).centroid)) + (1 - ratio) * qreal(qBlue((*destIt).centroid));
                 (*destIt).ratio += (*sourceIt).ratio;
                 (*destIt).centroid = qRgb(r, g, b);
                 itemsToDelete << sourceIt;
@@ -257,12 +244,10 @@ void ImagePalette::generatePalette()
     m_mostSaturated = QColor();
     m_dominant = QColor(m_clusters.first().centroid);
     m_suggestedContrast = QColor(255 - m_dominant.red(), 255 - m_dominant.green(), 255 - m_dominant.blue());
-    m_suggestedContrast.setHsl(m_suggestedContrast.hslHue(),
-                               m_suggestedContrast.hslSaturation(),
-                               128 + (128 - m_suggestedContrast.lightness()));
+    m_suggestedContrast.setHsl(m_suggestedContrast.hslHue(), m_suggestedContrast.hslSaturation(), 128 + (128 - m_suggestedContrast.lightness()));
     m_closestToBlack = Qt::white;
     m_closestToWhite = Qt::black;
-    int minimumDistance = 4681800; //max distance: 4*3*2*3*255*255
+    int minimumDistance = 4681800; // max distance: 4*3*2*3*255*255
 
     QColor tempContrast;
     m_palette.clear();
@@ -278,7 +263,7 @@ void ImagePalette::generatePalette()
             tempContrast = QColor(stat.centroid);
             minimumDistance = distance;
         }
-        if (color.saturation() + (158-qAbs(158-color.value())) > m_mostSaturated.saturation() + (158-qAbs(158-m_mostSaturated.value()))) {
+        if (color.saturation() + (158 - qAbs(158 - color.value())) > m_mostSaturated.saturation() + (158 - qAbs(158 - m_mostSaturated.value()))) {
             m_mostSaturated = color;
         }
         if (qGray(color.rgb()) > qGray(m_closestToWhite.rgb())) {
@@ -297,17 +282,13 @@ void ImagePalette::generatePalette()
         m_suggestedContrast = QColor(m_clusters[1].centroid);
     } else if (m_clusters.size() > 1) {
         m_suggestedContrast = QColor(m_clusters[1].centroid);
-        m_suggestedContrast.setHsl(m_suggestedContrast.hslHue(),
-                               m_suggestedContrast.hslSaturation(),
-                               m_suggestedContrast.lightness() > 128
-                                  ? m_suggestedContrast.lightness()+20
-                                  : m_suggestedContrast.lightness()-20);
+        m_suggestedContrast.setHsl(m_suggestedContrast.hslHue(), m_suggestedContrast.hslSaturation(), m_suggestedContrast.lightness() > 128 ? m_suggestedContrast.lightness() + 20 : m_suggestedContrast.lightness() - 20);
     } else if (qGray(m_dominant.rgb()) < 120) {
         m_suggestedContrast = QColor(230, 230, 230);
     } else {
         m_suggestedContrast = QColor(20, 20, 20);
     }
-    
+
     emit paletteChanged();
     emit mostSaturatedChanged();
     emit closestToBlackChanged();
@@ -332,7 +313,7 @@ QColor ImagePalette::mostSaturated() const
 
 QColor ImagePalette::closestToWhite() const
 {
-   return m_closestToWhite;
+    return m_closestToWhite;
 }
 
 QColor ImagePalette::closestToBlack() const

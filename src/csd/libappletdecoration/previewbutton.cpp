@@ -28,20 +28,21 @@
 #include "previewclient.h"
 #include "previewshareddecoration.h"
 
-#include <KDecoration2/Decoration>
 #include <KDecoration2/DecoratedClient>
+#include <KDecoration2/Decoration>
 
 #include <QDebug>
 #include <QEvent>
 #include <QPainter>
 
-namespace Decoration {
-namespace Applet {
-
+namespace Decoration
+{
+namespace Applet
+{
 PreviewButtonItem::PreviewButtonItem(QQuickItem *parent)
-    : QQuickPaintedItem(parent),
-      m_scheme("kdeglobals"),
-      m_padding(new Padding(this))
+    : QQuickPaintedItem(parent)
+    , m_scheme("kdeglobals")
+    , m_padding(new Padding(this))
 {
     setAcceptHoverEvents(true);
     setFiltersChildMouseEvents(true);
@@ -108,7 +109,6 @@ void PreviewButtonItem::setIsMaximized(bool maximized)
     m_isMaximized = maximized;
 
     if (m_client && m_button && m_type == KDecoration2::DecorationButtonType::Maximize) {
-
         if (m_isMaximized) {
             m_client->setMaximizedVertically(true);
             m_client->setMaximizedHorizontally(true);
@@ -162,14 +162,14 @@ bool PreviewButtonItem::isKeepAbove() const
 
 void PreviewButtonItem::setIsKeepAbove(bool keepabove)
 {
-    if (m_isKeepAbove == keepabove){
+    if (m_isKeepAbove == keepabove) {
         return;
     }
-    
+
     m_isKeepAbove = keepabove;
-    
+
     if (m_client && m_button && m_type == KDecoration2::DecorationButtonType::KeepAbove) {
-        if (m_isKeepAbove){
+        if (m_isKeepAbove) {
             m_client->setKeepAbove(true);
         } else {
             m_client->setKeepAbove(false);
@@ -418,11 +418,7 @@ void PreviewButtonItem::mousePressEvent(QMouseEvent *event)
 
     //! this a workaround in order to send proper coordinates
     //! that confirm the button visual coordinates
-    QMouseEvent e(event->type(),
-                  m_visualGeometry.center(),
-                  event->button(),
-                  event->buttons(),
-                  event->modifiers());
+    QMouseEvent e(event->type(), m_visualGeometry.center(), event->button(), event->buttons(), event->modifiers());
 
     QCoreApplication::instance()->sendEvent(m_button, &e);
 }
@@ -437,11 +433,7 @@ void PreviewButtonItem::mouseReleaseEvent(QMouseEvent *event)
 
     //! this a workaround in order to send proper coordinates
     //! that confirm the button visual coordinates
-    QMouseEvent e(event->type(),
-                  inItem ? m_visualGeometry.center() : QPoint(-5, -5),
-                  event->button(),
-                  event->buttons(),
-                  event->modifiers());
+    QMouseEvent e(event->type(), inItem ? m_visualGeometry.center() : QPoint(-5, -5), event->button(), event->buttons(), event->modifiers());
 
     QCoreApplication::instance()->sendEvent(m_button, event);
 
@@ -458,11 +450,7 @@ void PreviewButtonItem::mouseMoveEvent(QMouseEvent *event)
 
     //! this a workaround in order to send proper coordinates
     //! that confirm the button visual coordinates
-    QMouseEvent e(event->type(),
-                  m_visualGeometry.center(),
-                  event->button(),
-                  event->buttons(),
-                  event->modifiers());
+    QMouseEvent e(event->type(), m_visualGeometry.center(), event->button(), event->buttons(), event->modifiers());
 
     QCoreApplication::instance()->sendEvent(m_button, &e);
 }
@@ -475,10 +463,7 @@ void PreviewButtonItem::hoverEnterEvent(QHoverEvent *event)
 
     //! this a workaround in order to send proper coordinates
     //! that confirm the button visual coordinates
-    QHoverEvent e(event->type(),
-                  m_visualGeometry.center(),
-                  QPoint(m_visualGeometry.x() + event->posF().x(), m_visualGeometry.y() + event->posF().y()),
-                  event->modifiers());
+    QHoverEvent e(event->type(), m_visualGeometry.center(), QPoint(m_visualGeometry.x() + event->posF().x(), m_visualGeometry.y() + event->posF().y()), event->modifiers());
 
     QCoreApplication::instance()->sendEvent(m_button, &e);
 }
@@ -491,10 +476,7 @@ void PreviewButtonItem::hoverLeaveEvent(QHoverEvent *event)
 
     //! this a workaround in order to send proper coordinates
     //! that confirm the button visual coordinates
-    QHoverEvent e(event->type(),
-                  QPoint(-5, -5),
-                  m_visualGeometry.center(),
-                  event->modifiers());
+    QHoverEvent e(event->type(), QPoint(-5, -5), m_visualGeometry.center(), event->modifiers());
 
     QCoreApplication::instance()->sendEvent(m_button, &e);
 }
@@ -505,11 +487,11 @@ void PreviewButtonItem::hoverMoveEvent(QHoverEvent *event)
         return;
     }
 
-    QPoint newPos (qBound((double)m_visualGeometry.left(), m_visualGeometry.left() + event->posF().x(), (double)m_visualGeometry.right()),
-                   qBound((double)m_visualGeometry.top(), m_visualGeometry.top() + event->posF().x(), (double)m_visualGeometry.bottom()));
+    QPoint newPos(qBound((double)m_visualGeometry.left(), m_visualGeometry.left() + event->posF().x(), (double)m_visualGeometry.right()),
+                  qBound((double)m_visualGeometry.top(), m_visualGeometry.top() + event->posF().x(), (double)m_visualGeometry.bottom()));
 
-    QPoint oldPos (qBound((double)m_visualGeometry.left(), m_visualGeometry.left() + event->oldPosF().x(), (double)m_visualGeometry.right()),
-                   qBound((double)m_visualGeometry.top(), m_visualGeometry.top() + event->oldPosF().x(), (double)m_visualGeometry.bottom()));
+    QPoint oldPos(qBound((double)m_visualGeometry.left(), m_visualGeometry.left() + event->oldPosF().x(), (double)m_visualGeometry.right()),
+                  qBound((double)m_visualGeometry.top(), m_visualGeometry.top() + event->oldPosF().x(), (double)m_visualGeometry.bottom()));
 
     //! this a workaround in order to send proper coordinates
     //! that confirm the button visual coordinates
@@ -518,7 +500,6 @@ void PreviewButtonItem::hoverMoveEvent(QHoverEvent *event)
     QCoreApplication::instance()->sendEvent(m_button, &e);
 }
 
-
 void PreviewButtonItem::focusOutEvent(QFocusEvent *event)
 {
     QCoreApplication::instance()->sendEvent(m_button, event);
@@ -526,4 +507,3 @@ void PreviewButtonItem::focusOutEvent(QFocusEvent *event)
 
 } // namespace Applet
 } // namespace Decoration
-

@@ -22,16 +22,17 @@
  */
 
 #include "previewsettings.h"
-#include "previewbridge.h"
 #include "buttonsmodel.h"
+#include "previewbridge.h"
 
 #include <KLocalizedString>
 
 #include <QFontDatabase>
 
-namespace Decoration {
-namespace Applet {
-
+namespace Decoration
+{
+namespace Applet
+{
 BorderSizesModel::BorderSizesModel(QObject *parent)
     : QAbstractListModel(parent)
 {
@@ -61,7 +62,7 @@ int BorderSizesModel::rowCount(const QModelIndex &parent) const
     return m_borders.count();
 }
 
-QHash< int, QByteArray > BorderSizesModel::roleNames() const
+QHash<int, QByteArray> BorderSizesModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
     roles.insert(Qt::DisplayRole, QByteArrayLiteral("display"));
@@ -74,50 +75,41 @@ PreviewSettings::PreviewSettings(KDecoration2::DecorationSettings *parent)
     , m_alphaChannelSupported(true)
     , m_onAllDesktopsAvailable(true)
     , m_closeOnDoubleClick(false)
-    , m_leftButtons(new ButtonsModel(QVector<KDecoration2::DecorationButtonType>({
-    KDecoration2::DecorationButtonType::Minimize,
-    KDecoration2::DecorationButtonType::Close,
-    KDecoration2::DecorationButtonType::Menu,
-    KDecoration2::DecorationButtonType::ApplicationMenu,
-    KDecoration2::DecorationButtonType::OnAllDesktops
-}), this))
-, m_rightButtons(new ButtonsModel(QVector<KDecoration2::DecorationButtonType>({
-    KDecoration2::DecorationButtonType::ContextHelp,
-    KDecoration2::DecorationButtonType::Minimize,
-    KDecoration2::DecorationButtonType::Maximize,
-    KDecoration2::DecorationButtonType::Close
-}), this))
-, m_availableButtons(new ButtonsModel(QVector<KDecoration2::DecorationButtonType>({
-    KDecoration2::DecorationButtonType::Menu,
-    KDecoration2::DecorationButtonType::ApplicationMenu,
-    KDecoration2::DecorationButtonType::OnAllDesktops,
-    KDecoration2::DecorationButtonType::Minimize,
-    KDecoration2::DecorationButtonType::Maximize,
-    KDecoration2::DecorationButtonType::Close,
-    KDecoration2::DecorationButtonType::ContextHelp,
-    KDecoration2::DecorationButtonType::Shade,
-    KDecoration2::DecorationButtonType::KeepBelow,
-    KDecoration2::DecorationButtonType::KeepAbove
-}), this))
-, m_borderSizes(new BorderSizesModel(this))
-, m_borderSize(int(KDecoration2::BorderSize::Normal))
-, m_font(QFontDatabase::systemFont(QFontDatabase::TitleFont))
+    , m_leftButtons(new ButtonsModel(QVector<KDecoration2::DecorationButtonType>({KDecoration2::DecorationButtonType::Minimize,
+                                                                                  KDecoration2::DecorationButtonType::Close,
+                                                                                  KDecoration2::DecorationButtonType::Menu,
+                                                                                  KDecoration2::DecorationButtonType::ApplicationMenu,
+                                                                                  KDecoration2::DecorationButtonType::OnAllDesktops}),
+                                     this))
+    , m_rightButtons(new ButtonsModel(
+          QVector<KDecoration2::DecorationButtonType>({KDecoration2::DecorationButtonType::ContextHelp, KDecoration2::DecorationButtonType::Minimize, KDecoration2::DecorationButtonType::Maximize, KDecoration2::DecorationButtonType::Close}),
+          this))
+    , m_availableButtons(new ButtonsModel(QVector<KDecoration2::DecorationButtonType>({KDecoration2::DecorationButtonType::Menu,
+                                                                                       KDecoration2::DecorationButtonType::ApplicationMenu,
+                                                                                       KDecoration2::DecorationButtonType::OnAllDesktops,
+                                                                                       KDecoration2::DecorationButtonType::Minimize,
+                                                                                       KDecoration2::DecorationButtonType::Maximize,
+                                                                                       KDecoration2::DecorationButtonType::Close,
+                                                                                       KDecoration2::DecorationButtonType::ContextHelp,
+                                                                                       KDecoration2::DecorationButtonType::Shade,
+                                                                                       KDecoration2::DecorationButtonType::KeepBelow,
+                                                                                       KDecoration2::DecorationButtonType::KeepAbove}),
+                                          this))
+    , m_borderSizes(new BorderSizesModel(this))
+    , m_borderSize(int(KDecoration2::BorderSize::Normal))
+    , m_font(QFontDatabase::systemFont(QFontDatabase::TitleFont))
 {
     connect(this, &PreviewSettings::alphaChannelSupportedChanged, parent, &KDecoration2::DecorationSettings::alphaChannelSupportedChanged);
     connect(this, &PreviewSettings::onAllDesktopsAvailableChanged, parent, &KDecoration2::DecorationSettings::onAllDesktopsAvailableChanged);
     connect(this, &PreviewSettings::closeOnDoubleClickOnMenuChanged, parent, &KDecoration2::DecorationSettings::closeOnDoubleClickOnMenuChanged);
     connect(this, &PreviewSettings::fontChanged, parent, &KDecoration2::DecorationSettings::fontChanged);
-    auto updateLeft = [this, parent]() {
-        parent->decorationButtonsLeftChanged(decorationButtonsLeft());
-    };
-    auto updateRight = [this, parent]() {
-        parent->decorationButtonsRightChanged(decorationButtonsRight());
-    };
-    connect(m_leftButtons,  &QAbstractItemModel::rowsRemoved,  this, updateLeft);
-    connect(m_leftButtons,  &QAbstractItemModel::rowsMoved,    this, updateLeft);
-    connect(m_leftButtons,  &QAbstractItemModel::rowsInserted, this, updateLeft);
-    connect(m_rightButtons, &QAbstractItemModel::rowsRemoved,  this, updateRight);
-    connect(m_rightButtons, &QAbstractItemModel::rowsMoved,    this, updateRight);
+    auto updateLeft = [this, parent]() { parent->decorationButtonsLeftChanged(decorationButtonsLeft()); };
+    auto updateRight = [this, parent]() { parent->decorationButtonsRightChanged(decorationButtonsRight()); };
+    connect(m_leftButtons, &QAbstractItemModel::rowsRemoved, this, updateLeft);
+    connect(m_leftButtons, &QAbstractItemModel::rowsMoved, this, updateLeft);
+    connect(m_leftButtons, &QAbstractItemModel::rowsInserted, this, updateLeft);
+    connect(m_rightButtons, &QAbstractItemModel::rowsRemoved, this, updateRight);
+    connect(m_rightButtons, &QAbstractItemModel::rowsMoved, this, updateRight);
     connect(m_rightButtons, &QAbstractItemModel::rowsInserted, this, updateRight);
 }
 
@@ -178,12 +170,12 @@ void PreviewSettings::setCloseOnDoubleClickOnMenu(bool enabled)
     emit closeOnDoubleClickOnMenuChanged(enabled);
 }
 
-QVector< KDecoration2::DecorationButtonType > PreviewSettings::decorationButtonsLeft() const
+QVector<KDecoration2::DecorationButtonType> PreviewSettings::decorationButtonsLeft() const
 {
     return m_leftButtons->buttons();
 }
 
-QVector< KDecoration2::DecorationButtonType > PreviewSettings::decorationButtonsRight() const
+QVector<KDecoration2::DecorationButtonType> PreviewSettings::decorationButtonsRight() const
 {
     return m_rightButtons->buttons();
 }

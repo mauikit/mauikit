@@ -28,11 +28,12 @@
 
 #include <KDecoration2/Decoration>
 
-namespace Decoration {
-namespace Applet {
-
-SharedDecoration::SharedDecoration(QObject *parent) :
-    QObject(parent)
+namespace Decoration
+{
+namespace Applet
+{
+SharedDecoration::SharedDecoration(QObject *parent)
+    : QObject(parent)
 {
     connect(this, &Decoration::Applet::SharedDecoration::bridgeChanged, this, &Decoration::Applet::SharedDecoration::createDecoration);
     connect(this, &Decoration::Applet::SharedDecoration::settingsChanged, this, &Decoration::Applet::SharedDecoration::applySettings);

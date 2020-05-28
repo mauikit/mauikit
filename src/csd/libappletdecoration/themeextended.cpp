@@ -29,17 +29,18 @@
 #include <QDir>
 
 // KDE
-#include <KDirWatch>
 #include <KConfigGroup>
+#include <KDirWatch>
 #include <KSharedConfig>
 
 #define DEFAULTCOLORSCHEME "default.colors"
 
-namespace Decoration {
-namespace Applet {
-
-ExtendedTheme::ExtendedTheme(QObject *parent) :
-    QObject(parent)
+namespace Decoration
+{
+namespace Applet
+{
+ExtendedTheme::ExtendedTheme(QObject *parent)
+    : QObject(parent)
 {
     load();
 
@@ -96,7 +97,7 @@ void ExtendedTheme::updateDefaultScheme()
     if (m_colorsScheme) {
         disconnect(m_colorsScheme, &SchemeColors::colorsChanged, this, &ExtendedTheme::themeChanged);
         m_colorsScheme->deleteLater();
-    }    
+    }
 
     m_colorsScheme = new SchemeColors(this, m_colorsSchemePath, true);
     connect(m_colorsScheme, &SchemeColors::colorsChanged, this, &ExtendedTheme::themeChanged);
@@ -127,7 +128,7 @@ void ExtendedTheme::loadThemePaths()
 {
     m_themePath = AppletDecoration::standardPath("plasma/desktoptheme/" + m_theme.themeName());
 
-    if (QDir(m_themePath+"/widgets").exists()) {
+    if (QDir(m_themePath + "/widgets").exists()) {
         m_themeWidgetsPath = m_themePath + "/widgets";
     } else {
         m_themeWidgetsPath = AppletDecoration::standardPath("plasma/desktoptheme/default/widgets");
@@ -154,13 +155,13 @@ void ExtendedTheme::loadThemePaths()
 
         KDirWatch::self()->addFile(kdeSettingsFile);
 
-        m_kdeConnections[0] = connect(KDirWatch::self(), &KDirWatch::dirty, this, [ &, kdeSettingsFile](const QString & path) {
+        m_kdeConnections[0] = connect(KDirWatch::self(), &KDirWatch::dirty, this, [&, kdeSettingsFile](const QString &path) {
             if (path == kdeSettingsFile) {
                 this->setOriginalSchemeFile(SchemeColors::possibleSchemeFile("kdeglobals"));
             }
         });
 
-        m_kdeConnections[1] = connect(KDirWatch::self(), &KDirWatch::created, this, [ &, kdeSettingsFile](const QString & path) {
+        m_kdeConnections[1] = connect(KDirWatch::self(), &KDirWatch::created, this, [&, kdeSettingsFile](const QString &path) {
             if (path == kdeSettingsFile) {
                 this->setOriginalSchemeFile(SchemeColors::possibleSchemeFile("kdeglobals"));
             }

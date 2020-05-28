@@ -24,17 +24,18 @@
 #ifndef KDECORATIONS_PREVIEW_BRIDGE_H
 #define KDECORATIONS_PREVIEW_BRIDGE_H
 
-#include <KDecoration2/Private/DecorationBridge>
 #include <KDecoration2/DecorationButton>
+#include <KDecoration2/Private/DecorationBridge>
 
 #include <QList>
 #include <QPointer>
 
 class KPluginFactory;
 
-namespace Decoration {
-namespace Applet {
-
+namespace Decoration
+{
+namespace Applet
+{
 class PreviewButtonItem;
 class PreviewClient;
 class PreviewSettings;
@@ -53,10 +54,12 @@ public:
     void update(KDecoration2::Decoration *decoration, const QRect &geometry) override;
     std::unique_ptr<KDecoration2::DecorationSettingsPrivate> settings(KDecoration2::DecorationSettings *parent) override;
 
-    PreviewClient *lastCreatedClient() {
+    PreviewClient *lastCreatedClient()
+    {
         return m_lastCreatedClient;
     }
-    PreviewSettings *lastCreatedSettings() {
+    PreviewSettings *lastCreatedSettings()
+    {
         return m_lastCreatedSettings;
     }
 
@@ -108,23 +111,29 @@ public:
     explicit BridgeItem(QObject *parent = nullptr);
     virtual ~BridgeItem();
 
-    void setPlugin(const QString &plugin) {
+    void setPlugin(const QString &plugin)
+    {
         m_bridge->setPlugin(plugin);
     }
-    QString plugin() const {
+    QString plugin() const
+    {
         return m_bridge->plugin();
     }
-    void setTheme(const QString &theme) {
+    void setTheme(const QString &theme)
+    {
         m_bridge->setTheme(theme);
     }
-    QString theme() const {
+    QString theme() const
+    {
         return m_bridge->theme();
     }
-    bool isValid() const {
+    bool isValid() const
+    {
         return m_bridge->isValid();
     }
 
-    PreviewBridge *bridge() const {
+    PreviewBridge *bridge() const
+    {
         return m_bridge;
     }
 
@@ -135,7 +144,6 @@ Q_SIGNALS:
 
 private:
     PreviewBridge *m_bridge;
-
 };
 
 }

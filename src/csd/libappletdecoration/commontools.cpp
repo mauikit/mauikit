@@ -24,22 +24,22 @@
 #include <QFileInfo>
 #include <QStandardPaths>
 
-namespace AppletDecoration {
-
+namespace AppletDecoration
+{
 QString standardPath(QString subPath, bool localfirst)
 {
     QStringList paths = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
 
     if (localfirst) {
         for (const auto &pt : paths) {
-            QString ptF = pt + "/" +subPath;
+            QString ptF = pt + "/" + subPath;
             if (QFileInfo(ptF).exists()) {
                 return ptF;
             }
         }
     } else {
-        for (int i=paths.count()-1; i>=0; i--) {
-            QString ptF = paths[i] + "/" +subPath;
+        for (int i = paths.count() - 1; i >= 0; i--) {
+            QString ptF = paths[i] + "/" + subPath;
             if (QFileInfo(ptF).exists()) {
                 return ptF;
             }
@@ -47,8 +47,8 @@ QString standardPath(QString subPath, bool localfirst)
     }
 
     //! in any case that above fails
-    if (QFileInfo("/usr/share/"+subPath).exists()) {
-        return "/usr/share/"+subPath;
+    if (QFileInfo("/usr/share/" + subPath).exists()) {
+        return "/usr/share/" + subPath;
     }
 
     return "";
@@ -63,7 +63,7 @@ QStringList standardPaths(bool localfirst)
     } else {
         QStringList reversed;
 
-        for (int i=paths.count()-1; i>=0; i--) {
+        for (int i = paths.count() - 1; i >= 0; i--) {
             reversed << paths[i];
         }
 
@@ -77,7 +77,7 @@ QStringList standardPathsFor(QString subPath, bool localfirst)
 
     QString separator = subPath.startsWith("/") ? "" : "/";
 
-    for (int i=0; i<paths.count(); ++i) {
+    for (int i = 0; i < paths.count(); ++i) {
         paths[i] = paths[i] + separator + subPath;
     }
 

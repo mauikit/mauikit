@@ -23,10 +23,10 @@
 #include <QProcess>
 #include <QtDBus/QtDBus>
 
-namespace Decoration {
-namespace Applet {
-
-
+namespace Decoration
+{
+namespace Applet
+{
 WindowSystem::WindowSystem(QObject *parent)
     : QObject(parent)
 {

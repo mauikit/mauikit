@@ -1,25 +1,24 @@
 #ifndef SYNCINGLIST_H
 #define SYNCINGLIST_H
 
-#include <QObject>
 #include "fmh.h"
+#include <QObject>
 
 class FM;
 class SyncingList : public QObject
 {
     Q_OBJECT
- 
-public:    
+
+public:
     explicit SyncingList(QObject *parent = nullptr);
     FMH::MODEL_LIST items() const;
 
 private:
     FMH::MODEL_LIST list;
-	void setList();
-	FM *fm;
-   
-protected:
+    void setList();
+    FM *fm;
 
+protected:
 signals:
     void preItemAppended();
     void postItemAppended();
@@ -29,13 +28,12 @@ signals:
     void preListChanged();
     void postListChanged();
 
-public slots:    
+public slots:
     QVariantMap get(const int &index) const;
-	void insert(const QVariantMap &data);
-	void removeAccount(const QString &server, const QString &user);
-	void removeAccountAndFiles(const QString &server, const QString &user);
-	void refresh();
-
+    void insert(const QVariantMap &data);
+    void removeAccount(const QString &server, const QString &user);
+    void removeAccountAndFiles(const QString &server, const QString &user);
+    void refresh();
 };
 
 #endif // SYNCINGLIST_H

@@ -19,10 +19,10 @@
 
 #include "handy.h"
 #include "utils.h"
-#include <QDebug>
-#include <QIcon>
 #include <QClipboard>
 #include <QCoreApplication>
+#include <QDebug>
+#include <QIcon>
 #include <QMimeData>
 #include <QOperatingSystemVersion>
 #include <QTouchDevice>
@@ -37,19 +37,20 @@
 static const QUrl CONF_FILE = FMH::ConfigPath + "/kdeglobals";
 
 #ifdef KSHAREDCONFIG_H
-static const auto confCheck = [](QString key, QVariant defaultValue) -> QVariant
-{
-	auto kconf = KSharedConfig::openConfig("kdeglobals");
-	const auto group = kconf->group("KDE");
-	if( group.hasKey(key))
-		return  group.readEntry(key, defaultValue);
+static const auto confCheck = [](QString key, QVariant defaultValue) -> QVariant {
+    auto kconf = KSharedConfig::openConfig("kdeglobals");
+    const auto group = kconf->group("KDE");
+    if (group.hasKey(key))
+        return group.readEntry(key, defaultValue);
 
-	return defaultValue;
+    return defaultValue;
 };
 #endif
 
-Handy::Handy(QObject *parent) : QObject(parent), m_isTouch(Handy::isTouch())
-{    
+Handy::Handy(QObject *parent)
+    : QObject(parent)
+    , m_isTouch(Handy::isTouch())
+{
 #if defined Q_OS_LINUX && !defined Q_OS_ANDROID
 
     auto configWatcher = new QFileSystemWatcher({CONF_FILE.toLocalFile()}, this);
@@ -57,8 +58,7 @@ Handy::Handy(QObject *parent) : QObject(parent), m_isTouch(Handy::isTouch())
     m_singleClick = confCheck("SingleClick", m_singleClick).toBool();
     emit singleClickChanged();
 
-    connect(configWatcher, &QFileSystemWatcher::fileChanged, [&](QString)
-    {
+    connect(configWatcher, &QFileSystemWatcher::fileChanged, [&](QString) {
         m_singleClick = confCheck("SingleClick", m_singleClick).toBool();
         emit singleClickChanged();
     });
@@ -71,141 +71,146 @@ Handy::Handy(QObject *parent) : QObject(parent), m_isTouch(Handy::isTouch())
 }
 
 #ifdef Q_OS_ANDROID
-static inline struct
-{
-	QList<QUrl> urls;
-	QString text;
+static inline struct {
+    QList<QUrl> urls;
+    QString text;
     bool cut = false;
-	
-	bool hasUrls(){ return !urls.isEmpty(); }
-	bool hasText(){ return !text.isEmpty(); }
-	
+
+    bool hasUrls()
+    {
+        return !urls.isEmpty();
+    }
+    bool hasText()
+    {
+        return !text.isEmpty();
+    }
+
 } _clipboard;
 #endif
 
 QVariantMap Handy::appInfo()
 {
-	auto res = QVariantMap({{FMH::MODEL_NAME[FMH::MODEL_KEY::NAME], qApp->applicationName()},
-						   {FMH::MODEL_NAME[FMH::MODEL_KEY::VERSION], qApp->applicationVersion()},
-						   {FMH::MODEL_NAME[FMH::MODEL_KEY::ORG], qApp->organizationName()},
-						   {FMH::MODEL_NAME[FMH::MODEL_KEY::DOMAIN_M], qApp->organizationDomain()},
-						{"qt_version", QT_VERSION_STR} });
-	
-	#ifdef Q_OS_ANDROID
-	res.insert(FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], QGuiApplication::windowIcon().name());
-	#else
-	res.insert(FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], QApplication::windowIcon().name());
-	#endif
-	
-	return res;
+    auto res = QVariantMap({{FMH::MODEL_NAME[FMH::MODEL_KEY::NAME], qApp->applicationName()},
+                            {FMH::MODEL_NAME[FMH::MODEL_KEY::VERSION], qApp->applicationVersion()},
+                            {FMH::MODEL_NAME[FMH::MODEL_KEY::ORG], qApp->organizationName()},
+                            {FMH::MODEL_NAME[FMH::MODEL_KEY::DOMAIN_M], qApp->organizationDomain()},
+                            {"qt_version", QT_VERSION_STR}});
+
+#ifdef Q_OS_ANDROID
+    res.insert(FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], QGuiApplication::windowIcon().name());
+#else
+    res.insert(FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], QApplication::windowIcon().name());
+#endif
+
+    return res;
 }
 
 QVariantMap Handy::userInfo()
 {
-	QString name = qgetenv("USER");
-	if (name.isEmpty())
-		name = qgetenv("USERNAME");
-	
-	return QVariantMap({{FMH::MODEL_NAME[FMH::MODEL_KEY::NAME], name}});	
+    QString name = qgetenv("USER");
+    if (name.isEmpty())
+        name = qgetenv("USERNAME");
+
+    return QVariantMap({{FMH::MODEL_NAME[FMH::MODEL_KEY::NAME], name}});
 }
 
 QString Handy::getClipboardText()
 {
-	#ifdef Q_OS_ANDROID
-	auto clipbopard = QGuiApplication::clipboard();
-	#else
-	auto clipbopard = QApplication::clipboard();
-	#endif
-	
-	auto mime = clipbopard->mimeData();
-	if(mime->hasText())
-		return clipbopard->text();
-	
-	return QString();
+#ifdef Q_OS_ANDROID
+    auto clipbopard = QGuiApplication::clipboard();
+#else
+    auto clipbopard = QApplication::clipboard();
+#endif
+
+    auto mime = clipbopard->mimeData();
+    if (mime->hasText())
+        return clipbopard->text();
+
+    return QString();
 }
 
 QVariantMap Handy::getClipboard()
 {
-	QVariantMap res;
-	#ifdef Q_OS_ANDROID
-	if(_clipboard.hasUrls())
-		res.insert("urls", QUrl::toStringList(_clipboard.urls));
-	
-	if(_clipboard.hasText())
-		res.insert("text", _clipboard.text);
-    
+    QVariantMap res;
+#ifdef Q_OS_ANDROID
+    if (_clipboard.hasUrls())
+        res.insert("urls", QUrl::toStringList(_clipboard.urls));
+
+    if (_clipboard.hasText())
+        res.insert("text", _clipboard.text);
+
     res.insert("cut", _clipboard.cut);
-	#else
-	auto clipboard = QApplication::clipboard();
-	
-	auto mime = clipboard->mimeData();
-	if(mime->hasUrls())
-		res.insert("urls", QUrl::toStringList(mime->urls()));
-	
-	if(mime->hasText())
-		res.insert("text", mime->text());
-    
-    const QByteArray a = mime->data(QStringLiteral("application/x-kde-cutselection"));   
-  
+#else
+    auto clipboard = QApplication::clipboard();
+
+    auto mime = clipboard->mimeData();
+    if (mime->hasUrls())
+        res.insert("urls", QUrl::toStringList(mime->urls()));
+
+    if (mime->hasText())
+        res.insert("text", mime->text());
+
+    const QByteArray a = mime->data(QStringLiteral("application/x-kde-cutselection"));
+
     res.insert("cut", (!a.isEmpty() && a.at(0) == '1'));
-	#endif
-	return res;
+#endif
+    return res;
 }
 
-bool Handy::copyToClipboard(const QVariantMap &value, const bool &cut )
+bool Handy::copyToClipboard(const QVariantMap &value, const bool &cut)
 {
-	#ifdef Q_OS_ANDROID
-	if(value.contains("urls"))
-		_clipboard.urls = QUrl::fromStringList(value["urls"].toStringList());
-	
-	if(value.contains("text"))
-		_clipboard.text = value["text"].toString();
-    
+#ifdef Q_OS_ANDROID
+    if (value.contains("urls"))
+        _clipboard.urls = QUrl::fromStringList(value["urls"].toStringList());
+
+    if (value.contains("text"))
+        _clipboard.text = value["text"].toString();
+
     _clipboard.cut = cut;
-	
-	return true;
-	#else
-	auto clipboard = QApplication::clipboard();
-	QMimeData* mimeData = new QMimeData();
-	
-	if(value.contains("urls"))
-		mimeData->setUrls(QUrl::fromStringList(value["urls"].toStringList()));
-	
-	if(value.contains("text"))
-		mimeData->setText(value["text"].toString());
-	
+
+    return true;
+#else
+    auto clipboard = QApplication::clipboard();
+    QMimeData *mimeData = new QMimeData();
+
+    if (value.contains("urls"))
+        mimeData->setUrls(QUrl::fromStringList(value["urls"].toStringList()));
+
+    if (value.contains("text"))
+        mimeData->setText(value["text"].toString());
+
     mimeData->setData(QStringLiteral("application/x-kde-cutselection"), cut ? "1" : "0");
-	clipboard->setMimeData(mimeData);    
-    
-	return true;
-	#endif
-	
-	return false;
+    clipboard->setMimeData(mimeData);
+
+    return true;
+#endif
+
+    return false;
 }
 
 bool Handy::copyTextToClipboard(const QString &text)
 {
-	#ifdef Q_OS_ANDROID
-	Handy::copyToClipboard({{"text", text}});	
-	#else
-	QApplication::clipboard()->setText(text);
-	#endif
-	return true;
+#ifdef Q_OS_ANDROID
+    Handy::copyToClipboard({{"text", text}});
+#else
+    QApplication::clipboard()->setText(text);
+#endif
+    return true;
 }
 
 int Handy::version()
 {
-	return QOperatingSystemVersion::current().majorVersion();
+    return QOperatingSystemVersion::current().majorVersion();
 }
 
 bool Handy::isAndroid()
 {
-	return FMH::isAndroid();
+    return FMH::isAndroid();
 }
 
 bool Handy::isLinux()
 {
-	return FMH::isLinux();
+    return FMH::isLinux();
 }
 
 bool Handy::isIOS()
@@ -215,26 +220,21 @@ bool Handy::isIOS()
 
 bool Handy::isTouch()
 {
-	for(const auto &device : QTouchDevice::devices())
-	{
-		if(device->type() == QTouchDevice::TouchScreen)
-			return true;
-		qDebug()<< "DEVICE CAPABILITIES" << device->capabilities() << device->name();
-	}
+    for (const auto &device : QTouchDevice::devices()) {
+        if (device->type() == QTouchDevice::TouchScreen)
+            return true;
+        qDebug() << "DEVICE CAPABILITIES" << device->capabilities() << device->name();
+    }
 
-	return false;
+    return false;
 }
 
 bool Handy::isWindows()
 {
-	return FMH::isWindows();
+    return FMH::isWindows();
 }
 
 bool Handy::isMac()
 {
-	return FMH::isMac();
+    return FMH::isMac();
 }
-
-
-
-
