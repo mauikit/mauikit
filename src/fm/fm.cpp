@@ -233,7 +233,7 @@ FM::FM(QObject *parent)
 #endif
 }
 
-void FM::getPathContent(const QUrl &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters, const QDirIterator::IteratorFlags &iteratorFlags)
+void FM::getPathContent(const QUrl &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)
 {
     qDebug() << "Getting async path contents";
 
@@ -243,7 +243,7 @@ void FM::getPathContent(const QUrl &path, const bool &hidden, const bool &onlyDi
     this->dirLister->setNameFilter(filters.join(" "));
 
     if (this->dirLister->openUrl(path))
-        qDebug() << "GETTING PATH CONTENT" << path;
+        qDebug() << "Getting path content" << path;
 }
 
 FMH::MODEL_LIST FM::getAppsPath()
@@ -338,7 +338,7 @@ void FM::getCloudItem(const QVariantMap &item)
 #endif
 }
 
-QString FM::resolveUserCloudCachePath(const QString &server, const QString &user)
+QString FM::resolveUserCloudCachePath(const QString & /* server */, const QString &user)
 {
     return FMH::CloudCachePath + "opendesktop/" + user;
 }
@@ -406,7 +406,7 @@ bool FM::copy(const QList<QUrl> &urls, const QUrl &where)
 {
     // 	QStringList cloudPaths;
 
-    return FMStatic::copy(urls, where, false);
+    return FMStatic::copy(urls, where);
 
 #ifdef COMPONENT_SYNCING
     // 	if(!cloudPaths.isEmpty())

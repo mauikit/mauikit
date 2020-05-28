@@ -212,12 +212,9 @@ void StoreList::setSortBy(const StoreList::SORTBY &key)
 
 void StoreList::sortList()
 {
-    qDebug() << "TRYING TO SORT LIST" << this->list.size();
-    qSort(this->list.begin(), this->list.begin(), [this](const FMH::MODEL &e1, const FMH::MODEL &e2) -> bool {
-        qDebug() << "TRYIT LIST";
-
+    qDebug() << "Trying to sort list" << this->list.size();
+    std::sort(this->list.begin(), this->list.begin(), [this](const FMH::MODEL &e1, const FMH::MODEL &e2) -> bool {
         auto role = static_cast<FMH::MODEL_KEY>(this->sortBy);
-        ;
 
         switch (role) {
         case FMH::MODEL_KEY::RATE:

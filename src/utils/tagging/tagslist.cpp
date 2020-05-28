@@ -41,7 +41,7 @@ void TagsList::setList()
             this->list = this->toModel(this->tag->getAllTags(this->strict));
         else {
             this->list.clear();
-            this->list = std::accumulate(this->urls.constBegin(), this->urls.constEnd(), TAG::DB_LIST(), [&](auto &list, const QString &url) {
+            this->list = std::accumulate(this->urls.constBegin(), this->urls.constEnd(), TAG::DB_LIST(), [&](TAG::DB_LIST &list, const QString &url) {
                 list << this->toModel(this->tag->getUrlTags(url, this->strict));
                 return list;
             });
@@ -56,7 +56,7 @@ void TagsList::setList()
 void TagsList::sortList()
 {
     const auto key = static_cast<TAG::KEYS>(this->sortBy);
-    qSort(this->list.begin(), this->list.end(), [key](const TAG::DB &e1, const TAG::DB &e2) -> bool {
+    std::sort(this->list.begin(), this->list.end(), [key](const TAG::DB &e1, const TAG::DB &e2) -> bool {
         auto role = key;
 
         switch (role) {
@@ -241,6 +241,10 @@ void TagsList::removeFrom(const int &index, const QString &url)
 
 void TagsList::erase(const int &index)
 {
+    if (index >= this->list.size() || index < 0)
+        return;
+
+    this->remove(index);
 }
 
 TAG::DB_LIST TagsList::items() const

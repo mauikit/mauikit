@@ -187,7 +187,7 @@ QString FMStatic::homePath()
     return FMH::HomePath;
 }
 
-static bool copyRecursively(QString sourceFolder, QString destFolder)
+bool copyRecursively(QString sourceFolder, QString destFolder)
 {
     bool success = false;
     QDir sourceDir(sourceFolder);
@@ -221,7 +221,7 @@ static bool copyRecursively(QString sourceFolder, QString destFolder)
     return true;
 }
 
-bool FMStatic::copy(const QList<QUrl> &urls, const QUrl &destinationDir, const bool &overWriteDirectory)
+bool FMStatic::copy(const QList<QUrl> &urls, const QUrl &destinationDir)
 {
 #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
     for (const auto &url : urls) {
@@ -407,8 +407,7 @@ bool FMStatic::openUrl(const QUrl &url)
     MAUIAndroid::openUrl(url.toString());
     return true;
 #elif defined Q_OS_LINUX
-    //     return QDesktopServices::openUrl(QUrl::fromUserInput(url));
-    return KRun::runUrl(url, FMH::getFileInfoModel(url)[FMH::MODEL_KEY::MIME], nullptr, false, KRun::RunFlag::DeleteTemporaryFiles);
+    return KRun::runUrl(url, FMH::getFileInfoModel(url)[FMH::MODEL_KEY::MIME], nullptr, KRun::RunFlags(KRun::RunFlag::DeleteTemporaryFiles));
 #elif defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
     return QDesktopServices::openUrl(url);
 #endif

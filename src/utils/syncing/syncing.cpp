@@ -35,9 +35,10 @@ void Syncing::setCredentials(const QString &server, const QString &user, const Q
 void Syncing::listDirOutputHandler(WebDAVReply *reply, const QStringList &filters)
 {
     connect(reply, &WebDAVReply::listDirResponse, [=](QNetworkReply *listDirReply, QList<WebDAVItem> items) {
-        // 		qDebug() << "URL :" << listDirReply->url();
-        // 		qDebug() << "Received List of" << items.length() << "items";
-        // 		qDebug() << endl << "---------------------------------------";
+        if (listDirReply->error() != QNetworkReply::NoError) {
+            qDebug() << "listDir for URL:" << listDirReply->url() << "returned list of " << items.length() << " items";
+            return;
+        }
         FMH::MODEL_LIST list;
         for (WebDAVItem item : items) {
             const auto url = QUrl(item.getHref()).toString();
