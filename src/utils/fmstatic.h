@@ -26,7 +26,7 @@ public slots:
 
     static FMH::MODEL_LIST packItems(const QStringList &items, const QString &type);
 
-    static bool copy(const QList<QUrl> &urls, const QUrl &destinationDir, const bool &overWriteDirectory = false);
+    static bool copy(const QList<QUrl> &urls, const QUrl &destinationDir);
     static bool cut(const QList<QUrl> &urls, const QUrl &where);
     static bool cut(const QList<QUrl> &urls, const QUrl &where, const QString &name);
     static bool removeFiles(const QList<QUrl> &urls);

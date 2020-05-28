@@ -42,7 +42,7 @@ QVariant StoreModel::data(const QModelIndex &index, int role) const
     return mList->items().at(index.row())[static_cast<FMH::MODEL_KEY>(role)];
 }
 
-bool StoreModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool StoreModel::setData(const QModelIndex &, const QVariant &, int)
 {
     return false;
 }

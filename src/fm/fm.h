@@ -72,7 +72,7 @@ public:
     bool getCloudServerContent(const QUrl &server, const QStringList &filters = QStringList(), const int &depth = 0);
     Q_INVOKABLE void createCloudDir(const QString &path, const QString &name);
 
-    void getPathContent(const QUrl &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList(), const QDirIterator::IteratorFlags &iteratorFlags = QDirIterator::NoIteratorFlags);
+    void getPathContent(const QUrl &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
     QString resolveLocalCloudPath(const QString &path);
 
     static FMH::MODEL_LIST getAppsPath();

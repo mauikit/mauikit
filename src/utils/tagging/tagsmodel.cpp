@@ -25,7 +25,7 @@ QVariant TagsModel::data(const QModelIndex &index, int role) const
     return this->mList->items().at(index.row())[static_cast<TAG::KEYS>(role)];
 }
 
-bool TagsModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool TagsModel::setData(const QModelIndex &, const QVariant &, int)
 {
     return false;
 }

@@ -18,13 +18,13 @@ include_directories(
 set(mauikit_SRCS
     mauikit.cpp
     utils/fmstatic.cpp
+    utils/fmh.cpp
     utils/mauiapp.cpp
     utils/handy.cpp
     utils/models/pathlist.cpp
     utils/model_template/mauilist.cpp
     utils/model_template/mauimodel.cpp
     controls/libs/imagepalette.cpp
-
     )
 
 set(mauikit_HDRS

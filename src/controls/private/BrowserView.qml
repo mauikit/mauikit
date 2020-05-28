@@ -5,15 +5,12 @@ import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
-Maui.Page
-{
+Maui.Page {
     id: control
     title: currentFMList.pathName
     property url path 
-    onPathChanged:
-    {
-        if(control.currentView) 
-        {
+    onPathChanged: {
+        if(control.currentView) {
             control.currentView.currentIndex = 0
             control.currentView.forceActiveFocus()
         }
@@ -22,17 +19,12 @@ Maui.Page
     //group properties from the browser since the browser views are loaded async and
     //their properties can not be accesed inmediately, so they are stored here and then when completed they are set    
     property alias settings : _settings
-    BrowserSettings 
-    {
+    BrowserSettings {
 		id: _settings 
-		onGroupChanged:
-		{
-			if(settings.group)
-			{
+		onGroupChanged: {
+			if(settings.group) {
 				groupBy()				
-			}	
-			else
-			{
+			}	else {
 				currentView.section.property = ""				
 			}
 		}
@@ -44,18 +36,15 @@ Maui.Page
     property alias currentView : viewLoader.item
     property string filter    
    
-    function setCurrentFMList()
-    {
-        if(control.currentView)
-        {
+    function setCurrentFMList() {
+        if(control.currentView) {
             control.currentFMList = currentView.currentFMList
             control.currentFMModel = currentView.currentFMModel
             currentView.forceActiveFocus()
         }
     }
     
-    function filterSelectedItems(path)
-    {     
+    function filterSelectedItems(path) {     
         if(selectionBar && selectionBar.count > 0 && selectionBar.contains(path))
         {
             const uris = selectionBar.uris
@@ -110,39 +99,32 @@ Maui.Page
 		control.currentView.section.criteria = criteria
 	}
     
-    Menu
-    {
+    Menu {
         id: _dropMenu
         property string urls
         property url target
         
         enabled: Maui.FM.getFileInfo(target).isdir == "true" && !urls.includes(target.toString())
         
-        MenuItem
-        {
+        MenuItem {
             text: qsTr("Copy here")
-            onTriggered:
-            {
+            onTriggered: {
                 const urls = _dropMenu.urls.split(",")
                 Maui.FM.copy(urls, _dropMenu.target, false)
             }
         }
         
-        MenuItem
-        {
+        MenuItem {
             text: qsTr("Move here")
-            onTriggered:
-            {
+            onTriggered: {
                 const urls = _dropMenu.urls.split(",")
                 Maui.FM.cut(urls, _dropMenu.target)
             }
         }
         
-        MenuItem
-        {
+        MenuItem {
             text: qsTr("Link here")
-            onTriggered:
-            {
+            onTriggered: {
                 const urls = _dropMenu.urls.split(",")
                 for(var i in urls)
 					Maui.FM.createSymlink(url[i], _dropMenu.target)
@@ -151,15 +133,13 @@ Maui.Page
         
         MenuSeparator {}
         
-        MenuItem
-        {
+        MenuItem {
             text: qsTr("Cancel")
             onTriggered: _dropMenu.close()
         }
 	}    
 	
-	Loader
-	{
+	Loader {
 		id: viewLoader
 		anchors.fill: parent
 		focus: true
@@ -174,8 +154,7 @@ Maui.Page
 	}
 	
     
-    Maui.FMList
-    {
+    Maui.FMList {
         id: _commonFMList
         path: control.path
         onSortByChanged: if(settings.group) groupBy()
@@ -186,8 +165,7 @@ Maui.Page
         hidden: settings.showHiddenFiles
     }
     
-    Component
-    {
+    Component {
         id: listViewBrowser
         
         Maui.ListBrowser

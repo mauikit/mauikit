@@ -49,7 +49,7 @@ FMList::FMList(QObject *parent)
         }
     });
 
-    connect(this->fm, &FM::pathContentReady, [&](QUrl path) {
+    connect(this->fm, &FM::pathContentReady, [&](QUrl) {
         emit this->preListChanged();
         this->sortList();
         this->setStatus({STATUS_CODE::READY, this->list.isEmpty() ? "Nothing here!" : "", this->list.isEmpty() ? "This place seems to be empty" : "", this->list.isEmpty() ? "folder-add" : "", this->list.isEmpty(), true});
@@ -81,12 +81,13 @@ FMList::FMList(QObject *parent)
 
         for (const auto &item : res.content) {
             const auto index = this->indexOf(FMH::MODEL_KEY::PATH, item[FMH::MODEL_KEY::PATH]);
-            qDebug() << "SUPOSSED TO REMOVED THIS FORM THE LIST" << index << item[FMH::MODEL_KEY::PATH] << this->list[index];
+            qDebug() << "Supposed to remove this from the list" << index << item[FMH::MODEL_KEY::PATH] << this->list[index];
 
             this->remove(index);
         }
 
-        this->setStatus({STATUS_CODE::READY, this->list.isEmpty() ? "Nothing here!" : "", this->list.isEmpty() ? "This place seems to be empty" : "", this->list.isEmpty() ? "folder-add" : "", this->list.isEmpty(), true});
+        const bool empty = this->list.isEmpty();
+        this->setStatus({STATUS_CODE::READY, empty ? "Nothing here!" : "", empty ? "This place seems to be empty" : "", empty ? "folder-add" : "", empty, true});
     });
 
     connect(this->fm, &FM::warningMessage, [&](const QString &message) { emit this->warning(message); });
@@ -248,8 +249,8 @@ void FMList::sortList()
     auto index = 0;
 
     if (this->foldersFirst) {
-        qSort(this->list.begin(), this->list.end(), [](const FMH::MODEL &e1, const FMH::MODEL &e2) -> bool {
-            Q_UNUSED(e2)
+        std::sort(this->list.begin(), this->list.end(), [](const FMH::MODEL &e1, const FMH::MODEL &e2) -> bool {
+            Q_UNUSED(e2);
             const auto key = FMH::MODEL_KEY::MIME;
             if (e1[key] == "inode/directory")
                 return true;
@@ -673,7 +674,7 @@ void FMList::search(const QString &query, const QUrl &path, const bool &hidden, 
     watcher->setFuture(t1);
 }
 
-void FMList::filterContent(const QString &query, const QUrl &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)
+void FMList::filterContent(const QString &query, const QUrl &path, const bool &/* hidden */, const bool &onlyDirs, const QStringList &/* filters */)
 {
     if (this->list.isEmpty()) {
         qDebug() << "Can not filter content. List is empty";

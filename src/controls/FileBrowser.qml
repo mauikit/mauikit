@@ -27,8 +27,7 @@ import org.kde.mauikit 1.1 as MauiLab
 
 import "private" as Private
 
-Maui.Page
-{
+Maui.Page {
 	id: control
 	
 	//aliases	
@@ -90,16 +89,14 @@ Maui.Page
 	
 	showTitle: false
 	headBar.visible: false
-	headBar.leftContent: ToolButton
-	{
+	headBar.leftContent: ToolButton {
 		text: qsTr("Back")
 		icon.name: "go-previous"
 		onClicked: control.quitSearch()		
 		visible: control.isSearchView		
 	}
 	
-	headBar.middleContent: Maui.TextField
-	{
+	headBar.middleContent: Maui.TextField {
 		id: _searchField
 		Layout.fillWidth: true
 		placeholderText: qsTr("Search")
@@ -111,8 +108,7 @@ Maui.Page
 	footBar.leftSretch: false
 	footerPositioning: ListView.InlineFooter
 	
-	footBar.middleContent: Maui.TextField
-	{
+	footBar.middleContent: Maui.TextField {
 		id: _filterField
 		Layout.fillWidth: true
 		enabled: control.currentFMList.count > 0
@@ -120,17 +116,14 @@ Maui.Page
 		onAccepted: control.view.filter = text
 		onCleared: control.view.filter = ""
 		inputMethodHints: Qt.ImhNoAutoUppercase
-		onTextChanged:
-		{
+		onTextChanged: {
 			if(control.currentFMList.count < 50)
 				_filterField.accepted()
 		}
 		Keys.enabled: true
-		Keys.onPressed:
-		{
+		Keys.onPressed: {
 			// Shortcut for clearing selection
-			if(event.key == Qt.Key_Up)
-			{
+			if(event.key == Qt.Key_Up) {
 				// 				_filterField.clear()
 				// 				footBar.visible = false
 				control.currentView.forceActiveFocus()
@@ -138,26 +131,22 @@ Maui.Page
 		}
 	}
 	
-	footBar.rightContent: ToolButton
-	{
+	footBar.rightContent: ToolButton {
 		visible: String(control.currentPath).startsWith("trash:/")
 		icon.name: "trash-empty"
 		text: qsTr("Empty Trash")
 		onClicked: Maui.FM.emptyTrash()
 	}	
 	
-	Loader 
-	{ 
+	Loader { 
 		id: dialogLoader 
 // 		active: item && item.visible
 	}
 	
-	Component
-	{
+	Component {
 		id: removeDialogComponent
 		
-		Maui.Dialog
-		{
+		Maui.Dialog {
             id: _removeDialog
 			property var urls: []
 			
@@ -168,20 +157,17 @@ Maui.Page
 			acceptButton.visible: Maui.Handy.isLinux
 			page.margins: Maui.Style.space.huge
 			
-			ColumnLayout
-			{
+			ColumnLayout {
                 Layout.fillWidth: true                
                 
-                CheckBox
-                {
+                CheckBox {
                     id: _removeDialogFilesCheckBox
                     Layout.fillWidth: true
                     
                     text: qsTr("List files")
                 }
                 
-                Kirigami.ScrollablePage
-                {
+                Kirigami.ScrollablePage {
                     visible: _removeDialogFilesCheckBox.checked
                     
                     Layout.fillWidth: true
@@ -191,8 +177,7 @@ Maui.Page
                     leftPadding: 0
                     rightPadding: 0
                                         
-                    TextArea
-                    {
+                    TextArea {
                         wrapMode: Text.WordWrap
                         text: urls.join("\n\n")
                         readOnly: true
@@ -201,10 +186,8 @@ Maui.Page
                 }               
             }
 			
-			onRejected:
-			{
-				if(control.selectionBar && control.selectionBar.visible)
-				{
+			onRejected: {
+				if(control.selectionBar && control.selectionBar.visible) {
 					control.selectionBar.animate()
 					control.clearSelection()
 				}	
@@ -213,10 +196,8 @@ Maui.Page
 				close()
 			}
 			
-			onAccepted:
-			{
-				if(control.selectionBar && control.selectionBar.visible)
-				{
+			onAccepted: {
+				if(control.selectionBar && control.selectionBar.visible) {
 					control.selectionBar.animate()
 					control.clearSelection()
 				}
@@ -227,12 +208,10 @@ Maui.Page
 		}
 	}
 	
-	Component
-	{
+	Component {
 		id: newFolderDialogComponent
 		
-		Maui.NewDialog
-		{
+		Maui.NewDialog {
 			title: qsTr("New Folder")
 			message: qsTr("Create a new folder with a custom name")
 			acceptButton.text: qsTr("Create")
@@ -242,12 +221,10 @@ Maui.Page
 		}
 	}
 	
-	Component
-	{
+	Component {
 		id: newFileDialogComponent
 		
-		Maui.NewDialog
-		{
+		Maui.NewDialog {
 			title: qsTr("New File")
 			message: qsTr("Create a new file with a custom name and extension")
 			acceptButton.text: qsTr("Create")
@@ -257,11 +234,9 @@ Maui.Page
 		}
 	}
 	
-	Component
-	{
+	Component {
 		id: renameDialogComponent
-		Maui.NewDialog
-		{
+		Maui.NewDialog {
             property var item : control.currentFMList ? control.currentFMList.get(control.currentView.currentIndex) : ({})
 			title: qsTr("Rename File")
 			message: qsTr("Rename a file or folder")
@@ -276,25 +251,21 @@ Maui.Page
 	
 	Private.BrowserMenu { id: browserMenu }
 	
-	Private.FileMenu
-	{
+	Private.FileMenu {
 		id: itemMenu
 		width: Maui.Style.unit * 200
 		onBookmarkClicked: control.bookmarkFolder([item.path])
-		onCopyClicked:
-		{
+		onCopyClicked: {
 			if(item)
 				control.copy([item.path])
 		}
 		
-		onCutClicked:
-		{
+		onCutClicked: {
 			if(item)
 				control.cut([item.path])
 		}
 		
-		onTagsClicked:
-		{
+		onTagsClicked: {
 			if(item && control.tagsDialog)
 			{
 				control.tagsDialog.composerList.urls = [item.path]
@@ -302,14 +273,12 @@ Maui.Page
 			}
 		}
 		
-		onRenameClicked:
-		{
+		onRenameClicked: {
 			dialogLoader.sourceComponent = renameDialogComponent
 			dialog.open()
 		}
 		
-		onRemoveClicked:
-		{
+		onRemoveClicked: {
 			console.log("REMOVE", item.path)
 			control.remove([item.path])
 		}
@@ -318,8 +287,7 @@ Maui.Page
 		onShareClicked: control.shareFiles([item.path])
 	}
 	
-	Connections
-	{
+	Connections {
 		target: control.previewer.tagBar
 		enabled: control.previewer && control.tagsDialog
 	
@@ -333,8 +301,7 @@ Maui.Page
 		}
 	}
 	
-	Connections
-	{
+	Connections {
 		target: control.tagsDialog
 		enabled: control.tagsDialog && control.previewer
 		
@@ -346,21 +313,18 @@ Maui.Page
 		}
 	}
 	
-	Connections
-	{
+	Connections {
 		target: control.previewer
 		enabled: control.previewer
 		onShareButtonClicked: control.shareFiles([url])		
 		onOpenButtonClicked: control.openFile(url)		
 	}
 	
-	Connections
-	{
+	Connections {
 		enabled: control.currentView
 		target: control.currentView
 		
-		onKeyPress:
-		{
+		onKeyPress: {
 			const index = control.currentView.currentIndex
 			const item = control.currentFMList.get(index)
 			
@@ -508,39 +472,33 @@ Maui.Page
             control.keyPress(event)
         }
         
-		onItemsSelected:
-		{
+		onItemsSelected: {
 			control.selectIndexes(indexes)
 		}
 		
-		onItemClicked:
-		{
+		onItemClicked: {
 			control.currentView.currentIndex = index
 			indexHistory.push(index)
 			control.itemClicked(index)
 			control.currentView.forceActiveFocus()
 		}
 		
-		onItemDoubleClicked:
-		{
+		onItemDoubleClicked: {
 			control.currentView.currentIndex = index
 			indexHistory.push(index)
 			control.itemDoubleClicked(index)
 			control.currentView.forceActiveFocus()
 		}
 		
-		onItemRightClicked:
-		{
-			if(control.currentFMList.pathType !== Maui.FMList.TRASH_PATH && control.currentFMList.pathType !== Maui.FMList.REMOTE_PATH)
-			{
+		onItemRightClicked: {
+			if(control.currentFMList.pathType !== Maui.FMList.TRASH_PATH && control.currentFMList.pathType !== Maui.FMList.REMOTE_PATH) {
 				itemMenu.show(index)
 			}
 			control.itemRightClicked(index)
 			control.currentView.forceActiveFocus()
 		}
 		
-		onItemToggled:
-		{
+		onItemToggled: {
 			const item = control.currentFMList.get(index)
 			
 			if(control.selectionBar && control.selectionBar.contains(item.path))
@@ -554,14 +512,13 @@ Maui.Page
 			control.currentView.forceActiveFocus()
 		}		
 			
-		onAreaClicked:
-		{
+		onAreaClicked: {
 			if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
 				browserMenu.show(control)
 				else return
 					
-					control.rightClicked()
-					control.currentView.forceActiveFocus()
+			control.rightClicked()
+			control.currentView.forceActiveFocus()
 		}
 		
 		onAreaRightClicked: browserMenu.show(control)
@@ -580,15 +537,13 @@ Maui.Page
         //        }
     }
     
-    StackView
-    {
+    StackView {
 		id: _stackView
 
 		anchors.fill: parent
 		clip: true
 		
-		initialItem: DropArea
-		{
+		initialItem: DropArea {
 			id: _dropArea
 			property alias currentView : _browser.currentView
 			property alias currentFMList : _browser.currentFMList
@@ -596,10 +551,8 @@ Maui.Page
 			property alias filter: _browser.filter
 			property alias title : _browser.title
 			
-			onDropped:
-			{
-				if(drop.urls)
-				{
+			onDropped: {
+				if(drop.urls) {
 					_dropMenu.urls = drop.urls.join(",")
 					_dropMenu.popup()
 					control.urlsDropped(drop.urls)
@@ -608,30 +561,25 @@ Maui.Page
 			
 			opacity:  _dropArea.containsDrag ? 0.5 : 1
 			
-			Private.BrowserView
-			{
+			Private.BrowserView {
 				id: _browser
 				anchors.fill: parent
 			}  		
 			
-			Menu
-			{
+			Menu {
 				id: _dropMenu
 				property string urls
 				enabled: Maui.FM.getFileInfo(control.currentPath).isdir == "true" 
 				
-				MenuItem
-				{
+				MenuItem {
 					text: qsTr("Copy here")
-					onTriggered:
-					{
+					onTriggered: {
 						const urls = _dropMenu.urls.split(",")
 						Maui.FM.copy(urls, control.currentPath, false)
 					}
 				}
 				
-				MenuItem
-				{
+				MenuItem {
 					text: qsTr("Move here")
 					onTriggered:
 					{
@@ -640,8 +588,7 @@ Maui.Page
 					}
 				}
 				
-				MenuItem
-				{
+				MenuItem {
 					text: qsTr("Link here")
 					onTriggered:
 					{
@@ -653,21 +600,18 @@ Maui.Page
 			}
 		}
 		
-		Component
-		{
+		Component {
 			id: _searchBrowserComponent
-			
-			Private.BrowserView 
-			{
+
+			Private.BrowserView {
 				id: _searchBrowser
 				objectName: "searchView"	
 				settings.viewType: control.settings.viewType === Maui.FMList.MILLERS_VIEW ? Maui.FMList.LIST_VIEW : control.settings.viewType // do not use millersview it does not makes sense since search does not follow a path url structures
 			}
 		}
 	}
-	
-    Component.onCompleted:
-    {
+
+    Component.onCompleted: {
         control.currentView.forceActiveFocus()
     }
 
@@ -683,8 +627,7 @@ Maui.Page
 //     }
    
     
-    function tagFiles(urls)
-	{
+    function tagFiles(urls) {
 		if(urls.length <= 0)
 		{
 			return

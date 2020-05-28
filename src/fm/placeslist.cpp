@@ -72,7 +72,7 @@ PlacesList::PlacesList(QObject *parent)
 #endif
 
 #if defined Q_OS_LINUX && !defined Q_OS_ANDROID
-    connect(this->model, &KFilePlacesModel::rowsInserted, [this](const QModelIndex &parent, int first, int last) {
+    connect(this->model, &KFilePlacesModel::rowsInserted, [this](const QModelIndex &/*parent*/, int /*first*/, int /*last*/) {
         this->reset();
         emit this->bookmarksChanged();
 

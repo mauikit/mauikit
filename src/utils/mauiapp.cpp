@@ -176,6 +176,8 @@ void MauiApp::setHandleAccounts(const bool &value)
 
     this->handleAccounts = value;
     emit this->handleAccountsChanged();
+#else
+    qDebug()<< "COMPONENT_ACCOUNTS disabled, ignoring setHandleAccounts value " << value;
 #endif
 }
 
