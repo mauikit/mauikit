@@ -36,23 +36,27 @@
 #include <Plasma/FrameSvg>
 #include <Plasma/Theme>
 
-namespace Decoration {
-namespace Applet {
+namespace Decoration
+{
+namespace Applet
+{
 class SchemeColors;
 }
 }
 
-namespace Decoration {
-namespace Applet {
-
-class ExtendedTheme: public QObject
+namespace Decoration
+{
+namespace Applet
+{
+class ExtendedTheme : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QObject *colors READ colors NOTIFY colorsChanged)
 
 public:
     ExtendedTheme(QObject *parent = nullptr);
-    ~ExtendedTheme() override;;
+    ~ExtendedTheme() override;
+    ;
 
     QObject *colors() const;
 
@@ -81,7 +85,7 @@ private:
     KConfigGroup m_themeGroup;
     Plasma::Theme m_theme;
 
-    SchemeColors *m_colorsScheme{nullptr};
+    SchemeColors *m_colorsScheme {nullptr};
 };
 
 }

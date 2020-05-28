@@ -19,12 +19,15 @@
 #include "mauilist.h"
 #include "mauimodel.h"
 
-MauiList::MauiList(QObject *parent) : QObject(parent), m_model(nullptr)
-{}
+MauiList::MauiList(QObject *parent)
+    : QObject(parent)
+    , m_model(nullptr)
+{
+}
 
 int MauiList::mappedIndex(const int &index) const
 {
-    if(this->m_model)
+    if (this->m_model)
         return this->m_model->mappedToSource(index);
 
     return -1;
@@ -32,28 +35,26 @@ int MauiList::mappedIndex(const int &index) const
 
 int MauiList::mappedIndexFromSource(const int &index) const
 {
-    if(this->m_model)
+    if (this->m_model)
         return this->m_model->mappedFromSource(index);
 
     return -1;
 }
 
-bool MauiList::exists(const FMH::MODEL_KEY& key, const QString& value) const
+bool MauiList::exists(const FMH::MODEL_KEY &key, const QString &value) const
 {
-	return this->indexOf(key, value) >= 0;
+    return this->indexOf(key, value) >= 0;
 }
 
-int MauiList::indexOf(const FMH::MODEL_KEY& key, const QString& value) const
+int MauiList::indexOf(const FMH::MODEL_KEY &key, const QString &value) const
 {
     const auto items = this->items();
-    const auto it = std::find_if(items.constBegin(), items.constEnd(), [&](const FMH::MODEL &item) -> bool
-	{
+    const auto it = std::find_if(items.constBegin(), items.constEnd(), [&](const FMH::MODEL &item) -> bool {
         return item[key] == value;
+    });
 
-	});
-    
-    if(it != items.constEnd())        
+    if (it != items.constEnd())
         return this->mappedIndexFromSource(std::distance(items.constBegin(), it));
-    else return -1;
+    else
+        return -1;
 }
-

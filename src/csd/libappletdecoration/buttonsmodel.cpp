@@ -27,28 +27,28 @@
 
 #include <QFontDatabase>
 
-namespace Decoration {
-namespace Applet {
-
-ButtonsModel::ButtonsModel(const QVector< KDecoration2::DecorationButtonType > &buttons, QObject *parent)
+namespace Decoration
+{
+namespace Applet
+{
+ButtonsModel::ButtonsModel(const QVector<KDecoration2::DecorationButtonType> &buttons, QObject *parent)
     : QAbstractListModel(parent)
     , m_buttons(buttons)
 {
 }
 
 ButtonsModel::ButtonsModel(QObject *parent)
-    : ButtonsModel(QVector<KDecoration2::DecorationButtonType>({
-    KDecoration2::DecorationButtonType::Menu,
-    KDecoration2::DecorationButtonType::ApplicationMenu,
-    KDecoration2::DecorationButtonType::OnAllDesktops,
-    KDecoration2::DecorationButtonType::Minimize,
-    KDecoration2::DecorationButtonType::Maximize,
-    KDecoration2::DecorationButtonType::Close,
-    KDecoration2::DecorationButtonType::ContextHelp,
-    KDecoration2::DecorationButtonType::Shade,
-    KDecoration2::DecorationButtonType::KeepBelow,
-    KDecoration2::DecorationButtonType::KeepAbove
-}), parent)
+    : ButtonsModel(QVector<KDecoration2::DecorationButtonType>({KDecoration2::DecorationButtonType::Menu,
+                                                                KDecoration2::DecorationButtonType::ApplicationMenu,
+                                                                KDecoration2::DecorationButtonType::OnAllDesktops,
+                                                                KDecoration2::DecorationButtonType::Minimize,
+                                                                KDecoration2::DecorationButtonType::Maximize,
+                                                                KDecoration2::DecorationButtonType::Close,
+                                                                KDecoration2::DecorationButtonType::ContextHelp,
+                                                                KDecoration2::DecorationButtonType::Shade,
+                                                                KDecoration2::DecorationButtonType::KeepBelow,
+                                                                KDecoration2::DecorationButtonType::KeepAbove}),
+                   parent)
 {
 }
 
@@ -66,62 +66,59 @@ int ButtonsModel::rowCount(const QModelIndex &parent) const
 static QString buttonToName(KDecoration2::DecorationButtonType type)
 {
     switch (type) {
-        case KDecoration2::DecorationButtonType::Menu:
-            return i18n("Menu");
+    case KDecoration2::DecorationButtonType::Menu:
+        return i18n("Menu");
 
-        case KDecoration2::DecorationButtonType::ApplicationMenu:
-            return i18n("Application menu");
+    case KDecoration2::DecorationButtonType::ApplicationMenu:
+        return i18n("Application menu");
 
-        case KDecoration2::DecorationButtonType::OnAllDesktops:
-            return i18n("On all desktops");
+    case KDecoration2::DecorationButtonType::OnAllDesktops:
+        return i18n("On all desktops");
 
-        case KDecoration2::DecorationButtonType::Minimize:
-            return i18n("Minimize");
+    case KDecoration2::DecorationButtonType::Minimize:
+        return i18n("Minimize");
 
-        case KDecoration2::DecorationButtonType::Maximize:
-            return i18n("Maximize");
+    case KDecoration2::DecorationButtonType::Maximize:
+        return i18n("Maximize");
 
-        case KDecoration2::DecorationButtonType::Close:
-            return i18n("Close");
+    case KDecoration2::DecorationButtonType::Close:
+        return i18n("Close");
 
-        case KDecoration2::DecorationButtonType::ContextHelp:
-            return i18n("Context help");
+    case KDecoration2::DecorationButtonType::ContextHelp:
+        return i18n("Context help");
 
-        case KDecoration2::DecorationButtonType::Shade:
-            return i18n("Shade");
+    case KDecoration2::DecorationButtonType::Shade:
+        return i18n("Shade");
 
-        case KDecoration2::DecorationButtonType::KeepBelow:
-            return i18n("Keep below");
+    case KDecoration2::DecorationButtonType::KeepBelow:
+        return i18n("Keep below");
 
-        case KDecoration2::DecorationButtonType::KeepAbove:
-            return i18n("Keep above");
+    case KDecoration2::DecorationButtonType::KeepAbove:
+        return i18n("Keep above");
 
-        default:
-            return QString();
+    default:
+        return QString();
     }
 }
 
 QVariant ButtonsModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() ||
-        index.row() < 0 ||
-        index.row() >= m_buttons.count() ||
-        index.column() != 0) {
+    if (!index.isValid() || index.row() < 0 || index.row() >= m_buttons.count() || index.column() != 0) {
         return QVariant();
     }
 
     switch (role) {
-        case Qt::DisplayRole:
-            return buttonToName(m_buttons.at(index.row()));
+    case Qt::DisplayRole:
+        return buttonToName(m_buttons.at(index.row()));
 
-        case Qt::UserRole:
-            return QVariant::fromValue(int(m_buttons.at(index.row())));
+    case Qt::UserRole:
+        return QVariant::fromValue(int(m_buttons.at(index.row())));
     }
 
     return QVariant();
 }
 
-QHash< int, QByteArray > ButtonsModel::roleNames() const
+QHash<int, QByteArray> ButtonsModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
     roles.insert(Qt::DisplayRole, QByteArrayLiteral("display"));
@@ -198,4 +195,3 @@ void ButtonsModel::move(int sourceIndex, int targetIndex)
 
 }
 }
-

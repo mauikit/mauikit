@@ -7,7 +7,7 @@
 class MAUIMacOS
 {
 public:
- static void removeTitlebarFromWindow(long winId = -1);
+    static void removeTitlebarFromWindow(long winId = -1);
 };
 
 #endif // MAUIMACOS_H

@@ -26,9 +26,10 @@
 
 #include <QAbstractListModel>
 
-namespace Decoration {
-namespace Applet {
-
+namespace Decoration
+{
+namespace Applet
+{
 class DecorationsModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -42,11 +43,12 @@ public:
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    QHash< int, QByteArray > roleNames() const override;
+    QHash<int, QByteArray> roleNames() const override;
 
     QModelIndex findDecoration(const QString &pluginName, const QString &themeName = QString()) const;
 
-    QMap<QString, QString> knsProviders() const {
+    QMap<QString, QString> knsProviders() const
+    {
         return m_knsProvides;
     }
 
@@ -72,12 +74,10 @@ private slots:
     void setCurrentTheme(QString theme);
 
 private:
-
     bool pluginExists(const QString &plugin);
 
 private:
-    struct Data
-    {
+    struct Data {
         QString pluginName;
         QString themeName;
         QString visibleName;

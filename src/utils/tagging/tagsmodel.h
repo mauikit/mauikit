@@ -21,11 +21,11 @@ public:
     // Editable:
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
-    Qt::ItemFlags flags(const QModelIndex& index) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
 
     virtual QHash<int, QByteArray> roleNames() const override;
 
-    TagsList* getList() const;
+    TagsList *getList() const;
     void setList(TagsList *value);
 
 private:

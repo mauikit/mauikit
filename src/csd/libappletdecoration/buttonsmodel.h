@@ -27,23 +27,25 @@
 #include <KDecoration2/DecorationButton>
 #include <QAbstractListModel>
 
-namespace Decoration {
-namespace Applet {
-
+namespace Decoration
+{
+namespace Applet
+{
 class PreviewBridge;
 
 class ButtonsModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    explicit ButtonsModel(const QVector< KDecoration2::DecorationButtonType > &buttons, QObject *parent = 0);
+    explicit ButtonsModel(const QVector<KDecoration2::DecorationButtonType> &buttons, QObject *parent = 0);
     explicit ButtonsModel(QObject *parent = nullptr);
     virtual ~ButtonsModel();
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    QHash< int, QByteArray > roleNames() const override;
+    QHash<int, QByteArray> roleNames() const override;
 
-    QVector< KDecoration2::DecorationButtonType > buttons() const {
+    QVector<KDecoration2::DecorationButtonType> buttons() const
+    {
         return m_buttons;
     }
 
@@ -56,11 +58,10 @@ public:
     Q_INVOKABLE void add(int index, int type);
 
 private:
-    QVector< KDecoration2::DecorationButtonType > m_buttons;
+    QVector<KDecoration2::DecorationButtonType> m_buttons;
 };
 
 }
 }
 
 #endif
-
