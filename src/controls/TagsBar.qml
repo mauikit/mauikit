@@ -87,7 +87,6 @@ Maui.ToolBar
     {
         id: tagsList
         visible: !control.editMode
-        Layout.leftMargin: Maui.Style.space.medium
         Layout.fillHeight: true
         Layout.fillWidth: true
         showPlaceHolder: allowEditMode
