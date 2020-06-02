@@ -152,7 +152,7 @@ Maui.Dialog
                             {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 100
-                                color: Qt.darker(Kirigami.Theme.backgroundColor)
+                                color: Qt.darker(Kirigami.Theme.backgroundColor, 1.1)
                                 
                                 Kirigami.Icon
                                 {
@@ -180,7 +180,8 @@ Maui.Dialog
                                     visible: model.value.length
                                     width: visible ? parent.width : 0
                                     height: visible ? _delegateColumnInfo.implicitHeight + Maui.Style.space.large : 0
-                                    color: index % 2 === 0 ? Kirigami.Theme.backgroundColor : Qt.darker(Kirigami.Theme.backgroundColor)
+                                    color: index % 2 === 0 ? Kirigami.Theme.backgroundColor : Qt.darker(Kirigami.Theme.backgroundColor, 1.1)
+                                    
                                     Kirigami.Separator
                                     {
                                         anchors.left: parent.left
@@ -188,40 +189,24 @@ Maui.Dialog
                                         anchors.bottom: parent.bottom
                                     }
                                     
-                                    Column
+                                    Maui.ListItemTemplate
                                     {
                                         id: _delegateColumnInfo
-                                        spacing: Maui.Style.space.tiny
-                                        width: parent.width * 0.9
+                                        width: parent.width
+                                        
+                                        iconSource: "documentinfo"
+                                        iconSizeHint: Maui.Style.iconSizes.medium
                                         
                                         anchors.centerIn: parent
                                         anchors.margins: Maui.Style.space.medium
                                         
-                                        Label
-                                        {
-                                            width: parent.width                                            
-                                            text: model.key
-                                            color: Kirigami.Theme.textColor
-                                            elide: Text.ElideRight
-                                            wrapMode: Text.NoWrap
-                                            horizontalAlignment: Qt.AlignLeft
-                                            font.weight: Font.Bold
-                                            font.bold: true
-                                        }
-                                        
-                                        Label
-                                        {
-                                            id: _valueLabel
-                                            width: parent.width
-                                            text: model.value
-                                            color: Kirigami.Theme.textColor
-                                            elide: Qt.ElideMiddle
-                                            wrapMode: Text.Wrap
-                                            horizontalAlignment: Qt.AlignLeft
-                                            font.weight: Font.Light
-                                        }
-                                        
-                                        
+                                        label1.text: model.key
+                                        label1.font.weight: Font.Bold
+                                        label1.font.bold: true
+                                        label2.text: model.value
+                                        label2.elide: Qt.ElideMiddle
+                                        label2.wrapMode: Text.Wrap
+                                        label2.font.weight: Font.Light
                                     }
                                 }
                             }

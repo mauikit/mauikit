@@ -40,24 +40,24 @@ Maui.Dialog
 	
 	verticalAlignment: Qt.AlignBottom
 	
-	defaultButtons: false
-		
-		page.title: qsTr("Share with")
-		headBar.visible: true
-		
-		headBar.leftContent: ToolButton
-		{
-			visible: _purpose.depth>1;
-			icon.name: "go-previous"
-			onClicked: _purpose.pop()
-		}
-		
-		footBar.visible: true
-		footBar.middleContent : Button
-		{
-			text: qsTr("Open with")
-            onClicked:  control.openWith()
-		}
+	defaultButtons: true
+        
+        rejectButton.visible: false
+        acceptButton.text: qsTr("Open with")
+        onAccepted:  control.openWith()
+        
+        
+        page.title: qsTr("Share with")
+        headBar.visible: true
+        
+        headBar.leftContent: ToolButton
+        {
+            visible: _purpose.depth>1;
+            icon.name: "go-previous"
+            onClicked: _purpose.pop()
+        }
+        
+        
 		
 		Maui.OpenWithDialog
 		{
