@@ -20,8 +20,6 @@
 #ifndef MAUIKIT_H
 #define MAUIKIT_H
 
-#define MAUIKIT_VERSION "1.0.2"
-
 #include <QQmlEngine>
 #include <QQmlExtensionPlugin>
 

@@ -1,0 +1,7 @@
+module org.kde.mauikit.plugin
+
+plugin mauikitplugin
+AppViewsPlugin 1.2 AppViewsPlugin.qml
+PagePlugin 1.2 PagePlugin.qml
+PluginManager 1.2 PluginManager.qml
+PluginInfo 1.2 PluginInfo.qml

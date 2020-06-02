@@ -237,6 +237,14 @@ void MauiKit::registerTypes(const char *uri)
 		Q_UNUSED(scriptEngine)
 		return new Handy;
 	});
+    
+    	/** MAUI PLUGIN SUPPORT **/
+#ifdef SUPPORT_PLUGINS
+	qmlRegisterType(componentUrl(QStringLiteral("AppViewsPlugin.qml")), uri, 1, 2, "AppViewsPlugin");
+	qmlRegisterType(componentUrl(QStringLiteral("PagePlugin.qml")), uri, 1, 2, "PagePlugin");
+	qmlRegisterType(componentUrl(QStringLiteral("PluginManager.qml")), uri, 1, 2, "PluginManager");
+	qmlRegisterType(componentUrl(QStringLiteral("PluginsInfo.qml")), uri, 1, 2, "PluginsInfo");
+#endif
 
 	this->initResources();
 

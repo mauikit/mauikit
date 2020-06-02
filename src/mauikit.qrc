@@ -91,6 +91,10 @@
         <file alias="labs/WindowControlsLinux.qml">controls/labs/WindowControlsLinux.qml</file>
         <file alias="labs/WindowControlsMac.qml">controls/labs/WindowControlsMac.qml</file>
         <file alias="labs/WindowControlsWindows.qml">controls/labs/WindowControlsWindows.qml</file>
+        <file alias="plugin/AppViewsPlugin.qml">controls/plugin/AppViewsPlugin.qml</file>
+        <file alias="plugin/PagePlugin.qml">controls/plugin/PagePlugin.qml</file>
+        <file alias="plugin/PluginManager.qml">controls/plugin/PluginManager.qml</file>
+        <file alias="plugin/PluginsInfo.qml">controls/plugin/PluginsInfo.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

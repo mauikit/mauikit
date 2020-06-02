@@ -180,6 +180,21 @@ if(${COMPONENT_STORE})
 endif()
 #use dbus on linux, bsd etc, but not andoid and apple stuff
 
+if(${SUPPORT_PLUGINS})
+       message(STATUS "INCLUDING PLUGINS SUPPORT")
+    set(mauikitplugin_SRCS
+        utils/plugin/pluginmanager.cpp
+        )
+
+    set(mauikitplugin_HDRS
+        utils/plugin/pluginmanager.h
+        )
+    include_directories(
+        ${CMAKE_CURRENT_SOURCE_DIR}/utils/plugin/
+        ${CMAKE_CURRENT_BINARY_DIR}/utils/plugin )
+    add_definitions(-DSUPPORT_PLUGINS)
+endif()
+
 #options - for the appimage
 option(IS_APPIMAGE_PACKAGE "If set to true then the icons and styled is packaged as well" OFF)
 
