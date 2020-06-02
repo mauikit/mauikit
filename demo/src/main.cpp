@@ -1,11 +1,11 @@
 #include <QQmlApplicationEngine>
 
+#include <QCommandLineParser>
+#include <QFileInfo>
+#include <QIcon>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickStyle>
-#include <QIcon>
-#include <QCommandLineParser>
-#include <QFileInfo>
 #ifdef Q_OS_ANDROID
 #include <QGuiApplication>
 #include <QIcon>

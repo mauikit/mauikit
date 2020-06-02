@@ -1,21 +1,21 @@
 /*
-*  Copyright 2018  Michail Vourlakos <mvourlakos@gmail.com>
-*
-*  This file is part of the libappletdecoration library
-*
-*  Latte-Dock is free software; you can redistribute it and/or
-*  modify it under the terms of the GNU General Public License as
-*  published by the Free Software Foundation; either version 2 of
-*  the License, or (at your option) any later version.
-*
-*  Latte-Dock is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  You should have received a copy of the GNU General Public License
-*  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ *  Copyright 2018  Michail Vourlakos <mvourlakos@gmail.com>
+ *
+ *  This file is part of the libappletdecoration library
+ *
+ *  Latte-Dock is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU General Public License as
+ *  published by the Free Software Foundation; either version 2 of
+ *  the License, or (at your option) any later version.
+ *
+ *  Latte-Dock is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "auroraetheme.h"
 
@@ -32,16 +32,16 @@
 
 #include <Plasma/Svg>
 
-namespace Decoration {
-namespace Applet {
-
+namespace Decoration
+{
+namespace Applet
+{
 static const QString s_auroraeSvgTheme = QStringLiteral("__aurorae__svg__");
-static const QString s_auroraerc =  QStringLiteral("auroraerc");
+static const QString s_auroraerc = QStringLiteral("auroraerc");
 static int i_buttonSizeStep = 4;
 
-
-AuroraeTheme::AuroraeTheme(QObject *parent) :
-    QObject(parent)
+AuroraeTheme::AuroraeTheme(QObject *parent)
+    : QObject(parent)
 {
     const auto auroraerc = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + s_auroraerc;
 
@@ -135,7 +135,7 @@ void AuroraeTheme::updateAurorae(const QString &themeName)
 {
     const QString separator("__");
     const QString name = themeName.section(separator, -1, -1);
-    QString path = AppletDecoration::standardPath("aurorae/themes/"+name);
+    QString path = AppletDecoration::standardPath("aurorae/themes/" + name);
 
     if (QFileInfo(path + "/close.svg").exists()) {
         m_themeType = "svg";
@@ -187,7 +187,7 @@ void AuroraeTheme::loadSettings()
 
 void AuroraeTheme::parseThemeImages()
 {
-    QString origBackgroundFilePath = m_themePath + "/decoration."+m_themeType;
+    QString origBackgroundFilePath = m_themePath + "/decoration." + m_themeType;
 
     if (!QFileInfo(origBackgroundFilePath).exists()) {
         qDebug() << "Aurorare decoration file was not found for theme: " << m_themeName;
@@ -196,19 +196,19 @@ void AuroraeTheme::parseThemeImages()
 
     Plasma::Svg *svg = new Plasma::Svg(this);
     svg->setImagePath(origBackgroundFilePath);
-    svg->resize(50,50);
-    QImage img = svg->image(QSize(50,50), "decoration-top");
+    svg->resize(50, 50);
+    QImage img = svg->image(QSize(50, 50), "decoration-top");
 
     int maxOpacity = -1;
 
-    for (int y=49; y>=0; --y) {
+    for (int y = 49; y >= 0; --y) {
         QRgb *line = (QRgb *)img.scanLine(y);
-        for (int x=0; x<50; ++x) {
+        for (int x = 0; x < 50; ++x) {
             QRgb pix = line[x];
             int opacity = qAlpha(pix);
 
             //! the equality returns better results for more aurorae themes
-            if (maxOpacity<=opacity) {
+            if (maxOpacity <= opacity) {
                 maxOpacity = opacity;
                 m_titleBackgroundColor = QColor(qRed(pix), qGreen(pix), qBlue(pix));
             }

@@ -20,16 +20,14 @@
 #ifndef MAUIANDROID_H
 #define MAUIANDROID_H
 
-#include <QObject>
-#include <QString>
 #include <QAndroidActivityResultReceiver>
-#include <QObject>
-#include <QAndroidJniObject>
 #include <QAndroidJniEnvironment>
-#include <QtAndroid>
-#include <QStringList>
+#include <QAndroidJniObject>
+#include <QObject>
 #include <QString>
+#include <QStringList>
 #include <QVariantList>
+#include <QtAndroid>
 
 class Q_DECL_EXPORT MAUIAndroid : public QObject
 {
@@ -40,13 +38,13 @@ public:
     void handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data);
 
     static QImage contactPhoto(const QString &id);
-    static void addContact(const QString &name, const QString &tel, const QString &tel2, const QString &tel3, const QString &email, const QString &title, const QString &org, const QString &photo, const QString &account, const QString &accountType);
+    static void
+    addContact(const QString &name, const QString &tel, const QString &tel2, const QString &tel3, const QString &email, const QString &title, const QString &org, const QString &photo, const QString &account, const QString &accountType);
     static void updateContact(const QString &id, const QString &field, const QString &value);
 
     static void setAppIcons(const QString &lowDPI, const QString &mediumDPI, const QString &highDPI);
     static void setAppInfo(const QString &appName, const QString &version, const QString &uri);
     static void fileChooser();
-
 
 private:
     static QVariantList transform(const QAndroidJniObject &obj);
@@ -60,10 +58,10 @@ public slots:
 
     static void statusbarColor(const QString &bg, const bool &light);
     static void navBarColor(const QString &bg, const bool &light);
-    
+
     static void shareDialog(const QUrl &url);
     static void shareText(const QString &text);
-    static void sendSMS(const QString &tel,const QString &subject, const QString &message);
+    static void sendSMS(const QString &tel, const QString &subject, const QString &message);
     static void shareLink(const QString &link);
     static void shareContact(const QString &id);
     static void openUrl(const QUrl &url);
@@ -74,7 +72,6 @@ public slots:
 
     static bool checkRunTimePermissions(const QStringList &permissions);
 
-
 signals:
     void folderPicked(QString path);
 };
@@ -82,11 +79,11 @@ signals:
 namespace PATHS
 {
 const QString HomePath = MAUIAndroid::homePath();
-const QString PicturesPath = HomePath+"/"+QAndroidJniObject::getStaticObjectField("android/os/Environment", "DIRECTORY_PICTURES", "Ljava/lang/String;").toString();
-const QString DownloadsPath = HomePath+"/"+QAndroidJniObject::getStaticObjectField("android/os/Environment", "DIRECTORY_DOWNLOADS", "Ljava/lang/String;").toString();
-const QString DocumentsPath = HomePath+"/"+QAndroidJniObject::getStaticObjectField("android/os/Environment", "DIRECTORY_DOCUMENTS", "Ljava/lang/String;").toString();
-const QString MusicPath = HomePath+"/"+QAndroidJniObject::getStaticObjectField("android/os/Environment", "DIRECTORY_MUSIC", "Ljava/lang/String;").toString();
-const QString VideosPath = HomePath+"/"+QAndroidJniObject::getStaticObjectField("android/os/Environment", "DIRECTORY_MOVIES", "Ljava/lang/String;").toString();
+const QString PicturesPath = HomePath + "/" + QAndroidJniObject::getStaticObjectField("android/os/Environment", "DIRECTORY_PICTURES", "Ljava/lang/String;").toString();
+const QString DownloadsPath = HomePath + "/" + QAndroidJniObject::getStaticObjectField("android/os/Environment", "DIRECTORY_DOWNLOADS", "Ljava/lang/String;").toString();
+const QString DocumentsPath = HomePath + "/" + QAndroidJniObject::getStaticObjectField("android/os/Environment", "DIRECTORY_DOCUMENTS", "Ljava/lang/String;").toString();
+const QString MusicPath = HomePath + "/" + QAndroidJniObject::getStaticObjectField("android/os/Environment", "DIRECTORY_MUSIC", "Ljava/lang/String;").toString();
+const QString VideosPath = HomePath + "/" + QAndroidJniObject::getStaticObjectField("android/os/Environment", "DIRECTORY_MOVIES", "Ljava/lang/String;").toString();
 }
 
 #endif // ANDROID_H

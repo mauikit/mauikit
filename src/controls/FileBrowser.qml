@@ -950,8 +950,22 @@ Maui.Page
     
     function search(query)
 	{
-		openSearch()
-		_stackView.currentItem.title = qsTr("Search: %1").arg(query)
-		_stackView.currentItem.currentFMList.search(query, _browser.currentFMList)
-	}	
+        openSearch()
+        _stackView.currentItem.title = qsTr("Search: %1").arg(query)
+        _stackView.currentItem.currentFMList.search(query, _browser.currentFMList)
+    }
+    
+    function newFile()
+    {
+        dialogLoader.sourceComponent= newFileDialogComponent
+        dialog.open()
+        dialog.forceActiveFocus()
+    }
+    
+    function newFolder()
+    {
+        dialogLoader.sourceComponent= newFolderDialogComponent
+        dialog.open()
+        dialog.forceActiveFocus()
+    }
 }

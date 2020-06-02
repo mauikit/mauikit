@@ -34,9 +34,10 @@
 
 class QAbstractItemModel;
 
-namespace Decoration {
-namespace Applet {
-
+namespace Decoration
+{
+namespace Applet
+{
 class PreviewClient : public QObject, public KDecoration2::ApplicationMenuEnabledDecoratedClientPrivate
 {
     Q_OBJECT
@@ -63,9 +64,9 @@ class PreviewClient : public QObject, public KDecoration2::ApplicationMenuEnable
     Q_PROPERTY(bool providesContextHelp READ providesContextHelp WRITE setProvidesContextHelp NOTIFY providesContextHelpChanged)
     Q_PROPERTY(int width READ width WRITE setWidth NOTIFY widthChanged)
     Q_PROPERTY(int height READ height WRITE setHeight NOTIFY heightChanged)
-    Q_PROPERTY(bool bordersTopEdge    READ bordersTopEdge    WRITE setBordersTopEdge    NOTIFY bordersTopEdgeChanged)
-    Q_PROPERTY(bool bordersLeftEdge   READ bordersLeftEdge   WRITE setBordersLeftEdge   NOTIFY bordersLeftEdgeChanged)
-    Q_PROPERTY(bool bordersRightEdge  READ bordersRightEdge  WRITE setBordersRightEdge  NOTIFY bordersRightEdgeChanged)
+    Q_PROPERTY(bool bordersTopEdge READ bordersTopEdge WRITE setBordersTopEdge NOTIFY bordersTopEdgeChanged)
+    Q_PROPERTY(bool bordersLeftEdge READ bordersLeftEdge WRITE setBordersLeftEdge NOTIFY bordersLeftEdgeChanged)
+    Q_PROPERTY(bool bordersRightEdge READ bordersRightEdge WRITE setBordersRightEdge NOTIFY bordersRightEdgeChanged)
     Q_PROPERTY(bool bordersBottomEdge READ bordersBottomEdge WRITE setBordersBottomEdge NOTIFY bordersBottomEdgeChanged)
 public:
     explicit PreviewClient(KDecoration2::DecoratedClient *client, KDecoration2::Decoration *decoration);
@@ -198,7 +199,7 @@ private:
     QIcon m_icon;
     QString m_iconName;
     QString m_colorScheme;
-    Decoration::Applet::DecorationPalette *m_palette{nullptr};
+    Decoration::Applet::DecorationPalette *m_palette {nullptr};
     bool m_active;
     bool m_closeable;
     bool m_keepBelow;

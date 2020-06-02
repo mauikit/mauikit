@@ -20,7 +20,8 @@
 #include "kdeconnect.h"
 #include <QProcess>
 
-KdeConnect::KdeConnect(QObject *parent) : QObject(parent)
+KdeConnect::KdeConnect(QObject *parent)
+    : QObject(parent)
 {
 }
 
@@ -35,15 +36,13 @@ QVariantList KdeConnect::getDevices()
 
     process.setReadChannel(QProcess::StandardOutput);
 
-    while (process.canReadLine())
-    {
+    while (process.canReadLine()) {
         QString line = QString::fromLocal8Bit(process.readLine());
-        if(line.contains("(paired and reachable)"))
-        {
+        if (line.contains("(paired and reachable)")) {
             QVariantMap _devices;
             QStringList items = line.split(" ");
             auto serviceKey = QString(items.at(2));
-            auto serviceLabel = QString(items.at(1)).replace(":","");
+            auto serviceLabel = QString(items.at(1)).replace(":", "");
 
             _devices.insert("serviceKey", serviceKey);
             _devices.insert("label", serviceLabel);
@@ -52,7 +51,7 @@ QVariantList KdeConnect::getDevices()
         }
     }
 
-    return  devices;
+    return devices;
 }
 
 bool KdeConnect::sendToDevice(const QString &device, const QString &id, const QString &url)
@@ -61,14 +60,12 @@ bool KdeConnect::sendToDevice(const QString &device, const QString &id, const QS
     QString deviceKey = id;
 
     auto process = new QProcess();
-    connect(process, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
-            [=](int exitCode, QProcess::ExitStatus exitStatus)
-    {
+    connect(process, static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), [=](int exitCode, QProcess::ExitStatus exitStatus) {
         //        BabeWindow::nof->notify("Song sent to " + deviceName,title +" by "+ artist);
-//        process->deleteLater();
+        //        process->deleteLater();
     });
 
-    process->start("kdeconnect-cli -d " +deviceKey+ " --share " +"\""+ url+"\"");
+    process->start("kdeconnect-cli -d " + deviceKey + " --share " + "\"" + url + "\"");
 
     return true;
 }

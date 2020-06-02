@@ -23,9 +23,10 @@
 
 #include <QAbstractListModel>
 
-namespace Decoration {
-namespace Applet {
-
+namespace Decoration
+{
+namespace Applet
+{
 class SchemeColors;
 
 class SchemesModel : public QAbstractListModel
@@ -38,7 +39,7 @@ public:
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    QHash< int, QByteArray > roleNames() const override;
+    QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE int indexOf(QString file);
     Q_INVOKABLE QColor backgroundOf(const int &index) const;

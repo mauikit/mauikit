@@ -23,38 +23,39 @@ License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QObject>
 
-namespace KSyntaxHighlighting {
-    class Repository;
-    class SyntaxHighlighter;
+namespace KSyntaxHighlighting
+{
+class Repository;
+class SyntaxHighlighter;
 }
 
 class KQuickSyntaxHighlighter : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QObject* textEdit READ textEdit WRITE setTextEdit NOTIFY textEditChanged)
+    Q_PROPERTY(QObject *textEdit READ textEdit WRITE setTextEdit NOTIFY textEditChanged)
     Q_PROPERTY(QString formatName READ formatName WRITE setFormatName NOTIFY formatNameChanged)
 
-    public:
-        explicit KQuickSyntaxHighlighter(QObject *parent = nullptr);
-        ~KQuickSyntaxHighlighter() override;
+public:
+    explicit KQuickSyntaxHighlighter(QObject *parent = nullptr);
+    ~KQuickSyntaxHighlighter() override;
 
-        QObject *textEdit() const;
-        void setTextEdit(QObject *textEdit);
+    QObject *textEdit() const;
+    void setTextEdit(QObject *textEdit);
 
-        QString formatName() const;
-        void setFormatName(const QString &formatName);
+    QString formatName() const;
+    void setFormatName(const QString &formatName);
 
-    Q_SIGNALS:
-        void textEditChanged() const;
-        void formatNameChanged() const;
+Q_SIGNALS:
+    void textEditChanged() const;
+    void formatNameChanged() const;
 
-    private:
-        static int m_instanceCount;
-        QObject *m_textEdit;
-        QString m_formatName;
-        static KSyntaxHighlighting::Repository *m_repository;
-        KSyntaxHighlighting::SyntaxHighlighter *m_highlighter;
+private:
+    static int m_instanceCount;
+    QObject *m_textEdit;
+    QString m_formatName;
+    static KSyntaxHighlighting::Repository *m_repository;
+    KSyntaxHighlighting::SyntaxHighlighter *m_highlighter;
 };
 
 #endif // KQUICKSYNTAXHIGHLIGHTER_H
