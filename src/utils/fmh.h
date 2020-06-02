@@ -289,6 +289,8 @@ enum MODEL_KEY : int {
     READABLE,
     WRITABLE,
     LAST_READ,
+    VALUE,
+    KEY
 
 };
 
@@ -426,8 +428,10 @@ static const QHash<FMH::MODEL_KEY, QString> MODEL_NAME = {{MODEL_KEY::ICON, "ico
                                                           {MODEL_KEY::IS_DIR, "isdir"},
                                                           {MODEL_KEY::IS_FILE, "isfile"},
                                                           {MODEL_KEY::IS_REMOTE, "isremote"},
-                                                          {MODEL_KEY::EXECUTABLE, "executable"}
-
+                                                          {MODEL_KEY::EXECUTABLE, "executable"},
+                                                          {MODEL_KEY::VALUE, "value"},
+                                                          {MODEL_KEY::KEY, "key"}
+                                                          
 };
 
 static const QHash<QString, FMH::MODEL_KEY> MODEL_NAME_KEY = {{MODEL_NAME[MODEL_KEY::ICON], MODEL_KEY::ICON},
@@ -566,18 +570,10 @@ static const QHash<QString, FMH::MODEL_KEY> MODEL_NAME_KEY = {{MODEL_NAME[MODEL_
                                                               {MODEL_NAME[MODEL_KEY::IS_DIR], MODEL_KEY::IS_DIR},
                                                               {MODEL_NAME[MODEL_KEY::IS_FILE], MODEL_KEY::IS_FILE},
                                                               {MODEL_NAME[MODEL_KEY::IS_REMOTE], MODEL_KEY::IS_REMOTE},
-                                                              {MODEL_NAME[MODEL_KEY::EXECUTABLE], MODEL_KEY::EXECUTABLE}};
-
-// for now here to later on use it to allow auto cast qvariant to qstring
-template<typename Key, typename V> class MHash : public QHash<Key, V>
-{
-public:
-    using QHash<Key, V>::QHash;
-    MHash(const QHash<Key, V> &other)
-        : QHash<Key, V>(other)
-    {
-    }
-};
+                                                              {MODEL_NAME[MODEL_KEY::EXECUTABLE], MODEL_KEY::EXECUTABLE},
+                                                              {MODEL_NAME[MODEL_KEY::VALUE], MODEL_KEY::VALUE},
+                                                              {MODEL_NAME[MODEL_KEY::KEY], MODEL_KEY::KEY}};
+                                                              
 
 typedef QHash<FMH::MODEL_KEY, QString> MODEL;
 typedef QVector<MODEL> MODEL_LIST;

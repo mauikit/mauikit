@@ -132,67 +132,101 @@ Maui.Dialog
 					
 					Kirigami.ScrollablePage
 					{
-						id: _infoContent
-						visible: control.showInfo
-						anchors.fill: parent
-						
-						Kirigami.Theme.backgroundColor: "transparent"
-						padding:  Maui.Style.space.big
-						leftPadding: padding
-						rightPadding: padding
-						topPadding: padding
-						bottomPadding: padding
-						
-						ColumnLayout
-						{
-							width: parent.width
-							spacing: Maui.Style.space.large
-							
-							Repeater
-							{
-								model: ListModel { id: _infoModel }
-								
-								Column
-								{
-									spacing: Maui.Style.space.small
-									width: parent.width
-									
-									Label
-									{
-										width: parent.width
-										visible: _valueLabel.visible
-										text: model.key
-										color: Kirigami.Theme.textColor
-										
-										elide: Text.ElideRight
-										wrapMode: Text.NoWrap
-										
-										horizontalAlignment: Qt.AlignLeft
-										
-										font.weight: Font.Bold
-										font.bold: true
-									}
-									
-									Label
-									{
-										id: _valueLabel
-										
-										width: parent.width
-										visible: text.length
-										text: model.value
-										color: Kirigami.Theme.textColor
-										
-										elide: Qt.ElideMiddle
-										wrapMode: Text.Wrap
-										
-										horizontalAlignment: Qt.AlignLeft
-										
-										font.weight: Font.Light
-									}
-								}
-							}							
-						}
-					}
+                        id: _infoContent
+                        anchors.fill: parent
+                        visible: control.showInfo
+                        
+                        Kirigami.Theme.backgroundColor: "transparent"
+                        padding:  0
+                        leftPadding: padding
+                        rightPadding: padding
+                        topPadding: padding
+                        bottomPadding: padding
+                        
+                        ColumnLayout
+                        {
+                            width: parent.width
+                            spacing: 0
+                            
+                            Rectangle
+                            {
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: 100
+                                color: Qt.darker(Kirigami.Theme.backgroundColor)
+                                
+                                Kirigami.Icon
+                                {
+                                    height: Maui.Style.iconSizes.large
+                                    width: height
+                                    anchors.centerIn: parent
+                                    source: iteminfo.icon                                    
+                                }
+                            }
+                            
+                            Kirigami.Separator
+                            {
+                                Layout.fillWidth: true
+                            }
+                            
+                            ListView
+                            {
+                                Layout.preferredHeight: contentHeight
+                                Layout.fillWidth: true
+                                Layout.margins: 0
+                                spacing: 0
+                                model: ListModel { id: _infoModel }
+                                delegate: Rectangle
+                                {
+                                    visible: model.value.length
+                                    width: visible ? parent.width : 0
+                                    height: visible ? _delegateColumnInfo.implicitHeight + Maui.Style.space.large : 0
+                                    color: index % 2 === 0 ? Kirigami.Theme.backgroundColor : Qt.darker(Kirigami.Theme.backgroundColor)
+                                    Kirigami.Separator
+                                    {
+                                        anchors.left: parent.left
+                                        anchors.right: parent.right
+                                        anchors.bottom: parent.bottom
+                                    }
+                                    
+                                    Column
+                                    {
+                                        id: _delegateColumnInfo
+                                        spacing: Maui.Style.space.tiny
+                                        width: parent.width * 0.9
+                                        
+                                        anchors.centerIn: parent
+                                        anchors.margins: Maui.Style.space.medium
+                                        
+                                        Label
+                                        {
+                                            width: parent.width                                            
+                                            text: model.key
+                                            color: Kirigami.Theme.textColor
+                                            elide: Text.ElideRight
+                                            wrapMode: Text.NoWrap
+                                            horizontalAlignment: Qt.AlignLeft
+                                            font.weight: Font.Bold
+                                            font.bold: true
+                                        }
+                                        
+                                        Label
+                                        {
+                                            id: _valueLabel
+                                            width: parent.width
+                                            text: model.value
+                                            color: Kirigami.Theme.textColor
+                                            elide: Qt.ElideMiddle
+                                            wrapMode: Text.Wrap
+                                            horizontalAlignment: Qt.AlignLeft
+                                            font.weight: Font.Light
+                                        }
+                                        
+                                        
+                                    }
+                                }
+                            }
+                        }
+                    }
 					
 					function show(path)
 					{
