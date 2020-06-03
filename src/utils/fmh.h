@@ -431,7 +431,7 @@ static const QHash<FMH::MODEL_KEY, QString> MODEL_NAME = {{MODEL_KEY::ICON, "ico
                                                           {MODEL_KEY::EXECUTABLE, "executable"},
                                                           {MODEL_KEY::VALUE, "value"},
                                                           {MODEL_KEY::KEY, "key"}
-                                                          
+
 };
 
 static const QHash<QString, FMH::MODEL_KEY> MODEL_NAME_KEY = {{MODEL_NAME[MODEL_KEY::ICON], MODEL_KEY::ICON},
@@ -573,7 +573,6 @@ static const QHash<QString, FMH::MODEL_KEY> MODEL_NAME_KEY = {{MODEL_NAME[MODEL_
                                                               {MODEL_NAME[MODEL_KEY::EXECUTABLE], MODEL_KEY::EXECUTABLE},
                                                               {MODEL_NAME[MODEL_KEY::VALUE], MODEL_KEY::VALUE},
                                                               {MODEL_NAME[MODEL_KEY::KEY], MODEL_KEY::KEY}};
-                                                              
 
 typedef QHash<FMH::MODEL_KEY, QString> MODEL;
 typedef QVector<MODEL> MODEL_LIST;

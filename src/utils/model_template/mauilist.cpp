@@ -49,9 +49,7 @@ bool MauiList::exists(const FMH::MODEL_KEY &key, const QString &value) const
 int MauiList::indexOf(const FMH::MODEL_KEY &key, const QString &value) const
 {
     const auto items = this->items();
-    const auto it = std::find_if(items.constBegin(), items.constEnd(), [&](const FMH::MODEL &item) -> bool {
-        return item[key] == value;
-    });
+    const auto it = std::find_if(items.constBegin(), items.constEnd(), [&](const FMH::MODEL &item) -> bool { return item[key] == value; });
 
     if (it != items.constEnd())
         return this->mappedIndexFromSource(std::distance(items.constBegin(), it));

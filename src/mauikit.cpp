@@ -228,20 +228,19 @@ void MauiKit::registerTypes(const char *uri)
 #endif
     qmlRegisterUncreatableType<MauiApp>(uri, 1, 0, "App", "Cannot be created App");
 
-	/** HELPERS **/
-	qmlRegisterSingletonType<Handy>(uri, 1, 0, "Handy",
-									[](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject* {
-		Q_UNUSED(engine)
-		Q_UNUSED(scriptEngine)
-		return new Handy;
-	});
-    
-    	/** MAUI PLUGIN SUPPORT **/
+    /** HELPERS **/
+    qmlRegisterSingletonType<Handy>(uri, 1, 0, "Handy", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+        return new Handy;
+    });
+
+    /** MAUI PLUGIN SUPPORT **/
 #ifdef SUPPORT_PLUGINS
-	qmlRegisterType(componentUrl(QStringLiteral("AppViewsPlugin.qml")), uri, 1, 2, "AppViewsPlugin");
-	qmlRegisterType(componentUrl(QStringLiteral("PagePlugin.qml")), uri, 1, 2, "PagePlugin");
-	qmlRegisterType(componentUrl(QStringLiteral("PluginManager.qml")), uri, 1, 2, "PluginManager");
-	qmlRegisterType(componentUrl(QStringLiteral("PluginsInfo.qml")), uri, 1, 2, "PluginsInfo");
+    qmlRegisterType(componentUrl(QStringLiteral("AppViewsPlugin.qml")), uri, 1, 2, "AppViewsPlugin");
+    qmlRegisterType(componentUrl(QStringLiteral("PagePlugin.qml")), uri, 1, 2, "PagePlugin");
+    qmlRegisterType(componentUrl(QStringLiteral("PluginManager.qml")), uri, 1, 2, "PluginManager");
+    qmlRegisterType(componentUrl(QStringLiteral("PluginsInfo.qml")), uri, 1, 2, "PluginsInfo");
 #endif
 
     this->initResources();
