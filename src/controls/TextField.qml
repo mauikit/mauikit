@@ -111,21 +111,21 @@ TextField
 		
 		MenuItem
 		{
-			text: qsTr("Copy")
+			text: i18n("Copy")
 			onTriggered: control.copy()
 			enabled: control.selectedText.length
 		}
 		
 		MenuItem
 		{
-			text: qsTr("Cut")			
+			text: i18n("Cut")			
 			onTriggered: control.cut()
 			enabled: control.selectedText.length
 		}
 		
 		MenuItem
 		{
-			text: qsTr("Paste")
+			text: i18n("Paste")
 			onTriggered:
 			{
 				var text = control.paste()
@@ -135,21 +135,21 @@ TextField
 		
 		MenuItem
 		{
-			text: qsTr("Select All")
+			text: i18n("Select All")
 			onTriggered: control.selectAll()
 			enabled: control.text.length
 		}
 		
 		MenuItem
 		{
-			text: qsTr("Undo")
+			text: i18n("Undo")
 			onTriggered: control.undo()
 			enabled: control.canUndo
 		}
 		
 		MenuItem
 		{
-			text: qsTr("Redo")
+			text: i18n("Redo")
 			onTriggered: control.redo()
 			enabled: control.canRedo
 			

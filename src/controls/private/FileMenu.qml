@@ -27,7 +27,7 @@ Menu
     MenuItem
     {
         visible: !control.isExec && selectionBar
-        text: qsTr("Select")
+        text: i18n("Select")
         icon.name: "edit-select"		
         onTriggered:
         {			
@@ -42,7 +42,7 @@ Menu
     MenuItem
     {
         visible: !control.isExec && tagsDialog
-        text: qsTr("Add Tags")
+        text: i18n("Add Tags")
         icon.name: "tag"
         onTriggered:
         {
@@ -53,7 +53,7 @@ Menu
     
     MenuItem
     {
-        text: control.isFav ? qsTr("Remove from Favorites") : qsTr("Add to Favorites")
+        text: control.isFav ? i18n("Remove from Favorites") : i18n("Add to Favorites")
         icon.name: "love"		
         onTriggered:
         {			
@@ -65,7 +65,7 @@ Menu
     MenuItem
     {
         visible: !control.isExec && control.isDir
-        text: qsTr("Add to Bookmarks")
+        text: i18n("Add to Bookmarks")
         icon.name: "bookmark-new"
         onTriggered:
         {
@@ -79,7 +79,7 @@ Menu
     MenuItem
     {
         visible: !control.isExec && shareDialog	
-        text: qsTr("Share")
+        text: i18n("Share")
         icon.name: "document-share"
         onTriggered:
         {
@@ -91,7 +91,7 @@ Menu
     MenuItem
     {
 		visible: !control.isExec && previewer
-		text: qsTr("Preview")
+		text: i18n("Preview")
 		icon.name: "view-preview"
 		onTriggered:
 		{
@@ -103,7 +103,7 @@ Menu
     MenuItem
     {
         visible: !control.isExec && openWithDialog	
-        text: qsTr("Open with")
+        text: i18n("Open with")
         icon.name: "document-open"
         onTriggered:
         {
@@ -117,7 +117,7 @@ Menu
     MenuItem
     {
         visible: !control.isExec
-        text: qsTr("Copy")
+        text: i18n("Copy")
         icon.name: "edit-copy"
         onTriggered:
         {
@@ -129,7 +129,7 @@ Menu
     MenuItem
     {
         visible: !control.isExec
-        text: qsTr("Cut")
+        text: i18n("Cut")
         icon.name: "edit-cut"
         onTriggered:
         {
@@ -141,7 +141,7 @@ Menu
     MenuItem
     {
         visible: !control.isExec
-        text: qsTr("Rename")
+        text: i18n("Rename")
         icon.name: "edit-rename"
         onTriggered:
         {
@@ -154,7 +154,7 @@ Menu
     
     MenuItem
     {
-        text: qsTr("Remove")
+        text: i18n("Remove")
         Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
         icon.name: "edit-delete"
         onTriggered:

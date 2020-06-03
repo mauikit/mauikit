@@ -9,8 +9,8 @@ Maui.Dialog
 	
 	signal finished(string text)
 	
-    acceptText: qsTr("Accept")
-    rejectText: qsTr("Cancel")
+    acceptText: i18n("Accept")
+    rejectText: i18n("Cancel")
 	onAccepted: done()
 	onRejected: textEntry.clear()
     page.margins: Maui.Style.space.huge

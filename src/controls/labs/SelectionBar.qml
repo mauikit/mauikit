@@ -466,7 +466,7 @@ Item
         }else
         {
             selectionList.currentIndex = index
-            //             notify(item.icon, qsTr("Item already selected!"), String("The item '%1' is already in the selection box").arg(item.label), null, 4000)
+            //             notify(item.icon, i18n("Item already selected!"), String("The item '%1' is already in the selection box").arg(item.label), null, 4000)
         }
         
         animate()

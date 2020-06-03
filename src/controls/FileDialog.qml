@@ -54,15 +54,15 @@ Maui.Dialog
 	
 	signal urlsSelected(var urls)
 	
-	rejectButton.text: qsTr("Cancel")
-	acceptButton.text: control.mode === modes.SAVE ? qsTr("Save") : qsTr("Open")
+	rejectButton.text: i18n("Cancel")
+	acceptButton.text: control.mode === modes.SAVE ? i18n("Save") : i18n("Open")
 
     footBar.visible: control.mode === modes.SAVE
     footBar.middleContent: Maui.TextField
 	{
 		id: _textField
 		Layout.fillWidth: true
-		placeholderText: qsTr("File name...")
+		placeholderText: i18n("File name...")
 		text: suggestedFileName
 	}
 	
@@ -99,7 +99,7 @@ Maui.Dialog
 		
 		Maui.TextField
 		{
-			placeholderText: qsTr("Search for files... ")
+			placeholderText: i18n("Search for files... ")
 			onAccepted: browser.search(text)
 			onCleared: browser.quitSearch()
 			onGoBackTriggered:
@@ -144,11 +144,11 @@ Maui.Dialog
 	{
 		id: _confirmationDialog
 		
-		acceptButton.text: qsTr("Yes")
-		rejectButton.text: qsTr("No")
+		acceptButton.text: i18n("Yes")
+		rejectButton.text: i18n("No")
 		
-		title: qsTr("A file named %1 already exists!").arg(textField.text)
-		message: qsTr("This action will overwrite %1. Are you sure you want to do this?").arg(textField.text)	
+		title: i18n("A file named %1 already exists!").arg(textField.text)
+		message: i18n("This action will overwrite %1. Are you sure you want to do this?").arg(textField.text)	
 		
 		onAccepted: control.done()
 		onRejected: close()
@@ -203,7 +203,7 @@ Maui.Dialog
 						
 						MenuItem
 						{
-							text: qsTr("Show Folders First")
+							text: i18n("Show Folders First")
 							checked: browser.currentFMList.foldersFirst
 							checkable: true
 							onTriggered: browser.currentFMList.foldersFirst = !browser.currentFMList.foldersFirst
@@ -213,7 +213,7 @@ Maui.Dialog
 						
 						MenuItem
 						{
-							text: qsTr("Type")
+							text: i18n("Type")
 							checked: browser.currentFMList.sortBy === Maui.FMList.MIME
 							checkable: true
 							onTriggered: browser.currentFMList.sortBy = Maui.FMList.MIME
@@ -222,7 +222,7 @@ Maui.Dialog
 						
 						MenuItem
 						{
-							text: qsTr("Date")
+							text: i18n("Date")
 							checked: browser.currentFMList.sortBy === Maui.FMList.DATE
 							checkable: true
 							onTriggered: browser.currentFMList.sortBy = Maui.FMList.DATE
@@ -231,7 +231,7 @@ Maui.Dialog
 						
 						MenuItem
 						{
-							text: qsTr("Modified")
+							text: i18n("Modified")
 							checkable: true
 							checked: browser.currentFMList.sortBy === Maui.FMList.MODIFIED
 							onTriggered: browser.currentFMList.sortBy = Maui.FMList.MODIFIED
@@ -240,7 +240,7 @@ Maui.Dialog
 						
 						MenuItem
 						{
-							text: qsTr("Size")
+							text: i18n("Size")
 							checkable: true
 							checked: browser.currentFMList.sortBy === Maui.FMList.SIZE
 							onTriggered: browser.currentFMList.sortBy = Maui.FMList.SIZE
@@ -249,7 +249,7 @@ Maui.Dialog
 						
 						MenuItem
 						{
-							text: qsTr("Name")
+							text: i18n("Name")
 							checkable: true
 							checked: browser.currentFMList.sortBy === Maui.FMList.LABEL
 							onTriggered: browser.currentFMList.sortBy = Maui.FMList.LABEL
@@ -261,7 +261,7 @@ Maui.Dialog
 						MenuItem
 						{
 							id: groupAction
-							text: qsTr("Group")
+							text: i18n("Group")
 							checkable: true
 							checked: browser.settings.group
 							onTriggered:
@@ -324,21 +324,21 @@ Maui.Dialog
 						Action
 						{
 							icon.name: "view-list-icons"
-							text: qsTr("Grid")
+							text: i18n("Grid")
 							shortcut: "Ctrl+G"
 						}
 						
 						Action
 						{
 							icon.name: "view-list-details"
-							text: qsTr("List")
+							text: i18n("List")
 							shortcut: "Ctrl+L"
 						}
 						
 						Action
 						{
 							icon.name: "view-file-columns"
-							text: qsTr("Columns")
+							text: i18n("Columns")
 							shortcut: "Ctrl+M"
 						}
 					}					

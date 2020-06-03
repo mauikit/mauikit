@@ -94,7 +94,7 @@ Maui.ItemDelegate
         iconSource: model.icon
         
         label1.text: model.label ? model.label : ""
-        label3.text : model.mime ? (model.mime === "inode/directory" ? (model.count ? model.count + qsTr(" items") : "") : Maui.FM.formatSize(model.size)) : ""
+        label3.text : model.mime ? (model.mime === "inode/directory" ? (model.count ? model.count + i18n(" items") : "") : Maui.FM.formatSize(model.size)) : ""
         label4.text: model.modified ? Maui.FM.formatDate(model.modified, "MM/dd/yyyy") : "" 
 		
 		onToggled: control.toggled(state)

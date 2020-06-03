@@ -37,7 +37,7 @@ Maui.Dialog
 	
 	defaultButtons: false
 		
-	page.title: qsTr("Open with")
+	page.title: i18n("Open with")
 	headBar.visible: true
 		
 	Maui.GridBrowser

@@ -22,8 +22,8 @@ Maui.Dialog
 	maxHeight: Maui.Style.unit * 500
 	page.margins: Maui.Style.space.medium
 	
-	acceptButton.text: qsTr("Add")
-	rejectButton.text: qsTr("Cancel")
+	acceptButton.text: i18n("Add")
+	rejectButton.text: i18n("Cancel")
 	
 	onAccepted: setTags()
 	onRejected: close()	
@@ -40,7 +40,7 @@ Maui.Dialog
 			
 			MenuItem
 			{
-				text: qsTr("Sort by name")
+				text: i18n("Sort by name")
 				checkable: true
 				autoExclusive: true
 				checked: _tagsList.sortBy === TagsList.TAG
@@ -49,7 +49,7 @@ Maui.Dialog
 			
 			MenuItem
 			{
-				text: qsTr("Sort by date")
+				text: i18n("Sort by date")
 				checkable: true
 				autoExclusive: true
 				checked: _tagsList.sortBy === TagsList.ADD_DATE
@@ -62,7 +62,7 @@ Maui.Dialog
 	{
 		id: tagText
 		Layout.fillWidth: true
-		placeholderText: qsTr("Add a new tag...")
+		placeholderText: i18n("Add a new tag...")
 		onAccepted:
 		{
 			const tags = tagText.text.split(",")
@@ -113,8 +113,8 @@ Maui.Dialog
                 holder.emoji: "qrc:/assets/Electricity.png"
                 holder.visible: _listView.count === 0
                 holder.isMask: false
-                holder.title : qsTr("No tags!")
-                holder.body: qsTr("Start by creating tags")
+                holder.title : i18n("No tags!")
+                holder.body: i18n("Start by creating tags")
                 holder.emojiSize: Maui.Style.iconSizes.huge
 				
 				model: _tagsModel

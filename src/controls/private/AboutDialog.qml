@@ -157,7 +157,7 @@ Maui.Dialog
                 {
                     color: Kirigami.Theme.textColor
                     Layout.fillWidth: true
-                    text: qsTr("By ") + Maui.App.org
+                    text: i18n("By ") + Maui.App.org
                     font.pointSize: Maui.Style.fontSizes.default
                     elide: Text.ElideRight
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -175,7 +175,7 @@ Maui.Dialog
                     visible: _creditsRepeater.count > 0
                     color: Kirigami.Theme.textColor
                     Layout.fillWidth: true
-                    text: qsTr("Credits")
+                    text: i18n("Credits")
                     font.pointSize: Maui.Style.fontSizes.default
                     elide: Text.ElideRight
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -232,7 +232,7 @@ Maui.Dialog
                     color: Kirigami.Theme.textColor
                     Layout.fillWidth: true
                     
-                    text: qsTr("Powered by") + " <a href='https://mauikit.org'>MauiKit</a> " +
+                    text: i18n("Powered by") + " <a href='https://mauikit.org'>MauiKit</a> " +
                     Maui.App.mauikitVersion + " and  <a href='https://kde.org/products/kirigami'>Kirigami</a>"
                     font.pointSize: Maui.Style.fontSizes.default
                     elide: Text.ElideRight

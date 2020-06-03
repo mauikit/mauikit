@@ -27,7 +27,7 @@ Maui.Dialog
 	}
 	
 	rejectButton.visible: false
-	acceptButton.text: qsTr("Add account...") 
+	acceptButton.text: i18n("Add account...") 
 	onAccepted: _syncDialog.open()		
 
     footBar.leftContent: ToolButton
@@ -47,11 +47,11 @@ Maui.Dialog
 		id: _removeDialog
 		
 		maxWidth: Maui.Style.unit * 400
-		title: qsTr("Remove Account")
-		message: qsTr("Are you sure you want to remove this account?")
+		title: i18n("Remove Account")
+		message: i18n("Are you sure you want to remove this account?")
 		page.margins: control.page.margins
 		
-		rejectButton.text: qsTr("Delete Account")
+		rejectButton.text: i18n("Delete Account")
 		// 			rejectButton.visible: false
 		
 		onRejected: 
@@ -65,7 +65,7 @@ Maui.Dialog
 		
 		footBar.rightContent: Button
 		{
-			text: qsTr("Delete Account and Files")			
+			text: i18n("Delete Account and Files")			
 			onClicked: 
 			{
 				var account = Maui.App.accounts.get(_listView.currentIndex)
@@ -81,7 +81,7 @@ Maui.Dialog
 		
 		MenuItem
 		{
-			text: qsTr("Remove...")
+			text: i18n("Remove...")
 			Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
 			
 			onTriggered: _removeDialog.open()
@@ -129,8 +129,8 @@ Maui.Dialog
 			isGif: false
             emojiSize: Maui.Style.iconSizes.huge
             emoji: "qrc:/assets/dialog-information.svg"
-            title: qsTr("No accounts yet!")
-			body: qsTr("Start adding new accounts to sync your files, music, contacts, images, notes, etc...")
+            title: i18n("No accounts yet!")
+			body: i18n("Start adding new accounts to sync your files, music, contacts, images, notes, etc...")
 		}		
 	}
 	

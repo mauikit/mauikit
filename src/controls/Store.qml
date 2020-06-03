@@ -47,7 +47,7 @@ Maui.Page
 		limit : 20	
 		onDownloadReady:
 		{
-			notify("dialog-information", "Download ready...", qsTr("%1 is ready to use.\nFile has been saved in your machine at:\n %2", item.label, item.path), function()
+			notify("dialog-information", "Download ready...", i18n("%1 is ready to use.\nFile has been saved in your machine at:\n %2", item.label, item.path), function()
 			{
 				openFile(item.path)
 			})
@@ -61,7 +61,7 @@ Maui.Page
 	{
 		id: _previousPageButton
 		icon.name: "go-previous"
-		text: qsTr("Previous")
+		text: i18n("Previous")
 		enabled: _storeList.contentReady
 		onClicked:
 		{
@@ -85,7 +85,7 @@ Maui.Page
 	{
 		id: _nextPageButton
 		icon.name: "go-next"
-		text: qsTr("Next")
+		text: i18n("Next")
 		enabled: _storeList.contentReady
 		
 		onClicked:
@@ -98,7 +98,7 @@ Maui.Page
 	headBar.middleContent: Maui.TextField
 	{
 		Layout.fillWidth: true
-		placeholderText: qsTr("Search...")
+		placeholderText: i18n("Search...")
 		onAccepted: _storeList.query = text
 		onCleared: _storeList.query = ""
 	}
@@ -132,7 +132,7 @@ Maui.Page
 			id: sortMenu			
 			MenuItem
 			{
-				text: qsTr("Title")
+				text: i18n("Title")
 				checkable: true
 				checked: _storeList.sortBy === StoreList.LABEL
 				onTriggered: _storeList.sortBy = StoreList.LABEL
@@ -140,7 +140,7 @@ Maui.Page
 			
 			MenuItem
 			{
-				text: qsTr("Rating")
+				text: i18n("Rating")
 				checkable: true
 				checked: _storeList.sortBy === StoreList.RATE
 				onTriggered: _storeList.sortBy = StoreList.RATE
@@ -148,7 +148,7 @@ Maui.Page
 			
 			MenuItem
 			{
-				text: qsTr("Downloads")
+				text: i18n("Downloads")
 				checkable: true
 				checked: _storeList.sortBy === StoreList.COUNT
 				onTriggered: _storeList.sortBy = StoreList.COUNT
@@ -156,7 +156,7 @@ Maui.Page
 			
 			MenuItem
 			{
-				text: qsTr("Newest")
+				text: i18n("Newest")
 				checkable: true
 				checked: _storeList.sortBy === StoreList.DATE
 				onTriggered: _storeList.sortBy = StoreList.DATE
@@ -180,14 +180,14 @@ Maui.Page
 			isGif: !_storeList.contentReady
 			isMask: false
 			title : if(!_storeList.contentReady)
-			qsTr("Loading content!")
+			i18n("Loading content!")
 			else
-				qsTr("Nothing here")
+				i18n("Nothing here")
 				
 				body: if(!_storeList.contentReady)
-				qsTr("Almost ready!")
+				i18n("Almost ready!")
 				else
-					qsTr("Make sure you're online and your cloud account is working")
+					i18n("Make sure you're online and your cloud account is working")
 	}
 	
 	Component
@@ -323,14 +323,14 @@ Maui.Page
 		maxWidth: Maui.Style.unit * 800
 		page.padding: 0
 		
-		acceptButton.text: qsTr("Download")
+		acceptButton.text: i18n("Download")
 		rejectButton.visible: false
 	
 		
 		footBar.rightContent: Button
 		{
 			id: _openButton
-			text: qsTr("Open...")
+			text: i18n("Open...")
 			onClicked:
 			{
 				openFile(_storeList.itemLocalPath(layout.currentIndex))
@@ -483,7 +483,7 @@ Maui.Page
 				Layout.preferredHeight: rowHeightAlt
 				wrapMode: Text.Wrap
 				elide: Qt.ElideRight
-				text: qsTr("Rating: ") + _previewerDialog.currentItem.rate
+				text: i18n("Rating: ") + _previewerDialog.currentItem.rate
 				horizontalAlignment: Qt.AlignLeft
 				verticalAlignment: Qt.AlignVCenter
 				color: Kirigami.Theme.textColor
@@ -498,7 +498,7 @@ Maui.Page
 				Layout.preferredHeight: rowHeightAlt
 				wrapMode: Text.Wrap
 				elide: Qt.ElideRight
-				text: qsTr("Downloads: ") + _previewerDialog.currentItem.count
+				text: i18n("Downloads: ") + _previewerDialog.currentItem.count
 				horizontalAlignment: Qt.AlignLeft
 				verticalAlignment: Qt.AlignVCenter
 				color: Kirigami.Theme.textColor
@@ -513,7 +513,7 @@ Maui.Page
 // 				Layout.preferredHeight: rowHeightAlt
 // 				wrapMode: Text.Wrap
 // 				elide: Qt.ElideRight
-// 				text: qsTr("License: ") + _previewerDialog.currentItem.license
+// 				text: i18n("License: ") + _previewerDialog.currentItem.license
 // 				horizontalAlignment: Qt.AlignLeft
 // 				verticalAlignment: Qt.AlignVCenter
 // 				color: textColor
@@ -528,7 +528,7 @@ Maui.Page
 				Layout.preferredHeight: rowHeightAlt
 				wrapMode: Text.Wrap
 				elide: Qt.ElideRight
-				text: qsTr("Date: ") + _previewerDialog.currentItem.date
+				text: i18n("Date: ") + _previewerDialog.currentItem.date
 				horizontalAlignment: Qt.AlignLeft
 				verticalAlignment: Qt.AlignVCenter
 				color: Kirigami.Theme.textColor
@@ -543,7 +543,7 @@ Maui.Page
 				
 				wrapMode: Text.Wrap
 				elide: Qt.ElideRight
-				text: qsTr("Tags: ") + _previewerDialog.currentItem.tag
+				text: i18n("Tags: ") + _previewerDialog.currentItem.tag
 				horizontalAlignment: Qt.AlignLeft
 				verticalAlignment: Qt.AlignVCenter
 				color: Kirigami.Theme.textColor

@@ -43,11 +43,11 @@ Maui.Dialog
 	defaultButtons: true
         
         rejectButton.visible: false
-        acceptButton.text: qsTr("Open with")
+        acceptButton.text: i18n("Open with")
         onAccepted:  control.openWith()
         
         
-        page.title: qsTr("Share with")
+        page.title: i18n("Share with")
         headBar.visible: true
         
         headBar.leftContent: ToolButton

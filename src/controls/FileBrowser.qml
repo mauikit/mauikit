@@ -92,7 +92,7 @@ Maui.Page
 	headBar.visible: false
 	headBar.leftContent: ToolButton
 	{
-		text: qsTr("Back")
+		text: i18n("Back")
 		icon.name: "go-previous"
 		onClicked: control.quitSearch()		
 		visible: control.isSearchView		
@@ -102,7 +102,7 @@ Maui.Page
 	{
 		id: _searchField
 		Layout.fillWidth: true
-		placeholderText: qsTr("Search")
+		placeholderText: i18n("Search")
 		onAccepted: control.search(text)
 	}
 	
@@ -142,7 +142,7 @@ Maui.Page
 	{
 		visible: String(control.currentPath).startsWith("trash:/")
 		icon.name: "trash-empty"
-		text: qsTr("Empty Trash")
+		text: i18n("Empty Trash")
 		onClicked: Maui.FM.emptyTrash()
 	}	
 	
@@ -162,9 +162,9 @@ Maui.Page
 			property var urls: []
 			
 			title:  "Removing %1 files".arg(urls.length)
-			message: Maui.Handy.isAndroid ?  qsTr("This action will completely remove your files from your system. This action can not be undone.") : qsTr("You can move the file to the trash or delete it completely from your system. Which one do you prefer?")
-			rejectButton.text: qsTr("Delete")
-			acceptButton.text: qsTr("Trash")
+			message: Maui.Handy.isAndroid ?  i18n("This action will completely remove your files from your system. This action can not be undone.") : i18n("You can move the file to the trash or delete it completely from your system. Which one do you prefer?")
+			rejectButton.text: i18n("Delete")
+			acceptButton.text: i18n("Trash")
 			acceptButton.visible: Maui.Handy.isLinux
 			page.margins: Maui.Style.space.huge
 			
@@ -177,7 +177,7 @@ Maui.Page
                     id: _removeDialogFilesCheckBox
                     Layout.fillWidth: true
                     
-                    text: qsTr("List files")
+                    text: i18n("List files")
                 }
                 
                 Kirigami.ScrollablePage
@@ -233,12 +233,12 @@ Maui.Page
 		
 		Maui.NewDialog
 		{
-			title: qsTr("New Folder")
-			message: qsTr("Create a new folder with a custom name")
-			acceptButton.text: qsTr("Create")
+			title: i18n("New Folder")
+			message: i18n("Create a new folder with a custom name")
+			acceptButton.text: i18n("Create")
 			onFinished: control.currentFMList.createDir(text)
 			rejectButton.visible: false
-			textEntry.placeholderText: qsTr("Folder name")
+			textEntry.placeholderText: i18n("Folder name")
 		}
 	}
 	
@@ -248,12 +248,12 @@ Maui.Page
 		
 		Maui.NewDialog
 		{
-			title: qsTr("New File")
-			message: qsTr("Create a new file with a custom name and extension")
-			acceptButton.text: qsTr("Create")
+			title: i18n("New File")
+			message: i18n("Create a new file with a custom name and extension")
+			acceptButton.text: i18n("Create")
 			onFinished: Maui.FM.createFile(control.currentPath, text)
 			rejectButton.visible: false
-			textEntry.placeholderText: qsTr("Filename")
+			textEntry.placeholderText: i18n("Filename")
 		}
 	}
 	
@@ -263,14 +263,14 @@ Maui.Page
 		Maui.NewDialog
 		{
             property var item : control.currentFMList ? control.currentFMList.get(control.currentView.currentIndex) : ({})
-			title: qsTr("Rename File")
-			message: qsTr("Rename a file or folder")
+			title: i18n("Rename File")
+			message: i18n("Rename a file or folder")
 			textEntry.text: item.label
-			textEntry.placeholderText: qsTr("New name")
+			textEntry.placeholderText: i18n("New name")
 			onFinished: Maui.FM.rename(item.path, textEntry.text)
 			onRejected: close()
-			acceptText: qsTr("Rename")
-			rejectText: qsTr("Cancel")
+			acceptText: i18n("Rename")
+			rejectText: i18n("Cancel")
 		}
 	}
 	
@@ -622,7 +622,7 @@ Maui.Page
 				
 				MenuItem
 				{
-					text: qsTr("Copy here")
+					text: i18n("Copy here")
 					onTriggered:
 					{
 						const urls = _dropMenu.urls.split(",")
@@ -632,7 +632,7 @@ Maui.Page
 				
 				MenuItem
 				{
-					text: qsTr("Move here")
+					text: i18n("Move here")
 					onTriggered:
 					{
 						const urls = _dropMenu.urls.split(",")
@@ -642,7 +642,7 @@ Maui.Page
 				
 				MenuItem
 				{
-					text: qsTr("Link here")
+					text: i18n("Link here")
 					onTriggered:
 					{
 						const urls = _dropMenu.urls.split(",")
@@ -951,7 +951,7 @@ Maui.Page
     function search(query)
 	{
         openSearch()
-        _stackView.currentItem.title = qsTr("Search: %1").arg(query)
+        _stackView.currentItem.title = i18n("Search: %1").arg(query)
         _stackView.currentItem.currentFMList.search(query, _browser.currentFMList)
     }
     

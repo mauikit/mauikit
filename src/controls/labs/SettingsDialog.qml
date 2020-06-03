@@ -14,12 +14,12 @@ Maui.Dialog
     maxWidth: 350
     defaultButtons: false
         
-        page.title: qsTr("Settings")
+        page.title: i18n("Settings")
 //        page.flickable: _flickable
         headBar.visible: true        
         
-        acceptButton.text: qsTr("Apply")
-        rejectButton.text: qsTr("Cancel")
+        acceptButton.text: i18n("Apply")
+        rejectButton.text: i18n("Cancel")
         
         ScrollView
         {

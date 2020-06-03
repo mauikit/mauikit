@@ -69,17 +69,17 @@ Maui.SideBar
 		
 		MenuItem
 		{
-			text: qsTr("Edit...")
+			text: i18n("Edit...")
 		}
 		
 		MenuItem
 		{
-			text: qsTr("Hide")
+			text: i18n("Hide")
 		}
 		
 		MenuItem
 		{
-			text: qsTr("Remove")
+			text: i18n("Remove")
 			Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
 			onTriggered: list.removePlace(control.currentIndex)
 		}

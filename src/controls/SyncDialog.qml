@@ -28,8 +28,8 @@ Maui.Dialog
     id: control
 
     property bool customServer: false
-    acceptText: qsTr("Sign In")
-    rejectText: qsTr("Cancel")
+    acceptText: i18n("Sign In")
+    rejectText: i18n("Cancel")
     rejectButton.visible: false
     page.margins: Maui.Style.space.medium
     
@@ -43,7 +43,7 @@ Maui.Dialog
     
     footBar.leftContent: Button
     {
-        text: qsTr("Sign up")
+        text: i18n("Sign up")
         visible: !customServer
         onClicked: Qt.openUrlExternally("https://www.opendesktop.org/register")
     }
@@ -97,7 +97,7 @@ Maui.Dialog
             {
                 id: userField
                 Layout.fillWidth: true
-                placeholderText: qsTr("Username")
+                placeholderText: i18n("Username")
 				inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhSensitiveData
             }
 
@@ -105,7 +105,7 @@ Maui.Dialog
             {
                 id: passwordField
                 Layout.fillWidth: true
-                placeholderText: qsTr("Password")
+                placeholderText: i18n("Password")
 				echoMode: TextInput.Password
                 passwordMaskDelay: 300
                 inputMethodHints: Qt.ImhNoAutoUppercase
@@ -117,7 +117,7 @@ Maui.Dialog
                 id: serverField
                 visible: customServer
                 Layout.fillWidth: true
-                placeholderText: qsTr("Server address")
+                placeholderText: i18n("Server address")
 				inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoAutoUppercase
                 text: customServer ? "" : "https://cloud.opendesktop.cc/cloud/remote.php/webdav/"
             }            
@@ -126,7 +126,7 @@ Maui.Dialog
             {
                 Layout.fillWidth: true
                 icon.name: "filename-space-amarok"
-                text: customServer ? qsTr("opendesktop") : qsTr("Custom server")
+                text: customServer ? i18n("opendesktop") : i18n("Custom server")
                 onClicked: customServer = !customServer
             }
         }

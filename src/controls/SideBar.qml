@@ -184,7 +184,7 @@ Maui.AbstractSideBar
             ToolTip.delay: 1000
             ToolTip.timeout: 5000
             ToolTip.visible: _handle.containsMouse || _handle.containsPress
-            ToolTip.text: qsTr("Toogle SideBar")
+            ToolTip.text: i18n("Toogle SideBar")
 
             Rectangle
             {

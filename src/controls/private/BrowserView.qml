@@ -120,7 +120,7 @@ Maui.Page
         
         MenuItem
         {
-            text: qsTr("Copy here")
+            text: i18n("Copy here")
             onTriggered:
             {
                 const urls = _dropMenu.urls.split(",")
@@ -130,7 +130,7 @@ Maui.Page
         
         MenuItem
         {
-            text: qsTr("Move here")
+            text: i18n("Move here")
             onTriggered:
             {
                 const urls = _dropMenu.urls.split(",")
@@ -140,7 +140,7 @@ Maui.Page
         
         MenuItem
         {
-            text: qsTr("Link here")
+            text: i18n("Link here")
             onTriggered:
             {
                 const urls = _dropMenu.urls.split(",")
@@ -153,7 +153,7 @@ Maui.Page
         
         MenuItem
         {
-            text: qsTr("Cancel")
+            text: i18n("Cancel")
             onTriggered: _dropMenu.close()
         }
 	}    

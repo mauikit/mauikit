@@ -10,7 +10,7 @@ Menu
     MenuItem
     {
 		icon.name: "bookmark-new"
-		text: qsTr("Bookmark")
+		text: i18n("Bookmark")
 		onTriggered: bookmarkFolder([currentPath])
 //         enabled: _optionsButton.enabled
     }
@@ -18,7 +18,7 @@ Menu
     MenuItem
     {
 		icon.name: "folder-add"
-		text: qsTr("New folder")
+		text: i18n("New folder")
 //         enabled: _optionsButton.enabled
 
 		onTriggered:
@@ -31,7 +31,7 @@ Menu
     MenuItem
     {
 		icon.name: "document-new"
-		text: qsTr("New file")
+		text: i18n("New file")
 //         enabled: _optionsButton.enabled
 
 		onTriggered:
@@ -45,7 +45,7 @@ Menu
     
     MenuItem
     {
-		text: qsTr("Paste")
+		text: i18n("Paste")
 //         enabled: _optionsButton.enabled
 
 		icon.name: "edit-paste"
@@ -57,7 +57,7 @@ Menu
     
     MenuItem
     {
-		text: qsTr("Select all")
+		text: i18n("Select all")
 		icon.name: "edit-select-all"
 		onTriggered: selectAll()
     }

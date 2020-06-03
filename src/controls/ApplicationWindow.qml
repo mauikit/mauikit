@@ -177,7 +177,7 @@ Window
 
                 MenuItem
                 {
-                    text: qsTr("About")
+                    text: i18n("About")
                     icon.name: "documentinfo"
                     onTriggered: aboutDialog.open()
                 }
@@ -385,7 +385,7 @@ Window
                 Layout.margins: Maui.Style.space.small
                 Layout.preferredHeight: implicitHeight
                 Layout.alignment: Qt.AlignCenter
-                text: qsTr("Manage accounts")
+                text: i18n("Manage accounts")
                 icon.name: "list-add-user"
                 onClicked:
                 {

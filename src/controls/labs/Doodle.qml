@@ -69,7 +69,7 @@ Maui.Dialog
         Action
         {
             icon.name: "draw-highlight"
-            text: qsTr("Highlighter")
+            text: i18n("Highlighter")
             onTriggered: 
             {                    
                 control.paintColor = "yellow"
@@ -82,7 +82,7 @@ Maui.Dialog
         Action
         {
             icon.name: "draw-brush"
-            text: qsTr("Marker")
+            text: i18n("Marker")
             onTriggered: 
             {                    
                 control.paintColor = "blue"
@@ -95,7 +95,7 @@ Maui.Dialog
         Action
         {
             icon.name: "draw-calligraphic"
-            text: qsTr("Highlighter")
+            text: i18n("Highlighter")
             onTriggered: 
             {                    
                 control.paintColor = "#333"

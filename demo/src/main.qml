@@ -23,7 +23,7 @@ Maui.ApplicationWindow
 
         Maui.MenuItem
         {
-            text: qsTr("File dialog")
+            text: i18n("File dialog")
             icon.name: "folder-open"
             onTriggered:
             {
@@ -49,7 +49,7 @@ Maui.ApplicationWindow
             spacing: space.medium
             checked: currentPageIndex === 0
             onClicked: currentPageIndex = 0
-            text: qsTr("Home")
+            text: i18n("Home")
 
         },
 
@@ -61,7 +61,7 @@ Maui.ApplicationWindow
             spacing: space.medium
             checked: currentPageIndex === 1
             onClicked: currentPageIndex = 1
-            text: qsTr("Browser")
+            text: i18n("Browser")
         },
 
         ToolButton
@@ -72,7 +72,7 @@ Maui.ApplicationWindow
             spacing: space.medium
             checked: currentPageIndex === 2
             onClicked: currentPageIndex = 2
-            text: qsTr("Editor")
+            text: i18n("Editor")
         },
 
         ToolButton
@@ -83,7 +83,7 @@ Maui.ApplicationWindow
             spacing: space.medium
             checked: currentPageIndex === 3
             onClicked: currentPageIndex = 3
-            text: qsTr("Store")
+            text: i18n("Store")
         }
     ]
 
@@ -146,19 +146,19 @@ Maui.ApplicationWindow
         actions: [
         Kirigami.Action
             {
-                text: qsTr("Shopping")
+                text: i18n("Shopping")
                 iconName: "cpu"
             },
 
             Kirigami.Action
                 {
-                    text: qsTr("Notes")
+                    text: i18n("Notes")
                 iconName: "send-sms"
                 },
 
             Kirigami.Action
                 {
-                    text: qsTr("Example 3")
+                    text: i18n("Example 3")
                 iconName: "love"
                 }
 
@@ -249,7 +249,7 @@ Maui.ApplicationWindow
             headBar.rightContent: ToolButton
             {
                 icon.name: "documentinfo"
-                text: qsTr("Notify")
+                text: i18n("Notify")
 
                 onClicked:
                 {
@@ -258,8 +258,8 @@ Maui.ApplicationWindow
                         _batteryBtn.visible = true
                     }
 
-                    notify("battery", qsTr("Plug your device"),
-                           qsTr("Your device battery level is below 20%, please plug your device to a power supply"),
+                    notify("battery", i18n("Plug your device"),
+                           i18n("Your device battery level is below 20%, please plug your device to a power supply"),
                            callback, 5000)
                 }
 
