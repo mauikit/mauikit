@@ -50,6 +50,7 @@
 
 #include "documenthandler.h"
 
+#include <KLocalizedString>
 #include <QAbstractTextDocumentLayout>
 #include <QDebug>
 #include <QFile>
@@ -175,7 +176,7 @@ void FileLoader::loadFile(const QUrl &url)
 
 DocumentAlert *DocumentHandler::externallyModifiedAlert()
 {
-    auto alert = new DocumentAlert(tr("File changed externally"), tr("You can reload the file or save your changes now"), DocumentAlert::WARNING_LEVEL, Alerts::MODIFIED);
+    auto alert = new DocumentAlert(i18n("File changed externally"), i18n("You can reload the file or save your changes now"), DocumentAlert::WARNING_LEVEL, Alerts::MODIFIED);
 
     const auto reloadAction = [&]() { emit this->loadFile(this->fileUrl()); };
 
@@ -184,25 +185,25 @@ DocumentAlert *DocumentHandler::externallyModifiedAlert()
         emit this->loadFile(this->fileUrl());
     };
 
-    alert->setActions({{tr("Reload"), reloadAction}, {tr("Auto Reload"), autoReloadAction}, {tr("Ignore"), [&]() {}}});
+    alert->setActions({{i18n("Reload"), reloadAction}, {i18n("Auto Reload"), autoReloadAction}, {i18n("Ignore"), [&]() {}}});
     return alert;
 }
 
 DocumentAlert *DocumentHandler::canNotSaveAlert(const QString &details)
 {
-    auto alert = new DocumentAlert(tr("File can not be saved"), details, DocumentAlert::DANGER_LEVEL, Alerts::SAVE_ERROR);
+    auto alert = new DocumentAlert(i18n("File can not be saved"), details, DocumentAlert::DANGER_LEVEL, Alerts::SAVE_ERROR);
 
-    alert->setActions({{tr("Ignore"), [&]() {}}});
+    alert->setActions({{i18n("Ignore"), [&]() {}}});
     return alert;
 }
 
 DocumentAlert *DocumentHandler::missingAlert()
 {
-    auto alert = new DocumentAlert(tr("Your file was removed"), tr("This file does not longer exists in your local storage, however you can save it again"), DocumentAlert::DANGER_LEVEL, Alerts::MISSING);
+    auto alert = new DocumentAlert(i18n("Your file was removed"), i18n("This file does not longer exists in your local storage, however you can save it again"), DocumentAlert::DANGER_LEVEL, Alerts::MISSING);
 
     const auto saveAction = [&]() { this->saveAs(this->fileUrl()); };
 
-    alert->setActions({{tr("Save"), saveAction}});
+    alert->setActions({{i18n("Save"), saveAction}});
     return alert;
 }
 
@@ -683,9 +684,9 @@ void DocumentHandler::saveAs(const QUrl &url)
     // 	QTextDocumentWriter textWriter(url.toLocalFile());
     // 	if(!textWriter.write(this->textDocument()))
     // 	{
-    // 		emit error(tr("Cannot save file ")+ url.toString());
+    // 		emit error(i18n("Cannot save file ")+ url.toString());
     //         qWarning() << "can not save file" << textWriter.supportedDocumentFormats() << textWriter.format();
-    // 		this->m_alerts->append(this->canNotSaveAlert(tr("Cannot save file ")+ url.toString()));
+    // 		this->m_alerts->append(this->canNotSaveAlert(i18n("Cannot save file ")+ url.toString()));
     // 		return;
     // 	}
 
@@ -693,8 +694,8 @@ void DocumentHandler::saveAs(const QUrl &url)
     const bool isHtml = QFileInfo(filePath).suffix().contains(QLatin1String("htm"));
     QFile file(filePath);
     if (!file.open(QFile::WriteOnly | QFile::Truncate | (isHtml ? QFile::NotOpen : QFile::Text))) {
-        emit error(tr("Cannot save: ") + file.errorString());
-        this->m_alerts->append(this->canNotSaveAlert(tr("Cannot save file ") + file.errorString() + url.toString()));
+        emit error(i18n("Cannot save: ") + file.errorString());
+        this->m_alerts->append(this->canNotSaveAlert(i18n("Cannot save file ") + file.errorString() + url.toString()));
 
         return;
     }
