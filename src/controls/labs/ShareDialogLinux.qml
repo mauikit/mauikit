@@ -55,9 +55,7 @@ Maui.Dialog
             visible: _purpose.depth>1;
             icon.name: "go-previous"
             onClicked: _purpose.pop()
-        }
-        
-        
+        }    
 		
 		Maui.OpenWithDialog
 		{
