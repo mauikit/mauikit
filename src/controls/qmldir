@@ -1,7 +1,7 @@
 module org.kde.mauikit
 plugin MauiKit
 classname MauiKit
-depends QtQuick.Controls 2.10
+depends QtQuick.Controls 2.13
 depends QtQuick.Controls.Private 2.10
 depends QtQuick.Controls 2.10
 depends QtGraphicalEffects 1.0
@@ -52,7 +52,6 @@ Holder 1.0 Holder.qml
 ImageViewer 1.0 ImageViewer.qml
 TabBar 1.0 TabBar.qml
 TabButton 1.0 TabButton.qml
-ActionGroup 1.0 ActionGroup.qml
 ActionSideBar 1.0 ActionSideBar.qml
 ToolActions 1.0 ToolActions.qml
 DocumentPreview 1.0 DocumentPreview.qml
@@ -61,17 +60,6 @@ ListItemTemplate 1.0 ListItemTemplate.qml
 GridItemTemplate 1.0 GridItemTemplate.qml
 FloatingButton 1.0 FloatingButton.qml
 
-SelectionBar 1.1 labs/SelectionBar.qml
-ShareDialog 1.1 labs/ShareDialog.qml
-ActionToolBar 1.1 labs/ActionToolBar.qml
-ToolButtonAction 1.1 labs/ToolButtonAction.qml
-AppViews 1.1 labs/AppViews.qml
-AppViewLoader 1.1 labs/AppViewLoader.qml
-AltBrowser 1.1 labs/AltBrowser.qml
-TabsBrowser 1.1 labs/TabsBrowser.qml
-SettingsDialog 1.1 labs/SettingsDialog.qml
-SettingsSection 1.1 labs/SettingsSection.qml
-
 X 1.0 private/shapes/X.qml
 PlusSign 1.0 private/shapes/PlusSign.qml
 Arrow 1.0 private/shapes/Arrow.qml
@@ -79,3 +67,18 @@ Triangle 1.0 private/shapes/Triangle.qml
 CheckMark 1.0 private/shapes/CheckMark.qml
 Rectangle 1.0 private/shapes/Rectangle.qml
 
+AppViews 1.1 AppViews.qml
+AppViewLoader 1.1 AppViewLoader.qml
+AltBrowser 1.1 AltBrowser.qml
+SelectionBar 1.1 SelectionBar.qml
+
+ShareDialog 1.1 labs/ShareDialog.qml
+ActionToolBar 1.1 labs/ActionToolBar.qml
+ToolButtonAction 1.1 labs/ToolButtonAction.qml
+
+TabsBrowser 1.1 labs/TabsBrowser.qml
+SettingsDialog 1.1 labs/SettingsDialog.qml
+SettingsSection 1.1 labs/SettingsSection.qml
+Doodle 1.1 labs/Doodle.qml
+
+AlternateListItem 1.2 labs/AlternateListItem.qml

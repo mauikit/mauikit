@@ -27,7 +27,7 @@ import org.kde.mauikit 1.0 as Maui
 import org.kde.mauikit 1.1 as MauiLab
 
 Item
-{
+{   
     id: control
     
     default property alias content: _layout.data
@@ -50,6 +50,9 @@ Item
     property alias leftLabels : _leftLabels
     property alias rightLabels : _rightLabels
     
+    property alias spacing : _layout.spacing
+    property alias layout : _layout
+    
     property int iconSizeHint : Maui.Style.iconSizes.big
     property int imageSizeHint : iconSizeHint
     
@@ -68,7 +71,9 @@ Item
     
     property int fillMode : Image.PreserveAspectCrop
     property int maskRadius: Maui.Style.radiusV
-        
+    
+    property bool imageBorder: true
+    
     signal toggled(bool state)
     
     Component
@@ -109,7 +114,7 @@ Item
             Rectangle
             {
                 anchors.fill: parent
-                border.color: Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.8)   
+                border.color: control.imageBorder ? Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.8) : "transparent"   
                 radius: control.maskRadius
                 opacity: 0.2
                 color: control.hovered ? control.Kirigami.Theme.highlightColor : "transparent"
@@ -161,6 +166,8 @@ Item
         anchors.fill: parent
         spacing: Maui.Style.space.tiny
         
+        Item {Layout.fillHeight: true}
+        
         Item
         {
             id: _checkBoxContainer
@@ -180,7 +187,6 @@ Item
                 color: control.checked ? Kirigami.Theme.highlightColor : Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.8)
                 
                 border.color: Kirigami.Theme.textColor
-
                 
                 onClicked: 
                 {

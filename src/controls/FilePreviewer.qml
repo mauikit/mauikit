@@ -2,7 +2,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 import "private"
 
 Maui.Dialog
@@ -175,20 +175,13 @@ Maui.Dialog
                                 Layout.margins: 0
                                 spacing: 0
                                 model: ListModel { id: _infoModel }
-                                delegate: Rectangle
+                                delegate: Maui.AlternateListItem
                                 {
                                     visible: model.value.length
                                     width: visible ? parent.width : 0
                                     height: visible ? _delegateColumnInfo.implicitHeight + Maui.Style.space.large : 0
-                                    color: index % 2 === 0 ? Kirigami.Theme.backgroundColor : Qt.darker(Kirigami.Theme.backgroundColor, 1.1)
-                                    
-                                    Kirigami.Separator
-                                    {
-                                        anchors.left: parent.left
-                                        anchors.right: parent.right
-                                        anchors.bottom: parent.bottom
-                                    }
-                                    
+                                    alt: index % 2 === 0
+                                   
                                     Maui.ListItemTemplate
                                     {
                                         id: _delegateColumnInfo

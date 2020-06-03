@@ -14,9 +14,6 @@ Maui.Dialog
 	property alias listView: _listView
 	property alias composerList: tagListComposer.list
 
-	acceptText: "OK"
-	rejectText: "Cancel"
-	
 	signal tagsReady(var tags)
 	defaultButtons: true
 	maxHeight: Maui.Style.unit * 500

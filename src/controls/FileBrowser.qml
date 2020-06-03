@@ -269,8 +269,8 @@ Maui.Page
 			textEntry.placeholderText: i18n("New name")
 			onFinished: Maui.FM.rename(item.path, textEntry.text)
 			onRejected: close()
-			acceptText: i18n("Rename")
-			rejectText: i18n("Cancel")
+			acceptButton.text: i18n("Rename")
+			rejectButton.text: i18n("Cancel")
 		}
 	}
 	
