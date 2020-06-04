@@ -21,7 +21,7 @@ import QtQuick 2.10
 import QtQuick.Controls 2.10
 import QtQuick.Layouts 1.3
 
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.purpose 1.0 as Purpose
 
@@ -36,7 +36,7 @@ Maui.Dialog
 	
 	maxHeight: 500
 	maxWidth: Maui.Style.unit * 500
-	page.margins: Maui.Style.space.medium
+	page.margins: 0
 	
 	verticalAlignment: Qt.AlignBottom
 	
@@ -80,16 +80,20 @@ Maui.Dialog
 			delegate: Maui.ItemDelegate
 			{
 				width: parent.width
-				height: Maui.Style.rowHeight * 1.5
+				height: Maui.Style.rowHeight * 2
+				
+				background: Maui.AlternateListItem 
+				{
+                    alt: index % 2 === 0
+                }
 				
 				Maui.ListItemTemplate
 				{
 					anchors.fill: parent
 					
 					label1.text: model.display
-					iconSource: model.iconName
-					
-					iconSizeHint: Maui.Style.iconSizes.medium					
+					iconSource: model.iconName					
+					iconSizeHint: Maui.Style.iconSizes.big					
 				}
 				
 				onClicked: _purpose.createJob(index)
