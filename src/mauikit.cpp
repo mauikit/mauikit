@@ -132,16 +132,15 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("AppViews.qml")), uri, 1, 1, "AppViews");
     qmlRegisterType(componentUrl(QStringLiteral("AppViewLoader.qml")), uri, 1, 1, "AppViewLoader");
     qmlRegisterType(componentUrl(QStringLiteral("AltBrowser.qml")), uri, 1, 1, "AltBrowser");
-    
+
     qmlRegisterType(componentUrl(QStringLiteral("labs/TabsBrowser.qml")), uri, 1, 1, "TabsBrowser");
     qmlRegisterType(componentUrl(QStringLiteral("labs/SettingsDialog.qml")), uri, 1, 1, "SettingsDialog");
     qmlRegisterType(componentUrl(QStringLiteral("labs/SettingsSection.qml")), uri, 1, 1, "SettingsSection");
     qmlRegisterType(componentUrl(QStringLiteral("labs/Doodle.qml")), uri, 1, 1, "Doodle");
-    
+
     /** 1.2 **/
     qmlRegisterType(componentUrl(QStringLiteral("labs/AlternateListItem.qml")), uri, 1, 2, "AlternateListItem");
-    
-    
+
     /// NON UI CONTROLS
     qmlRegisterUncreatableType<AppView>(uri, 1, 1, "AppView", "Cannot be created App");
 
@@ -229,17 +228,16 @@ void MauiKit::registerTypes(const char *uri)
 #ifdef COMPONENT_ACCOUNTS
     qmlRegisterType<MauiAccounts>();
     qmlRegisterType(componentUrl(QStringLiteral("SyncDialog.qml")), uri, 1, 0, "SyncDialog"); // to be rename to accountsDialog
-#endif    
+#endif
 
-	/** HELPERS **/
-    qmlRegisterUncreatableType<MauiApp>(uri, 1, 0, "App", "Cannot be created App");    
-	qmlRegisterSingletonType<Handy>(uri, 1, 0, "Handy",
-									[](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject* {
-		Q_UNUSED(engine)
-		Q_UNUSED(scriptEngine)
-		return new Handy;
-	});
-    
+    /** HELPERS **/
+    qmlRegisterUncreatableType<MauiApp>(uri, 1, 0, "App", "Cannot be created App");
+    qmlRegisterSingletonType<Handy>(uri, 1, 0, "Handy", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+        return new Handy;
+    });
+
     /** MAUI PLUGIN SUPPORT **/
 #ifdef SUPPORT_PLUGINS
     qmlRegisterType(componentUrl(QStringLiteral("AppViewsPlugin.qml")), uri, 1, 2, "AppViewsPlugin");
