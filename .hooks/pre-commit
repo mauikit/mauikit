@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# This hook checks if the files are well formatted
+
+# Get a list of files with changes
+_files=$(git diff --name-only HEAD | grep -E "\.h$|\.hpp$|\.cpp$")
+
+# Iterate over each changed files
+for file in $_files; do
+    # Run clang-format to check if there are any unformatted files and
+    # store the exit code
+    clang-format -style=file $(pwd)/$file | diff $(pwd)/$file - #> /dev/null 2>&1
+    _exit_code=$?
+
+    # If exit code is 0, continue checking other files
+    # Else abort commit
+    if [ $_exit_code -gt 0 ]; then
+        echo "ERROR : Cpp sources / headers are not well formatted. Run \`make clang-format\` before commiting"
+        exit 1
+    fi
+done
