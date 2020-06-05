@@ -3,12 +3,12 @@
 Git Hooks for this repository
 
 ## Installing the hooks
-**Run this script from the `.hooks` directory**
+**Run the install script to install the hooks**
+
 ```bash
-for i in $(ls -I README.md); do ln -s ../../.hooks/$i ../.git/hooks/$i; done
+./install-hooks.sh
 ```
 
 # Hooks in this repository
 ## pre-commit
-Checks if the cpp sources and headers are well formatted or not with `clang-format`.
-If any of the changed files are not  well formatted, the the hook aborts the commit.
+Auto formats the cpp headers and sources with clang-format on running `git commit`
