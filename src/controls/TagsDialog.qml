@@ -17,7 +17,7 @@ Maui.Dialog
 	signal tagsReady(var tags)
 	defaultButtons: true
 	maxHeight: Maui.Style.unit * 500
-	page.margins: Maui.Style.space.medium
+	page.margins: 0
 	
 	acceptButton.text: i18n("Add")
 	rejectButton.text: i18n("Cancel")
@@ -95,7 +95,8 @@ Maui.Dialog
                 id: _listView                
                 anchors.fill: parent
                 spacing: Maui.Style.space.tiny
-
+                margins: Maui.Style.space.medium
+                
 				TagsModel
 				{
 					id: _tagsModel

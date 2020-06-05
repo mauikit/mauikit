@@ -72,7 +72,11 @@ Maui.Dialog
                     iconSizeHint: Maui.Style.iconSizes.big				
                 }
                 
-                onClicked: _purpose.createJob(index)
+                onClicked: 
+                {
+                    _list.currentIndex = index
+                    triggerService(index)
+                }
             } 
         }
         
