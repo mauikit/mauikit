@@ -20,46 +20,34 @@
 
 //this basic toolbutton provides a basic anima
 
-import QtQuick 2.9
-import QtQuick.Controls 2.5
+import QtQuick 2.13
+import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import org.kde.mauikit 1.1 as MauiLab
 
-MouseArea
+AbstractButton
 {
     id: control
     
     property alias extraContent : _layoutButton.data
-    
-    property bool checked : false
-    property alias text : _label.text   
-    property alias icon : _dummy.icon
-    property alias spacing: _layoutButton.spacing
-    
+        
     readonly property alias label : _label
     readonly property alias kicon : _icon
-    
-    property int display : ToolButton.TextBesideIcon
+    property alias rec : _background
     
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Button
     
-    hoverEnabled: true
+    hoverEnabled: Kirigami.Settings.isMobile
     implicitHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
     implicitWidth: _layoutButton.implicitWidth  + (Maui.Style.space.medium *  1.25)
-        
-    property Action action : Action
-    {
-        id: _dummy
-        icon.width: Maui.Style.iconSizes.medium
-        icon.height: Maui.Style.iconSizes.medium
-    }
     
-    readonly property alias background : _background
-        
-    Rectangle
+    icon.width: Maui.Style.iconSizes.medium
+    icon.height: icon.width
+    
+    background: Rectangle
     {
         id: _background
         anchors.fill: parent
@@ -84,10 +72,10 @@ MouseArea
         height: parent.height
         spacing: 0
         clip: true
-
+        
         Item
         {
-            Layout.preferredWidth: visible ? Maui.Style.iconSizes.medium : 0
+            implicitWidth: visible ? Maui.Style.iconSizes.medium : 0
             Layout.alignment: Qt.AlignCenter
             
             visible: _icon.source && _icon.source.length && (control.display === ToolButton.TextBesideIcon || control.display === ToolButton.IconOnly)
@@ -98,7 +86,7 @@ MouseArea
                 anchors.centerIn: parent
                 width: control.icon.width
                 height: control.icon.height
-               
+                
                 color: (control.icon.color && control.icon.color.length ) ? control.icon.color : ( (control.checked || control.containsMouse || control.containsPress ) && enabled ) ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
                 
                 source: control.icon.name  
@@ -109,6 +97,7 @@ MouseArea
         Label
         {
             id: _label
+            text: control.text
             visible: text.length && (control.display === ToolButton.TextOnly || control.display === ToolButton.TextBesideIcon || !_icon.visible)
             opacity: visible ? ( enabled ? 1 : 0.5) : 0
             horizontalAlignment: Qt.AlignHCenter

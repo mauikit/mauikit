@@ -86,7 +86,7 @@ Maui.Dialog
                         id: palette
                         source: Maui.App.name
                     }
-                                        
+                    
                     Maui.ListItemTemplate
                     {
                         id: _div1
@@ -140,26 +140,6 @@ Maui.Dialog
                     }
                 }
                 
-                //                 Label
-                //                 {
-                //                     visible: _creditsRepeater.count > 0
-                //                     color: Kirigami.Theme.textColor
-                //                     Layout.fillWidth: true
-                //                     text: i18n("Credits")
-                //                     font.pointSize: Maui.Style.fontSizes.default
-                //                     elide: Text.ElideRight
-                //                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                //                 }
-                //                 
-                //              
-                //                 
-                //                 Kirigami.Separator
-                //                 {
-                //                     Layout.fillWidth: true
-                //                     Layout.margins: Maui.Style.space.tiny
-                //                     opacity: 0.4
-                //                 }
-                
                 Maui.AlternateListItem
                 {
                     Layout.fillWidth: true
@@ -186,6 +166,5 @@ Maui.Dialog
                 }
                 
             }
-        }
-        
+        }        
 }
