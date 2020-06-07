@@ -165,9 +165,7 @@ Item
         id: _layout
         anchors.fill: parent
         spacing: Maui.Style.space.tiny
-        
-        Item {Layout.fillHeight: true}
-        
+               
         Item
         {
             id: _checkBoxContainer
@@ -230,7 +228,7 @@ Item
             visible: (control.width > Kirigami.Units.gridUnit * 10) && (iconSource.length > 0 || imageSource.length > 0)
             Layout.fillHeight: true
             Layout.fillWidth: !control.labelsVisible
-            Layout.leftMargin: _checkBoxContainer.visible ? 0 : Maui.Style.space.tiny
+//             Layout.leftMargin: _checkBoxContainer.visible ? 0 : Maui.Style.space.tiny
             Layout.preferredWidth: Math.min(parent.height, Math.max(control.iconSizeHint, imageSizeHint) + Maui.Style.space.medium)  
             
             Loader

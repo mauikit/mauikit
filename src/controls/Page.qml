@@ -344,7 +344,7 @@ Pane
             background: Rectangle
             {
                 id: _headerBackground
-                color: _headBar.Kirigami.Theme.backgroundColor
+                color: _headBar.Kirigami.Theme.backgroundColor               
                 
                 Kirigami.Separator
                 {

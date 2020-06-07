@@ -112,6 +112,7 @@ Window
     /******************** SIGNALS *********************/
     /*************************************************/
     signal menuButtonClicked();
+   
 
     onClosing:
     {
@@ -124,6 +125,7 @@ Window
             Maui.FM.saveSettings("GEOMETRY", Qt.rect(x, y, width, height), "WINDOW")
         }
     }
+   
 
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     MauiLab.Page
@@ -131,7 +133,7 @@ Window
         id: _page
         anchors.fill: parent
         Kirigami.Theme.colorSet: root.Kirigami.Theme.colorSet
-        headerBackground.color: Maui.App.enableCSD ? Qt.darker(Kirigami.Theme.backgroundColor, 1.1) : headBar.Kirigami.Theme.backgroundColor
+        headerBackground.color: Maui.App.enableCSD ? Qt.darker(Kirigami.Theme.backgroundColor, 1.1) : headBar.Kirigami.Theme.backgroundColor      
         
         headBar.farLeftContent: Loader
         {
@@ -243,7 +245,8 @@ Window
         radius: _pageBackground.radius - 0.5
         color: "transparent"
         border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
-        opacity: 0.5
+        opacity: 0.5       
+
         
         Rectangle
         {
@@ -256,6 +259,34 @@ Window
         }
     }
     
+    
+    
+    Rectangle
+    {
+        height: 22
+        width: height
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        color: "orange"
+        
+        DragHandler 
+        {
+            id: resizeHandler
+            grabPermissions: TapHandler.TakeOverForbidden
+            target: null
+            onActiveChanged: if (active) {
+                const p = resizeHandler.centroid.position;
+                let e = 0;
+                if (p.x / width < 0.10) { e |= Qt.LeftEdge }
+                if (p.x / width > 0.90) { e |= Qt.RightEdge }
+                if (p.y / height < 0.10) { e |= Qt.TopEdge }
+                if (p.y / height > 0.90) { e |= Qt.BottomEdge }
+                console.log("RESIZING", e);
+                root.startSystemResize(e);
+            }
+        }
+        
+    }    
     
     Overlay.overlay.modal: Rectangle 
     {

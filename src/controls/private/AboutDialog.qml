@@ -90,7 +90,8 @@ Maui.Dialog
                     Maui.ListItemTemplate
                     {
                         id: _div1
-                        width: parent.width
+                        
+                        width: parent.width * 0.95
                         height: Math.max(150, label2.implicitHeight + label1.implicitHeight)
                         anchors.centerIn: parent
                         imageBorder: false
