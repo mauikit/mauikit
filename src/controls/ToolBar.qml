@@ -65,7 +65,7 @@ ToolBar
         property bool leftSretch: strech
         property bool rightSretch: strech
         property bool middleStrech: strech                     
-              
+        
         MouseArea
         {
             id: _rightFlickRec
@@ -199,24 +199,24 @@ ToolBar
             id: wheelHandler
             target: mainFlickable
         }
-      
-      Item
-      {
-          anchors.fill: parent
-          
-          TapHandler
-          {
-              grabPermissions: TapHandler.CanTakeOverFromAnything
-              onTapped: if (tapCount === 2) root.toggleMaximized()
-              gesturePolicy: TapHandler.DragThreshold
-          } 
-          
-          DragHandler 
-          {
-              grabPermissions: TapHandler.CanTakeOverFromAnything
-              onActiveChanged: if (active) { root.startSystemMove(); }
-          }
-      }
+        
+        Item
+        {
+            anchors.fill: parent          
+            
+            DragHandler 
+            {
+                grabPermissions:  PointerHandler.CanTakeOverFromItems | PointerHandler.CanTakeOverFromHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByAnything 
+                onActiveChanged: if (active) { root.startSystemMove(); }
+            }
+            
+            TapHandler
+            {
+                grabPermissions:  PointerHandler.CanTakeOverFromItems | PointerHandler.CanTakeOverFromHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByAnything 
+                onTapped: if (tapCount === 2) root.toggleMaximized()
+                gesturePolicy: TapHandler.DragThreshold
+            }    
+        }
         
         ScrollView
         {
@@ -371,8 +371,6 @@ ToolBar
                     
                 }            
             }
-        }
+        }        
         
-      
-                
 }

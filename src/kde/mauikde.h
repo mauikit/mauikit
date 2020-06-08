@@ -45,7 +45,6 @@ public:
 
     static FMH::MODEL_LIST getApps();
     static FMH::MODEL_LIST getApps(const QString &groupStr);
-    static void launchApp(const QString &app);
 
 private:
     MAUIKDE(QObject *parent = nullptr);
@@ -59,6 +58,16 @@ public slots:
     static void email(const QString &to = "", const QString &cc = "", const QString &bcc = "", const QString &subject = "", const QString &body = "", const QString &messageFile = "", const QStringList &urls = QStringList());
 
     static void setColorScheme(const QString &schemeName, const QString &bg = QString(), const QString &fg = QString());
+    
+    static QVariantList appsList()
+    {
+        return FMH::toMapList(getApps());
+    }
+    static QVariantList appsList(const QString &groupStr)
+    {
+        return FMH::toMapList(getApps(groupStr));
+    }
+    static void launchApp(const QString &app);
 };
 
 QML_DECLARE_TYPEINFO(MAUIKDE, QML_HAS_ATTACHED_PROPERTIES)

@@ -68,6 +68,9 @@ Item
 	
 	property alias pinchEnabled : _pinchArea.enabled
 	
+	property int verticalScrollBarPolicy: ScrollBar.AlwaysOn
+	property int horizontalScrollBarPolicy: ScrollBar.AlwaysOff
+	
 	signal itemsSelected(var indexes)
 	signal areaClicked(var mouse)
 	signal areaRightClicked()
@@ -95,8 +98,9 @@ Item
 		contentWidth: controlView.width
 		contentHeight: controlView.contentHeight
 		
-		ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-
+		ScrollBar.horizontal.policy: control.horizontalScrollBarPolicy
+		ScrollBar.vertical.policy: control.verticalScrollBarPolicy
+		
 		GridView
 		{
 			id: controlView

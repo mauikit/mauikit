@@ -124,8 +124,7 @@ Window
             const y = root.y
             Maui.FM.saveSettings("GEOMETRY", Qt.rect(x, y, width, height), "WINDOW")
         }
-    }
-   
+    }     
 
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     MauiLab.Page
@@ -259,34 +258,54 @@ Window
         }
     }
     
-    
-    
-    Rectangle
+    MouseArea
     {
-        height: 22
+        visible: Maui.App.enableCSD        
+        height: 16
         width: height
         anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        color: "orange"
+        anchors.left: parent.left
+        cursorShape: Qt.SizeBDiagCursor
+        propagateComposedEvents: true
+        preventStealing: false
+        
+        onPressed: mouse.accepted = false 
         
         DragHandler 
         {
-            id: resizeHandler
             grabPermissions: TapHandler.TakeOverForbidden
             target: null
-            onActiveChanged: if (active) {
-                const p = resizeHandler.centroid.position;
-                let e = 0;
-                if (p.x / width < 0.10) { e |= Qt.LeftEdge }
-                if (p.x / width > 0.90) { e |= Qt.RightEdge }
-                if (p.y / height < 0.10) { e |= Qt.TopEdge }
-                if (p.y / height > 0.90) { e |= Qt.BottomEdge }
-                console.log("RESIZING", e);
-                root.startSystemResize(e);
+            onActiveChanged: if (active) 
+            {              
+                root.startSystemResize(Qt.LeftEdge | Qt.BottomEdge);
             }
-        }
+        }        
+    }  
+    
+    MouseArea
+    {
+        visible: Maui.App.enableCSD        
+        height: 16
+        width: height
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        cursorShape: Qt.SizeFDiagCursor
+        propagateComposedEvents: true
+        preventStealing: false
         
+        onPressed: mouse.accepted = false 
+        
+        DragHandler 
+        {
+            grabPermissions: TapHandler.TakeOverForbidden
+            target: null
+            onActiveChanged: if (active) 
+            {              
+                root.startSystemResize(Qt.RightEdge | Qt.BottomEdge);
+            }
+        }        
     }    
+    
     
     Overlay.overlay.modal: Rectangle 
     {
