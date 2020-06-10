@@ -206,16 +206,17 @@ ToolBar
             
             DragHandler 
             {
+                acceptedDevices: PointerDevice.GenericPointer
                 grabPermissions:  PointerHandler.CanTakeOverFromItems | PointerHandler.CanTakeOverFromHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByAnything 
                 onActiveChanged: if (active) { root.startSystemMove(); }
             }
-            
-            TapHandler
+//             
+          /*  TapHandler
             {
                 grabPermissions:  PointerHandler.CanTakeOverFromItems | PointerHandler.CanTakeOverFromHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByAnything 
                 onTapped: if (tapCount === 2) root.toggleMaximized()
                 gesturePolicy: TapHandler.DragThreshold
-            }    
+            } */   
         }
         
         ScrollView

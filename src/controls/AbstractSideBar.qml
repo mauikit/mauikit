@@ -75,7 +75,6 @@ Drawer
     contentItem: Item
     {
 		id: _content
-		anchors.fill: parent
 		Kirigami.Separator
 		{
 			z: parent.z + 999		
