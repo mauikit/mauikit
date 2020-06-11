@@ -27,9 +27,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QFileSystemWatcher>
 #include <QPalette>
 
-namespace Decoration {
-namespace Applet {
-
+namespace Decoration
+{
+namespace Applet
+{
 class DecorationPalette : public QObject
 {
     Q_OBJECT
@@ -43,6 +44,7 @@ public:
 
 Q_SIGNALS:
     void changed();
+
 private:
     void update();
 

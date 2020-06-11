@@ -23,225 +23,142 @@ import QtQuick.Controls 2.10
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.12
 
-import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
+import org.kde.kirigami 2.8 as Kirigami
+import org.kde.mauikit 1.2 as Maui
 
 Maui.Dialog
 {
     id: control
     
     defaultButtons: false
-    widthHint: 0.9
-    heightHint: 0.8
-
-    maxWidth: Maui.Style.unit * 400
-    maxHeight: Maui.Style.unit * 250
-
-    page.padding: 0
-    footBar.visible: true
-    footBar.middleContent: ToolButton
-    {
-        icon.name: "link"
-        visible: true
-        onClicked: Qt.openUrlExternally(Maui.App.webPage)
-    }
-
-    footBar.rightContent: ToolButton
-    {
-        icon.name: "love"
-        onClicked: Qt.openUrlExternally(Maui.App.donationPage)
-    }
-
-    footBar.leftContent: ToolButton
-    {
-        icon.name: "tools-report-bug"
-        onClicked: Qt.openUrlExternally(Maui.App.reportPage)
-    }
-
-    RowLayout
-    {
-        id: layout
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        spacing: Maui.Style.space.medium
-
-        Item
+        persistent: false
+        widthHint: 0.9
+        heightHint: 0.8
+        
+        maxWidth: 400
+        maxHeight: 300
+        
+        page.padding: 0
+        footBar.visible: true
+        footBar.middleContent: Button
         {
-            visible:  parent.width > control.maxWidth * 0.7
-            Layout.fillHeight: true
-            Layout.margins: Maui.Style.space.medium
-            Layout.alignment: Qt.AlignVCenter
-            Layout.preferredWidth: Maui.Style.iconSizes.huge + Maui.Style.space.big
-
-            Image
-            {
-                id: _imgIcon
-                anchors.centerIn: parent
-                source: Maui.App.iconName
-                width: Math.min(Maui.Style.iconSizes.huge, parent.width)
-                height: width
-                sourceSize.width: width
-                sourceSize.height: height
-                asynchronous: true
-                fillMode: Image.PreserveAspectFit
-            }
-
-            DropShadow
-            {
-                anchors.fill: _imgIcon
-                horizontalOffset: 0
-                verticalOffset: 0
-                radius: 8.0
-                samples: 17
-                color: "#80000000"
-                source: _imgIcon
-            }
+            icon.name: "link"
+            text: i18n("Site")
+            onClicked: Qt.openUrlExternally(Maui.App.webPage)
         }
-
+        
+        footBar.rightContent: Button
+        {
+            icon.name: "love"
+            text: i18n("Donate")
+            onClicked: Qt.openUrlExternally(Maui.App.donationPage)
+        }
+        
+        footBar.leftContent: Button
+        {
+            icon.name: "documentinfo"
+            text: i18n("Report")
+            onClicked: Qt.openUrlExternally(Maui.App.reportPage)
+        }
+        
         Kirigami.ScrollablePage
         {
-            id: _descriptionItem
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             Kirigami.Theme.backgroundColor: "transparent"
-			padding: Maui.Style.space.medium
+            padding: 0
             leftPadding: padding
             rightPadding: padding
-            topPadding: padding*3
+            topPadding: padding
             bottomPadding: padding
-
+            
             ColumnLayout
-            {
-                id: _columnInfo
-                width: parent.width
-                spacing: Maui.Style.space.medium
-                
-                Label
+            {                
+                Maui.AlternateListItem
                 {
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignLeft
-                    color: Kirigami.Theme.textColor
-                    text: Maui.App.displayName
-                    font.weight: Font.Bold
-                    font.bold: true
-                    font.pointSize: Maui.Style.fontSizes.enormous * 1.3
-                    elide: Text.ElideRight
-                    wrapMode: Text.NoWrap
-                }
-
-                Label
-                {
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignLeft
-                    color:  Qt.lighter(Kirigami.Theme.textColor, 1.2)
-                    text: Maui.App.version
-                    font.weight: Font.Light
-                    font.pointSize: Maui.Style.fontSizes.default
-                    elide: Text.ElideRight
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                }
-
-                Label
-                {
-                    id: body
-                    Layout.fillWidth: true
-                    text:  Maui.App.description
-                    color: Kirigami.Theme.textColor
-                    font.pointSize: Maui.Style.fontSizes.default
-                    elide: Text.ElideRight
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                }
-
-                Label
-                {
-                    color: Kirigami.Theme.textColor
-                    Layout.fillWidth: true
-                    text: qsTr("By ") + Maui.App.org
-                    font.pointSize: Maui.Style.fontSizes.default
-                    elide: Text.ElideRight
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                }
-               
-                Kirigami.Separator
-                {
-                    Layout.fillWidth: true
-                    Layout.margins: Maui.Style.space.tiny
-                    opacity: 0.4
-                }
-                
-                Label
-                {
-                    visible: _creditsRepeater.count > 0
-                    color: Kirigami.Theme.textColor
-                    Layout.fillWidth: true
-                    text: qsTr("Credits")
-                    font.pointSize: Maui.Style.fontSizes.default
-                    elide: Text.ElideRight
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                }
-                
-                Repeater
-                {
-                    id: _creditsRepeater
-                    model: Maui.App.credits
+                    Layout.fillWidth: true                    
+                    implicitHeight: _div1.height + Maui.Style.space.huge
+                    alt: true   
                     
-                    Column
+                    Maui.ListItemTemplate
                     {
-                        Label
-                        {
-                            color: Kirigami.Theme.textColor
-                            Layout.fillWidth: true
-                            text: modelData.name
-                            font.pointSize: Maui.Style.fontSizes.default
-                            elide: Text.ElideRight
-                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                        }  
+                        id: _div1
                         
-                        Label
-                        {
-                            color: Kirigami.Theme.textColor
-                            Layout.fillWidth: true
-                            text: modelData.email
-                            font.pointSize: Maui.Style.fontSizes.default
-                            elide: Text.ElideRight
-                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                        }
+                        width: parent.width * 0.95
+                        height: Math.max(150, label2.implicitHeight + label1.implicitHeight)
+                        anchors.centerIn: parent
+                        imageBorder: false
+                        imageSource: Maui.App.iconName
+                        imageWidth: Math.min(Maui.Style.iconSizes.huge, parent.width)
+                        imageHeight: imageWidth
+                        fillMode: Image.PreserveAspectFit
+                        imageSizeHint: imageWidth
                         
-                        Label
-                        {
-                            color: Kirigami.Theme.textColor
-                            Layout.fillWidth: true
-                            text: modelData.year
-                            font.pointSize: Maui.Style.fontSizes.default
-                            elide: Text.ElideRight
-                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                        }
-                    }                    
-                }
+                        spacing: Maui.Style.space.big
+                        label1.text: Maui.App.displayName 
+                        label1.font.weight: Font.Bold
+                        label1.font.bold: true
+                        label1.font.pointSize: Maui.Style.fontSizes.enormous * 1.3
+                        
+                        label2.text:  Maui.App.version + "\n" + Maui.App.description + "\n" + Maui.App.org
+                        label2.font.pointSize: Maui.Style.fontSizes.default
+                        label2.elide: Text.ElideRight
+                        label2.wrapMode: Text.WrapAtWordBoundaryOrAnywhere   
+                    }  
+                }              
                 
-                Kirigami.Separator
+                Maui.AlternateListItem
                 {
                     Layout.fillWidth: true
-                    Layout.margins: Maui.Style.space.tiny
-                    opacity: 0.4
+                    Layout.preferredHeight: _credits.contentHeight + Maui.Style.space.huge
+                    alt: false
+                    
+                    ListView
+                    {
+                        id: _credits
+                        spacing: Maui.Style.space.big
+                        model: Maui.App.credits
+                        width: parent.width
+                        height: contentHeight
+                        anchors.centerIn: parent
+                        delegate: Maui.ListItemTemplate
+                        {
+                            width: parent.width
+                            iconSource: "animal"
+                            iconSizeHint: Maui.Style.iconSizes.medium
+                            spacing: Maui.Style.space.medium
+                            label1.text: modelData.name
+                            label2.text: modelData.email
+                            label3.text: modelData.year
+                        }                  
+                    }
                 }
                 
-                Label
+                Maui.AlternateListItem
                 {
-                    color: Kirigami.Theme.textColor
                     Layout.fillWidth: true
+                    Layout.preferredHeight: _poweredBy.implicitHeight + Maui.Style.space.huge
+                    alt: true
                     
-                    text: qsTr("Powered by") + " <a href='https://mauikit.org'>MauiKit</a> " +
-                    Maui.App.mauikitVersion + " and  <a href='https://kde.org/products/kirigami'>Kirigami</a>"
-                    font.pointSize: Maui.Style.fontSizes.default
-                    elide: Text.ElideRight
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    
-                    onLinkActivated: Qt.openUrlExternally(link)
+                    Maui.ListItemTemplate
+                    {
+                        id: _poweredBy
+                        anchors.centerIn: parent
+                        width: parent.width
+                        iconSource: "code-context"
+                        iconSizeHint: Maui.Style.iconSizes.medium
+                        spacing: Maui.Style.space.medium
+                        label1.text: "Powered by"
+                        label2.text: "<a href='https://mauikit.org'>MauiKit</a> " +
+                        Maui.App.mauikitVersion + " and  <a href='https://kde.org/products/kirigami'>Kirigami</a>"
+                        Connections
+                        {
+                            target: _poweredBy.label2
+                            onLinkActivated: Qt.openUrlExternally(link)                                
+                        }
+                    }
                 }
                 
             }
-        }
-    }
+        }        
 }

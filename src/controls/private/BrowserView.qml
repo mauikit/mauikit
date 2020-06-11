@@ -120,7 +120,7 @@ Maui.Page
         
         MenuItem
         {
-            text: qsTr("Copy here")
+            text: i18n("Copy here")
             onTriggered:
             {
                 const urls = _dropMenu.urls.split(",")
@@ -130,7 +130,7 @@ Maui.Page
         
         MenuItem
         {
-            text: qsTr("Move here")
+            text: i18n("Move here")
             onTriggered:
             {
                 const urls = _dropMenu.urls.split(",")
@@ -140,7 +140,7 @@ Maui.Page
         
         MenuItem
         {
-            text: qsTr("Link here")
+            text: i18n("Link here")
             onTriggered:
             {
                 const urls = _dropMenu.urls.split(",")
@@ -153,7 +153,7 @@ Maui.Page
         
         MenuItem
         {
-            text: qsTr("Cancel")
+            text: i18n("Cancel")
             onTriggered: _dropMenu.close()
         }
 	}    
@@ -278,6 +278,53 @@ Maui.Page
                     }
                 }
                 
+                onClicked:
+                {
+                    _listViewBrowser.currentIndex = index
+                    
+                    if ((mouse.button == Qt.LeftButton) && (mouse.modifiers & Qt.ControlModifier))
+                    {
+                        _listViewBrowser.itemsSelected([index])
+                    }else						
+                    {
+                        _listViewBrowser.itemClicked(index)
+                    }
+                }
+                
+                onDoubleClicked:
+                {
+                    _listViewBrowser.currentIndex = index
+                    _listViewBrowser.itemDoubleClicked(index)
+                }
+                
+                onPressAndHold:
+                {
+                    if(!Maui.Handy.isTouch)
+                        return
+                        
+                        _listViewBrowser.currentIndex = index
+                        _listViewBrowser.itemRightClicked(index)
+                }
+                
+                onRightClicked:
+                {
+                    _listViewBrowser.currentIndex = index
+                    _listViewBrowser.itemRightClicked(index)
+                }
+                
+                onToggled:
+                {
+                    _listViewBrowser.currentIndex = index
+                    _listViewBrowser.itemToggled(index, state)
+                }
+                
+                onContentDropped:
+                {
+                    _dropMenu.urls = drop.urls.join(",")
+                    _dropMenu.target = model.path
+                    _dropMenu.popup()
+                }
+                
                 Connections
                 {
                     target: selectionBar
@@ -295,57 +342,6 @@ Maui.Page
                     }
                     
                     onCleared: delegate.checked = false
-                }
-                
-                Connections
-                {
-                    target: delegate
-                    onClicked:
-                    {
-                        _listViewBrowser.currentIndex = index
-						
-						if ((mouse.button == Qt.LeftButton) && (mouse.modifiers & Qt.ControlModifier))
-						{
-							_listViewBrowser.itemsSelected([index])
-						}else						
-						{
-							_listViewBrowser.itemClicked(index)
-						}
-                    }
-                    
-                    onDoubleClicked:
-                    {
-                        _listViewBrowser.currentIndex = index
-                        _listViewBrowser.itemDoubleClicked(index)
-                    }
-                    
-                    onPressAndHold:
-                    {
-                         if(!Maui.Handy.isTouch)
-                                return
-                                
-                        _listViewBrowser.currentIndex = index
-                        _listViewBrowser.itemRightClicked(index)
-                    }
-                    
-                    onRightClicked:
-                    {
-                        _listViewBrowser.currentIndex = index
-                        _listViewBrowser.itemRightClicked(index)
-                    }
-                    
-                    onToggled:
-                    {
-                        _listViewBrowser.currentIndex = index
-                        _listViewBrowser.itemToggled(index, state)
-                    }
-                    
-                    onContentDropped:
-                    {
-                        _dropMenu.urls = drop.urls.join(",")
-                        _dropMenu.target = model.path
-                        _dropMenu.popup()
-                    }
                 }
             }
         }
@@ -424,8 +420,56 @@ Maui.Page
                         anchors.bottom: parent.bottom
                         anchors.bottomMargin: Maui.Style.space.big
                         visible: (model.issymlink == true) || (model.issymlink == "true")
-                    }                    
-                                      
+                    }
+                    
+                    onClicked:
+                    {					
+                        _gridViewBrowser.currentIndex = index
+                        
+                        if ((mouse.button == Qt.LeftButton) && (mouse.modifiers & Qt.ControlModifier))
+                        {
+                            _gridViewBrowser.itemsSelected([index])
+                        }else						
+                        {
+                            _gridViewBrowser.itemClicked(index)
+                        }
+                    }
+                    
+                    onDoubleClicked:
+                    {
+                        _gridViewBrowser.currentIndex = index
+                        _gridViewBrowser.itemDoubleClicked(index)
+                    }
+                    
+                    onPressAndHold:
+                    {
+                        if(!Maui.Handy.isTouch)
+                            return
+                            
+                            _gridViewBrowser.currentIndex = index
+                            _gridViewBrowser.itemRightClicked(index)
+                    }
+                    
+                    onRightClicked:
+                    {
+                        _gridViewBrowser.currentIndex = index
+                        _gridViewBrowser.itemRightClicked(index)
+                    }
+                    
+                    onToggled:
+                    {
+                        _gridViewBrowser.currentIndex = index
+                        _gridViewBrowser.itemToggled(index, state)
+                    }
+                    
+                    onContentDropped:
+                    {
+                        _dropMenu.urls = drop.urls.join(",")
+                        _dropMenu.target = model.path
+                        _dropMenu.popup()
+                        
+                    }
+                    
                     Connections
                     {
                         target: selectionBar
@@ -444,58 +488,6 @@ Maui.Page
                         
                         onCleared: delegate.checked = false
                         
-                    }
-                    
-                    Connections
-                    {
-						target: delegate
-						onClicked:
-						{					
-							_gridViewBrowser.currentIndex = index
-							
-							if ((mouse.button == Qt.LeftButton) && (mouse.modifiers & Qt.ControlModifier))
-							{
-								_gridViewBrowser.itemsSelected([index])
-							}else						
-							{
-								_gridViewBrowser.itemClicked(index)
-							}
-						}
-                        
-                        onDoubleClicked:
-                        {
-                            _gridViewBrowser.currentIndex = index
-                            _gridViewBrowser.itemDoubleClicked(index)
-                        }
-                        
-                        onPressAndHold:
-                        {
-                            if(!Maui.Handy.isTouch)
-                                return
-                                
-                            _gridViewBrowser.currentIndex = index
-                            _gridViewBrowser.itemRightClicked(index)
-                        }
-                        
-                        onRightClicked:
-                        {
-                            _gridViewBrowser.currentIndex = index
-                            _gridViewBrowser.itemRightClicked(index)
-                        }
-                        
-                        onToggled:
-                        {
-                            _gridViewBrowser.currentIndex = index
-                            _gridViewBrowser.itemToggled(index, state)
-                        }
-                        
-                        onContentDropped:
-                        {
-                            _dropMenu.urls = drop.urls.join(",")
-                            _dropMenu.target = model.path
-                            _dropMenu.popup()
-                            
-                        }
                     }
                 }
             }            
@@ -777,60 +769,56 @@ Maui.Page
                                 onCleared: delegate.checked = false
                             }
                             
-                            Connections
+                            onClicked:
                             {
-                                target: delegate
-                                onClicked:
-                                {
-                                    _millerColumns.currentIndex = _index
-                                    _millerListView.currentIndex = index  
-									
-									if ((mouse.button == Qt.LeftButton) && (mouse.modifiers & Qt.ControlModifier))
-									{
-										_millerControl.itemsSelected([index])
-									}else						
-									{
-										_millerControl.itemClicked(index)
-									}
-                                }
+                                _millerColumns.currentIndex = _index
+                                _millerListView.currentIndex = index  
                                 
-                                onDoubleClicked:
+                                if ((mouse.button == Qt.LeftButton) && (mouse.modifiers & Qt.ControlModifier))
                                 {
-                                    _millerColumns.currentIndex = _index
-                                    _millerListView.currentIndex = index
-                                    _millerControl.itemDoubleClicked(index)
+                                    _millerControl.itemsSelected([index])
+                                }else						
+                                {
+                                    _millerControl.itemClicked(index)
                                 }
-                                
-                                onPressAndHold:
-                                {
-                                    if(!Maui.Handy.isTouch)
-                                        return
-                                        
+                            }
+                            
+                            onDoubleClicked:
+                            {
+                                _millerColumns.currentIndex = _index
+                                _millerListView.currentIndex = index
+                                _millerControl.itemDoubleClicked(index)
+                            }
+                            
+                            onPressAndHold:
+                            {
+                                if(!Maui.Handy.isTouch)
+                                    return
+                                    
                                     _millerColumns.currentIndex = _index
                                     _millerListView.currentIndex = index
                                     _millerControl.itemRightClicked(index)
-                                }
-                                
-                                onRightClicked:
-                                {
-                                    _millerColumns.currentIndex = _index
-                                    _millerListView.currentIndex = index
-                                    _millerControl.itemRightClicked(index)
-                                }
-                                                                
-                                onToggled:
-                                {
-                                    _millerColumns.currentIndex = _index
-                                    _millerListView.currentIndex = index
-                                    _millerControl.itemToggled(index, state)
-                                }
-                                
-                                onContentDropped:
-                                {
-                                    _dropMenu.urls =  drop.urls.join(",")
-                                    _dropMenu.target = model.path
-                                    _dropMenu.popup()
-                                }
+                            }
+                            
+                            onRightClicked:
+                            {
+                                _millerColumns.currentIndex = _index
+                                _millerListView.currentIndex = index
+                                _millerControl.itemRightClicked(index)
+                            }
+                            
+                            onToggled:
+                            {
+                                _millerColumns.currentIndex = _index
+                                _millerListView.currentIndex = index
+                                _millerControl.itemToggled(index, state)
+                            }
+                            
+                            onContentDropped:
+                            {
+                                _dropMenu.urls =  drop.urls.join(",")
+                                _dropMenu.target = model.path
+                                _dropMenu.popup()
                             }
                         }
                     }

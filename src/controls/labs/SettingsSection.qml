@@ -2,21 +2,19 @@ import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
-import org.kde.mauikit 1.1 as MauiLab
+import org.kde.mauikit 1.2 as Maui
 
-Rectangle
+Maui.AlternateListItem
 {
     id: control
     default property alias content : _mainData.data
-        
+        property int index : -1        
         property alias title : _titleLabel.text
         property alias description : _descLabel.text
         
+        alt: index % 2 === 0
         Layout.fillWidth: true
         implicitHeight: _layout.implicitHeight + (Maui.Style.space.huge + _layout.spacing)
-        
-        property int index : -1
         
         ColumnLayout
         {
@@ -60,16 +58,5 @@ Rectangle
                 Layout.fillWidth: true
                 //             Layout.margins: Maui.Style.space.medium
             }
-        }
-        
-        Kirigami.Separator
-        {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-        }
-        
-        color: Kirigami.Theme.backgroundColor
-        Kirigami.Theme.inherit: false
-        Kirigami.Theme.colorSet: index % 2 === 0 ? Kirigami.Theme.View : Kirigami.Theme.Window
+        }        
 }

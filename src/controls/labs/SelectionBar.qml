@@ -52,7 +52,7 @@ Item
     
     readonly property alias uris: _private._uris
     readonly property alias items: _private._items
-
+    
     readonly property alias selectionList : selectionList
     readonly property alias count : selectionList.count    
     
@@ -64,81 +64,69 @@ Item
         property var _uris : []
         property var _items : []
     }
-
+    
     property Component listDelegate: Maui.ItemDelegate
     {
         id: delegate
         height: Maui.Style.rowHeight * 1.5
         width: parent.width
-
+        
         Kirigami.Theme.backgroundColor: "transparent"
         Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
-
+        
         onClicked: control.itemClicked(index)
-		onPressAndHold: control.itemPressAndHold(index)
-		
-		Maui.ListItemTemplate
-		{
-			id: _template
-			anchors.fill: parent                
-			iconVisible: false
-			labelsVisible: true
-			label1.text: model.uri               
-			
-			checkable: true
-			checked: true
-			onToggled: control.removeAtIndex(index)	
-		}        
-	}
-
+        onPressAndHold: control.itemPressAndHold(index)
+        
+        Maui.ListItemTemplate
+        {
+            id: _template
+            anchors.fill: parent                
+            iconVisible: false
+            labelsVisible: true
+            label1.text: model.uri               
+            
+            checkable: true
+            checked: true
+            onToggled: control.removeAtIndex(index)	
+        }        
+    }
+    
     signal iconClicked()
     signal cleared()
     signal exitClicked()
     signal itemClicked(int index)
     signal itemPressAndHold(int index)
-
+    
     signal itemAdded(var item)
     signal itemRemoved(var item)
-
+    
     signal uriAdded(string uri)
     signal uriRemoved(string uri)
-
+    
     signal clicked(var mouse)
     signal rightClicked(var mouse)
     
     signal urisDropped(var uris)
-
+    
+    
     Item
     {
         id: _container
         anchors.centerIn: parent
         implicitHeight: control.barHeight
         width: parent.width
-                
-        DropShadow
-        {
-            id: rectShadow
-            anchors.fill: _listContainer
-            cached: true
-            horizontalOffset: 0
-            verticalOffset: 0
-            radius: 8.0
-            samples: 16
-            color: "#333"
-            smooth: true
-            source: _listContainer
-        }
         
         Rectangle
         {
             id: _listContainer
             property bool showList : false
-            height: showList ? Math.min(Math.min(400, control.maxListHeight), selectionList.contentHeight) + control.height + Maui.Style.space.big : 0
+            height: showList ? Math.min(Math.min(400, control.maxListHeight), selectionList.contentHeight) + control.barHeight + Maui.Style.space.big : 0
             width: parent.width
             color: Qt.lighter(Kirigami.Theme.backgroundColor)
+            border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
             radius:  control.radius
             focus: true
-            y:  ((height) * -1) + parent.height
+            y: ((height) * -1) + parent.implicitHeight
             x: parent.x
             
             opacity: showList ? 1 : .97
@@ -161,6 +149,7 @@ Item
                 }
             }
             
+         
             Maui.ListBrowser
             {
                 anchors.fill: parent
@@ -174,8 +163,23 @@ Item
                 background: null
                 
                 delegate: control.listDelegate			
-            }   
+            }             
         }
+        
+        DropShadow
+        {
+            id: rectShadow
+            anchors.fill: _listContainer
+            cached: true
+            horizontalOffset: 0
+            verticalOffset: 0
+            radius: 8.0
+            samples: 16
+            color: "#333"
+            smooth: true
+            source: _listContainer
+        }
+        
         
         Rectangle
         {
@@ -184,7 +188,7 @@ Item
             color: Kirigami.Theme.backgroundColor
             radius: control.radius
             border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-            
+                       
             MouseArea
             {
                 anchors.fill: parent
@@ -205,6 +209,8 @@ Item
                 }
             }
         }
+        
+        
         
         RowLayout
         {
@@ -382,18 +388,18 @@ Item
             control.urisDropped(drop.urls)
         }
     }
-
+    
     Keys.onEscapePressed:
     {
         control.exitClicked();
     }
-
+    
     Keys.onBackPressed:
     {
         control.exitClicked();
         event.accepted = true
     }
-
+    
     function clear()
     {
         _private._uris = []
@@ -402,42 +408,42 @@ Item
         selectionList.model.clear()
         control.cleared()
     }
-
+    
     function itemAt(index)
     {
         if(index < 0 ||  index > selectionList.count)
             return
-        return selectionList.model.get(index)
+            return selectionList.model.get(index)
     }
-
+    
     function removeAtIndex(index)
     {
         if(index < 0)
             return
-
-        const item = selectionList.model.get(index)
-        const uri = item.uri
-
-        if(contains(uri))
-        {
-            _private._uris.splice(index, 1)
-            _private._items.splice(index, 1)
-            selectionList.model.remove(index)
-            control.itemRemoved(item)
-            control.uriRemoved(uri)
-        }
+            
+            const item = selectionList.model.get(index)
+            const uri = item.uri
+            
+            if(contains(uri))
+            {
+                _private._uris.splice(index, 1)
+                _private._items.splice(index, 1)
+                selectionList.model.remove(index)
+                control.itemRemoved(item)
+                control.uriRemoved(uri)
+            }
     }
-
+    
     function removeAtUri(uri)
     {
         removeAtIndex(indexOf(uri))
     }
-
+    
     function indexOf(uri)
     {
         return _private._uris.indexOf(uri)
     }
-
+    
     function append(uri, item)
     {
         const index  = _private._uris.indexOf(uri)
@@ -445,37 +451,37 @@ Item
         {
             if(control.singleSelection)
                 clear()
-
-            _private._items.push(item)
-            _private._uris.push(uri)
-
-            item.uri = uri
-            selectionList.model.append(item)
-            selectionList.listView.positionViewAtEnd()
-            selectionList.currentIndex = selectionList.count - 1
-
-            control.itemAdded(item)
-            control.uriAdded(uri)
-
+                
+                _private._items.push(item)
+                _private._uris.push(uri)
+                
+                item.uri = uri
+                selectionList.model.append(item)
+                selectionList.listView.positionViewAtEnd()
+                selectionList.currentIndex = selectionList.count - 1
+                
+                control.itemAdded(item)
+                control.uriAdded(uri)
+                
         }else
         {
             selectionList.currentIndex = index
-            //             notify(item.icon, qsTr("Item already selected!"), String("The item '%1' is already in the selection box").arg(item.label), null, 4000)
+            //             notify(item.icon, i18n("Item already selected!"), String("The item '%1' is already in the selection box").arg(item.label), null, 4000)
         }
-
+        
         animate()
     }
-
+    
     function animate()
     {
         anim.running = true
     }
-
+    
     function getSelectedUrisString()
     {
         return String(""+_private._uris.join(","))
     }
-
+    
     function contains(uri)
     {
         return _private._uris.includes(uri)

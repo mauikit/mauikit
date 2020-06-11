@@ -5,7 +5,7 @@ set(REQUIRED_KF5_VERSION 5.60.0)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(MAUIKIT_VERSION 1.0.0)
+set(MAUIKIT_VERSION 1.2.0)
 
 set(AUTOMOC_MOC_OPTIONS -Muri=org.kde.maui)
 
@@ -20,7 +20,7 @@ option(COMPONENT_EDITOR "Build editor component" ON)
 option(COMPONENT_FM "Build filemanager component" ON)
 option(COMPONENT_ACCOUNTS "Build accounts component" ON)
 option(COMPONENT_TERMINAL "Build terminal component" ON)
-option(COMPONENT_STORE "Build store component" ON)
+option(COMPONENT_STORE "Build store component" OFF)
 option(COMPONENT_TAGGING "Build tagging component" ON)
 option(COMPONENT_SYNCING "Build syncing component" ON)
 
@@ -30,6 +30,7 @@ include(ECMGenerateHeaders)
 include(CMakePackageConfigHelpers)
 include(ECMPoQmTools)
 include(ECMQMLModules)
+include(KDEClangFormat)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(ECMQtDeclareLoggingCategory)
@@ -79,3 +80,6 @@ install(EXPORT MauiKitTargets
     DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
     FILE MauiKitTargets.cmake
     )
+
+file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h)
+kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})

@@ -20,18 +20,18 @@
 #ifndef TAGDB_H
 #define TAGDB_H
 
+#include <QDebug>
+#include <QDir>
+#include <QFileInfo>
+#include <QList>
 #include <QObject>
+#include <QSqlDatabase>
+#include <QSqlDriver>
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QSqlRecord>
 #include <QString>
 #include <QStringList>
-#include <QList>
-#include <QSqlDatabase>
-#include <QDebug>
-#include <QSqlQuery>
-#include <QSqlError>
-#include <QSqlRecord>
-#include <QSqlDriver>
-#include <QFileInfo>
-#include <QDir>
 #include <QVariantMap>
 
 #include "tag.h"
@@ -52,14 +52,14 @@ private:
     QSqlDatabase m_db;
 
 public:
-    /* utils*/	
+    /* utils*/
     bool checkExistance(const QString &tableName, const QString &searchId, const QString &search);
     bool checkExistance(const QString &queryStr);
 
 protected:
     TAGDB();
-	~TAGDB();
-    
+    ~TAGDB();
+
     QSqlQuery getQuery(const QString &queryTxt);
     void openDB(const QString &name);
     void prepareCollectionDB() const;
@@ -69,6 +69,5 @@ protected:
     bool update(const QString &table, const QString &column, const QVariant &newValue, const QVariant &op, const QString &id);
     bool remove(const QString &tableName, const TAG::DB &removeData);
 };
-
 
 #endif // DB_H

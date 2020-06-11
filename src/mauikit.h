@@ -20,8 +20,6 @@
 #ifndef MAUIKIT_H
 #define MAUIKIT_H
 
-#define MAUIKIT_VERSION "1.0.2"
-
 #include <QQmlEngine>
 #include <QQmlExtensionPlugin>
 
@@ -32,9 +30,9 @@
 class MauiAccounts;
 #ifdef STATIC_MAUIKIT
 class MauiKit : public QQmlExtensionPlugin
-        #else
+#else
 class MAUIKIT_EXPORT MauiKit : public QQmlExtensionPlugin
-        #endif
+#endif
 {
     Q_OBJECT
 
@@ -42,10 +40,10 @@ class MAUIKIT_EXPORT MauiKit : public QQmlExtensionPlugin
     Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
 #endif
 
-public:    
+public:
     void registerTypes(const char *uri) Q_DECL_OVERRIDE;
 
-    static MauiKit& getInstance()
+    static MauiKit &getInstance()
     {
         static MauiKit instance;
         return instance;
@@ -56,7 +54,7 @@ public:
         static MauiKit instance;
         instance.registerTypes("org.kde.mauikit");
     }
-    
+
     void initResources();
 
 private:
@@ -69,7 +67,7 @@ private:
         return baseUrl().toLocalFile() + QLatin1Char('/') + path;
 #endif
     }
-    
+
     QString resolveFileUrl(const QString &filePath) const
     {
 #ifdef STATIC_MAUIKIT

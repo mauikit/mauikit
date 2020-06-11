@@ -40,6 +40,27 @@ Rectangle
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     Kirigami.Theme.inherit: false
     
+    Component.onCompleted:
+    {
+        if(control.checkable && control.autoExclusive && control.currentIndex >= 0 && control.currentIndex < control.actions.length)
+        {
+            control.actions[control.currentIndex].checked = true
+        }        
+    }
+    
+    function uncheck(except)
+    {
+        for(var i in control.actions)
+        {
+            if(control.actions[i] === except)
+            {
+                continue
+            }
+            
+            control.actions[i].checked = false
+        }
+    }
+    
     Row
     {
         id: _layout
@@ -175,28 +196,22 @@ Rectangle
                 {
                     id: _buttonMouseArea
                     action : modelData
-                    checked: control.checkable && control.autoExclusive ? control.currentIndex === index : action.checked
+                    checkable: control.checkable
+                    autoExclusive: control.autoExclusive
                     width: implicitWidth
                     height: parent.height
                     enabled: action.enabled
                     opacity: enabled ? 1 : 0.5
-                    text: action.text
                     display: control.autoExclusive ? (checked && control.enabled ? control.display : ToolButton.IconOnly) : control.display
                     icon.name: action.icon.name
                     icon.width: Maui.Style.iconSizes.small
                     icon.height: Maui.Style.iconSizes.small
                     
-                    background.border.color: "transparent"
-                    
+                    rec.border.color: "transparent"                    
+                   
                     onClicked:
                     {
                         control.currentIndex = index
-                        if(control.checkable && !control.autoExclusive)
-                        {
-                            checked = !checked
-                        }
-                        
-                        action.triggered()
                     }
                     
                     Kirigami.Separator
@@ -226,7 +241,7 @@ Rectangle
                 
                 MenuItem
                 {
-                    text:modelData.text
+                    text: modelData.text
                     icon.name: modelData.icon.name
                     autoExclusive: control.autoExclusive
                     checked: index === control.currentIndex && control.checkable

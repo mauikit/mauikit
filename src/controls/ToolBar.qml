@@ -17,10 +17,10 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.6
-import QtQuick.Controls 2.2
+import QtQuick 2.13
+import QtQuick.Controls 2.13
 import org.kde.kirigami 2.9 as Kirigami
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import "private"
@@ -64,7 +64,7 @@ ToolBar
         property bool strech : true
         property bool leftSretch: strech
         property bool rightSretch: strech
-        property bool middleStrech: strech
+        property bool middleStrech: strech                     
         
         MouseArea
         {
@@ -198,6 +198,25 @@ ToolBar
         {
             id: wheelHandler
             target: mainFlickable
+        }
+        
+        Item
+        {
+            anchors.fill: parent          
+            
+            DragHandler 
+            {
+                acceptedDevices: PointerDevice.GenericPointer
+                grabPermissions:  PointerHandler.CanTakeOverFromItems | PointerHandler.CanTakeOverFromHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByAnything 
+                onActiveChanged: if (active) { root.startSystemMove(); }
+            }
+//             
+          /*  TapHandler
+            {
+                grabPermissions:  PointerHandler.CanTakeOverFromItems | PointerHandler.CanTakeOverFromHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByAnything 
+                onTapped: if (tapCount === 2) root.toggleMaximized()
+                gesturePolicy: TapHandler.DragThreshold
+            } */   
         }
         
         ScrollView
@@ -353,6 +372,6 @@ ToolBar
                     
                 }            
             }
-        }
+        }        
         
 }

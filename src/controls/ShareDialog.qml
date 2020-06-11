@@ -37,7 +37,7 @@ Maui.Dialog
 
     defaultButtons: false
 
-    page.title: qsTr("Share with")
+    page.title: i18n("Share with")
     headBar.visible: true
 
     Kirigami.ScrollablePage

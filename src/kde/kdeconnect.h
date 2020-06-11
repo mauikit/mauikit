@@ -20,8 +20,8 @@
 #ifndef KDECONNECT_H
 #define KDECONNECT_H
 
-#include <QObject>
 #include <QMap>
+#include <QObject>
 #include <QString>
 #include <QVariantList>
 

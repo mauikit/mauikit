@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# This hook formats the cpp headers and sources with clang-format
+
+# Get a list of files with changes
+_files=$(git diff --name-only HEAD | grep -E "\.h$|\.hpp$|\.cpp$")
+
+# Iterate over each changed files
+for file in $_files; do
+    # Runing clang-format on unformatted file
+    echo "[PRE-COMMIT HOOK]: Formatting $file"
+    /usr/bin/clang-format -style=file -i $file
+done

@@ -112,6 +112,7 @@ Window
     /******************** SIGNALS *********************/
     /*************************************************/
     signal menuButtonClicked();
+   
 
     onClosing:
     {
@@ -123,21 +124,73 @@ Window
             const y = root.y
             Maui.FM.saveSettings("GEOMETRY", Qt.rect(x, y, width, height), "WINDOW")
         }
-    }
+    }    
+        
+//     Rectangle
+//     {
+//         id: _csdBorder
+//         radius: _pageBackground.radius + 0.5
+//         anchors.fill: parent
+//         anchors.margins: Maui.Style.space.medium
+// 
+//         opacity: 0       
+//     }    
+//     
+//     MouseArea
+//     {
+//         visible: Maui.App.enableCSD 
+//         cursorShape: Qt.SizeHorCursor 
+//         propagateComposedEvents: true
+//         preventStealing: false        
+//         onPressed: mouse.accepted = false         
+//         anchors.fill: parent
+//          
+//         DragHandler
+//         {
+//             id: resizeHandler
+//             property int edge 
+//             grabPermissions: TapHandler.TakeOverForbidden
+//             target: null
+//             onActiveChanged: if (active) {
+//                 const p = resizeHandler.centroid.position;
+//                 let e = 0;
+//                 if (p.x / width < 0.10) { e |= Qt.LeftEdge; edge = Qt.LeftEdge }
+//                 if (p.x / width > 0.90) { e |= Qt.RightEdge; edge = Qt.RightEdge }
+//                 if (p.y / height < 0.10) { e |= Qt.TopEdge; edge = Qt.TopEdge }
+//                 if (p.y / height > 0.90) { e |= Qt.BottomEdge; edge = Qt.BottomEdge }
+//                 console.log("RESIZING", e);
+//                 root.startSystemResize(e);
+//             }
+//         }
+//         
+//     }
+ 
+//     DropShadow 
+//     {
+//         transparentBorder: true
+//         anchors.fill: _csdBorder
+//         horizontalOffset: 0
+//         verticalOffset: 0
+//         radius: 8.0
+//         samples: 17
+//         color: Qt.rgba(0,0,0,0.5)
+//         source: _csdBorder      
+//     }
 
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     MauiLab.Page
     {
         id: _page
         anchors.fill: parent
+//         anchors.margins: Maui.Style.space.small
         Kirigami.Theme.colorSet: root.Kirigami.Theme.colorSet
-        headerBackground.color: Maui.App.enableCSD ? Qt.darker(Kirigami.Theme.backgroundColor, 1.1) : headBar.Kirigami.Theme.backgroundColor
+        headerBackground.color: Maui.App.enableCSD ? Qt.darker(Kirigami.Theme.backgroundColor, 1.1) : headBar.Kirigami.Theme.backgroundColor      
         
         headBar.farLeftContent: Loader
         {
             id: _leftControlsLoader
             visible: active
-            active: Maui.App.enableCSD && Maui.App.leftWindowControls.length
+            active: Maui.App.enableCSD && Maui.App.leftWindowControls.length && !Kirigami.Settings.isMobile
             Layout.preferredWidth: active ? implicitWidth : 0
             Layout.fillHeight: true
             sourceComponent: MauiLab.WindowControls
@@ -177,7 +230,7 @@ Window
 
                 MenuItem
                 {
-                    text: qsTr("About")
+                    text: i18n("About")
                     icon.name: "documentinfo"
                     onTriggered: aboutDialog.open()
                 }
@@ -188,7 +241,7 @@ Window
         {
             id: _rightControlsLoader
             visible: active
-            active: Maui.App.enableCSD && Maui.App.rightWindowControls.length
+            active: Maui.App.enableCSD && Maui.App.rightWindowControls.length && !Kirigami.Settings.isMobile
             Layout.preferredWidth: active ? implicitWidth : 0
             Layout.fillHeight: true
             sourceComponent: MauiLab.WindowControls
@@ -240,10 +293,12 @@ Window
         visible: Maui.App.enableCSD
         z: ApplicationWindow.overlay.z + 9999
         anchors.fill: parent
+//         anchors.margins: Maui.Style.space.small
         radius: _pageBackground.radius - 0.5
         color: "transparent"
         border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
-        opacity: 0.5
+        opacity: 0.8       
+
         
         Rectangle
         {
@@ -254,7 +309,57 @@ Window
             border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
             opacity: 0.8
         }
+        
     }
+    
+    
+    MouseArea
+    {
+        visible: Maui.App.enableCSD        
+        height: 16
+        width: height
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        cursorShape: Qt.SizeBDiagCursor
+        propagateComposedEvents: true
+        preventStealing: false
+        
+        onPressed: mouse.accepted = false 
+        
+        DragHandler 
+        {
+            grabPermissions: TapHandler.TakeOverForbidden
+            target: null
+            onActiveChanged: if (active) 
+            {              
+                root.startSystemResize(Qt.LeftEdge | Qt.BottomEdge);
+            }
+        }        
+    }  
+    
+    MouseArea
+    {
+        visible: Maui.App.enableCSD        
+        height: 16
+        width: height
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        cursorShape: Qt.SizeFDiagCursor
+        propagateComposedEvents: true
+        preventStealing: false
+        
+        onPressed: mouse.accepted = false 
+        
+        DragHandler 
+        {
+            grabPermissions: TapHandler.TakeOverForbidden
+            target: null
+            onActiveChanged: if (active) 
+            {              
+                root.startSystemResize(Qt.RightEdge | Qt.BottomEdge);
+            }
+        }        
+    }    
     
     
     Overlay.overlay.modal: Rectangle 
@@ -385,7 +490,7 @@ Window
                 Layout.margins: Maui.Style.space.small
                 Layout.preferredHeight: implicitHeight
                 Layout.alignment: Qt.AlignCenter
-                text: qsTr("Manage accounts")
+                text: i18n("Manage accounts")
                 icon.name: "list-add-user"
                 onClicked:
                 {

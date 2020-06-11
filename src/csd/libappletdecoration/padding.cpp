@@ -22,11 +22,12 @@
 
 #include "padding.h"
 
-namespace Decoration {
-namespace Applet {
-
-Padding::Padding(QObject *parent) :
-    QObject(parent)
+namespace Decoration
+{
+namespace Applet
+{
+Padding::Padding(QObject *parent)
+    : QObject(parent)
 {
 }
 
@@ -64,7 +65,7 @@ void Padding::setLeft(int left)
     emit leftChanged();
 }
 
-int Padding::bottom()const
+int Padding::bottom() const
 {
     return m_bottom;
 }

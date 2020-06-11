@@ -1,4 +1,4 @@
-import QtQuick 2.12
+import QtQuick 2.13
 import QtQuick.Controls 2.3
 
 import QtQuick.Layouts 1.3
@@ -16,16 +16,8 @@ Item
 	
 	implicitWidth: _controlsLayout.implicitWidth
 	property var order : []
-	// 		TapHandler {
-	// 			onTapped: if (tapCount === 2) toggleMaximized()
-	// 			gesturePolicy: TapHandler.DragThreshold
-	// 		}
-	// 		DragHandler {
-	// 			grabPermissions: TapHandler.CanTakeOverFromAnything
-	// 			onActiveChanged: if (active) { root.startSystemMove(); }
-	// 		}
 	
-	
+	 
 	Row
 	{
 		id: _controlsLayout

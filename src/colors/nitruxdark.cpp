@@ -1,6 +1,7 @@
 #include "nitruxdark.h"
 
-NitruxDark::NitruxDark(QObject* parent) : Kirigami::PlatformTheme(parent)
+NitruxDark::NitruxDark(QObject *parent)
+    : Kirigami::PlatformTheme(parent)
 {
     for (auto group : {QPalette::Active, QPalette::Inactive, QPalette::Disabled}) {
         lightPalette.setColor(group, QPalette::WindowText, "#00FF00");

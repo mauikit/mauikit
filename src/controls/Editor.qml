@@ -81,34 +81,34 @@ Maui.Page
 		
 		MenuItem
 		{
-			text: qsTr("Copy")
+			text: i18n("Copy")
 			onTriggered: body.copy()
 			enabled: body.selectedText.length
 		}
 		
 		MenuItem
 		{
-			text: qsTr("Cut")
+			text: i18n("Cut")
 			onTriggered: body.cut()	
 			enabled: !body.readOnly && body.selectedText.length					
 		}
 		
 		MenuItem
 		{
-			text: qsTr("Paste")
+			text: i18n("Paste")
 			onTriggered: body.paste()
 			enabled: !body.readOnly					
 		}
 		
 		MenuItem
 		{
-			text: qsTr("Select All")
+			text: i18n("Select All")
 			onTriggered: body.selectAll()
 		}
 		
 		MenuItem
 		{
-			text: qsTr("Search Selected Text on Google...")
+			text: i18n("Search Selected Text on Google...")
 			onTriggered: Qt.openUrlExternally("https://www.google.com/search?q="+body.selectedText)
 			enabled: body.selectedText.length			
 		}
@@ -261,7 +261,16 @@ Maui.Page
                     else control.zoomOut()
             }
 			
-            MouseArea{ anchors.fill: parent}
+            MouseArea
+            {
+                anchors.fill: parent
+                onPressed:
+                {
+                    console.log("Editor")
+                    body.forceActiveFocus()
+                }
+                
+            }
 			
             Kirigami.ScrollablePage
 			{
@@ -285,8 +294,9 @@ Maui.Page
 				{
 					id: body
 					width: control.width
+					implicitHeight: Math.max( control.height, contentHeight)
 					text: document.text
-					placeholderText: qsTr("Body")
+					placeholderText: i18n("Body")
                     selectByKeyboard: !Kirigami.Settings.isMobile
                     selectByMouse : !Kirigami.Settings.isMobile
 					textFormat: TextEdit.AutoText			

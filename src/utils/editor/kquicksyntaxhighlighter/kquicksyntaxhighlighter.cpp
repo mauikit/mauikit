@@ -38,7 +38,8 @@ License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 int KQuickSyntaxHighlighter::m_instanceCount = 0;
 KSyntaxHighlighting::Repository *KQuickSyntaxHighlighter::m_repository = nullptr;
 
-KQuickSyntaxHighlighter::KQuickSyntaxHighlighter(QObject *parent) : QObject(parent)
+KQuickSyntaxHighlighter::KQuickSyntaxHighlighter(QObject *parent)
+    : QObject(parent)
     , m_textEdit(nullptr)
     , m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(this))
 {

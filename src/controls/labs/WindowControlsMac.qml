@@ -9,4 +9,5 @@ import org.kde.mauikit 1.1 as MauiLab
 Item
 {
     id: control
+    property int order
 }

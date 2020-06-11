@@ -69,7 +69,6 @@
         <file alias="ToolButtonMenu.qml">controls/ToolButtonMenu.qml</file>
         <file alias="ListItemTemplate.qml">controls/ListItemTemplate.qml</file>
         <file alias="FloatingButton.qml">controls/FloatingButton.qml</file>
-        <file alias="labs/SelectionBar.qml">controls/labs/SelectionBar.qml</file>
         <file alias="GridItemTemplate.qml">controls/GridItemTemplate.qml</file>
         <file alias="private/shapes/Arrow.qml">controls/private/shapes/Arrow.qml</file>
         <file alias="private/shapes/X.qml">controls/private/shapes/X.qml</file>
@@ -80,17 +79,21 @@
         <file alias="labs/CSDControls.qml">controls/labs/CSDControls.qml</file>
         <file alias="labs/ActionToolBar.qml">controls/labs/ActionToolBar.qml</file>
         <file alias="labs/ToolButtonAction.qml">controls/labs/ToolButtonAction.qml</file>
-        <file alias="labs/AppViews.qml">controls/labs/AppViews.qml</file>
-        <file alias="labs/AppViewLoader.qml">controls/labs/AppViewLoader.qml</file>
-        <file alias="labs/AltBrowser.qml">controls/labs/AltBrowser.qml</file>
+        <file alias="AppViews.qml">controls/AppViews.qml</file>
+        <file alias="AppViewLoader.qml">controls/AppViewLoader.qml</file>
+        <file alias="AltBrowser.qml">controls/AltBrowser.qml</file>
         <file alias="labs/TabsBrowser.qml">controls/labs/TabsBrowser.qml</file>
         <file alias="labs/SettingsDialog.qml">controls/labs/SettingsDialog.qml</file>
         <file alias="labs/SettingsSection.qml">controls/labs/SettingsSection.qml</file>
-        <file alias="labs/Page.qml">controls/labs/Page.qml</file>
         <file alias="labs/Doodle.qml">controls/labs/Doodle.qml</file>
         <file alias="labs/WindowControlsLinux.qml">controls/labs/WindowControlsLinux.qml</file>
         <file alias="labs/WindowControlsMac.qml">controls/labs/WindowControlsMac.qml</file>
         <file alias="labs/WindowControlsWindows.qml">controls/labs/WindowControlsWindows.qml</file>
+        <file alias="labs/AlternateListItem.qml">controls/labs/AlternateListItem.qml</file>
+        <file alias="plugin/AppViewsPlugin.qml">controls/plugin/AppViewsPlugin.qml</file>
+        <file alias="plugin/PagePlugin.qml">controls/plugin/PagePlugin.qml</file>
+        <file alias="plugin/PluginManager.qml">controls/plugin/PluginManager.qml</file>
+        <file alias="plugin/PluginsInfo.qml">controls/plugin/PluginsInfo.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

@@ -1,24 +1,23 @@
 #ifndef DOWNLOADER_H
 #define DOWNLOADER_H
 
-#include <QObject>
-#include <QNetworkReply>
-#include <QNetworkAccessManager>
-#include <QString>
 #include <QFile>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QObject>
+#include <QString>
 
 #ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
 #endif
 
-
 namespace FMH
 {
 #ifdef STATIC_MAUIKIT
 class Downloader : public QObject
-        #else
+#else
 class MAUIKIT_EXPORT Downloader : public QObject
-        #endif
+#endif
 {
     Q_OBJECT
 public:
@@ -46,7 +45,7 @@ signals:
 private slots:
     void onDownloadProgress(qint64 bytesRead, qint64 bytesTotal);
 
-    void onFinished(QNetworkReply* reply);
+    void onFinished(QNetworkReply *reply);
 
     void onReadyRead();
 
@@ -56,4 +55,3 @@ private slots:
 }
 
 #endif // DOWNLOADER_H
-

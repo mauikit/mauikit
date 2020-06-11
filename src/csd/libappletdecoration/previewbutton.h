@@ -24,18 +24,20 @@
 #ifndef KDECORATIONS_PREVIEW_BUTTON_ITEM_H
 #define KDECORATIONS_PREVIEW_BUTTON_ITEM_H
 
-#include <QMargins>
-#include <QQuickPaintedItem>
-#include <QPointer>
 #include <KDecoration2/DecorationButton>
+#include <QMargins>
+#include <QPointer>
+#include <QQuickPaintedItem>
 
-namespace KDecoration2 {
+namespace KDecoration2
+{
 class Decoration;
 }
 
-namespace Decoration {
-namespace Applet {
-
+namespace Decoration
+{
+namespace Applet
+{
 class Padding;
 class PreviewBridge;
 class PreviewClient;
@@ -81,7 +83,7 @@ public:
 
     bool isOnAllDesktops() const;
     void setIsOnAllDesktops(bool onalldesktops);
-    
+
     bool isKeepAbove() const;
     void setIsKeepAbove(bool keepabove);
 
@@ -135,7 +137,6 @@ private Q_SLOTS:
     void syncInternalGeometry();
 
 private:
-
     QPointer<Decoration::Applet::PreviewBridge> m_bridge;
     QPointer<Decoration::Applet::PreviewClient> m_client;
     QPointer<Decoration::Applet::SharedDecoration> m_sharedDecoration;
@@ -143,10 +144,10 @@ private:
     KDecoration2::DecorationButton *m_button = nullptr;
     KDecoration2::DecorationButtonType m_type = KDecoration2::DecorationButtonType::Custom;
 
-    bool m_isActive{true};
-    bool m_isMaximized{false};
-    bool m_isOnAllDesktops{false};
-    bool m_isKeepAbove{false};
+    bool m_isActive {true};
+    bool m_isMaximized {false};
+    bool m_isOnAllDesktops {false};
+    bool m_isKeepAbove {false};
 
     int m_localX;
     int m_localY;
