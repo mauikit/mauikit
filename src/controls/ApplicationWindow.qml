@@ -190,7 +190,7 @@ Window
         {
             id: _leftControlsLoader
             visible: active
-            active: Maui.App.enableCSD && Maui.App.leftWindowControls.length
+            active: Maui.App.enableCSD && Maui.App.leftWindowControls.length && !Kirigami.Settings.isMobile
             Layout.preferredWidth: active ? implicitWidth : 0
             Layout.fillHeight: true
             sourceComponent: MauiLab.WindowControls
@@ -241,7 +241,7 @@ Window
         {
             id: _rightControlsLoader
             visible: active
-            active: Maui.App.enableCSD && Maui.App.rightWindowControls.length
+            active: Maui.App.enableCSD && Maui.App.rightWindowControls.length && !Kirigami.Settings.isMobile
             Layout.preferredWidth: active ? implicitWidth : 0
             Layout.fillHeight: true
             sourceComponent: MauiLab.WindowControls
@@ -309,7 +309,6 @@ Window
             border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
             opacity: 0.8
         }
-        
         
     }
     

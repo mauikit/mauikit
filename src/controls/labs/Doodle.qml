@@ -183,6 +183,23 @@ Maui.Dialog
                 onClicked: {}
             }
             
+            leftContent: Maui.ToolActions
+            {
+                expanded: true
+                autoExclusive: true
+                checkable: false
+                
+                Action
+                {
+                    icon.name: "edit-undo"
+                }
+                
+                Action
+                {
+                    icon.name: "edit-redo"
+                }
+            }
+            
             middleContent:[ 
             
             Maui.ToolActions

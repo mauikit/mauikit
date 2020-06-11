@@ -20,7 +20,7 @@ option(COMPONENT_EDITOR "Build editor component" ON)
 option(COMPONENT_FM "Build filemanager component" ON)
 option(COMPONENT_ACCOUNTS "Build accounts component" ON)
 option(COMPONENT_TERMINAL "Build terminal component" ON)
-option(COMPONENT_STORE "Build store component" ON)
+option(COMPONENT_STORE "Build store component" OFF)
 option(COMPONENT_TAGGING "Build tagging component" ON)
 option(COMPONENT_SYNCING "Build syncing component" ON)
 

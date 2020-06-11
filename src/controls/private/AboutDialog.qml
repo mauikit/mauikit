@@ -23,7 +23,7 @@ import QtQuick.Controls 2.10
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.12
 
-import org.kde.kirigami 2.13 as Kirigami
+import org.kde.kirigami 2.8 as Kirigami
 import org.kde.mauikit 1.2 as Maui
 
 Maui.Dialog
@@ -79,14 +79,7 @@ Maui.Dialog
                     Layout.fillWidth: true                    
                     implicitHeight: _div1.height + Maui.Style.space.huge
                     alt: true   
-                    Kirigami.Theme.backgroundColor: palette.background
-                    Kirigami.Theme.textColor: palette.foreground
-                    Kirigami.ImageColors
-                    {
-                        id: palette
-                        source: Maui.App.name
-                    }
-                    
+                 
                     Maui.ListItemTemplate
                     {
                         id: _div1
