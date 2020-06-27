@@ -45,7 +45,7 @@ Item
         Layout.alignment: Qt.AlignVCenter
         Layout.fillWidth: control.strech
         Layout.preferredHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
-        
+        autoExclusive: true
         visible: modelData.visible
         checked:  index == control.currentIndex
         Kirigami.Theme.backgroundColor: modelData.Kirigami.Theme.backgroundColor
