@@ -57,6 +57,7 @@ Maui.AbstractSideBar
     Connections
     {
         target: control.overlay
+        ignoreUnknownSignals: true
         onClicked: control.stick ? control.collapse() : control.close()
     }
 

@@ -73,7 +73,9 @@ Maui.Dialog
             bottomPadding: padding
             
             ColumnLayout
-            {                
+            {    
+                spacing: 0
+                
                 Maui.AlternateListItem
                 {
                     Layout.fillWidth: true                    
@@ -100,7 +102,7 @@ Maui.Dialog
                         label1.font.bold: true
                         label1.font.pointSize: Maui.Style.fontSizes.enormous * 1.3
                         
-                        label2.text:  Maui.App.version + "\n" + Maui.App.description + "\n" + Maui.App.org
+                        label2.text:  Maui.App.version + "\n" + Maui.App.description + "\nBy " + Maui.App.org
                         label2.font.pointSize: Maui.Style.fontSizes.default
                         label2.elide: Text.ElideRight
                         label2.wrapMode: Text.WrapAtWordBoundaryOrAnywhere   
@@ -109,9 +111,11 @@ Maui.Dialog
                 
                 Maui.AlternateListItem
                 {
-                    Layout.fillWidth: true
+                    Layout.fillWidth: true                    
                     Layout.preferredHeight: _credits.contentHeight + Maui.Style.space.huge
                     alt: false
+                    leftPadding: Maui.Style.space.medium
+                    rightPadding: Maui.Style.space.medium 
                     
                     ListView
                     {
@@ -123,7 +127,7 @@ Maui.Dialog
                         anchors.centerIn: parent
                         delegate: Maui.ListItemTemplate
                         {
-                            width: parent.width
+                            width: parent.width                            
                             iconSource: "animal"
                             iconSizeHint: Maui.Style.iconSizes.medium
                             spacing: Maui.Style.space.medium
@@ -139,12 +143,15 @@ Maui.Dialog
                     Layout.fillWidth: true
                     Layout.preferredHeight: _poweredBy.implicitHeight + Maui.Style.space.huge
                     alt: true
+                    leftPadding: Maui.Style.space.medium
+                    rightPadding: Maui.Style.space.medium 
                     
                     Maui.ListItemTemplate
                     {
                         id: _poweredBy
                         anchors.centerIn: parent
                         width: parent.width
+                        
                         iconSource: "code-context"
                         iconSizeHint: Maui.Style.iconSizes.medium
                         spacing: Maui.Style.space.medium

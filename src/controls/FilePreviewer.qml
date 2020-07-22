@@ -180,8 +180,9 @@ Maui.Dialog
                                     visible: model.value.length
                                     width: visible ? parent.width : 0
                                     height: visible ? _delegateColumnInfo.implicitHeight + Maui.Style.space.large : 0
-                                    alt: index % 2 === 0
-                                   
+                                    leftPadding: Maui.Style.space.medium
+                                    rightPadding: Maui.Style.space.medium
+                                    
                                     Maui.ListItemTemplate
                                     {
                                         id: _delegateColumnInfo
@@ -189,7 +190,7 @@ Maui.Dialog
                                         
                                         iconSource: "documentinfo"
                                         iconSizeHint: Maui.Style.iconSizes.medium
-                                        
+                                       
                                         anchors.centerIn: parent
                                         anchors.margins: Maui.Style.space.medium
                                         

@@ -77,15 +77,13 @@ Maui.Dialog
 				'mimeType':control.mimeType
 			}				
 			
-			delegate: Maui.ItemDelegate
+			delegate:  Maui.AlternateListItem 
 			{
 				width: parent.width
 				height: Maui.Style.rowHeight * 2
 				
-				background: Maui.AlternateListItem 
-				{
-                    alt: index % 2 === 0
-                }
+				leftPadding: Maui.Style.space.medium
+				rightPadding: Maui.Style.space.medium
 				
 				Maui.ListItemTemplate
 				{

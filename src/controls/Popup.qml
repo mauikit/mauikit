@@ -19,67 +19,125 @@
 
 import QtQuick 2.13
 import QtQuick.Controls 2.13
-import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
+import org.kde.kirigami 2.12 as Kirigami
+import org.kde.mauikit 1.2 as Maui
+
+import QtGraphicalEffects 1.0
 
 Popup
 {
     id: control
     
-    property int maxWidth : parent.width
-    property int maxHeight : parent.height
-    property double hint : 0.9
-    property double heightHint : hint 
-    property double widthHint : hint
-    
-    property int verticalAlignment : Qt.AlignVCenter
-    
-    parent: ApplicationWindow.overlay
-    
-    width: Math.max(Math.min(parent.width * widthHint, maxWidth), Math.min(maxWidth, parent.width * widthHint))	
-    height: Math.max(Math.min(parent.height * heightHint, maxHeight), Math.min(maxHeight, parent.height * heightHint))	
-    
-    
-    x:  parent.width / 2 - width / 2
-    y: if(verticalAlignment === Qt.AlignVCenter) 
-    parent.height / 2 - height / 2
-    else if(verticalAlignment === Qt.AlignTop)
-		(height + Maui.Style.space.huge)
+    default property alias content : _content.data
+        property int maxWidth : parent.width
+        property int maxHeight : parent.height
+        property double hint : 0.9
+        property double heightHint : hint 
+        property double widthHint : hint
+        
+        property int verticalAlignment : Qt.AlignVCenter
+        
+        
+        parent: ApplicationWindow.overlay
+        
+        width: Math.round(Math.max(Math.min(parent.width * widthHint, maxWidth), Math.min(maxWidth, parent.width * widthHint))	)
+        height: Math.round(Math.max(Math.min(parent.height * heightHint, maxHeight), Math.min(maxHeight, parent.height * heightHint)))
+        
+        x:  parent.width / 2 - width / 2
+        y: if(verticalAlignment === Qt.AlignVCenter) 
+        {
+            parent.height / 2 - height / 2
+        }
+        else if(verticalAlignment === Qt.AlignTop)
+        {
+            (height + Maui.Style.space.huge)        
+        }
         else if(verticalAlignment === Qt.AlignBottom)
-			(parent.height) - (height + Maui.Style.space.huge)
-            else
-                parent.height / 2 - height / 2
-
-                
-                modal: control.width !== control.parent.width && control.height !== control.parent.height
+        {
+            (parent.height) - (height + Maui.Style.space.huge)
             
-                
-                margins: 1
-                padding: 1 
-                
-                //     topPadding: popupBackground.radius
-                //     bottomPadding: popupBackground.radius
-                topPadding: control.padding
-                bottomPadding: control.padding
-                leftPadding: control.padding
-                rightPadding: control.padding
-                
-                rightMargin: control.margins
-                leftMargin: control.margins
-                topMargin: control.margins
-                bottomMargin: control.margins    
-                
-                enter: Transition 
+        }else
+        {
+            parent.height / 2 - height / 2        
+        }
+        
+        modal: control.width !== control.parent.width && control.height !== control.parent.height
+        
+        
+        margins: 1
+        padding: 1 
+        
+        //     topPadding: popupBackground.radius
+        //     bottomPadding: popupBackground.radius
+        topPadding: control.padding
+        bottomPadding: control.padding
+        leftPadding: control.padding
+        rightPadding: control.padding
+        
+        rightMargin: control.margins
+        leftMargin: control.margins
+        topMargin: control.margins
+        bottomMargin: control.margins    
+        
+        enter: Transition 
+        {
+            // grow_fade_in
+            NumberAnimation { property: "scale"; from: 0.9; to: 1.0; easing.type: Easing.OutQuint; duration: 220 }
+            NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; easing.type: Easing.OutCubic; duration: 150 }
+        }
+        
+        exit: Transition 
+        {
+            // shrink_fade_out
+            NumberAnimation { property: "scale"; from: 1.0; to: 0.9; easing.type: Easing.OutQuint; duration: 220 }
+            NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; easing.type: Easing.OutCubic; duration: 150 }
+        }  
+        
+        contentItem: Item
+        {
+            id: _content
+            
+            layer.enabled: false
+            layer.effect: OpacityMask
+            {
+                cached: true
+                maskSource: Item
                 {
-                    // grow_fade_in
-                    NumberAnimation { property: "scale"; from: 0.9; to: 1.0; easing.type: Easing.OutQuint; duration: 220 }
-                    NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; easing.type: Easing.OutCubic; duration: 150 }
+                    width: _content.width
+                    height: _content.height
+                    
+                    Rectangle
+                    {
+                        anchors.fill: parent
+                        radius: Maui.Style.radiusV
+                    }
                 }
-                
-                exit: Transition 
-                {
-                    // shrink_fade_out
-                    NumberAnimation { property: "scale"; from: 1.0; to: 0.9; easing.type: Easing.OutQuint; duration: 220 }
-                    NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; easing.type: Easing.OutCubic; duration: 150 }
-                }                
+            }
+        }
+        
+        
+        background: Kirigami.ShadowedRectangle
+        {
+            radius: Maui.Style.radiusV
+            color: Kirigami.Theme.backgroundColor
+            
+            property color borderColor:  Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
+            border.color: Qt.rgba(borderColor.r, borderColor.g, borderColor.b, 0.6)
+            border.width: 1
+            
+            shadow.xOffset: 0
+            shadow.yOffset: 0
+            shadow.color: Qt.rgba(0, 0, 0, 0.3)
+            shadow.size: 8
+            
+            Rectangle
+            {
+                anchors.fill: parent
+                anchors.margins: 1
+                color: "transparent"
+                radius: parent.radius - 0.5
+                border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+                opacity: 0.8
+            }         
+        } 
 }

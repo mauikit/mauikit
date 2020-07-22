@@ -74,6 +74,7 @@ Maui.ItemDelegate
             radius: Maui.Style.radiusV
             color: control.Kirigami.Theme.highlightColor		
             visible: parent.containsDrag
+            opacity: 0.3
         }
         
         onDropped:

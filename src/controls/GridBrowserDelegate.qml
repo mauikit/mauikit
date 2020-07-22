@@ -67,14 +67,6 @@ Maui.ItemDelegate
         anchors.fill: parent
         enabled: control.draggable
 
-        Rectangle
-        {
-            anchors.fill: parent
-            radius: Maui.Style.radiusV
-            color: control.Kirigami.Theme.highlightColor
-            visible: parent.containsDrag
-        }
-
         onDropped:
         {
             control.contentDropped(drop)
@@ -86,8 +78,8 @@ Maui.ItemDelegate
         id: _template
         anchors.fill: parent
         iconSource: model.icon
-        hovered: control.hovered || control.containsPress
-        imageSource : model.mime ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails && model.thumbnail && model.thumbnail.length? model.thumbnail : "") : ""
+        hovered: control.hovered || control.containsPress || _dropArea.containsDrag
+        imageSource: model.mime ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails && model.thumbnail && model.thumbnail.length ? model.thumbnail : "") : ""
         label1.text: model.label
 //        label1.elide: Text.ElideMiddle // TODO this is broken ???
         isCurrentItem: control.isCurrentItem

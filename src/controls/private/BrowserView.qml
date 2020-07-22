@@ -396,8 +396,8 @@ Maui.Page
                     iconSizeHint: height * 0.5
                     
                     anchors.centerIn: parent
-                    height: _gridViewBrowser.cellHeight - 5
-                    width: _gridViewBrowser.itemSize - 5
+                    height: _gridViewBrowser.cellHeight - 15
+                    width: _gridViewBrowser.itemSize - 20
                     padding: Maui.Style.space.tiny
                     isCurrentItem: parent.isCurrentItem
                     tooltipText: model.path

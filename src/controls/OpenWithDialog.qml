@@ -45,6 +45,7 @@ Maui.Dialog
             id: _list
             Layout.fillWidth: true
             Layout.fillHeight: true
+            spacing: 0
             checkable: false
             model: ListModel {}
             onItemClicked:
@@ -53,16 +54,14 @@ Maui.Dialog
                 triggerService(index)
             }
             
-            delegate: Maui.ItemDelegate
+            delegate: Maui.AlternateListItem 
             {
-                width: parent.width
+                width: parent.width                
                 height: Maui.Style.rowHeight * 2
                 
-                background: Maui.AlternateListItem 
-                {
-                    alt: index % 2 === 0
-                }
-                
+                leftPadding: Maui.Style.space.medium
+                rightPadding: Maui.Style.space.medium
+              
                 Maui.ListItemTemplate
                 {
                     anchors.fill: parent                    
