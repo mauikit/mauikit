@@ -102,7 +102,7 @@ AbstractButton
             opacity: visible ? ( enabled ? 1 : 0.5) : 0
             horizontalAlignment: Qt.AlignHCenter
             Layout.fillWidth: visible
-            Layout.preferredWidth: visible ? implicitWidth + Maui.Style.space.big : 0
+            Layout.preferredWidth: visible ? implicitWidth + Maui.Style.space.medium : 0
             color: control.checked || control.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
             
             Behavior on Layout.preferredWidth

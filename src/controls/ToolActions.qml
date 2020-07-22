@@ -217,7 +217,6 @@ Rectangle
                     {
                         if(autoExclusive)
                             control.currentIndex = index
-                        else checked = !checked                                
                     }
                     
                     Kirigami.Separator

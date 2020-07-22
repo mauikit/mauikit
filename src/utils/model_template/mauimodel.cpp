@@ -165,37 +165,31 @@ void MauiModel::PrivateAbstractListModel::setList(MauiList *value)
 
     if (this->list) {
         connect(this->list, &MauiList::preItemAppendedAt, this, [=](int index) {
-            emit this->list->countChanged();
             beginInsertRows(QModelIndex(), index, index);
         });
 
         connect(this->list, &MauiList::preItemAppended, this, [=]() {
-            emit this->list->countChanged();
             const int index = this->list->items().size();
             beginInsertRows(QModelIndex(), index, index);
         });
 
         connect(this->list, &MauiList::postItemAppended, this, [=]() {
-            emit this->list->countChanged();
             endInsertRows();
         });
 
         connect(this->list, &MauiList::preItemRemoved, this, [=](int index) { beginRemoveRows(QModelIndex(), index, index); });
 
         connect(this->list, &MauiList::postItemRemoved, this, [=]() {
-            emit this->list->countChanged();
             endRemoveRows();
         });
 
         connect(this->list, &MauiList::updateModel, this, [=](int index, QVector<int> roles) { emit this->dataChanged(this->index(index), this->index(index), roles); });
 
         connect(this->list, &MauiList::preListChanged, this, [=]() {
-            emit this->list->countChanged();
             beginResetModel();
         });
 
         connect(this->list, &MauiList::postListChanged, this, [=]() {
-            emit this->list->countChanged();
             endResetModel();
         });
     }
@@ -214,6 +208,21 @@ MauiModel::PrivateAbstractListModel::PrivateAbstractListModel(MauiModel *model)
     , list(nullptr)
     , m_model(model)
 {
+    connect(this, &QAbstractListModel::rowsInserted, [this](QModelIndex, int, int)
+    {
+        if(this->list)
+        {
+            emit this->list->countChanged();
+        }
+    });
+    
+    connect(this, &QAbstractListModel::rowsRemoved, [this](QModelIndex, int, int)
+    {
+        if(this->list)
+        {
+            emit this->list->countChanged();
+        }
+    });
 }
 
 int MauiModel::PrivateAbstractListModel::rowCount(const QModelIndex &parent) const

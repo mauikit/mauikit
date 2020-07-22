@@ -22,7 +22,11 @@
 MauiList::MauiList(QObject *parent)
     : QObject(parent)
     , m_model(nullptr)
+{}
+
+int MauiList::getCount() const
 {
+    return this->items().count();
 }
 
 int MauiList::mappedIndex(const int &index) const
