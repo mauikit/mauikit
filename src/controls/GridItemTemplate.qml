@@ -62,6 +62,8 @@ Item
         
         property bool hovered: false
         
+        property bool imageBorder: true        
+        
         signal toggled(bool state)		
         
         Component
@@ -101,6 +103,7 @@ Item
                 
                 Rectangle
                 {
+                    visible: control.imageBorder
                     anchors.fill: parent
                     border.color: Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.8)   
                     radius: control.maskRadius
