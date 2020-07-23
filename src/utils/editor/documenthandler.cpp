@@ -87,6 +87,8 @@
 #include <KSyntaxHighlighting/Theme>
 #endif
 
+#define AUTOSAVE_TIMEOUT 5000
+
 /**
  * Global Variables
  */
@@ -240,6 +242,19 @@ DocumentHandler::DocumentHandler(QObject *parent)
         m_worker.start();
     }
     // end file loader thread implementation
+    
+    connect(&m_autoSaveTimer, &QTimer::timeout, [this]()
+    {
+        if(m_autoSave && getModified() && !m_fileUrl.isEmpty())
+        {
+            qDebug() << "Autosaving file" << m_fileUrl;
+            saveAs(m_fileUrl);   
+            m_autoSaveTimer.start(AUTOSAVE_TIMEOUT);
+        }            
+    });
+    
+    if(m_autoSave)
+        m_autoSaveTimer.start(AUTOSAVE_TIMEOUT);
 
     connect(this, &DocumentHandler::cursorPositionChanged, [&]() { emit this->currentLineIndexChanged(); });
 
@@ -302,6 +317,26 @@ void DocumentHandler::setAutoReload(const bool &value)
 
     this->m_autoReload = value;
     emit this->autoReloadChanged();
+}
+
+bool DocumentHandler::autoSave() const
+{
+    return m_autoSave;
+}
+
+void DocumentHandler::setAutoSave(const bool &value)
+{
+    if(m_autoSave == value)
+        return;
+    
+    m_autoSave = value;
+    emit autoSaveChanged();
+    
+    if(m_autoSave)
+    {
+        if(!m_autoSaveTimer.isActive())
+            m_autoSaveTimer.start(AUTOSAVE_TIMEOUT);       
+    }else m_autoSaveTimer.stop();
 }
 
 bool DocumentHandler::getModified() const
@@ -642,6 +677,11 @@ void DocumentHandler::setFileUrl(const QUrl &url)
     this->load(url);
 }
 
+QVariantMap DocumentHandler::fileInfo() const
+{
+    return FMH::getFileInfo(m_fileUrl);
+}
+
 void DocumentHandler::load(const QUrl &url)
 {
     qDebug() << "TRYING TO LOAD FILE << " << url << url.isEmpty();
@@ -650,6 +690,7 @@ void DocumentHandler::load(const QUrl &url)
 
     m_fileUrl = url;
     emit fileUrlChanged();
+    emit fileInfoChanged();
 
     if (m_fileUrl.isLocalFile() && !FMH::fileExists(m_fileUrl))
         return;
