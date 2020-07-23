@@ -17,10 +17,10 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 2.2
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 
 Maui.Dialog
@@ -28,8 +28,8 @@ Maui.Dialog
     id: control
 
     property bool customServer: false
-    acceptText: i18n("Sign In")
-    rejectText: i18n("Cancel")
+    acceptButton.text: i18n("Sign In")
+    rejectButton.text: i18n("Cancel")
     rejectButton.visible: false
     page.margins: Maui.Style.space.medium
     
@@ -39,7 +39,6 @@ Maui.Dialog
 
     maxHeight: Maui.Style.unit * 350
     maxWidth: 350
-
     
     footBar.leftContent: Button
     {

@@ -1,15 +1,15 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 
 import org.kde.kirigami 2.6 as Kirigami
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 
 Maui.Dialog
 {	
 	id: control
 	
-	maxHeight: 300* Maui.Style.unit
+	maxHeight: 350* Maui.Style.unit
 	maxWidth: maxHeight
 	page.margins: Maui.Style.contentMargins
 	

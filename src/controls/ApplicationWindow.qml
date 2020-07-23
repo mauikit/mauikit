@@ -496,7 +496,7 @@ Window
                     if(root.accounts)
                         accounts.open()
 
-                        mainMenu.close()
+                     mainMenu.close()
                 }
             }
 
