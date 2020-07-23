@@ -7,7 +7,8 @@
 class MAUIMacOS
 {
 public:
-    static void removeTitlebarFromWindow(long winId = -1);
+ static void removeTitlebarFromWindow(long winId = -1);
+ static void runApp(const QString &app, const QList<QUrl> &files);
 };
 
 #endif // MAUIMACOS_H

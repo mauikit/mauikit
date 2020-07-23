@@ -1,6 +1,10 @@
 #include "mauimacos.h"
 
 #include <Cocoa/Cocoa.h>
+#import <CoreFoundation/CoreFoundation.h>
+#import <ApplicationServices/ApplicationServices.h>
+
+#include <QUrl>
 
 void MAUIMacOS::removeTitlebarFromWindow(long winId)
 {
@@ -17,4 +21,32 @@ void MAUIMacOS::removeTitlebarFromWindow(long winId)
  [nativeWindow setStyleMask:[nativeWindow styleMask] | NSFullSizeContentViewWindowMask | NSWindowTitleHidden ];
  [nativeWindow setTitlebarAppearsTransparent:YES];
  [nativeWindow setMovableByWindowBackground:YES];
+}
+
+
+
+void MAUIMacOS::runApp(const QString &app, const QList<QUrl> &files)
+{
+    CFURLRef appUrl = QUrl::fromLocalFile(app).toCFURL();
+
+    CFMutableArrayRef cfaFiles =
+        CFArrayCreateMutable(kCFAllocatorDefault,
+                             files.count(),
+                             &kCFTypeArrayCallBacks);
+    for (const QUrl &url: files) {
+        CFURLRef u = url.toCFURL();
+        CFArrayAppendValue(cfaFiles, u);
+        CFRelease(u);
+    }
+
+    LSLaunchURLSpec inspec;
+    inspec.appURL = appUrl;
+    inspec.itemURLs = cfaFiles;
+    inspec.asyncRefCon = NULL;
+    inspec.launchFlags = kLSLaunchDefaults + kLSLaunchAndDisplayErrors;
+    inspec.passThruParams = NULL;
+
+    OSStatus ret;
+    ret = LSOpenFromURLSpec(&inspec, NULL);
+    CFRelease(appUrl);
 }
