@@ -31,6 +31,8 @@
 #include "mauikit_export.h"
 #endif
 
+#define MAX_LIMIT 9999
+
 #ifdef STATIC_MAUIKIT
 class Tagging : public TAGDB
 #else
@@ -73,7 +75,7 @@ public:
     Q_INVOKABLE QVariantList getUrlsTags(const bool &strict = true);
     Q_INVOKABLE QVariantList getAbstractsTags(const bool &strict = true);
     Q_INVOKABLE QVariantList getAllTags(const bool &strict = true);
-    Q_INVOKABLE QVariantList getUrls(const QString &tag, const bool &strict = true, std::function<bool(QVariantMap &item)> modifier = nullptr);
+    Q_INVOKABLE QVariantList getUrls(const QString &tag, const bool &strict = true, const int &limit = MAX_LIMIT, const QString &mimeType = "", std::function<bool(QVariantMap &item)> modifier = nullptr);
     Q_INVOKABLE QVariantList getUrlTags(const QString &url, const bool &strict = true);
     Q_INVOKABLE QVariantList getAbstractTags(const QString &key, const QString &lot, const bool &strict = true);
 

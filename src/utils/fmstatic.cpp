@@ -481,7 +481,7 @@ QList<QUrl> FMStatic::getTagUrls(const QString &tag, const QStringList &filters,
 {
     QList<QUrl> urls;
 #ifdef COMPONENT_TAGGING
-    for (const auto &data : Tagging::getInstance()->getUrls(tag, strict, [filters](QVariantMap &item) -> bool { return filters.isEmpty() ? true : doNameFilter(FMH::mapValue(item, FMH::MODEL_KEY::URL), filters); })) {
+    for (const auto &data : Tagging::getInstance()->getUrls(tag, strict, 9999, "", [filters](QVariantMap &item) -> bool { return filters.isEmpty() ? true : doNameFilter(FMH::mapValue(item, FMH::MODEL_KEY::URL), filters); })) {
         const auto url = QUrl(data.toMap()[TAG::KEYMAP[TAG::KEYS::URL]].toString());
         if (url.isLocalFile() && !FMH::fileExists(url))
             continue;

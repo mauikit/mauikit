@@ -206,16 +206,16 @@ QVariantList Tagging::getAllTags(const bool &strict)
                                &setTagIconName);
 }
 
-QVariantList Tagging::getUrls(const QString &tag, const bool &strict, std::function<bool(QVariantMap &item)> modifier)
+QVariantList Tagging::getUrls(const QString &tag, const bool &strict, const int &limit, const QString &mimeType, std::function<bool(QVariantMap &item)> modifier)
 {
-    return !strict ? this->get(QString("select distinct * from TAGS_URLS where tag = '%1'").arg(tag), modifier)
+    return !strict ? this->get(QString("select distinct * from TAGS_URLS where tag = '%1' and mime like '%2%' limit %3").arg(tag, mimeType, QString::number(limit)), modifier)
                    : this->get(QString("select distinct turl.*, t.color, t.comment as tagComment from TAGS t "
                                        "inner join TAGS_USERS tu on t.tag = tu.tag "
                                        "inner join APPS_USERS au on au.mac = tu.mac and au.app = t.app "
                                        "inner join TAGS_URLS turl on turl.tag = t.tag "
-                                       "where au.app = '%1' and au.uri = '%2' "
-                                       "and t.tag = '%3'")
-                                   .arg(this->application, this->uri, tag),
+                                       "where au.app = '%1' and au.uri = '%2' and turl.mime like '%5%' "
+                                       "and t.tag = '%3' limit %4")
+                                   .arg(this->application, this->uri, tag, QString::number(limit), mimeType),
                                modifier);
 }
 
