@@ -172,13 +172,11 @@ bool Tagging::updateAbstractTags(const QString &key, const QString &lot, const Q
 QVariantList Tagging::getUrlsTags(const bool &strict)
 {
     const auto query = QString(
-                           "select distinct t.* from TAGS t inner join TAGS_USERS tu on t.tag = tu.tag "
-                           "inner join APPS_USERS au on au.mac = tu.mac "
-                           "inner join TAGS_URLS turl on turl.tag = t.tag "
-                           "where au.app = '%1' and au.uri = '%2'")
+                           "select distinct t.* from TAGS t "
+                           "where t.app = '%1'")
                            .arg(this->application, this->uri);
 
-    return !strict ? this->get("select distinct t.* from tags t inner join TAGS_URLS turl on turl.tag = t.tag") : this->get(query);
+                           return !strict ? this->get("select distinct t.* from tags t inner join TAGS_URLS turl on turl.tag = t.tag", &setTagIconName) : this->get(query, &setTagIconName);
 }
 
 QVariantList Tagging::getAbstractsTags(const bool &strict)
@@ -191,7 +189,7 @@ QVariantList Tagging::getAbstractsTags(const bool &strict)
                                    .arg(this->application, this->uri));
 }
 
-static bool setTagIconName(QVariantMap &item)
+bool Tagging::setTagIconName(QVariantMap &item)
 {
     item.insert("icon", item.value("tag").toString() == "fav" ? "love" : "tag");
     return true;

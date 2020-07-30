@@ -112,7 +112,8 @@ private:
 
 protected:
     bool abstract(const QString &key, const QString &lot, const QString &comment);
-
+    static bool setTagIconName(QVariantMap &item);
+    
 signals:
     void urlTagged(const QString &url, const QString &tag);
     void abstractTagged(const QString &key, const QString &lot, const QString &tag);
