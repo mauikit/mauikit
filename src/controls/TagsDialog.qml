@@ -59,7 +59,7 @@ Maui.Dialog
 	{
 		id: tagText
 		Layout.fillWidth: true
-		placeholderText: i18n("Add a new tag...")
+		placeholderText: i18n("Add a new tag")
 		onAccepted:
 		{
 			const tags = tagText.text.split(",")
@@ -72,7 +72,6 @@ Maui.Dialog
 			clear()
 		}
 	}
-
 	
 	headBar.rightContent: ToolButton
 	{
@@ -85,57 +84,46 @@ Maui.Dialog
 		Layout.fillWidth: true
 		Layout.fillHeight: true
 		
-		Item
+		Maui.ListBrowser
 		{
-			Layout.fillHeight: true
-			Layout.fillWidth: true
-			
-            Maui.ListBrowser
-			{
-                id: _listView                
-                anchors.fill: parent
-                spacing: Maui.Style.space.tiny
-                margins: Maui.Style.space.medium
+            id: _listView                
+            
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            
+            topMargin: Maui.Style.space.medium
+            
+            holder.emoji: "qrc:/assets/Electricity.png"
+            holder.visible: _listView.count === 0
+            holder.isMask: false
+            holder.title : i18n("No tags!")
+            holder.body: i18n("Start by creating tags")
+            holder.emojiSize: Maui.Style.iconSizes.huge
+            
+            model: TagsModel
+            {
+                id: _tagsModel
+                list: TagsList
+                {
+                    id: _tagsList
+                }
+            }
+            
+            delegate: Maui.ListDelegate
+            {
+                id: delegate
+                label: model.tag
+                iconName: model.icon
+                iconSize: Maui.Style.iconSizes.small
                 
-				TagsModel
-				{
-					id: _tagsModel
-					list: _tagsList
-				}
-				
-				TagsList
-				{
-					id: _tagsList
-				}				
-				
-                holder.emoji: "qrc:/assets/Electricity.png"
-                holder.visible: _listView.count === 0
-                holder.isMask: false
-                holder.title : i18n("No tags!")
-                holder.body: i18n("Start by creating tags")
-                holder.emojiSize: Maui.Style.iconSizes.huge
-				
-				model: _tagsModel
-				delegate: Maui.ListDelegate
-				{
-					id: delegate
-                    label: model.tag
-                    iconName: model.icon
-                    iconSize: Maui.Style.iconSizes.small
-					radius: Maui.Style.radiusV
-					Connections
-					{
-						target: delegate
-						onClicked:
-						{
-							_listView.currentIndex = index
-							tagListComposer.list.append(_tagsList.get(_listView.currentIndex ).tag)			
-						}
-					}
-				}				
-			}			
-		}		
-		
+                onClicked:
+                {
+                    _listView.currentIndex = index
+                    tagListComposer.list.append(_tagsList.get(_listView.currentIndex ).tag)			
+                }                
+            }				
+        }	
+        
 		Maui.TagList
 		{
 			id: tagListComposer

@@ -477,11 +477,11 @@ static bool doNameFilter(const QString &name, const QStringList &filters)
     return false;
 }
 
-QList<QUrl> FMStatic::getTagUrls(const QString &tag, const QStringList &filters, const bool &strict)
+QList<QUrl> FMStatic::getTagUrls(const QString &tag, const QStringList &filters, const bool &strict, const int &limit, const QString &mime)
 {
     QList<QUrl> urls;
 #ifdef COMPONENT_TAGGING
-    for (const auto &data : Tagging::getInstance()->getUrls(tag, strict, [filters](QVariantMap &item) -> bool { return filters.isEmpty() ? true : doNameFilter(FMH::mapValue(item, FMH::MODEL_KEY::URL), filters); })) {
+    for (const auto &data : Tagging::getInstance()->getUrls(tag, strict, limit, mime, [filters](QVariantMap &item) -> bool { return filters.isEmpty() ? true : doNameFilter(FMH::mapValue(item, FMH::MODEL_KEY::URL), filters); })) {
         const auto url = QUrl(data.toMap()[TAG::KEYMAP[TAG::KEYS::URL]].toString());
         if (url.isLocalFile() && !FMH::fileExists(url))
             continue;
