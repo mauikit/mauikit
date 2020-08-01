@@ -23,3 +23,8 @@ DEPENDPATH += \
 
 INCLUDEPATH += \
      $$PWD
+
+LIBS += -L$$PWD/../../../../../../../../usr/local/Cellar/kde-ki18n/5.72.0/lib/ -lKF5I18n.5.72.0
+
+INCLUDEPATH += $$PWD/../../../../../../../../usr/local/Cellar/kde-ki18n/5.72.0/include
+DEPENDPATH += $$PWD/../../../../../../../../usr/local/Cellar/kde-ki18n/5.72.0/include
