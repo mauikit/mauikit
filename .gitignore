@@ -16,6 +16,7 @@ luv-icon-theme/
 
 #third party stuff
 src/utils/editor/KSyntaxHighlighting/
+src/android/KI18n/
 # src/utils/editor/kquicksyntaxhighlighter/
 src/utils/store/attica/
 src/utils/syncing/openssl/
