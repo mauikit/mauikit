@@ -19,7 +19,7 @@
 
 import QtQuick 2.13
 import QtQuick.Controls 2.13
-import org.kde.kirigami 2.12 as Kirigami
+import org.kde.kirigami 2.8 as Kirigami
 import org.kde.mauikit 1.2 as Maui
 
 import QtGraphicalEffects 1.0
@@ -116,28 +116,28 @@ Popup
         }
         
         
-        background: Kirigami.ShadowedRectangle
-        {
-            radius: Maui.Style.radiusV
-            color: Kirigami.Theme.backgroundColor
+//        background: Kirigami.ShadowedRectangle
+//        {
+//            radius: Maui.Style.radiusV
+//            color: Kirigami.Theme.backgroundColor
             
-            property color borderColor:  Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
-            border.color: Qt.rgba(borderColor.r, borderColor.g, borderColor.b, 0.6)
-            border.width: 1
+//            property color borderColor:  Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
+//            border.color: Qt.rgba(borderColor.r, borderColor.g, borderColor.b, 0.6)
+//            border.width: 1
             
-            shadow.xOffset: 0
-            shadow.yOffset: 0
-            shadow.color: Qt.rgba(0, 0, 0, 0.3)
-            shadow.size: 8
+//            shadow.xOffset: 0
+//            shadow.yOffset: 0
+//            shadow.color: Qt.rgba(0, 0, 0, 0.3)
+//            shadow.size: 8
             
-            Rectangle
-            {
-                anchors.fill: parent
-                anchors.margins: 1
-                color: "transparent"
-                radius: parent.radius - 0.5
-                border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
-                opacity: 0.8
-            }         
-        } 
+//            Rectangle
+//            {
+//                anchors.fill: parent
+//                anchors.margins: 1
+//                color: "transparent"
+//                radius: parent.radius - 0.5
+//                border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+//                opacity: 0.8
+//            }
+//        }
 }

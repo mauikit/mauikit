@@ -28,6 +28,9 @@ OPENSSL_REPO = https://github.com/mauikit/openssl
 ATTICA_REPO = https://github.com/mauikit/attica
 KQUICKSYNTAXHIGHLIGHTER_REPO = https://github.com/mauikit/kquicksyntaxhighlighter.git
 KSYNTAXHIGHLIGHTING_REPO = https://github.com/mauikit/KSyntaxHighlighting.git
+KI18N_ANDROID_REPO = https://github.com/mauikit/KI18n-android.git
+KI18N_MACOS_REPO = https://github.com/mauikit/KI18n-macos.git
+KI18N_WINDOWS_REPO = https://github.com/mauikit/KI18n-windows.git
 
 #ANDROID FILES VALUES
 ANDROID_FILES_DIR = $$_PRO_FILE_PWD_/android_files
@@ -66,7 +69,6 @@ linux:unix:!android {
         include($$PWD/src/macos/macos.pri)
     }else:ios {
         message("Setting up components for iOS")
-
     }
 
     contains(DEFINES, COMPONENT_EDITOR):{
