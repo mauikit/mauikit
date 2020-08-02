@@ -9,8 +9,9 @@ Maui.AlternateListItem
     id: control
     default property alias content : _mainData.data
         property int index : -1        
-        property alias title : _titleLabel.text
-        property alias description : _descLabel.text
+        property string title 
+        property string description
+        property alias template: _template
         
         Layout.fillWidth: true
         implicitHeight: _layout.implicitHeight + (Maui.Style.space.enormous + _layout.spacing)
@@ -21,28 +22,19 @@ Maui.AlternateListItem
             width: parent.width - (Maui.Style.space.huge)
             anchors.centerIn: parent
             spacing: Maui.Style.space.small
-            
-            Label
+                      
+            Maui.ListItemTemplate
             {
-                id: _titleLabel
+                id: _template
                 Layout.fillWidth: true
-                font.pointSize: Maui.Style.fontSizes.big
-                font.bold: true
-                font.weight: Font.Bold
-                visible: text.length
+                implicitHeight: label1.implicitHeight + label2.implicitHeight + Maui.Style.space.medium
+                label1.text: control.title
+                label2.text: control.description
+                label1.font.pointSize: Maui.Style.fontSizes.big
+                label1.font.bold: true
+                label1.font.weight: Font.Bold
+                label2.wrapMode: Text.WordWrap
             }
-            
-            Label
-            {
-                id: _descLabel
-                Layout.fillWidth: true
-                font.pointSize: Maui.Style.fontSizes.small
-                font.bold: false
-                visible: text.length
-                wrapMode: Text.WordWrap
-                elide: Qt.ElideRight
-                opacity: 0.7
-            }  
                         
             Kirigami.FormLayout
             {

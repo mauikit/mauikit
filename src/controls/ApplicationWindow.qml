@@ -528,7 +528,7 @@ Window
         property alias iconName : _notifyTemplate.iconSource
         property alias title : _notifyTemplate.label1
         property alias body: _notifyTemplate.label2
-
+persistent: false
         verticalAlignment: Qt.AlignTop
         defaultButtons: _notify.cb !== null
             rejectButton.visible: false

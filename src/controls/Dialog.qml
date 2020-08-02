@@ -33,7 +33,8 @@ Maui.Popup
         
     property string message : ""
     property string title: ""
-    
+    property alias template : _template
+        
     property bool defaultButtons: true
     property bool persistent : true    
     
@@ -105,38 +106,24 @@ Maui.Popup
             padding: 0
             clip: true
             
-            implicitHeight: Maui.Style.space.big + _pageContent.implicitHeight + topPadding + bottomPadding + topMargin + bottomMargin + footer.height + _pageContent.spacing + header.height
+            implicitHeight: Maui.Style.space.medium + _pageContent.implicitHeight + topPadding + bottomPadding + topMargin + bottomMargin + footer.height + _pageContent.spacing + header.height
             
             ColumnLayout
             {
                 id: _pageContent
                 anchors.fill: parent
-                spacing: Maui.Style.space.medium
-                
-                Label
-                {
-                    visible: title.length > 0
-                    
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignCenter
-                    
-                    color: Kirigami.Theme.textColor
-                    text: title
-                    font.weight: Font.Thin
-                    font.bold: true
-                    font.pointSize:Maui.Style.fontSizes.huge
-                    elide: Qt.ElideRight
-                    wrapMode: Text.Wrap
-                }
+                spacing: Maui.Style.space.medium                          
                 
                 Kirigami.ScrollablePage
                 {
                     id: _scrollable
                     visible: message.length > 0
                     Layout.maximumHeight: Math.min(_scrollable.contentHeight, 500)
+//                     Layout.minimumHeight: contentHeight
+                    Layout.fillHeight: true
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignCenter
-                    
+                    contentHeight: _template.implicitHeight
                     Kirigami.Theme.backgroundColor: "transparent"
                     padding: 0
                     leftPadding: padding
@@ -144,19 +131,28 @@ Maui.Popup
                     topPadding: padding
                     bottomPadding: padding
                     
-                    Label
+                    Maui.ListItemTemplate
                     {
-                        id: body
-                        width: parent.width
-                        padding: 0
-                        text: message
-                        textFormat : TextEdit.AutoText
-                        color: Kirigami.Theme.textColor
-                        font.pointSize:Maui.Style.fontSizes.default
-                        wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                        elide: Text.ElideLeft
-                        verticalAlignment: Qt.AlignVCenter
+                     id: _template
+                     width: parent.width
+                     implicitHeight: label1.implicitHeight + label2.implicitHeight + Maui.Style.space.medium
+                     
+                     label1.text: title
+                     label1.font.weight: Font.Thin
+                     label1.font.bold: true
+                     label1.font.pointSize:Maui.Style.fontSizes.huge
+                     label1.elide: Qt.ElideRight
+                     label1.wrapMode: Text.Wrap
+                     
+                     label2.text: message
+                     label2.textFormat : TextEdit.AutoText
+                     label2.font.pointSize:Maui.Style.fontSizes.default
+                     label2.wrapMode: TextEdit.WordWrap
+                     
+                     iconSizeHint: Maui.Style.iconSizes.large
+                     spacing: Maui.Style.space.big
                     }
+                    
                 }
                 
                 Maui.TextField
