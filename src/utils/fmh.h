@@ -610,46 +610,58 @@ namespace FMH
             return model;
         }
         
+        /**
+         * Creates a FMH::MODEL_LIST from a QVariantList
+         * */
         static const FMH::MODEL_LIST toModelList(const QVariantList &list)
         {
-            FMH::MODEL_LIST res;
-            
-            for (const auto &data : list)
-                res << FMH::toModel(data.toMap());
-            
-            return res;
+            FMH::MODEL_LIST res;    
+            return std::accumulate(list.constBegin(), list.constEnd(), res, [](FMH::MODEL_LIST &res, const QVariant &item) -> FMH::MODEL_LIST
+            {
+                res << FMH::toModel(item.toMap());
+                return res;
+            });
         }
         
+        /**
+         * Creates a QVariantList from a FMH::MODEL_LIST
+         * */
         static const QVariantList toMapList(const FMH::MODEL_LIST &list)
         {
             QVariantList res;
-            
-            for (const auto &data : list)
-                res << FMH::toMap(data);
-            
-            return res;
+            return std::accumulate(list.constBegin(), list.constEnd(), res, [](QVariantList &res, const FMH::MODEL &item) -> QVariantList
+            {
+                res << FMH::toMap(item);
+                return res;
+            });
         }
         
+        /**
+         * Creates a new FMH::MODEL from another filtered by the given array of FMH::MODEL_KEY
+         * */
         static const FMH::MODEL filterModel(const FMH::MODEL &model, const QVector<FMH::MODEL_KEY> &keys)
-        {
+        {            
             FMH::MODEL res;
-            for (const auto &key : keys) {
+            return std::accumulate(keys.constBegin(), keys.constEnd(), res, [=](FMH::MODEL &res, const FMH::MODEL_KEY &key) -> FMH::MODEL
+            {
                 if (model.contains(key))
                     res[key] = model[key];
-            }
-            
-            return res;
+                return res;
+            });
         }
         
-        static const QStringList modelToList(const FMH::MODEL &model, const FMH::MODEL_KEY &key)
+        /**
+         * Extracts from a FMH::MODEL_LIST the values from a given MODEL::KEY into a QStringList
+         * */        
+        static const QStringList modelToList(const FMH::MODEL_LIST &list, const FMH::MODEL_KEY &key)
         {
-            QStringList res;
-            for (const auto &item : model) {
+            QStringList res;           
+            return std::accumulate(list.constBegin(), list.constEnd(), res, [key](QStringList &res, const FMH::MODEL &item) -> QStringList
+            {
                 if (item.contains(key))
                     res << item[key];
-            }
-            
-            return res;
+                return res;
+            });
         }
         
         struct PATH_CONTENT {

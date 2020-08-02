@@ -34,6 +34,9 @@ Maui.ItemDelegate
 	property alias label2: _template.text2
 	property alias iconName: _template.iconSource  
 	property alias count : _badge.text
+	
+	property alias template : _template
+	
 	implicitWidth: parent.width
 	implicitHeight: Math.max(control.iconSize + Maui.Style.space.tiny, Maui.Style.rowHeight)	
 	

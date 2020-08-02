@@ -102,7 +102,7 @@ Maui.Dialog
                         label1.font.bold: true
                         label1.font.pointSize: Maui.Style.fontSizes.enormous * 1.3
                         
-                        label2.text:  Maui.App.version + "\n" + Maui.App.description + "\nBy " + Maui.App.org
+                        label2.text:  Maui.App.version + "\n" + Maui.App.description + "\n" + Maui.App.org
                         label2.font.pointSize: Maui.Style.fontSizes.default
                         label2.elide: Text.ElideRight
                         label2.wrapMode: Text.WrapAtWordBoundaryOrAnywhere   

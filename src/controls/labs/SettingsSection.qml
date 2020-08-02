@@ -12,15 +12,14 @@ Maui.AlternateListItem
         property alias title : _titleLabel.text
         property alias description : _descLabel.text
         
-        alt: index % 2 === 0
         Layout.fillWidth: true
-        implicitHeight: _layout.implicitHeight + (Maui.Style.space.huge + _layout.spacing)
+        implicitHeight: _layout.implicitHeight + (Maui.Style.space.enormous + _layout.spacing)
         
         ColumnLayout
         {
-            id: _layout
-            anchors.fill: parent
-            anchors.margins: Maui.Style.space.big
+            id: _layout   
+            width: parent.width - (Maui.Style.space.huge)
+            anchors.centerIn: parent
             spacing: Maui.Style.space.small
             
             Label
@@ -44,19 +43,11 @@ Maui.AlternateListItem
                 elide: Qt.ElideRight
                 opacity: 0.7
             }  
-            
-            //         Item
-            //         {
-            //             visible: _descLabel.visible
-            //             Layout.fillWidth: true
-            //             Layout.preferredHeight: visible ? Maui.Style.space.small : 0
-            //         }
-            
+                        
             Kirigami.FormLayout
             {
                 id: _mainData
                 Layout.fillWidth: true
-                //             Layout.margins: Maui.Style.space.medium
             }
         }        
 }

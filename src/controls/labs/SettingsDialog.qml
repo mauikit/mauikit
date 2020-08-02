@@ -10,7 +10,7 @@ Maui.Dialog
     default property alias content : _layout.data
         
     maxHeight: Math.min(_scrollView.contentHeight + Maui.Style.space.big, 500) + headBar.height
-    maxWidth: 350
+    maxWidth: 400
     defaultButtons: false
         
         page.title: i18n("Settings")
