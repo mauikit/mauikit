@@ -105,7 +105,8 @@ Item
             visible: obj
             Layout.fillWidth: control.strech
             Layout.preferredWidth: visible ? implicitWidth : 0
-            checked: true
+            checked: visible
+            autoExclusive: true
             icon.name: obj ? obj.MauiLab.AppView.iconName : ""
             icon.width: Maui.Style.iconSizes.medium
             icon.height: Maui.Style.iconSizes.medium
@@ -115,13 +116,7 @@ Item
             text: obj ? obj.MauiLab.AppView.title : ""            
             
             Kirigami.Theme.backgroundColor: obj ? obj.Kirigami.Theme.backgroundColor : undefined
-            Kirigami.Theme.highlightColor: obj ? obj.Kirigami.Theme.highlightColor: undefined
-            
-            onClicked: 
-            {
-                control.currentIndex = index
-                control.clicked(index)
-            }
+            Kirigami.Theme.highlightColor: obj ? obj.Kirigami.Theme.highlightColor: undefined            
         } 
         
         Maui.ToolButtonMenu
@@ -160,6 +155,11 @@ Item
                     
                     onTriggered:
                     {
+                        if(control.items.length + index === control.currentIndex)
+                        {
+                            return
+                        }
+                        
                         control.currentIndex = control.items.length + index
                         control.clicked(control.currentIndex)
                     }
