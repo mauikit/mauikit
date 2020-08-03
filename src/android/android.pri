@@ -1,4 +1,4 @@
-QT *= androidextras xml
+QT *= androidextras xml core
 
 HEADERS += \
     $$PWD/mauiandroid.h\
@@ -41,9 +41,8 @@ exists($$PWD/KI18n) {
     system(git clone $$KI18N_ANDROID_REPO $$PWD/KI18n)
 }
 
-ANDROID_EXTRA_LIBS += $$PWD/KI18n/libKF5I18n.so
+ANDROID_EXTRA_LIBS += $$PWD/KI18n/libKF5I18n_armeabi-v7a.so
+LIBS += -L$$PWD/KI18n/ -lKF5I18n_armeabi-v7a
 
-LIBS += -L$$PWD/KI18n/ -lKF5I18n
-
-INCLUDEPATH += $$PWD/KI18n/
-DEPENDPATH += $$PWD/KI18n/
+INCLUDEPATH += $$PWD/KI18n
+DEPENDPATH += $$PWD/KI18n

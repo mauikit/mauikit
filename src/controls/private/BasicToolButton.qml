@@ -75,7 +75,7 @@ AbstractButton
         
         Item
         {
-            implicitWidth: visible ? Maui.Style.iconSizes.medium : 0
+            implicitWidth: visible ? _icon.width + Maui.Style.space.medium : 0
             Layout.alignment: Qt.AlignCenter
             
             visible: _icon.source && _icon.source.length && (control.display === ToolButton.TextBesideIcon || control.display === ToolButton.IconOnly)

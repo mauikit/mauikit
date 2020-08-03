@@ -1,5 +1,4 @@
-QT *=  \
-    core \
+QT *= core \
     qml \
     quick \
     gui \
@@ -20,7 +19,6 @@ VERSION_BUILD = 1
 VERSION = $${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_BUILD}
 
 DEFINES += MAUIKIT_VERSION_STRING=\\\"$$VERSION\\\"
-
 
 #REPO VARIABLES
 LUV_REPO = https://github.com/Nitrux/luv-icon-theme

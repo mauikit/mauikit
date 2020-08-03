@@ -121,8 +121,8 @@ Rectangle
                         }
 
                         anchors.centerIn: parent
-                        icon.width: Maui.Style.iconSizes.small
-                        icon.height: width
+                        icon.width: icon.width ? icon.width : Maui.Style.iconSizes.small
+                        icon.height: icon.height ? icon.height : Maui.Style.iconSizes.small
                         icon.color: control.currentAction ? (control.currentAction.icon.color && control.currentAction.icon.color.length ? control.currentAction.icon.color : ( _defaultButtonMouseArea.containsPress ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor)) :  control.Kirigami.Theme.textColor
                         
                         icon.name: control.currentAction ? control.currentAction.icon.name : control.defaultIconName
@@ -208,8 +208,8 @@ Rectangle
                     opacity: enabled ? 1 : 0.5
                     display: control.autoExclusive ? (checked && control.enabled ? control.display : ToolButton.IconOnly) : control.display
                     icon.name: action.icon.name
-                    icon.width: Maui.Style.iconSizes.small
-                    icon.height: Maui.Style.iconSizes.small
+                    icon.width:  action.icon.width ?  action.icon.width : Maui.Style.iconSizes.small
+                    icon.height:  action.icon.height ?  action.icon.height : Maui.Style.iconSizes.small
                     
                     rec.border.color: "transparent"                    
                    
