@@ -360,21 +360,20 @@ Window
         }        
     }    
     
-    
     Overlay.overlay.modal: Rectangle 
     {
-        color: Qt.rgba( root.Kirigami.Theme.backgroundColor.r,  root.Kirigami.Theme.backgroundColor.g,  root.Kirigami.Theme.backgroundColor.b, 0.7)
+        color: Qt.rgba( root.Kirigami.Theme.backgroundColor.r,  root.Kirigami.Theme.backgroundColor.g,  root.Kirigami.Theme.backgroundColor.b, 1)
         
         Behavior on opacity { NumberAnimation { duration: 150 } }
         
-        radius: Maui.App.enableCSD ?  Maui.App.theme.borderRadius : 0
+        radius: Maui.App.enableCSD ? Maui.App.theme.borderRadius : 0
     }
     
     Overlay.overlay.modeless: Rectangle 
     {
-        radius: Maui.App.enableCSD ?  Maui.App.theme.borderRadius : 0
+        radius: Maui.App.enableCSD ? Maui.App.theme.borderRadius : 0
 
-        color: Qt.rgba( root.Kirigami.Theme.backgroundColor.r,  root.Kirigami.Theme.backgroundColor.g,  root.Kirigami.Theme.backgroundColor.b, 0.7)
+        color: Qt.rgba( root.Kirigami.Theme.backgroundColor.r,  root.Kirigami.Theme.backgroundColor.g,  root.Kirigami.Theme.backgroundColor.b, 1)
         Behavior on opacity { NumberAnimation { duration: 150 } }
     }
     

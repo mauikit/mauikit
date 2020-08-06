@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.13
-import QtQuick.Controls 2.13
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import org.kde.kirigami 2.8 as Kirigami
 import org.kde.mauikit 1.2 as Maui
 
@@ -37,32 +37,35 @@ Popup
         
         property int verticalAlignment : Qt.AlignVCenter
         
-        
         parent: ApplicationWindow.overlay
         
         width: Math.round(Math.max(Math.min(parent.width * widthHint, maxWidth), Math.min(maxWidth, parent.width * widthHint))	)
         height: Math.round(Math.max(Math.min(parent.height * heightHint, maxHeight), Math.min(maxHeight, parent.height * heightHint)))
         
         x:  parent.width / 2 - width / 2
-        y: if(verticalAlignment === Qt.AlignVCenter) 
+        y: positionY()
+
+        function positionY()
         {
-            parent.height / 2 - height / 2
-        }
-        else if(verticalAlignment === Qt.AlignTop)
-        {
-            (height + Maui.Style.space.huge)        
-        }
-        else if(verticalAlignment === Qt.AlignBottom)
-        {
-            (parent.height) - (height + Maui.Style.space.huge)
-            
-        }else
-        {
-            parent.height / 2 - height / 2        
+            if(verticalAlignment === Qt.AlignVCenter)
+                    {
+                        return parent.height / 2 - height / 2
+                    }
+                    else if(verticalAlignment === Qt.AlignTop)
+                    {
+                        return (height + Maui.Style.space.huge)
+                    }
+                    else if(verticalAlignment === Qt.AlignBottom)
+                    {
+                        return (parent.height) - (height + Maui.Style.space.huge)
+
+                    }else
+                    {
+                        return parent.height / 2 - height / 2
+                    }
         }
         
         modal: control.width !== control.parent.width && control.height !== control.parent.height
-        
         
         margins: 1
         padding: 1 
@@ -77,7 +80,26 @@ Popup
         rightMargin: control.margins
         leftMargin: control.margins
         topMargin: control.margins
-        bottomMargin: control.margins    
+        bottomMargin: control.margins
+
+
+//        DragHandler
+//        {
+//            id: _dragHandler
+//            //            target: null
+//            grabPermissions: PointerHandler.CanTakeOverFromAnything
+//            xAxis.enabled: false
+//            yAxis.minimum: 0
+//            onActiveChanged:
+//            {
+//                if(!active)
+//                {
+//                    if(control.y > 1000)
+//                        control.close()
+//                    //                    else control.y = control.positionY()
+//                }
+//            }
+//        }
         
         enter: Transition 
         {
@@ -97,7 +119,7 @@ Popup
         {
             id: _content
             
-            layer.enabled: false
+            layer.enabled: true
             layer.effect: OpacityMask
             {
                 cached: true
@@ -114,30 +136,29 @@ Popup
                 }
             }
         }
-        
-        
-//        background: Kirigami.ShadowedRectangle
-//        {
-//            radius: Maui.Style.radiusV
-//            color: Kirigami.Theme.backgroundColor
+
+        background: Rectangle
+        {
+            radius: Maui.Style.radiusV
+            color: Kirigami.Theme.backgroundColor
             
-//            property color borderColor:  Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
-//            border.color: Qt.rgba(borderColor.r, borderColor.g, borderColor.b, 0.6)
-//            border.width: 1
+            property color borderColor:  Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
+            border.color: Qt.rgba(borderColor.r, borderColor.g, borderColor.b, 0.6)
+            border.width: 1
             
 //            shadow.xOffset: 0
 //            shadow.yOffset: 0
 //            shadow.color: Qt.rgba(0, 0, 0, 0.3)
 //            shadow.size: 8
             
-//            Rectangle
-//            {
-//                anchors.fill: parent
-//                anchors.margins: 1
-//                color: "transparent"
-//                radius: parent.radius - 0.5
-//                border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
-//                opacity: 0.8
-//            }
-//        }
+            Rectangle
+            {
+                anchors.fill: parent
+                anchors.margins: 1
+                color: "transparent"
+                radius: parent.radius - 0.5
+                border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+                opacity: 0.8
+            }
+        }
 }

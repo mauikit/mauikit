@@ -17,11 +17,11 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.5
-import QtQuick.Controls 2.10
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
-import org.kde.mauikit 1.0 as Maui
-import org.kde.kirigami 2.7 as Kirigami
+import org.kde.mauikit 1.2 as Maui
+import org.kde.kirigami 2.8 as Kirigami
 
 import QtGraphicalEffects 1.0
 
@@ -59,37 +59,40 @@ Maui.Popup
     implicitHeight: _layout.implicitHeight
     widthHint: 0.9
     heightHint: 0.9  
-    clip: false
+    clip: true
+
+//    opacity:
+
     
-    Maui.Badge
-    {
-        id: _closeButton    
-        visible: control.persistent
+//    Maui.Badge
+//    {
+//        id: _closeButton
+//        visible: control.persistent
         
-        color: hovered || pressed ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
+//        color: hovered || pressed ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
         
-        property int position : Maui.App.leftWindowControls.includes("X") ? Qt.AlignLeft : Qt.AlignRight
+//        property int position : Maui.App.leftWindowControls.includes("X") ? Qt.AlignLeft : Qt.AlignRight
         
-        Maui.X
-        {
-            height: Maui.Style.iconSizes.tiny
-            width: height
-            anchors.centerIn: parent
-            color: Kirigami.Theme.textColor            
-        }
+//        Maui.X
+//        {
+//            height: Maui.Style.iconSizes.tiny
+//            width: height
+//            anchors.centerIn: parent
+//            color: Kirigami.Theme.textColor
+//        }
         
-        border.color: Kirigami.Theme.textColor
+//        border.color: Kirigami.Theme.textColor
         
-        anchors
-        {
-            verticalCenter: parent.top
-            horizontalCenter: _closeButton.position === Qt.AlignLeft ? parent.left : parent.right
-            horizontalCenterOffset: control.width === control.parent.width ? _closeButton.width : 0
-        }
+//        anchors
+//        {
+//            verticalCenter: parent.top
+//            horizontalCenter: _closeButton.position === Qt.AlignLeft ? parent.left : parent.right
+//            horizontalCenterOffset: control.width === control.parent.width ? _closeButton.width : 0
+//        }
         
-        z: control.z+999
-        onClicked: close()
-    }
+//        z: control.z+999
+//        onClicked: close()
+//    }
     
     
     ColumnLayout
@@ -107,7 +110,26 @@ Maui.Popup
             clip: true
             
             implicitHeight: Maui.Style.space.medium + _pageContent.implicitHeight + topPadding + bottomPadding + topMargin + bottomMargin + footer.height + _pageContent.spacing + header.height
-            
+            headBar.visible: headBar.visibleCount > 0
+            headBar.farLeftContent:   MouseArea
+                                     {
+                                         id: _closeButton
+                                         visible: control.persistent
+                                         implicitHeight: Maui.Style.iconSizes.medium
+                                         implicitWidth: Maui.Style.iconSizes.medium
+
+                                         Maui.X
+                                         {
+                                             height: Maui.Style.iconSizes.tiny
+                                             width: height
+                                             anchors.centerIn: parent
+                                             color: Kirigami.Theme.textColor
+                                             opacity: 0.5
+                                         }
+
+                                         onClicked: close()
+                                     }
+
             ColumnLayout
             {
                 id: _pageContent

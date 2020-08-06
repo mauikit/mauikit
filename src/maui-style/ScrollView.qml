@@ -61,7 +61,7 @@ T.ScrollView {
         parent: controlRoot
         x: controlRoot.leftPadding
         y: controlRoot.height - height
-        width: controlRoot.availableWidth
+        width: 32
         active: controlRoot.ScrollBar.vertical || controlRoot.ScrollBar.vertical.active
     }
 }

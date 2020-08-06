@@ -1,92 +1,166 @@
-/****************************************************************************
-**
-** Copyright (C) 2017 The Qt Company Ltd.
-** Contact: http://www.qt.io/licensing/
-**
-** This file is part of the Qt Quick Controls 2 module of the Qt Toolkit.
-**
-** $QT_BEGIN_LICENSE:LGPL3$
-** Commercial License Usage
-** Licensees holding valid commercial Qt licenses may use this file in
-** accordance with the commercial license agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company. For licensing terms
-** and conditions see http://www.qt.io/terms-conditions. For further
-** information use the contact form at http://www.qt.io/contact-us.
-**
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 3 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPLv3 included in the
-** packaging of this file. Please review the following information to
-** ensure the GNU Lesser General Public License version 3 requirements
-** will be met: https://www.gnu.org/licenses/lgpl.html.
-**
-** GNU General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU
-** General Public License version 2.0 or later as published by the Free
-** Software Foundation and appearing in the file LICENSE.GPL included in
-** the packaging of this file. Please review the following information to
-** ensure the GNU General Public License version 2.0 requirements will be
-** met: http://www.gnu.org/licenses/gpl-2.0.html.
-**
-** $QT_END_LICENSE$
-**
-****************************************************************************/
-
-import QtQuick 2.9
-import QtQuick.Templates 2.2 as T
-import QtQuick.Controls.Material 2.3
+import QtQuick 2.6
+import QtQuick.Templates 2.14 as T
+import org.kde.kirigami 2.11 as Kirigami
 
 T.ScrollBar {
-    id: control
+    id: controlRoot
 
-    implicitWidth: Math.max(background ? background.implicitWidth : 0,
-                            contentItem.implicitWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(background ? background.implicitHeight : 0,
-                             contentItem.implicitHeight + topPadding + bottomPadding)
+    palette: Kirigami.Theme.palette
+    implicitWidth: background.implicitWidth
+    implicitHeight: background.implicitHeight
 
-    padding: control.interactive ? 1 : 2
-    visible: control.policy !== T.ScrollBar.AlwaysOff
+    hoverEnabled: true
 
-    contentItem: Rectangle
-    {
-        implicitWidth: 4
-        implicitHeight: 4
+    visible: controlRoot.size < 1.0 && controlRoot.policy !== T.ScrollBar.AlwaysOff
+    stepSize: 0.02
+    interactive: !Kirigami.Settings.hasTransientTouchInput
 
-        color: control.pressed ? control.Material.scrollBarPressedColor :
-               control.interactive && control.hovered ? control.Material.scrollBarHoveredColor : control.Material.scrollBarColor
-        opacity: 0.0
-        radius: Math.min(control.width, control.height)
+    onPositionChanged: {
+        disappearTimer.restart();
+        handleGraphics.handleState = Math.min(1, handleGraphics.handleState + 0.1)
     }
 
-    background: Rectangle
-    {
-        implicitWidth: 4
-        implicitHeight:  4
-        color: "#0e000000"
-        opacity: 0.0
-        visible: control.interactive
-        radius: Math.min(control.width, control.height)
-    }
+    contentItem: Item {
+        visible: !controlRoot.interactive
 
-    states: State {
-        name: "active"
-        when: control.policy === T.ScrollBar.AlwaysOn || (control.active && control.size < 1.0)
-    }
+        Rectangle {
+            id: handleGraphics
+            property real handleState: 0
 
-    transitions: [
-        Transition {
-            to: "active"
-            NumberAnimation { targets: [contentItem, background]; property: "opacity"; to: 1.0 }
-        },
-        Transition {
-            from: "active"
-            SequentialAnimation {
-                PropertyAction{ targets: [contentItem, background]; property: "opacity"; value: 1.0 }
-                PauseAnimation { duration: 2450 }
-                NumberAnimation { targets: [contentItem, background]; property: "opacity"; to: 0.0 }
+            x: Math.round(controlRoot.orientation == Qt.Vertical
+                ? (parent.width - width) - (parent.width/2 - width/2) * handleState
+                : 0)
+
+            y: Math.round(controlRoot.orientation == Qt.Horizontal
+                ? (parent.height - height) - (parent.height/2 - height/2) * handleState
+                : 0)
+
+
+            NumberAnimation {
+                id: resetAnim
+                target: handleGraphics
+                property: "handleState"
+                from: handleGraphics.handleState
+                to: 0
+                duration: Kirigami.Units.longDuration
+                easing.type: Easing.InOutQuad
+            }
+
+            width: Math.round(controlRoot.orientation == Qt.Vertical
+                    ? Math.max(2, Kirigami.Units.smallSpacing * handleState)
+                    : parent.width)
+            height: Math.round(controlRoot.orientation == Qt.Horizontal
+                    ? Math.max(2, Kirigami.Units.smallSpacing * handleState)
+                    : parent.height)
+            radius: Math.min(width, height)
+            color: Kirigami.Theme.textColor
+            opacity: 0.3
+            Timer {
+                id: disappearTimer
+                interval: 1000
+                onTriggered: {
+                    resetAnim.restart();
+                    handleGraphics.handleState = 0;
+                }
             }
         }
-    ]
+    }
+
+    background: MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        visible: controlRoot.size < 1.0 && interactive
+        hoverEnabled: true
+        state: "inactive"
+        acceptedButtons: Qt.LeftButton | Qt.MiddleButton
+        onExited: style.activeControl = "groove";
+        onPressed: {
+            if (mouse.buttons & Qt.MiddleButton) {
+                style.activeControl = "handle";
+                controlRoot.position = Math.min(1 - controlRoot.size, Math.max(0, mouse.y/(controlRoot.orientation == Qt.Vertical ? height: width) - controlRoot.size/2));
+                mouse.accepted = true;
+            } else if (style.activeControl == "down") {
+                buttonTimer.increment = 1;
+                buttonTimer.running = true;
+                mouse.accepted = true
+            } else if (style.activeControl == "up") {
+                buttonTimer.increment = -1;
+                buttonTimer.running = true;
+                mouse.accepted = true
+            } else if (style.activeControl == "downPage") {
+                buttonTimer.increment = controlRoot.size;
+                buttonTimer.running = true;
+                mouse.accepted = true
+            } else if (style.activeControl == "upPage") {
+                buttonTimer.increment = -controlRoot.size;
+                buttonTimer.running = true;
+                mouse.accepted = true
+            } else {
+                mouse.accepted = false
+            }
+        }
+        onPositionChanged: {
+            style.activeControl = style.hitTest(mouse.x, mouse.y)
+            if (mouse.buttons & Qt.MiddleButton) {
+                style.activeControl = "handle";
+                controlRoot.position = Math.min(1 - controlRoot.size, Math.max(0, mouse.y/style.length - controlRoot.size/2));
+                mouse.accepted = true;
+            }
+        }
+        onReleased: {
+            buttonTimer.running = false;
+            mouse.accepted = false
+        }
+        onCanceled: buttonTimer.running = false;
+
+        implicitWidth: style.horizontal ? 200 : style.pixelMetric("scrollbarExtent")
+        implicitHeight: style.horizontal ? style.pixelMetric("scrollbarExtent") : 200
+
+
+
+        states: [
+            State {
+                name: "hover"
+                when: mouseArea.containsMouse
+                PropertyChanges {
+                    target: style
+                    opacity: 1
+                }
+                PropertyChanges {
+                    target: inactiveStyle
+                    opacity: 0
+                }
+            },
+            State {
+                name: "inactive"
+                when: !mouseArea.containsMouse
+                PropertyChanges {
+                    target: style
+                    opacity: 0
+                }
+                PropertyChanges {
+                    target: inactiveStyle
+                    opacity: 1
+                }
+            }
+        ]
+        transitions: [
+            Transition {
+                ParallelAnimation {
+                    NumberAnimation {
+                        target: style
+                        property: "opacity"
+                        duration: Kirigami.Units.shortDuration
+                        easing.type: Easing.InOutQuad
+                    }
+                    NumberAnimation {
+                        target: inactiveStyle
+                        property: "opacity"
+                        duration: Kirigami.Units.shortDuration
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+            }
+        ]
+    }
 }
