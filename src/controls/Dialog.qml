@@ -109,7 +109,7 @@ Maui.Popup
             padding: 0
             clip: true
             
-            implicitHeight: Maui.Style.space.medium + _pageContent.implicitHeight + topPadding + bottomPadding + topMargin + bottomMargin + footer.height + _pageContent.spacing + header.height
+            implicitHeight: _pageContent.implicitHeight + topPadding + bottomPadding + topMargin + bottomMargin + footer.height + _pageContent.spacing + header.height
             headBar.visible: control.persistent
             headerBackground.visible: headBar.visibleCount > 1
 //             headBar.preferredHeight: headBar.visibleCount > 1 ? Maui.Style.toolBarHeight : Maui.Style.rowHeight
@@ -139,13 +139,13 @@ Maui.Popup
             {
                 id: _pageContent
                 anchors.fill: parent
-                spacing: Maui.Style.space.medium                          
+                spacing: Maui.Style.space.small                          
                 
                 Kirigami.ScrollablePage
                 {
                     id: _scrollable
                     visible: message.length > 0
-                    Layout.maximumHeight: Math.min(_scrollable.contentHeight, 500)
+                    Layout.maximumHeight: Math.min(_scrollable.contentHeight, 300)
 //                     Layout.minimumHeight: contentHeight
                     Layout.fillHeight: true
                     Layout.fillWidth: true
@@ -178,8 +178,7 @@ Maui.Popup
                      
                      iconSizeHint: Maui.Style.iconSizes.large
                      spacing: Maui.Style.space.big
-                    }
-                    
+                    }                    
                 }
                 
                 Maui.TextField
