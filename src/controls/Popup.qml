@@ -39,11 +39,11 @@ Popup
         
         parent: ApplicationWindow.overlay
         
-        width: Math.round(Math.max(Math.min(parent.width * widthHint, maxWidth), Math.min(maxWidth, parent.width * widthHint))	)
+        width: Math.round(Math.max(Math.min(parent.width * widthHint, maxWidth), Math.min(maxWidth, parent.width * widthHint)))
         height: Math.round(Math.max(Math.min(parent.height * heightHint, maxHeight), Math.min(maxHeight, parent.height * heightHint)))
         
-        x:  parent.width / 2 - width / 2
-        y: positionY()
+        x: Math.round( parent.width / 2 - width / 2 )
+        y: Math.round( positionY() )
 
         function positionY()
         {

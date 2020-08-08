@@ -66,6 +66,9 @@ Pane
         
         property bool floatingFooter: control.flickable
         
+        property alias footerColumn : _footerContent.data
+        property alias headerColumn : _headerContent.data
+        
         QtObject
         {
             id: _private
@@ -324,7 +327,7 @@ Pane
                 {
                     text: control.title
                     elide : Text.ElideRight
-                    font.bold : false
+                    font.bold : true
                     font.weight: Font.Bold
                     color : Kirigami.Theme.textColor
                     font.pointSize: Maui.Style.fontSizes.big
@@ -513,21 +516,18 @@ Pane
             }
         } ]
         
-      
         onAutoHideHeaderChanged: pullDownHeader()
         onAutoHideFooterChanged: pullDownFooter()
-        onAltHeaderChanged: pullDownHeader()
-        
+        onAltHeaderChanged: pullDownHeader()        
         
         Column
         {
             id: _headerContent
             anchors.left: parent.left
             anchors.right: parent.right
-            children: header
             z: _content.z+1
         }  
-        
+       
 //         Label
 //         {
 //             anchors.centerIn: _headerContent
@@ -562,7 +562,7 @@ Pane
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
-                children: footer
+//                 data: footer
             }
         }   
         
@@ -717,6 +717,19 @@ Pane
         {
             sequence: StandardKey.Back
             onActivated: control.goBackTriggered();
+        }
+        
+        Component.onCompleted :
+        {
+            if(footer)
+            {
+                _footerContent.data.push(footer)
+            }
+            
+            if(header)
+            {
+                _headerContent.data.push(header)
+            }            
         }
         
         function returnToBounds()

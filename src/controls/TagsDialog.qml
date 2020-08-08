@@ -17,6 +17,7 @@ Maui.Dialog
 	signal tagsReady(var tags)
 	defaultButtons: true
 	maxHeight: Maui.Style.unit * 500
+	maxWidth: 500
 	page.margins: 0
 	
 	acceptButton.text: i18n("Add")

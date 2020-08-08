@@ -58,6 +58,20 @@ Maui.Dialog
 	acceptButton.text: control.mode === modes.SAVE ? i18n("Save") : i18n("Open")
 
     footBar.visible: control.mode === modes.SAVE
+    
+    page.footerColumn: Maui.TagsBar
+    {
+        id: _tagsBar
+        visible: control.mode === modes.SAVE
+        position: ToolBar.Footer
+        width: parent.width
+        list.urls: [""]
+        list.strict: false
+        allowEditMode: true
+        Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
+        Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
+    }
+    
     footBar.middleContent: Maui.TextField
 	{
 		id: _textField
@@ -395,11 +409,12 @@ Maui.Dialog
 				{
 					id: _selectionBar
 					Layout.alignment: Qt.AlignCenter
+					Layout.margins: Maui.Style.space.medium
 					onExitClicked: 
 					{
 						_selectionBar.clear()
 					}					
-				}
+				}				
 			}			
 	}
 	
@@ -428,12 +443,21 @@ Maui.Dialog
             for(var i in paths)
             {
                 paths[i] = paths[i] + "/" + textField.text 
-            }           
+            }    
+            
+            _tagsBar.list.urls = paths
+            _tagsBar.list.updateToUrls(_tagsBar.getTags())
         }
         
         if(callback instanceof Function)
         {
             callback(paths)	
+        }                
+                
+        if(control.mode === modes.SAVE) //do it after callback in cas ethe files need to be saved aka exists, before tryign to insert tags
+        { 
+            _tagsBar.list.urls = paths
+            _tagsBar.list.updateToUrls(_tagsBar.getTags())
         }
         
         control.urlsSelected(paths)        

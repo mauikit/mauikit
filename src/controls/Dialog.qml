@@ -110,26 +110,31 @@ Maui.Popup
             clip: true
             
             implicitHeight: Maui.Style.space.medium + _pageContent.implicitHeight + topPadding + bottomPadding + topMargin + bottomMargin + footer.height + _pageContent.spacing + header.height
-            headBar.visible: headBar.visibleCount > 0
-            headBar.farLeftContent:   MouseArea
-                                     {
-                                         id: _closeButton
-                                         visible: control.persistent
-                                         implicitHeight: Maui.Style.iconSizes.medium
-                                         implicitWidth: Maui.Style.iconSizes.medium
+            headBar.visible: control.persistent
+            headerBackground.visible: headBar.visibleCount > 1
+//             headBar.preferredHeight: headBar.visibleCount > 1 ? Maui.Style.toolBarHeight : Maui.Style.rowHeight
+            floatingHeader: headBar.visibleCount === 1
 
-                                         Maui.X
-                                         {
-                                             height: Maui.Style.iconSizes.tiny
-                                             width: height
-                                             anchors.centerIn: parent
-                                             color: Kirigami.Theme.textColor
-                                             opacity: 0.5
-                                         }
-
-                                         onClicked: close()
-                                     }
-
+            headBar.farLeftContent: MouseArea
+            {
+                id: _closeButton
+                visible: control.persistent
+                Layout.fillHeight: true
+                implicitHeight: Maui.Style.iconSizes.medium
+                implicitWidth: Maui.Style.iconSizes.medium
+                
+                Maui.X
+                {
+                    height: Maui.Style.iconSizes.tiny
+                    width: height
+                    anchors.centerIn: parent
+                    color: Kirigami.Theme.textColor
+                    opacity: 0.5
+                }
+                
+                onClicked: close()
+            }
+            
             ColumnLayout
             {
                 id: _pageContent

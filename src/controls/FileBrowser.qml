@@ -166,8 +166,9 @@ Maui.Page
 			rejectButton.text: i18n("Delete")
 			acceptButton.text: i18n("Trash")
 			acceptButton.visible: Maui.Handy.isLinux
-			page.margins: Maui.Style.space.huge
-			
+			page.margins: Maui.Style.space.big
+			template.iconSource: "emblem-warning"
+            			
 			ColumnLayout
 			{
                 Layout.fillWidth: true                
