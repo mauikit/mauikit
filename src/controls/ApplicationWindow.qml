@@ -293,12 +293,10 @@ Window
         visible: Maui.App.enableCSD
         z: ApplicationWindow.overlay.z + 9999
         anchors.fill: parent
-//         anchors.margins: Maui.Style.space.small
         radius: _pageBackground.radius - 0.5
         color: "transparent"
         border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
-        opacity: 0.8       
-
+        opacity: 0.8 
         
         Rectangle
         {
@@ -309,8 +307,7 @@ Window
             border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
             opacity: 0.8
         }        
-    }
-    
+    }    
     
     MouseArea
     {
@@ -523,11 +520,12 @@ Window
     {
         id: _notify
         property var cb : ({})
-
+        
         property alias iconName : _notifyTemplate.iconSource
         property alias title : _notifyTemplate.label1
         property alias body: _notifyTemplate.label2
-persistent: false
+        
+        persistent: false
         verticalAlignment: Qt.AlignTop
         defaultButtons: _notify.cb !== null
             rejectButton.visible: false
@@ -541,7 +539,7 @@ persistent: false
             }
             
             page.padding: Maui.Style.space.medium
-
+            
             footBar.background: null
             
             maxHeight: Math.max(Maui.Style.iconSizes.large + Maui.Style.space.huge, (_notifyTemplate.implicitHeight)) + Maui.Style.space.big + footBar.height
@@ -555,7 +553,7 @@ persistent: false
                 {
                     if(_mouseArea.containsPress || _mouseArea.containsMouse)
                         return;
-
+                    
                     _notify.close()
                 }
             }
@@ -581,7 +579,6 @@ persistent: false
                     hoverEnabled: true
                 }                
             }
-
 
             function show(callback)
             {

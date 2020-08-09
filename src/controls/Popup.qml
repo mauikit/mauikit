@@ -115,10 +115,12 @@ Popup
             NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; easing.type: Easing.OutCubic; duration: 150 }
         }  
         
-        contentItem: Item
+        contentItem: null
+        
+        Item
         {
             id: _content
-            
+            anchors.fill: parent
             layer.enabled: true
             layer.effect: OpacityMask
             {
@@ -131,25 +133,19 @@ Popup
                     Rectangle
                     {
                         anchors.fill: parent
-                        radius: Maui.Style.radiusV
+                        radius: Maui.Style.radiusV 
                     }
                 }
             }
         }
-
-        background: Rectangle
+        
+       Rectangle
         {
+            anchors.fill: parent
             radius: Maui.Style.radiusV
-            color: Kirigami.Theme.backgroundColor
-            
-            property color borderColor:  Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
-            border.color: Qt.rgba(borderColor.r, borderColor.g, borderColor.b, 0.6)
-            border.width: 1
-            
-//            shadow.xOffset: 0
-//            shadow.yOffset: 0
-//            shadow.color: Qt.rgba(0, 0, 0, 0.3)
-//            shadow.size: 8
+            color: "transparent" 
+            border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
+            opacity: 0.8
             
             Rectangle
             {
@@ -160,5 +156,8 @@ Popup
                 border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
                 opacity: 0.8
             }
+            
         }
+        
+        background: null
 }
