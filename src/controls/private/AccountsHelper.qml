@@ -12,7 +12,7 @@ Maui.Dialog
 	maxHeight: 350* Maui.Style.unit
 	maxWidth: maxHeight
 	page.margins: Maui.Style.contentMargins
-	
+	page.title: i18n("Accounts")
 	property alias model : _syncingModel
 	property alias list : _syncingModel.list
 	
