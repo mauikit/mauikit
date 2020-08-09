@@ -51,12 +51,11 @@ Maui.Page
 			}
 		}
 	}
-	
+	footBar.visible: true
 	footBar.leftContent: ToolButton
 	{
 		icon.name: player.playbackState === MediaPlayer.PlayingState ? "media-playback-pause" : "media-playback-start"
-		onClicked: player.playbackState === MediaPlayer.PlayingState ? player.pause() : player.play()
-		
+		onClicked: player.playbackState === MediaPlayer.PlayingState ? player.pause() : player.play()		
 	}
 	
 	footBar.rightContent: Label
