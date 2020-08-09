@@ -37,7 +37,6 @@ Item
     {
         id: pluginButton
         
-        
         AppletDecoration.Button
         {               
             width: 22                

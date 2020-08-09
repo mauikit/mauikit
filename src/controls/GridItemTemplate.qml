@@ -253,7 +253,6 @@ Item
                 }                  
             }
             
-            
             Item
             {
                 visible: control.labelsVisible

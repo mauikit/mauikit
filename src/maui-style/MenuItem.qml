@@ -54,8 +54,8 @@ T.MenuItem
                                        implicitContentHeight + topPadding + bottomPadding,
                                        implicitIndicatorHeight + topPadding + bottomPadding) : 0
                                        
-                                       padding: Kirigami.Settings.isMobile ? Maui.Style.space.small : Maui.Style.space.tiny
-    verticalPadding: Kirigami.Settings.isMobile ? Maui.Style.space.small : Maui.Style.space.tiny
+    padding: Maui.Style.space.small
+    verticalPadding: Maui.Style.space.small
     spacing: Maui.Style.space.small
 
     icon.width: Kirigami.Settings.isMobile ? Maui.Style.iconSizes.medium : Maui.Style.iconSizes.small

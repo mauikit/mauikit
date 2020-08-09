@@ -28,23 +28,23 @@ import QtQuick.Controls.impl 2.12
 T.Button
 {
     id: control
-    implicitWidth: Math.max(background.implicitWidth, contentItem.implicitWidth + Maui.Style.space.medium )
+    implicitWidth: Math.max(background.implicitWidth, contentItem.implicitWidth + Maui.Style.space.big )
     implicitHeight: background.implicitHeight
     hoverEnabled: true
 
     icon.width: Kirigami.Settings.isMobile ? Maui.Style.iconSizes.medium : Maui.Style.iconSizes.small
     icon.height: Kirigami.Settings.isMobile ? Maui.Style.iconSizes.medium : Maui.Style.iconSizes.small
 
-    icon.color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor) : control.Kirigami.Theme.disabledTextColor
-    spacing: Maui.Style.space.medium
+    icon.color:  !control.enabled ? control.Kirigami.Theme.disabledTextColor :
+                                    control.highlighted || control.down || control.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
+    spacing: Maui.Style.space.small
 
     contentItem: IconLabel
     {
         text: control.text
         font: control.font
         icon: control.icon
-        color: !control.enabled ? control.Kirigami.Theme.disabledTextColor :
-        control.highlighted || control.down ? control.Kirigami.Theme.highlightedTextColor : control.Kirigami.Theme.textColor
+        color: control.icon.color
         spacing: control.spacing
         mirrored: control.mirrored
         display: control.display
@@ -56,9 +56,10 @@ T.Button
         implicitWidth:  (Maui.Style.iconSizes.medium * 3) + Maui.Style.space.big
         implicitHeight: Maui.Style.iconSizes.medium + Maui.Style.space.small
      
-        color: control.Kirigami.Theme.backgroundColor
-        border.color: control.hovered ? Kirigami.Theme.highlightColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-        border.width: Kirigami.Units.devicePixelRatio
-        radius: height * 0.07
+        color: control.checked || control.hovered ? Qt.rgba( control.Kirigami.Theme.highlightColor.r,  control.Kirigami.Theme.highlightColor.g,  control.Kirigami.Theme.highlightColor.b, 0.2) : Kirigami.Theme.backgroundColor
+
+        border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+
+        radius: Maui.Style.radiusV
     }
 }

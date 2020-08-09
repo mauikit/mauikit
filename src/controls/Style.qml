@@ -29,7 +29,7 @@ QtObject
 	readonly property bool isAndroid: Qt.platform.os == "android"
 	readonly property bool isMobile : Kirigami.Settings.isMobile
 
-	property int unit : Kirigami.Units.devicePixelRatio
+    property int unit : Kirigami.Units.devicePixelRatio
     property int radiusV : Maui.Handy.isWindows ? 2 : 4
 	
 	readonly property int rowHeight: iconSizes.big * 0.95
@@ -76,13 +76,13 @@ QtObject
 	})
 	
 	readonly property var iconSizes : ({
-		tiny : 8,
+        tiny : 8,
         small :  Kirigami.Units.iconSizes.small / (isMobile ? 1.5 : 1),
         medium : Kirigami.Units.iconSizes.smallMedium / (isMobile ? 1.5 : 1),
         big:  Kirigami.Units.iconSizes.medium / (isMobile ? 1.5 : 1),
         large: Kirigami.Units.iconSizes.large / (isMobile ? 1.5 : 1),
         huge: Kirigami.Units.iconSizes.huge / (isMobile ? 1.5 : 1),
-        enormous: Kirigami.Units.iconSizes.enormous / (isMobile ? 1.5 : 1)		
+        enormous: Kirigami.Units.iconSizes.enormous / (isMobile ? 1.5 : 1)
 	})	
     
     function mapToIconSizes(size)
