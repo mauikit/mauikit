@@ -85,6 +85,7 @@
         <file alias="labs/TabsBrowser.qml">controls/labs/TabsBrowser.qml</file>
         <file alias="labs/SettingsDialog.qml">controls/labs/SettingsDialog.qml</file>
         <file alias="labs/SettingsSection.qml">controls/labs/SettingsSection.qml</file>
+        <file alias="labs/SettingTemplate.qml">controls/labs/SettingTemplate.qml</file>
         <file alias="labs/Doodle.qml">controls/labs/Doodle.qml</file>
         <file alias="labs/WindowControlsLinux.qml">controls/labs/WindowControlsLinux.qml</file>
         <file alias="labs/WindowControlsMac.qml">controls/labs/WindowControlsMac.qml</file>

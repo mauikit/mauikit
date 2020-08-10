@@ -19,7 +19,7 @@ Maui.AlternateListItem
         ColumnLayout
         {
             id: _layout   
-            width: parent.width - (Maui.Style.space.huge)
+            width: parent.width
             anchors.centerIn: parent
             spacing: Maui.Style.space.small
                       
@@ -36,7 +36,7 @@ Maui.AlternateListItem
                 label2.wrapMode: Text.WordWrap
             }
                         
-            Kirigami.FormLayout
+            ColumnLayout
             {
                 id: _mainData
                 Layout.fillWidth: true

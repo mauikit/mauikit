@@ -79,6 +79,7 @@ ToolButtonAction 1.1 labs/ToolButtonAction.qml
 TabsBrowser 1.1 labs/TabsBrowser.qml
 SettingsDialog 1.1 labs/SettingsDialog.qml
 SettingsSection 1.1 labs/SettingsSection.qml
+SettingTemplate 1.2 labs/SettingTemplate.qml
 Doodle 1.1 labs/Doodle.qml
 
 AlternateListItem 1.2 labs/AlternateListItem.qml

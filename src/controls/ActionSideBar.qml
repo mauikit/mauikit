@@ -68,7 +68,6 @@ Maui.SideBar
 				control.itemRightClicked(index)
 			}
 		}
-	}
-	
+	}	
 }
 
