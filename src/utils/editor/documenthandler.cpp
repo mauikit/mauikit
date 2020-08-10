@@ -50,7 +50,12 @@
 
 #include "documenthandler.h"
 
-#include <KLocalizedString>
+#ifdef Q_OS_MACOS
+#include <KF5/KI18n/KLocalizedString>
+#else
+#include <KI18n/KLocalizedString>
+#endif
+
 #include <QAbstractTextDocumentLayout>
 #include <QDebug>
 #include <QFile>

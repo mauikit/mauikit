@@ -119,6 +119,7 @@ Maui.Popup
             {
                 id: _closeButton
                 visible: control.persistent
+                hoverEnabled: !Kirigami.Settings.isMobile
                 Layout.fillHeight: true
                 implicitHeight: Maui.Style.iconSizes.medium
                 implicitWidth: Maui.Style.iconSizes.medium
@@ -128,8 +129,7 @@ Maui.Popup
                     height: Maui.Style.iconSizes.tiny
                     width: height
                     anchors.centerIn: parent
-                    color: Kirigami.Theme.textColor
-                    opacity: 0.5
+                    color: _closeButton.containsMouse || _closeButton.containsPress ? Kirigami.Theme.negativeTextColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
                 }
                 
                 onClicked: close()

@@ -42,7 +42,7 @@ AbstractButton
     
     hoverEnabled: !Kirigami.Settings.isMobile
     implicitHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
-    implicitWidth: _layoutButton.implicitWidth  + (Maui.Style.space.medium *  1.25)
+    implicitWidth: _layoutButton.implicitWidth  + (Maui.Style.space.medium *  2)
     
     icon.width: Maui.Style.iconSizes.medium
     icon.height: Maui.Style.iconSizes.medium
