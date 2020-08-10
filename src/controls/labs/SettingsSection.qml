@@ -19,7 +19,7 @@ Maui.AlternateListItem
         ColumnLayout
         {
             id: _layout   
-            width: parent.width
+            width: parent.width - (Maui.Style.space.huge)
             anchors.centerIn: parent
             spacing: Maui.Style.space.small
                       
