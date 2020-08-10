@@ -19,7 +19,7 @@ Maui.AlternateListItem
         ColumnLayout
         {
             id: _layout   
-            width: parent.width - (Maui.Style.space.huge)
+            width: parent.width - (Maui.Style.space.medium)
             anchors.centerIn: parent
             spacing: Maui.Style.space.small
                       
@@ -40,6 +40,7 @@ Maui.AlternateListItem
             {
                 id: _mainData
                 Layout.fillWidth: true
+                Layout.margins: Maui.Style.space.medium
             }
         }        
 }

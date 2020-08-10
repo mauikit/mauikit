@@ -192,8 +192,7 @@ Maui.Dialog
                 Maui.FMList.PLACES_PATH,
                 Maui.FMList.CLOUD_PATH,
                 Maui.FMList.REMOTE_PATH,
-                Maui.FMList.DRIVES_PATH,
-                Maui.FMList.TAGS_PATH] : 
+                Maui.FMList.DRIVES_PATH] : 
                 [Maui.FMList.PLACES_PATH,
                 Maui.FMList.REMOTE_PATH,                                                
                 Maui.FMList.CLOUD_PATH,
