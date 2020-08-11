@@ -168,18 +168,16 @@ Maui.Dialog
                                 Layout.fillWidth: true
                             }
                             
-                            ListView
+                            Repeater
                             {
-                                Layout.preferredHeight: contentHeight
-                                Layout.fillWidth: true
-                                Layout.margins: 0
-                                spacing: 0
                                 model: ListModel { id: _infoModel }
                                 delegate: Maui.AlternateListItem
                                 {
                                     visible: model.value.length
-                                    width: visible ? parent.width : 0
-                                    height: visible ? _delegateColumnInfo.implicitHeight + Maui.Style.space.large : 0
+                                    Layout.preferredHeight: visible ? _delegateColumnInfo.implicitHeight + Maui.Style.space.large : 0
+                                    Layout.fillWidth: true
+                                    Layout.margins: 0
+                                    
                                     leftPadding: Maui.Style.space.medium
                                     rightPadding: Maui.Style.space.medium
                                     

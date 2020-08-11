@@ -226,7 +226,7 @@ Maui.Page
             section.delegate: Maui.LabelDelegate
             {
                 id: delegate
-                width: parent.width
+                width: parent ? parent.width : 0
                 height: Maui.Style.toolBarHeightAlt
                 
                 label: String(section).toUpperCase()
@@ -238,7 +238,7 @@ Maui.Page
             delegate: Maui.ListBrowserDelegate
             {
                 id: delegate
-                width: parent.width
+                width: parent ? parent.width : 0
                 
                 padding: 0
                 leftPadding: Maui.Style.space.small

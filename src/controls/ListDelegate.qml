@@ -37,7 +37,7 @@ Maui.ItemDelegate
 	
 	property alias template : _template
 	
-	implicitWidth: parent.width
+	implicitWidth: parent ? parent.width : 0
 	implicitHeight: Math.max(control.iconSize + Maui.Style.space.tiny, Maui.Style.rowHeight)	
 	
 	isCurrentItem : ListView.isCurrentItem 

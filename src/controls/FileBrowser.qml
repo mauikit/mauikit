@@ -323,8 +323,9 @@ Maui.Page
 	{
 		target: control.previewer.tagBar
 		enabled: control.previewer && control.tagsDialog
-	
-		onAddClicked:
+        ignoreUnknownSignals: true
+        
+		function onAddClicked()
 		{			
 			if(control.tagsDialog)
 			{
@@ -338,8 +339,9 @@ Maui.Page
 	{
 		target: control.tagsDialog
 		enabled: control.tagsDialog && control.previewer
-		
-		onTagsReady:
+		ignoreUnknownSignals: true
+
+		function onTagsReady(tags)
 		{
 			control.tagsDialog.composerList.updateToUrls(tags)
 			if(control.previewer && control.previewer.visible)
@@ -351,16 +353,26 @@ Maui.Page
 	{
 		target: control.previewer
 		enabled: control.previewer
-		onShareButtonClicked: control.shareFiles([url])		
-		onOpenButtonClicked: control.openFile(url)		
+		ignoreUnknownSignals: true
+
+		function onShareButtonClicked(url)
+        {
+            control.shareFiles([url])		
+        }
+		
+		function onOpenButtonClicked(url)
+        {
+            control.openFile(url)		
+        }
 	}
 	
 	Connections
 	{
 		enabled: control.currentView
 		target: control.currentView
-		
-		onKeyPress:
+		ignoreUnknownSignals: true
+
+		function onKeyPress(event)
 		{
 			const index = control.currentView.currentIndex
 			const item = control.currentFMList.get(index)
@@ -509,12 +521,12 @@ Maui.Page
             control.keyPress(event)
         }
         
-		onItemsSelected:
+		function onItemsSelected(indexes)
 		{
 			control.selectIndexes(indexes)
 		}
 		
-		onItemClicked:
+		function onItemClicked(index)
 		{
 			control.currentView.currentIndex = index
 			indexHistory.push(index)
@@ -522,7 +534,7 @@ Maui.Page
 			control.currentView.forceActiveFocus()
 		}
 		
-		onItemDoubleClicked:
+		function onItemDoubleClicked(index)
 		{
 			control.currentView.currentIndex = index
 			indexHistory.push(index)
@@ -530,7 +542,7 @@ Maui.Page
 			control.currentView.forceActiveFocus()
 		}
 		
-		onItemRightClicked:
+		function onItemRightClicked(index)
 		{
 			if(control.currentFMList.pathType !== Maui.FMList.TRASH_PATH && control.currentFMList.pathType !== Maui.FMList.REMOTE_PATH)
 			{
@@ -540,7 +552,7 @@ Maui.Page
 			control.currentView.forceActiveFocus()
 		}
 		
-		onItemToggled:
+		function onItemToggled(index)
 		{
 			const item = control.currentFMList.get(index)
 			
@@ -555,7 +567,7 @@ Maui.Page
 			control.currentView.forceActiveFocus()
 		}		
 			
-		onAreaClicked:
+		function onAreaClicked(mouse)
 		{
 			if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
 				browserMenu.show(control)
@@ -565,20 +577,10 @@ Maui.Page
 					control.currentView.forceActiveFocus()
 		}
 		
-		onAreaRightClicked: browserMenu.show(control)
-
-        //        onWarning:
-        //        {
-        //            notify("dialog-information", "An error happened", message)
-        //        }
-
-        //        onProgress:
-        //        {
-        //            if(percent === 100)
-        //                _progressBar.value = 0
-        //            else
-        //                _progressBar.value = percent/100
-        //        }
+		function onAreaRightClicked(mouse) 
+        {
+            browserMenu.show(control)
+        }
     }
     
     StackView

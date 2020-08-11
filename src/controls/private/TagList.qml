@@ -14,28 +14,28 @@ ListView
     clip: true
     spacing: Maui.Style.contentMargins   
     boundsBehavior: Kirigami.Settings.isMobile ?  Flickable.DragOverBounds : Flickable.StopAtBounds
-
+    
     property string placeholderText: i18n("Add tags...")
     property alias list : _tagsList
     property bool showPlaceHolder:  true
     property bool showDeleteIcon: true
     
     signal tagRemoved(int index)
-	signal tagClicked(int index)
+    signal tagClicked(int index)
     
     TagsModel
     {
-		id: _tagsModel
-		list: _tagsList
-	}
-	
-	TagsList
-	{
-		id: _tagsList
-	}
-	
-	model: _tagsModel
-	
+        id: _tagsModel
+        list: _tagsList
+    }
+    
+    TagsList
+    {
+        id: _tagsList
+    }
+    
+    model: _tagsModel
+    
     Label
     {
         height: parent.height
@@ -47,7 +47,7 @@ ListView
         color: Kirigami.Theme.textColor
         font.pointSize: Maui.Style.fontSizes.default
     }
-
+    
     delegate: TagDelegate
     {
         id: delegate
@@ -58,14 +58,10 @@ ListView
         
         ListView.onAdd:
         {
-			control.positionViewAtEnd()
-		}
+            control.positionViewAtEnd()
+        }        
         
-        Connections
-        {
-            target: delegate
-            onRemoveTag: tagRemoved(index)
-            onClicked: tagClicked(index)
-        }
+        onRemoveTag: tagRemoved(index)
+        onClicked: tagClicked(index)        
     }
 }
