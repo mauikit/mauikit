@@ -329,19 +329,22 @@ Maui.Page
                 {
                     target: selectionBar
                     
-                    onUriRemoved:
+                    function onUriRemoved(uri)
                     {
                         if(uri === model.path)
                             delegate.checked = false
                     }
                     
-                    onUriAdded:
+                    function onUriAdded(uri)
                     {
                         if(uri === model.path)
                             delegate.checked = true
                     }
                     
-                    onCleared: delegate.checked = false
+                    function onCleared()
+                    {
+                        delegate.checked = false
+                    }
                 }
             }
         }
@@ -474,20 +477,22 @@ Maui.Page
                     {
                         target: selectionBar
                         
-                        onUriRemoved:
+                        function onUriRemoved(uri)
                         {
                             if(uri === model.path)
                                 delegate.checked = false
                         }
                         
-                        onUriAdded:
+                        function onUriAdded(uri)
                         {
                             if(uri === model.path)
                                 delegate.checked = true
                         }
                         
-                        onCleared: delegate.checked = false
-                        
+                        function onCleared(uri)
+                        {
+                            delegate.checked = false
+                        }
                     }
                 }
             }            
@@ -754,19 +759,22 @@ Maui.Page
                             {
                                 target: selectionBar
                                 
-                                onUriRemoved:
+                                function onUriRemoved(uri)
                                 {
                                     if(uri === model.path)
                                         delegate.checked = false
                                 }
                                 
-                                onUriAdded:
+                                function onUriAdded(uri)
                                 {
                                     if(uri === model.path)
                                         delegate.checked = true
                                 }
                                 
-                                onCleared: delegate.checked = false
+                                function onCleared()
+                                {
+                                     delegate.checked = false
+                                }
                             }
                             
                             onClicked:

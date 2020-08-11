@@ -11,7 +11,7 @@ Maui.ItemDelegate
     leftPadding: Maui.Style.space.medium
     rightPadding: Maui.Style.space.medium
     
-    background :Rectangle
+    background: Rectangle
     {        
         //     color: alt ? Kirigami.Theme.backgroundColor : Qt.darker(Kirigami.Theme.backgroundColor, 1.2)
         color: Kirigami.Theme.backgroundColor
@@ -35,6 +35,5 @@ Maui.ItemDelegate
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 1        
         }          
-    }
-    
+    }    
 }

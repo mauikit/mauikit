@@ -57,42 +57,38 @@ Maui.GridView
 			padding: Maui.Style.space.tiny
 			isCurrentItem: parent.isCurrentItem
 			
-			checkable: control.checkable
-			showThumbnails: control.showPreviewThumbnails
-			
-			Connections
-			{
-				target: delegate
-				onClicked:
-				{
-					control.currentIndex = index
-					itemClicked(index)
-				}
-				
-				onDoubleClicked:
-				{
-					control.currentIndex = index
-					itemDoubleClicked(index)
-				}
-				
-				onPressAndHold:
-				{
-					control.currentIndex = index
-					control.itemRightClicked(index)
-				}
-				
-				onRightClicked:
-				{
-					control.currentIndex = index
-					control.itemRightClicked(index)
-				}
-				
-				onToggled:
-				{
-					control.currentIndex = index
-					control.itemToggled(index, state)
-				}
-			}
-		}
+            checkable: control.checkable
+            showThumbnails: control.showPreviewThumbnails
+
+            onClicked:
+            {
+                control.currentIndex = index
+                itemClicked(index)
+            }
+
+            onDoubleClicked:
+            {
+                control.currentIndex = index
+                itemDoubleClicked(index)
+            }
+
+            onPressAndHold:
+            {
+                control.currentIndex = index
+                control.itemRightClicked(index)
+            }
+
+            onRightClicked:
+            {
+                control.currentIndex = index
+                control.itemRightClicked(index)
+            }
+
+            onToggled:
+            {
+                control.currentIndex = index
+                control.itemToggled(index, state)
+            }
+        }
 	}
 }

@@ -17,8 +17,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.13
-import QtQuick.Controls 2.13
+import QtQuick 2.14
+import QtQml 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
@@ -85,8 +86,7 @@ Pane
                     duration: Kirigami.Units.shortDuration
                     easing.type: Easing.InOutQuad
                 }
-            }
-            
+            }            
         }
         
         Binding 
@@ -96,17 +96,17 @@ Pane
             target: control.flickable
             property: "bottomMargin"
             value: control.flickable && control.footer.visible && control.footerPositioning === ListView.InlineFooter ? _footerContent.height : 0
-//            restoreMode: Binding.RestoreBindingOrValue
+            restoreMode: Binding.RestoreBindingOrValue
         }        
         
         Connections
         {
             target: control.flickable
+            ignoreUnknownSignals: true
             enabled: control.flickable && control.flickable.contentHeight > _content.height
             
-            onAtYBeginningChanged:
-            {
-                
+            function onAtYBeginningChanged()
+            {                
                 if(control.headerPositioning !== ListView.InlineHeader || !control.header.visible || control.altHeader || control.flickable.contentHeight <= control.height)
                 {
                     return
@@ -157,11 +157,12 @@ Pane
         Connections
         {
             target: control.flickable ? control.flickable : null
+            ignoreUnknownSignals: true
             enabled: control.flickable && ((control.header && control.headerPositioning === ListView.PullBackHeader) || (control.footer &&  control.footerPositioning === ListView.PullBackFooter))
             property int oldContentY
             property bool updatingContentY: false
             
-            onContentYChanged:
+            function onContentYChanged()
             {
                 _headerAnimation.enabled = false
                 _footerAnimation.enabled = false
@@ -215,7 +216,7 @@ Pane
                 }
             }
             
-            onMovementEnded:
+            function onMovementEnded()
             {
                 if (control.header && control.header.visible && control.headerPositioning === ListView.PullBackHeader && !control.altHeader)
                 {

@@ -77,8 +77,7 @@ Maui.ListBrowser
             Maui.FMList.PLACES_PATH,
             Maui.FMList.APPS_PATH,
             Maui.FMList.BOOKMARKS_PATH,
-            Maui.FMList.DRIVES_PATH,
-            Maui.FMList.TAGS_PATH]
+            Maui.FMList.DRIVES_PATH]
     }
 
     Rectangle
@@ -101,28 +100,22 @@ Maui.ListBrowser
         leftPadding:  Maui.Style.space.tiny
         rightPadding: Maui.Style.space.tiny
         radius : Maui.Style.radiusV
-
-        Connections
+        onClicked:
         {
-            target: itemDelegate
-            onClicked:
-            {
-                control.currentIndex = index
-                itemClicked(index)
-            }
+            control.currentIndex = index
+            itemClicked(index)
+        }
 
-            onRightClicked:
-            {
-                control.currentIndex = index
-                itemRightClicked(index)
-            }
+        onRightClicked:
+        {
+            control.currentIndex = index
+            itemRightClicked(index)
+        }
 
-            onPressAndHold:
-            {
-                control.currentIndex = index
-                itemRightClicked(index)
-            }
+        onPressAndHold:
+        {
+            control.currentIndex = index
+            itemRightClicked(index)
         }
     }
-
 }

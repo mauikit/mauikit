@@ -171,10 +171,9 @@ bool Tagging::updateAbstractTags(const QString &key, const QString &lot, const Q
 
 QVariantList Tagging::getUrlsTags(const bool &strict)
 {
-    const auto query = QString(
-                           "select distinct t.* from TAGS t "
+    const auto query = QString("select distinct t.* from TAGS t "
                            "where t.app = '%1'")
-                           .arg(this->application, this->uri);
+                           .arg(this->application);
 
                            return !strict ? this->get("select distinct t.* from tags t inner join TAGS_URLS turl on turl.tag = t.tag", &setTagIconName) : this->get(query, &setTagIconName);
 }

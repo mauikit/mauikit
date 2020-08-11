@@ -116,41 +116,37 @@ Kirigami.ScrollablePage
             iconSizeHint : height
             checkable: control.checkable
             showThumbnails: control.showPreviewThumbnails
-            
-            Connections
+
+            onClicked:
             {
-                target: delegate
-                onClicked:
-                {
-                    control.currentIndex = index
-                    control.itemClicked(index)
-                }
-                
-                onDoubleClicked:
-                {
-                    control.currentIndex = index
-                    control.itemDoubleClicked(index)
-                }
-                
-                onPressAndHold:
-                {
-                    control.currentIndex = index
-                    control.itemRightClicked(index)
-                }
-                
-                onRightClicked:
-                {
-                    control.currentIndex = index
-                    control.itemRightClicked(index)
-                }
-                
-                onToggled:
-                {
-					control.currentIndex = index
-					control.itemToggled(index, state)
-				}
+                control.currentIndex = index
+                control.itemClicked(index)
             }
-        }    
+
+            onDoubleClicked:
+            {
+                control.currentIndex = index
+                control.itemDoubleClicked(index)
+            }
+
+            onPressAndHold:
+            {
+                control.currentIndex = index
+                control.itemRightClicked(index)
+            }
+
+            onRightClicked:
+            {
+                control.currentIndex = index
+                control.itemRightClicked(index)
+            }
+
+            onToggled:
+            {
+                control.currentIndex = index
+                control.itemToggled(index, state)
+            }
+        }
         
         MouseArea
         {

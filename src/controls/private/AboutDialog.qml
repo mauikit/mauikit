@@ -165,7 +165,10 @@ Maui.Dialog
                     Connections
                     {
                         target: _poweredBy.label2
-                        onLinkActivated: Qt.openUrlExternally(link)
+                        function onLinkActivated(link)
+                        {
+                            Qt.openUrlExternally(link)
+                        }
                     }
                 }
             }
