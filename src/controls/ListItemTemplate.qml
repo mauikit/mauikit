@@ -74,6 +74,12 @@ Item
     
     property bool imageBorder: true
     
+    property int margins: 0
+    property int rightMargin: margins
+    property int leftMargin: margins
+    property int topMargin: margins
+    property int bottomMargin: margins
+    
     signal toggled(bool state)
     
     Component
@@ -164,6 +170,12 @@ Item
     {
         id: _layout
         anchors.fill: parent
+        anchors.margins: control.margins
+        anchors.leftMargin: control.leftMargin
+        anchors.rightMargin: control.rightMargin
+        anchors.topMargin: control.topMargin
+        anchors.bottomMargin: control.bottomMargin
+        
         spacing: Maui.Style.space.tiny
                
         Item

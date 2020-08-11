@@ -47,7 +47,7 @@ SwipeView
         
         Component.onCompleted:
         {
-            control.toolbar.middleContent.push(_actionGroup)
+            control.toolbar.leftContent.push(_actionGroup)
         }
     }	
     
@@ -85,16 +85,15 @@ SwipeView
         spacing: control.spacing
         orientation: control.orientation
         snapMode: ListView.SnapOneItem
-        boundsBehavior: Flickable.StopAtBounds
+        boundsBehavior: Flickable.StopAtBounds        
+        
+        preferredHighlightBegin: 0
+        preferredHighlightEnd: width
         
         highlightRangeMode: ListView.StrictlyEnforceRange
-        preferredHighlightBegin: 0
         highlightMoveDuration: 0
         highlightFollowsCurrentItem: true
-        highlightResizeDuration: 0		
-        
-        preferredHighlightEnd: width
-        // 		highlight: Item {}
+        highlightResizeDuration: 0        
         highlightMoveVelocity: -1
         highlightResizeVelocity: -1
         
@@ -134,8 +133,7 @@ SwipeView
             {
                 control.currentIndex = 3               
             }				
-        }
-        
+        }        
     }
     
     Component.onCompleted:
@@ -180,7 +178,6 @@ SwipeView
     
     function goBack()
     {
-        console.log("TRYING TO GO BACK", history.indexes())
         control.setCurrentIndex(history.pop())
     }
 }

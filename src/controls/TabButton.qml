@@ -1,8 +1,8 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.3
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 
 TabButton
 {
@@ -11,7 +11,8 @@ TabButton
     
     signal closeClicked(int index)
     
-    default property alias content : _layout.data
+    default property alias content : _template.data
+        property alias template: _template
         
         Kirigami.Separator
         {
@@ -42,35 +43,16 @@ TabButton
             }
         }
         
-        contentItem: Item
-        {   
-            RowLayout
-            {
-                id: _layout
-                anchors.fill: parent
-                spacing: Maui.Style.space.small
-                anchors.margins: Maui.Style.space.small
-                anchors.leftMargin: height
-                anchors.rightMargin: height
-                clip: true
-                opacity: control.hovered || control.checked ? 1 : 0.7
-                
-                Label
-                {
-                    visible: text.length
-                    text: control.text
-                    font.pointSize: Maui.Style.fontSizes.default
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    Layout.alignment: Qt.AlignHCenter
-                    verticalAlignment: Qt.AlignVCenter
-                    horizontalAlignment: Qt.AlignHCenter
-                    color: control.checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-                    wrapMode: Text.NoWrap
-                    elide: Text.ElideMiddle
-                }       
-            }
-            
+        contentItem:  Maui.ListItemTemplate
+        {
+            id: _template
+            label1.text: control.text
+            label1.horizontalAlignment: Qt.AlignHCenter
+            label1.color: control.checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+            label1.wrapMode: Text.NoWrap
+            label1.elide: Text.ElideMiddle
+            leftMargin: Maui.Style.space.small
+            rightMargin: leftMargin
             
             MouseArea
             {             
@@ -80,13 +62,9 @@ TabButton
                 
                 hoverEnabled: true
                 onClicked: control.closeClicked(index)
-                width: height
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.left:  _closeButton.position === Qt.AlignLeft ? parent.left : undefined
-                anchors.right:  _closeButton.position === Qt.AlignRight ? parent.right : undefined
+                Layout.preferredWidth: height
+                Layout.fillHeight: true
                 
-                visible:  opacity > 0
                 opacity: Kirigami.Settings.isMobile ? 1 : (control.hovered || control.checked ? 1 : 0)                
                 
                 Behavior on opacity
@@ -105,7 +83,8 @@ TabButton
                     anchors.centerIn: parent
                     color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.negativeTextColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))        
                 }
-            }            
-            
-        }
+            }  
+        }        
+        
 }
+
