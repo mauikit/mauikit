@@ -145,9 +145,12 @@ FMH::MODEL_LIST PlacesList::getGroup(const KFilePlacesModel &model, const FMH::P
     }
 
     const auto group = model.groupIndexes(static_cast<KFilePlacesModel::GroupType>(type));
-    res << std::accumulate(group.begin(), group.end(), FMH::MODEL_LIST(), [&model, &type](FMH::MODEL_LIST &list, const QModelIndex &index) -> FMH::MODEL_LIST {
+    res << std::accumulate(group.constBegin(), group.constEnd(), FMH::MODEL_LIST(), [&model, &type](FMH::MODEL_LIST &list, const QModelIndex &index) -> FMH::MODEL_LIST {
         const QUrl url = model.url(index);
         if (type == FMH::PATHTYPE_KEY::PLACES_PATH && FMH::defaultPaths.contains(url.toString()))
+            return list;
+
+        if(type == FMH::PATHTYPE_KEY::PLACES_PATH  && url.isLocalFile() && !FMH::fileExists(url))
             return list;
 
         list << FMH::MODEL {{FMH::MODEL_KEY::PATH, url.toString()},
