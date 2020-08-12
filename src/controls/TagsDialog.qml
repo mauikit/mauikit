@@ -15,9 +15,10 @@ Maui.Dialog
 	property alias composerList: tagListComposer.list
 
 	signal tagsReady(var tags)
+
 	defaultButtons: true
 	maxHeight: Maui.Style.unit * 500
-	maxWidth: 500
+    maxWidth: 400
 	page.margins: 0
 	
 	acceptButton.text: i18n("Add")
@@ -27,33 +28,26 @@ Maui.Dialog
 	onRejected: close()	
     
     headBar.visible: true
-	headBar.leftContent: ToolButton
+    headBar.rightContent: Maui.ToolButtonMenu
 	{
 		icon.name: "view-sort"
-		onClicked: sortMenu.popup()
-		
-		Menu
-		{
-			id: sortMenu			
-			
-			MenuItem
-			{
-				text: i18n("Sort by name")
-				checkable: true
-				autoExclusive: true
-				checked: _tagsList.sortBy === TagsList.TAG
-				onTriggered: _tagsList.sortBy = TagsList.TAG
-			}
-			
-			MenuItem
-			{
-				text: i18n("Sort by date")
-				checkable: true
-				autoExclusive: true
-				checked: _tagsList.sortBy === TagsList.ADD_DATE
-				onTriggered: _tagsList.sortBy = TagsList.ADD_DATE
-			}
-		}
+        MenuItem
+        {
+            text: i18n("Sort by name")
+            checkable: true
+            autoExclusive: true
+            checked: _tagsList.sortBy === TagsList.TAG
+            onTriggered: _tagsList.sortBy = TagsList.TAG
+        }
+
+        MenuItem
+        {
+            text: i18n("Sort by date")
+            checkable: true
+            autoExclusive: true
+            checked: _tagsList.sortBy === TagsList.ADD_DATE
+            onTriggered: _tagsList.sortBy = TagsList.ADD_DATE
+        }
 	}
 	
 	headBar.middleContent: Maui.TextField
@@ -74,11 +68,11 @@ Maui.Dialog
 		}
 	}
 	
-	headBar.rightContent: ToolButton
-	{
-		icon.name: "view-refresh"
-		onClicked: taglist.refresh()
-	}	
+//	headBar.rightContent: ToolButton
+//	{
+//		icon.name: "view-refresh"
+//		onClicked: taglist.refresh()
+//	}
 
 	ColumnLayout
 	{

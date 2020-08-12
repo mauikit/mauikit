@@ -236,6 +236,7 @@ Maui.Page
 		{
 			title: i18n("New Folder")
 			message: i18n("Create a new folder with a custom name")
+            template.iconSource: "folder"
 			acceptButton.text: i18n("Create")
 			onFinished: control.currentFMList.createDir(text)
 			rejectButton.visible: false
@@ -251,6 +252,7 @@ Maui.Page
 		{
 			title: i18n("New File")
 			message: i18n("Create a new file with a custom name and extension")
+            template.iconSource: "text-plain"
 			acceptButton.text: i18n("Create")
 			onFinished: Maui.FM.createFile(control.currentPath, text)
 			rejectButton.visible: false
@@ -264,8 +266,9 @@ Maui.Page
 		Maui.NewDialog
 		{
             property var item : control.currentFMList ? control.currentFMList.get(control.currentView.currentIndex) : ({})
-			title: i18n("Rename File")
-			message: i18n("Rename a file or folder")
+            title: i18n("Rename")
+            message: i18n("Change the name of a file or folder")
+            template.iconSource: "emblem-important"
 			textEntry.text: item.label
 			textEntry.placeholderText: i18n("New name")
 			onFinished: Maui.FM.rename(item.path, textEntry.text)

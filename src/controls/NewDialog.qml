@@ -14,7 +14,8 @@ Maui.Dialog
     
 	onAccepted: done()
 	onRejected: textEntry.clear()
-    page.margins: Maui.Style.space.huge
+
+    page.margins: Maui.Style.space.big
 	
 	function done()
 	{
