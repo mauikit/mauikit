@@ -168,12 +168,11 @@ Maui.Dialog
 		onRejected: close()
 	}	
 	
-	Kirigami.PageRow
+    stack: Kirigami.PageRow
 	{
         id: pageRow
         Layout.fillHeight: true
         Layout.fillWidth: true
-        clip: true
         
         separatorVisible: wideMode
         initialPage: [sidebar, _browserLayout]

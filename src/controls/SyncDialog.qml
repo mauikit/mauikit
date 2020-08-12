@@ -50,85 +50,68 @@ Maui.Dialog
 
     onRejected:	close()
 
-    Kirigami.ScrollablePage
+    Image
     {
-        Layout.fillHeight: true
+        visible: !customServer
+        Layout.alignment: Qt.AlignCenter
+        Layout.preferredWidth:  Maui.Style.iconSizes.huge
+        Layout.preferredHeight: Maui.Style.iconSizes.huge
+        Layout.margins: Maui.Style.space.medium
+
+        sourceSize.width: width
+        sourceSize.height: height
+
+        source: "qrc:/assets/opendesktop.png"
+    }
+
+    Label
+    {
+        visible: !customServer
         Layout.fillWidth: true
-        padding: 0
-        rightPadding: 0
-        leftPadding: 0
-        topPadding: 0
-        bottomPadding: 0
+        horizontalAlignment: Qt.AlignHCenter
+        Layout.preferredHeight: Maui.Style.rowHeight
+        text: "opendesktop.org"
+        elide: Text.ElideNone
+        wrapMode: Text.NoWrap
+        font.weight: Font.Bold
+        font.bold: true
+        font.pointSize: Maui.Style.fontSizes.big
+    }
 
-        ColumnLayout
-        {
-            spacing: Maui.Style.space.small
-            width: parent.width
+    Maui.TextField
+    {
+        id: userField
+        Layout.fillWidth: true
+        placeholderText: i18n("Username")
+        inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhSensitiveData
+    }
 
-            Image
-            {
-                visible: !customServer
-                Layout.alignment: Qt.AlignCenter
-                Layout.preferredWidth:  Maui.Style.iconSizes.huge
-                Layout.preferredHeight: Maui.Style.iconSizes.huge
-                Layout.margins: Maui.Style.space.medium
+    Maui.TextField
+    {
+        id: passwordField
+        Layout.fillWidth: true
+        placeholderText: i18n("Password")
+        echoMode: TextInput.Password
+        passwordMaskDelay: 300
+        inputMethodHints: Qt.ImhNoAutoUppercase
+    }
 
-                sourceSize.width: width
-                sourceSize.height: height
 
-                source: "qrc:/assets/opendesktop.png"
-            }
-            
-            Label
-            {
-                visible: !customServer
-                Layout.fillWidth: true
-                horizontalAlignment: Qt.AlignHCenter
-                Layout.preferredHeight: Maui.Style.rowHeight
-                text: "opendesktop.org"
-                elide: Text.ElideNone
-                wrapMode: Text.NoWrap
-                font.weight: Font.Bold
-                font.bold: true
-                font.pointSize: Maui.Style.fontSizes.big
-            }
-            
-            Maui.TextField
-            {
-                id: userField
-                Layout.fillWidth: true
-                placeholderText: i18n("Username")
-				inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhSensitiveData
-            }
+    Maui.TextField
+    {
+        id: serverField
+        visible: customServer
+        Layout.fillWidth: true
+        placeholderText: i18n("Server address")
+        inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoAutoUppercase
+        text: customServer ? "" : "https://cloud.opendesktop.cc/cloud/remote.php/webdav/"
+    }
 
-            Maui.TextField
-            {
-                id: passwordField
-                Layout.fillWidth: true
-                placeholderText: i18n("Password")
-				echoMode: TextInput.Password
-                passwordMaskDelay: 300
-                inputMethodHints: Qt.ImhNoAutoUppercase
-            }
-            
-                     
-            Maui.TextField
-            {
-                id: serverField
-                visible: customServer
-                Layout.fillWidth: true
-                placeholderText: i18n("Server address")
-				inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoAutoUppercase
-                text: customServer ? "" : "https://cloud.opendesktop.cc/cloud/remote.php/webdav/"
-            }            
-            
-            Button
-            {
-                Layout.fillWidth: true
-                icon.name: "filename-space-amarok"
-                text: customServer ? i18n("opendesktop") : i18n("Custom server")
-                onClicked: customServer = !customServer
-            }
-        }
+    Button
+    {
+        Layout.fillWidth: true
+        icon.name: "filename-space-amarok"
+        text: customServer ? i18n("opendesktop") : i18n("Custom server")
+        onClicked: customServer = !customServer
     }
 }

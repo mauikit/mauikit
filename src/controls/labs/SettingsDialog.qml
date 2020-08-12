@@ -7,9 +7,7 @@ import org.kde.mauikit 1.2 as Maui
 Maui.Dialog
 {
     id: control
-    default property alias content : _layout.data
-        
-    maxHeight: Math.min(_scrollView.contentHeight + Maui.Style.space.big, 500) + headBar.height
+    maxHeight: Math.min(implicitHeight + Maui.Style.space.big, 500) + headBar.height
     maxWidth: 400
     defaultButtons: false
         
@@ -20,27 +18,7 @@ Maui.Dialog
         acceptButton.text: i18n("Apply")
         rejectButton.text: i18n("Cancel")
         
-        ScrollView
-        {
-            id: _scrollView
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            contentHeight: _layout.implicitHeight
-            
-            Flickable
-            {
-                id: _flickable
-                
-                ColumnLayout
-                {
-                    id: _layout
-                    width: parent.width
-                    spacing: 0
-                }                
-            }           
-        }
 
-        
         Component.onCompleted:
         {
             for(var i in control.content)

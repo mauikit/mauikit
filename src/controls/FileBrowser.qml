@@ -168,39 +168,28 @@ Maui.Page
 			acceptButton.visible: Maui.Handy.isLinux
 			page.margins: Maui.Style.space.big
 			template.iconSource: "emblem-warning"
-            			
-			ColumnLayout
-			{
-                Layout.fillWidth: true                
-                
-                CheckBox
-                {
-                    id: _removeDialogFilesCheckBox
-                    Layout.fillWidth: true
-                    
-                    text: i18n("List files")
-                }
-                
-                Kirigami.ScrollablePage
+
+            CheckBox
+            {
+                id: _removeDialogFilesCheckBox
+                Layout.fillWidth: true
+
+                text: i18n("List files")
+            }
+
+            Repeater
+            {
+                model: urls
+
+                Label
                 {
                     visible: _removeDialogFilesCheckBox.checked
-                    
                     Layout.fillWidth: true
-                    Layout.maximumHeight: 200
-                    padding: 0
-                    topPadding: 0
-                    leftPadding: 0
-                    rightPadding: 0
-                                        
-                    TextArea
-                    {
-                        wrapMode: Text.WordWrap
-                        text: urls.join("\n\n")
-                        readOnly: true
-                        background: null
-                    }
-                }               
+                    text: modelData
+                    wrapMode: Text.WordWrap
+                }
             }
+
 			
 			onRejected:
 			{

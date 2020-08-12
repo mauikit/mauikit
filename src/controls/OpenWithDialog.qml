@@ -1,17 +1,17 @@
 /*
  * <one line to give the program's name and a brief idea of what it does.>
  * Copyright (C) 2020  camilo <chiguitar@unal.edu.co>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -36,69 +36,64 @@ Maui.Dialog
     verticalAlignment: Qt.AlignBottom
     
     defaultButtons: false
-        
-        page.title: i18n("Open with")
-        headBar.visible: true
-        
-        Maui.ListBrowser
+
+    page.title: i18n("Open with")
+    headBar.visible: true
+
+    stack: Maui.ListBrowser
+    {
+        id: _list
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        spacing: 0
+        checkable: false
+        model: ListModel {}
+
+        delegate: Maui.AlternateListItem
         {
-            id: _list
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            spacing: 0
-            checkable: false
-            model: ListModel {}
-            onItemClicked:
+            width: parent.width
+            height: Maui.Style.rowHeight * 2
+
+            leftPadding: Maui.Style.space.medium
+            rightPadding: Maui.Style.space.medium
+
+            Maui.ListItemTemplate
+            {
+                anchors.fill: parent
+                label1.text: model.label
+                label2.text: model.comment
+                iconSource: model.icon
+                iconSizeHint: Maui.Style.iconSizes.big
+            }
+
+            onClicked:
             {
                 _list.currentIndex = index
                 triggerService(index)
             }
-            
-            delegate: Maui.AlternateListItem 
-            {
-                width: parent.width                
-                height: Maui.Style.rowHeight * 2
-                
-                leftPadding: Maui.Style.space.medium
-                rightPadding: Maui.Style.space.medium
-              
-                Maui.ListItemTemplate
-                {
-                    anchors.fill: parent                    
-                    label1.text: model.label
-                    label2.text: model.comment
-                    iconSource: model.icon                    
-                    iconSizeHint: Maui.Style.iconSizes.big				
-                }
-                
-                onClicked: 
-                {
-                    _list.currentIndex = index
-                    triggerService(index)
-                }
-            } 
         }
-        
-        onOpened: populate()
-        
-        function populate()
+    }
+
+    onOpened: populate()
+
+    function populate()
+    {
+        if(urls.length > 0)
         {
-            if(urls.length > 0)
+            _list.model.clear()
+            var services = Maui.KDE.services(control.urls[0])
+
+            for(var i in services)
             {
-                _list.model.clear()
-                var services = Maui.KDE.services(control.urls[0])
-                
-                for(var i in services)
-                {
-                    _list.model.append(services[i])
-                }
+                _list.model.append(services[i])
             }
-        }	
-        
-        function triggerService(index)
-        {
-            const obj = _list.model.get(index)		
-            Maui.KDE.openWithApp(obj.actionArgument, control.urls)							
-            close()
         }
+    }
+
+    function triggerService(index)
+    {
+        const obj = _list.model.get(index)
+        Maui.KDE.openWithApp(obj.actionArgument, control.urls)
+        close()
+    }
 }

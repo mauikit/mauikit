@@ -29,14 +29,15 @@ Maui.Popup
 {
     id: control
     
-    default property alias content : _pageContent.data
-        
+    default property alias scrollable : _pageContent.data
+    property alias stack : _stack.data
+
     property string message : ""
     property string title: ""
     property alias template : _template
-        
+
     property bool defaultButtons: true
-    property bool persistent : true    
+    property bool persistent : true
     
     property alias acceptButton : _acceptButton
     property alias rejectButton : _rejectButton
@@ -48,7 +49,7 @@ Maui.Popup
     property alias footBar : _page.footBar
     property alias headBar: _page.headBar
     property alias closeButton: _closeButton
-    
+
     signal accepted()
     signal rejected()
     
@@ -58,43 +59,8 @@ Maui.Popup
     maxHeight: implicitHeight
     implicitHeight: _layout.implicitHeight
     widthHint: 0.9
-    heightHint: 0.9  
-    clip: true
+    heightHint: 0.9
 
-//    opacity:
-
-    
-//    Maui.Badge
-//    {
-//        id: _closeButton
-//        visible: control.persistent
-        
-//        color: hovered || pressed ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.backgroundColor
-        
-//        property int position : Maui.App.leftWindowControls.includes("X") ? Qt.AlignLeft : Qt.AlignRight
-        
-//        Maui.X
-//        {
-//            height: Maui.Style.iconSizes.tiny
-//            width: height
-//            anchors.centerIn: parent
-//            color: Kirigami.Theme.textColor
-//        }
-        
-//        border.color: Kirigami.Theme.textColor
-        
-//        anchors
-//        {
-//            verticalCenter: parent.top
-//            horizontalCenter: _closeButton.position === Qt.AlignLeft ? parent.left : parent.right
-//            horizontalCenterOffset: control.width === control.parent.width ? _closeButton.width : 0
-//        }
-        
-//        z: control.z+999
-//        onClicked: close()
-//    }
-    
-    
     ColumnLayout
     {
         id: _layout
@@ -107,12 +73,10 @@ Maui.Popup
             Layout.fillWidth: true
             Layout.fillHeight: true
             padding: 0
-            clip: true
             
-            implicitHeight: _pageContent.implicitHeight + topPadding + bottomPadding + topMargin + bottomMargin + footer.height + _pageContent.spacing + header.height
+            implicitHeight: _pageContent.implicitHeight + _stack.implicitHeight + topPadding + bottomPadding + topMargin + bottomMargin + footer.height + control.spacing + header.height
             headBar.visible: control.persistent
             headerBackground.visible: headBar.visibleCount > 1
-//             headBar.preferredHeight: headBar.visibleCount > 1 ? Maui.Style.toolBarHeight : Maui.Style.rowHeight
             floatingHeader: headBar.visibleCount === 1
 
             headBar.farLeftContent: MouseArea
@@ -134,82 +98,71 @@ Maui.Popup
                 
                 onClicked: close()
             }
-            
+
             ColumnLayout
             {
-                id: _pageContent
+                id: _stack
                 anchors.fill: parent
-                spacing: Maui.Style.space.small                          
-                
-                Kirigami.ScrollablePage
+                spacing: control.spacing
+            }
+
+            Kirigami.ScrollablePage
+            {
+                id: _scrollable
+                width: parent.width
+                height: Math.min(parent.height, contentHeight)
+                anchors.centerIn: parent
+
+                contentHeight: _pageContent.implicitHeight
+
+                Kirigami.Theme.backgroundColor: "transparent"
+
+                padding: 0
+                leftPadding: padding
+                rightPadding: padding
+                topPadding: padding
+                bottomPadding: padding
+
+                ColumnLayout
                 {
-                    id: _scrollable
-                    visible: message.length > 0
-                    Layout.maximumHeight: Math.min(_scrollable.contentHeight, 300)
-//                     Layout.minimumHeight: contentHeight
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignCenter
-                    contentHeight: _template.implicitHeight
-                    Kirigami.Theme.backgroundColor: "transparent"
-                    padding: 0
-                    leftPadding: padding
-                    rightPadding: padding
-                    topPadding: padding
-                    bottomPadding: padding
-                    
+                    id: _pageContent
+                    width: parent.width
+                    spacing: control.spacing
+
                     Maui.ListItemTemplate
                     {
-                     id: _template
-                     width: parent.width
-                     implicitHeight: label1.implicitHeight + label2.implicitHeight + Maui.Style.space.medium
-                     
-                     label1.text: title
-                     label1.font.weight: Font.Thin
-                     label1.font.bold: true
-                     label1.font.pointSize:Maui.Style.fontSizes.huge
-                     label1.elide: Qt.ElideRight
-                     label1.wrapMode: Text.Wrap
-                     
-                     label2.text: message
-                     label2.textFormat : TextEdit.AutoText
-                     label2.font.pointSize:Maui.Style.fontSizes.default
-                     label2.wrapMode: TextEdit.WordWrap
-                     
-                     iconSizeHint: Maui.Style.iconSizes.large
-                     spacing: Maui.Style.space.big
-                    }                    
-                }
-                
-                Maui.TextField
-                {
-                    id: _textEntry
-                    visible: false
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignCenter
-                    focus: visible
-                    onAccepted: control.accepted()
+                        id: _template
+                        visible: control.title.length || control.message.length
+                        Layout.fillWidth: true
+                        implicitHeight: label1.implicitHeight + label2.implicitHeight + Maui.Style.space.big
+
+                        label1.text: title
+                        label1.font.weight: Font.Thin
+                        label1.font.bold: true
+                        label1.font.pointSize:Maui.Style.fontSizes.huge
+                        label1.elide: Qt.ElideRight
+                        label1.wrapMode: Text.Wrap
+
+                        label2.text: message
+                        label2.textFormat : TextEdit.AutoText
+                        label2.font.pointSize:Maui.Style.fontSizes.default
+                        label2.wrapMode: TextEdit.WordWrap
+
+                        iconSizeHint: Maui.Style.iconSizes.large
+                        spacing: Maui.Style.space.big
+                    }
+
+                    Maui.TextField
+                    {
+                        id: _textEntry
+                        visible: false
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignCenter
+                        focus: visible
+                        onAccepted: control.accepted()
+                    }
                 }
             }
-            /* 
-             *        layer.enabled: control.background.radius
-             *        layer.samples: 4
-             *        layer.effect: OpacityMask
-             *        {
-             *            maskSource: Item
-             *            {
-             *                width: _page.width
-             *                height: _page.height
-             * 
-             *                Rectangle
-             *                {
-             *                    anchors.centerIn: parent
-             *                    width: _page.width
-             *                    height: _page.height
-             *                    radius: control.background.radius
-        }
-        }
-        }*/
         }
         
         Kirigami.Separator
@@ -229,7 +182,7 @@ Maui.Popup
             
             Button
             {
-                Layout.fillWidth: true                  
+                Layout.fillWidth: true
                 Layout.fillHeight: true
                 implicitWidth: width
                 id: _rejectButton
@@ -245,27 +198,10 @@ Maui.Popup
                     color:  _rejectButton.hovered || _rejectButton.down || _rejectButton.pressed ?  "#fafafa" : Kirigami.Theme.textColor
                     horizontalAlignment: Qt.AlignHCenter
                     verticalAlignment: Qt.AlignVCenter
-                } 
-                /*property color color : Kirigami.Theme.negativeBackgroundColor
-                 *       property alias text : _rejectLabel.text
-                 *       
-                 *       Rectangle
-                 *       {
-                 *           anchors.fill: parent
-                 *           color: _rejectButton.color
-                 *           Kirigami.Theme.textColor: Kirigami.Theme.negativeTextColor
-                 *           Label
-                 *           {
-                 *               id: _rejectLabel
-                 *               anchors.fill: parent
-                 *               anchors.margins: Maui.Style.space.small
-                 *               text: _rejectButton.text
-                 *               color: "#fafafa"
-            }
-            }    */                
+                }
                 
                 onClicked: rejected()
-            }    
+            }
             
             Kirigami.Separator
             {
@@ -292,7 +228,7 @@ Maui.Popup
                     color:  _acceptButton.hovered || _acceptButton.down || _acceptButton.pressed ?  "#fafafa" : Kirigami.Theme.textColor
                     horizontalAlignment: Qt.AlignHCenter
                     verticalAlignment: Qt.AlignVCenter
-                }               
+                }
                 
                 onClicked: accepted()
             }

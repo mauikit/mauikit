@@ -88,7 +88,7 @@ Maui.Dialog
 		}		
 	}
 	
-	ListView
+    stack: ListView
 	{
 		id: _listView
 		Layout.fillHeight: true

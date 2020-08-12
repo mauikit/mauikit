@@ -4,7 +4,7 @@ import org.kde.kirigami 2.2 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
 Maui.Dialog
-{   
+{
 	entryField: true
 	
 	signal finished(string text)
@@ -16,6 +16,7 @@ Maui.Dialog
 	onRejected: textEntry.clear()
 
     page.margins: Maui.Style.space.big
+    spacing: Maui.Style.space.medium
 	
 	function done()
 	{
