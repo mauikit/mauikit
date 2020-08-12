@@ -24,7 +24,7 @@
 #include <KConfigGroup>
 #include <KFileItem>
 #include <KLocalizedString>
-#include <KMimeTypeTrader>
+#include <KApplicationTrader>
 #include <KRun>
 #include <KService>
 #include <KServiceGroup>
@@ -69,7 +69,7 @@ QVariantList MAUIKDE::services(const QUrl &url)
     if (url.isValid()) {
         KFileItem fileItem(url);
 
-        for (const auto &service : KMimeTypeTrader::self()->query(fileItem.mimetype(), "Application")) 
+        for (const auto &service : KApplicationTrader::queryByMimeType(fileItem.mimetype()))
         {
             const QString text = service->name().replace('&', "&&");
             QVariantMap item = createActionItem(text, "_kicker_fileItem_openWith", service->entryPath());
