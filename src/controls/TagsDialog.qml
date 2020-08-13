@@ -54,7 +54,7 @@ Maui.Dialog
     {
         id: tagText
         Layout.fillWidth: true
-        placeholderText: i18n("Add a new tag")
+        placeholderText: i18n("New tag")
         onAccepted:
         {
             const tags = tagText.text.split(",")
@@ -76,6 +76,12 @@ Maui.Dialog
 
     stack: [
 
+        Maui.TextField
+        {
+            Layout.fillWidth: true
+            placeholderText: i18n("Filter")
+        },
+
         Maui.ListBrowser
         {
             id: _listView
@@ -91,6 +97,7 @@ Maui.Dialog
             holder.title : i18n("No tags!")
             holder.body: i18n("Start by creating tags")
             holder.emojiSize: Maui.Style.iconSizes.huge
+
 
             model: TagsModel
             {
