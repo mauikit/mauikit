@@ -33,15 +33,15 @@ import "private" as Private
 Window
 {
     id: root
-    default property alias content : _content.data
+    default property alias content : _page.content
 
     visible: true
     width: Screen.desktopAvailableWidth * (Kirigami.Settings.isMobile ? 1 : 0.4)
     height: Screen.desktopAvailableHeight * (Kirigami.Settings.isMobile ? 1 : 0.4)
-    color: "transparent" 
-	flags: Maui.App.enableCSD ? Qt.FramelessWindowHint : Qt.Window
+    color: "transparent"
+    flags: Maui.App.enableCSD ? Qt.FramelessWindowHint : Qt.Window
 
-    property Maui.AbstractSideBar sideBar
+    property alias sideBar : _sideBar
 
     /***************************************************/
     /******************** ALIASES *********************/
@@ -103,7 +103,7 @@ Window
     /******************** SIGNALS *********************/
     /*************************************************/
     signal menuButtonClicked();
-   
+
     onClosing:
     {
         if(!Kirigami.Settings.isMobile)
@@ -116,144 +116,251 @@ Window
         }
     }
 
-    MauiLab.Page
+    background: Rectangle
     {
-        id: _page
+        id: _pageBackground
+        color: Kirigami.Theme.backgroundColor
+        radius: root.visibility === Window.Maximized || !Maui.App.enableCSD ? 0 : Maui.App.theme.borderRadius
+    }
+
+//    Item
+//    {
+//        anchors.fill: parent
+//        DragHandler
+//        {
+//                id: resizeHandler
+//                grabPermissions: TapHandler.TakeOverForbidden
+//                target: null
+//                onActiveChanged: if (active) {
+//                    const p = resizeHandler.centroid.position;
+//                    let e = 0;
+//                    if (p.x / width < 0.10) { e |= Qt.LeftEdge }
+//                    if (p.x / width > 0.90) { e |= Qt.RightEdge }
+//                    if (p.y / height < 0.10) { e |= Qt.TopEdge }
+//                    if (p.y / height > 0.90) { e |= Qt.BottomEdge }
+//                    console.log("RESIZING", e);
+//                    root.startSystemResize(e);
+//                }
+//            }
+//    }
+
+    Item
+    {
+        id: _layout
         anchors.fill: parent
-        Kirigami.Theme.colorSet: root.Kirigami.Theme.colorSet
-        headerBackground.color: Maui.App.enableCSD ? Qt.darker(Kirigami.Theme.backgroundColor, 1.1) : headBar.Kirigami.Theme.backgroundColor      
-        
-        headBar.farLeftContent: Loader
-        {
-            id: _leftControlsLoader
-            visible: active
-            active: Maui.App.enableCSD && Maui.App.leftWindowControls.length
-            Layout.preferredWidth: active ? implicitWidth : 0
-            Layout.fillHeight: true
-            sourceComponent: MauiLab.WindowControls
-            {
-                order: Maui.App.leftWindowControls
-            }
-        }
-        
-        headBar.leftContent: ToolButton
-        {
-            id: menuBtn
-            icon.name: "application-menu"
-            checked: mainMenu.visible
-            onClicked:
-            {
-                menuButtonClicked()
-                mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, 0 , root.headBar.height )
-            }
-
-            Menu
-            {
-                id: mainMenu
-                modal: true
-                z: 999
-                width: Maui.Style.unit * 250
-
-                Loader
-                {
-                    id: _accountsMenuLoader
-                    width: parent.width - (Maui.Style.space.medium*2)
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    active: Maui.App.handleAccounts
-                    sourceComponent: Maui.App.handleAccounts ?
-                    _accountsComponent : null
-                }
-
-                Item
-               {
-                   visible: _accountsMenuLoader.active
-               }
-
-                MenuItem
-                {
-                    text: i18n("About")
-                    icon.name: "documentinfo"
-                    onTriggered: aboutDialog.open()
-                }
-            }
-        }        
-
-        headBar.farRightContent: Loader
-        {
-            id: _rightControlsLoader
-            visible: active
-            active: Maui.App.enableCSD && Maui.App.rightWindowControls.length
-            Layout.preferredWidth: active ? implicitWidth : 0
-            Layout.fillHeight: true
-            sourceComponent: MauiLab.WindowControls
-            {
-                order:  Maui.App.rightWindowControls
-            }
-        }
+//        anchors.margins: Maui.App.enableCSD ?  Maui.Style.space.small : 0
 
         Item
         {
-            id: _content
             anchors.fill: parent
-            Kirigami.Theme.inherit: false
 
-            transform: Translate
+            AbstractSideBar
             {
-                x: root.sideBar && root.sideBar.collapsible && root.sideBar.collapsed ? root.sideBar.position * (root.sideBar.width - root.sideBar.collapsedSize) : 0
-            }
+                id: _sideBar
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
 
-            anchors.leftMargin: root.sideBar ? ((root.sideBar.collapsible && root.sideBar.collapsed) ? root.sideBar.collapsedSize : (root.sideBar.width ) * root.sideBar.position) : 0
-        }
-        
-        background: Rectangle
-        {
-            id: _pageBackground
-            color: Kirigami.Theme.backgroundColor
-            radius: root.visibility === Window.Maximized || !Maui.App.enableCSD ? 0 : Maui.App.theme.borderRadius
-        }
-
-        layer.enabled: Maui.App.enableCSD
-        layer.effect: OpacityMask
-        {
-            maskSource: Item
-            {
-                width: _page.width
-                height: _page.height
-
-                Rectangle
+                headBar.farLeftContent: Loader
                 {
-                    anchors.fill: parent
-                    radius: _pageBackground.radius
+                    visible: active
+                    active: Maui.App.enableCSD && Maui.App.leftWindowControls.length && visible
+                    Layout.preferredWidth: active ? implicitWidth : 0
+                    Layout.fillHeight: true
+                    sourceComponent: MauiLab.WindowControls
+                    {
+                        order: Maui.App.leftWindowControls
+                    }
                 }
             }
-        }  
-    }
-    
-    Rectangle
-    {
-        visible: Maui.App.enableCSD
-        z: ApplicationWindow.overlay.z + 9999
-        anchors.fill: parent
-        radius: _pageBackground.radius - 0.5
-        color: "transparent"
-        border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
-        opacity: 0.8 
-        
+
+            Kirigami.Separator
+            {
+                z: parent.z + 999
+                anchors.right: _sideBar.right
+                height: parent.height
+            }
+
+
+            MauiLab.Page
+            {
+                id: _page
+                anchors.fill: parent
+                transform: Translate
+                {
+                    x: sideBar.visible && root.sideBar.collapsible && root.sideBar.collapsed ? _sideBar.position * (root.sideBar.width - root.sideBar.collapsedSize) : 0
+                }
+
+                anchors.leftMargin: _sideBar.visible ? ((_sideBar.collapsible && _sideBar.collapsed) ? _sideBar.collapsedSize : (_sideBar.width ) * _sideBar.position) : 0
+
+//                Rectangle
+//                {
+//                    z: ApplicationWindow.overlay.z + 9999
+//                    anchors.top: parent.top
+//                    anchors.bottom: parent.bottom
+//                    anchors.horizontalCenter: parent.left
+//                    color: "yellow"
+//                    width: _sideBar.dragMargin
+
+//                    DragHandler
+//                    {
+//                        id: _sidebarDragHandler
+//                        target: null
+//                        grabPermissions: TapHandler.TakeOverForbidden
+//                        xAxis.maximum: _sideBar.preferredWidth
+//                        yAxis.enabled: false
+
+////                        enabled: _sideBar.interactive
+
+//                    }
+
+//                }
+
+                MouseArea
+                {
+                    id: _overlay
+                    z: parent.z + 9999
+                    enabled: _sideBar.visible
+                    anchors.fill: parent
+                    preventStealing: true
+                    propagateComposedEvents: false
+                    visible: _sideBar.collapsed && _sideBar.position > 0 && _sideBar.visible
+                    Rectangle
+                    {
+                        color: Qt.rgba(_sideBar.Kirigami.Theme.backgroundColor.r, _sideBar.Kirigami.Theme.backgroundColor.g, _sideBar.Kirigami.Theme.backgroundColor.b, 0.5)
+                        opacity: _sideBar.position
+                        anchors.fill: parent
+                    }
+
+                    onClicked: _sideBar.close()
+                }
+
+
+                Kirigami.Theme.colorSet: root.Kirigami.Theme.colorSet
+                headerBackground.color: Maui.App.enableCSD ? Qt.darker(Kirigami.Theme.backgroundColor, 1.1) : headBar.Kirigami.Theme.backgroundColor
+
+                headBar.farLeftContent: Loader
+                {
+                    visible: active
+                    active: Maui.App.enableCSD && Maui.App.leftWindowControls.length && !_sideBar.visible
+                    Layout.preferredWidth: active ? implicitWidth : 0
+                    Layout.fillHeight: true
+                    sourceComponent: MauiLab.WindowControls
+                    {
+                        order: Maui.App.leftWindowControls
+                    }
+                }
+
+                headBar.leftContent: ToolButton
+                {
+                    id: menuBtn
+                    icon.name: "application-menu"
+                    checked: mainMenu.visible
+                    onClicked:
+                    {
+                        menuButtonClicked()
+                        mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, 0 , root.headBar.height )
+                    }
+
+                    Menu
+                    {
+                        id: mainMenu
+                        modal: true
+                        z: 999
+                        width: Maui.Style.unit * 250
+
+                        Loader
+                        {
+                            id: _accountsMenuLoader
+                            width: parent.width - (Maui.Style.space.medium*2)
+                            anchors.horizontalCenter: parent.horizontalCenter
+
+                            active: Maui.App.handleAccounts
+                            sourceComponent: Maui.App.handleAccounts ?
+                                                 _accountsComponent : null
+                        }
+
+                        Item
+                        {
+                            visible: _accountsMenuLoader.active
+                        }
+
+                        MenuItem
+                        {
+                            text: i18n("About")
+                            icon.name: "documentinfo"
+                            onTriggered: aboutDialog.open()
+                        }
+                    }
+                }
+
+                headBar.farRightContent: Loader
+                {
+                    id: _rightControlsLoader
+                    visible: active
+                    active: Maui.App.enableCSD && Maui.App.rightWindowControls.length
+                    Layout.preferredWidth: active ? implicitWidth : 0
+                    Layout.fillHeight: true
+                    sourceComponent: MauiLab.WindowControls
+                    {
+                        order:  Maui.App.rightWindowControls
+                    }
+                }
+            }
+
+            layer.enabled: Maui.App.enableCSD
+            layer.effect: OpacityMask
+            {
+                maskSource: Item
+                {
+                    width: _layout.width
+                    height: _layout.height
+
+                    Rectangle
+                    {
+                        anchors.fill: parent
+                        radius: _pageBackground.radius
+                    }
+                }
+            }
+        }
+
         Rectangle
         {
+            visible: Maui.App.enableCSD
+            z: ApplicationWindow.overlay.z + 9999
             anchors.fill: parent
-            anchors.margins: 1
+            radius: _pageBackground.radius - 0.5
             color: "transparent"
-            radius: parent.radius - 0.5
-            border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+            border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
             opacity: 0.8
-        }        
-    }    
+
+            Rectangle
+            {
+                anchors.fill: parent
+                anchors.margins: 1
+                color: "transparent"
+                radius: parent.radius - 0.5
+                border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+                opacity: 0.8
+            }
+        }
+    }
+
+//    DropShadow
+//    {
+//        visible: Maui.App.enableCSD
+//        anchors.fill: _layout
+//        horizontalOffset: 0
+//        verticalOffset: 0
+//        radius: 8.0
+//        samples: 17
+//        color: "#80000000"
+//        source: _layout
+//    }
     
     MouseArea
     {
-        visible: Maui.App.enableCSD        
+        visible: Maui.App.enableCSD
         height: 16
         width: height
         anchors.bottom: parent.bottom
@@ -262,22 +369,22 @@ Window
         propagateComposedEvents: true
         preventStealing: false
         
-        onPressed: mouse.accepted = false 
+        onPressed: mouse.accepted = false
         
-        DragHandler 
+        DragHandler
         {
             grabPermissions: TapHandler.TakeOverForbidden
             target: null
-            onActiveChanged: if (active) 
-            {              
-                root.startSystemResize(Qt.LeftEdge | Qt.BottomEdge);
-            }
-        }        
-    }  
+            onActiveChanged: if (active)
+                             {
+                                 root.startSystemResize(Qt.LeftEdge | Qt.BottomEdge);
+                             }
+        }
+    }
     
     MouseArea
     {
-        visible: Maui.App.enableCSD        
+        visible: Maui.App.enableCSD
         height: 16
         width: height
         anchors.bottom: parent.bottom
@@ -286,20 +393,20 @@ Window
         propagateComposedEvents: true
         preventStealing: false
         
-        onPressed: mouse.accepted = false 
+        onPressed: mouse.accepted = false
         
-        DragHandler 
+        DragHandler
         {
             grabPermissions: TapHandler.TakeOverForbidden
             target: null
-            onActiveChanged: if (active) 
-            {              
-                root.startSystemResize(Qt.RightEdge | Qt.BottomEdge);
-            }
-        }        
-    }    
-    
-    Overlay.overlay.modal: Rectangle 
+            onActiveChanged: if (active)
+                             {
+                                 root.startSystemResize(Qt.RightEdge | Qt.BottomEdge);
+                             }
+        }
+    }
+
+    Overlay.overlay.modal: Rectangle
     {
         color: Qt.rgba( root.Kirigami.Theme.backgroundColor.r,  root.Kirigami.Theme.backgroundColor.g,  root.Kirigami.Theme.backgroundColor.b, 0.7)
         
@@ -308,7 +415,7 @@ Window
         radius: Maui.App.enableCSD ? Maui.App.theme.borderRadius : 0
     }
     
-    Overlay.overlay.modeless: Rectangle 
+    Overlay.overlay.modeless: Rectangle
     {
         radius: Maui.App.enableCSD ? Maui.App.theme.borderRadius : 0
 
@@ -412,64 +519,64 @@ Window
         persistent: false
         verticalAlignment: Qt.AlignTop
         defaultButtons: _notify.cb !== null
-            rejectButton.visible: false
-            onAccepted:
+        rejectButton.visible: false
+        onAccepted:
+        {
+            if(_notify.cb)
             {
-                if(_notify.cb)
-                {
-                    _notify.cb()
-                    _notify.close()
-                }
+                _notify.cb()
+                _notify.close()
             }
-            
-            page.padding: Maui.Style.space.medium
-            
-            footBar.background: null
-            
-            maxHeight: Math.max(Maui.Style.iconSizes.large + Maui.Style.space.huge, (_notifyTemplate.implicitHeight)) + Maui.Style.space.big + footBar.height
-            maxWidth: Kirigami.Settings.isMobile ? parent.width * 0.9 : Maui.Style.unit * 500
-            widthHint: 0.8
-            
-            Timer
+        }
+
+        page.padding: Maui.Style.space.medium
+
+        footBar.background: null
+
+        maxHeight: Math.max(Maui.Style.iconSizes.large + Maui.Style.space.huge, (_notifyTemplate.implicitHeight)) + Maui.Style.space.big + footBar.height
+        maxWidth: Kirigami.Settings.isMobile ? parent.width * 0.9 : Maui.Style.unit * 500
+        widthHint: 0.8
+
+        Timer
+        {
+            id: _notifyTimer
+            onTriggered:
             {
-                id: _notifyTimer
-                onTriggered:
-                {
-                    if(_mouseArea.containsPress || _mouseArea.containsMouse)
-                        return;
-                    
-                    _notify.close()
-                }
+                if(_mouseArea.containsPress || _mouseArea.containsMouse)
+                    return;
+
+                _notify.close()
             }
+        }
 
-            onClosed: _notifyTimer.stop()
+        onClosed: _notifyTimer.stop()
 
-            Maui.ListItemTemplate
+        Maui.ListItemTemplate
+        {
+            id: _notifyTemplate
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            iconSizeHint: Maui.Style.iconSizes.huge
+            label1.font.bold: true
+            label1.font.weight: Font.Bold
+            label1.font.pointSize: Maui.Style.fontSizes.big
+            iconSource: "dialog-warning"
+
+            MouseArea
             {
-                id: _notifyTemplate
+                id: _mouseArea
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                iconSizeHint: Maui.Style.iconSizes.huge
-                label1.font.bold: true
-                label1.font.weight: Font.Bold
-                label1.font.pointSize: Maui.Style.fontSizes.big
-                iconSource: "dialog-warning"
-                
-                MouseArea
-                {
-                    id: _mouseArea
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                    hoverEnabled: true
-                }                
+                hoverEnabled: true
             }
+        }
 
-            function show(callback)
-            {
-                _notify.cb = callback || null
-                _notifyTimer.start()
-                _notify.open()
-            }
+        function show(callback)
+        {
+            _notify.cb = callback || null
+            _notifyTimer.start()
+            _notify.open()
+        }
     }
 
     Loader

@@ -24,15 +24,11 @@ import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import "private"
 
-Maui.AbstractSideBar
+Item
 {
     id: control
     default property alias content : _content.data
         
-        implicitWidth: privateProperties.isCollapsed && collapsed && collapsible && stick ? collapsedSize : preferredWidth
-        width: implicitWidth
-        position: 1
-        interactive: !stick && (modal || collapsed || !visible)
         
         property alias model : _listBrowser.model
         property alias count : _listBrowser.count
@@ -41,31 +37,32 @@ Maui.AbstractSideBar
         property alias currentIndex: _listBrowser.currentIndex
         
         property int iconSize : Maui.Style.iconSizes.small
-        property bool showLabels: control.width > collapsedSize
+        property bool showLabels: true
         property bool stick : true
         
         property QtObject privateProperties : QtObject
         {
-            property bool isCollapsed: control.collapsed
+            property bool isCollapsed: sideBar.collapsed
         }
         
         signal itemClicked(int index)
         signal itemRightClicked(int index)
+        signal handleClicked()
+
+//        overlay.visible: stick ? (control.collapsed && control.collapsible && !privateProperties.isCollapsed) : (collapsed && position > 0 && visible)
         
-        overlay.visible: stick ? (control.collapsed && control.collapsible && !privateProperties.isCollapsed) : (collapsed && position > 0 && visible)
-        
-        Connections
-        {
-            target: control.overlay
-            ignoreUnknownSignals: true
-            function onClicked()
-            {
-                if(control.stick) 
-                    control.collapse() 
-                    else
-                        control.close()
-            }
-        }
+//        Connections
+//        {
+//            target: control.overlay
+//            ignoreUnknownSignals: true
+//            function onClicked()
+//            {
+//                if(control.stick)
+//                    control.collapse()
+//                    else
+//                        control.close()
+//            }
+//        }
         
         property Component delegate : Maui.ListDelegate
         {
@@ -99,34 +96,34 @@ Maui.AbstractSideBar
         }
         
         //     onModalChanged: visible = true
-        visible: true
-        onStickChanged:
-        {
-            if(stick && collapsed)
-            {
-                control.collapse()
-            }else
-            {
-                control.expand()
-            }
-        }
+//        visible: true
+//        onStickChanged:
+//        {
+//            if(stick && collapsed)
+//            {
+//                control.collapse()
+//            }else
+//            {
+//                control.expand()
+//            }
+//        }
         
-        onCollapsedChanged :
-        {
-            if(!collapsible)
-            {
-                return
-            }
+//        onCollapsedChanged :
+//        {
+//            if(!collapsible)
+//            {
+//                return
+//            }
             
-            if(!collapsed)
-            {
-                control.visible = true
-                expand()
-            }else
-            {
-                collapse()
-            }
-        }
+//            if(!collapsed)
+//            {
+//                control.visible = true
+//                expand()
+//            }else
+//            {
+//                collapse()
+//            }
+//        }
         
         Behavior on width
         {
@@ -151,9 +148,6 @@ Maui.AbstractSideBar
                 id: _listBrowser
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                Layout.topMargin: Maui.Style.space.tiny
-                Layout.bottomMargin: Maui.Style.space.tiny
-                Layout.margins: Maui.Style.unit
                 listView.flickableDirection: Flickable.VerticalFlick
                 
                 verticalScrollBarPolicy:  Qt.ScrollBarAlwaysOff  //this make sthe app crash
@@ -170,7 +164,7 @@ Maui.AbstractSideBar
                     }
                 }
             }
-            
+
             MouseArea
             {
                 id: _handle
@@ -215,9 +209,7 @@ Maui.AbstractSideBar
                 
                 onClicked:
                 {
-                    if(privateProperties.isCollapsed)
-                        control.expand()
-                        else control.collapse()
+                   control.handleClicked()
                 }
             }
         }

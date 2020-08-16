@@ -21,81 +21,48 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 import "private"
 
-Drawer
+Maui.Page
 {
     id: control
-    edge: Qt.LeftEdge
-    implicitHeight: window().internalHeight
-    height: implicitHeight
-    y: (window().header && !window().altHeader ? window().header.height : 0)
-//    closePolicy: modal || collapsed ?  Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
-    interactive: modal || collapsed || !visible
-    dragMargin: Maui.Style.space.big    
-    modal: false
+    visible: _layout.children.length > 0
+    width: visible ? ( collapsed && collapsedSize > 0 ? collapsedSize : preferredWidth ): 0
+    y: 0
+    x: 0
+
+    default property alias content : _layout.data
+    property bool interactive: collapsed || !visible
+    property int dragMargin: Maui.Style.space.big
+
+    readonly property double position : (width + (x)) / width
+
+    readonly property bool hidden : Math.round(position)
+
+    readonly property bool isCollapsed : control.width === control.collapsedSize || collapsed
+
     property bool collapsible: false
     property bool collapsed: false
-    property int collapsedSize: 0
+    property int collapsedSize: -1
     property int preferredWidth : Kirigami.Units.gridUnit * 12
-    readonly property alias overlay : _overlay
 
-    onCollapsedChanged: position = (collapsed && collapsedSize < 1) ? 0 : 1
-	default property alias content : _content.data
+    onCollapsedChanged: collapsed ? close() : open()
     
     signal contentDropped(var drop)
-// 	background: null
 
-    MouseArea
+    headerBackground.color: "transparent"
+
+    ColumnLayout
     {
-        id: _overlay
-        enabled: control.visible
+        id: _layout
         anchors.fill: parent
-        anchors.margins: 0
-        anchors.leftMargin: (control.width * control.position)
-        parent: window().contentItem
-        preventStealing: true
-        propagateComposedEvents: false
-        visible: false
-        Rectangle
-        {
-            color: Qt.rgba(control.Kirigami.Theme.backgroundColor.r,control.Kirigami.Theme.backgroundColor.g,control.Kirigami.Theme.backgroundColor.b, 0.5)
-            opacity: control.position
-            anchors.fill: parent
-        }
+        spacing: 0
     }
 
-    //	onVisibleChanged:
-    //	{
-    //		if(control.visible && !control.modal)
-    //			control.position = 1
-    //	}
-    
-    contentItem: Item
+    Behavior on x
     {
-		id: _content
-		Kirigami.Separator
-		{
-			z: parent.z + 999		
-			anchors.right: parent.right
-			anchors.top: parent.top
-			anchors.bottom: parent.bottom
-		}
-	}   
-	
-    Component.onCompleted:
-    {
-        if(!control.collapsed && control.visible)
-        {
-            control.open()
-            control.position = 1;
-        }
-    }
-
-    Behavior on position
-    {
-        enabled: control.collapsible && control.position === 1
+//        enabled: false
         NumberAnimation
         {
             duration: Kirigami.Units.longDuration
@@ -113,6 +80,23 @@ Drawer
         {
             control.contentDropped(drop)
         }
+    }
+
+    function close()
+    {
+//        if(control.collapsedSize < control.preferredWidth)
+//        {
+//            control.width = control.collapsedSize
+//        } else
+//        {
+//            control.x = 0 - control.width
+//        }
+    }
+
+    function open()
+    {
+//        control.width = control.preferredWidth
+        control.x = 0
     }
 }
 
