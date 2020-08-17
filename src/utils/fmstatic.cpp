@@ -476,7 +476,7 @@ QList<QUrl> FMStatic::getTagUrls(const QString &tag, const QStringList &filters,
     QList<QUrl> urls;
 #ifdef COMPONENT_TAGGING
     for (const auto &data : Tagging::getInstance()->getUrls(tag, strict, limit, mime, [filters](QVariantMap &item) -> bool { return filters.isEmpty() ? true : doNameFilter(FMH::mapValue(item, FMH::MODEL_KEY::URL), filters); })) {
-        const auto url = QUrl(data.toMap()[TAG::KEYMAP[TAG::KEYS::URL]].toString());
+        const auto url = QUrl(data.toMap()[FMH::MODEL_NAME[FMH::MODEL_KEY::URL]].toString());
         if (url.isLocalFile() && !FMH::fileExists(url))
             continue;
         urls << url;
@@ -492,11 +492,11 @@ FMH::MODEL_LIST FMStatic::getTags(const int &limit)
 #ifdef COMPONENT_TAGGING
         for (const auto &tag : Tagging::getInstance()->getAllTags(false)) {
             const QVariantMap item = tag.toMap();
-            const auto label = item.value(TAG::KEYMAP[TAG::KEYS::TAG]).toString();
+            const auto label = item.value(FMH::MODEL_NAME[FMH::MODEL_KEY::TAG]).toString();
 
             data << FMH::MODEL {{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::TAGS_PATH] + label},
-                                {FMH::MODEL_KEY::ICON, item.value(TAG::KEYMAP[TAG::KEYS::ICON], "tag").toString()},
-                                {FMH::MODEL_KEY::MODIFIED, QDateTime::fromString(item.value(TAG::KEYMAP[TAG::KEYS::ADD_DATE]).toString(), Qt::TextDate).toString()},
+                                {FMH::MODEL_KEY::ICON, item.value(FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], "tag").toString()},
+                                {FMH::MODEL_KEY::MODIFIED, QDateTime::fromString(item.value(FMH::MODEL_NAME[FMH::MODEL_KEY::ADDDATE]).toString(), Qt::TextDate).toString()},
                                 {FMH::MODEL_KEY::IS_DIR, "true"},
                                 {FMH::MODEL_KEY::LABEL, label},
                                 {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::TAGS_PATH]}};

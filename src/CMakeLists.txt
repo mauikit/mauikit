@@ -104,7 +104,6 @@ if(${COMPONENT_TAGGING})
     set(tagging_SRCS
         utils/tagging/tagging.cpp
         utils/tagging/tagdb.cpp
-        utils/tagging/tagsmodel.cpp
         utils/tagging/tagslist.cpp
         utils/tagging/tagging.qrc
         )
@@ -113,7 +112,6 @@ if(${COMPONENT_TAGGING})
         utils/tagging/tag.h
         utils/tagging/tagging.h
         utils/tagging/tagdb.h
-        utils/tagging/tagsmodel.h
         utils/tagging/tagslist.h
         )
     include_directories(

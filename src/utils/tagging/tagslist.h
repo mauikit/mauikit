@@ -5,8 +5,10 @@
 #include "tag.h"
 #include <QObject>
 
+#include "mauilist.h"
+
 class Tagging;
-class TagsList : public QObject
+class TagsList : public MauiList
 {
     Q_OBJECT
     Q_PROPERTY(bool abstract READ getAbstract WRITE setAbstract NOTIFY abstractChanged)
@@ -20,28 +22,28 @@ class TagsList : public QObject
 
 public:
     enum KEYS : uint_fast8_t {
-        URL = TAG::URL,
-        APP = TAG::APP,
-        URI = TAG::URI,
-        MAC = TAG::MAC,
-        LAST_SYNC = TAG::LAST_SYNC,
-        NAME = TAG::NAME,
-        VERSION = TAG::VERSION,
-        LOT = TAG::LOT,
-        TAG = TAG::TAG,
-        COLOR = TAG::COLOR,
-        ADD_DATE = TAG::ADD_DATE,
-        COMMENT = TAG::COMMENT,
-        MIME = TAG::MIME,
-        TITLE = TAG::TITLE,
-        DEVICE = TAG::DEVICE,
-        KEY = TAG::KEY
+        URL = FMH::MODEL_KEY::URL,
+        APP = FMH::MODEL_KEY::APP,
+        URI = FMH::MODEL_KEY::URI,
+        MAC = FMH::MODEL_KEY::MAC,
+        LAST_SYNC = FMH::MODEL_KEY::LASTSYNC,
+        NAME = FMH::MODEL_KEY::NAME,
+        VERSION = FMH::MODEL_KEY::VERSION,
+        LOT = FMH::MODEL_KEY::LOT,
+        TAG = FMH::MODEL_KEY::TAG,
+        COLOR = FMH::MODEL_KEY::COLOR,
+        ADD_DATE = FMH::MODEL_KEY::ADDDATE,
+        COMMENT = FMH::MODEL_KEY::COMMENT,
+        MIME = FMH::MODEL_KEY::MIME,
+        TITLE = FMH::MODEL_KEY::TITLE,
+        DEVICE = FMH::MODEL_KEY::DEVICE,
+        KEY = FMH::MODEL_KEY::KEY
     };
     Q_ENUM(KEYS)
 
     explicit TagsList(QObject *parent = nullptr);
 
-    TAG::DB_LIST items() const;
+    FMH::MODEL_LIST items() const override;
 
     TagsList::KEYS getSortBy() const;
     void setSortBy(const TagsList::KEYS &key);
@@ -64,12 +66,10 @@ public:
     QStringList getTags() const;
 
 private:
-    TAG::DB_LIST list;
+    FMH::MODEL_LIST list;
     void setList();
     void sortList();
     Tagging *tag;
-
-    const TAG::DB_LIST toModel(const QVariantList &data);
 
     bool abstract = false;
     bool strict = true;
@@ -78,16 +78,7 @@ private:
     QString key;
     TagsList::KEYS sortBy = TagsList::KEYS::ADD_DATE;
 
-protected:
 signals:
-    void preItemAppended();
-    void postItemAppended();
-    void preItemRemoved(int index);
-    void postItemRemoved();
-    void updateModel(int index, QVector<int> roles);
-    void preListChanged();
-    void postListChanged();
-
     void abstractChanged();
     void strictChanged();
     void urlsChanged();

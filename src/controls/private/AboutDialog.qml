@@ -39,27 +39,28 @@ Maui.Dialog
     maxHeight: 300
 
     page.padding: 0
-    footBar.visible: true
-    footBar.middleContent: Button
-    {
-        icon.name: "link"
-        text: i18n("Site")
-        onClicked: Qt.openUrlExternally(Maui.App.webPage)
-    }
+    actions: [
+        Action
+        {
+            icon.name: "link"
+            text: i18n("Site")
+            onTriggered: Qt.openUrlExternally(Maui.App.webPage)
+        },
 
-    footBar.rightContent: Button
-    {
-        icon.name: "love"
-        text: i18n("Donate")
-        onClicked: Qt.openUrlExternally(Maui.App.donationPage)
-    }
+        Action
+        {
+            icon.name: "love"
+            text: i18n("Donate")
+            onTriggered: Qt.openUrlExternally(Maui.App.donationPage)
+        },
 
-    footBar.leftContent: Button
-    {
-        icon.name: "documentinfo"
-        text: i18n("Report")
-        onClicked: Qt.openUrlExternally(Maui.App.reportPage)
-    }
+        Action
+        {
+            icon.name: "documentinfo"
+            text: i18n("Report")
+            onTriggered: Qt.openUrlExternally(Maui.App.reportPage)
+        }
+    ]
 
     Maui.AlternateListItem
     {

@@ -1,8 +1,7 @@
 #include "tagslist.h"
 #include "tagging.h"
 
-TagsList::TagsList(QObject *parent)
-    : QObject(parent)
+TagsList::TagsList(QObject *parent) : MauiList(parent)
 {
     this->tag = Tagging::getInstance();
 
@@ -11,38 +10,23 @@ TagsList::TagsList(QObject *parent)
     this->setList();
 }
 
-const TAG::DB_LIST TagsList::toModel(const QVariantList &data)
-{
-    TAG::DB_LIST res;
-    for (const auto &item : data) {
-        const auto map = item.toMap();
-        TAG::DB model;
-        for (const auto &key : map.keys())
-            model.insert(TAG::MAPKEY[key], map[key].toString());
-
-        res << model;
-    }
-
-    return res;
-}
-
 void TagsList::setList()
 {
     emit this->preListChanged();
 
     if (this->abstract) {
         if (this->lot.isEmpty() || this->key.isEmpty())
-            this->list = this->toModel(this->tag->getAbstractsTags(this->strict));
+            this->list = FMH::toModelList(this->tag->getAbstractsTags(this->strict));
         else
-            this->list = this->toModel(this->tag->getAbstractTags(this->key, this->lot, this->strict));
+            this->list = FMH::toModelList(this->tag->getAbstractTags(this->key, this->lot, this->strict));
 
     } else {
         if (this->urls.isEmpty())
-            this->list = this->toModel(this->tag->getAllTags(this->strict));
+            this->list = FMH::toModelList(this->tag->getAllTags(this->strict));
         else {
             this->list.clear();
-            this->list = std::accumulate(this->urls.constBegin(), this->urls.constEnd(), TAG::DB_LIST(), [&](auto &list, const QString &url) {
-                list << this->toModel(this->tag->getUrlTags(url, this->strict));
+            this->list = std::accumulate(this->urls.constBegin(), this->urls.constEnd(), FMH::MODEL_LIST(), [&](FMH::MODEL_LIST &list, const QString &url) {
+                list << FMH::toModelList(this->tag->getUrlTags(url, this->strict));
                 return list;
             });
         }
@@ -55,12 +39,12 @@ void TagsList::setList()
 
 void TagsList::sortList()
 {
-    const auto key = static_cast<TAG::KEYS>(this->sortBy);
-    qSort(this->list.begin(), this->list.end(), [key](const TAG::DB &e1, const TAG::DB &e2) -> bool {
+    const auto key = static_cast<FMH::MODEL_KEY>(this->sortBy);
+    qSort(this->list.begin(), this->list.end(), [key](const FMH::MODEL &e1, const FMH::MODEL &e2) -> bool {
         auto role = key;
 
         switch (role) {
-        case TAG::KEYS::ADD_DATE: {
+        case FMH::MODEL_KEY::ADDDATE: {
             auto currentTime = QDateTime::currentDateTime();
 
             auto date1 = QDateTime::fromString(e1[role], Qt::TextDate);
@@ -72,7 +56,7 @@ void TagsList::sortList()
             break;
         }
 
-        case TAG::KEYS::TAG: {
+        case FMH::MODEL_KEY::TAG: {
             const auto str1 = QString(e1[role]).toLower();
             const auto str2 = QString(e2[role]).toLower();
 
@@ -97,8 +81,8 @@ QVariantMap TagsList::get(const int &index) const
 
     const auto folder = this->list.at(index);
     const auto keys = folder.keys();
-    return std::accumulate(keys.constBegin(), keys.constEnd(), QVariantMap(), [folder](QVariantMap &res, const TAG::KEYS &key) {
-        res.insert(TAG::KEYMAP[key], folder[key]);
+    return std::accumulate(keys.constBegin(), keys.constEnd(), QVariantMap(), [folder](QVariantMap &res, const FMH::MODEL_KEY &key) {
+        res.insert(FMH::MODEL_NAME[key], folder[key]);
         return res;
     });
 }
@@ -117,7 +101,7 @@ int TagsList::indexOf(const QString &tag)
 {
     int i = 0;
     for (const auto &item : this->list) {
-        if (item.value(TAG::KEYS::TAG) == tag)
+        if (item.value(FMH::MODEL_KEY::TAG) == tag)
             return i;
         i++;
     }
@@ -182,7 +166,7 @@ void TagsList::removeFromAbstract(const int &index)
     if (this->key.isEmpty() || this->lot.isEmpty())
         return;
 
-    const auto tag = this->list[index][TAG::KEYS::TAG];
+    const auto tag = this->list[index][FMH::MODEL_KEY::TAG];
     if (this->tag->removeAbstractTag(this->key, this->lot, tag))
         this->remove(index);
 }
@@ -195,7 +179,7 @@ void TagsList::removeFromUrls(const int &index)
     if (this->urls.isEmpty())
         return;
 
-    const auto tag = this->list[index][TAG::KEYS::TAG];
+    const auto tag = this->list[index][FMH::MODEL_KEY::TAG];
     for (const auto &url : this->urls)
         this->tag->removeUrlTag(url, tag);
 
@@ -226,7 +210,7 @@ void TagsList::removeFrom(const int &index, const QString &key, const QString &l
     if (index >= this->list.size() || index < 0)
         return;
 
-    if (this->tag->removeAbstractTag(key, lot, this->list[index][TAG::KEYS::TAG]))
+    if (this->tag->removeAbstractTag(key, lot, this->list[index][FMH::MODEL_KEY::TAG]))
         this->remove(index);
 }
 
@@ -235,7 +219,7 @@ void TagsList::removeFrom(const int &index, const QString &url)
     if (index >= this->list.size() || index < 0)
         return;
 
-    if (this->tag->removeUrlTag(url, this->list[index][TAG::KEYS::TAG]))
+    if (this->tag->removeUrlTag(url, this->list[index][FMH::MODEL_KEY::TAG]))
         this->remove(index);
 }
 
@@ -243,7 +227,7 @@ void TagsList::erase(const int &index)
 {
 }
 
-TAG::DB_LIST TagsList::items() const
+FMH::MODEL_LIST TagsList::items() const
 {
     return this->list;
 }
@@ -314,8 +298,8 @@ void TagsList::setKey(const QString &value)
 
 QStringList TagsList::getTags() const
 {
-    return std::accumulate(this->list.constBegin(), this->list.constEnd(), QStringList(), [](QStringList &tags, const TAG::DB &tag) {
-        tags << tag[TAG::KEYS::TAG];
+    return std::accumulate(this->list.constBegin(), this->list.constEnd(), QStringList(), [](QStringList &tags, const FMH::MODEL &tag) {
+        tags << tag[FMH::MODEL_KEY::TAG];
         return tags;
     });
 }
@@ -360,7 +344,7 @@ void TagsList::append(const QString &tag)
         return;
 
     emit this->preItemAppended();
-    this->list << TAG::DB {{TAG::KEYS::TAG, tag}};
+    this->list << FMH::MODEL {{FMH::MODEL_KEY::TAG, tag}};
     emit this->tagsChanged();
     emit this->postItemAppended();
 }

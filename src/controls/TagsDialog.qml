@@ -1,9 +1,8 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.2
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 
-import org.kde.mauikit 1.0 as Maui
-import TagsModel 1.0
+import org.kde.mauikit 1.2 as Maui
 import TagsList 1.0
 
 Maui.Dialog
@@ -53,7 +52,7 @@ Maui.Dialog
     headBar.middleContent: Maui.TextField
     {
         id: tagText
-        Layout.fillWidth: true
+        Layout.fillWidth: true       
         placeholderText: i18n("New tag")
         onAccepted:
         {
@@ -80,6 +79,10 @@ Maui.Dialog
         {
             Layout.fillWidth: true
             placeholderText: i18n("Filter")
+            background: Item{}
+
+            onAccepted: _tagsModel.filter = text
+            onCleared: _tagsModel.filter = ""
         },
 
         Maui.ListBrowser
@@ -98,10 +101,12 @@ Maui.Dialog
             holder.body: i18n("Start by creating tags")
             holder.emojiSize: Maui.Style.iconSizes.huge
 
-
-            model: TagsModel
+            model: Maui.BaseModel
             {
                 id: _tagsModel
+                recursiveFilteringEnabled: true
+                sortCaseSensitivity: Qt.CaseInsensitive
+                filterCaseSensitivity: Qt.CaseInsensitive
                 list: TagsList
                 {
                     id: _tagsList

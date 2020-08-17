@@ -36,6 +36,8 @@ Maui.Popup
     property string title: ""
     property alias template : _template
 
+    property list<Action> actions
+
     property bool defaultButtons: true
     property bool persistent : true
     
@@ -168,7 +170,7 @@ Maui.Popup
         Kirigami.Separator
         {
             Layout.fillWidth: true
-            visible: control.defaultButtons
+            visible: _defaultButtonsLayout.visible
         }
         
         RowLayout
@@ -178,7 +180,7 @@ Maui.Popup
             Layout.fillWidth: true
             Layout.preferredHeight:  Maui.Style.toolBarHeightAlt - Maui.Style.space.medium
             Layout.maximumHeight: Maui.Style.toolBarHeightAlt - Maui.Style.space.medium
-            visible: control.defaultButtons
+            visible: control.defaultButtons || control.actions.length
             
             Button
             {
@@ -186,6 +188,7 @@ Maui.Popup
                 Layout.fillHeight: true
                 implicitWidth: width
                 id: _rejectButton
+                 visible: control.defaultButtons
                 text: qsTr("Cancel")
                 background: Rectangle
                 {
@@ -206,7 +209,7 @@ Maui.Popup
             Kirigami.Separator
             {
                 Layout.fillHeight: true
-                visible: _defaultButtonsLayout.visibleChildren.length > 1
+                visible: control.defaultButtons && _defaultButtonsLayout.visibleChildren.length > 1
             }
             
             Button
@@ -216,7 +219,7 @@ Maui.Popup
                 implicitWidth: width
                 text: qsTr("Accept")
                 id: _acceptButton
-                
+                visible: control.defaultButtons
                 background: Rectangle
                 {
                     color: _acceptButton.hovered || _acceptButton.down || _acceptButton.pressed ? "#26c6da" : Kirigami.Theme.backgroundColor
@@ -231,6 +234,44 @@ Maui.Popup
                 }
                 
                 onClicked: accepted()
+            }
+
+            Repeater
+            {
+                model: control.actions
+
+                Button
+                {
+                    id: _actionButton
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    implicitWidth: width
+
+                    action: modelData
+
+                    background: Rectangle
+                    {
+                        color: _actionButton.hovered || _actionButton.down || _actionButton.pressed ? "#26c6da" : Kirigami.Theme.backgroundColor
+                    }
+
+                    contentItem: Label
+                    {
+                        text: _actionButton.text
+                        color:  _actionButton.hovered || _actionButton.down || _actionButton.pressed ?  "#fafafa" : Kirigami.Theme.textColor
+                        horizontalAlignment: Qt.AlignHCenter
+                        verticalAlignment: Qt.AlignVCenter
+                    }
+
+//                    onClicked: action.triggered()
+
+                    Kirigami.Separator
+                    {
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        anchors.left: parent.left
+                        visible: control.actions.length > index
+                    }
+                }
             }
         }
     }

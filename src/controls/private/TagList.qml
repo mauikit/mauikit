@@ -1,11 +1,10 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.2
-import "."
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui 
+import org.kde.mauikit 1.2 as Maui
 
 import TagsList 1.0 
-import TagsModel 1.0
+import "."
 
 ListView
 {
@@ -22,19 +21,15 @@ ListView
     
     signal tagRemoved(int index)
     signal tagClicked(int index)
-    
-    TagsModel
+
+    model: Maui.BaseModel
     {
         id: _tagsModel
-        list: _tagsList
+        list: TagsList
+        {
+            id: _tagsList
+        }
     }
-    
-    TagsList
-    {
-        id: _tagsList
-    }
-    
-    model: _tagsModel
     
     Label
     {
