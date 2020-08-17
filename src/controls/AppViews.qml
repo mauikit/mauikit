@@ -47,7 +47,7 @@ SwipeView
         
         Component.onCompleted:
         {
-            control.toolbar.leftContent.push(_actionGroup)
+            control.toolbar.middleContent.push(_actionGroup)
         }
     }	
     

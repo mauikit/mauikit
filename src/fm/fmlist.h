@@ -25,6 +25,10 @@
 
 enum STATUS_CODE : uint_fast8_t { LOADING, ERROR, READY };
 
+/**
+ * @brief The PathStatus class
+ * Represents the status of a directory, be it non existance, loading or empty.
+ */
 class PathStatus
 {
     Q_GADGET
@@ -45,6 +49,7 @@ public:
     bool m_exists = false;
 };
 Q_DECLARE_METATYPE(PathStatus)
+
 
 static inline struct {
     void appendPath(const QUrl &path)
@@ -81,13 +86,16 @@ private:
 
 class FM;
 class QFileSystemWatcher;
+
+/**
+ * @brief The FMList class
+ * Model for listing the file system files and directories and perfom relevant actions upon it
+ */
 class FMList : public MauiList
 {
     Q_OBJECT
-
     // writable
     Q_PROPERTY(QUrl path READ getPath WRITE setPath NOTIFY pathChanged)
-
     Q_PROPERTY(bool hidden READ getHidden WRITE setHidden NOTIFY hiddenChanged)
     Q_PROPERTY(bool onlyDirs READ getOnlyDirs WRITE setOnlyDirs NOTIFY onlyDirsChanged)
     Q_PROPERTY(bool foldersFirst READ getFoldersFirst WRITE setFoldersFirst NOTIFY foldersFirstChanged)
@@ -101,10 +109,10 @@ class FMList : public MauiList
     Q_PROPERTY(bool saveDirProps READ getSaveDirProps WRITE setSaveDirProps NOTIFY saveDirPropsChanged)
 
     // readonly
-    Q_PROPERTY(QString pathName READ getPathName NOTIFY pathNameChanged)
-    Q_PROPERTY(FMList::PATHTYPE pathType READ getPathType NOTIFY pathTypeChanged)
+    Q_PROPERTY(QString pathName READ getPathName NOTIFY pathNameChanged FINAL)
+    Q_PROPERTY(FMList::PATHTYPE pathType READ getPathType NOTIFY pathTypeChanged FINAL)
 
-    Q_PROPERTY(PathStatus status READ getStatus NOTIFY statusChanged)
+    Q_PROPERTY(PathStatus status READ getStatus NOTIFY statusChanged FINAL)
 
     Q_PROPERTY(QList<QUrl> previousPathHistory READ getPreviousPathHistory)  // interface for NavHistory
     Q_PROPERTY(QList<QUrl> posteriorPathHistory READ getPreviousPathHistory) // interface for NavHistory
@@ -173,45 +181,185 @@ public:
     FMList::SORTBY getSortBy() const;
     void setSortBy(const FMList::SORTBY &key);
 
+    /**
+     * @brief getPath
+     * Current path being watched and model
+     * @return
+     * Directory URL
+     */
     QUrl getPath() const;
+
+    /**
+     * @brief setPath
+     * Set the directory path to be model
+     * @param path
+     * Directory URL
+     */
     void setPath(const QUrl &path);
 
+    /**
+     * @brief getPathName
+     * The short name of the current directory
+     * @return
+     */
     QString getPathName() const;
 
+    /**
+     * @brief getPathType
+     * The type of the current path, be it LOCAl, TAGS, CLOUD, APPS, DEVICE or others
+     * @return
+     * Path type value
+     */
     FMList::PATHTYPE getPathType() const;
 
+    /**
+     * @brief getFilters
+     * The filters being applied to the current directory
+     * @return
+     * List of filters
+     */
     QStringList getFilters() const;
+
+    /**
+     * @brief setFilters
+     * FIlters to be applied as regular expressions
+     * @param filters
+     */
     void setFilters(const QStringList &filters);
 
+    /**
+     * @brief getFilterType
+     * Filter typebeing applied, for example, filtering by AUDIO or IMAGES etc...
+     * @return
+     */
     FMList::FILTER getFilterType() const;
+
+    /**
+     * @brief setFilterType
+     * Apply a filter type, this a quick shortcut for applying a filter on a file type such as AUDIO, IMAGE, DOCUMENT
+     * @param type
+     */
     void setFilterType(const FMList::FILTER &type);
 
+    /**
+     * @brief getHidden
+     * Returns if the current model is including hidden files
+     * @return
+     */
     bool getHidden() const;
+
+    /**
+     * @brief setHidden
+     * List hidden files in the model
+     * @param state
+     */
     void setHidden(const bool &state);
 
+    /**
+     * @brief getOnlyDirs
+     * Returns if the current model is including only directories or not
+     * @return
+     */
     bool getOnlyDirs() const;
+
+    /**
+     * @brief setOnlyDirs
+     * Only list directories when modeling a directory
+     * @param state
+     */
     void setOnlyDirs(const bool &state);
 
+    /**
+     * @brief getParentPath
+     * Returns a URL to the parent directory of the current directory being modeled or the previous directory if the current URL is not a local file
+     * @return
+     */
     const QUrl getParentPath();
 
+    /**
+     * @brief getPreviousPathHistory
+     * A list of the previous paths being navigated and modeled
+     * @return
+     */
     static QList<QUrl> getPreviousPathHistory();
+
+    /**
+     * @brief getPosteriorPathHistory
+     * A list of posteriors paths in the navigation history
+     * @return
+     */
     static QList<QUrl> getPosteriorPathHistory();
+
+    /**
+     * @brief getPreviousPath
+     * Inmediate previous path
+     * @return
+     */
     const QUrl getPreviousPath();
+
+    /**
+     * @brief getPosteriorPath
+     * Inmediate posterior path
+     * @return
+     */
     const QUrl getPosteriorPath();
 
+    /**
+     * @brief getTrackChanges
+     * If changes made to the current directory are saved
+     * @return
+     */
     bool getTrackChanges() const;
+
+    /**
+     * @brief setTrackChanges
+     * @param value
+     */
     void setTrackChanges(const bool &value);
 
+    /**
+     * @brief getFoldersFirst
+     * Returns whether directories are listed first before other files
+     * @return
+     */
     bool getFoldersFirst() const;
+
+    /**
+     * @brief setFoldersFirst
+     * List directories first
+     * @param value
+     */
     void setFoldersFirst(const bool &value);
 
+    /**
+     * @brief getSaveDirProps
+     * @return
+     */
     bool getSaveDirProps() const;
+
+    /**
+     * @brief setSaveDirProps
+     * @param value
+     */
     void setSaveDirProps(const bool &value);
 
+    /**
+     * @brief getCloudDepth
+     * @return
+     */
     int getCloudDepth() const;
+
+    /**
+     * @brief setCloudDepth
+     * @param value
+     */
     void setCloudDepth(const int &value);
 
-    void setStatus(const PathStatus &status);
+       /**
+     * @brief getStatus
+     * Get the current status of the current path
+     * @return
+     */
     PathStatus getStatus() const;
 
 private:
@@ -227,6 +375,7 @@ private:
     void watchPath(const QString &path, const bool &clear = true);
     void search(const QString &query, const QUrl &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
     void filterContent(const QString &query, const QUrl &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
+    void setStatus(const PathStatus &status);
 
     FMH::MODEL_LIST list = {{}};
 
@@ -252,22 +401,86 @@ private:
     QList<QUrl> postHistory = {};
 
 public slots:
+
+    /**
+     * @brief get
+     * Return an item in the current model
+     * @param index
+     * index of the item to be retrieved
+     * @return
+     */
     QVariantMap get(const int &index) const;
+
+    /**
+     * @brief refresh
+     * Refresh the model for new changes
+     */
     void refresh();
 
+    /**
+     * @brief createDir
+     * Create a new directory within the current directory
+     * @param name
+     * Name of the directory
+     */
     void createDir(const QString &name);
+
+    /**
+     * @brief copyInto
+     * Copy a list of file URls into the current directory
+     * @param urls
+     * List of files
+     */
     void copyInto(const QStringList &urls);
+
+    /**
+     * @brief cutInto
+     * Cut/move a list of file URLs to the current directory
+     * @param urls
+     * List of files
+     */
     void cutInto(const QStringList &urls);
 
+    /**
+     * @brief setDirIcon
+     * Changes the icon of a directory by making use of the directory config file
+     * @param index
+     * Index of the directory in the model
+     * @param iconName
+     * Name of the new icon
+     */
     void setDirIcon(const int &index, const QString &iconName);
 
-    bool itemIsFav(const QUrl &path);
-    bool favItem(const QUrl &path);
-
+    /**
+     * @brief remove
+     * Remove an item from the model, this does not remove the file from the file system
+     * @param index
+     */
     void remove(const int &index);
+
+    /**
+     * @brief moveFileToTrash
+     * Move an item at a index to the trash
+     * @param index
+     * index of the item
+     */
     void moveFileToTrash(const int &index);
+
+    /**
+     * @brief deleteFile
+     * Delete a file from a index, this removes the item from the model and the file system
+     * @param index
+     */
     void deleteFile(const int &index);
 
+    /**
+     * @brief search
+     * Perform a search on the current directory. The search is perfrom in another model than the current one
+     * @param query
+     * Query for the search
+     * @param currentFMList
+     * The information of the model where the search is going to be performed
+     */
     void search(const QString &query, const FMList *currentFMList);
 
 signals:

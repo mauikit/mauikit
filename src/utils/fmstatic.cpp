@@ -24,8 +24,7 @@
 
 FMStatic::FMStatic(QObject *parent)
     : QObject(parent)
-{
-}
+{}
 
 FMH::MODEL_LIST FMStatic::packItems(const QStringList &items, const QString &type)
 {
@@ -120,11 +119,6 @@ bool FMStatic::isDir(const QUrl &path)
 
     QFileInfo file(path.toLocalFile());
     return file.isDir();
-}
-
-bool FMStatic::isApp(const QString &path)
-{
-    return /*QFileInfo(path).isExecutable() ||*/ path.endsWith(".desktop");
 }
 
 bool FMStatic::isCloud(const QUrl &path)
@@ -489,6 +483,72 @@ QList<QUrl> FMStatic::getTagUrls(const QString &tag, const QStringList &filters,
     }
 #endif
     return urls;
+}
+
+FMH::MODEL_LIST FMStatic::getTags(const int &limit)
+{
+    Q_UNUSED(limit);
+    FMH::MODEL_LIST data;
+#ifdef COMPONENT_TAGGING
+        for (const auto &tag : Tagging::getInstance()->getAllTags(false)) {
+            const QVariantMap item = tag.toMap();
+            const auto label = item.value(TAG::KEYMAP[TAG::KEYS::TAG]).toString();
+
+            data << FMH::MODEL {{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::TAGS_PATH] + label},
+                                {FMH::MODEL_KEY::ICON, item.value(TAG::KEYMAP[TAG::KEYS::ICON], "tag").toString()},
+                                {FMH::MODEL_KEY::MODIFIED, QDateTime::fromString(item.value(TAG::KEYMAP[TAG::KEYS::ADD_DATE]).toString(), Qt::TextDate).toString()},
+                                {FMH::MODEL_KEY::IS_DIR, "true"},
+                                {FMH::MODEL_KEY::LABEL, label},
+                                {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::TAGS_PATH]}};
+        }
+#endif
+
+    return data;
+}
+
+FMH::MODEL_LIST FMStatic::getTagContent(const QString &tag, const QStringList &filters)
+{
+    FMH::MODEL_LIST content;
+#ifdef COMPONENT_TAGGING
+    if (tag.isEmpty()) {
+        return FMStatic::getTags();
+    } else {
+        for (const auto &url : FMStatic::getTagUrls(tag, filters, false)) {
+            content << FMH::getFileInfoModel(url);
+        }
+    }
+#endif
+    return content;
+}
+
+FMH::MODEL_LIST FMStatic::getUrlTags(const QUrl &url)
+{
+    FMH::MODEL_LIST content;
+#ifdef COMPONENT_TAGGING
+    content = FMH::toModelList(Tagging::getInstance()->getUrlTags(url.toString(), false));
+#endif
+    return content;
+}
+
+bool FMStatic::urlTagExists(const QUrl &url, const QString tag)
+{
+#ifdef COMPONENT_TAGGING
+    return Tagging::getInstance()->urlTagExists(url.toString(), tag, false);
+#endif
+}
+
+bool FMStatic::addTagToUrl(const QString tag, const QUrl &url)
+{
+#ifdef COMPONENT_TAGGING
+    return Tagging::getInstance()->tagUrl(url.toString(), tag);
+#endif
+}
+
+bool FMStatic::removeTagToUrl(const QString tag, const QUrl &url)
+{
+#ifdef COMPONENT_TAGGING
+    return Tagging::getInstance()->removeUrlTag(url.toString(), tag);
+#endif
 }
 
 void FMStatic::bookmark(const QUrl &url)

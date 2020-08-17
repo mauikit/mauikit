@@ -30,6 +30,12 @@
 #include <QColor>
 #include <QSettings>
 
+/**
+ * @brief The MauiTheme struct
+ * This is a helpful struct if the application makes usage of CSD
+ * It makes use of a config file names mauiproject.conf and the following fields.
+ *
+ */
 struct MauiTheme {
     Q_GADGET
     Q_PROPERTY(int borderRadius READ getRadius CONSTANT FINAL)
@@ -67,6 +73,13 @@ struct MauiTheme {
 
 public:
     QUrl path;
+
+    /**
+     * @brief buttonAsset
+     * @param key
+     * @param state
+     * @return
+     */
     Q_INVOKABLE QUrl buttonAsset(const QString &key, const QString &state) const
     {
         auto res = getSettings(key, state, QString());
@@ -81,12 +94,22 @@ public:
         return QUrl();
     }
 
+    /**
+     * @brief getRadius
+     * Border radius
+     * @return
+     */
     int getRadius() const
     {
         auto res = getSettings("Decoration", "BorderRadius", 6);
         return res.toInt();
     }
 
+    /**
+     * @brief getMaskButtons
+     * if the buttons should be colored following the system colorscheme or not
+     * @return
+     */
     bool getMaskButtons() const
     {
         auto res = getSettings("Decoration", "MaskButtons", true);
@@ -96,6 +119,19 @@ public:
 Q_DECLARE_METATYPE(MauiTheme)
 
 class MauiAccounts;
+
+/**
+ * @brief The MauiApp class
+ * The MauiApp is a global instance and is declared to QML as an attached property, so it can be used widely by importing the org.kde.maui namespace
+ * Example:
+ * import org.kde.mauikit 1.2 as Maui
+ *
+ * Maui.ApplicationWindow
+ * {
+ *      title: Maui.App.name
+ * }
+ */
+
 #ifdef STATIC_MAUIKIT
 class MauiApp : public QObject
 #else
@@ -146,63 +182,193 @@ public:
     MauiApp(MauiApp &&) = delete;
     MauiApp &operator=(MauiApp &&) = delete;
 
+    /**
+     * @brief getName
+     * Application name
+     * @return
+     */
     static QString getName();
 
+    /**
+     * @brief getDisplayName
+     * Application display name, usually capitalized
+     * @return
+     */
     static QString getDisplayName();
 
+    /**
+     * @brief getVersion
+     * Application version string
+     * @return
+     */
     static QString getVersion();
 
+    /**
+     * @brief getOrg
+     * Name of the organization
+     * @return
+     */
     static QString getOrg();
 
+    /**
+     * @brief getDomain
+     * Domain of the organization
+     * @return
+     */
     static QString getDomain();
 
+    /**
+     * @brief getMauikitVersion
+     * MauiKit string version
+     * @return
+     */
     static QString getMauikitVersion();
 
+    /**
+     * @brief getQtVersion
+     * Qt string version
+     * @return
+     */
     static QString getQtVersion();
 
+    /**
+     * @brief getDescription
+     * Application short description
+     * @return
+     */
     QString getDescription() const;
 
+    /**
+     * @brief setDescription
+     * Set application short description, this is display in the about dialog
+     * @param value
+     */
     void setDescription(const QString &value);
 
+    /**
+     * @brief getIconName
+     * Application icon name as a URL to the image asset
+     * @return
+     */
     QString getIconName() const;
 
+    /**
+     * @brief setIconName
+     * Set URL to the image asset to be set as the application icon
+     * @param value
+     */
     void setIconName(const QString &value);
 
+    /**
+     * @brief getWebPage
+     * Application official web page link
+     * @return
+     */
     QString getWebPage() const;
 
+    /**
+     * @brief setWebPage
+     * Set application official web page link
+     * @param value
+     */
     void setWebPage(const QString &value);
 
+    /**
+     * @brief getDonationPage
+     * Application donation web page link
+     * @return
+     */
     QString getDonationPage() const;
 
+    /**
+     * @brief setDonationPage
+     * Set application web page link
+     * @param value
+     */
     void setDonationPage(const QString &value);
 
+    /**
+     * @brief getReportPage
+     * Application bug & issues report web page link
+     * @return
+     */
     QString getReportPage() const;
 
+    /**
+     * @brief setReportPage
+     * Set bugs & issues report web page link
+     * @param value
+     */
     void setReportPage(const QString &value);
 
+    /**
+     * @brief getHandleAccounts
+     * If the application is meant to support online accounts
+     * @return
+     * True if the application supports online account
+     */
     bool getHandleAccounts() const;
+
+    /**
+     * @brief setHandleAccounts
+     * Set if the application is meant to support online accounts, if it supports online accounts a list of avaliable accounts is shown in the main application menu
+     * @param value
+     */
     void setHandleAccounts(const bool &value);
 
+    /**
+     * @brief getCredits
+     * Returns a model of the credits represented as a QVariantList, some of the fields used are: name, email, year.
+     * @return
+     */
     QVariantList getCredits() const
     {
         return m_credits;
     }
+
+    /**
+     * @brief setCredits
+     * Sets the credits for the application developers, designers, translators and other figures involved. The fields used in the about dialog are: name, email and year.
+     * @param credits
+     * Example:
+     *     MauiApp::instance()->setCredits ({QVariantMap({{"name", "Camilo Higuita"}, {"email", "milo.h@aol.com"}, {"year", "2019-2020"}})});
+     */
     void setCredits(const QVariantList &credits)
     {
         m_credits = credits;
     }
 
-    // Theming and branding support
+    /**
+     * @brief theme
+     * Structure that describes the style of a Maui Application that make suse of CSD (client side decorations), such as borderRadius, maskButtons, etc.
+     * @return
+     */
     MauiTheme theme()
     {
         return m_theme;
     }
 
-    // CSD support
+    /**
+     * @brief enableCSD
+     * If the apps supports CSD (client side decorations) the window controls are drawn within the app main header, following the system buttons order, and allows to drag to move windows and resizing.
+     * @return
+     * If the application has been marked manually to use CSD or if in the mauiproject.conf file the CSD field has been set
+     */
     bool enableCSD() const;
+
+    /**
+     * @brief setEnableCSD
+     * Manually enable CSD for this single application ignoreing the system wide mauiproject.conf CSD field value
+     * @param value
+     */
     void setEnableCSD(const bool &value);
 
 #ifdef COMPONENT_ACCOUNTS
+    /**
+     * @brief getAccounts
+     * Model of the avaliable accounts in the system. This feature can be skipped on building time making use of the variable COMPONENT_ACCOUNTS, if such variable has been set to false then this method doesn't exists.
+     * @return
+     */
     MauiAccounts *getAccounts() const;
 #endif
 

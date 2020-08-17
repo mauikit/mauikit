@@ -205,7 +205,7 @@ void PlacesList::setList()
             break;
 
         case FMH::PATHTYPE_KEY::TAGS_PATH:
-            this->list << this->fm->getTags();
+            this->list << FMStatic::getTags();
             break;
 
 #ifdef COMPONENT_ACCOUNTS

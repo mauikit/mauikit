@@ -41,8 +41,6 @@ FMList::FMList(QObject *parent)
     , fm(new FM(this))
     , watcher(new QFileSystemWatcher(this))
 {
-    qRegisterMetaType<FMList *>("const FMList*");
-
     connect(this->fm, &FM::cloudServerContentReady, [&](const FMH::MODEL_LIST &list, const QUrl &url) {
         if (this->path == url) {
             this->assignList(list);
@@ -173,7 +171,7 @@ void FMList::setList()
 
     switch (this->pathType) {
     case FMList::PATHTYPE::TAGS_PATH:
-        this->assignList(this->fm->getTagContent(this->path.fileName(), QStringList() << this->filters << FMH::FILTER_LIST[static_cast<FMH::FILTER_TYPE>(this->filterType)]));
+        this->assignList(FMStatic::getTagContent(this->path.fileName(), QStringList() << this->filters << FMH::FILTER_LIST[static_cast<FMH::FILTER_TYPE>(this->filterType)]));
         break; // SYNC
 
     case FMList::PATHTYPE::CLOUD_PATH:
@@ -737,16 +735,6 @@ void FMList::setStatus(const PathStatus &status)
 {
     this->m_status = status;
     emit this->statusChanged();
-}
-
-bool FMList::itemIsFav(const QUrl &path)
-{
-    return FMStatic::isFav(path);
-}
-
-bool FMList::favItem(const QUrl &path)
-{
-    return FMStatic::toggleFav(path);
 }
 
 void FMList::deleteFile(const int &index)

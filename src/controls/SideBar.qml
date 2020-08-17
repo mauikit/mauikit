@@ -28,45 +28,45 @@ Maui.AbstractSideBar
 {
     id: control
     default property alias content : _content.data
-        
+
         implicitWidth: privateProperties.isCollapsed && collapsed && collapsible && stick ? collapsedSize : preferredWidth
         width: implicitWidth
         position: 1
         interactive: !stick && (modal || collapsed || !visible)
-        
+
         property alias model : _listBrowser.model
         property alias count : _listBrowser.count
-        
+
         property alias section : _listBrowser.section
         property alias currentIndex: _listBrowser.currentIndex
-        
+
         property int iconSize : Maui.Style.iconSizes.small
         property bool showLabels: control.width > collapsedSize
         property bool stick : true
-        
+
         property QtObject privateProperties : QtObject
         {
             property bool isCollapsed: control.collapsed
         }
-        
+
         signal itemClicked(int index)
         signal itemRightClicked(int index)
-        
+
         overlay.visible: stick ? (control.collapsed && control.collapsible && !privateProperties.isCollapsed) : (collapsed && position > 0 && visible)
-        
+
         Connections
         {
             target: control.overlay
             ignoreUnknownSignals: true
             function onClicked()
             {
-                if(control.stick) 
-                    control.collapse() 
+                if(control.stick)
+                    control.collapse()
                     else
                         control.close()
             }
         }
-        
+
         property Component delegate : Maui.ListDelegate
         {
             id: itemDelegate
@@ -78,26 +78,26 @@ Maui.AbstractSideBar
             iconVisible: true
             leftPadding:  Maui.Style.space.tiny
             rightPadding:  Maui.Style.space.tiny
-            
+
             onClicked:
             {
                 control.currentIndex = index
                 control.itemClicked(index)
             }
-            
+
             onRightClicked:
             {
                 control.currentIndex = index
                 control.itemRightClicked(index)
             }
-            
+
             onPressAndHold:
             {
                 control.currentIndex = index
                 control.itemRightClicked(index)
             }
         }
-        
+
         //     onModalChanged: visible = true
         visible: true
         onStickChanged:
@@ -110,14 +110,14 @@ Maui.AbstractSideBar
                 control.expand()
             }
         }
-        
+
         onCollapsedChanged :
         {
             if(!collapsible)
             {
                 return
             }
-            
+
             if(!collapsed)
             {
                 control.visible = true
@@ -127,25 +127,25 @@ Maui.AbstractSideBar
                 collapse()
             }
         }
-        
+
         Behavior on width
         {
             id: _widthAnim
-            
+
             NumberAnimation
             {
                 duration: Kirigami.Units.longDuration
                 easing.type: Easing.InOutQuad
             }
         }
-        
-        
+
+
         ColumnLayout
         {
             id: _content
             anchors.fill: parent
             spacing: 0
-            
+
             Maui.ListBrowser
             {
                 id: _listBrowser
@@ -155,13 +155,13 @@ Maui.AbstractSideBar
                 Layout.bottomMargin: Maui.Style.space.tiny
                 Layout.margins: Maui.Style.unit
                 listView.flickableDirection: Flickable.VerticalFlick
-                
+
                 verticalScrollBarPolicy:  Qt.ScrollBarAlwaysOff  //this make sthe app crash
-                
+
                 delegate: control.delegate
                 Kirigami.Theme.inherit: true
                 Kirigami.Theme.backgroundColor: "transparent"
-                
+
                 onKeyPress:
                 {
                     if(event.key == Qt.Key_Return)
@@ -170,7 +170,7 @@ Maui.AbstractSideBar
                     }
                 }
             }
-            
+
             MouseArea
             {
                 id: _handle
@@ -183,36 +183,36 @@ Maui.AbstractSideBar
                 propagateComposedEvents: false
                 property int startX
                 property int startY
-                
+
                 ToolTip.delay: 1000
                 ToolTip.timeout: 5000
                 ToolTip.visible: _handle.containsMouse || _handle.containsPress
                 ToolTip.text: i18n("Toogle SideBar")
-                
+
                 Rectangle
                 {
                     anchors.centerIn: parent
                     radius: 2
                     height: 18
                     width: 16
-                    
+
                     color: _handle.containsMouse || _handle.containsPress || !privateProperties.isCollapsed  ?  Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
                     border.color: Qt.darker(color, 1.2)
-                    
+
                     Rectangle
                     {
                         radius: 1
                         height: 10
                         width: 3
-                        
+
                         anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.margins: 4
-                        
+
                         color: _handle.containsMouse || _handle.containsPress || !privateProperties.isCollapsed  ?  Kirigami.Theme.highlightedTextColor : Kirigami.Theme.backgroundColor
                     }
                 }
-                
+
                 onClicked:
                 {
                     if(privateProperties.isCollapsed)
@@ -221,7 +221,7 @@ Maui.AbstractSideBar
                 }
             }
         }
-        
+
         MouseArea
         {
             z: control.background.parent.z + 1
@@ -234,24 +234,24 @@ Maui.AbstractSideBar
             width: Maui.Style.space.large
             property int startX
             property int startY
-            
+
             onPressed:
             {
                 startY = mouse.y
                 startX = mouse.x
                 _widthAnim.enabled = false
             }
-            
+
             onPositionChanged:
             {
                 if (!pressed || !control.collapsible || !control.collapsed)
                     return
-                    
+
                     var value = control.width + (mouse.x-startX)
                     control.width = value > control.preferredWidth ? control.preferredWidth : (value < control.collapsedSize ? collapsedSize : value)
-                    
+
             }
-            
+
             onReleased:
             {
                 _widthAnim.enabled = true
@@ -260,18 +260,18 @@ Maui.AbstractSideBar
                     if(control.width >= control.collapsedSize * 1.2)
                     {
                         expand()
-                        
+
                     } else
                     {
                         collapse()
                     }
-                    
+
                 }else
                 {
                     if(control.width <= control.preferredWidth * 0.75)
                     {
                         collapse()
-                        
+
                     } else
                     {
                         expand()
@@ -279,7 +279,7 @@ Maui.AbstractSideBar
                 }
             }
         }
-        
+
         function collapse()
         {
             if(collapsible)
@@ -288,7 +288,7 @@ Maui.AbstractSideBar
                 control.width = control.stick ? control.collapsedSize : control.preferredWidth
             }
         }
-        
+
         function expand()
         {
             if(collapsible)

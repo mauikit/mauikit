@@ -27,19 +27,11 @@
 #include "syncing.h"
 #endif
 
-#include <QObject>
-
 #include <QDateTime>
 #include <QFileInfo>
-#include <QFlags>
 #include <QLocale>
 #include <QRegularExpression>
 #include <QUrl>
-
-#include <QFuture>
-#include <QThread>
-#include <QtConcurrent/QtConcurrentRun>
-#include <QtConcurrent>
 
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
@@ -55,6 +47,7 @@
 #include <QIcon>
 #endif
 
+#if !defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 QDirLister::QDirLister(QObject *parent)
     : QObject(parent)
 {
@@ -101,6 +94,7 @@ void QDirLister::setNameFilter(QString filters)
 {
     m_nameFilters = filters;
 }
+#endif
 
 FM::FM(QObject *parent)
     : QObject(parent)
@@ -260,29 +254,6 @@ FMH::MODEL_LIST FM::getAppsPath()
 #endif
 }
 
-FMH::MODEL_LIST FM::getTags(const int &limit)
-{
-    Q_UNUSED(limit);
-    FMH::MODEL_LIST data;
-#ifdef COMPONENT_TAGGING
-    if (this->tag) {
-        for (const auto &tag : this->tag->getAllTags(false)) {
-            const QVariantMap item = tag.toMap();
-            const auto label = item.value(TAG::KEYMAP[TAG::KEYS::TAG]).toString();
-
-            data << FMH::MODEL {{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::TAGS_PATH] + label},
-                                {FMH::MODEL_KEY::ICON, item.value(TAG::KEYMAP[TAG::KEYS::ICON], "tag").toString()},
-                                {FMH::MODEL_KEY::MODIFIED, QDateTime::fromString(item.value(TAG::KEYMAP[TAG::KEYS::ADD_DATE]).toString(), Qt::TextDate).toString()},
-                                {FMH::MODEL_KEY::IS_DIR, "true"},
-                                {FMH::MODEL_KEY::LABEL, label},
-                                {FMH::MODEL_KEY::TYPE, FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::TAGS_PATH]}};
-        }
-    }
-#endif
-
-    return data;
-}
-
 bool FM::getCloudServerContent(const QUrl &path, const QStringList &filters, const int &depth)
 {
 #ifdef COMPONENT_SYNCING
@@ -349,51 +320,6 @@ QString FM::resolveLocalCloudPath(const QString &path)
     return QString(path).replace(FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::CLOUD_PATH] + this->sync->getUser(), "");
 #else
     return QString();
-#endif
-}
-
-FMH::MODEL_LIST FM::getTagContent(const QString &tag, const QStringList &filters)
-{
-    FMH::MODEL_LIST content;
-#ifdef COMPONENT_TAGGING
-    if (tag.isEmpty()) {
-        return this->getTags();
-    } else {
-        for (const auto &url : FMStatic::getTagUrls(tag, filters, false)) {
-            content << FMH::getFileInfoModel(url);
-        }
-    }
-#endif
-    return content;
-}
-
-FMH::MODEL_LIST FM::getUrlTags(const QUrl &url)
-{
-    FMH::MODEL_LIST content;
-#ifdef COMPONENT_TAGGING
-    content = FMH::toModelList(this->tag->getUrlTags(url.toString(), false));
-#endif
-    return content;
-}
-
-bool FM::urlTagExists(const QUrl &url, const QString tag)
-{
-#ifdef COMPONENT_TAGGING
-    return this->tag->urlTagExists(url.toString(), tag, false);
-#endif
-}
-
-bool FM::addTagToUrl(const QString tag, const QUrl &url)
-{
-#ifdef COMPONENT_TAGGING
-    return this->tag->tagUrl(url.toString(), tag);
-#endif
-}
-
-bool FM::removeTagToUrl(const QString tag, const QUrl &url)
-{
-#ifdef COMPONENT_TAGGING
-    return this->tag->removeUrlTag(url.toString(), tag);
 #endif
 }
 

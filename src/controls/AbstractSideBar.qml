@@ -33,7 +33,7 @@ Drawer
     y: (window().header && !window().altHeader ? window().header.height : 0)
 //    closePolicy: modal || collapsed ?  Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
     interactive: modal || collapsed || !visible
-    dragMargin: Maui.Style.space.big    
+    dragMargin: Maui.Style.space.big
     modal: false
     property bool collapsible: false
     property bool collapsed: false
@@ -42,8 +42,8 @@ Drawer
     readonly property alias overlay : _overlay
 
     onCollapsedChanged: position = (collapsed && collapsedSize < 1) ? 0 : 1
-	default property alias content : _content.data
-    
+    default property alias content : _content.data
+
     signal contentDropped(var drop)
 // 	background: null
 
@@ -71,19 +71,19 @@ Drawer
     //		if(control.visible && !control.modal)
     //			control.position = 1
     //	}
-    
+
     contentItem: Item
     {
-		id: _content
-		Kirigami.Separator
-		{
-			z: parent.z + 999		
-			anchors.right: parent.right
-			anchors.top: parent.top
-			anchors.bottom: parent.bottom
-		}
-	}   
-	
+        id: _content
+//        Kirigami.Separator
+//        {
+//            z: parent.z + 999
+//            anchors.right: parent.right
+//            anchors.top: parent.top
+//            anchors.bottom: parent.bottom
+//        }
+    }
+
     Component.onCompleted:
     {
         if(!control.collapsed && control.visible)

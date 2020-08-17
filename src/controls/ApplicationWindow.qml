@@ -38,8 +38,8 @@ Window
     visible: true
     width: Screen.desktopAvailableWidth * (Kirigami.Settings.isMobile ? 1 : 0.4)
     height: Screen.desktopAvailableHeight * (Kirigami.Settings.isMobile ? 1 : 0.4)
-    color: "transparent" 
-	flags: Maui.App.enableCSD ? Qt.FramelessWindowHint : Qt.Window
+    color: "transparent"
+    flags: Maui.App.enableCSD ? Qt.FramelessWindowHint : Qt.Window
 
     property Maui.AbstractSideBar sideBar
 
@@ -58,20 +58,20 @@ Window
     property alias floatingFooter: _page.floatingFooter
     property alias autoHideHeader: _page.autoHideHeader
     property alias autoHideFooter: _page.autoHideFooter
-    
+
     property alias autoHideHeaderDelay: _page.autoHideHeaderDelay
     property alias autoHideFooterDelay: _page.autoHideFooterDelay
-    
+
     property alias autoHideHeaderMargins: _page.autoHideHeaderMargins
     property alias autoHideFooterMargins: _page.autoHideFooterMargins
-    
+
     property alias altHeader: _page.altHeader
     property alias margins : _page.margins
     property alias leftMargin : _page.leftMargin
     property alias rightMargin: _page.rightMargin
     property alias topMargin: _page.topMargin
     property alias bottomMargin: _page.bottomMargin
-    
+
     property alias footerPositioning : _page.footerPositioning
     property alias headerPositioning : _page.headerPositioning
 
@@ -84,7 +84,7 @@ Window
     property var currentAccount: Maui.App.handleAccounts ? Maui.App.accounts.currentAccount : ({})
 
     property alias notifyDialog: _notify
-    
+
     property alias background : _page.background
 
     property bool isWide : root.width >= Kirigami.Units.gridUnit * 30
@@ -103,7 +103,7 @@ Window
     /******************** SIGNALS *********************/
     /*************************************************/
     signal menuButtonClicked();
-   
+
     onClosing:
     {
         if(!Kirigami.Settings.isMobile)
@@ -121,8 +121,8 @@ Window
         id: _page
         anchors.fill: parent
         Kirigami.Theme.colorSet: root.Kirigami.Theme.colorSet
-        headerBackground.color: Maui.App.enableCSD ? Qt.darker(Kirigami.Theme.backgroundColor, 1.1) : headBar.Kirigami.Theme.backgroundColor      
-        
+        headerBackground.color: Maui.App.enableCSD ? Qt.darker(Kirigami.Theme.backgroundColor, 1.1) : headBar.Kirigami.Theme.backgroundColor
+
         headBar.farLeftContent: Loader
         {
             id: _leftControlsLoader
@@ -135,7 +135,7 @@ Window
                 order: Maui.App.leftWindowControls
             }
         }
-        
+
         headBar.leftContent: ToolButton
         {
             id: menuBtn
@@ -177,7 +177,7 @@ Window
                     onTriggered: aboutDialog.open()
                 }
             }
-        }        
+        }
 
         headBar.farRightContent: Loader
         {
@@ -205,7 +205,7 @@ Window
 
             anchors.leftMargin: root.sideBar ? ((root.sideBar.collapsible && root.sideBar.collapsed) ? root.sideBar.collapsedSize : (root.sideBar.width ) * root.sideBar.position) : 0
         }
-        
+
         background: Rectangle
         {
             id: _pageBackground
@@ -227,9 +227,9 @@ Window
                     radius: _pageBackground.radius
                 }
             }
-        }  
+        }
     }
-    
+
     Rectangle
     {
         visible: Maui.App.enableCSD
@@ -238,8 +238,8 @@ Window
         radius: _pageBackground.radius - 0.5
         color: "transparent"
         border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
-        opacity: 0.8 
-        
+        opacity: 0.8
+
         Rectangle
         {
             anchors.fill: parent
@@ -248,12 +248,12 @@ Window
             radius: parent.radius - 0.5
             border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
             opacity: 0.8
-        }        
-    }    
-    
+        }
+    }
+
     MouseArea
     {
-        visible: Maui.App.enableCSD        
+        visible: Maui.App.enableCSD
         height: 16
         width: height
         anchors.bottom: parent.bottom
@@ -261,23 +261,23 @@ Window
         cursorShape: Qt.SizeBDiagCursor
         propagateComposedEvents: true
         preventStealing: false
-        
-        onPressed: mouse.accepted = false 
-        
-        DragHandler 
+
+        onPressed: mouse.accepted = false
+
+        DragHandler
         {
             grabPermissions: TapHandler.TakeOverForbidden
             target: null
-            onActiveChanged: if (active) 
-            {              
+            onActiveChanged: if (active)
+            {
                 root.startSystemResize(Qt.LeftEdge | Qt.BottomEdge);
             }
-        }        
-    }  
-    
+        }
+    }
+
     MouseArea
     {
-        visible: Maui.App.enableCSD        
+        visible: Maui.App.enableCSD
         height: 16
         width: height
         anchors.bottom: parent.bottom
@@ -285,30 +285,30 @@ Window
         cursorShape: Qt.SizeFDiagCursor
         propagateComposedEvents: true
         preventStealing: false
-        
-        onPressed: mouse.accepted = false 
-        
-        DragHandler 
+
+        onPressed: mouse.accepted = false
+
+        DragHandler
         {
             grabPermissions: TapHandler.TakeOverForbidden
             target: null
-            onActiveChanged: if (active) 
-            {              
+            onActiveChanged: if (active)
+            {
                 root.startSystemResize(Qt.RightEdge | Qt.BottomEdge);
             }
-        }        
-    }    
-    
-    Overlay.overlay.modal: Rectangle 
+        }
+    }
+
+    Overlay.overlay.modal: Rectangle
     {
         color: Qt.rgba( root.Kirigami.Theme.backgroundColor.r,  root.Kirigami.Theme.backgroundColor.g,  root.Kirigami.Theme.backgroundColor.b, 0.7)
-        
+
         Behavior on opacity { NumberAnimation { duration: 150 } }
-        
+
         radius: Maui.App.enableCSD ? Maui.App.theme.borderRadius : 0
     }
-    
-    Overlay.overlay.modeless: Rectangle 
+
+    Overlay.overlay.modeless: Rectangle
     {
         radius: Maui.App.enableCSD ? Maui.App.theme.borderRadius : 0
 
@@ -404,11 +404,11 @@ Window
     {
         id: _notify
         property var cb : ({})
-        
+
         property alias iconName : _notifyTemplate.iconSource
         property alias title : _notifyTemplate.label1
         property alias body: _notifyTemplate.label2
-        
+
         persistent: false
         verticalAlignment: Qt.AlignTop
         defaultButtons: _notify.cb !== null
@@ -421,15 +421,15 @@ Window
                     _notify.close()
                 }
             }
-            
+
             page.padding: Maui.Style.space.medium
-            
+
             footBar.background: null
-            
+
             maxHeight: Math.max(Maui.Style.iconSizes.large + Maui.Style.space.huge, (_notifyTemplate.implicitHeight)) + Maui.Style.space.big + footBar.height
             maxWidth: Kirigami.Settings.isMobile ? parent.width * 0.9 : Maui.Style.unit * 500
             widthHint: 0.8
-            
+
             Timer
             {
                 id: _notifyTimer
@@ -437,7 +437,7 @@ Window
                 {
                     if(_mouseArea.containsPress || _mouseArea.containsMouse)
                         return;
-                    
+
                     _notify.close()
                 }
             }
@@ -454,14 +454,14 @@ Window
                 label1.font.weight: Font.Bold
                 label1.font.pointSize: Maui.Style.fontSizes.big
                 iconSource: "dialog-warning"
-                
+
                 MouseArea
                 {
                     id: _mouseArea
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     hoverEnabled: true
-                }                
+                }
             }
 
             function show(callback)
