@@ -158,9 +158,7 @@ Item
             {
                 id: _iconContainer
                 Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.maximumHeight: control.imageSource ? control.imageSizeHint : control.iconSizeHint
-                Layout.minimumHeight: control.imageSource ? control.imageSizeHint : control.iconSizeHint 
+                Layout.preferredHeight: control.imageSource ? control.imageSizeHint : control.iconSizeHint 
                 
                 Loader
                 {
@@ -289,7 +287,9 @@ Item
                     anchors.centerIn: parent
                     elide: Qt.ElideRight
                     wrapMode: Text.Wrap
-                    color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor                }
+                    color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor 
+                    
+                }
                 
             }
         }

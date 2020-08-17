@@ -126,7 +126,7 @@ Flickable
 				anchors.fill: parent
 				
 				acceptedButtons:  Qt.RightButton | Qt.LeftButton
-				onClicked:  if(!isMobile && mouse.button === Qt.RightButton)
+				onClicked:  if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
 				rightClicked()
 				
 				onPressAndHold: flick.pressAndHold()
