@@ -17,8 +17,10 @@ Maui.ItemDelegate
         color: Kirigami.Theme.backgroundColor
         Kirigami.Theme.inherit: false
         Kirigami.Theme.colorSet: alt ? Kirigami.Theme.View : Kirigami.Theme.Window
+
         Kirigami.Separator
         {
+            id: _sep
             opacity: 0.5
             color: Qt.darker(parent.color, 2.5)                    
             anchors.left: parent.left

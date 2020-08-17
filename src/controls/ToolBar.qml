@@ -111,7 +111,7 @@ ToolBar
                 visible: !Kirigami.Settings.isMobile
                 anchors.centerIn: parent
                 rotation: -135
-                color:  _rightFlickRec.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
+                color:  _rightFlickRec.hovered ? control.Kirigami.Theme.highlightColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
                 width: Maui.Style.iconSizes.tiny
                 height:  width 
             }
@@ -177,7 +177,7 @@ ToolBar
                 visible: !Kirigami.Settings.isMobile
                 anchors.centerIn: parent
                 rotation: 45
-                color:  _leftFlickRec.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
+                color:  _leftFlickRec.hovered ? control.Kirigami.Theme.highlightColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
                 width: Maui.Style.iconSizes.tiny
                 height:  width 
             }
