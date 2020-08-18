@@ -347,7 +347,7 @@ Maui.Page
                                     width: parent.width
                                     height: document.lineHeight(index)
                                     horizontalAlignment: Text.AlignHCenter
-                                    verticalAlignment: Text.AlignVCenter
+                                    verticalAlignment: Text.AlignTop
                                     renderType: Text.NativeRendering
                                     text: index+1                                    
                                 }
