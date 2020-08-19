@@ -360,7 +360,7 @@ Maui.Page
             property alias currentFMList : _browserModel.list
             property alias currentFMModel : _browserModel
             itemSize : thumbnailsSize + Maui.Style.space.big
-            cellHeight: itemSize * 1.3
+            itemHeight: itemSize * 1.3
             checkable: selectionMode
             showPreviewThumbnails: settings.showThumbnails
             enableLassoSelection: true

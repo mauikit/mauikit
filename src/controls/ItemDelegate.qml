@@ -62,7 +62,7 @@ Kirigami.DelegateRecycler
     
     Drag.active: mouseArea.drag.active && control.draggable
     Drag.dragType: Drag.Automatic
-    Drag.supportedActions: Qt.CopyAction   
+    Drag.supportedActions: Qt.CopyAction
 
     ItemDelegate
     {
@@ -86,42 +86,64 @@ Kirigami.DelegateRecycler
             //        enabled: !Kirigami.Settings.isMobile
             anchors.fill: parent
             acceptedButtons:  Qt.RightButton | Qt.LeftButton
-            property int startX
-            property int startY
+
+            drag.axis: Drag.XAndYAxis
+
+            drag.minimumY: control.height
+            drag.minimumX : control.width
 
             onClicked:
             {
-                if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
+                if(mouse.button === Qt.RightButton)
+                {
                     control.rightClicked(mouse)
+                }
                 else
+                {
                     control.clicked(mouse)
+                }
             }
 
-            onDoubleClicked: control.doubleClicked(mouse)
+            onDoubleClicked:
+            {
+                if(mouse.source === Qt.MouseEventSynthesizedByQt)
+                {
+                    control.rightClicked(mouse)
+                }
+                else
+                {
+                    control.doubleClicked(mouse)
+                }
+            }
 
             onPressed:
             {
-                if(control.draggable && mouse.source !== Qt.MouseEventSynthesizedByQt)
+                control.pressed(mouse)
+            }
+
+            onReleased :
+            {
+                if(control.draggable)
+                {
+                    drag.target = null
+                    control.opacity = 1
+                }
+            }
+
+            onPressAndHold :
+            {
+                if(control.draggable)
                 {
                     drag.target = _mouseArea
+                    control.opacity = 0.5
                     control.grabToImage(function(result)
                     {
                         control.Drag.imageSource = result.url
                     })
                 }else drag.target = null
 
-                startX = control.x
-                startY = control.y
-                control.pressed(mouse)
+                control.pressAndHold(mouse)
             }
-
-            onReleased :
-            {
-                control.x = startX
-                control.y = startY
-            }
-
-            onPressAndHold : control.pressAndHold(mouse)
         }
 
         //    TapHandler
