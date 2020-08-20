@@ -83,80 +83,87 @@ Kirigami.DelegateRecycler
         MouseArea
         {
             id: _mouseArea
-//            //        enabled: !Kirigami.Settings.isMobile
-//            anchors.fill: parent
-//            acceptedButtons:  Qt.RightButton | Qt.LeftButton
+            //        enabled: !Kirigami.Settings.isMobile
+            anchors.fill: parent
+            acceptedButtons:  Qt.RightButton | Qt.LeftButton
+            property bool pressAndHoldIgnored : false
+            drag.axis: Drag.XAndYAxis
 
-//            drag.axis: Drag.XAndYAxis
+            drag.minimumY: control.height
+            drag.minimumX : control.width
 
-//            drag.minimumY: control.height
-//            drag.minimumX : control.width
-
-//            onClicked:
-
-//            onDoubleClicked:
-
-//            onPressed:
-//            {
-//                control.pressed(mouse)
-//            }
-
-//            onReleased :
-//            {
-//                if(control.draggable)
-//                {
-//                    drag.target = null
-//                    control.opacity = 1
-//                }
-//            }
-
-//            onPressAndHold :
-
-        }
-
-            TapHandler
+            onClicked:
             {
-                id: _tapArea
-//                enabled: Kirigami.Settings.isMobile
-                acceptedButtons: Qt.LeftButton | Qt.RightButton
-                onSingleTapped:
+                if(mouse.button === Qt.RightButton)
                 {
-                    if(eventPoint.event.button === Qt.RightButton)
-                    {
-                        control.rightClicked(eventPoint)
-                    }
-                    else
-                    {
-                        control.clicked(eventPoint)
-                    }
+                    control.rightClicked(mouse)
                 }
-
-                onDoubleTapped:
+                else
                 {
-                    if(eventPoint.event.source === Qt.MouseEventSynthesizedByQt)
-                    {
-                        control.rightClicked(eventPoint)
-                    }
-                    else
-                    {
-                        control.doubleClicked(eventPoint)
-                    }
-                }
-
-                onLongPressed: {
-                    if(control.draggable)
-                    {
-                        drag.target = _mouseArea
-                        control.opacity = 0.5
-                        control.grabToImage(function(result)
-                        {
-                            control.Drag.imageSource = result.url
-                        })
-                    }else drag.target = null
-
-                    control.pressAndHold(eventPoint)
+                    control.clicked(mouse)
                 }
             }
+
+            onDoubleClicked:
+            {
+                if(mouse.source === Qt.MouseEventSynthesizedByQt)
+                {
+                    control.rightClicked(mouse)
+                }
+                else
+                {
+                    control.doubleClicked(mouse)
+                }
+            }
+
+            onPressed:
+            {
+                control.pressed(mouse)
+            }
+
+            onReleased :
+            {
+                if(control.draggable)
+                {
+                    drag.target = null
+                    control.opacity = 1
+                }
+
+                if(pressAndHoldIgnored)
+                {
+                    control.pressAndHold(mouse)
+                    pressAndHoldIgnored = false
+                }
+            }
+
+            onPressAndHold :
+            {
+                if(control.draggable)
+                {
+                    drag.target = _mouseArea
+                    control.opacity = 0.5
+                    control.grabToImage(function(result)
+                    {
+                        control.Drag.imageSource = result.url
+                    })
+                    pressAndHoldIgnored = true
+                }else
+                {
+                     drag.target = null
+                    control.pressAndHold(mouse)
+                }
+            }
+        }
+
+        //    TapHandler
+        //    {
+        //        id: _tapArea
+        //        enabled: Kirigami.Settings.isMobile
+        //        acceptedButtons: Qt.RightButton
+        //        onSingleTapped: control.clicked(eventPoint)
+        //        onDoubleTapped: control.doubleClicked(eventPoint)
+        //        onLongPressed: control.pressAndHold(eventPoint)
+        //    }
 
         contentItem: Item{}
         
