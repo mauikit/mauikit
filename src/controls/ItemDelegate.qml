@@ -106,14 +106,7 @@ Kirigami.DelegateRecycler
 
             onDoubleClicked:
             {
-                if(mouse.source === Qt.MouseEventSynthesizedByQt)
-                {
-                    control.rightClicked(mouse)
-                }
-                else
-                {
-                    control.doubleClicked(mouse)
-                }
+                control.doubleClicked(mouse)
             }
 
             onPressed:
