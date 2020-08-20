@@ -201,6 +201,12 @@ Flickable
 				autoTransform: true
 				asynchronous: true
 				source: flick.source
+
+                BusyIndicator
+                {
+                    anchors.centerIn: parent
+                    running: parent.status === Image.Loading
+                }
 			}
 		}		
 	}	

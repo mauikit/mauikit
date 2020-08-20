@@ -215,7 +215,7 @@ Kirigami.ScrollablePage
 
             onPressAndHold:
             {
-                if ( mouse.source !== Qt.MouseEventNotSynthesized && control.enableLassoSelection )
+                if ( mouse.source !== Qt.MouseEventNotSynthesized && control.enableLassoSelection && !selectLayer.visible )
                 {
                     selectLayer.visible = true;
                     selectLayer.x = mouseX;

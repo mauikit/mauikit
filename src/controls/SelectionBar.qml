@@ -41,7 +41,7 @@ Item
     property list<Action> hiddenActions
     property int padding : 0
     property int barHeight: Maui.Style.toolBarHeightAlt  
-    property int display : ToolButton.IconOnly
+    property int display : root.isWide ? ToolButton.TextBesideIcon : ToolButton.IconOnly
     property int maxListHeight : 400
     property int radius: Maui.Style.radiusV
     /**
@@ -107,8 +107,7 @@ Item
     signal rightClicked(var mouse)
     
     signal urisDropped(var uris)
-    
-    
+        
     Item
     {
         id: _container
