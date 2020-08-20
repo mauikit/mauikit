@@ -236,7 +236,20 @@ Item
 						selectLayer.height = 0;
 					}
 				}
-				
+
+                onPressAndHold:
+                {
+                    if ( mouse.source === Qt.MouseEventNotSynthesized && control.enableLassoSelection )
+                    {
+                        selectLayer.visible = true;
+                        selectLayer.x = mouseX;
+                        selectLayer.y = mouseY;
+                        selectLayer.newX = mouseX;
+                        selectLayer.newY = mouseY;
+                        selectLayer.width = 0
+                        selectLayer.height = 0;
+                    }
+                }
 				
 				onReleased:
 				{
