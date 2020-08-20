@@ -171,9 +171,8 @@ Maui.Page
 		}
 		
 		onLoaded: setCurrentFMList()
-	}
-	
-    
+    }
+
     Maui.FMList
     {
         id: _commonFMList
@@ -509,6 +508,8 @@ Maui.Page
             property Maui.FMList currentFMList
             property Maui.BaseModel currentFMModel
             property int currentIndex
+
+//            property Flickable flickable : _millerColumns.currentItem.list
             
             signal itemClicked(int index)
             signal itemDoubleClicked(int index)
@@ -526,54 +527,23 @@ Maui.Page
 			}
 			
 			contentWidth: _millerColumns.contentWidth
-			contentHeight: height
-			
-			ScrollBar.horizontal: ScrollBar
-			{
-                id: horizontalScrollBar
-                height: visible ? implicitHeight: 0
-                parent: _millerControl
-                x: 0
-                y: _millerControl.height - height
-                width: _millerControl.width
-                active: _millerControl.ScrollBar.horizontal || _millerControl.ScrollBar.horizontal.active
-            }
-			
-// 			ScrollBar.horizontal: ScrollBar
-// 			{
-//                 id: _scrollBar
-//                 snapMode: ScrollBar.SnapAlways
-//                 policy: ScrollBar.AlwaysOn
-//                 
-//                 contentItem: Rectangle
-//                 {
-//                     implicitWidth: _scrollBar.interactive ? 13 : 4
-//                     implicitHeight: _scrollBar.interactive ? 13 : 4
-//                     
-//                     color: "#333"
-//                     
-//                     opacity: _scrollBar.pressed ? 0.7 :
-//                     _scrollBar.interactive && _scrollBar.hovered ? 0.5 : 0.2
-//                     radius: 0
-//                 }
-//                 
-//                 background: Rectangle
-//                 {
-//                     implicitWidth: _scrollBar.interactive ? 16 : 4
-//                     implicitHeight: _scrollBar.interactive ? 16 : 4
-//                     color: "#0e000000"
-//                     opacity: 0.0
-//                     visible: _scrollBar.interactive
-//                     radius: 0
-//                     
-//                 }
-//             }
+
+            ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+            //			ScrollBar.horizontal: ScrollBar
+//			{
+//                id: horizontalScrollBar
+//                height: visible ? implicitHeight: 0
+//                parent: _millerControl
+//                x: 0
+//                y: _millerControl.height - height
+//                width: _millerControl.width
+//                active: _millerControl.ScrollBar.horizontal || _millerControl.ScrollBar.horizontal.active
+//            }
             
             ListView
             {
                 id: _millerColumns
                 anchors.fill: parent
-                anchors.bottomMargin: horizontalScrollBar.height
                 boundsBehavior: !Maui.Handy.isTouch? Flickable.StopAtBounds : Flickable.OvershootBounds
                 
                 keyNavigationEnabled: true
@@ -619,6 +589,7 @@ Maui.Page
                 {
                     property alias currentFMList : _millersFMList
                     property alias currentFMModel : _millersFMModel
+                    property alias list : _millerListView
                     property int _index : index
                     width: Math.min(Kirigami.Units.gridUnit * 22, control.width)
                     height: parent.height
