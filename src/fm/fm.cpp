@@ -47,7 +47,7 @@
 #include <QIcon>
 #endif
 
-#if !defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+#if defined(Q_OS_ANDROID) || defined(Q_OS_WIN) || defined(Q_OS_MACOS)
 QDirLister::QDirLister(QObject *parent)
     : QObject(parent)
 {
