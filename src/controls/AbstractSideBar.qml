@@ -75,13 +75,13 @@ Drawer
     contentItem: Item
     {
         id: _content
-//        Kirigami.Separator
-//        {
-//            z: parent.z + 999
-//            anchors.right: parent.right
-//            anchors.top: parent.top
-//            anchors.bottom: parent.bottom
-//        }
+        Kirigami.Separator
+        {
+            z: parent.z + 999
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+        }
     }
 
     Component.onCompleted:

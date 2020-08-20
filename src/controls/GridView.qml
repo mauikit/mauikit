@@ -220,26 +220,24 @@ Item
 				
 				onPressed:
 				{
-					if (mouse.source !== Qt.MouseEventNotSynthesized)
-					{
-						mouse.accepted = false
-					}
-					
-					if(control.enableLassoSelection && mouse.button === Qt.LeftButton )
-					{
-						selectLayer.visible = true;
-						selectLayer.x = mouseX;
-						selectLayer.y = mouseY;
-						selectLayer.newX = mouseX;
-						selectLayer.newY = mouseY;
-						selectLayer.width = 0
-						selectLayer.height = 0;
-					}
+                    if (mouse.source === Qt.MouseEventNotSynthesized)
+                    {
+                        if(control.enableLassoSelection && mouse.button === Qt.LeftButton )
+                        {
+                            selectLayer.visible = true;
+                            selectLayer.x = mouseX;
+                            selectLayer.y = mouseY;
+                            selectLayer.newX = mouseX;
+                            selectLayer.newY = mouseY;
+                            selectLayer.width = 0
+                            selectLayer.height = 0;
+                        }
+                    }
 				}
 
                 onPressAndHold:
                 {
-                    if ( mouse.source === Qt.MouseEventNotSynthesized && control.enableLassoSelection )
+                    if ( mouse.source !== Qt.MouseEventNotSynthesized && control.enableLassoSelection )
                     {
                         selectLayer.visible = true;
                         selectLayer.x = mouseX;
