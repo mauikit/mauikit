@@ -13,6 +13,10 @@
 
 namespace FMH
 {
+/**
+ * @brief The Downloader class
+ * This is a quick helper to download and save files. Allows to make get request using optional headers.
+ */
 #ifdef STATIC_MAUIKIT
 class Downloader : public QObject
 #else
@@ -25,7 +29,22 @@ public:
 
     virtual ~Downloader();
 
+    /**
+     * @brief downloadFile
+     * Given a source URL to a file it downloads it to a given local destination
+     * @param source
+     * Remote file URL
+     * @param destination
+     * Local file URL destination
+     */
     void downloadFile(const QUrl &source, const QUrl &destination);
+
+    /**
+     * @brief getArray
+     * Given a URL make a get request and once the reply is ready emits a signal with the retrieved array data
+     * @param fileURL
+     * @param headers
+     */
     void getArray(const QUrl &fileURL, const QMap<QString, QString> &headers = {});
 
 private:
@@ -43,12 +62,27 @@ signals:
     void done();
 
 private slots:
+    /**
+     * @brief onDownloadProgress
+     * @param bytesRead
+     * @param bytesTotal
+     */
     void onDownloadProgress(qint64 bytesRead, qint64 bytesTotal);
 
+    /**
+     * @brief onFinished
+     * @param reply
+     */
     void onFinished(QNetworkReply *reply);
 
+    /**
+     * @brief onReadyRead
+     */
     void onReadyRead();
 
+    /**
+     * @brief onReplyFinished
+     */
     void onReplyFinished();
 };
 

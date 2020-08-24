@@ -45,13 +45,62 @@ protected:
     void reset();
 
 public slots:
+    /**
+     * @brief get
+     * Gets a item in the model.
+     * @param index
+     * Index of the item in the model. The given index is not mapped to a filtered or sorted model
+     * @return
+     * The data of the place
+     */
     QVariantMap get(const int &index) const;
+
+    /**
+     * @brief refresh
+     * Refreshes the model list of all the places, like bookmarks, default places, devices, etc..
+     */
     void refresh();
+
+    /**
+     * @brief clearBadgeCount
+     * Clears the count associated to a place at a given index in the model
+     * @param index
+     */
     void clearBadgeCount(const int &index);
 
+    /**
+     * @brief addPlace
+     * Adds a new place to the bookmarks. How the file URL is stored depends on the platform
+     * @param path
+     */
     void addPlace(const QUrl &path);
+
+    /**
+     * @brief removePlace
+     * Removes a place from the model and if the data at the given index is a file URL bookmark then it gets removed from the bookmarks.
+     * @param index
+     * Index of the item to be removed in the model
+     */
     void removePlace(const int &index);
+
+    /**
+     * @brief contains
+     * Checks of a file URL exists in the places model
+     * @param path
+     * File URL to be checked
+     * @return
+     * True if it exists otherwise false
+     */
     bool contains(const QUrl &path);
+
+    /**
+     * @brief indexOf
+     * The index of a file URL in the model
+     * @param path
+     * File url to be look up
+     * @return
+     * Index of the file URL or -1 if it doesnt exists
+     */
     int indexOf(const QUrl &path);
 
 private:

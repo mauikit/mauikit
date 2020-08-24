@@ -29,21 +29,73 @@
 #include <QVariantList>
 #include <QtAndroid>
 
+/**
+ * @brief The MAUIAndroid class
+ */
 class Q_DECL_EXPORT MAUIAndroid : public QObject
 {
     Q_OBJECT
 public:
     MAUIAndroid(QObject *parent = nullptr);
     ~MAUIAndroid();
+
+    /**
+     * @brief handleActivityResult
+     * @param receiverRequestCode
+     * @param resultCode
+     * @param data
+     */
     void handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data);
 
+    /**
+     * @brief contactPhoto
+     * @param id
+     * @return
+     */
     static QImage contactPhoto(const QString &id);
-    static void
-    addContact(const QString &name, const QString &tel, const QString &tel2, const QString &tel3, const QString &email, const QString &title, const QString &org, const QString &photo, const QString &account, const QString &accountType);
+
+    /**
+     * @brief addContact
+     * @param name
+     * @param tel
+     * @param tel2
+     * @param tel3
+     * @param email
+     * @param title
+     * @param org
+     * @param photo
+     * @param account
+     * @param accountType
+     */
+    static void addContact(const QString &name, const QString &tel, const QString &tel2, const QString &tel3, const QString &email, const QString &title, const QString &org, const QString &photo, const QString &account, const QString &accountType);
+
+    /**
+     * @brief updateContact
+     * @param id
+     * @param field
+     * @param value
+     */
     static void updateContact(const QString &id, const QString &field, const QString &value);
 
+    /**
+     * @brief setAppIcons
+     * @param lowDPI
+     * @param mediumDPI
+     * @param highDPI
+     */
     static void setAppIcons(const QString &lowDPI, const QString &mediumDPI, const QString &highDPI);
+
+    /**
+     * @brief setAppInfo
+     * @param appName
+     * @param version
+     * @param uri
+     */
     static void setAppInfo(const QString &appName, const QString &version, const QString &uri);
+
+    /**
+     * @brief fileChooser
+     */
     static void fileChooser();
 
 private:
@@ -51,30 +103,122 @@ private:
     static QVariantMap createVariantMap(jobject data);
 
 public slots:
+    /**
+     * @brief getAccounts
+     * @return
+     */
     static QString getAccounts();
+
+    /**
+     * @brief getCallLogs
+     * @return
+     */
     static QVariantList getCallLogs();
+
+    /**
+     * @brief getContacts
+     * @return
+     */
     static QVariantList getContacts();
+
+    /**
+     * @brief getContact
+     * @param id
+     * @return
+     */
     static QVariantMap getContact(const QString &id);
 
+    /**
+     * @brief statusbarColor
+     * @param bg
+     * @param light
+     */
     static void statusbarColor(const QString &bg, const bool &light);
+
+    /**
+     * @brief navBarColor
+     * @param bg
+     * @param light
+     */
     static void navBarColor(const QString &bg, const bool &light);
 
+    /**
+     * @brief shareDialog
+     * @param url
+     */
     static void shareDialog(const QUrl &url);
+
+    /**
+     * @brief shareText
+     * @param text
+     */
     static void shareText(const QString &text);
+
+    /**
+     * @brief sendSMS
+     * @param tel
+     * @param subject
+     * @param message
+     */
     static void sendSMS(const QString &tel, const QString &subject, const QString &message);
+
+    /**
+     * @brief shareLink
+     * @param link
+     */
     static void shareLink(const QString &link);
+
+    /**
+     * @brief shareContact
+     * @param id
+     */
     static void shareContact(const QString &id);
+
+    /**
+     * @brief openUrl
+     * @param url
+     */
     static void openUrl(const QUrl &url);
+
+    /**
+     * @brief defaultPaths
+     * @return
+     */
     static QStringList defaultPaths();
+
+    /**
+     * @brief homePath
+     * @return
+     */
     static QString homePath();
+
+    /**
+     * @brief sdDirs
+     * @return
+     */
     static QStringList sdDirs();
+
+    /**
+     * @brief call
+     * @param tel
+     */
     static void call(const QString &tel);
 
+    /**
+     * @brief checkRunTimePermissions
+     * @param permissions
+     * @return
+     */
     static bool checkRunTimePermissions(const QStringList &permissions);
 
 signals:
+    /**
+     * @brief folderPicked
+     * @param path
+     */
     void folderPicked(QString path);
 };
+
 
 namespace PATHS
 {

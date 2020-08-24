@@ -60,21 +60,71 @@ public:
 
     FMH::MODEL_LIST items() const final override;
 
+    /**
+     * @brief setCurrentAccountIndex
+     * @param index
+     */
     void setCurrentAccountIndex(const int &index);
+
+    /**
+     * @brief getCurrentAccountIndex
+     * @return
+     */
     int getCurrentAccountIndex() const;
 
+    /**
+     * @brief getCurrentAccount
+     * @return
+     */
     QVariantMap getCurrentAccount() const;
 
+    /**
+     * @brief getCount
+     * @return
+     */
     uint getCount() const;
 
 public slots:
+    /**
+     * @brief get
+     * @param index
+     * @return
+     */
     QVariantMap get(const int &index) const;
+
+    /**
+     * @brief getCloudAccountsList
+     * @return
+     */
     QVariantList getCloudAccountsList();
+
+    /**
+     * @brief getCloudAccounts
+     * @return
+     */
     FMH::MODEL_LIST getCloudAccounts();
+
+    /**
+     * @brief registerAccount
+     * @param account
+     */
     void registerAccount(const QVariantMap &account);
 
+    /**
+     * @brief removeAccount
+     * @param index
+     */
     void removeAccount(const int &index);
+
+    /**
+     * @brief removeAccountAndFiles
+     * @param index
+     */
     void removeAccountAndFiles(const int &index);
+
+    /**
+     * @brief refresh
+     */
     void refresh();
 
 private:
@@ -96,9 +146,28 @@ private:
     QVariantList get(const QString &queryTxt);
 
 signals:
+    /**
+     * @brief accountAdded
+     * @param account
+     */
     void accountAdded(QVariantMap account);
+
+    /**
+     * @brief accountRemoved
+     * @param account
+     */
     void accountRemoved(QVariantMap account);
+
+    /**
+     * @brief currentAccountChanged
+     * @param account
+     */
     void currentAccountChanged(QVariantMap account);
+
+    /**
+     * @brief currentAccountIndexChanged
+     * @param index
+     */
     void currentAccountIndexChanged(int index);
     void countChanged(uint count);
 };

@@ -43,8 +43,15 @@
 #include <KFilePlacesModel>
 #endif
 
+/**
+ * A set of helpers related to file management and modeling of data
+ */
 namespace FMH
 {
+/**
+ * @brief isAndroid
+ * @return
+ */
 static constexpr bool isAndroid()
 {
 #if defined(Q_OS_ANDROID)
@@ -54,6 +61,10 @@ static constexpr bool isAndroid()
 #endif
 }
 
+/**
+ * @brief isWindows
+ * @return
+ */
 static constexpr bool isWindows()
 {
 #if defined(Q_OS_WIN32)
@@ -65,6 +76,10 @@ static constexpr bool isWindows()
 #endif
 }
 
+/**
+ * @brief isLinux
+ * @return
+ */
 static constexpr bool isLinux()
 {
 #if defined Q_OS_LINUX && !defined Q_OS_ANDROID
@@ -74,6 +89,10 @@ static constexpr bool isLinux()
 #endif
 }
 
+/**
+ * @brief isMac
+ * @return
+ */
 static constexpr bool isMac()
 {
 #if defined(Q_OS_MACOS)
@@ -85,6 +104,10 @@ static constexpr bool isMac()
 #endif
 }
 
+/**
+ * @brief isIOS
+ * @return
+ */
 static constexpr bool isIOS()
 {
 #if defined(Q_OS_iOS)
@@ -94,11 +117,15 @@ static constexpr bool isIOS()
 #endif
 }
 
+/**
+ * @brief The FILTER_TYPE enum
+ */
 enum FILTER_TYPE : int { AUDIO, VIDEO, TEXT, IMAGE, DOCUMENT, NONE };
 
-static QStringList AUDIO_MIMETYPES = {"audio/mpeg", "audio/mp4", "audio/flac", "audio/ogg", "audio/wav"};
-static QStringList VIDEO_MIMETYPES = {"video/mp4", "video/x-matroska", "video/webm", "video/avi", "video/flv", "video/mpg", "video/wmv", "video/mov", "video/ogg", "video/mpeg", "video/jpeg"};
-static QStringList TEXT_MIMETYPES = {"text/markdown",
+
+static const QStringList AUDIO_MIMETYPES = {"audio/mpeg", "audio/mp4", "audio/flac", "audio/ogg", "audio/wav"};
+static const QStringList VIDEO_MIMETYPES = {"video/mp4", "video/x-matroska", "video/webm", "video/avi", "video/flv", "video/mpg", "video/wmv", "video/mov", "video/ogg", "video/mpeg", "video/jpeg"};
+static const QStringList TEXT_MIMETYPES = {"text/markdown",
                                      "text/x-chdr",
                                      "text/x-c++src",
                                      "text/x-c++hdr",
@@ -118,15 +145,19 @@ static QStringList TEXT_MIMETYPES = {"text/markdown",
                                      "application/x-shellscript",
                                      "application/x-cmakecache",
                                      "application/x-kicad-project"};
-static QStringList IMAGE_MIMETYPES = {"image/webp", "image/png", "image/gif", "image/jpeg", "image/web", "image/svg", "image/svg+xml"};
-static QStringList DOCUMENT_MIMETYPES = {"application/pdf", "application/rtf", "application/doc", "application/odf"};
+static const QStringList IMAGE_MIMETYPES = {"image/webp", "image/png", "image/gif", "image/jpeg", "image/web", "image/svg", "image/svg+xml"};
+static const QStringList DOCUMENT_MIMETYPES = {"application/pdf", "application/rtf", "application/doc", "application/odf"};
 
-static QMap<FMH::FILTER_TYPE, QStringList> SUPPORTED_MIMETYPES {{FMH::FILTER_TYPE::AUDIO, AUDIO_MIMETYPES},
+static const QMap<FMH::FILTER_TYPE, QStringList> SUPPORTED_MIMETYPES {{FMH::FILTER_TYPE::AUDIO, AUDIO_MIMETYPES},
                                                                 {FMH::FILTER_TYPE::VIDEO, VIDEO_MIMETYPES},
                                                                 {FMH::FILTER_TYPE::TEXT, TEXT_MIMETYPES},
                                                                 {FMH::FILTER_TYPE::IMAGE, IMAGE_MIMETYPES},
                                                                 {FMH::FILTER_TYPE::DOCUMENT, DOCUMENT_MIMETYPES}};
-
+/**
+ * @brief getMimeTypeSuffixes
+ * @param type
+ * @return
+ */
 static const QStringList getMimeTypeSuffixes(const FMH::FILTER_TYPE &type, QString (*cb)(QString) = nullptr)
 {
     QStringList res;
@@ -148,6 +179,9 @@ static const QHash<FMH::FILTER_TYPE, QStringList> FILTER_LIST = {{FILTER_TYPE::A
                                                                  {FILTER_TYPE::DOCUMENT, FMH::getMimeTypeSuffixes(FMH::FILTER_TYPE::DOCUMENT, [](QString suffix) -> QString { return "*." + suffix; })},
                                                                  {FILTER_TYPE::IMAGE, FMH::getMimeTypeSuffixes(FMH::FILTER_TYPE::IMAGE, [](QString suffix) -> QString { return "*." + suffix; })},
                                                                  {FILTER_TYPE::NONE, QStringList()}};
+/**
+ * @brief The MODEL_KEY enum
+ */
 enum MODEL_KEY : int {
     ICON,
     LABEL,
@@ -592,10 +626,21 @@ static const QHash<QString, FMH::MODEL_KEY> MODEL_NAME_KEY = {{MODEL_NAME[MODEL_
                                                               {MODEL_NAME[MODEL_KEY::DEVICE], MODEL_KEY::DEVICE},
                                                               {MODEL_NAME[MODEL_KEY::LASTSYNC], MODEL_KEY::LASTSYNC}
                                                              };
-
+/**
+ * @brief MODEL
+ */
 typedef QHash<FMH::MODEL_KEY, QString> MODEL;
+
+/**
+ * @brief MODEL_LIST
+ */
 typedef QVector<MODEL> MODEL_LIST;
 
+/**
+ * @brief modelRoles
+ * @param model
+ * @return
+ */
 static const QVector<int> modelRoles(const FMH::MODEL &model)
 {
     const auto keys = model.keys();
@@ -605,11 +650,22 @@ static const QVector<int> modelRoles(const FMH::MODEL &model)
     });
 }
 
+/**
+ * @brief mapValue
+ * @param map
+ * @param key
+ * @return
+ */
 static const QString mapValue(const QVariantMap &map, const FMH::MODEL_KEY &key)
 {
     return map[FMH::MODEL_NAME[key]].toString();
 }
 
+/**
+ * @brief toMap
+ * @param model
+ * @return
+ */
 static const QVariantMap toMap(const FMH::MODEL &model)
 {
     QVariantMap map;
@@ -619,6 +675,11 @@ static const QVariantMap toMap(const FMH::MODEL &model)
     return map;
 }
 
+/**
+ * @brief toModel
+ * @param map
+ * @return
+ */
 static const FMH::MODEL toModel(const QVariantMap &map)
 {
     FMH::MODEL model;
@@ -631,6 +692,11 @@ static const FMH::MODEL toModel(const QVariantMap &map)
 /**
          * Creates a FMH::MODEL_LIST from a QVariantList
          * */
+/**
+ * @brief toModelList
+ * @param list
+ * @return
+ */
 static const FMH::MODEL_LIST toModelList(const QVariantList &list)
 {
     FMH::MODEL_LIST res;
@@ -644,6 +710,11 @@ static const FMH::MODEL_LIST toModelList(const QVariantList &list)
 /**
          * Creates a QVariantList from a FMH::MODEL_LIST
          * */
+/**
+ * @brief toMapList
+ * @param list
+ * @return
+ */
 static const QVariantList toMapList(const FMH::MODEL_LIST &list)
 {
     QVariantList res;
@@ -657,6 +728,12 @@ static const QVariantList toMapList(const FMH::MODEL_LIST &list)
 /**
          * Creates a new FMH::MODEL from another filtered by the given array of FMH::MODEL_KEY
          * */
+/**
+ * @brief filterModel
+ * @param model
+ * @param keys
+ * @return
+ */
 static const FMH::MODEL filterModel(const FMH::MODEL &model, const QVector<FMH::MODEL_KEY> &keys)
 {
     FMH::MODEL res;
@@ -671,6 +748,13 @@ static const FMH::MODEL filterModel(const FMH::MODEL &model, const QVector<FMH::
 /**
          * Extracts from a FMH::MODEL_LIST the values from a given MODEL::KEY into a QStringList
          * */
+
+/**
+ * @brief modelToList
+ * @param list
+ * @param key
+ * @return
+ */
 static const QStringList modelToList(const FMH::MODEL_LIST &list, const FMH::MODEL_KEY &key)
 {
     QStringList res;
@@ -682,11 +766,17 @@ static const QStringList modelToList(const FMH::MODEL_LIST &list, const FMH::MOD
     });
 }
 
+/**
+ * @brief The PATH_CONTENT struct
+ */
 struct PATH_CONTENT {
     QUrl path;               // the url holding all the content
     FMH::MODEL_LIST content; // the content from the url
 };
 
+/**
+ * @brief The PATHTYPE_KEY enum
+ */
 #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS // for android, windows and mac use this for now
 enum PATHTYPE_KEY : int {
     PLACES_PATH,
@@ -724,6 +814,7 @@ enum PATHTYPE_KEY : int {
     OTHER_PATH = 17
 };
 #endif
+
 static const QHash<PATHTYPE_KEY, QString> PATHTYPE_SCHEME = {{PATHTYPE_KEY::PLACES_PATH, "file"},
                                                              {PATHTYPE_KEY::BOOKMARKS_PATH, "file"},
                                                              {PATHTYPE_KEY::DRIVES_PATH, "drives"},
@@ -782,32 +873,55 @@ static const QHash<PATHTYPE_KEY, QString> PATHTYPE_LABEL = {{PATHTYPE_KEY::PLACE
                                                             {PATHTYPE_KEY::OTHER_PATH, ("Others")},
                                                             {PATHTYPE_KEY::QUICK_PATH, ("Quick")}};
 
-const QString DataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
-const QString ConfigPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)).toString();
-const QString CloudCachePath = FMH::DataPath + "/Cloud/";
-const QString DesktopPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation)).toString();
-const QString AppsPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation)).toString();
-const QString RootPath = QUrl::fromLocalFile("/").toString();
+/**
+ * @brief DataPath
+ */
+static const QString DataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+
+/**
+ * @brief ConfigPath
+ */
+static const QString ConfigPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)).toString();
+
+/**
+ * @brief CloudCachePath
+ */
+static const QString CloudCachePath = FMH::DataPath + "/Cloud/";
+
+/**
+ * @brief DesktopPath
+ */
+static const QString DesktopPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation)).toString();
+
+/**
+ * @brief AppsPath
+ */
+static const QString AppsPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation)).toString();
+
+/**
+ * @brief RootPath
+ */
+static const QString RootPath = QUrl::fromLocalFile("/").toString();
 
 #if defined(Q_OS_ANDROID)
-const QString PicturesPath = QUrl::fromLocalFile(PATHS::PicturesPath).toString();
-const QString DownloadsPath = QUrl::fromLocalFile(PATHS::DownloadsPath).toString();
-const QString DocumentsPath = QUrl::fromLocalFile(PATHS::DocumentsPath).toString();
-const QString HomePath = QUrl::fromLocalFile(PATHS::HomePath).toString();
-const QString MusicPath = QUrl::fromLocalFile(PATHS::MusicPath).toString();
-const QString VideosPath = QUrl::fromLocalFile(PATHS::VideosPath).toString();
+static const QString PicturesPath = QUrl::fromLocalFile(PATHS::PicturesPath).toString();
+static const QString DownloadsPath = QUrl::fromLocalFile(PATHS::DownloadsPath).toString();
+static const QString DocumentsPath = QUrl::fromLocalFile(PATHS::DocumentsPath).toString();
+static const QString HomePath = QUrl::fromLocalFile(PATHS::HomePath).toString();
+static const QString MusicPath = QUrl::fromLocalFile(PATHS::MusicPath).toString();
+static const QString VideosPath = QUrl::fromLocalFile(PATHS::VideosPath).toString();
 
-const QStringList defaultPaths = {FMH::HomePath, FMH::DocumentsPath, FMH::PicturesPath, FMH::MusicPath, FMH::VideosPath, FMH::DownloadsPath};
+static const QStringList defaultPaths = {FMH::HomePath, FMH::DocumentsPath, FMH::PicturesPath, FMH::MusicPath, FMH::VideosPath, FMH::DownloadsPath};
 
 #else
-const QString PicturesPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)).toString();
-const QString DownloadsPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DownloadLocation)).toString();
-const QString DocumentsPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).toString();
-const QString HomePath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).toString();
-const QString MusicPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::MusicLocation)).toString();
-const QString VideosPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::MoviesLocation)).toString();
+static const QString PicturesPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)).toString();
+static const QString DownloadsPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DownloadLocation)).toString();
+static const QString DocumentsPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).toString();
+static const QString HomePath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).toString();
+static const QString MusicPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::MusicLocation)).toString();
+static const QString VideosPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::MoviesLocation)).toString();
 
-const QStringList defaultPaths = {
+static const QStringList defaultPaths = {
     FMH::HomePath,
     FMH::DesktopPath,
     FMH::DocumentsPath,
@@ -820,7 +934,7 @@ const QStringList defaultPaths = {
 
 #endif
 
-const QMap<QString, QString> folderIcon {{PicturesPath, "folder-pictures"},
+static const QMap<QString, QString> folderIcon {{PicturesPath, "folder-pictures"},
                                          {DownloadsPath, "folder-download"},
                                          {DocumentsPath, "folder-documents"},
                                          {HomePath, "user-home"},
@@ -834,6 +948,11 @@ const QMap<QString, QString> folderIcon {{PicturesPath, "folder-pictures"},
          * Checks if a local file exists.
          * The URL must represent a local file path, by using the scheme file://
          **/
+/**
+ * @brief fileExists
+ * @param path
+ * @return
+ */
 static bool fileExists(const QUrl &path)
 {
     if (!path.isLocalFile()) {
@@ -843,6 +962,11 @@ static bool fileExists(const QUrl &path)
     return QFileInfo::exists(path.toLocalFile());
 }
 
+/**
+ * @brief fileDir
+ * @param path
+ * @return
+ */
 static const QString fileDir(const QUrl &path) // the directory path of the file
 {
     QString res = path.toString();
@@ -858,6 +982,11 @@ static const QString fileDir(const QUrl &path) // the directory path of the file
     return res;
 }
 
+/**
+ * @brief parentDir
+ * @param path
+ * @return
+ */
 static const QUrl parentDir(const QUrl &path)
 {
     if (!path.isLocalFile()) {
@@ -875,6 +1004,11 @@ static const QUrl parentDir(const QUrl &path)
          * by a QVariantMap.
          * The passed path must be a local file URL.
          **/
+/**
+ * @brief dirConf
+ * @param path
+ * @return
+ */
 static QVariantMap dirConf(const QUrl &path)
 {
     if (!path.isLocalFile()) {
@@ -938,6 +1072,13 @@ static QVariantMap dirConf(const QUrl &path)
                         {FMH::MODEL_NAME[FMH::MODEL_KEY::VIEWTYPE], viewType}});
 }
 
+/**
+ * @brief setDirConf
+ * @param path
+ * @param group
+ * @param key
+ * @param value
+ */
 static void setDirConf(const QUrl &path, const QString &group, const QString &key, const QVariant &value)
 {
     if (!path.isLocalFile()) {
@@ -965,6 +1106,11 @@ static void setDirConf(const QUrl &path, const QString &group, const QString &ke
          * The file path must be represented as a local file URL.
          * It also looks into the directory config file to get custom set icons
          **/
+/**
+ * @brief getIconName
+ * @param path
+ * @return
+ */
 static QString getIconName(const QUrl &path)
 {
     if (!path.isLocalFile())
@@ -990,6 +1136,11 @@ static QString getIconName(const QUrl &path)
     }
 }
 
+/**
+ * @brief getMime
+ * @param path
+ * @return
+ */
 static QString getMime(const QUrl &path)
 {
     if (!path.isLocalFile()) {
@@ -1001,12 +1152,23 @@ static QString getMime(const QUrl &path)
     return mimedb.mimeTypeForFile(path.toLocalFile()).name();
 }
 
+/**
+ * @brief mimeInherits
+ * @param baseType
+ * @param type
+ * @return
+ */
 static bool mimeInherits(const QString baseType, const QString &type)
 {
     const QMimeDatabase _m;
     return _m.mimeTypeForName(baseType).inherits(type);
 }
 
+/**
+ * @brief getFileInfoModel
+ * @param path
+ * @return
+ */
 static FMH::MODEL getFileInfoModel(const QUrl &path)
 {
     FMH::MODEL res;
@@ -1068,11 +1230,22 @@ static FMH::MODEL getFileInfoModel(const QUrl &path)
             return res;
 }
 
+            /**
+                     * @brief getFileInfo
+                     * @param path
+                     * @return
+                     */
             static QVariantMap getFileInfo(const QUrl &path)
     {
             return FMH::toMap(FMH::getFileInfoModel(path));
 }
 
+            /**
+                     * @brief getDirInfoModel
+                     * @param path
+                     * @param type
+                     * @return
+                     */
             static FMH::MODEL getDirInfoModel(const QUrl &path, const QString &type = QString())
     {
             auto res = getFileInfoModel(path);
@@ -1080,11 +1253,22 @@ static FMH::MODEL getFileInfoModel(const QUrl &path)
             return res;
 }
 
+            /**
+                     * @brief getDirInfo
+                     * @param path
+                     * @param type
+                     * @return
+                     */
             static QVariantMap getDirInfo(const QUrl &path, const QString &type = QString())
     {
             return FMH::toMap(FMH::getDirInfoModel(path));
 }
 
+            /**
+                     * @brief getPathType
+                     * @param url
+                     * @return
+                     */
             static FMH::PATHTYPE_KEY getPathType(const QUrl &url)
     {
             return FMH::PATHTYPE_SCHEME_NAME[url.scheme()];

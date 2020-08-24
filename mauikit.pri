@@ -1,3 +1,4 @@
+
 QT *= core \
     qml \
     quick \
@@ -118,7 +119,6 @@ contains(DEFINES, COMPONENT_EDITOR):{
         $$PWD/src/utils//editor/documenthandler.cpp
 
     INCLUDEPATH += $$PWD/src/utils/editor
-
 
 } else {
     warning("SKIPPING EDITOR COMPONENT")

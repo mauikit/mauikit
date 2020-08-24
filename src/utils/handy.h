@@ -29,7 +29,8 @@
 #include <QVariantMap>
 
 /*!
- * \brief The Handy class contains useful static methods to be used as an attached property to the Maui application
+ * \brief The Handy class
+ * Contains useful static methods to be used as an attached property to the Maui application
  */
 #ifdef STATIC_MAUIKIT
 class Handy : public QObject
@@ -95,17 +96,56 @@ public slots:
      * \return
      */
     static bool copyTextToClipboard(const QString &text);
+
+    /**
+     * @brief copyToClipboard
+     * @param value
+     * @param cut
+     * @return
+     */
     static bool copyToClipboard(const QVariantMap &value, const bool &cut = false);
 
     // TODO move to Device.h the defs and implementation of device specifics
+    /**
+     * @brief isTouch
+     * @return
+     */
     static bool isTouch();
+
+    /**
+     * @brief isAndroid
+     * @return
+     */
     static bool isAndroid();
+
+    /**
+     * @brief isWindows
+     * @return
+     */
     static bool isWindows();
+
+    /**
+     * @brief isMac
+     * @return
+     */
     static bool isMac();
+
+    /**
+     * @brief isLinux
+     * @return
+     */
     static bool isLinux();
+
+    /**
+     * @brief isIOS
+     * @return
+     */
     static bool isIOS();
 
 signals:
+    /**
+     * @brief singleClickChanged
+     */
     void singleClickChanged();
 };
 

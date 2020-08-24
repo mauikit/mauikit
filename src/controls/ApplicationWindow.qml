@@ -41,52 +41,128 @@ Window
     color: "transparent"
     flags: Maui.App.enableCSD ? Qt.FramelessWindowHint : Qt.Window
 
+    /**
+      */
     property Maui.AbstractSideBar sideBar
 
     /***************************************************/
     /******************** ALIASES *********************/
     /*************************************************/
 
+    /**
+      */
     property alias flickable : _page.flickable
 
+    /**
+      */
     property alias headBar : _page.headBar
+
+    /**
+      */
     property alias footBar: _page.footBar
 
+    /**
+      */
     property alias footer: _page.footer
+
+    /**
+      */
     property alias header :_page.header
+
+    /**
+      */
     property alias floatingHeader: _page.floatingHeader
+
+    /**
+      */
     property alias floatingFooter: _page.floatingFooter
+
+    /**
+      */
     property alias autoHideHeader: _page.autoHideHeader
+
+    /**
+      */
     property alias autoHideFooter: _page.autoHideFooter
 
+    /**
+      */
     property alias autoHideHeaderDelay: _page.autoHideHeaderDelay
+
+    /**
+      */
     property alias autoHideFooterDelay: _page.autoHideFooterDelay
 
+    /**
+      */
     property alias autoHideHeaderMargins: _page.autoHideHeaderMargins
+
+    /**
+      */
     property alias autoHideFooterMargins: _page.autoHideFooterMargins
 
+    /**
+      */
     property alias altHeader: _page.altHeader
+
+    /**
+      */
     property alias margins : _page.margins
+
+    /**
+      */
     property alias leftMargin : _page.leftMargin
+
+    /**
+      */
     property alias rightMargin: _page.rightMargin
+
+    /**
+      */
     property alias topMargin: _page.topMargin
+
+    /**
+      */
     property alias bottomMargin: _page.bottomMargin
 
+    /**
+      */
     property alias footerPositioning : _page.footerPositioning
+
+    /**
+      */
     property alias headerPositioning : _page.headerPositioning
 
+    /**
+      */
     property alias dialog: dialogLoader.item
 
+    /**
+      */
     property alias menuButton : menuBtn
+
+    /**
+      */
     property alias mainMenu : mainMenu.contentData
 
+    /**
+      */
     property alias accounts: _accountsDialogLoader.item
+
+    /**
+      */
     property var currentAccount: Maui.App.handleAccounts ? Maui.App.accounts.currentAccount : ({})
 
+    /**
+      */
     property alias notifyDialog: _notify
 
+    /**
+      */
     property alias background : _page.background
 
+    /**
+      */
     property bool isWide : root.width >= Kirigami.Units.gridUnit * 30
 
     /***************************************************/
@@ -97,11 +173,15 @@ Window
     /***************************************************/
     /**************** READONLY PROPS ******************/
     /*************************************************/
+    /**
+      */
     readonly property bool isPortrait: Screen.primaryOrientation === Qt.PortraitOrientation || Screen.primaryOrientation === Qt.InvertedPortraitOrientation
 
     /***************************************************/
     /******************** SIGNALS *********************/
     /*************************************************/
+    /**
+      */
     signal menuButtonClicked();
 
     onClosing:
@@ -503,6 +583,8 @@ Window
         }
     }
 
+    /**
+      */
     function notify(icon, title, body, callback, timeout, buttonText)
     {
         _notify.iconName = icon || "emblem-warning"
@@ -513,6 +595,8 @@ Window
         _notify.show(callback)
     }
 
+    /**
+      */
     function toggleMaximized()
     {
         if (root.visibility === Window.Maximized)
@@ -524,6 +608,8 @@ Window
         }
     }
 
+    /**
+      */
     function window()
     {
         return _page;

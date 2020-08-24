@@ -43,6 +43,10 @@ namespace UTIL
 {
 static const auto app = QCoreApplication::instance();
 
+/**
+ * @brief whoami
+ * @return
+ */
 static const inline QString whoami()
 {
 #ifdef Q_OS_UNIX
@@ -52,6 +56,9 @@ static const inline QString whoami()
 #endif
 }
 
+/**
+ * @brief The Settings class
+ */
 #ifdef STATIC_MAUIKIT
 class Settings : public QObject
 #else
@@ -60,12 +67,20 @@ class MAUIKIT_EXPORT Settings : public QObject
 {
     Q_OBJECT
 public:
+    /**
+     * @brief local
+     * @return
+     */
     static Settings &local()
     {
         static Settings settings;
         return settings;
     }
 
+    /**
+     * @brief global
+     * @return
+     */
     static Settings &global()
     {
         static Settings settings("mauiproject");
@@ -77,11 +92,22 @@ public:
     Settings(Settings &&) = delete;
     Settings &operator=(Settings &&) = delete;
 
+    /**
+     * @brief url
+     * @return
+     */
     QUrl url() const
     {
         return QUrl::fromLocalFile(m_settings->fileName());
     }
 
+    /**
+     * @brief load
+     * @param key
+     * @param group
+     * @param defaultValue
+     * @return
+     */
     QVariant load(const QString &key, const QString &group, const QVariant &defaultValue) const
     {
         QVariant variant;
@@ -90,6 +116,13 @@ public:
         m_settings->endGroup();
         return variant;
     }
+
+    /**
+     * @brief save
+     * @param key
+     * @param value
+     * @param group
+     */
     void save(const QString &key, const QVariant &value, const QString &group)
     {
         m_settings->beginGroup(group);
@@ -107,18 +140,28 @@ private:
     {
     }
 
-    ~Settings()
-    {
-    }
-
     QString m_app;
     QString m_org;
     QSettings *m_settings;
 
 signals:
+    /**
+     * @brief settingChanged
+     * @param url
+     * @param key
+     * @param value
+     * @param group
+     */
     void settingChanged(QUrl url, QString key, QVariant value, QString group);
 };
 
+/**
+ * @brief saveSettings
+ * @param key
+ * @param value
+ * @param group
+ * @param global
+ */
 static inline void saveSettings(const QString &key, const QVariant &value, const QString &group, const bool &global = false)
 {
     if (global)
@@ -127,6 +170,14 @@ static inline void saveSettings(const QString &key, const QVariant &value, const
         Settings::local().save(key, value, group);
 }
 
+/**
+ * @brief loadSettings
+ * @param key
+ * @param group
+ * @param defaultValue
+ * @param global
+ * @return
+ */
 static inline const QVariant loadSettings(const QString &key, const QString &group, const QVariant &defaultValue, const bool &global = false)
 {
     if (global)
@@ -135,12 +186,22 @@ static inline const QVariant loadSettings(const QString &key, const QString &gro
         return Settings::local().load(key, group, defaultValue);
 }
 
+/**
+ * @brief isDark
+ * @param color
+ * @return
+ */
 static inline bool isDark(const QColor &color)
 {
     const double darkness = 1 - (0.299 * color.red() + 0.587 * color.green() + 0.114 * color.blue()) / 255;
     return (darkness > 0.5);
 }
 
+/**
+ * @brief averageColour
+ * @param img
+ * @return
+ */
 static inline QColor averageColour(QImage img)
 {
     int r = 0;

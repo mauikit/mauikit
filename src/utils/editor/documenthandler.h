@@ -76,11 +76,17 @@ class Repository;
 class SyntaxHighlighter;
 }
 
+/**
+ * @brief The AlertAction struct
+ */
 struct AlertAction {
     QString label;
     std::function<void()> action;
 };
 
+/**
+ * @brief The DocumentAlert class
+ */
 class DocumentAlert : public QObject
 {
     Q_OBJECT
@@ -100,21 +106,39 @@ public:
         this->m_id = id;
     }
 
+    /**
+     * @brief setIndex
+     * @param index
+     */
     void setIndex(const int &index)
     {
         this->m_index = index;
     }
 
+    /**
+     * @brief setActions
+     * @param actions
+     */
     void setActions(QVector<AlertAction> actions)
     {
         this->m_actions = actions;
     }
 
+    /**
+     * @brief getId
+     * @return
+     */
     int getId() const
     {
         return this->m_id;
     }
 
+    /**
+     * @brief operator ==
+     * @param other
+     * @param other2
+     * @return
+     */
     friend bool operator==(const DocumentAlert &other, const DocumentAlert &other2)
     {
         return other.getId() == other2.getId();
@@ -130,6 +154,10 @@ private:
     QVector<AlertAction> m_actions;
 
 public slots:
+    /**
+     * @brief actionLabels
+     * @return
+     */
     QStringList actionLabels() const
     {
         return std::accumulate(this->m_actions.constBegin(), this->m_actions.constEnd(), QStringList(), [](QStringList &labels, const AlertAction &action) -> QStringList {
@@ -138,6 +166,11 @@ public slots:
         });
     }
 
+    /**
+     * @brief triggerAction
+     * @param actionIndex
+     * @param alertIndex
+     */
     void triggerAction(const int &actionIndex, const int &alertIndex)
     {
         qDebug() << "TRIGGERING DOCUMENT ACTION AT INDEX << " << actionIndex << alertIndex;
@@ -146,9 +179,16 @@ public slots:
     }
 
 signals:
+    /**
+     * @brief done
+     * @param index
+     */
     void done(int index);
 };
 
+/**
+ * @brief The Alerts class
+ */
 class Alerts : public QAbstractListModel
 {
     Q_OBJECT
@@ -171,17 +211,32 @@ private:
     bool contains(DocumentAlert *const alert);
 };
 
+/**
+ * @brief The FileLoader class
+ */
 class FileLoader : public QObject
 {
     Q_OBJECT
 
 public slots:
+    /**
+     * @brief loadFile
+     * @param url
+     */
     void loadFile(const QUrl &url);
 
 signals:
+    /**
+     * @brief fileReady
+     * @param array
+     * @param url
+     */
     void fileReady(QString array, QUrl url);
 };
 
+/**
+ * @brief The DocumentHandler class
+ */
 #ifdef STATIC_MAUIKIT
 class DocumentHandler : public QObject
 #else
@@ -238,92 +293,346 @@ public:
     explicit DocumentHandler(QObject *parent = nullptr);
     ~DocumentHandler();
 
+    /**
+     * @brief document
+     * @return
+     */
     QQuickTextDocument *document() const;
+
+    /**
+     * @brief setDocument
+     * @param document
+     */
     void setDocument(QQuickTextDocument *document);
 
+    /**
+     * @brief cursorPosition
+     * @return
+     */
     int cursorPosition() const;
+
+    /**
+     * @brief setCursorPosition
+     * @param position
+     */
     void setCursorPosition(int position);
 
+    /**
+     * @brief selectionStart
+     * @return
+     */
     int selectionStart() const;
+
+    /**
+     * @brief setSelectionStart
+     * @param position
+     */
     void setSelectionStart(int position);
 
+    /**
+     * @brief selectionEnd
+     * @return
+     */
     int selectionEnd() const;
+
+    /**
+     * @brief setSelectionEnd
+     * @param position
+     */
     void setSelectionEnd(int position);
 
+    /**
+     * @brief fontFamily
+     * @return
+     */
     QString fontFamily() const;
+
+    /**
+     * @brief setFontFamily
+     * @param family
+     */
     void setFontFamily(const QString &family);
 
+    /**
+     * @brief textColor
+     * @return
+     */
     QColor textColor() const;
+
+    /**
+     * @brief setTextColor
+     * @param color
+     */
     void setTextColor(const QColor &color);
 
+    /**
+     * @brief alignment
+     * @return
+     */
     Qt::Alignment alignment() const;
+
+    /**
+     * @brief setAlignment
+     * @param alignment
+     */
     void setAlignment(Qt::Alignment alignment);
 
+    /**
+     * @brief bold
+     * @return
+     */
     bool bold() const;
+
+    /**
+     * @brief setBold
+     * @param bold
+     */
     void setBold(bool bold);
 
+    /**
+     * @brief uppercase
+     * @return
+     */
     bool uppercase() const;
+
+    /**
+     * @brief setUppercase
+     * @param uppercase
+     */
     void setUppercase(bool uppercase);
 
+    /**
+     * @brief italic
+     * @return
+     */
     bool italic() const;
+
+    /**
+     * @brief setItalic
+     * @param italic
+     */
     void setItalic(bool italic);
 
+    /**
+     * @brief underline
+     * @return
+     */
     bool underline() const;
+
+    /**
+     * @brief setUnderline
+     * @param underline
+     */
     void setUnderline(bool underline);
 
+    /**
+     * @brief getIsRich
+     * @return
+     */
     bool getIsRich() const;
 
+    /**
+     * @brief fontSize
+     * @return
+     */
     int fontSize() const;
+
+    /**
+     * @brief setFontSize
+     * @param size
+     */
     void setFontSize(int size);
 
+    /**
+     * @brief fileName
+     * @return
+     */
     QString fileName() const;
+
+    /**
+     * @brief fileType
+     * @return
+     */
     QString fileType() const;
     
+    /**
+     * @brief fileUrl
+     * @return
+     */
     QUrl fileUrl() const;
+
+    /**
+     * @brief setFileUrl
+     * @param url
+     */
     void setFileUrl(const QUrl &url);
-    
+
+    /**
+     * @brief fileInfo
+     * @return
+     */
     QVariantMap fileInfo() const;
 
+    /**
+     * @brief text
+     * @return
+     */
     inline QString text() const
     {
         return m_text;
     }
+
+    /**
+     * @brief setText
+     * @param text
+     */
     void setText(const QString &text);
 
+    /**
+     * @brief getAutoReload
+     * @return
+     */
     bool getAutoReload() const;
+
+    /**
+     * @brief setAutoReload
+     * @param value
+     */
     void setAutoReload(const bool &value);
     
+    /**
+     * @brief autoSave
+     * @return
+     */
     bool autoSave() const;
+
+    /**
+     * @brief setAutoSave
+     * @param value
+     */
     void setAutoSave(const bool &value);
 
+    /**
+     * @brief getModified
+     * @return
+     */
     bool getModified() const;
 
+    /**
+     * @brief getExternallyModified
+     * @return
+     */
     bool getExternallyModified() const;
+
+    /**
+     * @brief setExternallyModified
+     * @param value
+     */
     void setExternallyModified(const bool &value);
 
+    /**
+     * @brief formatName
+     * @return
+     */
     QString formatName() const;
+
+    /**
+     * @brief setFormatName
+     * @param formatName
+     */
     void setFormatName(const QString &formatName);
 
+    /**
+     * @brief getBackgroundColor
+     * @return
+     */
     QColor getBackgroundColor() const;
+
+    /**
+     * @brief setBackgroundColor
+     * @param color
+     */
     void setBackgroundColor(const QColor &color);
 
+    /**
+     * @brief getAlerts
+     * @return
+     */
     Alerts *getAlerts() const;
 
+    /**
+     * @brief theme
+     * @return
+     */
     QString theme() const;
+
+    /**
+     * @brief setTheme
+     * @param theme
+     */
     void setTheme(const QString &theme);
 
+    /**
+     * @brief enableSyntaxHighlighting
+     * @return
+     */
     bool enableSyntaxHighlighting() const;
+
+    /**
+     * @brief setEnableSyntaxHighlighting
+     * @param value
+     */
     void setEnableSyntaxHighlighting(const bool &value);
 
 public slots:
+    /**
+     * @brief load
+     * @param url
+     */
     void load(const QUrl &url);
+
+    /**
+     * @brief saveAs
+     * @param url
+     */
     void saveAs(const QUrl &url);
+
+    /**
+     * @brief find
+     * @param query
+     */
     void find(const QString &query);
+
+    /**
+     * @brief lineHeight
+     * @param line
+     * @return
+     */
     int lineHeight(const int &line);
+
+    /**
+     * @brief getCurrentLineIndex
+     * @return
+     */
     int getCurrentLineIndex();
 
+    /**
+     * @brief getLanguageNameList
+     * @return
+     */
     static const QStringList getLanguageNameList();
+
+    /**
+     * @brief getLanguageNameFromFileName
+     * @param fileName
+     * @return
+     */
     static const QString getLanguageNameFromFileName(const QUrl &fileName);
+
+    /**
+     * @brief getThemes
+     * @return
+     */
     static const QStringList getThemes();
 
 signals:

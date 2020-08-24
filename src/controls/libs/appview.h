@@ -21,6 +21,10 @@
 #include <QObject>
 #include <QQmlEngine>
 
+/**
+ * @brief The AppView class
+ * representsthe attached properties to handled the application main views following the Maui HIG
+ */
 class AppView : public QObject
 {
     Q_OBJECT
@@ -35,6 +39,10 @@ public:
         return new AppView(object);
     }
 
+    /**
+     * @brief setTitle
+     * @param title
+     */
     inline void setTitle(const QString &title)
     {
         if (title == m_title)
@@ -44,6 +52,10 @@ public:
         emit titleChanged();
     }
 
+    /**
+     * @brief setIconName
+     * @param iconName
+     */
     inline void setIconName(const QString &iconName)
     {
         if (iconName == m_iconName)
@@ -53,10 +65,19 @@ public:
         emit iconNameChanged();
     }
 
+    /**
+     * @brief title
+     * @return
+     */
     inline const QString title() const
     {
         return m_title;
     }
+
+    /**
+     * @brief iconName
+     * @return
+     */
     inline const QString iconName() const
     {
         return m_iconName;
