@@ -50,7 +50,7 @@
 
 #include "documenthandler.h"
 
-#ifdef Q_OS_MACOS
+#if defined Q_OS_MACOS || defined Q_OS_WIN
 #include <KF5/KI18n/KLocalizedString>
 #else
 #include <KI18n/KLocalizedString>
