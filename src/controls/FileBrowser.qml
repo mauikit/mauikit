@@ -645,6 +645,14 @@ Maui.Page
 							Maui.FM.createSymlink(urls[i], control.currentPath)
 					}
 				}
+
+                MenuSeparator {}
+
+                MenuItem
+                {
+                    text: i18n("Cancel")
+                    onTriggered: _dropMenu.close()
+                }
 			}
 		}
 		

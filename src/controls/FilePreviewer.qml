@@ -31,6 +31,20 @@ Maui.Dialog
     page.padding: 0
     spacing: 0
 
+    page.title: _listView.currentItem.title
+
+    headBar.leftContent: ToolButton
+    {
+        icon.name: "go-previous"
+        onClicked: _listView.decrementCurrentIndex()
+    }
+
+    headBar.rightContent: ToolButton
+    {
+        icon.name: "go-next"
+        onClicked: _listView.incrementCurrentIndex()
+    }
+
     footBar.visible: true
     footBar.leftContent: ToolButton
     {
@@ -99,21 +113,17 @@ Maui.Dialog
             keyNavigationWraps : true
             onMovementEnded: currentIndex = indexAt(contentX, contentY)
 
-            delegate: Maui.Page
+            delegate: Item
             {
                 id: _delegate
                 property bool isCurrentItem : ListView.isCurrentItem
                 property url currentUrl: model.path
                 property var iteminfo : model
-
                 property alias infoModel : _infoModel
+                readonly property string title: model.label
+
                 height: _listView.height
                 width: _listView.width
-
-                title: model.label
-                headBar.visible: true
-                autoHideHeader: true
-                floatingHeader: false //TODO needs some upstream fixes to work properly
 
                 Loader
                 {
