@@ -143,7 +143,7 @@ Window
 
     /**
       */
-    property alias mainMenu : mainMenu.contentData
+    property list<Action> mainMenu
 
     /**
       */
@@ -220,16 +220,16 @@ Window
         {
             id: menuBtn
             icon.name: "application-menu"
-            checked: mainMenu.visible
+            checked: _mainMenu.visible
             onClicked:
             {
                 menuButtonClicked()
-                mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, 0 , root.headBar.height )
+                _mainMenu.visible ? _mainMenu.close() : _mainMenu.popup(parent, 0 , root.headBar.height )
             }
 
             Menu
             {
-                id: mainMenu
+                id: _mainMenu
                 modal: true
                 z: 999
                 width: Maui.Style.unit * 250
@@ -245,16 +245,30 @@ Window
                     _accountsComponent : null
                 }
 
-                Item
-               {
-                   visible: _accountsMenuLoader.active
-               }
+                MenuSeparator {visible: _accountsMenuLoader.active}
+
+                Repeater
+                {
+                    model: root.mainMenu
+                    MenuItem
+                    {
+                        action: modelData
+                    }
+                }
+
+                MenuSeparator{}
 
                 MenuItem
                 {
                     text: i18n("About")
                     icon.name: "documentinfo"
                     onTriggered: aboutDialog.open()
+                }
+
+                MenuItem
+                {
+                    text: i18n("Quit")
+                    onTriggered: root.close()
                 }
             }
         }
@@ -400,11 +414,9 @@ Window
     {
         id: _accountsComponent
 
-        Rectangle
+        Item
         {
             height: _accountLayout.implicitHeight + Maui.Style.space.medium
-            color: Qt.darker(Kirigami.Theme.backgroundColor, 1.05)
-            radius: Maui.Style.radiusV
 
             ColumnLayout
             {
@@ -461,7 +473,7 @@ Window
                         if(root.accounts)
                             accounts.open()
 
-                        mainMenu.close()
+                        _mainMenu.close()
                     }
                 }
             }

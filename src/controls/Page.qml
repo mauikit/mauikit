@@ -326,6 +326,8 @@ Pane
                 id: _titleComponent
                 Label
                 {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
                     text: control.title
                     elide : Text.ElideRight
                     font.bold : true
@@ -340,9 +342,8 @@ Pane
             middleContent: Loader
             {
                 visible: item
-                Layout.fillWidth: sourceComponent === _titleComponent
-                Layout.fillHeight: sourceComponent === _titleComponent
-                sourceComponent: control.title && control.showTitle ? _titleComponent : null
+                active: control.title && control.showTitle
+                sourceComponent: _titleComponent
             }
             
             background: Rectangle
