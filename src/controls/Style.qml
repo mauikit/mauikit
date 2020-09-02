@@ -32,36 +32,36 @@ QtObject
     property int unit : Kirigami.Units.devicePixelRatio
     property int radiusV : Maui.Handy.isWindows ? 2 : 4
 	
-	readonly property int rowHeight: iconSizes.big * 0.95
-	readonly property int rowHeightAlt: rowHeight * 0.8
+    readonly property int rowHeight: Math.round(iconSizes.big * 0.95)
+    readonly property int rowHeightAlt: Math.round(rowHeight * 0.8)
 	readonly property int contentMargins: space.medium
 	
-    readonly property int toolBarHeight: (iconSizes.medium * 2)
-	readonly property int toolBarHeightAlt: toolBarHeight * 0.9
+    readonly property int toolBarHeight: Math.round(iconSizes.medium * 2)
+    readonly property int toolBarHeightAlt: Math.round(toolBarHeight * 0.9)
 	
 	readonly property int defaultFontSize: Kirigami.Theme.defaultFont.pointSize
 	readonly property var fontSizes: ({
-		tiny: defaultFontSize * 0.7,
+        tiny: Math.round(defaultFontSize * 0.7),
 		
-		small: (isMobile ? defaultFontSize * 0.7 :
+        small: Math.round(isMobile ? defaultFontSize * 0.7 :
 		defaultFontSize * 0.8),
 		
-		medium: (isMobile ? defaultFontSize * 0.8 :
+        medium: Math.round(isMobile ? defaultFontSize * 0.8 :
 		defaultFontSize * 0.9),
 		
-		default: (isMobile ? defaultFontSize * 0.9 :
+        default: Math.round(isMobile ? defaultFontSize * 0.9 :
 			defaultFontSize),
 			
-			big: (isMobile ? defaultFontSize :
+            big: Math.round(isMobile ? defaultFontSize :
 			defaultFontSize * 1.1),
 			
-			large: (isMobile ? defaultFontSize * 1.1 :
+            large: Math.round(isMobile ? defaultFontSize * 1.1 :
 			defaultFontSize * 1.2),
 			
-			huge: (isMobile ? defaultFontSize * 1.2 :
+            huge: Math.round(isMobile ? defaultFontSize * 1.2 :
 			defaultFontSize * 1.3),
 			
-			enormous: (isMobile ? defaultFontSize * 1.3 :
+            enormous: Math.round(isMobile ? defaultFontSize * 1.3 :
 			defaultFontSize * 1.4)
 	})
 	

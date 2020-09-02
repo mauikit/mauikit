@@ -133,6 +133,7 @@ Maui.Dialog
         Layout.fillWidth: true
         Layout.preferredHeight: _poweredBy.implicitHeight + Maui.Style.space.huge
         alt: true
+        lastOne: true
         leftPadding: Maui.Style.space.medium
         rightPadding: Maui.Style.space.medium
 

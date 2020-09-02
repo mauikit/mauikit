@@ -8,6 +8,8 @@ Maui.ItemDelegate
 {
     id: control
     property bool alt : index ? index % 2 === 0 : false
+    property bool lastOne : false
+
     leftPadding: Maui.Style.space.medium
     rightPadding: Maui.Style.space.medium
     
@@ -21,6 +23,7 @@ Maui.ItemDelegate
         Kirigami.Separator
         {
             id: _sep
+            visible: !control.lastOne
             opacity: 0.5
             color: Qt.darker(parent.color, 2.5)                    
             anchors.left: parent.left
@@ -30,7 +33,8 @@ Maui.ItemDelegate
         
         Kirigami.Separator
         {
-            opacity: 0.3            
+            opacity: 0.3
+            visible: !control.lastOne
             color: Qt.lighter(parent.color, 2.5)
             anchors.left: parent.left
             anchors.right: parent.right

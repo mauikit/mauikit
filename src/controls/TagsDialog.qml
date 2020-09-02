@@ -75,14 +75,20 @@ Maui.Dialog
 
     stack: [
 
-        Maui.TextField
+        Maui.ToolBar
         {
+            position: ToolBar.Header
             Layout.fillWidth: true
-            placeholderText: i18n("Filter")
-            background: Item{}
+            Maui.TextField
+            {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                placeholderText: i18n("Filter")
+                background: Item{}
 
-            onAccepted: _tagsModel.filter = text
-            onCleared: _tagsModel.filter = ""
+                onAccepted: _tagsModel.filter = text
+                onCleared: _tagsModel.filter = ""
+            }
         },
 
         Maui.ListBrowser

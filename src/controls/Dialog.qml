@@ -18,6 +18,7 @@
  */
 
 import QtQuick 2.14
+import QtQml 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.2 as Maui
@@ -33,7 +34,7 @@ Maui.Popup
     property alias stack : _stack.data
 
     property string message : ""
-    property string title: ""
+    property alias title: _page.title
     property alias template : _template
 
     property list<Action> actions
@@ -75,11 +76,15 @@ Maui.Popup
             Layout.fillWidth: true
             Layout.fillHeight: true
             padding: 0
-            
-            implicitHeight: _pageContent.implicitHeight + _stack.implicitHeight + topPadding + bottomPadding + topMargin + bottomMargin + footer.height + control.spacing + header.height
+            flickable: _scrollable.flickable
+            implicitHeight: _pageContent.implicitHeight + _stack.implicitHeight + footer.height + control.spacing + header.height
             headBar.visible: control.persistent
-            headerBackground.visible: headBar.visibleCount > 1
-            floatingHeader: headBar.visibleCount === 1
+//            headerBackground.visible: headBar.visibleCount > 1
+
+//            Binding on floatingHeader {
+//            value: headBar.visibleCount === 1
+//            restoreMode: Binding.RestoreBinding
+//            }
 
             headBar.farLeftContent: MouseArea
             {
@@ -114,7 +119,6 @@ Maui.Popup
                 width: parent.width
                 height: Math.min(parent.height, contentHeight)
                 anchors.centerIn: parent
-
                 contentHeight: _pageContent.implicitHeight
 
                 Kirigami.Theme.backgroundColor: "transparent"
@@ -134,16 +138,16 @@ Maui.Popup
                     Maui.ListItemTemplate
                     {
                         id: _template
-                        visible: control.title.length || control.message.length
+                        visible: control.message.length
                         Layout.fillWidth: true
                         implicitHeight: label1.implicitHeight + label2.implicitHeight + Maui.Style.space.big
 
-                        label1.text: title
-                        label1.font.weight: Font.Thin
-                        label1.font.bold: true
-                        label1.font.pointSize:Maui.Style.fontSizes.huge
-                        label1.elide: Qt.ElideRight
-                        label1.wrapMode: Text.Wrap
+//                        label1.text: title
+//                        label1.font.weight: Font.Thin
+//                        label1.font.bold: true
+//                        label1.font.pointSize:Maui.Style.fontSizes.huge
+//                        label1.elide: Qt.ElideRight
+//                        label1.wrapMode: Text.Wrap
 
                         label2.text: message
                         label2.textFormat : TextEdit.AutoText
@@ -171,7 +175,17 @@ Maui.Popup
         {
             Layout.fillWidth: true
             visible: _defaultButtonsLayout.visible
+            color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+            opacity: 0.8
         }
+
+        Kirigami.Separator
+        {
+            Layout.fillWidth: true
+            visible: _defaultButtonsLayout.visible
+            color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
+            opacity: 0.8
+        }       
         
         RowLayout
         {
