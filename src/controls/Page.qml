@@ -518,8 +518,28 @@ Pane
             }
         } ]
         
-        onAutoHideHeaderChanged: pullDownHeader()
-        onAutoHideFooterChanged: pullDownFooter()
+        onAutoHideHeaderChanged:
+        {
+            if(autoHideHeader)
+            {
+                _autoHideHeaderTimer.start()                
+            } else
+            {                    
+                pullDownHeader()
+                _autoHideHeaderTimer.stop()
+            }
+        }
+        onAutoHideFooterChanged:
+        {
+            if(autoHideFooter)
+            {
+                _autoHideFooterTimer.start()                
+            } else
+            {                    
+                pullDownFooter()
+                _autoHideFooterTimer.stop()
+            }
+        }
         onAltHeaderChanged: pullDownHeader()        
         
         Column
@@ -567,6 +587,17 @@ Pane
 //                 data: footer
             }
         }   
+        
+        Timer
+        {
+            id: _revealHeaderTimer
+            interval: autoHideHeaderDelay
+            
+            onTriggered:
+            {
+                 pullDownHeader()
+            }
+        }
         
         Timer
         {
@@ -623,11 +654,12 @@ Pane
                     if(!hovered)
                     {
                         _autoHideHeaderTimer.start()
+                        _revealHeaderTimer.stop()
                         
                     }else
                     {
-                        pullDownHeader()
                         _autoHideHeaderTimer.stop()
+                        _revealHeaderTimer.start()
                     }
                 } 
             }
@@ -750,7 +782,7 @@ Pane
         function pullBackHeader()
         {
             _headerAnimation.enabled = true
-            header.height= 0
+            header.height = 0
         }
         
         function pullDownHeader()
