@@ -58,7 +58,7 @@ Item
     
     property alias background : bg
     
-    readonly property QtObject m_private : QtObject
+    property QtObject m_private : QtObject
     {
         id: _private
         property var _uris : []

@@ -104,6 +104,14 @@ Kirigami.DelegateRecycler
 //            drag.minimumY: control.height
 //            drag.minimumX : control.width
 
+            onCanceled:
+            {
+//                if(control.draggable)
+//                {
+//                    drag.target = null
+//                }
+            }
+
             onClicked:
             {
                 if(mouse.button === Qt.RightButton)
