@@ -9,9 +9,9 @@ android { #from the kde android docker
         system(git clone $$KSYNTAXHIGHLIGHTING_REPO $$PWD/KSyntaxHighlighting)
     }
 
-    ANDROID_EXTRA_LIBS += $$PWD/KSyntaxHighlighting/libKF5SyntaxHighlighting.so
+    ANDROID_EXTRA_LIBS += $$PWD/KSyntaxHighlighting/libKF5SyntaxHighlighting_armeabi-v7a.so
 
-    LIBS += -L$$PWD/KSyntaxHighlighting/ -lKF5SyntaxHighlighting
+    LIBS += -L$$PWD/KSyntaxHighlighting/ -lKF5SyntaxHighlighting_armeabi-v7a
 
     INCLUDEPATH += $$PWD/KSyntaxHighlighting/KSyntaxHighlighting
     DEPENDPATH += $$PWD/KSyntaxHighlighting/KSyntaxHighlighting
