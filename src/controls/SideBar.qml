@@ -78,6 +78,7 @@ Maui.AbstractSideBar
             iconVisible: true
             leftPadding:  Maui.Style.space.tiny
             rightPadding:  Maui.Style.space.tiny
+            template.leftMargin: privateProperties.isCollapsed && stick ? 0 : Maui.Style.space.medium
 
             onClicked:
             {
@@ -134,7 +135,7 @@ Maui.AbstractSideBar
 
             NumberAnimation
             {
-                duration: Kirigami.Units.longDuration
+                duration: Kirigami.Units.shortDuration
                 easing.type: Easing.InOutQuad
             }
         }

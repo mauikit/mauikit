@@ -351,23 +351,13 @@ Pane
                 id: _headerBackground
                 color: _headBar.Kirigami.Theme.backgroundColor               
                 
-                Kirigami.Separator
+                Maui.Separator
                 {
                     id: _border  
-                    opacity: 0.6
-                    color: Qt.darker(parent.color, 2)                    
+                    position: Qt.Horizontal
+                    color: parent.color
                     anchors.left: parent.left
                     anchors.right: parent.right
-                }
-                
-                Kirigami.Separator
-                {
-                    id: _border2  
-                    opacity: 0.4             
-                    color: Qt.lighter(parent.color, 2.5)
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.bottomMargin: 1
                 }
                 
                 FastBlur
@@ -386,8 +376,7 @@ Pane
                     }
                     radius: 64				
                 }
-            }
-            
+            }            
         }
         
 //           Label
@@ -464,14 +453,7 @@ Pane
                 anchors.top: undefined
                 anchors.bottom: parent.bottom
             }
-            
-            AnchorChanges 
-            {
-                target: _border2
-                anchors.top: undefined
-                anchors.bottom: parent.bottom
-            }
-            
+
             PropertyChanges 
             {
                 target: _headBar
@@ -496,15 +478,7 @@ Pane
                 anchors.top: parent.top
                 anchors.bottom: undefined
             }
-            
-            AnchorChanges 
-            {
-                target: _border2
-                anchors.top: parent.top
-                anchors.bottom: undefined
-            }
-            
-                       
+
             PropertyChanges 
             {
                 target: header

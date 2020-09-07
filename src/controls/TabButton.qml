@@ -31,9 +31,9 @@ TabButton
         {
             color: "transparent"
             
-            Kirigami.Separator
+            Maui.Separator
             {
-                width: Maui.Style.unit
+                position: Qt.Vertical
                 anchors
                 {
                     bottom: parent.bottom

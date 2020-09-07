@@ -20,26 +20,15 @@ Maui.ItemDelegate
         Kirigami.Theme.inherit: false
         Kirigami.Theme.colorSet: alt ? Kirigami.Theme.View : Kirigami.Theme.Window
 
-        Kirigami.Separator
+        Maui.Separator
         {
             id: _sep
             visible: !control.lastOne
-            opacity: 0.5
-            color: Qt.darker(parent.color, 2.5)                    
+            position: Qt.Horizontal
+            color: parent.color
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
         }
-        
-        Kirigami.Separator
-        {
-            opacity: 0.3
-            visible: !control.lastOne
-            color: Qt.lighter(parent.color, 2.5)
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 1        
-        }          
     }    
 }

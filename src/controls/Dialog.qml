@@ -172,20 +172,10 @@ Maui.Popup
             }
         }
         
-        Kirigami.Separator
+        Maui.Separator
         {
             Layout.fillWidth: true
             visible: _defaultButtonsLayout.visible
-            color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
-            opacity: 0.8
-        }
-
-        Kirigami.Separator
-        {
-            Layout.fillWidth: true
-            visible: _defaultButtonsLayout.visible
-            color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
-            opacity: 0.8
         }
         
         RowLayout

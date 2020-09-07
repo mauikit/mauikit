@@ -17,12 +17,11 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.12
-import QtQuick.Controls 2.12
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
-import "private"
+import org.kde.mauikit 1.2 as Maui
 
 Drawer
 {
@@ -31,7 +30,7 @@ Drawer
     implicitHeight: window().internalHeight
     height: implicitHeight
     y: (window().header && !window().altHeader ? window().header.height : 0)
-//    closePolicy: modal || collapsed ?  Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
+    //    closePolicy: modal || collapsed ?  Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
     interactive: modal || collapsed || !visible
     dragMargin: Maui.Style.space.big
     modal: false
@@ -45,7 +44,7 @@ Drawer
     default property alias content : _content.data
 
     signal contentDropped(var drop)
-// 	background: null
+    // 	background: null
 
     MouseArea
     {
@@ -72,16 +71,13 @@ Drawer
     //			control.position = 1
     //	}
 
-    contentItem: Item
+    contentItem: null
+
+    Item
     {
         id: _content
-//        Kirigami.Separator
-//        {
-//            z: parent.z + 999
-//            anchors.right: parent.right
-//            anchors.top: parent.top
-//            anchors.bottom: parent.bottom
-//        }
+        anchors.fill: parent
+        anchors.rightMargin: 1
     }
 
     Component.onCompleted:
@@ -98,7 +94,7 @@ Drawer
         enabled: control.collapsible && control.position === 1
         NumberAnimation
         {
-            duration: Kirigami.Units.longDuration
+            duration: Kirigami.Units.shortDuration
             easing.type: Easing.InOutQuad
         }
     }
@@ -112,6 +108,18 @@ Drawer
         onDropped:
         {
             control.contentDropped(drop)
+        }
+    }
+
+    background: Rectangle
+    {
+        color: Kirigami.Theme.backgroundColor
+        Maui.Separator
+        {
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            position: Qt.Vertical
         }
     }
 }
