@@ -7,8 +7,8 @@ import org.kde.mauikit 1.2 as Maui
 Maui.Dialog
 {
     id: control
-    maxHeight: Math.min(implicitHeight + Maui.Style.space.big, 500) + headBar.height
-    maxWidth: 400
+    maxHeight: implicitHeight
+    maxWidth: 500
     defaultButtons: false
         
         page.title: i18n("Settings")

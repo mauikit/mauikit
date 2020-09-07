@@ -79,6 +79,8 @@ Maui.Dialog
         {
             position: ToolBar.Header
             Layout.fillWidth: true
+            preferredHeight: Maui.Style.toolBarHeightAlt
+
             Maui.TextField
             {
                 Layout.fillWidth: true

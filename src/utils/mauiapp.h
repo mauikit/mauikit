@@ -145,7 +145,7 @@ class MAUIKIT_EXPORT MauiApp : public QObject
     Q_PROPERTY(QString org READ getOrg CONSTANT FINAL)
     Q_PROPERTY(QString domain READ getDomain CONSTANT FINAL)
 
-    Q_PROPERTY(QVariantList credits READ getCredits CONSTANT FINAL)
+    Q_PROPERTY(QVariantList credits READ getCredits WRITE setCredits )
 
     Q_PROPERTY(QString iconName READ getIconName WRITE setIconName NOTIFY iconNameChanged)
     Q_PROPERTY(QString description READ getDescription WRITE setDescription NOTIFY descriptionChanged)
