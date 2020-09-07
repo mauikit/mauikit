@@ -211,8 +211,9 @@ Maui.Popup
                 onClicked: rejected()
             }
             
-            Kirigami.Separator
+            Maui.Separator
             {
+                position: Qt.Vertical
                 Layout.fillHeight: true
                 visible: control.defaultButtons && _defaultButtonsLayout.visibleChildren.length > 1
             }
@@ -267,10 +268,9 @@ Maui.Popup
                         verticalAlignment: Qt.AlignVCenter
                     }
 
-                    //                    onClicked: action.triggered()
-
-                    Kirigami.Separator
+                    Maui.Separator
                     {
+                        position: Qt.Vertical
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
                         anchors.left: parent.left

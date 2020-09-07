@@ -125,25 +125,6 @@ bool Tagging::tagUrl(const QString &url, const QString &tag, const QString &colo
     return this->insert(TAG::TABLEMAP[TAG::TABLE::TAGS_URLS], tag_url_map);
 }
 
-bool Tagging::tagAbstract(const QString &tag, const QString &key, const QString &lot, const QString &color, const QString &comment)
-{
-    this->abstract(key, lot, comment);
-    this->tag(tag, color, comment);
-
-    QVariantMap tag_abstract_map {
-        {FMH::MODEL_NAME[FMH::MODEL_KEY::APP], this->application},
-        {FMH::MODEL_NAME[FMH::MODEL_KEY::URI], this->uri},
-        {FMH::MODEL_NAME[FMH::MODEL_KEY::TAG], tag},
-        {FMH::MODEL_NAME[FMH::MODEL_KEY::KEY], key},
-        {FMH::MODEL_NAME[FMH::MODEL_KEY::LOT], lot},
-        {FMH::MODEL_NAME[FMH::MODEL_KEY::ADDDATE], QDateTime::currentDateTime()},
-        {FMH::MODEL_NAME[FMH::MODEL_KEY::COMMENT], comment},
-    };
-
-    emit this->abstractTagged(key, lot, tag);
-    return this->insert(TAG::TABLEMAP[TAG::TABLE::TAGS_ABSTRACT], tag_abstract_map);
-}
-
 bool Tagging::updateUrlTags(const QString &url, const QStringList &tags)
 {
     this->removeUrlTags(url);
@@ -158,16 +139,6 @@ bool Tagging::updateUrl(const QString &url, const QString &newUrl)
     return this->update(TAG::TABLEMAP[TAG::TABLE::TAGS_URLS], {{FMH::MODEL_KEY::URL, newUrl}}, {{FMH::MODEL_NAME[FMH::MODEL_KEY::URL], url}});
 }
 
-bool Tagging::updateAbstractTags(const QString &key, const QString &lot, const QStringList &tags)
-{
-    this->removeAbstractTags(key, lot);
-
-    for (const auto &tag : tags)
-        this->tagAbstract(tag, key, lot);
-
-    return true;
-}
-
 QVariantList Tagging::getUrlsTags(const bool &strict)
 {
     const auto query = QString("select distinct t.* from TAGS t "
@@ -175,16 +146,6 @@ QVariantList Tagging::getUrlsTags(const bool &strict)
                            .arg(this->application);
 
                            return !strict ? this->get("select distinct t.* from tags t inner join TAGS_URLS turl on turl.tag = t.tag", &setTagIconName) : this->get(query, &setTagIconName);
-}
-
-QVariantList Tagging::getAbstractsTags(const bool &strict)
-{
-    return !strict ? this->get("select t.* from tags t inner join TAGS_ABSTRACT tab on tab.tag = t.tag")
-                   : this->get(QString("select t.* from TAGS t inner join TAGS_USERS tu on t.tag = tu.tag "
-                                       "inner join APPS_USERS au on au.mac = tu.mac "
-                                       "inner join TAGS_ABSTRACT tab on tab.tag = t.tag "
-                                       "where au.app = '%1' and au.uri = '%2'")
-                                   .arg(this->application, this->uri));
 }
 
 bool Tagging::setTagIconName(QVariantMap &item)
@@ -221,32 +182,6 @@ QVariantList Tagging::getUrlTags(const QString &url, const bool &strict)
                    : this->get(QString("select distinct t.* from TAGS t inner join TAGS_USERS tu on t.tag = tu.tag inner join APPS_USERS au on au.mac = tu.mac and au.app = t.app inner join TAGS_URLS turl on turl.tag = t.tag "
                                        "where au.app = '%1' and au.uri = '%2' and turl.url = '%3'")
                                    .arg(this->application, this->uri, url));
-}
-
-QVariantList Tagging::getAbstractTags(const QString &key, const QString &lot, const bool &strict)
-{
-    return !strict ? this->get(QString("select t.* from TAGS t inner join TAGS_ABSTRACT ta on ta.tag = t.tag where ta.key = '%1' and ta.lot = '%2'").arg(key, lot))
-                   : this->get(QString("select distinct t.*  from TAGS t inner join TAGS_ABSTRACT ta on ta.tag = t.tag "
-                                       "inner join TAGS_USERS tu on t.tag = tu.tag "
-                                       "inner join APPS_USERS au on au.mac = tu.mac "
-                                       "where au.app = '%1' and au.uri = '%2' and ta.key = '%3' and ta.lot = '%4'")
-                                   .arg(this->application, this->uri, key, lot));
-}
-
-bool Tagging::removeAbstractTag(const QString &key, const QString &lot, const QString &tag)
-{
-    FMH::MODEL data {{FMH::MODEL_KEY::KEY, key}, {FMH::MODEL_KEY::LOT, lot}, {FMH::MODEL_KEY::TAG, tag}};
-    return this->remove(TAG::TABLEMAP[TAG::TABLE::TAGS_ABSTRACT], data);
-}
-
-bool Tagging::removeAbstractTags(const QString &key, const QString &lot)
-{
-    for (const auto &map : this->getAbstractTags(key, lot)) {
-        auto tag = map.toMap().value(FMH::MODEL_NAME[FMH::MODEL_KEY::TAG]).toString();
-        this->removeAbstractTag(key, lot, tag);
-    }
-
-    return true;
 }
 
 bool Tagging::removeUrlTags(const QString &url)
@@ -331,18 +266,4 @@ bool Tagging::user()
     };
 
     return this->insert(TAG::TABLEMAP[TAG::TABLE::USERS], user_map);
-}
-
-bool Tagging::abstract(const QString &key, const QString &lot, const QString &comment)
-{
-    QVariantMap abstract_map {
-        {FMH::MODEL_NAME[FMH::MODEL_KEY::APP], this->application},
-        {FMH::MODEL_NAME[FMH::MODEL_KEY::URI], this->uri},
-        {FMH::MODEL_NAME[FMH::MODEL_KEY::KEY], key},
-        {FMH::MODEL_NAME[FMH::MODEL_KEY::LOT], lot},
-        {FMH::MODEL_NAME[FMH::MODEL_KEY::ADDDATE], QDateTime::currentDateTime()},
-        {FMH::MODEL_NAME[FMH::MODEL_KEY::COMMENT], comment},
-    };
-
-    return this->insert(TAG::TABLEMAP[TAG::TABLE::ABSTRACT], abstract_map);
 }

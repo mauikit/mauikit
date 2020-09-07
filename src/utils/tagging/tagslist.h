@@ -17,7 +17,6 @@ class TagsList : public MauiList
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool abstract READ getAbstract WRITE setAbstract NOTIFY abstractChanged)
     Q_PROPERTY(bool strict READ getStrict WRITE setStrict NOTIFY strictChanged)
     Q_PROPERTY(QStringList urls READ getUrls WRITE setUrls NOTIFY urlsChanged)
     Q_PROPERTY(QStringList tags READ getTags NOTIFY tagsChanged)
@@ -58,9 +57,6 @@ public:
     TagsList::KEYS getSortBy() const;
     void setSortBy(const TagsList::KEYS &key);
 
-    bool getAbstract() const;
-    void setAbstract(const bool &value);
-
     bool getStrict() const;
     void setStrict(const bool &value);
 
@@ -81,7 +77,6 @@ private:
     void sortList();
     Tagging *tag;
 
-    bool abstract = false;
     bool strict = true;
     QStringList urls = QStringList();
     QString lot;
@@ -89,7 +84,6 @@ private:
     TagsList::KEYS sortBy = TagsList::KEYS::ADD_DATE;
 
 signals:
-    void abstractChanged();
     void strictChanged();
     void urlsChanged();
     void lotChanged();
@@ -143,24 +137,12 @@ public slots:
     void insertToUrls(const QString &tag);
 
     /**
-     * @brief insertToAbstract /\deprecated
-     * @param tag
-     */
-    void insertToAbstract(const QString &tag);
-
-    /**
      * @brief updateToUrls
      * Updates a list of tags associated to the current file URLs. All the previous tags associated to each file URL are removed and replaced by the new ones
      * @param tags
      * Tags to be updated
      */
     void updateToUrls(const QStringList &tags);
-
-    /**
-     * @brief updateToAbstract \deprecated
-     * @param tags
-     */
-    void updateToAbstract(const QStringList &tags);
 
     /**
      * @brief remove
@@ -182,14 +164,6 @@ public slots:
     void removeFrom(const int &index, const QString &url);
 
     /**
-     * @brief removeFrom \deprecated
-     * @param index
-     * @param key
-     * @param lot
-     */
-    void removeFrom(const int &index, const QString &key, const QString &lot);
-
-    /**
      * @brief removeFromUrls
      * Removes a tag at a given index in the model from the all the file URls currently set
      * @param index
@@ -203,12 +177,6 @@ public slots:
      * @param tag
      */
     void removeFromUrls(const QString &tag);
-
-    /**
-     * @brief removeFromAbstract \deprecated
-     * @param index
-     */
-    void removeFromAbstract(const int &index);
 
     /**
      * @brief erase

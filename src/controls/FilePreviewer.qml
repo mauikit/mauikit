@@ -103,6 +103,7 @@ Maui.Dialog
             orientation: ListView.Horizontal
             clip: true
             focus: true
+            spacing: 0
             interactive: true
             highlightFollowsCurrentItem: true
             highlightMoveDuration: 0

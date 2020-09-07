@@ -13,24 +13,16 @@ TagsList::TagsList(QObject *parent) : MauiList(parent)
 void TagsList::setList()
 {
     emit this->preListChanged();
-
-    if (this->abstract) {
-        if (this->lot.isEmpty() || this->key.isEmpty())
-            this->list = FMH::toModelList(this->tag->getAbstractsTags(this->strict));
-        else
-            this->list = FMH::toModelList(this->tag->getAbstractTags(this->key, this->lot, this->strict));
-
-    } else {
-        if (this->urls.isEmpty())
-            this->list = FMH::toModelList(this->tag->getAllTags(this->strict));
-        else {
-            this->list.clear();
-            this->list = std::accumulate(this->urls.constBegin(), this->urls.constEnd(), FMH::MODEL_LIST(), [&](FMH::MODEL_LIST &list, const QString &url) {
-                list << FMH::toModelList(this->tag->getUrlTags(url, this->strict));
-                return list;
-            });
-        }
-    }
+    
+    if (this->urls.isEmpty())
+        this->list = FMH::toModelList(this->tag->getAllTags(this->strict));
+    else {
+        this->list.clear();
+        this->list = std::accumulate(this->urls.constBegin(), this->urls.constEnd(), FMH::MODEL_LIST(), [&](FMH::MODEL_LIST &list, const QString &url) {
+            list << FMH::toModelList(this->tag->getUrlTags(url, this->strict));
+            return list;
+        });
+    }    
 
     this->sortList();
     emit this->tagsChanged();
@@ -128,15 +120,6 @@ void TagsList::insertToUrls(const QString &tag)
     this->refresh();
 }
 
-void TagsList::insertToAbstract(const QString &tag)
-{
-    if (this->key.isEmpty() || this->lot.isEmpty())
-        return;
-
-    if (this->tag->tagAbstract(tag, this->key, this->lot))
-        this->refresh();
-}
-
 void TagsList::updateToUrls(const QStringList &tags)
 {
     if (this->urls.isEmpty())
@@ -146,29 +129,6 @@ void TagsList::updateToUrls(const QStringList &tags)
         this->tag->updateUrlTags(url, tags);
 
     this->refresh();
-}
-
-void TagsList::updateToAbstract(const QStringList &tags)
-{
-    if (this->key.isEmpty() || this->lot.isEmpty())
-        return;
-
-    this->tag->updateAbstractTags(this->key, this->lot, tags);
-
-    this->refresh();
-}
-
-void TagsList::removeFromAbstract(const int &index)
-{
-    if (index >= this->list.size() || index < 0)
-        return;
-
-    if (this->key.isEmpty() || this->lot.isEmpty())
-        return;
-
-    const auto tag = this->list[index][FMH::MODEL_KEY::TAG];
-    if (this->tag->removeAbstractTag(this->key, this->lot, tag))
-        this->remove(index);
 }
 
 void TagsList::removeFromUrls(const int &index)
@@ -205,15 +165,6 @@ bool TagsList::remove(const int &index)
     return true;
 }
 
-void TagsList::removeFrom(const int &index, const QString &key, const QString &lot)
-{
-    if (index >= this->list.size() || index < 0)
-        return;
-
-    if (this->tag->removeAbstractTag(key, lot, this->list[index][FMH::MODEL_KEY::TAG]))
-        this->remove(index);
-}
-
 void TagsList::removeFrom(const int &index, const QString &url)
 {
     if (index >= this->list.size() || index < 0)
@@ -248,21 +199,6 @@ void TagsList::setSortBy(const TagsList::KEYS &key)
     this->sortList();
     emit this->sortByChanged();
     emit this->postListChanged();
-}
-
-bool TagsList::getAbstract() const
-{
-    return this->abstract;
-}
-
-void TagsList::setAbstract(const bool &value)
-{
-    if (this->abstract == value)
-        return;
-
-    this->abstract = value;
-    this->setList();
-    emit this->abstractChanged();
 }
 
 bool TagsList::getStrict() const

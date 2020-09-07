@@ -131,17 +131,6 @@ public:
      */
     Q_INVOKABLE bool tagUrl(const QString &url, const QString &tag, const QString &color = QString(), const QString &comment = QString());
 
-    /**
-     * @brief tagAbstract \deprecated     *
-     * @param tag
-     * @param key
-     * @param lot
-     * @param color
-     * @param comment
-     * @return
-     */
-    Q_INVOKABLE bool tagAbstract(const QString &tag, const QString &key, const QString &lot, const QString &color = QString(), const QString &comment = QString());
-
     /* UPDATES */
     /**
      * @brief updateUrlTags
@@ -165,15 +154,6 @@ public:
      */
     Q_INVOKABLE bool updateUrl(const QString &url, const QString &newUrl);
 
-    /**
-     * @brief updateAbstractTags \deprecated
-     * @param key
-     * @param lot
-     * @param tags
-     * @return
-     */
-    Q_INVOKABLE bool updateAbstractTags(const QString &key, const QString &lot, const QStringList &tags);
-
     /* QUERIES */
 
     /**
@@ -183,13 +163,6 @@ public:
      * @return
      */
     Q_INVOKABLE QVariantList getUrlsTags(const bool &strict = true);
-
-    /**
-     * @brief getAbstractsTags \deprecated
-     * @param strict
-     * @return
-     */
-    Q_INVOKABLE QVariantList getAbstractsTags(const bool &strict = true);
 
     /**
      * @brief getAllTags
@@ -229,33 +202,7 @@ public:
      */
     Q_INVOKABLE QVariantList getUrlTags(const QString &url, const bool &strict = true);
 
-    /**
-     * @brief getAbstractTags \deprecated
-     * @param key
-     * @param lot
-     * @param strict
-     * @return
-     */
-    Q_INVOKABLE QVariantList getAbstractTags(const QString &key, const QString &lot, const bool &strict = true);
-
     /* DELETES */
-    /**
-     * @brief removeAbstractTag \deprecated
-     * @param key
-     * @param lot
-     * @param tag
-     * @return
-     */
-    Q_INVOKABLE bool removeAbstractTag(const QString &key, const QString &lot, const QString &tag);
-
-    /**
-     * @brief removeAbstractTags \deprecated
-     * @param key
-     * @param lot
-     * @return
-     */
-    Q_INVOKABLE bool removeAbstractTags(const QString &key, const QString &lot);
-
     /**
      * @brief removeUrlTags
      * Given a file URL remove all the tags associated to it
@@ -326,12 +273,10 @@ private:
     bool user();
 
 protected:
-    bool abstract(const QString &key, const QString &lot, const QString &comment);
     static bool setTagIconName(QVariantMap &item);
     
 signals:
     void urlTagged(const QString &url, const QString &tag);
-    void abstractTagged(const QString &key, const QString &lot, const QString &tag);
     void tagged(const QString &tag);
 };
 

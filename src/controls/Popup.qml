@@ -139,25 +139,31 @@ Popup
         }
     }
 
-    Rectangle
-    {
-        anchors.fill: parent
-        radius: Maui.Style.radiusV
-        color: "transparent"
-        border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
-        opacity: 0.8
+//     Rectangle
+//     {
+//         anchors.fill: parent
+//         radius: Maui.Style.radiusV
+//         color: "transparent"
+//         border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
+//         opacity: 0.8
+// 
+
+// 
+//     }
 
         Rectangle
         {
             anchors.fill: parent
-            anchors.margins: 1
             color: "transparent"
-            radius: parent.radius - 0.5
+            radius: Maui.Style.radiusV - 0.5
             border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
-            opacity: 0.8
+            opacity: 0.6
         }
 
+    background: Rectangle
+    {
+        color: Kirigami.Theme.backgroundColor
+        border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
+        radius: Maui.Style.radiusV
     }
-
-    background: null
 }
