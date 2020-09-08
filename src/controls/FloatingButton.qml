@@ -47,6 +47,27 @@ MouseArea
 		anchors.fill: parent
 		radius: Maui.Style.radiusV
 		color: control.Kirigami.Theme.backgroundColor
+        
+         Rectangle
+        {
+            anchors.fill: parent
+            color: "transparent"
+            radius: Maui.Style.radiusV
+            border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
+            opacity: 0.4
+            
+            Rectangle
+        {
+            anchors.fill: parent
+            color: "transparent"
+            radius: parent.radius - 0.5
+            border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+            opacity: 0.8
+            anchors.margins: 1
+        }
+        }
+        
+
 		ToolButton
 		{
 			id : _button

@@ -163,6 +163,7 @@ Popup
     background: Rectangle
     {
         color: Kirigami.Theme.backgroundColor
+        opacity: 0.7
         border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
         radius: Maui.Style.radiusV
     }
