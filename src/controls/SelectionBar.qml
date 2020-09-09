@@ -186,7 +186,8 @@ Item
             anchors.fill: parent
             color: Kirigami.Theme.backgroundColor
             radius: control.radius
-            border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+            border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.2)
+
                        
             MouseArea
             {
@@ -375,6 +376,16 @@ Item
             color: "transparent"
             borderColor: "white"
             solidBorder: false
+        }
+        
+         Rectangle
+        {
+            anchors.fill: parent
+            anchors.margins: 1
+            color: "transparent"
+            radius: bg.radius - 0.5
+            border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+            opacity: 0.4
         }
     }
     

@@ -63,7 +63,8 @@ Pane
         property int autoHideFooterDelay : 1000
         property int autoHideHeaderDelay : 1000
         
-        property bool floatingHeader : control.flickable && control.flickable.contentHeight > control.height && !altHeader ? !_private.flickableAtStart  : false     
+        property bool floatingHeader : false
+//         property bool floatingHeader : control.flickable && control.flickable.contentHeight > control.height && !altHeader ? !_private.flickableAtStart  : false     
         
         property bool floatingFooter: control.flickable
         
