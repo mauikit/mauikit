@@ -36,747 +36,646 @@ Pane
     rightPadding: control.padding
     topPadding: control.padding
     bottomPadding: control.padding
-    
+
+    Kirigami.Theme.colorSet: Kirigami.Theme.View
+
     default property alias content: _content.data
-        property alias headerBackground : _headerBackground
-        readonly property alias internalHeight : _content.height
-        property Flickable flickable : null
-        property int footerPositioning : ListView.InlineFooter
-        property int headerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineHeader
-                
-        property string title
-        
-        property int margins: 0
-        property int leftMargin : margins
-        property int rightMargin: margins
-        property int topMargin: margins
-        property int bottomMargin: margins
-        
-        property bool altHeader : false
-        
-        property bool autoHideHeader : false
-        property bool autoHideFooter : false
-        
-        property int autoHideHeaderMargins : Maui.Style.toolBarHeight
-        property int autoHideFooterMargins : Maui.Style.toolBarHeight
-        
-        property int autoHideFooterDelay : 1000
-        property int autoHideHeaderDelay : 1000
-        
-        property bool floatingHeader : false
-//         property bool floatingHeader : control.flickable && control.flickable.contentHeight > control.height && !altHeader ? !_private.flickableAtStart  : false     
-        
-        property bool floatingFooter: control.flickable
-        
-        property alias footerColumn : _footerContent.data
-        property alias headerColumn : _headerContent.data
-        
-        QtObject
+    property alias headerBackground : _headerBackground
+    readonly property alias internalHeight : _content.height
+    property Flickable flickable : null
+    property int footerPositioning : ListView.InlineFooter
+    property int headerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineHeader
+
+    property string title
+    property bool showTitle : true
+
+    property alias headBar : _headBar
+    property alias footBar: _footBar
+
+    property alias footerColumn : _footerContent.data
+    property alias headerColumn : _headerContent.data
+
+    property int margins: 0
+    property int leftMargin : margins
+    property int rightMargin: margins
+    property int topMargin: margins
+    property int bottomMargin: margins
+
+    property bool altHeader : false
+
+    property bool autoHideHeader : false
+    property bool autoHideFooter : false
+
+    property int autoHideHeaderMargins : Maui.Style.toolBarHeight
+    property int autoHideFooterMargins : Maui.Style.toolBarHeight
+
+    property int autoHideFooterDelay : 1000
+    property int autoHideHeaderDelay : 1000
+
+    property bool floatingHeader : control.flickable && control.flickable.contentHeight > control.height && !control.altHeader
+
+    property bool floatingFooter: control.flickable
+
+    signal goBackTriggered()
+    signal goForwardTriggered()
+
+    QtObject
+    {
+        id: _private
+        property int topMargin : !control.altHeader ? (control.floatingHeader ? 0 : _headerContent.height) : 0
+        property int bottomMargin: control.floatingFooter && control.footerPositioning === ListView.InlineFooter  ? control.bottomMargin : control.bottomMargin + _footerContent.height
+    }
+
+    Binding
+    {
+        delayed: true
+        when: control.floatingFooter
+        target: control.flickable
+        property: "bottomMargin"
+        value: control.flickable && control.footer.visible && control.footerPositioning === ListView.InlineFooter ? _footerContent.height : 0
+        restoreMode: Binding.RestoreBindingOrValue
+    }
+
+    Binding
+    {
+        delayed: true
+        when: control.floatingHeader
+        target: control.flickable
+        property: "topMargin"
+        value: control.flickable && control.header.visible && control.headerPositioning === ListView.InlineFooter ? _headerContent.height: 0
+        restoreMode: Binding.RestoreBindingOrValue
+    }
+
+    background: Rectangle
+    {
+        color: Kirigami.Theme.backgroundColor
+    }
+
+    onFlickableChanged:
+    {
+        returnToBounds()
+    }
+
+    Connections
+    {
+        target: control.flickable ? control.flickable : null
+        ignoreUnknownSignals: true
+        enabled: control.flickable && ((control.header && control.headerPositioning === ListView.PullBackHeader) || (control.footer &&  control.footerPositioning === ListView.PullBackFooter))
+        property int oldContentY
+        property bool updatingContentY: false
+
+        function onContentYChanged()
         {
-            id: _private
-            property bool flickableAtStart : control.flickable ? true : true
-            
-            property int topMargin : !control.altHeader ? (control.floatingHeader ? 0 : _headerContent.height) : 0
-            property int bottomMargin: control.floatingFooter && control.footerPositioning === ListView.InlineFooter  ? control.bottomMargin : control.bottomMargin + _footerContent.height
-            
-            Behavior on topMargin
+            _headerAnimation.enabled = false
+            _footerAnimation.enabled = false
+
+            if(!control.flickable.dragging && control.flickable.atYBeginning)
             {
-                enabled: control.header.visible && control.headerPositioning === ListView.InlineHeader && control.floatingHeader
-                NumberAnimation
-                {
-                    duration: Kirigami.Units.shortDuration
-                    easing.type: Easing.InOutQuad
-                }
-            }            
-        }
-        
-        Binding 
-        {
-            delayed: false
-            when: control.floatingFooter
-            target: control.flickable
-            property: "bottomMargin"
-            value: control.flickable && control.footer.visible && control.footerPositioning === ListView.InlineFooter ? _footerContent.height : 0
-            restoreMode: Binding.RestoreBindingOrValue
-        }        
-        
-        Connections
-        {
-            target: control.flickable
-            ignoreUnknownSignals: true
-            enabled: control.flickable && control.flickable.contentHeight > _content.height
-            
-            function onAtYBeginningChanged()
-            {                
-                if(control.headerPositioning !== ListView.InlineHeader || !control.header.visible || control.altHeader || control.flickable.contentHeight <= control.height)
-                {
-                    return
-                }
-                
-                if(control.flickable.atYBeginning && !control.floatingHeader)
-                {
-                    return
-                }
-                
-                if(!control.flickable.atYBeginning && control.floatingHeader)
-                {
-                    return
-                }
-                
-                if(_private.flickableAtStart === control.flickable.atYBeginning)
-                {
-                    return
-                }
-                 
-                 _private.flickableAtStart = flickable.atYBeginning 
-                 
-                 console.log("AT START CHANGES", _private.flickableAtStart, control.flickable.atYBeginning, control.floatingHeader)
-                 
+                control.returnToBounds()
+            }
+
+            if (updatingContentY || !control.flickable || !control.flickable.dragging)
+            {
+                oldContentY = control.flickable.contentY;
+                return;
+                //TODO: merge
+                //if moves but not dragging, just update oldContentY
+            }
+
+            if(control.flickable.contentHeight < control.height)
+            {
+                return
+            }
+
+            var oldFHeight
+            var oldHHeight
+
+            if (control.footer && control.footerPositioning === ListView.PullBackFooter && control.footer.visible)
+            {
+                oldFHeight = control.footer.height
+                control.footer.height = Math.max(0,
+                                                 Math.min(control.footer.implicitHeight,
+                                                          control.footer.height + oldContentY - control.flickable.contentY));
+            }
+
+            if (control.header && control.headerPositioning === ListView.PullBackHeader && control.header.visible && !control.altHeader)
+            {
+                oldHHeight = control.header.height
+                control.header.height = Math.max(0,
+                                                 Math.min(control.header.implicitHeight,
+                                                          control.header.height + oldContentY - control.flickable.contentY));
+            }
+
+            //if the implicitHeight is changed, use that to simulate scroll
+            if (control.header && oldHHeight !== control.header.height && control.header.visible && !control.altHeader)
+            {
+                updatingContentY = true
+                control.flickable.contentY -= (oldHHeight - control.header.height)
+                updatingContentY = false
+
+            } else {
+                oldContentY = control.flickable.contentY
             }
         }
 
-        property bool showTitle : true
-        property alias headBar : _headBar
-        property alias footBar: _footBar   
-        
-        Kirigami.Theme.colorSet: Kirigami.Theme.View    
-        
-        signal goBackTriggered()
-        signal goForwardTriggered()
-        
+        function onMovementEnded()
+        {
+            if (control.header && control.header.visible && control.headerPositioning === ListView.PullBackHeader && !control.altHeader)
+            {
+                _headerAnimation.enabled = true
+
+                if (control.header.height >= (control.header.implicitHeight/2) || control.flickable.atYBeginning )
+                {
+                    control.header.height =  control.header.implicitHeight
+
+                } else
+                {
+                    control.header.height = 0
+                }
+            }
+
+            if (control.footer && control.footer.visible && control.footerPositioning === ListView.PullBackFooter)
+            {
+                _footerAnimation.enabled = true
+
+                if (control.footer.height >= (control.footer.implicitHeight/2) ||  control.flickable.atYEnd)
+                {
+                    if(control.flickable.atYEnd)
+                    {
+                        control.footer.height =  control.footer.implicitHeight
+
+                        control.flickable.contentY = control.flickable.contentHeight - control.flickable.height
+                        oldContentY = control.flickable.contentY
+                    }else
+                    {
+                        control.footer.height =  control.footer.implicitHeight
+
+                    }
+
+                } else
+                {
+                    control.footer.height = 0
+                }
+            }
+        }
+    }
+
+    property Item header : Maui.ToolBar
+    {
+        id: _headBar
+        visible: visibleCount > 0
+        width: visible ? parent.width : 0
+        height: visible ? implicitHeight : 0
+
+        Kirigami.Theme.inherit: false
+        Kirigami.Theme.colorSet: Maui.Handy.isWindows ? Kirigami.Theme.View : Kirigami.Theme.Window
+
+        //             Label
+        //             {
+        //                 visible: false
+        //                 color: "yellow"
+        //                 text: _headBar.visibleCount + " / " + _headBar.count + " - " + _headBar.height + " / " + header.height + " - " + _headBar.visible + " / " + header.visible
+        //             }
+
+        Behavior on height
+        {
+            id: _headerAnimation
+            enabled: false
+            NumberAnimation
+            {
+                duration: Kirigami.Units.shortDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
+
+        Component
+        {
+            id: _titleComponent
+            Label
+            {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                text: control.title
+                elide : Text.ElideRight
+                font.bold : true
+                font.weight: Font.Bold
+                color : Kirigami.Theme.textColor
+                font.pointSize: Maui.Style.fontSizes.big
+                horizontalAlignment : Text.AlignHCenter
+                verticalAlignment :  Text.AlignVCenter
+            }
+        }
+
+        middleContent: Loader
+        {
+            visible: item
+            active: control.title && control.showTitle
+            sourceComponent: _titleComponent
+        }
+
         background: Rectangle
         {
-            color: Kirigami.Theme.backgroundColor
-        }
-        
-        onFlickableChanged:
-        {
-//             control.flickable.bottomMargin += control.floatingFooter && control.footer.visible ? _footerContent.height : 0
-             returnToBounds()
-        }
-              
-        Connections
-        {
-            target: control.flickable ? control.flickable : null
-            ignoreUnknownSignals: true
-            enabled: control.flickable && ((control.header && control.headerPositioning === ListView.PullBackHeader) || (control.footer &&  control.footerPositioning === ListView.PullBackFooter))
-            property int oldContentY
-            property bool updatingContentY: false
-            
-            function onContentYChanged()
+            id: _headerBackground
+            color: _headBar.Kirigami.Theme.backgroundColor
+
+            Maui.Separator
             {
-                _headerAnimation.enabled = false
-                _footerAnimation.enabled = false
-                
-                if(!control.flickable.dragging && control.flickable.atYBeginning)
-                {
-                    control.returnToBounds()
-                }
-                
-                if (updatingContentY || !control.flickable || !control.flickable.dragging)
-                {
-                    oldContentY = control.flickable.contentY;
-                    return;
-                    //TODO: merge
-                    //if moves but not dragging, just update oldContentY
-                }
-                
-                if(control.flickable.contentHeight < control.height)
-                {
-                    return
-                }
-                
-                var oldFHeight
-                var oldHHeight
-                
-                if (control.footer && control.footerPositioning === ListView.PullBackFooter && control.footer.visible)
-                {
-                    oldFHeight = control.footer.height
-                    control.footer.height = Math.max(0,
-                                                     Math.min(control.footer.implicitHeight,
-                                                              control.footer.height + oldContentY - control.flickable.contentY));
-                }
-                
-                if (control.header && control.headerPositioning === ListView.PullBackHeader && control.header.visible && !control.altHeader)
-                {
-                    oldHHeight = control.header.height
-                    control.header.height = Math.max(0,
-                                                     Math.min(control.header.implicitHeight,
-                                                              control.header.height + oldContentY - control.flickable.contentY));
-                }
-                
-                //if the implicitHeight is changed, use that to simulate scroll
-                if (control.header && oldHHeight !== control.header.height && control.header.visible && !control.altHeader)
-                {
-                    updatingContentY = true                    
-                    control.flickable.contentY -= (oldHHeight - control.header.height)
-                    updatingContentY = false
-                        
-                } else {
-                    oldContentY = control.flickable.contentY
-                }
+                id: _border
+                position: Qt.Horizontal
+                color: parent.color
+                anchors.left: parent.left
+                anchors.right: parent.right
             }
-            
-            function onMovementEnded()
+
+            FastBlur
             {
-                if (control.header && control.header.visible && control.headerPositioning === ListView.PullBackHeader && !control.altHeader)
+                anchors.fill: parent
+                visible: control.floatingHeader && !altHeader
+                opacity: 0.25
+                cached: false
+                radius: 64
+                transparentBorder: false
+                source: ShaderEffectSource
                 {
-                    _headerAnimation.enabled = true                
-                    
-                    if (control.header.height >= (control.header.implicitHeight/2) || control.flickable.atYBeginning )
-                    {
-                        control.header.height =  control.header.implicitHeight
-                        
-                    } else
-                    {
-                        control.header.height = 0
-                    }                        
+                    samples : 2
+                    recursive: false
+                    textureSize: Qt.size(headBar.width * 0.2, headBar.height * 0.2)
+                    sourceItem: _content
+                    sourceRect: Qt.rect(0, 0-control.topMargin, headBar.width, headBar.height)
                 }
-                
-                if (control.footer && control.footer.visible && control.footerPositioning === ListView.PullBackFooter)
-                {
-                    _footerAnimation.enabled = true
-                    
-                    if (control.footer.height >= (control.footer.implicitHeight/2) ||  control.flickable.atYEnd)
-                    {
-                        if(control.flickable.atYEnd)
-                        {
-                            control.footer.height =  control.footer.implicitHeight
-                            
-                            control.flickable.contentY = control.flickable.contentHeight - control.flickable.height
-                            oldContentY = control.flickable.contentY
-                        }else
-                        {
-                            control.footer.height =  control.footer.implicitHeight
-                            
-                        }
-                        
-                    } else
-                    {
-                        control.footer.height = 0
-                    }
-                }                
+
             }
         }
-      /*  
-        Component.onCompleted:
+    }
+
+    //           Label
+    //             {
+    // //                 visible: false
+    //                 z: 999999999999
+    //                 color: "yellow"
+    //                 text: _footBar.visibleCount + " / " + _footBar.count + " - " + _footBar.height + " / " + footer.height + " - " + _footBar.visible + " / " + footer.visible
+    //             }
+
+    property Item footer : Maui.ToolBar
+    {
+        id: _footBar
+        visible: visibleCount > 0
+        width: visible ? parent.width : 0
+        height: visible ? implicitHeight : 0
+
+        position: ToolBar.Footer
+
+        Behavior on height
         {
-            if(control.header && control.header instanceof Maui.ToolBar)
+            id: _footerAnimation
+            enabled: false
+            NumberAnimation
             {
-                control.header.visible = header.visibleCount > 0
+                duration: Kirigami.Units.shortDuration
+                easing.type: Easing.InOutQuad
             }
-        }*/
-        
-        property Item header : Maui.ToolBar
-        {
-            id: _headBar
-            visible: visibleCount > 0
-            width: visible ? parent.width : 0
-            height: visible ? implicitHeight : 0
-            
-            Kirigami.Theme.inherit: false
-            Kirigami.Theme.colorSet: Maui.Handy.isWindows ? Kirigami.Theme.View : Kirigami.Theme.Window
-                        
-              /** to not break the visible binding just check the count state of the header and act upon it **/
-//             readonly property bool hide : visibleCount === 0 
-//             onHideChanged:
-//             {
-//                 if(!header.visible)
-//                 {
-//                     return
-//                 }
-//                 
-//                 if(hide)
-//                 {
-//                     pullBackHeader()
-//                 }else
-//                 {
-//                     pullDownHeader()
-//                 }
-//             }
-            
-//             Label
-//             {
-//                 visible: false
-//                 color: "yellow"
-//                 text: _headBar.visibleCount + " / " + _headBar.count + " - " + _headBar.height + " / " + header.height + " - " + _headBar.visible + " / " + header.visible
-//             }
-                        
-            Behavior on height
-            {
-                id: _headerAnimation
-                enabled: false
-                NumberAnimation
-                {
-                    duration: Kirigami.Units.shortDuration
-                    easing.type: Easing.InOutQuad
-                }
-            }
-            
-            Behavior on opacity
-            {
-                NumberAnimation
-                {
-                    duration: Kirigami.Units.shortDuration
-                    easing.type: Easing.InOutQuad
-                }
-            }
-            
-            Component
-            {
-                id: _titleComponent
-                Label
-                {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    text: control.title
-                    elide : Text.ElideRight
-                    font.bold : true
-                    font.weight: Font.Bold
-                    color : Kirigami.Theme.textColor
-                    font.pointSize: Maui.Style.fontSizes.big
-                    horizontalAlignment : Text.AlignHCenter
-                    verticalAlignment :  Text.AlignVCenter
-                }
-            }
-            
-            middleContent: Loader
-            {
-                visible: item
-                active: control.title && control.showTitle
-                sourceComponent: _titleComponent
-            }
-            
-            background: Rectangle
-            {
-                id: _headerBackground
-                color: _headBar.Kirigami.Theme.backgroundColor               
-                
-                Maui.Separator
-                {
-                    id: _border  
-                    position: Qt.Horizontal
-                    color: parent.color
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                }
-                
-                FastBlur
-                {
-                    anchors.fill: parent				
-                    visible: control.floatingHeader && !altHeader
-                    opacity: 0.25
-                    
-                    transparentBorder: false 
-                    source: ShaderEffectSource
-                    {
-                        samples : 0
-                        recursive: true
-                        sourceItem: _content
-                        sourceRect: Qt.rect(0, 0-control.topMargin, headBar.width, headBar.height)
-                    }
-                    radius: 64				
-                }
-            }            
         }
-        
-//           Label
-//             {
-// //                 visible: false
-//                 z: 999999999999
-//                 color: "yellow"
-//                 text: _footBar.visibleCount + " / " + _footBar.count + " - " + _footBar.height + " / " + footer.height + " - " + _footBar.visible + " / " + footer.visible
-//             }
-        
-        property Item footer : Maui.ToolBar
+
+        background: Rectangle
         {
-            id: _footBar
-            visible: visibleCount > 0
-            width: visible ? parent.width : 0
-            height: visible ? implicitHeight : 0
-            
-            position: ToolBar.Footer
-            
-            Behavior on height
+            color: _footBar.Kirigami.Theme.backgroundColor
+
+            Maui.Separator
             {
-                id: _footerAnimation
-                enabled: false
-                NumberAnimation
-                {
-                    duration: Kirigami.Units.shortDuration
-                    easing.type: Easing.InOutQuad
-                }
+                position: Qt.Horizontal
+                color: parent.color
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
             }
-            
-            background: Rectangle
+
+            FastBlur
             {
-                color: _footBar.Kirigami.Theme.backgroundColor
-             
-                Kirigami.Separator
+                anchors.fill: parent
+                visible: control.floatingFooter
+                opacity: 0.25
+                transparentBorder: false
+                source: ShaderEffectSource
                 {
-                    anchors.top: parent.top
-                    anchors.left: parent.left
-                    anchors.right: parent.right
+                    samples : 2
+                    recursive: false
+                    textureSize: Qt.size(footBar.width * 0.2, footBar.height * 0.2)
+                    sourceItem: _content
+                    sourceRect: Qt.rect(0, control.height - (footBar.height), footBar.width, footBar.height)
                 }
-                
-                FastBlur
-                {
-                    anchors.fill: parent				
-                    visible: control.floatingFooter
-                    opacity: 0.4
-                    transparentBorder: false 
-                    source: ShaderEffectSource
-                    {
-                        samples : 0
-                        recursive: true
-                        sourceItem: _content
-                        sourceRect: Qt.rect(0, control.height - (footBar.height), footBar.width, footBar.height)
-                    }
-                    radius: 64				
-                }
+                radius: 64
             }
-        }  
-        
-        states: [  State 
+        }
+    }
+
+    states: [  State
         {
             when: !altHeader && header.visible
             
-            AnchorChanges 
+            AnchorChanges
             {
                 target: _headerContent
                 anchors.top: parent.top
-                anchors.bottom: undefined  
+                anchors.bottom: undefined
             }
             
-            AnchorChanges 
+            AnchorChanges
             {
                 target: _border
                 anchors.top: undefined
                 anchors.bottom: parent.bottom
             }
 
-            PropertyChanges 
+            PropertyChanges
             {
                 target: _headBar
-                position: ToolBar.Header        
-            } 
+                position: ToolBar.Header
+            }
         },
         
-        State 
+        State
         {
             when: altHeader && header.visible
             
-            AnchorChanges 
+            AnchorChanges
             {
                 target: _headerContent
                 anchors.top: undefined
                 anchors.bottom: parent.bottom
-            }    
+            }
             
-            AnchorChanges 
+            AnchorChanges
             {
                 target: _border
                 anchors.top: parent.top
                 anchors.bottom: undefined
             }
 
-            PropertyChanges 
+            PropertyChanges
             {
                 target: header
-                height: header.implicitHeight           
-            } 
+                height: header.implicitHeight
+            }
             
-            PropertyChanges 
+            PropertyChanges
             {
                 target: _headBar
-                position: ToolBar.Footer        
+                position: ToolBar.Footer
             }
         } ]
-        
-        onAutoHideHeaderChanged:
+
+    onAutoHideHeaderChanged:
+    {
+        if(autoHideHeader)
         {
-            if(autoHideHeader)
-            {
-                _autoHideHeaderTimer.start()                
-            } else
-            {                    
-                pullDownHeader()
-                _autoHideHeaderTimer.stop()
-            }
-        }
-        onAutoHideFooterChanged:
+            _autoHideHeaderTimer.start()
+        } else
         {
-            if(autoHideFooter)
-            {
-                _autoHideFooterTimer.start()                
-            } else
-            {                    
-                pullDownFooter()
-                _autoHideFooterTimer.stop()
-            }
+            pullDownHeader()
+            _autoHideHeaderTimer.stop()
         }
-        onAltHeaderChanged: pullDownHeader()        
-        
+    }
+    onAutoHideFooterChanged:
+    {
+        if(autoHideFooter)
+        {
+            _autoHideFooterTimer.start()
+        } else
+        {
+            pullDownFooter()
+            _autoHideFooterTimer.stop()
+        }
+    }
+    onAltHeaderChanged: pullDownHeader()
+
+
+    //             Label
+    //             {
+    //                 anchors.centerIn: _headerContent
+    //                 text: header.height + "/" + _headerContent.height + " - " + _layout.anchors.topMargin
+    //                 color: "orange"
+    //                 z: _headerContent.z + 1
+    //                 visible: header.visible
+    //             }
+
+    Column
+    {
+        id: _headerContent
+        anchors.left: parent.left
+        anchors.right: parent.right
+        z: _content.z+1
+    }
+
+    Item
+    {
+        id: _layout
+        anchors.fill: parent
+
+        anchors.bottomMargin: control.altHeader ? _headerContent.height : 0
+        anchors.topMargin: _private.topMargin
+
+        Item
+        {
+            id: _content
+            anchors.fill: parent
+            anchors.margins: control.margins
+            anchors.leftMargin: control.leftMargin
+            anchors.rightMargin: control.rightMargin
+            anchors.topMargin: control.topMargin
+            anchors.bottomMargin: _private.bottomMargin
+        }
+
         Column
         {
-            id: _headerContent
+            id: _footerContent
             anchors.left: parent.left
             anchors.right: parent.right
-            z: _content.z+1
-        }  
-       
-//         Label
-//         {
-//             anchors.centerIn: _headerContent
-//             text: header.height + "/" + _headerContent.height + " - " + _layout.anchors.topMargin
-//             color: "orange"
-//             z: _headerContent.z + 1
-//             visible: header.visible
-//         }
-        
-        Item
-        {
-            id: _layout
-            anchors.fill: parent 
-            
-            anchors.bottomMargin: control.altHeader ? _headerContent.height : 0
-            anchors.topMargin: _private.topMargin
-           
-            Item
-            {
-                id: _content
-                anchors.fill: parent
-                anchors.margins: control.margins
-                anchors.leftMargin: control.leftMargin
-                anchors.rightMargin: control.rightMargin
-                anchors.topMargin: control.topMargin
-                anchors.bottomMargin: _private.bottomMargin      
-            }   
-            
-            Column
-            {
-                id: _footerContent
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-//                 data: footer
-            }
-        }   
-        
-        Timer
-        {
-            id: _revealHeaderTimer
-            interval: autoHideHeaderDelay
-            
-            onTriggered:
-            {
-                 pullDownHeader()
-            }
+            anchors.bottom: parent.bottom
         }
-        
-        Timer
-        {
-            id: _autoHideHeaderTimer
-            interval: autoHideHeaderDelay
-            onTriggered: 
-            {
-                if(control.autoHideHeader && !control.altHeader)
-                {
-                    pullBackHeader()
-                }
-                
-                stop()
-            }
-        }
-        
-        Timer
-        {
-            id: _autoHideFooterTimer
-            interval: control.autoHideFooterDelay
-            onTriggered: 
-            {
-                if(control.autoHideFooter)
-                {
-                    pullBackFooter()
-                }
-                
-                stop()
-            }
-        }
-      
-        Item
-        {
-            anchors.top: parent.top            
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: visible ? _headerContent.height + control.autoHideHeaderMargins : 0
-            z: _content.z +1
-            visible: control.autoHideHeader && !control.altHeader && !Kirigami.Settings.isMobile
+    }
 
-            HoverHandler
-            {
-                target: parent                
-                acceptedDevices: PointerDevice.Mouse | PointerDevice.Stylus
-                
-                onHoveredChanged:
-                {
-                    if(!control.autoHideHeader || control.altHeader)
-                    {
-                        _autoHideHeaderTimer.stop()
-                        return
-                    }
-                    
-                    if(!hovered)
-                    {
-                        _autoHideHeaderTimer.start()
-                        _revealHeaderTimer.stop()
-                        
-                    }else
-                    {
-                        _autoHideHeaderTimer.stop()
-                        _revealHeaderTimer.start()
-                    }
-                } 
-            }
-        }   
-        
-        Item
-        {
-            anchors.bottom: parent.bottom            
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: visible ? _footerContent.height + control.autoHideFooterMargins : 0
-            z: _footerContent.z - 1
-            visible: control.autoHideFooter && !control.altHeader && !Kirigami.Settings.isMobile 
+    Timer
+    {
+        id: _revealHeaderTimer
+        interval: autoHideHeaderDelay
 
-            HoverHandler
+        onTriggered:
+        {
+            pullDownHeader()
+        }
+    }
+
+    Timer
+    {
+        id: _autoHideHeaderTimer
+        interval: autoHideHeaderDelay
+        onTriggered:
+        {
+            if(control.autoHideHeader && !control.altHeader)
             {
-                target: parent
-                
-                acceptedDevices: PointerDevice.Mouse | PointerDevice.Stylus
-                
-                onHoveredChanged:
+                pullBackHeader()
+            }
+
+            stop()
+        }
+    }
+
+    Timer
+    {
+        id: _autoHideFooterTimer
+        interval: control.autoHideFooterDelay
+        onTriggered:
+        {
+            if(control.autoHideFooter)
+            {
+                pullBackFooter()
+            }
+
+            stop()
+        }
+    }
+
+    Item
+    {
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: visible ? _headerContent.height + control.autoHideHeaderMargins : 0
+        z: _content.z +1
+        visible: control.autoHideHeader && !control.altHeader && !Kirigami.Settings.isMobile
+
+        HoverHandler
+        {
+            target: parent
+            acceptedDevices: PointerDevice.Mouse | PointerDevice.Stylus
+
+            onHoveredChanged:
+            {
+                if(!control.autoHideHeader || control.altHeader)
                 {
-                    if(!control.autoHideFooter)
-                    {
-                        return
-                    }
-                    
-                    if(!hovered)
-                    {
-                        _autoHideFooterTimer.start()
-                        
-                    }else
-                    {
-                        pullDownFooter()
-                        _autoHideFooterTimer.stop()
-                    }
-                } 
+                    _autoHideHeaderTimer.stop()
+                    return
+                }
+
+                if(!hovered)
+                {
+                    _autoHideHeaderTimer.start()
+                    _revealHeaderTimer.stop()
+
+                }else
+                {
+                    _autoHideHeaderTimer.stop()
+                    _revealHeaderTimer.start()
+                }
             }
-        }  
-        
-         
-        
-        //         Item
-        //         {
-        //             anchors.fill: parent
-        //             anchors.topMargin: header.height
-        //             anchors.bottomMargin: footer.height
-        //             z: _content.z + 9999
-        //             
-        //             TapHandler
-        //             {
-        //                 target: parent
-        //                 enabled: control.autoHideHeader && !control.altHeader 
-        //                 
-        //                 grabPermissions: PointerHandler.TakeOverForbidden | PointerHandler.ApprovesTakeOverByHandlersOfSameType | PointerHandler.CanTakeOverFromAnything
-        //                 
-        //                 onSingleTapped:
-        //                 {
-        //                     if(!control.autoHideHeader)
-        //                     {
-        //                         return
-        //                     }
-        //                     console.log("Pgae tapped")                
-        //                     header.visible = !header.visible
-        //                 }
-        //             }
-        //         }
-        
-        
-        
-        Keys.onBackPressed:
-        {
-            control.goBackTriggered();
         }
-        
-        Shortcut
+    }
+
+    Item
+    {
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: visible ? _footerContent.height + control.autoHideFooterMargins : 0
+        z: _footerContent.z - 1
+        visible: control.autoHideFooter && !control.altHeader && !Kirigami.Settings.isMobile
+
+        HoverHandler
         {
-            sequence: "Forward"
-            onActivated: control.goForwardTriggered();
-        }
-        
-        Shortcut
-        {
-            sequence: StandardKey.Forward
-            onActivated: control.goForwardTriggered();
-        }
-        
-        Shortcut
-        {
-            sequence: StandardKey.Back
-            onActivated: control.goBackTriggered();
-        }
-        
-        Component.onCompleted :
-        {
-            if(footer)
+            target: parent
+
+            acceptedDevices: PointerDevice.Mouse | PointerDevice.Stylus
+
+            onHoveredChanged:
             {
-                _footerContent.data.push(footer)
+                if(!control.autoHideFooter)
+                {
+                    return
+                }
+
+                if(!hovered)
+                {
+                    _autoHideFooterTimer.start()
+
+                }else
+                {
+                    pullDownFooter()
+                    _autoHideFooterTimer.stop()
+                }
             }
-            
-            if(header)
-            {
-                _headerContent.data.push(header)
-            }            
         }
-        
-        function returnToBounds()
+    }
+
+    Keys.onBackPressed:
+    {
+        control.goBackTriggered();
+    }
+
+    Shortcut
+    {
+        sequence: "Forward"
+        onActivated: control.goForwardTriggered();
+    }
+
+    Shortcut
+    {
+        sequence: StandardKey.Forward
+        onActivated: control.goForwardTriggered();
+    }
+
+    Shortcut
+    {
+        sequence: StandardKey.Back
+        onActivated: control.goBackTriggered();
+    }
+
+    Component.onCompleted :
+    {
+        if(footer)
         {
-            if(control.header)
-            {
-                pullDownHeader()
-            }            
-            
-            if(control.footer)
-            {
-                pullDownFooter()        
-            }   
+            _footerContent.data.push(footer)
         }
-        
-        function pullBackHeader()
+
+        if(header)
         {
-            _headerAnimation.enabled = true
-            header.height = 0
+            _headerContent.data.push(header)
         }
-        
-        function pullDownHeader()
+    }
+
+    function returnToBounds()
+    {
+        if(control.header)
         {
-            _headerAnimation.enabled = true
-            header.height = header.implicitHeight           
+            pullDownHeader()
         }
-        
-        function pullBackFooter()
+
+        if(control.footer)
         {
-            _footerAnimation.enabled = true
-            footer.height= 0
+            pullDownFooter()
         }
-        
-        function pullDownFooter()
-        {
-            _footerAnimation.enabled = true            
-            footer.height = footer.implicitHeight           
-        }
-        
-       
+    }
+
+    function pullBackHeader()
+    {
+        _headerAnimation.enabled = true
+        header.height = 0
+    }
+
+    function pullDownHeader()
+    {
+        _headerAnimation.enabled = true
+        header.height = header.implicitHeight
+    }
+
+    function pullBackFooter()
+    {
+        _footerAnimation.enabled = true
+        footer.height= 0
+    }
+
+    function pullDownFooter()
+    {
+        _footerAnimation.enabled = true
+        footer.height = footer.implicitHeight
+    }
 }

@@ -139,32 +139,20 @@ Popup
         }
     }
 
-//     Rectangle
-//     {
-//         anchors.fill: parent
-//         radius: Maui.Style.radiusV
-//         color: "transparent"
-//         border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
-//         opacity: 0.8
-// 
-
-// 
-//     }
-
-        Rectangle
-        {
-            anchors.fill: parent
-            color: "transparent"
-            radius: Maui.Style.radiusV - 0.5
-            border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
-            opacity: 0.6
-        }
+    Rectangle
+    {
+        anchors.fill: parent
+        color: "transparent"
+        radius: Maui.Style.radiusV - 0.5
+        border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+        opacity: 0.6
+    }
 
     background: Rectangle
     {
         color: Kirigami.Theme.backgroundColor
         opacity: 0.7
-        border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
+        border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.2)
         radius: Maui.Style.radiusV
     }
 }

@@ -154,6 +154,7 @@ Rectangle
                 ScrollBar.vertical.policy: ScrollBar.AlwaysOff
                 contentWidth: _listView.contentWidth
                 contentHeight: height
+
                 ListView
                 {
                     id: _listView
@@ -179,7 +180,7 @@ Rectangle
                         color: ListView.isCurrentItem || hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.15) : "transparent"
                         //                         smooth: true
                         //                         arrowWidth: _listView.pathArrowWidth
-                        height: parent.height
+                        height: _listView.height
                         width: Math.max(Maui.Style.iconSizes.medium * 2, implicitWidth)                        
                         
                         Kirigami.Separator
