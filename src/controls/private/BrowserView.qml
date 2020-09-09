@@ -194,6 +194,7 @@ Maui.Page
             id: _listViewBrowser
             property alias currentFMList : _browserModel.list
             property alias currentFMModel : _browserModel
+
             topMargin: Maui.Style.contentMargins
             showPreviewThumbnails: settings.showThumbnails
             checkable: selectionMode
