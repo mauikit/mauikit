@@ -27,8 +27,8 @@ import QtGraphicalEffects 1.0
 MouseArea
 {
 	id: control
-	z: 999
-	
+    z: 999
+
 	height: Maui.Style.toolBarHeight
 	width: height
 	

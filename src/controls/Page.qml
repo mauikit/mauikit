@@ -88,7 +88,6 @@ Pane
 
     Binding
     {
-        delayed: true
         when: control.floatingFooter
         target: control.flickable
         property: "bottomMargin"
@@ -98,7 +97,6 @@ Pane
 
     Binding
     {
-        delayed: true
         when: control.floatingHeader
         target: control.flickable
         property: "topMargin"
