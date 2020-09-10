@@ -41,6 +41,7 @@ Kirigami.ScrollablePage
     property alias count : _listView.count
     property alias cacheBuffer : _listView.cacheBuffer
     property alias orientation: _listView.orientation
+    property alias snapMode: _listView.snapMode
     
     property int margins : 0
     property alias topMargin: _listView.topMargin

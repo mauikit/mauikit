@@ -12,13 +12,13 @@ Maui.Dialog
     defaultButtons: false
         
         page.title: i18n("Settings")
-//        page.flickable: _flickable
+        //        page.flickable: _flickable
         headBar.visible: true        
         
         acceptButton.text: i18n("Apply")
         rejectButton.text: i18n("Cancel")
         
-
+        
         Component.onCompleted:
         {
             for(var i in control.content)
