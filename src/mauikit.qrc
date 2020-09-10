@@ -95,7 +95,7 @@
         <file alias="plugin/PagePlugin.qml">controls/plugin/PagePlugin.qml</file>
         <file alias="plugin/PluginManager.qml">controls/plugin/PluginManager.qml</file>
         <file alias="plugin/PluginsInfo.qml">controls/plugin/PluginsInfo.qml</file>
-        <file alias="labs/Separator">controls/labs/Separator.qml</file>
+        <file alias="labs/Separator.qml">controls/labs/Separator.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>
