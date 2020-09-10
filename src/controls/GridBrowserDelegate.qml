@@ -31,6 +31,7 @@ Maui.ItemDelegate
 
     property string tooltipText  
     
+    property alias template : _template
     property alias label1 : _template.label1
 
     property alias iconItem : _template.iconItem

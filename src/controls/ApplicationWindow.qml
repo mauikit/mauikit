@@ -49,6 +49,8 @@ Window
     /******************** ALIASES *********************/
     /*************************************************/
 
+    property alias page : _page
+    
     /**
       */
     property alias flickable : _page.flickable
