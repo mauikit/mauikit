@@ -314,6 +314,8 @@ Item
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignRight
                 horizontalAlignment: Qt.AlignRight
+                verticalAlignment: _label4.visible ? Qt.AlignBottom :  Qt.AlignVCenter
+
                 font.pointSize: Maui.Style.fontSizes.small
                 font.weight: Font.Light
                 wrapMode: Text.NoWrap
@@ -330,6 +332,8 @@ Item
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignRight
                 horizontalAlignment: Qt.AlignRight
+                verticalAlignment: _label3.visible ? Qt.AlignTop : Qt.AlignVCenter
+
                 font.pointSize: Maui.Style.fontSizes.small
                 font.weight: Font.Light
                 wrapMode: Text.NoWrap

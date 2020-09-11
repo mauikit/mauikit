@@ -80,21 +80,23 @@ if(${COMPONENT_FM})
     message(STATUS "INCLUDING FM COMPONENT")
 
     set(fm_SRCS
-        fm/fm.cpp
-        fm/fmlist.cpp
-        fm/placeslist.cpp
-        fm/downloader.cpp
+        utils/fm/fm.cpp
+        utils/fm/fmlist.cpp
+        utils/fm/placeslist.cpp
+        utils/fm/downloader.cpp
+        utils/fm/fileloader.cpp
         )
 
     set(fm_HDRS
-        fm/fm.h
-        fm/fmlist.h
-        fm/placeslist.h
-        fm/downloader.h
+        utils/fm/fm.h
+        utils/fm/fmlist.h
+        utils/fm/placeslist.h
+        utils/fm/downloader.h
+        utils/fm/fileloader.h
         )
     include_directories(
-        ${CMAKE_CURRENT_SOURCE_DIR}/fm
-        ${CMAKE_CURRENT_BINARY_DIR}/fm
+        ${CMAKE_CURRENT_SOURCE_DIR}/utils/fm
+        ${CMAKE_CURRENT_BINARY_DIR}/utils/fm
         )
     add_definitions(-DCOMPONENT_FM)
 endif()
@@ -206,7 +208,7 @@ if (ANDROID)
     add_subdirectory(android)
 
     set(mauikit_Android_SRCS
-        android/mauiandroid.cpp
+        platforms/android/mauiandroid.cpp
     )
 
     kde_enable_exceptions(MauiKit PRIVATE)
@@ -214,13 +216,13 @@ else()
     add_subdirectory(csd/libappletdecoration)
 
     set(mauikit_KDE_SRCS
-        kde/mauikde.cpp
-        kde/kdeconnect.cpp
+        platforms/kde/mauikde.cpp
+        platforms/kde/kdeconnect.cpp
         )
 
     set(mauikit_KDE_HDRS
-        kde/mauikde.h
-        kde/kdeconnect.h
+        platforms/kde/mauikde.h
+        platforms/kde/kdeconnect.h
         )
 endif()
 
@@ -261,9 +263,9 @@ if(ANDROID)
     target_link_libraries(MauiKit PRIVATE Qt5::AndroidExtras jnigraphics)
 
     target_include_directories(MauiKit PRIVATE android)
-    install(FILES android/mauiandroid.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit COMPONENT Devel)
+    install(FILES platforms/android/mauiandroid.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit COMPONENT Devel)
 
-    install(DIRECTORY android/ DESTINATION ${KDE_INSTALL_DATAROOTDIR}/MauiKitAndroid COMPONENT Devel)
+    install(DIRECTORY platforms/android/ DESTINATION ${KDE_INSTALL_DATAROOTDIR}/MauiKitAndroid COMPONENT Devel)
 
     if (Qt5Core_VERSION VERSION_LESS 5.14.0)
         install(FILES MauiKit-android-dependencies.xml DESTINATION ${KDE_INSTALL_LIBDIR})

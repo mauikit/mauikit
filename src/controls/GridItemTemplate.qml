@@ -108,7 +108,6 @@ Item
                     border.color: Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.8)   
                     radius: control.maskRadius
                     opacity: 0.2
-                    color: control.hovered ? control.Kirigami.Theme.highlightColor : "transparent"
                     
                     Kirigami.Icon
                     {
@@ -120,7 +119,16 @@ Item
                         color: parent.border.color
                         opacity: 1 - img.progress
                     }
-                }               
+                }
+
+                ColorOverlay
+                {
+                    visible: control.hovered || control.checked
+                    opacity: 0.3
+                    anchors.fill: parent
+                    source: parent
+                    color: control.hovered ? control.Kirigami.Theme.highlightColor : "#000"
+                }
             }
         }
         
@@ -139,11 +147,11 @@ Item
                 
                 ColorOverlay
                 {
-                    visible: control.hovered
+                    visible: control.hovered || control.checked
                     opacity: 0.3
                     anchors.fill: parent
                     source: parent
-                    color: control.Kirigami.Theme.highlightColor
+                    color: control.hovered ? control.Kirigami.Theme.highlightColor : "#000"
                 } 
             }            
         }

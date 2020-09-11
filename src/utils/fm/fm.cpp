@@ -34,9 +34,9 @@
 #include <QUrl>
 
 #if defined(Q_OS_ANDROID)
-#include "mauiandroid.h"
+#include "platforms/android/mauiandroid.h"
 #elif defined Q_OS_LINUX
-#include "mauikde.h"
+#include "platforms/kde/mauikde.h"
 #include <KCoreDirLister>
 #include <KFileItem>
 #include <KFilePlacesModel>

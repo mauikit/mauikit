@@ -53,9 +53,9 @@
 #endif
 
 #ifdef Q_OS_ANDROID
-#include "mauiandroid.h"
+#include "platforms/android/mauiandroid.h"
 #elif defined Q_OS_LINUX
-#include "mauikde.h"
+#include "platforms/kde/mauikde.h"
 #endif
 
 #ifdef MAUIKIT_STYLE
@@ -188,8 +188,8 @@ void MauiKit::registerTypes(const char *uri)
 #ifdef COMPONENT_EDITOR
     /** EDITOR CONTROLS **/
     qmlRegisterType<DocumentHandler>(uri, 1, 0, "DocumentHandler");
-    qmlRegisterType<Alerts>();
-    qmlRegisterType<DocumentAlert>();
+    qmlRegisterAnonymousType<Alerts>(uri, 1);
+    qmlRegisterAnonymousType<DocumentAlert>(uri, 1);
     qmlRegisterType(componentUrl(QStringLiteral("Editor.qml")), uri, 1, 0, "Editor");
     qmlRegisterType(componentUrl(QStringLiteral("private/DocumentPreview.qml")), uri, 1, 0, "DocumentPreview");
 #endif
@@ -213,7 +213,7 @@ void MauiKit::registerTypes(const char *uri)
 #endif
 
     /** DATA MODELING TEMPLATED INTERFACES **/
-    qmlRegisterType<MauiList>();                        // ABSTRACT BASE LIST
+    qmlRegisterAnonymousType<MauiList>(uri, 1);                        // ABSTRACT BASE LIST
     qmlRegisterType<MauiModel>(uri, 1, 0, "BaseModel"); // BASE MODEL
 
 #ifdef COMPONENT_TAGGING
@@ -226,7 +226,7 @@ void MauiKit::registerTypes(const char *uri)
 
     /** MAUI APPLICATION SPECIFIC PROPS **/
 #ifdef COMPONENT_ACCOUNTS
-    qmlRegisterType<MauiAccounts>();
+    qmlRegisterAnonymousType<MauiAccounts>(uri, 1);
     qmlRegisterType(componentUrl(QStringLiteral("SyncDialog.qml")), uri, 1, 0, "SyncDialog"); // to be rename to accountsDialog
 #endif
 
