@@ -131,6 +131,18 @@ Kirigami.DelegateRecycler
 
             onPressed:
             {
+                if(control.draggable && mouse.source !== Qt.MouseEventSynthesizedByQt)
+                {
+                    drag.target = _mouseArea
+                    control.grabToImage(function(result)
+                    {
+                        control.Drag.imageSource = result.url
+                    })
+                }else
+                {
+                     drag.target = null
+                }
+
                 control.pressed(mouse)
             }
 
@@ -150,7 +162,7 @@ Kirigami.DelegateRecycler
 
             onPressAndHold :
             {
-                if(control.draggable)
+                if(control.draggable && mouse.source === Qt.MouseEventSynthesizedByQt && Maui.Handy.isTouch)
                 {
                     drag.target = _mouseArea
                     xAnim.running = true
