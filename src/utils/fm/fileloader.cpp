@@ -8,6 +8,7 @@ FileLoader::FileLoader(QObject *parent) : QObject(parent)
   ,m_thread ( new QThread )
 {
     qRegisterMetaType<QDir::Filters>("QDir::Filters");
+    qRegisterMetaType<FMH::MODEL>("FMH::MODEL");
     this->moveToThread(m_thread);
     connect(m_thread, &QThread::finished, m_thread, &QObject::deleteLater);
     connect(this, &FileLoader::start, this, &FileLoader::getFiles);
