@@ -94,11 +94,14 @@ Maui.Dialog
         Layout.fillHeight: true
         Layout.fillWidth: true
         model: _syncingModel
+        spacing: Maui.Style.space.medium
         delegate: Maui.ListDelegate
         {
             id: delegate
             label: model.label
             label2: model.server
+            template.label2.elide: Text.ElideMiddle
+
             radius: Maui.Style.radiusV
 
             onClicked:
