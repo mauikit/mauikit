@@ -37,6 +37,7 @@
 #include "fm.h"
 #include "fmlist.h"
 #include "placeslist.h"
+#include "thumbnailer.h"
 #endif
 
 #ifdef COMPONENT_TAGGING
@@ -69,6 +70,16 @@ QUrl MauiKit::componentUrl(const QString &fileName) const
     return QUrl(QStringLiteral("qrc:/maui/kit/") + fileName);
 #else
     return QUrl(resolveFileUrl(fileName));
+#endif
+}
+
+void MauiKit::initializeEngine(QQmlEngine *engine, const char *uri)
+{
+    Q_UNUSED(uri);
+
+    /** IMAGE PROVIDERS **/
+#ifdef COMPONENT_FM
+    engine->addImageProvider("thumbnailer", new Thumbnailer());
 #endif
 }
 

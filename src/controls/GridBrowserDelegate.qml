@@ -27,8 +27,6 @@ Maui.ItemDelegate
 {
     id: control
 
-    property bool showThumbnails : false
-
     property string tooltipText  
     
     property alias template : _template
@@ -77,8 +75,7 @@ Maui.ItemDelegate
         id: _template
         anchors.fill: parent
         iconSource: model.icon
-        hovered: control.hovered || control.containsPress || _dropArea.containsDrag
-        imageSource: model.mime ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails && model.thumbnail && model.thumbnail.length ? model.thumbnail : "") : ""
+        hovered: control.hovered || control.containsPress || _dropArea.containsDrag       
         label1.text: model.label
 //        label1.elide: Text.ElideMiddle // TODO this is broken ???
         isCurrentItem: control.isCurrentItem

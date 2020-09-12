@@ -262,6 +262,7 @@ Maui.Dialog
                     infoModel.append({key: "Size", value: Maui.FM.formatSize(iteminfo.size)})
                     infoModel.append({key: "Symbolic Link", value: iteminfo.symlink})
                     infoModel.append({key: "Path", value: iteminfo.path})
+                    infoModel.append({key: "Thumbnail", value: iteminfo.thumbnail})
                     infoModel.append({key: "Icon Name", value: iteminfo.icon})
                 }
             }

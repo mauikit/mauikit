@@ -196,7 +196,6 @@ Maui.Page
             property alias currentFMModel : _browserModel
 
             topMargin: Maui.Style.contentMargins
-            showPreviewThumbnails: settings.showThumbnails
             checkable: selectionMode
             enableLassoSelection: true
             spacing: Kirigami.Settings.isMobile ? Maui.Style.space.small : Maui.Style.space.medium
@@ -250,8 +249,7 @@ Maui.Page
                 tooltipText: model.path
                 
                 checkable: _listViewBrowser.checkable
-                showThumbnails: _listViewBrowser.showPreviewThumbnails
-                
+                imageSource: settings.showThumbnails ? model.thumbnail : ""
                 checked: selectionBar ? selectionBar.contains(model.path) : false
 				opacity: model.hidden == "true" ? 0.5 : 1
                 draggable: true
@@ -362,7 +360,6 @@ Maui.Page
             itemSize : thumbnailsSize + Maui.Style.space.big
             itemHeight: itemSize * 1.3
             checkable: selectionMode
-            showPreviewThumbnails: settings.showThumbnails
             enableLassoSelection: true
             
             BrowserHolder
@@ -397,7 +394,11 @@ Maui.Page
                     id: delegate
                     
                     iconSizeHint: height * 0.5
-                    
+                    imageSource: settings.showThumbnails ? model.thumbnail : ""
+
+//                    template.imageHeight: height
+//                    template.imageWidth: width
+
                     anchors.centerIn: parent
                     height: _gridViewBrowser.cellHeight - 15
                     width: _gridViewBrowser.itemSize - 20
@@ -405,7 +406,6 @@ Maui.Page
                     isCurrentItem: parent.isCurrentItem
                     tooltipText: model.path
                     checkable: _gridViewBrowser.checkable
-                    showThumbnails: _gridViewBrowser.showPreviewThumbnails
                     checked: (selectionBar ? selectionBar.contains(model.path) : false) 
                     draggable: true
                     opacity: model.hidden == "true" ? 0.5 : 1
@@ -626,7 +626,6 @@ Maui.Page
                         id: _millerListView
                         anchors.fill: parent
                         topMargin: Maui.Style.contentMargins
-                        showPreviewThumbnails: settings.showThumbnails
                         checkable: selectionMode
                         onKeyPress: _millerControl.keyPress(event)
                         currentIndex : 0
@@ -698,9 +697,9 @@ Maui.Page
                             
                             iconSizeHint : Maui.Style.iconSizes.medium
                             imageSizeHint : height * 0.8
-                            
+                            imageSource: settings.showThumbnails ? model.thumbnail : ""
+
                             checkable: _millerListView.checkable
-                            showThumbnails: _millerListView.showPreviewThumbnails
                             checked: selectionBar ? selectionBar.contains(model.path) : false
                             opacity: model.hidden == "true" ? 0.5 : 1
                             draggable: true

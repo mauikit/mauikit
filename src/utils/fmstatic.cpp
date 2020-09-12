@@ -426,7 +426,7 @@ void FMStatic::setDirConf(const QUrl &path, const QString &group, const QString 
 
 bool FMStatic::checkFileType(const int &type, const QString &mimeTypeName)
 {
-    return FMH::SUPPORTED_MIMETYPES[static_cast<FMH::FILTER_TYPE>(type)].contains(mimeTypeName);
+    return FMH::checkFileType(static_cast<FMH::FILTER_TYPE>(type), mimeTypeName);
 }
 
 bool FMStatic::toggleFav(const QUrl &url)

@@ -13,22 +13,22 @@ QQuickImageResponse * Thumbnailer::requestImageResponse(const QString & id, cons
 AsyncImageResponse::AsyncImageResponse(const QString & id, const QSize & requestedSize)
 	: m_id(id), m_requestedSize(requestedSize)
 {
-    QStringList plugins;
-    plugins.append ("ffmpegthumbs");
+    QStringList plugins = KIO::PreviewJob::defaultPlugins();
     auto job = new KIO::PreviewJob(KFileItemList() << KFileItem(QUrl::fromUserInput (id)), requestedSize, &plugins);
 
-	connect (job, &KIO::PreviewJob::gotPreview, [this](KFileItem item, QPixmap pixmap)
+    qDebug() << KIO::PreviewJob::defaultPlugins();
+
+    connect (job, &KIO::PreviewJob::gotPreview, [this](KFileItem, QPixmap pixmap)
 	{
 		m_image = pixmap.toImage ();
 		emit this->finished ();
 	});
 
-	connect (job, &KIO::PreviewJob::failed, [this](KFileItem item)
+    connect (job, &KIO::PreviewJob::failed, [this](KFileItem)
     {
 		emit this->cancel ();
 		emit this->finished ();
 	});
-
 
 	job->start ();
 }

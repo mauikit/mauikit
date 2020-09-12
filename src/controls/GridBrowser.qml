@@ -31,7 +31,6 @@ Maui.GridView
 	itemSize : Maui.Style.iconSizes.large * 2	
 	adaptContent: true
 	
-	property bool showPreviewThumbnails: true
 	property bool checkable : false
 	
 	signal itemClicked(int index)
@@ -55,10 +54,8 @@ Maui.GridView
 			height: control.cellHeight - 5
 			width: control.itemSize
 			padding: Maui.Style.space.tiny
-			isCurrentItem: parent.isCurrentItem
-			
+			isCurrentItem: parent.isCurrentItem			
             checkable: control.checkable
-            showThumbnails: control.showPreviewThumbnails
 
             onClicked:
             {

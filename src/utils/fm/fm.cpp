@@ -117,35 +117,9 @@ FM::FM(QObject *parent)
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     this->dirLister->setAutoUpdate(true);
 
-    const static auto packItem = [](const KFileItem &kfile) -> FMH::MODEL {
-        return FMH::MODEL {{FMH::MODEL_KEY::LABEL, kfile.name()},
-                           {FMH::MODEL_KEY::NAME, kfile.name()},
-                           {FMH::MODEL_KEY::DATE, kfile.time(KFileItem::FileTimes::CreationTime).toString(Qt::TextDate)},
-                           {FMH::MODEL_KEY::MODIFIED, kfile.time(KFileItem::FileTimes::ModificationTime).toString(Qt::TextDate)},
-                           {FMH::MODEL_KEY::LAST_READ, kfile.time(KFileItem::FileTimes::AccessTime).toString(Qt::TextDate)},
-                           {FMH::MODEL_KEY::PATH, kfile.mostLocalUrl().toString()},
-                           {FMH::MODEL_KEY::THUMBNAIL, kfile.localPath()},
-                           {FMH::MODEL_KEY::SYMLINK, kfile.linkDest()},
-                           {FMH::MODEL_KEY::IS_SYMLINK, QVariant(kfile.isLink()).toString()},
-                           {FMH::MODEL_KEY::HIDDEN, QVariant(kfile.isHidden()).toString()},
-                           {FMH::MODEL_KEY::IS_DIR, QVariant(kfile.isDir()).toString()},
-                           {FMH::MODEL_KEY::IS_FILE, QVariant(kfile.isFile()).toString()},
-                           {FMH::MODEL_KEY::WRITABLE, QVariant(kfile.isWritable()).toString()},
-                           {FMH::MODEL_KEY::READABLE, QVariant(kfile.isReadable()).toString()},
-                           {FMH::MODEL_KEY::EXECUTABLE, QVariant(kfile.isDesktopFile()).toString()},
-                           {FMH::MODEL_KEY::MIME, kfile.mimetype()},
-                           {FMH::MODEL_KEY::GROUP, kfile.group()},
-                           {FMH::MODEL_KEY::ICON, kfile.iconName()},
-                           {FMH::MODEL_KEY::SIZE, QString::number(kfile.size())},
-                           {FMH::MODEL_KEY::THUMBNAIL, kfile.mostLocalUrl().toString()},
-                           {FMH::MODEL_KEY::OWNER, kfile.user()},
-                           // 			{FMH::MODEL_KEY::FAVORITE, QVariant(this->urlTagExists(kfile.mostLocalUrl().toString(), "fav")).toString()},
-                           {FMH::MODEL_KEY::COUNT, kfile.isLocalFile() && kfile.isDir() ? QString::number(QDir(kfile.localPath()).count() - 2) : "0"}};
-    };
-
     const static auto packItems = [](const KFileItemList &items) -> FMH::MODEL_LIST {
         return std::accumulate(items.constBegin(), items.constEnd(), FMH::MODEL_LIST(), [](FMH::MODEL_LIST &res, const KFileItem &item) -> FMH::MODEL_LIST {
-            res << packItem(item);
+            res << FMH::getFileInfo(item);
             return res;
         });
     };
@@ -179,7 +153,7 @@ FM::FM(QObject *parent)
 
         const auto res = std::accumulate(
             items.constBegin(), items.constEnd(), QVector<QPair<FMH::MODEL, FMH::MODEL>>(), [](QVector<QPair<FMH::MODEL, FMH::MODEL>> &list, const QPair<KFileItem, KFileItem> &pair) -> QVector<QPair<FMH::MODEL, FMH::MODEL>> {
-                list << QPair<FMH::MODEL, FMH::MODEL> {packItem(pair.first), packItem(pair.second)};
+                list << QPair<FMH::MODEL, FMH::MODEL> {FMH::getFileInfo(pair.first), FMH::getFileInfo(pair.second)};
                 return list;
             });
 

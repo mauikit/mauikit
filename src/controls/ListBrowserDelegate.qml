@@ -40,7 +40,6 @@ Maui.ItemDelegate
 	ToolTip.visible: control.hovered && control.tooltipText
 	ToolTip.text: control.tooltipText
     
-    property bool showThumbnails : false    
     property string tooltipText  
         
     property alias label1 : _template.label1
@@ -91,9 +90,7 @@ Maui.ItemDelegate
         anchors.fill: parent
         
         isCurrentItem : control.isCurrentItem
-        hovered: control.hovered
-        
-        imageSource: model.mime &&  model.thumbnail ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails ? model.thumbnail : "") : ""	
+        hovered: control.hovered        
         iconSource: model.icon
         
         label1.text: model.label ? model.label : ""

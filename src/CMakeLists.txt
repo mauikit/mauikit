@@ -18,6 +18,7 @@ include_directories(
 set(mauikit_SRCS
     mauikit.cpp
     utils/fmstatic.cpp
+    utils/fmh.cpp
     utils/mauiapp.cpp
     utils/handy.cpp
     utils/models/pathlist.cpp
@@ -85,6 +86,7 @@ if(${COMPONENT_FM})
         utils/fm/placeslist.cpp
         utils/fm/downloader.cpp
         utils/fm/fileloader.cpp
+        utils/fm/thumbnailer.cpp
         )
 
     set(fm_HDRS
@@ -93,6 +95,7 @@ if(${COMPONENT_FM})
         utils/fm/placeslist.h
         utils/fm/downloader.h
         utils/fm/fileloader.h
+        utils/fm/thumbnailer.h
         )
     include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/fm

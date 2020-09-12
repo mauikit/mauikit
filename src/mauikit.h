@@ -77,9 +77,8 @@ private:
 #endif
     }
 
-signals:
+    void initializeEngine(QQmlEngine *engine, const char *uri) override;
 
-public slots:
 };
 
 #endif // MAUIKIT_H

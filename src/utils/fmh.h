@@ -145,7 +145,7 @@ static const QStringList TEXT_MIMETYPES = {"text/markdown",
                                      "application/x-shellscript",
                                      "application/x-cmakecache",
                                      "application/x-kicad-project"};
-static const QStringList IMAGE_MIMETYPES = {"image/webp", "image/png", "image/gif", "image/jpeg", "image/web", "image/svg", "image/svg+xml"};
+static const QStringList IMAGE_MIMETYPES = {"image/bmp", "image/webp", "image/png", "image/gif", "image/jpeg", "image/web", "image/svg", "image/svg+xml"};
 static const QStringList DOCUMENT_MIMETYPES = {"application/pdf", "application/rtf", "application/doc", "application/odf"};
 
 static const QMap<FMH::FILTER_TYPE, QStringList> SUPPORTED_MIMETYPES {{FMH::FILTER_TYPE::AUDIO, AUDIO_MIMETYPES},
@@ -1165,6 +1165,70 @@ static bool mimeInherits(const QString baseType, const QString &type)
 }
 
 /**
+ * @brief checkFileType
+ * @param type
+ * @param mimeTypeName
+ * @return
+ */
+static bool checkFileType(const FMH::FILTER_TYPE &type, const QString &mimeTypeName)
+{
+    return FMH::SUPPORTED_MIMETYPES[type].contains(mimeTypeName);
+}
+
+/**
+ * @brief thumbnailUrl
+ * Returns a valid thumbnail Url to an image provider if supported, otherwise an empty URL
+ * @param url
+ * @return
+ */
+static QUrl thumbnailUrl(const QUrl &url, const QString &mimetype)
+{
+    if(checkFileType(FMH::FILTER_TYPE::DOCUMENT, mimetype) || checkFileType(FMH::FILTER_TYPE::VIDEO, mimetype))
+    {
+        return QUrl("image://thumbnailer/"+url.toString());
+    }
+
+    if(checkFileType(FMH::FILTER_TYPE::IMAGE, mimetype))
+    {
+        return url;
+    }
+
+    return QUrl();
+}
+
+#if !defined Q_OS_ANDROID && defined Q_OS_LINUX
+/**
+ * @brief packFileInfo
+ * @param item
+ * @return
+ */
+static FMH::MODEL getFileInfo(const KFileItem &kfile)
+{
+    return FMH::MODEL {{FMH::MODEL_KEY::LABEL, kfile.name()},
+        {FMH::MODEL_KEY::NAME, kfile.name().remove(kfile.name().lastIndexOf("."), kfile.name().size())},
+        {FMH::MODEL_KEY::DATE, kfile.time(KFileItem::FileTimes::CreationTime).toString(Qt::TextDate)},
+        {FMH::MODEL_KEY::MODIFIED, kfile.time(KFileItem::FileTimes::ModificationTime).toString(Qt::TextDate)},
+        {FMH::MODEL_KEY::LAST_READ, kfile.time(KFileItem::FileTimes::AccessTime).toString(Qt::TextDate)},
+        {FMH::MODEL_KEY::PATH, kfile.mostLocalUrl().toString()},
+        {FMH::MODEL_KEY::THUMBNAIL, thumbnailUrl(kfile.mostLocalUrl(), kfile.mimetype()).toString()},
+        {FMH::MODEL_KEY::SYMLINK, kfile.linkDest()},
+        {FMH::MODEL_KEY::IS_SYMLINK, QVariant(kfile.isLink()).toString()},
+        {FMH::MODEL_KEY::HIDDEN, QVariant(kfile.isHidden()).toString()},
+        {FMH::MODEL_KEY::IS_DIR, QVariant(kfile.isDir()).toString()},
+        {FMH::MODEL_KEY::IS_FILE, QVariant(kfile.isFile()).toString()},
+        {FMH::MODEL_KEY::WRITABLE, QVariant(kfile.isWritable()).toString()},
+        {FMH::MODEL_KEY::READABLE, QVariant(kfile.isReadable()).toString()},
+        {FMH::MODEL_KEY::EXECUTABLE, QVariant(kfile.isDesktopFile()).toString()},
+        {FMH::MODEL_KEY::MIME, kfile.mimetype()},
+        {FMH::MODEL_KEY::GROUP, kfile.group()},
+        {FMH::MODEL_KEY::ICON, kfile.iconName()},
+        {FMH::MODEL_KEY::SIZE, QString::number(kfile.size())},
+        {FMH::MODEL_KEY::OWNER, kfile.user()},
+        {FMH::MODEL_KEY::COUNT, kfile.isLocalFile() && kfile.isDir() ? QString::number(QDir(kfile.localPath()).count() - 2) : "0"}};
+#endif
+}
+
+/**
  * @brief getFileInfoModel
  * @param path
  * @return
@@ -1181,13 +1245,9 @@ static FMH::MODEL getFileInfoModel(const QUrl &path)
     res = FMH::MODEL {{FMH::MODEL_KEY::GROUP, file.group()},
     {FMH::MODEL_KEY::OWNER, file.owner()},
     {FMH::MODEL_KEY::SUFFIX, file.completeSuffix()},
-    {FMH::MODEL_KEY::LABEL, /*file.isDir() ? file.baseName() :*/ path == FMH::HomePath ? QStringLiteral("Home") : file.fileName()},
-    {FMH::MODEL_KEY::NAME, file.baseName()},
-    {FMH::MODEL_KEY::DATE, file.birthTime().toString(Qt::TextDate)},
-    {FMH::MODEL_KEY::MODIFIED, file.lastModified().toString(Qt::TextDate)},
+    {FMH::MODEL_KEY::LABEL, /*file.isDir() ? file.baseName() :*/ path == FMH::HomePath ? QStringLiteral("Home") : file;::MODIFIED, file.lastModified().toString(Qt::TextDate)},
     {FMH::MODEL_KEY::LAST_READ, file.lastRead().toString(Qt::TextDate)},
     {FMH::MODEL_KEY::MIME, mime},
-    {FMH::MODEL_KEY::SYMLINK, file.symLinkTarget()},
     {FMH::MODEL_KEY::SYMLINK, file.symLinkTarget()},
     {FMH::MODEL_KEY::IS_SYMLINK, QVariant(file.isSymLink()).toString()},
     {FMH::MODEL_KEY::IS_FILE, QVariant(file.isFile()).toString()},
@@ -1199,33 +1259,11 @@ static FMH::MODEL getFileInfoModel(const QUrl &path)
     {FMH::MODEL_KEY::ICON, FMH::getIconName(path)},
     {FMH::MODEL_KEY::SIZE, QString::number(file.size()) /*locale.formattedDataSize(file.size())*/},
     {FMH::MODEL_KEY::PATH, path.toString()},
-    {FMH::MODEL_KEY::THUMBNAIL, path.toString()},
+    {FMH::MODEL_KEY::THUMBNAIL, thumbnailUrl(path, mime},
     {FMH::MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path.toLocalFile()).count() - 2) : "0"}};
         #else
-    KFileItem kfile(path, KFileItem::MimeTypeDetermination::NormalMimeTypeDetermination);
 
-    res = FMH::MODEL {{FMH::MODEL_KEY::LABEL, kfile.name()},
-    {FMH::MODEL_KEY::NAME, kfile.name().remove(kfile.name().lastIndexOf("."), kfile.name().size())},
-    {FMH::MODEL_KEY::DATE, kfile.time(KFileItem::FileTimes::CreationTime).toString(Qt::TextDate)},
-    {FMH::MODEL_KEY::MODIFIED, kfile.time(KFileItem::FileTimes::ModificationTime).toString(Qt::TextDate)},
-    {FMH::MODEL_KEY::LAST_READ, kfile.time(KFileItem::FileTimes::AccessTime).toString(Qt::TextDate)},
-    {FMH::MODEL_KEY::PATH, kfile.mostLocalUrl().toString()},
-    {FMH::MODEL_KEY::THUMBNAIL, kfile.localPath()},
-    {FMH::MODEL_KEY::SYMLINK, kfile.linkDest()},
-    {FMH::MODEL_KEY::IS_SYMLINK, QVariant(kfile.isLink()).toString()},
-    {FMH::MODEL_KEY::HIDDEN, QVariant(kfile.isHidden()).toString()},
-    {FMH::MODEL_KEY::IS_DIR, QVariant(kfile.isDir()).toString()},
-    {FMH::MODEL_KEY::IS_FILE, QVariant(kfile.isFile()).toString()},
-    {FMH::MODEL_KEY::WRITABLE, QVariant(kfile.isWritable()).toString()},
-    {FMH::MODEL_KEY::READABLE, QVariant(kfile.isReadable()).toString()},
-    {FMH::MODEL_KEY::EXECUTABLE, QVariant(kfile.isDesktopFile()).toString()},
-    {FMH::MODEL_KEY::MIME, kfile.mimetype()},
-    {FMH::MODEL_KEY::GROUP, kfile.group()},
-    {FMH::MODEL_KEY::ICON, kfile.iconName()},
-    {FMH::MODEL_KEY::SIZE, QString::number(kfile.size())},
-    {FMH::MODEL_KEY::THUMBNAIL, kfile.mostLocalUrl().toString()},
-    {FMH::MODEL_KEY::OWNER, kfile.user()},
-    {FMH::MODEL_KEY::COUNT, kfile.isLocalFile() && kfile.isDir() ? QString::number(QDir(kfile.localPath()).count() - 2) : "0"}};
+    res = getFileInfo(KFileItem(path, KFileItem::MimeTypeDetermination::NormalMimeTypeDetermination));
         #endif
             return res;
 }

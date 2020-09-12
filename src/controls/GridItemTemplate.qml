@@ -29,7 +29,8 @@ import org.kde.mauikit 1.1 as MauiLab
 Item
 {
     id: control
-    
+    Kirigami.Theme.inherit: false
+
     default property alias content: _layout.data
         
         //     implicitHeight: _layout.implicitHeight
@@ -95,7 +96,9 @@ Item
                         height: img.height
                         Rectangle
                         {
-                            anchors.fill: parent
+                            anchors.centerIn: parent
+                            width: Math.min(parent.width, img.paintedWidth)
+                            height: Math.min(parent.height, img.paintedHeight)
                             radius: control.maskRadius                          
                         }
                     }
@@ -103,29 +106,45 @@ Item
                 
                 Rectangle
                 {
+                    z: 99999
                     visible: control.imageBorder
-                    anchors.fill: parent
-                    border.color: Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.8)   
+                    anchors.centerIn: parent
+                    width: Math.min(parent.width, img.paintedWidth)
+                    height: Math.min(parent.height, img.paintedHeight)
+                    border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.2)
                     radius: control.maskRadius
-                    opacity: 0.2
-                    
-                    Kirigami.Icon
+                    opacity: 0.6
+                    color: "transparent"
+
+                    Rectangle
                     {
-                        anchors.centerIn: parent
-                        height: Math.min(22, parent.height * 0.4)
-                        width: height
-                        source: "folder-images"
-                        isMask: true
-                        color: parent.border.color
-                        opacity: 1 - img.progress
+                        anchors.fill: parent
+                        color: "transparent"
+                        anchors.margins: 1
+                        radius: parent.radius - 0.5
+                        border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+                        opacity: 0.3
                     }
+                }
+
+                Kirigami.Icon
+                {
+                    anchors.centerIn: parent
+                    height: Math.min(22, parent.height * 0.4)
+                    width: height
+                    source: "folder-images"
+                    isMask: true
+                    color: parent.border.color
+                    opacity: 1 - img.progress
                 }
 
                 ColorOverlay
                 {
+                    anchors.fill: parent
+
                     visible: control.hovered || control.checked
                     opacity: 0.3
-                    anchors.fill: parent
+
                     source: parent
                     color: control.hovered ? control.Kirigami.Theme.highlightColor : "#000"
                 }
@@ -141,7 +160,7 @@ Item
                 anchors.centerIn: parent
                 source: control.iconSource
                 fallback: "application-x-zerosize"
-                height: Math.min(parent.height, control.iconSizeHint)
+                height: Math.floor(Math.min(parent.height, control.iconSizeHint))
                 width: height
                 color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
                 
@@ -172,7 +191,7 @@ Item
                 {
                     id: _iconLoader
                     anchors.fill: parent
-                    sourceComponent: _iconContainer.visible ? (control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : null) ): null                    
+                    sourceComponent: _iconContainer.visible ? (control.imageSource && control.imageSource.length ? _imgComponent : (control.iconSource && control.iconSource.length ?  _iconComponent : null) ): null
 
                     Maui.Badge
                     {
@@ -240,7 +259,7 @@ Item
                 
                 Rectangle
                 {
-                    visible: !control.labelsVisible 
+                    visible: !control.labelsVisible
                     anchors.fill: parent
                     
                     Behavior on color
@@ -251,12 +270,12 @@ Item
                         }
                     }
                     
-                    color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
+                    color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
                     
                     radius: Maui.Style.radiusV
                     border.width: 2
-                    border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"                    
-                }                  
+                    border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"
+                }
             }
             
             Item

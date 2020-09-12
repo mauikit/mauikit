@@ -28,10 +28,8 @@ Kirigami.ScrollablePage
     id: control    
     
     property int itemSize : Maui.Style.iconSizes.big
-    property bool checkable : false
-    
-    property bool showPreviewThumbnails: true
-    
+    property bool checkable : false    
+
     property alias model : _listView.model
     property alias delegate : _listView.delegate
     property alias section : _listView.section
@@ -116,7 +114,6 @@ Kirigami.ScrollablePage
             padding: 0
             iconSizeHint : height
             checkable: control.checkable
-            showThumbnails: control.showPreviewThumbnails
 
             onClicked:
             {
