@@ -29,7 +29,6 @@ import org.kde.mauikit 1.1 as MauiLab
 Item
 {
     id: control
-    Kirigami.Theme.inherit: false
 
     default property alias content: _layout.data
         
@@ -78,7 +77,7 @@ Item
                 source: control.imageSource
                 height: parent.height
                 width: parent.width
-                sourceSize.width:control.imageWidth
+                sourceSize.width: control.imageWidth
                 sourceSize.height: control.imageHeight
                 horizontalAlignment: Qt.AlignHCenter
                 verticalAlignment: Qt.AlignVCenter
@@ -107,6 +106,7 @@ Item
                 Rectangle
                 {
                     z: 99999
+                    Kirigami.Theme.inherit: false
                     visible: control.imageBorder
                     anchors.centerIn: parent
                     width: Math.min(parent.width, img.paintedWidth)
