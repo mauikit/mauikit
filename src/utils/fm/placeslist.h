@@ -28,8 +28,7 @@ class QFileSystemWatcher;
 class PlacesList : public MauiList
 {
     Q_OBJECT
-
-    Q_PROPERTY(QList<int> groups READ getGroups WRITE setGroups NOTIFY groupsChanged())
+    Q_PROPERTY(QList<int> groups READ getGroups WRITE setGroups NOTIFY groupsChanged)
 
 public:
     PlacesList(QObject *parent = nullptr);
@@ -38,6 +37,7 @@ public:
 
     QList<int> getGroups() const;
     void setGroups(const QList<int> &value);
+
     void componentComplete() override final;
 
 protected:
@@ -108,6 +108,7 @@ private:
     FMH::MODEL_LIST list;
     KFilePlacesModel *model;
     QHash<QString, int> count;
+
     QList<int> groups;
 
     QFileSystemWatcher *watcher;

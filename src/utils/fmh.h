@@ -1210,6 +1210,7 @@ static FMH::MODEL getFileInfo(const KFileItem &kfile)
         {FMH::MODEL_KEY::MODIFIED, kfile.time(KFileItem::FileTimes::ModificationTime).toString(Qt::TextDate)},
         {FMH::MODEL_KEY::LAST_READ, kfile.time(KFileItem::FileTimes::AccessTime).toString(Qt::TextDate)},
         {FMH::MODEL_KEY::PATH, kfile.mostLocalUrl().toString()},
+        {FMH::MODEL_KEY::URL, kfile.mostLocalUrl().toString()},
         {FMH::MODEL_KEY::THUMBNAIL, thumbnailUrl(kfile.mostLocalUrl(), kfile.mimetype()).toString()},
         {FMH::MODEL_KEY::SYMLINK, kfile.linkDest()},
         {FMH::MODEL_KEY::IS_SYMLINK, QVariant(kfile.isLink()).toString()},
@@ -1259,6 +1260,7 @@ static FMH::MODEL getFileInfoModel(const QUrl &path)
     {FMH::MODEL_KEY::ICON, FMH::getIconName(path)},
     {FMH::MODEL_KEY::SIZE, QString::number(file.size()) /*locale.formattedDataSize(file.size())*/},
     {FMH::MODEL_KEY::PATH, path.toString()},
+    {FMH::MODEL_KEY::URL, path.toString()},
     {FMH::MODEL_KEY::THUMBNAIL, thumbnailUrl(path, mime},
     {FMH::MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path.toLocalFile()).count() - 2) : "0"}};
         #else

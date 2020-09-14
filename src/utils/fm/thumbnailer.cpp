@@ -16,8 +16,6 @@ AsyncImageResponse::AsyncImageResponse(const QString & id, const QSize & request
     QStringList plugins = KIO::PreviewJob::defaultPlugins();
     auto job = new KIO::PreviewJob(KFileItemList() << KFileItem(QUrl::fromUserInput (id)), requestedSize, &plugins);
 
-    qDebug() << KIO::PreviewJob::defaultPlugins();
-
     connect (job, &KIO::PreviewJob::gotPreview, [this](KFileItem, QPixmap pixmap)
 	{
 		m_image = pixmap.toImage ();

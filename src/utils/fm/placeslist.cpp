@@ -50,11 +50,17 @@ PlacesList::PlacesList(QObject *parent)
     , watcher(new QFileSystemWatcher(this))
 #endif
 {
+    /*
+     *  The watcher signal returns a local file URL withouth a scheme, and the model is using a local file URL with file:// scheme.
+     *  So those need to be correctly mapped
+     * */
     connect(watcher, &QFileSystemWatcher::directoryChanged, [&](const QString &path) {
-        if (this->count.contains(path)) {
-            const auto oldCount = this->count[path];
-            const auto index = this->indexOf(path);
-            const auto newCount = FMH::getFileInfoModel(path)[FMH::MODEL_KEY::COUNT].toInt();
+
+        if (this->count.contains(QUrl::fromLocalFile(path).toString())) {
+            const auto oldCount = this->count[QUrl::fromLocalFile(path).toString()];
+            const auto index = this->indexOf(QUrl::fromLocalFile(path).toString());
+            const QDir dir(path);
+            const auto newCount = dir.count();
             const auto count = newCount - oldCount;
 
             this->list[index][FMH::MODEL_KEY::COUNT] = QString::number(count);
@@ -103,10 +109,10 @@ PlacesList::PlacesList(QObject *parent)
 
 void PlacesList::watchPath(const QString &path)
 {
-    if (path.isEmpty() || !FMH::fileExists(path) || QUrl(path).isLocalFile())
+    if (path.isEmpty() || !FMH::fileExists(path) || !QUrl(path).isLocalFile())
         return;
 
-    this->watcher->addPath(path);
+    this->watcher->addPath(QUrl(path).toLocalFile());
 }
 
 void PlacesList::componentComplete()
@@ -154,7 +160,7 @@ FMH::MODEL_LIST PlacesList::getGroup(const KFilePlacesModel &model, const FMH::P
             return list;
 
         list << FMH::MODEL {{FMH::MODEL_KEY::PATH, url.toString()},
-                            {FMH::MODEL_KEY::URL, model.url(index).toString()},
+                            {FMH::MODEL_KEY::URL, url.toString()},
                             {FMH::MODEL_KEY::ICON, model.icon(index).name()},
                             {FMH::MODEL_KEY::LABEL, model.text(index)},
                             {FMH::MODEL_KEY::NAME, model.text(index)},
@@ -223,11 +229,12 @@ void PlacesList::setCount()
 {
     this->watcher->removePaths(this->watcher->directories());
     for (auto &data : this->list) {
-        const auto path = data[FMH::MODEL_KEY::PATH];
+        const auto path = data[FMH::MODEL_KEY::URL];
         if (FMStatic::isDir(path)) {
             data.insert(FMH::MODEL_KEY::COUNT, "0");
-            const auto count = FMH::getFileInfoModel(path)[FMH::MODEL_KEY::COUNT];
-            this->count.insert(path, count.toInt());
+            QDir dir(QUrl(path).toLocalFile());
+            const auto count = dir.count();
+            this->count.insert(path, count);
             this->watchPath(path);
         }
     }

@@ -111,10 +111,12 @@ Item
                     anchors.centerIn: parent
                     width: Math.min(parent.width, img.paintedWidth)
                     height: Math.min(parent.height, img.paintedHeight)
-                    border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.2)
+                    border.color: control.isCurrentItem ? Kirigami.Theme.highlightColor : Qt.darker(Kirigami.Theme.backgroundColor, 2.2)
                     radius: control.maskRadius
-                    opacity: 0.6
+
+                    border.width: control.isCurrentItem ? 2 : 1
                     color: "transparent"
+                    opacity: 0.6
 
                     Rectangle
                     {
@@ -142,11 +144,11 @@ Item
                 {
                     anchors.fill: parent
 
-                    visible: control.hovered || control.checked
+                    visible: control.hovered || control.checked ||control.isCurrentItem
                     opacity: 0.3
 
                     source: parent
-                    color: control.hovered ? control.Kirigami.Theme.highlightColor : "#000"
+                    color: control.hovered || control.isCurrentItem  ? control.Kirigami.Theme.highlightColor : "#000"
                 }
             }
         }
@@ -257,25 +259,6 @@ Item
                     }
                 }
                 
-                Rectangle
-                {
-                    visible: !control.labelsVisible
-                    anchors.fill: parent
-                    
-                    Behavior on color
-                    {
-                        ColorAnimation
-                        {
-                            duration: Kirigami.Units.longDuration
-                        }
-                    }
-                    
-                    color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
-                    
-                    radius: Maui.Style.radiusV
-                    border.width: 2
-                    border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"
-                }
             }
             
             Item

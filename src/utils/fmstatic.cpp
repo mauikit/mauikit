@@ -117,7 +117,7 @@ bool FMStatic::isDir(const QUrl &path)
         return false;
     }
 
-    QFileInfo file(path.toLocalFile());
+    const QFileInfo file(path.toLocalFile());
     return file.isDir();
 }
 
@@ -148,18 +148,16 @@ QVariant FMStatic::loadSettings(const QString &key, const QString &group, const 
 
 QString FMStatic::formatSize(const int &size)
 {
-    QLocale locale;
+    const QLocale locale;
     return locale.formattedDataSize(size);
 }
 
 QString FMStatic::formatDate(const QString &dateStr, const QString &format, const QString &initFormat)
 {
-    QDateTime date;
     if (initFormat.isEmpty())
-        date = QDateTime::fromString(dateStr, Qt::TextDate);
+        return  QDateTime::fromString(dateStr, Qt::TextDate).toString(format);
     else
-        date = QDateTime::fromString(dateStr, initFormat);
-    return date.toString(format);
+        return QDateTime::fromString(dateStr, initFormat).toString(format);
 }
 
 QString FMStatic::formatTime(const qint64 &value)
@@ -180,6 +178,7 @@ QString FMStatic::homePath()
 {
     return FMH::HomePath;
 }
+#if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
 
 static bool copyRecursively(QString sourceFolder, QString destFolder)
 {
@@ -214,6 +213,7 @@ static bool copyRecursively(QString sourceFolder, QString destFolder)
 
     return true;
 }
+#endif
 
 bool FMStatic::copy(const QList<QUrl> &urls, const QUrl &destinationDir, const bool &overWriteDirectory)
 {
