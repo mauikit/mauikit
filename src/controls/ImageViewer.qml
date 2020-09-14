@@ -10,6 +10,13 @@ Flickable
 	id: flick
 
 	property alias image: _imageLoader.item
+	property int fillMode: Image.PreserveAspectFit
+	property bool asynchronous : true
+	property bool cache: false
+	
+	property int imageWidth: width
+	property int imageHeight: height
+	
 	property bool animated: false
 	property url source 
 	
@@ -182,13 +189,13 @@ Flickable
 			id: _animatedImageComponent
 			AnimatedImage
 			{
-				fillMode: Image.PreserveAspectFit
+				fillMode: flick.fillMode
 				autoTransform: true
-				asynchronous: true
+				asynchronous: flick.asynchronous
 				source: flick.source
 				playing: true
 // 				onStatusChanged: playing = (status == AnimatedImage.Ready)
-				cache: true				
+				cache: flick.cache				
 			}
 		}
 		
@@ -197,11 +204,13 @@ Flickable
 			id: _stillImageComponent
 			Image
 			{				
-				fillMode: Image.PreserveAspectFit
+				fillMode: flick.fillMode
 				autoTransform: true
-				asynchronous: true
+				asynchronous: flick.asynchronous
 				source: flick.source
-
+				cache: flick.cache
+				sourceSize.width : flick.imageWidth
+				sourceSize.height: flick.imageHeight
                 BusyIndicator
                 {
                     anchors.centerIn: parent
