@@ -12,79 +12,78 @@ TabButton
     signal closeClicked(int index)
     
     default property alias content : _template.data
-        property alias template: _template
-        
-        Kirigami.Separator
+    property alias template: _template
+
+    Kirigami.Separator
+    {
+        color: Kirigami.Theme.highlightColor
+        height: Maui.Style.unit * 2
+        visible: checked
+        anchors
         {
-            color: Kirigami.Theme.highlightColor
-            height: Maui.Style.unit * 2
-            visible: checked
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
+        }
+    }
+
+    background: Rectangle
+    {
+        color: "transparent"
+
+        Maui.Separator
+        {
+            position: Qt.Vertical
             anchors
             {
                 bottom: parent.bottom
-                left: parent.left
+                top: parent.top
                 right: parent.right
             }
         }
-        
-        background: Rectangle
+    }
+
+    contentItem:  Maui.ListItemTemplate
+    {
+        id: _template
+        label1.text: control.text
+        label1.horizontalAlignment: Qt.AlignHCenter
+        label1.color: control.checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+        label1.wrapMode: Text.NoWrap
+        label1.elide: Text.ElideMiddle
+        leftMargin: Maui.Style.space.small
+        rightMargin: leftMargin
+
+        MouseArea
         {
-            color: "transparent"
-            
-            Maui.Separator
+            id: _closeButton
+
+            property int position : Maui.App.leftWindowControls.includes("X") ? Qt.AlignLeft : Qt.AlignRight
+
+            hoverEnabled: true
+            onClicked: control.closeClicked(index)
+            Layout.preferredWidth: height
+            Layout.fillHeight: true
+
+            opacity: Kirigami.Settings.isMobile ? 1 : (control.hovered || control.checked ? 1 : 0)
+
+            Behavior on opacity
             {
-                position: Qt.Vertical
-                anchors
+                NumberAnimation
                 {
-                    bottom: parent.bottom
-                    top: parent.top
-                    right: parent.right
+                    duration: Kirigami.Units.longDuration
+                    easing.type: Easing.InOutQuad
                 }
             }
+
+            Maui.X
+            {
+                height: Maui.Style.iconSizes.tiny
+                width: height
+                anchors.centerIn: parent
+                color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.negativeTextColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+            }
         }
-        
-        contentItem:  Maui.ListItemTemplate
-        {
-            id: _template
-            label1.text: control.text
-            label1.horizontalAlignment: Qt.AlignHCenter
-            label1.color: control.checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-            label1.wrapMode: Text.NoWrap
-            label1.elide: Text.ElideMiddle
-            leftMargin: Maui.Style.space.small
-            rightMargin: leftMargin
-            
-            MouseArea
-            {             
-                id: _closeButton        
-                
-                property int position : Maui.App.leftWindowControls.includes("X") ? Qt.AlignLeft : Qt.AlignRight
-                
-                hoverEnabled: true
-                onClicked: control.closeClicked(index)
-                Layout.preferredWidth: height
-                Layout.fillHeight: true
-                
-                opacity: Kirigami.Settings.isMobile ? 1 : (control.hovered || control.checked ? 1 : 0)                
-                
-                Behavior on opacity
-                {
-                    NumberAnimation
-                    {
-                        duration: Kirigami.Units.longDuration
-                        easing.type: Easing.InOutQuad
-                    }
-                }
-                
-                Maui.X
-                {
-                    height: Maui.Style.iconSizes.tiny
-                    width: height
-                    anchors.centerIn: parent
-                    color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.negativeTextColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))        
-                }
-            }  
-        }        
-        
+    }
 }
 

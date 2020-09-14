@@ -38,6 +38,8 @@ Maui.Page
 	property alias settings : _browser.settings	
 	
 	property alias view : _stackView.currentItem
+
+    property alias dropArea : _dropArea
 	
 	readonly property QtObject currentView : _stackView.currentItem.currentView	
 	readonly property Maui.FMList currentFMList : view.currentFMList
@@ -161,13 +163,13 @@ Maui.Page
             id: _removeDialog
 			property var urls: []
 			
-			title:  "Removing %1 files".arg(urls.length)
-			message: Maui.Handy.isAndroid ?  i18n("This action will completely remove your files from your system. This action can not be undone.") : i18n("You can move the file to the trash or delete it completely from your system. Which one do you prefer?")
-			rejectButton.text: i18n("Delete")
-			acceptButton.text: i18n("Trash")
-			acceptButton.visible: Maui.Handy.isLinux
-			page.margins: Maui.Style.space.big
-			template.iconSource: "emblem-warning"
+            title:  i18n("Removing %1 files", urls.length)
+            message: Maui.Handy.isAndroid ?  i18n("This action will completely remove your files from your system. This action can not be undone.") : i18n("You can move the file to the trash or delete it completely from your system. Which one do you prefer?")
+            rejectButton.text: i18n("Delete")
+            acceptButton.text: i18n("Trash")
+            acceptButton.visible: Maui.Handy.isLinux
+            page.margins: Maui.Style.space.big
+            template.iconSource: "emblem-warning"
 
             CheckBox
             {
@@ -190,7 +192,6 @@ Maui.Page
                 }
             }
 
-			
 			onRejected:
 			{
 				if(control.selectionBar && control.selectionBar.visible)
