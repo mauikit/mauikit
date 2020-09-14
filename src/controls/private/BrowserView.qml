@@ -395,7 +395,7 @@ Maui.Page
                     
                     iconSizeHint: height * 0.5
                     imageSource: settings.showThumbnails ? model.thumbnail : ""
-
+                    template.fillMode: Image.PreserveAspectFit
 //                    template.imageHeight: height
 //                    template.imageWidth: width
 
