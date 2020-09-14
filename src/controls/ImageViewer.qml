@@ -203,14 +203,15 @@ Flickable
 		{
 			id: _stillImageComponent
 			Image
-			{				
+			{			
+                id: img
 				fillMode: flick.fillMode
 				autoTransform: true
 				asynchronous: flick.asynchronous
 				source: flick.source
 				cache: flick.cache
-				sourceSize.width : flick.imageWidth
-				sourceSize.height: flick.imageHeight
+				sourceSize.width : Math.max(flick.imageWidth, img.implicitWidth)
+				sourceSize.height: Math.max(flick.imageHeight, img.implicitHeight)
                 BusyIndicator
                 {
                     anchors.centerIn: parent

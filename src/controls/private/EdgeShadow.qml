@@ -19,10 +19,10 @@
 
 import QtQuick 2.1
 import QtGraphicalEffects 1.0
-import org.kde.kirigami 2.4
+import org.kde.kirigami 2.8 as Kirigami
 
 LinearGradient {
-    id: shadow
+    id: control
     /**
      * edge: enumeration
      * This property holds the edge of the shadow that will determine
@@ -34,20 +34,22 @@ LinearGradient {
      * Qt.BottomEdge: The bottom edge of the content item.
      */
     property int edge: Qt.LeftEdge
+    
+    property color color: Kirigami.Theme.textColor
 
-    implicitWidth: Units.gridUnit/2
-    implicitHeight: Units.gridUnit/2
+    implicitWidth: Kirigami.Units.gridUnit/2
+    implicitHeight: Kirigami.Units.gridUnit/2
 
     start: Qt.point((edge !== Qt.RightEdge ? 0 : width), (edge !== Qt.BottomEdge ? 0 : height))
     end: Qt.point((edge !== Qt.LeftEdge ? 0 : width), (edge !== Qt.TopEdge ? 0 : height))
     gradient: Gradient {
         GradientStop {
             position: 0.1
-            color: Qt.rgba(0, 0, 0, 0.2)
+            color: Qt.rgba(control.color.r, control.color.g, control.color.b, 0.2)
         }
         GradientStop {
             position: 0.3
-            color: Qt.rgba(0, 0, 0, 0.1)
+            color: Qt.rgba(control.color.r, control.color.g, control.color.b, 0.1)
         }
         GradientStop {
             position: 1.0

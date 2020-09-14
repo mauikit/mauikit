@@ -60,7 +60,7 @@ Maui.Popup
     
     maxWidth: Maui.Style.unit * 300
     maxHeight: implicitHeight
-    implicitHeight:  Math.max(_pageContent.implicitHeight + _stack.implicitHeight) + _page.footer.height + control.spacing + _page.header.height + _defaultButtonsLayout.height
+    implicitHeight:  Math.max(_pageContent.implicitHeight, _stack.implicitHeight) + _page.footer.height + control.spacing + _page.margins + _page.header.height + _defaultButtonsLayout.height
     widthHint: 0.9
     heightHint: 0.9
 
@@ -188,10 +188,11 @@ Maui.Popup
             
             Button
             {
+                id: _rejectButton
+
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 implicitWidth: width
-                id: _rejectButton
                 visible: control.defaultButtons
                 text: qsTr("Cancel")
                 background: Rectangle
@@ -214,16 +215,17 @@ Maui.Popup
             {
                 position: Qt.Vertical
                 Layout.fillHeight: true
-                visible: control.defaultButtons && _defaultButtonsLayout.visibleChildren.length > 1
+                visible: _acceptButton.visible && _rejectButton.visible
             }
             
             Button
             {
+                id: _acceptButton
+
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 implicitWidth: width
                 text: qsTr("Accept")
-                id: _acceptButton
                 visible: control.defaultButtons
                 background: Rectangle
                 {
@@ -273,7 +275,7 @@ Maui.Popup
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
                         anchors.left: parent.left
-                        visible: control.actions.length > index
+                        visible: index > 0
                     }
                 }
             }

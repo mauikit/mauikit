@@ -82,7 +82,7 @@ Item
                 horizontalAlignment: Qt.AlignHCenter
                 verticalAlignment: Qt.AlignVCenter
                 fillMode: control.fillMode
-                cache: true
+                cache: false
                 asynchronous: true
                 smooth: false
                 
@@ -131,6 +131,8 @@ Item
 
                 Kirigami.Icon
                 {
+                    Kirigami.Theme.inherit: false
+
                     anchors.centerIn: parent
                     height: Math.min(22, parent.height * 0.4)
                     width: height
