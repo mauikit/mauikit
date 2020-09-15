@@ -145,7 +145,7 @@ class MAUIKIT_EXPORT MauiApp : public QObject
     Q_PROPERTY(QString org READ getOrg CONSTANT FINAL)
     Q_PROPERTY(QString domain READ getDomain CONSTANT FINAL)
 
-    Q_PROPERTY(QVariantList credits READ getCredits WRITE setCredits )
+    Q_PROPERTY(QVariantList credits READ getCredits WRITE setCredits NOTIFY creditsChanged)
 
     Q_PROPERTY(QString iconName READ getIconName WRITE setIconName NOTIFY iconNameChanged)
     Q_PROPERTY(QString description READ getDescription WRITE setDescription NOTIFY descriptionChanged)
@@ -336,6 +336,7 @@ public:
     void setCredits(const QVariantList &credits)
     {
         m_credits = credits;
+        emit creditsChanged();
     }
 
     /**
@@ -406,6 +407,7 @@ signals:
     void webPageChanged(QString webPage);
     void donationPageChanged(QString donationPage);
     void reportPageChanged(QString reportPage);
+    void creditsChanged();
     void handleAccountsChanged();
     void sendNotification(QString iconName, QString title, QString body, QJSValue callback, int timeout, QString buttonText);
 

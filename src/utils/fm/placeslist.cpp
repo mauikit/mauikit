@@ -63,7 +63,7 @@ PlacesList::PlacesList(QObject *parent)
             const auto newCount = dir.count();
             const auto count = newCount - oldCount;
 
-            this->list[index][FMH::MODEL_KEY::COUNT] = QString::number(count);
+            this->list[index][FMH::MODEL_KEY::COUNT] = QString::number(count < 0 ? 0 : count);
             emit this->updateModel(index, {FMH::MODEL_KEY::COUNT});
         }
     });
