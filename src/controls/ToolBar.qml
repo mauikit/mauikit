@@ -188,25 +188,26 @@ ToolBar
                 height: mainFlickable.height
                 spacing: control.spacing
 
-                RowLayout
+                Row
                 {
                     id: _leftContent
                     readonly property int alignment : Qt.AlignLeft
                     Layout.fillHeight: true
-                    Layout.fillWidth: true
+
+                    Layout.preferredWidth: implicitWidth
+                    Layout.maximumWidth: implicitWidth
+                    Layout.minimumWidth: implicitWidth
+
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+
                     spacing: farLeftRowContent.visibleChildren.length > 0 ? control.spacing : 0
 
                     RowLayout
                     {
                         id: farLeftRowContent
                         readonly property int alignment : Qt.AlignLeft
-
+                        height: parent.height
                         spacing: control.spacing
-                        Layout.fillHeight: true
-                        Layout.fillWidth: visibleChildren.length > 0
-                        //                            Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0
-                        Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
                     }
 
                     RowLayout
@@ -215,11 +216,7 @@ ToolBar
                         readonly property int alignment : Qt.AlignLeft
 
                         spacing: control.spacing
-                        Layout.fillHeight: true
-                        Layout.fillWidth: visibleChildren.length > 0
-                        //                            Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0
-                        Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-
+                        height: parent.height
                     }
                 }
 
@@ -239,8 +236,11 @@ ToolBar
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     spacing: visibleChildren.length > 1 ? control.spacing : 0
                     Layout.fillHeight: true
-                    //                        Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0
-                    Layout.fillWidth:  visibleChildren.length > 0
+                    Layout.fillWidth: true
+//                    Layout.preferredWidth: implicitWidth
+//                    Layout.maximumWidth: implicitWidth
+//                    Layout.minimumWidth: implicitWidth
+                    Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0
                 }
 
                 Item //helper to force center middle content
@@ -251,15 +251,20 @@ ToolBar
                     Layout.maximumWidth: visible ? Math.max(_leftContent.implicitWidth-_rightContent.implicitWidth, 0) : 0
                 }
 
-                RowLayout
+                Row
                 {
                     id: _rightContent
                     readonly property int alignment : Qt.AlignRight
 
                     Layout.fillHeight: true
-                    Layout.fillWidth: true
-                    spacing: farRightRowContent.visibleChildren.length > 0 ? control.spacing : 0
+
+                    Layout.preferredWidth: implicitWidth
+                    Layout.maximumWidth: implicitWidth
+                    Layout.minimumWidth: implicitWidth
+
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+
+                    spacing: farRightRowContent.visibleChildren.length > 0 ? control.spacing : 0
 
                     RowLayout
                     {
@@ -267,10 +272,7 @@ ToolBar
                         readonly property int alignment : Qt.AlignRight
 
                         spacing: visibleChildren.length > 1 ? control.spacing : 0
-                        Layout.fillHeight: true
-                        Layout.fillWidth: visibleChildren.length > 0
-                        //                            Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0
-                        Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+                        height: parent.height
                     }
 
                     RowLayout
@@ -279,11 +281,7 @@ ToolBar
                         readonly property int alignment : Qt.AlignRight
 
                         spacing: visibleChildren.length > 1 ? control.spacing : 0
-                        Layout.fillHeight: true
-                        Layout.fillWidth: visibleChildren.length > 0
-                        //                            Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0
-                        Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
-
+                        height: parent.height
                     }
                 }
 

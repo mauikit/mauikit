@@ -12,7 +12,7 @@ import "private" as Private
 Rectangle
 {
     id: control
-    implicitWidth: _loader.item.implicitWidth
+    implicitWidth: _loader.item ? _loader.item.implicitWidth : 0
     implicitHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.12)
     
     default property list<Action> actions
@@ -67,7 +67,6 @@ Rectangle
         height: parent.height
         sourceComponent: control.expanded ? _rowComponent : _menuComponent
     }
-
     
     Component
     {
@@ -146,6 +145,7 @@ Rectangle
         {
             id: _defaultButtonMouseArea
             hoverEnabled: true
+            width: implicitWidth
             implicitWidth: height + Maui.Style.space.tiny + Maui.Style.iconSizes.small
 
             onClicked:
