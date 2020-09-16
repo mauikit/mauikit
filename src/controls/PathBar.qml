@@ -192,17 +192,17 @@ Rectangle
                         
                         onClicked:
                         {
-                            control.placeClicked(_pathList.get(index).path)
+                            control.placeClicked(model.path)
                         }
                         
                         onRightClicked:
                         {
-                            control.placeRightClicked(_pathList.get(index).path)
+                            control.placeRightClicked(model.path)
                         }
                         
                         onPressAndHold:
                         {
-                            control.placeRightClicked(_pathList.get(index).path)
+                            control.placeRightClicked(model.path)
                         }                        
                     }
                     
