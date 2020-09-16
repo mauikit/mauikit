@@ -154,11 +154,10 @@ Maui.Dialog
                         width: parent.width
                         spacing: 0
 
-                        Rectangle
+                        Item
                         {
                             Layout.fillWidth: true
                             Layout.preferredHeight: 100
-                            color: Qt.darker(Kirigami.Theme.backgroundColor, 1.1)
 
                             Kirigami.Icon
                             {
@@ -169,8 +168,9 @@ Maui.Dialog
                             }
                         }
 
-                        Kirigami.Separator
+                        Maui.Separator
                         {
+                            position: Qt.Horizontal
                             Layout.fillWidth: true
                         }
 
