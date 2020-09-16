@@ -60,7 +60,7 @@ Maui.Popup
     
     maxWidth: Maui.Style.unit * 300
     maxHeight: implicitHeight
-    implicitHeight:  Math.max(_pageContent.implicitHeight, _stack.implicitHeight) + _page.footer.height + control.spacing + _page.margins + _page.header.height + _defaultButtonsLayout.height
+    implicitHeight: _layout.implicitHeight
     widthHint: 0.9
     heightHint: 0.9
 
@@ -75,6 +75,7 @@ Maui.Popup
             id: _page
             Layout.fillWidth: true
             Layout.fillHeight: true
+            implicitHeight: Math.max(_pageContent.implicitHeight, _stack.implicitHeight) + _page.footer.height + _page.margins + _page.header.height
             headerPositioning: ListView.InlineHeader
             padding: 0
             flickable: _scrollable.flickable
@@ -116,9 +117,8 @@ Maui.Popup
             Kirigami.ScrollablePage
             {
                 id: _scrollable
-                width: parent.width
-                height: Math.min(parent.height, contentHeight)
-                anchors.centerIn: parent
+                anchors.fill: parent
+                visible: _stack.children.length === 0
 //                contentHeight: _pageContent.implicitHeight
 
                 Kirigami.Theme.backgroundColor: "transparent"
