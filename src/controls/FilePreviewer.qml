@@ -240,7 +240,7 @@ Maui.Dialog
                         source = "private/ImagePreview.qml"
                     }
 
-                    if(Maui.FM.checkFileType(Maui.FMList.DOCUMENT, iteminfo.mime) && !isAndroid)
+                    if(Maui.FM.checkFileType(Maui.FMList.DOCUMENT, iteminfo.mime) && !Maui.Handy.isAndroid)
                     {
                         source = "private/DocumentPreview.qml"
                     }

@@ -80,12 +80,7 @@ Maui.Popup
             padding: 0
             flickable: _scrollable.flickable
             headBar.visible: control.persistent
-            //            headerBackground.visible: headBar.visibleCount > 1
-
-            //            Binding on floatingHeader {
-            //            value: headBar.visibleCount === 1
-            //            restoreMode: Binding.RestoreBinding
-            //            }
+//            headerBackground.visible: false
 
             headBar.farLeftContent: MouseArea
             {

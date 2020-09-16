@@ -77,7 +77,15 @@ Drawer
     {
         id: _content
         anchors.fill: parent
-        anchors.rightMargin: 1
+
+        Maui.Separator
+        {
+            z: 9999
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            position: Qt.Vertical
+        }
     }
 
     Component.onCompleted:
@@ -113,14 +121,7 @@ Drawer
 
     background: Rectangle
     {
-        color: Kirigami.Theme.backgroundColor
-        Maui.Separator
-        {
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            position: Qt.Vertical
-        }
+        color: Kirigami.Theme.backgroundColor       
     }
 }
 

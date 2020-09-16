@@ -37,8 +37,8 @@ AbstractButton
     readonly property alias kicon : _icon
     property alias rec : _background
     
-    Kirigami.Theme.inherit: false
-    Kirigami.Theme.colorSet: Kirigami.Theme.Button
+//    Kirigami.Theme.inherit: false
+//    Kirigami.Theme.colorSet: Kirigami.Theme.Button
     
     hoverEnabled: !Kirigami.Settings.isMobile
     implicitHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)

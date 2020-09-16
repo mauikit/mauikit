@@ -240,7 +240,7 @@ ToolBar
 //                    Layout.preferredWidth: implicitWidth
 //                    Layout.maximumWidth: implicitWidth
 //                    Layout.minimumWidth: implicitWidth
-                    Layout.minimumWidth: visibleChildren.length > 0 ? implicitWidth : 0
+                    Layout.minimumWidth: implicitWidth
                 }
 
                 Item //helper to force center middle content
@@ -271,7 +271,7 @@ ToolBar
                         id: rightRowContent
                         readonly property int alignment : Qt.AlignRight
 
-                        spacing: visibleChildren.length > 1 ? control.spacing : 0
+                        spacing: control.spacing
                         height: parent.height
                     }
 
@@ -280,7 +280,7 @@ ToolBar
                         id: farRightRowContent
                         readonly property int alignment : Qt.AlignRight
 
-                        spacing: visibleChildren.length > 1 ? control.spacing : 0
+                        spacing: control.spacing
                         height: parent.height
                     }
                 }
