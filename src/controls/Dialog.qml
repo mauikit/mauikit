@@ -22,14 +22,14 @@ import QtQml 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.2 as Maui
-import org.kde.kirigami 2.8 as Kirigami
+import org.kde.kirigami 2.9 as Kirigami
 
 import QtGraphicalEffects 1.0
 
 Maui.Popup
 {
     id: control
-    
+
     default property alias scrollable : _pageContent.data
     property alias stack : _stack.data
 
@@ -41,13 +41,13 @@ Maui.Popup
 
     property bool defaultButtons: true
     property bool persistent : true
-    
+
     property alias acceptButton : _acceptButton
     property alias rejectButton : _rejectButton
-    
+
     property alias textEntry : _textEntry
     property alias entryField: _textEntry.visible
-    
+
     property alias page : _page
     property alias footBar : _page.footBar
     property alias headBar: _page.headBar
@@ -55,9 +55,9 @@ Maui.Popup
 
     signal accepted()
     signal rejected()
-    
+
     closePolicy: control.persistent ? Popup.NoAutoClose | Popup.CloseOnEscape : Popup.CloseOnEscape | Popup.CloseOnPressOutside
-    
+
     maxWidth: Maui.Style.unit * 300
     maxHeight: implicitHeight
     implicitHeight: _layout.implicitHeight
@@ -69,7 +69,7 @@ Maui.Popup
         id: _layout
         anchors.fill: parent
         spacing: 0
-        
+
         Maui.Page
         {
             id: _page
@@ -78,7 +78,7 @@ Maui.Popup
             implicitHeight: Math.max(_pageContent.implicitHeight, _stack.implicitHeight) + _page.footer.height + _page.margins + _page.header.height
             headerPositioning: ListView.InlineHeader
             padding: 0
-            flickable: _scrollable.flickable
+            flickable: _flickable
             headBar.visible: control.persistent
 //            headerBackground.visible: false
 
@@ -90,7 +90,7 @@ Maui.Popup
                 Layout.fillHeight: true
                 implicitHeight: Maui.Style.iconSizes.medium
                 implicitWidth: Maui.Style.iconSizes.medium
-                
+
                 Maui.X
                 {
                     height: Maui.Style.iconSizes.tiny
@@ -98,7 +98,7 @@ Maui.Popup
                     anchors.centerIn: parent
                     color: _closeButton.containsMouse || _closeButton.containsPress ? Kirigami.Theme.negativeTextColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
                 }
-                
+
                 onClicked: close()
             }
 
@@ -109,69 +109,82 @@ Maui.Popup
                 spacing: control.spacing
             }
 
-            Kirigami.ScrollablePage
+            Kirigami.WheelHandler
             {
-                id: _scrollable
+                target: _flickable
+            }
+
+            ScrollView
+            {
+                id: _scrollView
                 anchors.fill: parent
                 visible: _stack.children.length === 0
-//                contentHeight: _pageContent.implicitHeight
+                contentHeight: _pageContent.implicitHeight
+                contentWidth: width
 
-                Kirigami.Theme.backgroundColor: "transparent"
 
-                padding: 0
-                leftPadding: padding
-                rightPadding: padding
-                topPadding: padding
-                bottomPadding: padding
+                ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+                ScrollBar.vertical.policy: ScrollBar.AsNeeded
 
-                ColumnLayout
+                Flickable
                 {
-                    id: _pageContent
-                    width: parent.width
-                    spacing: control.spacing
+                    id: _flickable
+                    anchors.fill: parent
 
-                    Maui.ListItemTemplate
+                    ColumnLayout
                     {
-                        id: _template
-                        visible: control.message.length
-                        Layout.fillWidth: true
-                        implicitHeight: label1.implicitHeight + label2.implicitHeight + Maui.Style.space.big
+                        id: _pageContent
+                        anchors.fill: parent
+                        anchors.rightMargin: Kirigami.Settings.isMobile ? 0 : _scrollView.ScrollBar.vertical.visible ? _scrollView.ScrollBar.vertical.width : 0
 
-                        //                        label1.text: title
-                        //                        label1.font.weight: Font.Thin
-                        //                        label1.font.bold: true
-                        //                        label1.font.pointSize:Maui.Style.fontSizes.huge
-                        //                        label1.elide: Qt.ElideRight
-                        //                        label1.wrapMode: Text.Wrap
 
-                        label2.text: message
-                        label2.textFormat : TextEdit.AutoText
-                        label2.font.pointSize:Maui.Style.fontSizes.default
-                        label2.wrapMode: TextEdit.WordWrap
+                        spacing: control.spacing
 
-                        iconSizeHint: Maui.Style.iconSizes.large
-                        spacing: Maui.Style.space.big
+                        Maui.ListItemTemplate
+                        {
+                            id: _template
+                            visible: control.message.length
+                            Layout.fillWidth: true
+                            implicitHeight: label1.implicitHeight + label2.implicitHeight + Maui.Style.space.big
+
+                            //                        label1.text: title
+                            //                        label1.font.weight: Font.Thin
+                            //                        label1.font.bold: true
+                            //                        label1.font.pointSize:Maui.Style.fontSizes.huge
+                            //                        label1.elide: Qt.ElideRight
+                            //                        label1.wrapMode: Text.Wrap
+
+                            label2.text: message
+                            label2.textFormat : TextEdit.AutoText
+                            label2.font.pointSize:Maui.Style.fontSizes.default
+                            label2.wrapMode: TextEdit.WordWrap
+
+                            iconSizeHint: Maui.Style.iconSizes.large
+                            spacing: Maui.Style.space.big
+                        }
+
+                        Maui.TextField
+                        {
+                            id: _textEntry
+                            visible: false
+                            Layout.fillWidth: true
+                            Layout.alignment: Qt.AlignCenter
+                            focus: visible
+                            onAccepted: control.accepted()
+                        }
                     }
 
-                    Maui.TextField
-                    {
-                        id: _textEntry
-                        visible: false
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignCenter
-                        focus: visible
-                        onAccepted: control.accepted()
-                    }
                 }
+
             }
         }
-        
+
         Maui.Separator
         {
             Layout.fillWidth: true
             visible: _defaultButtonsLayout.visible
         }
-        
+
         RowLayout
         {
             id: _defaultButtonsLayout
@@ -180,7 +193,7 @@ Maui.Popup
             Layout.preferredHeight:  Maui.Style.toolBarHeightAlt - Maui.Style.space.medium
             Layout.maximumHeight: Maui.Style.toolBarHeightAlt - Maui.Style.space.medium
             visible: control.defaultButtons || control.actions.length
-            
+
             Button
             {
                 id: _rejectButton
@@ -194,7 +207,7 @@ Maui.Popup
                 {
                     color: _rejectButton.hovered || _rejectButton.down || _rejectButton.pressed ? "#da4453" : Kirigami.Theme.backgroundColor
                 }
-                
+
                 contentItem: Label
                 {
                     text: _rejectButton.text
@@ -202,17 +215,17 @@ Maui.Popup
                     horizontalAlignment: Qt.AlignHCenter
                     verticalAlignment: Qt.AlignVCenter
                 }
-                
+
                 onClicked: rejected()
             }
-            
+
             Maui.Separator
             {
                 position: Qt.Vertical
                 Layout.fillHeight: true
                 visible: _acceptButton.visible && _rejectButton.visible
             }
-            
+
             Button
             {
                 id: _acceptButton
@@ -226,7 +239,7 @@ Maui.Popup
                 {
                     color: _acceptButton.hovered || _acceptButton.down || _acceptButton.pressed ? "#26c6da" : Kirigami.Theme.backgroundColor
                 }
-                
+
                 contentItem: Label
                 {
                     text: _acceptButton.text
@@ -234,7 +247,7 @@ Maui.Popup
                     horizontalAlignment: Qt.AlignHCenter
                     verticalAlignment: Qt.AlignVCenter
                 }
-                
+
                 onClicked: accepted()
             }
 

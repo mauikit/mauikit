@@ -51,7 +51,8 @@ Maui.ToolBar
             anchors.right: parent.right
         }
     }
-    
+
+    leftSretch: false
     rightContent: [
     MouseArea
     {           
@@ -92,7 +93,7 @@ Maui.ToolBar
             onClicked: if(allowEditMode) goEditMode()
         }
     },
-    
+
     Maui.TextField
     {
         id: editTagsEntry

@@ -106,11 +106,6 @@ ScrollView
         clip: control.clip
         focus: true
 
-        // 		topMargin: control.margins
-        // 		bottomMargin: control.margins
-        // 		leftMargin: control.margins
-        // 		rightMargin: control.margins
-        //
         cellWidth: control.itemWidth
         cellHeight: control.itemHeight
 
