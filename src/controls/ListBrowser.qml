@@ -21,9 +21,9 @@ import QtQuick 2.10
 import QtQuick.Controls 2.10
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
-import org.kde.kirigami 2.7 as Kirigami
+import org.kde.kirigami 2.9 as Kirigami
 
-Kirigami.ScrollablePage
+ScrollView
 {
     id: control    
     
@@ -63,7 +63,7 @@ Kirigami.ScrollablePage
     
     spacing: Maui.Style.space.tiny
     contentWidth: _listView.contentWidth
-    
+
     focus: true	
     padding: 0
     leftPadding: padding
@@ -72,12 +72,19 @@ Kirigami.ScrollablePage
     bottomPadding: padding
 
     Keys.enabled: false
-    Kirigami.Theme.colorSet: Kirigami.Theme.View       
-    supportsRefreshing: false
-    
+    Kirigami.Theme.colorSet: Kirigami.Theme.View
+
+    readonly property alias flickable : _listView
+
+    ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+    ScrollBar.vertical.policy: ScrollBar.AsNeeded
+
     ListView
     {	
         id: _listView
+        anchors.fill: parent
+        anchors.rightMargin: Kirigami.Settings.isMobile ? 0 : parent.ScrollBar.vertical.visible ? parent.ScrollBar.vertical.width : 0
+
         focus: true
         clip: control.clip           
         spacing: control.spacing
@@ -104,6 +111,12 @@ Kirigami.ScrollablePage
             id: _holder
             anchors.fill : parent		
         }	
+
+        Kirigami.WheelHandler
+        {
+            id: wheelHandler
+            target: parent
+        }
         
         delegate: Maui.ListBrowserDelegate
         {
@@ -151,11 +164,10 @@ Kirigami.ScrollablePage
             id: _mouseArea
             z: -1
             anchors.fill: parent
-            propagateComposedEvents: true
+            propagateComposedEvents: false
 //             preventStealing: true
             acceptedButtons:  Qt.RightButton | Qt.LeftButton
-            
-            
+                        
             onClicked:
             {
 				control.areaClicked(mouse)

@@ -48,9 +48,8 @@ ListView
         id: delegate
         showDeleteIcon: control.showDeleteIcon
         Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
-        height: implicitHeight
-        width: implicitWidth
-        
+        anchors.verticalCenter: parent.verticalCenter
+
         ListView.onAdd:
         {
             control.positionViewAtEnd()

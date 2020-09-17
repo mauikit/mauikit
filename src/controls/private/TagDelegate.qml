@@ -16,14 +16,12 @@ ItemDelegate
     hoverEnabled: !Kirigami.Settings.isMobile
     implicitHeight: tagHeight
     implicitWidth: _layout.implicitWidth
-    
-    anchors.verticalCenter: parent.verticalCenter
-    
+       
     ToolTip.visible: hovered
     ToolTip.text: model.tag
     
-    Kirigami.Theme.inherit: false
-    Kirigami.Theme.colorSet: Kirigami.Theme.Window
+//    Kirigami.Theme.inherit: false
+//    Kirigami.Theme.colorSet: Kirigami.Theme.Window
     
     background: Rectangle
     {

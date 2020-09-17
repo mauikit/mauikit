@@ -155,9 +155,8 @@ Maui.AbstractSideBar
                 Layout.topMargin: Maui.Style.space.tiny
                 Layout.bottomMargin: Maui.Style.space.tiny
                 Layout.margins: Maui.Style.unit
-                listView.flickableDirection: Flickable.VerticalFlick
 
-                verticalScrollBarPolicy:  Qt.ScrollBarAlwaysOff  //this make sthe app crash
+                ScrollBar.vertical.policy: ScrollBar.AlwaysOff
 
                 delegate: control.delegate
                 Kirigami.Theme.inherit: true

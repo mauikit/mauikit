@@ -52,18 +52,7 @@ Maui.ToolBar
         }
     }
     
-    leftSretch: false
-    rightContent: [/*ToolButton
-    {
-        Layout.alignment: Qt.AlignRight
-        visible: false
-//         visible: control.allowEditMode && tagsList.visible && (tagsList.contentWidth > tagsList.width)
-        icon.name: "document-edit"
-        onClicked: control.goEditMode()
-        icon.color: control.Kirigami.Theme.textColor
-    },
-    */
-    
+    rightContent: [
     MouseArea
     {           
         visible: control.allowEditMode && tagsList.visible

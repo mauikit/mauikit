@@ -92,8 +92,8 @@ Item
 			width: height		
 			anchors.horizontalCenter: parent.horizontalCenter
 			sourceComponent: control.emoji ? (isGif ? animComponent : imgComponent) : null
-        }			
-		
+        }
+
 		Label
 		{
 			id: textHolder
