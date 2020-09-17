@@ -49,7 +49,7 @@ ScrollView
     property alias currentIndex : controlView.currentIndex
     property alias count : controlView.count
     property alias cacheBuffer : controlView.cacheBuffer
-    readonly property alias flickable : controlView
+    property alias flickable : controlView
 
     property int topMargin: margins
     property int bottomMargin: margins
@@ -80,9 +80,6 @@ ScrollView
 //    Keys.enabled : true
 //    Keys.forwardTo : controlView
 
-    contentWidth: controlView.width
-    contentHeight: controlView.contentHeight
-
     ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
     ScrollBar.vertical.policy: ScrollBar.AsNeeded
 
@@ -90,11 +87,15 @@ ScrollView
     {
         id: controlView
         anchors.fill: parent
-        anchors.rightMargin: Kirigami.Settings.isMobile ? 0 : parent.ScrollBar.vertical.visible ? parent.ScrollBar.vertical.width : 0
+        anchors.rightMargin: Kirigami.Settings.isMobile ? control.rightMargin : parent.ScrollBar.vertical.visible ? parent.ScrollBar.vertical.width : control.rightMargin
+
         anchors.leftMargin: control.leftMargin
         anchors.bottomMargin: control.bottomMargin
         anchors.topMargin: control.topMargin
         anchors.margins: control.margins
+
+//        bottomMargin: 100
+
         //nasty trick
         property int size_
         Component.onCompleted:

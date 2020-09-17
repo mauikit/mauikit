@@ -42,10 +42,11 @@ ScrollView
     property alias snapMode: _listView.snapMode
     
     property int margins : 0
-    property alias topMargin: _listView.topMargin
-    property alias bottomMargin: _listView.bottomMargin
-    property alias rightMargin: _listView.rightMargin
-    property alias leftMargin: _listView.leftMargin
+    property int topMargin: margins
+    property int bottomMargin: margins
+    property int rightMargin: margins
+    property int leftMargin: margins
+
     property alias listView: _listView
     property alias holder : _holder
     
@@ -62,28 +63,28 @@ ScrollView
     signal keyPress(var event)
     
     spacing: Maui.Style.space.tiny
-    contentWidth: _listView.contentWidth
-
-    focus: true	
-    padding: 0
-    leftPadding: padding
-    rightPadding: padding
-    topPadding: padding
-    bottomPadding: padding
 
     Keys.enabled: false
     Kirigami.Theme.colorSet: Kirigami.Theme.View
 
-    readonly property alias flickable : _listView
+    property alias flickable : _listView
 
-    ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+    contentHeight: _listView.contentHeight
+    contentWidth: _listView.contentWidth
+
+    ScrollBar.horizontal.policy: _listView.orientation === Qt.Horizontal ? ScrollBar.AsNeeded : ScrollBar.AlwaysOff
     ScrollBar.vertical.policy: ScrollBar.AsNeeded
 
     ListView
     {	
         id: _listView
         anchors.fill: parent
-        anchors.rightMargin: Kirigami.Settings.isMobile ? 0 : parent.ScrollBar.vertical.visible ? parent.ScrollBar.vertical.width : 0
+        anchors.rightMargin: Kirigami.Settings.isMobile ? control.rightMargin: parent.ScrollBar.vertical.visible ? parent.ScrollBar.vertical.width : control.rightMargin
+        anchors.bottomMargin: Kirigami.Settings.isMobile ? control.bottomMargin : parent.ScrollBar.horizontal.visible ? parent.ScrollBar.horizontal.height + control.bottomMargin : control.bottomMargin
+
+        anchors.leftMargin: control.leftMargin
+        anchors.topMargin: control.topMargin
+        anchors.margins: control.margins
 
         focus: true
         clip: control.clip           

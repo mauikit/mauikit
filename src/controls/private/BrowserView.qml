@@ -195,11 +195,11 @@ Maui.Page
             property alias currentFMList : _browserModel.list
             property alias currentFMModel : _browserModel
 
-            topMargin: Maui.Style.contentMargins
             checkable: selectionMode
             enableLassoSelection: true
             spacing: Kirigami.Settings.isMobile ? Maui.Style.space.small : Maui.Style.space.medium
-            
+            margins: Maui.Style.space.tiny
+
             BrowserHolder
             {
                 id: _holder
@@ -237,12 +237,8 @@ Maui.Page
             delegate: Maui.ListBrowserDelegate
             {
                 id: delegate
-                width: parent ? parent.width : 0
-                
-                padding: 0
-                leftPadding: Maui.Style.space.small
-                rightPadding: leftPadding
-                
+                width: parent ? parent.width : 0                
+
                 iconSizeHint : Maui.Style.iconSizes.medium
                 imageSizeHint : height * 0.8
                 
@@ -510,7 +506,7 @@ Maui.Page
             property Maui.BaseModel currentFMModel
             property int currentIndex
 
-//            property Flickable flickable : _millerColumns.currentItem.list
+            property Flickable flickable : _millerColumns.currentItem.list
             
             signal itemClicked(int index)
             signal itemDoubleClicked(int index)
@@ -625,13 +621,14 @@ Maui.Page
                     {
                         id: _millerListView
                         anchors.fill: parent
-                        topMargin: Maui.Style.contentMargins
                         checkable: selectionMode
                         onKeyPress: _millerControl.keyPress(event)
                         currentIndex : 0
                         onCurrentIndexChanged: _millerControl.currentIndex = currentIndex
                         enableLassoSelection: true
-                        
+                        spacing: Kirigami.Settings.isMobile ? Maui.Style.space.small : Maui.Style.space.medium
+                        margins: Maui.Style.space.tiny
+
                         BrowserHolder
                         {
                             id: _holder
@@ -689,10 +686,7 @@ Maui.Page
                             id: delegate
                             width: parent.width
                             height: implicitHeight
-                            padding: 0                            
-                            leftPadding: Maui.Style.space.small
-                            rightPadding: leftPadding
-                            
+
                             tooltipText: model.path
                             
                             iconSizeHint : Maui.Style.iconSizes.medium
