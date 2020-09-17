@@ -26,7 +26,7 @@ import "private" as Private
 SwipeView
 {
     id: control
-    interactive: Maui.Handy.isTouch
+    interactive: Kirigami.Settings.hasTransientTouchInput
     clip: true
     focus: true
     

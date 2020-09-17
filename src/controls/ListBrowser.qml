@@ -164,7 +164,7 @@ ScrollView
             id: _mouseArea
             z: -1
             anchors.fill: parent
-            propagateComposedEvents: false
+            propagateComposedEvents: true
 //             preventStealing: true
             acceptedButtons:  Qt.RightButton | Qt.LeftButton
                         

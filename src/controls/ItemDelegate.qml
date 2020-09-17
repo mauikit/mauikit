@@ -29,8 +29,8 @@ Kirigami.DelegateRecycler
 {    
     id: control
     
-    Kirigami.Theme.inherit: false
-    Kirigami.Theme.backgroundColor: "transparent"
+//     Kirigami.Theme.inherit: false
+//     Kirigami.Theme.backgroundColor: "transparent"
     
     default property alias content : _content.data
 
