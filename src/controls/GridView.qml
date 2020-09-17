@@ -87,14 +87,12 @@ ScrollView
     {
         id: controlView
         anchors.fill: parent
-        anchors.rightMargin: Kirigami.Settings.isMobile ? control.rightMargin : parent.ScrollBar.vertical.visible ? parent.ScrollBar.vertical.width : control.rightMargin
+        anchors.rightMargin: Kirigami.Settings.hasTransientTouchInput ? control.rightMargin : parent.ScrollBar.vertical.visible ? parent.ScrollBar.vertical.width : control.rightMargin
 
         anchors.leftMargin: control.leftMargin
         anchors.bottomMargin: control.bottomMargin
         anchors.topMargin: control.topMargin
         anchors.margins: control.margins
-
-//        bottomMargin: 100
 
         //nasty trick
         property int size_
@@ -150,7 +148,7 @@ ScrollView
             id: _mouseArea
             z: -1
             anchors.fill: parent
-            propagateComposedEvents: true
+            propagateComposedEvents: false
             // 				preventStealing: true
             acceptedButtons:  Qt.RightButton | Qt.LeftButton
 

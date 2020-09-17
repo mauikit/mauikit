@@ -135,8 +135,7 @@ Maui.Popup
                     {
                         id: _pageContent
                         anchors.fill: parent
-                        anchors.rightMargin: Kirigami.Settings.isMobile ? 0 : _scrollView.ScrollBar.vertical.visible ? _scrollView.ScrollBar.vertical.width : 0
-
+                        anchors.rightMargin: Kirigami.Settings.hasTransientTouchInput ? 0 : _scrollView.ScrollBar.vertical.visible ? _scrollView.ScrollBar.vertical.width : 0
 
                         spacing: control.spacing
 

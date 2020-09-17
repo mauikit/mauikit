@@ -79,8 +79,8 @@ ScrollView
     {	
         id: _listView
         anchors.fill: parent
-        anchors.rightMargin: Kirigami.Settings.isMobile ? control.rightMargin: parent.ScrollBar.vertical.visible ? parent.ScrollBar.vertical.width : control.rightMargin
-        anchors.bottomMargin: Kirigami.Settings.isMobile ? control.bottomMargin : parent.ScrollBar.horizontal.visible ? parent.ScrollBar.horizontal.height + control.bottomMargin : control.bottomMargin
+        anchors.rightMargin: Kirigami.Settings.hasTransientTouchInput ? control.rightMargin: parent.ScrollBar.vertical.visible ? parent.ScrollBar.vertical.width : control.rightMargin
+        anchors.bottomMargin: Kirigami.Settings.hasTransientTouchInput ? control.bottomMargin : parent.ScrollBar.horizontal.visible ? parent.ScrollBar.horizontal.height + control.bottomMargin : control.bottomMargin
 
         anchors.leftMargin: control.leftMargin
         anchors.topMargin: control.topMargin
