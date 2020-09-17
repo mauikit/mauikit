@@ -151,8 +151,8 @@ Kirigami.ScrollablePage
             id: _mouseArea
             z: -1
             anchors.fill: parent
-            propagateComposedEvents: false
-            preventStealing: true
+            propagateComposedEvents: true
+//             preventStealing: true
             acceptedButtons:  Qt.RightButton | Qt.LeftButton
             
             
@@ -222,6 +222,10 @@ Kirigami.ScrollablePage
                     selectLayer.newY = mouseY;
                     selectLayer.width = 0
                     selectLayer.height = 0;
+                    mouse.accepted = true
+                }else
+                {
+                    mouse.accepted = false
                 }
             }
 			            

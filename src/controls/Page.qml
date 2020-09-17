@@ -658,18 +658,24 @@ Pane
 
     function pullBackHeader()
     {
+        if(Maui.Handy.isTouch) 
+            return
+            
         _headerAnimation.enabled = true
         header.height = 0
     }
 
     function pullDownHeader()
-    {
+    {            
         _headerAnimation.enabled = true
         header.height = header.implicitHeight
     }
 
     function pullBackFooter()
     {
+         if(Maui.Handy.isTouch) 
+            return
+            
         _footerAnimation.enabled = true
         footer.height= 0
     }
