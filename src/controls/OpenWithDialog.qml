@@ -46,20 +46,23 @@ Maui.Dialog
         Layout.fillWidth: true
         Layout.fillHeight: true
         spacing: 0
+        margins: 0
         checkable: false
         model: ListModel {}
 
         delegate: Maui.AlternateListItem
         {
-            width: parent.width
+            width: ListView.view.width
             height: Maui.Style.rowHeight * 2
 
-            leftPadding: Maui.Style.space.medium
-            rightPadding: Maui.Style.space.medium
+//            padding: Maui.Style.space.medium
+//            rightPadding: Maui.Style.space.medium
 
             Maui.ListItemTemplate
             {
+                isCurrentItem: parent.hovered
                 anchors.fill: parent
+                anchors.leftMargin: Maui.Style.space.big
                 label1.text: model.label
                 label2.text: model.comment
                 iconSource: model.icon

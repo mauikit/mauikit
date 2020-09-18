@@ -154,8 +154,6 @@ Maui.AbstractSideBar
                 verticalScrollBarPolicy: ScrollBar.AlwaysOff
 
                 delegate: control.delegate
-                Kirigami.Theme.inherit: true
-                Kirigami.Theme.backgroundColor: "transparent"
 
                 onKeyPress:
                 {

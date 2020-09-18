@@ -40,10 +40,11 @@ Maui.ItemDelegate
     
     property alias imageSource : _template.imageSource
     property alias iconSource : _template.iconSource
-    property alias checkable : _template.checkable
-    property alias checked : _template.checked
     property alias showLabel : _template.labelsVisible
     
+    property alias checked : _template.checked
+    property alias checkable: _template.checkable
+
     property alias dropArea : _dropArea
 
     isCurrentItem : GridView.isCurrentItem || checked
@@ -77,6 +78,8 @@ Maui.ItemDelegate
         iconSource: model.icon
         hovered: control.hovered || control.containsPress || _dropArea.containsDrag       
         label1.text: model.label
+        checkable : control.checkable
+        checked : control.checked
 //        label1.elide: Text.ElideMiddle // TODO this is broken ???
         isCurrentItem: control.isCurrentItem
         onToggled: control.toggled(state)		

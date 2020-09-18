@@ -100,8 +100,6 @@ Maui.Dialog
             Layout.fillHeight: true
             Layout.fillWidth: true
 
-            topMargin: Maui.Style.space.medium
-
             holder.emoji: "qrc:/assets/Electricity.png"
             holder.visible: _listView.count === 0
             holder.isMask: false
@@ -124,6 +122,7 @@ Maui.Dialog
             delegate: Maui.ListDelegate
             {
                 id: delegate
+                width: ListView.view.width
                 label: model.tag
                 iconName: model.icon
                 iconSize: Maui.Style.iconSizes.small

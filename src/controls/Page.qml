@@ -72,7 +72,7 @@ Pane
     property int autoHideFooterDelay : 1000
     property int autoHideHeaderDelay : 1000
 
-//    property bool floatingHeader : control.flickable && control.flickable.contentHeight > control.height && !control.altHeader
+//    property bool floatingHeader : control.flickable && !control.flickable.atYBeginning && !control.altHeader
     property bool floatingHeader : false
 
     property bool floatingFooter: control.flickable
@@ -97,15 +97,15 @@ Pane
         restoreMode: Binding.RestoreBindingOrValue
     }
 
-//    Binding
-//    {
+    Binding
+    {
 //        delayed: true
-//        when: control.floatingHeader && control.flickable && control.state
-//        target: control.flickable
-//        property: "topMargin"
-//        value: control.header.visible && control.headerPositioning === ListView.InlineFooter ? _headerContent.height: 0
-//        restoreMode: Binding.RestoreBindingOrValue
-//    }
+        when: control.floatingHeader && control.flickable
+        target: control.flickable
+        property: "topMargin"
+        value: control.header.visible && control.headerPositioning === ListView.InlineFooter ? _headerContent.height: 0
+        restoreMode: Binding.RestoreBindingOrValue
+    }
 
     background: Rectangle
     {

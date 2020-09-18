@@ -28,6 +28,8 @@ import QtGraphicalEffects 1.0
 Item
 {
     id: control
+    Kirigami.Theme.colorSet: Kirigami.Theme.View
+    focus: true
 
     property int itemSize: 0
     property int itemWidth : itemSize
@@ -73,15 +75,12 @@ Item
     signal areaRightClicked()
     signal keyPress(var event)
 
-    Kirigami.Theme.colorSet: Kirigami.Theme.View
-
-    focus: true
+    Keys.enabled : true
+    Keys.forwardTo : controlView
 
     ScrollView
     {
         anchors.fill: parent
-        //    Keys.enabled : true
-        //    Keys.forwardTo : controlView
 
         ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
         ScrollBar.vertical.policy: ScrollBar.AsNeeded

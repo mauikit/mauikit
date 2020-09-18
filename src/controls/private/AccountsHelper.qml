@@ -96,6 +96,7 @@ Maui.Dialog
         delegate: Maui.ListDelegate
         {
             id: delegate
+            width: ListView.view.width
             label: model.label
             label2: model.server
             template.label2.elide: Text.ElideMiddle

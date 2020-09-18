@@ -42,11 +42,12 @@ Item
     property alias snapMode: _listView.snapMode
     property alias spacing: _listView.spacing
     property alias flickable : _listView
+    property alias scrollView : _scrollView
 
     property alias contentHeight : _listView.contentHeight
     property alias contentWidth : _listView.contentWidth
 
-    property int margins : Maui.Style.space.tiny
+    property int margins : control.enableLassoSelection ?  Maui.Style.space.small : Maui.Style.space.tiny
     property int topMargin: margins
     property int bottomMargin: margins
     property int rightMargin: margins
@@ -71,6 +72,9 @@ Item
 
     Kirigami.Theme.colorSet: Kirigami.Theme.View
 
+    Keys.enabled : true
+    Keys.forwardTo : _listView
+
     ScrollView
     {
         id: _scrollView
@@ -82,7 +86,7 @@ Item
         {
             id: _listView
             anchors.fill: parent
-            anchors.rightMargin: Kirigami.Settings.hasTransientTouchInput ? control.rightMargin: parent.ScrollBar.vertical.visible ? parent.ScrollBar.vertical.width : control.rightMargin
+            anchors.rightMargin: Kirigami.Settings.hasTransientTouchInput ? control.rightMargin: parent.ScrollBar.vertical.visible ? parent.ScrollBar.vertical.width + control.rightMargin : control.rightMargin
             anchors.bottomMargin: Kirigami.Settings.hasTransientTouchInput ? control.bottomMargin : parent.ScrollBar.horizontal.visible ? parent.ScrollBar.horizontal.height + control.bottomMargin : control.bottomMargin
 
             anchors.leftMargin: control.leftMargin
@@ -91,7 +95,7 @@ Item
 
             focus: true
             clip: control.clip
-            spacing: Maui.Style.space.medium
+            spacing: control.enableLassoSelection ? Maui.Style.space.big : Maui.Style.space.medium
             snapMode: ListView.NoSnap
             boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds :
                                                          Flickable.OvershootBounds
@@ -104,11 +108,6 @@ Item
             keyNavigationEnabled : true
             keyNavigationWraps : true
             Keys.onPressed: control.keyPress(event)
-
-            topMargin: control.margins
-            bottomMargin: control.margins
-            leftMargin: control.margins
-            rightMargin: control.margins
 
             Maui.Holder
             {

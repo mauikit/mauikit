@@ -235,7 +235,7 @@ Maui.Page
             delegate: Maui.ListBrowserDelegate
             {
                 id: delegate
-                width: parent ? parent.width : 0                
+                width: ListView.view.width
 
                 iconSizeHint : Maui.Style.iconSizes.medium
                 imageSizeHint : height * 0.8
@@ -670,7 +670,7 @@ Maui.Page
                         delegate: Maui.ListBrowserDelegate
                         {
                             id: delegate
-                            width: parent.width
+                            width: ListView.view.width
                             height: implicitHeight
 
                             tooltipText: model.path

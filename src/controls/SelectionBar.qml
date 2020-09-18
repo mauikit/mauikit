@@ -69,7 +69,7 @@ Item
     {
         id: delegate
         height: Maui.Style.rowHeight * 1.5
-        width: parent.width
+        width: ListView.view.width
         
         Kirigami.Theme.backgroundColor: "transparent"
         Kirigami.Theme.textColor: control.Kirigami.Theme.textColor

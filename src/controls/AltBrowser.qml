@@ -121,8 +121,8 @@ Maui.Page
             cellHeight: _dummyGridView.cellHeight
             cellWidth: _dummyGridView.cellWidth
             itemSize: _dummyGridView.itemSize  
-            margins: _dummyGridView.margins
-            topMargin: _dummyGridView.topMargin  
+//            margins: _dummyGridView.margins
+//            topMargin: _dummyGridView.topMargin
             adaptContent: true
         }
     }
@@ -143,9 +143,9 @@ Maui.Page
             section.property: _dummyListBrowser.section.property
             section.criteria: _dummyListBrowser.section.criteria
             section.labelPositioning: _dummyListBrowser.section.labelPositioning
-            margins: _dummyListBrowser.margins
-            spacing: _dummyListBrowser.spacing
-            topMargin: _dummyListBrowser.topMargin            
+//            margins: _dummyListBrowser.margins
+//            spacing: _dummyListBrowser.spacing
+//            topMargin: _dummyListBrowser.topMargin
         }
     }    
 }

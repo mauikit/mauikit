@@ -10,15 +10,15 @@ Maui.ItemDelegate
     property bool alt : index ? index % 2 === 0 : false
     property bool lastOne : false
 
-    leftPadding: Maui.Style.space.medium
-    rightPadding: Maui.Style.space.medium
+    leftPadding: Maui.Style.space.big
+    rightPadding: Maui.Style.space.big
     
     background: Rectangle
     {        
-        //     color: alt ? Kirigami.Theme.backgroundColor : Qt.darker(Kirigami.Theme.backgroundColor, 1.2)
-        color: Kirigami.Theme.backgroundColor
-        Kirigami.Theme.inherit: false
-        Kirigami.Theme.colorSet: alt ? Kirigami.Theme.View : Kirigami.Theme.Window
+        color: alt ? Kirigami.Theme.backgroundColor : Qt.darker(Kirigami.Theme.backgroundColor, 1.05)
+//        color: Kirigami.Theme.backgroundColor
+//        Kirigami.Theme.inherit: false
+//        Kirigami.Theme.colorSet: alt ? Kirigami.Theme.View : Kirigami.Theme.Window
 
         Maui.Separator
         {

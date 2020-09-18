@@ -119,9 +119,6 @@ Maui.Popup
                 id: _scrollView
                 anchors.fill: parent
                 visible: _stack.children.length === 0
-                contentHeight: _pageContent.implicitHeight
-                contentWidth: width
-
 
                 ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
                 ScrollBar.vertical.policy: ScrollBar.AsNeeded
@@ -129,14 +126,12 @@ Maui.Popup
                 Flickable
                 {
                     id: _flickable
-                    anchors.fill: parent
+                    contentHeight: _pageContent.implicitHeight
 
                     ColumnLayout
                     {
                         id: _pageContent
-                        anchors.fill: parent
-                        anchors.rightMargin: Kirigami.Settings.hasTransientTouchInput ? 0 : _scrollView.ScrollBar.vertical.visible ? _scrollView.ScrollBar.vertical.width : 0
-
+                        width: parent.width
                         spacing: control.spacing
 
                         Maui.ListItemTemplate
