@@ -426,33 +426,28 @@ Window
                 anchors.fill: parent
                 spacing: Maui.Style.space.medium
 
-                ListBrowser
+                Repeater
                 {
                     id: _accountsListing
-                    visible: _accountsListing.count > 0
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: Math.min(contentHeight, 300)
-                    spacing: Maui.Style.space.medium
-                    Kirigami.Theme.backgroundColor: "transparent"
-                    currentIndex: Maui.App.accounts.currentAccountIndex
 
-                    model:  Maui.BaseModel
+                    model: Maui.BaseModel
                     {
                         list: Maui.App.accounts
                     }
 
-                    background: null
-
                     delegate: Maui.ListBrowserDelegate
                     {
+                        visible: _accountsListing.count > 0
+                        Layout.fillWidth: true
+                        Kirigami.Theme.backgroundColor: "transparent"
+
+                        isCurrentItem: Maui.App.accounts.currentAccountIndex === index
                         iconSource: "amarok_artist"
                         iconSizeHint: Maui.Style.iconSizes.medium
                         label1.text: model.user
                         label2.text: model.server
                         width: _accountsListing.width
-                        height: Maui.Style.rowHeight * 1.2
-                        leftPadding: Maui.Style.space.tiny
-                        rightPadding: Maui.Style.space.tiny
+                        height: Maui.Style.rowHeight * 1.2                        
                         onClicked: Maui.App.accounts.currentAccountIndex = index
                     }
 

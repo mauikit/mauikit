@@ -11,7 +11,6 @@ Maui.Dialog
 
     maxHeight: 350* Maui.Style.unit
     maxWidth: maxHeight
-    page.margins: Maui.Style.contentMargins
     page.title: i18n("Accounts")
     property alias model : _syncingModel
     property alias list : _syncingModel.list
@@ -88,13 +87,12 @@ Maui.Dialog
         }
     }
 
-    stack: ListView
+    stack: Maui.ListBrowser
     {
         id: _listView
         Layout.fillHeight: true
         Layout.fillWidth: true
         model: _syncingModel
-        spacing: Maui.Style.space.medium
         delegate: Maui.ListDelegate
         {
             id: delegate
@@ -120,7 +118,6 @@ Maui.Dialog
                 _listView.currentIndex = index
                 _menu.popup()
             }
-
         }
 
         Maui.Holder

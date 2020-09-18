@@ -24,7 +24,8 @@ import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.9 as Kirigami
 import QtGraphicalEffects 1.0
 
-ScrollView
+
+Item
 {
     id: control
 
@@ -50,12 +51,14 @@ ScrollView
     property alias count : controlView.count
     property alias cacheBuffer : controlView.cacheBuffer
     property alias flickable : controlView
+    property alias contentHeight : controlView.contentHeight
+    property alias contentWidth : controlView.contentWidth
 
     property int topMargin: margins
     property int bottomMargin: margins
     property int rightMargin: margins
     property int leftMargin: margins
-    property int margins: 0
+    property int margins: Maui.Style.space.medium
 
     property alias holder : _holder
 
@@ -64,9 +67,6 @@ ScrollView
     property alias lassoRec : selectLayer
 
     property alias pinchEnabled : _pinchArea.enabled
-
-    property int verticalScrollBarPolicy: ScrollBar.AlwaysOn
-    property int horizontalScrollBarPolicy: ScrollBar.AlwaysOff
 
     signal itemsSelected(var indexes)
     signal areaClicked(var mouse)
@@ -77,137 +77,155 @@ ScrollView
 
     focus: true
 
-//    Keys.enabled : true
-//    Keys.forwardTo : controlView
-
-    ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-    ScrollBar.vertical.policy: ScrollBar.AsNeeded
-
-    GridView
+    ScrollView
     {
-        id: controlView
         anchors.fill: parent
-        anchors.rightMargin: Kirigami.Settings.hasTransientTouchInput ? control.rightMargin : parent.ScrollBar.vertical.visible ? parent.ScrollBar.vertical.width : control.rightMargin
+        //    Keys.enabled : true
+        //    Keys.forwardTo : controlView
 
-        anchors.leftMargin: control.leftMargin
-        anchors.bottomMargin: control.bottomMargin
-        anchors.topMargin: control.topMargin
-        anchors.margins: control.margins
+        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+        ScrollBar.vertical.policy: ScrollBar.AsNeeded
 
-        //nasty trick
-        property int size_
-        Component.onCompleted:
+        GridView
         {
-            controlView.size_ = control.itemWidth
-        }
-
-        flow: GridView.FlowLeftToRight
-        clip: control.clip
-        focus: true
-
-        cellWidth: control.itemWidth
-        cellHeight: control.itemHeight
-
-        boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
-        flickableDirection: Flickable.AutoFlickDirection
-        snapMode: GridView.NoSnap
-        highlightMoveDuration: 0
-        interactive: Kirigami.Settings.hasTransientTouchInput
-        onWidthChanged: if(adaptContent) control.adaptGrid()
-        onCountChanged: if(adaptContent) control.adaptGrid()
-
-        keyNavigationEnabled : true
-        keyNavigationWraps : true
-        Keys.onPressed: control.keyPress(event)
-
-        Kirigami.WheelHandler
-        {
-            id: wheelHandler
-            target: parent
-        }
-
-        Maui.Holder
-        {
-            id: _holder
-            anchors.fill : parent
-        }
-
-        PinchArea
-        {
-            id: _pinchArea
+            id: controlView
             anchors.fill: parent
-            z: -1
-            onPinchFinished:
+            anchors.rightMargin: Kirigami.Settings.hasTransientTouchInput ? control.rightMargin : parent.ScrollBar.vertical.visible ? parent.ScrollBar.vertical.width : control.rightMargin
+
+            anchors.leftMargin: control.leftMargin
+            anchors.bottomMargin: control.bottomMargin
+            anchors.topMargin: control.topMargin
+            anchors.margins: control.margins
+
+            //nasty trick
+            property int size_
+            Component.onCompleted:
             {
-                resizeContent(pinch.scale)
+                controlView.size_ = control.itemWidth
             }
-        }
 
-        MouseArea
-        {
-            id: _mouseArea
-            z: -1
-            anchors.fill: parent
-            propagateComposedEvents: false
-            // 				preventStealing: true
-            acceptedButtons:  Qt.RightButton | Qt.LeftButton
+            flow: GridView.FlowLeftToRight
+            clip: control.clip
+            focus: true
 
-            onClicked:
+            cellWidth: control.itemWidth
+            cellHeight: control.itemHeight
+
+            boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds : Flickable.OvershootBounds
+            flickableDirection: Flickable.AutoFlickDirection
+            snapMode: GridView.NoSnap
+            highlightMoveDuration: 0
+            interactive: Kirigami.Settings.hasTransientTouchInput
+            onWidthChanged: if(adaptContent) control.adaptGrid()
+            onCountChanged: if(adaptContent) control.adaptGrid()
+
+            keyNavigationEnabled : true
+            keyNavigationWraps : true
+            Keys.onPressed: control.keyPress(event)
+
+            Kirigami.WheelHandler
             {
-                control.areaClicked(mouse)
-                control.forceActiveFocus()
+                id: wheelHandler
+                target: parent
+            }
 
-                if(mouse.button === Qt.RightButton)
+            Maui.Holder
+            {
+                id: _holder
+                anchors.fill : parent
+            }
+
+            PinchArea
+            {
+                id: _pinchArea
+                anchors.fill: parent
+                z: -1
+                onPinchFinished:
                 {
-                    control.areaRightClicked()
-                    return
+                    resizeContent(pinch.scale)
                 }
             }
 
-            onWheel:
+            MouseArea
             {
-                if (wheel.modifiers & Qt.ControlModifier)
+                id: _mouseArea
+                z: -1
+                anchors.fill: parent
+                propagateComposedEvents: false
+                // 				preventStealing: true
+                acceptedButtons:  Qt.RightButton | Qt.LeftButton
+
+                onClicked:
                 {
-                    if (wheel.angleDelta.y != 0)
+                    control.areaClicked(mouse)
+                    control.forceActiveFocus()
+
+                    if(mouse.button === Qt.RightButton)
                     {
-                        var factor = 1 + wheel.angleDelta.y / 600;
-                        control.resizeContent(factor)
-                    }
-                }else
-                    wheel.accepted = false
-            }
-
-            onPositionChanged:
-            {
-                if(_mouseArea.pressed && control.enableLassoSelection && selectLayer.visible)
-                {
-                    if(mouseX >= selectLayer.newX)
-                    {
-                        selectLayer.width = (mouseX + 10) < (control.x + control.width) ? (mouseX - selectLayer.x) : selectLayer.width;
-                    } else {
-                        selectLayer.x = mouseX < control.x ? control.x : mouseX;
-                        selectLayer.width = selectLayer.newX - selectLayer.x;
-                    }
-
-                    if(mouseY >= selectLayer.newY) {
-                        selectLayer.height = (mouseY + 10) < (control.y + control.height) ? (mouseY - selectLayer.y) : selectLayer.height;
-                        if(!controlView.atYEnd &&  mouseY > (control.y + control.height))
-                            controlView.contentY += 10
-                    } else {
-                        selectLayer.y = mouseY < control.y ? control.y : mouseY;
-                        selectLayer.height = selectLayer.newY - selectLayer.y;
-
-                        if(!controlView.atYBeginning && selectLayer.y === 0)
-                            controlView.contentY -= 10
+                        control.areaRightClicked()
+                        return
                     }
                 }
-            }
 
-            onPressed:
-            {
-                if (mouse.source === Qt.MouseEventNotSynthesized)
+                onWheel:
                 {
-                    if(control.enableLassoSelection && mouse.button === Qt.LeftButton )
+                    if (wheel.modifiers & Qt.ControlModifier)
+                    {
+                        if (wheel.angleDelta.y != 0)
+                        {
+                            var factor = 1 + wheel.angleDelta.y / 600;
+                            control.resizeContent(factor)
+                        }
+                    }else
+                        wheel.accepted = false
+                }
+
+                onPositionChanged:
+                {
+                    if(_mouseArea.pressed && control.enableLassoSelection && selectLayer.visible)
+                    {
+                        if(mouseX >= selectLayer.newX)
+                        {
+                            selectLayer.width = (mouseX + 10) < (control.x + control.width) ? (mouseX - selectLayer.x) : selectLayer.width;
+                        } else {
+                            selectLayer.x = mouseX < control.x ? control.x : mouseX;
+                            selectLayer.width = selectLayer.newX - selectLayer.x;
+                        }
+
+                        if(mouseY >= selectLayer.newY) {
+                            selectLayer.height = (mouseY + 10) < (control.y + control.height) ? (mouseY - selectLayer.y) : selectLayer.height;
+                            if(!controlView.atYEnd &&  mouseY > (control.y + control.height))
+                                controlView.contentY += 10
+                        } else {
+                            selectLayer.y = mouseY < control.y ? control.y : mouseY;
+                            selectLayer.height = selectLayer.newY - selectLayer.y;
+
+                            if(!controlView.atYBeginning && selectLayer.y === 0)
+                                controlView.contentY -= 10
+                        }
+                    }
+                }
+
+                onPressed:
+                {
+                    if (mouse.source === Qt.MouseEventNotSynthesized)
+                    {
+                        if(control.enableLassoSelection && mouse.button === Qt.LeftButton )
+                        {
+                            selectLayer.visible = true;
+                            selectLayer.x = mouseX;
+                            selectLayer.y = mouseY;
+                            selectLayer.newX = mouseX;
+                            selectLayer.newY = mouseY;
+                            selectLayer.width = 0
+                            selectLayer.height = 0;
+                        }
+                    }
+                }
+
+                onPressAndHold:
+                {
+                    if ( mouse.source !== Qt.MouseEventNotSynthesized && control.enableLassoSelection && !selectLayer.visible )
                     {
                         selectLayer.visible = true;
                         selectLayer.x = mouseX;
@@ -216,116 +234,102 @@ ScrollView
                         selectLayer.newY = mouseY;
                         selectLayer.width = 0
                         selectLayer.height = 0;
-                    }
-                }
-            }
 
-            onPressAndHold:
-            {
-                if ( mouse.source !== Qt.MouseEventNotSynthesized && control.enableLassoSelection && !selectLayer.visible )
-                {
-                    selectLayer.visible = true;
-                    selectLayer.x = mouseX;
-                    selectLayer.y = mouseY;
-                    selectLayer.newX = mouseX;
-                    selectLayer.newY = mouseY;
-                    selectLayer.width = 0
-                    selectLayer.height = 0;
-
-                    mouse.accepted = true
-                }else
-                {
-                    mouse.accepted = false
-                }
-            }
-
-            onReleased:
-            {
-                if(mouse.button !== Qt.LeftButton || !control.enableLassoSelection || !selectLayer.visible)
-                {
-                    mouse.accepted = false
-                    return;
-                }
-
-                if(selectLayer.y > controlView.contentHeight)
-                {
-                    return selectLayer.reset();
-                }
-
-                var lassoIndexes = []
-                const limitX = mouse.x === lassoRec.x ? lassoRec.x+lassoRec.width : mouse.x
-                const limitY =  mouse.y === lassoRec.y ?  lassoRec.y+lassoRec.height : mouse.y
-
-                for(var i =lassoRec.x; i < limitX; i+=(lassoRec.width/(controlView.cellWidth* 0.5)))
-                {
-                    for(var y = lassoRec.y; y < limitY; y+=(lassoRec.height/(controlView.cellHeight * 0.5)))
+                        mouse.accepted = true
+                    }else
                     {
-                        const index = controlView.indexAt(i,y+controlView.contentY)
-                        if(!lassoIndexes.includes(index) && index>-1 && index< controlView.count)
-                            lassoIndexes.push(index)
+                        mouse.accepted = false
                     }
                 }
 
-                control.itemsSelected(lassoIndexes)
-                selectLayer.reset()
+                onReleased:
+                {
+                    if(mouse.button !== Qt.LeftButton || !control.enableLassoSelection || !selectLayer.visible)
+                    {
+                        mouse.accepted = false
+                        return;
+                    }
+
+                    if(selectLayer.y > controlView.contentHeight)
+                    {
+                        return selectLayer.reset();
+                    }
+
+                    var lassoIndexes = []
+                    const limitX = mouse.x === lassoRec.x ? lassoRec.x+lassoRec.width : mouse.x
+                    const limitY =  mouse.y === lassoRec.y ?  lassoRec.y+lassoRec.height : mouse.y
+
+                    for(var i =lassoRec.x; i < limitX; i+=(lassoRec.width/(controlView.cellWidth* 0.5)))
+                    {
+                        for(var y = lassoRec.y; y < limitY; y+=(lassoRec.height/(controlView.cellHeight * 0.5)))
+                        {
+                            const index = controlView.indexAt(i,y+controlView.contentY)
+                            if(!lassoIndexes.includes(index) && index>-1 && index< controlView.count)
+                                lassoIndexes.push(index)
+                        }
+                    }
+
+                    control.itemsSelected(lassoIndexes)
+                    selectLayer.reset()
+                }
             }
-        }
 
-        Maui.Rectangle
-        {
-            id: selectLayer
-            property int newX: 0
-            property int newY: 0
-            height: 0
-            width: 0
-            x: 0
-            y: 0
-            visible: false
-            color: Qt.rgba(control.Kirigami.Theme.highlightColor.r,control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2)
-            opacity: 0.7
-
-            borderColor: control.Kirigami.Theme.highlightColor
-            borderWidth: 2
-            solidBorder: false
-
-            function reset()
+            Maui.Rectangle
             {
-                selectLayer.x = 0;
-                selectLayer.y = 0;
-                selectLayer.newX = 0;
-                selectLayer.newY = 0;
-                selectLayer.visible = false;
-                selectLayer.width = 0;
-                selectLayer.height = 0;
+                id: selectLayer
+                property int newX: 0
+                property int newY: 0
+                height: 0
+                width: 0
+                x: 0
+                y: 0
+                visible: false
+                color: Qt.rgba(control.Kirigami.Theme.highlightColor.r,control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2)
+                opacity: 0.7
+
+                borderColor: control.Kirigami.Theme.highlightColor
+                borderWidth: 2
+                solidBorder: false
+
+                function reset()
+                {
+                    selectLayer.x = 0;
+                    selectLayer.y = 0;
+                    selectLayer.newX = 0;
+                    selectLayer.newY = 0;
+                    selectLayer.visible = false;
+                    selectLayer.width = 0;
+                    selectLayer.height = 0;
+                }
             }
         }
     }
 
 
-    function resizeContent(factor)
-    {
-        const newSize= control.itemSize * factor
+        function resizeContent(factor)
+        {
+            const newSize= control.itemSize * factor
 
-        if(newSize > control.itemSize)
-        {
-            control.itemSize =  newSize
-        }
-        else
-        {
-            if(newSize >= Maui.Style.iconSizes.small)
+            if(newSize > control.itemSize)
+            {
                 control.itemSize =  newSize
+            }
+            else
+            {
+                if(newSize >= Maui.Style.iconSizes.small)
+                    control.itemSize =  newSize
+            }
         }
-    }
 
-    function adaptGrid()
-    {
-        var fullWidth = controlView.width
-        var realAmount = parseInt(fullWidth / controlView.size_, 10)
-        var amount = parseInt(fullWidth / control.cellWidth, 10)
+        function adaptGrid()
+        {
+            var fullWidth = controlView.width
+            var realAmount = parseInt(fullWidth / controlView.size_, 10)
+            var amount = parseInt(fullWidth / control.cellWidth, 10)
 
-        var leftSpace = parseInt(fullWidth - ( realAmount * controlView.size_ ), 10)
-        var size = Math.min(amount, realAmount) >= control.count ? Math.max(control.cellWidth, control.itemSize) : parseInt((controlView.size_) + (parseInt(leftSpace/realAmount, 10)), 10)
+            var leftSpace = parseInt(fullWidth - ( realAmount * controlView.size_ ), 10)
+            var size = Math.min(amount, realAmount) >= control.count ? Math.max(control.cellWidth, control.itemSize) : parseInt((controlView.size_) + (parseInt(leftSpace/realAmount, 10)), 10)
 
-        control.cellWidth = size
-    }
+            control.cellWidth = size
+        }
 }

@@ -155,11 +155,9 @@ Item
                 anchors.topMargin: Maui.Style.space.medium
                 anchors.bottomMargin: _container.height
                 id: selectionList
-                padding: 0
                 visible: _listContainer.height > 10
                 spacing: Maui.Style.space.small
                 model: ListModel{}
-                background: null
                 
                 delegate: control.listDelegate			
             }             
@@ -467,7 +465,7 @@ Item
                 
                 item.uri = uri
                 selectionList.model.append(item)
-                selectionList.listView.positionViewAtEnd()
+                selectionList.flickable.positionViewAtEnd()
                 selectionList.currentIndex = selectionList.count - 1
                 
                 control.itemAdded(item)

@@ -97,15 +97,7 @@ void MauiModel::setSort(const QString &sort)
 
     this->m_sort = sort;
     emit this->sortChanged(this->m_sort);
-    this->setSortRole([sort, roles = this->roleNames()]() -> int {
-        for (const auto &key : roles.keys()) {
-            if (roles[key] == sort) {
-                qDebug() << "FOUND ROLE KEY " << key << roles[key] << sort;
-                return key;
-            }
-        }
-        return -1;
-    }());
+    this->setSortRole(FMH::MODEL_NAME_KEY[sort]);
     this->sort(0, this->m_sortOrder);
 }
 

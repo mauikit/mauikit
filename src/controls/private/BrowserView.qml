@@ -197,8 +197,6 @@ Maui.Page
 
             checkable: selectionMode
             enableLassoSelection: true
-            spacing: Kirigami.Settings.isMobile ? Maui.Style.space.small : Maui.Style.space.medium
-            margins: Maui.Style.space.tiny
 
             BrowserHolder
             {
@@ -526,21 +524,13 @@ Maui.Page
 			contentWidth: _millerColumns.contentWidth
 
             ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-            //			ScrollBar.horizontal: ScrollBar
-//			{
-//                id: horizontalScrollBar
-//                height: visible ? implicitHeight: 0
-//                parent: _millerControl
-//                x: 0
-//                y: _millerControl.height - height
-//                width: _millerControl.width
-//                active: _millerControl.ScrollBar.horizontal || _millerControl.ScrollBar.horizontal.active
-//            }
-            
+
             ListView
             {
                 id: _millerColumns
                 anchors.fill: parent
+                anchors.bottomMargin: parent.ScrollBar.horizontal.visible ? parent.ScrollBar.horizontal.height : 0
+
                 boundsBehavior: !Maui.Handy.isTouch? Flickable.StopAtBounds : Flickable.OvershootBounds
                 
                 keyNavigationEnabled: true
@@ -606,17 +596,6 @@ Maui.Page
                         z: 999
                     }
                     
-                    Maui.FMList
-                    {
-                        id: _millersFMList
-                        path: model.path
-                        onlyDirs: settings.onlyDirs
-                        filterType: settings.filterType
-                        filters: settings.filters
-                        sortBy: settings.sortBy
-                        hidden: settings.showHiddenFiles
-                    }
-                    
                     Maui.ListBrowser
                     {
                         id: _millerListView
@@ -626,8 +605,6 @@ Maui.Page
                         currentIndex : 0
                         onCurrentIndexChanged: _millerControl.currentIndex = currentIndex
                         enableLassoSelection: true
-                        spacing: Kirigami.Settings.isMobile ? Maui.Style.space.small : Maui.Style.space.medium
-                        margins: Maui.Style.space.tiny
 
                         BrowserHolder
                         {
@@ -674,7 +651,16 @@ Maui.Page
                         model: Maui.BaseModel
                         {
                             id: _millersFMModel
-                            list: _millersFMList
+                            list: Maui.FMList
+                            {
+                                id: _millersFMList
+                                path: model.path
+                                onlyDirs: settings.onlyDirs
+                                filterType: settings.filterType
+                                filters: settings.filters
+                                sortBy: settings.sortBy
+                                hidden: settings.showHiddenFiles
+                            }
                             filter: control.filter
                             recursiveFilteringEnabled: true
                             sortCaseSensitivity: Qt.CaseInsensitive
