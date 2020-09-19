@@ -126,13 +126,32 @@ FMH::MODEL_LIST PlacesList::items() const
 }
 
 FMH::MODEL_LIST PlacesList::getGroup(const KFilePlacesModel &model, const FMH::PATHTYPE_KEY &type)
-{
+{    
+    FMH::MODEL_LIST res;
+
+    if(type == FMH::PATHTYPE_KEY::QUICK_PATH)
+    {
+        res << FMH::MODEL {{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::TAGS_PATH] + "fav"}, {FMH::MODEL_KEY::ICON, "love"}, {FMH::MODEL_KEY::LABEL, "Favorite"}, {FMH::MODEL_KEY::TYPE, "Quick"}};
+
+    #if defined Q_OS_LINUX && !defined Q_OS_ANDROID
+        res << FMH::MODEL {{FMH::MODEL_KEY::PATH, "recentdocuments:///"}, {FMH::MODEL_KEY::ICON, "view-media-recent"}, {FMH::MODEL_KEY::LABEL, "Recent"}, {FMH::MODEL_KEY::TYPE, "Quick"}};
+    #endif
+
+    #ifdef COMPONENT_TAGGING
+        res << FMH::MODEL {{FMH::MODEL_KEY::PATH, "tags:///"}, {FMH::MODEL_KEY::ICON, "tag"}, {FMH::MODEL_KEY::LABEL, "Tags"}, {FMH::MODEL_KEY::TYPE, "Quick"}};
+    #endif
+
+        return res;
+    }
+
+    if (type == FMH::PATHTYPE_KEY::PLACES_PATH) {
+        res << FMStatic::getDefaultPaths();
+    }
+
 #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
     Q_UNUSED(model)
-    FMH::MODEL_LIST res;
     switch (type) {
     case (FMH::PATHTYPE_KEY::PLACES_PATH):
-        res << FMStatic::getDefaultPaths();
         res << FMStatic::packItems(UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, true).toStringList(), FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::BOOKMARKS_PATH]);
         break;
     case (FMH::PATHTYPE_KEY::DRIVES_PATH):
@@ -141,14 +160,7 @@ FMH::MODEL_LIST PlacesList::getGroup(const KFilePlacesModel &model, const FMH::P
     default:
         break;
     }
-
-    return res;
 #else
-    FMH::MODEL_LIST res;
-
-    if (type == FMH::PATHTYPE_KEY::PLACES_PATH) {
-        res << FMStatic::getDefaultPaths();
-    }
 
     const auto group = model.groupIndexes(static_cast<KFilePlacesModel::GroupType>(type));
     res << std::accumulate(group.constBegin(), group.constEnd(), FMH::MODEL_LIST(), [&model, &type](FMH::MODEL_LIST &list, const QModelIndex &index) -> FMH::MODEL_LIST {
@@ -168,30 +180,23 @@ FMH::MODEL_LIST PlacesList::getGroup(const KFilePlacesModel &model, const FMH::P
 
         return list;
     });
+#endif
 
     return res;
-#endif
 }
 
 void PlacesList::setList()
 {
     this->list.clear();
 
-    // this are default static places //TODO move to itws own PATHTYPE_KEY::QUICK
-    this->list << FMH::MODEL {{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::TAGS_PATH] + "fav"}, {FMH::MODEL_KEY::ICON, "love"}, {FMH::MODEL_KEY::LABEL, "Favorite"}, {FMH::MODEL_KEY::TYPE, "Quick"}};
-
-#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
-    this->list << FMH::MODEL {{FMH::MODEL_KEY::PATH, "recentdocuments:///"}, {FMH::MODEL_KEY::ICON, "view-media-recent"}, {FMH::MODEL_KEY::LABEL, "Recent"}, {FMH::MODEL_KEY::TYPE, "Quick"}};
-#endif
-
-#ifdef COMPONENT_TAGGING
-    this->list << FMH::MODEL {{FMH::MODEL_KEY::PATH, "tags:///"}, {FMH::MODEL_KEY::ICON, "tag"}, {FMH::MODEL_KEY::LABEL, "Tags"}, {FMH::MODEL_KEY::TYPE, "Quick"}};
-#endif
-
     for (const auto &group : this->groups) {
         switch (group) {
         case FMH::PATHTYPE_KEY::PLACES_PATH:
             this->list << getGroup(*this->model, FMH::PATHTYPE_KEY::PLACES_PATH);
+            break;
+
+        case FMH::PATHTYPE_KEY::QUICK_PATH:
+            this->list << getGroup(*this->model, FMH::PATHTYPE_KEY::QUICK_PATH);
             break;
 
         case FMH::PATHTYPE_KEY::APPS_PATH:

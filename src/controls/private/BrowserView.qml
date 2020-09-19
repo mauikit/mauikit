@@ -183,6 +183,7 @@ Maui.Page
         filters: settings.filters
         sortBy: settings.sortBy
         hidden: settings.showHiddenFiles
+        foldersFirst: settings.foldersFirst
     }
     
     Component
@@ -663,6 +664,7 @@ Maui.Page
                                 filters: settings.filters
                                 sortBy: settings.sortBy
                                 hidden: settings.showHiddenFiles
+                                foldersFirst: settings.foldersFirst
                             }
                             filter: control.filter
                             recursiveFilteringEnabled: true

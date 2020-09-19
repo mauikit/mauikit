@@ -27,6 +27,9 @@ Item
 {
     id: control
 
+    implicitHeight: contentHeight + margins*2
+    implicitWidth: contentWidth + margins*2
+
     property int itemSize : Maui.Style.iconSizes.big
     property bool checkable : false
 

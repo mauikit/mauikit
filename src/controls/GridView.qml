@@ -31,6 +31,9 @@ Item
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     focus: true
 
+    implicitHeight: contentHeight + margins*2
+    implicitWidth: contentWidth + margins*2
+
     property int itemSize: 0
     property int itemWidth : itemSize
     property int itemHeight : itemSize

@@ -198,7 +198,7 @@ Maui.Page
 				if(control.selectionBar && control.selectionBar.visible)
 				{
 					control.selectionBar.animate()
-					control.clearSelection()
+                    control.selectionBar.clear()
 				}	
 				
 				Maui.FM.removeFiles(urls)					
@@ -210,7 +210,7 @@ Maui.Page
 				if(control.selectionBar && control.selectionBar.visible)
 				{
 					control.selectionBar.animate()
-					control.clearSelection()
+                    control.selectionBar.clear()
 				}
 				
 				Maui.FM.moveToTrash(urls)
@@ -482,7 +482,7 @@ Maui.Page
 			{
 				if(control.selectionBar && control.selectionBar.count> 0)
 				{
-					control.clearSelection()					
+                    control.selectionBar.clear()
 				}				
 				else
 				{
@@ -494,7 +494,7 @@ Maui.Page
 			if(event.key == Qt.Key_Escape) //TODO not working, the event is not catched or emitted or is being accepted else where?
 			{
 				if(control.selectionBar && control.selectionBar.count > 0)
-					control.clearSelection()
+                    control.selectionBar.clear()
 					
 					control.view.filter = ""
 			}
@@ -762,7 +762,7 @@ Maui.Page
         if(data.cut)
         {
             control.currentFMList.cutInto(urls)
-            control.clearSelection()
+            control.selectionBar.clear()
         }else
         {
             control.currentFMList.copyInto(urls)
@@ -877,13 +877,6 @@ Maui.Page
 		control.selectionBar.append(item.path, item)		
 	}
 	
-	function clearSelection()
-	{
-		if(control.selectionBar)
-		{
-			control.selectionBar.clear()
-		}
-	}
     //given a list inf indexes add them to the selectionBar
     function selectIndexes(indexes)
     {

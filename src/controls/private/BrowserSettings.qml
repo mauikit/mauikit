@@ -32,5 +32,6 @@ QtObject
     property bool showHiddenFiles: false
     property bool group : false
     property int viewType : 0    
+    property bool foldersFirst: true
 }
 
