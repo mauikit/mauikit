@@ -23,152 +23,169 @@ import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.2 as Maui
 
-Control
-{
+Kirigami.DelegateRecycler
+{    
     id: control
+    default property alias content : _delegate.data
 
-//    Kirigami.Theme.colorSet: Kirigami.Theme.Button
+    //    Kirigami.Theme.colorSet: Kirigami.Theme.Button
     property alias mouseArea : _mouseArea
     property bool draggable: false
     property bool isCurrentItem :  false
-
-    property int radius: Maui.Style.radiusV
-
+    
+    property int radius: Maui.Style.radiusV    
+    
+    property alias padding: _delegate.padding
+    property alias leftPadding: _delegate.leftPadding
+    property alias rightPadding: _delegate.rightPadding
+    property alias topPadding: _delegate.topPadding
+    property alias bottomPadding: _delegate.bottomPadding
+    
+    property alias hovered: _delegate.hovered
     property alias containsPress: _mouseArea.containsPress
-
+    property alias hoverEnabled: _delegate.hoverEnabled
+    
+    property alias background : _delegate.background
+    
     signal pressed(var mouse)
     signal pressAndHold(var mouse)
     signal clicked(var mouse)
     signal rightClicked(var mouse)
     signal doubleClicked(var mouse)
-
+    
     Drag.active: mouseArea.drag.active && control.draggable
     Drag.dragType: Drag.Automatic
     Drag.supportedActions: Qt.CopyAction
-
+    
     property bool highlighted: control.isCurrentItem
-
-    hoverEnabled: !Kirigami.Settings.isMobile
-
-    padding: 0
-    bottomPadding: padding
-    rightPadding: padding
-    leftPadding: padding
-    topPadding: padding
-
-    SequentialAnimation on y
+    
+    Control
     {
-        id: xAnim
-        // Animations on properties start running by default
-        running: false
-        loops: 2
-        NumberAnimation { from: 0; to: -10; duration: 100; easing.type: Easing.InOutQuad }
-        NumberAnimation { from: -10; to: 0; duration: 100; easing.type: Easing.InOutQuad }
-        PauseAnimation { duration: 50 } // This puts a bit of time between the loop
-    }
-
-    MouseArea
-    {
-        id: _mouseArea
-        //        enabled: !Kirigami.Settings.isMobile
+        id: _delegate
+        
         anchors.fill: parent
-        acceptedButtons:  Qt.RightButton | Qt.LeftButton
-        property bool pressAndHoldIgnored : false
-        drag.axis: Drag.XAndYAxis
-
-        //            drag.minimumY: control.height
-        //            drag.minimumX : control.width
-
-        onCanceled:
+        
+        hoverEnabled: !Kirigami.Settings.isMobile
+        
+        padding: 0
+        bottomPadding: padding
+        rightPadding: padding
+        leftPadding: padding
+        topPadding: padding
+        
+        SequentialAnimation on y
         {
-            //                if(control.draggable)
-            //                {
-            //                    drag.target = null
-            //                }
+            id: xAnim
+            // Animations on properties start running by default
+            running: false
+            loops: 2
+            NumberAnimation { from: 0; to: -10; duration: 100; easing.type: Easing.InOutQuad }
+            NumberAnimation { from: -10; to: 0; duration: 100; easing.type: Easing.InOutQuad }
+            PauseAnimation { duration: 50 } // This puts a bit of time between the loop
         }
-
-        onClicked:
+        
+        MouseArea
         {
-            if(mouse.button === Qt.RightButton)
+            id: _mouseArea
+            //        enabled: !Kirigami.Settings.isMobile
+            anchors.fill: parent
+            acceptedButtons:  Qt.RightButton | Qt.LeftButton
+            property bool pressAndHoldIgnored : false
+            drag.axis: Drag.XAndYAxis
+            
+            //            drag.minimumY: control.height
+            //            drag.minimumX : control.width
+            
+            onCanceled:
             {
-                control.rightClicked(mouse)
+                //                if(control.draggable)
+                //                {
+                //                    drag.target = null
+                //                }
             }
-            else
+            
+            onClicked:
             {
-                control.clicked(mouse)
-            }
-        }
-
-        onDoubleClicked:
-        {
-            control.doubleClicked(mouse)
-        }
-
-        onPressed:
-        {
-            if(control.draggable && mouse.source !== Qt.MouseEventSynthesizedByQt)
-            {
-                drag.target = _mouseArea
-                control.grabToImage(function(result)
+                if(mouse.button === Qt.RightButton)
                 {
-                    control.Drag.imageSource = result.url
-                })
-            }else
-            {
-                drag.target = null
-            }
-
-            control.pressed(mouse)
-        }
-
-        onReleased :
-        {
-            if(control.draggable)
-            {
-                drag.target = null
-            }
-
-            if(pressAndHoldIgnored)
-            {
-                control.pressAndHold(mouse)
-                pressAndHoldIgnored = false
-            }
-        }
-
-        onPressAndHold :
-        {
-            if(control.draggable && mouse.source === Qt.MouseEventSynthesizedByQt && Maui.Handy.isTouch)
-            {
-                drag.target = _mouseArea
-                xAnim.running = true
-                control.grabToImage(function(result)
+                    control.rightClicked(mouse)
+                }
+                else
                 {
-                    control.Drag.imageSource = result.url
-                })
-                pressAndHoldIgnored = true
-            }else
+                    control.clicked(mouse)
+                }
+            }
+            
+            onDoubleClicked:
             {
-                drag.target = null
-                control.pressAndHold(mouse)
+                control.doubleClicked(mouse)
+            }
+            
+            onPressed:
+            {
+                if(control.draggable && mouse.source !== Qt.MouseEventSynthesizedByQt)
+                {
+                    drag.target = _mouseArea
+                    control.grabToImage(function(result)
+                    {
+                        control.Drag.imageSource = result.url
+                    })
+                }else
+                {
+                    drag.target = null
+                }
+                
+                control.pressed(mouse)
+            }
+            
+            onReleased :
+            {
+                if(control.draggable)
+                {
+                    drag.target = null
+                }
+                
+                if(pressAndHoldIgnored)
+                {
+                    control.pressAndHold(mouse)
+                    pressAndHoldIgnored = false
+                }
+            }
+            
+            onPressAndHold :
+            {
+                if(control.draggable && mouse.source === Qt.MouseEventSynthesizedByQt && Maui.Handy.isTouch)
+                {
+                    drag.target = _mouseArea
+                    xAnim.running = true
+                    control.grabToImage(function(result)
+                    {
+                        control.Drag.imageSource = result.url
+                    })
+                    pressAndHoldIgnored = true
+                }else
+                {
+                    drag.target = null
+                    control.pressAndHold(mouse)
+                }
             }
         }
-    }
-
-    background: Rectangle
-    {
-//        Kirigami.Theme.inherit: false
-        opacity: 1
-        Behavior on color
+        
+        background: Rectangle
         {
-            ColorAnimation
+            //        Kirigami.Theme.inherit: false
+            opacity: 1
+            Behavior on color
             {
-                duration: Kirigami.Units.shortDuration
+                ColorAnimation
+                {
+                    duration: Kirigami.Units.shortDuration
+                }
             }
+            color: control.isCurrentItem || control.hovered || _mouseArea.containsPress ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
+            
+            radius: control.radius
+            border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.draggable ? Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9)) : "transparent"
         }
-        color: control.isCurrentItem || control.hovered || _mouseArea.containsPress ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
-
-        radius: control.radius
-        border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.draggable ? Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9)) : "transparent"
     }
 }
-
