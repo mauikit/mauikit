@@ -96,7 +96,7 @@ Maui.Page
 				break;
 			case Maui.FMList.MODIFIED:
 				prop = "modified"
-				break;
+                br
 		}
 		
 		if(!prop)
@@ -397,9 +397,8 @@ Maui.Page
 //                    template.imageHeight: height
 //                    template.imageWidth: width
 
-                    anchors.centerIn: parent
-                    height: _gridViewBrowser.cellHeight - 15
-                    width: _gridViewBrowser.itemSize - 20
+                    anchors.fill: parent
+                    anchors.margins: Maui.Style.space.big
                     padding: Maui.Style.space.tiny
                     isCurrentItem: parent.isCurrentItem
                     tooltipText: model.path

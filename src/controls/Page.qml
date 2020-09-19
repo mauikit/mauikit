@@ -72,6 +72,7 @@ Pane
         property int autoHideFooterDelay : 1000
         property int autoHideHeaderDelay : 1000
         
+        //    property bool floatingHeader : control.flickable && !control.flickable.atYBeginning
         property bool floatingHeader : false
         property bool floatingFooter: false
         

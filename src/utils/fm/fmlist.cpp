@@ -41,6 +41,7 @@ FMList::FMList(QObject *parent)
     , fm(new FM(this))
     , watcher(new QFileSystemWatcher(this))
 {
+    qRegisterMetaType<FMList*>("const FMList*"); //this is needed for QML to know of FMList in the search method
     connect(this->fm, &FM::cloudServerContentReady, [&](const FMH::MODEL_LIST &list, const QUrl &url) {
         if (this->path == url) {
             this->assignList(list);

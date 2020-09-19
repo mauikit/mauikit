@@ -32,9 +32,6 @@ Item
 
     default property alias content: _layout.data
         
-        //     implicitHeight: _layout.implicitHeight
-//         implicitWidth: _layout.implicitWidth
-        
         property alias text1 : _label1.text
         
         property alias label1 : _label1
@@ -259,8 +256,7 @@ Item
                         color: "#80000000"
                         source: _emblem
                     }
-                }
-                
+                }                
             }
             
             Item
@@ -273,7 +269,7 @@ Item
                 Rectangle
                 {
                     width: parent.width
-                    height: Math.min(_label1.height + Maui.Style.space.small, parent.height)
+                    height: Math.min(_label1.implicitHeight + Maui.Style.space.tiny, parent.height)
                     anchors.centerIn: parent
                     Behavior on color
                     {
@@ -294,9 +290,8 @@ Item
                     id: _label1
                     horizontalAlignment: Qt.AlignHCenter
                     verticalAlignment: Qt.AlignVCenter
-                    width: control.width
-                    height: Math.min(parent.height, implicitHeight)
-                    anchors.centerIn: parent
+                    anchors.fill: parent
+                    anchors.margins: Maui.Style.space.tiny
                     elide: Qt.ElideRight
                     wrapMode: Text.Wrap
                     color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor 
