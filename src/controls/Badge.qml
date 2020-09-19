@@ -96,7 +96,7 @@ Rectangle
         id: mouseArea
         hoverEnabled: true
         
-        readonly property int targetMargin:  Kirigami.Settings.isMobile ? Maui.Style.space.big : 0
+        readonly property int targetMargin:  Kirigami.Settings.hasTransientTouchInput ? Maui.Style.space.big : 0
 
         height: parent.height + targetMargin
         width: parent.width + targetMargin

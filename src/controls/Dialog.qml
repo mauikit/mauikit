@@ -126,6 +126,7 @@ Maui.Popup
                 Flickable
                 {
                     id: _flickable
+//                     contentWidth: parent.width
                     contentHeight: _pageContent.implicitHeight
 
                     ColumnLayout
