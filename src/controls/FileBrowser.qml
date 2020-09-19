@@ -89,6 +89,7 @@ Maui.Page
 	title: view.title
 	focus: true	
 	flickable: control.currentView.flickable
+	floatingFooter: false
 	
 	showTitle: false
 	headBar.visible: false

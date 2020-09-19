@@ -192,6 +192,7 @@ Maui.Page
         Maui.ListBrowser
         {
             id: _listViewBrowser
+            objectName: "FM ListBrowser"
             property alias currentFMList : _browserModel.list
             property alias currentFMModel : _browserModel
 
@@ -349,6 +350,8 @@ Maui.Page
         Maui.GridBrowser
         {
             id: _gridViewBrowser
+            objectName: "FM GridBrowser"
+            
             property alias currentFMList : _browserModel.list
             property alias currentFMModel : _browserModel
             itemSize : thumbnailsSize + Maui.Style.space.big

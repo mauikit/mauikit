@@ -124,10 +124,8 @@ Item
             delegate: Maui.ListBrowserDelegate
             {
                 id: delegate
-                width: parent.width
-                leftPadding: Maui.Style.space.small
-                rightPadding: Maui.Style.space.small
-                padding: 0
+                width: ListView.view.width
+
                 iconSizeHint : height
                 checkable: control.checkable
 
