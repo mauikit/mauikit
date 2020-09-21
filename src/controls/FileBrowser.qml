@@ -171,6 +171,11 @@ Maui.Page
             acceptButton.visible: Maui.Handy.isLinux
             page.margins: Maui.Style.space.big
             template.iconSource: "emblem-warning"
+            actions: Action
+            {
+            text: i18n("Cancel")
+            onTriggered: _removeDialog.close()
+            }
 
             CheckBox
             {

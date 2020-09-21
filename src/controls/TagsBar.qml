@@ -21,7 +21,7 @@ import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.9 as Kirigami
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 import "private"
 
 Maui.ToolBar
@@ -44,8 +44,9 @@ Maui.ToolBar
     {
         color: control.hovered || control.editMode ?  Qt.darker(control.Kirigami.Theme.backgroundColor, 1.1): control.Kirigami.Theme.backgroundColor
         
-        Kirigami.Separator
+        Maui.Separator
         {
+            position: Qt.Horizontal
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right

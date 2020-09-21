@@ -179,13 +179,10 @@ Maui.Dialog
                             model: ListModel { id: _infoModel }
                             delegate: Maui.AlternateListItem
                             {
-                                visible: model.value.length
+                                visible: model.value
                                 Layout.preferredHeight: visible ? _delegateColumnInfo.implicitHeight + Maui.Style.space.large : 0
                                 Layout.fillWidth: true
-                                Layout.margins: 0
-
-                                leftPadding: Maui.Style.space.medium
-                                rightPadding: Maui.Style.space.medium
+                                lastOne: index === _infoModel.count-1
 
                                 Maui.ListItemTemplate
                                 {
@@ -254,9 +251,9 @@ Maui.Dialog
                 {
                     infoModel.clear()
                     infoModel.append({key: "Type", value: iteminfo.mime})
-                    infoModel.append({key: "Date", value: iteminfo.date})
-                    infoModel.append({key: "Modified", value: iteminfo.modified})
-                    infoModel.append({key: "Last Read", value: iteminfo.lastread})
+                    infoModel.append({key: "Date", value: Qt.formatDateTime(new Date(model.date), "d MMM yyyy")})
+                    infoModel.append({key: "Modified", value: Qt.formatDateTime(new Date(model.modified), "d MMM yyyy")})
+                    infoModel.append({key: "Last Read", value: Qt.formatDateTime(new Date(model.lastread), "d MMM yyyy")})
                     infoModel.append({key: "Owner", value: iteminfo.owner})
                     infoModel.append({key: "Group", value: iteminfo.group})
                     infoModel.append({key: "Size", value: Maui.FM.formatSize(iteminfo.size)})
