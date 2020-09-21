@@ -1,6 +1,10 @@
 #include "thumbnailer.h"
+
+#if defined Q_OS_MACOS || defined Q_OS_WIN
+#else
 #include <KIO/PreviewJob>
-//#include <KIO/KFileItem>
+#endif
+
 #include <QDebug>
 #include <QImage>
 
@@ -13,6 +17,8 @@ QQuickImageResponse * Thumbnailer::requestImageResponse(const QString & id, cons
 AsyncImageResponse::AsyncImageResponse(const QString & id, const QSize & requestedSize)
 	: m_id(id), m_requestedSize(requestedSize)
 {
+#if defined Q_OS_MACOS || defined Q_OS_WIN
+#else
     QStringList plugins = KIO::PreviewJob::defaultPlugins();
     auto job = new KIO::PreviewJob(KFileItemList() << KFileItem(QUrl::fromUserInput (id)), requestedSize, &plugins);
 
@@ -29,6 +35,7 @@ AsyncImageResponse::AsyncImageResponse(const QString & id, const QSize & request
 	});
 
 	job->start ();
+#endif
 }
 
 QQuickTextureFactory * AsyncImageResponse::textureFactory() const

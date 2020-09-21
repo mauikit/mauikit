@@ -354,7 +354,7 @@ static const QHash<FMH::MODEL_KEY, QString> MODEL_NAME = {{MODEL_KEY::ICON, "ico
                                                           {MODEL_KEY::HIDDEN, "hidden"},
                                                           {MODEL_KEY::DETAILVIEW, "detailview"},
                                                           {MODEL_KEY::SHOWTERMINAL, "showterminal"},
-//                                                          {MODEL_KEY::SHOWTHUMBNAIL, "showthumbnail"},
+                                                          {MODEL_KEY::SHOWTHUMBNAIL, "showthumbnail"},
                                                           {MODEL_KEY::COUNT, "count"},
                                                           {MODEL_KEY::SORTBY, "sortby"},
                                                           {MODEL_KEY::USER, "user"},
@@ -1226,8 +1226,8 @@ static FMH::MODEL getFileInfo(const KFileItem &kfile)
         {FMH::MODEL_KEY::SIZE, QString::number(kfile.size())},
         {FMH::MODEL_KEY::OWNER, kfile.user()},
         {FMH::MODEL_KEY::COUNT, kfile.isLocalFile() && kfile.isDir() ? QString::number(QDir(kfile.localPath()).count() - 2) : "0"}};
-#endif
 }
+        #endif
 
 /**
  * @brief getFileInfoModel
@@ -1264,7 +1264,7 @@ static FMH::MODEL getFileInfoModel(const QUrl &path)
     {FMH::MODEL_KEY::SIZE, QString::number(file.size()) /*locale.formattedDataSize(file.size())*/},
     {FMH::MODEL_KEY::PATH, path.toString()},
     {FMH::MODEL_KEY::URL, path.toString()},
-    {FMH::MODEL_KEY::THUMBNAIL, thumbnailUrl(path, mime},
+    {FMH::MODEL_KEY::THUMBNAIL, thumbnailUrl(path, mime).toString()},
     {FMH::MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path.toLocalFile()).count() - 2) : "0"}};
         #else
 

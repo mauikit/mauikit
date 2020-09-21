@@ -15,6 +15,9 @@ Rectangle
     implicitWidth: _loader.item ? _loader.item.implicitWidth : 0
     implicitHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.12)
     
+    Kirigami.Theme.colorSet: Kirigami.Theme.View
+    Kirigami.Theme.inherit: false
+
     default property list<Action> actions
     
     property bool autoExclusive: true

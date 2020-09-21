@@ -1,4 +1,3 @@
-
 QT *= core \
     qml \
     quick \
@@ -47,7 +46,7 @@ linux:unix:!android {
     message(Building Maui helpers for Android or Windows or Mac or iOS)
 
     android {
-        include($$PWD/src/android/android.pri)
+        include($$PWD/src/platforms/android/android.pri)
 
         contains(DEFINES, ANDROID_OPENSSL):{
             exists($$PWD/src/utils/syncing/openssl/openssl.pri) {
@@ -68,11 +67,9 @@ linux:unix:!android {
 
         INCLUDEPATH += $$PWD/../../../../../../CraftRoot/include
         DEPENDPATH += $$PWD/../../../../../../CraftRoot/include
-
-
     }else:macos {
         message("Setting up components for Mac")
-        include($$PWD/src/macos/macos.pri)
+        include($$PWD/src/platforms/macos/macos.pri)
     }else:ios {
         message("Setting up components for iOS")
     }
@@ -123,7 +120,7 @@ contains(DEFINES, COMPONENT_EDITOR):{
         $$PWD/src/utils/editor/documenthandler.h
 
     SOURCES += \
-        $$PWD/src/utils//editor/documenthandler.cpp
+        $$PWD/src/utils/editor/documenthandler.cpp
 
     INCLUDEPATH += $$PWD/src/utils/editor
 
@@ -168,14 +165,14 @@ contains(DEFINES, COMPONENT_ACCOUNTS):{
     QT *= sql
     HEADERS +=  \
         $$PWD/src/utils/accounts/mauiaccounts.h \
-        $$PWD/src/utils/accounts/accountsdb.h \
+        $$PWD/src/utils/accounts/accountsdb.h
 
     SOURCES += \
         $$PWD/src/utils/accounts/mauiaccounts.cpp\
         $$PWD/src/utils/accounts/accountsdb.cpp
 
     RESOURCES += $$PWD/src/utils/accounts/accounts.qrc
-    DISTFILES += $$PWD//src/utils/accounts/script.sql
+    DISTFILES += $$PWD/src/utils/accounts/script.sql
 
     INCLUDEPATH += $$PWD/src/utils/accounts
     DEPENDPATH +=  $$PWD/src/utils/accounts
@@ -187,20 +184,24 @@ contains(DEFINES, COMPONENT_ACCOUNTS):{
 contains(DEFINES, COMPONENT_FM):{
     message("INCLUDING FM COMPONENT")
     HEADERS += \
-        $$PWD/src/fm/fm.h \
-        $$PWD/src/fm/fmlist.h \
-        $$PWD/src/fm/placeslist.h \
-        $$PWD/src/fm/downloader.h
+        $$PWD/src/utils/fm/fm.h \
+        $$PWD/src/utils/fm/fmlist.h \
+        $$PWD/src/utils/fm/placeslist.h \
+        $$PWD/src/utils/fm/downloader.h \
+        $$PWD/src/utils/fm/fileloader.h \
+        $$PWD/src/utils/fm/thumbnailer.h
 
 
     SOURCES += \
-        $$PWD/src/fm/fm.cpp \
-        $$PWD/src/fm/fmlist.cpp \
-        $$PWD/src/fm/placeslist.cpp \
-        $$PWD/src/fm/downloader.cpp
+        $$PWD/src/utils/fm/fm.cpp \
+        $$PWD/src/utils/fm/fmlist.cpp \
+        $$PWD/src/utils/fm/placeslist.cpp \
+        $$PWD/src/utils/fm/downloader.cpp \
+        $$PWD/src/utils/fm/fileloader.cpp \
+        $$PWD/src/utils/fm/thumbnailer.cpp
 
-    INCLUDEPATH += $$PWD/src/fm
-    DEPENDPATH += $$PWD/src/fm
+    INCLUDEPATH += $$PWD/src/utils/fm
+    DEPENDPATH += $$PWD/src/utils/fm
 } else {
     warning("SKIPPING FM COMPONENT")
 }
@@ -233,7 +234,7 @@ SOURCES += \
 DEPENDPATH += \
     $$PWD/src \
     $$PWD/src/utils/model_template \
-     $$PWD/src/controls/libs
+    $$PWD/src/controls/libs
 
 INCLUDEPATH += \
      $$PWD/src \
@@ -242,7 +243,7 @@ INCLUDEPATH += \
      $$PWD/src/utils/model_template \
      $$PWD/src/controls/libs
 
-API_VER = 1.0
+API_VER = 1.2
 
 DISTFILES += \
     $$PWD/CMakeLists.txt \
