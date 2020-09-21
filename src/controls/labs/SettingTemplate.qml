@@ -30,12 +30,10 @@ Maui.ListItemTemplate
     iconSizeHint: Maui.Style.iconSizes.small
     label2.wrapMode: Text.WordWrap
     implicitHeight: label1.implicitHeight + label2.implicitHeight + Maui.Style.space.big 
-    
-//    background: Rectangle
-//    {
-//        opacity: 0.5
-//        color: control.enabled ? Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9)) :  "transparent"
-//        radius: Maui.Style.radiusV
-//        border.color: control.enabled ? "transparent" : Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
-//    }
+
+    background.visible: true
+    background.opacity: 0.5
+    background.color: control.enabled ? Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9)) :  "transparent"
+    background.radius: Maui.Style.radiusV
+    background.border.color: control.enabled ? "transparent" : Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
 } 

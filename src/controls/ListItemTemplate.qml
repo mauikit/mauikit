@@ -50,8 +50,10 @@ Item
     property alias leftLabels : _leftLabels
     property alias rightLabels : _rightLabels
     
-     property alias spacing : _layout.spacing
+    property alias spacing : _layout.spacing
     property alias layout : _layout
+
+    property alias background : _background
     
     property int iconSizeHint : Maui.Style.iconSizes.big
     property int imageSizeHint : iconSizeHint
@@ -165,6 +167,13 @@ Item
                 }
             }
         }        
+    }
+
+    Rectangle
+    {
+        id: _background
+        visible: false
+        anchors.fill: parent
     }
 
     RowLayout
