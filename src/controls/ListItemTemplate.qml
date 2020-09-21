@@ -26,7 +26,7 @@ import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import org.kde.mauikit 1.1 as MauiLab
 
-Control
+Item
 {   
     id: control
     
@@ -50,7 +50,7 @@ Control
     property alias leftLabels : _leftLabels
     property alias rightLabels : _rightLabels
     
-//     property alias spacing : _layout.spacing
+     property alias spacing : _layout.spacing
     property alias layout : _layout
     
     property int iconSizeHint : Maui.Style.iconSizes.big
@@ -68,14 +68,13 @@ Control
     property bool isCurrentItem: false
     property bool labelsVisible: true
 
-    hoverEnabled : false
+    property bool hovered : false
     
     property int fillMode : Image.PreserveAspectCrop
     property int maskRadius: Maui.Style.radiusV
     
     property bool imageBorder: true
     
-    spacing: Maui.Style.space.small
     property int margins: 0
     property int rightMargin: Maui.Style.space.tiny
     property int leftMargin: Maui.Style.space.tiny
@@ -178,7 +177,7 @@ Control
         anchors.topMargin: control.topMargin
         anchors.bottomMargin: control.bottomMargin
         
-        spacing: control.spacing
+        spacing: Maui.Style.space.small
                
         Item
         {
