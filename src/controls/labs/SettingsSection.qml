@@ -37,6 +37,13 @@ Maui.AlternateListItem
             label1.font.bold: true
             label1.font.weight: Font.Bold
             label2.wrapMode: Text.WordWrap
+            
+            ToolButton
+            {
+                icon.name: checked ? "arrow-up" : "arrow-down"
+                checked: !_mainData.visible
+                onClicked: _mainData.visible = !_mainData.visible
+            }
         }
 
         ColumnLayout
