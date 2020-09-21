@@ -5,6 +5,7 @@ import org.kde.mauikit 1.0 as Maui
 
 Maui.Dialog
 {
+    id: control
 	entryField: true
 	
 	signal finished(string text)
@@ -13,7 +14,11 @@ Maui.Dialog
     rejectButton.text: i18n("Cancel")
     
 	onAccepted: done()
-	onRejected: textEntry.clear()
+    onRejected:
+    {
+        textEntry.clear()
+        control.close()
+    }
 
     page.margins: Maui.Style.space.big
     spacing: Maui.Style.space.medium
