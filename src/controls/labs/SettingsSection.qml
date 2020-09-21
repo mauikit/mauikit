@@ -12,7 +12,8 @@ Maui.AlternateListItem
     property string title
     property string description
     property alias template: _template
-
+    property alias spacing: _mainData.spacing
+    
     alt: index % 2
 
     Layout.fillWidth: true
@@ -23,7 +24,7 @@ Maui.AlternateListItem
         id: _layout
         width: parent.width - (Maui.Style.space.medium)
         anchors.centerIn: parent
-        spacing: Maui.Style.space.small
+        spacing: Maui.Style.space.medium
 
         Maui.ListItemTemplate
         {
@@ -42,7 +43,9 @@ Maui.AlternateListItem
         {
             id: _mainData
             Layout.fillWidth: true
-//             Layout.margins: Maui.Style.space.medium
+            spacing: Maui.Style.space.medium
+                    
+            Layout.margins: Maui.Style.space.medium
         }
     }
 }

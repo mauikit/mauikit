@@ -91,7 +91,7 @@ Maui.ItemDelegate
         anchors.fill: parent
         
         isCurrentItem : control.isCurrentItem
-        hovered: control.hovered        
+        hoverEnabled: true       
         iconSource: model.icon
         checkable : control.checkable
         checked : control.checked

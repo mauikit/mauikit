@@ -41,22 +41,17 @@ Maui.ItemDelegate
 	
 	isCurrentItem : ListView.isCurrentItem 
 	
-	padding: 0
-	leftPadding: Maui.Style.space.tiny
-	rightPadding: Maui.Style.space.tiny
-	
 	ToolTip.delay: 1000
 	ToolTip.timeout: 5000
 	ToolTip.visible: hovered 
-	ToolTip.text: qsTr(control.label)
-	
+	ToolTip.text: qsTr(control.label)	
 	
 	Maui.ListItemTemplate
 	{
 		id: _template
 		anchors.fill: parent
 		labelsVisible: control.labelVisible
-		hovered: control.hovered
+		hoverEnabled: true
 		isCurrentItem: control.isCurrentItem
 		
 		Maui.Badge

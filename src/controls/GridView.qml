@@ -63,7 +63,7 @@ Item
     property int bottomMargin: margins
     property int rightMargin: margins
     property int leftMargin: margins
-    property int margins: Maui.Style.space.medium
+    property int margins: isWide ? Maui.Style.space.medium : Maui.Style.space.tiny
 
     property alias holder : _holder
 

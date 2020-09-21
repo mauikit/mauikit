@@ -55,14 +55,10 @@ Maui.Dialog
             width: ListView.view.width
             height: Maui.Style.rowHeight * 2
 
-//            padding: Maui.Style.space.medium
-//            rightPadding: Maui.Style.space.medium
-
             Maui.ListItemTemplate
             {
                 isCurrentItem: parent.hovered
                 anchors.fill: parent
-                anchors.leftMargin: Maui.Style.space.big
                 label1.text: model.label
                 label2.text: model.comment
                 iconSource: model.icon
