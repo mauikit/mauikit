@@ -193,6 +193,7 @@ void MauiModel::setList(MauiList *value)
 {
     this->m_model->setList(value);
     this->getList()->m_model = this;
+    emit this->listChanged();
 }
 
 MauiModel::PrivateAbstractListModel::PrivateAbstractListModel(MauiModel *model)

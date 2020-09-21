@@ -244,7 +244,7 @@ Window
 
                     active: Maui.App.handleAccounts
                     sourceComponent: Maui.App.handleAccounts ?
-                    _accountsComponent : null
+                                         _accountsComponent : null
                 }
 
                 MenuSeparator {visible: _accountsMenuLoader.active}
@@ -365,9 +365,9 @@ Window
             grabPermissions: TapHandler.TakeOverForbidden
             target: null
             onActiveChanged: if (active)
-            {
-                root.startSystemResize(Qt.LeftEdge | Qt.BottomEdge);
-            }
+                             {
+                                 root.startSystemResize(Qt.LeftEdge | Qt.BottomEdge);
+                             }
         }
     }
 
@@ -389,9 +389,9 @@ Window
             grabPermissions: TapHandler.TakeOverForbidden
             target: null
             onActiveChanged: if (active)
-            {
-                root.startSystemResize(Qt.RightEdge | Qt.BottomEdge);
-            }
+                             {
+                                 root.startSystemResize(Qt.RightEdge | Qt.BottomEdge);
+                             }
         }
     }
 
@@ -447,7 +447,7 @@ Window
                         label1.text: model.user
                         label2.text: model.server
                         width: _accountsListing.width
-                        height: Maui.Style.rowHeight * 1.2                        
+                        height: Maui.Style.rowHeight * 1.2
                         onClicked: Maui.App.accounts.currentAccountIndex = index
                     }
 
@@ -501,64 +501,64 @@ Window
         persistent: false
         verticalAlignment: Qt.AlignTop
         defaultButtons: _notify.cb !== null
-            rejectButton.visible: false
-            onAccepted:
+        rejectButton.visible: false
+        onAccepted:
+        {
+            if(_notify.cb)
             {
-                if(_notify.cb)
+                _notify.cb()
+                _notify.close()
+            }
+        }
+
+        page.margins: Maui.Style.space.big
+
+        footBar.background: null
+        widthHint: 0.8
+
+        Timer
+        {
+            id: _notifyTimer
+            onTriggered:
+            {
+                if(_mouseArea.containsPress || _mouseArea.containsMouse)
                 {
-                    _notify.cb()
-                    _notify.close()
+                    _notifyTimer.restart();
+                    return
                 }
+
+                _notify.close()
             }
+        }
 
-            page.padding: Maui.Style.space.medium
+        onClosed: _notifyTimer.stop()
 
-            footBar.background: null
+        stack: Maui.ListItemTemplate
+        {
+            id: _notifyTemplate
+            spacing: Maui.Style.space.big
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            iconSizeHint: Maui.Style.iconSizes.big
+            label1.font.bold: true
+            label1.font.weight: Font.Bold
+            label1.font.pointSize: Maui.Style.fontSizes.big
+            iconSource: "dialog-warning"
 
-            maxHeight: Math.max(Maui.Style.iconSizes.large + Maui.Style.space.huge, (_notifyTemplate.implicitHeight)) + Maui.Style.space.big + footBar.height
-            maxWidth: Kirigami.Settings.isMobile ? parent.width * 0.9 : Maui.Style.unit * 500
-            widthHint: 0.8
-
-            Timer
+            MouseArea
             {
-                id: _notifyTimer
-                onTriggered:
-                {
-                    if(_mouseArea.containsPress || _mouseArea.containsMouse)
-                        return;
-
-                    _notify.close()
-                }
+                id: _mouseArea
+                anchors.fill: parent
+                hoverEnabled: true
             }
+        }
 
-            onClosed: _notifyTimer.stop()
-
-            Maui.ListItemTemplate
-            {
-                id: _notifyTemplate
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                iconSizeHint: Maui.Style.iconSizes.huge
-                label1.font.bold: true
-                label1.font.weight: Font.Bold
-                label1.font.pointSize: Maui.Style.fontSizes.big
-                iconSource: "dialog-warning"
-
-                MouseArea
-                {
-                    id: _mouseArea
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                    hoverEnabled: true
-                }
-            }
-
-            function show(callback)
-            {
-                _notify.cb = callback || null
-                _notifyTimer.start()
-                _notify.open()
-            }
+        function show(callback)
+        {
+            _notify.cb = callback || null
+            _notifyTimer.start()
+            _notify.open()
+        }
     }
 
     Loader

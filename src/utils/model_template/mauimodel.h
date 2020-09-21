@@ -43,7 +43,7 @@ class MAUIKIT_EXPORT MauiModel : public QSortFilterProxyModel
 #endif
 {
     Q_OBJECT
-    Q_PROPERTY(MauiList *list READ getList WRITE setList)
+    Q_PROPERTY(MauiList *list READ getList WRITE setList NOTIFY listChanged)
     Q_PROPERTY(QString filter READ getFilter WRITE setFilter NOTIFY filterChanged)
     Q_PROPERTY(Qt::SortOrder sortOrder READ getSortOrder WRITE setSortOrder NOTIFY sortOrderChanged)
     Q_PROPERTY(QString sort READ getSort WRITE setSort NOTIFY sortChanged)
