@@ -32,7 +32,7 @@ Item
 
     default property alias content: _layout.data
 
-    implicitHeight: Maui.Style.rowHeight * 1.5
+    implicitHeight: Maui.Style.rowHeight
     //     implicitWidth: _layout.implicitWidth
 
     property alias text1 : _label1.text

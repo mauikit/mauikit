@@ -532,23 +532,23 @@ Window
 
         onClosed: _notifyTimer.stop()
 
-        stack: Maui.ListItemTemplate
+        stack: MouseArea
         {
-            id: _notifyTemplate
-            spacing: Maui.Style.space.big
+            id: _mouseArea
             Layout.fillHeight: true
             Layout.fillWidth: true
-            iconSizeHint: Maui.Style.iconSizes.big
-            label1.font.bold: true
-            label1.font.weight: Font.Bold
-            label1.font.pointSize: Maui.Style.fontSizes.big
-            iconSource: "dialog-warning"
-
-            MouseArea
+            hoverEnabled: true
+            Maui.ListItemTemplate
             {
-                id: _mouseArea
+                id: _notifyTemplate
+                spacing: Maui.Style.space.big
                 anchors.fill: parent
-                hoverEnabled: true
+
+                iconSizeHint: Maui.Style.iconSizes.big
+                label1.font.bold: true
+                label1.font.weight: Font.Bold
+                label1.font.pointSize: Maui.Style.fontSizes.big
+                iconSource: "dialog-warning"
             }
         }
 
