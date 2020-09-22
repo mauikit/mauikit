@@ -115,7 +115,6 @@ Maui.Dialog
                 {
                     width: parent.width
                     height: implicitHeight
-                    iconSource: "animal"
                     iconSizeHint: Maui.Style.iconSizes.medium
                     spacing: Maui.Style.space.medium
                     label1.text: modelData.name

@@ -78,7 +78,6 @@ Maui.Popup
             implicitHeight: Math.max(_pageContent.implicitHeight, _stack.implicitHeight) + _page.footer.height + _page.margins + _page.header.height
             headerPositioning: ListView.InlineHeader
             padding: 0
-            flickable: _flickable
             headBar.visible: control.persistent
 //            headerBackground.visible: false
 
@@ -141,13 +140,6 @@ Maui.Popup
                             visible: control.message.length
                             Layout.fillWidth: true
                             implicitHeight: label1.implicitHeight + label2.implicitHeight + Maui.Style.space.big
-
-                            //                        label1.text: title
-                            //                        label1.font.weight: Font.Thin
-                            //                        label1.font.bold: true
-                            //                        label1.font.pointSize:Maui.Style.fontSizes.huge
-                            //                        label1.elide: Qt.ElideRight
-                            //                        label1.wrapMode: Text.Wrap
 
                             label2.text: message
                             label2.textFormat : TextEdit.AutoText
