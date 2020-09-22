@@ -32,7 +32,7 @@ QtObject
     property int unit : Kirigami.Units.devicePixelRatio
     property int radiusV : Maui.Handy.isWindows ? 2 : 4
 	
-    readonly property int rowHeight: Math.round(iconSizes.big * 0.95)
+    readonly property int rowHeight: Math.round(iconSizes.big)
     readonly property int rowHeightAlt: Math.round(rowHeight * 0.8)
 	readonly property int contentMargins: space.medium
 	

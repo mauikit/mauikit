@@ -43,10 +43,14 @@
 #include <KFilePlacesModel>
 #endif
 
+#ifndef STATIC_MAUIKIT
+#include "mauikit_export.h"
+#endif
+
 /**
  * A set of helpers related to file management and modeling of data
  */
-namespace FMH
+namespace MAUIKIT_EXPORT FMH
 {
 /**
  * @brief isAndroid

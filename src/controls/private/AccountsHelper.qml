@@ -35,11 +35,7 @@ Maui.Dialog
         onClicked: Qt.openUrlExternally("https://mauikit.org/cloud")
     }
 
-    Maui.BaseModel
-    {
-        id: _syncingModel
-        list: Maui.App.accounts
-    }
+
 
     Maui.Dialog
     {
@@ -92,7 +88,12 @@ Maui.Dialog
         id: _listView
         Layout.fillHeight: true
         Layout.fillWidth: true
-        model: _syncingModel
+        model: Maui.BaseModel
+        {
+            id: _syncingModel
+            list: Maui.App.accounts
+        }
+
         delegate: Maui.ListDelegate
         {
             id: delegate
