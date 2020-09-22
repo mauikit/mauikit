@@ -61,9 +61,9 @@ PlacesList::PlacesList(QObject *parent)
             const auto index = this->indexOf(QUrl::fromLocalFile(path).toString());
             const QDir dir(path);
             const auto newCount = dir.count();
-            const auto count = newCount - oldCount;
+            int count = newCount - oldCount;
 
-            this->list[index][FMH::MODEL_KEY::COUNT] = QString::number(count < 0 ? 0 : count);
+            this->list[index][FMH::MODEL_KEY::COUNT] = QString::number(std::max( 0 , count ));
             emit this->updateModel(index, {FMH::MODEL_KEY::COUNT});
         }
     });
@@ -78,7 +78,7 @@ PlacesList::PlacesList(QObject *parent)
 #endif
 
 #if defined Q_OS_LINUX && !defined Q_OS_ANDROID
-    connect(this->model, &KFilePlacesModel::rowsInserted, [this](const QModelIndex &parent, int first, int last) {
+    connect(this->model, &KFilePlacesModel::rowsInserted, [this](const QModelIndex, int, int) {
         this->reset();
         emit this->bookmarksChanged();
 

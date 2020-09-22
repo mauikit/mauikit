@@ -27,64 +27,64 @@ import org.kde.mauikit 1.0 as Maui
 import org.kde.mauikit 1.1 as MauiLab
 
 Item
-{   
+{
     id: control
-    
+
     default property alias content: _layout.data
 
     implicitHeight: Maui.Style.rowHeight
-//     implicitWidth: _layout.implicitWidth
+    //     implicitWidth: _layout.implicitWidth
 
     property alias text1 : _label1.text
     property alias text2 : _label2.text
     property alias text3 : _label3.text
     property alias text4 : _label4.text
-    
+
     property alias label1 : _label1
     property alias label2 : _label2
     property alias label3 : _label3
     property alias label4 : _label4
     property alias iconItem : _iconLoader.item
     property alias iconVisible : _iconContainer.visible
-    
+
     property alias leftLabels : _leftLabels
     property alias rightLabels : _rightLabels
-    
+
     property alias spacing : _layout.spacing
     property alias layout : _layout
 
     property alias background : _background
-    
+
     property int iconSizeHint : Maui.Style.iconSizes.big
     property int imageSizeHint : iconSizeHint
-    
+
     property int imageWidth : imageSizeHint
     property int imageHeight : imageSizeHint
-    
+
     property string imageSource
-    property string iconSource    
-    
+    property string iconSource
+
     property bool checkable : false
     property bool checked : false
-    
+
     property bool isCurrentItem: false
     property bool labelsVisible: true
 
     property bool hovered : false
-    
+
     property int fillMode : Image.PreserveAspectCrop
     property int maskRadius: Maui.Style.radiusV
-    
+
     property bool imageBorder: true
-    
+
     property int margins: 0
     property int rightMargin: Maui.Style.space.tiny
     property int leftMargin: Maui.Style.space.tiny
     property int topMargin: margins
     property int bottomMargin: margins
-    
+
     signal toggled(bool state)
-    
+
     Component
     {
         id: _imgComponent
@@ -115,19 +115,19 @@ Item
                     Rectangle
                     {
                         anchors.fill: parent
-                        radius: control.maskRadius                          
+                        radius: control.maskRadius
                     }
                 }
             }
-            
+
             Rectangle
             {
                 anchors.fill: parent
-                border.color: control.imageBorder ? Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.8) : "transparent"   
+                border.color: control.imageBorder ? Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.8) : "transparent"
                 radius: control.maskRadius
                 opacity: 0.2
                 color: control.hovered ? control.Kirigami.Theme.highlightColor : "transparent"
-                
+
                 Kirigami.Icon
                 {
                     anchors.centerIn: parent
@@ -138,7 +138,7 @@ Item
                     color: parent.border.color
                     opacity: 1 - img.progress
                 }
-            } 
+            }
         }
     }
 
@@ -156,7 +156,7 @@ Item
                 height: Math.min(parent.height, control.iconSizeHint)
                 width: height
                 color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
-                
+
                 ColorOverlay
                 {
                     visible: control.hovered
@@ -166,7 +166,7 @@ Item
                     color: control.Kirigami.Theme.highlightColor
                 }
             }
-        }        
+        }
     }
 
     Rectangle
@@ -185,35 +185,35 @@ Item
         anchors.rightMargin: control.rightMargin
         anchors.topMargin: control.topMargin
         anchors.bottomMargin: control.bottomMargin
-        
+
         spacing: Maui.Style.space.small
-               
+
         Item
         {
             id: _checkBoxContainer
             visible: control.checkable || control.checked
-            
+
             Layout.fillHeight: true
             Layout.preferredWidth: _emblem.size * 2
-            
+
             Maui.Badge
             {
                 id: _emblem
-                
+
                 size: Math.min(Maui.Style.iconSizes.medium, parent.height)
-                
+
                 anchors.centerIn: parent
-                
+
                 color: control.checked ? Kirigami.Theme.highlightColor : Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.8)
-                
+
                 border.color: Kirigami.Theme.textColor
-                
-                onClicked: 
+
+                onClicked:
                 {
                     control.checked = !control.checked
                     control.toggled(control.checked)
                 }
-                
+
                 MauiLab.CheckMark
                 {
                     visible: opacity > 0
@@ -222,7 +222,7 @@ Item
                     height: control.checked ? 10 : 0
                     width: height
                     opacity: control.checked ? 1 : 0
-                    
+
                     Behavior on height
                     {
                         NumberAnimation
@@ -231,7 +231,7 @@ Item
                             easing.type: Easing.InOutQuad
                         }
                     }
-                    
+
                     Behavior on opacity
                     {
                         NumberAnimation
@@ -242,7 +242,7 @@ Item
                     }
                 }
             }
-        }      
+        }
 
         Item
         {
@@ -250,13 +250,13 @@ Item
             visible: (control.width > Kirigami.Units.gridUnit * 10) && (iconSource.length > 0 || imageSource.length > 0)
             Layout.fillHeight: true
             Layout.fillWidth: !control.labelsVisible
-//             Layout.leftMargin: _checkBoxContainer.visible ? 0 : Maui.Style.space.tiny
-            Layout.preferredWidth: Math.min(parent.height, Math.max(control.iconSizeHint, imageSizeHint) + Maui.Style.space.medium)  
-            
+            //             Layout.leftMargin: _checkBoxContainer.visible ? 0 : Maui.Style.space.tiny
+            Layout.preferredWidth: Math.min(parent.height, Math.max(control.iconSizeHint, imageSizeHint) + Maui.Style.space.medium)
+
             Loader
-            {                
+            {
                 id: _iconLoader
-                width: Math.min(parent.height, Math.max(control.iconSizeHint, imageSizeHint) )           
+                width: Math.min(parent.height, Math.max(control.iconSizeHint, imageSizeHint) )
                 height: width
                 anchors.centerIn: parent
                 sourceComponent: _iconContainer.visible ? (control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : null) ): null
@@ -269,7 +269,7 @@ Item
             visible: control.labelsVisible
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.margins: Maui.Style.space.tiny 
+            Layout.margins: Maui.Style.space.tiny
             Layout.leftMargin: _iconContainer.visible || _checkBoxContainer.visible ? 0 : Maui.Style.space.small
             spacing: 0
 
@@ -295,13 +295,13 @@ Item
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 verticalAlignment: _label1.visible ? Qt.AlignTop : Qt.AlignVCenter
-                
+
                 elide: Text.ElideRight
                 wrapMode: Text.NoWrap
-                
+
                 color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
                 opacity: control.isCurrentItem ? 0.8 : 0.6
-                
+
                 font.weight: Font.Normal
                 font.pointSize: Maui.Style.fontSizes.medium
             }
@@ -310,10 +310,10 @@ Item
         ColumnLayout
         {
             id: _rightLabels
-			visible: control.width >  Kirigami.Units.gridUnit * 15 && control.labelsVisible
+            visible: control.width >  Kirigami.Units.gridUnit * 15 && control.labelsVisible
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.margins: Maui.Style.space.tiny 
+            Layout.margins: Maui.Style.space.tiny
             spacing: 0
 
             Label

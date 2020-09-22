@@ -90,9 +90,9 @@ FMH::MODEL_LIST FMStatic::getDevices()
     return drives;
 }
 
-QVariantMap FMStatic::getDirInfo(const QUrl &path, const QString &type)
+QVariantMap FMStatic::getDirInfo(const QUrl &path)
 {
-    return FMH::getDirInfo(path, type);
+    return FMH::getDirInfo(path);
 }
 
 QVariantMap FMStatic::getFileInfo(const QUrl &path)
@@ -215,7 +215,7 @@ static bool copyRecursively(QString sourceFolder, QString destFolder)
 }
 #endif
 
-bool FMStatic::copy(const QList<QUrl> &urls, const QUrl &destinationDir, const bool &overWriteDirectory)
+bool FMStatic::copy(const QList<QUrl> &urls, const QUrl &destinationDir)
 {
 #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
     for (const auto &url : urls) {

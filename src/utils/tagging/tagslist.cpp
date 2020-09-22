@@ -24,46 +24,8 @@ void TagsList::setList()
         });
     }    
 
-    this->sortList();
     emit this->tagsChanged();
     emit this->postListChanged();
-}
-
-void TagsList::sortList()
-{
-    const auto key = static_cast<FMH::MODEL_KEY>(this->sortBy);
-    qSort(this->list.begin(), this->list.end(), [key](const FMH::MODEL &e1, const FMH::MODEL &e2) -> bool {
-        auto role = key;
-
-        switch (role) {
-        case FMH::MODEL_KEY::ADDDATE: {
-            auto currentTime = QDateTime::currentDateTime();
-
-            auto date1 = QDateTime::fromString(e1[role], Qt::TextDate);
-            auto date2 = QDateTime::fromString(e2[role], Qt::TextDate);
-
-            if (date1.secsTo(currentTime) < date2.secsTo(currentTime))
-                return true;
-
-            break;
-        }
-
-        case FMH::MODEL_KEY::TAG: {
-            const auto str1 = QString(e1[role]).toLower();
-            const auto str2 = QString(e2[role]).toLower();
-
-            if (str1 < str2)
-                return true;
-            break;
-        }
-
-        default:
-            if (e1[role] < e2[role])
-                return true;
-        }
-
-        return false;
-    });
 }
 
 QVariantMap TagsList::get(const int &index) const
@@ -176,29 +138,12 @@ void TagsList::removeFrom(const int &index, const QString &url)
 
 void TagsList::erase(const int &index)
 {
+    Q_UNUSED(index)
 }
 
 FMH::MODEL_LIST TagsList::items() const
 {
     return this->list;
-}
-
-TagsList::KEYS TagsList::getSortBy() const
-{
-    return this->sortBy;
-}
-
-void TagsList::setSortBy(const TagsList::KEYS &key)
-{
-    if (this->sortBy == key)
-        return;
-
-    this->sortBy = key;
-
-    emit this->preListChanged();
-    this->sortList();
-    emit this->sortByChanged();
-    emit this->postListChanged();
 }
 
 bool TagsList::getStrict() const
@@ -216,44 +161,12 @@ void TagsList::setStrict(const bool &value)
     emit this->strictChanged();
 }
 
-QString TagsList::getKey() const
-{
-    return this->key;
-}
-
-void TagsList::setKey(const QString &value)
-{
-    if (this->key == value)
-        return;
-
-    this->urls.clear();
-    this->key = value;
-    this->setList();
-    emit this->keyChanged();
-}
-
 QStringList TagsList::getTags() const
 {
     return std::accumulate(this->list.constBegin(), this->list.constEnd(), QStringList(), [](QStringList &tags, const FMH::MODEL &tag) {
         tags << tag[FMH::MODEL_KEY::TAG];
         return tags;
     });
-}
-
-QString TagsList::getLot() const
-{
-    return this->lot;
-}
-
-void TagsList::setLot(const QString &value)
-{
-    if (this->lot == value)
-        return;
-
-    this->urls.clear();
-    this->lot = value;
-    this->setList();
-    emit this->lotChanged();
 }
 
 QStringList TagsList::getUrls() const
@@ -265,9 +178,6 @@ void TagsList::setUrls(const QStringList &value)
 {
     if (this->urls == value)
         return;
-
-    this->key.clear();
-    this->lot.clear();
 
     this->urls = value;
     this->setList();

@@ -204,10 +204,9 @@ FM::FM(QObject *parent)
 void FM::getPathContent(const QUrl &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters, const QDirIterator::IteratorFlags &iteratorFlags)
 {
     qDebug() << "Getting async path contents";
-
+    Q_UNUSED(iteratorFlags)
     this->dirLister->setShowingDotFiles(hidden);
     this->dirLister->setDirOnlyMode(onlyDirs);
-
     this->dirLister->setNameFilter(filters.join(" "));
 
     if (this->dirLister->openUrl(path))
@@ -285,6 +284,7 @@ void FM::getCloudItem(const QVariantMap &item)
 
 QString FM::resolveUserCloudCachePath(const QString &server, const QString &user)
 {
+    Q_UNUSED(server)
     return FMH::CloudCachePath + "opendesktop/" + user;
 }
 
@@ -306,7 +306,7 @@ bool FM::copy(const QList<QUrl> &urls, const QUrl &where)
 {
     // 	QStringList cloudPaths;
 
-    return FMStatic::copy(urls, where, false);
+    return FMStatic::copy(urls, where);
 
 #ifdef COMPONENT_SYNCING
     // 	if(!cloudPaths.isEmpty())

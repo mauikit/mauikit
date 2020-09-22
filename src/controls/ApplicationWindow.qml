@@ -25,8 +25,7 @@ import QtGraphicalEffects 1.0
 import QtQuick.Window 2.12
 
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
-import org.kde.mauikit 1.1 as MauiLab
+import org.kde.mauikit 1.2 as Maui
 
 import "private" as Private
 
@@ -198,7 +197,7 @@ Window
         }
     }
 
-    MauiLab.Page
+     Maui.Page
     {
         id: _page
         anchors.fill: parent
@@ -212,7 +211,7 @@ Window
             active: Maui.App.enableCSD && Maui.App.leftWindowControls.length
             Layout.preferredWidth: active ? implicitWidth : 0
             Layout.fillHeight: true
-            sourceComponent: MauiLab.WindowControls
+            sourceComponent:  Maui.WindowControls
             {
                 order: Maui.App.leftWindowControls
             }
@@ -282,7 +281,7 @@ Window
             active: Maui.App.enableCSD && Maui.App.rightWindowControls.length
             Layout.preferredWidth: active ? implicitWidth : 0
             Layout.fillHeight: true
-            sourceComponent: MauiLab.WindowControls
+            sourceComponent:  Maui.WindowControls
             {
                 order:  Maui.App.rightWindowControls
             }
@@ -306,7 +305,7 @@ Window
         {
             id: _pageBackground
             color: Kirigami.Theme.backgroundColor
-            radius: root.visibility === Window.Maximized || !Maui.App.enableCSD ? 0 : Maui.App.theme.borderRadius
+            radius: root.visibility === Window.Maximized || !Maui.App.enableCSD ? 0 :Maui.Style.radiusV
         }
 
         layer.enabled: Maui.App.enableCSD
@@ -401,12 +400,12 @@ Window
 
         Behavior on opacity { NumberAnimation { duration: 150 } }
 
-        radius: Maui.App.enableCSD ? Maui.App.theme.borderRadius : 0
+        radius: _pageBackground.radius
     }
 
     Overlay.overlay.modeless: Rectangle
     {
-        radius: Maui.App.enableCSD ? Maui.App.theme.borderRadius : 0
+        radius: _pageBackground.radius
 
         color: Qt.rgba( root.Kirigami.Theme.backgroundColor.r,  root.Kirigami.Theme.backgroundColor.g,  root.Kirigami.Theme.backgroundColor.b, 0.7)
         Behavior on opacity { NumberAnimation { duration: 150 } }

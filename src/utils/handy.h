@@ -66,15 +66,6 @@ public slots:
     static int version();
 
     /*!
-     * \brief Returns a QVariantMap containing basic information about the current app
-     *
-     * The pairs keys for the information returned are:
-     * "name", "version", "org", "domain", "mauikit_version" and "qt_version"
-     * \return QVariantMap with app info
-     */
-    static QVariantMap appInfo();
-
-    /*!
      * \brief Returns a QVariantMap containing basic information about the current user
      *
      * The pairs keys for the information returned are:

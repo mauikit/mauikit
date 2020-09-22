@@ -88,23 +88,6 @@ static inline struct {
 } _clipboard;
 #endif
 
-QVariantMap Handy::appInfo()
-{
-    auto res = QVariantMap({{FMH::MODEL_NAME[FMH::MODEL_KEY::NAME], qApp->applicationName()},
-                            {FMH::MODEL_NAME[FMH::MODEL_KEY::VERSION], qApp->applicationVersion()},
-                            {FMH::MODEL_NAME[FMH::MODEL_KEY::ORG], qApp->organizationName()},
-                            {FMH::MODEL_NAME[FMH::MODEL_KEY::DOMAIN_M], qApp->organizationDomain()},
-                            {"qt_version", QT_VERSION_STR}});
-
-#ifdef Q_OS_ANDROID
-    res.insert(FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], QGuiApplication::windowIcon().name());
-#else
-    res.insert(FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], QApplication::windowIcon().name());
-#endif
-
-    return res;
-}
-
 QVariantMap Handy::userInfo()
 {
     QString name = qgetenv("USER");

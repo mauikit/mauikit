@@ -74,12 +74,10 @@ public slots:
      * List of URLs to be copy
      * @param destinationDir
      * Destination
-     * @param overWriteDirectory
-     * Overwrite directory if the directory already exists in the destination path
      * @return
      * Return if the operation has been succesfull
      */
-    static bool copy(const QList<QUrl> &urls, const QUrl &destinationDir, const bool &overWriteDirectory = false);
+    static bool copy(const QList<QUrl> &urls, const QUrl &destinationDir);
 
     /**
      * @brief cut
@@ -177,10 +175,9 @@ public slots:
      * Get info of a directory packed as a QVariantMap model
      * @param path
      * Path URL
-     * @param type
      * @return
      */
-    static QVariantMap getDirInfo(const QUrl &path, const QString &type);
+    static QVariantMap getDirInfo(const QUrl &path);
 
     /**
      * @brief getFileInfo
@@ -422,7 +419,7 @@ public slots:
      * @param limit
      * The maximum limit number of URLs to be returned
      * @param mime
-     * The mimetype filtering, for example, "image/* "or "image/png", "audio/mp4"
+     * The mimetype filtering, for example, "image/\*" or "image/png", "audio/mp4"
      * @return
      */
     static QList<QUrl> getTagUrls(const QString &tag, const QStringList &filters, const bool &strict = false, const int &limit = 9999, const QString &mime = "");

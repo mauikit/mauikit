@@ -374,7 +374,7 @@ private:
     void sortList();
     void watchPath(const QString &path, const bool &clear = true);
     void search(const QString &query, const QUrl &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
-    void filterContent(const QString &query, const QUrl &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
+    void filterContent(const QString &query, const QUrl &path);
     void setStatus(const PathStatus &status);
 
     FMH::MODEL_LIST list = {{}};

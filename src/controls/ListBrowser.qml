@@ -50,7 +50,8 @@ Item
     property alias contentHeight : _listView.contentHeight
     property alias contentWidth : _listView.contentWidth
 
-    property int margins : control.enableLassoSelection && isWide ?  Maui.Style.space.small : Maui.Style.space.tiny
+    property int margins : control.enableLassoSelection ?  Maui.Style.space.medium : Maui.Style.space.small
+
     property int topMargin: margins
     property int bottomMargin: margins
     property int rightMargin: margins

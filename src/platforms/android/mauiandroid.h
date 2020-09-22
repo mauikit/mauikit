@@ -40,60 +40,6 @@ public:
     ~MAUIAndroid();
 
     /**
-     * @brief handleActivityResult
-     * @param receiverRequestCode
-     * @param resultCode
-     * @param data
-     */
-    void handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data);
-
-    /**
-     * @brief contactPhoto
-     * @param id
-     * @return
-     */
-    static QImage contactPhoto(const QString &id);
-
-    /**
-     * @brief addContact
-     * @param name
-     * @param tel
-     * @param tel2
-     * @param tel3
-     * @param email
-     * @param title
-     * @param org
-     * @param photo
-     * @param account
-     * @param accountType
-     */
-    static void addContact(const QString &name, const QString &tel, const QString &tel2, const QString &tel3, const QString &email, const QString &title, const QString &org, const QString &photo, const QString &account, const QString &accountType);
-
-    /**
-     * @brief updateContact
-     * @param id
-     * @param field
-     * @param value
-     */
-    static void updateContact(const QString &id, const QString &field, const QString &value);
-
-    /**
-     * @brief setAppIcons
-     * @param lowDPI
-     * @param mediumDPI
-     * @param highDPI
-     */
-    static void setAppIcons(const QString &lowDPI, const QString &mediumDPI, const QString &highDPI);
-
-    /**
-     * @brief setAppInfo
-     * @param appName
-     * @param version
-     * @param uri
-     */
-    static void setAppInfo(const QString &appName, const QString &version, const QString &uri);
-
-    /**
      * @brief fileChooser
      */
     static void fileChooser();
@@ -109,26 +55,7 @@ public slots:
      */
     static QString getAccounts();
 
-    /**
-     * @brief getCallLogs
-     * @return
-     */
-    static QVariantList getCallLogs();
-
-    /**
-     * @brief getContacts
-     * @return
-     */
-    static QVariantList getContacts();
-
-    /**
-     * @brief getContact
-     * @param id
-     * @return
-     */
-    static QVariantMap getContact(const QString &id);
-
-    /**
+      /**
      * @brief statusbarColor
      * @param bg
      * @param light
@@ -197,12 +124,6 @@ public slots:
      * @return
      */
     static QStringList sdDirs();
-
-    /**
-     * @brief call
-     * @param tel
-     */
-    static void call(const QString &tel);
 
     /**
      * @brief checkRunTimePermissions
