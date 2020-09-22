@@ -1183,10 +1183,12 @@ static bool checkFileType(const FMH::FILTER_TYPE &type, const QString &mimeTypeN
  */
 static QUrl thumbnailUrl(const QUrl &url, const QString &mimetype)
 {
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
     if(checkFileType(FMH::FILTER_TYPE::DOCUMENT, mimetype) || checkFileType(FMH::FILTER_TYPE::VIDEO, mimetype))
     {
         return QUrl("image://thumbnailer/"+url.toString());
     }
+#endif
 
     if(checkFileType(FMH::FILTER_TYPE::IMAGE, mimetype))
     {

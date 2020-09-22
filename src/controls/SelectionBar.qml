@@ -134,7 +134,7 @@ Item
             {
                 NumberAnimation
                 {
-                    duration: Kirigami.Units.longDuration
+                    duration: Kirigami.Units.shortDuration
                     easing.type: Easing.InOutQuad
                 }
             }

@@ -27,7 +27,7 @@ Maui.ListItemTemplate
 {
     id: control
     Layout.fillWidth: true
-    iconSizeHint: Maui.Style.iconSizes.small
+    iconSizeHint: Maui.Style.iconSizes.medium
     label2.wrapMode: Text.WordWrap
     implicitHeight: label1.implicitHeight + label2.implicitHeight + Maui.Style.space.big 
 
