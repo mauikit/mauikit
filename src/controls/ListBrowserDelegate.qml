@@ -89,7 +89,7 @@ Maui.ItemDelegate
     {
         id: _template
         anchors.fill: parent
-        
+        leftMargin: 0
         isCurrentItem : control.isCurrentItem
         hovered: parent.hovered
         iconSource: model.icon

@@ -25,7 +25,7 @@ import org.kde.mauikit 1.2 as Maui
 
 Maui.ListItemTemplate
 {
-    id: control    
+    id: control
 
     property alias setting : _settingSection
     Maui.SettingSection
