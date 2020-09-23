@@ -13,7 +13,7 @@ Maui.AlternateListItem
     property string description
     property alias template: _template
     property alias spacing: _mainData.spacing
-    
+
     alt: index % 2
 
     Layout.fillWidth: true

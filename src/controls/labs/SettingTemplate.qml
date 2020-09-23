@@ -25,7 +25,14 @@ import org.kde.mauikit 1.2 as Maui
 
 Maui.ListItemTemplate
 {
-    id: control
+    id: control    
+
+    property alias setting : _settingSection
+    Maui.SettingSection
+    {
+        id: _settingSection
+    }
+
     Layout.fillWidth: true
     iconSizeHint: Maui.Style.iconSizes.medium
     label2.wrapMode: Text.WordWrap

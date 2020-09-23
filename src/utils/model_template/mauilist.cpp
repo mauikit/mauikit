@@ -31,9 +31,10 @@ int MauiList::getCount() const
 
 QVariantMap MauiList::get(const int &index) const
 {
-      if (this->m_model)
+    if (this->m_model)
+    {
         return this->m_model->get(index);
-      
+    }
           
     if(index >=0 && this->items().size() > 0 && index < this->items().size())
     {
@@ -41,6 +42,16 @@ QVariantMap MauiList::get(const int &index) const
     }
 
     return QVariantMap();
+}
+
+FMH::MODEL_LIST MauiList::getItems() const
+{
+    if (this->m_model && !this->m_model->getFilter().isEmpty())
+    {
+        return FMH::toModelList(this->m_model->getAll());
+    }
+
+    return this->items();
 }
 
 int MauiList::mappedIndex(const int &index) const

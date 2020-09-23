@@ -51,15 +51,19 @@ public:
     explicit MauiList(QObject *parent = nullptr);
 
     virtual FMH::MODEL_LIST items() const = 0;
-    virtual void classBegin() override
-    {
-    }
-    virtual void componentComplete() override
-    {
-    }
+    virtual void classBegin() override  {}
+    virtual void componentComplete() override {}
     
     int getCount() const;
-      
+
+    /**
+     * @brief getItems
+     * Get all the items in the list model. If the model has been filtered or sorted those are the items that are returned
+     * @param index
+     * @return
+     */
+    FMH::MODEL_LIST getItems() const;
+
     const MauiModel *m_model; // becarefull this is owned by qml engine, this is only supossed to be a viewer
 public slots:
     int mappedIndex(const int &index) const;

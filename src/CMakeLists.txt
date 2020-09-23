@@ -18,6 +18,7 @@ include_directories(
 set(mauikit_SRCS
     mauikit.cpp
     utils/fmstatic.cpp
+    utils/settings.cpp
     utils/fmh.cpp
     utils/mauiapp.cpp
     utils/handy.cpp
@@ -29,6 +30,7 @@ set(mauikit_SRCS
 set(mauikit_HDRS
     mauikit.h
     utils/fmstatic.h
+    utils/settings.h
     utils/fmh.h
     utils/utils.h
     utils/handy.h

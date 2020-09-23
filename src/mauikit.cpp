@@ -28,6 +28,7 @@
 #include "mauilist.h"
 #include "mauimodel.h"
 #include "pathlist.h"
+#include "settings.h"
 
 #ifdef COMPONENT_ACCOUNTS
 #include "mauiaccounts.h"
@@ -155,6 +156,7 @@ void MauiKit::registerTypes(const char *uri)
 
     /// NON UI CONTROLS
     qmlRegisterUncreatableType<AppView>(uri, 1, 1, "AppView", "Cannot be created App");
+    qmlRegisterType<SettingSection>(uri, 1, 2, "SettingSection");
 
     /** Experimental **/
 #ifdef Q_OS_WIN32

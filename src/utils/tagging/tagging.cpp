@@ -20,7 +20,7 @@
 #include "tagging.h"
 #include <QMimeDatabase>
 #include <QNetworkInterface>
-
+#include <QCoreApplication>
 #include "utils.h"
 
 Tagging::Tagging() : TAGDB()
@@ -58,9 +58,9 @@ const QVariantList Tagging::get(const QString &queryTxt, std::function<bool(QVar
 bool Tagging::tagExists(const QString &tag, const bool &strict)
 {
     return !strict ? this->checkExistance(TAG::TABLEMAP[TAG::TABLE::TAGS], FMH::MODEL_NAME[FMH::MODEL_KEY::TAG], tag)
-                   : this->checkExistance(QString("select t.tag from TAGS t inner join TAGS_USERS tu on t.tag = tu.tag inner join APPS_USERS au on au.mac = tu.mac "
-                                                  "where au.app = '%1' and au.uri = '%2' and t.tag = '%3'")
-                                              .arg(this->application, this->uri, tag));
+            : this->checkExistance(QString("select t.tag from TAGS t inner join TAGS_USERS tu on t.tag = tu.tag inner join APPS_USERS au on au.mac = tu.mac "
+            "where au.app = '%1' and au.uri = '%2' and t.tag = '%3'")
+            .arg(this->application, this->uri, tag));
 }
 
 bool Tagging::urlTagExists(const QString &url, const QString &tag, const bool &strict)
@@ -68,15 +68,15 @@ bool Tagging::urlTagExists(const QString &url, const QString &tag, const bool &s
     return !strict ? this->checkExistance(QString("select * from TAGS_URLS where url = '%1' and tag = '%2'").arg(url, tag))
                    : this->checkExistance(QString("select t.tag from TAGS t inner join TAGS_USERS tu on t.tag = tu.tag inner join APPS_USERS au on au.mac = tu.mac "
                                                   "where au.app = '%1' and au.uri = '%2' and t.tag = '%3'")
-                                              .arg(this->application, this->uri, tag));
+                                          .arg(this->application, this->uri, tag));
 }
 
 void Tagging::setApp()
 {
-    this->application = UTIL::app->applicationName();
-    this->version = UTIL::app->applicationVersion();
+    this->application = qApp->applicationName();
+    this->version = qApp->applicationVersion();
     this->comment = QString();
-    this->uri = UTIL::app->organizationDomain().isEmpty() ? QString("org.maui.%1").arg(this->application) : UTIL::app->organizationDomain();
+    this->uri = qApp->organizationDomain().isEmpty() ? QString("org.maui.%1").arg(this->application) : qApp->organizationDomain();
     this->app(); // here register the app
 }
 
@@ -142,10 +142,10 @@ bool Tagging::updateUrl(const QString &url, const QString &newUrl)
 QVariantList Tagging::getUrlsTags(const bool &strict)
 {
     const auto query = QString("select distinct t.* from TAGS t "
-                           "where t.app = '%1'")
-                           .arg(this->application);
+                               "where t.app = '%1'")
+            .arg(this->application);
 
-                           return !strict ? this->get("select distinct t.* from tags t inner join TAGS_URLS turl on turl.tag = t.tag", &setTagIconName) : this->get(query, &setTagIconName);
+    return !strict ? this->get("select distinct t.* from tags t inner join TAGS_URLS turl on turl.tag = t.tag", &setTagIconName) : this->get(query, &setTagIconName);
 }
 
 bool Tagging::setTagIconName(QVariantMap &item)
@@ -159,7 +159,7 @@ QVariantList Tagging::getAllTags(const bool &strict)
     return !strict ? this->get("select * from tags group by tag", &setTagIconName)
                    : this->get(QString("select t.* from TAGS t inner join TAGS_USERS tu on t.tag = tu.tag inner join APPS_USERS au on au.mac = tu.mac and au.app = t.app "
                                        "where au.app = '%1' and au.uri = '%2'")
-                                   .arg(this->application, this->uri),
+                               .arg(this->application, this->uri),
                                &setTagIconName);
 }
 
@@ -172,7 +172,7 @@ QVariantList Tagging::getUrls(const QString &tag, const bool &strict, const int 
                                        "inner join TAGS_URLS turl on turl.tag = t.tag "
                                        "where au.app = '%1' and au.uri = '%2' and turl.mime like '%5%' "
                                        "and t.tag = '%3' limit %4")
-                                   .arg(this->application, this->uri, tag, QString::number(limit), mimeType),
+                               .arg(this->application, this->uri, tag, QString::number(limit), mimeType),
                                modifier);
 }
 
@@ -181,7 +181,7 @@ QVariantList Tagging::getUrlTags(const QString &url, const bool &strict)
     return !strict ? this->get(QString("select distinct turl.*, t.color, t.comment as tagComment from tags t inner join TAGS_URLS turl on turl.tag = t.tag where turl.url  = '%1'").arg(url))
                    : this->get(QString("select distinct t.* from TAGS t inner join TAGS_USERS tu on t.tag = tu.tag inner join APPS_USERS au on au.mac = tu.mac and au.app = t.app inner join TAGS_URLS turl on turl.tag = t.tag "
                                        "where au.app = '%1' and au.uri = '%2' and turl.url = '%3'")
-                                   .arg(this->application, this->uri, url));
+                               .arg(this->application, this->uri, url));
 }
 
 bool Tagging::removeUrlTags(const QString &url)

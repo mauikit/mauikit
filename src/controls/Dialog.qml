@@ -75,11 +75,10 @@ Maui.Popup
             id: _page
             Layout.fillWidth: true
             Layout.fillHeight: true
-            implicitHeight: Math.max(_pageContent.implicitHeight, _stack.implicitHeight) + _page.footer.height + _page.margins + _page.header.height
+            implicitHeight: Math.max(_scrollView.contentHeight, _stack.implicitHeight) + _page.footer.height + (_page.margins*2) + _page.header.height + Maui.Style.space.big
             headerPositioning: ListView.InlineHeader
             padding: 0
             headBar.visible: control.persistent
-//            headerBackground.visible: false
 
             headBar.farLeftContent: MouseArea
             {

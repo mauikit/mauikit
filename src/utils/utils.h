@@ -22,23 +22,11 @@
 
 #include <QColor>
 #include <QObject>
-#include <QSettings>
-#include <QString>
-#include <QUrl>
 
-#ifdef Q_OS_ANDROID
-#include <QGuiApplication>
-#else
-#include <QApplication>
-#endif
-
-#ifndef STATIC_MAUIKIT
-#include "mauikit_export.h"
-#endif
+#include "settings.h"
 
 namespace UTIL
 {
-static const auto app = QCoreApplication::instance();
 
 /**
  * @brief whoami
@@ -52,105 +40,6 @@ static const inline QString whoami()
     return qgetenv("USERNAME"); // for windows
 #endif
 }
-
-/**
- * @brief The Settings class
- */
-#ifdef STATIC_MAUIKIT
-class Settings : public QObject
-#else
-class MAUIKIT_EXPORT Settings : public QObject
-#endif
-{
-    Q_OBJECT
-public:
-    /**
-     * @brief local
-     * @return
-     */
-    static Settings &local()
-    {
-        static Settings settings;
-        return settings;
-    }
-
-    /**
-     * @brief global
-     * @return
-     */
-    static Settings &global()
-    {
-        static Settings settings("mauiproject");
-        return settings;
-    }
-
-    Settings(const Settings &) = delete;
-    Settings &operator=(const Settings &) = delete;
-    Settings(Settings &&) = delete;
-    Settings &operator=(Settings &&) = delete;
-
-    /**
-     * @brief url
-     * @return
-     */
-    QUrl url() const
-    {
-        return QUrl::fromLocalFile(m_settings->fileName());
-    }
-
-    /**
-     * @brief load
-     * @param key
-     * @param group
-     * @param defaultValue
-     * @return
-     */
-    QVariant load(const QString &key, const QString &group, const QVariant &defaultValue) const
-    {
-        QVariant variant;
-        m_settings->beginGroup(group);
-        variant = m_settings->value(key, defaultValue);
-        m_settings->endGroup();
-        return variant;
-    }
-
-    /**
-     * @brief save
-     * @param key
-     * @param value
-     * @param group
-     */
-    void save(const QString &key, const QVariant &value, const QString &group)
-    {
-        m_settings->beginGroup(group);
-        m_settings->setValue(key, value);
-        m_settings->endGroup();
-        emit this->settingChanged(url(), key, value, group);
-    }
-
-private:
-    explicit Settings(QString app = UTIL::app->applicationName(), QString org = UTIL::app->organizationName().isEmpty() ? QString("org.kde.maui") : UTIL::app->organizationName())
-        : QObject(nullptr)
-        , m_app(app)
-        , m_org(org)
-        , m_settings(new QSettings(m_org, m_app, this))
-    {
-    }
-
-    QString m_app;
-    QString m_org;
-    QSettings *m_settings;
-
-signals:
-    /**
-     * @brief settingChanged
-     * @param url
-     * @param key
-     * @param value
-     * @param group
-     */
-    void settingChanged(QUrl url, QString key, QVariant value, QString group);
-};
 
 /**
  * @brief saveSettings

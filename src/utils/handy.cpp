@@ -20,12 +20,17 @@
 #include "handy.h"
 #include "utils.h"
 #include <QClipboard>
-#include <QCoreApplication>
 #include <QDebug>
 #include <QIcon>
 #include <QMimeData>
 #include <QOperatingSystemVersion>
 #include <QTouchDevice>
+
+#ifdef Q_OS_ANDROID
+#include <QGuiApplication>
+#else
+#include <QApplication>
+#endif
 
 #include "fmh.h"
 
