@@ -39,7 +39,7 @@ void MauiModel::setSortOrder(const int &sortOrder)
     this->sort(0, static_cast<Qt::SortOrder>(sortOrder));
 }
 
-QVariantMap MauiModel::get(const int &index)
+QVariantMap MauiModel::get(const int &index) const
 {
     QVariantMap res;
     if (index >= this->rowCount() || index < 0)
@@ -51,7 +51,7 @@ QVariantMap MauiModel::get(const int &index)
     return res;
 }
 
-QVariantList MauiModel::getAll()
+QVariantList MauiModel::getAll() const
 {
     QVariantList res;
     for (auto i = 0; i < this->rowCount(); i++)

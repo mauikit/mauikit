@@ -21,9 +21,6 @@
 #define UTILS_H
 
 #include <QColor>
-#include <QDebug>
-#include <QFileInfo>
-#include <QImage>
 #include <QObject>
 #include <QSettings>
 #include <QString>
@@ -195,41 +192,6 @@ static inline bool isDark(const QColor &color)
 {
     const double darkness = 1 - (0.299 * color.red() + 0.587 * color.green() + 0.114 * color.blue()) / 255;
     return (darkness > 0.5);
-}
-
-/**
- * @brief averageColour
- * @param img
- * @return
- */
-static inline QColor averageColour(QImage img)
-{
-    int r = 0;
-    int g = 0;
-    int b = 0;
-    int c = 0;
-
-    for (int i = 0; i < img.width(); i++) {
-        for (int ii = 0; ii < img.height(); ii++) {
-            QRgb pix = img.pixel(i, ii);
-            if (pix == 0)
-                continue;
-
-            c++;
-            r += qRed(pix);
-            g += qGreen(pix);
-            b += qBlue(pix);
-        }
-    }
-    r = r / c;
-    g = g / c;
-    b = b / c;
-
-    QColor color = QColor::fromRgb(r, g, b);
-
-    color.setHsv(color.hue(), color.saturation() / 4, color.value());
-
-    return color;
 }
 
 }

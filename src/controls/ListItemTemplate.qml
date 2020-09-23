@@ -82,6 +82,8 @@ Item
     property int leftMargin: Maui.Style.space.tiny
     property int topMargin: margins
     property int bottomMargin: margins
+    
+    property Component iconComponent :  _iconContainer.visible ? (control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : null) ): null
 
     signal toggled(bool state)
 
@@ -259,7 +261,7 @@ Item
                 width: Math.min(parent.height, Math.max(control.iconSizeHint, imageSizeHint) )
                 height: width
                 anchors.centerIn: parent
-                sourceComponent: _iconContainer.visible ? (control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : null) ): null
+                sourceComponent: control.iconComponent
             }
         }
 

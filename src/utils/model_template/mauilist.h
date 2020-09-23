@@ -64,6 +64,7 @@ public:
 public slots:
     int mappedIndex(const int &index) const;
     int mappedIndexFromSource(const int &index) const;
+    QVariantMap get(const int &index) const;
 
 protected:
     bool exists(const FMH::MODEL_KEY &key, const QString &value) const;

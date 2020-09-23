@@ -86,7 +86,7 @@ public slots:
      * Index of the item in the list
      * @return
      */
-    QVariantMap get(const int &index);
+    QVariantMap get(const int &index) const;
 
     /**
      * @brief getAll
@@ -94,7 +94,7 @@ public slots:
      * @return
      * All the items in the list
      */
-    QVariantList getAll();
+    QVariantList getAll() const;
 
     /**
      * @brief setFilter
