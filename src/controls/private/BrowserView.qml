@@ -236,7 +236,8 @@ Maui.Page
             
             delegate: Maui.ListBrowserDelegate
             {
-                id: delegate
+                id: delegate    
+                readonly property string path : model.path
                 width: ListView.view.width
 
                 iconSizeHint : Maui.Style.iconSizes.medium
@@ -319,6 +320,15 @@ Maui.Page
                     _dropMenu.popup()
                 }
                 
+                ListView.onRemove:
+                {
+                    console.log("Item removed", delegate.path)
+                    if(selectionBar)
+                    {
+                        selectionBar.removeAtUri(delegate.path)
+                    }
+                }
+                
                 Connections
                 {
                     target: selectionBar
@@ -383,19 +393,28 @@ Maui.Page
             
             delegate: Item
             {
+                
                 property bool isCurrentItem : GridView.isCurrentItem
                 height: _gridViewBrowser.cellHeight
                 width: _gridViewBrowser.cellWidth
-
+                
+                GridView.onRemove:
+                {
+                    console.log("Item removed")
+                    if(selectionBar)
+                    {
+                        selectionBar.removeAtUri(delegate.path)
+                    }
+                }
+                
                 Maui.GridBrowserDelegate
                 {
                     id: delegate
-                    
+                    readonly property string path : model.path
+
                     iconSizeHint: height * 0.5
                     imageSource: settings.showThumbnails ? model.thumbnail : ""
                     template.fillMode: Image.PreserveAspectFit
-//                    template.imageHeight: height
-//                    template.imageWidth: width
 
                     anchors.fill: parent
                     anchors.margins: Maui.Style.space.big
@@ -466,8 +485,7 @@ Maui.Page
                     {
                         _dropMenu.urls = drop.urls.join(",")
                         _dropMenu.target = model.path
-                        _dropMenu.popup()
-                        
+                        _dropMenu.popup()                        
                     }
                     
                     Connections
@@ -674,6 +692,8 @@ Maui.Page
                         delegate: Maui.ListBrowserDelegate
                         {
                             id: delegate
+                            readonly property string path : model.path
+
                             width: ListView.view.width
                             height: implicitHeight
 
@@ -707,6 +727,14 @@ Maui.Page
                                     width: Maui.Style.iconSizes.small
                                     anchors.centerIn: parent
                                     color: label1.color
+                                }
+                            }
+                            
+                            ListView.onRemove:
+                            {
+                                if(selectionBar)
+                                {
+                                    selectionBar.removeAtUri(delegate.path)
                                 }
                             }
                             

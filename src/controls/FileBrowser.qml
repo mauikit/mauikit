@@ -200,24 +200,12 @@ Maui.Page
 
             onRejected:
             {
-                if(control.selectionBar && control.selectionBar.visible)
-                {
-                    control.selectionBar.animate()
-                    control.selectionBar.clear()
-                }
-
                 Maui.FM.removeFiles(urls)
                 close()
             }
 
             onAccepted:
             {
-                if(control.selectionBar && control.selectionBar.visible)
-                {
-                    control.selectionBar.animate()
-                    control.selectionBar.clear()
-                }
-
                 Maui.FM.moveToTrash(urls)
                 close()
             }
