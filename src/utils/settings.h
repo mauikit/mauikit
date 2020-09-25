@@ -18,7 +18,6 @@ class SettingSection : public QObject
     Q_OBJECT
     Q_PROPERTY(QString key READ key WRITE setKey NOTIFY keyChanged)
     Q_PROPERTY(QString group READ group WRITE setGroup NOTIFY groupChanged)
-    Q_PROPERTY(QVariant value READ value NOTIFY valueChanged FINAL)
     Q_PROPERTY(QVariant defaultValue READ defaultValue WRITE setDefaultValue NOTIFY defaultValueChanged)
 
 private:
@@ -30,19 +29,18 @@ public:
     explicit SettingSection(QObject * parent = nullptr);
     QString key() const;
     QString group() const;
-    QVariant value() const;
     QVariant defaultValue() const;
 
 public slots:
     void setKey(QString key);
     void setGroup(QString group);
+    QVariant value() const;
     void setValue(QVariant value);
     void setDefaultValue(QVariant defaultValue);
 
 signals:
     void keyChanged(QString key);
     void groupChanged(QString group);
-    void valueChanged();
     void defaultValueChanged(QVariant defaultValue);
 };
 

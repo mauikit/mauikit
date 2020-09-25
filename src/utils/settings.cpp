@@ -1,9 +1,7 @@
 #include "settings.h"
 
 SettingSection::SettingSection(QObject *parent) : QObject(parent)
-{
-
-}
+{}
 
 QString SettingSection::key() const
 {
@@ -32,7 +30,6 @@ void SettingSection::setKey(QString key)
 
     m_key = key;
     emit keyChanged(m_key);
-    emit valueChanged();
 }
 
 void SettingSection::setGroup(QString group)
@@ -42,13 +39,11 @@ void SettingSection::setGroup(QString group)
 
     m_group = group;
     emit groupChanged(m_group);
-    emit valueChanged();
 }
 
 void SettingSection::setValue(QVariant value)
 {
     Settings::local().save(m_key, value, m_group);
-    emit valueChanged();
 }
 
 void SettingSection::setDefaultValue(QVariant defaultValue)
