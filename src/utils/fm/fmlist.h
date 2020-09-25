@@ -403,15 +403,6 @@ private:
 public slots:
 
     /**
-     * @brief get
-     * Return an item in the current model
-     * @param index
-     * index of the item to be retrieved
-     * @return
-     */
-    QVariantMap get(const int &index) const;
-
-    /**
      * @brief refresh
      * Refresh the model for new changes
      */

@@ -363,36 +363,25 @@ Maui.Page
             const item = control.currentFMList.get(index)
 
             // Shortcuts for refreshing
-            if((event.key == Qt.Key_F5))
+            if((event.key === Qt.Key_F5))
             {
                 control.currentFMList.refresh()
             }
 
             // Shortcuts for renaming
-            if((event.key == Qt.Key_F2))
+            if((event.key === Qt.Key_F2))
             {
                 dialogLoader.sourceComponent = renameDialogComponent
                 dialog.open()
             }
 
             // Shortcuts for selecting file
-            if((event.key == Qt.Key_A) && (event.modifiers & Qt.ControlModifier))
+            if((event.key === Qt.Key_A) && (event.modifiers & Qt.ControlModifier))
             {
                 control.selectAll()
-            }
+            }          
 
-            if(event.key == Qt.Key_S)
-            {
-                if(control.selectionBar && control.selectionBar.contains(item.path))
-                {
-                    control.selectionBar.removeAtUri(item.path)
-                }else
-                {
-                    control.addToSelection(item)
-                }
-            }
-
-            if((event.key == Qt.Key_Left || event.key == Qt.Key_Right || event.key == Qt.Key_Down || event.key == Qt.Key_Up) && (event.modifiers & Qt.ControlModifier) && (event.modifiers & Qt.ShiftModifier))
+            if((event.key === Qt.Key_Left || event.key === Qt.Key_Right || event.key === Qt.Key_Down || event.key === Qt.Key_Up) && (event.modifiers & Qt.ControlModifier) && (event.modifiers & Qt.ShiftModifier))
             {
                 if(control.selectionBar && control.selectionBar.contains(item.path))
                 {
@@ -404,14 +393,14 @@ Maui.Page
             }
 
             //shortcut for opening files
-            if((event.key == Qt.Key_Return) && (event.modifiers & Qt.AltModifier))
+            if((event.key === Qt.Key_Return) && (event.modifiers & Qt.AltModifier))
             {
                 if(control.previewer)
                 {
                     control.previewer.show(currentFMModel, index)
                 }
 
-            }else if(event.key == Qt.Key_Return)
+            }else if(event.key === Qt.Key_Return)
             {
                 indexHistory.push(index)
                 control.openItem(index)
@@ -426,50 +415,26 @@ Maui.Page
             // Shortcut for cutting an item
             if((event.key == Qt.Key_X) && (event.modifiers & Qt.ControlModifier))
             {
-                var urls = []
-                if(control.selectionBar && control.selectionBar.count > 0)
-                {
-                    urls = control.selectionBar.uris
-                }
-                else
-                {
-                    urls = [item.path]
-                }
+                const urls = filterSelection(control.currentPath, item.path)
                 control.cut(urls)
             }
 
             // Shortcut for copying an item
             if((event.key == Qt.Key_C) && (event.modifiers & Qt.ControlModifier))
             {
-                var urls = []
-                if(control.selectionBar && control.selectionBar.count > 0)
-                {
-                    urls = control.selectionBar.uris
-                }
-                else
-                {
-                    urls = [item.path]
-                }
+                const urls = filterSelection(control.currentPath, item.path)
                 control.copy(urls)
             }
 
             // Shortcut for removing an item
-            if(event.key == Qt.Key_Delete)
+            if(event.key === Qt.Key_Delete)
             {
-                var urls = []
-                if(control.selectionBar && control.selectionBar.count > 0)
-                {
-                    urls = control.selectionBar.uris
-                }
-                else
-                {
-                    urls = [item.path]
-                }
+                const urls = filterSelection(control.currentPath, item.path)
                 control.remove(urls)
             }
 
             // Shortcut for going back in browsing history
-            if(event.key == Qt.Key_Backspace || event.key == Qt.Key_Back)
+            if(event.key === Qt.Key_Backspace || event.key == Qt.Key_Back)
             {
                 if(control.selectionBar && control.selectionBar.count> 0)
                 {
@@ -482,7 +447,7 @@ Maui.Page
             }
 
             // Shortcut for clearing selection and filtering
-            if(event.key == Qt.Key_Escape) //TODO not working, the event is not catched or emitted or is being accepted else where?
+            if(event.key === Qt.Key_Escape) //TODO not working, the event is not catched or emitted or is being accepted else where?
             {
                 if(control.selectionBar && control.selectionBar.count > 0)
                     control.selectionBar.clear()
@@ -491,12 +456,12 @@ Maui.Page
             }
 
             //Shortcut for opening filtering
-            if((event.key == Qt.Key_F) && (event.modifiers & Qt.ControlModifier))
+            if((event.key === Qt.Key_F) && (event.modifiers & Qt.ControlModifier))
             {
                 control.toggleStatusBar()
             }
             
-            if(event.key == Qt.Key_Space)
+            if(event.key === Qt.Key_Space)
             {
                 if(control.previewer)
                     control.previewer.show(currentFMModel, index)
@@ -667,18 +632,10 @@ Maui.Page
         control.currentView.forceActiveFocus()
     }
 
-    //     onThumbnailsSizeChanged:
-    //     {
-    //         if(settings.trackChanges && settings.saveDirProps)
-    //             Maui.FM.setDirConf(currentPath+"/.directory", "MAUIFM", "IconSize", thumbnailsSize)
-    //             else
-    //                 Maui.FM.saveSettings("IconSize", thumbnailsSize, "SETTINGS")
-    //
-    //                 if(view.viewType === Maui.FMList.ICON_VIEW)
-    //                     control.currentView.adaptGrid()
-    //     }
 
-    
+    /**
+      *
+      **/
     function tagFiles(urls)
     {
         if(urls.length <= 0)
@@ -693,6 +650,9 @@ Maui.Page
         }
     }
     
+    /**
+      *
+      **/
     function openWith(urls)
     {
         if(urls.length <= 0)
@@ -707,6 +667,9 @@ Maui.Page
         }
     }
 
+    /**
+      *
+      **/
     function shareFiles(urls)
     {
         if(urls.length <= 0)
@@ -721,6 +684,9 @@ Maui.Page
         }
     }
     
+    /**
+      *
+      **/
     function copy(urls)
     {
         if(urls.length <= 0)
@@ -731,6 +697,9 @@ Maui.Page
         Maui.Handy.copyToClipboard({"urls": urls}, false)
     }
 
+    /**
+      *
+      **/
     function cut(urls)
     {
         if(urls.length <= 0)
@@ -741,6 +710,9 @@ Maui.Page
         Maui.Handy.copyToClipboard({"urls": urls}, true)
     }
 
+    /**
+      *
+      **/
     function paste()
     {
         const data = Maui.Handy.getClipboard()
@@ -753,13 +725,15 @@ Maui.Page
         if(data.cut)
         {
             control.currentFMList.cutInto(urls)
-            control.selectionBar.clear()
         }else
         {
             control.currentFMList.copyInto(urls)
         }
     }
 
+    /**
+      *
+      **/
     function remove(urls)
     {
         if(urls.length <= 0)
@@ -772,6 +746,9 @@ Maui.Page
         dialog.open()
     }
 
+    /**
+      *
+      **/
     function openItem(index)
     {
         const item = control.currentFMList.get(index)
@@ -821,11 +798,17 @@ Maui.Page
         }
     }
 
+    /**
+      *
+      **/
     function openFile(path)
     {
         Maui.FM.openUrl(path)
     }
 
+    /**
+      *
+      **/
     function openFolder(path)
     {
         if(!String(path).length)
@@ -841,23 +824,34 @@ Maui.Page
         control.currentPath = path
     }
 
+    /**
+      *
+      **/
     function goBack()
     {
         openFolder(control.currentFMList.previousPath)
         //        control.currentView.currentIndex = indexHistory.pop()
     }
 
+    /**
+      *
+      **/
     function goNext()
     {
         openFolder(control.currentFMList.posteriorPath)
     }
 
+    /**
+      *
+      **/
     function goUp()
     {
         openFolder(control.currentFMList.parentPath)
     }
 
-    // for this to work the implementation needs to have passed a selectionBar
+    /**
+      * For this to work the implementation needs to have passed a selectionBar
+      **/
     function addToSelection(item)
     {
         if(control.selectionBar == null || item.path.startsWith("tags://") || item.path.startsWith("applications://"))
@@ -868,7 +862,10 @@ Maui.Page
         control.selectionBar.append(item.path, item)
     }
 
-    //given a list inf indexes add them to the selectionBar
+
+    /**
+      * Given a list of indexes add them to the selectionBar
+      **/
     function selectIndexes(indexes)
     {
         if(control.selectionBar == null)
@@ -880,6 +877,9 @@ Maui.Page
             addToSelection(control.currentFMList.get(indexes[i]))
     }
 
+    /**
+      *
+      **/
     function selectAll() //TODO for now dont select more than 100 items so things dont freeze or break
     {
         if(control.selectionBar == null)
@@ -890,6 +890,9 @@ Maui.Page
         selectIndexes([...Array( Math.min(control.currentFMList.count, 100)).keys()])
     }
 
+    /**
+      *
+      **/
     function bookmarkFolder(paths) //multiple paths
     {
         for(var i in paths)
@@ -898,16 +901,9 @@ Maui.Page
         }
     }
 
-    function zoomIn()
-    {
-        control.currentView.resizeContent(1.2)
-    }
-    
-    function zoomOut()
-    {
-        control.currentView.resizeContent(0.8)
-    }
-    
+    /**
+      *
+      **/
     function toggleStatusBar()
     {
         control.footBar.visible = !control.footBar.visible
@@ -922,6 +918,9 @@ Maui.Page
         }
     }
     
+    /**
+      *
+      **/
     function openSearch()
     {
         if(!control.isSearchView)
@@ -931,12 +930,18 @@ Maui.Page
         _searchField.forceActiveFocus()
     }
 
+    /**
+      *
+      **/
     function quitSearch()
     {
         _stackView.pop(StackView.Immediate)
         control.headBar.visible = false
     }
     
+    /**
+      *
+      **/
     function search(query)
     {
         openSearch()
@@ -944,6 +949,9 @@ Maui.Page
         _stackView.currentItem.currentFMList.search(query, _browser.currentFMList)
     }
     
+    /**
+      *
+      **/
     function newFile()
     {
         dialogLoader.sourceComponent= newFileDialogComponent
@@ -951,10 +959,39 @@ Maui.Page
         dialog.forceActiveFocus()
     }
     
+    /**
+      *
+      **/
     function newFolder()
     {
         dialogLoader.sourceComponent= newFolderDialogComponent
         dialog.open()
         dialog.forceActiveFocus()
+    }
+
+    /**
+      * Filters the content of the selection to the current path. The currentPath must be a directory, so the selection can be compared if it is its parent directory. The itemPath is a default item path in cas ethe selectionBar is empty
+      **/
+    function filterSelection(currentPath, itemPath)
+    {
+        var res = []
+
+        if(selectionBar && selectionBar.count > 0 && selectionBar.contains(itemPath))
+        {
+            const uris = selectionBar.uris
+            for(var uri of uris)
+            {
+                if(Maui.FM.parentDir(uri) === currentPath)
+                {
+                    res.push(uri)
+                }
+            }
+
+        } else
+        {
+            res = [itemPath]
+        }
+
+        return res
     }
 }

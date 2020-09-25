@@ -486,14 +486,6 @@ void FMList::setOnlyDirs(const bool &state)
     this->reset();
 }
 
-QVariantMap FMList::get(const int &index) const
-{
-    if (index >= this->list.size() || index < 0)
-        return QVariantMap();
-
-    return FMH::toMap(this->list.at(this->mappedIndex(index)));
-}
-
 void FMList::refresh()
 {
     emit this->pathChanged();

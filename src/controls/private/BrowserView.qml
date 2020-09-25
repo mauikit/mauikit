@@ -53,27 +53,7 @@ Maui.Page
             currentView.forceActiveFocus()
         }
     }
-    
-    function filterSelectedItems(path)
-    {     
-        if(selectionBar && selectionBar.count > 0 && selectionBar.contains(path))
-        {
-            const uris = selectionBar.uris
-            var res = []
-            for(var i in uris)
-            {
-                if(Maui.FM.parentDir(uris[i]) == control.path)
-                {
-                    res.push(uris[i])                    
-                } 
-            }  
-            
-            return res.join("\n")  
-        }        
-        
-        return path
-    }
-    
+
     function groupBy()
 	{
 		var prop = ""
@@ -96,7 +76,7 @@ Maui.Page
 				break;
 			case Maui.FMList.MODIFIED:
 				prop = "modified"
-                br
+                break;
 		}
 		
 		if(!prop)
@@ -254,7 +234,7 @@ Maui.Page
                 Drag.keys: ["text/uri-list"]
                 Drag.mimeData: Drag.active ? 
                 {
-                    "text/uri-list": control.filterSelectedItems(model.path) 
+                    "text/uri-list": filterSelection(control.path, model.path).join("\n")
                 } : {}
                 
                 Item
@@ -429,7 +409,7 @@ Maui.Page
                     Drag.keys: ["text/uri-list"]
                     Drag.mimeData: Drag.active ? 
                     {
-                        "text/uri-list": control.filterSelectedItems(model.path) 
+                        "text/uri-list":  filterSelection(control.path, model.path).join("\n")
                     } : {}
                     
                     Maui.Badge
@@ -711,7 +691,7 @@ Maui.Page
                             Drag.keys: ["text/uri-list"]
                             Drag.mimeData: Drag.active ? 
                             {
-                                "text/uri-list": control.filterSelectedItems(model.path) 
+                                "text/uri-list": filterSelection(control.path, model.path).join("\n")
                             } : {}
                             
                             Item
