@@ -10,6 +10,8 @@ Maui.Page
     id: control
     title: currentFMList.pathName
     property url path 
+    property bool selectionMode : false
+    
     onPathChanged:
     {
         if(control.currentView) 
@@ -176,8 +178,8 @@ Maui.Page
             objectName: "FM ListBrowser"
             property alias currentFMList : _browserModel.list
             property alias currentFMModel : _browserModel
-
-            checkable: selectionMode
+            selectionMode: control.selectionMode
+            checkable: control.selectionMode
             enableLassoSelection: true
 
             BrowserHolder
@@ -347,9 +349,9 @@ Maui.Page
             property alias currentFMModel : _browserModel
             itemSize : thumbnailsSize + Maui.Style.space.big
             itemHeight: itemSize * 1.3
-            checkable: selectionMode
+            checkable: control.selectionMode
             enableLassoSelection: true
-            
+            selectionMode: control.selectionMode
             BrowserHolder
             {
                 id: _holder
@@ -601,7 +603,8 @@ Maui.Page
                     {
                         id: _millerListView
                         anchors.fill: parent
-                        checkable: selectionMode
+                        selectionMode: control.selectionMode
+                        checkable: control.selectionMode
                         onKeyPress: _millerControl.keyPress(event)
                         currentIndex : 0
                         onCurrentIndexChanged: _millerControl.currentIndex = currentIndex

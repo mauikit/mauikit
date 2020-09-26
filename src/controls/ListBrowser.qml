@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.10
-import QtQuick.Controls 2.10
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.9 as Kirigami
@@ -63,6 +63,7 @@ Item
     property alias holder : _holder
 
     property bool enableLassoSelection : false
+    property bool selectionMode: false
     property alias lassoRec : selectLayer
 
     signal itemsSelected(var indexes)
@@ -88,6 +89,28 @@ Item
 
         ListView
         {
+            property alias position : _hoverHandler.point.position
+            
+            onPositionChanged: 
+            {
+                if(_hoverHandler.hovered && position.x < control.width * 0.25 &&  _hoverHandler.point.pressPosition.y != position.y)
+                {
+                    console.log(position.x, position.y)
+                    const index = _listView.indexAt(position.x, position.y)
+                    control.itemsSelected([index])  
+                }                
+            }
+            
+            HoverHandler
+            {
+                id: _hoverHandler
+                margin: Maui.Style.space.big
+                enabled: control.enableLassoSelection && control.selectionMode && !_listView.flicking  
+                acceptedDevices: PointerDevice.TouchScreen
+                acceptedPointerTypes : PointerDevice.Finger 
+                grabPermissions : PointerHandler.CanTakeOverFromAnything            
+            }            
+            
             id: _listView
             anchors.fill: parent
             anchors.rightMargin: Kirigami.Settings.hasTransientTouchInput ? control.rightMargin: parent.ScrollBar.vertical.visible ? parent.ScrollBar.vertical.width + control.rightMargin : control.rightMargin
@@ -168,6 +191,7 @@ Item
             {
                 id: _mouseArea
                 z: -1
+                enabled: !Kirigami.Settings.hasTransientTouchInput
                 anchors.fill: parent
                 propagateComposedEvents: true
                 //             preventStealing: true
@@ -303,6 +327,15 @@ Item
                 }
             }
         }
+    }
+    
+    MouseArea
+    {
+        height: parent.height
+        width: control.width * 0.25
+        propagateComposedEvents: true
+        preventStealing: true
+        enabled: _hoverHandler.enabled && Kirigami.Settings.hasTransientTouchInput     
     }
     
 }

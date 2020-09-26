@@ -35,6 +35,7 @@ Rectangle
     property alias item : loader.item
     readonly property alias hovered : mouseArea.containsMouse
     readonly property alias pressed : mouseArea.pressed
+    property alias mouseArea : mouseArea
     
     property int size: Maui.Style.iconSizes.medium
     property string iconName : ""

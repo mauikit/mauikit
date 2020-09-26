@@ -565,6 +565,7 @@ Maui.Page
             {
                 id: _browser
                 anchors.fill: parent
+                selectionMode: control.selectionMode
             }
 
             Menu

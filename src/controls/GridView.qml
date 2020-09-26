@@ -17,13 +17,12 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.9
-import QtQuick.Controls 2.10
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.9 as Kirigami
 import QtGraphicalEffects 1.0
-
 
 Item
 {
@@ -69,6 +68,7 @@ Item
 
     property bool adaptContent: true
     property bool enableLassoSelection : false
+    property bool selectionMode: false
     property alias lassoRec : selectLayer
 
     property alias pinchEnabled : _pinchArea.enabled
@@ -81,6 +81,8 @@ Item
     Keys.enabled : true
     Keys.forwardTo : controlView
 
+  
+    
     ScrollView
     {
         anchors.fill: parent
@@ -90,6 +92,29 @@ Item
 
         GridView
         {
+            property alias position : _hoverHandler.point.position
+            
+            onPositionChanged: 
+            {
+                console.log("===>" +_hoverHandler.point.pressPosition.y, _hoverHandler.point.sceneGrabPosition.y, position.y, _hoverHandler.point.scenePressPosition)
+                if(_hoverHandler.hovered && !controlView.moving && _hoverHandler.point.pressPosition.y != position.y)
+                {
+                    console.log(position.x, position.y)
+                    const index = controlView.indexAt(position.x, position.y)
+                    control.itemsSelected([index])  
+                }                
+            }
+            
+            HoverHandler
+            {
+                id: _hoverHandler
+//                 margin: 
+                enabled: control.enableLassoSelection && control.selectionMode && !controlView.flicking
+                acceptedDevices: PointerDevice.TouchScreen
+                acceptedPointerTypes : PointerDevice.Finger 
+                grabPermissions : PointerHandler.ApprovesTakeOverByItems	      
+            }
+            
             id: controlView
             anchors.fill: parent
             anchors.rightMargin: Kirigami.Settings.hasTransientTouchInput ? control.rightMargin : parent.ScrollBar.vertical.visible ? parent.ScrollBar.vertical.width : control.rightMargin
@@ -152,9 +177,10 @@ Item
             {
                 id: _mouseArea
                 z: -1
+                enabled: !Kirigami.Settings.hasTransientTouchInput
                 anchors.fill: parent
-                propagateComposedEvents: false
-                // 				preventStealing: true
+                propagateComposedEvents: true
+//                 preventStealing: true
                 acceptedButtons:  Qt.RightButton | Qt.LeftButton
 
                 onClicked:
@@ -307,6 +333,26 @@ Item
         }
     }
 
+//       MouseArea
+//     {
+//         anchors.fill: parent
+//         propagateComposedEvents: true
+//         
+//         property point position: Qt.point(mouseX, mouseY)
+//         
+//         onMouseXChanged: 
+//         {
+//          console.log("Pos changed")
+//              const index = controlView.indexAt(mouseX, mouseY)
+//              control.itemsSelected([index])   
+//         }
+//         
+//         onPressed:
+//         {
+//             
+//              mouse.accepted = false
+//         }
+//     }
 
         function resizeContent(factor)
         {

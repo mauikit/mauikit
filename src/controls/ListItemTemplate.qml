@@ -271,8 +271,8 @@ Item
             visible: control.labelsVisible
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.margins: Maui.Style.space.tiny
-            Layout.leftMargin: _iconContainer.visible || _checkBoxContainer.visible ? 0 : Maui.Style.space.small
+//             Layout.margins: Maui.Style.space.tiny
+//             Layout.leftMargin: _iconContainer.visible || _checkBoxContainer.visible ? 0 : Maui.Style.space.small
             spacing: 0
 
             Label

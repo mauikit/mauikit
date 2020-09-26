@@ -17,9 +17,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.9
+import QtQuick 2.14
 import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.3
+import QtQuick.Controls 2.14
 import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.7 as Kirigami
@@ -199,7 +199,6 @@ Item
                         id: _emblem
                         
                         visible: control.checkable || control.checked
-                        
                         size: Maui.Style.iconSizes.medium        
                         anchors.margins: Maui.Style.space.medium
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -214,7 +213,7 @@ Item
 							control.checked = !control.checked
 							control.toggled(control.checked)
 						}
-						
+												
                         MauiLab.CheckMark
                         {
 							visible: opacity > 0
