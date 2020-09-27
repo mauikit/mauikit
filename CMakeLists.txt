@@ -39,7 +39,7 @@ include(KDECompilerSettings NO_POLICY_SCOPE)
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Qml 
     Sql Core Quick Gui Svg QuickControls2 Network DBus Xml)
-    
+
 ecm_find_qmlmodule(QtGraphicalEffects 1.0)
 ecm_find_qmlmodule(QtQuick.Shapes 1.0)
 
@@ -48,7 +48,7 @@ if(ANDROID)
     find_package(Gradle REQUIRED)
 endif()
 
-find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets)
+find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS I18n Notifications Config Service KIO ConfigWidgets Archive)
 
 add_subdirectory(src)
 

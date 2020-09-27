@@ -287,7 +287,8 @@ target_link_libraries(MauiKit
     KF5::KIOCore
     KF5::KIOWidgets
     KF5::KIOFileWidgets
-
+    KF5::Archive
+    
     PRIVATE
     Qt5::Qml
     Qt5::Quick
@@ -299,6 +300,7 @@ target_link_libraries(MauiKit
     KF5::Service
     KF5::KIONTLM
     KF5::ConfigWidgets
+    KF5::Archive
     )
 
 if(${COMPONENT_EDITOR})

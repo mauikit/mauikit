@@ -287,6 +287,12 @@ Maui.Page
 				control.cut([item.path])
 		}
 		
+		onExtractArk:
+		{
+			if(item)
+				 Maui.FM.extractFile(item.path)
+		}
+
 		onTagsClicked:
 		{
 			if(item && control.tagsDialog)

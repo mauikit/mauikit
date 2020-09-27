@@ -2,6 +2,7 @@
 #define FMSTATIC_H
 
 #include "fmh.h"
+#include "kzip.h"
 #include <QObject>
 
 #ifndef STATIC_MAUIKIT
@@ -361,6 +362,18 @@ public slots:
      * @return
      */
     static bool openUrl(const QUrl &url);
+
+
+
+
+    /**
+     * @brief extractFile
+     * Given a URL it extract file in the same path
+     * @param url
+     * The URL to be open
+     * @return void
+     */
+    static void extractFile(const QUrl &url);
 
     /**
      * @brief openLocation

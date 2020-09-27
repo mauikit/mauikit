@@ -23,6 +23,7 @@ Menu
     signal renameClicked(var item)
     signal tagsClicked(var item)	
     signal openWithClicked(var item)
+    signal extractArk(var item);
                       
     MenuItem
     {
@@ -30,7 +31,8 @@ Menu
         text: i18n("Select")
         icon.name: "edit-select"		
         onTriggered:
-        {			
+        {
+            console.log("@gadominguez File: FileMenu.qml Select Action")			
             addToSelection(currentFMList.get(index))
             if(Maui.Handy.isTouch)
                 selectionMode = true
@@ -49,7 +51,19 @@ Menu
             tagsClicked(control.item)
             close()
         }
-    }  
+    } 
+    
+    MenuItem
+    {
+        visible: !control.isExec && tagsDialog
+        text: i18n("Extract with Ark")
+        icon.name: "tag"
+        onTriggered:
+        {
+            console.log("@gadominguez File: FileMenu.qml Extract with ARK Item: " + item.path)
+            extractArk(item);
+        }
+    }   
     
     MenuItem
     {

@@ -408,6 +408,21 @@ bool FMStatic::openUrl(const QUrl &url)
 #endif
 }
 
+void FMStatic::extractFile(const QUrl &url)
+{
+    qDebug() << "@gadominguez File:fm.cpp Funcion: extractFile  " << url.toString();
+    KZip *kArch = new KZip(url.toString().split(QString("file://"))[1]);
+    const char *data = "Hello World";
+    kArch->open(QIODevice::ReadOnly);
+    assert(kArch->isOpen() == true);
+    if(kArch->isOpen())
+    {
+        bool recursive = true;
+        kArch->directory()->copyTo("/home/gabridc/Descargas/test", recursive);
+    }
+
+}
+
 void FMStatic::openLocation(const QStringList &urls)
 {
     for (const auto &url : urls)
