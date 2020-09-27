@@ -80,8 +80,6 @@ Item
 
     Keys.enabled : true
     Keys.forwardTo : controlView
-
-  
     
     ScrollView
     {
@@ -93,26 +91,37 @@ Item
         GridView
         {
             property alias position : _hoverHandler.point.position
+            property var selectedIndexes : []
             
             onPositionChanged: 
             {
                 console.log("===>" +_hoverHandler.point.pressPosition.y, _hoverHandler.point.sceneGrabPosition.y, position.y, _hoverHandler.point.scenePressPosition)
                 if(_hoverHandler.hovered && !controlView.moving && _hoverHandler.point.pressPosition.y != position.y)
-                {
-                    console.log(position.x, position.y)
+                {                   
                     const index = controlView.indexAt(position.x, position.y)
-                    control.itemsSelected([index])  
+                    if(!selectedIndexes.includes(index))
+                    {
+                         selectedIndexes.push(index)
+                         control.itemsSelected([index])  
+                    }
                 }                
             }
             
             HoverHandler
             {
                 id: _hoverHandler
-//                 margin: 
                 enabled: control.enableLassoSelection && control.selectionMode && !controlView.flicking
                 acceptedDevices: PointerDevice.TouchScreen
                 acceptedPointerTypes : PointerDevice.Finger 
-                grabPermissions : PointerHandler.ApprovesTakeOverByItems	      
+                grabPermissions : PointerHandler.ApprovesTakeOverByItems	
+                
+                onHoveredChanged:
+                {
+                    if(!hovered)
+                    {
+                        controlView.selectedIndexes = []   
+                    }
+                }
             }
             
             id: controlView

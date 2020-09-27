@@ -27,7 +27,8 @@ import "private" as Private
 SwipeView
 {
     id: control
-    interactive: Kirigami.Settings.hasTransientTouchInput
+//     interactive: Kirigami.Settings.hasTransientTouchInput
+    interactive: false
     clip: true
     focus: true
 

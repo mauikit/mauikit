@@ -29,7 +29,8 @@ Maui.Page
     
     property var model : null
     
-    property bool enableLassoSelection: false    
+    property bool enableLassoSelection: false   
+    property bool selectionMode: false
     property alias holder : _holder   
     
     readonly property alias gridView : private_.gridView
@@ -118,6 +119,7 @@ Maui.Page
             model: control.model
             delegate: control.gridDelegate
             enableLassoSelection: control.enableLassoSelection
+            selectionMode: control.selectionMode
             cellHeight: _dummyGridView.cellHeight
             cellWidth: _dummyGridView.cellWidth
             itemSize: _dummyGridView.itemSize  
@@ -137,7 +139,8 @@ Maui.Page
             model: control.model
             delegate: control.listDelegate
             enableLassoSelection: control.enableLassoSelection
-            
+            selectionMode: control.selectionMode
+
             itemSize: _dummyListBrowser.itemSize
             section.delegate: _dummyListBrowser.section.delegate
             section.property: _dummyListBrowser.section.property

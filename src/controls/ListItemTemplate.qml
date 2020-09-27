@@ -78,8 +78,8 @@ Item
     property bool imageBorder: true
 
     property int margins: 0
-    property int rightMargin: Maui.Style.space.tiny
-    property int leftMargin: Maui.Style.space.tiny
+    property int rightMargin: Maui.Style.space.medium
+    property int leftMargin: Maui.Style.space.medium
     property int topMargin: margins
     property int bottomMargin: margins
     

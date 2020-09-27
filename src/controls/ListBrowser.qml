@@ -90,14 +90,18 @@ Item
         ListView
         {
             property alias position : _hoverHandler.point.position
+            property var selectedIndexes : []
             
             onPositionChanged: 
             {
                 if(_hoverHandler.hovered && position.x < control.width * 0.25 &&  _hoverHandler.point.pressPosition.y != position.y)
                 {
-                    console.log(position.x, position.y)
                     const index = _listView.indexAt(position.x, position.y)
-                    control.itemsSelected([index])  
+                    if(!selectedIndexes.includes(index) && index > -1 && index < _listView.count)
+                    {
+                         selectedIndexes.push(index)
+                         control.itemsSelected([index])  
+                    }
                 }                
             }
             
@@ -108,7 +112,15 @@ Item
                 enabled: control.enableLassoSelection && control.selectionMode && !_listView.flicking  
                 acceptedDevices: PointerDevice.TouchScreen
                 acceptedPointerTypes : PointerDevice.Finger 
-                grabPermissions : PointerHandler.CanTakeOverFromAnything            
+                grabPermissions : PointerHandler.CanTakeOverFromAnything  
+                
+                 onHoveredChanged:
+                {
+                    if(!hovered)
+                    {
+                        _listView.selectedIndexes = []   
+                    }
+                }
             }            
             
             id: _listView
