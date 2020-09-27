@@ -38,10 +38,19 @@ Maui.AlternateListItem
             label1.font.weight: Font.Bold
             label2.wrapMode: Text.WordWrap
             
-            ToolButton
+            MouseArea
             {
-                icon.name: checked ? "arrow-up" : "arrow-down"
-                checked: !_mainData.visible
+                implicitHeight: Maui.Style.iconSizes.medium
+                implicitWidth: implicitHeight
+                
+                Maui.Triangle
+                {
+                    height: Maui.Style.iconSizes.tiny
+                    width: height
+                    rotation: _mainData.visible ? -45 : -225
+                    color:  Kirigami.Theme.textColor
+                }
+                
                 onClicked: _mainData.visible = !_mainData.visible
             }
         }

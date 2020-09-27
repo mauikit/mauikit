@@ -86,18 +86,25 @@ Maui.Popup
                 visible: control.persistent
                 hoverEnabled: !Kirigami.Settings.isMobile
                 Layout.fillHeight: true
-                implicitHeight: Maui.Style.iconSizes.medium
-                implicitWidth: Maui.Style.iconSizes.medium
-
-                Maui.X
-                {
-                    height: Maui.Style.iconSizes.tiny
-                    width: height
-                    anchors.centerIn: parent
-                    color: _closeButton.containsMouse || _closeButton.containsPress ? Kirigami.Theme.negativeTextColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-                }
-
+                implicitWidth: height
                 onClicked: close()
+
+                Rectangle
+                {
+                    anchors.fill: parent
+                    anchors.margins: Maui.Style.space.small
+                    radius: Maui.Style.radiusV
+                    color: Qt.darker(Kirigami.Theme.backgroundColor)
+                    
+                    Maui.X
+                    {
+                        height: Maui.Style.iconSizes.tiny
+                        width: height
+                        anchors.centerIn: parent
+                        color: _closeButton.containsMouse || _closeButton.containsPress ? Kirigami.Theme.negativeTextColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+                    }
+                }                
+
             }
 
             ColumnLayout
