@@ -3,6 +3,7 @@
 
 #include "fmh.h"
 #include "kzip.h"
+#include "ktar.h"
 #include <QObject>
 
 #ifndef STATIC_MAUIKIT
@@ -20,6 +21,7 @@ class MAUIKIT_EXPORT FMStatic : public QObject
 #endif
 {
     Q_OBJECT
+
 public:
     explicit FMStatic(QObject *parent = nullptr);
 
@@ -373,7 +375,7 @@ public slots:
      * The URL to be open
      * @return void
      */
-    static void extractFile(const QUrl &url);
+    static void extractFile(const QUrl &url, const int type);
 
     /**
      * @brief openLocation
@@ -515,6 +517,18 @@ public slots:
      * The file URL to be bookmarked
      */
     static void bookmark(const QUrl &url);
+
+private:
+    enum class CompressedFileType 
+    {
+        ZIP = 1,
+        GZIP,
+        ZIP7,
+        BZIP2,
+        TARGZ,
+        TAR,
+        AR
+    };
 };
 
 #endif // FMSTATIC_H

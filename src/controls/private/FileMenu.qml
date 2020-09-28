@@ -23,7 +23,7 @@ Menu
     signal renameClicked(var item)
     signal tagsClicked(var item)	
     signal openWithClicked(var item)
-    signal extractArk(var item);
+    signal extractArk(var item, var type);
                       
     MenuItem
     {
@@ -55,13 +55,14 @@ Menu
     
     MenuItem
     {
-        visible: !control.isExec && tagsDialog
+        visible: !control.isExec && tagsDialog && checkCompressedFileType(item.path) > 0
         text: i18n("Extract with Ark")
         icon.name: "tag"
         onTriggered:
         {
             console.log("@gadominguez File: FileMenu.qml Extract with ARK Item: " + item.path)
-            extractArk(item);
+            var type = checkCompressedFileType(item.path);
+            extractArk(item, type);
         }
     }   
     
@@ -212,5 +213,48 @@ Menu
                 control.isFav = Maui.FM.isFav(item.path)
                 popup()
             }
+    }
+
+    /*
+     * Check the type of a compresed type.
+     * Return: type[int] 
+     *    The values returned must be equals with enum class CompressedFileType 
+     *    in class fmstatic.h
+     */
+
+    function checkCompressedFileType(path)
+    {
+        if(path.includes(".zip"))
+        {
+            return 1
+        }
+        else if(path.includes(".gzip")) 
+        {
+            return 2;
+        }
+        else if(path.includes(".7zip"))
+        {
+            return 3;
+        }
+        else if(path.includes(".bzip2"))
+        {
+            return 4;
+        }
+        else if(path.includes(".tar.gz"))
+        {
+            return 5;
+        }
+        else if(path.includes(".tar"))
+        {
+            return 6;
+        }
+        else if(path.includes(".ar")) 
+        {
+            return 7;
+        }
+        else
+        {
+            return 0;
+        }
     }
 }

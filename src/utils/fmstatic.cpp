@@ -408,10 +408,33 @@ bool FMStatic::openUrl(const QUrl &url)
 #endif
 }
 
-void FMStatic::extractFile(const QUrl &url)
+void FMStatic::extractFile(const QUrl &url, const int type)
 {
     qDebug() << "@gadominguez File:fm.cpp Funcion: extractFile  " << url.toString();
-    KZip *kArch = new KZip(url.toString().split(QString("file://"))[1]);
+    KArchive *kArch = nullptr;
+    switch(type)
+    {
+        case static_cast<int>(CompressedFileType::ZIP):
+            kArch = new KZip(url.toString().split(QString("file://"))[1]);
+            break;
+        case static_cast<int>(CompressedFileType::BZIP2):
+            break;
+        case static_cast<int>(CompressedFileType::GZIP):
+            break;
+        case static_cast<int>(CompressedFileType::ZIP7):
+            break;
+        case static_cast<int>(CompressedFileType::AR):
+            break;        
+        case static_cast<int>(CompressedFileType::TAR):
+            kArch = new KTar(url.toString().split(QString("file://"))[1]);
+            break;
+        case static_cast<int>(CompressedFileType::TARGZ): 
+            break;  
+        default:
+            qDebug() << "ERROR. COMPRESSED FILE TYPE UNKOWN " << url.toString();
+            break;      
+    }
+    
     const char *data = "Hello World";
     kArch->open(QIODevice::ReadOnly);
     assert(kArch->isOpen() == true);
