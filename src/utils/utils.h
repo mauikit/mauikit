@@ -23,7 +23,7 @@
 #include <QColor>
 #include <QObject>
 
-#include "settings.h"
+#include "appsettings.h"
 
 namespace UTIL
 {
@@ -51,9 +51,9 @@ static const inline QString whoami()
 static inline void saveSettings(const QString &key, const QVariant &value, const QString &group, const bool &global = false)
 {
     if (global)
-        Settings::global().save(key, value, group);
+        AppSettings::global().save(key, value, group);
     else
-        Settings::local().save(key, value, group);
+        AppSettings::local().save(key, value, group);
 }
 
 /**
@@ -67,9 +67,9 @@ static inline void saveSettings(const QString &key, const QVariant &value, const
 static inline const QVariant loadSettings(const QString &key, const QString &group, const QVariant &defaultValue, const bool &global = false)
 {
     if (global)
-        return Settings::global().load(key, group, defaultValue);
+        return AppSettings::global().load(key, group, defaultValue);
     else
-        return Settings::local().load(key, group, defaultValue);
+        return AppSettings::local().load(key, group, defaultValue);
 }
 
 /**

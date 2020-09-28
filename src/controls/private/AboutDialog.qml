@@ -35,8 +35,8 @@ Maui.Dialog
     widthHint: 0.9
     heightHint: 0.8
 
-    maxWidth: 400
-    maxHeight: 300
+    maxWidth: Math.floor( 400 * Kirigami.Units.devicePixelRatio )
+    maxHeight: Math.floor( 300 * Kirigami.Units.devicePixelRatio )
 
     page.padding: 0
     actions: [

@@ -28,7 +28,7 @@
 #include "mauilist.h"
 #include "mauimodel.h"
 #include "pathlist.h"
-#include "settings.h"
+#include "appsettings.h"
 
 #ifdef COMPONENT_ACCOUNTS
 #include "mauiaccounts.h"

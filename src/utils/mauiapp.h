@@ -29,7 +29,12 @@
 
 #include <QColor>
 #include <QSettings>
+
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
 #include <KAboutData>
+#else
+#include <KCoreAddons/KAboutData>
+#endif
 
 class MauiAccounts;
 

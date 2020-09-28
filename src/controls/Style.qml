@@ -68,11 +68,11 @@ QtObject
 	readonly property var space : ({
 		tiny: Kirigami.Units.smallSpacing,
 		small: Kirigami.Units.smallSpacing*2,
-		medium: Kirigami.Units.largeSpacing,
-		big: Kirigami.Units.largeSpacing*2,
-		large: Kirigami.Units.largeSpacing*3,
-		huge: Kirigami.Units.largeSpacing*4,
-		enormous: Kirigami.Units.largeSpacing*5
+        medium: Kirigami.Units.largeSpacing,
+        big: Kirigami.Units.largeSpacing*2,
+        large: Kirigami.Units.largeSpacing*3,
+        huge: Kirigami.Units.largeSpacing*4,
+        enormous: Kirigami.Units.largeSpacing*5
 	})
 	
 	readonly property var iconSizes : ({

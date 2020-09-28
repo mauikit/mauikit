@@ -302,6 +302,7 @@ const QUrl thumbnailUrl(const QUrl &url, const QString &mimetype)
     return QUrl();
 }
 
+#if !defined Q_OS_ANDROID && defined Q_OS_LINUX
 const FMH::MODEL getFileInfo(const KFileItem &kfile)
 {
     return MODEL {{MODEL_KEY::LABEL, kfile.name()},
@@ -327,6 +328,7 @@ const FMH::MODEL getFileInfo(const KFileItem &kfile)
         {MODEL_KEY::OWNER, kfile.user()},
         {MODEL_KEY::COUNT, kfile.isLocalFile() && kfile.isDir() ? QString::number(QDir(kfile.localPath()).count() - 2) : "0"}};
         }
+#endif
 
         const FMH::MODEL getFileInfoModel(const QUrl &path)
         {

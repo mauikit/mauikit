@@ -96,7 +96,7 @@ PlacesList::PlacesList(QObject *parent)
         emit this->postListChanged();	*/
     }); // TODO improve the usage of the model
 #else
-    connect(&UTIL::Settings::global(), &UTIL::Settings::settingChanged, [&](const QUrl &url, const QString &key, const QVariant &value, const QString &group) {
+    connect(&AppSettings::global(), &AppSettings::settingChanged, [&](const QUrl, const QString &key, const QVariant, const QString &group) {
         if (key == "BOOKMARKS" && group == "PREFERENCES") {
             this->reset();
             emit this->bookmarksChanged();

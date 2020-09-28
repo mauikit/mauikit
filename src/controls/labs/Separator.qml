@@ -31,17 +31,22 @@ Loader
         ColumnLayout
         {
             spacing: 0
+            opacity: 0.5
 
             Kirigami.Separator
             {
-                opacity: 0.3
+                implicitWidth: 1
+                implicitHeight: 1
+                opacity: 0.8
                 color: Qt.lighter(control.color, 2.5)
                 Layout.fillWidth: true
             }
 
             Kirigami.Separator
             {
-                opacity: 0.5
+                implicitWidth: 1
+                implicitHeight: 1
+                opacity: 0.9
                 color: Qt.darker(control.color, 2.5)
                 Layout.fillWidth: true
             }
@@ -55,16 +60,22 @@ Loader
         RowLayout
         {
             spacing: 0
+            opacity: 0.5
+
             Kirigami.Separator
             {
-                opacity: 0.3
+                implicitWidth: 1
+                implicitHeight: 1
+                opacity: 0.8
                 color: Qt.lighter(control.color, 2.5)
                 Layout.fillHeight: true
             }
 
             Kirigami.Separator
             {
-                opacity: 0.5
+                implicitWidth: 1
+                implicitHeight: 1
+                opacity: 0.9
                 color: Qt.darker(control.color, 2.5)
                 Layout.fillHeight: true
             }

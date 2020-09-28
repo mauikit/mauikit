@@ -20,15 +20,14 @@
 #include "mauiandroid.h"
 #include <QColor>
 #include <QDebug>
-#include <QDomDocument>
 #include <QException>
 #include <QFile>
 #include <QImage>
 #include <QMimeData>
 #include <QMimeDatabase>
 #include <QUrl>
-
-#include "utils.h"
+#include <QFileInfo>
+#include <QCoreApplication>
 
 #include <android/bitmap.h>
 // WindowManager.LayoutParams
@@ -132,7 +131,7 @@ void MAUIAndroid::shareDialog(const QUrl &url)
                                                   activity.object<jobject>(),
                                                   QAndroidJniObject::fromString(url.toLocalFile()).object<jstring>(),
                                                   QAndroidJniObject::fromString(mimeType).object<jstring>(),
-                                                  QAndroidJniObject::fromString(QString("%1.fileprovider").arg(UTIL::app->organizationDomain())).object<jstring>());
+                                                  QAndroidJniObject::fromString(QString("%1.fileprovider").arg(qApp->organizationDomain())).object<jstring>());
 
         if (_env->ExceptionCheck()) {
             qDebug() << "trying to share dialog << exception";
@@ -235,7 +234,7 @@ void MAUIAndroid::openUrl(const QUrl &url)
                                                   "(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;)V",
                                                   activity.object<jobject>(),
                                                   QAndroidJniObject::fromString(url.toLocalFile()).object<jstring>(),
-                                                  QAndroidJniObject::fromString(QString("%1.fileprovider").arg(UTIL::app->organizationDomain())).object<jstring>());
+                                                  QAndroidJniObject::fromString(QString("%1.fileprovider").arg(qApp->organizationDomain())).object<jstring>());
 
         if (_env->ExceptionCheck()) {
             _env->ExceptionClear();
@@ -276,20 +275,16 @@ QStringList MAUIAndroid::sdDirs()
     return res;
 }
 
-void MAUIAndroid::setAppIcons(const QString &lowDPI, const QString &mediumDPI, const QString &highDPI)
-{
-}
+//void MAUIAndroid::handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data)
+//{
+//    qDebug() << "ACTIVITY RESULTS";
+//    jint RESULT_OK = QAndroidJniObject::getStaticField<jint>("android/app/Activity", "RESULT_OK");
 
-void MAUIAndroid::handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data)
-{
-    qDebug() << "ACTIVITY RESULTS";
-    jint RESULT_OK = QAndroidJniObject::getStaticField<jint>("android/app/Activity", "RESULT_OK");
-
-    if (receiverRequestCode == 42 && resultCode == RESULT_OK) {
-        QString url = data.callObjectMethod("getData", "()Landroid/net/Uri;").callObjectMethod("getPath", "()Ljava/lang/String;").toString();
-        emit folderPicked(url);
-    }
-}
+//    if (receiverRequestCode == 42 && resultCode == RESULT_OK) {
+//        QString url = data.callObjectMethod("getData", "()Landroid/net/Uri;").callObjectMethod("getPath", "()Ljava/lang/String;").toString();
+//        emit folderPicked(url);
+//    }
+//}
 
 void MAUIAndroid::fileChooser()
 {

@@ -26,9 +26,14 @@ OPENSSL_REPO = https://github.com/mauikit/openssl
 ATTICA_REPO = https://github.com/mauikit/attica
 KQUICKSYNTAXHIGHLIGHTER_REPO = https://github.com/mauikit/kquicksyntaxhighlighter.git
 KSYNTAXHIGHLIGHTING_REPO = https://github.com/mauikit/KSyntaxHighlighting.git
+
 KI18N_ANDROID_REPO = https://github.com/mauikit/KI18n-android.git
 KI18N_MACOS_REPO = https://github.com/mauikit/KI18n-macos.git
 KI18N_WINDOWS_REPO = https://github.com/mauikit/KI18n-windows.git
+
+KCOREADDONS_ANDROID_REPO = https://github.com/mauikit/KCoreAddons-android.git
+KCOREADDONS_MACOS_REPO = https://github.com/mauikit/KCoreAddons-macos.git
+KCOREADDONS_WINDOWS_REPO = https://github.com/mauikit/KCoreAddons-windows.git
 
 #ANDROID FILES VALUES
 ANDROID_FILES_DIR = $$_PRO_FILE_PWD_/android_files
@@ -218,6 +223,7 @@ HEADERS += \
     $$PWD/src/utils/model_template/mauilist.h \
     $$PWD/src/utils/handy.h \
     $$PWD/src/utils/utils.h \
+    $$PWD/src/utils/appsettings.h \
     $$PWD/src/utils/mauiapp.h \
     $$PWD/src/utils/models/pathlist.h \
     $$PWD/src/controls/libs/appview.h
@@ -225,9 +231,11 @@ HEADERS += \
 SOURCES += \
     $$PWD/src/utils/fmstatic.cpp \
     $$PWD/src/mauikit.cpp \
+    $$PWD/src/utils/fmh.cpp \
     $$PWD/src/utils/model_template/mauimodel.cpp \
     $$PWD/src/utils/model_template/mauilist.cpp \
     $$PWD/src/utils/handy.cpp \
+    $$PWD/src/utils/appsettings.cpp \
     $$PWD/src/utils/mauiapp.cpp \
     $$PWD/src/utils/models/pathlist.cpp
 

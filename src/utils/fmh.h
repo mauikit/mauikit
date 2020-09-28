@@ -50,7 +50,11 @@
 /**
  * A set of helpers related to file management and modeling of data
  */
+#ifdef STATIC_MAUIKIT
+namespace FMH
+#else
 namespace MAUIKIT_EXPORT FMH
+#endif
 {
 /**
  * @brief isAndroid
