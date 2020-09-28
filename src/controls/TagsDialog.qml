@@ -20,40 +20,40 @@ Maui.Dialog
     maxWidth: 400
     page.margins: 0
 
-    acceptButton.text: i18n("Add")
+    acceptButton.text: i18n("Save")
     rejectButton.text: i18n("Cancel")
 
     onAccepted: setTags()
     onRejected: close()
     
     headBar.visible: true
-    headBar.rightContent: Maui.ToolButtonMenu
-    {
-        icon.name: "view-sort"
-        MenuItem
-        {
-            text: i18n("Sort by name")
-            checkable: true
-            autoExclusive: true
-            checked: _tagsList.sortBy === TagsList.TAG
-            onTriggered: _tagsList.sortBy = TagsList.TAG
-        }
-
-        MenuItem
-        {
-            text: i18n("Sort by date")
-            checkable: true
-            autoExclusive: true
-            checked: _tagsList.sortBy === TagsList.ADD_DATE
-            onTriggered: _tagsList.sortBy = TagsList.ADD_DATE
-        }
-    }
+//     headBar.rightContent: Maui.ToolButtonMenu
+//     {
+//         icon.name: "view-sort"
+//         MenuItem
+//         {
+//             text: i18n("Sort by name")
+//             checkable: true
+//             autoExclusive: true
+//             checked: _tagsModel.sort === "tag"
+//             onTriggered: _tagsModel.sort = "tag"
+//         }
+// 
+//         MenuItem
+//         {
+//             text: i18n("Sort by date")
+//             checkable: true
+//             autoExclusive: true
+//             checked: _tagsModel.sort === "adddate"
+//             onTriggered: _tagsModel.sort = "adddate"
+//         }
+//     }
 
     headBar.middleContent: Maui.TextField
     {
         id: tagText
         Layout.fillWidth: true       
-        placeholderText: i18n("New tag")
+        placeholderText: i18n("Filter or add a new tag")
         onAccepted:
         {
             const tags = tagText.text.split(",")
@@ -64,34 +64,17 @@ Maui.Dialog
                 tagListComposer.list.append(myTag)
             }
             clear()
+             _tagsModel.filter = ""
+        }
+        
+        onTextChanged:
+        {
+            _tagsModel.filter = text
         }
     }
-
-    //	headBar.rightContent: ToolButton
-    //	{
-    //		icon.name: "view-refresh"
-    //		onClicked: taglist.refresh()
-    //	}
-
+    
     stack: [
 
-        Maui.ToolBar
-        {
-            position: ToolBar.Header
-            Layout.fillWidth: true
-            preferredHeight: Maui.Style.toolBarHeightAlt
-
-            Maui.TextField
-            {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                placeholderText: i18n("Filter")
-                background: Item{}
-
-                onAccepted: _tagsModel.filter = text
-                onCleared: _tagsModel.filter = ""
-            }
-        },
 
         Maui.ListBrowser
         {
@@ -110,6 +93,8 @@ Maui.Dialog
             model: Maui.BaseModel
             {
                 id: _tagsModel
+                sort: "tag"
+                sortOrder: Qt.AscendingOrder
                 recursiveFilteringEnabled: true
                 sortCaseSensitivity: Qt.CaseInsensitive
                 filterCaseSensitivity: Qt.CaseInsensitive
@@ -151,6 +136,8 @@ Maui.Dialog
     onClosed:
     {
         composerList.urls = []
+        tagText.clear()
+         _tagsModel.filter = ""
     }
 
     function setTags()

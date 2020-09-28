@@ -89,42 +89,12 @@ Item
         ScrollBar.vertical.policy: ScrollBar.AsNeeded
 
         GridView
-        {
+        {            
+            id: controlView            
+            
             property alias position : _hoverHandler.point.position
             property var selectedIndexes : []
             
-            onPositionChanged: 
-            {
-                console.log("===>" +_hoverHandler.point.pressPosition.y, _hoverHandler.point.sceneGrabPosition.y, position.y, _hoverHandler.point.scenePressPosition)
-                if(_hoverHandler.hovered && !controlView.moving && _hoverHandler.point.pressPosition.y != position.y)
-                {                   
-                    const index = controlView.indexAt(position.x, position.y)
-                    if(!selectedIndexes.includes(index))
-                    {
-                         selectedIndexes.push(index)
-                         control.itemsSelected([index])  
-                    }
-                }                
-            }
-            
-            HoverHandler
-            {
-                id: _hoverHandler
-                enabled: control.enableLassoSelection && control.selectionMode && !controlView.flicking
-                acceptedDevices: PointerDevice.TouchScreen
-                acceptedPointerTypes : PointerDevice.Finger 
-                grabPermissions : PointerHandler.ApprovesTakeOverByItems	
-                
-                onHoveredChanged:
-                {
-                    if(!hovered)
-                    {
-                        controlView.selectedIndexes = []   
-                    }
-                }
-            }
-            
-            id: controlView
             anchors.fill: parent
             anchors.rightMargin: Kirigami.Settings.hasTransientTouchInput ? control.rightMargin : parent.ScrollBar.vertical.visible ? parent.ScrollBar.vertical.width : control.rightMargin
 
@@ -159,10 +129,41 @@ Item
             keyNavigationWraps : true
             Keys.onPressed: control.keyPress(event)
 
-            Kirigami.WheelHandler
+//             Kirigami.WheelHandler
+//             {
+//                 id: wheelHandler
+//                 target: parent
+//             }
+            
+            onPositionChanged: 
             {
-                id: wheelHandler
-                target: parent
+                console.log("===>" +_hoverHandler.point.pressPosition.y, _hoverHandler.point.sceneGrabPosition.y, position.y, _hoverHandler.point.scenePressPosition)
+                if(_hoverHandler.hovered && !controlView.moving && _hoverHandler.point.pressPosition.y != position.y)
+                {                   
+                    const index = controlView.indexAt(position.x, position.y)
+                    if(!selectedIndexes.includes(index))
+                    {
+                         selectedIndexes.push(index)
+                         control.itemsSelected([index])  
+                    }
+                }                
+            }
+            
+            HoverHandler
+            {
+                id: _hoverHandler
+                enabled: control.enableLassoSelection && control.selectionMode && !controlView.flicking
+                acceptedDevices: PointerDevice.TouchScreen
+                acceptedPointerTypes : PointerDevice.Finger 
+                grabPermissions : PointerHandler.ApprovesTakeOverByItems	
+                
+                onHoveredChanged:
+                {
+                    if(!hovered)
+                    {
+                        controlView.selectedIndexes = []   
+                    }
+                }
             }
 
             Maui.Holder

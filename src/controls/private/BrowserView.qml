@@ -210,7 +210,7 @@ Maui.Page
                 width: parent ? parent.width : 0
                 height: Maui.Style.toolBarHeightAlt
                 
-                label: String(section).toUpperCase()
+                label: _listViewBrowser.section.property == "date" || _listViewBrowser.section.property === "modified" ?  Qt.formatDateTime(new Date(section), "d MMM yyyy") : section
                 labelTxt.font.pointSize: Maui.Style.fontSizes.big
                 
                 isSection: true
@@ -220,8 +220,14 @@ Maui.Page
             {
                 id: delegate    
                 readonly property string path : model.path
+                
                 width: ListView.view.width
-
+                iconSource: model.icon
+                
+                label1.text: model.label ? model.label : ""
+                label3.text : model.mime ? (model.mime === "inode/directory" ? (model.count ? model.count + i18n(" items") : "") : Maui.FM.formatSize(model.size)) : ""
+                label4.text: model.modified ? Maui.FM.formatDate(model.modified, "MM/dd/yyyy") : "" 
+		
                 iconSizeHint : Maui.Style.iconSizes.medium
                 imageSizeHint : height * 0.8
                 
@@ -395,7 +401,9 @@ Maui.Page
                     iconSizeHint: height * 0.5
                     imageSource: settings.showThumbnails ? model.thumbnail : ""
                     template.fillMode: Image.PreserveAspectFit
-
+                    iconSource: model.icon
+                    label1.text: model.label
+                    
                     anchors.fill: parent
                     anchors.margins: Maui.Style.space.big
                     padding: Maui.Style.space.tiny
@@ -626,7 +634,7 @@ Maui.Page
                             width: parent.width
                             height: Maui.Style.toolBarHeightAlt
                             
-                            label: String(section).toUpperCase()
+                            label: section.property == "date" || section.property === "modified" ?  Qt.formatDateTime(new Date(section), "d MMM yyyy") : section
                             labelTxt.font.pointSize: Maui.Style.fontSizes.big
                             
                             isSection: true
@@ -677,7 +685,13 @@ Maui.Page
 
                             width: ListView.view.width
                             height: implicitHeight
-
+                            
+                            iconSource: model.icon
+                            
+                            label1.text: model.label ? model.label : ""
+                            label3.text : model.mime ? (model.mime === "inode/directory" ? (model.count ? model.count + i18n(" items") : "") : Maui.FM.formatSize(model.size)) : ""
+                            label4.text: model.modified ? Maui.FM.formatDate(model.modified, "MM/dd/yyyy") : "" 
+                                                        
                             tooltipText: model.path
                             
                             iconSizeHint : Maui.Style.iconSizes.medium

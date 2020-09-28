@@ -50,14 +50,6 @@ signals:
 public slots:
 
     /**
-     * @brief get
-     * Return the data of a item in the model at the given index
-     * @param index
-     * @return
-     */
-    QVariantMap get(const int &index) const;
-
-    /**
      * @brief append
      * Adds a given tag to the model, if the tag already exist in the model then nothing happens.
      * This operation does not inserts the tag to the tagging data base.

@@ -42,7 +42,7 @@ Menu
     MenuItem
     {
         visible: !control.isExec && tagsDialog
-        text: i18n("Add Tags")
+        text: i18n("Tags")
         icon.name: "tag"
         onTriggered:
         {

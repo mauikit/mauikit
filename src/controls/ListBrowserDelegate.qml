@@ -91,13 +91,8 @@ Maui.ItemDelegate
         anchors.fill: parent
         isCurrentItem : control.isCurrentItem
         hovered: parent.hovered
-        iconSource: model.icon
         checkable : control.checkable
-        checked : control.checked
-        label1.text: model.label ? model.label : ""
-        label3.text : model.mime ? (model.mime === "inode/directory" ? (model.count ? model.count + i18n(" items") : "") : Maui.FM.formatSize(model.size)) : ""
-        label4.text: model.modified ? Maui.FM.formatDate(model.modified, "MM/dd/yyyy") : "" 
-		
+        checked : control.checked               
 		onToggled: control.toggled(state)
     } 
 }

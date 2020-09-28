@@ -89,8 +89,34 @@ Item
 
         ListView
         {
+            id: _listView
+            
             property alias position : _hoverHandler.point.position
             property var selectedIndexes : []
+                       
+            anchors.fill: parent
+            anchors.rightMargin: Kirigami.Settings.hasTransientTouchInput ? control.rightMargin: parent.ScrollBar.vertical.visible ? parent.ScrollBar.vertical.width + control.rightMargin : control.rightMargin
+            anchors.bottomMargin: Kirigami.Settings.hasTransientTouchInput ? control.bottomMargin : parent.ScrollBar.horizontal.visible ? parent.ScrollBar.horizontal.height + control.bottomMargin : control.bottomMargin
+
+            anchors.leftMargin: control.leftMargin
+            anchors.topMargin: control.topMargin
+            anchors.margins: control.margins
+
+            focus: true
+            clip: control.clip
+            spacing: control.enableLassoSelection ? Maui.Style.space.big : Maui.Style.space.medium
+            snapMode: ListView.NoSnap
+            boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds :
+                                                         Flickable.OvershootBounds
+
+            interactive: Kirigami.Settings.hasTransientTouchInput
+            highlightFollowsCurrentItem: true
+            highlightMoveDuration: 0
+            highlightResizeDuration : 0
+
+            keyNavigationEnabled : true
+            keyNavigationWraps : true
+            Keys.onPressed: control.keyPress(event)            
             
             onPositionChanged: 
             {
@@ -114,39 +140,14 @@ Item
                 acceptedPointerTypes : PointerDevice.Finger 
                 grabPermissions : PointerHandler.CanTakeOverFromAnything  
                 
-                 onHoveredChanged:
+                onHoveredChanged:
                 {
                     if(!hovered)
                     {
                         _listView.selectedIndexes = []   
                     }
                 }
-            }            
-            
-            id: _listView
-            anchors.fill: parent
-            anchors.rightMargin: Kirigami.Settings.hasTransientTouchInput ? control.rightMargin: parent.ScrollBar.vertical.visible ? parent.ScrollBar.vertical.width + control.rightMargin : control.rightMargin
-            anchors.bottomMargin: Kirigami.Settings.hasTransientTouchInput ? control.bottomMargin : parent.ScrollBar.horizontal.visible ? parent.ScrollBar.horizontal.height + control.bottomMargin : control.bottomMargin
-
-            anchors.leftMargin: control.leftMargin
-            anchors.topMargin: control.topMargin
-            anchors.margins: control.margins
-
-            focus: true
-            clip: control.clip
-            spacing: control.enableLassoSelection ? Maui.Style.space.big : Maui.Style.space.medium
-            snapMode: ListView.NoSnap
-            boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds :
-                                                         Flickable.OvershootBounds
-
-            interactive: Kirigami.Settings.hasTransientTouchInput
-            highlightFollowsCurrentItem: true
-            highlightMoveDuration: 0
-            highlightResizeDuration : 0
-
-            keyNavigationEnabled : true
-            keyNavigationWraps : true
-            Keys.onPressed: control.keyPress(event)
+            } 
 
             Maui.Holder
             {
@@ -154,50 +155,11 @@ Item
                 anchors.fill : parent
             }
 
-            Kirigami.WheelHandler
-            {
-                id: wheelHandler
-                target: parent
-            }
-
-            delegate: Maui.ListBrowserDelegate
-            {
-                id: delegate
-                width: ListView.view.width
-
-                iconSizeHint : height
-                checkable: control.checkable
-
-                onClicked:
-                {
-                    control.currentIndex = index
-                    control.itemClicked(index)
-                }
-
-                onDoubleClicked:
-                {
-                    control.currentIndex = index
-                    control.itemDoubleClicked(index)
-                }
-
-                onPressAndHold:
-                {
-                    control.currentIndex = index
-                    control.itemRightClicked(index)
-                }
-
-                onRightClicked:
-                {
-                    control.currentIndex = index
-                    control.itemRightClicked(index)
-                }
-
-                onToggled:
-                {
-                    control.currentIndex = index
-                    control.itemToggled(index, state)
-                }
-            }
+//             Kirigami.WheelHandler
+//             {
+//                 id: wheelHandler
+//                 target: parent
+//             }
 
             MouseArea
             {

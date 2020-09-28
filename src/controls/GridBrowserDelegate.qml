@@ -75,9 +75,8 @@ Maui.ItemDelegate
     {
         id: _template
         anchors.fill: parent
-        iconSource: model.icon
+      
         hovered: control.hovered || control.containsPress || _dropArea.containsDrag       
-        label1.text: model.label
         checkable : control.checkable
         checked : control.checked
 //        label1.elide: Text.ElideMiddle // TODO this is broken ???

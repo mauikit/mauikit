@@ -36,55 +36,5 @@ Maui.GridView
 	signal itemDoubleClicked(int index)	
 	signal itemToggled(int index, bool state)	
 	signal itemRightClicked(int index)	
-	
-	delegate: Item
-	{
-		property bool isCurrentItem : GridView.isCurrentItem
-		height: control.cellHeight
-		width: control.cellWidth
-		
-		Maui.GridBrowserDelegate
-		{
-			id: delegate
-			
-			iconSizeHint: height * 0.5
-			
-			anchors.centerIn: parent
-			height: control.cellHeight - 5
-			width: control.itemSize
-			padding: Maui.Style.space.tiny
-			isCurrentItem: parent.isCurrentItem			
-            checkable: control.checkable
 
-            onClicked:
-            {
-                control.currentIndex = index
-                itemClicked(index)
-            }
-
-            onDoubleClicked:
-            {
-                control.currentIndex = index
-                itemDoubleClicked(index)
-            }
-
-            onPressAndHold:
-            {
-                control.currentIndex = index
-                control.itemRightClicked(index)
-            }
-
-            onRightClicked:
-            {
-                control.currentIndex = index
-                control.itemRightClicked(index)
-            }
-
-            onToggled:
-            {
-                control.currentIndex = index
-                control.itemToggled(index, state)
-            }
-        }
-	}
 }

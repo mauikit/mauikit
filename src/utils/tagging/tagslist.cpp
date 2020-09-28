@@ -28,19 +28,6 @@ void TagsList::setList()
     emit this->postListChanged();
 }
 
-QVariantMap TagsList::get(const int &index) const
-{
-    if (index >= this->list.size() || index < 0)
-        return QVariantMap();
-
-    const auto folder = this->list.at(index);
-    const auto keys = folder.keys();
-    return std::accumulate(keys.constBegin(), keys.constEnd(), QVariantMap(), [folder](QVariantMap &res, const FMH::MODEL_KEY &key) {
-        res.insert(FMH::MODEL_NAME[key], folder[key]);
-        return res;
-    });
-}
-
 void TagsList::refresh()
 {
     this->setList();
