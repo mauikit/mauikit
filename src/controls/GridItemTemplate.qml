@@ -138,7 +138,7 @@ Item
                     width: height
                     source: "folder-images"
                     isMask: true
-                    color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+                    color: Kirigami.Theme.textColor
                     opacity: 1 - img.progress
                 }
                 

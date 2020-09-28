@@ -304,8 +304,7 @@ Maui.Page
                 
                 ListView.onRemove:
                 {
-                    console.log("Item removed", delegate.path)
-                    if(selectionBar)
+                    if(selectionBar && !Maui.FM.fileExists(delegate.path))
                     {
                         selectionBar.removeAtUri(delegate.path)
                     }
@@ -382,8 +381,7 @@ Maui.Page
                 
                 GridView.onRemove:
                 {
-                    console.log("Item removed")
-                    if(selectionBar)
+                    if(selectionBar && !Maui.FM.fileExists(delegate.path))
                     {
                         selectionBar.removeAtUri(delegate.path)
                     }
@@ -715,7 +713,7 @@ Maui.Page
                             
                             ListView.onRemove:
                             {
-                                if(selectionBar)
+                                if(selectionBar && !Maui.FM.fileExists(delegate.path))
                                 {
                                     selectionBar.removeAtUri(delegate.path)
                                 }

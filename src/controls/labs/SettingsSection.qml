@@ -49,6 +49,7 @@ Maui.AlternateListItem
                     width: height
                     rotation: _mainData.visible ? -45 : -225
                     color:  Kirigami.Theme.textColor
+                    opacity: 0.7
                 }
                 
                 onClicked: _mainData.visible = !_mainData.visible

@@ -33,7 +33,7 @@ Maui.Page
 
     //aliases
     property alias currentPath : _browser.path
-    onCurrentPathChanged : _filterField.clear()
+    onCurrentPathChanged : _searchField.clear()
     
     property alias settings : _browser.settings
 
@@ -105,41 +105,56 @@ Maui.Page
     {
         id: _searchField
         Layout.fillWidth: true
-        placeholderText: i18n("Search")
-        onAccepted: control.search(text)
+        placeholderText: _filterButton.checked ? i18n("Filter") : ("Search")
+        inputMethodHints: Qt.ImhNoAutoUppercase
+
+        onAccepted: 
+        {
+            if(_filterButton.checked)
+            {
+                 control.view.filter = text
+            }else
+            {
+                 control.search(text)
+            }            
+        }
+        onCleared:
+        {
+            if(_filterButton.checked)
+            {
+                 control.view.filter = ""
+            }
+        }
+        onTextChanged:
+        {
+            if(_filterButton.checked)
+                _searchField.accepted()              
+                
+        }
+        Keys.enabled: _filterButton.checked
+        Keys.onPressed:
+        {
+            // Shortcut for clearing selection
+            if(event.key == Qt.Key_Up)
+            {
+                control.currentView.forceActiveFocus()
+            }
+        }
+    }
+    
+    headBar.rightContent: ToolButton
+    {
+        id: _filterButton
+        icon.name: "view-filter"
+        text: i18n("Filter")
+        checkable: true
+        checked: true
     }
 
     footBar.visible: control.showStatusBar ||  String(control.currentPath).startsWith("trash:/")
 
     footBar.leftSretch: false
     footerPositioning: ListView.InlineFooter
-
-    footBar.middleContent: Maui.TextField
-    {
-        id: _filterField
-        Layout.fillWidth: true
-        enabled: control.currentFMList.count > 0
-        placeholderText: String("Filter %1 files").arg(control.currentFMList ? control.currentFMList.count : 0)
-        onAccepted: control.view.filter = text
-        onCleared: control.view.filter = ""
-        inputMethodHints: Qt.ImhNoAutoUppercase
-        onTextChanged:
-        {
-            if(control.currentFMList.count < 50)
-                _filterField.accepted()
-        }
-        Keys.enabled: true
-        Keys.onPressed:
-        {
-            // Shortcut for clearing selection
-            if(event.key == Qt.Key_Up)
-            {
-                // 				_filterField.clear()
-                // 				footBar.visible = false
-                control.currentView.forceActiveFocus()
-            }
-        }
-    }
 
     footBar.rightContent: ToolButton
     {
@@ -458,7 +473,7 @@ Maui.Page
             //Shortcut for opening filtering
             if((event.key === Qt.Key_F) && (event.modifiers & Qt.ControlModifier))
             {
-                control.toggleStatusBar()
+                control.headBar.visible = !control.headBar.visible
             }
             
             if(event.key === Qt.Key_Space)
@@ -910,12 +925,9 @@ Maui.Page
         control.footBar.visible = !control.footBar.visible
         Maui.FM.saveSettings("StatusBar",  control.footBar.visible, "SETTINGS")
         
-        if(control.footBar.visible)
+        if(!control.footBar.visible)
         {
-            _filterField.forceActiveFocus()
-        }else
-        {
-            control.currentView.forceActiveFocus()
+          control.currentView.forceActiveFocus()
         }
     }
     
@@ -937,7 +949,6 @@ Maui.Page
     function quitSearch()
     {
         _stackView.pop(StackView.Immediate)
-        control.headBar.visible = false
     }
     
     /**
