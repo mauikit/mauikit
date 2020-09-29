@@ -35,6 +35,7 @@
 
 #if defined(Q_OS_ANDROID)
 #include "platforms/android/mauiandroid.h"
+#include "fileloader.h"
 #elif defined Q_OS_LINUX
 #include "platforms/kde/mauikde.h"
 #include <KCoreDirLister>
@@ -49,34 +50,34 @@
 
 #if defined(Q_OS_ANDROID) || defined(Q_OS_WIN) || defined(Q_OS_MACOS)
 QDirLister::QDirLister(QObject *parent)
-    : QObject(parent)
+    : QObject(parent) , m_loader(new FMH::FileLoader)
 {
+    m_loader->setBatchCount(20);
+    connect(m_loader, &FMH::FileLoader::itemsReady, [this](FMH::MODEL_LIST items, QList<QUrl> urls)
+    {
+        emit this->itemsReady(items, urls.first());
+    });
+
+    connect(m_loader, &FMH::FileLoader::itemReady, [this](FMH::MODEL item, QList<QUrl> urls)
+    {
+        emit this->itemReady(item, urls.first());
+    });
 }
 
 bool QDirLister::openUrl(QUrl url)
 {
-    qDebug() << "GET FILES <<" << m_nameFilters.split(" ");
-    FMH::MODEL_LIST content;
-
     if (FMStatic::isDir(url)) {
-        QDir::Filters dirFilter;
 
-        dirFilter = (m_dirOnly ? QDir::AllDirs | QDir::NoDotDot | QDir::NoDot : QDir::Files | QDir::AllDirs | QDir::NoDotDot | QDir::NoDot);
+        QDir::Filters dirFilter = (m_dirOnly ? QDir::AllDirs | QDir::NoDotDot | QDir::NoDot : QDir::Files | QDir::AllDirs | QDir::NoDotDot | QDir::NoDot);
 
         if (m_showDotFiles)
             dirFilter = dirFilter | QDir::Hidden | QDir::System;
 
-        QDirIterator it(url.toLocalFile(), m_nameFilters.isEmpty() ? QStringList() : m_nameFilters.split(" "), dirFilter, QDirIterator::NoIteratorFlags);
-        while (it.hasNext()) {
-            const auto item = FMH::getFileInfoModel(QUrl::fromLocalFile(it.next()));
-            content << item;
+        m_loader->requestPath({url}, false, m_nameFilters.isEmpty() ? QStringList() : m_nameFilters.split(" "), dirFilter);
 
-            emit itemReady(item, url);
-        }
     } else
         return false;
 
-    emit itemsReady(content, url);
     return true;
 }
 

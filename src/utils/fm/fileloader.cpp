@@ -21,6 +21,16 @@ FileLoader::~FileLoader()
     m_thread->wait();
 }
 
+void FileLoader::setBatchCount(const uint &count)
+{
+    m_batchCount = count;
+}
+
+uint FileLoader::batchCount() const
+{
+    return m_batchCount;
+}
+
 void FileLoader::requestPath(const QList<QUrl> &urls, const bool &recursive, const QStringList &nameFilters, const QDir::Filters &filters, const uint &limit)
 {
     qDebug()<<"FROM file loader"<< urls;
@@ -30,7 +40,6 @@ void FileLoader::requestPath(const QList<QUrl> &urls, const bool &recursive, con
 void FileLoader::getFiles(QList<QUrl> paths, bool recursive, const QStringList &nameFilters, const QDir::Filters &filters, uint limit)
 {
     qDebug()<<"GETTING FILES";
-    const uint m_bsize = 5000; //maximum batch size
     uint count = 0; //total count
     uint i = 0; //count per batch
     uint batch = 0; //batches count
@@ -46,18 +55,17 @@ void FileLoader::getFiles(QList<QUrl> paths, bool recursive, const QStringList &
             while (it.hasNext())
             {
                 const auto url = QUrl::fromLocalFile(it.next());
-
                 MODEL map = FileLoader::informer(url);
 
-                emit itemReady(map);
+                emit itemReady(map, paths);
                 res << map;
                 res_batch << map;
                 i++;
                 count++;
 
-                if(i == m_bsize) //send a batch
+                if(i == m_batchCount) //send a batch
                 {
-                    emit itemsReady(res_batch);
+                    emit itemsReady(res_batch, paths);
                     res_batch.clear ();
                     batch++;
                     i = 0;
@@ -71,6 +79,6 @@ void FileLoader::getFiles(QList<QUrl> paths, bool recursive, const QStringList &
         if(count == limit)
             break;
     }
-    emit itemsReady(res_batch);
-    emit finished(res);
+    emit itemsReady(res_batch, paths);
+    emit finished(res, paths);
 }
