@@ -165,7 +165,7 @@ Item
             {
                 id: _mouseArea
                 z: -1
-                enabled: !Kirigami.Settings.hasTransientTouchInput
+                enabled: !Kirigami.Settings.hasTransientTouchInput && !Maui.Handy.isAndroid
                 anchors.fill: parent
                 propagateComposedEvents: true
                 //             preventStealing: true

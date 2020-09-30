@@ -27,13 +27,13 @@ ATTICA_REPO = https://github.com/mauikit/attica
 KQUICKSYNTAXHIGHLIGHTER_REPO = https://github.com/mauikit/kquicksyntaxhighlighter.git
 KSYNTAXHIGHLIGHTING_REPO = https://github.com/mauikit/KSyntaxHighlighting.git
 
-KI18N_ANDROID_REPO = https://github.com/mauikit/KI18n-android.git
-KI18N_MACOS_REPO = https://github.com/mauikit/KI18n-macos.git
-KI18N_WINDOWS_REPO = https://github.com/mauikit/KI18n-windows.git
+KI18N_ANDROID_REPO = https://github.com/mauikit/KI18n-android
+KI18N_MACOS_REPO = https://github.com/mauikit/KI18n-macos
+KI18N_WINDOWS_REPO = https://github.com/mauikit/KI18n-windows
 
-KCOREADDONS_ANDROID_REPO = https://github.com/mauikit/KCoreAddons-android.git
-KCOREADDONS_MACOS_REPO = https://github.com/mauikit/KCoreAddons-macos.git
-KCOREADDONS_WINDOWS_REPO = https://github.com/mauikit/KCoreAddons-windows.git
+KCOREADDONS_ANDROID_REPO = https://github.com/mauikit/KCoreAddons-android
+KCOREADDONS_MACOS_REPO = https://github.com/mauikit/KCoreAddons-macos
+KCOREADDONS_WINDOWS_REPO = https://github.com/mauikit/KCoreAddons-windows
 
 #ANDROID FILES VALUES
 ANDROID_FILES_DIR = $$_PRO_FILE_PWD_/android_files
@@ -51,7 +51,6 @@ linux:unix:!android {
     message(Building Maui helpers for Android or Windows or Mac or iOS)
 
     android {
-        include($$PWD/src/platforms/android/android.pri)
 
         contains(DEFINES, ANDROID_OPENSSL):{
             exists($$PWD/src/utils/syncing/openssl/openssl.pri) {
@@ -63,6 +62,24 @@ linux:unix:!android {
                 include($$PWD/src/utils/syncing/openssl/openssl.pri)
             }
         }
+
+        exists($$PWD/src/android/KI18n) {
+            message("Using KI18n for Android")
+
+        }else {
+            warning("Getting KI18n for Android")
+            system(git clone $$KI18N_ANDROID_REPO $$PWD/src/android/KI18n)
+        }
+
+        exists($$PWD/src/android/KCoreAddons) {
+            message("Using KCoreAddons for Android")
+
+        }else {
+            warning("Getting KCoreAddons for Android")
+            system(git clone $$KCOREADDONS_ANDROID_REPO $$PWD/src/android/KCoreAddons)
+        }
+        include($$PWD/src/platforms/android/android.pri)
+
     }else:win32 {
         message("Using OpenSSL for Windows")
         LIBS += -L$$PWD/../../../../../../Qt/Tools/OpenSSL/Win_x64/lib/ -llibssl

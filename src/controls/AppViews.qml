@@ -37,7 +37,7 @@ SwipeView
 
     readonly property int index : -1
 
-    readonly property QtObject actionGroup : Private.ActionGroup
+    property QtObject actionGroup : Private.ActionGroup
     {
         id: _actionGroup
         currentIndex : control.currentIndex
@@ -157,7 +157,7 @@ SwipeView
         }
     }
 
-    readonly property QtObject history : QtObject
+    property QtObject history : QtObject
     {
         property var historyIndexes : []
 
