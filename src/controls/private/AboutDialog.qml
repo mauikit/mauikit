@@ -35,8 +35,8 @@ Maui.Dialog
     widthHint: 0.9
     heightHint: 0.8
 
-    maxWidth: Math.floor( 400 * Kirigami.Units.devicePixelRatio )
-    maxHeight: Math.floor( 300 * Kirigami.Units.devicePixelRatio )
+    maxWidth: Math.floor( 350 * Kirigami.Units.devicePixelRatio )
+    maxHeight: Math.floor( 250 * Kirigami.Units.devicePixelRatio )
 
     page.padding: 0
     actions: [
@@ -65,7 +65,7 @@ Maui.Dialog
     Maui.AlternateListItem
     {
         Layout.fillWidth: true
-        implicitHeight: _div1.height + Maui.Style.space.huge
+        implicitHeight: (_div1.height * 1.5) + Maui.Style.space.big
         alt: true
 
         Maui.ListItemTemplate
@@ -73,7 +73,7 @@ Maui.Dialog
             id: _div1
 
             width: parent.width * 0.95
-            height: Math.max(150, label2.implicitHeight + label1.implicitHeight)
+            height: label2.implicitHeight + label1.implicitHeight
             anchors.centerIn: parent
             imageBorder: false
             imageSource: Maui.App.iconName
@@ -114,6 +114,7 @@ Maui.Dialog
                 Maui.ListItemTemplate
                 {
                     iconSource: "view-media-artist"
+                    iconSizeHint: Maui.Style.iconSizes.medium
                     width: parent.width
                     height: implicitHeight
                     spacing: Maui.Style.space.medium
