@@ -35,7 +35,6 @@
 
 #if defined(Q_OS_ANDROID)
 #include "platforms/android/mauiandroid.h"
-#include "fileloader.h"
 #elif defined Q_OS_LINUX
 #include "platforms/kde/mauikde.h"
 #include <KCoreDirLister>
@@ -49,6 +48,8 @@
 #endif
 
 #if defined(Q_OS_ANDROID) || defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#include "fileloader.h"
+
 QDirLister::QDirLister(QObject *parent)
     : QObject(parent) , m_loader(new FMH::FileLoader)
 {
