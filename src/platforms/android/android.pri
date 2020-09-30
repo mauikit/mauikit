@@ -1,26 +1,26 @@
 QT *= androidextras core
 
-#exists($$PWD/KI18n) {
-#    message("Using KI18n for Android")
+exists($$PWD/KI18n) {
+    message("Using KI18n for Android")
 
-#}else {
-#    warning("Getting KI18n for Android")
-#    system(git clone $$KI18N_ANDROID_REPO $$PWD/KI18n)
-#}
+}else {
+    warning("Getting KI18n for Android")
+    system(git clone $$KI18N_ANDROID_REPO $$PWD/KI18n)
+}
 
-#exists($$PWD/KCoreAddons) {
-#    message("Using KCoreAddons for Android")
+exists($$PWD/KCoreAddons) {
+    message("Using KCoreAddons for Android")
 
-#}else {
-#    warning("Getting KCoreAddons for Android")
-#    system(git clone $$KCOREADDONS_ANDROID_REPO $$PWD/KCoreAddons)
-#}
+}else {
+    warning("Getting KCoreAddons for Android")
+    system(git clone $$KCOREADDONS_ANDROID_REPO $$PWD/KCoreAddons)
+}
 
 HEADERS += \
-    $$PWD/mauiandroid.h\
+    $$PWD/mauiandroid.h
 
 SOURCES += \
-    $$PWD/mauiandroid.cpp \
+    $$PWD/mauiandroid.cpp
 
 LIBS += -ljnigraphics
 

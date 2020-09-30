@@ -62,23 +62,7 @@ linux:unix:!android {
                 include($$PWD/src/utils/syncing/openssl/openssl.pri)
             }
         }
-
-        exists($$PWD/src/android/KI18n) {
-            message("Using KI18n for Android")
-
-        }else {
-            warning("Getting KI18n for Android")
-            system(git clone $$KI18N_ANDROID_REPO $$PWD/src/android/KI18n)
-        }
-
-        exists($$PWD/src/android/KCoreAddons) {
-            message("Using KCoreAddons for Android")
-
-        }else {
-            warning("Getting KCoreAddons for Android")
-            system(git clone $$KCOREADDONS_ANDROID_REPO $$PWD/src/android/KCoreAddons)
-        }
-        include($$PWD/src/platforms/android/android.pri)
+              include($$PWD/src/platforms/android/android.pri)
 
     }else:win32 {
         message("Using OpenSSL for Windows")

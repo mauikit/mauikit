@@ -303,14 +303,14 @@ Item
         }
     }
     
-    MouseArea
-    {
-        height: parent.height
-        width: control.width * 0.25
-        propagateComposedEvents: true
-        preventStealing: true
-        enabled: _hoverHandler.enabled && Kirigami.Settings.hasTransientTouchInput     
-    }
+//    MouseArea
+//    {
+//        height: parent.height
+//        width: control.width * 0.25
+//        propagateComposedEvents: false
+//        preventStealing: true
+//        enabled: _hoverHandler.enabled && Kirigami.Settings.hasTransientTouchInput
+//    }
     
 }
 

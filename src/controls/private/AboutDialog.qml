@@ -113,6 +113,7 @@ Maui.Dialog
                 model: Maui.App.about.authors
                 Maui.ListItemTemplate
                 {
+                    iconSource: "view-media-artist"
                     width: parent.width
                     height: implicitHeight
                     spacing: Maui.Style.space.medium
