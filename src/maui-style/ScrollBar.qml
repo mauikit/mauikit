@@ -37,6 +37,7 @@
 import QtQuick 2.12
 import QtQuick.Templates 2.12 as T
 import QtQuick.Controls.Material 2.12
+import org.kde.mauikit 1.2 as Maui
 
 T.ScrollBar {
     id: control
@@ -51,8 +52,10 @@ T.ScrollBar {
     minimumSize: orientation == Qt.Horizontal ? height / width : width / height
 
     contentItem: Rectangle {
-        implicitWidth: control.interactive ? 13 : 4
-        implicitHeight: control.interactive ? 13 : 4
+        
+        radius: Maui.Style.radiusV
+        implicitWidth: control.interactive ? 6 : 4
+        implicitHeight: control.interactive ? 6 : 4
 
         color: control.pressed ? control.Material.scrollBarPressedColor :
                control.interactive && control.hovered ? control.Material.scrollBarHoveredColor : control.Material.scrollBarColor
@@ -60,8 +63,8 @@ T.ScrollBar {
     }
 
     background: Rectangle {
-        implicitWidth: control.interactive ? 16 : 4
-        implicitHeight: control.interactive ? 16 : 4
+        implicitWidth: control.interactive ? 8 : 4
+        implicitHeight: control.interactive ? 8 : 4
         color: "#0e000000"
         opacity: 0.0
         visible: control.interactive

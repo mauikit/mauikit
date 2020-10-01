@@ -48,12 +48,12 @@ Item {
                                              : Kirigami.Theme.disabledTextColor
 
     Rectangle {
-
         width: parent.width
         height: 20
         radius: height / 2
         y: parent.height / 2 - height / 2
-        border.color: Qt.darker(m_color)
+        border.color: control.checked ? m_color : color
+
         color: Qt.rgba(m_color.r, m_color.g, m_color.b, 0.2)
     }
 
@@ -64,7 +64,7 @@ Item {
         width: 16
         height: 16
         radius: width / 2
-        color: control.enabled ? (control.checked ? Kirigami.Theme.highlightColor : Qt.lighter(m_color, 1.6))
+        color: control.enabled ? (control.checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor)
                                : Kirigami.Theme.disabledTextColor
 
         Behavior on x {
