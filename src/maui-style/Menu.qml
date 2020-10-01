@@ -52,6 +52,9 @@ T.Menu
                              contentHeight + topPadding + bottomPadding)
 
     margins: 0
+    padding: 0
+//    topPadding: 0
+//    bottomPadding: 0
     verticalPadding: 8
     spacing: Maui.Style.space.tiny
     transformOrigin: !cascade ? Item.Top : (mirrored ? Item.TopRight : Item.TopLeft)
@@ -79,6 +82,9 @@ T.Menu
         clip: true
         currentIndex: control.currentIndex
         spacing: control.spacing
+        keyNavigationEnabled: true
+        keyNavigationWraps: true
+
         ScrollIndicator.vertical: ScrollIndicator {}
     }
 

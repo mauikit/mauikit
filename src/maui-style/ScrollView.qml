@@ -1,67 +1,73 @@
-/*
- * Copyright 2017 Marco Martin <mart@kde.org>
- * Copyright 2017 The Qt Company Ltd.
- *
- * GNU Lesser General Public License Usage
- * Alternatively, this file may be used under the terms of the GNU Lesser
- * General Public License version 3 as published by the Free Software
- * Foundation and appearing in the file LICENSE.LGPLv3 included in the
- * packaging of this file. Please review the following information to
- * ensure the GNU Lesser General Public License version 3 requirements
- * will be met: https://www.gnu.org/licenses/lgpl.html.
- *
- * GNU General Public License Usage
- * Alternatively, this file may be used under the terms of the GNU
- * General Public License version 2.0 or later as published by the Free
- * Software Foundation and appearing in the file LICENSE.GPL included in
- * the packaging of this file. Please review the following information to
- * ensure the GNU General Public License version 2.0 requirements will be
- * met: http://www.gnu.org/licenses/gpl-2.0.html.
- */
+/****************************************************************************
+**
+** Copyright (C) 2017 The Qt Company Ltd.
+** Contact: http://www.qt.io/licensing/
+**
+** This file is part of the Qt Quick Controls 2 module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:LGPL3$
+** Commercial License Usage
+** Licensees holding valid commercial Qt licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see http://www.qt.io/terms-conditions. For further
+** information use the contact form at http://www.qt.io/contact-us.
+**
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 3 as published by the Free Software
+** Foundation and appearing in the file LICENSE.LGPLv3 included in the
+** packaging of this file. Please review the following information to
+** ensure the GNU Lesser General Public License version 3 requirements
+** will be met: https://www.gnu.org/licenses/lgpl.html.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 2.0 or later as published by the Free
+** Software Foundation and appearing in the file LICENSE.GPL included in
+** the packaging of this file. Please review the following information to
+** ensure the GNU General Public License version 2.0 requirements will be
+** met: http://www.gnu.org/licenses/gpl-2.0.html.
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
 
-
-import QtQuick 2.9
-import QtQuick.Controls 2.3
-import QtQuick.Templates 2.3 as T
-import org.kde.kirigami 2.2 as Kirigami
+import QtQuick 2.12
+import QtQuick.Controls 2.12
+import QtQuick.Controls.impl 2.12
+import QtQuick.Templates 2.12 as T
+import org.kde.kirigami 2.9 as Kirigami
 
 T.ScrollView {
-    id: controlRoot
+    id: control
 
-    clip: true
-
-    implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(background ? background.implicitHeight : 0, contentHeight + topPadding + bottomPadding)
-
-//    contentWidth: scrollHelper.flickableItem ? scrollHelper.flickableItem.contentWidth : 0
-//    contentHeight: scrollHelper.flickableItem ? scrollHelper.flickableItem.contentHeight : 0
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            contentWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+                             contentHeight + topPadding + bottomPadding)
 
     Kirigami.Theme.colorSet: Kirigami.Theme.View
-    Kirigami.Theme.inherit: !background || !background.visible
+        Kirigami.Theme.inherit: !background || !background.visible
 
-    //create a background only after Component.onCompleted, see on the component creation below for explanation
-//    Component.onCompleted: {
-//        if (!controlRoot.background) {
-//            controlRoot.background = backgroundComponent.createObject(controlRoot);
-//            print(controlRoot.background.width);
-//        }
-//    }
-
+   data: Kirigami.WheelHandler {
+                target: control.contentItem
+            }
 
     ScrollBar.vertical: ScrollBar {
-        id: verticalScrollBar
-        parent: controlRoot
-        x: controlRoot.mirrored ? 0 : controlRoot.width - width
-        y: controlRoot.topPadding
-        height: controlRoot.availableHeight
-        active: controlRoot.ScrollBar.horizontal || controlRoot.ScrollBar.horizontal.active
+        parent: control
+        x: control.mirrored ? 0 : control.width - width
+        y: control.topPadding
+        height: control.availableHeight
+        active: control.ScrollBar.horizontal.active
     }
 
     ScrollBar.horizontal: ScrollBar {
-        parent: controlRoot
-        x: controlRoot.leftPadding
-        y: controlRoot.height - height
-        width: 32
-        active: controlRoot.ScrollBar.vertical || controlRoot.ScrollBar.vertical.active
+        parent: control
+        x: control.leftPadding
+        y: control.height - height
+        width: control.availableWidth
+        active: control.ScrollBar.vertical.active
     }
 }

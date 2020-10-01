@@ -24,7 +24,7 @@ import QtQuick 2.6
 import QtQuick.Window 2.1
 import QtQuick.Controls 2.3 as Controls
 import QtQuick.Templates 2.3 as T
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami 2.8 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
 T.TextField
@@ -47,9 +47,9 @@ T.TextField
     selectedTextColor: Kirigami.Theme.highlightedTextColor
     verticalAlignment: TextInput.AlignVCenter*/
     //Text.NativeRendering is broken on non integer pixel ratios
-    renderType: Window.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
+//    renderType: Window.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
     
-    color: enabled ? Kirigami.Theme.textColor : Kirigami.Theme.disabledtextColor
+    color: Kirigami.Theme.textColor
     selectionColor: Kirigami.Theme.highlightColor
     selectedTextColor: Kirigami.Theme.highlightedTextColor
 	

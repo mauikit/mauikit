@@ -197,7 +197,7 @@ Window
         }
     }
 
-     Maui.Page
+    Maui.Page
     {
         id: _page
         anchors.fill: parent
@@ -232,7 +232,6 @@ Window
             {
                 id: _mainMenu
                 modal: true
-                z: 999
                 width: Maui.Style.unit * 250
 
                 Loader
@@ -240,7 +239,6 @@ Window
                     id: _accountsMenuLoader
                     width: parent.width - (Maui.Style.space.medium*2)
                     anchors.horizontalCenter: parent.horizontalCenter
-
                     active: Maui.App.handleAccounts
                     sourceComponent: Maui.App.handleAccounts ?
                                          _accountsComponent : null

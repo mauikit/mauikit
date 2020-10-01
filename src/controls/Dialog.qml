@@ -114,10 +114,6 @@ Maui.Popup
                 spacing: control.spacing
             }
 
-            Kirigami.WheelHandler
-            {
-                target: _flickable
-            }
 
             ScrollView
             {

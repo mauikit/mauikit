@@ -33,6 +33,9 @@ Maui.ListItemTemplate
         id: _settingSection
     }
 
+    leftMargin: Maui.Style.space.big
+    rightMargin: leftMargin
+
     Layout.fillWidth: true
     iconSizeHint: Maui.Style.iconSizes.medium
     label2.wrapMode: Text.WordWrap
