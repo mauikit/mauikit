@@ -33,7 +33,7 @@ T.Button
     hoverEnabled: true
 
     Kirigami.Theme.colorSet: Kirigami.Theme.Button
-    Kirigami.Theme.inherit: !background || !background.visible
+//    Kirigami.Theme.inherit: !background || !background.visible
 
     icon.width: Maui.Style.iconSizes.small
     icon.height: Maui.Style.iconSizes.small
