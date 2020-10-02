@@ -36,9 +36,10 @@
 
 import QtQuick 2.12
 import QtQuick.Templates 2.12 as T
-import QtQuick.Controls.Material 2.12
+import org.kde.mauikit 1.2 as Maui
 
-T.MenuSeparator {
+T.MenuSeparator
+{
     id: control
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
@@ -46,11 +47,10 @@ T.MenuSeparator {
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
                              implicitContentHeight + topPadding + bottomPadding)
 
-    verticalPadding: 8
+    verticalPadding: Maui.Style.space.medium
 
-    contentItem: Rectangle {
-        implicitWidth: 200
-        implicitHeight: 1
-        color: control.Material.dividerColor
+    contentItem: Maui.Separator
+    {
+       position: Qt.Horizontal
     }
 }

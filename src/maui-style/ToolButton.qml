@@ -88,7 +88,7 @@ T.ToolButton
     background: Rectangle
     {
         implicitWidth: Maui.Style.iconSizes.medium
-        implicitHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
+        implicitHeight: Math.floor(Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25))
 
         radius: Maui.Style.radiusV
 

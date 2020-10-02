@@ -162,9 +162,7 @@ Maui.Popup
                             onAccepted: control.accepted()
                         }
                     }
-
                 }
-
             }
         }
 

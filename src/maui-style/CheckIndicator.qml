@@ -76,8 +76,8 @@ Rectangle
         visible: !control.autoExclusive
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
-        width: 10
-        height: 14
+        width: 14
+        height: 16
         source: "qrc:/qt-project.org/imports/QtQuick/Controls.2/Material/images/check.png"
         color: control.checked ? Kirigami.Theme.highlightColor : "transparent"
 

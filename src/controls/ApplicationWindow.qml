@@ -244,7 +244,7 @@ Window
                                          _accountsComponent : null
                 }
 
-                MenuSeparator {visible: _accountsMenuLoader.active}
+                //MenuSeparator {visible: _accountsMenuLoader.active}
 
                 Repeater
                 {
