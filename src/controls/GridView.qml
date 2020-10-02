@@ -111,7 +111,7 @@ Item
             }
 
             flow: GridView.FlowLeftToRight
-            clip: control.clip
+            clip: true
             focus: true
 
             cellWidth: control.itemWidth

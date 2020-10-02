@@ -103,7 +103,7 @@ Item
             anchors.margins: control.margins
 
             focus: true
-            clip: control.clip
+            clip: true
             spacing: control.enableLassoSelection ? Maui.Style.space.big : Maui.Style.space.medium
             snapMode: ListView.NoSnap
             boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds :

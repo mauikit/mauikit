@@ -54,6 +54,7 @@ QDirLister::QDirLister(QObject *parent)
     : QObject(parent) , m_loader(new FMH::FileLoader)
 {
     m_loader->setBatchCount(20);
+    m_loader->informer = &FMH::getFileInfoModel;
     connect(m_loader, &FMH::FileLoader::itemsReady, [this](FMH::MODEL_LIST items, QList<QUrl> urls)
     {
         emit this->itemsReady(items, urls.first());

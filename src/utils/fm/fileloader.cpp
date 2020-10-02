@@ -57,6 +57,9 @@ void FileLoader::getFiles(QList<QUrl> paths, bool recursive, const QStringList &
                 const auto url = QUrl::fromLocalFile(it.next());
                 MODEL map = FileLoader::informer(url);
 
+                if(map.isEmpty())
+                    continue;
+
                 emit itemReady(map, paths);
                 res << map;
                 res_batch << map;

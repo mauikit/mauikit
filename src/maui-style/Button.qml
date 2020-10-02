@@ -28,12 +28,15 @@ import QtQuick.Controls.impl 2.12
 T.Button
 {
     id: control
-    implicitWidth: Math.max(background.implicitWidth, contentItem.implicitWidth + Maui.Style.space.big )
+    implicitWidth: Math.max(background.implicitWidth, contentItem.implicitWidth) + Maui.Style.space.big
     implicitHeight: background.implicitHeight
     hoverEnabled: true
 
-    icon.width: Kirigami.Settings.isMobile ? Maui.Style.iconSizes.medium : Maui.Style.iconSizes.small
-    icon.height: Kirigami.Settings.isMobile ? Maui.Style.iconSizes.medium : Maui.Style.iconSizes.small
+    Kirigami.Theme.colorSet: Kirigami.Theme.Button
+    Kirigami.Theme.inherit: !background || !background.visible
+
+    icon.width: Maui.Style.iconSizes.small
+    icon.height: Maui.Style.iconSizes.small
 
     icon.color:  !control.enabled ? control.Kirigami.Theme.disabledTextColor :
                                     control.highlighted || control.down || control.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
@@ -54,9 +57,9 @@ T.Button
     background: Rectangle
     {
         implicitWidth:  (Maui.Style.iconSizes.medium * 3) + Maui.Style.space.big
-        implicitHeight: Maui.Style.iconSizes.medium + Maui.Style.space.small
-     
-        color: control.checked || control.hovered ? Qt.rgba( control.Kirigami.Theme.highlightColor.r,  control.Kirigami.Theme.highlightColor.g,  control.Kirigami.Theme.highlightColor.b, 0.2) : Kirigami.Theme.backgroundColor
+        implicitHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
+
+        color: control.down || control.pressed || control.checked || control.hovered ? Qt.rgba( control.Kirigami.Theme.highlightColor.r,  control.Kirigami.Theme.highlightColor.g,  control.Kirigami.Theme.highlightColor.b, 0.2) : Qt.lighter(Kirigami.Theme.backgroundColor)
 
         border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
 
