@@ -58,8 +58,8 @@ T.MenuItem
     verticalPadding: Maui.Style.space.small
     spacing: Maui.Style.space.small
 
-    icon.width: Kirigami.Settings.isMobile ? Maui.Style.iconSizes.medium : Maui.Style.iconSizes.small
-    icon.height: Kirigami.Settings.isMobile ? Maui.Style.iconSizes.medium : Maui.Style.iconSizes.small
+    icon.width: Maui.Style.iconSizes.small
+    icon.height: Maui.Style.iconSizes.small
 
     icon.color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor) :
                              control.Kirigami.Theme.disabledTextColor
@@ -109,7 +109,6 @@ T.MenuItem
         implicitHeight: control.visible ? Maui.Style.rowHeightAlt : 0
         radius: Maui.Style.radiusV
 
-        opacity: 0.5
         anchors
         {
             fill: parent

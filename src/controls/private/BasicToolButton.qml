@@ -42,7 +42,8 @@ AbstractButton
     
     hoverEnabled: !Kirigami.Settings.isMobile
     implicitHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
-    implicitWidth: _layoutButton.implicitWidth  + (Maui.Style.space.medium *  2)
+
+    implicitWidth: _layoutButton.implicitWidth + (Maui.Style.space.medium *  2)
     
     icon.width: Maui.Style.iconSizes.medium
     icon.height: Maui.Style.iconSizes.medium
@@ -50,10 +51,9 @@ AbstractButton
     background: Rectangle
     {
         id: _background
-        anchors.fill: parent
-        opacity: 0.5
+        anchors.fill: parent       
         radius: Maui.Style.radiusV
-        color: checked || control.hovered ? Qt.rgba( control.Kirigami.Theme.highlightColor.r,  control.Kirigami.Theme.highlightColor.g,  control.Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
+        color: control.down || control.checked || control.hovered || control.pressed ? Qt.rgba(control.Kirigami.Theme.highlightColor.r,  control.Kirigami.Theme.highlightColor.g,  control.Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
         border.color:  checked ?  control.Kirigami.Theme.highlightColor : "transparent"            
         
         Behavior on color
@@ -87,7 +87,7 @@ AbstractButton
                 width: control.icon.width
                 height: control.icon.height
                 
-                color: (control.icon.color && control.icon.color.length ) ? control.icon.color : ( (control.checked || control.hovered ) && enabled ) ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
+                color: (control.icon.color && control.icon.color.length ) ? control.icon.color : ( (control.checked || control.hovered || control.pressed || control.down ) && enabled ) ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
                 
                 source: control.icon.name  
                 isMask: true
@@ -103,7 +103,7 @@ AbstractButton
             horizontalAlignment: Qt.AlignHCenter
             Layout.fillWidth: visible
             Layout.preferredWidth: visible ? implicitWidth + Maui.Style.space.medium : 0
-            color: control.checked || control.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
+            color: control.down || control.pressed || control.checked || control.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
             
             Behavior on Layout.preferredWidth
             {		

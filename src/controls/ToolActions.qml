@@ -102,6 +102,7 @@ Rectangle
                     id: _buttonMouseArea
                     action : modelData
                     checkable: control.checkable
+//                    rec.radius: index < _repeater.count-1 || index > 0 ? 0 : Maui.Style.radiusV
                     Binding on checked
                     {
                         when: autoExclusive

@@ -82,7 +82,7 @@ Item
                     horizontalAlignment: Qt.AlignHCenter
                     verticalAlignment: Qt.AlignVCenter
                     fillMode: control.fillMode
-                    cache: false
+                    cache: true
                     asynchronous: true
                     smooth: false
                     
