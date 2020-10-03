@@ -120,7 +120,7 @@ static constexpr bool isIOS()
 /**
  * @brief The FILTER_TYPE enum
  */
-enum FILTER_TYPE : int { AUDIO, VIDEO, TEXT, IMAGE, DOCUMENT, NONE };
+enum FILTER_TYPE : int { AUDIO, VIDEO, TEXT, IMAGE, DOCUMENT, COMPRESSED, NONE };
 
 
 static const QStringList AUDIO_MIMETYPES = {"audio/mpeg", "audio/mp4", "audio/flac", "audio/ogg", "audio/wav"};
@@ -147,12 +147,13 @@ static const QStringList TEXT_MIMETYPES = {"text/markdown",
                                      "application/x-kicad-project"};
 static const QStringList IMAGE_MIMETYPES = {"image/bmp", "image/webp", "image/png", "image/gif", "image/jpeg", "image/web", "image/svg", "image/svg+xml"};
 static const QStringList DOCUMENT_MIMETYPES = {"application/pdf", "application/rtf", "application/doc", "application/odf"};
-
+static const QStringList COMPRESSED_MIMETYPES = {"application/x-compress","application/x-compressed", "application/x-xz-compressed-tar", "application/x-compressed-tar", "application/x-gtar", "application/x-gzip", "application/x-tar", "application/zip"};
 static const QMap<FMH::FILTER_TYPE, QStringList> SUPPORTED_MIMETYPES {{FMH::FILTER_TYPE::AUDIO, AUDIO_MIMETYPES},
                                                                 {FMH::FILTER_TYPE::VIDEO, VIDEO_MIMETYPES},
                                                                 {FMH::FILTER_TYPE::TEXT, TEXT_MIMETYPES},
                                                                 {FMH::FILTER_TYPE::IMAGE, IMAGE_MIMETYPES},
-                                                                {FMH::FILTER_TYPE::DOCUMENT, DOCUMENT_MIMETYPES}};
+                                                                {FMH::FILTER_TYPE::DOCUMENT, DOCUMENT_MIMETYPES},
+                                                                {FMH::FILTER_TYPE::COMPRESSED, COMPRESSED_MIMETYPES}};
 /**
  * @brief getMimeTypeSuffixes
  * @param type
@@ -177,6 +178,7 @@ static const QHash<FMH::FILTER_TYPE, QStringList> FILTER_LIST = {{FILTER_TYPE::A
                                                                  {FILTER_TYPE::VIDEO, FMH::getMimeTypeSuffixes(FMH::FILTER_TYPE::VIDEO, [](QString suffix) -> QString { return "*." + suffix; })},
                                                                  {FILTER_TYPE::TEXT, FMH::getMimeTypeSuffixes(FMH::FILTER_TYPE::TEXT, [](QString suffix) -> QString { return "*." + suffix; })},
                                                                  {FILTER_TYPE::DOCUMENT, FMH::getMimeTypeSuffixes(FMH::FILTER_TYPE::DOCUMENT, [](QString suffix) -> QString { return "*." + suffix; })},
+                                                                 {FILTER_TYPE::COMPRESSED, FMH::getMimeTypeSuffixes(FMH::FILTER_TYPE::COMPRESSED, [](QString suffix) -> QString { return "*." + suffix; })},
                                                                  {FILTER_TYPE::IMAGE, FMH::getMimeTypeSuffixes(FMH::FILTER_TYPE::IMAGE, [](QString suffix) -> QString { return "*." + suffix; })},
                                                                  {FILTER_TYPE::NONE, QStringList()}};
 /**
@@ -1172,6 +1174,7 @@ static bool mimeInherits(const QString baseType, const QString &type)
  */
 static bool checkFileType(const FMH::FILTER_TYPE &type, const QString &mimeTypeName)
 {
+    qDebug() << "@gadominguez File: fmn.h " << type ;
     return FMH::SUPPORTED_MIMETYPES[type].contains(mimeTypeName);
 }
 

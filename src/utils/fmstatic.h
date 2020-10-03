@@ -297,6 +297,14 @@ public slots:
      * @return
      */
     static bool checkFileType(const int &type, const QString &mimeTypeName);
+    
+    /**
+     * @brief checkCompressedFileType
+     * Return the compressed type of a file
+     * @param path
+     * @return Value of type according to enum CompressedFileType
+     */
+    static int getCompressedFileType(const QUrl &path, const QString &mimeTypeName);
 
     /**
      * @brief moveToTrash
@@ -367,15 +375,37 @@ public slots:
 
 
 
-
+    /**
+     * @brief getKArchiveObject
+     * Return the derived class as an abstract KArchive object
+     * @param url
+     * The url to be open
+     * @param type
+     * The compressed type file
+     * @return void
+     */
+    static KArchive* getKArchiveObject(const QUrl &url, const int type);
     /**
      * @brief extractFile
      * Given a URL it extract file in the same path
      * @param url
-     * The URL to be open
+     * The url to be open
+     * @param type
+     * The compressed type file
      * @return void
      */
     static void extractFile(const QUrl &url, const int type);
+
+    /**
+     * @brief getEntries
+     * Rerun the content of a compressed file
+     * @param url
+     * The url to be open
+     * @param type
+     * The compressed type file
+     * @return void
+     */
+    QString getEntries(const QUrl &url, const int type);
 
     /**
      * @brief openLocation
@@ -527,7 +557,9 @@ private:
         BZIP2,
         TARGZ,
         TAR,
-        AR
+        AR,
+        TARXZ
+
     };
 };
 

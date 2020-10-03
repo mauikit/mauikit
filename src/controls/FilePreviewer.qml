@@ -99,7 +99,7 @@ Maui.Dialog
             id: _listView
             Layout.fillWidth: true
             Layout.fillHeight: true
-
+            
             orientation: ListView.Horizontal
             clip: true
             focus: true
@@ -244,6 +244,11 @@ Maui.Dialog
                     {
                         source = "private/DocumentPreview.qml"
                     }
+                    if(Maui.FM.checkFileType(Maui.FMList.COMPRESSED, iteminfo.mime) && !Maui.Handy.isAndroid)
+                    {
+                        source = "private/DefaultPreview.qml"
+                        console.log("previe mime", iteminfo.mime)
+                    }                    
 
                     console.log("previe mime", iteminfo.mime)
                     previewLoader.source = source
@@ -254,6 +259,14 @@ Maui.Dialog
                 {
                     infoModel.clear()
                     infoModel.append({key: "Type", value: iteminfo.mime})
+                    if(Maui.FM.checkFileType(Maui.FMList.COMPRESSED, iteminfo.mime) && !Maui.Handy.isAndroid)
+                    {
+                        console.log("@gadominguez File: FilePreviewer.qml Func: initModel " + iteminfo.mime)
+                        var type = Maui.FM.getCompressedFileType(iteminfo.path, iteminfo.mime);
+                        var values = Maui.FM.getEntries(iteminfo.path, type)
+                        console.log(values)
+                        infoModel.append({key: "Content", value:  values})
+                    }
                     infoModel.append({key: "Date", value: iteminfo.date})
                     infoModel.append({key: "Modified", value: iteminfo.modified})
                     infoModel.append({key: "Last Read", value: iteminfo.lastread})

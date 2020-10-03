@@ -408,9 +408,9 @@ bool FMStatic::openUrl(const QUrl &url)
 #endif
 }
 
-void FMStatic::extractFile(const QUrl &url, const int type)
+
+KArchive* FMStatic::getKArchiveObject(const QUrl &url, const int type)
 {
-    qDebug() << "@gadominguez File:fm.cpp Funcion: extractFile  " << url.toString();
     KArchive *kArch = nullptr;
     switch(type)
     {
@@ -420,23 +420,32 @@ void FMStatic::extractFile(const QUrl &url, const int type)
         case static_cast<int>(CompressedFileType::BZIP2):
             break;
         case static_cast<int>(CompressedFileType::GZIP):
+            kArch = new KZip(url.toString().split(QString("file://"))[1]);
             break;
         case static_cast<int>(CompressedFileType::ZIP7):
             break;
         case static_cast<int>(CompressedFileType::AR):
-            break;        
-        case static_cast<int>(CompressedFileType::TAR):
-            kArch = new KTar(url.toString().split(QString("file://"))[1]);
             break;
-        case static_cast<int>(CompressedFileType::TARGZ): 
-            break;  
+        case static_cast<int>(CompressedFileType::TARGZ):
+        case static_cast<int>(CompressedFileType::TAR):
+        case static_cast<int>(CompressedFileType::TARXZ):
+            kArch = new KTar(url.toString().split(QString("file://"))[1]);
+            break; 
         default:
             qDebug() << "ERROR. COMPRESSED FILE TYPE UNKOWN " << url.toString();
             break;      
     }
-    
-    const char *data = "Hello World";
+
+    return kArch;
+}
+
+void FMStatic::extractFile(const QUrl &url, const int type)
+{
+    qDebug() << "@gadominguez File:fm.cpp Funcion: extractFile  " << url.toString();
+
+    KArchive *kArch = getKArchiveObject(url, type);
     kArch->open(QIODevice::ReadOnly);
+    qDebug() << "@gadominguez File:fm.cpp Funcion: extractFile  " <<  kArch->directory()->entries();
     assert(kArch->isOpen() == true);
     if(kArch->isOpen())
     {
@@ -444,6 +453,34 @@ void FMStatic::extractFile(const QUrl &url, const int type)
         kArch->directory()->copyTo("/home/gabridc/Descargas/test", recursive);
     }
 
+}
+
+QString FMStatic::getEntries(const QUrl &url, const int type)
+{
+    qDebug() << "@gadominguez File:fm.cpp Funcion: extractFile  " << url.toString() << " " << type;
+
+    KArchive *kArch = getKArchiveObject(url, type);
+    kArch->open(QIODevice::ReadOnly);
+    assert(kArch->isOpen() == true);
+    if(kArch->isOpen())
+    {
+        qDebug() << "@gadominguez File:fm.cpp Funcion: extractFile  " <<  kArch->directory()->entries();
+
+        QString entriesStr;
+        bool first = true;
+        for(auto entry : kArch->directory()->entries())
+        {
+            if(first) { entriesStr = entry; first = false;}
+            else { entriesStr += "\n" + entry; }
+            
+           
+        }
+        return entriesStr;
+    }
+    else
+    {
+        return QString();
+    }
 }
 
 void FMStatic::openLocation(const QStringList &urls)
@@ -465,6 +502,46 @@ void FMStatic::setDirConf(const QUrl &path, const QString &group, const QString 
 bool FMStatic::checkFileType(const int &type, const QString &mimeTypeName)
 {
     return FMH::checkFileType(static_cast<FMH::FILTER_TYPE>(type), mimeTypeName);
+}
+
+int FMStatic::getCompressedFileType(const QUrl &path, const QString &mimeTypeName)
+{
+        if(mimeTypeName.contains("application/zip"))
+	{
+		return 1;
+	}
+        else if(mimeTypeName.contains("application/gzip"))
+	{
+		return 2;
+	}
+        else if(mimeTypeName.contains("application/7zip"))
+	{
+		return 3;
+	}
+        else if(mimeTypeName.contains("application/bzip2"))
+	{
+		return 4;
+	}
+        else if(mimeTypeName.contains("application/x-compressed-tar"))
+	{
+		return 5;
+	}
+        else if(mimeTypeName.contains("application/tar"))
+	{
+		return 6;
+	}
+        else if(mimeTypeName.contains("application/ar"))
+	{
+		return 7;
+	}
+        else if(mimeTypeName.contains("application/x-xz-compressed-tar"))
+        {
+                return 8;
+        }
+	else
+	{
+		return 0;
+	}
 }
 
 bool FMStatic::toggleFav(const QUrl &url)
