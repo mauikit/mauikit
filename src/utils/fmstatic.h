@@ -299,14 +299,6 @@ public slots:
     static bool checkFileType(const int &type, const QString &mimeTypeName);
     
     /**
-     * @brief checkCompressedFileType
-     * Return the compressed type of a file
-     * @param path
-     * @return Value of type according to enum CompressedFileType
-     */
-    static int getCompressedFileType(const QUrl &path, const QString &mimeTypeName);
-
-    /**
      * @brief moveToTrash
      * Moves to the trash can the file URLs. The associated tags are kept in case the files are restored.
      * @param urls
@@ -380,32 +372,26 @@ public slots:
      * Return the derived class as an abstract KArchive object
      * @param url
      * The url to be open
-     * @param type
-     * The compressed type file
      * @return void
      */
-    static KArchive* getKArchiveObject(const QUrl &url, const int type);
+    static KArchive* getKArchiveObject(const QUrl &url);
     /**
      * @brief extractFile
      * Given a URL it extract file in the same path
      * @param url
      * The url to be open
-     * @param type
-     * The compressed type file
      * @return void
      */
-    static void extractFile(const QUrl &url, const int type);
+    static void extractFile(const QUrl &url);
 
     /**
      * @brief getEntries
      * Rerun the content of a compressed file
      * @param url
      * The url to be open
-     * @param type
-     * The compressed type file
      * @return void
      */
-    QString getEntries(const QUrl &url, const int type);
+    QString getEntries(const QUrl &url);
 
     /**
      * @brief openLocation

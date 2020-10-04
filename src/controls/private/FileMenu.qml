@@ -23,7 +23,7 @@ Menu
     signal renameClicked(var item)
     signal tagsClicked(var item)	
     signal openWithClicked(var item)
-    signal extractArk(var item, var type);
+    signal extractArk(var item);
                       
     MenuItem
     {
@@ -61,8 +61,7 @@ Menu
         onTriggered:
         {
             console.log("@gadominguez File: FileMenu.qml Extract with ARK Item: " + item.path)
-            var type = Maui.FM.getCompressedFileType(item.path, item.mime);
-            extractArk(item, type);
+            extractArk(item);
         }
     }   
     

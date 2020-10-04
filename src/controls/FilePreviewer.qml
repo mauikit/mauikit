@@ -262,8 +262,7 @@ Maui.Dialog
                     if(Maui.FM.checkFileType(Maui.FMList.COMPRESSED, iteminfo.mime) && !Maui.Handy.isAndroid)
                     {
                         console.log("@gadominguez File: FilePreviewer.qml Func: initModel " + iteminfo.mime)
-                        var type = Maui.FM.getCompressedFileType(iteminfo.path, iteminfo.mime);
-                        var values = Maui.FM.getEntries(iteminfo.path, type)
+                        var values = Maui.FM.getEntries(iteminfo.path)
                         console.log(values)
                         infoModel.append({key: "Content", value:  values})
                     }
