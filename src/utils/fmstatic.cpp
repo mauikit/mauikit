@@ -416,19 +416,20 @@ KArchive* FMStatic::getKArchiveObject(const QUrl &url)
     /*
      * This checks depends on type COMPRESSED_MIMETYPES in file fmh.h
      */
-    if(FMH::getMime(url).contains("application/x-compress"))
-    {
-        KArchive *kArch = nullptr; //TODO: gadominguez
-    }
-    else if(FMH::getMime(url).contains("application/x-xz-compressed-tar") ||
+    qDebug() << "@gadominguez File: fmstatic.cpp Func: getKArchiveObject MimeType: " <<  FMH::getMime(url);
+
+    if(FMH::getMime(url).contains("application/x-xz-compressed-tar") ||
+            FMH::getMime(url).contains("application/x-compressed-tar") ||
             FMH::getMime(url).contains("application/x-compressed-tar") ||
             FMH::getMime(url).contains("application/x-gtar") ||
-            FMH::getMime(url).contains("application/x-tar") )
+            FMH::getMime(url).contains("application/x-tar") ||
+            FMH::getMime(url).contains("application/x-bzip") ||
+            FMH::getMime(url).contains("application/x-xz") ||
+            FMH::getMime(url).contains("application/x-gzip"))
     {
         kArch = new KTar(url.toString().split(QString("file://"))[1]);
     }
-    else if(FMH::getMime(url).contains("application/zip") ||
-            FMH::getMime(url).contains("application/x-gzip"))
+    else if(FMH::getMime(url).contains("application/zip"))
     {
         kArch = new KZip(url.toString().split(QString("file://"))[1]);
     }
@@ -458,14 +459,14 @@ void FMStatic::extractFile(const QUrl &url)
 
 QString FMStatic::getEntries(const QUrl &url)
 {
-    qDebug() << "@gadominguez File:fm.cpp Funcion: getEntries  " << url.toString();
+    qDebug() << "@gadominguez File:fm.cpp Funcion: getEntries  Url:" << url.toString();
 
     KArchive *kArch = getKArchiveObject(url);
     kArch->open(QIODevice::ReadOnly);
     assert(kArch->isOpen() == true);
     if(kArch->isOpen())
     {
-        qDebug() << "@gadominguez File:fm.cpp Funcion: getEntries  " <<  kArch->directory()->entries();
+        qDebug() << "@gadominguez File:fm.cpp Funcion: getEntries  Entries:" <<  kArch->directory()->entries();
 
         QString entriesStr;
         bool first = true;
