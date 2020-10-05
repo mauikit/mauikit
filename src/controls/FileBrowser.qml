@@ -290,7 +290,7 @@ Maui.Page
 		onExtractArk:
 		{
 			if(item)
-				 Maui.FM.extractFile(item.path, type)
+                 Maui.FM.extractFile(item.path)
 		}
 
 		onTagsClicked:
