@@ -17,7 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "mauikde.h"
+#include "mauilinux.h"
+
 #include <KColorScheme>
 #include <KColorSchemeManager>
 #include <KConfig>
@@ -44,7 +45,7 @@ MAUIKDE *MAUIKDE::qmlAttachedProperties(QObject *object)
 }
 
 MAUIKDE::MAUIKDE(QObject *parent)
-    : QObject(parent)
+    : AbstractPlatform(parent)
 {
 }
 
@@ -272,3 +273,34 @@ void MAUIKDE::launchApp(const QString &app)
     KService service(app);
     KRun::runApplication(service, {}, nullptr);
 }
+
+bool MAUIKDE::hasKeyboard()
+{
+    return true;
+}
+
+bool MAUIKDE::hasMouse()
+{
+    return true;
+}
+
+void MAUIKDE::openUrl(const QUrl& url)
+{
+    //    //     return QDesktopServices::openUrl(QUrl::fromUserInput(url));
+    KRun::runUrl(url, FMH::getFileInfoModel(url)[FMH::MODEL_KEY::MIME], nullptr, false, KRun::RunFlag::DeleteTemporaryFiles);
+}
+
+void MAUIKDE::shareFiles(const QList<QUrl>&)
+{
+    
+}
+
+void MAUIKDE::shareText(const QString&)
+{
+    
+}
+
+
+
+
+

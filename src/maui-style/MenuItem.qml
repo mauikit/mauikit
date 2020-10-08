@@ -90,7 +90,7 @@ T.MenuItem
         readonly property real indicatorPadding: control.checkable && control.indicator ? control.indicator.width + control.spacing : 0
         leftPadding: !control.mirrored ? indicatorPadding + Maui.Style.space.small : arrowPadding
         rightPadding: control.mirrored ? indicatorPadding : arrowPadding + Maui.Style.space.small
-
+        opacity: control.enabled ? 1 : 0.5
         spacing: control.spacing
         mirrored: control.mirrored
         display: control.display

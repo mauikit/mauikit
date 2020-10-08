@@ -57,7 +57,7 @@
 #ifdef Q_OS_ANDROID
 #include "platforms/android/mauiandroid.h"
 #elif defined Q_OS_LINUX
-#include "platforms/kde/mauikde.h"
+#include "platforms/linux/mauilinux.h"
 #endif
 
 #ifdef MAUIKIT_STYLE

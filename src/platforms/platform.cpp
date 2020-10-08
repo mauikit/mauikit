@@ -9,7 +9,7 @@
 #elif defined Q_OS_IOS
 #include "mauiios.h"
 #else
-#include "mauilinux"
+#include "mauilinux.h"
 #endif
 
 Platform::Platform(QObject *parent) : AbstractPlatform(parent),
@@ -22,7 +22,7 @@ Platform::Platform(QObject *parent) : AbstractPlatform(parent),
     #elif defined Q_OS_IOS
       m_platform(new MAUIIOS(this))
     #else
-      m_platform(new MAUILinux(this))
+      m_platform(MAUIKDE::instance())
     #endif
 {
 

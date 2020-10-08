@@ -13,7 +13,6 @@
 #include <KIO/EmptyTrashJob>
 #include <KIO/MkdirJob>
 #include <KIO/SimpleJob>
-#include <KRun>
 #include <QIcon>
 #endif
 
@@ -406,6 +405,7 @@ bool FMStatic::openUrl(const QUrl &url)
 //#elif defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
 //    return QDesktopServices::openUrl(url);
 //#endif
+    return true;
 }
 
 void FMStatic::openLocation(const QStringList &urls)

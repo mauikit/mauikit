@@ -26,10 +26,12 @@
 
 #include "fmh.h"
 
+#include "abstractplatform.h"
+
 /**
  * @brief The MAUIKDE class
  */
-class MAUIKDE : public QObject
+class MAUIKDE : public AbstractPlatform
 {
     Q_OBJECT
 
@@ -142,6 +144,12 @@ public slots:
      * @param app
      */
     static void launchApp(const QString &app);
+    
+    void shareFiles(const QList<QUrl> &urls) override final;
+    void shareText(const QString &text) override final;
+    void openUrl(const QUrl &url) override final;
+    bool hasKeyboard() override final;
+    bool hasMouse() override final;
 };
 
 QML_DECLARE_TYPEINFO(MAUIKDE, QML_HAS_ATTACHED_PROPERTIES)
