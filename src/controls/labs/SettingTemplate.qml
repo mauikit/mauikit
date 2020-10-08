@@ -39,7 +39,7 @@ Maui.ListItemTemplate
     Layout.fillWidth: true
     iconSizeHint: Maui.Style.iconSizes.medium
     label2.wrapMode: Text.WordWrap
-    implicitHeight: label1.implicitHeight + label2.implicitHeight + Maui.Style.space.big 
+    implicitHeight: Math.floor(label1.implicitHeight + label2.implicitHeight + Maui.Style.space.big )
 
     background.visible: true
     background.opacity: 0.5

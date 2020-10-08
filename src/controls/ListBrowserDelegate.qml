@@ -94,5 +94,6 @@ Maui.ItemDelegate
         checkable : control.checkable
         checked : control.checked               
 		onToggled: control.toggled(state)
+        leftMargin: iconVisible ? 0 : Maui.Style.space.medium
     } 
 }

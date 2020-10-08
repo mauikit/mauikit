@@ -265,8 +265,8 @@ Item
             Item
             {
                 visible: control.labelsVisible
-                
                 Layout.fillHeight: true
+                Layout.preferredHeight: Math.min(_label1.implicitHeight, height)
                 Layout.fillWidth: true
                 
                 Rectangle
