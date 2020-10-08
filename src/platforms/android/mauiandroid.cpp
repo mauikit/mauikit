@@ -51,11 +51,7 @@ public:
 };
 
 MAUIAndroid::MAUIAndroid(QObject *parent)
-    : QObject(parent)
-{
-}
-
-MAUIAndroid::~MAUIAndroid()
+    : AbstractPlatform(parent)
 {
 }
 
@@ -108,6 +104,11 @@ void MAUIAndroid::navBarColor(const QString &bg, const bool &light)
         view.callMethod<void>("setSystemUiVisibility", "(I)V", visibility);
         window.callMethod<void>("setNavigationBarColor", "(I)V", QColor(bg).rgba());
     });
+}
+
+void MAUIAndroid::shareFiles(const QList<QUrl> &urls)
+{
+
 }
 
 void MAUIAndroid::shareDialog(const QUrl &url)
@@ -443,4 +444,40 @@ bool MAUIAndroid::checkRunTimePermissions(const QStringList &permissions)
     //                                              "(Landroid/app/Activity;)V",
     //                                              QtAndroid::androidActivity().object<jobject>());
     //    return (true);
+}
+
+bool MAUIAndroid::hasKeyboard()
+{
+
+    QAndroidJniObject context =QtAndroid::androidContext().object<jobject>();
+
+    if (context.isValid()) {
+
+        QAndroidJniObject resources = context.callObjectMethod("getResources", "()Landroid/content/res/Resources;");
+        QAndroidJniObject config = resources.callObjectMethod("getConfiguration", "()Landroid/content/res/Configuration;");
+        int value = config.getField<jint>("keyboard");
+//        QVariant v = value.toString();
+        qDebug() << "KEYBOARD" << value;
+
+        return value == 2 || value == 3; // KEYBOARD_12KEY || KEYBOARD_QWERTY
+
+    } else
+        throw InterfaceConnFailedException();
+}
+
+bool MAUIAndroid::hasMouse()
+{
+    return false;
+}
+
+void MAUIAndroid::handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data)
+{
+    qDebug() << "ACTIVITY RESULTS" << receiverRequestCode;
+    emit this->hasKeyboardChanged();
+    jint RESULT_OK = QAndroidJniObject::getStaticField<jint>("android/app/Activity", "RESULT_OK");
+
+    if (receiverRequestCode == 42 && resultCode == RESULT_OK) {
+        QString url = data.callObjectMethod("getData", "()Landroid/net/Uri;").callObjectMethod("getPath", "()Ljava/lang/String;").toString();
+        emit folderPicked(url);
+    }
 }

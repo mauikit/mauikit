@@ -77,8 +77,8 @@ Item
                     id: img
                     source: control.imageSource
                     anchors.fill: parent
-                    sourceSize.width: Math.min(control.imageWidth, width)
-                    sourceSize.height: Math.min(control.imageHeight, height)
+                    sourceSize.width: control.imageWidth
+                    sourceSize.height: control.imageHeight
                     horizontalAlignment: Qt.AlignHCenter
                     verticalAlignment: Qt.AlignVCenter
                     fillMode: control.fillMode
@@ -133,13 +133,14 @@ Item
                 
                 Kirigami.Icon
                 {
+                    visible: img.status !== Image.Ready
                     anchors.centerIn: parent
                     height: Math.min(22, parent.height * 0.4)
                     width: height
                     source: "folder-images"
                     isMask: true
                     color: Kirigami.Theme.textColor
-                    opacity: 1 - img.progress
+                    opacity: 0.5
                 }
                 
                 ColorOverlay

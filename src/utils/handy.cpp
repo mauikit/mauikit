@@ -26,6 +26,8 @@
 #include <QOperatingSystemVersion>
 #include <QTouchDevice>
 
+#include "platforms/platform.h"
+
 #ifdef Q_OS_ANDROID
 #include <QGuiApplication>
 #else
@@ -215,6 +217,16 @@ bool Handy::isTouch()
     }
 
     return false;
+}
+
+bool Handy::hasKeyboard()
+{
+   return Platform::instance()->hasKeyboard();
+}
+
+bool Handy::hasMouse()
+{
+    return Platform::instance()->hasMouse();
 }
 
 bool Handy::isWindows()

@@ -62,7 +62,7 @@ Item
     property int bottomMargin: margins
     property int rightMargin: margins
     property int leftMargin: margins
-    property int margins: isWide ? Maui.Style.space.medium : Maui.Style.space.tiny
+    property int margins: isWide ? Maui.Style.space.medium :  (Kirigami.Settings.isMobile ? 0 : Maui.Style.space.tiny)
 
     property alias holder : _holder
 
@@ -96,8 +96,7 @@ Item
             property var selectedIndexes : []
             
             anchors.fill: parent
-            anchors.rightMargin: Kirigami.Settings.hasTransientTouchInput ? control.rightMargin : parent.ScrollBar.vertical.visible ? parent.ScrollBar.vertical.width : control.rightMargin
-
+            anchors.rightMargin: control.rightMargin
             anchors.leftMargin: control.leftMargin
             anchors.bottomMargin: control.bottomMargin
             anchors.topMargin: control.topMargin

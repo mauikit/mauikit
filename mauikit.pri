@@ -227,7 +227,9 @@ HEADERS += \
     $$PWD/src/utils/appsettings.h \
     $$PWD/src/utils/mauiapp.h \
     $$PWD/src/utils/models/pathlist.h \
-    $$PWD/src/controls/libs/appview.h
+    $$PWD/src/controls/libs/appview.h \
+    $$PWD/src/platforms/abstractplatform.h \
+    $$PWD/src/platforms/platform.h
 
 SOURCES += \
     $$PWD/src/utils/fmstatic.cpp \
@@ -238,19 +240,23 @@ SOURCES += \
     $$PWD/src/utils/handy.cpp \
     $$PWD/src/utils/appsettings.cpp \
     $$PWD/src/utils/mauiapp.cpp \
-    $$PWD/src/utils/models/pathlist.cpp
+    $$PWD/src/utils/models/pathlist.cpp \
+    $$PWD/src/platforms/abstractplatform.cpp \
+    $$PWD/src/platforms/platform.cpp
 
 DEPENDPATH += \
     $$PWD/src \
     $$PWD/src/utils/model_template \
-    $$PWD/src/controls/libs
+    $$PWD/src/controls/libs \
+    $$PWD/src/platforms
 
 INCLUDEPATH += \
      $$PWD/src \
      $$PWD/src/utils \
      $$PWD/src/utils/models \
      $$PWD/src/utils/model_template \
-     $$PWD/src/controls/libs
+     $$PWD/src/controls/libs \
+     $$PWD/src/platforms
 
 API_VER = 1.2
 

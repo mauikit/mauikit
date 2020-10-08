@@ -1,11 +1,10 @@
 #include "fmstatic.h"
 #include "utils.h"
+#include "platform.h"
+
 #include <QDesktopServices>
 
-#if defined(Q_OS_ANDROID)
-#include "platforms/android/mauiandroid.h"
-#elif defined Q_OS_LINUX
-#include "platforms/kde/mauikde.h"
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
 #include <KCoreDirLister>
 #include <KFileItem>
 #include <KFilePlacesModel>
@@ -397,15 +396,16 @@ bool FMStatic::createSymlink(const QUrl &path, const QUrl &where)
 
 bool FMStatic::openUrl(const QUrl &url)
 {
-#ifdef Q_OS_ANDROID
-    MAUIAndroid::openUrl(url.toString());
-    return true;
-#elif defined Q_OS_LINUX
-    //     return QDesktopServices::openUrl(QUrl::fromUserInput(url));
-    return KRun::runUrl(url, FMH::getFileInfoModel(url)[FMH::MODEL_KEY::MIME], nullptr, false, KRun::RunFlag::DeleteTemporaryFiles);
-#elif defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
-    return QDesktopServices::openUrl(url);
-#endif
+    Platform::instance()->openUrl(url);
+//#ifdef Q_OS_ANDROID
+//    MAUIAndroid::openUrl(url.toString());
+//    return true;
+//#elif defined Q_OS_LINUX
+//    //     return QDesktopServices::openUrl(QUrl::fromUserInput(url));
+//    return KRun::runUrl(url, FMH::getFileInfoModel(url)[FMH::MODEL_KEY::MIME], nullptr, false, KRun::RunFlag::DeleteTemporaryFiles);
+//#elif defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
+//    return QDesktopServices::openUrl(url);
+//#endif
 }
 
 void FMStatic::openLocation(const QStringList &urls)

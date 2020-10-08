@@ -87,8 +87,6 @@ public:
     MauiApp(MauiApp &&) = delete;
     MauiApp &operator=(MauiApp &&) = delete;
 
-
-
     /**
      * @brief getMauikitVersion
      * MauiKit string version

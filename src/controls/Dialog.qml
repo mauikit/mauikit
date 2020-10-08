@@ -91,8 +91,9 @@ Maui.Popup
 
                 Rectangle
                 {
-                    anchors.fill: parent
-                    anchors.margins: Maui.Style.space.small
+                    height: Maui.Style.iconSizes.big
+                    width: height
+                    anchors.centerIn: parent
                     radius: Maui.Style.radiusV
                     color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.9))
                     

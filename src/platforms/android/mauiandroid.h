@@ -20,6 +20,8 @@
 #ifndef MAUIANDROID_H
 #define MAUIANDROID_H
 
+#include <QObject>
+
 #include <QAndroidActivityResultReceiver>
 #include <QAndroidJniEnvironment>
 #include <QAndroidJniObject>
@@ -29,15 +31,16 @@
 #include <QVariantList>
 #include <QtAndroid>
 
+#include "abstractplatform.h"
+
 /**
  * @brief The MAUIAndroid class
  */
-class Q_DECL_EXPORT MAUIAndroid : public QObject
+class Q_DECL_EXPORT MAUIAndroid : public AbstractPlatform
 {
     Q_OBJECT
 public:
-    MAUIAndroid(QObject *parent = nullptr);
-    ~MAUIAndroid();
+    explicit MAUIAndroid(QObject *parent = nullptr);
 
     /**
      * @brief fileChooser
@@ -48,6 +51,9 @@ private:
     static QVariantList transform(const QAndroidJniObject &obj);
     static QVariantMap createVariantMap(jobject data);
 
+    void handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data);
+
+
 public slots:
     /**
      * @brief getAccounts
@@ -55,7 +61,7 @@ public slots:
      */
     static QString getAccounts();
 
-      /**
+    /**
      * @brief statusbarColor
      * @param bg
      * @param light
@@ -70,6 +76,11 @@ public slots:
     static void navBarColor(const QString &bg, const bool &light);
 
     /**
+     * @brief shareFiles
+     * @param urls
+     */
+    void shareFiles(const QList<QUrl> &urls) override final;
+    /**
      * @brief shareDialog
      * @param url
      */
@@ -79,7 +90,7 @@ public slots:
      * @brief shareText
      * @param text
      */
-    static void shareText(const QString &text);
+    void shareText(const QString &text) override final;
 
     /**
      * @brief sendSMS
@@ -105,7 +116,7 @@ public slots:
      * @brief openUrl
      * @param url
      */
-    static void openUrl(const QUrl &url);
+    void openUrl(const QUrl &url) override final;
 
     /**
      * @brief defaultPaths
@@ -131,6 +142,9 @@ public slots:
      * @return
      */
     static bool checkRunTimePermissions(const QStringList &permissions);
+
+    bool hasKeyboard() override final;
+    bool hasMouse() override final;
 
 signals:
     /**
