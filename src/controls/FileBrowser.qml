@@ -56,7 +56,6 @@ Maui.Page
 
     // need to be set by the implementation as features
     property MauiLab.SelectionBar selectionBar : null
-    property Maui.FilePreviewer previewer : null
     property Maui.TagsDialog tagsDialog : null
     property MauiLab.ShareDialog shareDialog : null
     property Maui.OpenWithDialog openWithDialog : null
@@ -319,50 +318,16 @@ Maui.Page
         onShareClicked: control.shareFiles([item.path])
     }
 
-    Connections
-    {
-        target: control.previewer.tagBar
-        enabled: control.previewer && control.tagsDialog
-        ignoreUnknownSignals: true
-        
-        function onAddClicked()
-        {
-            if(control.tagsDialog)
-            {
-                control.tagsDialog.composerList.urls = [ control.previewer.currentUrl]
-                control.tagsDialog.open()
-            }
-        }
-    }
-
+   
     Connections
     {
         target: control.tagsDialog
-        enabled: control.tagsDialog && control.previewer
+        enabled: control.tagsDialog
         ignoreUnknownSignals: true
 
         function onTagsReady(tags)
         {
-            control.tagsDialog.composerList.updateToUrls(tags)
-            if(control.previewer && control.previewer.visible)
-                control.previewer.tagBar.list.refresh()
-        }
-    }
-
-    Connections
-    {
-        target: control.previewer
-        enabled: control.previewer
-        ignoreUnknownSignals: true
-
-        function onShareButtonClicked(url)
-        {
-            control.shareFiles([url])
-        }
-
-        function onOpenButtonClicked(url)
-        {
-            control.openFile(url)
+            control.tagsDialog.composerList.updateToUrls(tags)            
         }
     }
 
@@ -408,14 +373,7 @@ Maui.Page
             }
 
             //shortcut for opening files
-            if((event.key === Qt.Key_Return) && (event.modifiers & Qt.AltModifier))
-            {
-                if(control.previewer)
-                {
-                    control.previewer.show(currentFMModel, index)
-                }
-
-            }else if(event.key === Qt.Key_Return)
+            if(event.key === Qt.Key_Return)
             {
                 indexHistory.push(index)
                 control.openItem(index)
@@ -474,14 +432,7 @@ Maui.Page
             if((event.key === Qt.Key_F) && (event.modifiers & Qt.ControlModifier))
             {
                 control.headBar.visible = !control.headBar.visible
-            }
-            
-            if(event.key === Qt.Key_Space)
-            {
-                if(control.previewer)
-                    control.previewer.show(currentFMModel, index)
-                
-            }
+            }                    
             
             control.keyPress(event)
         }
@@ -800,15 +751,8 @@ Maui.Page
                     control.openFolder(path)
                 }
                 else
-                {
-                    if (Kirigami.Settings.isMobile && control.previewer)
-                    {
-                        control.previewer.show(currentFMModel, index)
-                    }
-                    else
-                    {
-                        control.openFile(path)
-                    }
+                {                    
+                    control.openFile(path)                    
                 }
             }
         }

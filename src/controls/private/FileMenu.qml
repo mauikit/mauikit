@@ -86,20 +86,8 @@ Menu
             shareClicked(control.item)
             close()
         }
-    }
-    
-    MenuItem
-    {
-		visible: !control.isExec && previewer
-		text: i18n("Preview")
-		icon.name: "view-preview"
-		onTriggered:
-		{
-			previewer.show(currentFMModel, control.index)
-			close()
-		}
-	}
-    
+    }   
+
     MenuItem
     {
         visible: !control.isExec && openWithDialog	

@@ -34,7 +34,6 @@ Taglist 1.0 private/TagList.qml
 GridBrowser 1.0 GridBrowser.qml
 ListBrowser 1.0 ListBrowser.qml
 FileBrowser 1.0 FileBrowser.qml
-FilePreviewer 1.0 FilePreviewer.qml
 FileDialog 1.0 FileDialog.qml
 PlacesListBrowser 1.0 PlacesListBrowser.qml
 PathBar 1.0 PathBar.qml
@@ -54,7 +53,6 @@ TabBar 1.0 TabBar.qml
 TabButton 1.0 TabButton.qml
 ActionSideBar 1.0 ActionSideBar.qml
 ToolActions 1.0 ToolActions.qml
-DocumentPreview 1.0 DocumentPreview.qml
 ToolButtonMenu 1.0 ToolButtonMenu.qml
 ListItemTemplate 1.0 ListItemTemplate.qml
 GridItemTemplate 1.0 GridItemTemplate.qml
