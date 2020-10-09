@@ -246,8 +246,7 @@ Maui.Dialog
                     }
                     if(Maui.FM.checkFileType(Maui.FMList.COMPRESSED, iteminfo.mime) && !Maui.Handy.isAndroid)
                     {
-                        source = "private/DefaultPreview.qml"
-                        console.log("previe mime", iteminfo.mime)
+                        source = "private/CompressedPreview.qml"
                     }                    
 
                     console.log("previe mime", iteminfo.mime)
@@ -258,14 +257,7 @@ Maui.Dialog
                 function initModel()
                 {
                     infoModel.clear()
-                    infoModel.append({key: "Type", value: iteminfo.mime})
-                    if(Maui.FM.checkFileType(Maui.FMList.COMPRESSED, iteminfo.mime) && !Maui.Handy.isAndroid)
-                    {
-                        console.log("@gadominguez File: FilePreviewer.qml Func: initModel " + iteminfo.mime)
-                        var values = Maui.FM.getEntries(iteminfo.path)
-                        console.log(values)
-                        infoModel.append({key: "Content", value:  values})
-                    }
+                    infoModel.append({key: "Type", value: iteminfo.mime})                  
                     infoModel.append({key: "Date", value: iteminfo.date})
                     infoModel.append({key: "Modified", value: iteminfo.modified})
                     infoModel.append({key: "Last Read", value: iteminfo.lastread})

@@ -391,7 +391,7 @@ public slots:
      * The url to be open
      * @return void
      */
-    QString getEntries(const QUrl &url);
+    QVariantList getEntries(const QUrl &url);
 
     /**
      * @brief openLocation
