@@ -464,10 +464,11 @@ void FMStatic::extractFile(const QUrl &url)
 
 }
 
-QString FMStatic::getEntries(const QUrl &url)
+QVariantList FMStatic::getEntries(const QUrl &url)
 {
     qDebug() << "@gadominguez File:fm.cpp Funcion: getEntries  Url:" << url.toString();
 
+    QVariantList res;
     KArchive *kArch = getKArchiveObject(url);
     kArch->open(QIODevice::ReadOnly);
     assert(kArch->isOpen() == true);
@@ -475,20 +476,17 @@ QString FMStatic::getEntries(const QUrl &url)
     {
         qDebug() << "@gadominguez File:fm.cpp Funcion: getEntries  Entries:" <<  kArch->directory()->entries();
 
-        QString entriesStr;
-        bool first = true;
         for(auto entry : kArch->directory()->entries())
         {
-            if(first) { entriesStr = entry; first = false;}
-            else { entriesStr += "\n" + entry; }
-            
+            auto e = kArch->directory()->entry(entry);
            
+           res << QVariantMap {{"label", e->name()}, {"icon", e->isDirectory() ? "folder" : FMH::getIconName(e->name())}, {"date", e->date().toString()}};
         }
-        return entriesStr;
+        return res;
     }
     else
     {
-        return QString();
+        return res;
     }
 }
 
