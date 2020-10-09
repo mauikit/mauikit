@@ -11,24 +11,31 @@ include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/controls/libs
     ${CMAKE_CURRENT_BINARY_DIR}/controls/libs
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/kde
-    ${CMAKE_CURRENT_BINARY_DIR}/kde
+    ${CMAKE_CURRENT_SOURCE_DIR}/platforms
+    ${CMAKE_CURRENT_BINARY_DIR}/platforms
+    
+    ${CMAKE_CURRENT_SOURCE_DIR}/platforms/linux
+    ${CMAKE_CURRENT_BINARY_DIR}/platforms/linux
     )
 
 set(mauikit_SRCS
     mauikit.cpp
     utils/fmstatic.cpp
+    utils/appsettings.cpp
     utils/fmh.cpp
     utils/mauiapp.cpp
     utils/handy.cpp
     utils/models/pathlist.cpp
     utils/model_template/mauilist.cpp
     utils/model_template/mauimodel.cpp
+    platforms/abstractplatform.cpp
+    platforms/platform.cpp
     )
 
 set(mauikit_HDRS
     mauikit.h
     utils/fmstatic.h
+    utils/appsettings.h
     utils/fmh.h
     utils/utils.h
     utils/handy.h
@@ -37,6 +44,8 @@ set(mauikit_HDRS
     utils/model_template/mauilist.h
     utils/model_template/mauimodel.h
     controls/libs/appview.h
+    platforms/abstractplatform.h
+    platforms/platform.h
     )
 
 if(${COMPONENT_ACCOUNTS})
@@ -219,13 +228,13 @@ else()
     add_subdirectory(csd/libappletdecoration)
 
     set(mauikit_KDE_SRCS
-        platforms/kde/mauikde.cpp
-        platforms/kde/kdeconnect.cpp
+        platforms/linux/mauilinux.cpp
+        platforms/linux/kdeconnect.cpp
         )
 
     set(mauikit_KDE_HDRS
-        platforms/kde/mauikde.h
-        platforms/kde/kdeconnect.h
+        platforms/linux/mauilinux.h
+        platforms/linux/kdeconnect.h
         )
 endif()
 

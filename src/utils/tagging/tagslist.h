@@ -20,42 +20,11 @@ class TagsList : public MauiList
     Q_PROPERTY(bool strict READ getStrict WRITE setStrict NOTIFY strictChanged)
     Q_PROPERTY(QStringList urls READ getUrls WRITE setUrls NOTIFY urlsChanged)
     Q_PROPERTY(QStringList tags READ getTags NOTIFY tagsChanged)
-    Q_PROPERTY(QString lot READ getLot WRITE setLot NOTIFY lotChanged)
-    Q_PROPERTY(QString key READ getKey WRITE setKey NOTIFY keyChanged)
-
-    Q_PROPERTY(TagsList::KEYS sortBy READ getSortBy WRITE setSortBy NOTIFY sortByChanged())
 
 public:
-
-    //!
-    //! \brief The KEYS enum
-    //!
-    enum KEYS : uint_fast8_t {
-        URL = FMH::MODEL_KEY::URL,
-        APP = FMH::MODEL_KEY::APP,
-        URI = FMH::MODEL_KEY::URI,
-        MAC = FMH::MODEL_KEY::MAC,
-        LAST_SYNC = FMH::MODEL_KEY::LASTSYNC,
-        NAME = FMH::MODEL_KEY::NAME,
-        VERSION = FMH::MODEL_KEY::VERSION,
-        LOT = FMH::MODEL_KEY::LOT,
-        TAG = FMH::MODEL_KEY::TAG,
-        COLOR = FMH::MODEL_KEY::COLOR,
-        ADD_DATE = FMH::MODEL_KEY::ADDDATE,
-        COMMENT = FMH::MODEL_KEY::COMMENT,
-        MIME = FMH::MODEL_KEY::MIME,
-        TITLE = FMH::MODEL_KEY::TITLE,
-        DEVICE = FMH::MODEL_KEY::DEVICE,
-        KEY = FMH::MODEL_KEY::KEY
-    };
-    Q_ENUM(KEYS)
-
     explicit TagsList(QObject *parent = nullptr);
 
     FMH::MODEL_LIST items() const override;
-
-    TagsList::KEYS getSortBy() const;
-    void setSortBy(const TagsList::KEYS &key);
 
     bool getStrict() const;
     void setStrict(const bool &value);
@@ -63,43 +32,22 @@ public:
     QStringList getUrls() const;
     void setUrls(const QStringList &value);
 
-    QString getLot() const;
-    void setLot(const QString &value);
-
-    QString getKey() const;
-    void setKey(const QString &value);
-
     QStringList getTags() const;
 
 private:
     FMH::MODEL_LIST list;
     void setList();
-    void sortList();
     Tagging *tag;
 
     bool strict = true;
     QStringList urls = QStringList();
-    QString lot;
-    QString key;
-    TagsList::KEYS sortBy = TagsList::KEYS::ADD_DATE;
 
 signals:
     void strictChanged();
     void urlsChanged();
-    void lotChanged();
-    void keyChanged();
-    void sortByChanged();
     void tagsChanged();
 
 public slots:
-
-    /**
-     * @brief get
-     * Return the data of a item in the model at the given index
-     * @param index
-     * @return
-     */
-    QVariantMap get(const int &index) const;
 
     /**
      * @brief append

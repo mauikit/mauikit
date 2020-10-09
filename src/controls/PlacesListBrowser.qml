@@ -15,7 +15,20 @@ Maui.ListBrowser
 
     signal placeClicked (string path)
     focus: true
-    model: placesModel
+    model: Maui.BaseModel
+    {
+        id: placesModel
+        list: Maui.PlacesList
+        {
+            id: placesList
+            groups: [
+                Maui.FMList.PLACES_PATH,
+                Maui.FMList.APPS_PATH,
+                Maui.FMList.BOOKMARKS_PATH,
+                Maui.FMList.DRIVES_PATH]
+        }
+    }
+
     section.property: "type"
     section.criteria: ViewSection.FullString
     section.delegate: Maui.LabelDelegate
@@ -64,22 +77,6 @@ Maui.ListBrowser
         }
     }
 
-    Maui.BaseModel
-    {
-        id: placesModel
-        list: placesList
-    }
-
-    Maui.PlacesList
-    {
-        id: placesList
-        groups: [
-            Maui.FMList.PLACES_PATH,
-            Maui.FMList.APPS_PATH,
-            Maui.FMList.BOOKMARKS_PATH,
-            Maui.FMList.DRIVES_PATH]
-    }
-
     Rectangle
     {
         anchors.fill: parent
@@ -90,6 +87,7 @@ Maui.ListBrowser
     delegate: Maui.ListDelegate
     {
         id: itemDelegate
+        width: ListView.view.width
         iconSize: control.iconSize
         labelVisible: true
         iconVisible: true
@@ -97,8 +95,6 @@ Maui.ListBrowser
         iconName: model.icon
         count: model.count > 0 ? model.count : ""
 
-        leftPadding:  Maui.Style.space.tiny
-        rightPadding: Maui.Style.space.tiny
         radius : Maui.Style.radiusV
         onClicked:
         {

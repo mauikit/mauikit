@@ -144,7 +144,6 @@ public:
         DOCUMENT = FMH::FILTER_TYPE::DOCUMENT,
         COMPRESSED = FMH::FILTER_TYPE::COMPRESSED,
         NONE = FMH::FILTER_TYPE::NONE
-
     };
     Q_ENUM(FILTER)
 
@@ -375,7 +374,7 @@ private:
     void sortList();
     void watchPath(const QString &path, const bool &clear = true);
     void search(const QString &query, const QUrl &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
-    void filterContent(const QString &query, const QUrl &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
+    void filterContent(const QString &query, const QUrl &path);
     void setStatus(const PathStatus &status);
 
     FMH::MODEL_LIST list = {{}};
@@ -402,15 +401,6 @@ private:
     QList<QUrl> postHistory = {};
 
 public slots:
-
-    /**
-     * @brief get
-     * Return an item in the current model
-     * @param index
-     * index of the item to be retrieved
-     * @return
-     */
-    QVariantMap get(const int &index) const;
 
     /**
      * @brief refresh

@@ -52,10 +52,11 @@ Maui.ItemDelegate
     property alias imageSizeHint : _template.imageSizeHint
     property alias imageSource : _template.imageSource
     property alias iconSource : _template.iconSource
-    property alias checkable : _template.checkable
-    property alias checked : _template.checked
     property alias showLabel : _template.labelsVisible
-    
+
+    property alias checked : _template.checked
+    property alias checkable: _template.checkable
+
     property alias leftLabels: _template.leftLabels
     property alias rightLabels: _template.rightLabels   
     
@@ -88,15 +89,11 @@ Maui.ItemDelegate
     {
         id: _template
         anchors.fill: parent
-        
         isCurrentItem : control.isCurrentItem
-        hovered: control.hovered        
-        iconSource: model.icon
-        
-        label1.text: model.label ? model.label : ""
-        label3.text : model.mime ? (model.mime === "inode/directory" ? (model.count ? model.count + i18n(" items") : "") : Maui.FM.formatSize(model.size)) : ""
-        label4.text: model.modified ? Maui.FM.formatDate(model.modified, "MM/dd/yyyy") : "" 
-		
+        hovered: parent.hovered
+        checkable : control.checkable
+        checked : control.checked               
 		onToggled: control.toggled(state)
+        leftMargin: iconVisible ? 0 : Maui.Style.space.medium
     } 
 }

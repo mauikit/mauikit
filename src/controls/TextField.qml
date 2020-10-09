@@ -20,12 +20,8 @@
 import QtQuick 2.9
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
-import QtQuick.Controls.Material 2.1
 import org.kde.kirigami 2.2 as Kirigami
-import QtQuick.Controls.impl 2.3
-import QtQuick.Controls.Material.impl 2.3
-import org.kde.mauikit 1.0 as Maui
-import "private"
+import org.kde.mauikit 1.2 as Maui
 
 TextField
 {

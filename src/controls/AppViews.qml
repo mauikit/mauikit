@@ -17,65 +17,67 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.10
-import QtQuick.Controls 2.10
-import org.kde.mauikit 1.0 as Maui
-import org.kde.mauikit 1.1 as MauiLab
+import QtQuick 2.14
+import QtQuick.Controls 2.14
+import org.kde.mauikit 1.2 as Maui
+import org.kde.kirigami 2.9 as Kirigami
+
 import "private" as Private
 
 SwipeView
 {
     id: control
-    interactive: Maui.Handy.isTouch
+//     interactive: Kirigami.Settings.hasTransientTouchInput
+    interactive: false
     clip: true
     focus: true
-    
+
     property int maxViews : 4
     property Maui.ToolBar toolbar : window().headBar
-    
+
     readonly property int index : -1
-    
-    readonly property QtObject actionGroup : Private.ActionGroup
+
+    property QtObject actionGroup : Private.ActionGroup
     {
-        id: _actionGroup	
+        id: _actionGroup
         currentIndex : control.currentIndex
-        onCurrentIndexChanged: 
+        onCurrentIndexChanged:
         {
-            control.currentIndex = currentIndex	
+            control.currentIndex = currentIndex
             _actionGroup.currentIndex = control.currentIndex
-        }		
-        
+        }
+
         Component.onCompleted:
         {
             control.toolbar.middleContent.push(_actionGroup)
         }
-    }	
-    
+    }
+
     currentIndex: _actionGroup.currentIndex
-    onCurrentIndexChanged: 
+    onCurrentIndexChanged:
     {
         _actionGroup.currentIndex = currentIndex
         control.currentIndex = _actionGroup.currentIndex
     }
-    
-    onCurrentItemChanged: 
+
+    onCurrentItemChanged:
     {
         currentItem.forceActiveFocus()
         _listView.positionViewAtIndex(control.currentIndex , ListView.SnapPosition)
         history.push(control.currentIndex)
     }
-    
+
     Keys.onBackPressed:
     {
         control.goBack()
     }
-    
+
     Shortcut
     {
         sequence: StandardKey.Back
         onActivated: control.goBack()
     }
-    
+
     contentItem: ListView
     {
         id: _listView
@@ -85,21 +87,21 @@ SwipeView
         spacing: control.spacing
         orientation: control.orientation
         snapMode: ListView.SnapOneItem
-        boundsBehavior: Flickable.StopAtBounds        
-        
+        boundsBehavior: Flickable.StopAtBounds
+
         preferredHighlightBegin: 0
         preferredHighlightEnd: width
-        
+
         highlightRangeMode: ListView.StrictlyEnforceRange
         highlightMoveDuration: 0
         highlightFollowsCurrentItem: true
-        highlightResizeDuration: 0        
+        highlightResizeDuration: 0
         highlightMoveVelocity: -1
         highlightResizeVelocity: -1
-        
-        maximumFlickVelocity: 4 * (control.orientation === Qt.Horizontal ? width : height)	
+
+        maximumFlickVelocity: 4 * (control.orientation === Qt.Horizontal ? width : height)
     }
-    
+
     Keys.enabled: true
     Keys.onPressed:
     {
@@ -107,75 +109,75 @@ SwipeView
         {
             if(control.count > -1 )
             {
-                control.currentIndex = 0                
+                control.currentIndex = 0
             }
         }
-        
+
         if((event.key == Qt.Key_2) && (event.modifiers & Qt.ControlModifier))
         {
             if(control.count > 0 )
             {
-                control.currentIndex = 1               
-            }				
+                control.currentIndex = 1
+            }
         }
-        
+
         if((event.key == Qt.Key_3) && (event.modifiers & Qt.ControlModifier))
         {
             if(control.count > 1 )
             {
-                control.currentIndex = 2                
-            }				
+                control.currentIndex = 2
+            }
         }
-        
+
         if((event.key == Qt.Key_4) && (event.modifiers & Qt.ControlModifier))
         {
             if(control.count > 2 )
             {
-                control.currentIndex = 3               
-            }				
-        }        
+                control.currentIndex = 3
+            }
+        }
     }
-    
+
     Component.onCompleted:
     {
         for(var i in control.contentChildren)
         {
             const obj = control.contentChildren[i]
-            
-            if(obj.MauiLab.AppView.title || obj.MauiLab.AppView.iconName)
+
+            if(obj.Maui.AppView.title || obj.Maui.AppView.iconName)
             {
                 if(control.actionGroup.items.length < control.maxViews)
                 {
                     control.actionGroup.items.push(obj)
                 }else
                 {
-                    control.actionGroup.hiddenItems.push(obj)					
+                    control.actionGroup.hiddenItems.push(obj)
                 }
             }
         }
     }
-    
-    readonly property QtObject history : QtObject
+
+    property QtObject history : QtObject
     {
         property var historyIndexes : []
-        
+
         function pop()
         {
             historyIndexes.pop()
             return historyIndexes.pop()
         }
-        
+
         function push(index)
         {
             historyIndexes.push(index)
         }
-        
+
         function indexes()
         {
             return historyIndexes
         }
     }
-    
+
     function goBack()
     {
         control.setCurrentIndex(history.pop())

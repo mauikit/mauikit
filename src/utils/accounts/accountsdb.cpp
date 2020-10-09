@@ -17,7 +17,6 @@ AccountsDB::AccountsDB(QObject *parent)
     MAUIAndroid::checkRunTimePermissions({"android.permission.WRITE_EXTERNAL_STORAGE"});
 #endif
 
-    qDebug() << "TRY TO CREATE ACCOUNTS DB";
     QDir collectionDBPath_dir(FMPath.toLocalFile());
     if (!collectionDBPath_dir.exists())
         collectionDBPath_dir.mkpath(".");

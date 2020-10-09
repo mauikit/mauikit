@@ -15,6 +15,9 @@ Rectangle
     implicitWidth: _loader.item ? _loader.item.implicitWidth : 0
     implicitHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.12)
     
+    Kirigami.Theme.colorSet: Kirigami.Theme.View
+    Kirigami.Theme.inherit: false
+
     default property list<Action> actions
     
     property bool autoExclusive: true
@@ -99,6 +102,7 @@ Rectangle
                     id: _buttonMouseArea
                     action : modelData
                     checkable: control.checkable
+//                    rec.radius: index < _repeater.count-1 || index > 0 ? 0 : Maui.Style.radiusV
                     Binding on checked
                     {
                         when: autoExclusive
@@ -146,7 +150,7 @@ Rectangle
             id: _defaultButtonMouseArea
             hoverEnabled: true
             width: implicitWidth
-            implicitWidth: height + Maui.Style.space.tiny + Maui.Style.iconSizes.small
+            implicitWidth: _defaultButtonLayout.implicitWidth
 
             onClicked:
             {
@@ -195,38 +199,34 @@ Rectangle
 
             RowLayout
             {
-                anchors.fill: parent
+                id: _defaultButtonLayout
+                height: parent.height
                 spacing: 0
-
-                Item
+                
+                Private.BasicToolButton
                 {
-                    Layout.fillWidth: true
+                    id: _defaultButtonIcon
                     Layout.fillHeight: true
-
-                    Private.BasicToolButton
+                    
+                    onClicked:
                     {
-                        id: _defaultButtonIcon
-                        onClicked:
+                        if(!_menu.visible)
                         {
-                            if(!_menu.visible)
-                            {
-                               _menu.popup(control, 0, control.height)
-
-                            }else
-                            {
-                                _menu.close()
-                            }
+                            _menu.popup(control, 0, control.height)
+                            
+                        }else
+                        {
+                            _menu.close()
                         }
-
-                        anchors.centerIn: parent
-                        icon.width: Maui.Style.iconSizes.small
-                        icon.height: Maui.Style.iconSizes.small
-                        icon.color: control.currentAction ? (control.currentAction.icon.color && control.currentAction.icon.color.length ? control.currentAction.icon.color : ( _defaultButtonMouseArea.containsPress ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor)) :  control.Kirigami.Theme.textColor
-
-                        icon.name: control.currentAction ? control.currentAction.icon.name : control.defaultIconName
-
-                        enabled: control.currentAction ? control.currentAction.enabled : true
                     }
+                    
+                    icon.width: Maui.Style.iconSizes.small
+                    icon.height: Maui.Style.iconSizes.small
+                    icon.color: control.currentAction ? (control.currentAction.icon.color && control.currentAction.icon.color.length ? control.currentAction.icon.color : ( _defaultButtonMouseArea.containsPress ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor)) :  control.Kirigami.Theme.textColor
+                    
+                    icon.name: control.currentAction ? control.currentAction.icon.name : control.defaultIconName
+                    
+                    enabled: control.currentAction ? control.currentAction.enabled : true
                 }
 
                 Kirigami.Separator

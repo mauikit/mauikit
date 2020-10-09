@@ -20,6 +20,8 @@
 #ifndef MAUIANDROID_H
 #define MAUIANDROID_H
 
+#include <QObject>
+
 #include <QAndroidActivityResultReceiver>
 #include <QAndroidJniEnvironment>
 #include <QAndroidJniObject>
@@ -29,69 +31,16 @@
 #include <QVariantList>
 #include <QtAndroid>
 
+#include "abstractplatform.h"
+
 /**
  * @brief The MAUIAndroid class
  */
-class Q_DECL_EXPORT MAUIAndroid : public QObject
+class Q_DECL_EXPORT MAUIAndroid : public AbstractPlatform
 {
     Q_OBJECT
 public:
-    MAUIAndroid(QObject *parent = nullptr);
-    ~MAUIAndroid();
-
-    /**
-     * @brief handleActivityResult
-     * @param receiverRequestCode
-     * @param resultCode
-     * @param data
-     */
-    void handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data);
-
-    /**
-     * @brief contactPhoto
-     * @param id
-     * @return
-     */
-    static QImage contactPhoto(const QString &id);
-
-    /**
-     * @brief addContact
-     * @param name
-     * @param tel
-     * @param tel2
-     * @param tel3
-     * @param email
-     * @param title
-     * @param org
-     * @param photo
-     * @param account
-     * @param accountType
-     */
-    static void addContact(const QString &name, const QString &tel, const QString &tel2, const QString &tel3, const QString &email, const QString &title, const QString &org, const QString &photo, const QString &account, const QString &accountType);
-
-    /**
-     * @brief updateContact
-     * @param id
-     * @param field
-     * @param value
-     */
-    static void updateContact(const QString &id, const QString &field, const QString &value);
-
-    /**
-     * @brief setAppIcons
-     * @param lowDPI
-     * @param mediumDPI
-     * @param highDPI
-     */
-    static void setAppIcons(const QString &lowDPI, const QString &mediumDPI, const QString &highDPI);
-
-    /**
-     * @brief setAppInfo
-     * @param appName
-     * @param version
-     * @param uri
-     */
-    static void setAppInfo(const QString &appName, const QString &version, const QString &uri);
+    explicit MAUIAndroid(QObject *parent = nullptr);
 
     /**
      * @brief fileChooser
@@ -102,31 +51,15 @@ private:
     static QVariantList transform(const QAndroidJniObject &obj);
     static QVariantMap createVariantMap(jobject data);
 
+    void handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data);
+
+
 public slots:
     /**
      * @brief getAccounts
      * @return
      */
     static QString getAccounts();
-
-    /**
-     * @brief getCallLogs
-     * @return
-     */
-    static QVariantList getCallLogs();
-
-    /**
-     * @brief getContacts
-     * @return
-     */
-    static QVariantList getContacts();
-
-    /**
-     * @brief getContact
-     * @param id
-     * @return
-     */
-    static QVariantMap getContact(const QString &id);
 
     /**
      * @brief statusbarColor
@@ -143,6 +76,11 @@ public slots:
     static void navBarColor(const QString &bg, const bool &light);
 
     /**
+     * @brief shareFiles
+     * @param urls
+     */
+    void shareFiles(const QList<QUrl> &urls) override final;
+    /**
      * @brief shareDialog
      * @param url
      */
@@ -152,7 +90,7 @@ public slots:
      * @brief shareText
      * @param text
      */
-    static void shareText(const QString &text);
+    void shareText(const QString &text) override final;
 
     /**
      * @brief sendSMS
@@ -178,7 +116,7 @@ public slots:
      * @brief openUrl
      * @param url
      */
-    static void openUrl(const QUrl &url);
+    void openUrl(const QUrl &url) override final;
 
     /**
      * @brief defaultPaths
@@ -199,17 +137,14 @@ public slots:
     static QStringList sdDirs();
 
     /**
-     * @brief call
-     * @param tel
-     */
-    static void call(const QString &tel);
-
-    /**
      * @brief checkRunTimePermissions
      * @param permissions
      * @return
      */
     static bool checkRunTimePermissions(const QStringList &permissions);
+
+    bool hasKeyboard() override final;
+    bool hasMouse() override final;
 
 signals:
     /**

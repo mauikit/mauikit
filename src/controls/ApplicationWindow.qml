@@ -25,8 +25,7 @@ import QtGraphicalEffects 1.0
 import QtQuick.Window 2.12
 
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
-import org.kde.mauikit 1.1 as MauiLab
+import org.kde.mauikit 1.2 as Maui
 
 import "private" as Private
 
@@ -198,7 +197,7 @@ Window
         }
     }
 
-    MauiLab.Page
+    Maui.Page
     {
         id: _page
         anchors.fill: parent
@@ -212,7 +211,7 @@ Window
             active: Maui.App.enableCSD && Maui.App.leftWindowControls.length
             Layout.preferredWidth: active ? implicitWidth : 0
             Layout.fillHeight: true
-            sourceComponent: MauiLab.WindowControls
+            sourceComponent:  Maui.WindowControls
             {
                 order: Maui.App.leftWindowControls
             }
@@ -233,7 +232,6 @@ Window
             {
                 id: _mainMenu
                 modal: true
-                z: 999
                 width: Maui.Style.unit * 250
 
                 Loader
@@ -241,13 +239,12 @@ Window
                     id: _accountsMenuLoader
                     width: parent.width - (Maui.Style.space.medium*2)
                     anchors.horizontalCenter: parent.horizontalCenter
-
                     active: Maui.App.handleAccounts
                     sourceComponent: Maui.App.handleAccounts ?
-                    _accountsComponent : null
+                                         _accountsComponent : null
                 }
 
-                MenuSeparator {visible: _accountsMenuLoader.active}
+                //MenuSeparator {visible: _accountsMenuLoader.active}
 
                 Repeater
                 {
@@ -282,7 +279,7 @@ Window
             active: Maui.App.enableCSD && Maui.App.rightWindowControls.length
             Layout.preferredWidth: active ? implicitWidth : 0
             Layout.fillHeight: true
-            sourceComponent: MauiLab.WindowControls
+            sourceComponent:  Maui.WindowControls
             {
                 order:  Maui.App.rightWindowControls
             }
@@ -306,7 +303,7 @@ Window
         {
             id: _pageBackground
             color: Kirigami.Theme.backgroundColor
-            radius: root.visibility === Window.Maximized || !Maui.App.enableCSD ? 0 : Maui.App.theme.borderRadius
+            radius: root.visibility === Window.Maximized || !Maui.App.enableCSD ? 0 :Maui.Style.radiusV
         }
 
         layer.enabled: Maui.App.enableCSD
@@ -365,9 +362,9 @@ Window
             grabPermissions: TapHandler.TakeOverForbidden
             target: null
             onActiveChanged: if (active)
-            {
-                root.startSystemResize(Qt.LeftEdge | Qt.BottomEdge);
-            }
+                             {
+                                 root.startSystemResize(Qt.LeftEdge | Qt.BottomEdge);
+                             }
         }
     }
 
@@ -389,9 +386,9 @@ Window
             grabPermissions: TapHandler.TakeOverForbidden
             target: null
             onActiveChanged: if (active)
-            {
-                root.startSystemResize(Qt.RightEdge | Qt.BottomEdge);
-            }
+                             {
+                                 root.startSystemResize(Qt.RightEdge | Qt.BottomEdge);
+                             }
         }
     }
 
@@ -401,12 +398,12 @@ Window
 
         Behavior on opacity { NumberAnimation { duration: 150 } }
 
-        radius: Maui.App.enableCSD ? Maui.App.theme.borderRadius : 0
+        radius: _pageBackground.radius
     }
 
     Overlay.overlay.modeless: Rectangle
     {
-        radius: Maui.App.enableCSD ? Maui.App.theme.borderRadius : 0
+        radius: _pageBackground.radius
 
         color: Qt.rgba( root.Kirigami.Theme.backgroundColor.r,  root.Kirigami.Theme.backgroundColor.g,  root.Kirigami.Theme.backgroundColor.b, 0.7)
         Behavior on opacity { NumberAnimation { duration: 150 } }
@@ -426,33 +423,28 @@ Window
                 anchors.fill: parent
                 spacing: Maui.Style.space.medium
 
-                ListBrowser
+                Repeater
                 {
                     id: _accountsListing
-                    visible: _accountsListing.count > 0
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: Math.min(contentHeight, 300)
-                    spacing: Maui.Style.space.medium
-                    Kirigami.Theme.backgroundColor: "transparent"
-                    currentIndex: Maui.App.accounts.currentAccountIndex
 
-                    model:  Maui.BaseModel
+                    model: Maui.BaseModel
                     {
                         list: Maui.App.accounts
                     }
 
-                    background: null
-
                     delegate: Maui.ListBrowserDelegate
                     {
+                        visible: _accountsListing.count > 0
+                        Layout.fillWidth: true
+                        Kirigami.Theme.backgroundColor: "transparent"
+
+                        isCurrentItem: Maui.App.accounts.currentAccountIndex === index
                         iconSource: "amarok_artist"
                         iconSizeHint: Maui.Style.iconSizes.medium
                         label1.text: model.user
                         label2.text: model.server
                         width: _accountsListing.width
                         height: Maui.Style.rowHeight * 1.2
-                        leftPadding: Maui.Style.space.tiny
-                        rightPadding: Maui.Style.space.tiny
                         onClicked: Maui.App.accounts.currentAccountIndex = index
                     }
 
@@ -506,64 +498,64 @@ Window
         persistent: false
         verticalAlignment: Qt.AlignTop
         defaultButtons: _notify.cb !== null
-            rejectButton.visible: false
-            onAccepted:
+        rejectButton.visible: false
+        onAccepted:
+        {
+            if(_notify.cb)
             {
-                if(_notify.cb)
-                {
-                    _notify.cb()
-                    _notify.close()
-                }
+                _notify.cb()
+                _notify.close()
             }
+        }
 
-            page.padding: Maui.Style.space.medium
+        page.margins: Maui.Style.space.big
+        footBar.background: null
+        widthHint: 0.8
 
-            footBar.background: null
-
-            maxHeight: Math.max(Maui.Style.iconSizes.large + Maui.Style.space.huge, (_notifyTemplate.implicitHeight)) + Maui.Style.space.big + footBar.height
-            maxWidth: Kirigami.Settings.isMobile ? parent.width * 0.9 : Maui.Style.unit * 500
-            widthHint: 0.8
-
-            Timer
+        Timer
+        {
+            id: _notifyTimer
+            onTriggered:
             {
-                id: _notifyTimer
-                onTriggered:
+                if(_mouseArea.containsPress || _mouseArea.containsMouse)
                 {
-                    if(_mouseArea.containsPress || _mouseArea.containsMouse)
-                        return;
-
-                    _notify.close()
+                    _notifyTimer.restart();
+                    return
                 }
+
+                _notify.close()
             }
+        }
 
-            onClosed: _notifyTimer.stop()
+        onClosed: _notifyTimer.stop()
 
+        stack: MouseArea
+        {
+            id: _mouseArea
+            implicitHeight: _notifyTemplate.label1.implicitHeight + _notifyTemplate.label2.implicitHeight + Maui.Style.space.medium
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            hoverEnabled: true
             Maui.ListItemTemplate
             {
                 id: _notifyTemplate
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                iconSizeHint: Maui.Style.iconSizes.huge
+                spacing: Maui.Style.space.big
+                anchors.fill: parent
+
+                iconSizeHint: Maui.Style.iconSizes.big
                 label1.font.bold: true
                 label1.font.weight: Font.Bold
                 label1.font.pointSize: Maui.Style.fontSizes.big
                 iconSource: "dialog-warning"
-
-                MouseArea
-                {
-                    id: _mouseArea
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                    hoverEnabled: true
-                }
             }
+        }
 
-            function show(callback)
-            {
-                _notify.cb = callback || null
-                _notifyTimer.start()
-                _notify.open()
-            }
+        function show(callback)
+        {
+            _notify.cb = callback || null
+            _notifyTimer.start()
+            _notify.open()
+        }
     }
 
     Loader

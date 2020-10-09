@@ -96,7 +96,6 @@ Maui.Dialog
         inputMethodHints: Qt.ImhNoAutoUppercase
     }
 
-
     Maui.TextField
     {
         id: serverField

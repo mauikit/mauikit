@@ -44,7 +44,7 @@ Menu
     MenuItem
     {
         visible: !control.isExec && tagsDialog
-        text: i18n("Add Tags")
+        text: i18n("Tags")
         icon.name: "tag"
         onTriggered:
         {
@@ -100,20 +100,8 @@ Menu
             shareClicked(control.item)
             close()
         }
-    }
-    
-    MenuItem
-    {
-		visible: !control.isExec && previewer
-		text: i18n("Preview")
-		icon.name: "view-preview"
-		onTriggered:
-		{
-			previewer.show(currentFMModel, control.index)
-			close()
-		}
-	}
-    
+    }   
+
     MenuItem
     {
         visible: !control.isExec && openWithDialog	

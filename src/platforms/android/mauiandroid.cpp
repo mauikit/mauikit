@@ -20,15 +20,14 @@
 #include "mauiandroid.h"
 #include <QColor>
 #include <QDebug>
-#include <QDomDocument>
 #include <QException>
 #include <QFile>
 #include <QImage>
 #include <QMimeData>
 #include <QMimeDatabase>
 #include <QUrl>
-
-#include "utils.h"
+#include <QFileInfo>
+#include <QCoreApplication>
 
 #include <android/bitmap.h>
 // WindowManager.LayoutParams
@@ -52,11 +51,7 @@ public:
 };
 
 MAUIAndroid::MAUIAndroid(QObject *parent)
-    : QObject(parent)
-{
-}
-
-MAUIAndroid::~MAUIAndroid()
+    : AbstractPlatform(parent)
 {
 }
 
@@ -65,151 +60,6 @@ QString MAUIAndroid::getAccounts()
     QAndroidJniObject str = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union", "getAccounts", "(Landroid/content/Context;)Ljava/lang/String;", QtAndroid::androidActivity().object<jobject>());
 
     return str.toString();
-}
-
-QVariantList MAUIAndroid::getCallLogs()
-{
-    QVariantList res;
-    QAndroidJniObject logsObj = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union", "callLogs", "(Landroid/content/Context;)Ljava/util/List;", QtAndroid::androidActivity().object<jobject>());
-
-    return MAUIAndroid::transform(logsObj);
-}
-
-QImage toImage(const QAndroidJniObject &bitmap)
-{
-    QAndroidJniEnvironment env;
-    AndroidBitmapInfo info;
-    if (AndroidBitmap_getInfo(env, bitmap.object(), &info) != ANDROID_BITMAP_RESULT_SUCCESS)
-        return QImage();
-
-    QImage::Format format;
-    switch (info.format) {
-    case ANDROID_BITMAP_FORMAT_RGBA_8888:
-        format = QImage::Format_RGBA8888;
-        break;
-    case ANDROID_BITMAP_FORMAT_RGB_565:
-        format = QImage::Format_RGB16;
-        break;
-    case ANDROID_BITMAP_FORMAT_RGBA_4444:
-        format = QImage::Format_ARGB4444_Premultiplied;
-        break;
-    case ANDROID_BITMAP_FORMAT_A_8:
-        format = QImage::Format_Alpha8;
-        break;
-    default:
-        return QImage();
-    }
-
-    void *pixels;
-    if (AndroidBitmap_lockPixels(env, bitmap.object(), &pixels) != ANDROID_BITMAP_RESULT_SUCCESS)
-        return QImage();
-
-    QImage image(info.width, info.height, format);
-
-    if (info.stride == uint32_t(image.bytesPerLine())) {
-        memcpy((void *)image.constBits(), pixels, info.stride * info.height);
-    } else {
-        uchar *bmpPtr = static_cast<uchar *>(pixels);
-        const unsigned width = std::min(info.width, (uint)image.width());
-        const unsigned height = std::min(info.height, (uint)image.height());
-        for (unsigned y = 0; y < height; y++, bmpPtr += info.stride)
-            memcpy((void *)image.constScanLine(y), bmpPtr, width);
-    }
-
-    if (AndroidBitmap_unlockPixels(env, bitmap.object()) != ANDROID_BITMAP_RESULT_SUCCESS)
-        return QImage();
-
-    return image;
-}
-
-QVariantList MAUIAndroid::getContacts()
-{
-    QVariantList res;
-
-    QAndroidJniObject contactsObj = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/Union", "fetchContacts", "(Landroid/content/Context;)Ljava/util/List;", QtAndroid::androidActivity().object<jobject>());
-
-    return MAUIAndroid::transform(contactsObj);
-}
-
-QVariantMap MAUIAndroid::getContact(const QString &id)
-{
-    QAndroidJniObject contactObj = QAndroidJniObject::callStaticObjectMethod(
-        "com/kde/maui/tools/Union", "getContact", "(Landroid/content/Context;Ljava/lang/String;)Ljava/util/HashMap;", QtAndroid::androidActivity().object<jobject>(), QAndroidJniObject::fromString(id).object<jstring>());
-
-    return MAUIAndroid::createVariantMap(contactObj.object<jobject>());
-}
-
-void MAUIAndroid::addContact(const QString &name,
-                             const QString &tel,
-                             const QString &tel2,
-                             const QString &tel3,
-                             const QString &email,
-                             const QString &title,
-                             const QString &org,
-                             const QString &photo,
-                             const QString &account,
-                             const QString &accountType)
-{
-    qDebug() << "Adding new contact to android";
-    QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/Union",
-                                              "addContact",
-                                              "(Landroid/content/Context;"
-                                              "Ljava/lang/String;"
-                                              "Ljava/lang/String;"
-                                              "Ljava/lang/String;"
-                                              "Ljava/lang/String;"
-                                              "Ljava/lang/String;"
-                                              "Ljava/lang/String;"
-                                              "Ljava/lang/String;"
-                                              "Ljava/lang/String;"
-                                              "Ljava/lang/String;"
-                                              "Ljava/lang/String;)V",
-                                              QtAndroid::androidActivity().object<jobject>(),
-                                              QAndroidJniObject::fromString(name).object<jstring>(),
-                                              QAndroidJniObject::fromString(tel).object<jstring>(),
-                                              QAndroidJniObject::fromString(tel2).object<jstring>(),
-                                              QAndroidJniObject::fromString(tel3).object<jstring>(),
-                                              QAndroidJniObject::fromString(email).object<jstring>(),
-                                              QAndroidJniObject::fromString(title).object<jstring>(),
-                                              QAndroidJniObject::fromString(org).object<jstring>(),
-                                              QAndroidJniObject::fromString(photo).object<jstring>(),
-                                              QAndroidJniObject::fromString(account).object<jstring>(),
-                                              QAndroidJniObject::fromString(accountType).object<jstring>());
-}
-
-void MAUIAndroid::updateContact(const QString &id, const QString &field, const QString &value)
-{
-    QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/Union",
-                                              "updateContact",
-                                              "(Landroid/content/Context;"
-                                              "Ljava/lang/String;"
-                                              "Ljava/lang/String;"
-                                              "Ljava/lang/String;)V",
-                                              QtAndroid::androidActivity().object<jobject>(),
-                                              QAndroidJniObject::fromString(id).object<jstring>(),
-                                              QAndroidJniObject::fromString(field).object<jstring>(),
-                                              QAndroidJniObject::fromString(value).object<jstring>());
-}
-
-void MAUIAndroid::call(const QString &tel)
-{
-    QAndroidJniEnvironment _env;
-    QAndroidJniObject activity = QAndroidJniObject::callStaticObjectMethod("org/qtproject/qt5/android/QtNative", "activity", "()Landroid/app/Activity;"); // activity is valid
-    if (_env->ExceptionCheck()) {
-        _env->ExceptionClear();
-        throw InterfaceConnFailedException();
-    }
-    if (activity.isValid()) {
-        qDebug() << "trying to call from senitents" << tel;
-
-        QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/SendIntent", "call", "(Landroid/app/Activity;Ljava/lang/String;)V", activity.object<jobject>(), QAndroidJniObject::fromString(tel).object<jstring>());
-
-        if (_env->ExceptionCheck()) {
-            _env->ExceptionClear();
-            throw InterfaceConnFailedException();
-        }
-    } else
-        throw InterfaceConnFailedException();
 }
 
 static QAndroidJniObject getAndroidWindow()
@@ -256,6 +106,11 @@ void MAUIAndroid::navBarColor(const QString &bg, const bool &light)
     });
 }
 
+void MAUIAndroid::shareFiles(const QList<QUrl> &urls)
+{
+
+}
+
 void MAUIAndroid::shareDialog(const QUrl &url)
 {
     qDebug() << "trying to share dialog";
@@ -277,7 +132,7 @@ void MAUIAndroid::shareDialog(const QUrl &url)
                                                   activity.object<jobject>(),
                                                   QAndroidJniObject::fromString(url.toLocalFile()).object<jstring>(),
                                                   QAndroidJniObject::fromString(mimeType).object<jstring>(),
-                                                  QAndroidJniObject::fromString(QString("%1.fileprovider").arg(UTIL::app->organizationDomain())).object<jstring>());
+                                                  QAndroidJniObject::fromString(QString("%1.fileprovider").arg(qApp->organizationDomain())).object<jstring>());
 
         if (_env->ExceptionCheck()) {
             qDebug() << "trying to share dialog << exception";
@@ -380,7 +235,7 @@ void MAUIAndroid::openUrl(const QUrl &url)
                                                   "(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;)V",
                                                   activity.object<jobject>(),
                                                   QAndroidJniObject::fromString(url.toLocalFile()).object<jstring>(),
-                                                  QAndroidJniObject::fromString(QString("%1.fileprovider").arg(UTIL::app->organizationDomain())).object<jstring>());
+                                                  QAndroidJniObject::fromString(QString("%1.fileprovider").arg(qApp->organizationDomain())).object<jstring>());
 
         if (_env->ExceptionCheck()) {
             _env->ExceptionClear();
@@ -421,108 +276,16 @@ QStringList MAUIAndroid::sdDirs()
     return res;
 }
 
-QImage MAUIAndroid::contactPhoto(const QString &id)
-{
-    QImage photo;
-    QAndroidJniObject bitmap = QAndroidJniObject::callStaticObjectMethod(
-        "com/kde/maui/tools/Union", "loadContactPhoto", "(Landroid/content/Context;Ljava/lang/String;)Landroid/graphics/Bitmap;", QtAndroid::androidActivity().object<jobject>(), QAndroidJniObject::fromString(id).object<jstring>());
-    if (bitmap != NULL)
-        photo = toImage(bitmap);
+//void MAUIAndroid::handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data)
+//{
+//    qDebug() << "ACTIVITY RESULTS";
+//    jint RESULT_OK = QAndroidJniObject::getStaticField<jint>("android/app/Activity", "RESULT_OK");
 
-    return photo;
-}
-
-void MAUIAndroid::setAppIcons(const QString &lowDPI, const QString &mediumDPI, const QString &highDPI)
-{
-}
-
-void MAUIAndroid::setAppInfo(const QString &appName, const QString &version, const QString &uri)
-{
-    QDomDocument doc("mydocument");
-    QFile file(":/assets/AndroidManifest.xml");
-
-    if (!file.open(QIODevice::ReadOnly)) {
-        qDebug("Cannot open the file");
-        return;
-    }
-
-    // Parse file
-    if (!doc.setContent(&file)) {
-        qDebug("Cannot parse the content");
-        file.close();
-        return;
-    }
-    file.close();
-
-    // Modify content
-    QDomNodeList manifest = doc.elementsByTagName("manifest");
-    if (manifest.size() < 1) {
-        qDebug("Cannot find manifest");
-        return;
-    }
-
-    // Manifest//
-    QDomElement root = manifest.at(0).toElement();
-    root.setAttribute("package", uri);
-    root.setAttribute("android:versionName", version);
-
-    // Application//
-    auto applicationNode = root.toElement().elementsByTagName("application");
-    if (applicationNode.size() < 1) {
-        qDebug("Cannot find application node in manifest");
-        return;
-    }
-
-    auto application = applicationNode.at(0).toElement();
-    application.setAttribute("android:label", appName);
-
-    // Activity //
-    auto activityNode = application.toElement().elementsByTagName("activity");
-    if (activityNode.size() < 1) {
-        qDebug("Cannot find activity node in manifest");
-        return;
-    }
-
-    auto activity = activityNode.at(0).toElement();
-    activity.setAttribute("android:label", appName);
-
-    // Service //
-    auto serviceNode = application.toElement().elementsByTagName("service");
-    if (serviceNode.size() < 1) {
-        qDebug("Cannot find service node in manifest");
-        return;
-    }
-
-    auto service = activityNode.at(0).toElement();
-    auto serviceMetadataNode = service.elementsByTagName("meta-data");
-    if (serviceMetadataNode.size() < 1) {
-        qDebug("Cannot find service metadata node in manifest");
-        return;
-    }
-
-    auto serviceMetadata = serviceMetadataNode.at(1).toElement();
-    serviceMetadata.setAttribute("android:value", appName);
-
-    if (!file.open(QIODevice::Truncate | QIODevice::WriteOnly)) {
-        qDebug("Basically, now we lost content of a file");
-        return;
-    }
-
-    QByteArray xml = doc.toByteArray();
-    file.write(xml);
-    file.close();
-}
-
-void MAUIAndroid::handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data)
-{
-    qDebug() << "ACTIVITY RESULTS";
-    jint RESULT_OK = QAndroidJniObject::getStaticField<jint>("android/app/Activity", "RESULT_OK");
-
-    if (receiverRequestCode == 42 && resultCode == RESULT_OK) {
-        QString url = data.callObjectMethod("getData", "()Landroid/net/Uri;").callObjectMethod("getPath", "()Ljava/lang/String;").toString();
-        emit folderPicked(url);
-    }
-}
+//    if (receiverRequestCode == 42 && resultCode == RESULT_OK) {
+//        QString url = data.callObjectMethod("getData", "()Landroid/net/Uri;").callObjectMethod("getPath", "()Ljava/lang/String;").toString();
+//        emit folderPicked(url);
+//    }
+//}
 
 void MAUIAndroid::fileChooser()
 {
@@ -681,4 +444,40 @@ bool MAUIAndroid::checkRunTimePermissions(const QStringList &permissions)
     //                                              "(Landroid/app/Activity;)V",
     //                                              QtAndroid::androidActivity().object<jobject>());
     //    return (true);
+}
+
+bool MAUIAndroid::hasKeyboard()
+{
+
+    QAndroidJniObject context =QtAndroid::androidContext().object<jobject>();
+
+    if (context.isValid()) {
+
+        QAndroidJniObject resources = context.callObjectMethod("getResources", "()Landroid/content/res/Resources;");
+        QAndroidJniObject config = resources.callObjectMethod("getConfiguration", "()Landroid/content/res/Configuration;");
+        int value = config.getField<jint>("keyboard");
+//        QVariant v = value.toString();
+        qDebug() << "KEYBOARD" << value;
+
+        return value == 2 || value == 3; // KEYBOARD_12KEY || KEYBOARD_QWERTY
+
+    } else
+        throw InterfaceConnFailedException();
+}
+
+bool MAUIAndroid::hasMouse()
+{
+    return false;
+}
+
+void MAUIAndroid::handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data)
+{
+    qDebug() << "ACTIVITY RESULTS" << receiverRequestCode;
+    emit this->hasKeyboardChanged();
+    jint RESULT_OK = QAndroidJniObject::getStaticField<jint>("android/app/Activity", "RESULT_OK");
+
+    if (receiverRequestCode == 42 && resultCode == RESULT_OK) {
+        QString url = data.callObjectMethod("getData", "()Landroid/net/Uri;").callObjectMethod("getPath", "()Ljava/lang/String;").toString();
+        emit folderPicked(url);
+    }
 }

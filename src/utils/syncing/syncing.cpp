@@ -34,7 +34,7 @@ void Syncing::setCredentials(const QString &server, const QString &user, const Q
 
 void Syncing::listDirOutputHandler(WebDAVReply *reply, const QStringList &filters)
 {
-    connect(reply, &WebDAVReply::listDirResponse, [=](QNetworkReply *listDirReply, QList<WebDAVItem> items) {
+    connect(reply, &WebDAVReply::listDirResponse, [=](QNetworkReply *, QList<WebDAVItem> items) {
         // 		qDebug() << "URL :" << listDirReply->url();
         // 		qDebug() << "Received List of" << items.length() << "items";
         // 		qDebug() << endl << "---------------------------------------";

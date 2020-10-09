@@ -184,7 +184,7 @@ public:
      * @param limit
      * Maximum limit of results
      * @param mimeType
-     * Filter by mimetype, for example: "image/*" or "image/png"
+     * Filter by mimetype, for example: "image/\*" or "image/png"
      * @param modifier
      * A callback function that sends as an argument a reference to the current item being retrieved, which can be modified, and expects a boolean value to be returned to decide if such item should be added to the model or not
      * @return

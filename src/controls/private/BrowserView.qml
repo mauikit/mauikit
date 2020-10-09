@@ -10,6 +10,8 @@ Maui.Page
     id: control
     title: currentFMList.pathName
     property url path 
+    property bool selectionMode : false
+    
     onPathChanged:
     {
         if(control.currentView) 
@@ -53,27 +55,7 @@ Maui.Page
             currentView.forceActiveFocus()
         }
     }
-    
-    function filterSelectedItems(path)
-    {     
-        if(selectionBar && selectionBar.count > 0 && selectionBar.contains(path))
-        {
-            const uris = selectionBar.uris
-            var res = []
-            for(var i in uris)
-            {
-                if(Maui.FM.parentDir(uris[i]) == control.path)
-                {
-                    res.push(uris[i])                    
-                } 
-            }  
-            
-            return res.join("\n")  
-        }        
-        
-        return path
-    }
-    
+
     function groupBy()
 	{
 		var prop = ""
@@ -96,7 +78,7 @@ Maui.Page
 				break;
 			case Maui.FMList.MODIFIED:
 				prop = "modified"
-				break;
+                break;
 		}
 		
 		if(!prop)
@@ -183,6 +165,7 @@ Maui.Page
         filters: settings.filters
         sortBy: settings.sortBy
         hidden: settings.showHiddenFiles
+        foldersFirst: settings.foldersFirst
     }
     
     Component
@@ -192,14 +175,13 @@ Maui.Page
         Maui.ListBrowser
         {
             id: _listViewBrowser
+            objectName: "FM ListBrowser"
             property alias currentFMList : _browserModel.list
             property alias currentFMModel : _browserModel
-
-            topMargin: Maui.Style.contentMargins
-            checkable: selectionMode
+            selectionMode: control.selectionMode
+            checkable: control.selectionMode
             enableLassoSelection: true
-            spacing: Kirigami.Settings.isMobile ? Maui.Style.space.small : Maui.Style.space.medium
-            
+
             BrowserHolder
             {
                 id: _holder
@@ -228,7 +210,7 @@ Maui.Page
                 width: parent ? parent.width : 0
                 height: Maui.Style.toolBarHeightAlt
                 
-                label: String(section).toUpperCase()
+                label: _listViewBrowser.section.property == "date" || _listViewBrowser.section.property === "modified" ?  Qt.formatDateTime(new Date(section), "d MMM yyyy") : section
                 labelTxt.font.pointSize: Maui.Style.fontSizes.big
                 
                 isSection: true
@@ -236,13 +218,16 @@ Maui.Page
             
             delegate: Maui.ListBrowserDelegate
             {
-                id: delegate
-                width: parent ? parent.width : 0
+                id: delegate    
+                readonly property string path : model.path
                 
-                padding: 0
-                leftPadding: Maui.Style.space.small
-                rightPadding: leftPadding
+                width: ListView.view.width
+                iconSource: model.icon
                 
+                label1.text: model.label ? model.label : ""
+                label3.text : model.mime ? (model.mime === "inode/directory" ? (model.count ? model.count + i18n(" items") : "") : Maui.FM.formatSize(model.size)) : ""
+                label4.text: model.modified ? Maui.FM.formatDate(model.modified, "MM/dd/yyyy") : "" 
+		
                 iconSizeHint : Maui.Style.iconSizes.medium
                 imageSizeHint : height * 0.8
                 
@@ -257,7 +242,7 @@ Maui.Page
                 Drag.keys: ["text/uri-list"]
                 Drag.mimeData: Drag.active ? 
                 {
-                    "text/uri-list": control.filterSelectedItems(model.path) 
+                    "text/uri-list": filterSelection(control.path, model.path).join("\n")
                 } : {}
                 
                 Item
@@ -323,6 +308,14 @@ Maui.Page
                     _dropMenu.popup()
                 }
                 
+                ListView.onRemove:
+                {
+                    if(selectionBar && !Maui.FM.fileExists(delegate.path))
+                    {
+                        selectionBar.removeAtUri(delegate.path)
+                    }
+                }
+                
                 Connections
                 {
                     target: selectionBar
@@ -355,13 +348,15 @@ Maui.Page
         Maui.GridBrowser
         {
             id: _gridViewBrowser
+            objectName: "FM GridBrowser"
+            
             property alias currentFMList : _browserModel.list
             property alias currentFMModel : _browserModel
             itemSize : thumbnailsSize + Maui.Style.space.big
             itemHeight: itemSize * 1.3
-            checkable: selectionMode
+            checkable: control.selectionMode
             enableLassoSelection: true
-            
+            selectionMode: control.selectionMode
             BrowserHolder
             {
                 id: _holder
@@ -385,23 +380,32 @@ Maui.Page
             
             delegate: Item
             {
+                
                 property bool isCurrentItem : GridView.isCurrentItem
                 height: _gridViewBrowser.cellHeight
                 width: _gridViewBrowser.cellWidth
-
+                
+                GridView.onRemove:
+                {
+                    if(selectionBar && !Maui.FM.fileExists(delegate.path))
+                    {
+                        selectionBar.removeAtUri(delegate.path)
+                    }
+                }
+                
                 Maui.GridBrowserDelegate
                 {
                     id: delegate
-                    
+                    readonly property string path : model.path
+
                     iconSizeHint: height * 0.5
                     imageSource: settings.showThumbnails ? model.thumbnail : ""
                     template.fillMode: Image.PreserveAspectFit
-//                    template.imageHeight: height
-//                    template.imageWidth: width
-
-                    anchors.centerIn: parent
-                    height: _gridViewBrowser.cellHeight - 15
-                    width: _gridViewBrowser.itemSize - 20
+                    iconSource: model.icon
+                    label1.text: model.label
+                    
+                    anchors.fill: parent
+                    anchors.margins: Maui.Style.space.big
                     padding: Maui.Style.space.tiny
                     isCurrentItem: parent.isCurrentItem
                     tooltipText: model.path
@@ -413,7 +417,7 @@ Maui.Page
                     Drag.keys: ["text/uri-list"]
                     Drag.mimeData: Drag.active ? 
                     {
-                        "text/uri-list": control.filterSelectedItems(model.path) 
+                        "text/uri-list":  filterSelection(control.path, model.path).join("\n")
                     } : {}
                     
                     Maui.Badge
@@ -423,6 +427,17 @@ Maui.Page
                         anchors.bottom: parent.bottom
                         anchors.bottomMargin: Maui.Style.space.big
                         visible: (model.issymlink == true) || (model.issymlink == "true")
+                    }
+                    
+                    template.content: Label
+                    {
+                        visible: delegate.height > 100
+                        opacity: 0.5
+                        color: Kirigami.Theme.textColor
+                        font.pointSize: Maui.Style.fontSizes.tiny
+                        horizontalAlignment: Qt.AlignHCenter
+                        Layout.fillWidth: true
+                        text: model.mime ? (model.mime === "inode/directory" ? (model.count ? model.count + i18n(" items") : "") : Maui.FM.formatSize(model.size)) : ""
                     }
                     
                     onClicked:
@@ -469,8 +484,7 @@ Maui.Page
                     {
                         _dropMenu.urls = drop.urls.join(",")
                         _dropMenu.target = model.path
-                        _dropMenu.popup()
-                        
+                        _dropMenu.popup()                        
                     }
                     
                     Connections
@@ -510,7 +524,7 @@ Maui.Page
             property Maui.BaseModel currentFMModel
             property int currentIndex
 
-//            property Flickable flickable : _millerColumns.currentItem.list
+            property Flickable flickable : _millerColumns.currentItem.list
             
             signal itemClicked(int index)
             signal itemDoubleClicked(int index)
@@ -530,21 +544,13 @@ Maui.Page
 			contentWidth: _millerColumns.contentWidth
 
             ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-            //			ScrollBar.horizontal: ScrollBar
-//			{
-//                id: horizontalScrollBar
-//                height: visible ? implicitHeight: 0
-//                parent: _millerControl
-//                x: 0
-//                y: _millerControl.height - height
-//                width: _millerControl.width
-//                active: _millerControl.ScrollBar.horizontal || _millerControl.ScrollBar.horizontal.active
-//            }
-            
+
             ListView
             {
                 id: _millerColumns
                 anchors.fill: parent
+                anchors.bottomMargin: parent.ScrollBar.horizontal.visible ? parent.ScrollBar.horizontal.height : 0
+
                 boundsBehavior: !Maui.Handy.isTouch? Flickable.StopAtBounds : Flickable.OvershootBounds
                 
                 keyNavigationEnabled: true
@@ -610,28 +616,17 @@ Maui.Page
                         z: 999
                     }
                     
-                    Maui.FMList
-                    {
-                        id: _millersFMList
-                        path: model.path
-                        onlyDirs: settings.onlyDirs
-                        filterType: settings.filterType
-                        filters: settings.filters
-                        sortBy: settings.sortBy
-                        hidden: settings.showHiddenFiles
-                    }
-                    
                     Maui.ListBrowser
                     {
                         id: _millerListView
                         anchors.fill: parent
-                        topMargin: Maui.Style.contentMargins
-                        checkable: selectionMode
+                        selectionMode: control.selectionMode
+                        checkable: control.selectionMode
                         onKeyPress: _millerControl.keyPress(event)
                         currentIndex : 0
                         onCurrentIndexChanged: _millerControl.currentIndex = currentIndex
                         enableLassoSelection: true
-                        
+
                         BrowserHolder
                         {
                             id: _holder
@@ -650,7 +645,7 @@ Maui.Page
                             width: parent.width
                             height: Maui.Style.toolBarHeightAlt
                             
-                            label: String(section).toUpperCase()
+                            label: section.property == "date" || section.property === "modified" ?  Qt.formatDateTime(new Date(section), "d MMM yyyy") : section
                             labelTxt.font.pointSize: Maui.Style.fontSizes.big
                             
                             isSection: true
@@ -677,7 +672,17 @@ Maui.Page
                         model: Maui.BaseModel
                         {
                             id: _millersFMModel
-                            list: _millersFMList
+                            list: Maui.FMList
+                            {
+                                id: _millersFMList
+                                path: model.path
+                                onlyDirs: settings.onlyDirs
+                                filterType: settings.filterType
+                                filters: settings.filters
+                                sortBy: settings.sortBy
+                                hidden: settings.showHiddenFiles
+                                foldersFirst: settings.foldersFirst
+                            }
                             filter: control.filter
                             recursiveFilteringEnabled: true
                             sortCaseSensitivity: Qt.CaseInsensitive
@@ -687,12 +692,17 @@ Maui.Page
                         delegate: Maui.ListBrowserDelegate
                         {
                             id: delegate
-                            width: parent.width
+                            readonly property string path : model.path
+
+                            width: ListView.view.width
                             height: implicitHeight
-                            padding: 0                            
-                            leftPadding: Maui.Style.space.small
-                            rightPadding: leftPadding
                             
+                            iconSource: model.icon
+                            
+                            label1.text: model.label ? model.label : ""
+                            label3.text : model.mime ? (model.mime === "inode/directory" ? (model.count ? model.count + i18n(" items") : "") : Maui.FM.formatSize(model.size)) : ""
+                            label4.text: model.modified ? Maui.FM.formatDate(model.modified, "MM/dd/yyyy") : "" 
+                                                        
                             tooltipText: model.path
                             
                             iconSizeHint : Maui.Style.iconSizes.medium
@@ -707,7 +717,7 @@ Maui.Page
                             Drag.keys: ["text/uri-list"]
                             Drag.mimeData: Drag.active ? 
                             {
-                                "text/uri-list": control.filterSelectedItems(model.path) 
+                                "text/uri-list": filterSelection(control.path, model.path).join("\n")
                             } : {}
                             
                             Item
@@ -723,6 +733,14 @@ Maui.Page
                                     width: Maui.Style.iconSizes.small
                                     anchors.centerIn: parent
                                     color: label1.color
+                                }
+                            }
+                            
+                            ListView.onRemove:
+                            {
+                                if(selectionBar && !Maui.FM.fileExists(delegate.path))
+                                {
+                                    selectionBar.removeAtUri(delegate.path)
                                 }
                             }
                             

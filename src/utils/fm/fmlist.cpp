@@ -41,13 +41,14 @@ FMList::FMList(QObject *parent)
     , fm(new FM(this))
     , watcher(new QFileSystemWatcher(this))
 {
+    qRegisterMetaType<FMList*>("const FMList*"); //this is needed for QML to know of FMList in the search method
     connect(this->fm, &FM::cloudServerContentReady, [&](const FMH::MODEL_LIST &list, const QUrl &url) {
         if (this->path == url) {
             this->assignList(list);
         }
     });
 
-    connect(this->fm, &FM::pathContentReady, [&](QUrl path) {
+    connect(this->fm, &FM::pathContentReady, [&](QUrl) {
         emit this->preListChanged();
         this->sortList();
         this->setStatus({STATUS_CODE::READY, this->list.isEmpty() ? "Nothing here!" : "", this->list.isEmpty() ? "This place seems to be empty" : "", this->list.isEmpty() ? "folder-add" : "", this->list.isEmpty(), true});
@@ -485,14 +486,6 @@ void FMList::setOnlyDirs(const bool &state)
     this->reset();
 }
 
-QVariantMap FMList::get(const int &index) const
-{
-    if (index >= this->list.size() || index < 0)
-        return QVariantMap();
-
-    return FMH::toMap(this->list.at(this->mappedIndex(index)));
-}
-
 void FMList::refresh()
 {
     emit this->pathChanged();
@@ -648,7 +641,7 @@ void FMList::search(const QString &query, const QUrl &path, const bool &hidden, 
 
     if (!path.isLocalFile()) {
         qWarning() << "URL recived is not a local file. So search will only filter the content" << path;
-        this->filterContent(query, path, hidden, onlyDirs, filters);
+        this->filterContent(query, path);
         return;
     }
 
@@ -671,7 +664,7 @@ void FMList::search(const QString &query, const QUrl &path, const bool &hidden, 
     watcher->setFuture(t1);
 }
 
-void FMList::filterContent(const QString &query, const QUrl &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)
+void FMList::filterContent(const QString &query, const QUrl &path)
 {
     if (this->list.isEmpty()) {
         qDebug() << "Can not filter content. List is empty";
@@ -694,10 +687,6 @@ void FMList::filterContent(const QString &query, const QUrl &path, const bool &h
 
         for (const auto &item : this->list) {
             if (item[FMH::MODEL_KEY::LABEL].contains(query, Qt::CaseInsensitive) || item[FMH::MODEL_KEY::SUFFIX].contains(query, Qt::CaseInsensitive) || item[FMH::MODEL_KEY::MIME].contains(query, Qt::CaseInsensitive)) {
-                if (onlyDirs && item[FMH::MODEL_KEY::IS_DIR] == "true") {
-                    m_content << item;
-                    continue;
-                }
 
                 m_content << item;
             }

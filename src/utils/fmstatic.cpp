@@ -1,11 +1,10 @@
 #include "fmstatic.h"
 #include "utils.h"
+#include "platform.h"
+
 #include <QDesktopServices>
 
-#if defined(Q_OS_ANDROID)
-#include "platforms/android/mauiandroid.h"
-#elif defined Q_OS_LINUX
-#include "platforms/kde/mauikde.h"
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
 #include <KCoreDirLister>
 #include <KFileItem>
 #include <KFilePlacesModel>
@@ -14,7 +13,6 @@
 #include <KIO/EmptyTrashJob>
 #include <KIO/MkdirJob>
 #include <KIO/SimpleJob>
-#include <KRun>
 #include <QIcon>
 #endif
 
@@ -90,9 +88,9 @@ FMH::MODEL_LIST FMStatic::getDevices()
     return drives;
 }
 
-QVariantMap FMStatic::getDirInfo(const QUrl &path, const QString &type)
+QVariantMap FMStatic::getDirInfo(const QUrl &path)
 {
-    return FMH::getDirInfo(path, type);
+    return FMH::getDirInfo(path);
 }
 
 QVariantMap FMStatic::getFileInfo(const QUrl &path)
@@ -215,7 +213,7 @@ static bool copyRecursively(QString sourceFolder, QString destFolder)
 }
 #endif
 
-bool FMStatic::copy(const QList<QUrl> &urls, const QUrl &destinationDir, const bool &overWriteDirectory)
+bool FMStatic::copy(const QList<QUrl> &urls, const QUrl &destinationDir)
 {
 #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
     for (const auto &url : urls) {
@@ -397,15 +395,17 @@ bool FMStatic::createSymlink(const QUrl &path, const QUrl &where)
 
 bool FMStatic::openUrl(const QUrl &url)
 {
-#ifdef Q_OS_ANDROID
-    MAUIAndroid::openUrl(url.toString());
+    Platform::instance()->openUrl(url);
+//#ifdef Q_OS_ANDROID
+//    MAUIAndroid::openUrl(url.toString());
+//    return true;
+//#elif defined Q_OS_LINUX
+//    //     return QDesktopServices::openUrl(QUrl::fromUserInput(url));
+//    return KRun::runUrl(url, FMH::getFileInfoModel(url)[FMH::MODEL_KEY::MIME], nullptr, false, KRun::RunFlag::DeleteTemporaryFiles);
+//#elif defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
+//    return QDesktopServices::openUrl(url);
+//#endif
     return true;
-#elif defined Q_OS_LINUX
-    //     return QDesktopServices::openUrl(QUrl::fromUserInput(url));
-    return KRun::runUrl(url, FMH::getFileInfoModel(url)[FMH::MODEL_KEY::MIME], nullptr, false, KRun::RunFlag::DeleteTemporaryFiles);
-#elif defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
-    return QDesktopServices::openUrl(url);
-#endif
 }
 
 
@@ -559,7 +559,13 @@ QList<QUrl> FMStatic::getTagUrls(const QString &tag, const QStringList &filters,
 {
     QList<QUrl> urls;
 #ifdef COMPONENT_TAGGING
-    for (const auto &data : Tagging::getInstance()->getUrls(tag, strict, limit, mime, [filters](QVariantMap &item) -> bool { return filters.isEmpty() ? true : doNameFilter(FMH::mapValue(item, FMH::MODEL_KEY::URL), filters); })) {
+
+    std::function<bool(QVariantMap &item)> filter = nullptr;
+
+    if(!filters.isEmpty())
+        filter = [filters](QVariantMap &item) -> bool { return doNameFilter(FMH::mapValue(item, FMH::MODEL_KEY::URL), filters); };
+
+    for (const auto &data : Tagging::getInstance()->getUrls(tag, strict, limit, mime, filter)) {
         const auto url = QUrl(data.toMap()[FMH::MODEL_NAME[FMH::MODEL_KEY::URL]].toString());
         if (url.isLocalFile() && !FMH::fileExists(url))
             continue;

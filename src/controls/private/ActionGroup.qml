@@ -52,7 +52,7 @@ Item
         Kirigami.Theme.highlightColor: modelData.Kirigami.Theme.highlightColor
         icon.name: modelData.MauiLab.AppView.iconName
         text: modelData.MauiLab.AppView.title 
-        display: checked ? ToolButton.TextBesideIcon : ToolButton.IconOnly
+        display: checked ? (!isWide ? ToolButton.IconOnly : ToolButton.TextBesideIcon) : ToolButton.IconOnly
         
         onClicked: 
         {

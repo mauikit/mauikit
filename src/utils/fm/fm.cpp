@@ -36,7 +36,7 @@
 #if defined(Q_OS_ANDROID)
 #include "platforms/android/mauiandroid.h"
 #elif defined Q_OS_LINUX
-#include "platforms/kde/mauikde.h"
+#include "platforms/linux/mauilinux.h"
 #include <KCoreDirLister>
 #include <KFileItem>
 #include <KFilePlacesModel>
@@ -48,35 +48,38 @@
 #endif
 
 #if defined(Q_OS_ANDROID) || defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#include "fileloader.h"
+
 QDirLister::QDirLister(QObject *parent)
-    : QObject(parent)
+    : QObject(parent) , m_loader(new FMH::FileLoader)
 {
+    m_loader->setBatchCount(20);
+    m_loader->informer = &FMH::getFileInfoModel;
+    connect(m_loader, &FMH::FileLoader::itemsReady, [this](FMH::MODEL_LIST items, QList<QUrl> urls)
+    {
+        emit this->itemsReady(items, urls.first());
+    });
+
+    connect(m_loader, &FMH::FileLoader::itemReady, [this](FMH::MODEL item, QList<QUrl> urls)
+    {
+        emit this->itemReady(item, urls.first());
+    });
 }
 
 bool QDirLister::openUrl(QUrl url)
 {
-    qDebug() << "GET FILES <<" << m_nameFilters.split(" ");
-    FMH::MODEL_LIST content;
-
     if (FMStatic::isDir(url)) {
-        QDir::Filters dirFilter;
 
-        dirFilter = (m_dirOnly ? QDir::AllDirs | QDir::NoDotDot | QDir::NoDot : QDir::Files | QDir::AllDirs | QDir::NoDotDot | QDir::NoDot);
+        QDir::Filters dirFilter = (m_dirOnly ? QDir::AllDirs | QDir::NoDotDot | QDir::NoDot : QDir::Files | QDir::AllDirs | QDir::NoDotDot | QDir::NoDot);
 
         if (m_showDotFiles)
             dirFilter = dirFilter | QDir::Hidden | QDir::System;
 
-        QDirIterator it(url.toLocalFile(), m_nameFilters.isEmpty() ? QStringList() : m_nameFilters.split(" "), dirFilter, QDirIterator::NoIteratorFlags);
-        while (it.hasNext()) {
-            const auto item = FMH::getFileInfoModel(QUrl::fromLocalFile(it.next()));
-            content << item;
+        m_loader->requestPath({url}, false, m_nameFilters.isEmpty() ? QStringList() : m_nameFilters.split(" "), dirFilter);
 
-            emit itemReady(item, url);
-        }
     } else
         return false;
 
-    emit itemsReady(content, url);
     return true;
 }
 
@@ -204,10 +207,9 @@ FM::FM(QObject *parent)
 void FM::getPathContent(const QUrl &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters, const QDirIterator::IteratorFlags &iteratorFlags)
 {
     qDebug() << "Getting async path contents";
-
+    Q_UNUSED(iteratorFlags)
     this->dirLister->setShowingDotFiles(hidden);
     this->dirLister->setDirOnlyMode(onlyDirs);
-
     this->dirLister->setNameFilter(filters.join(" "));
 
     if (this->dirLister->openUrl(path))
@@ -285,6 +287,7 @@ void FM::getCloudItem(const QVariantMap &item)
 
 QString FM::resolveUserCloudCachePath(const QString &server, const QString &user)
 {
+    Q_UNUSED(server)
     return FMH::CloudCachePath + "opendesktop/" + user;
 }
 
@@ -306,7 +309,7 @@ bool FM::copy(const QList<QUrl> &urls, const QUrl &where)
 {
     // 	QStringList cloudPaths;
 
-    return FMStatic::copy(urls, where, false);
+    return FMStatic::copy(urls, where);
 
 #ifdef COMPONENT_SYNCING
     // 	if(!cloudPaths.isEmpty())

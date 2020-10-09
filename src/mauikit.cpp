@@ -28,6 +28,7 @@
 #include "mauilist.h"
 #include "mauimodel.h"
 #include "pathlist.h"
+#include "appsettings.h"
 
 #ifdef COMPONENT_ACCOUNTS
 #include "mauiaccounts.h"
@@ -56,7 +57,7 @@
 #ifdef Q_OS_ANDROID
 #include "platforms/android/mauiandroid.h"
 #elif defined Q_OS_LINUX
-#include "platforms/kde/mauikde.h"
+#include "platforms/linux/mauilinux.h"
 #endif
 
 #ifdef MAUIKIT_STYLE
@@ -155,6 +156,7 @@ void MauiKit::registerTypes(const char *uri)
 
     /// NON UI CONTROLS
     qmlRegisterUncreatableType<AppView>(uri, 1, 1, "AppView", "Cannot be created App");
+    qmlRegisterType<SettingSection>(uri, 1, 2, "SettingSection");
 
     /** Experimental **/
 #ifdef Q_OS_WIN32
@@ -192,7 +194,6 @@ void MauiKit::registerTypes(const char *uri)
 
     qmlRegisterType(componentUrl(QStringLiteral("FileBrowser.qml")), uri, 1, 0, "FileBrowser");
     qmlRegisterType(componentUrl(QStringLiteral("PlacesListBrowser.qml")), uri, 1, 0, "PlacesListBrowser");
-    qmlRegisterType(componentUrl(QStringLiteral("FilePreviewer.qml")), uri, 1, 0, "FilePreviewer");
     qmlRegisterType(componentUrl(QStringLiteral("FileDialog.qml")), uri, 1, 0, "FileDialog");
 #endif
 
@@ -202,7 +203,6 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterAnonymousType<Alerts>(uri, 1);
     qmlRegisterAnonymousType<DocumentAlert>(uri, 1);
     qmlRegisterType(componentUrl(QStringLiteral("Editor.qml")), uri, 1, 0, "Editor");
-    qmlRegisterType(componentUrl(QStringLiteral("private/DocumentPreview.qml")), uri, 1, 0, "DocumentPreview");
 #endif
 
     /** PLATFORMS SPECIFIC CONTROLS **/

@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QDirIterator>
 #include <QThread>
 #include <QDir>
+#include <QUrl>
 
 #include "fmh.h"
 
@@ -44,6 +45,9 @@ class MAUIKIT_EXPORT FileLoader : public QObject
 public:
     FileLoader(QObject *parent = nullptr);
     ~FileLoader();
+
+    void setBatchCount(const uint &count);
+    uint batchCount() const;
 
     /**
      * @brief requestPath
@@ -73,7 +77,7 @@ signals:
      * @brief finished
      * @param items
      */
-    void finished(FMH::MODEL_LIST items);
+    void finished(FMH::MODEL_LIST items, QList<QUrl> &urls);
 
     /**
      * @brief start
@@ -89,16 +93,17 @@ signals:
      * @brief itemsReady
      * @param items
      */
-    void itemsReady(FMH::MODEL_LIST items);
+    void itemsReady(FMH::MODEL_LIST items, QList<QUrl> &urls);
 
     /**
      * @brief itemReady
      * @param item
      */
-    void itemReady(FMH::MODEL item);
+    void itemReady(FMH::MODEL item, QList<QUrl> &urls);
 
 private:
     QThread *m_thread;
+    uint m_batchCount = 1500;
 
 };
 }

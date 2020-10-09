@@ -26,8 +26,24 @@ import org.kde.mauikit 1.2 as Maui
 Maui.ListItemTemplate
 {
     id: control
+
+    property alias setting : _settingSection
+    Maui.SettingSection
+    {
+        id: _settingSection
+    }
+
+    leftMargin: Maui.Style.space.big
+    rightMargin: leftMargin
+
     Layout.fillWidth: true
-    iconSizeHint: Maui.Style.iconSizes.small
+    iconSizeHint: Maui.Style.iconSizes.medium
     label2.wrapMode: Text.WordWrap
-    implicitHeight: label1.implicitHeight + label2.implicitHeight + Maui.Style.space.small    
+    implicitHeight: Math.floor(label1.implicitHeight + label2.implicitHeight + Maui.Style.space.big )
+
+    background.visible: true
+    background.opacity: 0.5
+    background.color: control.enabled ? Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9)) :  "transparent"
+    background.radius: Maui.Style.radiusV
+    background.border.color: control.enabled ? "transparent" : Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
 } 

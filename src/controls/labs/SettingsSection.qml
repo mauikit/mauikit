@@ -12,6 +12,7 @@ Maui.AlternateListItem
     property string title
     property string description
     property alias template: _template
+    property alias spacing: _mainData.spacing
 
     alt: index % 2
 
@@ -23,7 +24,7 @@ Maui.AlternateListItem
         id: _layout
         width: parent.width - (Maui.Style.space.medium)
         anchors.centerIn: parent
-        spacing: Maui.Style.space.small
+        spacing: Maui.Style.space.medium
 
         Maui.ListItemTemplate
         {
@@ -36,13 +37,32 @@ Maui.AlternateListItem
             label1.font.bold: true
             label1.font.weight: Font.Bold
             label2.wrapMode: Text.WordWrap
+            
+            MouseArea
+            {
+                implicitHeight: Maui.Style.iconSizes.medium
+                implicitWidth: implicitHeight
+                
+                Maui.Triangle
+                {
+                    height: Maui.Style.iconSizes.tiny
+                    width: height
+                    rotation: _mainData.visible ? -45 : -225
+                    color:  Kirigami.Theme.textColor
+                    opacity: 0.7
+                }
+                
+                onClicked: _mainData.visible = !_mainData.visible
+            }
         }
 
         ColumnLayout
         {
             id: _mainData
             Layout.fillWidth: true
-//             Layout.margins: Maui.Style.space.medium
+            spacing: Maui.Style.space.medium
+                    
+            Layout.margins: Maui.Style.space.medium
         }
     }
 }

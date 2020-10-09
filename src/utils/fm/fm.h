@@ -22,6 +22,10 @@
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 class KCoreDirLister;
 #else
+namespace FMH
+{
+class FileLoader;
+}
 /**
  * @brief The QDirLister class
  * Placeholder for the KCoreDirLister for other system other than GNU Linux
@@ -43,6 +47,7 @@ signals:
     void itemReady(FMH::MODEL item, QUrl url);
 
 private:
+    FMH::FileLoader *m_loader;
     QString m_nameFilters;
     QUrl m_url;
     bool m_dirOnly = false;

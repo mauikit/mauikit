@@ -39,7 +39,7 @@ void MauiModel::setSortOrder(const int &sortOrder)
     this->sort(0, static_cast<Qt::SortOrder>(sortOrder));
 }
 
-QVariantMap MauiModel::get(const int &index)
+QVariantMap MauiModel::get(const int &index) const
 {
     QVariantMap res;
     if (index >= this->rowCount() || index < 0)
@@ -51,7 +51,7 @@ QVariantMap MauiModel::get(const int &index)
     return res;
 }
 
-QVariantList MauiModel::getAll()
+QVariantList MauiModel::getAll() const
 {
     QVariantList res;
     for (auto i = 0; i < this->rowCount(); i++)
@@ -97,15 +97,7 @@ void MauiModel::setSort(const QString &sort)
 
     this->m_sort = sort;
     emit this->sortChanged(this->m_sort);
-    this->setSortRole([sort, roles = this->roleNames()]() -> int {
-        for (const auto &key : roles.keys()) {
-            if (roles[key] == sort) {
-                qDebug() << "FOUND ROLE KEY " << key << roles[key] << sort;
-                return key;
-            }
-        }
-        return -1;
-    }());
+    this->setSortRole(FMH::MODEL_NAME_KEY[sort]);
     this->sort(0, this->m_sortOrder);
 }
 
@@ -201,6 +193,7 @@ void MauiModel::setList(MauiList *value)
 {
     this->m_model->setList(value);
     this->getList()->m_model = this;
+    emit this->listChanged();
 }
 
 MauiModel::PrivateAbstractListModel::PrivateAbstractListModel(MauiModel *model)

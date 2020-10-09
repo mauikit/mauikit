@@ -20,10 +20,8 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.7 as Kirigami
-
-import "private"
 
 Rectangle
 {
@@ -35,6 +33,7 @@ Rectangle
     property alias item : loader.item
     readonly property alias hovered : mouseArea.containsMouse
     readonly property alias pressed : mouseArea.pressed
+    property alias mouseArea : mouseArea
     
     property int size: Maui.Style.iconSizes.medium
     property string iconName : ""
@@ -50,8 +49,8 @@ Rectangle
     implicitWidth: loader.sourceComponent == labelComponent ? Math.max(loader.item.implicitWidth, size) : size
     
     radius: Math.min(width, height)
-    color: control.Kirigami.Theme.backgroundColor
-    border.color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.7))
+    color: Kirigami.Theme.backgroundColor
+//     border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
 
     Loader
     {
@@ -70,8 +69,8 @@ Rectangle
             text: control.text
             font.weight: Font.Bold
             font.bold: true
-            font.pointSize: Maui.Style.fontSizes.default
-            color: control.Kirigami.Theme.textColor
+            font.pointSize: Maui.Style.fontSizes.small
+            color: Kirigami.Theme.textColor
             verticalAlignment: Qt.AlignVCenter
             horizontalAlignment: Qt.AlignHCenter
         }
@@ -84,7 +83,7 @@ Rectangle
         {
             anchors.centerIn: parent
             source: control.iconName
-            color: control.Kirigami.Theme.textColor
+            color: Kirigami.Theme.textColor
             width: control.size
             height: width
             isMask: color !== "transparent"
@@ -96,7 +95,7 @@ Rectangle
         id: mouseArea
         hoverEnabled: true
         
-        readonly property int targetMargin:  Kirigami.Settings.isMobile ? Maui.Style.space.big : 0
+        readonly property int targetMargin:  Kirigami.Settings.hasTransientTouchInput ? Maui.Style.space.big : 0
 
         height: parent.height + targetMargin
         width: parent.width + targetMargin

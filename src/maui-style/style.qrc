@@ -41,4 +41,7 @@
         <file>private/DefaultListItemBackground.qml</file>
         <file>CheckIndicator.qml</file>
     </qresource>
+    <qresource prefix="/">
+        <file>MenuSeparator.qml</file>
+    </qresource>
 </RCC>
