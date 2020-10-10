@@ -22,8 +22,7 @@ import QtQuick.Controls 2.10
 import QtQuick.Layouts 1.3
 
 import org.kde.kirigami 2.8 as Kirigami
-import org.kde.mauikit 1.0 as Maui
-import org.kde.mauikit 1.1 as MauiLab
+import org.kde.mauikit 1.2 as Maui
 
 import "private" as Private
 
@@ -55,9 +54,8 @@ Maui.Page
     property var indexHistory : []
 
     // need to be set by the implementation as features
-    property MauiLab.SelectionBar selectionBar : null
+    property Maui.SelectionBar selectionBar : null
     property Maui.TagsDialog tagsDialog : null
-    property MauiLab.ShareDialog shareDialog : null
     property Maui.OpenWithDialog openWithDialog : null
 
     //relevant menus to file item and the browserview
@@ -644,11 +642,7 @@ Maui.Page
             return
         }
 
-        if(control.shareDialog)
-        {
-            control.shareDialog.urls = urls
-            control.shareDialog.open()
-        }
+       Maui.Platform.shareFiles(urls)        
     }
     
     /**

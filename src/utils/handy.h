@@ -59,7 +59,6 @@ private:
     bool m_singleClick = true;
 
 public slots:
-
     /*!
      * \brief Returns the major version of the current OS
      *

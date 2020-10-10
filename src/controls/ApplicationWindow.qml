@@ -588,6 +588,18 @@ Window
             root.height = rect.height
         }
     }
+    
+    Connections
+    {
+        target: Maui.Platform
+        ignoreUnknownSignals: true
+        onShareFilesRequest: 
+        {
+            dialogLoader.source = "labs/ShareDialog.qml"
+            dialog.urls = urls
+            dialog.open()
+        }
+    }
 
     /**
       */

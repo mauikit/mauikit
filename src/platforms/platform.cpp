@@ -12,6 +12,12 @@
 #include "mauilinux.h"
 #endif
 
+Platform *Platform::qmlAttachedProperties(QObject *object)
+{
+    Q_UNUSED(object)
+    return Platform::instance();
+}
+
 Platform::Platform(QObject *parent) : AbstractPlatform(parent),
     #ifdef Q_OS_ANDROID
     m_platform(new MAUIAndroid(this))
@@ -24,8 +30,8 @@ Platform::Platform(QObject *parent) : AbstractPlatform(parent),
     #else
       m_platform(MAUIKDE::instance())
     #endif
-{
-
+{    
+    connect(m_platform, &AbstractPlatform::shareFilesRequest, this, &Platform::shareFilesRequest);
 }
 
 void Platform::shareFiles(const QList<QUrl> &urls)

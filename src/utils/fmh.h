@@ -147,11 +147,13 @@ static QStringList getMimeTypeSuffixes(const FMH::FILTER_TYPE &type, QString (*c
 }
 
 static QHash<FILTER_TYPE, QStringList> FILTER_LIST = {{FILTER_TYPE::AUDIO, getMimeTypeSuffixes(FILTER_TYPE::AUDIO, [](QString suffix) -> QString { return "*." + suffix; })},
-                                                            {FILTER_TYPE::VIDEO, getMimeTypeSuffixes(FILTER_TYPE::VIDEO, [](QString suffix) -> QString { return "*." + suffix; })},
-                                                            {FILTER_TYPE::TEXT, getMimeTypeSuffixes(FILTER_TYPE::TEXT, [](QString suffix) -> QString { return "*." + suffix; })},
-                                                            {FILTER_TYPE::DOCUMENT, getMimeTypeSuffixes(FILTER_TYPE::DOCUMENT, [](QString suffix) -> QString { return "*." + suffix; })},
-                                                            {FILTER_TYPE::IMAGE, getMimeTypeSuffixes(FILTER_TYPE::IMAGE, [](QString suffix) -> QString { return "*." + suffix; })},
-                                                            {FILTER_TYPE::NONE, QStringList()}};
+{FILTER_TYPE::VIDEO, getMimeTypeSuffixes(FILTER_TYPE::VIDEO, [](QString suffix) -> QString { return "*." + suffix; })},
+{FILTER_TYPE::TEXT, getMimeTypeSuffixes(FILTER_TYPE::TEXT, [](QString suffix) -> QString { return "*." + suffix; })},
+{FILTER_TYPE::DOCUMENT, getMimeTypeSuffixes(FILTER_TYPE::DOCUMENT, [](QString suffix) -> QString { return "*." + suffix; })},
+{FILTER_TYPE::COMPRESSED, FMH::getMimeTypeSuffixes(FMH::FILTER_TYPE::COMPRESSED, [](QString suffix) -> QString { return "*." + suffix; })},
+{FILTER_TYPE::IMAGE, getMimeTypeSuffixes(FILTER_TYPE::IMAGE, [](QString suffix) -> QString { return "*." + suffix; })},
+{FILTER_TYPE::NONE, QStringList()}};
+
 /**
  * @brief The MODEL_KEY enum
  */

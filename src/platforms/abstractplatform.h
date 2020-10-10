@@ -17,6 +17,7 @@ class AbstractPlatform : public QObject
 
 public:
     explicit AbstractPlatform(QObject * parent= nullptr);
+    
 public slots:
 
     /**
@@ -51,11 +52,10 @@ public slots:
 
     virtual void notify(const QString &title, const QString &message, const QString &icon, const QString &imageUrl) {}
 
-private:
-
 signals:
     void hasKeyboardChanged();
     void hasMouseChanged();
+    void shareFilesRequest(QStringList urls);
 
 };
 

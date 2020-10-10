@@ -78,7 +78,7 @@ Menu
     
     MenuItem
     {
-        visible: !control.isExec && shareDialog	
+        visible: !control.isExec	
         text: i18n("Share")
         icon.name: "document-share"
         onTriggered:
@@ -100,7 +100,7 @@ Menu
         }
     }
     
-    MenuSeparator{visible: tagsDialog  || shareDialog || previewer}
+    MenuSeparator{visible: tagsDialog}
         
     MenuItem
     {

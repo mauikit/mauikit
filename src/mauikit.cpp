@@ -60,6 +60,8 @@
 #include "platforms/linux/mauilinux.h"
 #endif
 
+#include "platform.h"
+
 #ifdef MAUIKIT_STYLE
 #include <QIcon>
 #include <QQuickStyle>
@@ -157,6 +159,14 @@ void MauiKit::registerTypes(const char *uri)
     /// NON UI CONTROLS
     qmlRegisterUncreatableType<AppView>(uri, 1, 1, "AppView", "Cannot be created App");
     qmlRegisterType<SettingSection>(uri, 1, 2, "SettingSection");
+//     qmlRegisterSingletonInstance<Platform>(uri, 1, 2, "Platform", Platform::instance());
+    qmlRegisterSingletonType<Platform>(uri, 1, 2, "Platform", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+        
+        Q_UNUSED(scriptEngine)
+        auto platform = Platform::instance();
+        engine->setObjectOwnership(platform, QQmlEngine::CppOwnership);
+        return platform;
+    });
 
     /** Experimental **/
 #ifdef Q_OS_WIN32
