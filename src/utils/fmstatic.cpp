@@ -425,7 +425,8 @@ KArchive* FMStatic::getKArchiveObject(const QUrl &url)
             FMH::getMime(url).contains("application/x-tar") ||
             FMH::getMime(url).contains("application/x-bzip") ||
             FMH::getMime(url).contains("application/x-xz") ||
-            FMH::getMime(url).contains("application/x-gzip"))
+            FMH::getMime(url).contains("application/x-gzip") ||
+            FMH::getMime(url).contains("application/gzip"))
     {
         kArch = new KTar(url.toString().split(QString("file://"))[1]);
     }

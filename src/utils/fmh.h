@@ -931,11 +931,7 @@ const QString getMime(const QUrl &path);
  * @param mimeTypeName
  * @return
  */
-static bool checkFileType(const FMH::FILTER_TYPE &type, const QString &mimeTypeName)
-{
-    qDebug() << "@gadominguez File: fmn.h " << type ;
-    return FMH::SUPPORTED_MIMETYPES[type].contains(mimeTypeName);
-}
+bool checkFileType(const FMH::FILTER_TYPE &type, const QString &mimeTypeName);
 
 /**
  * @brief thumbnailUrl
