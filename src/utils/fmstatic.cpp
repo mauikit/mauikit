@@ -124,6 +124,14 @@ bool FMStatic::isCloud(const QUrl &path)
     return path.scheme() == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::CLOUD_PATH];
 }
 
+bool FMStatic::isCompressedType(const QUrl &path)
+{
+    for(auto mime : FMH::COMPRESSED_MIMETYPES)
+        if(FMH::getMime(path) == mime)
+            return true;
+    return false;
+}
+
 bool FMStatic::fileExists(const QUrl &path)
 {
     return FMH::fileExists(path);
@@ -407,7 +415,6 @@ bool FMStatic::openUrl(const QUrl &url)
 //#endif
     return true;
 }
-
 
 KArchive* FMStatic::getKArchiveObject(const QUrl &url)
 {

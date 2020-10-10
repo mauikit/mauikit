@@ -217,6 +217,14 @@ public slots:
     static bool isCloud(const QUrl &path);
 
     /**
+     * @brief isCompressedType
+     * Returns if the file is a compressed type or not based on COMPRESSEDMIMETYPES
+     * @param path
+     * @return boolean with the result of the comparation
+     */
+    static bool isCompressedType(const QUrl &path);
+
+    /**
      * @brief fileExists
      * Checks if a local file exists in the file system
      * @param path

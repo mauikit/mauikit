@@ -55,7 +55,7 @@ Menu
     
     MenuItem
     {
-        visible: !control.isExec && tagsDialog && Maui.FM.getCompressedFileType(item.path, item.mime) > 0
+        visible: !control.isExec && tagsDialog && Maui.FM.isCompressedType(item.path) > 0
         text: i18n("Extract here")
         icon.name: "tag"
         onTriggered:
