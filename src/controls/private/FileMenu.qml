@@ -53,7 +53,7 @@ Menu
         }
     } 
     
-    MenuItem
+ /*   MenuItem
     {
         visible: !control.isExec && tagsDialog && Maui.FM.isCompressedType(item.path) > 0
         text: i18n("Extract here")
@@ -63,7 +63,7 @@ Menu
             console.log("@gadominguez File: FileMenu.qml Extract with ARK Item: " + item.path)
             extractArk(item);
         }
-    }   
+    }   */
     
     MenuItem
     {
