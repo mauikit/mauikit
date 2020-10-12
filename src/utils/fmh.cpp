@@ -250,9 +250,6 @@ void setDirConf(const QUrl &path, const QString &group, const QString &key, cons
 
 const QString getIconName(const QUrl &path)
 {
-    if (!path.isLocalFile())
-        qWarning() << "URL recived is not a local file. getIconName" << path;
-
     if (path.isLocalFile() && QFileInfo(path.toLocalFile()).isDir()) {
         if (folderIcon.contains(path.toString()))
             return folderIcon[path.toString()];
