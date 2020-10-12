@@ -118,7 +118,7 @@ static const QStringList IMAGE_MIMETYPES = {"image/bmp", "image/webp", "image/pn
 static const QStringList DOCUMENT_MIMETYPES = {"application/pdf", "application/rtf", "application/doc", "application/odf"};
 static const QStringList COMPRESSED_MIMETYPES = {
                                                  //"application/x-compress","application/x-compressed",
-                                                 "application/x-xz-compressed-tar",
+                                                 //"application/x-xz-compressed-tar",
                                                  "application/x-compressed-tar",
                                                  "application/x-xz",
                                                  //"application/x-bzip",
