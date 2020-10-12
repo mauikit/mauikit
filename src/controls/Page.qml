@@ -40,6 +40,8 @@ Pane
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     
     default property alias content: _content.data
+    readonly property alias pageContent : _content
+
         property alias headerBackground : _headerBackground
         readonly property alias internalHeight : _content.height
         property Flickable flickable : null
