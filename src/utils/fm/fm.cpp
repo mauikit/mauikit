@@ -64,6 +64,11 @@ QDirLister::QDirLister(QObject *parent)
     {
         emit this->itemReady(item, urls.first());
     });
+
+    connect(m_loader, &FMH::FileLoader::finished, [this](FMH::MODEL_LIST, QList<QUrl> urls)
+    {
+        emit this->completed(urls.first());
+    });
 }
 
 bool QDirLister::openUrl(QUrl url)
@@ -163,9 +168,9 @@ FM::FM(QObject *parent)
         emit this->pathContentItemsChanged(res);
     });
 #else
-    connect(dirLister, &QDirLister::itemReady, this, [&](FMH::MODEL item, QUrl url) { emit this->pathContentItemsReady(FMH::PATH_CONTENT {url, {item}}); });
+    connect(dirLister, &QDirLister::itemsReady, this, [&](FMH::MODEL_LIST items, QUrl url) { emit this->pathContentItemsReady({url, items}); });
 
-    connect(dirLister, &QDirLister::itemsReady, this, [&](FMH::MODEL_LIST, QUrl url) { emit this->pathContentReady(url); });
+    connect(dirLister, &QDirLister::completed, this, [&](QUrl url) { emit this->pathContentReady(url);});
 #endif
 
 #ifdef COMPONENT_SYNCING

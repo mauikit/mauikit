@@ -45,6 +45,7 @@ public slots:
 signals:
     void itemsReady(FMH::MODEL_LIST items, QUrl url);
     void itemReady(FMH::MODEL item, QUrl url);
+    void completed(QUrl url);
 
 private:
     FMH::FileLoader *m_loader;
