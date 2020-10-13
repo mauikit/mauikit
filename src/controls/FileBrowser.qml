@@ -47,7 +47,6 @@ Maui.Page
 
     // custom props
     property bool selectionMode: false
-    property bool showStatusBar : Maui.FM.loadSettings("StatusBar", "SETTINGS", false) == "true"
 
     property int thumbnailsSize : Maui.Style.iconSizes.large * 1.7
 
@@ -146,9 +145,15 @@ Maui.Page
         text: i18n("Filter")
         checkable: true
         checked: true
+        onClicked:
+        {
+            control.view.filter = ""
+            _searchField.clear()
+            _searchField.forceActiveFocus()
+        }
     }
 
-    footBar.visible: control.showStatusBar ||  String(control.currentPath).startsWith("trash:/")
+    footBar.visible: String(control.currentPath).startsWith("trash:/")
 
     footBar.leftSretch: false
     footerPositioning: ListView.InlineFooter
@@ -430,6 +435,7 @@ Maui.Page
             if((event.key === Qt.Key_F) && (event.modifiers & Qt.ControlModifier))
             {
                 control.headBar.visible = !control.headBar.visible
+                _searchField.forceActiveFocus()
             }                    
             
             control.keyPress(event)
@@ -855,20 +861,7 @@ Maui.Page
         }
     }
 
-    /**
-      *
-      **/
-    function toggleStatusBar()
-    {
-        control.footBar.visible = !control.footBar.visible
-        Maui.FM.saveSettings("StatusBar",  control.footBar.visible, "SETTINGS")
-        
-        if(!control.footBar.visible)
-        {
-          control.currentView.forceActiveFocus()
-        }
-    }
-    
+       
     /**
       *
       **/
