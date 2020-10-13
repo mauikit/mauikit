@@ -22,11 +22,11 @@ DEPENDPATH += $$PWD
 
 INCLUDEPATH += $$PWD
 
-LIBS += -L/usr/local/Cellar/kde-ki18n/5.72.0/lib/ -lKF5I18n.5.72.0 \
-        -L/usr/local/Cellar/kf5-kcoreaddons/5.72.0/lib/ -lKF5CoreAddons.5.72.0
+LIBS += -L/usr/local/Cellar/kde-ki18n/5.74.0/lib/ -lKF5I18n.5.74.0 \
+        -L/usr/local/Cellar/kf5-kcoreaddons/5.74.0/lib/ -lKF5CoreAddons.5.74.0
 
-INCLUDEPATH += /usr/local/Cellar/kde-ki18n/5.72.0/include \
-               /usr/local/Cellar/kf5-kcoreaddons/5.72.0/include/KF5
+INCLUDEPATH += /usr/local/Cellar/kde-ki18n/5.74.0/include \
+               /usr/local/Cellar/kf5-kcoreaddons/5.74.0/include/KF5
 
-DEPENDPATH += /usr/local/Cellar/kde-ki18n/5.72.0/include \
-              /usr/local/Cellar/kf5-kcoreaddons/5.72.0/include/KF5
+DEPENDPATH += /usr/local/Cellar/kde-ki18n/5.74.0/include \
+              /usr/local/Cellar/kf5-kcoreaddons/5.74.0/include/KF5

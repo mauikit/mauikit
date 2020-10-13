@@ -3,7 +3,7 @@
 #ifdef Q_OS_ANDROID
 #include "mauiandroid.h"
 #elif defined Q_OS_MAC
-#include "mauimac.h"
+#include "mauimacos.h"
 #elif defined Q_OS_WIN
 #include "mauiwin.h"
 #elif defined Q_OS_IOS
@@ -22,7 +22,7 @@ Platform::Platform(QObject *parent) : AbstractPlatform(parent),
     #ifdef Q_OS_ANDROID
     m_platform(new MAUIAndroid(this))
     #elif defined Q_OS_MAC
-      m_platform(new MauiMacOS(this))
+      m_platform(new MAUIMacOS(this))
     #elif defined Q_OS_WIN
       m_platform(new MAUIWin(this))
     #elif defined Q_OS_IOS
