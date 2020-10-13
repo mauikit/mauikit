@@ -108,7 +108,7 @@ void MAUIAndroid::navBarColor(const QString &bg, const bool &light)
 
 void MAUIAndroid::shareFiles(const QList<QUrl> &urls)
 {
-
+    shareDialog(urls.first());
 }
 
 void MAUIAndroid::shareDialog(const QUrl &url)

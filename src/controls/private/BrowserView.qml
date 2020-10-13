@@ -356,7 +356,7 @@ Maui.Page
             itemHeight: itemSize * 1.3
             checkable: control.selectionMode
             enableLassoSelection: true
-            selectionMode: control.selectionMode
+//            selectionMode: control.selectionMode
             BrowserHolder
             {
                 id: _holder

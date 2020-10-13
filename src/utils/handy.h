@@ -40,8 +40,8 @@ class MAUIKIT_EXPORT Handy : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool isTouch MEMBER m_isTouch CONSTANT FINAL)
-    Q_PROPERTY(bool hasMouse READ hasMouse CONSTANT NOTIFY hasMouseChanged)
-    Q_PROPERTY(bool hasKeyboard READ hasKeyboard CONSTANT NOTIFY hasKeyboardChanged)
+    Q_PROPERTY(bool hasMouse READ hasMouse NOTIFY hasMouseChanged)
+    Q_PROPERTY(bool hasKeyboard READ hasKeyboard NOTIFY hasKeyboardChanged)
 
     Q_PROPERTY(bool isAndroid READ isAndroid CONSTANT FINAL)
     Q_PROPERTY(bool isLinux READ isLinux CONSTANT FINAL)

@@ -63,6 +63,13 @@ Maui.Popup
     implicitHeight: _layout.implicitHeight
     widthHint: 0.9
     heightHint: 0.9
+    
+    function alert(message, level)
+    {
+        _alertMessage.text = message
+        _alertMessage.level = level
+//         _alertAnim.running = true
+    }
 
     ColumnLayout
     {
@@ -161,6 +168,34 @@ Maui.Popup
                             Layout.alignment: Qt.AlignCenter
                             focus: visible
                             onAccepted: control.accepted()
+                        }
+                        
+                        Label
+                        {
+                            id: _alertMessage
+                            visible: text.length > 0
+                            property int level : 0
+                            Layout.fillWidth: true
+                            wrapMode: Text.WordWrap
+                            verticalAlignment: Qt.AlignVCenter
+                            
+                            color: switch(level)
+                            {
+                                case 0: return Kirigami.Theme.positiveTextColor
+                                case 1: return Kirigami.Theme.neutralTextColor
+                                case 2: return Kirigami.Theme.negativeTextColor
+                            }
+                            
+                            SequentialAnimation on x
+                            {
+                                id: _alertAnim
+                                // Animations on properties start running by default
+                                running: false
+                                loops: 3
+                                NumberAnimation { from: 0; to: -10; duration: 100; easing.type: Easing.InOutQuad }
+                                NumberAnimation { from: -10; to: 0; duration: 100; easing.type: Easing.InOutQuad }
+                                PauseAnimation { duration: 50 } // This puts a bit of time between the loop
+                            }
                         }
                     }
                 }

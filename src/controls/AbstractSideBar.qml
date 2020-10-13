@@ -53,7 +53,7 @@ Drawer
         anchors.fill: parent
         anchors.margins: 0
         anchors.leftMargin: (control.width * control.position)
-        parent: window().contentItem
+        parent: window().pageContent
         preventStealing: true
         propagateComposedEvents: false
         visible: false
