@@ -23,7 +23,7 @@ import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.8 as Kirigami
 import org.kde.mauikit 1.2 as Maui
 
-Control
+Item
 {
     id: control
     default property alias content : _content.data
@@ -38,7 +38,17 @@ Control
     property bool wide : _content.implicitWidth < control.width * 0.5
     
     implicitHeight: _layout.implicitHeight + Maui.Style.space.medium
-    Layout.fillWidth: true
+    Layout.fillWidth: true    
+    
+    Rectangle
+    {
+        anchors.fill: parent
+        
+        opacity: 0.5
+        color: control.enabled ? Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9)) :  "transparent"
+        radius: Maui.Style.radiusV
+        border.color: control.enabled ? "transparent" : Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
+    }
     
     GridLayout
     {        
@@ -79,14 +89,6 @@ Control
 //             Layout.fillHeight: true
         }
     }
-    
-    background: Rectangle
-    {
-        
-        opacity: 0.5
-        color: control.enabled ? Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9)) :  "transparent"
-        radius: Maui.Style.radiusV
-        border.color: control.enabled ? "transparent" : Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
-    }
+
     
 }
