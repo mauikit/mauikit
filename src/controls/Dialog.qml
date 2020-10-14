@@ -213,8 +213,8 @@ Maui.Popup
             id: _defaultButtonsLayout
             spacing: 0
             Layout.fillWidth: true
-            Layout.preferredHeight:  Maui.Style.toolBarHeightAlt - Maui.Style.space.medium
-            Layout.maximumHeight: Maui.Style.toolBarHeightAlt - Maui.Style.space.medium
+            Layout.preferredHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
+            Layout.maximumHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
             visible: control.defaultButtons || control.actions.length
 
             Button
@@ -240,13 +240,13 @@ Maui.Popup
                 }
 
                 onClicked: rejected()
-            }
-
-            Maui.Separator
-            {
-                position: Qt.Vertical
-                Layout.fillHeight: true
-                visible: _acceptButton.visible && _rejectButton.visible
+                   Maui.Separator
+                {
+                    position: Qt.Vertical
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.right: parent.right
+                }
             }
 
             Button
@@ -272,8 +272,16 @@ Maui.Popup
                 }
 
                 onClicked: accepted()
+                
+                Maui.Separator
+                {
+                    position: Qt.Vertical
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.right: parent.right
+                }
             }
-
+            
             Repeater
             {
                 model: control.actions
@@ -305,8 +313,8 @@ Maui.Popup
                         position: Qt.Vertical
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
-                        anchors.left: parent.left
-                        visible: index > 0
+                        anchors.right: parent.right
+                        visible: index < control.actions.length-1
                     }
                 }
             }
