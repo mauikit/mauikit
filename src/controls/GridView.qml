@@ -20,7 +20,7 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.9 as Kirigami
 import QtGraphicalEffects 1.0
 
@@ -62,7 +62,7 @@ Item
     property int bottomMargin: margins
     property int rightMargin: margins
     property int leftMargin: margins
-    property int margins: isWide ? Maui.Style.space.medium :  (Kirigami.Settings.isMobile ? 0 : Maui.Style.space.tiny)
+    property int margins: (Kirigami.Settings.isMobile ? 0 : Maui.Style.space.medium)
 
     property alias holder : _holder
 
@@ -95,12 +95,12 @@ Item
             property alias position : _hoverHandler.point.position
             property var selectedIndexes : []
             
-            anchors.fill: parent
-            anchors.rightMargin: control.rightMargin
-            anchors.leftMargin: control.leftMargin
-            anchors.bottomMargin: control.bottomMargin
-            anchors.topMargin: control.topMargin
-            anchors.margins: control.margins
+//             anchors.fill: parent
+//             anchors.rightMargin: control.rightMargin + ScrollBar.horizontal.width
+//             anchors.leftMargin: control.leftMargin
+//             anchors.bottomMargin: control.bottomMargin
+//             anchors.topMargin: control.topMargin
+//             anchors.margins: control.margins
 
             //nasty trick
             property int size_

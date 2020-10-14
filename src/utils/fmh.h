@@ -838,6 +838,7 @@ static const QString DocumentsPath = QUrl::fromLocalFile(QStandardPaths::writabl
 static const QString HomePath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).toString();
 static const QString MusicPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::MusicLocation)).toString();
 static const QString VideosPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::MoviesLocation)).toString();
+static const QString TrashPath = QStringLiteral("trash:/");
 
 static const QStringList defaultPaths = {
     HomePath,
@@ -846,8 +847,9 @@ static const QStringList defaultPaths = {
     PicturesPath,
     MusicPath,
     VideosPath,
-    DownloadsPath,
-    // 		RootPath
+    DownloadsPath/*,
+    RootPath,
+    TrashPath*/
 };
 
 #endif
@@ -860,6 +862,7 @@ static const QMap<QString, QString> folderIcon {{PicturesPath, "folder-pictures"
                                                 {VideosPath, "folder-videos"},
                                                 {DesktopPath, "user-desktop"},
                                                 {AppsPath, "system-run"},
+                                                {TrashPath, "user-trash"},
                                                 {RootPath, "folder-root"}};
 
 /**

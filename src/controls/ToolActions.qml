@@ -23,6 +23,8 @@ Rectangle
     property bool autoExclusive: true
     property bool checkable: true
     property int display: ToolButton.IconOnly
+    property bool cyclic: false
+    readonly property int count : actions.length
     
     property Action currentAction : control.autoExclusive ? actions[0] : null
     property int currentIndex : -1
@@ -152,17 +154,27 @@ Rectangle
             width: implicitWidth
             implicitWidth: _defaultButtonLayout.implicitWidth
 
-            onClicked:
+            function triggerAction()
             {
+                if(control.cyclic && control.autoExclusive)
+                {
+                    const index = control.currentIndex + 1
+                    control.currentIndex = index >= control.actions.length ? 0 : index
+                    control.currentAction.triggered()
+                    return
+                }
+                
                 if(!_menu.visible)
                 {
                     _menu.popup(control, 0, control.height)
-
+                    
                 }else
                 {
                     _menu.close()
-                }
+                } 
             }
+            
+            onClicked: triggerAction()
 
             Menu
             {
@@ -208,37 +220,39 @@ Rectangle
                     id: _defaultButtonIcon
                     Layout.fillHeight: true
                     
-                    onClicked:
-                    {
-                        if(!_menu.visible)
-                        {
-                            _menu.popup(control, 0, control.height)
-                            
-                        }else
-                        {
-                            _menu.close()
-                        }
-                    }
+                    onClicked: triggerAction()
                     
                     icon.width: Maui.Style.iconSizes.small
                     icon.height: Maui.Style.iconSizes.small
-                    icon.color: control.currentAction ? (control.currentAction.icon.color && control.currentAction.icon.color.length ? control.currentAction.icon.color : ( _defaultButtonMouseArea.containsPress ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor)) :  control.Kirigami.Theme.textColor
+                    icon.color: buttonAction() ? (buttonAction().icon.color && buttonAction().icon.color.length ? buttonAction().icon.color : ( _defaultButtonMouseArea.containsPress ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor)) :  control.Kirigami.Theme.textColor
                     
-                    icon.name: control.currentAction ? control.currentAction.icon.name : control.defaultIconName
+                    icon.name: buttonAction() ? buttonAction().icon.name : control.defaultIconName
                     
-                    enabled: control.currentAction ? control.currentAction.enabled : true
+                    enabled: buttonAction() ? buttonAction().enabled : true
+                    
+                    function buttonAction()
+                    {
+                        if(control.cyclic && control.autoExclusive)
+                        {
+                            const index = control.currentIndex + 1
+                            return control.actions[index >= control.actions.length ? 0 : index]
+                        }else
+                        {
+                            return control.currentAction
+                        }
+                    }
                 }
 
                 Kirigami.Separator
                 {
+                    visible: !control.cyclic
                     color: control.border.color
                     Layout.fillHeight: true
-                    visible: _defaultButtonMouseArea.visible
                 }
 
                 Item
                 {
-                    visible: _defaultButtonMouseArea.visible
+                    visible: !control.cyclic
                     Layout.fillHeight: true
                     Layout.preferredWidth: visible ? Maui.Style.iconSizes.small : 0
 
