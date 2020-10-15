@@ -111,7 +111,7 @@ QUrl FMStatic::parentDir(const QUrl &path)
 bool FMStatic::isDir(const QUrl &path)
 {
     if (!path.isLocalFile()) {
-        qWarning() << "URL recived is not a local file. FM::isDir" << path;
+//         qWarning() << "URL recived is not a local file. FM::isDir" << path;
         return false;
     }
 

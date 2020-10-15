@@ -187,7 +187,9 @@ Maui.Page
             acceptButton.text: i18n("Trash")
             acceptButton.visible: Maui.Handy.isLinux
             page.margins: Maui.Style.space.big
-            template.iconSource: "emblem-warning"
+            template.iconSource: urls.length === 1 ? Maui.FM.getFileInfo(urls[0]).icon : "emblem-warning"
+            template.imageSource: urls.length === 1 ? Maui.FM.getFileInfo(urls[0]).thumbnail : ""
+            
             actions: Action
             {
                 text: i18n("Cancel")
@@ -913,7 +915,7 @@ Maui.Page
     }
 
     /**
-      * Filters the content of the selection to the current path. The currentPath must be a directory, so the selection can be compared if it is its parent directory. The itemPath is a default item path in cas ethe selectionBar is empty
+      * Filters the content of the selection to the current path. The currentPath must be a directory, so the selection can be compared if it is its parent directory. The itemPath is a default item path in case the selectionBar is empty
       **/
     function filterSelection(currentPath, itemPath)
     {
