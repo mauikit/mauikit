@@ -92,13 +92,14 @@ Maui.Popup
                 id: _closeButton
                 visible: control.persistent
                 hoverEnabled: !Kirigami.Settings.isMobile
-                Layout.fillHeight: true
-                implicitWidth: height
+//                 Layout.fillHeight: true
+                implicitWidth: Maui.Style.iconSizes.medium
+                implicitHeight: Maui.Style.iconSizes.medium
                 onClicked: close()
 
                 Rectangle
                 {
-                    height: Maui.Style.iconSizes.big
+                    height: Maui.Style.iconSizes.medium
                     width: height
                     anchors.centerIn: parent
                     radius: Maui.Style.radiusV

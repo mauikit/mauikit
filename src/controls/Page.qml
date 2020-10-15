@@ -240,10 +240,11 @@ Pane
             Component
             {
                 id: _titleComponent
-                Label
-                {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
+               Item
+               {
+                    Label
+                {     
+                    anchors.fill: parent
                     text: control.title
                     elide : Text.ElideRight
                     font.bold : true
@@ -254,12 +255,16 @@ Pane
                     verticalAlignment :  Text.AlignVCenter
                 }
             }
+            }
             
             middleContent: Loader
             {
                 visible: item
                 active: control.title && control.showTitle
                 sourceComponent: _titleComponent
+                
+                 Layout.fillWidth: true
+                 Layout.fillHeight: true
             }
             
             background: Rectangle
