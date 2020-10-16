@@ -101,6 +101,7 @@ Maui.Page
     {
         id: _searchField
         Layout.fillWidth: true
+        Layout.maximumWidth: 500
         placeholderText: _filterButton.checked ? i18n("Filter") : ("Search")
         inputMethodHints: Qt.ImhNoAutoUppercase
 
@@ -136,23 +137,23 @@ Maui.Page
                 control.currentView.forceActiveFocus()
             }
         }
-    }
-    
-    headBar.rightContent: ToolButton
-    {
-        id: _filterButton
-        icon.name: "view-filter"
-        text: i18n("Filter")
-        checkable: true
-        checked: true
-        onClicked:
+        
+        actions.data: ToolButton
         {
-            control.view.filter = ""
-            _searchField.clear()
-            _searchField.forceActiveFocus()
+            id: _filterButton
+            icon.name: "view-filter"
+//             text: i18n("Filter")
+            checkable: true
+            checked: true
+            onClicked:
+            {
+                control.view.filter = ""
+                _searchField.clear()
+                _searchField.forceActiveFocus()
+            }
         }
     }
-
+    
     footBar.visible: String(control.currentPath).startsWith("trash:/")
 
     footBar.leftSretch: false
