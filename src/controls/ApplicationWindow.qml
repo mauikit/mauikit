@@ -157,6 +157,10 @@ Window
     /**
       */
     property alias notifyDialog: _notify
+    
+    /**
+     */
+    property alias aboutDialog: aboutDialog
 
     /**
       */

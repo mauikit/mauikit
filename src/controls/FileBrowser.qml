@@ -145,6 +145,7 @@ Maui.Page
 //             text: i18n("Filter")
             checkable: true
             checked: true
+            flat: true
             onClicked:
             {
                 control.view.filter = ""

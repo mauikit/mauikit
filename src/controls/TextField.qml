@@ -34,12 +34,16 @@ TextField
     signal goBackTriggered();
     signal goFowardTriggered();	
     signal contentDropped(var drop)
+    
+    Layout.maximumWidth: 500
 
-//	bottomPadding: Maui.Style.space.tiny
 	rightPadding: _actions.implicitWidth + Maui.Style.space.small
+	
     selectByMouse: !Kirigami.Settings.isMobile
+    
     persistentSelection: true
 	focus: true
+	
 	wrapMode: TextInput.NoWrap	
 	
     onPressAndHold: !Kirigami.Settings.isMobile ? entryMenu.popup() : undefined
