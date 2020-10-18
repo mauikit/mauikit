@@ -460,11 +460,13 @@ void DocumentHandler::setDocument(QQuickTextDocument *document)
     if (this->textDocument()) {
         this->textDocument()->setModified(false);
         connect(this->textDocument(), &QTextDocument::modificationChanged, this, &DocumentHandler::modifiedChanged);
-        this->load(m_fileUrl);
+        
+        this->load(m_fileUrl);        
+        
+        QTextOption textOptions = this->textDocument()->defaultTextOption();     
+        textOptions.setTabStopDistance(m_tabSpace);
+        textDocument()->setDefaultTextOption(textOptions);        
     }
-
-    // 	connect(this->textDocument(), &QTextDocument::blockCountChanged, [](){});
-    //     connect(this->textDocument(), &QTextDocument::updateRequest, [](){});
 }
 
 int DocumentHandler::cursorPosition() const
@@ -658,6 +660,28 @@ void DocumentHandler::setFontSize(int size)
     format.setFontPointSize(size);
     mergeFormatOnWordOrSelection(format);
     emit fontSizeChanged();
+}
+
+void DocumentHandler::setTabSpace(qreal value)
+{
+    if(m_tabSpace == value)
+        return;
+    
+    m_tabSpace = value;
+    
+    if(textDocument())
+    {
+        QTextOption textOptions = this->textDocument()->defaultTextOption();     
+        textOptions.setTabStopDistance(m_tabSpace);
+        textDocument()->setDefaultTextOption(textOptions);
+    }
+    
+    emit tabSpaceChanged();
+}
+
+qreal DocumentHandler::tabSpace() const
+{
+    return m_tabSpace;
 }
 
 QString DocumentHandler::fileName() const
@@ -874,14 +898,13 @@ void DocumentHandler::find(const QString &query)
 
 int DocumentHandler::lineHeight(const int &line)
 {
-    return 10;
-//     QTextDocument *doc = textDocument();
-// 
-//     if (!doc) {
-//         return 0;
-//     }
-// 
-//     return int(doc->documentLayout()->blockBoundingRect(doc->findBlockByNumber(line)).height());
+    QTextDocument *doc = textDocument();
+
+    if (!doc) {
+        return 0;
+    }
+
+    return int(doc->documentLayout()->blockBoundingRect(doc->findBlockByNumber(line)).height());
 }
 
 int DocumentHandler::getCurrentLineIndex()
