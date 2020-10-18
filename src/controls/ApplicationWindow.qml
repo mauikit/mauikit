@@ -597,7 +597,7 @@ Window
     {
         target: Maui.Platform
         ignoreUnknownSignals: true
-        onShareFilesRequest: 
+        function onShareFilesRequest(urls) 
         {
             dialogLoader.source = "labs/ShareDialog.qml"
             dialog.urls = urls

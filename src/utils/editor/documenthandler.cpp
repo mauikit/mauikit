@@ -416,11 +416,12 @@ QString DocumentHandler::formatName() const
 
 void DocumentHandler::setFormatName(const QString &formatName)
 {
-    if (this->m_formatName == formatName)
-        return;
-
-    this->m_formatName = formatName;
-    emit this->formatNameChanged();
+    if (this->m_formatName != formatName)
+    {
+        this->m_formatName = formatName;
+        emit this->formatNameChanged();
+    }    
+  
     this->setStyle();
 }
 
@@ -459,6 +460,7 @@ void DocumentHandler::setDocument(QQuickTextDocument *document)
     if (this->textDocument()) {
         this->textDocument()->setModified(false);
         connect(this->textDocument(), &QTextDocument::modificationChanged, this, &DocumentHandler::modifiedChanged);
+        this->load(m_fileUrl);
     }
 
     // 	connect(this->textDocument(), &QTextDocument::blockCountChanged, [](){});
@@ -679,7 +681,12 @@ QUrl DocumentHandler::fileUrl() const
 
 void DocumentHandler::setFileUrl(const QUrl &url)
 {
-    this->load(url);
+ if (url == m_fileUrl)
+        return;
+
+    m_fileUrl = url;
+    emit fileUrlChanged();
+    emit fileInfoChanged();
 }
 
 QVariantMap DocumentHandler::fileInfo() const
@@ -690,12 +697,7 @@ QVariantMap DocumentHandler::fileInfo() const
 void DocumentHandler::load(const QUrl &url)
 {
     qDebug() << "TRYING TO LOAD FILE << " << url << url.isEmpty();
-    if (url == m_fileUrl)
-        return;
-
-    m_fileUrl = url;
-    emit fileUrlChanged();
-    emit fileInfoChanged();
+   
 
     if (m_fileUrl.isLocalFile() && !FMH::fileExists(m_fileUrl))
         return;
@@ -872,13 +874,14 @@ void DocumentHandler::find(const QString &query)
 
 int DocumentHandler::lineHeight(const int &line)
 {
-    QTextDocument *doc = textDocument();
-
-    if (!doc) {
-        return 0;
-    }
-
-    return int(doc->documentLayout()->blockBoundingRect(doc->findBlockByNumber(line)).height());
+    return 10;
+//     QTextDocument *doc = textDocument();
+// 
+//     if (!doc) {
+//         return 0;
+//     }
+// 
+//     return int(doc->documentLayout()->blockBoundingRect(doc->findBlockByNumber(line)).height());
 }
 
 int DocumentHandler::getCurrentLineIndex()
