@@ -331,7 +331,7 @@ Maui.Page
                         active: control.showLineNumbers && !document.isRich
                         anchors.left: parent.left
                         height: Math.max(body.height, control.height)
-                        width: active ? 64 : 0
+                        width: active ? 32 : 0
                         sourceComponent: _linesCounterComponent                        
                     }
                     

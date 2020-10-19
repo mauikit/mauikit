@@ -79,8 +79,6 @@ SwipeView
         onActivated: control.goBack()
     }
     
-
-    
     contentItem: ListView
     {
         id: _listView
@@ -119,31 +117,31 @@ SwipeView
             restoreMode: Binding.RestoreBinding
         }        
         
-        Item
-        {
-            enabled: Maui.Handy.isTouch
-            parent: window().pageContent
-            z: parent.z + 999
-            anchors.bottom: parent.bottom
-            height: 32
-            anchors.left: parent.left
-            anchors.right: parent.right
+        //Item
+        //{
+            //enabled: Maui.Handy.isTouch
+            //parent: window().pageContent
+            //z: parent.z + 999
+            //anchors.bottom: parent.bottom
+            //height: 32
+            //anchors.left: parent.left
+            //anchors.right: parent.right
             
-            DragHandler
-            {
-                id: overviewHandler
-                target: null
-                onActiveChanged:
-                {
-                    if(!active)
-                    {
-                        _listView.contentX += (overviewHandler.centroid.position.x - overviewHandler.centroid.pressPosition.x) * -1
-                        _listView.returnToBounds()
-                        _listView.currentIndex = _listView.indexAt(_listView.contentX, 0)                    
-                    }
-                }
-            }
-        }
+            //DragHandler
+            //{
+                //id: overviewHandler
+                //target: null
+                //onActiveChanged:
+                //{
+                    //if(!active)
+                    //{
+                        //_listView.contentX += (overviewHandler.centroid.position.x - overviewHandler.centroid.pressPosition.x) * -1
+                        //_listView.returnToBounds()
+                        //_listView.currentIndex = _listView.indexAt(_listView.contentX, 0)                    
+                    //}
+                //}
+            //}
+        //}
         
     }
 
