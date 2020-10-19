@@ -258,7 +258,7 @@ Item
                         action: modelData
                         display: control.display
                         Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
-                        
+                        Kirigami.Theme.inherit: false
                         ToolTip.delay: 1000
                         ToolTip.timeout: 5000
                         ToolTip.visible: hovered || pressed && action.text

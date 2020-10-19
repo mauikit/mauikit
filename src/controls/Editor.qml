@@ -27,7 +27,7 @@ Maui.Page
     
     property alias fileUrl : document.fileUrl
     
-    property alias showLineNumbers : _linesCounter.active
+    property bool showLineNumbers : false
     
     focus: true
     title: document.fileName
@@ -304,7 +304,7 @@ Maui.Page
                     placeholderText: i18n("Body")
                     selectByKeyboard: !Kirigami.Settings.isMobile
                     selectByMouse : !Kirigami.Settings.isMobile
-                    textFormat: TextEdit.AutoText			
+                    textFormat: TextEdit.AutoText
                     wrapMode: TextEdit.WrapAnywhere
                     color: control.Kirigami.Theme.textColor
                     activeFocusOnPress: true
@@ -328,10 +328,10 @@ Maui.Page
                     Loader
                     {
                         id: _linesCounter
-                        active: false
+                        active: control.showLineNumbers && !document.isRich
                         anchors.left: parent.left
                         height: Math.max(body.height, control.height)
-                        width: 64
+                        width: active ? 64 : 0
                         sourceComponent: _linesCounterComponent                        
                     }
                     

@@ -730,6 +730,8 @@ private:
     DocumentAlert *canNotSaveAlert(const QString &details);
     
     QTimer m_autoSaveTimer;
+    
+    void refreshAllBlocks();
 };
 
 #endif // DOCUMENTHANDLER_H

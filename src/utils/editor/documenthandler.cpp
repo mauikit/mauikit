@@ -234,11 +234,14 @@ DocumentHandler::DocumentHandler(QObject *parent)
         connect(this, &DocumentHandler::loadFile, m_loader, &FileLoader::loadFile);
         connect(m_loader, &FileLoader::fileReady, [&](QString array, QUrl url) {
             this->setText(array);
-            this->isRich = Qt::mightBeRichText(this->text());
-            emit this->isRichChanged();
-
+            
             if (this->textDocument())
+            {
                 this->textDocument()->setModified(false);
+                
+                this->isRich = Qt::mightBeRichText(this->text());
+                emit this->isRichChanged();                
+            }
 
             emit this->loaded(url);
 
@@ -406,6 +409,18 @@ void DocumentHandler::setStyle()
         const auto style = DocumentHandler::m_repository->theme(m_theme);
         this->m_highlighter->setTheme(style);
         this->m_highlighter->rehighlight();
+    }
+    
+    refreshAllBlocks();
+}
+
+void DocumentHandler::refreshAllBlocks()
+{   
+    
+    if(textDocument())
+    {        
+        for (QTextBlock it = textDocument()->begin(); it != textDocument()->end(); it = it.next())
+            textDocument()->documentLayout()->updateBlock(it);
     }
 }
 
@@ -677,6 +692,7 @@ void DocumentHandler::setTabSpace(qreal value)
     }
     
     emit tabSpaceChanged();
+    refreshAllBlocks();
 }
 
 qreal DocumentHandler::tabSpace() const
@@ -709,6 +725,9 @@ void DocumentHandler::setFileUrl(const QUrl &url)
         return;
 
     m_fileUrl = url;
+ 
+    load(m_fileUrl);
+ 
     emit fileUrlChanged();
     emit fileInfoChanged();
 }
@@ -721,7 +740,8 @@ QVariantMap DocumentHandler::fileInfo() const
 void DocumentHandler::load(const QUrl &url)
 {
     qDebug() << "TRYING TO LOAD FILE << " << url << url.isEmpty();
-   
+    if(!textDocument())
+        return;
 
     if (m_fileUrl.isLocalFile() && !FMH::fileExists(m_fileUrl))
         return;
