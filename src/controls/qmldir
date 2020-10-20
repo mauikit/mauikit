@@ -38,6 +38,7 @@ FileDialog 1.0 FileDialog.qml
 PlacesListBrowser 1.0 PlacesListBrowser.qml
 PathBar 1.0 PathBar.qml
 Dialog 1.0 Dialog.qml
+ErrorDialog 1.0 ErrorDialog.qml
 Popup 1.0 Popup.qml
 TextField 1.0 TextField.qml
 Badge 1.0 Badge.qml

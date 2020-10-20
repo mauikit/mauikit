@@ -42,22 +42,13 @@ Maui.Popup
     property bool defaultButtons: true
     property bool persistent : true
 
-    property bool compressVisible: false
-    property int compressTypeSelected: 0
-
     property alias acceptButton : _acceptButton
-    property alias rejectButton : _rejectButton
-
-    property alias textEntry : _textEntry
-    property alias entryField: _textEntry.visible
-
     property alias page : _page
     property alias footBar : _page.footBar
     property alias headBar: _page.headBar
     property alias closeButton: _closeButton
 
     signal accepted()
-    signal rejected()
 
     closePolicy: control.persistent ? Popup.NoAutoClose | Popup.CloseOnEscape : Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
@@ -119,6 +110,8 @@ Maui.Popup
             }
 
 
+
+
             ScrollView
             {
                 id: _scrollView
@@ -155,33 +148,6 @@ Maui.Popup
                             iconSizeHint: Maui.Style.iconSizes.large
                             spacing: Maui.Style.space.big
                         }
-
-                        RowLayout{
-                            Maui.TextField
-                            {
-                                id: _textEntry
-                                visible: compressVisible
-                                Layout.fillWidth: true
-                                Layout.alignment: Qt.AlignCenter
-                                focus: visible
-                                onAccepted: control.accepted()
-                            }
-
-                            ComboBox
-                            {
-                                id: compressType
-                                visible: compressVisible
-                                model: [".ZIP", ".TAR", ".GZIP"]
-
-                                onCurrentIndexChanged: {
-                                    console.log("@gadomingez Compress Type Selected: " , compressType.currentIndex)
-                                    compressTypeSelected = compressType.currentIndex
-                                }
-                            }
-
-                        }
-
-
                     }
                 }
             }
@@ -201,38 +167,6 @@ Maui.Popup
             Layout.preferredHeight:  Maui.Style.toolBarHeightAlt - Maui.Style.space.medium
             Layout.maximumHeight: Maui.Style.toolBarHeightAlt - Maui.Style.space.medium
             visible: control.defaultButtons || control.actions.length
-
-            Button
-            {
-                id: _rejectButton
-
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                implicitWidth: width
-                visible: control.defaultButtons
-                text: qsTr("Cancel")
-                background: Rectangle
-                {
-                    color: _rejectButton.hovered || _rejectButton.down || _rejectButton.pressed ? "#da4453" : Kirigami.Theme.backgroundColor
-                }
-
-                contentItem: Label
-                {
-                    text: _rejectButton.text
-                    color:  _rejectButton.hovered || _rejectButton.down || _rejectButton.pressed ?  "#fafafa" : Kirigami.Theme.textColor
-                    horizontalAlignment: Qt.AlignHCenter
-                    verticalAlignment: Qt.AlignVCenter
-                }
-
-                onClicked: rejected()
-            }
-
-            Maui.Separator
-            {
-                position: Qt.Vertical
-                Layout.fillHeight: true
-                visible: _acceptButton.visible && _rejectButton.visible
-            }
 
             Button
             {
@@ -259,42 +193,6 @@ Maui.Popup
                 onClicked: accepted()
             }
 
-            Repeater
-            {
-                model: control.actions
-
-                Button
-                {
-                    id: _actionButton
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    implicitWidth: width
-
-                    action: modelData
-
-                    background: Rectangle
-                    {
-                        color: _actionButton.hovered || _actionButton.down || _actionButton.pressed ? "#26c6da" : Kirigami.Theme.backgroundColor
-                    }
-
-                    contentItem: Label
-                    {
-                        text: _actionButton.text
-                        color:  _actionButton.hovered || _actionButton.down || _actionButton.pressed ?  "#fafafa" : Kirigami.Theme.textColor
-                        horizontalAlignment: Qt.AlignHCenter
-                        verticalAlignment: Qt.AlignVCenter
-                    }
-
-                    Maui.Separator
-                    {
-                        position: Qt.Vertical
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        anchors.left: parent.left
-                        visible: index > 0
-                    }
-                }
-            }
         }
     }
 }
