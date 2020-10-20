@@ -641,6 +641,8 @@ public slots:
 
 signals:
     void documentChanged();
+    void fileSaved();
+    
     void cursorPositionChanged();
     void selectionStartChanged();
     void selectionEndChanged();

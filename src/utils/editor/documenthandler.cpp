@@ -793,6 +793,7 @@ void DocumentHandler::saveAs(const QUrl &url)
     }
     file.write((isHtml ? doc->toHtml() : doc->toPlainText()).toUtf8());
     file.close();
+    emit fileSaved();
 
     doc->setModified(false);
 
@@ -801,10 +802,6 @@ void DocumentHandler::saveAs(const QUrl &url)
 
     m_fileUrl = url;
     emit fileUrlChanged();
-
-    if (m_enableSyntaxHighlighting) {
-        this->setFormatName(DocumentHandler::getLanguageNameFromFileName(m_fileUrl));
-    }
 }
 
 const QString DocumentHandler::getLanguageNameFromFileName(const QUrl &fileName)
