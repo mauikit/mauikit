@@ -52,7 +52,7 @@ Maui.Dialog
     headBar.middleContent: Maui.TextField
     {
         id: tagText
-        Layout.fillWidth: true       
+        Layout.fillWidth: true           
         placeholderText: i18n("Filter or add a new tag")
         onAccepted:
         {

@@ -226,7 +226,7 @@ Maui.Popup
                 Layout.fillHeight: true
                 implicitWidth: width
                 visible: control.defaultButtons
-                text: qsTr("Cancel")
+                text: i18n("Cancel")
                 background: Rectangle
                 {
                     color: _rejectButton.hovered || _rejectButton.down || _rejectButton.pressed ? "#da4453" : Kirigami.Theme.backgroundColor
@@ -257,7 +257,7 @@ Maui.Popup
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 implicitWidth: width
-                text: qsTr("Accept")
+                text: i18n("Accept")
                 visible: control.defaultButtons
                 background: Rectangle
                 {

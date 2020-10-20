@@ -101,6 +101,7 @@ Maui.Page
     {
         id: _searchField
         Layout.fillWidth: true
+        Layout.maximumWidth: 500
         placeholderText: _filterButton.checked ? i18n("Filter") : ("Search")
         inputMethodHints: Qt.ImhNoAutoUppercase
 
@@ -136,23 +137,24 @@ Maui.Page
                 control.currentView.forceActiveFocus()
             }
         }
-    }
-    
-    headBar.rightContent: ToolButton
-    {
-        id: _filterButton
-        icon.name: "view-filter"
-        text: i18n("Filter")
-        checkable: true
-        checked: true
-        onClicked:
+        
+        actions.data: ToolButton
         {
-            control.view.filter = ""
-            _searchField.clear()
-            _searchField.forceActiveFocus()
+            id: _filterButton
+            icon.name: "view-filter"
+//             text: i18n("Filter")
+            checkable: true
+            checked: true
+            flat: true
+            onClicked:
+            {
+                control.view.filter = ""
+                _searchField.clear()
+                _searchField.forceActiveFocus()
+            }
         }
     }
-
+    
     footBar.visible: String(control.currentPath).startsWith("trash:/")
 
     footBar.leftSretch: false
@@ -187,7 +189,9 @@ Maui.Page
             acceptButton.text: i18n("Trash")
             acceptButton.visible: Maui.Handy.isLinux
             page.margins: Maui.Style.space.big
-            template.iconSource: "emblem-warning"
+            template.iconSource: urls.length === 1 ? Maui.FM.getFileInfo(urls[0]).icon : "emblem-warning"
+            template.imageSource: urls.length === 1 ? Maui.FM.getFileInfo(urls[0]).thumbnail : ""
+            
             actions: Action
             {
                 text: i18n("Cancel")
@@ -913,7 +917,7 @@ Maui.Page
     }
 
     /**
-      * Filters the content of the selection to the current path. The currentPath must be a directory, so the selection can be compared if it is its parent directory. The itemPath is a default item path in cas ethe selectionBar is empty
+      * Filters the content of the selection to the current path. The currentPath must be a directory, so the selection can be compared if it is its parent directory. The itemPath is a default item path in case the selectionBar is empty
       **/
     function filterSelection(currentPath, itemPath)
     {

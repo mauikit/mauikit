@@ -54,7 +54,10 @@ Item
     {        
         id: _layout
         width: parent.width
-        anchors.centerIn: parent  
+        anchors.centerIn: parent 
+        rowSpacing: 0
+        columnSpacing: 0
+        
         rows: 2
         columns: 2
         
@@ -71,7 +74,7 @@ Item
             
             iconSizeHint: Maui.Style.iconSizes.medium
             label2.wrapMode: Text.WordWrap
-            implicitHeight: Math.floor(label1.implicitHeight + label2.implicitHeight + Maui.Style.space.big ) 
+            implicitHeight: Math.floor(label1.implicitHeight + label2.implicitHeight + Maui.Style.space.medium ) 
         }
         
         RowLayout

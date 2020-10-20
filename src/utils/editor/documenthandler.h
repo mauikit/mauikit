@@ -261,6 +261,7 @@ class MAUIKIT_EXPORT DocumentHandler : public QObject
     Q_PROPERTY(bool isRich READ getIsRich NOTIFY isRichChanged)
 
     Q_PROPERTY(int fontSize READ fontSize WRITE setFontSize NOTIFY fontSizeChanged)
+    Q_PROPERTY(qreal tabSpace READ tabSpace WRITE setTabSpace NOTIFY tabSpaceChanged)
 
     Q_PROPERTY(QString fileName READ fileName NOTIFY fileUrlChanged)
     Q_PROPERTY(QString fileType READ fileType NOTIFY fileUrlChanged)
@@ -442,6 +443,9 @@ public:
      * @param size
      */
     void setFontSize(int size);
+       
+    qreal tabSpace() const;    
+    void setTabSpace(qreal value);
 
     /**
      * @brief fileName
@@ -637,6 +641,8 @@ public slots:
 
 signals:
     void documentChanged();
+    void fileSaved();
+    
     void cursorPositionChanged();
     void selectionStartChanged();
     void selectionEndChanged();
@@ -652,6 +658,7 @@ signals:
     void isRichChanged();
 
     void fontSizeChanged();
+    void tabSpaceChanged();
 
     void textChanged();
     void fileUrlChanged();
@@ -695,7 +702,9 @@ private:
     bool isRich = false;
 
     QFont m_font;
-    int m_fontSize;
+    int m_fontSize = 12;
+    qreal m_tabSpace = 8;
+    
     QUrl m_fileUrl;
     
     QThread m_worker;
@@ -723,6 +732,8 @@ private:
     DocumentAlert *canNotSaveAlert(const QString &details);
     
     QTimer m_autoSaveTimer;
+    
+    void refreshAllBlocks();
 };
 
 #endif // DOCUMENTHANDLER_H
