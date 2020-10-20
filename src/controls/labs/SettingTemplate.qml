@@ -74,7 +74,7 @@ Item
             
             iconSizeHint: Maui.Style.iconSizes.medium
             label2.wrapMode: Text.WordWrap
-            implicitHeight: Math.floor(label1.implicitHeight + label2.implicitHeight + Maui.Style.space.medium ) 
+            implicitHeight: Math.floor(label1.implicitHeight + label2.implicitHeight + Maui.Style.space.small)
         }
         
         RowLayout

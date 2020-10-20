@@ -862,7 +862,6 @@ static const QMap<QString, QString> folderIcon {{PicturesPath, "folder-pictures"
                                                 {VideosPath, "folder-videos"},
                                                 {DesktopPath, "user-desktop"},
                                                 {AppsPath, "system-run"},
-                                                {TrashPath, "user-trash"},
                                                 {RootPath, "folder-root"}};
 
 /**
