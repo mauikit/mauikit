@@ -157,6 +157,10 @@ Window
     /**
       */
     property alias notifyDialog: _notify
+    
+    /**
+     */
+    property alias aboutDialog: aboutDialog
 
     /**
       */
@@ -586,6 +590,18 @@ Window
             root.y = rect.y
             root.width = rect.width
             root.height = rect.height
+        }
+    }
+    
+    Connections
+    {
+        target: Maui.Platform
+        ignoreUnknownSignals: true
+        function onShareFilesRequest(urls) 
+        {
+            dialogLoader.source = "labs/ShareDialog.qml"
+            dialog.urls = urls
+            dialog.open()
         }
     }
 

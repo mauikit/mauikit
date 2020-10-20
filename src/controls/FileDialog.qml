@@ -132,12 +132,12 @@ Maui.Dialog
     }
 
     headBar.visible: true
-    headBar.leftContent: ToolButton
-    {
-        icon.name: "application-menu"
-        checked: pageRow.currentIndex === 0
-        onClicked: pageRow.currentIndex = !pageRow.currentIndex
-    }
+//     headBar.leftContent: ToolButton
+//     {
+//         icon.name: "application-menu"
+//         checked: pageRow.currentIndex === 0
+//         onClicked: pageRow.currentIndex = !pageRow.currentIndex
+//     }
 
     headBar.middleContent: Loader
     {

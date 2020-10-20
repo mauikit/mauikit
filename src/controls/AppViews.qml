@@ -18,6 +18,7 @@
  */
 
 import QtQuick 2.14
+import QtQml 2.14
 import QtQuick.Controls 2.14
 import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.9 as Kirigami
@@ -77,7 +78,7 @@ SwipeView
         sequence: StandardKey.Back
         onActivated: control.goBack()
     }
-
+    
     contentItem: ListView
     {
         id: _listView
@@ -100,6 +101,48 @@ SwipeView
         highlightResizeVelocity: -1
 
         maximumFlickVelocity: 4 * (control.orientation === Qt.Horizontal ? width : height)
+        
+        property int lastPos: 0
+        
+        onCurrentIndexChanged:
+        {
+            _listView.lastPos = _listView.contentX
+        }
+        
+        Binding on contentX
+        {
+            when: overviewHandler.active
+            delayed: true
+            value: _listView.lastPos + ((overviewHandler.centroid.position.x - overviewHandler.centroid.pressPosition.x) * -1)
+            restoreMode: Binding.RestoreBinding
+        }        
+        
+        //Item
+        //{
+            //enabled: Maui.Handy.isTouch
+            //parent: window().pageContent
+            //z: parent.z + 999
+            //anchors.bottom: parent.bottom
+            //height: 32
+            //anchors.left: parent.left
+            //anchors.right: parent.right
+            
+            //DragHandler
+            //{
+                //id: overviewHandler
+                //target: null
+                //onActiveChanged:
+                //{
+                    //if(!active)
+                    //{
+                        //_listView.contentX += (overviewHandler.centroid.position.x - overviewHandler.centroid.pressPosition.x) * -1
+                        //_listView.returnToBounds()
+                        //_listView.currentIndex = _listView.indexAt(_listView.contentX, 0)                    
+                    //}
+                //}
+            //}
+        //}
+        
     }
 
     Keys.enabled: true

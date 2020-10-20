@@ -67,7 +67,13 @@ FMList::FMList(QObject *parent)
         }
     });
 
-    connect(this->fm, &FM::pathContentItemsReady, [&](FMH::PATH_CONTENT res) { this->appendToList(res.content); });
+    connect(this->fm, &FM::pathContentItemsReady, [&](FMH::PATH_CONTENT res)
+    {
+        if(res.path != this->path)
+            return;
+
+        this->appendToList(res.content);
+    });
 
     connect(this->fm, &FM::pathContentItemsRemoved, [&](FMH::PATH_CONTENT res) {
         if (res.path != this->path)

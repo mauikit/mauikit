@@ -89,7 +89,7 @@ bool isIOS();
 /**
  * @brief The FILTER_TYPE enum
  */
-enum FILTER_TYPE : int { AUDIO, VIDEO, TEXT, IMAGE, DOCUMENT, COMPRESSED, NONE };
+enum FILTER_TYPE : int { AUDIO, VIDEO, TEXT, IMAGE, DOCUMENT, COMPRESSED, FONT, NONE };
 
 
 static const QStringList AUDIO_MIMETYPES = {"audio/mpeg", "audio/mp4", "audio/flac", "audio/ogg", "audio/wav"};
@@ -127,13 +127,15 @@ static const QStringList COMPRESSED_MIMETYPES = {
                                                  //"application/gzip",
                                                  "application/zip"};
 
+static const QStringList FONT_MIMETYPES = {"font/ttf", "font/otf"};
 
 static const QMap<FILTER_TYPE, QStringList> SUPPORTED_MIMETYPES {{FILTER_TYPE::AUDIO, AUDIO_MIMETYPES},
                                                                  {FILTER_TYPE::VIDEO, VIDEO_MIMETYPES},
                                                                  {FILTER_TYPE::TEXT, TEXT_MIMETYPES},
                                                                  {FILTER_TYPE::IMAGE, IMAGE_MIMETYPES},
                                                                  {FILTER_TYPE::DOCUMENT, DOCUMENT_MIMETYPES},
-                                                                 {FMH::FILTER_TYPE::COMPRESSED, COMPRESSED_MIMETYPES}};
+                                                                 {FILTER_TYPE::FONT, FONT_MIMETYPES},
+                                                                 {FILTER_TYPE::COMPRESSED, COMPRESSED_MIMETYPES}};
 
 
 /**
@@ -155,14 +157,15 @@ static QStringList getMimeTypeSuffixes(const FMH::FILTER_TYPE &type, QString (*c
     return res;
 }
 
+static QHash<FILTER_TYPE, QStringList> FILTER_LIST = {{FILTER_TYPE::AUDIO, getMimeTypeSuffixes(FILTER_TYPE::AUDIO, [](QString suffix) -> QString { return "*." + suffix; })},
+{FILTER_TYPE::VIDEO, getMimeTypeSuffixes(FILTER_TYPE::VIDEO, [](QString suffix) -> QString { return "*." + suffix; })},
+{FILTER_TYPE::TEXT, getMimeTypeSuffixes(FILTER_TYPE::TEXT, [](QString suffix) -> QString { return "*." + suffix; })},
+{FILTER_TYPE::DOCUMENT, getMimeTypeSuffixes(FILTER_TYPE::DOCUMENT, [](QString suffix) -> QString { return "*." + suffix; })},
+{FILTER_TYPE::COMPRESSED, getMimeTypeSuffixes(FILTER_TYPE::COMPRESSED, [](QString suffix) -> QString { return "*." + suffix; })},
+{FILTER_TYPE::FONT, getMimeTypeSuffixes(FILTER_TYPE::FONT, [](QString suffix) -> QString { return "*." + suffix; })},
+{FILTER_TYPE::IMAGE, getMimeTypeSuffixes(FILTER_TYPE::IMAGE, [](QString suffix) -> QString { return "*." + suffix; })},
+{FILTER_TYPE::NONE, QStringList()}};
 
-static const QHash<FMH::FILTER_TYPE, QStringList> FILTER_LIST = {{FILTER_TYPE::AUDIO, FMH::getMimeTypeSuffixes(FMH::FILTER_TYPE::AUDIO, [](QString suffix) -> QString { return "*." + suffix; })},
-                                                                 {FILTER_TYPE::VIDEO, FMH::getMimeTypeSuffixes(FMH::FILTER_TYPE::VIDEO, [](QString suffix) -> QString { return "*." + suffix; })},
-                                                                 {FILTER_TYPE::TEXT, FMH::getMimeTypeSuffixes(FMH::FILTER_TYPE::TEXT, [](QString suffix) -> QString { return "*." + suffix; })},
-                                                                 {FILTER_TYPE::DOCUMENT, FMH::getMimeTypeSuffixes(FMH::FILTER_TYPE::DOCUMENT, [](QString suffix) -> QString { return "*." + suffix; })},
-                                                                 {FILTER_TYPE::COMPRESSED, FMH::getMimeTypeSuffixes(FMH::FILTER_TYPE::COMPRESSED, [](QString suffix) -> QString { return "*." + suffix; })},
-                                                                 {FILTER_TYPE::IMAGE, FMH::getMimeTypeSuffixes(FMH::FILTER_TYPE::IMAGE, [](QString suffix) -> QString { return "*." + suffix; })},
-                                                                 {FILTER_TYPE::NONE, QStringList()}};
 /**
  * @brief The MODEL_KEY enum
  */
@@ -845,6 +848,7 @@ static const QString DocumentsPath = QUrl::fromLocalFile(QStandardPaths::writabl
 static const QString HomePath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).toString();
 static const QString MusicPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::MusicLocation)).toString();
 static const QString VideosPath = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::MoviesLocation)).toString();
+static const QString TrashPath = QStringLiteral("trash:/");
 
 static const QStringList defaultPaths = {
     HomePath,
@@ -853,8 +857,9 @@ static const QStringList defaultPaths = {
     PicturesPath,
     MusicPath,
     VideosPath,
-    DownloadsPath,
-    // 		RootPath
+    DownloadsPath/*,
+    RootPath,
+    TrashPath*/
 };
 
 #endif

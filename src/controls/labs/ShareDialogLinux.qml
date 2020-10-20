@@ -46,7 +46,6 @@ Maui.Dialog
     acceptButton.text: i18n("Open with")
     onAccepted:  control.openWith()
 
-
     page.title: i18n("Share with")
     headBar.visible: true
 
@@ -73,7 +72,7 @@ Maui.Dialog
 
         inputData :
         {
-            'urls': control.urls,
+            'urls': [control.urls[0]],
             'mimeType':control.mimeType
         }
 

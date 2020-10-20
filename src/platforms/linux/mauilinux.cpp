@@ -290,9 +290,9 @@ void MAUIKDE::openUrl(const QUrl& url)
     KRun::runUrl(url, FMH::getFileInfoModel(url)[FMH::MODEL_KEY::MIME], nullptr, false, KRun::RunFlag::DeleteTemporaryFiles);
 }
 
-void MAUIKDE::shareFiles(const QList<QUrl>&)
+void MAUIKDE::shareFiles(const QList<QUrl> &urls)
 {
-    
+    emit this->shareFilesRequest(QUrl::toStringList(urls));
 }
 
 void MAUIKDE::shareText(const QString&)

@@ -34,6 +34,8 @@ Maui.Dialog
     persistent: false
     widthHint: 0.9
     heightHint: 0.8
+    
+    property alias mainHeader : _header
 
     maxWidth: Math.floor( 350 * Kirigami.Units.devicePixelRatio )
     maxHeight: Math.floor( 250 * Kirigami.Units.devicePixelRatio )
@@ -64,6 +66,7 @@ Maui.Dialog
 
     Maui.AlternateListItem
     {
+        id: _header
         Layout.fillWidth: true
         implicitHeight: (_div1.height * 1.5) + Maui.Style.space.big
         alt: true

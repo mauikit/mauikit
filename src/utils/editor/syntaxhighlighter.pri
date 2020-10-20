@@ -25,9 +25,9 @@ android { #from the kde android docker
 
 }else:macos { #from homebrew
 
-    LIBS += -L$$PWD/../../../../../../../../../usr/local/Cellar/kf5-syntax-highlighting/5.72.0/lib/ -lKF5SyntaxHighlighting.5.72.0
+    LIBS += -L$$PWD/../../../../../../../../../usr/local/Cellar/kf5-syntax-highlighting/5.74.0/lib/ -lKF5SyntaxHighlighting.5.74.0
 
-    INCLUDEPATH += $$PWD/../../../../../../../../../usr/local/Cellar/kf5-syntax-highlighting/5.72.0/include
-    DEPENDPATH += $$PWD/../../../../../../../../../usr/local/Cellar/kf5-syntax-highlighting/5.72.0/include
+    INCLUDEPATH += $$PWD/../../../../../../../../../usr/local/Cellar/kf5-syntax-highlighting/5.74.0/include
+    DEPENDPATH += $$PWD/../../../../../../../../../usr/local/Cellar/kf5-syntax-highlighting/5.74.0/include
 
 }

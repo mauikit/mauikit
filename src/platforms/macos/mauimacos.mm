@@ -6,6 +6,11 @@
 
 #include <QUrl>
 
+MAUIMacOS::MAUIMacOS(QObject *parent) : AbstractPlatform(parent)
+{
+
+}
+
 void MAUIMacOS::removeTitlebarFromWindow(long winId)
 {
  if(winId == -1)
@@ -49,4 +54,34 @@ void MAUIMacOS::runApp(const QString &app, const QList<QUrl> &files)
     OSStatus ret;
     ret = LSOpenFromURLSpec(&inspec, NULL);
     CFRelease(appUrl);
+}
+
+void MAUIMacOS::shareFiles(const QList<QUrl> &urls)
+{
+
+}
+
+void MAUIMacOS::shareText(const QString &urls)
+{
+
+}
+
+void MAUIMacOS::openUrl(const QUrl &url)
+{
+
+}
+
+bool MAUIMacOS::hasKeyboard()
+{
+
+}
+
+bool MAUIMacOS::hasMouse()
+{
+
+}
+
+void MAUIMacOS::notify(const QString &title, const QString &message, const QString &icon, const QString &imageUrl)
+{
+
 }

@@ -23,12 +23,6 @@ Item
 	
 	function open()
 	{		
-		if(Maui.Handy.isAndroid)
-		{
-			Maui.Android.shareDialog(control.urls[0])
-			return;
-		}
-		
 		if(Maui.Handy.isLinux)
 		{
 			console.log(control.urls)

@@ -22,8 +22,7 @@ import QtQuick.Controls 2.10
 import QtQuick.Layouts 1.3
 
 import org.kde.kirigami 2.8 as Kirigami
-import org.kde.mauikit 1.0 as Maui
-import org.kde.mauikit 1.1 as MauiLab
+import org.kde.mauikit 1.2 as Maui
 
 import "private" as Private
 
@@ -48,16 +47,14 @@ Maui.Page
 
     // custom props
     property bool selectionMode: false
-    property bool showStatusBar : Maui.FM.loadSettings("StatusBar", "SETTINGS", false) == "true"
 
     property int thumbnailsSize : Maui.Style.iconSizes.large * 1.7
 
     property var indexHistory : []
 
     // need to be set by the implementation as features
-    property MauiLab.SelectionBar selectionBar : null
+    property Maui.SelectionBar selectionBar : null
     property Maui.TagsDialog tagsDialog : null
-    property MauiLab.ShareDialog shareDialog : null
     property Maui.OpenWithDialog openWithDialog : null
 
     //relevant menus to file item and the browserview
@@ -104,6 +101,7 @@ Maui.Page
     {
         id: _searchField
         Layout.fillWidth: true
+        Layout.maximumWidth: 500
         placeholderText: _filterButton.checked ? i18n("Filter") : ("Search")
         inputMethodHints: Qt.ImhNoAutoUppercase
 
@@ -139,18 +137,25 @@ Maui.Page
                 control.currentView.forceActiveFocus()
             }
         }
+        
+        actions.data: ToolButton
+        {
+            id: _filterButton
+            icon.name: "view-filter"
+//             text: i18n("Filter")
+            checkable: true
+            checked: true
+            flat: true
+            onClicked:
+            {
+                control.view.filter = ""
+                _searchField.clear()
+                _searchField.forceActiveFocus()
+            }
+        }
     }
     
-    headBar.rightContent: ToolButton
-    {
-        id: _filterButton
-        icon.name: "view-filter"
-        text: i18n("Filter")
-        checkable: true
-        checked: true
-    }
-
-    footBar.visible: control.showStatusBar ||  String(control.currentPath).startsWith("trash:/")
+    footBar.visible: String(control.currentPath).startsWith("trash:/")
 
     footBar.leftSretch: false
     footerPositioning: ListView.InlineFooter
@@ -184,7 +189,9 @@ Maui.Page
             acceptButton.text: i18n("Trash")
             acceptButton.visible: Maui.Handy.isLinux
             page.margins: Maui.Style.space.big
-            template.iconSource: "emblem-warning"
+            template.iconSource: urls.length === 1 ? Maui.FM.getFileInfo(urls[0]).icon : "emblem-warning"
+            template.imageSource: urls.length === 1 ? Maui.FM.getFileInfo(urls[0]).thumbnail : ""
+            
             actions: Action
             {
                 text: i18n("Cancel")
@@ -439,6 +446,7 @@ Maui.Page
             if((event.key === Qt.Key_F) && (event.modifiers & Qt.ControlModifier))
             {
                 control.headBar.visible = !control.headBar.visible
+                _searchField.forceActiveFocus()
             }                    
             
             control.keyPress(event)
@@ -651,11 +659,7 @@ Maui.Page
             return
         }
 
-        if(control.shareDialog)
-        {
-            control.shareDialog.urls = urls
-            control.shareDialog.open()
-        }
+       Maui.Platform.shareFiles(urls)        
     }
     
     /**
@@ -868,20 +872,7 @@ Maui.Page
         }
     }
 
-    /**
-      *
-      **/
-    function toggleStatusBar()
-    {
-        control.footBar.visible = !control.footBar.visible
-        Maui.FM.saveSettings("StatusBar",  control.footBar.visible, "SETTINGS")
-        
-        if(!control.footBar.visible)
-        {
-          control.currentView.forceActiveFocus()
-        }
-    }
-    
+       
     /**
       *
       **/
@@ -933,7 +924,7 @@ Maui.Page
     }
 
     /**
-      * Filters the content of the selection to the current path. The currentPath must be a directory, so the selection can be compared if it is its parent directory. The itemPath is a default item path in cas ethe selectionBar is empty
+      * Filters the content of the selection to the current path. The currentPath must be a directory, so the selection can be compared if it is its parent directory. The itemPath is a default item path in case the selectionBar is empty
       **/
     function filterSelection(currentPath, itemPath)
     {

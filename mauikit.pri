@@ -35,6 +35,8 @@ KCOREADDONS_ANDROID_REPO = https://github.com/mauikit/KCoreAddons-android
 KCOREADDONS_MACOS_REPO = https://github.com/mauikit/KCoreAddons-macos
 KCOREADDONS_WINDOWS_REPO = https://github.com/mauikit/KCoreAddons-windows
 
+KIO_ANDROID_REPO = https://github.com/mauikit/KIO-android
+
 #ANDROID FILES VALUES
 ANDROID_FILES_DIR = $$_PRO_FILE_PWD_/android_files
 ANDROID_FILES_MANIFEST = $$_PRO_FILE_PWD_/android_files/AndroidManifest.xml
