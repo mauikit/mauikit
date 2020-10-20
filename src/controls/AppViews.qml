@@ -109,13 +109,13 @@ SwipeView
             _listView.lastPos = _listView.contentX
         }
         
-        Binding on contentX
-        {
-            when: overviewHandler.active
-            delayed: true
-            value: _listView.lastPos + ((overviewHandler.centroid.position.x - overviewHandler.centroid.pressPosition.x) * -1)
-            restoreMode: Binding.RestoreBinding
-        }        
+//        Binding on contentX
+//        {
+//            when: overviewHandler.active
+//            delayed: true
+//            value: _listView.lastPos + ((overviewHandler.centroid.position.x - overviewHandler.centroid.pressPosition.x) * -1)
+//            restoreMode: Binding.RestoreBinding
+//        }
         
         //Item
         //{

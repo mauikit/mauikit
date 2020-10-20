@@ -536,7 +536,7 @@ Pane
                 stop()
             }
         }
-        
+
         Item
         {
             anchors.top: parent.top
@@ -659,9 +659,9 @@ Pane
         
         function pullBackHeader()
         {
-            if(Maui.Handy.isTouch) 
+            if(Maui.Handy.isTouch)
                 return
-                
+
                 _headerAnimation.enabled = true
                 header.height = 0
         }
@@ -674,9 +674,9 @@ Pane
         
         function pullBackFooter()
         {
-            if(Maui.Handy.isTouch) 
+            if(Maui.Handy.isTouch)
                 return
-                
+
                 _footerAnimation.enabled = true
                 footer.height= 0
         }
