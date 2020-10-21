@@ -71,8 +71,8 @@ Pane
         property int autoHideHeaderMargins : Maui.Style.toolBarHeight
         property int autoHideFooterMargins : Maui.Style.toolBarHeight
         
-        property int autoHideFooterDelay : 1000
-        property int autoHideHeaderDelay : 1000
+        property int autoHideFooterDelay : Maui.Handy.isTouch ? 0 : 1000
+        property int autoHideHeaderDelay : Maui.Handy.isTouch ? 0 : 1000
         
         //    property bool floatingHeader : control.flickable && !control.flickable.atYBeginning
         property bool floatingHeader : false
@@ -420,24 +420,32 @@ Pane
         
         onAutoHideHeaderChanged:
         {
-            if(autoHideHeader)
-            {
-                _autoHideHeaderTimer.start()
-            } else
-            {
-                pullDownHeader()
-                _autoHideHeaderTimer.stop()
+            if(control.autoHideHeader){
+                if(header.height !== 0)
+                {
+                    _autoHideHeaderTimer.start()
+                    _revealHeaderTimer.stop()
+
+                }else
+                {
+                    _autoHideHeaderTimer.stop()
+                    _revealHeaderTimer.start()
+                }
             }
         }
+
         onAutoHideFooterChanged:
         {
-            if(autoHideFooter)
+            if(control.autoHideFooter)
             {
-                _autoHideFooterTimer.start()
-            } else
-            {
-                pullDownFooter()
-                _autoHideFooterTimer.stop()
+                if(footer.height !== 0)
+                {
+                    _autoHideFooterTimer.start()
+                } else
+                {
+                    pullDownFooter()
+                    _autoHideFooterTimer.stop()
+                }
             }
         }
         onAltHeaderChanged: pullDownHeader()
@@ -513,7 +521,7 @@ Pane
             interval: autoHideHeaderDelay
             onTriggered:
             {
-                if(control.autoHideHeader && !control.altHeader)
+                if(control.autoHideHeader)
                 {
                     pullBackHeader()
                 }
@@ -537,6 +545,76 @@ Pane
             }
         }
 
+//TapHandler
+//{
+////    enabled: (control.autoHideFooter || control.autoHideHeader ) && Maui.Handy.isTouch
+//    target: _content
+//    onTapped:
+//    {
+//        if(control.autoHideHeader){
+//            if(header.height !== 0)
+//            {
+//                _autoHideHeaderTimer.start()
+//                _revealHeaderTimer.stop()
+
+//            }else
+//            {
+//                _autoHideHeaderTimer.stop()
+//                _revealHeaderTimer.start()
+//            }
+//        }
+//    }
+//}
+
+        MouseArea
+        {
+            id: _touchMouse
+            parent: _content
+            anchors.fill:  parent
+            propagateComposedEvents: true
+            drag.filterChildren: true
+            z: _content.z +1
+            visible: (control.autoHideFooter || control.autoHideHeader ) && Maui.Handy.isTouch
+
+            Timer {
+                id: doubleClickTimer
+                interval: 900
+                onTriggered:
+                {
+                    if(control.autoHideHeader){
+                        if(header.height !== 0)
+                        {
+                            _autoHideHeaderTimer.start()
+                            _revealHeaderTimer.stop()
+
+                        }else
+                        {
+                            _autoHideHeaderTimer.stop()
+                            _revealHeaderTimer.start()
+                        }
+                    }
+
+                    if(control.autoHideFooter)
+                    {
+                        if(footer.height !== 0)
+                        {
+                            _autoHideFooterTimer.start()
+
+                        }else
+                        {
+                            pullDownFooter()
+                            _autoHideFooterTimer.stop()
+                        }
+                    }
+                }
+            }
+
+            onPressed: {
+                doubleClickTimer.restart();
+                mouse.accepted = false
+            }
+        }
+
         Item
         {
             anchors.top: parent.top
@@ -544,7 +622,7 @@ Pane
             anchors.right: parent.right
             height: visible ? _headerContent.height + control.autoHideHeaderMargins : 0
             z: _content.z +1
-            visible: control.autoHideHeader && !control.altHeader && !Kirigami.Settings.isMobile
+            visible: control.autoHideHeader && !control.altHeader && !Maui.Handy.isTouch
             
             HoverHandler
             {
@@ -580,7 +658,7 @@ Pane
             anchors.right: parent.right
             height: visible ? _footerContent.height + control.autoHideFooterMargins : 0
             z: _footerContent.z - 1
-            visible: control.autoHideFooter && !control.altHeader && !Kirigami.Settings.isMobile
+            visible: control.autoHideFooter && !control.altHeader && !Maui.Handy.isTouch
             
             HoverHandler
             {
@@ -659,9 +737,6 @@ Pane
         
         function pullBackHeader()
         {
-            if(Maui.Handy.isTouch)
-                return
-
                 _headerAnimation.enabled = true
                 header.height = 0
         }
@@ -674,9 +749,6 @@ Pane
         
         function pullBackFooter()
         {
-            if(Maui.Handy.isTouch)
-                return
-
                 _footerAnimation.enabled = true
                 footer.height= 0
         }
