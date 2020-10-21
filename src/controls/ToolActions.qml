@@ -16,7 +16,7 @@ Rectangle
     implicitHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.12)
     
     Kirigami.Theme.colorSet: Kirigami.Theme.View
-    Kirigami.Theme.inherit: false
+//     Kirigami.Theme.inherit: false
 
     default property list<Action> actions
     
