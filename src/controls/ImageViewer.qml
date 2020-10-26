@@ -210,8 +210,8 @@ Flickable
 				asynchronous: flick.asynchronous
 				source: flick.source
 				cache: flick.cache
-				sourceSize.width : Math.max(flick.imageWidth, img.implicitWidth)
-				sourceSize.height: Math.max(flick.imageHeight, img.implicitHeight)
+                sourceSize.width : Math.max(flick.imageWidth, img.implicitWidth)
+                sourceSize.height: Math.max(flick.imageHeight, img.implicitHeight)
                 BusyIndicator
                 {
                     anchors.centerIn: parent

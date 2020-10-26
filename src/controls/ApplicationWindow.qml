@@ -259,7 +259,7 @@ Window
                     }
                 }
 
-                MenuSeparator{}
+                MenuSeparator{visible: root.mainMenu.length}
 
                 MenuItem
                 {
