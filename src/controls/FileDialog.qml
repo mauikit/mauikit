@@ -56,10 +56,25 @@ Maui.Dialog
 
     rejectButton.text: i18n("Cancel")
     acceptButton.text: control.mode === modes.SAVE ? i18n("Save") : i18n("Open")
-
-    footBar.visible: control.mode === modes.SAVE
+   
+    page.footerColumn: [
     
-    page.footerColumn: Maui.TagsBar
+    Maui.ToolBar
+    {
+        visible: control.mode === modes.SAVE
+        width: parent.width
+        position: ToolBar.Footer
+        
+        middleContent: Maui.TextField
+        {
+            id: _textField
+            Layout.fillWidth: true
+            placeholderText: i18n("File name...")
+            text: suggestedFileName
+        }
+    },
+    
+    Maui.TagsBar
     {
         id: _tagsBar
         visible: control.mode === modes.SAVE
@@ -71,15 +86,7 @@ Maui.Dialog
         Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
         Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
     }
-    
-    footBar.middleContent: Maui.TextField
-    {
-        id: _textField
-        Layout.fillWidth: true
-        placeholderText: i18n("File name...")
-        text: suggestedFileName
-    }
-
+    ]
     onRejected: control.close()
     
     onAccepted:

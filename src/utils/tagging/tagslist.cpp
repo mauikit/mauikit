@@ -5,7 +5,13 @@ TagsList::TagsList(QObject *parent) : MauiList(parent)
 {
     this->tag = Tagging::getInstance();
 
-    connect(this->tag, &Tagging::tagged, [&](QString) { this->setList(); });
+    connect(this->tag, &Tagging::tagged, [&](QVariantMap tag)
+    {         
+        emit this->preItemAppended();
+        this->list << FMH::toModel(tag);
+        emit this->postItemAppended();
+        
+    });
 
     this->setList();
 }

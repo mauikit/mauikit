@@ -277,7 +277,7 @@ protected:
     
 signals:
     void urlTagged(const QString &url, const QString &tag);
-    void tagged(const QString &tag);
+    void tagged(const QVariantMap &tag);
 };
 
 #endif // TAGGING_H

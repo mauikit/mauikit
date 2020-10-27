@@ -96,9 +96,9 @@ bool Tagging::tag(const QString &tag, const QString &color, const QString &comme
     this->insert(TAG::TABLEMAP[TAG::TABLE::TAGS], tag_map);
 
     QVariantMap tag_user_map {{FMH::MODEL_NAME[FMH::MODEL_KEY::TAG], tag}, {FMH::MODEL_NAME[FMH::MODEL_KEY::MAC], this->id()}};
-
     if (this->insert(TAG::TABLEMAP[TAG::TABLE::TAGS_USERS], tag_user_map)) {
-        emit this->tagged(tag);
+        setTagIconName(tag_map);        
+        emit this->tagged(tag_map);
         return true;
     }
 
@@ -107,7 +107,7 @@ bool Tagging::tag(const QString &tag, const QString &color, const QString &comme
 
 bool Tagging::tagUrl(const QString &url, const QString &tag, const QString &color, const QString &comment)
 {
-    auto myTag = tag.trimmed();
+    const auto myTag = tag.trimmed();
 
     this->tag(myTag, color, comment);
 
