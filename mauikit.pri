@@ -67,14 +67,7 @@ linux:unix:!android {
               include($$PWD/src/platforms/android/android.pri)
 
     }else:win32 {
-        message("Using OpenSSL for Windows")
-        LIBS += -L$$PWD/../../../../../../Qt/Tools/OpenSSL/Win_x64/lib/ -llibssl
-        LIBS += -L$$PWD/../../../../../../Qt/Tools/OpenSSL/Win_x64/lib/ -llibcrypto
-
-        LIBS += -L$$PWD/../../../../../../CraftRoot/lib/ -lKF5I18n
-
-        INCLUDEPATH += $$PWD/../../../../../../CraftRoot/include
-        DEPENDPATH += $$PWD/../../../../../../CraftRoot/include
+        include($$PWD/src/platforms/windows/windows.pri)
     }else:macos {
         message("Setting up components for Mac")
         include($$PWD/src/platforms/macos/macos.pri)
@@ -371,3 +364,4 @@ DISTFILES += \
 #LIBS += -L$$PWD/libs/bin/ -lKF5ConfigCore
 #INCLUDEPATH += $$PWD/libs/includes/KConfigCore
 #DEPENDPATH += $$PWD/libs/includes/KConfigCore
+
