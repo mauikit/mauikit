@@ -5,7 +5,7 @@
 #elif defined Q_OS_MAC
 #include "mauimacos.h"
 #elif defined Q_OS_WIN
-#include "mauiwin.h"
+#include "mauiwindows.h"
 #elif defined Q_OS_IOS
 #include "mauiios.h"
 #else
@@ -24,7 +24,7 @@ Platform::Platform(QObject *parent) : AbstractPlatform(parent),
     #elif defined Q_OS_MAC
       m_platform(new MAUIMacOS(this))
     #elif defined Q_OS_WIN
-      m_platform(new MAUIWin(this))
+      m_platform(new MAUIWindows(this))
     #elif defined Q_OS_IOS
       m_platform(new MAUIIOS(this))
     #else
