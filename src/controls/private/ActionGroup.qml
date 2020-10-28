@@ -29,6 +29,8 @@ Item
 {
     id: control
     Layout.fillHeight: true
+    Layout.fillWidth: strech
+
     default property list<QtObject> items
     property list<QtObject> hiddenItems
     
@@ -72,8 +74,7 @@ Item
         }
     }
     
-    implicitHeight: parent.height
-    implicitWidth: strech ? parent.width : _layout.implicitWidth    
+    implicitWidth: _layout.implicitWidth
     
 //     Behavior on implicitWidth
 //     {		
@@ -102,7 +103,7 @@ Item
         {            
             readonly property QtObject obj : control.currentIndex >= control.items.length && control.currentIndex < control.count? control.hiddenItems[control.currentIndex - control.items.length] : null
             
-            visible: obj
+            visible: obj && obj.visible
             Layout.fillWidth: control.strech
             Layout.preferredWidth: visible ? implicitWidth : 0
             checked: visible
