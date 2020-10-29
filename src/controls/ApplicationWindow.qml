@@ -248,7 +248,7 @@ Window
                                          _accountsComponent : null
                 }
 
-                //MenuSeparator {visible: _accountsMenuLoader.active}
+                MenuSeparator {visible: _accountsMenuLoader.active}
 
                 Repeater
                 {
@@ -461,9 +461,9 @@ Window
 
                 Button
                 {
-                    Layout.margins: Maui.Style.space.small
                     Layout.preferredHeight: implicitHeight
                     Layout.alignment: Qt.AlignCenter
+                    Layout.fillWidth: true
                     text: i18n("Accounts")
                     icon.name: "list-add-user"
                     onClicked:
