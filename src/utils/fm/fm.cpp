@@ -50,8 +50,12 @@
 #if defined(Q_OS_ANDROID) || defined(Q_OS_WIN) || defined(Q_OS_MACOS)
 #include "fileloader.h"
 
+#include <QFileSystemWatcher>
+
 QDirLister::QDirLister(QObject *parent)
-    : QObject(parent) , m_loader(new FMH::FileLoader)
+    : QObject(parent)
+    , m_loader(new FMH::FileLoader)
+    , m_watcher(new QFileSystemWatcher(this))
 {
     m_loader->setBatchCount(20);
     m_loader->informer = &FMH::getFileInfoModel;
@@ -62,6 +66,8 @@ QDirLister::QDirLister(QObject *parent)
 
     connect(m_loader, &FMH::FileLoader::itemReady, [this](FMH::MODEL item, QList<QUrl> urls)
     {
+        this->m_list << item;
+        this->m_watcher->addPath(QUrl(item[FMH::MODEL_KEY::URL]).toLocalFile());
         emit this->itemReady(item, urls.first());
     });
 
@@ -69,18 +75,128 @@ QDirLister::QDirLister(QObject *parent)
     {
         emit this->completed(urls.first());
     });
+
+    connect(this->m_watcher, &QFileSystemWatcher::directoryChanged, [&](const QString &path) {
+        if(path == this->m_url.toLocalFile())
+        {
+            this->reviewChanges();
+        }
+    });
+
+    connect(this->m_watcher, &QFileSystemWatcher::fileChanged, [&](const QString &path) {
+
+        const auto fileUrl = QUrl::fromLocalFile(path);
+        if(this->includes(fileUrl))
+        {
+            if(FMH::fileExists(fileUrl))
+            {
+                emit this->refreshItems({{this->m_list.at(this->indexOf(FMH::MODEL_KEY::URL, fileUrl.toString())), FMH::getFileInfoModel(fileUrl)}}, this->m_url);
+            }
+        }
+    });
+}
+
+void QDirLister::reviewChanges()
+{
+    if(this->m_checking)
+        return;
+
+    this->m_checking = true;
+    auto checkLoader = new FMH::FileLoader;
+    checkLoader->informer = &FMH::getFileInfoModel;
+
+    qDebug( ) << "Doign the check" << m_checking;
+
+    FMH::MODEL_LIST removedItems;
+    for(const auto &item : this->m_list)
+    {
+        const auto fileUrl = QUrl(item[FMH::MODEL_KEY::URL]);
+        if(!FMH::fileExists(fileUrl))
+        {
+            removedItems << item;
+            qDebug() << "FILE PATH CHANGED REMOVED" << fileUrl;
+            const auto index = this->indexOf(FMH::MODEL_KEY::URL, fileUrl.toString());
+            this->m_list.remove(index);
+            this->m_watcher->removePath(fileUrl.toLocalFile());
+        }
+    }
+
+    if(!removedItems.isEmpty())
+        emit this->itemsDeleted(removedItems, this->m_url);
+
+    connect(checkLoader, &FMH::FileLoader::itemsReady, [=](FMH::MODEL_LIST items, QList<QUrl> urls)
+    {
+        if(urls.first() == this->m_url)
+        {
+            FMH::MODEL_LIST newItems;
+            for(const auto &item : items)
+            {
+                const auto fileUrl = QUrl(item[FMH::MODEL_KEY::URL]);
+                if(!this->includes(fileUrl))
+                {
+                    newItems << item;
+
+                    this->m_list << item;
+                    this->m_watcher->addPath(fileUrl.toLocalFile());
+                }
+            }
+
+            if(!newItems.isEmpty())
+                emit this->itemsAdded(newItems, this->m_url);
+        }
+
+        checkLoader->deleteLater();
+        this->m_checking = false;
+
+    });
+
+    connect(checkLoader, &FMH::FileLoader::finished, [=](FMH::MODEL_LIST, QList<QUrl>)
+    {
+        checkLoader->deleteLater();
+        this->m_checking = false;
+    });
+
+    QDir::Filters dirFilter = (m_dirOnly ? QDir::AllDirs | QDir::NoDotDot | QDir::NoDot : QDir::Files | QDir::AllDirs | QDir::NoDotDot | QDir::NoDot);
+
+    if (m_showDotFiles)
+        dirFilter = dirFilter | QDir::Hidden | QDir::System;
+
+    checkLoader->requestPath({this->m_url}, false, m_nameFilters.isEmpty() ? QStringList() : m_nameFilters.split(" "), dirFilter);
+}
+
+bool QDirLister::includes(const QUrl &url)
+{
+    return this->indexOf(FMH::MODEL_KEY::URL, url.toString()) >= 0;
+}
+
+int QDirLister::indexOf(const FMH::MODEL_KEY &key, const QString &value) const
+{
+    const auto it = std::find_if(this->m_list.constBegin(), this->m_list.constEnd(), [&](const FMH::MODEL &item) -> bool { return item[key] == value; });
+
+    if (it != this->m_list.constEnd())
+        return std::distance(this->m_list.constBegin(), it);
+    else
+        return -1;
 }
 
 bool QDirLister::openUrl(QUrl url)
 {
-    if (FMStatic::isDir(url)) {
+//    if(this->m_url == url)
+//        return false;
+
+    this->m_url = url;
+    this->m_watcher->removePaths(QStringList() << this->m_watcher->directories() << this->m_watcher->files());
+
+    if (FMStatic::isDir(this->m_url)) {
+
+        this->m_watcher->addPath(this->m_url.toLocalFile());
 
         QDir::Filters dirFilter = (m_dirOnly ? QDir::AllDirs | QDir::NoDotDot | QDir::NoDot : QDir::Files | QDir::AllDirs | QDir::NoDotDot | QDir::NoDot);
 
         if (m_showDotFiles)
             dirFilter = dirFilter | QDir::Hidden | QDir::System;
 
-        m_loader->requestPath({url}, false, m_nameFilters.isEmpty() ? QStringList() : m_nameFilters.split(" "), dirFilter);
+        m_loader->requestPath({this->m_url}, false, m_nameFilters.isEmpty() ? QStringList() : m_nameFilters.split(" "), dirFilter);
 
     } else
         return false;
@@ -171,6 +287,22 @@ FM::FM(QObject *parent)
     connect(dirLister, &QDirLister::itemsReady, this, [&](FMH::MODEL_LIST items, QUrl url) { emit this->pathContentItemsReady({url, items}); });
 
     connect(dirLister, &QDirLister::completed, this, [&](QUrl url) { emit this->pathContentReady(url);});
+
+    connect(dirLister, &QDirLister::refreshItems, this, [&](QVector<QPair<FMH::MODEL, FMH::MODEL>> items, QUrl) {
+        qDebug() << "ITEMS WERE REFRESHED";
+        emit this->pathContentItemsChanged(items);
+    });
+
+    connect(dirLister, &QDirLister::itemsAdded, this, [&](FMH::MODEL_LIST items, QUrl url) {
+        qDebug() << "MORE ITEMS WERE ADDED";
+        emit this->pathContentItemsReady({url, items});
+    });
+
+    connect(dirLister, &QDirLister::itemsDeleted, this, [&](FMH::MODEL_LIST items, QUrl url) {
+        qDebug() << "ITEMS WERE DELETED";
+        emit this->pathContentItemsRemoved({url, items});
+    });
+
 #endif
 
 #ifdef COMPONENT_SYNCING

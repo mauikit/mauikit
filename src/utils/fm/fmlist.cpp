@@ -20,9 +20,6 @@
 #include "fm.h"
 #include "utils.h"
 
-#include <QFileSystemWatcher>
-#include <QObject>
-
 #ifdef COMPONENT_SYNCING
 #include "syncing.h"
 #endif
@@ -31,6 +28,7 @@
 #include <KIO/EmptyTrashJob>
 #endif
 
+#include <QObject>
 #include <QFuture>
 #include <QThread>
 #include <QtConcurrent/QtConcurrentRun>
@@ -39,7 +37,6 @@
 FMList::FMList(QObject *parent)
     : MauiList(parent)
     , fm(new FM(this))
-    , watcher(new QFileSystemWatcher(this))
 {
     qRegisterMetaType<FMList*>("const FMList*"); //this is needed for QML to know of FMList in the search method
     connect(this->fm, &FM::cloudServerContentReady, [&](const FMH::MODEL_LIST &list, const QUrl &url) {
@@ -98,20 +95,12 @@ FMList::FMList(QObject *parent)
 
     connect(this->fm, &FM::loadProgress, [&](const int &percent) { emit this->progress(percent); });
 
-    // with kio based on android it watches the directory itself, so better relay on that
-#if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS // for android, windows and mac use this for now
-    connect(this->watcher, &QFileSystemWatcher::directoryChanged, [&](const QString &path) {
-        qDebug() << "FOLDER PATH CHANGED" << path;
-        this->reset();
-    });
-#else
     connect(this->fm, &FM::pathContentChanged, [&](const QUrl &path) {
         qDebug() << "FOLDER PATH CHANGED" << path;
         if (path != this->path)
             return;
         this->sortList();
     });
-#endif
 
     connect(this->fm, &FM::newItem, [&](const FMH::MODEL &item, const QUrl &url) {
         if (this->path == url) {
@@ -121,26 +110,7 @@ FMList::FMList(QObject *parent)
         }
     });
 
-    const auto value = UTIL::loadSettings("SaveDirProps", "SETTINGS", this->saveDirProps).toBool();
-    this->setSaveDirProps(value);
     connect(this, &FMList::pathChanged, this, &FMList::reset);
-}
-
-void FMList::watchPath(const QString &path, const bool &clear)
-{
-#if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS // for android, windows and mac use this for now
-    if (!this->watcher->directories().isEmpty() && clear)
-        this->watcher->removePaths(this->watcher->directories());
-
-    if (path.isEmpty() || !FMH::fileExists(path) || !QUrl(path).isLocalFile())
-        return;
-
-    this->watcher->addPath(QUrl::fromUserInput(path).toLocalFile());
-    qDebug() << "WATCHING PATHS" << this->watcher->directories();
-#else
-    Q_UNUSED(path)
-    Q_UNUSED(clear)
-#endif
 }
 
 void FMList::assignList(const FMH::MODEL_LIST &list)
@@ -199,21 +169,6 @@ void FMList::setList()
 
 void FMList::reset()
 {
-    if (this->saveDirProps) {
-        auto conf = FMH::dirConf(this->path.toString() + "/.directory");
-        this->sort = static_cast<FMList::SORTBY>(conf[FMH::MODEL_NAME[FMH::MODEL_KEY::SORTBY]].toInt());
-        this->hidden = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::HIDDEN]].toBool();
-        this->foldersFirst = conf[FMH::MODEL_NAME[FMH::MODEL_KEY::FOLDERSFIRST]].toBool();
-    } else {
-        this->hidden = UTIL::loadSettings("HiddenFilesShown", "SETTINGS", this->hidden).toBool();
-        this->foldersFirst = UTIL::loadSettings("FoldersFirst", "SETTINGS", this->foldersFirst).toBool();
-        this->sort = static_cast<FMList::SORTBY>(UTIL::loadSettings("SortBy", "SETTINGS", this->sort).toInt());
-    }
-
-    emit this->sortByChanged();
-    emit this->hiddenChanged();
-    emit this->foldersFirstChanged();
-
     this->setList();
 }
 
@@ -237,13 +192,7 @@ void FMList::setSortBy(const FMList::SORTBY &key)
     this->sort = key;
     this->sortList();
 
-    if (this->pathType == FMList::PATHTYPE::PLACES_PATH && this->trackChanges && this->saveDirProps)
-        FMH::setDirConf(this->path.toString() + "/.directory", "MAUIFM", "SortBy", this->sort);
-    else
-        UTIL::saveSettings("SortBy", this->sort, "SETTINGS");
-
     emit this->sortByChanged();
-
     emit this->postListChanged();
 }
 
@@ -377,24 +326,19 @@ void FMList::setPath(const QUrl &path)
 
     if (__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::CLOUD_PATH]) {
         this->pathType = FMList::PATHTYPE::CLOUD_PATH;
-        this->watchPath(QString());
 
     } else if (__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::APPS_PATH]) {
         this->pathType = FMList::PATHTYPE::APPS_PATH;
-        this->watchPath(QString());
 
     } else if (__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::TAGS_PATH]) {
         this->pathType = FMList::PATHTYPE::TAGS_PATH;
         this->pathName = this->path.path();
-        this->watchPath(QString());
 
     } else if (__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::TRASH_PATH]) {
         this->pathType = FMList::PATHTYPE::TRASH_PATH;
         this->pathName = "Trash";
-        this->watchPath(QString());
 
     } else if (__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::PLACES_PATH]) {
-        this->watchPath(this->path.toString());
         this->pathType = FMList::PATHTYPE::PLACES_PATH;
 
     } else if (__scheme == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::MTP_PATH]) {
@@ -466,11 +410,6 @@ void FMList::setHidden(const bool &state)
         return;
 
     this->hidden = state;
-
-    if (this->pathType == FMList::PATHTYPE::PLACES_PATH && this->trackChanges && this->saveDirProps)
-        FMH::setDirConf(this->path.toString() + "/.directory", "Settings", "HiddenFilesShown", this->hidden);
-    else
-        UTIL::saveSettings("HiddenFilesShown", this->hidden, "SETTINGS");
 
     emit this->hiddenChanged();
     this->reset();
@@ -580,20 +519,6 @@ const QUrl FMList::getPreviousPath()
     return url;
 }
 
-bool FMList::getTrackChanges() const
-{
-    return this->trackChanges;
-}
-
-void FMList::setTrackChanges(const bool &value)
-{
-    if (this->trackChanges == value)
-        return;
-
-    this->trackChanges = value;
-    emit this->trackChangesChanged();
-}
-
 bool FMList::getFoldersFirst() const
 {
     return this->foldersFirst;
@@ -608,32 +533,11 @@ void FMList::setFoldersFirst(const bool &value)
 
     this->foldersFirst = value;
 
-    if (this->pathType == FMList::PATHTYPE::PLACES_PATH && this->trackChanges && this->saveDirProps)
-        FMH::setDirConf(this->path.toString() + "/.directory", "MAUIFM", "FoldersFirst", this->foldersFirst);
-    else
-        UTIL::saveSettings("FoldersFirst", this->foldersFirst, "SETTINGS");
-
     emit this->foldersFirstChanged();
 
     this->sortList();
 
     emit this->postListChanged();
-}
-
-void FMList::setSaveDirProps(const bool &value)
-{
-    if (this->saveDirProps == value)
-        return;
-
-    this->saveDirProps = value;
-    UTIL::saveSettings("SaveDirProps", this->saveDirProps, "SETTINGS");
-
-    emit this->saveDirPropsChanged();
-}
-
-bool FMList::getSaveDirProps() const
-{
-    return this->saveDirProps;
 }
 
 void FMList::search(const QString &query, const FMList *currentFMList)

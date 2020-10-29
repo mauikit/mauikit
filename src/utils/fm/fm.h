@@ -22,6 +22,8 @@
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 class KCoreDirLister;
 #else
+class QFileSystemWatcher;
+
 namespace FMH
 {
 class FileLoader;
@@ -46,13 +48,26 @@ signals:
     void itemsReady(FMH::MODEL_LIST items, QUrl url);
     void itemReady(FMH::MODEL item, QUrl url);
     void completed(QUrl url);
+    void itemsAdded(FMH::MODEL_LIST items, QUrl url);
+    void itemsDeleted(FMH::MODEL_LIST items, QUrl url);
+    void newItems(FMH::MODEL_LIST items, QUrl url);
+    void refreshItems(QVector<QPair<FMH::MODEL, FMH::MODEL>> items, QUrl url);
 
 private:
     FMH::FileLoader *m_loader;
+    QFileSystemWatcher *m_watcher;
+
+    FMH::MODEL_LIST m_list;
     QString m_nameFilters;
     QUrl m_url;
     bool m_dirOnly = false;
     bool m_showDotFiles = false;
+
+    bool m_checking = false;
+
+    void reviewChanges();
+    bool includes(const QUrl &url);
+    int indexOf(const FMH::MODEL_KEY &key, const QString &value) const;
 };
 #endif
 

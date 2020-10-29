@@ -85,7 +85,6 @@ private:
 } NavHistory;
 
 class FM;
-class QFileSystemWatcher;
 
 /**
  * @brief The FMList class
@@ -104,9 +103,6 @@ class FMList : public MauiList
     Q_PROPERTY(QStringList filters READ getFilters WRITE setFilters NOTIFY filtersChanged)
     Q_PROPERTY(FMList::FILTER filterType READ getFilterType WRITE setFilterType NOTIFY filterTypeChanged)
     Q_PROPERTY(FMList::SORTBY sortBy READ getSortBy WRITE setSortBy NOTIFY sortByChanged)
-
-    Q_PROPERTY(bool trackChanges READ getTrackChanges WRITE setTrackChanges NOTIFY trackChangesChanged)
-    Q_PROPERTY(bool saveDirProps READ getSaveDirProps WRITE setSaveDirProps NOTIFY saveDirPropsChanged)
 
     // readonly
     Q_PROPERTY(QString pathName READ getPathName NOTIFY pathNameChanged FINAL)
@@ -306,19 +302,6 @@ public:
     const QUrl getPosteriorPath();
 
     /**
-     * @brief getTrackChanges
-     * If changes made to the current directory are saved
-     * @return
-     */
-    bool getTrackChanges() const;
-
-    /**
-     * @brief setTrackChanges
-     * @param value
-     */
-    void setTrackChanges(const bool &value);
-
-    /**
      * @brief getFoldersFirst
      * Returns whether directories are listed first before other files
      * @return
@@ -331,18 +314,6 @@ public:
      * @param value
      */
     void setFoldersFirst(const bool &value);
-
-    /**
-     * @brief getSaveDirProps
-     * @return
-     */
-    bool getSaveDirProps() const;
-
-    /**
-     * @brief setSaveDirProps
-     * @param value
-     */
-    void setSaveDirProps(const bool &value);
 
     /**
      * @brief getCloudDepth
@@ -365,7 +336,6 @@ public:
 
 private:
     FM *fm;
-    QFileSystemWatcher *watcher;
 
     void clear();
     void reset();
@@ -373,7 +343,6 @@ private:
     void assignList(const FMH::MODEL_LIST &list);
     void appendToList(const FMH::MODEL_LIST &list);
     void sortList();
-    void watchPath(const QString &path, const bool &clear = true);
     void search(const QString &query, const QUrl &path, const bool &hidden = false, const bool &onlyDirs = false, const QStringList &filters = QStringList());
     void filterContent(const QString &query, const QUrl &path);
     void setStatus(const PathStatus &status);
@@ -387,9 +356,7 @@ private:
     bool onlyDirs = false;
     bool hidden = false;
 
-    bool trackChanges = true;
     bool foldersFirst = false;
-    bool saveDirProps = false;
     int cloudDepth = 1;
 
     PathStatus m_status;
@@ -484,9 +451,7 @@ signals:
     void hiddenChanged();
     void onlyDirsChanged();
     void sortByChanged();
-    void trackChangesChanged();
     void foldersFirstChanged();
-    void saveDirPropsChanged();
     void statusChanged();
     void cloudDepthChanged();
 
