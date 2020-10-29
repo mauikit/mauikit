@@ -42,7 +42,6 @@ AbstractButton
     
     hoverEnabled: !Kirigami.Settings.isMobile
     implicitHeight: Math.floor(Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25))
-
     implicitWidth: Math.floor(_layoutButton.implicitWidth + (Maui.Style.space.medium *  2))
     
     icon.width: Maui.Style.iconSizes.medium
@@ -51,7 +50,8 @@ AbstractButton
     background: Rectangle
     {
         id: _background
-        anchors.fill: parent       
+        implicitHeight: Math.floor(Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25))
+
         radius: Maui.Style.radiusV
         color: control.down || control.checked || control.hovered || control.pressed ? Qt.rgba(control.Kirigami.Theme.highlightColor.r,  control.Kirigami.Theme.highlightColor.g,  control.Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
         border.color:  checked ?  control.Kirigami.Theme.highlightColor : "transparent"            

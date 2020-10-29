@@ -37,7 +37,7 @@ Item
     
     property bool wide : _content.implicitWidth < control.width * 0.5
     
-    implicitHeight: _layout.implicitHeight + Maui.Style.space.small
+    implicitHeight: _layout.implicitHeight
     Layout.fillWidth: true    
     
     Rectangle

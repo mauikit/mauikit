@@ -42,6 +42,7 @@ SwipeView
     {
         id: _actionGroup
         currentIndex : control.currentIndex
+        strech: false
         onCurrentIndexChanged:
         {
             control.currentIndex = currentIndex

@@ -1,64 +1,83 @@
-/*
- * Copyright 2017 Marco Martin <mart@kde.org>
- * Copyright 2017 The Qt Company Ltd.
- *
- * GNU Lesser General Public License Usage
- * Alternatively, this file may be used under the terms of the GNU Lesser
- * General Public License version 3 as published by the Free Software
- * Foundation and appearing in the file LICENSE.LGPLv3 included in the
- * packaging of this file. Please review the following information to
- * ensure the GNU Lesser General Public License version 3 requirements
- * will be met: https://www.gnu.org/licenses/lgpl.html.
- *
- * GNU General Public License Usage
- * Alternatively, this file may be used under the terms of the GNU
- * General Public License version 2.0 or later as published by the Free
- * Software Foundation and appearing in the file LICENSE.GPL included in
- * the packaging of this file. Please review the following information to
- * ensure the GNU General Public License version 2.0 requirements will be
- * met: http://www.gnu.org/licenses/gpl-2.0.html.
- */
+/****************************************************************************
+**
+** Copyright (C) 2017 The Qt Company Ltd.
+** Contact: http://www.qt.io/licensing/
+**
+** This file is part of the Qt Quick Controls 2 module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:LGPL3$
+** Commercial License Usage
+** Licensees holding valid commercial Qt licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see http://www.qt.io/terms-conditions. For further
+** information use the contact form at http://www.qt.io/contact-us.
+**
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 3 as published by the Free Software
+** Foundation and appearing in the file LICENSE.LGPLv3 included in the
+** packaging of this file. Please review the following information to
+** ensure the GNU Lesser General Public License version 3 requirements
+** will be met: https://www.gnu.org/licenses/lgpl.html.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 2.0 or later as published by the Free
+** Software Foundation and appearing in the file LICENSE.GPL included in
+** the packaging of this file. Please review the following information to
+** ensure the GNU General Public License version 2.0 requirements will be
+** met: http://www.gnu.org/licenses/gpl-2.0.html.
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
 
+import QtQuick 2.12
+import QtQuick.Templates 2.12 as T
+import org.kde.kirigami 2.7 as Kirigami
+import org.kde.mauikit 1.2 as Maui
 
-import QtQuick 2.6
-import QtQuick.Templates 2.3 as T
-import org.kde.kirigami 2.2 as Kirigami
 
 T.SpinBox {
-    id: controlRoot
-    Kirigami.Theme.colorSet: Kirigami.Theme.View
-    Kirigami.Theme.inherit: false
+    id: control
 
-    implicitWidth: Math.max(48, contentItem.implicitWidth + 2 * padding +  up.indicator.implicitWidth)
-    implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            contentItem.implicitWidth +
+                            up.implicitIndicatorWidth +
+                            down.implicitIndicatorWidth)
+    implicitHeight: Math.max(implicitContentHeight + topPadding + bottomPadding,
+                             implicitBackgroundHeight,
+                             up.implicitIndicatorHeight,
+                             down.implicitIndicatorHeight)
 
-    padding: 6
-    leftPadding: padding + (controlRoot.mirrored ? (up.indicator ? up.indicator.width : 0) : 0)
-    rightPadding: padding + (controlRoot.mirrored ? 0 : (up.indicator ? up.indicator.width : 0))
-
-
-    hoverEnabled: true
+    spacing: Maui.Style.space.tiny
+    topPadding: 0
+    bottomPadding: 0
+    leftPadding: (control.mirrored ? (up.indicator ? up.indicator.width : 0) : (down.indicator ? down.indicator.width : 0))
+    rightPadding: (control.mirrored ? (down.indicator ? down.indicator.width : 0) : (up.indicator ? up.indicator.width : 0))
 
     validator: IntValidator {
-        locale: controlRoot.locale.name
-        bottom: Math.min(controlRoot.from, controlRoot.to)
-        top: Math.max(controlRoot.from, controlRoot.to)
+        locale: control.locale.name
+        bottom: Math.min(control.from, control.to)
+        top: Math.max(control.from, control.to)
     }
 
     contentItem: TextInput {
         z: 2
-        text: controlRoot.textFromValue(controlRoot.value, controlRoot.locale)
-        opacity: controlRoot.enabled ? 1 : 0.3
+        text: control.textFromValue(control.value, control.locale)
+        opacity: control.enabled ? 1 : 0.3
 
-        font: controlRoot.font
+        font: control.font
         color: Kirigami.Theme.textColor
         selectionColor: Kirigami.Theme.highlightColor
         selectedTextColor: Kirigami.Theme.highlightedTextColor
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter
 
-        readOnly: !controlRoot.editable
-        validator: controlRoot.validator
+        readOnly: !control.editable
+        validator: control.validator
         inputMethodHints: Qt.ImhFormattedNumbersOnly
 
         MouseArea {
@@ -66,42 +85,53 @@ T.SpinBox {
             onPressed: mouse.accepted = false;
             onWheel: {
                 if (wheel.pixelDelta.y < 0 || wheel.angleDelta.y < 0) {
-                    controlRoot.decrease();
+                    control.decrease();
                 } else {
-                    controlRoot.increase();
+                    control.increase();
                 }
             }
         }
     }
 
     up.indicator: Item {
-        implicitWidth: parent.height/2
-        implicitHeight: implicitWidth
-        x: controlRoot.mirrored ? 0 : parent.width - width
+        x: control.mirrored ? 0 : parent.width - width
+        height: parent.height
+        width: height
+
+        Kirigami.Icon {
+            source: "list-add"
+            x: (parent.width - width) / 2
+            y: (parent.height - height) / 2
+            width: Maui.Style.iconSizes.small
+            height: width
+            color: enabled ? Kirigami.Theme.textColor : Kirigami.Theme.disabledTextColor
+        }
     }
+
     down.indicator: Item {
-        implicitWidth: parent.height/2
-        implicitHeight: implicitWidth
- 
-        x: controlRoot.mirrored ? 0 : parent.width - width
-        y: parent.height - height
+        x: control.mirrored ? parent.width - width : 0
+        height: parent.height
+        width: height
+
+        Kirigami.Icon {
+            source: "list-remove"
+            x: (parent.width - width) / 2
+            y: (parent.height - height) / 2
+            width: Maui.Style.iconSizes.small
+            height: width
+            color: enabled ? Kirigami.Theme.textColor : Kirigami.Theme.disabledTextColor
+        }
     }
 
+    background: Rectangle
+    {
+        implicitWidth:  (Maui.Style.iconSizes.medium * 6) + Maui.Style.space.big
+        implicitHeight: Math.floor(Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25))
 
-//    background: StylePrivate.StyleItem {
-//        id: styleitem
-//        control: controlRoot
-//        elementType: "spinbox"
-//        anchors.fill: parent
-//        hover: controlRoot.hovered
-//        hasFocus: controlRoot.activeFocus
-//        enabled: controlRoot.enabled
+        radius: Maui.Style.radiusV
 
-//        value: (controlRoot.up.pressed ? 1 : 0) |
-//                   (controlRoot.down.pressed ? 1<<1 : 0) |
-//                   ( controlRoot.value != controlRoot.to ? (1<<2) : 0) |
-//                   (controlRoot.value != controlRoot.from ? (1<<3) : 0) |
-//                   (controlRoot.up.hovered ? 0x1 : 0) |
-//                   (controlRoot.down.hovered ? (1<<1) : 0)
-//    }
+        color: !control.editable ? control.Kirigami.Theme.backgroundColor : "transparent"
+
+        border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+    }
 }

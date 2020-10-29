@@ -208,8 +208,6 @@ Item
             }
         }
         
-        
-        
         RowLayout
         {
             id: _rowLayout
@@ -242,7 +240,7 @@ Item
                 id: _layout
                 clip: true
                 position: ToolBar.Footer
-                
+                spacing: Maui.Style.space.medium
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 preferredHeight: height

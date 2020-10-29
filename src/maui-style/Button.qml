@@ -57,7 +57,7 @@ T.Button
     background: Rectangle
     {
         implicitWidth:  (Maui.Style.iconSizes.medium * 3) + Maui.Style.space.big
-        implicitHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
+        implicitHeight: Math.floor(Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25))
 
         color: control.down || control.pressed || control.checked || control.hovered ? Qt.rgba( control.Kirigami.Theme.highlightColor.r,  control.Kirigami.Theme.highlightColor.g,  control.Kirigami.Theme.highlightColor.b, 0.2) : Qt.lighter(Kirigami.Theme.backgroundColor)
 
