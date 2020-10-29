@@ -95,14 +95,33 @@ Pane
         
         onFlickableChanged:
         {
-            if(flickable)
-            {
-                flickable.bottomMargin = Qt.binding(function() { return control.floatingFooter && control.footerPositioning === ListView.InlineFooter ? _footerContent.implicitHeight : 0 })
-
-                 //         flickable.topMargin = Qt.binding(function() { return control.floatingHeader && this.atYBeginning && control.header.visible && control.headerPositioning === ListView.InlineHeader && !control.altHeader ? _headerContent.height: 0 })
-            }
+//             if(flickable)
+//             {
+//                 flickable.bottomMargin = Qt.binding(function() { return control.floatingFooter && control.footerPositioning === ListView.InlineFooter ? _footerContent.implicitHeight : 0 })
+// 
+//                          flickable.topMargin = Qt.binding(function() { return control.floatingHeader && this.atYBeginning && control.header.visible && control.headerPositioning === ListView.InlineHeader && !control.altHeader ? _headerContent.height: 0 })
+//             }
             
             returnToBounds()
+        }
+        
+        //Binding
+        //{
+            //when: control.flickable
+            //target: control.flickable
+            //property: "topMargin"
+                        //delayed: true
+            //value: control.floatingHeader && control.headerPositioning === ListView.InlineHeader && !control.altHeader ? _headerContent.implicitHeight: 0  
+            //restoreMode: Binding.RestoreBindingOrValue
+        //}
+        
+        Binding
+        {
+            when:  control.floatingFooter && control.footerPositioning === ListView.InlineFooter && _footerContent.implicitHeight > 0
+            target: control.flickable
+            property: "bottomMargin"
+            value:  _footerContent.implicitHeight
+            restoreMode: Binding.RestoreBindingOrValue
         }
         
         Connections
@@ -302,13 +321,12 @@ Pane
             }
         }
         
-        //           Label
-        //             {
-        // //                 visible: false
-        //                 z: 999999999999
-        //                 color: "yellow"
-        //                 text: _footBar.visibleCount + " / " + _footBar.count + " - " + _footBar.height + " / " + footer.height + " - " + _footBar.visible + " / " + footer.visible
-        //             }
+                  //Label
+                    //{
+                        //z: 999999999999
+                        //color: "yellow"
+                        //text: _footBar.visibleCount + " / " + _footBar.count + " - " + _footBar.height + " / " + footer.height + " - " + _footBar.visible + " / " + footer.visible + " / " + footer.height + " / " + _footerContent.implicitHeight  + " / " + _footerContent.implicitHeight
+                    //}
         
         property Item footer : Maui.ToolBar
         {

@@ -12,7 +12,6 @@ import org.kde.appletdecoration 0.1 as AppletDecoration
 Item
 {
 	id: control
-	readonly property bool maskButtons: Maui.App.theme.maskButtons
 	
 	implicitWidth: _controlsLayout.implicitWidth
 	property var order : []

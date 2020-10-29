@@ -1,4 +1,5 @@
 import QtQuick 2.13
+import QtQml 2.14
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 
@@ -9,7 +10,8 @@ Maui.Page
 {
     id: control    
     
-    readonly property Item currentView : control.viewType === AltBrowser.ViewType.Grid ? _gridView : _listView
+    readonly property Item currentView : control.viewType === AltBrowser.ViewType.List ? _listView : _gridView
+    
     enum ViewType 
     {
         Grid,
@@ -34,11 +36,9 @@ Maui.Page
     property alias holder : _holder   
     
     readonly property alias gridView : _gridView
-    readonly property alias listView : _listView
+    readonly property alias listView : _listView    
     
-    //     readonly property var section : listView.section
-    
-    flickable: currentView.flickable     
+    flickable: control.viewType === AltBrowser.ViewType.List ? _listView.flickable : _gridView.flickable   
     
     Maui.Holder
     {
