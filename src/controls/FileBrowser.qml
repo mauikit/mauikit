@@ -447,6 +447,7 @@ Maui.Page
         
         function onItemsSelected(indexes)
         {
+            control.currentView.currentIndex = indexes[0]
             control.selectIndexes(indexes)
         }
 
