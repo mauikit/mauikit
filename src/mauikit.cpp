@@ -21,6 +21,7 @@
 
 #include <QDebug>
 
+#include "appsettings.h"
 #include "appview.h"
 #include "fmstatic.h"
 #include "handy.h"
@@ -28,7 +29,6 @@
 #include "mauilist.h"
 #include "mauimodel.h"
 #include "pathlist.h"
-#include "appsettings.h"
 
 #ifdef COMPONENT_ACCOUNTS
 #include "mauiaccounts.h"
@@ -67,6 +67,16 @@
 #include <QQuickStyle>
 #endif
 
+#if defined Q_OS_MACOS || defined Q_OS_WIN
+#include <KF5/KI18n/KLocalizedContext>
+#include <KF5/KI18n/KLocalizedString>
+#else
+#include <KI18n/KLocalizedContext>
+#include <KI18n/KLocalizedString>
+#endif
+
+#include <QQmlContext>
+
 QUrl MauiKit::componentUrl(const QString &fileName) const
 {
 #ifdef MAUI_APP
@@ -79,6 +89,9 @@ QUrl MauiKit::componentUrl(const QString &fileName) const
 void MauiKit::initializeEngine(QQmlEngine *engine, const char *uri)
 {
     Q_UNUSED(uri);
+
+    KLocalizedString::setApplicationDomain("mauikit");
+    engine->rootContext()->setContextObject(new KLocalizedContext(engine));
 
     /** IMAGE PROVIDERS **/
 #ifdef COMPONENT_FM
@@ -159,9 +172,8 @@ void MauiKit::registerTypes(const char *uri)
     /// NON UI CONTROLS
     qmlRegisterUncreatableType<AppView>(uri, 1, 1, "AppView", "Cannot be created App");
     qmlRegisterType<SettingSection>(uri, 1, 2, "SettingSection");
-//     qmlRegisterSingletonInstance<Platform>(uri, 1, 2, "Platform", Platform::instance());
+    //     qmlRegisterSingletonInstance<Platform>(uri, 1, 2, "Platform", Platform::instance());
     qmlRegisterSingletonType<Platform>(uri, 1, 2, "Platform", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
-        
         Q_UNUSED(scriptEngine)
         auto platform = Platform::instance();
         engine->setObjectOwnership(platform, QQmlEngine::CppOwnership);
@@ -234,7 +246,7 @@ void MauiKit::registerTypes(const char *uri)
 #endif
 
     /** DATA MODELING TEMPLATED INTERFACES **/
-    qmlRegisterAnonymousType<MauiList>(uri, 1);                        // ABSTRACT BASE LIST
+    qmlRegisterAnonymousType<MauiList>(uri, 1);         // ABSTRACT BASE LIST
     qmlRegisterType<MauiModel>(uri, 1, 0, "BaseModel"); // BASE MODEL
 
 #ifdef COMPONENT_TAGGING
