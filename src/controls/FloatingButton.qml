@@ -53,7 +53,8 @@ MouseArea
             anchors.fill: parent
             color: "transparent"
             radius: Maui.Style.radiusV
-            border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.2)
+            border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
+            opacity: 0.7
             
             Rectangle
             {
