@@ -40,9 +40,11 @@ Maui.SwipeItemDelegate
     property alias imageSource : _template.imageSource
     property alias iconSource : _template.iconSource
 	
+	property alias template : _template
 
     Maui.ListItemTemplate
     {
-        id: _template        
+        id: _template 
+        anchors.fill: parent
     }
 }

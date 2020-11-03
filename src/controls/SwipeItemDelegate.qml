@@ -65,9 +65,9 @@ Maui.ItemDelegate
 				id: _bg
 				anchors.fill: _swipeDelegate.background
 				z: _swipeDelegate.background.z -1
-				color: Kirigami.Theme.backgroundColor
+				color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.95))
 				radius: Maui.Style.radiusV
-				opacity: Math.abs( _swipeDelegate.swipe.position)
+// 				opacity: Math.abs( _swipeDelegate.swipe.position)
 			}
 			
 			background: RowLayout
