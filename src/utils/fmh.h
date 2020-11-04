@@ -116,15 +116,9 @@ static const QStringList TEXT_MIMETYPES = {"text/markdown",
                                            "application/x-kicad-project"};
 static const QStringList IMAGE_MIMETYPES = {"image/bmp", "image/webp", "image/png", "image/gif", "image/jpeg", "image/web", "image/svg", "image/svg+xml"};
 static const QStringList DOCUMENT_MIMETYPES = {"application/pdf", "application/rtf", "application/doc", "application/odf"};
-static const QStringList COMPRESSED_MIMETYPES = {
-                                                 //"application/x-compress","application/x-compressed",
-                                                 //"application/x-xz-compressed-tar",
-                                                 "application/x-compressed-tar",
-                                                 "application/x-xz",
-                                                 //"application/x-bzip",
-                                                 //"application/x-gtar",
-                                                 //"application/x-gzip",
-                                                 //"application/gzip",
+static const QStringList COMPRESSED_MIMETYPES = {"application/x-tar",
+                                                 "application/x-7z-compressed",
+                                                 "application/x-archive",
                                                  "application/zip"};
 
 static const QStringList FONT_MIMETYPES = {"font/ttf", "font/otf"};
