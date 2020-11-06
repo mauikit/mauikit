@@ -89,7 +89,6 @@ QUrl MauiKit::componentUrl(const QString &fileName) const
 void MauiKit::initializeEngine(QQmlEngine *engine, const char *uri)
 {
     Q_UNUSED(uri);
-
     KLocalizedString::setApplicationDomain("mauikit");
     engine->rootContext()->setContextObject(new KLocalizedContext(engine));
 
@@ -101,7 +100,7 @@ void MauiKit::initializeEngine(QQmlEngine *engine, const char *uri)
 
 void MauiKit::registerTypes(const char *uri)
 {
-    Q_ASSERT(uri == QLatin1String("org.kde.mauikit"));
+    Q_ASSERT(uri == QLatin1String(MAUIKIT_URI));
 
     qmlRegisterSingletonType(componentUrl(QStringLiteral("Style.qml")), uri, 1, 0, "Style");
     qmlRegisterType(componentUrl(QStringLiteral("ToolBar.qml")), uri, 1, 0, "ToolBar");

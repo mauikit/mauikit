@@ -27,6 +27,8 @@
 #include "mauikit_export.h"
 #endif
 
+static constexpr const char* MAUIKIT_URI = "org.kde.mauikit";
+
 class MauiAccounts;
 #ifdef STATIC_MAUIKIT
 class MauiKit : public QQmlExtensionPlugin
@@ -49,10 +51,11 @@ public:
         return instance;
     }
 
-    static void registerTypes()
+    static void registerTypes(QQmlEngine *engine, const char *uri = MAUIKIT_URI)
     {
         static MauiKit instance;
-        instance.registerTypes("org.kde.mauikit");
+        instance.registerTypes(MAUIKIT_URI);
+        instance.initializeEngine(engine, uri);
     }
 
     void initResources();
