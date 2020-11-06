@@ -56,7 +56,7 @@ FMList::FMList(QObject *parent)
         for (const auto &item : res) {
             const auto index = this->indexOf(FMH::MODEL_KEY::PATH, item.first[FMH::MODEL_KEY::PATH]);
 
-            if (index > this->list.size() || index < 0)
+            if (index >= this->list.size() || index < 0)
                 return;
 
             this->list[index] = item.second;
@@ -466,17 +466,17 @@ void FMList::setDirIcon(const int &index, const QString &iconName)
     if (index >= this->list.size() || index < 0)
         return;
 
-    const auto index_ = this->mappedIndex(index);
+//    const auto index_ = this->mappedIndex(index);
 
-    const auto path = QUrl(this->list.at(index_)[FMH::MODEL_KEY::PATH]);
+    const auto path = QUrl(this->list.at(index)[FMH::MODEL_KEY::PATH]);
 
     if (!FMStatic::isDir(path))
         return;
 
     FMH::setDirConf(path.toString() + "/.directory", "Desktop Entry", "Icon", iconName);
 
-    this->list[index_][FMH::MODEL_KEY::ICON] = iconName;
-    emit this->updateModel(index_, QVector<int> {FMH::MODEL_KEY::ICON});
+    this->list[index][FMH::MODEL_KEY::ICON] = iconName;
+    emit this->updateModel(index, QVector<int> {FMH::MODEL_KEY::ICON});
 }
 
 const QUrl FMList::getParentPath()
@@ -638,31 +638,30 @@ void FMList::setStatus(const PathStatus &status)
 
 void FMList::deleteFile(const int &index)
 {
-    if (index > this->list.size() || index < 0)
+    if (index >= this->list.size() || index < 0)
         return;
 
-    FMStatic::removeFiles({this->list[this->mappedIndex(index)][FMH::MODEL_KEY::PATH]});
+    FMStatic::removeFiles({this->list[index][FMH::MODEL_KEY::PATH]});
     this->remove(index);
 }
 
 void FMList::moveFileToTrash(const int &index)
 {
-    if (index > this->list.size() || index < 0)
+    if (index >= this->list.size() || index < 0)
         return;
 
-    FMStatic::moveToTrash({this->list[this->mappedIndex(index)][FMH::MODEL_KEY::PATH]});
+    FMStatic::moveToTrash({this->list[index][FMH::MODEL_KEY::PATH]});
     this->remove(index);
 }
 
 void FMList::remove(const int &index)
 {
-    if (index > this->list.size() || index < 0)
+    if (index >= this->list.size() || index < 0)
         return;
 
-    const auto index_ = this->mappedIndex(index);
+//    const auto index_ = this->mappedIndex(index);
 
-    emit this->preItemRemoved(index_);
-    const auto item = this->list.takeAt(index_);
-
+    emit this->preItemRemoved(index);
+    this->list.remove(index);
     emit this->postItemRemoved();
 }

@@ -42,7 +42,8 @@ Pane
     default property alias content: _content.data
     readonly property alias pageContent : _content
 
-        property alias headerBackground : _headerBackground
+    property alias headerBackground : _headerBackground
+    property alias footerBackground : _footerBackground
         readonly property alias internalHeight : _content.height
         property Flickable flickable : null
         property int footerPositioning : ListView.InlineFooter
@@ -350,6 +351,7 @@ Pane
             
             background: Rectangle
             {
+                id: _footerBackground
                 color: _footBar.Kirigami.Theme.backgroundColor
                 
                 Maui.Separator
