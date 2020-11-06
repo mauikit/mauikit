@@ -12,11 +12,18 @@ Maui.Page
     property url path 
     property bool selectionMode : false
     
+    property int currentIndex : -1
+    Binding on currentIndex
+    {
+        when: control.currentView
+        value: control.currentView.currentIndex        
+    }   
+    
     onPathChanged:
     {
         if(control.currentView) 
         {
-            control.currentView.currentIndex = 0
+            control.currentIndex = 0
             control.currentView.forceActiveFocus()
         }
     }
@@ -181,7 +188,8 @@ Maui.Page
             selectionMode: control.selectionMode
             checkable: control.selectionMode
             enableLassoSelection: true
-
+            currentIndex: control.currentIndex
+            
             BrowserHolder
             {
                 id: _holder
@@ -263,7 +271,7 @@ Maui.Page
                 
                 onClicked:
                 {
-                    _listViewBrowser.currentIndex = index
+                    control.currentIndex = index
                     
                     if ((mouse.button == Qt.LeftButton) && (mouse.modifiers & Qt.ControlModifier))
                     {
@@ -276,7 +284,7 @@ Maui.Page
                 
                 onDoubleClicked:
                 {
-                    _listViewBrowser.currentIndex = index
+                    control.currentIndex = index
                     _listViewBrowser.itemDoubleClicked(index)
                 }
                 
@@ -285,19 +293,19 @@ Maui.Page
                     if(!Maui.Handy.isTouch)
                         return
                         
-                        _listViewBrowser.currentIndex = index
+                        control.currentIndex = index
                         _listViewBrowser.itemRightClicked(index)
                 }
                 
                 onRightClicked:
                 {
-                    _listViewBrowser.currentIndex = index
+                    control.currentIndex = index
                     _listViewBrowser.itemRightClicked(index)
                 }
                 
                 onToggled:
                 {
-                    _listViewBrowser.currentIndex = index
+                    control.currentIndex = index
                     _listViewBrowser.itemToggled(index, state)
                 }
                 
@@ -356,6 +364,7 @@ Maui.Page
             itemHeight: itemSize * 1.3
             checkable: control.selectionMode
             enableLassoSelection: true
+            currentIndex: control.currentIndex
 //            selectionMode: control.selectionMode
             BrowserHolder
             {
@@ -442,7 +451,7 @@ Maui.Page
                     
                     onClicked:
                     {					
-                        _gridViewBrowser.currentIndex = index
+                        control.currentIndex = index
                         
                         if ((mouse.button == Qt.LeftButton) && (mouse.modifiers & Qt.ControlModifier))
                         {
@@ -455,7 +464,7 @@ Maui.Page
                     
                     onDoubleClicked:
                     {
-                        _gridViewBrowser.currentIndex = index
+                        control.currentIndex = index
                         _gridViewBrowser.itemDoubleClicked(index)
                     }
                     
@@ -464,19 +473,19 @@ Maui.Page
                         if(!Maui.Handy.isTouch)
                             return
                             
-                            _gridViewBrowser.currentIndex = index
+                            control.currentIndex = index
                             _gridViewBrowser.itemRightClicked(index)
                     }
                     
                     onRightClicked:
                     {
-                        _gridViewBrowser.currentIndex = index
+                        control.currentIndex = index
                         _gridViewBrowser.itemRightClicked(index)
                     }
                     
                     onToggled:
                     {
-                        _gridViewBrowser.currentIndex = index
+                        control.currentIndex = index
                         _gridViewBrowser.itemToggled(index, state)
                     }
                     
@@ -623,7 +632,7 @@ Maui.Page
                         selectionMode: control.selectionMode
                         checkable: control.selectionMode
                         onKeyPress: _millerControl.keyPress(event)
-                        currentIndex : 0
+                        currentIndex : -1
                         onCurrentIndexChanged: _millerControl.currentIndex = currentIndex
                         enableLassoSelection: true
 
@@ -769,7 +778,7 @@ Maui.Page
                             onClicked:
                             {
                                 _millerColumns.currentIndex = _index
-                                _millerListView.currentIndex = index  
+                                control.currentIndex = index  
                                 
                                 if ((mouse.button == Qt.LeftButton) && (mouse.modifiers & Qt.ControlModifier))
                                 {
@@ -783,7 +792,7 @@ Maui.Page
                             onDoubleClicked:
                             {
                                 _millerColumns.currentIndex = _index
-                                _millerListView.currentIndex = index
+                                control.currentIndex = index
                                 _millerControl.itemDoubleClicked(index)
                             }
                             
@@ -793,21 +802,21 @@ Maui.Page
                                     return
                                     
                                     _millerColumns.currentIndex = _index
-                                    _millerListView.currentIndex = index
+                                    control.currentIndex = index
                                     _millerControl.itemRightClicked(index)
                             }
                             
                             onRightClicked:
                             {
                                 _millerColumns.currentIndex = _index
-                                _millerListView.currentIndex = index
+                                control.currentIndex = index
                                 _millerControl.itemRightClicked(index)
                             }
                             
                             onToggled:
                             {
                                 _millerColumns.currentIndex = _index
-                                _millerListView.currentIndex = index
+                                control.currentIndex = index
                                 _millerControl.itemToggled(index, state)
                             }
                             

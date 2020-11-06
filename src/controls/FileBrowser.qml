@@ -39,6 +39,8 @@ Maui.Page
     property alias view : _stackView.currentItem
 
     property alias dropArea : _dropArea
+    
+    property alias currentIndex : _browser.currentIndex
 
     readonly property QtObject currentView : _stackView.currentItem.currentView
     readonly property Maui.FMList currentFMList : view.currentFMList
@@ -268,7 +270,7 @@ Maui.Page
         id: renameDialogComponent
         Maui.NewDialog
         {
-            property var item : control.currentFMList ? control.currentFMList.get(control.currentView.currentIndex) : ({})
+            property var item : control.currentFMList ? control.currentFMList.get(control.currentIndex) : ({})
             title: i18n("Rename")
             message: i18n("Change the name of a file or folder")
             template.iconSource: "emblem-important"
@@ -346,7 +348,7 @@ Maui.Page
 
         function onKeyPress(event)
         {
-            const index = control.currentView.currentIndex
+            const index = control.currentIndex
             const item = control.currentFMList.get(index)
 
             // Shortcuts for refreshing
@@ -447,13 +449,13 @@ Maui.Page
         
         function onItemsSelected(indexes)
         {
-            control.currentView.currentIndex = indexes[0]
+            control.currentIndex = indexes[0]
             control.selectIndexes(indexes)
         }
 
         function onItemClicked(index)
         {
-            control.currentView.currentIndex = index
+            control.currentIndex = index
             indexHistory.push(index)
             control.itemClicked(index)
             control.currentView.forceActiveFocus()
@@ -461,7 +463,7 @@ Maui.Page
 
         function onItemDoubleClicked(index)
         {
-            control.currentView.currentIndex = index
+            control.currentIndex = index
             indexHistory.push(index)
             control.itemDoubleClicked(index)
             control.currentView.forceActiveFocus()
@@ -795,7 +797,7 @@ Maui.Page
     function goBack()
     {
         openFolder(control.currentFMList.previousPath)
-        //        control.currentView.currentIndex = indexHistory.pop()
+        //        control.currentIndex = indexHistory.pop()
     }
 
     /**
