@@ -2,6 +2,8 @@
 #define FMSTATIC_H
 
 #include "fmh.h"
+#include "kzip.h"
+#include "ktar.h"
 #include <QObject>
 
 #ifndef STATIC_MAUIKIT
@@ -19,6 +21,7 @@ class MAUIKIT_EXPORT FMStatic : public QObject
 #endif
 {
     Q_OBJECT
+
 public:
     explicit FMStatic(QObject *parent = nullptr);
 
@@ -214,6 +217,14 @@ public slots:
     static bool isCloud(const QUrl &path);
 
     /**
+     * @brief isCompressedType
+     * Returns if the file is a compressed type or not based on COMPRESSEDMIMETYPES
+     * @param path
+     * @return boolean with the result of the comparation
+     */
+    static bool isCompressedType(const QUrl &path);
+
+    /**
      * @brief fileExists
      * Checks if a local file exists in the file system
      * @param path
@@ -291,7 +302,7 @@ public slots:
      * @return
      */
     static bool checkFileType(const int &type, const QString &mimeTypeName);
-
+    
     /**
      * @brief moveToTrash
      * Moves to the trash can the file URLs. The associated tags are kept in case the files are restored.
@@ -358,6 +369,34 @@ public slots:
      * @return
      */
     static bool openUrl(const QUrl &url);
+
+
+
+    /**
+     * @brief getKArchiveObject
+     * Return the derived class as an abstract KArchive object
+     * @param url
+     * The url to be open
+     * @return void
+     */
+    static KArchive* getKArchiveObject(const QUrl &url);
+    /**
+     * @brief extractFile
+     * Given a URL it extract file in the same path
+     * @param url
+     * The url to be open
+     * @return void
+     */
+    static void extractFile(const QUrl &url);
+
+    /**
+     * @brief getEntries
+     * Rerun the content of a compressed file
+     * @param url
+     * The url to be open
+     * @return void
+     */
+    QVariantList getEntries(const QUrl &url);
 
     /**
      * @brief openLocation
@@ -499,6 +538,20 @@ public slots:
      * The file URL to be bookmarked
      */
     static void bookmark(const QUrl &url);
+
+private:
+    enum class CompressedFileType 
+    {
+        ZIP = 1,
+        GZIP,
+        ZIP7,
+        BZIP2,
+        TARGZ,
+        TAR,
+        AR,
+        TARXZ
+
+    };
 };
 
 #endif // FMSTATIC_H

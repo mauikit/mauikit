@@ -124,6 +124,14 @@ bool FMStatic::isCloud(const QUrl &path)
     return path.scheme() == FMH::PATHTYPE_SCHEME[FMH::PATHTYPE_KEY::CLOUD_PATH];
 }
 
+bool FMStatic::isCompressedType(const QUrl &path)
+{
+    for(auto mime : FMH::COMPRESSED_MIMETYPES)
+        if(FMH::getMime(path) == mime)
+            return true;
+    return false;
+}
+
 bool FMStatic::fileExists(const QUrl &path)
 {
     return FMH::fileExists(path);
@@ -406,6 +414,88 @@ bool FMStatic::openUrl(const QUrl &url)
 //    return QDesktopServices::openUrl(url);
 //#endif
     return true;
+}
+
+KArchive* FMStatic::getKArchiveObject(const QUrl &url)
+{
+    KArchive *kArch = nullptr;
+
+    /*
+     * This checks depends on type COMPRESSED_MIMETYPES in file fmh.h
+     */
+    qDebug() << "@gadominguez File: fmstatic.cpp Func: getKArchiveObject MimeType: " <<  FMH::getMime(url);
+
+    if(FMH::getMime(url).contains("application/x-xz-compressed-tar") ||
+            FMH::getMime(url).contains("application/x-compressed-tar") ||
+            FMH::getMime(url).contains("application/x-compressed-tar") ||
+            FMH::getMime(url).contains("application/x-gtar") ||
+            FMH::getMime(url).contains("application/x-tar") ||
+            FMH::getMime(url).contains("application/x-bzip") ||
+            FMH::getMime(url).contains("application/x-xz") ||
+            FMH::getMime(url).contains("application/x-gzip") ||
+            FMH::getMime(url).contains("application/gzip"))
+    {
+        kArch = new KTar(url.toString().split(QString("file://"))[1]);
+    }
+    else if(FMH::getMime(url).contains("application/zip"))
+    {
+        kArch = new KZip(url.toString().split(QString("file://"))[1]);
+    }
+    else
+    {
+        qDebug() << "ERROR. COMPRESSED FILE TYPE UNKOWN " << url.toString();
+    }
+
+    return kArch;
+}
+
+void FMStatic::extractFile(const QUrl &url)
+{
+    qDebug() << "@gadominguez File:fm.cpp Funcion: extractFile  " << url.toString();
+
+    QString filename = url.fileName(); //Filename without file extension
+    QString basepath = url.toString().remove("file://").remove(filename);
+
+     //qDebug() << "@gadominguez File:fm.cpp Funcion: extractFile  Regex: " << basepath + "/" + filename.section(".",0,0);
+
+    KArchive *kArch = getKArchiveObject(url);
+    kArch->open(QIODevice::ReadOnly);
+    qDebug() << "@gadominguez File:fm.cpp Funcion: extractFile  " <<  kArch->directory()->entries();
+    assert(kArch->isOpen() == true);
+    if(kArch->isOpen())
+    {
+        bool recursive = true;
+
+        // Extract contents in the same directory creating a folder with the name of the compressed file
+        kArch->directory()->copyTo(basepath + filename.section(".",0,0), recursive);
+    }
+
+}
+
+QVariantList FMStatic::getEntries(const QUrl &url)
+{
+    qDebug() << "@gadominguez File:fm.cpp Funcion: getEntries  Url:" << url.toString();
+
+    QVariantList res;
+    KArchive *kArch = getKArchiveObject(url);
+    kArch->open(QIODevice::ReadOnly);
+    assert(kArch->isOpen() == true);
+    if(kArch->isOpen())
+    {
+        qDebug() << "@gadominguez File:fm.cpp Funcion: getEntries  Entries:" <<  kArch->directory()->entries();
+
+        for(auto entry : kArch->directory()->entries())
+        {
+            auto e = kArch->directory()->entry(entry);
+           
+           res << QVariantMap {{"label", e->name()}, {"icon", e->isDirectory() ? "folder" : FMH::getIconName(e->name())}, {"date", e->date().toString()}};
+        }
+        return res;
+    }
+    else
+    {
+        return res;
+    }
 }
 
 void FMStatic::openLocation(const QStringList &urls)

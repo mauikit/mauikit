@@ -116,7 +116,11 @@ static const QStringList TEXT_MIMETYPES = {"text/markdown",
                                            "application/x-kicad-project"};
 static const QStringList IMAGE_MIMETYPES = {"image/bmp", "image/webp", "image/png", "image/gif", "image/jpeg", "image/web", "image/svg", "image/svg+xml"};
 static const QStringList DOCUMENT_MIMETYPES = {"application/pdf", "application/rtf", "application/doc", "application/odf"};
-static const QStringList COMPRESSED_MIMETYPES = {"application/x-compress","application/x-compressed", "application/x-xz-compressed-tar", "application/x-compressed-tar", "application/x-xz", "application/x-bzip", "application/x-gtar", "application/x-gzip", "application/zip"};
+static const QStringList COMPRESSED_MIMETYPES = {"application/x-tar",
+                                                 "application/x-7z-compressed",
+                                                 "application/x-archive",
+                                                 "application/zip"};
+
 static const QStringList FONT_MIMETYPES = {"font/ttf", "font/otf"};
 
 static const QMap<FILTER_TYPE, QStringList> SUPPORTED_MIMETYPES {{FILTER_TYPE::AUDIO, AUDIO_MIMETYPES},
@@ -910,8 +914,6 @@ const QVariantMap dirConf(const QUrl &path);
  */
 void setDirConf(const QUrl &path, const QString &group, const QString &key, const QVariant &value);
 
-
-
 /**
  * @brief getIconName
  * Returns the icon name for certain file.
@@ -935,7 +937,7 @@ const QString getMime(const QUrl &path);
  * @param mimeTypeName
  * @return
  */
-bool checkFileType(const FILTER_TYPE &type, const QString &mimeTypeName);
+bool checkFileType(const FMH::FILTER_TYPE &type, const QString &mimeTypeName);
 
 /**
  * @brief thumbnailUrl

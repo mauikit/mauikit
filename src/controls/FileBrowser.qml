@@ -311,6 +311,13 @@ Maui.Page
             }
         }
 
+		onExtractArk:
+		{
+			if(item)
+				console.log("EXTRACT ARK")
+				Maui.FM.extractFile(item.path)
+		}
+
         onRenameClicked:
         {
             dialogLoader.sourceComponent = renameDialogComponent

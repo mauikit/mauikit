@@ -42,22 +42,13 @@ Maui.Popup
     property bool defaultButtons: true
     property bool persistent : true
 
-    property bool compressVisible: false
-    property int compressTypeSelected: 0
-
     property alias acceptButton : _acceptButton
-    property alias rejectButton : _rejectButton
-
-    property alias textEntry : _textEntry
-    property alias entryField: _textEntry.visible
-
     property alias page : _page
     property alias footBar : _page.footBar
     property alias headBar: _page.headBar
     property alias closeButton: _closeButton
 
     signal accepted()
-    signal rejected()
 
     closePolicy: control.persistent ? Popup.NoAutoClose | Popup.CloseOnEscape : Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
@@ -66,13 +57,6 @@ Maui.Popup
     implicitHeight: _layout.implicitHeight
     widthHint: 0.9
     heightHint: 0.9
-    
-    function alert(message, level)
-    {
-        _alertMessage.text = message
-        _alertMessage.level = level
-//         _alertAnim.running = true
-    }
 
     ColumnLayout
     {
@@ -95,14 +79,13 @@ Maui.Popup
                 id: _closeButton
                 visible: control.persistent
                 hoverEnabled: !Kirigami.Settings.isMobile
-//                 Layout.fillHeight: true
-                implicitWidth: Maui.Style.iconSizes.medium
-                implicitHeight: Maui.Style.iconSizes.medium
+                Layout.fillHeight: true
+                implicitWidth: height
                 onClicked: close()
 
                 Rectangle
                 {
-                    height: Maui.Style.iconSizes.medium
+                    height: Maui.Style.iconSizes.big
                     width: height
                     anchors.centerIn: parent
                     radius: Maui.Style.radiusV
@@ -125,6 +108,8 @@ Maui.Popup
                 anchors.fill: parent
                 spacing: control.spacing
             }
+
+
 
 
             ScrollView
@@ -163,59 +148,6 @@ Maui.Popup
                             iconSizeHint: Maui.Style.iconSizes.large
                             spacing: Maui.Style.space.big
                         }
-
-                        RowLayout{
-                            Maui.TextField
-                            {
-                                id: _textEntry
-                                visible: compressVisible
-                                Layout.fillWidth: true
-                                Layout.alignment: Qt.AlignCenter
-                                focus: visible
-                                onAccepted: control.accepted()
-                            }
-
-                            ComboBox
-                            {
-                                id: compressType
-                                visible: compressVisible
-                                model: [".ZIP", ".TAR", ".GZIP"]
-
-                                onCurrentIndexChanged: {
-                                    console.log("@gadomingez Compress Type Selected: " , compressType.currentIndex)
-                                    compressTypeSelected = compressType.currentIndex
-                                }
-                            }
-
-                        }
-                        
-                        Label
-                        {
-                            id: _alertMessage
-                            visible: text.length > 0
-                            property int level : 0
-                            Layout.fillWidth: true
-                            wrapMode: Text.WordWrap
-                            verticalAlignment: Qt.AlignVCenter
-                            
-                            color: switch(level)
-                            {
-                                case 0: return Kirigami.Theme.positiveTextColor
-                                case 1: return Kirigami.Theme.neutralTextColor
-                                case 2: return Kirigami.Theme.negativeTextColor
-                            }
-                            
-                            SequentialAnimation on x
-                            {
-                                id: _alertAnim
-                                // Animations on properties start running by default
-                                running: false
-                                loops: 3
-                                NumberAnimation { from: 0; to: -10; duration: 100; easing.type: Easing.InOutQuad }
-                                NumberAnimation { from: -10; to: 0; duration: 100; easing.type: Easing.InOutQuad }
-                                PauseAnimation { duration: 50 } // This puts a bit of time between the loop
-                            }
-                        }
                     }
                 }
             }
@@ -232,41 +164,9 @@ Maui.Popup
             id: _defaultButtonsLayout
             spacing: 0
             Layout.fillWidth: true
-            Layout.preferredHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
-            Layout.maximumHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
+            Layout.preferredHeight:  Maui.Style.toolBarHeightAlt - Maui.Style.space.medium
+            Layout.maximumHeight: Maui.Style.toolBarHeightAlt - Maui.Style.space.medium
             visible: control.defaultButtons || control.actions.length
-
-            Button
-            {
-                id: _rejectButton
-
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                implicitWidth: width
-                visible: control.defaultButtons
-                text: i18n("Cancel")
-                background: Rectangle
-                {
-                    color: _rejectButton.hovered || _rejectButton.down || _rejectButton.pressed ? "#da4453" : Kirigami.Theme.backgroundColor
-                }
-
-                contentItem: Label
-                {
-                    text: _rejectButton.text
-                    color:  _rejectButton.hovered || _rejectButton.down || _rejectButton.pressed ?  "#fafafa" : Kirigami.Theme.textColor
-                    horizontalAlignment: Qt.AlignHCenter
-                    verticalAlignment: Qt.AlignVCenter
-                }
-
-                onClicked: rejected()
-                   Maui.Separator
-                {
-                    position: Qt.Vertical
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    anchors.right: parent.right
-                }
-            }
 
             Button
             {
@@ -275,7 +175,7 @@ Maui.Popup
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 implicitWidth: width
-                text: i18n("Accept")
+                text: qsTr("Accept")
                 visible: control.defaultButtons
                 background: Rectangle
                 {
@@ -291,52 +191,8 @@ Maui.Popup
                 }
 
                 onClicked: accepted()
-                
-                Maui.Separator
-                {
-                    position: Qt.Vertical
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    anchors.right: parent.right
-                }
             }
-            
-            Repeater
-            {
-                model: control.actions
 
-                Button
-                {
-                    id: _actionButton
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    implicitWidth: width
-
-                    action: modelData
-
-                    background: Rectangle
-                    {
-                        color: _actionButton.hovered || _actionButton.down || _actionButton.pressed ? "#26c6da" : Kirigami.Theme.backgroundColor
-                    }
-
-                    contentItem: Label
-                    {
-                        text: _actionButton.text
-                        color:  _actionButton.hovered || _actionButton.down || _actionButton.pressed ?  "#fafafa" : Kirigami.Theme.textColor
-                        horizontalAlignment: Qt.AlignHCenter
-                        verticalAlignment: Qt.AlignVCenter
-                    }
-
-                    Maui.Separator
-                    {
-                        position: Qt.Vertical
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        anchors.right: parent.right
-                        visible: index < control.actions.length-1
-                    }
-                }
-            }
         }
     }
 }
