@@ -29,6 +29,8 @@ Item
 {
     id: control
     Layout.fillHeight: true
+    Layout.fillWidth: strech
+
     default property list<QtObject> items
     property list<QtObject> hiddenItems
     
@@ -45,14 +47,14 @@ Item
         Layout.alignment: Qt.AlignVCenter
         Layout.fillWidth: control.strech
         Layout.preferredHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
-        
+        autoExclusive: true
         visible: modelData.visible
         checked:  index == control.currentIndex
         Kirigami.Theme.backgroundColor: modelData.Kirigami.Theme.backgroundColor
         Kirigami.Theme.highlightColor: modelData.Kirigami.Theme.highlightColor
         icon.name: modelData.MauiLab.AppView.iconName
         text: modelData.MauiLab.AppView.title 
-        display: checked ? ToolButton.TextBesideIcon : ToolButton.IconOnly
+        display: checked ? (!isWide ? ToolButton.IconOnly : ToolButton.TextBesideIcon) : ToolButton.IconOnly
         
         onClicked: 
         {
@@ -72,8 +74,7 @@ Item
         }
     }
     
-    implicitHeight: parent.height
-    implicitWidth: strech ? parent.width : _layout.implicitWidth    
+    implicitWidth: _layout.implicitWidth
     
 //     Behavior on implicitWidth
 //     {		
@@ -102,10 +103,11 @@ Item
         {            
             readonly property QtObject obj : control.currentIndex >= control.items.length && control.currentIndex < control.count? control.hiddenItems[control.currentIndex - control.items.length] : null
             
-            visible: obj
+            visible: obj && obj.visible
             Layout.fillWidth: control.strech
             Layout.preferredWidth: visible ? implicitWidth : 0
-            checked: true
+            checked: visible
+            autoExclusive: true
             icon.name: obj ? obj.MauiLab.AppView.iconName : ""
             icon.width: Maui.Style.iconSizes.medium
             icon.height: Maui.Style.iconSizes.medium
@@ -115,13 +117,7 @@ Item
             text: obj ? obj.MauiLab.AppView.title : ""            
             
             Kirigami.Theme.backgroundColor: obj ? obj.Kirigami.Theme.backgroundColor : undefined
-            Kirigami.Theme.highlightColor: obj ? obj.Kirigami.Theme.highlightColor: undefined
-            
-            onClicked: 
-            {
-                control.currentIndex = index
-                control.clicked(index)
-            }
+            Kirigami.Theme.highlightColor: obj ? obj.Kirigami.Theme.highlightColor: undefined            
         } 
         
         Maui.ToolButtonMenu
@@ -160,6 +156,11 @@ Item
                     
                     onTriggered:
                     {
+                        if(control.items.length + index === control.currentIndex)
+                        {
+                            return
+                        }
+                        
                         control.currentIndex = control.items.length + index
                         control.clicked(control.currentIndex)
                     }

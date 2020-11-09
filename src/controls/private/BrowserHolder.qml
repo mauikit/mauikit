@@ -8,9 +8,9 @@ import org.kde.mauikit 1.0 as Maui
 QtObject
 {
 	property Maui.FMList browser
-	property bool visible: (browser.status.code === Maui.FMList.LOADING || browser.status.code === Maui.FMList.ERROR || ( browser.status.code === Maui.FMList.READY && browser.status.empty === true)) && browser.count <= 0
-	
-	
+    property bool visible: (browser.status.code === Maui.FMList.LOADING || browser.status.code === Maui.FMList.ERROR || ( browser.status.code === Maui.FMList.READY && browser.status.empty === true)) && browser.count <= 0
+
+
 	property string emoji: browser.status.icon
 	
 	property string title : browser.status.title

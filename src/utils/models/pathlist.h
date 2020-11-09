@@ -21,7 +21,7 @@
 #include "mauilist.h"
 
 /**
- * @todo write docs
+ * @brief The PathList class
  */
 class PathList : public MauiList
 {
@@ -34,7 +34,16 @@ public:
 
     FMH::MODEL_LIST items() const override;
 
+    /**
+     * @brief setPath
+     * @param path
+     */
     void setPath(const QString &path);
+
+    /**
+     * @brief getPath
+     * @return
+     */
     QString getPath() const;
 
 private:
@@ -45,9 +54,17 @@ private:
     void setList();
 
 public slots:
+    /**
+     * @brief get
+     * @param index
+     * @return
+     */
     QVariantMap get(const int &index) const;
 
 signals:
+    /**
+     * @brief pathChanged
+     */
     void pathChanged();
 };
 

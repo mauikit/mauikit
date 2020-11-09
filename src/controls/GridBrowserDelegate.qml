@@ -17,22 +17,19 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 2.2
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
-import QtGraphicalEffects 1.0
-import "private"
+import org.kde.mauikit 1.2 as Maui
 
 Maui.ItemDelegate
 {
     id: control
 
-    property bool showThumbnails : false
-
     property string tooltipText  
     
+    property alias template : _template
     property alias label1 : _template.label1
 
     property alias iconItem : _template.iconItem
@@ -43,10 +40,11 @@ Maui.ItemDelegate
     
     property alias imageSource : _template.imageSource
     property alias iconSource : _template.iconSource
-    property alias checkable : _template.checkable
-    property alias checked : _template.checked
     property alias showLabel : _template.labelsVisible
     
+    property alias checked : _template.checked
+    property alias checkable: _template.checkable
+
     property alias dropArea : _dropArea
 
     isCurrentItem : GridView.isCurrentItem || checked
@@ -67,14 +65,6 @@ Maui.ItemDelegate
         anchors.fill: parent
         enabled: control.draggable
 
-        Rectangle
-        {
-            anchors.fill: parent
-            radius: Maui.Style.radiusV
-            color: control.Kirigami.Theme.highlightColor
-            visible: parent.containsDrag
-        }
-
         onDropped:
         {
             control.contentDropped(drop)
@@ -85,10 +75,10 @@ Maui.ItemDelegate
     {
         id: _template
         anchors.fill: parent
-        iconSource: model.icon
-        hovered: control.hovered || control.containsPress
-        imageSource : model.mime ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails && model.thumbnail && model.thumbnail.length? model.thumbnail : "") : ""
-        label1.text: model.label
+      
+        hovered: control.hovered || control.containsPress || _dropArea.containsDrag       
+        checkable : control.checkable
+        checked : control.checked
 //        label1.elide: Text.ElideMiddle // TODO this is broken ???
         isCurrentItem: control.isCurrentItem
         onToggled: control.toggled(state)		

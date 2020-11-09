@@ -31,134 +31,210 @@ Maui.Dialog
     id: control
     
     defaultButtons: false
-        persistent: false
-        widthHint: 0.9
-        heightHint: 0.8
-        
-        maxWidth: 400
-        maxHeight: 300
-        
-        page.padding: 0
-        footBar.visible: true
-        footBar.middleContent: Button
+    persistent: false
+    widthHint: 0.9
+    heightHint: 0.8
+    
+    property alias mainHeader : _header
+
+    maxWidth: Math.floor( 350 * Kirigami.Units.devicePixelRatio )
+    maxHeight: Math.floor( 250 * Kirigami.Units.devicePixelRatio )
+
+    page.padding: 0
+    actions: [
+        Action
         {
             icon.name: "link"
             text: i18n("Site")
-            onClicked: Qt.openUrlExternally(Maui.App.webPage)
-        }
-        
-        footBar.rightContent: Button
+            onTriggered: Qt.openUrlExternally(Maui.App.about.homepage)
+        },
+
+        Action
         {
             icon.name: "love"
             text: i18n("Donate")
-            onClicked: Qt.openUrlExternally(Maui.App.donationPage)
-        }
-        
-        footBar.leftContent: Button
+            onTriggered: Qt.openUrlExternally(Maui.App.donationPage)
+        },
+
+        Action
         {
             icon.name: "documentinfo"
             text: i18n("Report")
-            onClicked: Qt.openUrlExternally(Maui.App.reportPage)
+            onTriggered: Qt.openUrlExternally(Maui.App.about.bugAddress)
         }
-        
-        Kirigami.ScrollablePage
+    ]
+
+    Maui.AlternateListItem
+    {
+        id: _header
+        Layout.fillWidth: true
+        implicitHeight: (_div1.height * 1.5) + Maui.Style.space.big
+        alt: true
+
+        Maui.ListItemTemplate
         {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Kirigami.Theme.backgroundColor: "transparent"
-            padding: 0
-            leftPadding: padding
-            rightPadding: padding
-            topPadding: padding
-            bottomPadding: padding
-            
-            ColumnLayout
-            {                
-                Maui.AlternateListItem
+            id: _div1
+
+            width: parent.width * 0.95
+            height: label2.implicitHeight + label1.implicitHeight
+            anchors.centerIn: parent
+            imageBorder: false
+            imageSource: Maui.App.iconName
+            imageWidth: Math.min(Maui.Style.iconSizes.huge, parent.width)
+            imageHeight: imageWidth
+            fillMode: Image.PreserveAspectFit
+            imageSizeHint: imageWidth
+
+            spacing: Maui.Style.space.big
+            label1.text: Maui.App.about.displayName
+            label1.font.weight: Font.Bold
+            label1.font.bold: true
+            label1.font.pointSize: Maui.Style.fontSizes.enormous * 1.3
+
+            label2.text:  Maui.App.about.version + "\n" + Maui.App.about.shortDescription
+            label2.font.pointSize: Maui.Style.fontSizes.default
+            label2.elide: Text.ElideRight
+            label2.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        }
+    }
+
+    Maui.AlternateListItem
+    {
+        Layout.fillWidth: true
+        Layout.preferredHeight: _credits.implicitHeight + Maui.Style.space.huge
+        alt: false
+
+        Column
+        {
+            id: _credits
+            spacing: Maui.Style.space.big
+            width: parent.width
+            anchors.centerIn: parent
+
+            Repeater
+            {
+                model: Maui.App.about.authors
+                Maui.ListItemTemplate
                 {
-                    Layout.fillWidth: true                    
-                    implicitHeight: _div1.height + Maui.Style.space.huge
-                    alt: true   
-                 
-                    Maui.ListItemTemplate
-                    {
-                        id: _div1
-                        
-                        width: parent.width * 0.95
-                        height: Math.max(150, label2.implicitHeight + label1.implicitHeight)
-                        anchors.centerIn: parent
-                        imageBorder: false
-                        imageSource: Maui.App.iconName
-                        imageWidth: Math.min(Maui.Style.iconSizes.huge, parent.width)
-                        imageHeight: imageWidth
-                        fillMode: Image.PreserveAspectFit
-                        imageSizeHint: imageWidth
-                        
-                        spacing: Maui.Style.space.big
-                        label1.text: Maui.App.displayName 
-                        label1.font.weight: Font.Bold
-                        label1.font.bold: true
-                        label1.font.pointSize: Maui.Style.fontSizes.enormous * 1.3
-                        
-                        label2.text:  Maui.App.version + "\n" + Maui.App.description + "\n" + Maui.App.org
-                        label2.font.pointSize: Maui.Style.fontSizes.default
-                        label2.elide: Text.ElideRight
-                        label2.wrapMode: Text.WrapAtWordBoundaryOrAnywhere   
-                    }  
-                }              
-                
-                Maui.AlternateListItem
-                {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: _credits.contentHeight + Maui.Style.space.huge
-                    alt: false
-                    
-                    ListView
-                    {
-                        id: _credits
-                        spacing: Maui.Style.space.big
-                        model: Maui.App.credits
-                        width: parent.width
-                        height: contentHeight
-                        anchors.centerIn: parent
-                        delegate: Maui.ListItemTemplate
-                        {
-                            width: parent.width
-                            iconSource: "animal"
-                            iconSizeHint: Maui.Style.iconSizes.medium
-                            spacing: Maui.Style.space.medium
-                            label1.text: modelData.name
-                            label2.text: modelData.email
-                            label3.text: modelData.year
-                        }                  
-                    }
+                    iconSource: "view-media-artist"
+                    iconSizeHint: Maui.Style.iconSizes.medium
+                    width: parent.width
+                    height: implicitHeight
+                    spacing: Maui.Style.space.medium
+                    label1.text: modelData.name
+                    label2.text: modelData.emailAddress
+                    label3.text: modelData.task
                 }
-                
-                Maui.AlternateListItem
-                {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: _poweredBy.implicitHeight + Maui.Style.space.huge
-                    alt: true
-                    
-                    Maui.ListItemTemplate
-                    {
-                        id: _poweredBy
-                        anchors.centerIn: parent
-                        width: parent.width
-                        iconSource: "code-context"
-                        iconSizeHint: Maui.Style.iconSizes.medium
-                        spacing: Maui.Style.space.medium
-                        label1.text: "Powered by"
-                        label2.text: "<a href='https://mauikit.org'>MauiKit</a> " +
-                        Maui.App.mauikitVersion + " and  <a href='https://kde.org/products/kirigami'>Kirigami</a>"
-                        Connections
-                        {
-                            target: _poweredBy.label2
-                            onLinkActivated: Qt.openUrlExternally(link)                                
-                        }
-                    }
-                }
-                
             }
-        }        
+        }
+    }
+
+
+    Maui.AlternateListItem
+    {
+        Layout.fillWidth: true
+        Layout.preferredHeight: _licenses.implicitHeight + Maui.Style.space.huge
+        alt: true
+
+        Column
+        {
+            id: _licenses
+            spacing: Maui.Style.space.big
+            width: parent.width
+            anchors.centerIn: parent
+
+            Repeater
+            {
+                model: Maui.App.about.licenses
+                Maui.ListItemTemplate
+                {
+                    iconSource: "license"
+                    width: parent.width
+                    height: implicitHeight
+                    iconSizeHint: Maui.Style.iconSizes.medium
+                    spacing: Maui.Style.space.medium
+                    label1.text: modelData.name
+                }
+            }
+        }
+    }
+
+    Maui.AlternateListItem
+    {
+        Layout.fillWidth: true
+        Layout.preferredHeight: _poweredBy.implicitHeight + Maui.Style.space.huge
+        alt: false
+
+        Maui.ListItemTemplate
+        {
+            id: _poweredBy
+            anchors.centerIn: parent
+            width: parent.width
+
+            iconSource: "code-context"
+            iconSizeHint: Maui.Style.iconSizes.medium
+            spacing: Maui.Style.space.medium
+            label1.text: "Powered by"
+            label2.text: "<a href='https://mauikit.org'>MauiKit</a> " + Maui.App.mauikitVersion
+            Connections
+            {
+                target: _poweredBy.label2
+                function onLinkActivated(link)
+                {
+                    Qt.openUrlExternally(link)
+                }
+            }
+        }
+    }
+
+
+    Maui.AlternateListItem
+    {
+        Layout.fillWidth: true
+        Layout.preferredHeight: _libraries.implicitHeight + Maui.Style.space.huge
+        alt: true
+
+        Column
+        {
+            id: _libraries
+            spacing: Maui.Style.space.big
+            width: parent.width
+            anchors.centerIn: parent
+
+            Repeater
+            {
+                model: Kirigami.Settings.information
+                Maui.ListItemTemplate
+                {
+                    iconSource: "plugins"
+                    width: parent.width
+                    height: implicitHeight
+                    iconSizeHint: Maui.Style.iconSizes.medium
+                    spacing: Maui.Style.space.medium
+                    label1.text: modelData
+                }
+            }
+        }
+    }
+
+
+    Maui.AlternateListItem
+    {
+        Layout.fillWidth: true
+        Layout.preferredHeight: _copyRight.implicitHeight + Maui.Style.space.huge
+        alt: false
+        lastOne: true
+
+        Maui.ListItemTemplate
+        {
+            id: _copyRight
+            anchors.centerIn: parent
+            width: parent.width
+
+            iconSizeHint: Maui.Style.iconSizes.medium
+            spacing: Maui.Style.space.medium
+            label1.text: Maui.App.about.copyrightStatement
+            label1.horizontalAlignment: Qt.AlignCenter
+        }
+    }
 }

@@ -20,12 +20,19 @@
 #include "handy.h"
 #include "utils.h"
 #include <QClipboard>
-#include <QCoreApplication>
 #include <QDebug>
 #include <QIcon>
 #include <QMimeData>
 #include <QOperatingSystemVersion>
 #include <QTouchDevice>
+
+#include "platforms/platform.h"
+
+#ifdef Q_OS_ANDROID
+#include <QGuiApplication>
+#else
+#include <QApplication>
+#endif
 
 #include "fmh.h"
 
@@ -87,23 +94,6 @@ static inline struct {
 
 } _clipboard;
 #endif
-
-QVariantMap Handy::appInfo()
-{
-    auto res = QVariantMap({{FMH::MODEL_NAME[FMH::MODEL_KEY::NAME], qApp->applicationName()},
-                            {FMH::MODEL_NAME[FMH::MODEL_KEY::VERSION], qApp->applicationVersion()},
-                            {FMH::MODEL_NAME[FMH::MODEL_KEY::ORG], qApp->organizationName()},
-                            {FMH::MODEL_NAME[FMH::MODEL_KEY::DOMAIN_M], qApp->organizationDomain()},
-                            {"qt_version", QT_VERSION_STR}});
-
-#ifdef Q_OS_ANDROID
-    res.insert(FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], QGuiApplication::windowIcon().name());
-#else
-    res.insert(FMH::MODEL_NAME[FMH::MODEL_KEY::ICON], QApplication::windowIcon().name());
-#endif
-
-    return res;
-}
 
 QVariantMap Handy::userInfo()
 {
@@ -227,6 +217,16 @@ bool Handy::isTouch()
     }
 
     return false;
+}
+
+bool Handy::hasKeyboard()
+{
+   return Platform::instance()->hasKeyboard();
+}
+
+bool Handy::hasMouse()
+{
+    return Platform::instance()->hasMouse();
 }
 
 bool Handy::isWindows()

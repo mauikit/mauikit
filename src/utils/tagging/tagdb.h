@@ -65,9 +65,9 @@ protected:
     void prepareCollectionDB() const;
 
     bool insert(const QString &tableName, const QVariantMap &insertData);
-    bool update(const QString &tableName, const TAG::DB &updateData, const QVariantMap &where);
+    bool update(const QString &tableName, const FMH::MODEL &updateData, const QVariantMap &where);
     bool update(const QString &table, const QString &column, const QVariant &newValue, const QVariant &op, const QString &id);
-    bool remove(const QString &tableName, const TAG::DB &removeData);
+    bool remove(const QString &tableName, const FMH::MODEL &removeData);
 };
 
 #endif // DB_H

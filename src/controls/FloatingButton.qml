@@ -26,48 +26,69 @@ import QtGraphicalEffects 1.0
 
 MouseArea
 {
-	id: control
-	z: 999
-	
-	height: Maui.Style.toolBarHeight
-	width: height
-	
-	property alias icon : _button.icon
-	property alias text: _button.text
-	property alias display: _button.display
-	
-	signal clicked()
-	
-	Kirigami.Theme.backgroundColor: Kirigami.Theme.highlightColor
-	Kirigami.Theme.textColor:  Kirigami.Theme.highlightedTextColor
-	
-	Rectangle
-	{
-		id: _rec
-		anchors.fill: parent
-		radius: Maui.Style.radiusV
-		color: control.Kirigami.Theme.backgroundColor
-		ToolButton
-		{
-			id : _button
-			anchors.fill: parent
-			icon.height: Maui.Style.iconSizes.medium
-			icon.width: Maui.Style.iconSizes.medium
-			Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
-			onClicked: control.clicked()
-		}
-	}
-	
-	DropShadow
-	{
-		anchors.fill: parent
-		cached: true
-		horizontalOffset: 0
-		verticalOffset: 0
-		radius: 8.0
-		samples: 16
-		color: "#333"
-		smooth: true
-		source: _rec
-	}	
+    id: control
+    z: 999
+
+    height: Maui.Style.toolBarHeight
+    width: height
+
+    property alias icon : _button.icon
+    property alias text: _button.text
+    property alias display: _button.display
+
+    signal clicked()
+
+    Kirigami.Theme.backgroundColor: Kirigami.Theme.highlightColor
+    Kirigami.Theme.textColor:  Kirigami.Theme.highlightedTextColor
+
+    Rectangle
+    {
+        id: _rec
+        anchors.fill: parent
+        radius: Maui.Style.radiusV
+        color: control.Kirigami.Theme.backgroundColor
+        
+        Rectangle
+        {
+            anchors.fill: parent
+            color: "transparent"
+            radius: Maui.Style.radiusV
+            border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
+            opacity: 0.7
+            
+            Rectangle
+            {
+                anchors.fill: parent
+                color: "transparent"
+                radius: parent.radius - 0.5
+                border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+                opacity: 0.8
+                anchors.margins: 1
+            }
+        }
+        
+
+        ToolButton
+        {
+            id : _button
+            anchors.fill: parent
+            icon.height: Maui.Style.iconSizes.medium
+            icon.width: Maui.Style.iconSizes.medium
+            Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
+            onClicked: control.clicked()
+        }
+    }
+
+    DropShadow
+    {
+        anchors.fill: parent
+        cached: true
+        horizontalOffset: 0
+        verticalOffset: 0
+        radius: 8.0
+        samples: 16
+        color: "#333"
+        smooth: true
+        source: _rec
+    }
 }

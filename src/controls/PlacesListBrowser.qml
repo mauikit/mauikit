@@ -15,7 +15,20 @@ Maui.ListBrowser
 
     signal placeClicked (string path)
     focus: true
-    model: placesModel
+    model: Maui.BaseModel
+    {
+        id: placesModel
+        list: Maui.PlacesList
+        {
+            id: placesList
+            groups: [
+                Maui.FMList.PLACES_PATH,
+                Maui.FMList.APPS_PATH,
+                Maui.FMList.BOOKMARKS_PATH,
+                Maui.FMList.DRIVES_PATH]
+        }
+    }
+
     section.property: "type"
     section.criteria: ViewSection.FullString
     section.delegate: Maui.LabelDelegate
@@ -64,23 +77,6 @@ Maui.ListBrowser
         }
     }
 
-    Maui.BaseModel
-    {
-        id: placesModel
-        list: placesList
-    }
-
-    Maui.PlacesList
-    {
-        id: placesList
-        groups: [
-            Maui.FMList.PLACES_PATH,
-            Maui.FMList.APPS_PATH,
-            Maui.FMList.BOOKMARKS_PATH,
-            Maui.FMList.DRIVES_PATH,
-            Maui.FMList.TAGS_PATH]
-    }
-
     Rectangle
     {
         anchors.fill: parent
@@ -91,6 +87,7 @@ Maui.ListBrowser
     delegate: Maui.ListDelegate
     {
         id: itemDelegate
+        width: ListView.view.width
         iconSize: control.iconSize
         labelVisible: true
         iconVisible: true
@@ -98,31 +95,23 @@ Maui.ListBrowser
         iconName: model.icon
         count: model.count > 0 ? model.count : ""
 
-        leftPadding:  Maui.Style.space.tiny
-        rightPadding: Maui.Style.space.tiny
         radius : Maui.Style.radiusV
-
-        Connections
+        onClicked:
         {
-            target: itemDelegate
-            onClicked:
-            {
-                control.currentIndex = index
-                itemClicked(index)
-            }
+            control.currentIndex = index
+            itemClicked(index)
+        }
 
-            onRightClicked:
-            {
-                control.currentIndex = index
-                itemRightClicked(index)
-            }
+        onRightClicked:
+        {
+            control.currentIndex = index
+            itemRightClicked(index)
+        }
 
-            onPressAndHold:
-            {
-                control.currentIndex = index
-                itemRightClicked(index)
-            }
+        onPressAndHold:
+        {
+            control.currentIndex = index
+            itemRightClicked(index)
         }
     }
-
 }

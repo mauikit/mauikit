@@ -18,12 +18,6 @@
         <file alias="private/BrowserSettings.qml">controls/private/BrowserSettings.qml</file>
         <file alias="private/BrowserHolder.qml">controls/private/BrowserHolder.qml</file>
         <file alias="private/FileMenu.qml">controls/private/FileMenu.qml</file>
-        <file alias="private/AudioPreview.qml">controls/private/AudioPreview.qml</file>
-        <file alias="private/ImagePreview.qml">controls/private/ImagePreview.qml</file>
-        <file alias="private/TextPreview.qml">controls/private/TextPreview.qml</file>
-        <file alias="private/VideoPreview.qml">controls/private/VideoPreview.qml</file>
-        <file alias="private/DocumentPreview.qml">controls/private/DocumentPreview.qml</file>
-        <file alias="private/DefaultPreview.qml">controls/private/DefaultPreview.qml</file>
         <file alias="private/AccountsHelper.qml">controls/private/AccountsHelper.qml</file>
         <file alias="private/BasicToolButton.qml">controls/private/BasicToolButton.qml</file>
         <file alias="Holder.qml">controls/Holder.qml</file>
@@ -43,7 +37,6 @@
         <file alias="private/TagDelegate.qml">controls/private/TagDelegate.qml</file>
         <file alias="ColorsBar.qml">controls/ColorsBar.qml</file>
         <file alias="FileBrowser.qml">controls/FileBrowser.qml</file>
-        <file alias="FilePreviewer.qml">controls/FilePreviewer.qml</file>
         <file alias="FileDialog.qml">controls/FileDialog.qml</file>
         <file alias="ListBrowser.qml">controls/ListBrowser.qml</file>
         <file alias="PathBar.qml">controls/PathBar.qml</file>
@@ -85,6 +78,7 @@
         <file alias="labs/TabsBrowser.qml">controls/labs/TabsBrowser.qml</file>
         <file alias="labs/SettingsDialog.qml">controls/labs/SettingsDialog.qml</file>
         <file alias="labs/SettingsSection.qml">controls/labs/SettingsSection.qml</file>
+        <file alias="labs/SettingTemplate.qml">controls/labs/SettingTemplate.qml</file>
         <file alias="labs/Doodle.qml">controls/labs/Doodle.qml</file>
         <file alias="labs/WindowControlsLinux.qml">controls/labs/WindowControlsLinux.qml</file>
         <file alias="labs/WindowControlsMac.qml">controls/labs/WindowControlsMac.qml</file>
@@ -94,6 +88,7 @@
         <file alias="plugin/PagePlugin.qml">controls/plugin/PagePlugin.qml</file>
         <file alias="plugin/PluginManager.qml">controls/plugin/PluginManager.qml</file>
         <file alias="plugin/PluginsInfo.qml">controls/plugin/PluginsInfo.qml</file>
+        <file alias="labs/Separator.qml">controls/labs/Separator.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

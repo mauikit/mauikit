@@ -42,7 +42,7 @@ Menu
     MenuItem
     {
         visible: !control.isExec && tagsDialog
-        text: i18n("Add Tags")
+        text: i18n("Tags")
         icon.name: "tag"
         onTriggered:
         {
@@ -57,7 +57,7 @@ Menu
         icon.name: "love"		
         onTriggered:
         {			
-            if(currentFMList.favItem(item.path))
+            if(Maui.FM.toggleFav(item.path))
                 control.isFav = !control.isFav
         }
     }    
@@ -78,7 +78,7 @@ Menu
     
     MenuItem
     {
-        visible: !control.isExec && shareDialog	
+        visible: !control.isExec	
         text: i18n("Share")
         icon.name: "document-share"
         onTriggered:
@@ -86,20 +86,8 @@ Menu
             shareClicked(control.item)
             close()
         }
-    }
-    
-    MenuItem
-    {
-		visible: !control.isExec && previewer
-		text: i18n("Preview")
-		icon.name: "view-preview"
-		onTriggered:
-		{
-			previewer.show(currentFMModel, control.index)
-			close()
-		}
-	}
-    
+    }   
+
     MenuItem
     {
         visible: !control.isExec && openWithDialog	
@@ -112,7 +100,7 @@ Menu
         }
     }
     
-    MenuSeparator{visible: tagsDialog  || shareDialog || previewer}
+    MenuSeparator{visible: tagsDialog}
         
     MenuItem
     {
@@ -195,7 +183,7 @@ Menu
                 control.index = index
                 control.isDir = item.isdir == true || item.isdir == "true"
                 control.isExec = item.executable == true || item.executable == "true"
-                control.isFav = currentFMList.itemIsFav(item.path)
+                control.isFav = Maui.FM.isFav(item.path)
                 popup()
             }
     }

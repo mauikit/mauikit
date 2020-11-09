@@ -29,7 +29,8 @@
 #include <QVariantMap>
 
 /*!
- * \brief The Handy class contains useful static methods to be used as an attached property to the Maui application
+ * \brief The Handy class
+ * Contains useful static methods to be used as an attached property to the Maui application
  */
 #ifdef STATIC_MAUIKIT
 class Handy : public QObject
@@ -39,6 +40,9 @@ class MAUIKIT_EXPORT Handy : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool isTouch MEMBER m_isTouch CONSTANT FINAL)
+    Q_PROPERTY(bool hasMouse READ hasMouse NOTIFY hasMouseChanged)
+    Q_PROPERTY(bool hasKeyboard READ hasKeyboard NOTIFY hasKeyboardChanged)
+
     Q_PROPERTY(bool isAndroid READ isAndroid CONSTANT FINAL)
     Q_PROPERTY(bool isLinux READ isLinux CONSTANT FINAL)
     Q_PROPERTY(bool isWindows READ isWindows CONSTANT FINAL)
@@ -55,7 +59,6 @@ private:
     bool m_singleClick = true;
 
 public slots:
-
     /*!
      * \brief Returns the major version of the current OS
      *
@@ -63,15 +66,6 @@ public slots:
      * \return Major OS version
      */
     static int version();
-
-    /*!
-     * \brief Returns a QVariantMap containing basic information about the current app
-     *
-     * The pairs keys for the information returned are:
-     * "name", "version", "org", "domain", "mauikit_version" and "qt_version"
-     * \return QVariantMap with app info
-     */
-    static QVariantMap appInfo();
 
     /*!
      * \brief Returns a QVariantMap containing basic information about the current user
@@ -95,18 +89,71 @@ public slots:
      * \return
      */
     static bool copyTextToClipboard(const QString &text);
+
+    /**
+     * @brief copyToClipboard
+     * @param value
+     * @param cut
+     * @return
+     */
     static bool copyToClipboard(const QVariantMap &value, const bool &cut = false);
 
     // TODO move to Device.h the defs and implementation of device specifics
+    /**
+     * @brief isTouch
+     * @return
+     */
     static bool isTouch();
+
+    /**
+     * @brief hasKeyboard
+     * @return
+     */
+    static bool hasKeyboard();
+
+    /**
+     * @brief hasMouse
+     * @return
+     */
+    static bool hasMouse();
+
+    /**
+     * @brief isAndroid
+     * @return
+     */
     static bool isAndroid();
+
+    /**
+     * @brief isWindows
+     * @return
+     */
     static bool isWindows();
+
+    /**
+     * @brief isMac
+     * @return
+     */
     static bool isMac();
+
+    /**
+     * @brief isLinux
+     * @return
+     */
     static bool isLinux();
+
+    /**
+     * @brief isIOS
+     * @return
+     */
     static bool isIOS();
 
 signals:
+    /**
+     * @brief singleClickChanged
+     */
     void singleClickChanged();
+    void hasKeyboardChanged();
+    void hasMouseChanged();
 };
 
 #endif // HANDY_H

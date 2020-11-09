@@ -29,15 +29,15 @@ Rectangle
     id: control
     
     implicitHeight: Maui.Style.rowHeight
-//     implicitWidth:  _loader.item.implicitWidth
-        
+    //     implicitWidth:  _loader.item.implicitWidth
+    
     property string url : ""
     property bool pathEntry: false
     
     readonly property alias list : _pathList
     readonly property alias model : _pathModel
     readonly property alias item : _loader.item
-        
+    
     signal pathChanged(string path)
     signal homeClicked()
     signal placeClicked(string path)
@@ -105,12 +105,12 @@ Rectangle
                 }
             }
             
-//             Keys.enabled: true
-//             Keys.onPressed:
-//             {
-//                 console.log(event.key)
-//                 pathEntry = false
-//             }
+            //             Keys.enabled: true
+            //             Keys.onPressed:
+            //             {
+            //                 console.log(event.key)
+            //                 pathEntry = false
+            //             }
         }
     }
     
@@ -154,6 +154,7 @@ Rectangle
                 ScrollBar.vertical.policy: ScrollBar.AlwaysOff
                 contentWidth: _listView.contentWidth
                 contentHeight: height
+
                 ListView
                 {
                     id: _listView
@@ -163,7 +164,7 @@ Rectangle
                     orientation: ListView.Horizontal
                     clip: true
                     spacing: 0
-					currentIndex: _pathModel.count - 1
+                    currentIndex: _pathModel.count - 1
                     focus: true
                     interactive: Maui.Handy.isTouch
                     highlightFollowsCurrentItem: true
@@ -175,11 +176,11 @@ Rectangle
                     delegate: Private.PathBarDelegate
                     {
                         id: delegate
-//                         borderColor: ListView.isCurrentItem ?  control.Kirigami.Theme.highlightColor :  control.border.color
+                        //                         borderColor: ListView.isCurrentItem ?  control.Kirigami.Theme.highlightColor :  control.border.color
                         color: ListView.isCurrentItem || hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.15) : "transparent"
-//                         smooth: true
-//                         arrowWidth: _listView.pathArrowWidth
-                        height: parent.height
+                        //                         smooth: true
+                        //                         arrowWidth: _listView.pathArrowWidth
+                        height: _listView.height
                         width: Math.max(Maui.Style.iconSizes.medium * 2, implicitWidth)                        
                         
                         Kirigami.Separator
@@ -189,24 +190,20 @@ Rectangle
                             anchors.right: parent.right
                         }
                         
-                        Connections
+                        onClicked:
                         {
-                            target: delegate
-                            onClicked:
-                            {
-                                control.placeClicked(_pathList.get(index).path)
-                            }
-                            
-                            onRightClicked:
-                            {
-                                control.placeRightClicked(_pathList.get(index).path)
-                            }
-                            
-                            onPressAndHold:
-                            {
-                                control.placeRightClicked(_pathList.get(index).path)
-                            }
+                            control.placeClicked(model.path)
                         }
+                        
+                        onRightClicked:
+                        {
+                            control.placeRightClicked(model.path)
+                        }
+                        
+                        onPressAndHold:
+                        {
+                            control.placeRightClicked(model.path)
+                        }                        
                     }
                     
                     MouseArea
@@ -261,7 +258,7 @@ Rectangle
         control.pathEntry = !control.pathEntry
         if(_loader.sourceComponent === _pathEntryComponent)
         {
-             _loader.item.forceActiveFocus()
+            _loader.item.forceActiveFocus()
         }
     }
 }

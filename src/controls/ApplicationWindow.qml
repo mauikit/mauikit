@@ -25,8 +25,7 @@ import QtGraphicalEffects 1.0
 import QtQuick.Window 2.12
 
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
-import org.kde.mauikit 1.1 as MauiLab
+import org.kde.mauikit 1.2 as Maui
 
 import "private" as Private
 
@@ -38,81 +37,157 @@ Window
     visible: true
     width: Screen.desktopAvailableWidth * (Kirigami.Settings.isMobile ? 1 : 0.4)
     height: Screen.desktopAvailableHeight * (Kirigami.Settings.isMobile ? 1 : 0.4)
-    color: "transparent" 
-	flags: Maui.App.enableCSD ? Qt.FramelessWindowHint : Qt.Window
+    color: "transparent"
+    flags: Maui.App.enableCSD ? Qt.FramelessWindowHint : Qt.Window
 
+    /**
+      */
     property Maui.AbstractSideBar sideBar
 
     /***************************************************/
     /******************** ALIASES *********************/
     /*************************************************/
 
+    property alias page : _page
+    
+    /**
+      */
     property alias flickable : _page.flickable
 
+    /**
+      */
     property alias headBar : _page.headBar
+
+    /**
+      */
     property alias footBar: _page.footBar
 
+    /**
+      */
     property alias footer: _page.footer
+
+    /**
+      */
     property alias header :_page.header
+
+    /**
+      */
     property alias floatingHeader: _page.floatingHeader
+
+    /**
+      */
     property alias floatingFooter: _page.floatingFooter
+
+    /**
+      */
     property alias autoHideHeader: _page.autoHideHeader
+
+    /**
+      */
     property alias autoHideFooter: _page.autoHideFooter
-    
+
+    /**
+      */
     property alias autoHideHeaderDelay: _page.autoHideHeaderDelay
+
+    /**
+      */
     property alias autoHideFooterDelay: _page.autoHideFooterDelay
-    
+
+    /**
+      */
     property alias autoHideHeaderMargins: _page.autoHideHeaderMargins
+
+    /**
+      */
     property alias autoHideFooterMargins: _page.autoHideFooterMargins
-    
+
+    /**
+      */
     property alias altHeader: _page.altHeader
+
+    /**
+      */
     property alias margins : _page.margins
+
+    /**
+      */
     property alias leftMargin : _page.leftMargin
+
+    /**
+      */
     property alias rightMargin: _page.rightMargin
+
+    /**
+      */
     property alias topMargin: _page.topMargin
+
+    /**
+      */
     property alias bottomMargin: _page.bottomMargin
-    
+
+    /**
+      */
     property alias footerPositioning : _page.footerPositioning
+
+    /**
+      */
     property alias headerPositioning : _page.headerPositioning
 
+    /**
+      */
     property alias dialog: dialogLoader.item
 
+    /**
+      */
     property alias menuButton : menuBtn
-    property alias mainMenu : mainMenu.contentData
 
+    /**
+      */
+    property list<Action> mainMenu
+
+    /**
+      */
     property alias accounts: _accountsDialogLoader.item
+
+    /**
+      */
     property var currentAccount: Maui.App.handleAccounts ? Maui.App.accounts.currentAccount : ({})
 
+    /**
+      */
     property alias notifyDialog: _notify
     
+    /**
+     */
+    property alias aboutDialog: aboutDialog
+
+    /**
+      */
     property alias background : _page.background
-    
-    /***************************************************/
-    /*********************** UI ***********************/
-    /*************************************************/
 
+    /**
+      */
     property bool isWide : root.width >= Kirigami.Units.gridUnit * 30
-
 
     /***************************************************/
     /********************* COLORS *********************/
     /*************************************************/
-    property color headBarBGColor: Kirigami.Theme.backgroundColor
-    property color headBarFGColor: Kirigami.Theme.textColor
-
+    Kirigami.Theme.colorSet: Kirigami.Theme.View
 
     /***************************************************/
     /**************** READONLY PROPS ******************/
     /*************************************************/
-    readonly property bool isMobile : Kirigami.Settings.isMobile
-    readonly property bool isAndroid: Maui.Handy.isAndroid
+    /**
+      */
     readonly property bool isPortrait: Screen.primaryOrientation === Qt.PortraitOrientation || Screen.primaryOrientation === Qt.InvertedPortraitOrientation
 
     /***************************************************/
     /******************** SIGNALS *********************/
     /*************************************************/
+    /**
+      */
     signal menuButtonClicked();
-   
 
     onClosing:
     {
@@ -124,109 +199,67 @@ Window
             const y = root.y
             Maui.FM.saveSettings("GEOMETRY", Qt.rect(x, y, width, height), "WINDOW")
         }
-    }    
-        
-//     Rectangle
-//     {
-//         id: _csdBorder
-//         radius: _pageBackground.radius + 0.5
-//         anchors.fill: parent
-//         anchors.margins: Maui.Style.space.medium
-// 
-//         opacity: 0       
-//     }    
-//     
-//     MouseArea
-//     {
-//         visible: Maui.App.enableCSD 
-//         cursorShape: Qt.SizeHorCursor 
-//         propagateComposedEvents: true
-//         preventStealing: false        
-//         onPressed: mouse.accepted = false         
-//         anchors.fill: parent
-//          
-//         DragHandler
-//         {
-//             id: resizeHandler
-//             property int edge 
-//             grabPermissions: TapHandler.TakeOverForbidden
-//             target: null
-//             onActiveChanged: if (active) {
-//                 const p = resizeHandler.centroid.position;
-//                 let e = 0;
-//                 if (p.x / width < 0.10) { e |= Qt.LeftEdge; edge = Qt.LeftEdge }
-//                 if (p.x / width > 0.90) { e |= Qt.RightEdge; edge = Qt.RightEdge }
-//                 if (p.y / height < 0.10) { e |= Qt.TopEdge; edge = Qt.TopEdge }
-//                 if (p.y / height > 0.90) { e |= Qt.BottomEdge; edge = Qt.BottomEdge }
-//                 console.log("RESIZING", e);
-//                 root.startSystemResize(e);
-//             }
-//         }
-//         
-//     }
- 
-//     DropShadow 
-//     {
-//         transparentBorder: true
-//         anchors.fill: _csdBorder
-//         horizontalOffset: 0
-//         verticalOffset: 0
-//         radius: 8.0
-//         samples: 17
-//         color: Qt.rgba(0,0,0,0.5)
-//         source: _csdBorder      
-//     }
+    }
 
-    Kirigami.Theme.colorSet: Kirigami.Theme.View
-    MauiLab.Page
+    Maui.Page
     {
         id: _page
         anchors.fill: parent
-//         anchors.margins: Maui.Style.space.small
         Kirigami.Theme.colorSet: root.Kirigami.Theme.colorSet
-        headerBackground.color: Maui.App.enableCSD ? Qt.darker(Kirigami.Theme.backgroundColor, 1.1) : headBar.Kirigami.Theme.backgroundColor      
-        
+        headerBackground.color: Maui.App.enableCSD ? Qt.darker(Kirigami.Theme.backgroundColor, 1.1) : headBar.Kirigami.Theme.backgroundColor
+
         headBar.farLeftContent: Loader
         {
             id: _leftControlsLoader
             visible: active
-            active: Maui.App.enableCSD && Maui.App.leftWindowControls.length && !Kirigami.Settings.isMobile
+            active: Maui.App.enableCSD && Maui.App.leftWindowControls.length
             Layout.preferredWidth: active ? implicitWidth : 0
             Layout.fillHeight: true
-            sourceComponent: MauiLab.WindowControls
+            sourceComponent:  Maui.WindowControls
             {
                 order: Maui.App.leftWindowControls
             }
         }
-        
+
         headBar.leftContent: ToolButton
         {
             id: menuBtn
             icon.name: "application-menu"
-            checked: mainMenu.visible
+            checked: _mainMenu.visible
             onClicked:
             {
                 menuButtonClicked()
-                mainMenu.visible ? mainMenu.close() : mainMenu.popup(parent, 0 , root.headBar.height )
+                _mainMenu.visible ? _mainMenu.close() : _mainMenu.popup(parent, 0 , root.headBar.height )
             }
 
             Menu
             {
-                id: mainMenu
+                id: _mainMenu
                 modal: true
-                z: 999
                 width: Maui.Style.unit * 250
 
                 Loader
                 {
                     id: _accountsMenuLoader
-                    width: parent.width * 0.9
+                    width: parent.width - (Maui.Style.space.medium*2)
                     anchors.horizontalCenter: parent.horizontalCenter
-
                     active: Maui.App.handleAccounts
                     sourceComponent: Maui.App.handleAccounts ?
-                    _accountsComponent : null
+                                         _accountsComponent : null
                 }
+
+                MenuSeparator {visible: _accountsMenuLoader.active}
+
+                Repeater
+                {
+                    model: root.mainMenu
+                    MenuItem
+                    {
+                        action: modelData
+                    }
+                }
+
+                MenuSeparator{visible: root.mainMenu.length}
 
                 MenuItem
                 {
@@ -234,17 +267,23 @@ Window
                     icon.name: "documentinfo"
                     onTriggered: aboutDialog.open()
                 }
+
+                MenuItem
+                {
+                    text: i18n("Quit")
+                    onTriggered: root.close()
+                }
             }
-        }        
+        }
 
         headBar.farRightContent: Loader
         {
             id: _rightControlsLoader
             visible: active
-            active: Maui.App.enableCSD && Maui.App.rightWindowControls.length && !Kirigami.Settings.isMobile
+            active: Maui.App.enableCSD && Maui.App.rightWindowControls.length
             Layout.preferredWidth: active ? implicitWidth : 0
             Layout.fillHeight: true
-            sourceComponent: MauiLab.WindowControls
+            sourceComponent:  Maui.WindowControls
             {
                 order:  Maui.App.rightWindowControls
             }
@@ -263,12 +302,12 @@ Window
 
             anchors.leftMargin: root.sideBar ? ((root.sideBar.collapsible && root.sideBar.collapsed) ? root.sideBar.collapsedSize : (root.sideBar.width ) * root.sideBar.position) : 0
         }
-        
+
         background: Rectangle
         {
             id: _pageBackground
             color: Kirigami.Theme.backgroundColor
-            radius: root.visibility === Window.Maximized || !Maui.App.enableCSD ? 0 : Maui.App.theme.borderRadius
+            radius: root.visibility === Window.Maximized || !Maui.App.enableCSD ? 0 :Maui.Style.radiusV
         }
 
         layer.enabled: Maui.App.enableCSD
@@ -285,21 +324,19 @@ Window
                     radius: _pageBackground.radius
                 }
             }
-        }  
+        }
     }
-    
+
     Rectangle
     {
         visible: Maui.App.enableCSD
         z: ApplicationWindow.overlay.z + 9999
         anchors.fill: parent
-//         anchors.margins: Maui.Style.space.small
         radius: _pageBackground.radius - 0.5
         color: "transparent"
         border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
-        opacity: 0.8       
+        opacity: 0.8
 
-        
         Rectangle
         {
             anchors.fill: parent
@@ -309,13 +346,11 @@ Window
             border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
             opacity: 0.8
         }
-        
     }
-    
-    
+
     MouseArea
     {
-        visible: Maui.App.enableCSD        
+        visible: Maui.App.enableCSD
         height: 16
         width: height
         anchors.bottom: parent.bottom
@@ -323,23 +358,23 @@ Window
         cursorShape: Qt.SizeBDiagCursor
         propagateComposedEvents: true
         preventStealing: false
-        
-        onPressed: mouse.accepted = false 
-        
-        DragHandler 
+
+        onPressed: mouse.accepted = false
+
+        DragHandler
         {
             grabPermissions: TapHandler.TakeOverForbidden
             target: null
-            onActiveChanged: if (active) 
-            {              
-                root.startSystemResize(Qt.LeftEdge | Qt.BottomEdge);
-            }
-        }        
-    }  
-    
+            onActiveChanged: if (active)
+                             {
+                                 root.startSystemResize(Qt.LeftEdge | Qt.BottomEdge);
+                             }
+        }
+    }
+
     MouseArea
     {
-        visible: Maui.App.enableCSD        
+        visible: Maui.App.enableCSD
         height: 16
         width: height
         anchors.bottom: parent.bottom
@@ -347,165 +382,99 @@ Window
         cursorShape: Qt.SizeFDiagCursor
         propagateComposedEvents: true
         preventStealing: false
-        
-        onPressed: mouse.accepted = false 
-        
-        DragHandler 
+
+        onPressed: mouse.accepted = false
+
+        DragHandler
         {
             grabPermissions: TapHandler.TakeOverForbidden
             target: null
-            onActiveChanged: if (active) 
-            {              
-                root.startSystemResize(Qt.RightEdge | Qt.BottomEdge);
-            }
-        }        
-    }    
-    
-    
-    Overlay.overlay.modal: Rectangle 
+            onActiveChanged: if (active)
+                             {
+                                 root.startSystemResize(Qt.RightEdge | Qt.BottomEdge);
+                             }
+        }
+    }
+
+    Overlay.overlay.modal: Rectangle
     {
         color: Qt.rgba( root.Kirigami.Theme.backgroundColor.r,  root.Kirigami.Theme.backgroundColor.g,  root.Kirigami.Theme.backgroundColor.b, 0.7)
-        
+
         Behavior on opacity { NumberAnimation { duration: 150 } }
-        
-        radius: Maui.App.enableCSD ?  Maui.App.theme.borderRadius : 0
+
+        radius: _pageBackground.radius
     }
-    
-    Overlay.overlay.modeless: Rectangle 
+
+    Overlay.overlay.modeless: Rectangle
     {
-        radius: Maui.App.enableCSD ?  Maui.App.theme.borderRadius : 0
+        radius: _pageBackground.radius
 
         color: Qt.rgba( root.Kirigami.Theme.backgroundColor.r,  root.Kirigami.Theme.backgroundColor.g,  root.Kirigami.Theme.backgroundColor.b, 0.7)
         Behavior on opacity { NumberAnimation { duration: 150 } }
     }
-    
-    
-    //     onHeadBarBGColorChanged:
-    //     {
-    //         if(!isMobile && colorSchemeName.length > 0)
-    //             Maui.KDE.setColorScheme(colorSchemeName, headBarBGColor, headBarFGColor)
-    //         else if(isAndroid && headBar.position === ToolBar.Header)
-    //             Maui.Android.statusbarColor(headBarBGColor, false)
-    // 			else if(isAndroid && headBar.position === ToolBar.Footer)
-    // 				Maui.Android.statusbarColor(Kirigami.Theme.viewBackgroundColor, true)
-    //
-    //     }
-    //
-    //     onHeadBarFGColorChanged:
-    //     {
-    // 		if(!isAndroid && !isMobile && colorSchemeName.length > 0 && headBar.position === ToolBar.Header)
-    //             Maui.KDE.setColorScheme(colorSchemeName, headBarBGColor, headBarFGColor)
-    // 			else if(isAndroid && headBar.position === ToolBar.Header)
-    //             Maui.Android.statusbarColor(headBarBGColor, false)
-    // 			else if(isAndroid && headBar.position === ToolBar.Footer)
-    // 				Maui.Android.statusbarColor(Kirigami.Theme.viewBackgroundColor, true)
-    //     }
-    /*
-     *    background: Rectangle
-     *    {
-     *        color: bgColor
-}
-*/
 
     Component
     {
         id: _accountsComponent
 
-        ColumnLayout
+        Item
         {
-            visible: Maui.App.handleAccounts
-            spacing: Maui.Style.space.medium
+            height: _accountLayout.implicitHeight + Maui.Style.space.medium
 
-            Kirigami.Icon
+            ColumnLayout
             {
-                visible: Maui.App.accounts.currentAccountIndex >= 0
-                source: "user-identity"
-                Layout.preferredHeight: Maui.Style.iconSizes.large
-                Layout.preferredWidth: Maui.Style.iconSizes.large
-                Layout.alignment:  Qt.AlignCenter
-                Layout.margins: Maui.Style.space.medium
-            }
-
-            Label
-            {
-                visible: Maui.App.accounts.currentAccountIndex >= 0
-                text: currentAccount ? currentAccount.user : ""
-                Layout.fillWidth: true
-                horizontalAlignment: Qt.AlignHCenter
-                elide: Text.ElideMiddle
-                wrapMode: Text.NoWrap
-                font.bold: true
-                font.weight: Font.Bold
-            }
-
-            Kirigami.Separator
-            {
-                visible: _accountsListing.count > 0
-                Layout.fillWidth: true
-            }
-
-            ListBrowser
-            {
-                id: _accountsListing
-                visible: _accountsListing.count > 0
-                Layout.fillWidth: true
-                Layout.preferredHeight: Math.min(contentHeight, 300)
+                id: _accountLayout
+                anchors.fill: parent
                 spacing: Maui.Style.space.medium
-                Kirigami.Theme.backgroundColor: "transparent"
-                currentIndex: Maui.App.accounts.currentAccountIndex
 
-                model:  Maui.BaseModel
+                Repeater
                 {
-                    list: Maui.App.accounts
+                    id: _accountsListing
+
+                    model: Maui.BaseModel
+                    {
+                        list: Maui.App.accounts
+                    }
+
+                    delegate: Maui.ListBrowserDelegate
+                    {
+                        visible: _accountsListing.count > 0
+                        Layout.fillWidth: true
+                        Kirigami.Theme.backgroundColor: "transparent"
+
+                        isCurrentItem: Maui.App.accounts.currentAccountIndex === index
+                        iconSource: "amarok_artist"
+                        iconSizeHint: Maui.Style.iconSizes.medium
+                        label1.text: model.user
+                        label2.text: model.server
+                        width: _accountsListing.width
+                        height: Maui.Style.rowHeight * 1.2
+                        onClicked: Maui.App.accounts.currentAccountIndex = index
+                    }
+
+                    Component.onCompleted:
+                    {
+                        if(_accountsListing.count > 0)
+                            Maui.App.accounts.currentAccountIndex = 0
+                    }
                 }
 
-                delegate: Maui.ListBrowserDelegate
+                Button
                 {
-                    iconSource: "amarok_artist"
-                    iconSizeHint: Maui.Style.iconSizes.medium
-                    label1.text: model.user
-                    label2.text: model.server
-                    width: _accountsListing.width
-                    height: Maui.Style.rowHeight * 1.2
-                    leftPadding: Maui.Style.space.tiny
-                    rightPadding: Maui.Style.space.tiny
-                    onClicked: Maui.App.accounts.currentAccountIndex = index
-                }
+                    Layout.preferredHeight: implicitHeight
+                    Layout.alignment: Qt.AlignCenter
+                    Layout.fillWidth: true
+                    text: i18n("Accounts")
+                    icon.name: "list-add-user"
+                    onClicked:
+                    {
+                        if(root.accounts)
+                            accounts.open()
 
-                Component.onCompleted:
-                {
-                    if(_accountsListing.count > 0)
-                        Maui.App.accounts.currentAccountIndex = 0
+                        _mainMenu.close()
+                    }
                 }
             }
-
-            Kirigami.Separator
-            {
-                visible: _accountsListing.count > 0
-                Layout.fillWidth: true
-            }
-
-            Button
-            {
-                Layout.margins: Maui.Style.space.small
-                Layout.preferredHeight: implicitHeight
-                Layout.alignment: Qt.AlignCenter
-                text: i18n("Manage accounts")
-                icon.name: "list-add-user"
-                onClicked:
-                {
-                    if(root.accounts)
-                        accounts.open()
-
-                        mainMenu.close()
-                }
-            }
-
-            Kirigami.Separator
-            {
-                Layout.fillWidth: true
-            }
-
         }
     }
 
@@ -530,67 +499,67 @@ Window
         property alias title : _notifyTemplate.label1
         property alias body: _notifyTemplate.label2
 
+        persistent: false
         verticalAlignment: Qt.AlignTop
         defaultButtons: _notify.cb !== null
-            rejectButton.visible: false
-            onAccepted:
+        rejectButton.visible: false
+        onAccepted:
+        {
+            if(_notify.cb)
             {
-                if(_notify.cb)
-                {
-                    _notify.cb()
-                    _notify.close()
-                }
+                _notify.cb()
+                _notify.close()
             }
-            
-            page.padding: Maui.Style.space.medium
+        }
 
-            footBar.background: null
-            
-            maxHeight: Math.max(Maui.Style.iconSizes.large + Maui.Style.space.huge, (_notifyTemplate.implicitHeight)) + Maui.Style.space.big + footBar.height
-            maxWidth: Kirigami.Settings.isMobile ? parent.width * 0.9 : Maui.Style.unit * 500
-            widthHint: 0.8
-            
-            Timer
+        page.margins: Maui.Style.space.big
+        footBar.background: null
+        widthHint: 0.8
+
+        Timer
+        {
+            id: _notifyTimer
+            onTriggered:
             {
-                id: _notifyTimer
-                onTriggered:
+                if(_mouseArea.containsPress || _mouseArea.containsMouse)
                 {
-                    if(_mouseArea.containsPress || _mouseArea.containsMouse)
-                        return;
-
-                    _notify.close()
+                    _notifyTimer.restart();
+                    return
                 }
+
+                _notify.close()
             }
+        }
 
-            onClosed: _notifyTimer.stop()
+        onClosed: _notifyTimer.stop()
 
+        stack: MouseArea
+        {
+            id: _mouseArea
+            implicitHeight: _notifyTemplate.label1.implicitHeight + _notifyTemplate.label2.implicitHeight + Maui.Style.space.medium
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            hoverEnabled: true
             Maui.ListItemTemplate
             {
                 id: _notifyTemplate
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                iconSizeHint: Maui.Style.iconSizes.huge
+                spacing: Maui.Style.space.big
+                anchors.fill: parent
+
+                iconSizeHint: Maui.Style.iconSizes.big
                 label1.font.bold: true
                 label1.font.weight: Font.Bold
                 label1.font.pointSize: Maui.Style.fontSizes.big
                 iconSource: "dialog-warning"
-                
-                MouseArea
-                {
-                    id: _mouseArea
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                    hoverEnabled: true
-                }                
             }
+        }
 
-
-            function show(callback)
-            {
-                _notify.cb = callback || null
-                _notifyTimer.start()
-                _notify.open()
-            }
+        function show(callback)
+        {
+            _notify.cb = callback || null
+            _notifyTimer.start()
+            _notify.open()
+        }
     }
 
     Loader
@@ -600,7 +569,7 @@ Window
 
     Component.onCompleted:
     {
-        if(isAndroid)
+        if(Maui.Handy.isAndroid)
         {
             if(headBar.position === ToolBar.Footer)
             {
@@ -623,7 +592,21 @@ Window
             root.height = rect.height
         }
     }
+    
+    Connections
+    {
+        target: Maui.Platform
+        ignoreUnknownSignals: true
+        function onShareFilesRequest(urls) 
+        {
+            dialogLoader.source = "labs/ShareDialog.qml"
+            dialog.urls = urls
+            dialog.open()
+        }
+    }
 
+    /**
+      */
     function notify(icon, title, body, callback, timeout, buttonText)
     {
         _notify.iconName = icon || "emblem-warning"
@@ -634,6 +617,8 @@ Window
         _notify.show(callback)
     }
 
+    /**
+      */
     function toggleMaximized()
     {
         if (root.visibility === Window.Maximized)
@@ -645,6 +630,8 @@ Window
         }
     }
 
+    /**
+      */
     function window()
     {
         return _page;

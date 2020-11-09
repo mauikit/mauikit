@@ -35,47 +35,47 @@
 ****************************************************************************/
 
 import QtQuick 2.12
-import QtQuick.Controls.Material 2.12
-import QtQuick.Controls.Material.impl 2.12
+import org.kde.kirigami 2.9 as Kirigami
 
-Item {
+Item
+{
     id: indicator
     implicitWidth: 38
     implicitHeight: 32
 
     property Item control
     property alias handle: handle
+    property color m_color : control.checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
 
-    Material.elevation: 1
-
-    Rectangle {
+    Rectangle
+    {
         width: parent.width
-        height: 14
+        height: 20
         radius: height / 2
         y: parent.height / 2 - height / 2
-        color: control.enabled ? (control.checked ? control.Material.switchCheckedTrackColor : control.Material.switchUncheckedTrackColor)
-                               : control.Material.switchDisabledTrackColor
+        border.color: control.enabled ? (control.checked ? m_color : color) : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.9))
+        color: control.enabled ? Qt.rgba(m_color.r, m_color.g, m_color.b, 0.2) : "transparent"
     }
 
-    Rectangle {
+    Rectangle
+    {
         id: handle
-        x: Math.max(0, Math.min(parent.width - width, control.visualPosition * parent.width - (width / 2)))
+        x: Math.max(4, Math.min(parent.width - width, control.visualPosition * parent.width - (width / 2)) - 4)
         y: (parent.height - height) / 2
-        width: 20
-        height: 20
+        width: 16
+        height: 16
         radius: width / 2
-        color: control.enabled ? (control.checked ? control.Material.switchCheckedHandleColor : control.Material.switchUncheckedHandleColor)
-                               : control.Material.switchDisabledHandleColor
+        color: control.enabled ? (control.checked ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor)
+                               : "transparent"
+        border.color: control.enabled ? "transparent" : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.9))
 
-        Behavior on x {
+        Behavior on x
+        {
             enabled: !control.pressed
-            SmoothedAnimation {
+            SmoothedAnimation
+            {
                 duration: 300
             }
-        }
-        layer.enabled: indicator.Material.elevation > 0
-        layer.effect: ElevationEffect {
-            elevation: indicator.Material.elevation
         }
     }
 }

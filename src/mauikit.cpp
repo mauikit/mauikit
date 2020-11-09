@@ -21,6 +21,7 @@
 
 #include <QDebug>
 
+#include "appsettings.h"
 #include "appview.h"
 #include "fmstatic.h"
 #include "handy.h"
@@ -37,11 +38,11 @@
 #include "fm.h"
 #include "fmlist.h"
 #include "placeslist.h"
+#include "thumbnailer.h"
 #endif
 
 #ifdef COMPONENT_TAGGING
 #include "tagslist.h"
-#include "tagsmodel.h"
 #endif
 
 #ifdef COMPONENT_STORE
@@ -54,15 +55,27 @@
 #endif
 
 #ifdef Q_OS_ANDROID
-#include "mauiandroid.h"
+#include "platforms/android/mauiandroid.h"
 #elif defined Q_OS_LINUX
-#include "mauikde.h"
+#include "platforms/linux/mauilinux.h"
 #endif
+
+#include "platform.h"
 
 #ifdef MAUIKIT_STYLE
 #include <QIcon>
 #include <QQuickStyle>
 #endif
+
+#if defined Q_OS_MACOS || defined Q_OS_WIN
+#include <KF5/KI18n/KLocalizedContext>
+#include <KF5/KI18n/KLocalizedString>
+#else
+#include <KI18n/KLocalizedContext>
+#include <KI18n/KLocalizedString>
+#endif
+
+#include <QQmlContext>
 
 QUrl MauiKit::componentUrl(const QString &fileName) const
 {
@@ -73,9 +86,21 @@ QUrl MauiKit::componentUrl(const QString &fileName) const
 #endif
 }
 
+void MauiKit::initializeEngine(QQmlEngine *engine, const char *uri)
+{
+    Q_UNUSED(uri);
+    KLocalizedString::setApplicationDomain("mauikit");
+    engine->rootContext()->setContextObject(new KLocalizedContext(engine));
+
+    /** IMAGE PROVIDERS **/
+#ifdef COMPONENT_FM
+    engine->addImageProvider("thumbnailer", new Thumbnailer());
+#endif
+}
+
 void MauiKit::registerTypes(const char *uri)
 {
-    Q_ASSERT(uri == QLatin1String("org.kde.mauikit"));
+    Q_ASSERT(uri == QLatin1String(MAUIKIT_URI));
 
     qmlRegisterSingletonType(componentUrl(QStringLiteral("Style.qml")), uri, 1, 0, "Style");
     qmlRegisterType(componentUrl(QStringLiteral("ToolBar.qml")), uri, 1, 0, "ToolBar");
@@ -136,13 +161,23 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("labs/TabsBrowser.qml")), uri, 1, 1, "TabsBrowser");
     qmlRegisterType(componentUrl(QStringLiteral("labs/SettingsDialog.qml")), uri, 1, 1, "SettingsDialog");
     qmlRegisterType(componentUrl(QStringLiteral("labs/SettingsSection.qml")), uri, 1, 1, "SettingsSection");
+    qmlRegisterType(componentUrl(QStringLiteral("labs/SettingTemplate.qml")), uri, 1, 2, "SettingTemplate");
     qmlRegisterType(componentUrl(QStringLiteral("labs/Doodle.qml")), uri, 1, 1, "Doodle");
 
     /** 1.2 **/
     qmlRegisterType(componentUrl(QStringLiteral("labs/AlternateListItem.qml")), uri, 1, 2, "AlternateListItem");
+    qmlRegisterType(componentUrl(QStringLiteral("labs/Separator.qml")), uri, 1, 2, "Separator");
 
     /// NON UI CONTROLS
     qmlRegisterUncreatableType<AppView>(uri, 1, 1, "AppView", "Cannot be created App");
+    qmlRegisterType<SettingSection>(uri, 1, 2, "SettingSection");
+    //     qmlRegisterSingletonInstance<Platform>(uri, 1, 2, "Platform", Platform::instance());
+    qmlRegisterSingletonType<Platform>(uri, 1, 2, "Platform", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+        Q_UNUSED(scriptEngine)
+        auto platform = Platform::instance();
+        engine->setObjectOwnership(platform, QQmlEngine::CppOwnership);
+        return platform;
+    });
 
     /** Experimental **/
 #ifdef Q_OS_WIN32
@@ -180,17 +215,15 @@ void MauiKit::registerTypes(const char *uri)
 
     qmlRegisterType(componentUrl(QStringLiteral("FileBrowser.qml")), uri, 1, 0, "FileBrowser");
     qmlRegisterType(componentUrl(QStringLiteral("PlacesListBrowser.qml")), uri, 1, 0, "PlacesListBrowser");
-    qmlRegisterType(componentUrl(QStringLiteral("FilePreviewer.qml")), uri, 1, 0, "FilePreviewer");
     qmlRegisterType(componentUrl(QStringLiteral("FileDialog.qml")), uri, 1, 0, "FileDialog");
 #endif
 
 #ifdef COMPONENT_EDITOR
     /** EDITOR CONTROLS **/
     qmlRegisterType<DocumentHandler>(uri, 1, 0, "DocumentHandler");
-    qmlRegisterType<Alerts>();
-    qmlRegisterType<DocumentAlert>();
+    qmlRegisterAnonymousType<Alerts>(uri, 1);
+    qmlRegisterAnonymousType<DocumentAlert>(uri, 1);
     qmlRegisterType(componentUrl(QStringLiteral("Editor.qml")), uri, 1, 0, "Editor");
-    qmlRegisterType(componentUrl(QStringLiteral("private/DocumentPreview.qml")), uri, 1, 0, "DocumentPreview");
 #endif
 
     /** PLATFORMS SPECIFIC CONTROLS **/
@@ -212,13 +245,12 @@ void MauiKit::registerTypes(const char *uri)
 #endif
 
     /** DATA MODELING TEMPLATED INTERFACES **/
-    qmlRegisterType<MauiList>();                        // ABSTRACT BASE LIST
+    qmlRegisterAnonymousType<MauiList>(uri, 1);         // ABSTRACT BASE LIST
     qmlRegisterType<MauiModel>(uri, 1, 0, "BaseModel"); // BASE MODEL
 
 #ifdef COMPONENT_TAGGING
     /** TAGGING INTERFACES AND MODELS **/
     qmlRegisterType<TagsList>("TagsList", 1, 0, "TagsList");
-    qmlRegisterType<TagsModel>("TagsModel", 1, 0, "TagsModel");
     qmlRegisterType(componentUrl(QStringLiteral("private/TagList.qml")), uri, 1, 0, "TagList");
     qmlRegisterType(componentUrl(QStringLiteral("TagsBar.qml")), uri, 1, 0, "TagsBar");
     qmlRegisterType(componentUrl(QStringLiteral("TagsDialog.qml")), uri, 1, 0, "TagsDialog");
@@ -226,7 +258,7 @@ void MauiKit::registerTypes(const char *uri)
 
     /** MAUI APPLICATION SPECIFIC PROPS **/
 #ifdef COMPONENT_ACCOUNTS
-    qmlRegisterType<MauiAccounts>();
+    qmlRegisterAnonymousType<MauiAccounts>(uri, 1);
     qmlRegisterType(componentUrl(QStringLiteral("SyncDialog.qml")), uri, 1, 0, "SyncDialog"); // to be rename to accountsDialog
 #endif
 

@@ -22,7 +22,36 @@
 MauiList::MauiList(QObject *parent)
     : QObject(parent)
     , m_model(nullptr)
+{}
+
+int MauiList::getCount() const
 {
+    return this->items().count();
+}
+
+QVariantMap MauiList::get(const int &index) const
+{
+    if (this->m_model)
+    {
+        return this->m_model->get(index);
+    }
+          
+    if(index >=0 && this->items().size() > 0 && index < this->items().size())
+    {
+        return FMH::toMap(this->items()[index]);
+    }
+
+    return QVariantMap();
+}
+
+FMH::MODEL_LIST MauiList::getItems() const
+{
+    if (this->m_model && !this->m_model->getFilter().isEmpty())
+    {
+        return FMH::toModelList(this->m_model->getAll());
+    }
+
+    return this->items();
 }
 
 int MauiList::mappedIndex(const int &index) const
@@ -30,7 +59,7 @@ int MauiList::mappedIndex(const int &index) const
     if (this->m_model)
         return this->m_model->mappedToSource(index);
 
-    return -1;
+    return index;
 }
 
 int MauiList::mappedIndexFromSource(const int &index) const
@@ -38,7 +67,7 @@ int MauiList::mappedIndexFromSource(const int &index) const
     if (this->m_model)
         return this->m_model->mappedFromSource(index);
 
-    return -1;
+    return index;
 }
 
 bool MauiList::exists(const FMH::MODEL_KEY &key, const QString &value) const

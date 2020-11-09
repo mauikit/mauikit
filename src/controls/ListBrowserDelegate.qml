@@ -17,11 +17,11 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 2.2
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 import QtGraphicalEffects 1.0
 import "private"
 
@@ -40,7 +40,6 @@ Maui.ItemDelegate
 	ToolTip.visible: control.hovered && control.tooltipText
 	ToolTip.text: control.tooltipText
     
-    property bool showThumbnails : false    
     property string tooltipText  
         
     property alias label1 : _template.label1
@@ -53,12 +52,15 @@ Maui.ItemDelegate
     property alias imageSizeHint : _template.imageSizeHint
     property alias imageSource : _template.imageSource
     property alias iconSource : _template.iconSource
-    property alias checkable : _template.checkable
-    property alias checked : _template.checked
     property alias showLabel : _template.labelsVisible
-    
+
+    property alias checked : _template.checked
+    property alias checkable: _template.checkable
+
     property alias leftLabels: _template.leftLabels
     property alias rightLabels: _template.rightLabels   
+    
+    property alias template : _template
     
     default property alias content : _template.content
             
@@ -74,6 +76,7 @@ Maui.ItemDelegate
             radius: Maui.Style.radiusV
             color: control.Kirigami.Theme.highlightColor		
             visible: parent.containsDrag
+            opacity: 0.3
         }
         
         onDropped:
@@ -86,17 +89,11 @@ Maui.ItemDelegate
     {
         id: _template
         anchors.fill: parent
-        
         isCurrentItem : control.isCurrentItem
-        hovered: control.hovered
-        
-        imageSource: model.mime &&  model.thumbnail ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails ? model.thumbnail : "") : ""	
-        iconSource: model.icon
-        
-        label1.text: model.label ? model.label : ""
-        label3.text : model.mime ? (model.mime === "inode/directory" ? (model.count ? model.count + i18n(" items") : "") : Maui.FM.formatSize(model.size)) : ""
-        label4.text: model.modified ? Maui.FM.formatDate(model.modified, "MM/dd/yyyy") : "" 
-		
+        hovered: parent.hovered
+        checkable : control.checkable
+        checked : control.checked               
 		onToggled: control.toggled(state)
+        leftMargin: iconVisible ? 0 : Maui.Style.space.medium
     } 
 }

@@ -37,12 +37,12 @@ AbstractButton
     readonly property alias kicon : _icon
     property alias rec : _background
     
-    Kirigami.Theme.inherit: false
-    Kirigami.Theme.colorSet: Kirigami.Theme.Button
+//    Kirigami.Theme.inherit: false
+//    Kirigami.Theme.colorSet: Kirigami.Theme.Button
     
     hoverEnabled: !Kirigami.Settings.isMobile
-    implicitHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
-    implicitWidth: _layoutButton.implicitWidth  + (Maui.Style.space.medium *  1.25)
+    implicitHeight: Math.floor(Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25))
+    implicitWidth: Math.floor(_layoutButton.implicitWidth + (Maui.Style.space.medium *  2))
     
     icon.width: Maui.Style.iconSizes.medium
     icon.height: Maui.Style.iconSizes.medium
@@ -50,10 +50,10 @@ AbstractButton
     background: Rectangle
     {
         id: _background
-        anchors.fill: parent
-        opacity: 0.5
+        implicitHeight: Math.floor(Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25))
+
         radius: Maui.Style.radiusV
-        color: checked || control.hovered ? Qt.rgba( control.Kirigami.Theme.highlightColor.r,  control.Kirigami.Theme.highlightColor.g,  control.Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
+        color: control.down || control.checked || control.hovered || control.pressed ? Qt.rgba(control.Kirigami.Theme.highlightColor.r,  control.Kirigami.Theme.highlightColor.g,  control.Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
         border.color:  checked ?  control.Kirigami.Theme.highlightColor : "transparent"            
         
         Behavior on color
@@ -75,7 +75,7 @@ AbstractButton
         
         Item
         {
-            implicitWidth: visible ? Maui.Style.iconSizes.medium : 0
+            implicitWidth: visible ? _icon.width + Maui.Style.space.medium : 0
             Layout.alignment: Qt.AlignCenter
             
             visible: _icon.source && _icon.source.length && (control.display === ToolButton.TextBesideIcon || control.display === ToolButton.IconOnly)
@@ -87,7 +87,7 @@ AbstractButton
                 width: control.icon.width
                 height: control.icon.height
                 
-                color: (control.icon.color && control.icon.color.length ) ? control.icon.color : ( (control.checked || control.hovered ) && enabled ) ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
+                color: (control.icon.color && control.icon.color.length ) ? control.icon.color : ( (control.checked || control.hovered || control.pressed || control.down ) && enabled ) ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
                 
                 source: control.icon.name  
                 isMask: true
@@ -102,14 +102,14 @@ AbstractButton
             opacity: visible ? ( enabled ? 1 : 0.5) : 0
             horizontalAlignment: Qt.AlignHCenter
             Layout.fillWidth: visible
-            Layout.preferredWidth: visible ? implicitWidth + Maui.Style.space.big : 0
-            color: control.checked || control.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
+            Layout.preferredWidth: visible ? implicitWidth + Maui.Style.space.medium : 0
+            color: control.down || control.pressed || control.checked || control.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
             
             Behavior on Layout.preferredWidth
             {		
                 NumberAnimation
                 {
-                    duration: Kirigami.Units.longDuration
+                    duration: Kirigami.Units.shortDuration
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -118,7 +118,7 @@ AbstractButton
             {		
                 NumberAnimation
                 {
-                    duration: Kirigami.Units.longDuration
+                    duration: Kirigami.Units.shortDuration
                     easing.type: Easing.InOutQuad
                 }
             }

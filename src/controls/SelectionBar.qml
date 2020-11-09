@@ -41,7 +41,7 @@ Item
     property list<Action> hiddenActions
     property int padding : 0
     property int barHeight: Maui.Style.toolBarHeightAlt  
-    property int display : ToolButton.IconOnly
+    property int display : root.isWide ? ToolButton.TextBesideIcon : ToolButton.IconOnly
     property int maxListHeight : 400
     property int radius: Maui.Style.radiusV
     /**
@@ -58,7 +58,7 @@ Item
     
     property alias background : bg
     
-    readonly property QtObject m_private : QtObject
+    property QtObject m_private : QtObject
     {
         id: _private
         property var _uris : []
@@ -69,7 +69,7 @@ Item
     {
         id: delegate
         height: Maui.Style.rowHeight * 1.5
-        width: parent.width
+        width: ListView.view.width
         
         Kirigami.Theme.backgroundColor: "transparent"
         Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
@@ -107,8 +107,7 @@ Item
     signal rightClicked(var mouse)
     
     signal urisDropped(var uris)
-    
-    
+        
     Item
     {
         id: _container
@@ -135,7 +134,7 @@ Item
             {
                 NumberAnimation
                 {
-                    duration: Kirigami.Units.longDuration
+                    duration: Kirigami.Units.shortDuration
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -156,11 +155,9 @@ Item
                 anchors.topMargin: Maui.Style.space.medium
                 anchors.bottomMargin: _container.height
                 id: selectionList
-                padding: 0
                 visible: _listContainer.height > 10
                 spacing: Maui.Style.space.small
                 model: ListModel{}
-                background: null
                 
                 delegate: control.listDelegate			
             }             
@@ -187,7 +184,8 @@ Item
             anchors.fill: parent
             color: Kirigami.Theme.backgroundColor
             radius: control.radius
-            border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+            border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.2)
+
                        
             MouseArea
             {
@@ -209,8 +207,6 @@ Item
                 }
             }
         }
-        
-        
         
         RowLayout
         {
@@ -244,7 +240,7 @@ Item
                 id: _layout
                 clip: true
                 position: ToolBar.Footer
-                
+                spacing: Maui.Style.space.medium
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 preferredHeight: height
@@ -260,7 +256,7 @@ Item
                         action: modelData
                         display: control.display
                         Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
-                        
+                        Kirigami.Theme.inherit: false
                         ToolTip.delay: 1000
                         ToolTip.timeout: 5000
                         ToolTip.visible: hovered || pressed && action.text
@@ -377,6 +373,16 @@ Item
             borderColor: "white"
             solidBorder: false
         }
+        
+         Rectangle
+        {
+            anchors.fill: parent
+            anchors.margins: 1
+            color: "transparent"
+            radius: bg.radius - 0.5
+            border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+            opacity: 0.4
+        }
     }
     
     DropArea
@@ -457,7 +463,7 @@ Item
                 
                 item.uri = uri
                 selectionList.model.append(item)
-                selectionList.listView.positionViewAtEnd()
+                selectionList.flickable.positionViewAtEnd()
                 selectionList.currentIndex = selectionList.count - 1
                 
                 control.itemAdded(item)
@@ -466,7 +472,7 @@ Item
         }else
         {
             selectionList.currentIndex = index
-            //             notify(item.icon, qsTr("Item already selected!"), String("The item '%1' is already in the selection box").arg(item.label), null, 4000)
+            //             notify(item.icon, i18n("Item already selected!"), String("The item '%1' is already in the selection box").arg(item.label), null, 4000)
         }
         
         animate()

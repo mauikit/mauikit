@@ -39,7 +39,7 @@ void MauiModel::setSortOrder(const int &sortOrder)
     this->sort(0, static_cast<Qt::SortOrder>(sortOrder));
 }
 
-QVariantMap MauiModel::get(const int &index)
+QVariantMap MauiModel::get(const int &index) const
 {
     QVariantMap res;
     if (index >= this->rowCount() || index < 0)
@@ -51,7 +51,7 @@ QVariantMap MauiModel::get(const int &index)
     return res;
 }
 
-QVariantList MauiModel::getAll()
+QVariantList MauiModel::getAll() const
 {
     QVariantList res;
     for (auto i = 0; i < this->rowCount(); i++)
@@ -97,15 +97,7 @@ void MauiModel::setSort(const QString &sort)
 
     this->m_sort = sort;
     emit this->sortChanged(this->m_sort);
-    this->setSortRole([sort, roles = this->roleNames()]() -> int {
-        for (const auto &key : roles.keys()) {
-            if (roles[key] == sort) {
-                qDebug() << "FOUND ROLE KEY " << key << roles[key] << sort;
-                return key;
-            }
-        }
-        return -1;
-    }());
+    this->setSortRole(FMH::MODEL_NAME_KEY[sort]);
     this->sort(0, this->m_sortOrder);
 }
 
@@ -165,37 +157,31 @@ void MauiModel::PrivateAbstractListModel::setList(MauiList *value)
 
     if (this->list) {
         connect(this->list, &MauiList::preItemAppendedAt, this, [=](int index) {
-            emit this->list->countChanged();
             beginInsertRows(QModelIndex(), index, index);
         });
 
         connect(this->list, &MauiList::preItemAppended, this, [=]() {
-            emit this->list->countChanged();
             const int index = this->list->items().size();
             beginInsertRows(QModelIndex(), index, index);
         });
 
         connect(this->list, &MauiList::postItemAppended, this, [=]() {
-            emit this->list->countChanged();
             endInsertRows();
         });
 
         connect(this->list, &MauiList::preItemRemoved, this, [=](int index) { beginRemoveRows(QModelIndex(), index, index); });
 
         connect(this->list, &MauiList::postItemRemoved, this, [=]() {
-            emit this->list->countChanged();
             endRemoveRows();
         });
 
         connect(this->list, &MauiList::updateModel, this, [=](int index, QVector<int> roles) { emit this->dataChanged(this->index(index), this->index(index), roles); });
 
         connect(this->list, &MauiList::preListChanged, this, [=]() {
-            emit this->list->countChanged();
             beginResetModel();
         });
 
         connect(this->list, &MauiList::postListChanged, this, [=]() {
-            emit this->list->countChanged();
             endResetModel();
         });
     }
@@ -207,6 +193,7 @@ void MauiModel::setList(MauiList *value)
 {
     this->m_model->setList(value);
     this->getList()->m_model = this;
+    emit this->listChanged();
 }
 
 MauiModel::PrivateAbstractListModel::PrivateAbstractListModel(MauiModel *model)
@@ -214,6 +201,21 @@ MauiModel::PrivateAbstractListModel::PrivateAbstractListModel(MauiModel *model)
     , list(nullptr)
     , m_model(model)
 {
+    connect(this, &QAbstractListModel::rowsInserted, [this](QModelIndex, int, int)
+    {
+        if(this->list)
+        {
+            emit this->list->countChanged();
+        }
+    });
+    
+    connect(this, &QAbstractListModel::rowsRemoved, [this](QModelIndex, int, int)
+    {
+        if(this->list)
+        {
+            emit this->list->countChanged();
+        }
+    });
 }
 
 int MauiModel::PrivateAbstractListModel::rowCount(const QModelIndex &parent) const

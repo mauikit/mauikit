@@ -12,12 +12,12 @@ import org.kde.appletdecoration 0.1 as AppletDecoration
 Item
 {
 	id: control
-	readonly property bool maskButtons: Maui.App.theme.maskButtons
 	
 	implicitWidth: _controlsLayout.implicitWidth
 	property var order : []
 	
-	 
+	signal buttonClicked(var type)
+		 
 	Row
 	{
 		id: _controlsLayout
@@ -36,7 +36,6 @@ Item
     {
         id: pluginButton
         
-        
         AppletDecoration.Button
         {               
             width: 22                
@@ -52,9 +51,8 @@ Item
             
             //                 localX: x
             //                 localY: y
-            isActive: Window.window.active
-            
-            onClicked: performActiveWindowAction(type)                  
+            isActive: Window.window.active            
+            onClicked: buttonClicked(type)                  
         }    
     }
     
@@ -154,19 +152,5 @@ Item
             default: return null;			
         }
 	}
-	
-	function performActiveWindowAction(type)
-    {
-        if (type === AppletDecoration.Types.Close) {
-            root.close()
-        } else if (type === AppletDecoration.Types.Maximize) {
-            root.toggleMaximized()
-        } else if (type ===  AppletDecoration.Types.Minimize) {
-            root.showMinimized()
-        } else if (type === AppletDecoration.Types.TogglePinToAllDesktops) {
-            windowInfo.togglePinToAllDesktops();
-        } else if (type === AppletDecoration.Types.ToggleKeepAbove){
-            windowInfo.toggleKeepAbove();
-        }
-    }
+
 }

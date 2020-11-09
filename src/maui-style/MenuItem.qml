@@ -54,12 +54,12 @@ T.MenuItem
                                        implicitContentHeight + topPadding + bottomPadding,
                                        implicitIndicatorHeight + topPadding + bottomPadding) : 0
                                        
-                                       padding: Kirigami.Settings.isMobile ? Maui.Style.space.small : Maui.Style.space.tiny
-    verticalPadding: Kirigami.Settings.isMobile ? Maui.Style.space.small : Maui.Style.space.tiny
+    padding: Maui.Style.space.small
+    verticalPadding: Maui.Style.space.small
     spacing: Maui.Style.space.small
 
-    icon.width: Kirigami.Settings.isMobile ? Maui.Style.iconSizes.medium : Maui.Style.iconSizes.small
-    icon.height: Kirigami.Settings.isMobile ? Maui.Style.iconSizes.medium : Maui.Style.iconSizes.small
+    icon.width: Maui.Style.iconSizes.small
+    icon.height: Maui.Style.iconSizes.small
 
     icon.color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor) :
                              control.Kirigami.Theme.disabledTextColor
@@ -90,7 +90,7 @@ T.MenuItem
         readonly property real indicatorPadding: control.checkable && control.indicator ? control.indicator.width + control.spacing : 0
         leftPadding: !control.mirrored ? indicatorPadding + Maui.Style.space.small : arrowPadding
         rightPadding: control.mirrored ? indicatorPadding : arrowPadding + Maui.Style.space.small
-
+        opacity: control.enabled ? 1 : 0.5
         spacing: control.spacing
         mirrored: control.mirrored
         display: control.display
@@ -109,7 +109,6 @@ T.MenuItem
         implicitHeight: control.visible ? Maui.Style.rowHeightAlt : 0
         radius: Maui.Style.radiusV
 
-        opacity: 0.5
         anchors
         {
             fill: parent

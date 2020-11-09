@@ -1,8 +1,8 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.3
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import QtQml.Models 2.3
-import QtQml 2.1
+import QtQml 2.14
 
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
@@ -12,14 +12,19 @@ import "private" as Private
 Rectangle
 {
     id: control
-    implicitWidth: _layout.implicitWidth
+    implicitWidth: _loader.item ? _loader.item.implicitWidth : 0
     implicitHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.12)
     
+    Kirigami.Theme.colorSet: Kirigami.Theme.View
+//     Kirigami.Theme.inherit: false
+
     default property list<Action> actions
     
     property bool autoExclusive: true
     property bool checkable: true
     property int display: ToolButton.IconOnly
+    property bool cyclic: false
+    readonly property int count : actions.length
     
     property Action currentAction : control.autoExclusive ? actions[0] : null
     property int currentIndex : -1
@@ -37,8 +42,8 @@ Rectangle
     border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
     radius: Maui.Style.radiusV
     color: enabled ? Kirigami.Theme.backgroundColor : "transparent"
-    Kirigami.Theme.colorSet: Kirigami.Theme.View
-    Kirigami.Theme.inherit: false
+//    Kirigami.Theme.colorSet: Kirigami.Theme.View
+//    Kirigami.Theme.inherit: false
     
     Component.onCompleted:
     {
@@ -61,109 +66,11 @@ Rectangle
         }
     }
     
-    Row
+    Loader
     {
-        id: _layout
+        id: _loader
         height: parent.height
-        spacing: 0
-        
-        MouseArea
-        {
-            id: _defaultButtonMouseArea
-            hoverEnabled: true
-            width: height + Maui.Style.space.tiny + Maui.Style.iconSizes.small
-            height: parent.height
-            
-            visible: !control.expanded
-            anchors.verticalCenter: parent.verticalCenter
-            onClicked:
-            {
-                if(!_loader.item.visible)
-                {
-                    _loader.item.popup(control, 0, control.height)
-
-                }else
-                {
-                    _loader.item.close()
-                }
-            }
-            
-            Rectangle
-            {
-                anchors.fill: parent
-                color: control.currentAction ? (control.currentAction.enabled && (_defaultButtonMouseArea.containsMouse || _defaultButtonMouseArea.containsPress) ? Kirigami.Theme.highlightColor : "transparent") : "transparent"
-                opacity: 0.15
-                radius: control.radius
-            }
-            
-            RowLayout
-            {
-                anchors.fill: parent
-                spacing: 0
-                Item
-                {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    
-                    Private.BasicToolButton
-                    {
-                        id: _defaultButtonIcon
-                        onClicked:
-                        {
-                            if(!_loader.item.visible)
-                            {
-                                _loader.item.popup(control, 0, control.height)
-
-                            }else
-                            {
-                                _loader.item.close()
-                            }
-                        }
-
-                        anchors.centerIn: parent
-                        icon.width: Maui.Style.iconSizes.small
-                        icon.height: width
-                        icon.color: control.currentAction ? (control.currentAction.icon.color && control.currentAction.icon.color.length ? control.currentAction.icon.color : ( _defaultButtonMouseArea.containsPress ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor)) :  control.Kirigami.Theme.textColor
-                        
-                        icon.name: control.currentAction ? control.currentAction.icon.name : control.defaultIconName
-                        
-                        enabled: control.currentAction ? control.currentAction.enabled : true
-                    }
-                }
-                
-                Kirigami.Separator
-                {
-                    color: control.border.color
-                    Layout.fillHeight: true
-                    visible: _defaultButtonMouseArea.visible
-                }
-                
-                Item
-                {
-                    visible: _defaultButtonMouseArea.visible
-                    Layout.fillHeight: true
-                    Layout.preferredWidth: visible ? Maui.Style.iconSizes.small : 0
-                    
-                    Maui.Triangle
-                    {
-                        anchors.centerIn: parent
-                        rotation: -45
-                        color: _defaultButtonIcon.icon.color
-                        width: Maui.Style.iconSizes.tiny-3
-                        height:  width
-                    }
-                }
-            }
-            
-        }
-        
-        Loader
-        {
-            id: _loader
-            height: parent.height
-            width: control.expanded ? implicitWidth : 0
-            sourceComponent: control.expanded ? _rowComponent : _menuComponent
-        }
+        sourceComponent: control.expanded ? _rowComponent : _menuComponent
     }
     
     Component
@@ -197,6 +104,12 @@ Rectangle
                     id: _buttonMouseArea
                     action : modelData
                     checkable: control.checkable
+//                    rec.radius: index < _repeater.count-1 || index > 0 ? 0 : Maui.Style.radiusV
+                    Binding on checked
+                    {
+                        when: autoExclusive
+                        value: control.currentIndex === index
+                    }
                     autoExclusive: control.autoExclusive
                     width: implicitWidth
                     height: parent.height
@@ -204,14 +117,15 @@ Rectangle
                     opacity: enabled ? 1 : 0.5
                     display: control.autoExclusive ? (checked && control.enabled ? control.display : ToolButton.IconOnly) : control.display
                     icon.name: action.icon.name
-                    icon.width: Maui.Style.iconSizes.small
-                    icon.height: Maui.Style.iconSizes.small
+                    icon.width:  action.icon.width ?  action.icon.width : Maui.Style.iconSizes.small
+                    icon.height:  action.icon.height ?  action.icon.height : Maui.Style.iconSizes.small
                     
                     rec.border.color: "transparent"                    
                    
                     onClicked:
                     {
-                        control.currentIndex = index
+                        if(autoExclusive)
+                            control.currentIndex = index
                     }
                     
                     Kirigami.Separator
@@ -221,6 +135,8 @@ Rectangle
                         anchors.bottom: parent.bottom
                         anchors.right: parent.right
                         visible: index < _repeater.count-1
+                        anchors.topMargin:1
+                        anchors.bottomMargin: 1
                     }
                 }
             }
@@ -231,25 +147,122 @@ Rectangle
     {
         id: _menuComponent
         
-        Menu
+        MouseArea
         {
-            closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-            
-            Repeater
+            id: _defaultButtonMouseArea
+            hoverEnabled: true
+            width: implicitWidth
+            implicitWidth: _defaultButtonLayout.implicitWidth
+
+            function triggerAction()
             {
-                model: control.actions
-                
-                MenuItem
+                if(control.cyclic && control.autoExclusive)
                 {
-                    text: modelData.text
-                    icon.name: modelData.icon.name
-                    autoExclusive: control.autoExclusive
-                    checked: index === control.currentIndex && control.checkable
-                    checkable: control.checkable
-                    onTriggered:
+                    const index = control.currentIndex + 1
+                    control.currentIndex = index >= control.actions.length ? 0 : index
+                    control.currentAction.triggered()
+                    return
+                }
+                
+                if(!_menu.visible)
+                {
+                    _menu.popup(control, 0, control.height)
+                    
+                }else
+                {
+                    _menu.close()
+                } 
+            }
+            
+            onClicked: triggerAction()
+
+            Menu
+            {
+                id: _menu
+                closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
+                Repeater
+                {
+                    model: control.actions
+
+                    MenuItem
                     {
-                        control.currentIndex = index
-                        modelData.triggered()
+                        text: modelData.text
+                        icon.name: modelData.icon.name
+                        autoExclusive: control.autoExclusive
+                        checked: index === control.currentIndex && control.checkable
+                        checkable: control.checkable
+                        onTriggered:
+                        {
+                            control.currentIndex = index
+                            modelData.triggered()
+                        }
+                    }
+                }
+            }
+
+            Rectangle
+            {
+                anchors.fill: parent
+                color: control.currentAction ? (control.currentAction.enabled && (_defaultButtonMouseArea.containsMouse || _defaultButtonMouseArea.containsPress) ? Kirigami.Theme.highlightColor : "transparent") : "transparent"
+                opacity: 0.15
+                radius: control.radius
+            }
+
+            RowLayout
+            {
+                id: _defaultButtonLayout
+                height: parent.height
+                spacing: 0
+                
+                Private.BasicToolButton
+                {
+                    id: _defaultButtonIcon
+                    Layout.fillHeight: true
+                    
+                    onClicked: triggerAction()
+                    
+                    icon.width: Maui.Style.iconSizes.small
+                    icon.height: Maui.Style.iconSizes.small
+                    icon.color: buttonAction() ? (buttonAction().icon.color && buttonAction().icon.color.length ? buttonAction().icon.color : ( _defaultButtonMouseArea.containsPress ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor)) :  control.Kirigami.Theme.textColor
+                    
+                    icon.name: buttonAction() ? buttonAction().icon.name : control.defaultIconName
+                    
+                    enabled: buttonAction() ? buttonAction().enabled : true
+                    
+                    function buttonAction()
+                    {
+                        if(control.cyclic && control.autoExclusive)
+                        {
+                            const index = control.currentIndex + 1
+                            return control.actions[index >= control.actions.length ? 0 : index]
+                        }else
+                        {
+                            return control.currentAction
+                        }
+                    }
+                }
+
+                Kirigami.Separator
+                {
+                    visible: !control.cyclic
+                    color: control.border.color
+                    Layout.fillHeight: true
+                }
+
+                Item
+                {
+                    visible: !control.cyclic
+                    Layout.fillHeight: true
+                    Layout.preferredWidth: visible ? Maui.Style.iconSizes.small : 0
+
+                    Maui.Triangle
+                    {
+                        anchors.centerIn: parent
+                        rotation: -45
+                        color: _defaultButtonIcon.icon.color
+                        width: Maui.Style.iconSizes.tiny-3
+                        height:  width
                     }
                 }
             }

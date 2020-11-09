@@ -11,23 +11,31 @@ include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/controls/libs
     ${CMAKE_CURRENT_BINARY_DIR}/controls/libs
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/kde
-    ${CMAKE_CURRENT_BINARY_DIR}/kde
+    ${CMAKE_CURRENT_SOURCE_DIR}/platforms
+    ${CMAKE_CURRENT_BINARY_DIR}/platforms
+    
+    ${CMAKE_CURRENT_SOURCE_DIR}/platforms/linux
+    ${CMAKE_CURRENT_BINARY_DIR}/platforms/linux
     )
 
 set(mauikit_SRCS
     mauikit.cpp
     utils/fmstatic.cpp
+    utils/appsettings.cpp
+    utils/fmh.cpp
     utils/mauiapp.cpp
     utils/handy.cpp
     utils/models/pathlist.cpp
     utils/model_template/mauilist.cpp
     utils/model_template/mauimodel.cpp
+    platforms/abstractplatform.cpp
+    platforms/platform.cpp
     )
 
 set(mauikit_HDRS
     mauikit.h
     utils/fmstatic.h
+    utils/appsettings.h
     utils/fmh.h
     utils/utils.h
     utils/handy.h
@@ -36,6 +44,8 @@ set(mauikit_HDRS
     utils/model_template/mauilist.h
     utils/model_template/mauimodel.h
     controls/libs/appview.h
+    platforms/abstractplatform.h
+    platforms/platform.h
     )
 
 if(${COMPONENT_ACCOUNTS})
@@ -80,21 +90,25 @@ if(${COMPONENT_FM})
     message(STATUS "INCLUDING FM COMPONENT")
 
     set(fm_SRCS
-        fm/fm.cpp
-        fm/fmlist.cpp
-        fm/placeslist.cpp
-        fm/downloader.cpp
+        utils/fm/fm.cpp
+        utils/fm/fmlist.cpp
+        utils/fm/placeslist.cpp
+        utils/fm/downloader.cpp
+        utils/fm/fileloader.cpp
+        utils/fm/thumbnailer.cpp
         )
 
     set(fm_HDRS
-        fm/fm.h
-        fm/fmlist.h
-        fm/placeslist.h
-        fm/downloader.h
+        utils/fm/fm.h
+        utils/fm/fmlist.h
+        utils/fm/placeslist.h
+        utils/fm/downloader.h
+        utils/fm/fileloader.h
+        utils/fm/thumbnailer.h
         )
     include_directories(
-        ${CMAKE_CURRENT_SOURCE_DIR}/fm
-        ${CMAKE_CURRENT_BINARY_DIR}/fm
+        ${CMAKE_CURRENT_SOURCE_DIR}/utils/fm
+        ${CMAKE_CURRENT_BINARY_DIR}/utils/fm
         )
     add_definitions(-DCOMPONENT_FM)
 endif()
@@ -104,7 +118,6 @@ if(${COMPONENT_TAGGING})
     set(tagging_SRCS
         utils/tagging/tagging.cpp
         utils/tagging/tagdb.cpp
-        utils/tagging/tagsmodel.cpp
         utils/tagging/tagslist.cpp
         utils/tagging/tagging.qrc
         )
@@ -113,7 +126,6 @@ if(${COMPONENT_TAGGING})
         utils/tagging/tag.h
         utils/tagging/tagging.h
         utils/tagging/tagdb.h
-        utils/tagging/tagsmodel.h
         utils/tagging/tagslist.h
         )
     include_directories(
@@ -208,7 +220,7 @@ if (ANDROID)
     add_subdirectory(android)
 
     set(mauikit_Android_SRCS
-        android/mauiandroid.cpp
+        platforms/android/mauiandroid.cpp
     )
 
     kde_enable_exceptions(MauiKit PRIVATE)
@@ -216,13 +228,13 @@ else()
     add_subdirectory(csd/libappletdecoration)
 
     set(mauikit_KDE_SRCS
-        kde/mauikde.cpp
-        kde/kdeconnect.cpp
+        platforms/linux/mauilinux.cpp
+        platforms/linux/kdeconnect.cpp
         )
 
     set(mauikit_KDE_HDRS
-        kde/mauikde.h
-        kde/kdeconnect.h
+        platforms/linux/mauilinux.h
+        platforms/linux/kdeconnect.h
         )
 endif()
 
@@ -263,9 +275,9 @@ if(ANDROID)
     target_link_libraries(MauiKit PRIVATE Qt5::AndroidExtras jnigraphics)
 
     target_include_directories(MauiKit PRIVATE android)
-    install(FILES android/mauiandroid.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit COMPONENT Devel)
+    install(FILES platforms/android/mauiandroid.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit COMPONENT Devel)
 
-    install(DIRECTORY android/ DESTINATION ${KDE_INSTALL_DATAROOTDIR}/MauiKitAndroid COMPONENT Devel)
+    install(DIRECTORY platforms/android/ DESTINATION ${KDE_INSTALL_DATAROOTDIR}/MauiKitAndroid COMPONENT Devel)
 
     if (Qt5Core_VERSION VERSION_LESS 5.14.0)
         install(FILES MauiKit-android-dependencies.xml DESTINATION ${KDE_INSTALL_LIBDIR})

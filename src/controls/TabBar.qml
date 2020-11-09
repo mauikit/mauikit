@@ -1,8 +1,8 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.3
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.9 as Kirigami
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 import "private"
 
 TabBar
@@ -24,9 +24,9 @@ TabBar
     {
         color: Kirigami.Theme.backgroundColor
         
-        Kirigami.Separator
+        Maui.Separator
         {
-            color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+            color: parent.color
             
             anchors
             {
@@ -35,7 +35,6 @@ TabBar
                 top: control.position === TabBar.Footer ? parent.top : undefined
                 bottom: control.position == TabBar.Header ? parent.bottom : undefined
             }
-            height: Maui.Style.unit
         }	
         
         /*EdgeShadow

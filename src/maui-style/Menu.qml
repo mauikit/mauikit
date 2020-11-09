@@ -52,6 +52,9 @@ T.Menu
                              contentHeight + topPadding + bottomPadding)
 
     margins: 0
+    padding: 0
+//    topPadding: 0
+//    bottomPadding: 0
     verticalPadding: 8
     spacing: Maui.Style.space.tiny
     transformOrigin: !cascade ? Item.Top : (mirrored ? Item.TopRight : Item.TopLeft)
@@ -79,6 +82,9 @@ T.Menu
         clip: true
         currentIndex: control.currentIndex
         spacing: control.spacing
+        keyNavigationEnabled: true
+        keyNavigationWraps: true
+
         ScrollIndicator.vertical: ScrollIndicator {}
     }
 
@@ -90,8 +96,29 @@ T.Menu
         radius: Maui.Style.radiusV
         color: control.Kirigami.Theme.backgroundColor
         border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-        layer.enabled: true
 
+        Rectangle
+         {
+             anchors.fill: parent
+             radius: Maui.Style.radiusV
+             color: "transparent"
+             border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
+             opacity: 0.8
+
+             Rectangle
+             {
+                 anchors.fill: parent
+                 anchors.margins: 1
+                 color: "transparent"
+                 radius: parent.radius - 0.5
+                 border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+                 opacity: 0.8
+             }
+
+         }
+
+
+        layer.enabled: true
         layer.effect: DropShadow
         {
             transparentBorder: true

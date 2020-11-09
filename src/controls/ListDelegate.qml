@@ -34,27 +34,24 @@ Maui.ItemDelegate
 	property alias label2: _template.text2
 	property alias iconName: _template.iconSource  
 	property alias count : _badge.text
-	implicitWidth: parent.width
-	implicitHeight: Math.max(control.iconSize + Maui.Style.space.tiny, Maui.Style.rowHeight)	
+	
+	property alias template : _template
+	
+	implicitHeight: Math.floor(Math.max(control.iconSize + Maui.Style.space.tiny, Maui.Style.rowHeight))	
 	
 	isCurrentItem : ListView.isCurrentItem 
-	
-	padding: 0
-	leftPadding: Maui.Style.space.tiny
-	rightPadding: Maui.Style.space.tiny
 	
 	ToolTip.delay: 1000
 	ToolTip.timeout: 5000
 	ToolTip.visible: hovered 
-	ToolTip.text: qsTr(control.label)
-	
+	ToolTip.text: qsTr(control.label)	
 	
 	Maui.ListItemTemplate
 	{
 		id: _template
 		anchors.fill: parent
 		labelsVisible: control.labelVisible
-		hovered: control.hovered
+        hovered: parent.hovered
 		isCurrentItem: control.isCurrentItem
 		
 		Maui.Badge

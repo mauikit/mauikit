@@ -19,6 +19,8 @@ src/utils/editor/KSyntaxHighlighting/
 # src/utils/editor/kquicksyntaxhighlighter/
 src/utils/store/attica/
 src/utils/syncing/openssl/
+src/platforms/android/KI18n/
+src/platforms/android/KcoreAddons/
 
 #.*
 *.*~

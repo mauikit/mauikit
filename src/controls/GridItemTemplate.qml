@@ -17,9 +17,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.9
+import QtQuick 2.14
 import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.3
+import QtQuick.Controls 2.14
 import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.7 as Kirigami
@@ -31,9 +31,6 @@ Item
     id: control
     
     default property alias content: _layout.data
-        
-        //     implicitHeight: _layout.implicitHeight
-//         implicitWidth: _layout.implicitWidth
         
         property alias text1 : _label1.text
         
@@ -53,7 +50,7 @@ Item
         
         property bool checkable : false
         property bool checked : false
-                
+        
         property bool isCurrentItem: false
         property bool labelsVisible: true
         
@@ -62,62 +59,100 @@ Item
         
         property bool hovered: false
         
+        property bool imageBorder: true        
+        
         signal toggled(bool state)		
         
         Component
         {
             id: _imgComponent
             
-            Image
+            Item
             {
-                id: img
-                anchors.centerIn: parent
-                source: control.imageSource
                 height: parent.height
                 width: parent.width
-                sourceSize.width:control.imageWidth
-                sourceSize.height: control.imageHeight
-                horizontalAlignment: Qt.AlignHCenter
-                verticalAlignment: Qt.AlignVCenter
-                fillMode: control.fillMode
-                cache: true
-                asynchronous: true
-                smooth: false
                 
-                layer.enabled: control.maskRadius
-                layer.effect: OpacityMask
+                Image
                 {
-                    maskSource: Item
+                    id: img
+                    source: control.imageSource
+                    anchors.fill: parent
+                    sourceSize.width: control.imageWidth
+                    sourceSize.height: control.imageHeight
+                    horizontalAlignment: Qt.AlignHCenter
+                    verticalAlignment: Qt.AlignVCenter
+                    fillMode: control.fillMode
+                    cache: true
+                    asynchronous: true
+                    smooth: false
+                    
+                    layer.enabled: control.maskRadius
+                    layer.effect: OpacityMask
                     {
-                        width: img.width
-                        height: img.height
-                        Rectangle
+                        maskSource: Item
                         {
-                            anchors.fill: parent
-                            radius: control.maskRadius                          
+                            width: img.width
+                            height: img.height
+                            
+                            Rectangle
+                            {
+                                anchors.centerIn: parent
+                                width: Math.min(parent.width, img.paintedWidth)
+                                height: Math.min(parent.height, img.paintedHeight)
+                                radius: control.maskRadius                          
+                            }
                         }
                     }
                 }
                 
                 Rectangle
                 {
-                    anchors.fill: parent
-                    border.color: Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.8)   
-                    radius: control.maskRadius
-                    opacity: 0.2
-                    color: control.hovered ? control.Kirigami.Theme.highlightColor : "transparent"
+                    Kirigami.Theme.inherit: false
+                    visible: control.imageBorder
+                    anchors.centerIn: parent
                     
-                    Kirigami.Icon
+                    width: img.status === Image.Ready ? Math.min(parent.width, img.paintedWidth) : parent.width
+                    height:  img.status === Image.Ready ? Math.min(parent.height, img.paintedHeight) : parent.height
+                    border.color: control.isCurrentItem ? Kirigami.Theme.highlightColor : Qt.darker(Kirigami.Theme.backgroundColor, 2.2)
+                    radius: control.maskRadius
+                    
+                    border.width: control.isCurrentItem ? 2 : 1
+                    color: "transparent"
+                    opacity: 0.8
+                    
+                    Rectangle
                     {
-                        anchors.centerIn: parent
-                        height: Math.min(22, parent.height * 0.4)
-                        width: height
-                        source: "folder-images"
-                        isMask: true
-                        color: parent.border.color
-                        opacity: 1 - img.progress
+                        anchors.fill: parent
+                        color: "transparent"
+                        anchors.margins: 1
+                        radius: parent.radius - 0.5
+                        border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+                        opacity: 0.3
                     }
-                }               
+                }
+                
+                Kirigami.Icon
+                {
+                    visible: img.status !== Image.Ready
+                    anchors.centerIn: parent
+                    height: Math.min(22, parent.height * 0.4)
+                    width: height
+                    source: "folder-images"
+                    isMask: true
+                    color: Kirigami.Theme.textColor
+                    opacity: 0.5
+                }
+                
+                ColorOverlay
+                {
+                    anchors.fill: parent
+                    
+                    visible: control.hovered || control.checked ||control.isCurrentItem
+                    opacity: 0.3
+                    
+                    source: parent
+                    color: control.hovered || control.isCurrentItem  ? control.Kirigami.Theme.highlightColor : "#000"
+                }
             }
         }
         
@@ -130,17 +165,17 @@ Item
                 anchors.centerIn: parent
                 source: control.iconSource
                 fallback: "application-x-zerosize"
-                height: Math.min(parent.height, control.iconSizeHint)
+                height: Math.floor(Math.min(parent.height, control.iconSizeHint))
                 width: height
                 color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
                 
                 ColorOverlay
                 {
-                    visible: control.hovered
+                    visible: control.hovered || control.checked
                     opacity: 0.3
                     anchors.fill: parent
                     source: parent
-                    color: control.Kirigami.Theme.highlightColor
+                    color: control.hovered ? control.Kirigami.Theme.highlightColor : "#000"
                 } 
             }            
         }
@@ -155,22 +190,19 @@ Item
             {
                 id: _iconContainer
                 Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.maximumHeight: control.imageSource ? control.imageSizeHint : control.iconSizeHint
-                Layout.minimumHeight: control.imageSource ? control.imageSizeHint : control.iconSizeHint 
+                Layout.preferredHeight: control.imageSource ? control.imageSizeHint : control.iconSizeHint 
                 
                 Loader
                 {
                     id: _iconLoader
                     anchors.fill: parent
-                    sourceComponent: _iconContainer.visible ? (control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : null) ): null                    
-
+                    sourceComponent: _iconContainer.visible ? (control.imageSource && control.imageSource.length ? _imgComponent : (control.iconSource && control.iconSource.length ?  _iconComponent : null) ): null
+                    
                     Maui.Badge
                     {
                         id: _emblem
                         
                         visible: control.checkable || control.checked
-                        
                         size: Maui.Style.iconSizes.medium        
                         anchors.margins: Maui.Style.space.medium
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -182,37 +214,37 @@ Item
                         
                         onClicked: 
                         {
-							control.checked = !control.checked
-							control.toggled(control.checked)
-						}
-						
+                            control.checked = !control.checked
+                            control.toggled(control.checked)
+                        }
+                        
                         MauiLab.CheckMark
                         {
-							visible: opacity > 0
-							color: Kirigami.Theme.highlightedTextColor
-							anchors.centerIn: parent
-							height: control.checked ? 10 : 0
-							width: height
-							opacity: control.checked ? 1 : 0
-							
-							Behavior on height
-							{
-								NumberAnimation
-								{
-									duration: Kirigami.Units.shortDuration
-									easing.type: Easing.InOutQuad
-								}
-							}
-							
-							Behavior on opacity
-							{
-								NumberAnimation
-								{
-									duration: Kirigami.Units.shortDuration
-									easing.type: Easing.InOutQuad
-								}
-							}
-						}
+                            visible: opacity > 0
+                            color: Kirigami.Theme.highlightedTextColor
+                            anchors.centerIn: parent
+                            height: control.checked ? 10 : 0
+                            width: height
+                            opacity: control.checked ? 1 : 0
+                            
+                            Behavior on height
+                            {
+                                NumberAnimation
+                                {
+                                    duration: Kirigami.Units.shortDuration
+                                    easing.type: Easing.InOutQuad
+                                }
+                            }
+                            
+                            Behavior on opacity
+                            {
+                                NumberAnimation
+                                {
+                                    duration: Kirigami.Units.shortDuration
+                                    easing.type: Easing.InOutQuad
+                                }
+                            }
+                        }
                     } 
                     
                     DropShadow
@@ -227,41 +259,20 @@ Item
                         color: "#80000000"
                         source: _emblem
                     }
-                }
-                
-                Rectangle
-                {
-                    visible: !control.labelsVisible 
-                    anchors.fill: parent
-                    
-                    Behavior on color
-                    {
-                        ColorAnimation
-                        {
-                            duration: Kirigami.Units.longDuration
-                        }
-                    }
-                    
-                    color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
-                    
-                    radius: Maui.Style.radiusV
-                    border.width: 2
-                    border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"                    
-                }                  
+                }                
             }
-            
             
             Item
             {
                 visible: control.labelsVisible
-                
                 Layout.fillHeight: true
+                Layout.preferredHeight: Math.min(_label1.implicitHeight, height)
                 Layout.fillWidth: true
                 
                 Rectangle
                 {
                     width: parent.width
-                    height: Math.min(_label1.height + Maui.Style.space.small, parent.height)
+                    height: Math.min(_label1.implicitHeight + Maui.Style.space.tiny, parent.height)
                     anchors.centerIn: parent
                     Behavior on color
                     {
@@ -271,24 +282,23 @@ Item
                         }
                     }
                     
-                    color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
+                    color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.9))
                     
                     radius: Maui.Style.radiusV
                     border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"                    
                 }  
- 
+                
                 Label
                 {
                     id: _label1
                     horizontalAlignment: Qt.AlignHCenter
                     verticalAlignment: Qt.AlignVCenter
-                    width: control.width
-                    height: Math.min(parent.height, implicitHeight)
-                    anchors.centerIn: parent
+                    anchors.fill: parent
+                    anchors.margins: Maui.Style.space.tiny
                     elide: Qt.ElideRight
                     wrapMode: Text.Wrap
-                    color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor                }
-                
+                    color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor                     
+                }                
             }
         }
 }

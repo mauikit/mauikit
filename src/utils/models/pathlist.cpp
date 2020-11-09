@@ -52,7 +52,7 @@ void PathList::setList()
         this->list << paths;
         emit this->postListChanged();
     } else {
-        const int index = [&]() -> const int {
+        const int index = [&]() -> int {
             int i = 0;
             for (const auto &item : this->list) {
                 if (i < paths.size()) {

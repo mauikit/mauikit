@@ -20,12 +20,8 @@
 import QtQuick 2.9
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
-import QtQuick.Controls.Material 2.1
 import org.kde.kirigami 2.2 as Kirigami
-import QtQuick.Controls.impl 2.3
-import QtQuick.Controls.Material.impl 2.3
-import org.kde.mauikit 1.0 as Maui
-import "private"
+import org.kde.mauikit 1.2 as Maui
 
 TextField
 {
@@ -38,12 +34,16 @@ TextField
     signal goBackTriggered();
     signal goFowardTriggered();	
     signal contentDropped(var drop)
+    
+    Layout.maximumWidth: 500
 
-//	bottomPadding: Maui.Style.space.tiny
 	rightPadding: _actions.implicitWidth + Maui.Style.space.small
+	
     selectByMouse: !Kirigami.Settings.isMobile
+    
     persistentSelection: true
 	focus: true
+	
 	wrapMode: TextInput.NoWrap	
 	
     onPressAndHold: !Kirigami.Settings.isMobile ? entryMenu.popup() : undefined
@@ -92,6 +92,29 @@ TextField
 		
 		ToolButton
 		{
+            property int previousEchoMode
+            icon.name: control.echoMode === TextInput.Normal ? "view-hidden" : "view-visible" 
+            icon.color: control.color
+            onClicked: 
+            {
+                if(control.echoMode === TextInput.Normal)
+                {
+                    control.echoMode = previousEchoMode
+                }else
+                {
+                    control.echoMode = TextInput.Normal                     
+                }
+            }
+            
+            Component.onCompleted:
+            {
+                previousEchoMode = control.echoMode
+                visible =  control.echoMode === TextInput.Password || control.echoMode === TextInput.PasswordEchoOnEdit 		
+            }
+        }
+		
+		ToolButton
+		{
 			id: clearButton
 			visible: control.text.length			
 			icon.name: "edit-clear"
@@ -101,7 +124,7 @@ TextField
 				control.clear()
 				cleared()            
 			}
-		}
+		}		
     }
 	
 	Menu

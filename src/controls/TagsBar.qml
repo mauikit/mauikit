@@ -21,7 +21,7 @@ import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.9 as Kirigami
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 import "private"
 
 Maui.ToolBar
@@ -44,26 +44,17 @@ Maui.ToolBar
     {
         color: control.hovered || control.editMode ?  Qt.darker(control.Kirigami.Theme.backgroundColor, 1.1): control.Kirigami.Theme.backgroundColor
         
-        Kirigami.Separator
+        Maui.Separator
         {
+            position: Qt.Horizontal
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
         }
     }
-    
+
     leftSretch: false
-    rightContent: [/*ToolButton
-    {
-        Layout.alignment: Qt.AlignRight
-        visible: false
-//         visible: control.allowEditMode && tagsList.visible && (tagsList.contentWidth > tagsList.width)
-        icon.name: "document-edit"
-        onClicked: control.goEditMode()
-        icon.color: control.Kirigami.Theme.textColor
-    },
-    */
-    
+    rightContent: [
     MouseArea
     {           
         visible: control.allowEditMode && tagsList.visible
@@ -103,7 +94,7 @@ Maui.ToolBar
             onClicked: if(allowEditMode) goEditMode()
         }
     },
-    
+
     Maui.TextField
     {
         id: editTagsEntry

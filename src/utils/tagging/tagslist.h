@@ -1,53 +1,30 @@
-#ifndef TAGSLIST_JH
-#define TAGSLIST_JH
+#ifndef TAGSLIST_H
+#define TAGSLIST_H
 
 #include "fmh.h"
 #include "tag.h"
 #include <QObject>
 
+#include "mauilist.h"
+
 class Tagging;
-class TagsList : public QObject
+
+/**
+ * @brief The TagsList class
+ * A model ready to be consumed by QML. Has basic support for browsing and handling tags, appending and removing
+ */
+class TagsList : public MauiList
 {
     Q_OBJECT
-    Q_PROPERTY(bool abstract READ getAbstract WRITE setAbstract NOTIFY abstractChanged)
+
     Q_PROPERTY(bool strict READ getStrict WRITE setStrict NOTIFY strictChanged)
     Q_PROPERTY(QStringList urls READ getUrls WRITE setUrls NOTIFY urlsChanged)
     Q_PROPERTY(QStringList tags READ getTags NOTIFY tagsChanged)
-    Q_PROPERTY(QString lot READ getLot WRITE setLot NOTIFY lotChanged)
-    Q_PROPERTY(QString key READ getKey WRITE setKey NOTIFY keyChanged)
-
-    Q_PROPERTY(TagsList::KEYS sortBy READ getSortBy WRITE setSortBy NOTIFY sortByChanged())
 
 public:
-    enum KEYS : uint_fast8_t {
-        URL = TAG::URL,
-        APP = TAG::APP,
-        URI = TAG::URI,
-        MAC = TAG::MAC,
-        LAST_SYNC = TAG::LAST_SYNC,
-        NAME = TAG::NAME,
-        VERSION = TAG::VERSION,
-        LOT = TAG::LOT,
-        TAG = TAG::TAG,
-        COLOR = TAG::COLOR,
-        ADD_DATE = TAG::ADD_DATE,
-        COMMENT = TAG::COMMENT,
-        MIME = TAG::MIME,
-        TITLE = TAG::TITLE,
-        DEVICE = TAG::DEVICE,
-        KEY = TAG::KEY
-    };
-    Q_ENUM(KEYS)
-
     explicit TagsList(QObject *parent = nullptr);
 
-    TAG::DB_LIST items() const;
-
-    TagsList::KEYS getSortBy() const;
-    void setSortBy(const TagsList::KEYS &key);
-
-    bool getAbstract() const;
-    void setAbstract(const bool &value);
+    FMH::MODEL_LIST items() const override;
 
     bool getStrict() const;
     void setStrict(const bool &value);
@@ -55,70 +32,132 @@ public:
     QStringList getUrls() const;
     void setUrls(const QStringList &value);
 
-    QString getLot() const;
-    void setLot(const QString &value);
-
-    QString getKey() const;
-    void setKey(const QString &value);
-
     QStringList getTags() const;
 
 private:
-    TAG::DB_LIST list;
+    FMH::MODEL_LIST list;
     void setList();
-    void sortList();
     Tagging *tag;
 
-    const TAG::DB_LIST toModel(const QVariantList &data);
-
-    bool abstract = false;
     bool strict = true;
     QStringList urls = QStringList();
-    QString lot;
-    QString key;
-    TagsList::KEYS sortBy = TagsList::KEYS::ADD_DATE;
 
-protected:
 signals:
-    void preItemAppended();
-    void postItemAppended();
-    void preItemRemoved(int index);
-    void postItemRemoved();
-    void updateModel(int index, QVector<int> roles);
-    void preListChanged();
-    void postListChanged();
-
-    void abstractChanged();
     void strictChanged();
     void urlsChanged();
-    void lotChanged();
-    void keyChanged();
-    void sortByChanged();
     void tagsChanged();
 
 public slots:
-    QVariantMap get(const int &index) const;
+
+    /**
+     * @brief append
+     * Adds a given tag to the model, if the tag already exist in the model then nothing happens.
+     * This operation does not inserts the tag to the tagging data base.
+     * @param tag
+     * The tag to be aaded to the model
+     */
     void append(const QString &tag);
+
+    /**
+     * @brief append
+     * Adds a given list of tags to the model. Tags that already exists in the model are ignored
+     * @param tags
+     * List of tags to be added to the model
+     */
     void append(const QStringList &tags);
+
+    /**
+     * @brief insert
+     * Inserts a tag to the tagging data base.
+     * @param tag
+     * Tag to be inserted
+     * @return
+     * If the tag already exists in the data base then it return false, if the operation is sucessfull returns true
+     */
     bool insert(const QString &tag);
+
+    /**
+     * @brief insertToUrls
+     * Associates a given tag to the current file URLs set to the urls property
+     * @param tag
+     * A tag to be associated, if the tag doesnt exists then it gets created
+     */
     void insertToUrls(const QString &tag);
-    void insertToAbstract(const QString &tag);
+
+    /**
+     * @brief updateToUrls
+     * Updates a list of tags associated to the current file URLs. All the previous tags associated to each file URL are removed and replaced by the new ones
+     * @param tags
+     * Tags to be updated
+     */
     void updateToUrls(const QStringList &tags);
-    void updateToAbstract(const QStringList &tags);
 
+    /**
+     * @brief remove
+     * Removes a tag from the model at a given index. The tag is removed from the model but not from the tagging data base
+     * @param index
+     * Index of the tag in the model. If the model has been filtered or ordered using the Maui BaseModel then it should use the mapped index.
+     * @return
+     */
     bool remove(const int &index);
+
+    /**
+     * @brief removeFrom
+     * Removes a tag at the given index in the model from the given file URL. This removes the associated file URL from the tagging data base and  the tag from the model
+     * @param index
+     * Index of the tag in the model
+     * @param url
+     * File URL
+     */
     void removeFrom(const int &index, const QString &url);
-    void removeFrom(const int &index, const QString &key, const QString &lot);
 
+    /**
+     * @brief removeFromUrls
+     * Removes a tag at a given index in the model from the all the file URls currently set
+     * @param index
+     * Index of the tag in the model.
+     */
     void removeFromUrls(const int &index);
-    void removeFromUrls(const QString &tag);
-    void removeFromAbstract(const int &index);
 
+    /**
+     * @brief removeFromUrls
+     * Removes a given tag name from the current list of file URLs set
+     * @param tag
+     */
+    void removeFromUrls(const QString &tag);
+
+    /**
+     * @brief erase
+     * Removes a tag from the tagging data base. This operation will remove the association of the tag to the current application making the request, meaning that if the tag is also associated to another application then the tag will still exists
+     * @param index
+     */
     void erase(const int &index);
+
+    /**
+     * @brief refresh
+     * Reloads the model, checking the tags from the given list of file URLs
+     */
     void refresh();
 
+    /**
+     * @brief contains
+     * Checks if a given tag name is already in the model list
+     * @param tag
+     * Tag name to look up
+     * @return
+     * True if the tag exists false otherwise
+     */
     bool contains(const QString &tag);
+
+    /**
+     * @brief indexOf
+     * Returns the index of a given tag name in the model list, if the tag is not present then -1 is returned.
+     * @param tag
+     * Tag name to be look up
+     * @return
+     * The index of the tag in the model or -1. This operation does not map the index to a fitered or sorted model, to get a matched index in such case use the mapping methods from the Maui Base Model
+     */
     int indexOf(const QString &tag);
 };
 
-#endif // SYNCINGLIST_H
+#endif // TAGSLIST_H
