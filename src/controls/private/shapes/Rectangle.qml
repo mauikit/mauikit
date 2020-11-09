@@ -8,18 +8,34 @@ import QtQuick.Shapes 1.12
 Shape
 {
     id: _shape
+
+    /**
+      * color : color
+      */
     property color color : Kirigami.Theme.backgroundColor
+
+    /**
+      * borderColor : color
+      */
     property color borderColor: Kirigami.Theme.backgroundColor
+
+    /**
+      * borderWidth : int
+      */
     property int borderWidth: Maui.Style.unit
+
+    /**
+      * solidBorder : bool
+      */
     property bool solidBorder : true
-    
+
     layer.enabled: true
     layer.samples: 4
-    
+
     ShapePath
     {
-		id: _path
-		joinStyle: ShapePath.RoundJoin
+        id: _path
+        joinStyle: ShapePath.RoundJoin
         capStyle: ShapePath.RoundCap
         strokeWidth: _shape.borderWidth
         strokeColor: _shape.borderColor

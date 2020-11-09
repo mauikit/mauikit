@@ -8,12 +8,20 @@ import QtQuick.Shapes 1.12
 Shape
 {
     id: control
+
+    /**
+      * color : color
+      */
     property color color : Kirigami.Theme.backgroundColor
+
+    /**
+      * borderWidth : int
+      */
     property int borderWidth: 2
-    
+
     layer.enabled: true
     layer.samples: 4
-   
+
    ShapePath
     {
         capStyle: ShapePath.RoundCap
@@ -23,10 +31,10 @@ Shape
         strokeStyle: ShapePath.SolidLine
         startX: 0; startY: 0
         PathLine { x: control.width; y: control.height }
-       
+
     }
-    
-       
+
+
    ShapePath
     {
         capStyle: ShapePath.RoundCap
@@ -37,5 +45,5 @@ Shape
         startX: control.width; startY: 0
         PathLine { x: 0; y: control.height }
     }
-       
+
     }

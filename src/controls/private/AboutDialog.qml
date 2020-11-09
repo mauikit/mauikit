@@ -39,7 +39,7 @@ Maui.Dialog
     maxHeight: Math.floor( 250 * Kirigami.Units.devicePixelRatio )
 
     /**
-      *
+      * mainHeader : AlternateListItem
       */
     property alias mainHeader : _header
 
