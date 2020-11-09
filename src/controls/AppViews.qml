@@ -33,11 +33,24 @@ SwipeView
     clip: true
     focus: true
 
+    /**
+      *
+      */
     property int maxViews : 4
+
+    /**
+      *
+      */
     property Maui.ToolBar toolbar : window().headBar
 
+    /**
+      *
+      */
     readonly property int index : -1
 
+    /**
+      *
+      */
     property QtObject actionGroup : Private.ActionGroup
     {
         id: _actionGroup
@@ -222,6 +235,9 @@ SwipeView
         }
     }
 
+    /**
+      *
+      */
     function goBack()
     {
         control.setCurrentIndex(history.pop())

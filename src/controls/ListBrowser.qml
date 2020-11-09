@@ -20,7 +20,7 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.9 as Kirigami
 
 Item
@@ -30,49 +30,179 @@ Item
     implicitHeight: contentHeight + margins*2
     implicitWidth: contentWidth + margins*2
 
-    property int itemSize : Maui.Style.iconSizes.big
+    /**
+      *
+      */
     property bool checkable : false
 
+    /**
+      *
+      */
     property alias model : _listView.model
+
+    /**
+      *
+      */
     property alias delegate : _listView.delegate
+
+    /**
+      *
+      */
     property alias section : _listView.section
+
+    /**
+      *
+      */
     property alias contentY: _listView.contentY
+
+    /**
+      *
+      */
     property alias currentIndex : _listView.currentIndex
+
+    /**
+      *
+      */
     property alias currentItem : _listView.currentItem
+
+    /**
+      *
+      */
     property alias count : _listView.count
+
+    /**
+      *
+      */
     property alias cacheBuffer : _listView.cacheBuffer
+
+    /**
+      *
+      */
     property alias orientation: _listView.orientation
+
+    /**
+      *
+      */
     property alias snapMode: _listView.snapMode
+
+    /**
+      *
+      */
     property alias spacing: _listView.spacing
+
+    /**
+      *
+      */
     property alias flickable : _listView
+
+    /**
+      *
+      */
     property alias scrollView : _scrollView
 
+    /**
+      *
+      */
     property alias contentHeight : _listView.contentHeight
+
+    /**
+      *
+      */
     property alias contentWidth : _listView.contentWidth
 
+    /**
+      *
+      */
     property int margins : control.enableLassoSelection ?  Maui.Style.space.medium : Maui.Style.space.small
 
+    /**
+      *
+      */
     property int topMargin: margins
+
+    /**
+      *
+      */
     property int bottomMargin: margins
+
+    /**
+      *
+      */
     property int rightMargin: margins
+
+    /**
+      *
+      */
     property int leftMargin: margins
 
+    /**
+      *
+      */
     property int verticalScrollBarPolicy: ScrollBar.AsNeeded
+
+    /**
+      *
+      */
     property int horizontalScrollBarPolicy:  _listView.orientation === Qt.Horizontal ? ScrollBar.AsNeeded : ScrollBar.AlwaysOff
 
+    /**
+      *
+      */
     property alias holder : _holder
 
+    /**
+      *
+      */
     property bool enableLassoSelection : false
+
+    /**
+      *
+      */
     property bool selectionMode: false
+
+    /**
+      *
+      */
     property alias lassoRec : selectLayer
 
+    /**
+      *
+      */
     signal itemsSelected(var indexes)
+
+    /**
+      *
+      */
     signal itemClicked(int index)
+
+    /**
+      *
+      */
     signal itemDoubleClicked(int index)
+
+    /**
+      *
+      */
     signal itemRightClicked(int index)
+
+    /**
+      *
+      */
     signal itemToggled(int index, bool state)
+
+    /**
+      *
+      */
     signal areaClicked(var mouse)
+
+    /**
+      *
+      */
     signal areaRightClicked()
+
+    /**
+      *
+      */
     signal keyPress(var event)
 
     Kirigami.Theme.colorSet: Kirigami.Theme.View

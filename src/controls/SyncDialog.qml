@@ -27,15 +27,31 @@ Maui.Dialog
 {
     id: control
 
-    property bool customServer: false
     acceptButton.text: i18n("Sign In")
     rejectButton.text: i18n("Cancel")
     rejectButton.visible: false
     page.margins: Maui.Style.space.medium
     page.title: i18n("New Account")
     spacing: Maui.Style.space.medium
+
+    /**
+      *
+      */
+    property bool customServer: false
+
+    /**
+      *
+      */
     property alias serverField: serverField
+
+    /**
+      *
+      */
     property alias userField: userField
+
+    /**
+      *
+      */
     property alias passwordField: passwordField
 
     maxHeight: Maui.Style.unit * 350

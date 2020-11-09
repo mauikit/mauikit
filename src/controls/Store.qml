@@ -1,6 +1,6 @@
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
-import QtQuick 2.9
+import QtQuick 2.14
 
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
@@ -14,22 +14,66 @@ import "private"
 Maui.Page
 {
 	id: control
-	/*props*/
+
+    /**
+      *
+      */
 	property int itemSize : Kirigami.Settings.isMobile ? Maui.Style.iconSizes.huge * 1.5 : Maui.Style.iconSizes.enormous
+
+    /**
+      *
+      */
 	property int itemSpacing: Kirigami.Settings.isMobile ? Maui.Style.space.medium : Maui.Style.space.big
+
+    /**
+      *
+      */
 	property int itemRadius : Maui.Style.unit * 6
+
+    /**
+      *
+      */
 	property bool showLabels : true
+
+    /**
+      *
+      */
 	property bool fitPreviews : false
+
+    /**
+      *
+      */
 	property bool detailsView : false
 	
+    /**
+      *
+      */
 	property alias holder: holder
+
+    /**
+      *
+      */
 	property alias list : _storeList
+
+    /**
+      *
+      */
 	property alias model: _storeModel
 	
+    /**
+      *
+      */
 	property alias layout : _layoutLoader.item
 	
 	/*signals*/
+    /**
+      *
+      */
 	signal openFile(string filePath)
+
+    /**
+      *
+      */
 	signal fileReady(var item)
 	
 	headBar.visible: !holder.visible

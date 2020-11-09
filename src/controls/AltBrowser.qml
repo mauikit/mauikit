@@ -8,37 +8,78 @@ import org.kde.mauikit 1.0 as Maui
 
 Maui.Page
 {
-    id: control    
+    id: control
     
+    /**
+      *
+      */
     readonly property Item currentView : control.viewType === AltBrowser.ViewType.List ? _listView : _gridView
     
-    enum ViewType 
+    /**
+      *
+      */
+    enum ViewType
     {
         Grid,
         List
     }
     
+    /**
+      *
+      */
     property int viewType: AltBrowser.ViewType.List
+
+    /**
+      *
+      */
     property int currentIndex : -1
     Binding on currentIndex
     {
         when: control.currentView
-        value: control.currentView.currentIndex        
-    }    
+        value: control.currentView.currentIndex
+    }
     
+    /**
+      *
+      */
     property Component listDelegate : null
+
+    /**
+      *
+      */
     property Component gridDelegate : null
     
+    /**
+      *
+      */
     property var model : null
     
-    property bool enableLassoSelection: false   
+    /**
+      *
+      */
+    property bool enableLassoSelection: false
+
+    /**
+      *
+      */
     property bool selectionMode: false
-    property alias holder : _holder   
+
+    /**
+      *
+      */
+    property alias holder : _holder
     
+    /**
+      *
+      */
     readonly property alias gridView : _gridView
-    readonly property alias listView : _listView    
+
+    /**
+      *
+      */
+    readonly property alias listView : _listView
     
-    flickable: control.viewType === AltBrowser.ViewType.List ? _listView.flickable : _gridView.flickable   
+    flickable: control.viewType === AltBrowser.ViewType.List ? _listView.flickable : _gridView.flickable
     
     Maui.Holder
     {
@@ -70,5 +111,4 @@ Maui.Page
         enableLassoSelection: control.enableLassoSelection
         selectionMode: control.selectionMode
     }
-    
 }

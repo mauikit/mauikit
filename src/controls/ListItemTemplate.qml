@@ -17,74 +17,203 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.9
+import QtQuick 2.14
 import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.3
+import QtQuick.Controls 2.14
 import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
-import org.kde.mauikit 1.1 as MauiLab
+import org.kde.mauikit 1.2 as Maui
 
 Item
 {
     id: control
-    
+
+    /**
+      *
+      */
     default property alias content: _layout.data
 
     implicitHeight: Maui.Style.rowHeight
-    //     implicitWidth: _layout.implicitWidth
     
+    /**
+      *
+      */
     property alias text1 : _label1.text
+
+    /**
+      *
+      */
     property alias text2 : _label2.text
+
+    /**
+      *
+      */
     property alias text3 : _label3.text
+
+    /**
+      *
+      */
     property alias text4 : _label4.text
     
+    /**
+      *
+      */
     property alias label1 : _label1
+
+    /**
+      *
+      */
     property alias label2 : _label2
+
+    /**
+      *
+      */
     property alias label3 : _label3
+
+    /**
+      *
+      */
     property alias label4 : _label4
+
+    /**
+      *
+      */
     property alias iconItem : _iconLoader.item
+
+    /**
+      *
+      */
     property alias iconVisible : _iconContainer.visible
     
+    /**
+      *
+      */
     property alias leftLabels : _leftLabels
+
+    /**
+      *
+      */
     property alias rightLabels : _rightLabels
     
+    /**
+      *
+      */
     property alias spacing : _layout.spacing
+
+    /**
+      *
+      */
     property alias layout : _layout
     
+    /**
+      *
+      */
     property alias background : _background
     
+    /**
+      *
+      */
     property int iconSizeHint : Maui.Style.iconSizes.big
+
+    /**
+      *
+      */
     property int imageSizeHint : iconSizeHint
-    
+
+    /**
+      *
+      */
     property int imageWidth : imageSizeHint
+
+    /**
+      *
+      */
     property int imageHeight : imageSizeHint
     
+    /**
+      *
+      */
     property string imageSource
+
+    /**
+      *
+      */
     property string iconSource
     
+    /**
+      *
+      */
     property bool checkable : false
+
+    /**
+      *
+      */
     property bool checked : false
     
+    /**
+      *
+      */
     property bool isCurrentItem: false
+
+    /**
+      *
+      */
     property bool labelsVisible: true
     
+    /**
+      *
+      */
     property bool hovered : false
     
+    /**
+      *
+      */
     property int fillMode : Image.PreserveAspectCrop
+
+    /**
+      *
+      */
     property int maskRadius: Maui.Style.radiusV
     
+    /**
+      *
+      */
     property bool imageBorder: true
     
+    /**
+      *
+      */
     property int margins: 0
+
+    /**
+      *
+      */
     property int rightMargin: Maui.Style.space.medium
+
+    /**
+      *
+      */
     property int leftMargin: Maui.Style.space.medium
+
+    /**
+      *
+      */
     property int topMargin: margins
+
+    /**
+      *
+      */
     property int bottomMargin: margins
     
+    /**
+      *
+      */
     property Component iconComponent :  _iconContainer.visible ? (control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : null) ): null
     
+    /**
+      *
+      */
     signal toggled(bool state)
     
     Component
@@ -201,12 +330,9 @@ Item
             id: _emblem
             
             visible: control.checkable || control.checked
-            
-            //             Layout.fillHeight: true
-            
-            size: Math.min(Maui.Style.iconSizes.medium, _layout.height)
-            
-            
+
+            size: Math.min(Maui.Style.iconSizes.medium, _layout.height)   
+
             color: control.checked ? Kirigami.Theme.highlightColor : Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.8)
             
             border.color: Kirigami.Theme.textColor
@@ -217,7 +343,7 @@ Item
                 control.toggled(control.checked)
             }
             
-            MauiLab.CheckMark
+            Maui.CheckMark
             {
                 visible: opacity > 0
                 color: Kirigami.Theme.highlightedTextColor

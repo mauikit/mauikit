@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.10
-import QtQuick.Controls 2.10
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
@@ -37,25 +37,70 @@ Item
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
     
+    /**
+      *
+      */
     default property list<Action> actions 
+
+    /**
+      *
+      */
     property list<Action> hiddenActions
+
+    /**
+      *
+      */
     property int padding : 0
+
+    /**
+      *
+      */
     property int barHeight: Maui.Style.toolBarHeightAlt  
+
+    /**
+      *
+      */
     property int display : root.isWide ? ToolButton.TextBesideIcon : ToolButton.IconOnly
+
+    /**
+      *
+      */
     property int maxListHeight : 400
+
+    /**
+      *
+      */
     property int radius: Maui.Style.radiusV
+
     /**
      * if singleSelection is set to true then only a single item is selected
      * at time, and replaced with a newe item appended
      **/
     property bool singleSelection: false
     
+    /**
+      *
+      */
     readonly property alias uris: _private._uris
+
+    /**
+      *
+      */
     readonly property alias items: _private._items
     
+    /**
+      *
+      */
     readonly property alias selectionList : selectionList
+
+    /**
+      *
+      */
     readonly property alias count : selectionList.count    
     
+    /**
+      *
+      */
     property alias background : bg
     
     property QtObject m_private : QtObject
@@ -65,6 +110,9 @@ Item
         property var _items : []
     }
     
+    /**
+      *
+      */
     property Component listDelegate: Maui.ItemDelegate
     {
         id: delegate
@@ -91,21 +139,63 @@ Item
         }        
     }
     
+    /**
+      *
+      */
     signal iconClicked()
+    /**
+      *
+      */
     signal cleared()
+
+    /**
+      *
+      */
     signal exitClicked()
+
+    /**
+      *
+      */
     signal itemClicked(int index)
+
+    /**
+      *
+      */
     signal itemPressAndHold(int index)
     
+    /**
+      *
+      */
     signal itemAdded(var item)
+
+    /**
+      *
+      */
     signal itemRemoved(var item)
     
+    /**
+      *
+      */
     signal uriAdded(string uri)
+
+    /**
+      *
+      */
     signal uriRemoved(string uri)
     
+    /**
+      *
+      */
     signal clicked(var mouse)
+
+    /**
+      *
+      */
     signal rightClicked(var mouse)
     
+    /**
+      *
+      */
     signal urisDropped(var uris)
         
     Item
@@ -406,6 +496,9 @@ Item
         event.accepted = true
     }
     
+    /**
+      *
+      */
     function clear()
     {
         _private._uris = []
@@ -415,6 +508,9 @@ Item
         control.cleared()
     }
     
+    /**
+      *
+      */
     function itemAt(index)
     {
         if(index < 0 ||  index > selectionList.count)
@@ -422,6 +518,9 @@ Item
             return selectionList.model.get(index)
     }
     
+    /**
+      *
+      */
     function removeAtIndex(index)
     {
         if(index < 0)
@@ -440,16 +539,25 @@ Item
             }
     }
     
+    /**
+      *
+      */
     function removeAtUri(uri)
     {
         removeAtIndex(indexOf(uri))
     }
     
+    /**
+      *
+      */
     function indexOf(uri)
     {
         return _private._uris.indexOf(uri)
     }
     
+    /**
+      *
+      */
     function append(uri, item)
     {
         const index  = _private._uris.indexOf(uri)
@@ -478,16 +586,25 @@ Item
         animate()
     }
     
+    /**
+      *
+      */
     function animate()
     {
         anim.running = true
     }
     
+    /**
+      *
+      */
     function getSelectedUrisString()
     {
         return String(""+_private._uris.join(","))
     }
     
+    /**
+      *
+      */
     function contains(uri)
     {
         return _private._uris.includes(uri)

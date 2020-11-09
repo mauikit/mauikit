@@ -28,6 +28,10 @@ Maui.SideBar
 {
 	id: control	
 	interactive: !collapsible	
+
+    /**
+      *
+      */
 	default property list<Action> actions 
 	
 	model: control.actions	

@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.12
-import QtQuick.Controls 2.2
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.2 as Maui
@@ -26,39 +26,111 @@ import org.kde.mauikit 1.2 as Maui
 Kirigami.DelegateRecycler
 {    
     id: control
+
+    /**
+      *
+      */
     default property alias content : _delegate.data
 
-    //    Kirigami.Theme.colorSet: Kirigami.Theme.Button
+    /**
+      *
+      */
     property alias mouseArea : _mouseArea
+
+    /**
+      *
+      */
     property bool draggable: false
+
+    /**
+      *
+      */
     property bool isCurrentItem :  false
     
+    /**
+      *
+      */
     property int radius: Maui.Style.radiusV    
     
+    /**
+      *
+      */
     property alias padding: _delegate.padding
+
+    /**
+      *
+      */
     property alias leftPadding: _delegate.leftPadding
+
+    /**
+      *
+      */
     property alias rightPadding: _delegate.rightPadding
+
+    /**
+      *
+      */
     property alias topPadding: _delegate.topPadding
+
+    /**
+      *
+      */
     property alias bottomPadding: _delegate.bottomPadding
     
+    /**
+      *
+      */
     property alias hovered: _delegate.hovered
+
+    /**
+      *
+      */
     property alias containsPress: _mouseArea.containsPress
+
+    /**
+      *
+      */
     property alias hoverEnabled: _delegate.hoverEnabled
     
+    /**
+      *
+      */
     property alias background : _delegate.background
+
+    /**
+      *
+      */
+    property bool highlighted: control.isCurrentItem
     
+    /**
+      *
+      */
     signal pressed(var mouse)
+
+    /**
+      *
+      */
     signal pressAndHold(var mouse)
+
+    /**
+      *
+      */
     signal clicked(var mouse)
+
+    /**
+      *
+      */
     signal rightClicked(var mouse)
+
+    /**
+      *
+      */
     signal doubleClicked(var mouse)
     
     Drag.active: mouseArea.drag.active && control.draggable
     Drag.dragType: Drag.Automatic
     Drag.supportedActions: Qt.CopyAction
-    
-    property bool highlighted: control.isCurrentItem
-    
+
     Control
     {
         id: _delegate
@@ -174,7 +246,6 @@ Kirigami.DelegateRecycler
         
         background: Rectangle
         {
-            //        Kirigami.Theme.inherit: false
             opacity: 1
             Behavior on color
             {

@@ -33,9 +33,153 @@ Item
     implicitHeight: contentHeight + margins*2
     implicitWidth: contentWidth + margins*2
 
+    /**
+      *
+      */
     property int itemSize: 0
+
+    /**
+      *
+      */
     property int itemWidth : itemSize
+
+    /**
+      *
+      */
     property int itemHeight : itemSize
+
+    /**
+      *
+      */
+    property alias cellWidth: controlView.cellWidth
+
+    /**
+      *
+      */
+    property alias cellHeight: controlView.cellHeight
+
+    /**
+      *
+      */
+    property alias model : controlView.model
+
+    /**
+      *
+      */
+    property alias delegate : controlView.delegate
+
+    /**
+      *
+      */
+    property alias contentY: controlView.contentY
+
+    /**
+      *
+      */
+    property alias currentIndex : controlView.currentIndex
+
+    /**
+      *
+      */
+    property alias count : controlView.count
+
+    /**
+      *
+      */
+    property alias cacheBuffer : controlView.cacheBuffer
+
+    /**
+      *
+      */
+    property alias flickable : controlView
+
+    /**
+      *
+      */
+    property alias contentHeight : controlView.contentHeight
+
+    /**
+      *
+      */
+    property alias contentWidth : controlView.contentWidth
+
+    /**
+      *
+      */
+    property int topMargin: margins
+
+    /**
+      *
+      */
+    property int bottomMargin: margins
+
+    /**
+      *
+      */
+    property int rightMargin: margins
+
+    /**
+      *
+      */
+    property int leftMargin: margins
+
+    /**
+      *
+      */
+    property int margins: (Kirigami.Settings.isMobile ? 0 : Maui.Style.space.medium)
+
+    /**
+      *
+      */
+    property alias holder : _holder
+
+    /**
+      *
+      */
+    property bool adaptContent: true
+
+    /**
+      *
+      */
+    property bool enableLassoSelection : false
+
+    /**
+      *
+      */
+    property bool selectionMode: false
+
+    /**
+      *
+      */
+    property alias lassoRec : selectLayer
+
+    /**
+      *
+      */
+    property alias pinchEnabled : _pinchArea.enabled
+
+    /**
+      *
+      */
+    signal itemsSelected(var indexes)
+
+    /**
+      *
+      */
+    signal areaClicked(var mouse)
+
+    /**
+      *
+      */
+    signal areaRightClicked()
+
+    /**
+      *
+      */
+    signal keyPress(var event)
+
+    Keys.enabled : true
+    Keys.forwardTo : controlView
 
     onItemSizeChanged :
     {
@@ -46,41 +190,6 @@ Item
             control.adaptGrid()
     }
 
-    property alias cellWidth: controlView.cellWidth
-    property alias cellHeight: controlView.cellHeight
-    property alias model : controlView.model
-    property alias delegate : controlView.delegate
-    property alias contentY: controlView.contentY
-    property alias currentIndex : controlView.currentIndex
-    property alias count : controlView.count
-    property alias cacheBuffer : controlView.cacheBuffer
-    property alias flickable : controlView
-    property alias contentHeight : controlView.contentHeight
-    property alias contentWidth : controlView.contentWidth
-
-    property int topMargin: margins
-    property int bottomMargin: margins
-    property int rightMargin: margins
-    property int leftMargin: margins
-    property int margins: (Kirigami.Settings.isMobile ? 0 : Maui.Style.space.medium)
-
-    property alias holder : _holder
-
-    property bool adaptContent: true
-    property bool enableLassoSelection : false
-    property bool selectionMode: false
-    property alias lassoRec : selectLayer
-
-    property alias pinchEnabled : _pinchArea.enabled
-
-    signal itemsSelected(var indexes)
-    signal areaClicked(var mouse)
-    signal areaRightClicked()
-    signal keyPress(var event)
-
-    Keys.enabled : true
-    Keys.forwardTo : controlView
-    
     ScrollView
     {
         anchors.fill: parent
@@ -89,18 +198,11 @@ Item
         ScrollBar.vertical.policy: ScrollBar.AsNeeded
 
         GridView
-        {            
-            id: controlView            
+        {
+            id: controlView
             
             property alias position : _hoverHandler.point.position
             property var selectedIndexes : []
-            
-//             anchors.fill: parent
-//             anchors.rightMargin: control.rightMargin + ScrollBar.horizontal.width
-//             anchors.leftMargin: control.leftMargin
-//             anchors.bottomMargin: control.bottomMargin
-//             anchors.topMargin: control.topMargin
-//             anchors.margins: control.margins
 
             //nasty trick
             property int size_
@@ -128,24 +230,24 @@ Item
             keyNavigationWraps : true
             Keys.onPressed: control.keyPress(event)
 
-//             Kirigami.WheelHandler
-//             {
-//                 id: wheelHandler
-//                 target: parent
-//             }
+            //             Kirigami.WheelHandler
+            //             {
+            //                 id: wheelHandler
+            //                 target: parent
+            //             }
             
-            onPositionChanged: 
+            onPositionChanged:
             {
                 console.log("===>" +_hoverHandler.point.pressPosition.y, _hoverHandler.point.sceneGrabPosition.y, position.y, _hoverHandler.point.scenePressPosition)
                 if(_hoverHandler.hovered && !controlView.moving && _hoverHandler.point.pressPosition.y != position.y)
-                {                   
+                {
                     const index = controlView.indexAt(position.x, position.y)
                     if(!selectedIndexes.includes(index))
                     {
-                         selectedIndexes.push(index)
-                         control.itemsSelected([index])  
+                        selectedIndexes.push(index)
+                        control.itemsSelected([index])
                     }
-                }                
+                }
             }
             
             HoverHandler
@@ -153,14 +255,14 @@ Item
                 id: _hoverHandler
                 enabled: control.enableLassoSelection && control.selectionMode && !controlView.flicking
                 acceptedDevices: PointerDevice.TouchScreen
-                acceptedPointerTypes : PointerDevice.Finger 
-                grabPermissions : PointerHandler.ApprovesTakeOverByItems	
+                acceptedPointerTypes : PointerDevice.Finger
+                grabPermissions : PointerHandler.ApprovesTakeOverByItems
                 
                 onHoveredChanged:
                 {
                     if(!hovered)
                     {
-                        controlView.selectedIndexes = []   
+                        controlView.selectedIndexes = []
                     }
                 }
             }
@@ -189,7 +291,7 @@ Item
                 enabled: !Kirigami.Settings.hasTransientTouchInput && !Kirigami.Settings.isMobile
                 anchors.fill: parent
                 propagateComposedEvents: true
-//                 preventStealing: true
+                //                 preventStealing: true
                 acceptedButtons:  Qt.RightButton | Qt.LeftButton
 
                 onClicked:
@@ -342,51 +444,36 @@ Item
         }
     }
 
-//       MouseArea
-//     {
-//         anchors.fill: parent
-//         propagateComposedEvents: true
-//         
-//         property point position: Qt.point(mouseX, mouseY)
-//         
-//         onMouseXChanged: 
-//         {
-//          console.log("Pos changed")
-//              const index = controlView.indexAt(mouseX, mouseY)
-//              control.itemsSelected([index])   
-//         }
-//         
-//         onPressed:
-//         {
-//             
-//              mouse.accepted = false
-//         }
-//     }
+    /**
+      *
+      */
+    function resizeContent(factor)
+    {
+        const newSize= control.itemSize * factor
 
-        function resizeContent(factor)
+        if(newSize > control.itemSize)
         {
-            const newSize= control.itemSize * factor
-
-            if(newSize > control.itemSize)
-            {
+            control.itemSize =  newSize
+        }
+        else
+        {
+            if(newSize >= Maui.Style.iconSizes.small)
                 control.itemSize =  newSize
-            }
-            else
-            {
-                if(newSize >= Maui.Style.iconSizes.small)
-                    control.itemSize =  newSize
-            }
         }
+    }
 
-        function adaptGrid()
-        {
-            var fullWidth = controlView.width
-            var realAmount = parseInt(fullWidth / controlView.size_, 10)
-            var amount = parseInt(fullWidth / control.cellWidth, 10)
+    /**
+      *
+      */
+    function adaptGrid()
+    {
+        var fullWidth = controlView.width
+        var realAmount = parseInt(fullWidth / controlView.size_, 10)
+        var amount = parseInt(fullWidth / control.cellWidth, 10)
 
-            var leftSpace = parseInt(fullWidth - ( realAmount * controlView.size_ ), 10)
-            var size = Math.min(amount, realAmount) >= control.count ? Math.max(control.cellWidth, control.itemSize) : parseInt((controlView.size_) + (parseInt(leftSpace/realAmount, 10)), 10)
+        var leftSpace = parseInt(fullWidth - ( realAmount * controlView.size_ ), 10)
+        var size = Math.min(amount, realAmount) >= control.count ? Math.max(control.cellWidth, control.itemSize) : parseInt((controlView.size_) + (parseInt(leftSpace/realAmount, 10)), 10)
 
-            control.cellWidth = size
-        }
+        control.cellWidth = size
+    }
 }

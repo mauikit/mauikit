@@ -11,22 +11,69 @@ Maui.Page
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     
+    /**
+      *
+      */
     property bool showLineCount : true
+
+    /**
+      *
+      */
     property bool showSyntaxHighlightingLanguages: false
     
+    /**
+      *
+      */
     property alias body : body
+
+    /**
+      *
+      */
     property alias document : document
+
+    /**
+      *
+      */
     property alias scrollView: _scrollView
     
+    /**
+      *
+      */
     property alias text: body.text
+
+    /**
+      *
+      */
     property alias uppercase: document.uppercase
+
+    /**
+      *
+      */
     property alias underline: document.underline
+
+    /**
+      *
+      */
     property alias italic: document.italic
+
+    /**
+      *
+      */
     property alias bold: document.bold
+
+    /**
+      *
+      */
     property alias canRedo: body.canRedo
     
+    /**
+      *
+      */
     property alias fileUrl : document.fileUrl
     
+    /**
+      *
+      */
     property bool showLineNumbers : false
     
     focus: true
@@ -41,19 +88,8 @@ Maui.Page
         cursorPosition: body.cursorPosition
         selectionStart: body.selectionStart
         selectionEnd: body.selectionEnd
-        // 		textColor:"red"
         backgroundColor: control.Kirigami.Theme.backgroundColor
         enableSyntaxHighlighting: false
-        // 		onError:
-        // 		{
-        // 			body.text = message
-        // 			body.visible = true
-        // 		}
-        
-        onLoaded:
-        {
-            //_linesCounter.active = showLineNumbers            
-        }
     }
     
     Row
@@ -121,8 +157,7 @@ Maui.Page
     
     
     headBar.visible: !body.readOnly
-    
-    headBar.leftContent: [				
+    headBar.leftContent: [
     
     Maui.ToolActions
     {
@@ -248,11 +283,10 @@ Maui.Page
             id: pinchArea
             Layout.fillWidth: true
             Layout.fillHeight: true
-            // 			enabled: Maui.Handy.hasTouch
+
             property real minScale: 1.0
             property real maxScale: 3.0
             
-            // 			anchors.fill: parent
             pinch.minimumScale: minScale
             pinch.maximumScale: maxScale
             pinch.dragAxis: Pinch.XandYAxis
@@ -347,7 +381,6 @@ Maui.Page
                             ListView 
                             {
                                 currentIndex: document.currentLineIndex 
-//                                 highlighFollowsCurrentItem: true
                                 model: body.lineCount
                                 orientation: ListView.Vertical
                                 interactive: false
@@ -375,24 +408,24 @@ Maui.Page
                                 anchors.bottom: parent.bottom
                                 anchors.right: parent.right
                             }
-                        }	
-                        
+                        }
                     }
-                    
                 }
             }
-            // 		ScrollBar.vertical.height: _scrollView.height - body.topPadding
-            // 		ScrollBar.vertical.y: body.topPadding
         }
     }
     
-    
-    
+    /**
+      *
+      */
     function zoomIn()
     {
         body.font.pointSize = body.font.pointSize *1.5
     }
     
+    /**
+      *
+      */
     function zoomOut()
     {
         body.font.pointSize = body.font.pointSize / 1.5

@@ -6,13 +6,25 @@ import org.kde.kirigami 2.7 as Kirigami
 
 Row
 {
-	signal colorPicked(string color)
+    id: control
 	anchors.verticalCenter: parent.verticalCenter
 	spacing: Maui.Style.space.medium
+
+    /**
+      *
+      */
 	property string currentColor
+
+    /**
+      *
+      */
 	property int size : Maui.Style.iconSizes.medium
 	
-	
+    /**
+      *
+      */
+    signal colorPicked(string color)
+
 	Rectangle
 	{
 		color:"#f21b51"

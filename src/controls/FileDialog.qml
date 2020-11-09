@@ -17,11 +17,10 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.9
-import QtQuick.Controls 2.9
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
-import org.kde.mauikit 1.1 as MauiLab
+import org.kde.mauikit 1.2 as Maui
 import QtQuick.Layouts 1.3
 
 Maui.Dialog
@@ -31,27 +30,65 @@ Maui.Dialog
     maxWidth: Maui.Style.unit * 700
     page.padding: 0
 
+    /**
+      *
+      */
     property alias currentPath : browser.currentPath
 
+    /**
+      *
+      */
     readonly property alias browser : browser
+
+    /**
+      *
+      */
     readonly property alias selectionBar: _selectionBar
 
+    /**
+      *
+      */
     property alias singleSelection : _selectionBar.singleSelection
 
+    /**
+      *
+      */
     property string suggestedFileName : ""
 
+    /**
+      *
+      */
     readonly property alias settings : browser.settings
 
+    /**
+      *
+      */
     property bool searchBar : false
     onSearchBarChanged: if(!searchBar) browser.quitSearch()
 
+    /**
+      *
+      */
     readonly property var modes : ({OPEN: 0, SAVE: 1})
+
+    /**
+      *
+      */
     property int mode : modes.OPEN
 
+    /**
+      *
+      */
     property var callback : ({})
 
+    /**
+      *
+      */
     property alias textField: _textField
 
+    /**
+      *
+      */
     signal urlsSelected(var urls)
 
     rejectButton.text: i18n("Cancel")
@@ -139,13 +176,6 @@ Maui.Dialog
     }
 
     headBar.visible: true
-//     headBar.leftContent: ToolButton
-//     {
-//         icon.name: "application-menu"
-//         checked: pageRow.currentIndex === 0
-//         onClicked: pageRow.currentIndex = !pageRow.currentIndex
-//     }
-
     headBar.middleContent: Loader
     {
         Layout.fillWidth: true
@@ -410,7 +440,7 @@ Maui.Dialog
                 }
             }
 
-            MauiLab.SelectionBar
+            Maui.SelectionBar
             {
                 id: _selectionBar
                 Layout.alignment: Qt.AlignCenter
@@ -423,7 +453,9 @@ Maui.Dialog
         }
     }
 
-
+    /**
+      *
+      */
     function show(cb)
     {
         if(cb)
@@ -433,12 +465,18 @@ Maui.Dialog
         open()
     }
 
+    /**
+      *
+      */
     function closeIt()
     {
         _selectionBar.clear()
         close()
     }
 
+    /**
+      *
+      */
     function done()
     {
         var paths = browser.selectionBar && browser.selectionBar.visible ? browser.selectionBar.uris : [browser.currentPath]

@@ -9,10 +9,24 @@ Maui.Dialog
 {	
     id: control
     
-    property alias taglist :_tagsList
+    /**
+      *
+      */
+    property alias taglist : _tagsList
+
+    /**
+      *
+      */
     property alias listView: _listView
+
+    /**
+      *
+      */
     property alias composerList: tagListComposer.list
 
+    /**
+      *
+      */
     signal tagsReady(var tags)
 
     defaultButtons: true
@@ -27,27 +41,6 @@ Maui.Dialog
     onRejected: close()
     
     headBar.visible: true
-//     headBar.rightContent: Maui.ToolButtonMenu
-//     {
-//         icon.name: "view-sort"
-//         MenuItem
-//         {
-//             text: i18n("Sort by name")
-//             checkable: true
-//             autoExclusive: true
-//             checked: _tagsModel.sort === "tag"
-//             onTriggered: _tagsModel.sort = "tag"
-//         }
-// 
-//         MenuItem
-//         {
-//             text: i18n("Sort by date")
-//             checkable: true
-//             autoExclusive: true
-//             checked: _tagsModel.sort === "adddate"
-//             onTriggered: _tagsModel.sort = "adddate"
-//         }
-//     }
 
     headBar.middleContent: Maui.TextField
     {
@@ -74,8 +67,6 @@ Maui.Dialog
     }
     
     stack: [
-
-
         Maui.ListBrowser
         {
             id: _listView
@@ -140,6 +131,9 @@ Maui.Dialog
          _tagsModel.filter = ""
     }
 
+    /**
+      *
+      */
     function setTags()
     {
         var tags = []

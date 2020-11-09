@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.13
+import QtQuick 2.14
 import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.13
+import QtQuick.Controls 2.14
 import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 
@@ -26,6 +26,9 @@ Maui.Dialog
 {
     id: control
     
+    /**
+      *
+      */
     property var urls : []
     
     widthHint: 0.9
@@ -75,6 +78,9 @@ Maui.Dialog
 
     onOpened: populate()
 
+    /**
+      *
+      */
     function populate()
     {
         if(urls.length > 0)
@@ -89,6 +95,9 @@ Maui.Dialog
         }
     }
 
+    /**
+      *
+      */
     function triggerService(index)
     {
         const obj = _list.model.get(index)

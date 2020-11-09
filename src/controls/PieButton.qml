@@ -17,25 +17,45 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.10
-import QtQuick.Controls 2.10
-import org.kde.mauikit 1.0 as Maui
+import QtQuick 2.14
+import QtQuick.Controls 2.14
+import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
-
 Item
 {	
 	id: control
+
+    /**
+      *
+      */
 	property int alignment : Qt.AlignLeft
 	
+    /**
+      *
+      */
 	property int maxWidth :  ApplicationWindow.overlay.width - control.anchors.margins
 	
+    /**
+      *
+      */
 	default property list<Action> actions
 
+    /**
+      *
+      */
 	property alias icon : _button.icon
+
+    /**
+      *
+      */
 	property alias text: _button.text
+
+    /**
+      *
+      */
 	property alias display: _button.display
 	
 	implicitWidth: _actionsBar.visible ? Math.min(maxWidth, height + _actionsBar.implicitWidth + Maui.Style.space.big) :  height
@@ -142,11 +162,17 @@ Item
 		}		
 	}
 	
+    /**
+      *
+      */
 	function open()
 	{	
 		_actionsBar.visible = true	
 	}
 	
+    /**
+      *
+      */
 	function close()
 	{
 		_actionsBar.visible = false

@@ -28,13 +28,39 @@ Popup
 {
     id: control
     
+    /**
+      *
+      */
     default property alias content : _content.data
+
+    /**
+      *
+      */
     property int maxWidth : parent.width
+
+    /**
+      *
+      */
     property int maxHeight : parent.height
+
+    /**
+      *
+      */
     property double hint : 0.9
+
+    /**
+      *
+      */
     property double heightHint : hint
+
+    /**
+      *
+      */
     property double widthHint : hint
 
+    /**
+      *
+      */
     property int verticalAlignment : Qt.AlignVCenter
 
     parent: ApplicationWindow.overlay
@@ -45,6 +71,9 @@ Popup
     x: Math.round( parent.width / 2 - width / 2 )
     y: Math.round( positionY() )
 
+    /**
+      *
+      */
     function positionY()
     {
         if(verticalAlignment === Qt.AlignVCenter)
@@ -81,25 +110,6 @@ Popup
     leftMargin: control.margins
     topMargin: control.margins
     bottomMargin: control.margins
-
-
-    //        DragHandler
-    //        {
-    //            id: _dragHandler
-    //            //            target: null
-    //            grabPermissions: PointerHandler.CanTakeOverFromAnything
-    //            xAxis.enabled: false
-    //            yAxis.minimum: 0
-    //            onActiveChanged:
-    //            {
-    //                if(!active)
-    //                {
-    //                    if(control.y > 1000)
-    //                        control.close()
-    //                    //                    else control.y = control.positionY()
-    //                }
-    //            }
-    //        }
 
     enter: Transition
     {

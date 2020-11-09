@@ -30,17 +30,54 @@ Rectangle
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
 
+    /**
+      *
+      */
     property alias item : loader.item
+
+    /**
+      *
+      */
     readonly property alias hovered : mouseArea.containsMouse
+
+    /**
+      *
+      */
     readonly property alias pressed : mouseArea.pressed
+
+    /**
+      *
+      */
     property alias mouseArea : mouseArea
     
+    /**
+      *
+      */
     property int size: Maui.Style.iconSizes.medium
+
+    /**
+      *
+      */
     property string iconName : ""
+
+    /**
+      *
+      */
     property string text : ""
 
+    /**
+      *
+      */
     signal clicked()
+
+    /**
+      *
+      */
     signal hovered()
+
+    /**
+      *
+      */
     signal released()
 
     z: parent.z+1
@@ -50,7 +87,6 @@ Rectangle
     
     radius: Math.min(width, height)
     color: Kirigami.Theme.backgroundColor
-//     border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
 
     Loader
     {

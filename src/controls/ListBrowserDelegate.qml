@@ -32,38 +32,111 @@ Maui.ItemDelegate
     implicitHeight: label4.visible || label2.visible ?  Maui.Style.rowHeight + (Maui.Style.space.medium * 1.5) : Maui.Style.rowHeight
     isCurrentItem : ListView.isCurrentItem || checked	
     
-    signal contentDropped(var drop)	
-	signal toggled(bool state)
-	
-	ToolTip.delay: 1000
-	ToolTip.timeout: 5000
-	ToolTip.visible: control.hovered && control.tooltipText
-	ToolTip.text: control.tooltipText
-    
+    ToolTip.delay: 1000
+    ToolTip.timeout: 5000
+    ToolTip.visible: control.hovered && control.tooltipText
+    ToolTip.text: control.tooltipText
+
+    /**
+      *
+      */
+    default property alias content : _template.content
+
+    /**
+      *
+      */
     property string tooltipText  
         
+    /**
+      *
+      */
     property alias label1 : _template.label1
+
+    /**
+      *
+      */
     property alias label2 : _template.label2
+
+    /**
+      *
+      */
     property alias label3 : _template.label3
+
+    /**
+      *
+      */
     property alias label4 : _template.label4
+
+    /**
+      *
+      */
     property alias iconItem : _template.iconItem
+
+    /**
+      *
+      */
     property alias iconVisible : _template.iconVisible
+
+    /**
+      *
+      */
     property alias iconSizeHint : _template.iconSizeHint
+
+    /**
+      *
+      */
     property alias imageSizeHint : _template.imageSizeHint
+
+    /**
+      *
+      */
     property alias imageSource : _template.imageSource
+
+    /**
+      *
+      */
     property alias iconSource : _template.iconSource
+
+    /**
+      *
+      */
     property alias showLabel : _template.labelsVisible
 
+    /**
+      *
+      */
     property alias checked : _template.checked
+
+    /**
+      *
+      */
     property alias checkable: _template.checkable
 
+    /**
+      *
+      */
     property alias leftLabels: _template.leftLabels
+
+    /**
+      *
+      */
     property alias rightLabels: _template.rightLabels   
     
+    /**
+      *
+      */
     property alias template : _template
-    
-    default property alias content : _template.content
-            
+
+    /**
+      *
+      */
+    signal contentDropped(var drop)
+
+    /**
+      *
+      */
+    signal toggled(bool state)
+
     DropArea 
     {
         id: _dropArea

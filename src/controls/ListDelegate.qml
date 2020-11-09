@@ -17,24 +17,54 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.9
+import QtQuick 2.14
 import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.14
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 
 Maui.ItemDelegate
 {
 	id: control
 	
+    /**
+      *
+      */
 	property bool labelVisible : true
+
+    /**
+      *
+      */
 	property alias iconSize : _template.iconSizeHint  
+
+    /**
+      *
+      */
 	property alias iconVisible : _template.iconVisible
+
+    /**
+      *
+      */
 	property alias label: _template.text1
+
+    /**
+      *
+      */
 	property alias label2: _template.text2
+
+    /**
+      *
+      */
 	property alias iconName: _template.iconSource  
+
+    /**
+      *
+      */
 	property alias count : _badge.text
 	
+    /**
+      *
+      */
 	property alias template : _template
 	
 	implicitHeight: Math.floor(Math.max(control.iconSize + Maui.Style.space.tiny, Maui.Style.rowHeight))	
@@ -62,6 +92,9 @@ Maui.ItemDelegate
 		}
 	}	
 	
+    /**
+      *
+      */
 	function clearCount()
 	{
 		console.log("CLEANING SIDEBAR COUNT")

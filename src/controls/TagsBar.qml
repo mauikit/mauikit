@@ -17,25 +17,62 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.13
-import QtQuick.Controls 2.13
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
+
 import org.kde.kirigami 2.9 as Kirigami
 import org.kde.mauikit 1.2 as Maui
+
 import "private"
 
 Maui.ToolBar
 {
     id: control
+
+    /**
+      *
+      */
     property alias listView : tagsList
+
+    /**
+      *
+      */
     property alias count : tagsList.count
+
+    /**
+      *
+      */
     property bool editMode : false
+
+    /**
+      *
+      */
     property bool allowEditMode : false
+
+    /**
+      *
+      */
     property alias list : tagsList.list
     
+    /**
+      *
+      */
     signal addClicked()
+
+    /**
+      *
+      */
     signal tagRemovedClicked(int index)
+
+    /**
+      *
+      */
     signal tagClicked(string tag)
+
+    /**
+      *
+      */
     signal tagsEdited(var tags)
     
     preferredHeight: Maui.Style.rowHeight + Maui.Style.space.tiny
@@ -124,23 +161,35 @@ Maui.ToolBar
     }
     ]
     
+    /**
+      *
+      */
     function clear()
     {
         //         tagsList.model.clear()
     }
     
+    /**
+      *
+      */
     function goEditMode()
     {
         editMode = true
         editTagsEntry.forceActiveFocus()
     }
     
+    /**
+      *
+      */
     function saveTags()
     {
         control.tagsEdited(control.getTags())
         editMode = false
     }
     
+    /**
+      *
+      */
     function getTags()
     {
         if(!editTagsEntry.text.length > 0)

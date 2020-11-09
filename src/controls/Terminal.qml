@@ -1,8 +1,8 @@
 
 import QMLTermWidget 1.0
-import QtQuick 2.9
-import QtQuick.Controls 2.9
-import QtQuick.Layouts 1.1
+import QtQuick 2.14
+import QtQuick.Controls 2.14
+import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 
 import org.kde.mauikit 1.0 as Maui
@@ -12,26 +12,73 @@ Maui.Page
 {
 	id: control
 
+    title: ksession.title
+    showTitle: false
+    focus: true
+
+    /**
+      *
+      */
 	property size virtualResolution: Qt.size(kterminal.width, kterminal.height)
 	
+    /**
+      *
+      */
 	property real fontWidth: 1.0
+
+    /**
+      *
+      */
 	property real screenScaling: 1.0
+
+    /**
+      *
+      */
 	property real scaleTexture: 1.0
-	
-	title: ksession.title
-	showTitle: false
-	
+
+    /**
+      *
+      */
 	property alias kterminal: kterminal
+
+    /**
+      *
+      */
 	property alias session: ksession
+
+    /**
+      *
+      */
 	property alias findBar : findBar
+
+    /**
+      *
+      */
 	property alias menu : terminalMenu.contentData
 	
+    /**
+      *
+      */
 	property size terminalSize: kterminal.terminalSize
+
+    /**
+      *
+      */
 	property size fontMetrics: kterminal.fontMetrics
-	focus: true	
-	
+
+    /**
+      *
+      */
 	signal urlsDropped(var urls)
+
+    /**
+      *
+      */
 	signal keyPressed(var event)
+
+    /**
+      *
+      */
 	signal clicked()
     
 	Keys.enabled: true

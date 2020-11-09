@@ -8,16 +8,27 @@ import "private"
 TabBar
 {
     id: control
-    default property alias content : _content.data
-            
+
     implicitWidth: _content.width
     implicitHeight: Maui.Style.rowHeight + Maui.Style.space.tiny
     Kirigami.Theme.colorSet: Kirigami.Theme.View
-    Kirigami.Theme.inherit: false	
-    clip: true	    
+    Kirigami.Theme.inherit: false
+    clip: true
+
+    /**
+      *
+      */
+    default property alias content : _content.data
+
     
+    /**
+      *
+      */
     property bool showNewTabButton : true
     
+    /**
+      *
+      */
     signal newTabClicked()
     
     background: Rectangle
@@ -35,16 +46,7 @@ TabBar
                 top: control.position === TabBar.Footer ? parent.top : undefined
                 bottom: control.position == TabBar.Header ? parent.bottom : undefined
             }
-        }	
-        
-        /*EdgeShadow
-        {
-            edge: Qt.TopEdge		
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-            opacity: 0.2
-        }	*/	
+        }
     }
     
     Kirigami.WheelHandler

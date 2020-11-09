@@ -27,29 +27,81 @@ Maui.ItemDelegate
 {
     id: control
 
-    property string tooltipText  
-    
-    property alias template : _template
-    property alias label1 : _template.label1
-
-    property alias iconItem : _template.iconItem
-    property alias iconVisible : _template.iconVisible
-    
-    property alias iconSizeHint : _template.iconSizeHint
-    property alias imageSizeHint : _template.imageSizeHint
-    
-    property alias imageSource : _template.imageSource
-    property alias iconSource : _template.iconSource
-    property alias showLabel : _template.labelsVisible
-    
-    property alias checked : _template.checked
-    property alias checkable: _template.checkable
-
-    property alias dropArea : _dropArea
-
     isCurrentItem : GridView.isCurrentItem || checked
 
+    /**
+      *
+      */
+    property string tooltipText  
+    
+    /**
+      *
+      */
+    property alias template : _template
+
+    /**
+      *
+      */
+    property alias label1 : _template.label1
+
+    /**
+      *
+      */
+    property alias iconItem : _template.iconItem
+
+    /**
+      *
+      */
+    property alias iconVisible : _template.iconVisible
+    
+    /**
+      *
+      */
+    property alias iconSizeHint : _template.iconSizeHint
+
+    /**
+      *
+      */
+    property alias imageSizeHint : _template.imageSizeHint
+    
+    /**
+      *
+      */
+    property alias imageSource : _template.imageSource
+
+    /**
+      *
+      */
+    property alias iconSource : _template.iconSource
+
+    /**
+      *
+      */
+    property alias showLabel : _template.labelsVisible
+    
+    /**
+      *
+      */
+    property alias checked : _template.checked
+
+    /**
+      *
+      */
+    property alias checkable: _template.checkable
+
+    /**
+      *
+      */
+    property alias dropArea : _dropArea
+
+    /**
+      *
+      */
     signal contentDropped(var drop)
+
+    /**
+      *
+      */
 	signal toggled(bool state)		
 	
     ToolTip.delay: 1000

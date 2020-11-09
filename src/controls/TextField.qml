@@ -17,22 +17,45 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.9
+import QtQuick 2.14
 import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.2
-import org.kde.kirigami 2.2 as Kirigami
+import QtQuick.Controls 2.14
+
+import org.kde.kirigami 2.9 as Kirigami
 import org.kde.mauikit 1.2 as Maui
 
 TextField
 {
 	id: control    
 
+    /**
+      *
+      */
 	property alias menu : entryMenu
+
+    /**
+      *
+      */
 	property alias actions : _actions
 	
+    /**
+      *
+      */
 	signal cleared()
-    signal goBackTriggered();
-    signal goFowardTriggered();	
+
+    /**
+      *
+      */
+    signal goBackTriggered()
+
+    /**
+      *
+      */
+    signal goFowardTriggered()
+
+    /**
+      *
+      */
     signal contentDropped(var drop)
     
     Layout.maximumWidth: 500
@@ -175,7 +198,6 @@ TextField
 			text: i18n("Redo")
 			onTriggered: control.redo()
 			enabled: control.canRedo
-			
 		}
 	}
 	

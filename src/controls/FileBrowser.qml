@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.10
-import QtQuick.Controls 2.10
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 
 import org.kde.kirigami 2.8 as Kirigami
@@ -30,50 +30,139 @@ Maui.Page
 {
     id: control
 
-    //aliases
+    /**
+      *
+      */
     property alias currentPath : _browser.path
     onCurrentPathChanged : _searchField.clear()
     
+    /**
+      *
+      */
     property alias settings : _browser.settings
 
+    /**
+      *
+      */
     property alias view : _stackView.currentItem
 
+    /**
+      *
+      */
     property alias dropArea : _dropArea
     
+    /**
+      *
+      */
     property alias currentIndex : _browser.currentIndex
 
+    /**
+      *
+      */
     readonly property QtObject currentView : _stackView.currentItem.currentView
+
+    /**
+      *
+      */
     readonly property Maui.FMList currentFMList : view.currentFMList
+
+    /**
+      *
+      */
     readonly property Maui.BaseModel currentFMModel : view.currentFMModel
+
+    /**
+      *
+      */
     readonly property bool isSearchView : _stackView.currentItem.objectName === "searchView"
 
-    // custom props
+    /**
+      *
+      */
     property bool selectionMode: false
 
+    /**
+      *
+      */
     property int thumbnailsSize : Maui.Style.iconSizes.large * 1.7
 
+    /**
+      *
+      */
     property var indexHistory : []
 
     // need to be set by the implementation as features
+    /**
+      *
+      */
     property Maui.SelectionBar selectionBar : null
+
+    /**
+      *
+      */
     property Maui.TagsDialog tagsDialog : null
+
+    /**
+      *
+      */
     property Maui.OpenWithDialog openWithDialog : null
 
     //relevant menus to file item and the browserview
+    /**
+      *
+      */
     property alias browserMenu: browserMenu
+
+    /**
+      *
+      */
     property alias itemMenu: itemMenu
 
     //access to the loaded the dialog components
+    /**
+      *
+      */
     property alias dialog : dialogLoader.item
 
     //signals
+    /**
+      *
+      */
     signal itemClicked(int index)
+
+    /**
+      *
+      */
     signal itemDoubleClicked(int index)
+
+    /**
+      *
+      */
     signal itemRightClicked(int index)
+
+    /**
+      *
+      */
     signal itemLeftEmblemClicked(int index)
+
+    /**
+      *
+      */
     signal itemRightEmblemClicked(int index)
+
+    /**
+      *
+      */
     signal rightClicked()
+
+    /**
+      *
+      */
     signal keyPress(var event)
+
+    /**
+      *
+      */
     signal urlsDropped(var urls)
 
     //color scheme

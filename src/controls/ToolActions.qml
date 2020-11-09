@@ -5,7 +5,7 @@ import QtQml.Models 2.3
 import QtQml 2.14
 
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 
 import "private" as Private
 
@@ -16,17 +16,45 @@ Rectangle
     implicitHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.12)
     
     Kirigami.Theme.colorSet: Kirigami.Theme.View
-//     Kirigami.Theme.inherit: false
 
+    /**
+      *
+      */
     default property list<Action> actions
     
+    /**
+      *
+      */
     property bool autoExclusive: true
+
+    /**
+      *
+      */
     property bool checkable: true
+
+    /**
+      *
+      */
     property int display: ToolButton.IconOnly
+
+    /**
+      *
+      */
     property bool cyclic: false
+
+    /**
+      *
+      */
     readonly property int count : actions.length
     
+    /**
+      *
+      */
     property Action currentAction : control.autoExclusive ? actions[0] : null
+
+    /**
+      *
+      */
     property int currentIndex : -1
     onCurrentIndexChanged:
     {
@@ -36,7 +64,14 @@ Rectangle
         }
     }
     
+    /**
+      *
+      */
     property bool expanded : true
+
+    /**
+      *
+      */
     property string defaultIconName: "application-menu"
     
     border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
@@ -53,6 +88,9 @@ Rectangle
         }        
     }
     
+    /**
+      *
+      */
     function uncheck(except)
     {
         for(var i in control.actions)

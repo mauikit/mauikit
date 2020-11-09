@@ -17,11 +17,12 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
+
 import "private" as Private
 
 Rectangle
@@ -29,18 +30,50 @@ Rectangle
     id: control
     
     implicitHeight: Maui.Style.rowHeight
-    //     implicitWidth:  _loader.item.implicitWidth
-    
+
+    /**
+      *
+      */
     property string url : ""
+
+    /**
+      *
+      */
     property bool pathEntry: false
     
+    /**
+      *
+      */
     readonly property alias list : _pathList
+
+    /**
+      *
+      */
     readonly property alias model : _pathModel
+
+    /**
+      *
+      */
     readonly property alias item : _loader.item
     
+    /**
+      *
+      */
     signal pathChanged(string path)
+
+    /**
+      *
+      */
     signal homeClicked()
+
+    /**
+      *
+      */
     signal placeClicked(string path)
+
+    /**
+      *
+      */
     signal placeRightClicked(string path)
     
     onUrlChanged: append()
@@ -240,6 +273,9 @@ Rectangle
         }
     }
     
+    /**
+      *
+      */
     function append()
     {
         _pathList.path = control.url
@@ -253,6 +289,9 @@ Rectangle
         _loader.item.listView.positionViewAtEnd()
     }
     
+    /**
+      *
+      */
     function showEntryBar()
     {
         control.pathEntry = !control.pathEntry

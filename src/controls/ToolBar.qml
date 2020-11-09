@@ -17,53 +17,128 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.13
-import QtQuick.Controls 2.13
+import QtQuick 2.14
+import QtQuick.Controls 2.14
+
 import org.kde.kirigami 2.9 as Kirigami
 import org.kde.mauikit 1.2 as Maui
+
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
+
 import "private"
 
 ToolBar
 {
     id: control
-    property int preferredHeight: Maui.Style.toolBarHeight
     implicitHeight: preferredHeight
     implicitWidth: mainFlickable.contentWidth
     spacing: Maui.Style.space.small
     padding: 0
+
+    /**
+      *
+      */
     default property alias content : leftRowContent.data
 
-    //     property alias stickyRightContent : rightRowContent.sticky
-    //     property alias stickyLeftContent : leftRowContent.sticky
-    //     property alias stickyMiddleContent : middleRowContent.sticky
+    /**
+      *
+      */
+    property int preferredHeight: Maui.Style.toolBarHeight
 
+    /**
+      *
+      */
     property bool forceCenterMiddleContent : true
 
+    /**
+      *
+      */
     property alias leftContent : leftRowContent.data
+
+    /**
+      *
+      */
     property alias middleContent : middleRowContent.data
+
+    /**
+      *
+      */
     property alias rightContent : rightRowContent.data
 
+    /**
+      *
+      */
     property alias farLeftContent : farLeftRowContent.data
+
+    /**
+      *
+      */
     property alias farRightContent : farRightRowContent.data
 
+    /**
+      *
+      */
     property alias middleLayout : middleRowContent
+
+    /**
+      *
+      */
     property alias leftLayout : leftRowContent
+
+    /**
+      *
+      */
     property alias rightLayout : rightRowContent
 
+    /**
+      *
+      */
     property alias layout : layout
 
+    /**
+      *
+      */
     readonly property alias fits : _scrollView.fits
 
+    /**
+      *
+      */
     property int margins: Maui.Style.space.medium
+
+    /**
+      *
+      */
     readonly property int count : leftContent.length + middleContent.length + rightContent.length + farLeftContent.length + farRightContent.length
+
+    /**
+      *
+      */
     readonly property int visibleCount : leftRowContent.visibleChildren.length + middleRowContent.visibleChildren.length  + rightRowContent.visibleChildren.length + farLeftRowContent.visibleChildren.length  + farRightRowContent.visibleChildren.length
 
+    /**
+      *
+      */
     property bool flickable: true
+
+    /**
+      *
+      */
     property bool strech : true
+
+    /**
+      *
+      */
     property bool leftSretch: strech
+
+    /**
+      *
+      */
     property bool rightSretch: strech
+
+    /**
+      *
+      */
     property bool middleStrech: strech
 
     EdgeShadow
@@ -255,7 +330,6 @@ ToolBar
                 {
                     id: _rightContent
                     readonly property int alignment : Qt.AlignRight
-
                     Layout.fillHeight: true
 
                     Layout.preferredWidth: implicitWidth
@@ -270,7 +344,6 @@ ToolBar
                     {
                         id: rightRowContent
                         readonly property int alignment : Qt.AlignRight
-
                         spacing: control.spacing
                         height: parent.height
                     }
@@ -279,14 +352,11 @@ ToolBar
                     {
                         id: farRightRowContent
                         readonly property int alignment : Qt.AlignRight
-
                         spacing: control.spacing
                         height: parent.height
                     }
                 }
-
             }
         }
     }
-
 }

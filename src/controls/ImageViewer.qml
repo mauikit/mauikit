@@ -1,6 +1,6 @@
 
-import QtQuick 2.5
-import QtQuick 2.9
+import QtQuick 2.14
+import QtQuick 2.14
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.7 as Kirigami
@@ -9,19 +9,55 @@ Flickable
 {
 	id: flick
 
+    /**
+      *
+      */
 	property alias image: _imageLoader.item
+
+    /**
+      *
+      */
 	property int fillMode: Image.PreserveAspectFit
+
+    /**
+      *
+      */
 	property bool asynchronous : true
+
+    /**
+      *
+      */
 	property bool cache: false
 	
+    /**
+      *
+      */
 	property int imageWidth: width
+
+    /**
+      *
+      */
 	property int imageHeight: height
 	
+    /**
+      *
+      */
 	property bool animated: false
+
+    /**
+      *
+      */
 	property url source 
 	
-	signal rightClicked();
-	signal pressAndHold();
+    /**
+      *
+      */
+    signal rightClicked()
+
+    /**
+      *
+      */
+    signal pressAndHold()
 
 	contentWidth: flick.width
 	contentHeight: flick.height
@@ -221,21 +257,33 @@ Flickable
 		}		
 	}	
 	
+    /**
+      *
+      */
 	function fit()
 	{
 		image.width = image.sourceSize.width
 	}
 	
+    /**
+      *
+      */
 	function fill()
 	{
 		image.width = parent.width
 	}
 	
+    /**
+      *
+      */
 	function rotateLeft()
 	{
 		image.rotation = image.rotation - 90
 	}
 	
+    /**
+      *
+      */
 	function rotateRight()
 	{
 		image.rotation = image.rotation + 90

@@ -32,10 +32,24 @@ MouseArea
     height: Maui.Style.toolBarHeight
     width: height
 
+    /**
+      *
+      */
     property alias icon : _button.icon
+
+    /**
+      *
+      */
     property alias text: _button.text
+
+    /**
+      *
+      */
     property alias display: _button.display
 
+    /**
+      *
+      */
     signal clicked()
 
     Kirigami.Theme.backgroundColor: Kirigami.Theme.highlightColor

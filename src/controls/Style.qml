@@ -19,27 +19,67 @@
 
 pragma Singleton
 
-import QtQuick 2.4
+import QtQuick 2.14
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 
 QtObject
 {
 	id: style
+
+    /**
+      *
+      */
 	readonly property bool isAndroid: Qt.platform.os == "android"
+
+    /**
+      *
+      */
 	readonly property bool isMobile : Kirigami.Settings.isMobile
 
+    /**
+      *
+      */
     property int unit : Kirigami.Units.devicePixelRatio
+
+    /**
+      *
+      */
     property int radiusV : Maui.Handy.isWindows ? 2 : 4
 	
+    /**
+      *
+      */
     readonly property int rowHeight: Math.round(iconSizes.big)
+
+    /**
+      *
+      */
     readonly property int rowHeightAlt: Math.round(rowHeight * 0.8)
+
+    /**
+      *
+      */
 	readonly property int contentMargins: space.medium
 	
+    /**
+      *
+      */
     readonly property int toolBarHeight: Math.round(iconSizes.medium * 2)
+
+    /**
+      *
+      */
     readonly property int toolBarHeightAlt: Math.round(toolBarHeight * 0.9)
 	
+    /**
+      *
+      */
 	readonly property int defaultFontSize: Kirigami.Theme.defaultFont.pointSize
+
+    /**
+      *
+      */
 	readonly property var fontSizes: ({
         tiny: Math.round(defaultFontSize * 0.7),
 		
@@ -65,6 +105,9 @@ QtObject
 			defaultFontSize * 1.4)
 	})
 	
+    /**
+      *
+      */
 	readonly property var space : ({
 		tiny: Kirigami.Units.smallSpacing,
 		small: Kirigami.Units.smallSpacing*2,
@@ -75,6 +118,9 @@ QtObject
         enormous: Kirigami.Units.largeSpacing*5
 	})
 	
+    /**
+      *
+      */
 	readonly property var iconSizes : ({
         tiny : 8,
         small :  Kirigami.Units.iconSizes.small / (isMobile ? 1.5 : 1),
@@ -85,6 +131,9 @@ QtObject
         enormous: Kirigami.Units.iconSizes.enormous / (isMobile ? 1.5 : 1)
 	})	
     
+    /**
+      *
+      */
     function mapToIconSizes(size)
     {
         const values = Object.values(iconSizes);

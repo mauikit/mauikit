@@ -30,30 +30,94 @@ Maui.Popup
 {
     id: control
 
+    /**
+      *
+      */
     default property alias scrollable : _pageContent.data
+
+    /**
+      *
+      */
     property alias stack : _stack.data
 
+    /**
+      *
+      */
     property string message : ""
+
+    /**
+      *
+      */
     property alias title: _page.title
+
+    /**
+      *
+      */
     property alias template : _template
 
+    /**
+      *
+      */
     property list<Action> actions
 
+    /**
+      *
+      */
     property bool defaultButtons: true
+
+    /**
+      *
+      */
     property bool persistent : true
 
+    /**
+      *
+      */
     property alias acceptButton : _acceptButton
+
+    /**
+      *
+      */
     property alias rejectButton : _rejectButton
 
+    /**
+      *
+      */
     property alias textEntry : _textEntry
+
+    /**
+      *
+      */
     property alias entryField: _textEntry.visible
 
+    /**
+      *
+      */
     property alias page : _page
+
+    /**
+      *
+      */
     property alias footBar : _page.footBar
+
+    /**
+      *
+      */
     property alias headBar: _page.headBar
+
+    /**
+      *
+      */
     property alias closeButton: _closeButton
 
+    /**
+      *
+      */
     signal accepted()
+
+    /**
+      *
+      */
     signal rejected()
 
     closePolicy: control.persistent ? Popup.NoAutoClose | Popup.CloseOnEscape : Popup.CloseOnEscape | Popup.CloseOnPressOutside
@@ -63,13 +127,6 @@ Maui.Popup
     implicitHeight: _layout.implicitHeight
     widthHint: 0.9
     heightHint: 0.9
-    
-    function alert(message, level)
-    {
-        _alertMessage.text = message
-        _alertMessage.level = level
-//         _alertAnim.running = true
-    }
 
     ColumnLayout
     {
@@ -113,7 +170,6 @@ Maui.Popup
                         color: _closeButton.containsMouse || _closeButton.containsPress ? Kirigami.Theme.negativeTextColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.2))
                     }
                 }                
-
             }
 
             ColumnLayout
@@ -122,7 +178,6 @@ Maui.Popup
                 anchors.fill: parent
                 spacing: control.spacing
             }
-
 
             ScrollView
             {
@@ -136,7 +191,6 @@ Maui.Popup
                 Flickable
                 {
                     id: _flickable
-//                     contentWidth: parent.width
                     contentHeight: _pageContent.implicitHeight
 
                     ColumnLayout
@@ -320,5 +374,14 @@ Maui.Popup
                 }
             }
         }
+    }
+
+    /**
+      *
+      */
+    function alert(message, level)
+    {
+        _alertMessage.text = message
+        _alertMessage.level = level
     }
 }

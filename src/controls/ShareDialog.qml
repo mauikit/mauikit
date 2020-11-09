@@ -64,6 +64,9 @@ Maui.Dialog
 
     onOpened: populate()
 
+    /**
+      *
+      */
     function show(urls)
     {
         if(urls.length > 0)
@@ -73,6 +76,9 @@ Maui.Dialog
         }
     }
 
+    /**
+      *
+      */
     function populate()
     {
         grid.model.clear()
@@ -94,6 +100,9 @@ Maui.Dialog
                 grid.model.append(services[i])
     }
 
+    /**
+      *
+      */
     function triggerService(index)
     {
         var obj = grid.model.get(index)
