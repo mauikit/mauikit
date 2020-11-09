@@ -8,8 +8,12 @@ import QtQuick.Shapes 1.12
 Shape
 {
     id: control
+
+    /**
+      * color : color
+      */
     property color color : Kirigami.Theme.backgroundColor
-    
+
     ShapePath
     {
         capStyle: ShapePath.SquareCap
@@ -19,6 +23,6 @@ Shape
         startX: 0; startY: 0
         PathLine { x: control.width; y: control.height }
         PathLine { x: 0; y: control.height }
-        PathLine { x: 0; y: 0 }    
+        PathLine { x: 0; y: 0 }
     }
 }
