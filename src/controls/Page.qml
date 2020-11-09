@@ -30,164 +30,164 @@ Pane
 {
     id: control
     focus: true
-    
+
     padding: 0
     leftPadding: control.padding
     rightPadding: control.padding
     topPadding: control.padding
     bottomPadding: control.padding
-    
+
     Kirigami.Theme.colorSet: Kirigami.Theme.View
-    
+
     /**
-      *
+      * content : Item.data
       */
     default property alias content: _content.data
 
     /**
-      *
+      * pageContent : Item
       */
     readonly property alias pageContent : _content
 
     /**
-      *
+      * headerBackground : Rectangle
       */
     property alias headerBackground : _headerBackground
 
     /**
-      *
+      * footerBackground : Rectangle
       */
     property alias footerBackground : _footerBackground
 
     /**
-      *
+      * internalHeight : int
       */
     readonly property alias internalHeight : _content.height
 
     /**
-      *
+      * flickable : Flickable
       */
     property Flickable flickable : null
 
     /**
-      *
+      * footerPositioning : ListView.positioning
       */
     property int footerPositioning : ListView.InlineFooter
 
     /**
-      *
+      * headerPositioning : ListView.positioning
       */
     property int headerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineHeader
 
     /**
-      *
+      * title : string
       */
     property string title
 
     /**
-      *
+      * showTitle : bool
       */
     property bool showTitle : true
 
     /**
-      *
+      * headBar : ToolBar
       */
     property alias headBar : _headBar
 
     /**
-      *
+      * footBar : ToolBar
       */
     property alias footBar: _footBar
 
     /**
-      *
+      * footerColumn : ColumnLayout.data
       */
     property alias footerColumn : _footerContent.data
 
     /**
-      *
+      * headerColumn : ColumnLayout.data
       */
     property alias headerColumn : _headerContent.data
 
     /**
-      *
+      * margins : int
       */
     property int margins: 0
 
     /**
-      *
+      * leftMargin : int
       */
     property int leftMargin : margins
 
     /**
-      *
+      * rightMargin : int
       */
     property int rightMargin: margins
 
     /**
-      *
+      * topMargin : int
       */
     property int topMargin: margins
 
     /**
-      *
+      * bottomMargin : int
       */
     property int bottomMargin: margins
 
     /**
-      *
+      * altHeader : bool
       */
     property bool altHeader : false
 
     /**
-      *
+      * autoHideHeader : bool
       */
     property bool autoHideHeader : false
 
     /**
-      *
+      * autoHideFooter : bool
       */
     property bool autoHideFooter : false
 
     /**
-      *
+      * autoHideHeaderMargins : int
       */
     property int autoHideHeaderMargins : Maui.Style.toolBarHeight
 
     /**
-      *
+      * autoHideFooterMargins : int
       */
     property int autoHideFooterMargins : Maui.Style.toolBarHeight
 
     /**
-      *
+      * autoHideFooterDelay : int
       */
     property int autoHideFooterDelay : Maui.Handy.isTouch ? 0 : 1000
 
     /**
-      *
+      * autoHideHeaderDelay : int
       */
     property int autoHideHeaderDelay : Maui.Handy.isTouch ? 0 : 1000
 
     //    property bool floatingHeader : control.flickable && !control.flickable.atYBeginning
 
     /**
-      *
+      * floatingHeader : bool
       */
     property bool floatingHeader : false
 
     /**
-      *
+      * floatingFooter : bool
       */
     property bool floatingFooter: false
 
     /**
-      *
+      * goBackTriggered :
       */
     signal goBackTriggered()
 
     /**
-      *
+      * goForwardTriggered :
       */
     signal goForwardTriggered()
 
@@ -338,6 +338,9 @@ Pane
         }
     }
 
+    /**
+      *
+      */
     property Item header : Maui.ToolBar
     {
         id: _headBar
@@ -438,6 +441,9 @@ Pane
     //text: _footBar.visibleCount + " / " + _footBar.count + " - " + _footBar.height + " / " + footer.height + " - " + _footBar.visible + " / " + footer.visible + " / " + footer.height + " / " + _footerContent.implicitHeight  + " / " + _footerContent.implicitHeight
     //}
 
+    /**
+      *
+      */
     property Item footer : Maui.ToolBar
     {
         id: _footBar
@@ -494,52 +500,52 @@ Pane
     states: [  State
         {
             when: !altHeader && header.visible
-            
+
             AnchorChanges
             {
                 target: _headerContent
                 anchors.top: parent.top
                 anchors.bottom: undefined
             }
-            
+
             AnchorChanges
             {
                 target: _border
                 anchors.top: undefined
                 anchors.bottom: parent.bottom
             }
-            
+
             PropertyChanges
             {
                 target: _headBar
                 position: ToolBar.Header
             }
         },
-        
+
         State
         {
             when: altHeader && header.visible
-            
+
             AnchorChanges
             {
                 target: _headerContent
                 anchors.top: undefined
                 anchors.bottom: parent.bottom
             }
-            
+
             AnchorChanges
             {
                 target: _border
                 anchors.top: parent.top
                 anchors.bottom: undefined
             }
-            
+
             PropertyChanges
             {
                 target: header
                 height: header.implicitHeight
             }
-            
+
             PropertyChanges
             {
                 target: _headBar

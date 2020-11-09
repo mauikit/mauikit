@@ -29,21 +29,50 @@ import org.kde.mauikit 1.2 as Maui
 
 import "private" as Private
 
+/**
+ * A window that provides some basic features needed for all apps
+ *
+ * It's usually used as a root QML component for the application.
+ * By default it makes usage of the Maui Page control, so it contains a header and footer bar.
+The header can be moved to the bottom for better reachability.
+The Application window has some components already built in like an AboutDialog, a main application menu,
+and an optional property to add a global sidebar.
+
+The application can have client side decorations CSD by setting the attached property Maui.App.enabledCSD  to true.
+
+For more details you can refer to the Maui Page documentation for tweaking the application window main content.
+ * @code
+ * ApplicationWindow {
+ *     id: root
+ *     //The rectangle will automatically bescrollable
+ *     AppViews {
+ *         anchors.fill: parent
+ *     }
+ * }
+ * @endcode
+ */
 Window
 {
     id: root
-
-
-    default property alias content : _content.data
-
     visible: true
     width: Screen.desktopAvailableWidth * (Kirigami.Settings.isMobile ? 1 : 0.4)
     height: Screen.desktopAvailableHeight * (Kirigami.Settings.isMobile ? 1 : 0.4)
     color: "transparent"
     flags: Maui.App.enableCSD ? Qt.FramelessWindowHint : Qt.Window
 
+    /***************************************************/
+    /********************* COLORS *********************/
+    /*************************************************/
+    Kirigami.Theme.colorSet: Kirigami.Theme.View
+
     /**
-      *
+      * content: Item
+      * Any item to be placed inside the ApplicationWindow Page.
+      */
+    default property alias content : _content.data
+
+    /**
+      * sideBar : AbstractSideBar
       */
     property Maui.AbstractSideBar sideBar
 
@@ -52,170 +81,165 @@ Window
     /*************************************************/
 
     /**
-      *
+      * page : Page
       */
     property alias page : _page
-    
+
     /**
-      *
+      * flickable : Flickable
       */
     property alias flickable : _page.flickable
 
     /**
-      *
+      * headBar : ToolBar
       */
     property alias headBar : _page.headBar
 
     /**
-      *
+      * footBar : ToolBar
       */
-    property alias footBar: _page.footBar
+    property alias footBar : _page.footBar
 
     /**
-      *
+      * footer : Item
       */
-    property alias footer: _page.footer
+    property alias footer : _page.footer
 
     /**
-      *
+      * header : Item
       */
     property alias header :_page.header
 
     /**
-      *
+      * floatingHeader : bool
       */
     property alias floatingHeader: _page.floatingHeader
 
     /**
-      *
+      * floatingFooter : bool
       */
     property alias floatingFooter: _page.floatingFooter
 
     /**
-      *
+      * autoHideHeader : bool
       */
     property alias autoHideHeader: _page.autoHideHeader
 
     /**
-      *
+      * autoHideFooter : bool
       */
     property alias autoHideFooter: _page.autoHideFooter
 
     /**
-      *
+      * autoHideHeaderDelay : int
       */
     property alias autoHideHeaderDelay: _page.autoHideHeaderDelay
 
     /**
-      *
+      * autoHideFooterDelay : int
       */
     property alias autoHideFooterDelay: _page.autoHideFooterDelay
 
     /**
-      *
+      * autoHideHeaderMargins : int
       */
     property alias autoHideHeaderMargins: _page.autoHideHeaderMargins
 
     /**
-      *
+      * autoHideFooterMargins : int
       */
     property alias autoHideFooterMargins: _page.autoHideFooterMargins
 
     /**
-      *
+      * altHeader : bool
       */
     property alias altHeader: _page.altHeader
 
     /**
-      *
+      * margins : int
       */
     property alias margins : _page.margins
 
     /**
-      *
+      * leftMargin : int
       */
     property alias leftMargin : _page.leftMargin
 
     /**
-      *
+      * rightMargin : int
       */
     property alias rightMargin: _page.rightMargin
 
     /**
-      *
+      * topMargin : int
       */
     property alias topMargin: _page.topMargin
 
     /**
-      *
+      * bottomMargin : int
       */
     property alias bottomMargin: _page.bottomMargin
 
     /**
-      *
+      * footerPositioning : ListView.footerPositioning
       */
     property alias footerPositioning : _page.footerPositioning
 
     /**
-      *
+      * headerPositioning : ListView.headerPositioning
       */
     property alias headerPositioning : _page.headerPositioning
 
     /**
-      *
+      * dialog : Item
       */
     property alias dialog: dialogLoader.item
 
     /**
-      *
+      * menuButton : ToolButton
       */
     property alias menuButton : menuBtn
 
     /**
-      *
+      * mainMenu : list<Action>
       */
     property list<Action> mainMenu
 
     /**
-      *
+      * accounts : AccountsDialog
       */
     property alias accounts: _accountsDialogLoader.item
 
     /**
-      *
+      * currentAccount : var
       */
     property var currentAccount: Maui.App.handleAccounts ? Maui.App.accounts.currentAccount : ({})
 
     /**
-      *
+      * notifyDialog : Dialog
       */
     property alias notifyDialog: _notify
-    
+
     /**
-      *
+      * aboutDialog : AboutDialog
       */
     property alias aboutDialog: aboutDialog
 
     /**
-      *
+      * background : Component
       */
     property alias background : _page.background
 
     /**
-      *
+      * isWide : bool
       */
     property bool isWide : root.width >= Kirigami.Units.gridUnit * 30
-
-    /***************************************************/
-    /********************* COLORS *********************/
-    /*************************************************/
-    Kirigami.Theme.colorSet: Kirigami.Theme.View
 
     /***************************************************/
     /**************** READONLY PROPS ******************/
     /*************************************************/
     /**
-      *
+      * isPortrait : bool
       */
     readonly property bool isPortrait: Screen.primaryOrientation === Qt.PortraitOrientation || Screen.primaryOrientation === Qt.InvertedPortraitOrientation
 
@@ -223,7 +247,7 @@ Window
     /******************** SIGNALS *********************/
     /*************************************************/
     /**
-      *
+      * menuButtonClicked : signal
       */
     signal menuButtonClicked();
 
@@ -630,12 +654,12 @@ Window
             root.height = rect.height
         }
     }
-    
+
     Connections
     {
         target: Maui.Platform
         ignoreUnknownSignals: true
-        function onShareFilesRequest(urls) 
+        function onShareFilesRequest(urls)
         {
             dialogLoader.source = "labs/ShareDialog.qml"
             dialog.urls = urls

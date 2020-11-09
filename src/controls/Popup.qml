@@ -27,39 +27,39 @@ import QtGraphicalEffects 1.0
 Popup
 {
     id: control
-    
+
     /**
-      *
+      * content : Item.data
       */
     default property alias content : _content.data
 
     /**
-      *
+      * maxWidth : int
       */
     property int maxWidth : parent.width
 
     /**
-      *
+      * maxHeight : int
       */
     property int maxHeight : parent.height
 
     /**
-      *
+      * hint : double
       */
     property double hint : 0.9
 
     /**
-      *
+      * heightHint : double
       */
     property double heightHint : hint
 
     /**
-      *
+      * widthHint : double
       */
     property double widthHint : hint
 
     /**
-      *
+      * verticalAlignment : int
       */
     property int verticalAlignment : Qt.AlignVCenter
 

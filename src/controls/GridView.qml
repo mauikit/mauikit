@@ -34,147 +34,147 @@ Item
     implicitWidth: contentWidth + margins*2
 
     /**
-      *
+      * itemSize : int
       */
     property int itemSize: 0
 
     /**
-      *
+      * itemWidth : int
       */
     property int itemWidth : itemSize
 
     /**
-      *
+      * itemHeight : int
       */
     property int itemHeight : itemSize
 
     /**
-      *
+      * cellWidth : int
       */
     property alias cellWidth: controlView.cellWidth
 
     /**
-      *
+      * cellHeight : int
       */
     property alias cellHeight: controlView.cellHeight
 
     /**
-      *
+      * model : var
       */
     property alias model : controlView.model
 
     /**
-      *
+      * delegate : Component
       */
     property alias delegate : controlView.delegate
 
     /**
-      *
+      * contentY : int
       */
     property alias contentY: controlView.contentY
 
     /**
-      *
+      * currentIndex : int
       */
     property alias currentIndex : controlView.currentIndex
 
     /**
-      *
+      * count : int
       */
     property alias count : controlView.count
 
     /**
-      *
+      * cacheBuffer : int
       */
     property alias cacheBuffer : controlView.cacheBuffer
 
     /**
-      *
+      * flickable : Flickable
       */
     property alias flickable : controlView
 
     /**
-      *
+      * contentHeight : int
       */
     property alias contentHeight : controlView.contentHeight
 
     /**
-      *
+      * contentWidth : int
       */
     property alias contentWidth : controlView.contentWidth
 
     /**
-      *
+      * topMargin : int
       */
     property int topMargin: margins
 
     /**
-      *
+      * bottomMargin : int
       */
     property int bottomMargin: margins
 
     /**
-      *
+      * rightMargin : int
       */
     property int rightMargin: margins
 
     /**
-      *
+      * leftMargin : int
       */
     property int leftMargin: margins
 
     /**
-      *
+      * margins : int
       */
     property int margins: (Kirigami.Settings.isMobile ? 0 : Maui.Style.space.medium)
 
     /**
-      *
+      * holder : Holder
       */
     property alias holder : _holder
 
     /**
-      *
+      * adaptContent : bool
       */
     property bool adaptContent: true
 
     /**
-      *
+      * enableLassoSelection : bool
       */
     property bool enableLassoSelection : false
 
     /**
-      *
+      * selectionMode : bool
       */
     property bool selectionMode: false
 
     /**
-      *
+      * lassoRec : Rectangle
       */
     property alias lassoRec : selectLayer
 
     /**
-      *
+      * pinchEnabled : bool
       */
     property alias pinchEnabled : _pinchArea.enabled
 
     /**
-      *
+      * itemsSelected :
       */
     signal itemsSelected(var indexes)
 
     /**
-      *
+      * areaClicked :
       */
     signal areaClicked(var mouse)
 
     /**
-      *
+      * areaRightClicked :
       */
     signal areaRightClicked()
 
     /**
-      *
+      * keyPress :
       */
     signal keyPress(var event)
 
@@ -200,7 +200,7 @@ Item
         GridView
         {
             id: controlView
-            
+
             property alias position : _hoverHandler.point.position
             property var selectedIndexes : []
 
@@ -235,7 +235,7 @@ Item
             //                 id: wheelHandler
             //                 target: parent
             //             }
-            
+
             onPositionChanged:
             {
                 console.log("===>" +_hoverHandler.point.pressPosition.y, _hoverHandler.point.sceneGrabPosition.y, position.y, _hoverHandler.point.scenePressPosition)
@@ -249,7 +249,7 @@ Item
                     }
                 }
             }
-            
+
             HoverHandler
             {
                 id: _hoverHandler
@@ -257,7 +257,7 @@ Item
                 acceptedDevices: PointerDevice.TouchScreen
                 acceptedPointerTypes : PointerDevice.Finger
                 grabPermissions : PointerHandler.ApprovesTakeOverByItems
-                
+
                 onHoveredChanged:
                 {
                     if(!hovered)

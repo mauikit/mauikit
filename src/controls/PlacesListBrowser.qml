@@ -10,22 +10,22 @@ Maui.ListBrowser
     id: control
 
     /**
-      *
+      * list : PlacesList
       */
     property alias list : placesList
 
     /**
-      *
+      * itemMenu : Menu
       */
     property alias itemMenu : _menu
 
     /**
-      *
+      * iconSize : int
       */
     property int iconSize : Maui.Style.iconSizes.small
 
     /**
-      *
+      * placeClicked :
       */
     signal placeClicked (string path)
 

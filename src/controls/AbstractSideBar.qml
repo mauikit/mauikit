@@ -36,37 +36,37 @@ Drawer
     modal: false
 
     /**
-      *
+      * content : data
       */
     default property alias content : _content.data
 
     /**
-      *
+      * collapsible : bool
       */
     property bool collapsible: false
 
     /**
-      *
+      * collapsed : bool
       */
     property bool collapsed: false
 
     /**
-      *
+      * collapsedSize : int
       */
     property int collapsedSize: 0
 
     /**
-      *
+      * preferredWidth : int
       */
     property int preferredWidth : Kirigami.Units.gridUnit * 12
 
     /**
-      *
+      * overlay : Rectangle
       */
     readonly property alias overlay : _overlay
 
     /**
-      *
+      * contentDropped
       */
     signal contentDropped(var drop)
 
@@ -147,7 +147,7 @@ Drawer
 
     background: Rectangle
     {
-        color: Kirigami.Theme.backgroundColor       
+        color: Kirigami.Theme.backgroundColor
     }
 }
 

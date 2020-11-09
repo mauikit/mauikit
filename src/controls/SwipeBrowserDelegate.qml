@@ -27,66 +27,66 @@ import org.kde.mauikit 1.0 as Maui
 
 Maui.SwipeItemDelegate
 {
-	id: control
+    id: control
 
     /**
-      *
+      * label1 : Label
       */
     property alias label1 : _template.label1
 
     /**
-      *
+      * label2 : Label
       */
     property alias label2 : _template.label2
 
     /**
-      *
+      * label3 : Label
       */
     property alias label3 : _template.label3
 
     /**
-      *
+      * label4 : Label
       */
     property alias label4 : _template.label4
 
     /**
-      *
+      * iconItem : Item
       */
     property alias iconItem : _template.iconItem
 
     /**
-      *
+      * iconVisible : bool
       */
     property alias iconVisible : _template.iconVisible
 
     /**
-      *
+      * iconSizeHint : int
       */
     property alias iconSizeHint : _template.iconSizeHint
 
     /**
-      *
+      * imageSizeHint : int
       */
     property alias imageSizeHint : _template.imageSizeHint
 
     /**
-      *
+      * imageSource: string
       */
     property alias imageSource : _template.imageSource
 
     /**
-      *
+      * iconSource : string
       */
     property alias iconSource : _template.iconSource
-	
+
     /**
-      *
+      * template : ListItemTemplate
       */
-	property alias template : _template
+    property alias template : _template
 
     Maui.ListItemTemplate
     {
-        id: _template 
+        id: _template
         anchors.fill: parent
     }
 }

@@ -31,56 +31,56 @@ Maui.ToolBar
     id: control
 
     /**
-      *
+      * listView : TagList
       */
     property alias listView : tagsList
 
     /**
-      *
+      * count : int
       */
     property alias count : tagsList.count
 
     /**
-      *
+      * editMode : bool
       */
     property bool editMode : false
 
     /**
-      *
+      * allowEditMode : bool
       */
     property bool allowEditMode : false
 
     /**
-      *
+      * list : TagsList
       */
     property alias list : tagsList.list
-    
+
     /**
-      *
+      * addClicked :
       */
     signal addClicked()
 
     /**
-      *
+      * tagRemovedClicked :
       */
     signal tagRemovedClicked(int index)
 
     /**
-      *
+      * tagClicked :
       */
     signal tagClicked(string tag)
 
     /**
-      *
+      * tagsEdited :
       */
     signal tagsEdited(var tags)
-    
+
     preferredHeight: Maui.Style.rowHeight + Maui.Style.space.tiny
-    
+
     background: Rectangle
     {
         color: control.hovered || control.editMode ?  Qt.darker(control.Kirigami.Theme.backgroundColor, 1.1): control.Kirigami.Theme.backgroundColor
-        
+
         Maui.Separator
         {
             position: Qt.Horizontal
@@ -93,23 +93,23 @@ Maui.ToolBar
     leftSretch: false
     rightContent: [
     MouseArea
-    {           
+    {
         visible: control.allowEditMode && tagsList.visible
         hoverEnabled: true
         onClicked: addClicked()
         Layout.fillHeight: true
         Layout.preferredWidth: visible ? height : 0
-        
+
         Maui.PlusSign
         {
             height: Maui.Style.iconSizes.tiny
             width: height
             anchors.centerIn: parent
-            color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.highlightColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))    
+            color: parent.containsMouse || parent.containsPress ? Kirigami.Theme.highlightColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
         }
-    } 
+    }
     ]
-    
+
     middleContent : [
     TagList
     {
@@ -146,21 +146,21 @@ Maui.ToolBar
         selectionColor: Kirigami.Theme.highlightColor
         selectedTextColor: Kirigami.Theme.highlightedTextColor
         onAccepted: control.saveTags()
-        
+
         actions.data: ToolButton
         {
             Layout.alignment: Qt.AlignLeft
             icon.name: "checkbox"
             onClicked: editTagsEntry.accepted()
         }
-        
+
         background: Rectangle
         {
             color: "transparent"
         }
     }
     ]
-    
+
     /**
       *
       */
@@ -168,7 +168,7 @@ Maui.ToolBar
     {
         //         tagsList.model.clear()
     }
-    
+
     /**
       *
       */
@@ -177,7 +177,7 @@ Maui.ToolBar
         editMode = true
         editTagsEntry.forceActiveFocus()
     }
-    
+
     /**
       *
       */
@@ -186,7 +186,7 @@ Maui.ToolBar
         control.tagsEdited(control.getTags())
         editMode = false
     }
-    
+
     /**
       *
       */
@@ -196,22 +196,22 @@ Maui.ToolBar
         {
             return
         }
-        
+
         var tags = []
         if(editTagsEntry.text.trim().length > 0)
         {
             var list = editTagsEntry.text.split(",")
-            
+
             if(list.length > 0)
             {
                 for(var i in list)
                 {
                     tags.push(list[i].trim())
-                    
-                }                
+
+                }
             }
         }
-        
+
         return tags
     }
 }

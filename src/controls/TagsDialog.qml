@@ -6,26 +6,26 @@ import org.kde.mauikit 1.2 as Maui
 import TagsList 1.0
 
 Maui.Dialog
-{	
+{
     id: control
-    
+
     /**
-      *
+      * taglist : TagsList
       */
     property alias taglist : _tagsList
 
     /**
-      *
+      * listView : ListView
       */
     property alias listView: _listView
 
     /**
-      *
+      * composerList : TagsList
       */
     property alias composerList: tagListComposer.list
 
     /**
-      *
+      * tagsReady :
       */
     signal tagsReady(var tags)
 
@@ -39,13 +39,13 @@ Maui.Dialog
 
     onAccepted: setTags()
     onRejected: close()
-    
+
     headBar.visible: true
 
     headBar.middleContent: Maui.TextField
     {
         id: tagText
-        Layout.fillWidth: true           
+        Layout.fillWidth: true
         placeholderText: i18n("Filter or add a new tag")
         onAccepted:
         {
@@ -59,13 +59,13 @@ Maui.Dialog
             clear()
              _tagsModel.filter = ""
         }
-        
+
         onTextChanged:
         {
             _tagsModel.filter = text
         }
     }
-    
+
     stack: [
         Maui.ListBrowser
         {

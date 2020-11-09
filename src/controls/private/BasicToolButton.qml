@@ -30,23 +30,37 @@ import org.kde.mauikit 1.1 as MauiLab
 AbstractButton
 {
     id: control
-    
+
+    /**
+      *
+      */
     property alias extraContent : _layoutButton.data
-        
+
+    /**
+      *
+      */
     readonly property alias label : _label
+
+    /**
+      *
+      */
     readonly property alias kicon : _icon
+
+    /**
+      *
+      */
     property alias rec : _background
-    
+
 //    Kirigami.Theme.inherit: false
 //    Kirigami.Theme.colorSet: Kirigami.Theme.Button
-    
+
     hoverEnabled: !Kirigami.Settings.isMobile
     implicitHeight: Math.floor(Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25))
     implicitWidth: Math.floor(_layoutButton.implicitWidth + (Maui.Style.space.medium *  2))
-    
+
     icon.width: Maui.Style.iconSizes.medium
     icon.height: Maui.Style.iconSizes.medium
-    
+
     background: Rectangle
     {
         id: _background
@@ -54,8 +68,8 @@ AbstractButton
 
         radius: Maui.Style.radiusV
         color: control.down || control.checked || control.hovered || control.pressed ? Qt.rgba(control.Kirigami.Theme.highlightColor.r,  control.Kirigami.Theme.highlightColor.g,  control.Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
-        border.color:  checked ?  control.Kirigami.Theme.highlightColor : "transparent"            
-        
+        border.color:  checked ?  control.Kirigami.Theme.highlightColor : "transparent"
+
         Behavior on color
         {
             ColorAnimation
@@ -63,8 +77,8 @@ AbstractButton
                 duration: Kirigami.Units.longDuration
             }
         }
-    }    
-    
+    }
+
     RowLayout
     {
         id: _layoutButton
@@ -72,28 +86,28 @@ AbstractButton
         height: parent.height
         spacing: 0
         clip: true
-        
+
         Item
         {
             implicitWidth: visible ? _icon.width + Maui.Style.space.medium : 0
             Layout.alignment: Qt.AlignCenter
-            
+
             visible: _icon.source && _icon.source.length && (control.display === ToolButton.TextBesideIcon || control.display === ToolButton.IconOnly)
-            
+
             Kirigami.Icon
             {
-                id: _icon                 
+                id: _icon
                 anchors.centerIn: parent
                 width: control.icon.width
                 height: control.icon.height
-                
+
                 color: (control.icon.color && control.icon.color.length ) ? control.icon.color : ( (control.checked || control.hovered || control.pressed || control.down ) && enabled ) ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
-                
-                source: control.icon.name  
+
+                source: control.icon.name
                 isMask: true
-            }                
-        }            
-        
+            }
+        }
+
         Label
         {
             id: _label
@@ -104,18 +118,18 @@ AbstractButton
             Layout.fillWidth: visible
             Layout.preferredWidth: visible ? implicitWidth + Maui.Style.space.medium : 0
             color: control.down || control.pressed || control.checked || control.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
-            
+
             Behavior on Layout.preferredWidth
-            {		
+            {
                 NumberAnimation
                 {
                     duration: Kirigami.Units.shortDuration
                     easing.type: Easing.InOutQuad
                 }
             }
-            
+
             Behavior on opacity
-            {		
+            {
                 NumberAnimation
                 {
                     duration: Kirigami.Units.shortDuration
@@ -124,7 +138,7 @@ AbstractButton
             }
         }
     }
-    
+
     ToolTip.delay: 1000
     ToolTip.timeout: 5000
     ToolTip.visible: ( control.hovered ) && control.text.length && (control.display === ToolButton.IconOnly ? true : !checked)

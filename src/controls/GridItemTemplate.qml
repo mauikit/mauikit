@@ -28,104 +28,104 @@ import org.kde.mauikit 1.2 as Maui
 Item
 {
     id: control
-    
+
     /**
-      *
+      * content : data
       */
     default property alias content: _layout.data
 
     /**
-      *
+      * text1 : string
       */
     property alias text1 : _label1.text
 
     /**
-      *
+      * label1 : Label
       */
     property alias label1 : _label1
 
     /**
-      *
+      * iconItem : Item
       */
     property alias iconItem : _iconLoader.item
 
     /**
-      *
+      * iconVisible : bool
       */
     property alias iconVisible : _iconContainer.visible
 
     /**
-      *
+      * iconSizeHint : int
       */
     property int iconSizeHint : Maui.Style.iconSizes.big
 
     /**
-      *
+      * imageSizeHint : int
       */
     property int imageSizeHint : iconSizeHint
 
     /**
-      *
+      * imageWidth : int
       */
     property int imageWidth : iconSizeHint
 
     /**
-      *
+      * imageHeight : int
       */
     property int imageHeight : iconSizeHint
 
     /**
-      *
+      * imageSource : string
       */
     property string imageSource
 
     /**
-      *
+      * iconSource : string
       */
     property string iconSource
 
     /**
-      *
+      * checkable : bool
       */
     property bool checkable : false
 
     /**
-      *
+      * checked : bool
       */
     property bool checked : false
 
     /**
-      *
+      * isCurrentItem : bool
       */
     property bool isCurrentItem: false
 
     /**
-      *
+      * labelsVisible : bool
       */
     property bool labelsVisible: true
 
     /**
-      *
+      * fillMode : Image.fillMode
       */
     property int fillMode : Image.PreserveAspectCrop
 
     /**
-      *
+      * maskRadius : int
       */
     property int maskRadius: Maui.Style.radiusV
 
     /**
-      *
+      * hovered : bool
       */
     property bool hovered: false
 
     /**
-      *
+      * imageBorder : bool
       */
     property bool imageBorder: true
 
     /**
-      *
+      * toggled :
       */
     signal toggled(bool state)
 

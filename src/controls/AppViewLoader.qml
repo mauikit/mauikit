@@ -24,11 +24,11 @@ import org.kde.kirigami 2.7 as Kirigami
 
 Loader
 {
-	id: control	
+    id: control
 
     /**
-      *
+      * content : Component
       */
-	default property alias content : control.sourceComponent
+    default property alias content : control.sourceComponent
     active: SwipeView.view.interactive ? SwipeView.isCurrentItem || SwipeView.isPreviousItem || SwipeView.isNextItem || item : SwipeView.isCurrentItem || item
 }

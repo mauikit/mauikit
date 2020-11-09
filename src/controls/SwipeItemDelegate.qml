@@ -32,22 +32,22 @@ Maui.ItemDelegate
     isCurrentItem : ListView.isCurrentItem
 
     /**
-      *
+      * content : Item.data
       */
     default property alias content : _content.data
 
     /**
-      *
+      * showQuickActions : bool
       */
     property bool showQuickActions : true
 
     /**
-      *
+      * quickActions : list<Action>
       */
     property list<Action> quickActions
 
     /**
-      *
+      * collapse : bool
       */
     property bool collapse : width < Kirigami.Units.gridUnit * 26 || Kirigami.Settings.isMobile
 

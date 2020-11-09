@@ -25,19 +25,19 @@ import org.kde.kirigami 2.7 as Kirigami
 Maui.Dialog
 {
     id: control
-    
+
     /**
-      *
+      * urls : var
       */
     property var urls : []
-    
+
     widthHint: 0.9
     page.padding: 0
     maxHeight: _list.contentHeight + (page.padding * 2.5) + headBar.height + Maui.Style.space.huge
     maxWidth: Maui.Style.unit * 500
-    
+
     verticalAlignment: Qt.AlignBottom
-    
+
     defaultButtons: false
 
     page.title: i18n("Open with")

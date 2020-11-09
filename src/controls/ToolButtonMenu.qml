@@ -12,12 +12,12 @@ Private.BasicToolButton
     id: control
 
     /**
-      *
+      * content : list<Item>
       */
     default property list<Item> content
 
     /**
-      *
+      * menu : Menu
       */
     property alias menu : _menu
 

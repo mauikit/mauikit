@@ -14,46 +14,46 @@ Rectangle
     id: control
     implicitWidth: _loader.item ? _loader.item.implicitWidth : 0
     implicitHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.12)
-    
+
     Kirigami.Theme.colorSet: Kirigami.Theme.View
 
     /**
-      *
+      * actions : list<Action>
       */
     default property list<Action> actions
-    
+
     /**
-      *
+      * autoExclusive : bool
       */
     property bool autoExclusive: true
 
     /**
-      *
+      * checkable : bool
       */
     property bool checkable: true
 
     /**
-      *
+      * display : int
       */
     property int display: ToolButton.IconOnly
 
     /**
-      *
+      * cyclic : bool
       */
     property bool cyclic: false
 
     /**
-      *
+      * count : int
       */
     readonly property int count : actions.length
-    
+
     /**
-      *
+      * currentAction : Action
       */
     property Action currentAction : control.autoExclusive ? actions[0] : null
 
     /**
-      *
+      * currentIndex : int
       */
     property int currentIndex : -1
     onCurrentIndexChanged:
@@ -63,31 +63,31 @@ Rectangle
             control.currentAction = actions[control.currentIndex]
         }
     }
-    
+
     /**
-      *
+      * expanded : bool
       */
     property bool expanded : true
 
     /**
-      *
+      * defaultIconName : string
       */
     property string defaultIconName: "application-menu"
-    
+
     border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
     radius: Maui.Style.radiusV
     color: enabled ? Kirigami.Theme.backgroundColor : "transparent"
 //    Kirigami.Theme.colorSet: Kirigami.Theme.View
 //    Kirigami.Theme.inherit: false
-    
+
     Component.onCompleted:
     {
         if(control.checkable && control.autoExclusive && control.currentIndex >= 0 && control.currentIndex < control.actions.length)
         {
             control.actions[control.currentIndex].checked = true
-        }        
+        }
     }
-    
+
     /**
       *
       */
@@ -99,30 +99,30 @@ Rectangle
             {
                 continue
             }
-            
+
             control.actions[i].checked = false
         }
     }
-    
+
     Loader
     {
         id: _loader
         height: parent.height
         sourceComponent: control.expanded ? _rowComponent : _menuComponent
     }
-    
+
     Component
     {
         id: _rowComponent
-        
+
         Row
         {
             id: _row
             spacing: 0
             height: parent.height
-            
+
             clip: true
-            
+
             Behavior on width
             {
                 NumberAnimation
@@ -131,12 +131,12 @@ Rectangle
                     easing.type: Easing.InOutQuad
                 }
             }
-            
+
             Repeater
             {
                 id: _repeater
                 model: control.actions
-                
+
                 Private.BasicToolButton
                 {
                     id: _buttonMouseArea
@@ -157,15 +157,15 @@ Rectangle
                     icon.name: action.icon.name
                     icon.width:  action.icon.width ?  action.icon.width : Maui.Style.iconSizes.small
                     icon.height:  action.icon.height ?  action.icon.height : Maui.Style.iconSizes.small
-                    
-                    rec.border.color: "transparent"                    
-                   
+
+                    rec.border.color: "transparent"
+
                     onClicked:
                     {
                         if(autoExclusive)
                             control.currentIndex = index
                     }
-                    
+
                     Kirigami.Separator
                     {
                         color: control.border.color
@@ -180,11 +180,11 @@ Rectangle
             }
         }
     }
-    
+
     Component
     {
         id: _menuComponent
-        
+
         MouseArea
         {
             id: _defaultButtonMouseArea
@@ -201,17 +201,17 @@ Rectangle
                     control.currentAction.triggered()
                     return
                 }
-                
+
                 if(!_menu.visible)
                 {
                     _menu.popup(control, 0, control.height)
-                    
+
                 }else
                 {
                     _menu.close()
-                } 
+                }
             }
-            
+
             onClicked: triggerAction()
 
             Menu
@@ -252,22 +252,22 @@ Rectangle
                 id: _defaultButtonLayout
                 height: parent.height
                 spacing: 0
-                
+
                 Private.BasicToolButton
                 {
                     id: _defaultButtonIcon
                     Layout.fillHeight: true
-                    
+
                     onClicked: triggerAction()
-                    
+
                     icon.width: Maui.Style.iconSizes.small
                     icon.height: Maui.Style.iconSizes.small
                     icon.color: buttonAction() ? (buttonAction().icon.color && buttonAction().icon.color.length ? buttonAction().icon.color : ( _defaultButtonMouseArea.containsPress ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor)) :  control.Kirigami.Theme.textColor
-                    
+
                     icon.name: buttonAction() ? buttonAction().icon.name : control.defaultIconName
-                    
+
                     enabled: buttonAction() ? buttonAction().enabled : true
-                    
+
                     function buttonAction()
                     {
                         if(control.cyclic && control.autoExclusive)

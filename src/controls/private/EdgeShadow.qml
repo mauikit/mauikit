@@ -34,7 +34,10 @@ LinearGradient {
      * Qt.BottomEdge: The bottom edge of the content item.
      */
     property int edge: Qt.LeftEdge
-    
+
+    /**
+      *
+      */
     property color color: Kirigami.Theme.textColor
 
     implicitWidth: Kirigami.Units.gridUnit/2

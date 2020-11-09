@@ -30,80 +30,80 @@ Maui.ItemDelegate
     isCurrentItem : GridView.isCurrentItem || checked
 
     /**
-      *
+      * tooltipText : string
       */
-    property string tooltipText  
-    
+    property string tooltipText
+
     /**
-      *
+      * template : GridItemTemplate
       */
     property alias template : _template
 
     /**
-      *
+      * label1 : Label
       */
     property alias label1 : _template.label1
 
     /**
-      *
+      * iconItem : Item
       */
     property alias iconItem : _template.iconItem
 
     /**
-      *
+      * iconVisible : bool
       */
     property alias iconVisible : _template.iconVisible
-    
+
     /**
-      *
+      * iconSizeHint : int
       */
     property alias iconSizeHint : _template.iconSizeHint
 
     /**
-      *
+      * imageSizeHint : int
       */
     property alias imageSizeHint : _template.imageSizeHint
-    
+
     /**
-      *
+      * imageSource : string
       */
     property alias imageSource : _template.imageSource
 
     /**
-      *
+      * iconSource : string
       */
     property alias iconSource : _template.iconSource
 
     /**
-      *
+      * showLabel : bool
       */
     property alias showLabel : _template.labelsVisible
-    
+
     /**
-      *
+      * checked : bool
       */
     property alias checked : _template.checked
 
     /**
-      *
+      * checkable : bool
       */
     property alias checkable: _template.checkable
 
     /**
-      *
+      * dropArea : DropArea
       */
     property alias dropArea : _dropArea
 
     /**
-      *
+      * contentDropped :
       */
     signal contentDropped(var drop)
 
     /**
-      *
+      * toggled :
       */
-	signal toggled(bool state)		
-	
+    signal toggled(bool state)
+
     ToolTip.delay: 1000
     ToolTip.timeout: 5000
     ToolTip.visible: control.hovered && control.tooltipText
@@ -127,12 +127,12 @@ Maui.ItemDelegate
     {
         id: _template
         anchors.fill: parent
-      
-        hovered: control.hovered || control.containsPress || _dropArea.containsDrag       
+
+        hovered: control.hovered || control.containsPress || _dropArea.containsDrag
         checkable : control.checkable
         checked : control.checked
 //        label1.elide: Text.ElideMiddle // TODO this is broken ???
         isCurrentItem: control.isCurrentItem
-        onToggled: control.toggled(state)		
+        onToggled: control.toggled(state)
     }
 }

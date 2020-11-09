@@ -24,109 +24,109 @@ import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.2 as Maui
 
 Kirigami.DelegateRecycler
-{    
+{
     id: control
 
     /**
-      *
+      * content :
       */
     default property alias content : _delegate.data
 
     /**
-      *
+      * mouseArea :
       */
     property alias mouseArea : _mouseArea
 
     /**
-      *
+      * draggable :
       */
     property bool draggable: false
 
     /**
-      *
+      * isCurrentItem :
       */
     property bool isCurrentItem :  false
-    
+
     /**
-      *
+      * radius :
       */
-    property int radius: Maui.Style.radiusV    
-    
+    property int radius: Maui.Style.radiusV
+
     /**
-      *
+      * padding :
       */
     property alias padding: _delegate.padding
 
     /**
-      *
+      * leftPadding :
       */
     property alias leftPadding: _delegate.leftPadding
 
     /**
-      *
+      * rightPadding :
       */
     property alias rightPadding: _delegate.rightPadding
 
     /**
-      *
+      * topPadding :
       */
     property alias topPadding: _delegate.topPadding
 
     /**
-      *
+      * bottomPadding :
       */
     property alias bottomPadding: _delegate.bottomPadding
-    
+
     /**
-      *
+      * hovered :
       */
     property alias hovered: _delegate.hovered
 
     /**
-      *
+      * containsPress :
       */
     property alias containsPress: _mouseArea.containsPress
 
     /**
-      *
+      * hoverEnabled :
       */
     property alias hoverEnabled: _delegate.hoverEnabled
-    
+
     /**
-      *
+      * background :
       */
     property alias background : _delegate.background
 
     /**
-      *
+      * highlighted :
       */
     property bool highlighted: control.isCurrentItem
-    
+
     /**
-      *
+      * pressed :
       */
     signal pressed(var mouse)
 
     /**
-      *
+      * pressAndHold :
       */
     signal pressAndHold(var mouse)
 
     /**
-      *
+      * clicked :
       */
     signal clicked(var mouse)
 
     /**
-      *
+      * rightClicked :
       */
     signal rightClicked(var mouse)
 
     /**
-      *
+      * doubleClicked :
       */
     signal doubleClicked(var mouse)
-    
+
     Drag.active: mouseArea.drag.active && control.draggable
     Drag.dragType: Drag.Automatic
     Drag.supportedActions: Qt.CopyAction
@@ -134,18 +134,18 @@ Kirigami.DelegateRecycler
     Control
     {
         id: _delegate
-        
+
         width: parent.width
         height: parent.height
-        
+
         hoverEnabled: !Kirigami.Settings.isMobile
-        
+
         padding: 0
         bottomPadding: padding
         rightPadding: padding
         leftPadding: padding
         topPadding: padding
-        
+
         SequentialAnimation on y
         {
             id: xAnim
@@ -156,7 +156,7 @@ Kirigami.DelegateRecycler
             NumberAnimation { from: -10; to: 0; duration: 100; easing.type: Easing.InOutQuad }
             PauseAnimation { duration: 50 } // This puts a bit of time between the loop
         }
-        
+
         MouseArea
         {
             id: _mouseArea
@@ -165,10 +165,10 @@ Kirigami.DelegateRecycler
             acceptedButtons:  Qt.RightButton | Qt.LeftButton
             property bool pressAndHoldIgnored : false
             drag.axis: Drag.XAndYAxis
-            
+
             //            drag.minimumY: control.height
             //            drag.minimumX : control.width
-            
+
             onCanceled:
             {
                 //                if(control.draggable)
@@ -176,7 +176,7 @@ Kirigami.DelegateRecycler
                 //                    drag.target = null
                 //                }
             }
-            
+
             onClicked:
             {
                 if(mouse.button === Qt.RightButton)
@@ -188,12 +188,12 @@ Kirigami.DelegateRecycler
                     control.clicked(mouse)
                 }
             }
-            
+
             onDoubleClicked:
             {
                 control.doubleClicked(mouse)
             }
-            
+
             onPressed:
             {
                 if(control.draggable && mouse.source !== Qt.MouseEventSynthesizedByQt)
@@ -207,24 +207,24 @@ Kirigami.DelegateRecycler
                 {
                     drag.target = null
                 }
-                
+
                 control.pressed(mouse)
             }
-            
+
             onReleased :
             {
                 if(control.draggable)
                 {
                     drag.target = null
                 }
-                
+
                 if(pressAndHoldIgnored)
                 {
                     control.pressAndHold(mouse)
                     pressAndHoldIgnored = false
                 }
             }
-            
+
             onPressAndHold :
             {
                 if(control.draggable && mouse.source === Qt.MouseEventSynthesizedByQt && Maui.Handy.isTouch)
@@ -243,7 +243,7 @@ Kirigami.DelegateRecycler
                 }
             }
         }
-        
+
         background: Rectangle
         {
             opacity: 1
@@ -255,7 +255,7 @@ Kirigami.DelegateRecycler
                 }
             }
             color: control.isCurrentItem || control.hovered || _mouseArea.containsPress ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
-            
+
             radius: control.radius
             border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.draggable ? Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9)) : "transparent"
         }

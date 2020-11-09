@@ -23,32 +23,32 @@ import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 
-Maui.GridView
+Maui.GridView // TODO remove
 {
-	id: control
-	
-	itemSize : Maui.Style.iconSizes.large * 2	
-	adaptContent: true
-	
-    /**
-      *
-      */
-	property bool checkable : false
-	
-    /**
-      *
-      */
-	signal itemClicked(int index)
+    id: control
+
+    itemSize : Maui.Style.iconSizes.large * 2
+    adaptContent: true
 
     /**
-      *
+      * checkable :
       */
-	signal itemDoubleClicked(int index)	
+    property bool checkable : false
 
     /**
-      *
+      * itemClicked :
       */
-	signal itemToggled(int index, bool state)	
+    signal itemClicked(int index)
+
+    /**
+      * itemDoubleClicked :
+      */
+    signal itemDoubleClicked(int index)
+
+    /**
+      * itemToggled :
+      */
+    signal itemToggled(int index, bool state)
 
     /**
       *

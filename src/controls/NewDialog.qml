@@ -6,17 +6,17 @@ import org.kde.mauikit 1.2 as Maui
 Maui.Dialog
 {
     id: control
-	entryField: true
-	
+    entryField: true
+
     /**
-      *
+      * finished :
       */
-	signal finished(string text)
-	
+    signal finished(string text)
+
     acceptButton.text: i18n("Accept")
     rejectButton.text: i18n("Cancel")
-    
-	onAccepted: done()
+
+    onAccepted: done()
     onRejected:
     {
         textEntry.clear()
@@ -25,11 +25,11 @@ Maui.Dialog
 
     page.margins: Maui.Style.space.big
     spacing: Maui.Style.space.medium
-	
-	function done()
-	{
-		finished(textEntry.text)
-		textEntry.clear()
-		close()
-	}
+
+    function done()
+    {
+        finished(textEntry.text)
+        textEntry.clear()
+        close()
+    }
 }

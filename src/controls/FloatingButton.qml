@@ -33,22 +33,22 @@ MouseArea
     width: height
 
     /**
-      *
+      * icon : icon
       */
     property alias icon : _button.icon
 
     /**
-      *
+      * text : string
       */
     property alias text: _button.text
 
     /**
-      *
+      * display : ToolButton.display
       */
     property alias display: _button.display
 
     /**
-      *
+      * clicked :
       */
     signal clicked()
 
@@ -61,7 +61,7 @@ MouseArea
         anchors.fill: parent
         radius: Maui.Style.radiusV
         color: control.Kirigami.Theme.backgroundColor
-        
+
         Rectangle
         {
             anchors.fill: parent
@@ -69,7 +69,7 @@ MouseArea
             radius: Maui.Style.radiusV
             border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
             opacity: 0.7
-            
+
             Rectangle
             {
                 anchors.fill: parent
@@ -80,7 +80,7 @@ MouseArea
                 anchors.margins: 1
             }
         }
-        
+
 
         ToolButton
         {

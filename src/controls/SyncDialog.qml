@@ -35,28 +35,28 @@ Maui.Dialog
     spacing: Maui.Style.space.medium
 
     /**
-      *
+      * customServer : bool
       */
     property bool customServer: false
 
     /**
-      *
+      * serverField : TextField
       */
     property alias serverField: serverField
 
     /**
-      *
+      * userField : TextField
       */
     property alias userField: userField
 
     /**
-      *
+      * passwordField : TextField
       */
     property alias passwordField: passwordField
 
     maxHeight: Maui.Style.unit * 350
     maxWidth: 350
-    
+
     footBar.leftContent: Button
     {
         text: i18n("Sign up")

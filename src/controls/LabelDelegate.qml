@@ -28,42 +28,42 @@ import "private"
 ItemDelegate
 {
     id: control
-    Kirigami.Theme.backgroundColor: isSection ? "transparent" : (index % 2 === 0 ? Qt.darker(Kirigami.Theme.backgroundColor) : "transparent")				
+    Kirigami.Theme.backgroundColor: isSection ? "transparent" : (index % 2 === 0 ? Qt.darker(Kirigami.Theme.backgroundColor) : "transparent")
     implicitHeight: Maui.Style.rowHeight
 
 
     /**
-      *
+      * isCurrentListItem : bool
       */
-    property bool isCurrentListItem :  ListView.isCurrentItem
-    
+    property bool isCurrentListItem : ListView.isCurrentItem
+
     /**
-      *
+      * isSection : bool
       */
     property bool isSection : false
-    
+
     /**
-      *
+      * label : string
       */
     property alias label: labelTxt.text
 
     /**
-      *
+      * labelTxt : Label
       */
     property alias labelTxt : labelTxt
-    
+
     background: Rectangle
     {
         color: control.isCurrentListItem ? Kirigami.Theme.highlightColor : Kirigami.Theme.backgroundColor
         opacity: control.isCurrentListItem ? 1 : 0.1
     }
-    
+
     Label
     {
         id: labelTxt
         anchors.margins: Maui.Style.contentMargins
         anchors.fill: parent
-        
+
         horizontalAlignment: Qt.AlignLeft
         verticalAlignment: Qt.AlignVCenter
         text: labelTxt.text
@@ -71,8 +71,8 @@ ItemDelegate
         wrapMode: Text.NoWrap
         color:  control.isCurrentListItem ? control.Kirigami.Theme.highlightedTextColor : control.Kirigami.Theme.textColor
         font.pointSize: Maui.Style.fontSizes.default
-        
+
         font.bold: control.isSection
         font.weight : control.isSection ? Font.Bold : Font.Normal
-    }    
+    }
 }

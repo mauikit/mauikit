@@ -29,49 +29,50 @@ Maui.AbstractSideBar
 {
     id: control
 
-
     implicitWidth: privateProperties.isCollapsed && collapsed && collapsible && stick ? collapsedSize : preferredWidth
     width: implicitWidth
     position: 1
     interactive: !stick && (modal || collapsed || !visible)
+    visible: true
+    overlay.visible: stick ? (control.collapsed && control.collapsible && !privateProperties.isCollapsed) : (collapsed && position > 0 && visible)
 
     /**
-      *
+      * content : ColumnLayout.data
       */
     default property alias content : _content.data
 
     /**
-      *
+      * model : var
       */
     property alias model : _listBrowser.model
 
     /**
-      *
+      * count : int
       */
     property alias count : _listBrowser.count
 
     /**
-      *
+      * section : ListView.section
       */
     property alias section : _listBrowser.section
 
     /**
-      *
+      * currentIndex : int
       */
     property alias currentIndex: _listBrowser.currentIndex
 
     /**
-      *
+      * iconSize : int
       */
     property int iconSize : Maui.Style.iconSizes.small
 
     /**
-      *
+      * showLabels : bool
       */
     property bool showLabels: control.width > collapsedSize
 
     /**
-      *
+      * stick : bool
       */
     property bool stick : true
 
@@ -81,32 +82,7 @@ Maui.AbstractSideBar
     }
 
     /**
-      *
-      */
-    signal itemClicked(int index)
-
-    /**
-      *
-      */
-    signal itemRightClicked(int index)
-
-    overlay.visible: stick ? (control.collapsed && control.collapsible && !privateProperties.isCollapsed) : (collapsed && position > 0 && visible)
-
-    Connections
-    {
-        target: control.overlay
-        ignoreUnknownSignals: true
-        function onClicked()
-        {
-            if(control.stick)
-                control.collapse()
-            else
-                control.close()
-        }
-    }
-
-    /**
-      *
+      * delegate : Component
       */
     property Component delegate : Maui.ListDelegate
     {
@@ -138,8 +114,30 @@ Maui.AbstractSideBar
         }
     }
 
+    /**
+      * itemClicked :
+      */
+    signal itemClicked(int index)
+
+    /**
+      * itemRightClicked :
+      */
+    signal itemRightClicked(int index)
+
+    Connections
+    {
+        target: control.overlay
+        ignoreUnknownSignals: true
+        function onClicked()
+        {
+            if(control.stick)
+                control.collapse()
+            else
+                control.close()
+        }
+    }
+
     //     onModalChanged: visible = true
-    visible: true
     onStickChanged:
     {
         if(stick && collapsed)

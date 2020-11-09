@@ -34,24 +34,24 @@ SwipeView
     focus: true
 
     /**
-      *
+      * maxViews : int
       */
     property int maxViews : 4
 
     /**
-      *
+      * toolbar : ToolBar
       */
     property Maui.ToolBar toolbar : window().headBar
 
     /**
-      *
+      * index : int
       */
     readonly property int index : -1
 
     /**
-      *
+      * actionGroup : ActionGroup
       */
-    property QtObject actionGroup : Private.ActionGroup
+    readonly property QtObject actionGroup : Private.ActionGroup
     {
         id: _actionGroup
         currentIndex : control.currentIndex
@@ -92,7 +92,7 @@ SwipeView
         sequence: StandardKey.Back
         onActivated: control.goBack()
     }
-    
+
     contentItem: ListView
     {
         id: _listView
@@ -115,14 +115,14 @@ SwipeView
         highlightResizeVelocity: -1
 
         maximumFlickVelocity: 4 * (control.orientation === Qt.Horizontal ? width : height)
-        
+
         property int lastPos: 0
-        
+
         onCurrentIndexChanged:
         {
             _listView.lastPos = _listView.contentX
         }
-        
+
 //        Binding on contentX
 //        {
 //            when: overviewHandler.active
@@ -130,7 +130,7 @@ SwipeView
 //            value: _listView.lastPos + ((overviewHandler.centroid.position.x - overviewHandler.centroid.pressPosition.x) * -1)
 //            restoreMode: Binding.RestoreBinding
 //        }
-        
+
         //Item
         //{
             //enabled: Maui.Handy.isTouch
@@ -140,7 +140,7 @@ SwipeView
             //height: 32
             //anchors.left: parent.left
             //anchors.right: parent.right
-            
+
             //DragHandler
             //{
                 //id: overviewHandler
@@ -151,12 +151,12 @@ SwipeView
                     //{
                         //_listView.contentX += (overviewHandler.centroid.position.x - overviewHandler.centroid.pressPosition.x) * -1
                         //_listView.returnToBounds()
-                        //_listView.currentIndex = _listView.indexAt(_listView.contentX, 0)                    
+                        //_listView.currentIndex = _listView.indexAt(_listView.contentX, 0)
                     //}
                 //}
             //}
         //}
-        
+
     }
 
     Keys.enabled: true

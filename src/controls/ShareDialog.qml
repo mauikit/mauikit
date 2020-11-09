@@ -26,6 +26,10 @@ import org.kde.kirigami 2.7 as Kirigami
 Maui.Dialog
 {
     id: control
+
+    /**
+      * itemUrls : var
+      */
     property var itemUrls : []
 
     widthHint: 0.9
@@ -46,19 +50,19 @@ Maui.Dialog
         anchors.fill: parent
         leftPadding: 0
         rightPadding: 0
-        
+
         Maui.GridBrowser
         {
-			id: grid
-			width: parent.width
-			showEmblem: false
-			model: ListModel {}
-			onItemClicked:
-			{
-				grid.currentIndex = index
-				triggerService(index)
-			}
-		}
+            id: grid
+            width: parent.width
+            showEmblem: false
+            model: ListModel {}
+            onItemClicked:
+            {
+                grid.currentIndex = index
+                triggerService(index)
+            }
+        }
     }
 
 

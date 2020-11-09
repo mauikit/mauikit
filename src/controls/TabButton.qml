@@ -10,17 +10,17 @@ TabButton
     implicitWidth:  150 * Maui.Style.unit
 
     /**
-      *
+      * content : ListItemTemplate.data
       */
     default property alias content : _template.data
 
     /**
-      *
+      * template : ListItemTemplate
       */
     property alias template: _template
 
     /**
-      *
+      * closeClicked :
       */
     signal closeClicked(int index)
 
