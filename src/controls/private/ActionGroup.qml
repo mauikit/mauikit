@@ -31,18 +31,47 @@ Item
     Layout.fillHeight: true
     Layout.fillWidth: strech
 
+    /**
+      *
+      */
     default property list<QtObject> items
+
+    /**
+      *
+      */
     property list<QtObject> hiddenItems
-    
+
+    /**
+      *
+      */
     property int currentIndex : 0
+
+    /**
+      *
+      */
     property bool strech: false
+
+    /**
+      *
+      */
     readonly property int count : control.items.length + control.hiddenItems.length
-    
+
+    /**
+      *
+      */
     signal clicked(int index)
+
+    /**
+      *
+      */
     signal pressAndHold(int index)
-    signal doubleClicked(int index)	
-    
-    property Component delegate : BasicToolButton 
+
+    /**
+      *
+      */
+    signal doubleClicked(int index)
+
+    property Component delegate : BasicToolButton
     {
         Layout.alignment: Qt.AlignVCenter
         Layout.fillWidth: control.strech
@@ -53,56 +82,56 @@ Item
         Kirigami.Theme.backgroundColor: modelData.Kirigami.Theme.backgroundColor
         Kirigami.Theme.highlightColor: modelData.Kirigami.Theme.highlightColor
         icon.name: modelData.MauiLab.AppView.iconName
-        text: modelData.MauiLab.AppView.title 
+        text: modelData.MauiLab.AppView.title
         display: checked ? (!isWide ? ToolButton.IconOnly : ToolButton.TextBesideIcon) : ToolButton.IconOnly
-        
-        onClicked: 
+
+        onClicked:
         {
             if(index == control.currentIndex )
             {
                 return
             }
-            
+
             control.currentIndex = index
             control.clicked(index)
         }
-        
+
         DropArea
         {
             anchors.fill: parent
             onEntered: control.currentIndex = index
         }
     }
-    
+
     implicitWidth: _layout.implicitWidth
-    
+
 //     Behavior on implicitWidth
-//     {		
+//     {
 //         NumberAnimation
 //         {
 //             duration: Kirigami.Units.shortDuration
 //             easing.type: Easing.InOutQuad
 //         }
 //     }
-    
+
     RowLayout
     {
         id: _layout
         height: parent.height
         width: control.strech ? parent.width : undefined
         // 		width: Math.min(implicitWidth, parent.width)
-        spacing: Maui.Style.space.medium	
-        
+        spacing: Maui.Style.space.medium
+
         Repeater
         {
             model: control.items
-            delegate: control.delegate		
+            delegate: control.delegate
         }
-        
-        BasicToolButton 
-        {            
+
+        BasicToolButton
+        {
             readonly property QtObject obj : control.currentIndex >= control.items.length && control.currentIndex < control.count? control.hiddenItems[control.currentIndex - control.items.length] : null
-            
+
             visible: obj && obj.visible
             Layout.fillWidth: control.strech
             Layout.preferredWidth: visible ? implicitWidth : 0
@@ -111,41 +140,41 @@ Item
             icon.name: obj ? obj.MauiLab.AppView.iconName : ""
             icon.width: Maui.Style.iconSizes.medium
             icon.height: Maui.Style.iconSizes.medium
-            
+
             display: checked ? ToolButton.TextBesideIcon : ToolButton.IconOnly
-            
-            text: obj ? obj.MauiLab.AppView.title : ""            
-            
+
+            text: obj ? obj.MauiLab.AppView.title : ""
+
             Kirigami.Theme.backgroundColor: obj ? obj.Kirigami.Theme.backgroundColor : undefined
-            Kirigami.Theme.highlightColor: obj ? obj.Kirigami.Theme.highlightColor: undefined            
-        } 
-        
+            Kirigami.Theme.highlightColor: obj ? obj.Kirigami.Theme.highlightColor: undefined
+        }
+
         Maui.ToolButtonMenu
         {
             id: _menuButton
             icon.name: "list-add"
-            
-            visible: control.hiddenItems.length > 0          
-            
+
+            visible: control.hiddenItems.length > 0
+
             Layout.alignment: Qt.AlignVCenter
             display: checked ? ToolButton.TextBesideIcon : ToolButton.IconOnly
-            
+
             menu.closePolicy: Popup.CloseOnReleaseOutsideParent
-            
-            
+
+
             Behavior on implicitWidth
-            {		
+            {
                 NumberAnimation
                 {
                     duration: Kirigami.Units.shortDuration
                     easing.type: Easing.InOutQuad
                 }
             }
-            
+
             Repeater
             {
                 model: control.hiddenItems
-                
+
                 MenuItem
                 {
                     text: modelData.MauiLab.AppView.title
@@ -153,14 +182,14 @@ Item
                     autoExclusive: true
                     checkable: true
                     checked: control.currentIndex === control.items.length + index
-                    
+
                     onTriggered:
                     {
                         if(control.items.length + index === control.currentIndex)
                         {
                             return
                         }
-                        
+
                         control.currentIndex = control.items.length + index
                         control.clicked(control.currentIndex)
                     }

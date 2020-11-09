@@ -17,9 +17,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.9
+import QtQuick 2.14
 import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.3
+import QtQuick.Controls 2.14
 import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.7 as Kirigami
@@ -27,24 +27,66 @@ import org.kde.mauikit 1.0 as Maui
 
 Maui.SwipeItemDelegate
 {
-	id: control
-	
+    id: control
+
+    /**
+      * label1 : Label
+      */
     property alias label1 : _template.label1
+
+    /**
+      * label2 : Label
+      */
     property alias label2 : _template.label2
+
+    /**
+      * label3 : Label
+      */
     property alias label3 : _template.label3
+
+    /**
+      * label4 : Label
+      */
     property alias label4 : _template.label4
+
+    /**
+      * iconItem : Item
+      */
     property alias iconItem : _template.iconItem
+
+    /**
+      * iconVisible : bool
+      */
     property alias iconVisible : _template.iconVisible
+
+    /**
+      * iconSizeHint : int
+      */
     property alias iconSizeHint : _template.iconSizeHint
+
+    /**
+      * imageSizeHint : int
+      */
     property alias imageSizeHint : _template.imageSizeHint
+
+    /**
+      * imageSource: string
+      */
     property alias imageSource : _template.imageSource
+
+    /**
+      * iconSource : string
+      */
     property alias iconSource : _template.iconSource
-	
-	property alias template : _template
+
+    /**
+      * template : ListItemTemplate
+      */
+    property alias template : _template
 
     Maui.ListItemTemplate
     {
-        id: _template 
+        id: _template
         anchors.fill: parent
     }
 }

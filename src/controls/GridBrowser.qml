@@ -17,24 +17,41 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.9
-import QtQuick.Controls 2.10
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 
-Maui.GridView
+Maui.GridView // TODO remove
 {
-	id: control
-	
-	itemSize : Maui.Style.iconSizes.large * 2	
-	adaptContent: true
-	
-	property bool checkable : false
-	
-	signal itemClicked(int index)
-	signal itemDoubleClicked(int index)	
-	signal itemToggled(int index, bool state)	
-	signal itemRightClicked(int index)	
+    id: control
 
+    itemSize : Maui.Style.iconSizes.large * 2
+    adaptContent: true
+
+    /**
+      * checkable :
+      */
+    property bool checkable : false
+
+    /**
+      * itemClicked :
+      */
+    signal itemClicked(int index)
+
+    /**
+      * itemDoubleClicked :
+      */
+    signal itemDoubleClicked(int index)
+
+    /**
+      * itemToggled :
+      */
+    signal itemToggled(int index, bool state)
+
+    /**
+      *
+      */
+    signal itemRightClicked(int index)
 }

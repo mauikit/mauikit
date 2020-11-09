@@ -34,17 +34,43 @@ Drawer
     interactive: modal || collapsed || !visible
     dragMargin: Maui.Style.space.big
     modal: false
-    property bool collapsible: false
-    property bool collapsed: false
-    property int collapsedSize: 0
-    property int preferredWidth : Kirigami.Units.gridUnit * 12
-    readonly property alias overlay : _overlay
 
-    onCollapsedChanged: position = (collapsed && collapsedSize < 1) ? 0 : 1
+    /**
+      * content : data
+      */
     default property alias content : _content.data
 
+    /**
+      * collapsible : bool
+      */
+    property bool collapsible: false
+
+    /**
+      * collapsed : bool
+      */
+    property bool collapsed: false
+
+    /**
+      * collapsedSize : int
+      */
+    property int collapsedSize: 0
+
+    /**
+      * preferredWidth : int
+      */
+    property int preferredWidth : Kirigami.Units.gridUnit * 12
+
+    /**
+      * overlay : Rectangle
+      */
+    readonly property alias overlay : _overlay
+
+    /**
+      * contentDropped
+      */
     signal contentDropped(var drop)
-    // 	background: null
+
+    onCollapsedChanged: position = (collapsed && collapsedSize < 1) ? 0 : 1
 
     MouseArea
     {
@@ -121,7 +147,7 @@ Drawer
 
     background: Rectangle
     {
-        color: Kirigami.Theme.backgroundColor       
+        color: Kirigami.Theme.backgroundColor
     }
 }
 

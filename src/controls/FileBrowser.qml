@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.10
-import QtQuick.Controls 2.10
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 
 import org.kde.kirigami 2.8 as Kirigami
@@ -30,50 +30,139 @@ Maui.Page
 {
     id: control
 
-    //aliases
+    /**
+      * currentPath : url
+      */
     property alias currentPath : _browser.path
     onCurrentPathChanged : _searchField.clear()
-    
+
+    /**
+      * settings : BrowserSettings
+      */
     property alias settings : _browser.settings
 
+    /**
+      * view : Item
+      */
     property alias view : _stackView.currentItem
 
+    /**
+      * dropArea : DropArea
+      */
     property alias dropArea : _dropArea
-    
+
+    /**
+      * currentIndex : int
+      */
     property alias currentIndex : _browser.currentIndex
 
+    /**
+      * currentView : Item
+      */
     readonly property QtObject currentView : _stackView.currentItem.currentView
+
+    /**
+      * currentFMList : FMList
+      */
     readonly property Maui.FMList currentFMList : view.currentFMList
+
+    /**
+      * currentFMModel : BaseModel
+      */
     readonly property Maui.BaseModel currentFMModel : view.currentFMModel
+
+    /**
+      * isSearchView : bool
+      */
     readonly property bool isSearchView : _stackView.currentItem.objectName === "searchView"
 
-    // custom props
+    /**
+      * selectionMode : bool
+      */
     property bool selectionMode: false
 
+    /**
+      * thumbnailsSize : int
+      */
     property int thumbnailsSize : Maui.Style.iconSizes.large * 1.7
 
+    /**
+      * indexHistory : var
+      */
     property var indexHistory : []
 
     // need to be set by the implementation as features
-    property Maui.SelectionBar selectionBar : null
-    property Maui.TagsDialog tagsDialog : null
-    property Maui.OpenWithDialog openWithDialog : null
+    /**
+      * selectionBar : SelectionBar
+      */
+    property Maui.SelectionBar selectionBar : null //TODO remove
+
+    /**
+      * tagsDialog : TagsDialog
+      */
+    property Maui.TagsDialog tagsDialog : null //TODO remove
+
+    /**
+      * openWithDialog : OpenWithDialog
+      */
+    property Maui.OpenWithDialog openWithDialog : null //TODO remove
 
     //relevant menus to file item and the browserview
+    /**
+      * browserMenu : Menu
+      */
     property alias browserMenu: browserMenu
+
+    /**
+      * itemMenu : Menu
+      */
     property alias itemMenu: itemMenu
 
     //access to the loaded the dialog components
+    /**
+      * dialog : Dialog
+      */
     property alias dialog : dialogLoader.item
 
     //signals
+    /**
+      * itemClicked :
+      */
     signal itemClicked(int index)
+
+    /**
+      * itemDoubleClicked :
+      */
     signal itemDoubleClicked(int index)
+
+    /**
+      * itemRightClicked :
+      */
     signal itemRightClicked(int index)
+
+    /**
+      * itemLeftEmblemClicked :
+      */
     signal itemLeftEmblemClicked(int index)
+
+    /**
+      * itemRightEmblemClicked :
+      */
     signal itemRightEmblemClicked(int index)
+
+    /**
+      * rightClicked :
+      */
     signal rightClicked()
+
+    /**
+      * keyPress :
+      */
     signal keyPress(var event)
+
+    /**
+      * urlsDropped :
+      */
     signal urlsDropped(var urls)
 
     //color scheme
@@ -107,7 +196,7 @@ Maui.Page
         placeholderText: _filterButton.checked ? i18n("Filter") : ("Search")
         inputMethodHints: Qt.ImhNoAutoUppercase
 
-        onAccepted: 
+        onAccepted:
         {
             if(_filterButton.checked)
             {
@@ -115,7 +204,7 @@ Maui.Page
             }else
             {
                  control.search(text)
-            }            
+            }
         }
         onCleared:
         {
@@ -127,8 +216,8 @@ Maui.Page
         onTextChanged:
         {
             if(_filterButton.checked)
-                _searchField.accepted()              
-                
+                _searchField.accepted()
+
         }
         Keys.enabled: _filterButton.checked
         Keys.onPressed:
@@ -139,7 +228,7 @@ Maui.Page
                 control.currentView.forceActiveFocus()
             }
         }
-        
+
         actions.data: ToolButton
         {
             id: _filterButton
@@ -156,7 +245,7 @@ Maui.Page
             }
         }
     }
-    
+
     footBar.visible: String(control.currentPath).startsWith("trash:/")
 
     footBar.leftSretch: false
@@ -193,7 +282,7 @@ Maui.Page
             page.margins: Maui.Style.space.big
             template.iconSource: urls.length === 1 ? Maui.FM.getFileInfo(urls[0]).icon : "emblem-warning"
             template.imageSource: urls.length === 1 ? Maui.FM.getFileInfo(urls[0]).thumbnail : ""
-            
+
             actions: Action
             {
                 text: i18n("Cancel")
@@ -327,7 +416,7 @@ Maui.Page
         onShareClicked: control.shareFiles([item.path])
     }
 
-   
+
     Connections
     {
         target: control.tagsDialog
@@ -336,7 +425,7 @@ Maui.Page
 
         function onTagsReady(tags)
         {
-            control.tagsDialog.composerList.updateToUrls(tags)            
+            control.tagsDialog.composerList.updateToUrls(tags)
         }
     }
 
@@ -368,7 +457,7 @@ Maui.Page
             if((event.key === Qt.Key_A) && (event.modifiers & Qt.ControlModifier))
             {
                 control.selectAll()
-            }          
+            }
 
             if((event.key === Qt.Key_Left || event.key === Qt.Key_Right || event.key === Qt.Key_Down || event.key === Qt.Key_Up) && (event.modifiers & Qt.ControlModifier) && (event.modifiers & Qt.ShiftModifier))
             {
@@ -442,11 +531,11 @@ Maui.Page
             {
                 control.headBar.visible = !control.headBar.visible
                 _searchField.forceActiveFocus()
-            }                    
-            
+            }
+
             control.keyPress(event)
         }
-        
+
         function onItemsSelected(indexes)
         {
             control.currentIndex = indexes[0]
@@ -509,7 +598,7 @@ Maui.Page
             browserMenu.show(control)
         }
     }
-    
+
     StackView
     {
         id: _stackView
@@ -627,7 +716,7 @@ Maui.Page
             control.tagsDialog.open()
         }
     }
-    
+
     /**
       *
       **/
@@ -655,9 +744,9 @@ Maui.Page
             return
         }
 
-       Maui.Platform.shareFiles(urls)        
+       Maui.Platform.shareFiles(urls)
     }
-    
+
     /**
       *
       **/
@@ -691,7 +780,7 @@ Maui.Page
     {
         const data = Maui.Handy.getClipboard()
         const urls = data.urls
-        
+
         if(!urls)
         {
             return
@@ -758,8 +847,8 @@ Maui.Page
                     control.openFolder(path)
                 }
                 else
-                {                    
-                    control.openFile(path)                    
+                {
+                    control.openFile(path)
                 }
             }
         }
@@ -868,7 +957,7 @@ Maui.Page
         }
     }
 
-       
+
     /**
       *
       **/
@@ -888,7 +977,7 @@ Maui.Page
     {
         _stackView.pop(StackView.Immediate)
     }
-    
+
     /**
       *
       **/
@@ -898,7 +987,7 @@ Maui.Page
         _stackView.currentItem.title = i18n("Search: %1").arg(query)
         _stackView.currentItem.currentFMList.search(query, _browser.currentFMList)
     }
-    
+
     /**
       *
       **/
@@ -908,7 +997,7 @@ Maui.Page
         dialog.open()
         dialog.forceActiveFocus()
     }
-    
+
     /**
       *
       **/

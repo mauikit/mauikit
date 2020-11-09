@@ -8,44 +8,85 @@ import org.kde.mauikit 1.0 as Maui
 
 Maui.Page
 {
-    id: control    
-    
+    id: control
+
+    /**
+      * currentView : Item
+      */
     readonly property Item currentView : control.viewType === AltBrowser.ViewType.List ? _listView : _gridView
-    
-    enum ViewType 
+
+    /**
+      * ViewType : enum
+      */
+    enum ViewType
     {
         Grid,
         List
     }
-    
+
+    /**
+      * viewType : AltBrowser.ViewType
+      */
     property int viewType: AltBrowser.ViewType.List
+
+    /**
+      * currentIndex : int
+      */
     property int currentIndex : -1
     Binding on currentIndex
     {
         when: control.currentView
-        value: control.currentView.currentIndex        
-    }    
-    
+        value: control.currentView.currentIndex
+    }
+
+    /**
+      * listDelegate : Component
+      */
     property Component listDelegate : null
+
+    /**
+      * gridDelegate : Component
+      */
     property Component gridDelegate : null
-    
+
+    /**
+      * model : var
+      */
     property var model : null
-    
-    property bool enableLassoSelection: false   
+
+    /**
+      * enableLassoSelection : bool
+      */
+    property bool enableLassoSelection: false
+
+    /**
+      * selectionMode : bool
+      */
     property bool selectionMode: false
-    property alias holder : _holder   
-    
+
+    /**
+      * holder : Holder
+      */
+    property alias holder : _holder
+
+    /**
+      * gridView : GridView
+      */
     readonly property alias gridView : _gridView
-    readonly property alias listView : _listView    
-    
-    flickable: control.viewType === AltBrowser.ViewType.List ? _listView.flickable : _gridView.flickable   
-    
+
+    /**
+      * listView : ListBrowser
+      */
+    readonly property alias listView : _listView
+
+    flickable: control.viewType === AltBrowser.ViewType.List ? _listView.flickable : _gridView.flickable
+
     Maui.Holder
     {
         id: _holder
         anchors.fill: parent
     }
-    
+
     Maui.GridView
     {
         id: _gridView
@@ -58,7 +99,7 @@ Maui.Page
         selectionMode: control.selectionMode
         adaptContent: true
     }
-    
+
     Maui.ListBrowser
     {
         anchors.fill: parent
@@ -70,5 +111,4 @@ Maui.Page
         enableLassoSelection: control.enableLassoSelection
         selectionMode: control.selectionMode
     }
-    
 }

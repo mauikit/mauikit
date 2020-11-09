@@ -6,13 +6,21 @@ import org.kde.kirigami 2.6 as Kirigami
 import org.kde.mauikit 1.2 as Maui
 
 Maui.Dialog
-{	
+{
     id: control
 
     maxHeight: 350* Maui.Style.unit
     maxWidth: maxHeight
     page.title: i18n("Accounts")
+
+    /**
+      *
+      */
     property alias model : _syncingModel
+
+    /**
+      *
+      */
     property alias list : _syncingModel.list
 
     Maui.SyncDialog

@@ -30,30 +30,94 @@ Maui.Popup
 {
     id: control
 
+    /**
+      * scrollable : data
+      */
     default property alias scrollable : _pageContent.data
+
+    /**
+      * stack : data
+      */
     property alias stack : _stack.data
 
+    /**
+      * message : string
+      */
     property string message : ""
-    property alias title: _page.title
+
+    /**
+      * title : string
+      */
+    property alias title : _page.title
+
+    /**
+      * template : ListItemTemplate
+      */
     property alias template : _template
 
+    /**
+      * actions : list<Action>
+      */
     property list<Action> actions
 
+    /**
+      * defaultButtons : bool
+      */
     property bool defaultButtons: true
+
+    /**
+      * persistent : bool
+      */
     property bool persistent : true
 
+    /**
+      * acceptButton : Button
+      */
     property alias acceptButton : _acceptButton
+
+    /**
+      * rejectButton : Button
+      */
     property alias rejectButton : _rejectButton
 
+    /**
+      * textEntry : TextEntry
+      */
     property alias textEntry : _textEntry
+
+    /**
+      * entryField : bool
+      */
     property alias entryField: _textEntry.visible
 
+    /**
+      * page : Page
+      */
     property alias page : _page
+
+    /**
+      * footBar : ToolBar
+      */
     property alias footBar : _page.footBar
+
+    /**
+      * headBar : ToolBar
+      */
     property alias headBar: _page.headBar
+
+    /**
+      * closeButton : MouseArea
+      */
     property alias closeButton: _closeButton
 
+    /**
+      * accepted :
+      */
     signal accepted()
+
+    /**
+      * rejected :
+      */
     signal rejected()
 
     closePolicy: control.persistent ? Popup.NoAutoClose | Popup.CloseOnEscape : Popup.CloseOnEscape | Popup.CloseOnPressOutside
@@ -63,13 +127,6 @@ Maui.Popup
     implicitHeight: _layout.implicitHeight
     widthHint: 0.9
     heightHint: 0.9
-    
-    function alert(message, level)
-    {
-        _alertMessage.text = message
-        _alertMessage.level = level
-//         _alertAnim.running = true
-    }
 
     ColumnLayout
     {
@@ -104,7 +161,7 @@ Maui.Popup
                     anchors.centerIn: parent
                     radius: Maui.Style.radiusV
                     color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.9))
-                    
+
                     Maui.X
                     {
                         height: Maui.Style.iconSizes.tiny
@@ -112,8 +169,7 @@ Maui.Popup
                         anchors.centerIn: parent
                         color: _closeButton.containsMouse || _closeButton.containsPress ? Kirigami.Theme.negativeTextColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.2))
                     }
-                }                
-
+                }
             }
 
             ColumnLayout
@@ -122,7 +178,6 @@ Maui.Popup
                 anchors.fill: parent
                 spacing: control.spacing
             }
-
 
             ScrollView
             {
@@ -136,7 +191,6 @@ Maui.Popup
                 Flickable
                 {
                     id: _flickable
-//                     contentWidth: parent.width
                     contentHeight: _pageContent.implicitHeight
 
                     ColumnLayout
@@ -170,7 +224,7 @@ Maui.Popup
                             focus: visible
                             onAccepted: control.accepted()
                         }
-                        
+
                         Label
                         {
                             id: _alertMessage
@@ -179,14 +233,14 @@ Maui.Popup
                             Layout.fillWidth: true
                             wrapMode: Text.WordWrap
                             verticalAlignment: Qt.AlignVCenter
-                            
+
                             color: switch(level)
                             {
                                 case 0: return Kirigami.Theme.positiveTextColor
                                 case 1: return Kirigami.Theme.neutralTextColor
                                 case 2: return Kirigami.Theme.negativeTextColor
                             }
-                            
+
                             SequentialAnimation on x
                             {
                                 id: _alertAnim
@@ -273,7 +327,7 @@ Maui.Popup
                 }
 
                 onClicked: accepted()
-                
+
                 Maui.Separator
                 {
                     position: Qt.Vertical
@@ -282,7 +336,7 @@ Maui.Popup
                     anchors.right: parent.right
                 }
             }
-            
+
             Repeater
             {
                 model: control.actions
@@ -320,5 +374,14 @@ Maui.Popup
                 }
             }
         }
+    }
+
+    /**
+      *
+      */
+    function alert(message, level)
+    {
+        _alertMessage.text = message
+        _alertMessage.level = level
     }
 }

@@ -1,19 +1,34 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.14
+import QtQuick.Controls 2.14
+
 import QtQuick.Layouts 1.3
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.6 as Kirigami
 
 Maui.ListBrowser
 {
     id: control
 
+    /**
+      * list : PlacesList
+      */
     property alias list : placesList
+
+    /**
+      * itemMenu : Menu
+      */
     property alias itemMenu : _menu
 
+    /**
+      * iconSize : int
+      */
     property int iconSize : Maui.Style.iconSizes.small
 
+    /**
+      * placeClicked :
+      */
     signal placeClicked (string path)
+
     focus: true
     model: Maui.BaseModel
     {

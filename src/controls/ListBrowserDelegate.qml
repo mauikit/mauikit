@@ -27,64 +27,137 @@ import "private"
 
 Maui.ItemDelegate
 {
-    id: control 
-    
+    id: control
+
     implicitHeight: label4.visible || label2.visible ?  Maui.Style.rowHeight + (Maui.Style.space.medium * 1.5) : Maui.Style.rowHeight
-    isCurrentItem : ListView.isCurrentItem || checked	
-    
-    signal contentDropped(var drop)	
-	signal toggled(bool state)
-	
-	ToolTip.delay: 1000
-	ToolTip.timeout: 5000
-	ToolTip.visible: control.hovered && control.tooltipText
-	ToolTip.text: control.tooltipText
-    
-    property string tooltipText  
-        
+    isCurrentItem : ListView.isCurrentItem || checked
+
+    ToolTip.delay: 1000
+    ToolTip.timeout: 5000
+    ToolTip.visible: control.hovered && control.tooltipText
+    ToolTip.text: control.tooltipText
+
+    /**
+      * content : ListItemTemplate.data
+      */
+    default property alias content : _template.content
+
+    /**
+      * tooltipText : string
+      */
+    property string tooltipText
+
+    /**
+      * label1 : Label
+      */
     property alias label1 : _template.label1
+
+    /**
+      * label2 :  Label
+      */
     property alias label2 : _template.label2
+
+    /**
+      * label3 : Label
+      */
     property alias label3 : _template.label3
+
+    /**
+      * label4 : Label
+      */
     property alias label4 : _template.label4
+
+    /**
+      * iconItem : Item
+      */
     property alias iconItem : _template.iconItem
+
+    /**
+      * iconVisible : bool
+      */
     property alias iconVisible : _template.iconVisible
+
+    /**
+      * iconSizeHint : int
+      */
     property alias iconSizeHint : _template.iconSizeHint
+
+    /**
+      * imageSizeHint : int
+      */
     property alias imageSizeHint : _template.imageSizeHint
+
+    /**
+      * imageSource : string
+      */
     property alias imageSource : _template.imageSource
+
+    /**
+      * iconSource : string
+      */
     property alias iconSource : _template.iconSource
+
+    /**
+      * showLabel : bool
+      */
     property alias showLabel : _template.labelsVisible
 
+    /**
+      * checked : bool
+      */
     property alias checked : _template.checked
+
+    /**
+      * checkable : bool
+      */
     property alias checkable: _template.checkable
 
+    /**
+      * leftLabels : ColumnLayout
+      */
     property alias leftLabels: _template.leftLabels
-    property alias rightLabels: _template.rightLabels   
-    
+
+    /**
+      * rightLabels : ColumnLayout
+      */
+    property alias rightLabels: _template.rightLabels
+
+    /**
+      * template : ListItemTemplate
+      */
     property alias template : _template
-    
-    default property alias content : _template.content
-            
-    DropArea 
+
+    /**
+      * contentDropped :
+      */
+    signal contentDropped(var drop)
+
+    /**
+      * toggled :
+      */
+    signal toggled(bool state)
+
+    DropArea
     {
         id: _dropArea
         anchors.fill: parent
         enabled: control.draggable
-        
-        Rectangle 
+
+        Rectangle
         {
             anchors.fill: parent
             radius: Maui.Style.radiusV
-            color: control.Kirigami.Theme.highlightColor		
+            color: control.Kirigami.Theme.highlightColor
             visible: parent.containsDrag
             opacity: 0.3
         }
-        
+
         onDropped:
         {
             control.contentDropped(drop)
         }
-    }  
-    
+    }
+
     Maui.ListItemTemplate
     {
         id: _template
@@ -92,8 +165,8 @@ Maui.ItemDelegate
         isCurrentItem : control.isCurrentItem
         hovered: parent.hovered
         checkable : control.checkable
-        checked : control.checked               
-		onToggled: control.toggled(state)
+        checked : control.checked
+        onToggled: control.toggled(state)
         leftMargin: iconVisible ? 0 : Maui.Style.space.medium
-    } 
+    }
 }

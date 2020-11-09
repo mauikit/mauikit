@@ -17,11 +17,10 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.9
-import QtQuick.Controls 2.9
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
-import org.kde.mauikit 1.1 as MauiLab
+import org.kde.mauikit 1.2 as Maui
 import QtQuick.Layouts 1.3
 
 Maui.Dialog
@@ -31,40 +30,78 @@ Maui.Dialog
     maxWidth: Maui.Style.unit * 700
     page.padding: 0
 
+    /**
+      * currentPath : url
+      */
     property alias currentPath : browser.currentPath
 
+    /**
+      * browser : FileBrowser
+      */
     readonly property alias browser : browser
+
+    /**
+      * selectionBar : SelectionBar
+      */
     readonly property alias selectionBar: _selectionBar
 
+    /**
+      * singleSelection : bool
+      */
     property alias singleSelection : _selectionBar.singleSelection
 
+    /**
+      * suggestedFileName : string
+      */
     property string suggestedFileName : ""
 
+    /**
+      * settings : BrowserSettings
+      */
     readonly property alias settings : browser.settings
 
+    /**
+      * searchBar : bool
+      */
     property bool searchBar : false
     onSearchBarChanged: if(!searchBar) browser.quitSearch()
 
+    /**
+      * modes : var
+      */
     readonly property var modes : ({OPEN: 0, SAVE: 1})
+
+    /**
+      * mode : int
+      */
     property int mode : modes.OPEN
 
+    /**
+      * callback : var
+      */
     property var callback : ({})
 
+    /**
+      * textField : TextField
+      */
     property alias textField: _textField
 
+    /**
+      * urlsSelected :
+      */
     signal urlsSelected(var urls)
 
     rejectButton.text: i18n("Cancel")
     acceptButton.text: control.mode === modes.SAVE ? i18n("Save") : i18n("Open")
-   
+
     page.footerColumn: [
-    
+
     Maui.ToolBar
     {
         visible: control.mode === modes.SAVE
         width: parent.width
         position: ToolBar.Footer
-        
+
         middleContent: Maui.TextField
         {
             id: _textField
@@ -73,7 +110,7 @@ Maui.Dialog
             text: suggestedFileName
         }
     },
-    
+
     Maui.TagsBar
     {
         id: _tagsBar
@@ -88,7 +125,7 @@ Maui.Dialog
     }
     ]
     onRejected: control.close()
-    
+
     onAccepted:
     {
         console.log("CURRENT PATHb", browser.currentPath+"/"+textField.text)
@@ -139,13 +176,6 @@ Maui.Dialog
     }
 
     headBar.visible: true
-//     headBar.leftContent: ToolButton
-//     {
-//         icon.name: "application-menu"
-//         checked: pageRow.currentIndex === 0
-//         onClicked: pageRow.currentIndex = !pageRow.currentIndex
-//     }
-
     headBar.middleContent: Loader
     {
         Layout.fillWidth: true
@@ -180,7 +210,7 @@ Maui.Dialog
         id: pageRow
         Layout.fillHeight: true
         Layout.fillWidth: true
-        
+
         separatorVisible: wideMode
         initialPage: [sidebar, _browserLayout]
         defaultColumnWidth:  Kirigami.Units.gridUnit * (Kirigami.Settings.isMobile? 15 : 8)
@@ -313,13 +343,13 @@ Maui.Dialog
                         expanded: true
                         autoExclusive: false
                         checkable: false
-                        
+
                         Action
                         {
                             icon.name: "go-previous"
                             onTriggered : browser.goBack()
                         }
-                        
+
                         Action
                         {
                             icon.name: "go-next"
@@ -410,7 +440,7 @@ Maui.Dialog
                 }
             }
 
-            MauiLab.SelectionBar
+            Maui.SelectionBar
             {
                 id: _selectionBar
                 Layout.alignment: Qt.AlignCenter
@@ -423,7 +453,9 @@ Maui.Dialog
         }
     }
 
-
+    /**
+      *
+      */
     function show(cb)
     {
         if(cb)
@@ -433,27 +465,33 @@ Maui.Dialog
         open()
     }
 
+    /**
+      *
+      */
     function closeIt()
     {
         _selectionBar.clear()
         close()
     }
 
+    /**
+      *
+      */
     function done()
     {
         var paths = browser.selectionBar && browser.selectionBar.visible ? browser.selectionBar.uris : [browser.currentPath]
-        
+
         if(control.mode === modes.SAVE)
         {
             for(var i in paths)
             {
                 paths[i] = paths[i] + "/" + textField.text
             }
-            
+
             _tagsBar.list.urls = paths
             _tagsBar.list.updateToUrls(_tagsBar.getTags())
         }
-        
+
         if(callback instanceof Function)
         {
             callback(paths)
@@ -464,7 +502,7 @@ Maui.Dialog
             _tagsBar.list.urls = paths
             _tagsBar.list.updateToUrls(_tagsBar.getTags())
         }
-        
+
         control.urlsSelected(paths)
         control.closeIt()
     }

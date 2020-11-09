@@ -17,63 +17,96 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
+
 import "private" as Private
 
 Rectangle
 {
     id: control
-    
+
     implicitHeight: Maui.Style.rowHeight
-    //     implicitWidth:  _loader.item.implicitWidth
-    
+
+    /**
+      * url : string
+      */
     property string url : ""
+
+    /**
+      * pathEntry : bool
+      */
     property bool pathEntry: false
-    
+
+    /**
+      *  list : PathList
+      */
     readonly property alias list : _pathList
+
+    /**
+      * model : BaseModel
+      */
     readonly property alias model : _pathModel
+
+    /**
+      * item : Item
+      */
     readonly property alias item : _loader.item
-    
+
+    /**
+      * pathChanged :
+      */
     signal pathChanged(string path)
+
+    /**
+      * homeClicked :
+      */
     signal homeClicked()
+
+    /**
+      * placeClicked :
+      */
     signal placeClicked(string path)
+
+    /**
+      * placeRightClicked :
+      */
     signal placeRightClicked(string path)
-    
+
     onUrlChanged: append()
-    
+
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     Kirigami.Theme.inherit: false
-    
+
     color: Kirigami.Theme.backgroundColor
     radius: Maui.Style.radiusV
     border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-    
+
     Loader
     {
         id: _loader
         anchors.fill: parent
         sourceComponent: pathEntry ? _pathEntryComponent : _pathCrumbsComponent
     }
-    
+
     Maui.BaseModel
     {
         id: _pathModel
         list: _pathList
     }
-    
+
     Maui.PathList
     {
         id: _pathList
     }
-    
+
     Component
     {
         id: _pathEntryComponent
-        
+
         Maui.TextField
         {
             id: entry
@@ -88,12 +121,12 @@ Rectangle
                 pathChanged(text)
                 showEntryBar()
             }
-            
+
             background: Rectangle
             {
                 color: "transparent"
             }
-            
+
             actions.data: ToolButton
             {
                 icon.name: "go-next"
@@ -104,7 +137,7 @@ Rectangle
                     showEntryBar()
                 }
             }
-            
+
             //             Keys.enabled: true
             //             Keys.onPressed:
             //             {
@@ -113,24 +146,24 @@ Rectangle
             //             }
         }
     }
-    
+
     Component
     {
         id: _pathCrumbsComponent
-        
+
         RowLayout
         {
             implicitWidth: _listView.contentWidth + (height * 2) + Maui.Style.space.small
             property alias listView: _listView
             spacing: 0
-            
+
             MouseArea
             {
                 Layout.fillHeight: true
                 Layout.preferredWidth: height * 1.5
                 onClicked: control.homeClicked()
                 hoverEnabled: Kirigami.Settings.isMobile
-                
+
                 Kirigami.Icon
                 {
                     anchors.centerIn: parent
@@ -140,12 +173,12 @@ Rectangle
                     height: width
                 }
             }
-            
+
             Kirigami.Separator
             {
                 Layout.fillHeight: true
-            }            
-            
+            }
+
             ScrollView
             {
                 Layout.fillHeight: true
@@ -159,7 +192,7 @@ Rectangle
                 {
                     id: _listView
                     anchors.fill: parent
-                    
+
                     property int pathArrowWidth: 8
                     orientation: ListView.Horizontal
                     clip: true
@@ -168,11 +201,11 @@ Rectangle
                     focus: true
                     interactive: Maui.Handy.isTouch
                     highlightFollowsCurrentItem: true
-                    
+
                     boundsBehavior: Kirigami.Settings.isMobile ?  Flickable.DragOverBounds : Flickable.StopAtBounds
-                    
+
                     model: _pathModel
-                    
+
                     delegate: Private.PathBarDelegate
                     {
                         id: delegate
@@ -181,31 +214,31 @@ Rectangle
                         //                         smooth: true
                         //                         arrowWidth: _listView.pathArrowWidth
                         height: _listView.height
-                        width: Math.max(Maui.Style.iconSizes.medium * 2, implicitWidth)                        
-                        
+                        width: Math.max(Maui.Style.iconSizes.medium * 2, implicitWidth)
+
                         Kirigami.Separator
                         {
                             anchors.top: parent.top
                             anchors.bottom: parent.bottom
                             anchors.right: parent.right
                         }
-                        
+
                         onClicked:
                         {
                             control.placeClicked(model.path)
                         }
-                        
+
                         onRightClicked:
                         {
                             control.placeRightClicked(model.path)
                         }
-                        
+
                         onPressAndHold:
                         {
                             control.placeRightClicked(model.path)
-                        }                        
+                        }
                     }
-                    
+
                     MouseArea
                     {
                         anchors.fill: parent
@@ -213,15 +246,15 @@ Rectangle
                         z: -1
                     }
                 }
-            }         
-            
+            }
+
             MouseArea
             {
                 Layout.fillHeight: true
                 Layout.preferredWidth: control.height
                 onClicked: control.showEntryBar()
                 hoverEnabled: Kirigami.Settings.isMobile
-                
+
                 Rectangle
                 {
                     anchors.fill: parent
@@ -239,20 +272,26 @@ Rectangle
             }
         }
     }
-    
+
+    /**
+      *
+      */
     function append()
     {
         _pathList.path = control.url
-        
+
         if(_loader.sourceComponent !== _pathCrumbsComponent)
         {
             return
         }
-        
+
         _loader.item.listView.currentIndex = _loader.item.listView.count-1
         _loader.item.listView.positionViewAtEnd()
     }
-    
+
+    /**
+      *
+      */
     function showEntryBar()
     {
         control.pathEntry = !control.pathEntry

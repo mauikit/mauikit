@@ -30,27 +30,63 @@ Rectangle
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
 
+    /**
+      * item : Item
+      */
     property alias item : loader.item
+
+    /**
+      * hovered : bool
+      */
     readonly property alias hovered : mouseArea.containsMouse
+
+    /**
+      * pressed : bool
+      */
     readonly property alias pressed : mouseArea.pressed
+
+    /**
+      * mouseArea : MouseArea
+      */
     property alias mouseArea : mouseArea
-    
+
+    /**
+      * size : int
+      */
     property int size: Maui.Style.iconSizes.medium
+
+    /**
+      * iconName : string
+      */
     property string iconName : ""
+
+    /**
+      * text : string
+      */
     property string text : ""
 
+    /**
+      * clicked :
+      */
     signal clicked()
+
+    /**
+      * hovered :
+      */
     signal hovered()
+
+    /**
+      * released :
+      */
     signal released()
 
     z: parent.z+1
-    
+
     implicitHeight: size
     implicitWidth: loader.sourceComponent == labelComponent ? Math.max(loader.item.implicitWidth, size) : size
-    
+
     radius: Math.min(width, height)
     color: Kirigami.Theme.backgroundColor
-//     border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
 
     Loader
     {
@@ -94,7 +130,7 @@ Rectangle
     {
         id: mouseArea
         hoverEnabled: true
-        
+
         readonly property int targetMargin:  Kirigami.Settings.hasTransientTouchInput ? Maui.Style.space.big : 0
 
         height: parent.height + targetMargin

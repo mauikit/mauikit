@@ -17,53 +17,128 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.13
-import QtQuick.Controls 2.13
+import QtQuick 2.14
+import QtQuick.Controls 2.14
+
 import org.kde.kirigami 2.9 as Kirigami
 import org.kde.mauikit 1.2 as Maui
+
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
+
 import "private"
 
 ToolBar
 {
     id: control
-    property int preferredHeight: Maui.Style.toolBarHeight
     implicitHeight: preferredHeight
     implicitWidth: mainFlickable.contentWidth
     spacing: Maui.Style.space.small
     padding: 0
+
+    /**
+      * content : RowLayout.data
+      */
     default property alias content : leftRowContent.data
 
-    //     property alias stickyRightContent : rightRowContent.sticky
-    //     property alias stickyLeftContent : leftRowContent.sticky
-    //     property alias stickyMiddleContent : middleRowContent.sticky
+    /**
+      * preferredHeight : int
+      */
+    property int preferredHeight: Maui.Style.toolBarHeight
 
+    /**
+      * forceCenterMiddleContent : bool
+      */
     property bool forceCenterMiddleContent : true
 
+    /**
+      * leftContent : RowLayout.data
+      */
     property alias leftContent : leftRowContent.data
+
+    /**
+      * middleContent : RowLayout.data
+      */
     property alias middleContent : middleRowContent.data
+
+    /**
+      * rightContent : RowLayout.data
+      */
     property alias rightContent : rightRowContent.data
 
+    /**
+      * farLeftContent : RowLayout.data
+      */
     property alias farLeftContent : farLeftRowContent.data
+
+    /**
+      * farRightContent : RowLayout.data
+      */
     property alias farRightContent : farRightRowContent.data
 
+    /**
+      * middleLayout : RowLayout
+      */
     property alias middleLayout : middleRowContent
+
+    /**
+      * leftLayout : RowLayout
+      */
     property alias leftLayout : leftRowContent
+
+    /**
+      * rightLayout : RowLayout
+      */
     property alias rightLayout : rightRowContent
 
+    /**
+      * layout : RowLayout
+      */
     property alias layout : layout
 
+    /**
+      * fits : bool
+      */
     readonly property alias fits : _scrollView.fits
 
+    /**
+      * margins : int
+      */
     property int margins: Maui.Style.space.medium
+
+    /**
+      * count : int
+      */
     readonly property int count : leftContent.length + middleContent.length + rightContent.length + farLeftContent.length + farRightContent.length
+
+    /**
+      * visibleCount: int
+      */
     readonly property int visibleCount : leftRowContent.visibleChildren.length + middleRowContent.visibleChildren.length  + rightRowContent.visibleChildren.length + farLeftRowContent.visibleChildren.length  + farRightRowContent.visibleChildren.length
 
+    /**
+      * flickable : bool
+      */
     property bool flickable: true
+
+    /**
+      * strech : bool
+      */
     property bool strech : true
+
+    /**
+      * leftSretch : bool
+      */
     property bool leftSretch: strech
+
+    /**
+      * rightSretch : bool
+      */
     property bool rightSretch: strech
+
+    /**
+      * middleStrech : bool
+      */
     property bool middleStrech: strech
 
     EdgeShadow
@@ -138,7 +213,7 @@ ToolBar
         states: [State
             {
                 when: control.position === ToolBar.Header
-                
+
                 AnchorChanges
                 {
                     target: _scrollView
@@ -146,11 +221,11 @@ ToolBar
                     anchors.bottom: parent.bottom
                 }
             },
-            
+
             State
             {
                 when: control.position === ToolBar.Footer
-                
+
                 AnchorChanges
                 {
                     target: _scrollView
@@ -255,7 +330,6 @@ ToolBar
                 {
                     id: _rightContent
                     readonly property int alignment : Qt.AlignRight
-
                     Layout.fillHeight: true
 
                     Layout.preferredWidth: implicitWidth
@@ -270,7 +344,6 @@ ToolBar
                     {
                         id: rightRowContent
                         readonly property int alignment : Qt.AlignRight
-
                         spacing: control.spacing
                         height: parent.height
                     }
@@ -279,14 +352,11 @@ ToolBar
                     {
                         id: farRightRowContent
                         readonly property int alignment : Qt.AlignRight
-
                         spacing: control.spacing
                         height: parent.height
                     }
                 }
-
             }
         }
     }
-
 }

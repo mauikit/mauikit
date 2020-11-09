@@ -17,98 +17,130 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 
 Item
 {
-	id: control
-	anchors.fill: parent
-	visible: false
-	
-	property string emoji
-	property string message
-	property string title
-	property string body
-	
-	property bool isMask : true
-	property bool isGif : false
-	property int emojiSize : Maui.Style.iconSizes.large
-	
-	property bool enabled: true
-	
-	signal actionTriggered()
-	
-	Component
-	{
-		id: imgComponent
-		
+    id: control
+    anchors.fill: parent
+    visible: false
+
+    /**
+      * emoji : string
+      */
+    property string emoji
+
+    /**
+      * message : string
+      */
+    property string message
+
+    /**
+      * title : string
+      */
+    property string title
+
+    /**
+      * body : string
+      */
+    property string body
+
+    /**
+      * isMask : bool
+      */
+    property bool isMask : true
+
+    /**
+      * isGif : bool
+      */
+    property bool isGif : false
+
+    /**
+      * emojiSize : int
+      */
+    property int emojiSize : Maui.Style.iconSizes.large
+
+    /**
+      * enabled : bool
+      */
+    property bool enabled: true
+
+    /**
+      * actionTriggered :
+      */
+    signal actionTriggered()
+
+    Component
+    {
+        id: imgComponent
+
         Kirigami.Icon
-		{
-			id: imageHolder
-			
-			width: Math.min(parent.width, emojiSize)
-			height: width
-			color: textHolder.color
-			isMask: control.isMask
-			opacity: textHolder.opacity
-			source: emoji
-		}
-	}
-	
-	Component
-	{
-		id: animComponent
-		AnimatedImage
-		{ 
-			id: animation; 
-			source: emoji			
-		}
-	}
-	
-	MouseArea
-	{
-		id: _mouseArea
-		anchors.fill: _layout
-		enabled: control.enabled
-		onClicked: actionTriggered()
-		propagateComposedEvents: true
-		hoverEnabled: true	
-	}
-	
-	Column
-	{
-		id: _layout
-		anchors.centerIn: parent	
-		
-		Loader
-		{
-			id: loader		
-			visible: control.height > (textHolder.implicitHeight + emojiSize)
-			height: control.emoji && visible ? emojiSize : 0
-			width: height		
-			anchors.horizontalCenter: parent.horizontalCenter
-			sourceComponent: control.emoji ? (isGif ? animComponent : imgComponent) : null
+        {
+            id: imageHolder
+
+            width: Math.min(parent.width, emojiSize)
+            height: width
+            color: textHolder.color
+            isMask: control.isMask
+            opacity: textHolder.opacity
+            source: emoji
+        }
+    }
+
+    Component
+    {
+        id: animComponent
+        AnimatedImage
+        {
+            id: animation;
+            source: emoji
+        }
+    }
+
+    MouseArea
+    {
+        id: _mouseArea
+        anchors.fill: _layout
+        enabled: control.enabled
+        onClicked: actionTriggered()
+        propagateComposedEvents: true
+        hoverEnabled: true
+    }
+
+    Column
+    {
+        id: _layout
+        anchors.centerIn: parent
+
+        Loader
+        {
+            id: loader
+            visible: control.height > (textHolder.implicitHeight + emojiSize)
+            height: control.emoji && visible ? emojiSize : 0
+            width: height
+            anchors.horizontalCenter: parent.horizontalCenter
+            sourceComponent: control.emoji ? (isGif ? animComponent : imgComponent) : null
         }
 
-		Label
-		{
-			id: textHolder
-			width: Math.min(control.width * 0.7, implicitWidth)			
-			opacity: 0.5
-			text: message ? qsTr(message) : "<h3>"+title+"</h3><p>"+body+"</p>"
+        Label
+        {
+            id: textHolder
+            width: Math.min(control.width * 0.7, implicitWidth)
+            opacity: 0.5
+            text: message ? qsTr(message) : "<h3>"+title+"</h3><p>"+body+"</p>"
             font.pointSize: Maui.Style.fontSizes.default
-			
+
             padding: Maui.Style.space.medium
-			font.bold: true
-			textFormat: Text.RichText
-			horizontalAlignment: Qt.AlignHCenter
-			elide: Text.ElideRight
-			color: _mouseArea.containsMouse ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-			wrapMode: Text.Wrap				
-		}			
-	}
+            font.bold: true
+            textFormat: Text.RichText
+            horizontalAlignment: Qt.AlignHCenter
+            elide: Text.ElideRight
+            color: _mouseArea.containsMouse ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+            wrapMode: Text.Wrap
+        }
+    }
 }

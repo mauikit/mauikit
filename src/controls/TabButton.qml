@@ -8,11 +8,21 @@ TabButton
 {
     id: control
     implicitWidth:  150 * Maui.Style.unit
-    
-    signal closeClicked(int index)
-    
+
+    /**
+      * content : ListItemTemplate.data
+      */
     default property alias content : _template.data
+
+    /**
+      * template : ListItemTemplate
+      */
     property alias template: _template
+
+    /**
+      * closeClicked :
+      */
+    signal closeClicked(int index)
 
     Kirigami.Separator
     {

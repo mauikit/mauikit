@@ -26,48 +26,52 @@ import "private"
 
 Maui.SideBar
 {
-	id: control	
-	interactive: !collapsible	
-	default property list<Action> actions 
-	
-	model: control.actions	
-	delegate: Maui.ListDelegate
-	{
-		id: itemDelegate
-		Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
-		Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
+    id: control
+    interactive: !collapsible
 
-		readonly property QtObject action : modelData
-		// 					action : modelData
-		iconSize: control.iconSize
-		labelVisible: control.showLabels
-		iconName: action.icon.name
-		label: action.text
-		leftPadding:  Maui.Style.space.tiny
-		rightPadding:  Maui.Style.space.tiny
-		
-		Connections
-		{
-			target: itemDelegate
-			onClicked:
-			{
-				control.currentIndex = index
-				target.action.triggered()
-				control.itemClicked(index)
-			}
-			
-			onRightClicked:
-			{
-				control.currentIndex = index
-				control.itemRightClicked(index)
-			}
-			
-			onPressAndHold:
-			{
-				control.currentIndex = index
-				control.itemRightClicked(index)
-			}
-		}
-	}	
+    /**
+      * actions : list<Action>
+      */
+    default property list<Action> actions
+
+    model: control.actions
+    delegate: Maui.ListDelegate
+    {
+        id: itemDelegate
+        Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
+        Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
+
+        readonly property QtObject action : modelData
+        // 					action : modelData
+        iconSize: control.iconSize
+        labelVisible: control.showLabels
+        iconName: action.icon.name
+        label: action.text
+        leftPadding:  Maui.Style.space.tiny
+        rightPadding:  Maui.Style.space.tiny
+
+        Connections
+        {
+            target: itemDelegate
+            onClicked:
+            {
+                control.currentIndex = index
+                target.action.triggered()
+                control.itemClicked(index)
+            }
+
+            onRightClicked:
+            {
+                control.currentIndex = index
+                control.itemRightClicked(index)
+            }
+
+            onPressAndHold:
+            {
+                control.currentIndex = index
+                control.itemRightClicked(index)
+            }
+        }
+    }
 }
 

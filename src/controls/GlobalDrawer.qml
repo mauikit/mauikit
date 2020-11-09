@@ -25,13 +25,13 @@ import org.kde.mauikit 1.0 as Maui
 import QtGraphicalEffects 1.0
 import "private"
 
-Kirigami.GlobalDrawer
+Kirigami.GlobalDrawer // TODO remove
 {
     id: control
 //     Kirigami.Theme.backgroundColor: viewBackgroundColor
-    
+
     property Item bg
-    
+
 //     property alias handleButton : _handleButton
 
 z:  modal ? ApplicationWindow.overlay.z + 1  : ApplicationWindow.z
@@ -39,8 +39,8 @@ z:  modal ? ApplicationWindow.overlay.z + 1  : ApplicationWindow.z
 //     y: altToolBars ? 0 : headBar.height
 //     height: parent.height - (floatingBar && altToolBars ? 0 : headBar.height)
 //     modal: true
-    
-    
+
+
     implicitHeight: root.height - root.header.height - root.footer.height
     height: root.height - root.header.height - root.footer.height
 //     ApplicationWindow.height -ApplicationWindow.header.height - ApplicationWindow.footer.height
@@ -50,13 +50,13 @@ z:  modal ? ApplicationWindow.overlay.z + 1  : ApplicationWindow.z
     topPadding: 0
     bottomPadding: 0
     leftPadding: 0
-    rightPadding: 0 
-    
+    rightPadding: 0
+
     onModalChanged:
     {
-		if(!modal)
-			visible = true
-	}
+        if(!modal)
+            visible = true
+    }
 
 //    FastBlur
 //    {
@@ -74,18 +74,18 @@ z:  modal ? ApplicationWindow.overlay.z + 1  : ApplicationWindow.z
 //                               control.height)
 //        }
 //    }
-    
-//     background: Rectangle 
+
+//     background: Rectangle
 //     {
 // 		color: control.colorScheme.backgroundColor
-// 		
+//
 // 		Item
 // 		{
 // 			parent: control.handle
 // 			anchors.fill: parent
 // 			anchors.margins: Maui.Style.space.huge
-// 			
-// 			DropShadow 
+//
+// 			DropShadow
 // 			{
 // 				anchors.fill: handleGraphics
 // 				horizontalOffset: 0
@@ -95,24 +95,24 @@ z:  modal ? ApplicationWindow.overlay.z + 1  : ApplicationWindow.z
 // 				color: Qt.rgba(0, 0, 0, control.handle.pressed ? 0.6 : 0.4)
 // 				source: handleGraphics
 // 			}
-// 			
+//
 // 			Rectangle
 // 			{
 // 				id: handleGraphics
 // 				anchors.centerIn: parent
-// 				
+//
 // 				color: control.handle.pressed ? control.colorScheme.highlightColor : control.colorScheme.accentColor
 // 				width: iconSizes.medium + Maui.Style.space.medium * 2
 // 				height: width
 // 				radius: Maui.Style.radiusV
-// 				
+//
 // 				Maui.ToolButton
 // 				{
 // 					id: _handleButton
 // 					anchors.centerIn: parent
 // 					size: iconSizes.medium
 // 				}
-// 				
+//
 // 				Behavior on color
 // 				{
 // 					ColorAnimation {
@@ -122,8 +122,8 @@ z:  modal ? ApplicationWindow.overlay.z + 1  : ApplicationWindow.z
 // 				}
 // 			}
 // 		}
-// 		
-// 		
+//
+//
 // 		EdgeShadow
 // 		{
 // 			z: -2
@@ -135,9 +135,9 @@ z:  modal ? ApplicationWindow.overlay.z + 1  : ApplicationWindow.z
 // 				top: control.edge == Qt.TopEdge ? parent.bottom : (control.edge == Qt.BottomEdge ? undefined : parent.top)
 // 				bottom: control.edge == Qt.BottomEdge ? parent.top : (control.edge == Qt.TopEdge ? undefined : parent.bottom)
 // 			}
-// 			
+//
 // 			opacity: control.position == 0 ? 0 : 1
-// 			
+//
 // 			Behavior on opacity {
 // 				NumberAnimation {
 // 					duration: Units.longDuration

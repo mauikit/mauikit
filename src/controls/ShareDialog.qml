@@ -26,6 +26,10 @@ import org.kde.kirigami 2.7 as Kirigami
 Maui.Dialog
 {
     id: control
+
+    /**
+      * itemUrls : var
+      */
     property var itemUrls : []
 
     widthHint: 0.9
@@ -46,24 +50,27 @@ Maui.Dialog
         anchors.fill: parent
         leftPadding: 0
         rightPadding: 0
-        
+
         Maui.GridBrowser
         {
-			id: grid
-			width: parent.width
-			showEmblem: false
-			model: ListModel {}
-			onItemClicked:
-			{
-				grid.currentIndex = index
-				triggerService(index)
-			}
-		}
+            id: grid
+            width: parent.width
+            showEmblem: false
+            model: ListModel {}
+            onItemClicked:
+            {
+                grid.currentIndex = index
+                triggerService(index)
+            }
+        }
     }
 
 
     onOpened: populate()
 
+    /**
+      *
+      */
     function show(urls)
     {
         if(urls.length > 0)
@@ -73,6 +80,9 @@ Maui.Dialog
         }
     }
 
+    /**
+      *
+      */
     function populate()
     {
         grid.model.clear()
@@ -94,6 +104,9 @@ Maui.Dialog
                 grid.model.append(services[i])
     }
 
+    /**
+      *
+      */
     function triggerService(index)
     {
         var obj = grid.model.get(index)

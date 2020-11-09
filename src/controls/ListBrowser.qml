@@ -20,7 +20,7 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.9 as Kirigami
 
 Item
@@ -30,49 +30,179 @@ Item
     implicitHeight: contentHeight + margins*2
     implicitWidth: contentWidth + margins*2
 
-    property int itemSize : Maui.Style.iconSizes.big
+    /**
+      * checkable : bool
+      */
     property bool checkable : false
 
+    /**
+      * model : var
+      */
     property alias model : _listView.model
+
+    /**
+      * delegate : Component
+      */
     property alias delegate : _listView.delegate
+
+    /**
+      * section : ListView.section
+      */
     property alias section : _listView.section
+
+    /**
+      * contentY : int
+      */
     property alias contentY: _listView.contentY
+
+    /**
+      * currentIndex : int
+      */
     property alias currentIndex : _listView.currentIndex
+
+    /**
+      * currentItem : Item
+      */
     property alias currentItem : _listView.currentItem
+
+    /**
+      * count : int
+      */
     property alias count : _listView.count
+
+    /**
+      * cacheBuffer : int
+      */
     property alias cacheBuffer : _listView.cacheBuffer
+
+    /**
+      * orientation : ListView.orientation
+      */
     property alias orientation: _listView.orientation
+
+    /**
+      * snapMode : ListView.snapMode
+      */
     property alias snapMode: _listView.snapMode
+
+    /**
+      * spacing : int
+      */
     property alias spacing: _listView.spacing
+
+    /**
+      * flickable : Flickable
+      */
     property alias flickable : _listView
+
+    /**
+      * scrollView : ScrollView
+      */
     property alias scrollView : _scrollView
 
+    /**
+      * contentHeight : int
+      */
     property alias contentHeight : _listView.contentHeight
+
+    /**
+      * contentWidth : int
+      */
     property alias contentWidth : _listView.contentWidth
 
+    /**
+      * margins : int
+      */
     property int margins : control.enableLassoSelection ?  Maui.Style.space.medium : Maui.Style.space.small
 
+    /**
+      * topMargin : int
+      */
     property int topMargin: margins
+
+    /**
+      * bottomMargin : int
+      */
     property int bottomMargin: margins
+
+    /**
+      * bottomMargin : int
+      */
     property int rightMargin: margins
+
+    /**
+      * leftMargin : int
+      */
     property int leftMargin: margins
 
+    /**
+      * leftMargin : int
+      */
     property int verticalScrollBarPolicy: ScrollBar.AsNeeded
+
+    /**
+      * horizontalScrollBarPolicy : ScrollBar.policy
+      */
     property int horizontalScrollBarPolicy:  _listView.orientation === Qt.Horizontal ? ScrollBar.AsNeeded : ScrollBar.AlwaysOff
 
+    /**
+      * holder : Holder
+      */
     property alias holder : _holder
 
+    /**
+      * enableLassoSelection : bool
+      */
     property bool enableLassoSelection : false
+
+    /**
+      * selectionMode : bool
+      */
     property bool selectionMode: false
+
+    /**
+      * lassoRec : Rectangle
+      */
     property alias lassoRec : selectLayer
 
+    /**
+      * itemsSelected :
+      */
     signal itemsSelected(var indexes)
+
+    /**
+      * itemClicked :
+      */
     signal itemClicked(int index)
+
+    /**
+      * itemDoubleClicked :
+      */
     signal itemDoubleClicked(int index)
+
+    /**
+      * itemRightClicked :
+      */
     signal itemRightClicked(int index)
+
+    /**
+      *  itemToggled :
+      */
     signal itemToggled(int index, bool state)
+
+    /**
+      * areaClicked :
+      */
     signal areaClicked(var mouse)
+
+    /**
+      * areaRightClicked :
+      */
     signal areaRightClicked()
+
+    /**
+      * keyPress :
+      */
     signal keyPress(var event)
 
     Kirigami.Theme.colorSet: Kirigami.Theme.View
@@ -90,10 +220,10 @@ Item
         ListView
         {
             id: _listView
-            
+
             property alias position : _hoverHandler.point.position
             property var selectedIndexes : []
-                       
+
             anchors.fill: parent
             anchors.rightMargin: Kirigami.Settings.hasTransientTouchInput ? control.rightMargin: parent.ScrollBar.vertical.visible ? parent.ScrollBar.vertical.width + control.rightMargin : control.rightMargin
             anchors.bottomMargin: Kirigami.Settings.hasTransientTouchInput ? control.bottomMargin : parent.ScrollBar.horizontal.visible ? parent.ScrollBar.horizontal.height + control.bottomMargin : control.bottomMargin
@@ -116,9 +246,9 @@ Item
 
             keyNavigationEnabled : true
             keyNavigationWraps : true
-            Keys.onPressed: control.keyPress(event)            
-            
-            onPositionChanged: 
+            Keys.onPressed: control.keyPress(event)
+
+            onPositionChanged:
             {
                 if(_hoverHandler.hovered && position.x < control.width * 0.25 &&  _hoverHandler.point.pressPosition.y != position.y)
                 {
@@ -126,28 +256,28 @@ Item
                     if(!selectedIndexes.includes(index) && index > -1 && index < _listView.count)
                     {
                          selectedIndexes.push(index)
-                         control.itemsSelected([index])  
+                         control.itemsSelected([index])
                     }
-                }                
+                }
             }
-            
+
             HoverHandler
             {
                 id: _hoverHandler
                 margin: Maui.Style.space.big
-                enabled: control.enableLassoSelection && control.selectionMode && !_listView.flicking  
+                enabled: control.enableLassoSelection && control.selectionMode && !_listView.flicking
                 acceptedDevices: PointerDevice.TouchScreen
-                acceptedPointerTypes : PointerDevice.Finger 
-                grabPermissions : PointerHandler.CanTakeOverFromAnything  
-                
+                acceptedPointerTypes : PointerDevice.Finger
+                grabPermissions : PointerHandler.CanTakeOverFromAnything
+
                 onHoveredChanged:
                 {
                     if(!hovered)
                     {
-                        _listView.selectedIndexes = []   
+                        _listView.selectedIndexes = []
                     }
                 }
-            } 
+            }
 
             Maui.Holder
             {
@@ -302,7 +432,7 @@ Item
             }
         }
     }
-    
+
 //    MouseArea
 //    {
 //        height: parent.height
@@ -311,7 +441,7 @@ Item
 //        preventStealing: true
 //        enabled: _hoverHandler.enabled && Kirigami.Settings.hasTransientTouchInput
 //    }
-    
+
 }
 
 

@@ -17,278 +17,323 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.12
-import QtQuick.Controls 2.12
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
+
 import "private"
 
 Maui.AbstractSideBar
 {
     id: control
+
+    implicitWidth: privateProperties.isCollapsed && collapsed && collapsible && stick ? collapsedSize : preferredWidth
+    width: implicitWidth
+    position: 1
+    interactive: !stick && (modal || collapsed || !visible)
+    visible: true
+    overlay.visible: stick ? (control.collapsed && control.collapsible && !privateProperties.isCollapsed) : (collapsed && position > 0 && visible)
+
+    /**
+      * content : ColumnLayout.data
+      */
     default property alias content : _content.data
 
-        implicitWidth: privateProperties.isCollapsed && collapsed && collapsible && stick ? collapsedSize : preferredWidth
-        width: implicitWidth
-        position: 1
-        interactive: !stick && (modal || collapsed || !visible)
+    /**
+      * model : var
+      */
+    property alias model : _listBrowser.model
 
-        property alias model : _listBrowser.model
-        property alias count : _listBrowser.count
+    /**
+      * count : int
+      */
+    property alias count : _listBrowser.count
 
-        property alias section : _listBrowser.section
-        property alias currentIndex: _listBrowser.currentIndex
+    /**
+      * section : ListView.section
+      */
+    property alias section : _listBrowser.section
 
-        property int iconSize : Maui.Style.iconSizes.small
-        property bool showLabels: control.width > collapsedSize
-        property bool stick : true
+    /**
+      * currentIndex : int
+      */
+    property alias currentIndex: _listBrowser.currentIndex
 
-        property QtObject privateProperties : QtObject
+    /**
+      * iconSize : int
+      */
+    property int iconSize : Maui.Style.iconSizes.small
+
+    /**
+      * showLabels : bool
+      */
+    property bool showLabels: control.width > collapsedSize
+
+    /**
+      * stick : bool
+      */
+    property bool stick : true
+
+    property QtObject privateProperties : QtObject
+    {
+        property bool isCollapsed: control.collapsed
+    }
+
+    /**
+      * delegate : Component
+      */
+    property Component delegate : Maui.ListDelegate
+    {
+        id: itemDelegate
+        iconSize: control.iconSize
+        labelVisible: control.showLabels
+        label: model.label
+        count: model.count > 0 ? model.count : ""
+        iconName: model.icon +  (Qt.platform.os == "android" || Qt.platform.os == "osx" ? ("-sidebar") : "")
+        iconVisible: true
+        template.leftMargin: privateProperties.isCollapsed && stick ? 0 : Maui.Style.space.medium
+
+        onClicked:
         {
-            property bool isCollapsed: control.collapsed
+            control.currentIndex = index
+            control.itemClicked(index)
         }
 
-        signal itemClicked(int index)
-        signal itemRightClicked(int index)
-
-        overlay.visible: stick ? (control.collapsed && control.collapsible && !privateProperties.isCollapsed) : (collapsed && position > 0 && visible)
-
-        Connections
+        onRightClicked:
         {
-            target: control.overlay
-            ignoreUnknownSignals: true
-            function onClicked()
-            {
-                if(control.stick)
-                    control.collapse()
-                    else
-                        control.close()
-            }
+            control.currentIndex = index
+            control.itemRightClicked(index)
         }
 
-        property Component delegate : Maui.ListDelegate
+        onPressAndHold:
         {
-            id: itemDelegate
-            iconSize: control.iconSize
-            labelVisible: control.showLabels
-            label: model.label
-            count: model.count > 0 ? model.count : ""
-            iconName: model.icon +  (Qt.platform.os == "android" || Qt.platform.os == "osx" ? ("-sidebar") : "")
-            iconVisible: true            
-            template.leftMargin: privateProperties.isCollapsed && stick ? 0 : Maui.Style.space.medium
-
-            onClicked:
-            {
-                control.currentIndex = index
-                control.itemClicked(index)
-            }
-
-            onRightClicked:
-            {
-                control.currentIndex = index
-                control.itemRightClicked(index)
-            }
-
-            onPressAndHold:
-            {
-                control.currentIndex = index
-                control.itemRightClicked(index)
-            }
+            control.currentIndex = index
+            control.itemRightClicked(index)
         }
+    }
 
-        //     onModalChanged: visible = true
-        visible: true
-        onStickChanged:
+    /**
+      * itemClicked :
+      */
+    signal itemClicked(int index)
+
+    /**
+      * itemRightClicked :
+      */
+    signal itemRightClicked(int index)
+
+    Connections
+    {
+        target: control.overlay
+        ignoreUnknownSignals: true
+        function onClicked()
         {
-            if(stick && collapsed)
-            {
+            if(control.stick)
                 control.collapse()
-            }else
-            {
-                control.expand()
-            }
+            else
+                control.close()
+        }
+    }
+
+    //     onModalChanged: visible = true
+    onStickChanged:
+    {
+        if(stick && collapsed)
+        {
+            control.collapse()
+        }else
+        {
+            control.expand()
+        }
+    }
+
+    onCollapsedChanged :
+    {
+        if(!collapsible)
+        {
+            return
         }
 
-        onCollapsedChanged :
+        if(!collapsed)
         {
-            if(!collapsible)
-            {
-                return
-            }
-
-            if(!collapsed)
-            {
-                control.visible = true
-                expand()
-            }else
-            {
-                collapse()
-            }
+            control.visible = true
+            expand()
+        }else
+        {
+            collapse()
         }
+    }
 
-        Behavior on width
+    Behavior on width
+    {
+        id: _widthAnim
+
+        NumberAnimation
         {
-            id: _widthAnim
-
-            NumberAnimation
-            {
-                duration: Kirigami.Units.shortDuration
-                easing.type: Easing.InOutQuad
-            }
+            duration: Kirigami.Units.shortDuration
+            easing.type: Easing.InOutQuad
         }
+    }
 
 
-        ColumnLayout
+    ColumnLayout
+    {
+        id: _content
+        anchors.fill: parent
+        spacing: 0
+
+        Maui.ListBrowser
         {
-            id: _content
-            anchors.fill: parent
-            spacing: 0
+            id: _listBrowser
+            Layout.fillHeight: true
+            Layout.fillWidth: true
 
-            Maui.ListBrowser
+            verticalScrollBarPolicy: ScrollBar.AlwaysOff
+
+            delegate: control.delegate
+
+            onKeyPress:
             {
-                id: _listBrowser
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-
-                verticalScrollBarPolicy: ScrollBar.AlwaysOff
-
-                delegate: control.delegate
-
-                onKeyPress:
+                if(event.key == Qt.Key_Return)
                 {
-                    if(event.key == Qt.Key_Return)
-                    {
-                        control.itemClicked(control.currentIndex)
-                    }
-                }
-            }
-
-            MouseArea
-            {
-                id: _handle
-                visible: control.collapsed && control.stick
-                Layout.preferredHeight: Maui.Style.toolBarHeight
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignBottom
-                hoverEnabled: true
-                preventStealing: true
-                propagateComposedEvents: false
-                property int startX
-                property int startY
-
-                ToolTip.delay: 1000
-                ToolTip.timeout: 5000
-                ToolTip.visible: _handle.containsMouse || _handle.containsPress
-                ToolTip.text: i18n("Toogle SideBar")
-
-                Rectangle
-                {
-                    anchors.centerIn: parent
-                    radius: 2
-                    height: 18
-                    width: 16
-
-                    color: _handle.containsMouse || _handle.containsPress || !privateProperties.isCollapsed  ?  Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-                    border.color: Qt.darker(color, 1.2)
-
-                    Rectangle
-                    {
-                        radius: 1
-                        height: 10
-                        width: 3
-
-                        anchors.left: parent.left
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.margins: 4
-
-                        color: _handle.containsMouse || _handle.containsPress || !privateProperties.isCollapsed  ?  Kirigami.Theme.highlightedTextColor : Kirigami.Theme.backgroundColor
-                    }
-                }
-
-                onClicked:
-                {
-                    if(privateProperties.isCollapsed)
-                        control.expand()
-                        else control.collapse()
+                    control.itemClicked(control.currentIndex)
                 }
             }
         }
 
         MouseArea
         {
-            z: control.background.parent.z + 1
+            id: _handle
+            visible: control.collapsed && control.stick
+            Layout.preferredHeight: Maui.Style.toolBarHeight
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignBottom
+            hoverEnabled: true
             preventStealing: true
-            anchors.horizontalCenter: parent.right
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            visible: Maui.Handy.isTouch
-            enabled: Maui.Handy.isTouch
-            width: Maui.Style.space.large
+            propagateComposedEvents: false
             property int startX
             property int startY
 
-            onPressed:
+            ToolTip.delay: 1000
+            ToolTip.timeout: 5000
+            ToolTip.visible: _handle.containsMouse || _handle.containsPress
+            ToolTip.text: i18n("Toogle SideBar")
+
+            Rectangle
             {
-                startY = mouse.y
-                startX = mouse.x
-                _widthAnim.enabled = false
+                anchors.centerIn: parent
+                radius: 2
+                height: 18
+                width: 16
+
+                color: _handle.containsMouse || _handle.containsPress || !privateProperties.isCollapsed  ?  Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
+                border.color: Qt.darker(color, 1.2)
+
+                Rectangle
+                {
+                    radius: 1
+                    height: 10
+                    width: 3
+
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: 4
+
+                    color: _handle.containsMouse || _handle.containsPress || !privateProperties.isCollapsed  ?  Kirigami.Theme.highlightedTextColor : Kirigami.Theme.backgroundColor
+                }
             }
 
-            onPositionChanged:
+            onClicked:
             {
-                if (!pressed || !control.collapsible || !control.collapsed)
-                    return
-
-                    var value = control.width + (mouse.x-startX)
-                    control.width = value > control.preferredWidth ? control.preferredWidth : (value < control.collapsedSize ? collapsedSize : value)
-
+                if(privateProperties.isCollapsed)
+                    control.expand()
+                else control.collapse()
             }
+        }
+    }
 
-            onReleased:
+    MouseArea
+    {
+        z: control.background.parent.z + 1
+        preventStealing: true
+        anchors.horizontalCenter: parent.right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        visible: Maui.Handy.isTouch
+        enabled: Maui.Handy.isTouch
+        width: Maui.Style.space.large
+        property int startX
+        property int startY
+
+        onPressed:
+        {
+            startY = mouse.y
+            startX = mouse.x
+            _widthAnim.enabled = false
+        }
+
+        onPositionChanged:
+        {
+            if (!pressed || !control.collapsible || !control.collapsed)
+                return
+
+            var value = control.width + (mouse.x-startX)
+            control.width = value > control.preferredWidth ? control.preferredWidth : (value < control.collapsedSize ? collapsedSize : value)
+
+        }
+
+        onReleased:
+        {
+            _widthAnim.enabled = true
+            if( privateProperties.isCollapsed)
             {
-                _widthAnim.enabled = true
-                if( privateProperties.isCollapsed)
+                if(control.width >= control.collapsedSize * 1.2)
                 {
-                    if(control.width >= control.collapsedSize * 1.2)
-                    {
-                        expand()
+                    expand()
 
-                    } else
-                    {
-                        collapse()
-                    }
-
-                }else
+                } else
                 {
-                    if(control.width <= control.preferredWidth * 0.75)
-                    {
-                        collapse()
+                    collapse()
+                }
 
-                    } else
-                    {
-                        expand()
-                    }
+            }else
+            {
+                if(control.width <= control.preferredWidth * 0.75)
+                {
+                    collapse()
+
+                } else
+                {
+                    expand()
                 }
             }
         }
+    }
 
-        function collapse()
+    /**
+      *
+      */
+    function collapse()
+    {
+        if(collapsible)
         {
-            if(collapsible)
-            {
-                privateProperties.isCollapsed  = true
-                control.width = control.stick ? control.collapsedSize : control.preferredWidth
-            }
+            privateProperties.isCollapsed  = true
+            control.width = control.stick ? control.collapsedSize : control.preferredWidth
         }
+    }
 
-        function expand()
+    /**
+      *
+      */
+    function expand()
+    {
+        if(collapsible)
         {
-            if(collapsible)
-            {
-                privateProperties.isCollapsed = false
-                control.width = control.preferredWidth
-            }
+            privateProperties.isCollapsed = false
+            control.width = control.preferredWidth
         }
+    }
 }
 

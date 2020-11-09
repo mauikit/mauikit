@@ -6,13 +6,27 @@ import org.kde.mauikit 1.2 as Maui
 import TagsList 1.0
 
 Maui.Dialog
-{	
+{
     id: control
-    
-    property alias taglist :_tagsList
+
+    /**
+      * taglist : TagsList
+      */
+    property alias taglist : _tagsList
+
+    /**
+      * listView : ListView
+      */
     property alias listView: _listView
+
+    /**
+      * composerList : TagsList
+      */
     property alias composerList: tagListComposer.list
 
+    /**
+      * tagsReady :
+      */
     signal tagsReady(var tags)
 
     defaultButtons: true
@@ -25,34 +39,13 @@ Maui.Dialog
 
     onAccepted: setTags()
     onRejected: close()
-    
+
     headBar.visible: true
-//     headBar.rightContent: Maui.ToolButtonMenu
-//     {
-//         icon.name: "view-sort"
-//         MenuItem
-//         {
-//             text: i18n("Sort by name")
-//             checkable: true
-//             autoExclusive: true
-//             checked: _tagsModel.sort === "tag"
-//             onTriggered: _tagsModel.sort = "tag"
-//         }
-// 
-//         MenuItem
-//         {
-//             text: i18n("Sort by date")
-//             checkable: true
-//             autoExclusive: true
-//             checked: _tagsModel.sort === "adddate"
-//             onTriggered: _tagsModel.sort = "adddate"
-//         }
-//     }
 
     headBar.middleContent: Maui.TextField
     {
         id: tagText
-        Layout.fillWidth: true           
+        Layout.fillWidth: true
         placeholderText: i18n("Filter or add a new tag")
         onAccepted:
         {
@@ -66,16 +59,14 @@ Maui.Dialog
             clear()
              _tagsModel.filter = ""
         }
-        
+
         onTextChanged:
         {
             _tagsModel.filter = text
         }
     }
-    
+
     stack: [
-
-
         Maui.ListBrowser
         {
             id: _listView
@@ -140,6 +131,9 @@ Maui.Dialog
          _tagsModel.filter = ""
     }
 
+    /**
+      *
+      */
     function setTags()
     {
         var tags = []

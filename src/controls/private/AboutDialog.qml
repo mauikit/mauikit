@@ -29,16 +29,19 @@ import org.kde.mauikit 1.2 as Maui
 Maui.Dialog
 {
     id: control
-    
+
     defaultButtons: false
     persistent: false
     widthHint: 0.9
     heightHint: 0.8
-    
-    property alias mainHeader : _header
 
     maxWidth: Math.floor( 350 * Kirigami.Units.devicePixelRatio )
     maxHeight: Math.floor( 250 * Kirigami.Units.devicePixelRatio )
+
+    /**
+      * mainHeader : AlternateListItem
+      */
+    property alias mainHeader : _header
 
     page.padding: 0
     actions: [
