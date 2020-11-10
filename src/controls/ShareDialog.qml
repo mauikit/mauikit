@@ -23,6 +23,16 @@ import QtQuick.Controls 2.2
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 
+/**
+ * ShareDialog
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 Maui.Dialog
 {
     id: control

@@ -26,6 +26,16 @@ import org.kde.mauikit 1.2 as Maui
 
 import "private" as Private
 
+/**
+ * FileBrowser
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 Maui.Page
 {
     id: control

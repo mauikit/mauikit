@@ -9,6 +9,16 @@ import org.kde.mauikit 1.2 as Maui
 
 import "private" as Private
 
+/**
+ * ToolActions
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 Rectangle
 {
     id: control
@@ -142,7 +152,7 @@ Rectangle
                     id: _buttonMouseArea
                     action : modelData
                     checkable: control.checkable
-//                    rec.radius: index < _repeater.count-1 || index > 0 ? 0 : Maui.Style.radiusV
+                    rec.radius: index <= _repeater.count-1 || index > 0 ? 0 : Maui.Style.radiusV
                     Binding on checked
                     {
                         when: autoExclusive

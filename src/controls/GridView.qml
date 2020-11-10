@@ -24,6 +24,16 @@ import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.9 as Kirigami
 import QtGraphicalEffects 1.0
 
+/**
+ * GridView
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 Item
 {
     id: control

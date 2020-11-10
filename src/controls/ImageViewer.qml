@@ -5,6 +5,16 @@ import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
 import org.kde.kirigami 2.7 as Kirigami
 
+/**
+ * ImageViewer
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 Flickable
 {
     id: flick

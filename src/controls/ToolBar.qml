@@ -28,6 +28,16 @@ import QtGraphicalEffects 1.0
 
 import "private"
 
+/**
+ * ToolBar
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 ToolBar
 {
     id: control

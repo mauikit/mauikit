@@ -25,6 +25,16 @@ import org.kde.mauikit 1.2 as Maui
 
 import "private" as Private
 
+/**
+ * PathBar
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 Rectangle
 {
     id: control

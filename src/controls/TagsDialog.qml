@@ -5,6 +5,16 @@ import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.2 as Maui
 import TagsList 1.0
 
+/**
+ * TagsDialog
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 Maui.Dialog
 {
     id: control

@@ -23,6 +23,16 @@ import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.9 as Kirigami
 
+/**
+ * ListBrowser
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 Item
 {
     id: control

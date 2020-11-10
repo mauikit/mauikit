@@ -7,6 +7,16 @@ import org.kde.mauikit 1.0 as Maui
 
 import "private" as Private
 
+/**
+ * ToolButtonMenu
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 Private.BasicToolButton
 {
     id: control

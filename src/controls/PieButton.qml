@@ -24,6 +24,16 @@ import org.kde.kirigami 2.7 as Kirigami
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
+/**
+ * PieButton
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 Item
 {
     id: control

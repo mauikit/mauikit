@@ -22,6 +22,16 @@ import QtQuick.Controls 2.10
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 
+/**
+ * AppViewLoader
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 Loader
 {
     id: control

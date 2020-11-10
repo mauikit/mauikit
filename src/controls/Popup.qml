@@ -24,6 +24,16 @@ import org.kde.mauikit 1.2 as Maui
 
 import QtGraphicalEffects 1.0
 
+/**
+ * Popup
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 Popup
 {
     id: control

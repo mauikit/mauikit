@@ -25,6 +25,16 @@ import org.kde.kirigami 2.9 as Kirigami
 
 import "private" as Private
 
+/**
+ * AppViews
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 SwipeView
 {
     id: control

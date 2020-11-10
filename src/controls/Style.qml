@@ -23,6 +23,16 @@ import QtQuick 2.14
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.2 as Maui
 
+/**
+ * Style
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 QtObject
 {
     id: style

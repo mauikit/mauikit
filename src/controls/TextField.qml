@@ -24,6 +24,16 @@ import QtQuick.Controls 2.14
 import org.kde.kirigami 2.9 as Kirigami
 import org.kde.mauikit 1.2 as Maui
 
+/**
+ * TextField
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 TextField
 {
     id: control

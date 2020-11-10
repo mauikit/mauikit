@@ -26,6 +26,16 @@ import org.kde.kirigami 2.9 as Kirigami
 
 import QtGraphicalEffects 1.0
 
+/**
+ * Dialog
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 Maui.Popup
 {
     id: control

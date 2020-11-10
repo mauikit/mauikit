@@ -23,6 +23,16 @@ import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.2 as Maui
 
+/**
+ * AbstractSideBar
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 Drawer
 {
     id: control
@@ -36,32 +46,41 @@ Drawer
     modal: false
 
     /**
-      * content : data
+      * content : Item.data
+      * The main content is added to an Item contents, it can anchored or sized normally.
       */
     default property alias content : _content.data
 
     /**
       * collapsible : bool
+      * If the sidebar can be collapsed into a slimmer bar with a width defined by the collapsedSize hint.
       */
     property bool collapsible: false
 
     /**
       * collapsed : bool
+      * If the sidebar should be collapsed or not, this property can be used to dynamically collapse
+      * the sidebar on constrained spaces.
       */
     property bool collapsed: false
 
     /**
       * collapsedSize : int
+      * Size hint for the width of the sidebar in the collapsed state.
       */
     property int collapsedSize: 0
 
     /**
       * preferredWidth : int
+      * The preferred width of the sidebar in the expanded state.
       */
     property int preferredWidth : Kirigami.Units.gridUnit * 12
 
     /**
-      * overlay : Rectangle
+      * overlay : MouseArea
+      * When the application has a constrained width to fit the sidebar and main contain,
+      * the sidebar is in a constrained state, and the app main content gets dimmed by an overlay.
+      * This property gives access to such ovelay element drawn on top of the app contents.
       */
     readonly property alias overlay : _overlay
 

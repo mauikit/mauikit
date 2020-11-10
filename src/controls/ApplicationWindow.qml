@@ -34,13 +34,13 @@ import "private" as Private
  *
  * It's usually used as a root QML component for the application.
  * By default it makes usage of the Maui Page control, so it contains a header and footer bar.
-The header can be moved to the bottom for better reachability.
-The Application window has some components already built in like an AboutDialog, a main application menu,
-and an optional property to add a global sidebar.
+ * The header can be moved to the bottom for better reachability.
+ * The Application window has some components already built in like an AboutDialog, a main application menu,
+ * and an optional property to add a global sidebar.
 
-The application can have client side decorations CSD by setting the attached property Maui.App.enabledCSD  to true.
+ * The application can have client side decorations CSD by setting the attached property Maui.App.enabledCSD  to true.
 
-For more details you can refer to the Maui Page documentation for tweaking the application window main content.
+ * For more details you can refer to the Maui Page documentation for tweaking the application window main content.
  * @code
  * ApplicationWindow {
  *     id: root
