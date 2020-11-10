@@ -56,6 +56,7 @@ Maui.Dialog
     {
         id: tagText
         Layout.fillWidth: true
+        Layout.maximumWidth: 500
         placeholderText: i18n("Filter or add a new tag")
         onAccepted:
         {

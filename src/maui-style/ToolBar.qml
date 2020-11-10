@@ -37,7 +37,7 @@ T.ToolBar {
 
     padding: Kirigami.Units.smallSpacing
     contentItem: Item {}
-    position: controlRoot.parent.footer == controlRoot ? ToolBar.Footer : ToolBar.Header
+//    position: controlRoot.parent.footer == controlRoot ? ToolBar.Footer : ToolBar.Header
     background: Rectangle {
         implicitHeight: Maui.Style.toolBarHeight
         color: Kirigami.Theme.backgroundColor

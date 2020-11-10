@@ -3,22 +3,22 @@ import QtQuick.Controls 2.14
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.2 as Maui
 
-import TagsList 1.0 
+import TagsList 1.0
 import "."
 
 ListView
 {
-    id: control 
+    id: control
     orientation: ListView.Horizontal
     clip: true
-    spacing: Maui.Style.contentMargins   
+    spacing: Maui.Style.contentMargins
     boundsBehavior: Kirigami.Settings.isMobile ?  Flickable.DragOverBounds : Flickable.StopAtBounds
-    
+
     property string placeholderText: i18n("Add tags...")
     property alias list : _tagsList
     property bool showPlaceHolder:  true
     property bool showDeleteIcon: true
-    
+
     signal tagRemoved(int index)
     signal tagClicked(int index)
 
@@ -30,7 +30,7 @@ ListView
             id: _tagsList
         }
     }
-    
+
     Label
     {
         height: parent.height
@@ -42,20 +42,26 @@ ListView
         color: Kirigami.Theme.textColor
         font.pointSize: Maui.Style.fontSizes.default
     }
-    
-    delegate: TagDelegate
-    {
-        id: delegate
-        showDeleteIcon: control.showDeleteIcon
-        Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
-        anchors.verticalCenter: parent.verticalCenter
 
-        ListView.onAdd:
+    delegate: Item
+    {
+        width: ListView.view.width
+        height: ListView.view.height
+
+        TagDelegate
         {
-            control.positionViewAtEnd()
-        }        
-        
-        onRemoveTag: tagRemoved(index)
-        onClicked: tagClicked(index)        
+            id: delegate
+            showDeleteIcon: control.showDeleteIcon
+            Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
+            anchors.verticalCenter: parent.verticalCenter
+
+            ListView.onAdd:
+            {
+                control.positionViewAtEnd()
+            }
+
+            onRemoveTag: tagRemoved(index)
+            onClicked: tagClicked(index)
+        }
     }
 }
