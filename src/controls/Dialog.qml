@@ -28,11 +28,13 @@ import QtGraphicalEffects 1.0
 
 /**
  * Dialog
- * A global sidebar for the application window that can be collapsed.
+ * A scrollable dialog popup, with a page as its main content.
+ * With default buttons styled, a close button and a predefiend layout.
  *
+ * The dialog can be used with its main default ColumnLayout or with an Item stacked.
  *
- *
- *
+ *  the dialog contents will be hanlded by a ColumnLayout, so the positioning of its child elements should use the attached property
+ * Layout.fillheight layout.fillWidth, etc.
  *
  *
  */

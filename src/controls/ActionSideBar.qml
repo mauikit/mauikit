@@ -28,11 +28,12 @@ import "private"
  * ActionSideBar
  * A global sidebar for the application window that can be collapsed.
  *
+ * The ActionSideBar is hanlded by a ListView, by default you would only need to declare
+ * a list of Actions and those will be used as the model to populate the ListView.
  *
- *
- *
- *
- *
+ * By default the Actions delegate is a ListDelegate, you can use any other component.
+ * For reference on how the collapsed sidebar is implemented for the delegate check
+ * the default implementation as an exmaple.
  */
 Maui.SideBar
 {
@@ -41,6 +42,9 @@ Maui.SideBar
 
     /**
       * actions : list<Action>
+      * List of actions to be used to populate the ListView.
+      * This is the default property, so declaring the actions is staright forward.
+      *
       */
     default property list<Action> actions
 

@@ -25,7 +25,7 @@ import org.kde.kirigami 2.7 as Kirigami
 
 /**
  * Badge
- * A global sidebar for the application window that can be collapsed.
+ * Badge to show a counter or an icon as a notification.
  *
  *
  *
@@ -42,16 +42,19 @@ Rectangle
 
     /**
       * item : Item
+      * The current item being used, a label or an icon
       */
     property alias item : loader.item
 
     /**
       * hovered : bool
+      * If the badge is hovered by a cursor
       */
     readonly property alias hovered : mouseArea.containsMouse
 
     /**
       * pressed : bool
+      * If the badge is pressed
       */
     readonly property alias pressed : mouseArea.pressed
 
@@ -62,16 +65,19 @@ Rectangle
 
     /**
       * size : int
+      * Size of the badge. Can be used as width and height, unless the implicitWidth is wider.
       */
     property int size: Maui.Style.iconSizes.medium
 
     /**
       * iconName : string
+      * Name of the icon to be used by the badge
       */
     property string iconName : ""
 
     /**
       * text : string
+      * Text to be used by the badge
       */
     property string text : ""
 

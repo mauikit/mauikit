@@ -548,8 +548,11 @@ Maui.Page
 
         function onItemsSelected(indexes)
         {
-            control.currentIndex = indexes[0]
-            control.selectIndexes(indexes)
+            if(indexes.length)
+            {
+                control.currentIndex = indexes[0]
+                control.selectIndexes(indexes)
+            }
         }
 
         function onItemClicked(index)
