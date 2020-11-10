@@ -153,7 +153,7 @@ Maui.Popup
             headerPositioning: ListView.InlineHeader
             padding: 0
             headBar.visible: control.persistent
-
+            headerBackground.color: "transparent"
             headBar.farLeftContent: MouseArea
             {
                 id: _closeButton
@@ -169,8 +169,8 @@ Maui.Popup
                     height: Maui.Style.iconSizes.medium
                     width: height
                     anchors.centerIn: parent
-                    radius: Maui.Style.radiusV
-                    color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.9))
+                    radius: height
+                    color: _closeButton.containsMouse || _closeButton.containsPress ? Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.9)) : "transparent"
 
                     Maui.X
                     {
@@ -202,6 +202,7 @@ Maui.Popup
                 {
                     id: _flickable
                     contentHeight: _pageContent.implicitHeight
+                    clip: true
 
                     ColumnLayout
                     {
