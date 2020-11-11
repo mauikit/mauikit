@@ -25,12 +25,14 @@ import QtQuick.Layouts 1.3
 
 /**
  * FileDialog
- * A global sidebar for the application window that can be collapsed.
+ * A file dialog to quickly open or saved files.
  *
+ * This component make use of the FileBrowser.
  *
+ * The FileDialog can be in two states, one for Opening and other for Saving files.
  *
- *
- *
+ * The file dialog allows to have multiple or single selection,
+ * and filtering content specific to a file type of arbitrary filters.
  *
  */
 Maui.Dialog
@@ -42,11 +44,16 @@ Maui.Dialog
 
     /**
       * currentPath : url
+      * The current path of the directory URL.
+      * To list a directory path, or other location, use the right schemas,
+      * some of them are file://, webdav://, trash:///, tags://
       */
     property alias currentPath : browser.currentPath
 
     /**
       * browser : FileBrowser
+      * The FileBrowser used to listing.
+      * For more details on how it works check its documentation.
       */
     readonly property alias browser : browser
 
@@ -57,47 +64,59 @@ Maui.Dialog
 
     /**
       * singleSelection : bool
+      * If true then only one item can be selected, either for saving or for opening.
       */
     property alias singleSelection : _selectionBar.singleSelection
 
     /**
       * suggestedFileName : string
+      * On save mode a text field is visible and this property is used to assign its default text value.
       */
     property string suggestedFileName : ""
 
     /**
       * settings : BrowserSettings
+      * A group of properties for controlling the sorting, listing and behaviour of the file browser.
+      * For more details check the BrowserSettings documentation.
       */
     readonly property alias settings : browser.settings
 
     /**
       * searchBar : bool
+      * Show the search bar to enter a search query.
       */
     property bool searchBar : false
     onSearchBarChanged: if(!searchBar) browser.quitSearch()
 
     /**
       * modes : var
+      * There are two modes: Save : 1, to save files with a given file name or
+      * Open : 0 to open one or multiple files.
       */
     readonly property var modes : ({OPEN: 0, SAVE: 1})
 
     /**
       * mode : int
+      * The current mode in use. By default the Open : 0 mode is used.
       */
     property int mode : modes.OPEN
 
     /**
       * callback : var
+      * When the operations finished by clicking the accept button this function is called.
+      * The callback signature should take as its argument a variable list, representing the list of selected file URLs.
       */
     property var callback : ({})
 
     /**
       * textField : TextField
+      * On Save mode a text field is visible, this property gives access to it.
       */
     property alias textField: _textField
 
     /**
       * urlsSelected :
+      * Triggered once the urls have been selected.
       */
     signal urlsSelected(var urls)
 

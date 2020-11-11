@@ -7,8 +7,9 @@ import "private"
 
 /**
  * Editor
- * A global sidebar for the application window that can be collapsed.
- *
+ * A text area for editing text with convinient functions.
+ * The Editor is controlled by the DocumentHandler which controls the files I/O,
+ * the syntax highlighting styles, and many more text editing properties.
  *
  *
  *
@@ -23,6 +24,8 @@ Maui.Page
 
     /**
       * showLineCount : bool
+      * If a small text tooltip should be visible at the editor right bottom area, displaying the
+      * number of count of lines and words.
       */
     property bool showLineCount : true
 
@@ -33,11 +36,13 @@ Maui.Page
 
     /**
       * body : TextArea
+      * Access to the editor text area.
       */
     property alias body : body
 
     /**
       * document : DocumentHandler
+      *  The DocumentHandler
       */
     property alias document : document
 
@@ -78,11 +83,13 @@ Maui.Page
 
     /**
       * fileUrl : url
+      * If a file url is provided the DocumentHandler will try to open its contents and display it.
       */
     property alias fileUrl : document.fileUrl
 
     /**
       * showLineNumbers : bool
+      * If a sidebar listing each line number should be visible.
       */
     property bool showLineNumbers : false
 

@@ -14,7 +14,7 @@ import org.kde.kirigami 2.7 as Kirigami
  *
  *
  */
-Row
+Row // TODO to be moved to Index
 {
     id: control
     anchors.verticalCenter: parent.verticalCenter

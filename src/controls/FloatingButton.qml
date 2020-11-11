@@ -26,7 +26,7 @@ import QtGraphicalEffects 1.0
 
 /**
  * FloatingButton
- * A global sidebar for the application window that can be collapsed.
+ * A styled button to be used above other elements.
  *
  *
  *
