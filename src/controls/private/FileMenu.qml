@@ -9,16 +9,54 @@ Menu
     id: control
     implicitWidth: colorBar.implicitWidth + Maui.Style.space.big
 
+    /**
+      *
+      */
     property var item : ({})
+
+    /**
+      *
+      */
     property int index : -1
+
+    /**
+      *
+      */
     property bool isDir : false
+
+    /**
+      *
+      */
     property bool isExec : false
+
+    /**
+      *
+      */
     property bool isFav: false
 
+    /**
+      *
+      */
     signal bookmarkClicked(var item)
+
+    /**
+      *
+      */
     signal removeClicked(var item)
+
+    /**
+      *
+      */
     signal copyClicked(var item)
+
+    /**
+      *
+      */
     signal cutClicked(var item)
+
+    /**
+      *
+      */
     signal renameClicked(var item)
 
     MenuItem

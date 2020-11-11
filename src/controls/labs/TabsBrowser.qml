@@ -9,21 +9,30 @@ import org.kde.mauikit 1.0 as Maui
 Maui.Page
 {
     id: control
-    
+
+    /**
+      *
+      */
     property ObjectModel model : null
-    
+
     header: Maui.TabBar
     {
         width: parent.width
     }
-    
+
+    /**
+      *
+      */
     function newTab()
     {
-        
+
     }
-    
+
+    /**
+      *
+      */
     function closeTab(index)
     {
-        
+
     }
 }

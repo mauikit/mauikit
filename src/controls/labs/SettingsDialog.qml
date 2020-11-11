@@ -10,23 +10,19 @@ Maui.Dialog
     maxHeight: implicitHeight
     maxWidth: 500
     defaultButtons: false
-        
-        page.title: i18n("Settings")
-        //        page.flickable: _flickable
-        headBar.visible: true        
-        
-        acceptButton.text: i18n("Apply")
-        rejectButton.text: i18n("Cancel")
-        
-        
-        Component.onCompleted:
+
+    page.title: i18n("Settings")
+    headBar.visible: true
+
+    Component.onCompleted:
+    {
+        for(var i = 0; i < control.scrollable.length; i++)
         {
-            for(var i in control.content)
+            if(control.scrollable[i] instanceof Maui.SettingsSection)
             {
-                if(control.content[i] instanceof Maui.SettingsSection)
-                {
-                    control.content[i].index = i
-                }
+                console.log("Setting dialog section", i)
+                control.scrollable[i].index = i
             }
         }
+    }
 }

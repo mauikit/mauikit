@@ -26,10 +26,17 @@ import org.kde.kirigami 2.7 as Kirigami
 import org.kde.purpose 1.0 as Purpose
 
 Maui.Dialog
-{	
+{
     id: control
 
+    /**
+      *
+      */
     property var urls : []
+
+    /**
+      *
+      */
     property string mimeType
 
     widthHint: 0.9
@@ -62,7 +69,7 @@ Maui.Dialog
         urls: control.urls
     }
 
-   stack: Purpose.AlternativesView
+    stack: Purpose.AlternativesView
     {
         id: _purpose
         Layout.fillWidth: true
@@ -94,6 +101,9 @@ Maui.Dialog
         }
     }
 
+    /**
+     *
+     */
     function openWith()
     {
         _openWithDialog.open()

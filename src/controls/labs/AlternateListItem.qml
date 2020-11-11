@@ -7,18 +7,23 @@ import org.kde.mauikit 1.2 as Maui
 Maui.ItemDelegate
 {
     id: control
+
+    /**
+      *
+      */
     property bool alt : index ? index % 2 === 0 : false
+
+    /**
+      *
+      */
     property bool lastOne : false
 
     leftPadding: Maui.Style.space.big
     rightPadding: Maui.Style.space.big
-    
+
     background: Rectangle
-    {        
-        color: alt ? Kirigami.Theme.backgroundColor : Qt.darker(Kirigami.Theme.backgroundColor, 1.05)
-//        color: Kirigami.Theme.backgroundColor
-//        Kirigami.Theme.inherit: false
-//        Kirigami.Theme.colorSet: alt ? Kirigami.Theme.View : Kirigami.Theme.Window
+    {
+        color: alt ? Kirigami.Theme.backgroundColor : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.95))
 
         Maui.Separator
         {
@@ -30,5 +35,5 @@ Maui.ItemDelegate
             anchors.right: parent.right
             anchors.bottom: parent.bottom
         }
-    }    
+    }
 }

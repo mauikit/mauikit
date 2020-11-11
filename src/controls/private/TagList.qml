@@ -14,12 +14,34 @@ ListView
     spacing: Maui.Style.contentMargins
     boundsBehavior: Kirigami.Settings.isMobile ?  Flickable.DragOverBounds : Flickable.StopAtBounds
 
+    /**
+      *
+      */
     property string placeholderText: i18n("Add tags...")
+
+    /**
+      *
+      */
     property alias list : _tagsList
+
+    /**
+      *
+      */
     property bool showPlaceHolder:  true
+
+    /**
+      *
+      */
     property bool showDeleteIcon: true
 
+    /**
+      *
+      */
     signal tagRemoved(int index)
+
+    /**
+      *
+      */
     signal tagClicked(int index)
 
     model: Maui.BaseModel

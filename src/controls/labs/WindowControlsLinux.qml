@@ -9,9 +9,12 @@ import org.kde.appletdecoration 0.1 as AppletDecoration
 
 MauiLab.CSDControls
 {
-	id: control
-	onButtonClicked: performActiveWindowAction(type)
-    
+    id: control
+    onButtonClicked: performActiveWindowAction(type)
+
+    /**
+      *
+      */
     function performActiveWindowAction(type)
     {
         if (type === AppletDecoration.Types.Close) {

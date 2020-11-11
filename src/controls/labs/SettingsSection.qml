@@ -7,23 +7,47 @@ import org.kde.mauikit 1.2 as Maui
 Maui.AlternateListItem
 {
     id: control
+
+    /**
+      *
+      */
     default property alias content : _mainData.data
+
+    /**
+      *
+      */
     property int index : -1
+
+    /**
+      *
+      */
     property string title
+
+    /**
+      *
+      */
     property string description
+
+    /**
+      *
+      */
     property alias template: _template
+
+    /**
+      *
+      */
     property alias spacing: _mainData.spacing
 
     alt: index % 2
 
     Layout.fillWidth: true
-    implicitHeight: _layout.implicitHeight + (Maui.Style.space.enormous + _layout.spacing)
+    implicitHeight: _layout.implicitHeight + (Maui.Style.space.big + _layout.spacing)
 
     ColumnLayout
     {
         id: _layout
-        width: parent.width - (Maui.Style.space.medium)
-        anchors.centerIn: parent
+        anchors.fill: parent
+        anchors.margins: Maui.Style.space.medium
         spacing: Maui.Style.space.medium
 
         Maui.ListItemTemplate
@@ -37,12 +61,12 @@ Maui.AlternateListItem
             label1.font.bold: true
             label1.font.weight: Font.Bold
             label2.wrapMode: Text.WordWrap
-            
+
             MouseArea
             {
                 implicitHeight: Maui.Style.iconSizes.medium
                 implicitWidth: implicitHeight
-                
+
                 Maui.Triangle
                 {
                     height: Maui.Style.iconSizes.tiny
@@ -51,7 +75,7 @@ Maui.AlternateListItem
                     color:  Kirigami.Theme.textColor
                     opacity: 0.7
                 }
-                
+
                 onClicked: _mainData.visible = !_mainData.visible
             }
         }
@@ -61,7 +85,7 @@ Maui.AlternateListItem
             id: _mainData
             Layout.fillWidth: true
             spacing: Maui.Style.space.medium
-                    
+
             Layout.margins: Maui.Style.space.medium
         }
     }

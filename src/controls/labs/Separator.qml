@@ -14,8 +14,6 @@ Loader
 {
     id: control
 
-    property int position : Qt.Horizontal
-
     sourceComponent: switch(control.position)
                      {
                      case Qt.Horizontal: return _horizontalSep
@@ -23,6 +21,14 @@ Loader
                      default: return null
                      }
 
+    /**
+      *
+      */
+    property int position : Qt.Horizontal
+
+    /**
+      *
+      */
     property color color : Kirigami.Theme.backgroundColor
 
     Component
