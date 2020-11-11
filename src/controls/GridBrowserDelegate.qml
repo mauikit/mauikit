@@ -25,11 +25,11 @@ import org.kde.mauikit 1.2 as Maui
 
 /**
  * GridBrowserDelegate
- * A global sidebar for the application window that can be collapsed.
+ * A GridItemTemplate wrapped into a ItemDelegate to make it clickable and draggable.
  *
+ * For more details check the ItemDelegate and GridItemTemplate documentation.
  *
- *
- *
+ * This mix adds a drop area, tooltip information and a custom styling.
  *
  *
  */

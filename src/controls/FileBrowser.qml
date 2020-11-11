@@ -130,15 +130,6 @@ Maui.Page
       */
     property Maui.SelectionBar selectionBar : null //TODO remove
 
-    /**
-      * tagsDialog : TagsDialog
-      */
-    property Maui.TagsDialog tagsDialog : null //TODO remove
-
-    /**
-      * openWithDialog : OpenWithDialog
-      */
-    property Maui.OpenWithDialog openWithDialog : null //TODO remove
 
     //relevant menus to file item and the browserview
     /**
@@ -439,15 +430,6 @@ Maui.Page
                 control.cut([item.path])
         }
 
-        onTagsClicked:
-        {
-            if(item && control.tagsDialog)
-            {
-                control.tagsDialog.composerList.urls = [item.path]
-                control.tagsDialog.open()
-            }
-        }
-
         onRenameClicked:
         {
             dialogLoader.sourceComponent = renameDialogComponent
@@ -458,22 +440,6 @@ Maui.Page
         {
             console.log("REMOVE", item.path)
             control.remove([item.path])
-        }
-
-        onOpenWithClicked: control.openWith([item.path])
-        onShareClicked: control.shareFiles([item.path])
-    }
-
-
-    Connections
-    {
-        target: control.tagsDialog
-        enabled: control.tagsDialog
-        ignoreUnknownSignals: true
-
-        function onTagsReady(tags)
-        {
-            control.tagsDialog.composerList.updateToUrls(tags)
         }
     }
 
@@ -750,53 +716,6 @@ Maui.Page
         control.currentView.forceActiveFocus()
     }
 
-
-    /**
-      *
-      **/
-    function tagFiles(urls)
-    {
-        if(urls.length <= 0)
-        {
-            return
-        }
-
-        if(control.tagsDialog)
-        {
-            control.tagsDialog.composerList.urls = urls
-            control.tagsDialog.open()
-        }
-    }
-
-    /**
-      *
-      **/
-    function openWith(urls)
-    {
-        if(urls.length <= 0)
-        {
-            return
-        }
-
-        if(control.openWithDialog)
-        {
-            openWithDialog.urls = urls
-            openWithDialog.open()
-        }
-    }
-
-    /**
-      *
-      **/
-    function shareFiles(urls)
-    {
-        if(urls.length <= 0)
-        {
-            return
-        }
-
-       Maui.Platform.shareFiles(urls)
-    }
 
     /**
       *

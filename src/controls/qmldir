@@ -46,7 +46,6 @@ Terminal 1.0 Terminal.qml
 SyncDialog 1.0 SyncDialog.qml
 SyncDialog 1.0 SyncDialogA.qml
 Editor 1.0 Editor.qml
-ColorsBar 1.0 ColorsBar.qml
 Holder 1.0 Holder.qml
 ImageViewer 1.0 ImageViewer.qml
 TabBar 1.0 TabBar.qml
