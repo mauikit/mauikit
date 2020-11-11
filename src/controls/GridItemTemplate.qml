@@ -133,6 +133,12 @@ Item
       * imageBorder : bool
       */
     property bool imageBorder: true
+    
+     /**
+      * iconComponent : Component
+      */
+    property Component iconComponent :  _iconContainer.visible ? (control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : null) ): null
+
 
     /**
       * toggled :
@@ -272,7 +278,7 @@ Item
             {
                 id: _iconLoader
                 anchors.fill: parent
-                sourceComponent: _iconContainer.visible ? (control.imageSource && control.imageSource.length ? _imgComponent : (control.iconSource && control.iconSource.length ?  _iconComponent : null) ): null
+                sourceComponent: control.iconComponent
 
                 Maui.Badge
                 {
