@@ -84,7 +84,7 @@ Maui.AlternateListItem
         {
             id: _mainData
             Layout.fillWidth: true
-            spacing: Maui.Style.space.medium
+            spacing: Maui.Style.space.big
 
             Layout.margins: Maui.Style.space.medium
         }

@@ -79,8 +79,7 @@ Item
     GridLayout
     {
         id: _layout
-        width: parent.width
-        anchors.centerIn: parent
+        anchors.fill: parent
         rowSpacing: 0
         columnSpacing: 0
 
@@ -98,7 +97,7 @@ Item
 
             iconSizeHint: Maui.Style.iconSizes.medium
             label2.wrapMode: Text.WordWrap
-            implicitHeight: Math.floor(label1.implicitHeight + label2.implicitHeight + Maui.Style.space.medium)
+            implicitHeight: Math.floor(label1.implicitHeight + label2.implicitHeight + Maui.Style.space.big)
         }
 
         RowLayout
@@ -113,9 +112,6 @@ Item
             Layout.rowSpan: control.wide ? 2 : 1
 
             Layout.fillWidth: !control.wide
-//             Layout.fillHeight: true
         }
     }
-
-
 }

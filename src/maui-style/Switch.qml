@@ -38,15 +38,14 @@ import QtQuick 2.12
 import QtQuick.Controls.Material 2.12
 import QtQuick.Controls.Material.impl 2.12
 import QtQuick.Templates 2.12 as T
+import org.kde.mauikit 1.0 as Maui
 
 T.Switch {
     id: control
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             implicitContentWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
-                             implicitContentHeight + topPadding + bottomPadding,
-                             implicitIndicatorHeight + topPadding + bottomPadding)
+    implicitHeight: implicitBackgroundHeight + topInset + bottomInset
 
     padding: 8
     spacing: 8
@@ -66,5 +65,9 @@ T.Switch {
         color: control.enabled ? control.Material.foreground : control.Material.hintTextColor
         elide: Text.ElideRight
         verticalAlignment: Text.AlignVCenter
+    }
+
+    background: Item {
+        implicitHeight: Math.floor(Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25))
     }
 }
