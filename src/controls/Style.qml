@@ -126,12 +126,12 @@ QtObject
       */
     readonly property var iconSizes : ({
         tiny : 8,
-        small :  Kirigami.Units.iconSizes.small / (Maui.Handy.isAndroid ? 1.5 : 1),
-                                       medium : Kirigami.Units.iconSizes.smallMedium / (Maui.Handy.isAndroid ? 1.5 : 1),
-                                       big:  Kirigami.Units.iconSizes.medium / (Maui.Handy.isAndroid ? 1.5 : 1),
-                                       large: Kirigami.Units.iconSizes.large / (Maui.Handy.isAndroid ? 1.5 : 1),
-                                       huge: Kirigami.Units.iconSizes.huge / (Maui.Handy.isAndroid ? 1.5 : 1),
-                                       enormous: Kirigami.Units.iconSizes.enormous / (Maui.Handy.isAndroid ? 1.5 : 1)
+        small :  Kirigami.Units.iconSizes.small / (isMobile ? 1.5 : 1),
+                                       medium : Kirigami.Units.iconSizes.smallMedium / (isMobile ? 1.5 : 1),
+                                       big:  Kirigami.Units.iconSizes.medium / (isMobile ? 1.5 : 1),
+                                       large: Kirigami.Units.iconSizes.large / (isMobile ? 1.5 : 1),
+                                       huge: Kirigami.Units.iconSizes.huge / (isMobile ? 1.5 : 1),
+                                       enormous: Kirigami.Units.iconSizes.enormous / (isMobile ? 1.5 : 1)
     })
 
     /**
