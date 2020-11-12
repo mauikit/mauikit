@@ -35,18 +35,6 @@ import org.kde.mauikit 1.2 as Maui
  */
 QtObject
 {
-    id: style
-
-    /**
-      *
-      */
-    readonly property bool isAndroid: Qt.platform.os == "android" //TODO remove
-
-    /**
-      *
-      */
-    readonly property bool isMobile : Kirigami.Settings.isMobile //TODO remove
-
     /**
       * unit : int
       */
@@ -111,28 +99,28 @@ QtObject
     /**
       * space : var
       */
-    readonly property var space : ({
-        tiny: Kirigami.Units.smallSpacing,
-        small: Kirigami.Units.smallSpacing*2,
-        medium: Kirigami.Units.largeSpacing,
-        big: Kirigami.Units.largeSpacing*2,
-        large: Kirigami.Units.largeSpacing*3,
-        huge: Kirigami.Units.largeSpacing*4,
-        enormous: Kirigami.Units.largeSpacing*5
-    })
+    property QtObject space: QtObject {
+        property int tiny: Kirigami.Units.smallSpacing
+        property int small: Kirigami.Units.smallSpacing*2
+        property int medium: Kirigami.Units.largeSpacing
+        property int big: Kirigami.Units.largeSpacing*2
+        property int large: Kirigami.Units.largeSpacing*3
+        property int huge: Kirigami.Units.largeSpacing*4
+        property int enormous: Kirigami.Units.largeSpacing*5
+    }
 
     /**
-      * iconSizes : var
-      */
-    readonly property var iconSizes : ({
-        tiny : 8,
-        small :  Kirigami.Units.iconSizes.small / (isMobile ? 1.5 : 1),
-                                       medium : Kirigami.Units.iconSizes.smallMedium / (isMobile ? 1.5 : 1),
-                                       big:  Kirigami.Units.iconSizes.medium / (isMobile ? 1.5 : 1),
-                                       large: Kirigami.Units.iconSizes.large / (isMobile ? 1.5 : 1),
-                                       huge: Kirigami.Units.iconSizes.huge / (isMobile ? 1.5 : 1),
-                                       enormous: Kirigami.Units.iconSizes.enormous / (isMobile ? 1.5 : 1)
-    })
+      * iconSizes : QtObject
+      */    
+    property QtObject iconSizes: QtObject {
+        property int tiny : 8
+        property int small: Math.floor(Kirigami.Units.fontMetrics.roundedIconSize(16 * Kirigami.Units.devicePixelRatio))
+        property int medium: Math.floor(Kirigami.Units.fontMetrics.roundedIconSize(22 * Kirigami.Units.devicePixelRatio))
+        property int big: Math.floor(Kirigami.Units.fontMetrics.roundedIconSize(32 * Kirigami.Units.devicePixelRatio))
+        property int large: Math.floor(Kirigami.Units.fontMetrics.roundedIconSize(48 * Kirigami.Units.devicePixelRatio))
+        property int huge: Math.floor(Kirigami.Units.fontMetrics.roundedIconSize(64 * Kirigami.Units.devicePixelRatio))
+        property int enormous: Math.floor(128 * Kirigami.Units.devicePixelRatio)
+    }
 
     /**
       *
@@ -146,5 +134,5 @@ QtObject
         });
         console.log(size, closest, values)
         return closest;
-    }
+    }  
 }
