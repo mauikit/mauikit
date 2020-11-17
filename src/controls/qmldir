@@ -81,3 +81,6 @@ Doodle 1.1 labs/Doodle.qml
 
 AlternateListItem 1.2 labs/AlternateListItem.qml
 Separator 1.2 labs/Separator.qml
+GalleryRollItem 1.2 labs/GalleryRollItem
+CollageItem 1.2 labs/CollageItem.qml
+

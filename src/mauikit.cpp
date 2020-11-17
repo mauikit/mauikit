@@ -166,7 +166,9 @@ void MauiKit::registerTypes(const char *uri)
     /** 1.2 **/
     qmlRegisterType(componentUrl(QStringLiteral("labs/AlternateListItem.qml")), uri, 1, 2, "AlternateListItem");
     qmlRegisterType(componentUrl(QStringLiteral("labs/Separator.qml")), uri, 1, 2, "Separator");
-
+    qmlRegisterType(componentUrl(QStringLiteral("labs/GalleryRollItem.qml")), uri, 1, 2, "GalleryRollItem");
+    qmlRegisterType(componentUrl(QStringLiteral("labs/CollageItem.qml")), uri, 1, 2, "CollageItem");
+    
     /// NON UI CONTROLS
     qmlRegisterUncreatableType<AppView>(uri, 1, 1, "AppView", "Cannot be created App");
     qmlRegisterType<SettingSection>(uri, 1, 2, "SettingSection");

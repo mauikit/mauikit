@@ -88,6 +88,8 @@
         <file alias="plugin/PluginManager.qml">controls/plugin/PluginManager.qml</file>
         <file alias="plugin/PluginsInfo.qml">controls/plugin/PluginsInfo.qml</file>
         <file alias="labs/Separator.qml">controls/labs/Separator.qml</file>
+        <file alias="labs/CollageItem.qml">controls/labs/CollageItem.qml</file>
+        <file alias="labs/GalleryRollItem.qml">controls/labs/GalleryRollItem.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>
