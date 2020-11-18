@@ -17,28 +17,11 @@ Menu
 
     MenuItem
     {
-        icon.name: "folder-add"
-        text: i18n("New folder")
-//         enabled: _optionsButton.enabled
-
-        onTriggered:
-        {
-            dialogLoader.sourceComponent= newFolderDialogComponent
-            dialog.open()
-        }
-    }
-
-    MenuItem
-    {
         icon.name: "document-new"
-        text: i18n("New file")
+        text: i18n("New item")
 //         enabled: _optionsButton.enabled
 
-        onTriggered:
-        {
-            dialogLoader.sourceComponent= newFileDialogComponent
-            dialog.open()
-        }
+        onTriggered: newItem()        
     }
 
     MenuSeparator {}

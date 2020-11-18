@@ -365,34 +365,48 @@ Maui.Page
 
     Component
     {
-        id: newFolderDialogComponent
+        id: newDialogComponent
 
         Maui.NewDialog
         {
-            title: i18n("New Folder")
-            message: i18n("Create a new folder with a custom name")
-            template.iconSource: "folder"
+            title: i18n("New %1", _newActions.currentIndex === 0 ? "folder" : "file" )
+            message: i18n("Create a new folder or a file with a custom name")
             acceptButton.text: i18n("Create")
-            onFinished: control.currentFMList.createDir(text)
-            textEntry.placeholderText: i18n("Folder name")
+            onFinished: 
+            {
+                switch(_newActions.currentIndex)
+                {
+                    case 0: control.currentFMList.createDir(text); break;
+                    case 1: Maui.FM.createFile(control.currentPath, text); break;
+
+                }
+            }
+            
+            textEntry.placeholderText: i18n("Name")
+            
+            Maui.ToolActions
+            {
+                id: _newActions
+                expanded: true
+                autoExclusive: true
+                display: ToolButton.TextBesideIcon
+                currentIndex: 0
+                
+                Action
+                {
+                    icon.name: "folder-new"
+                    text: i18n("Folder")
+                }
+                
+                Action
+                {
+                    icon.name: "document-new"
+                    text: i18n("File")
+                }
+            }
         }
     }
-
-    Component
-    {
-        id: newFileDialogComponent
-
-        Maui.NewDialog
-        {
-            title: i18n("New File")
-            message: i18n("Create a new file with a custom name and extension")
-            template.iconSource: "text-plain"
-            acceptButton.text: i18n("Create")
-            onFinished: Maui.FM.createFile(control.currentPath, text)
-            textEntry.placeholderText: i18n("Filename")
-        }
-    }
-
+    
     Component
     {
         id: renameDialogComponent
@@ -961,19 +975,9 @@ Maui.Page
     /**
       *
       **/
-    function newFile()
+    function newItem()
     {
-        dialogLoader.sourceComponent= newFileDialogComponent
-        dialog.open()
-        dialog.forceActiveFocus()
-    }
-
-    /**
-      *
-      **/
-    function newFolder()
-    {
-        dialogLoader.sourceComponent= newFolderDialogComponent
+        dialogLoader.sourceComponent= newDialogComponent
         dialog.open()
         dialog.forceActiveFocus()
     }

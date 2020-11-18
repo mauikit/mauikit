@@ -61,8 +61,8 @@ T.MenuItem
     icon.width: Maui.Style.iconSizes.small
     icon.height: Maui.Style.iconSizes.small
 
-    icon.color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor) :
-                             control.Kirigami.Theme.disabledTextColor
+    icon.color: control.enabled ? (control.checked || control.down ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor) :
+                                 control.Kirigami.Theme.disabledTextColor
 
     indicator: CheckIndicator
     {
@@ -79,8 +79,7 @@ T.MenuItem
 
         visible: control.subMenu
 //        mirror: control.mirrored
-        color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightedTextColor : control.Kirigami.Theme.textColor) :
-                                 control.Kirigami.Theme.disabledTextColor
+        color: control.icon.color
         source: "qrc:/qt-project.org/imports/QtQuick/Controls.2/Material/images/arrow-indicator.png"
     }
 
@@ -99,8 +98,7 @@ T.MenuItem
         icon: control.icon
         text: control.text
         font: control.font
-        color: control.enabled ? (control.highlighted || control.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor) :
-                                 control.Kirigami.Theme.disabledTextColor
+        color: control.icon.color
     }
 
     background: Rectangle
@@ -126,6 +124,6 @@ T.MenuItem
         }
 
         color: control.highlighted || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
-        border.color: control.highlighted || control.hovered ? control.Kirigami.Theme.highlightColor : "transparent"
+        border.color: control.checked || control.down ? control.Kirigami.Theme.highlightColor : "transparent"
     }
 }

@@ -115,6 +115,11 @@ Item
       */
     property alias contentHeight : _listView.contentHeight
 
+        /**
+      * contentWidth : int
+      */
+    property alias contentWidth : _listView.contentWidth
+
     /**
       * atYEnd : bool
       */
@@ -124,13 +129,6 @@ Item
       * atYBeginning : bool
       */
     property alias atYBeginning : _listView.atYBeginning
-
-    
-        /**
-      * contentWidth : int
-      */
-    property alias contentWidth : _listView.contentWidth
-
 
     /**
       * margins : int
