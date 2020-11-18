@@ -1,89 +1,89 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.14 as Kirigami
+import org.kde.kirigami 2.9 as Kirigami
 import org.kde.mauikit 1.2 as Maui
 import QtGraphicalEffects 1.0
 
 Maui.ItemDelegate
 {
     id: control
-    
+
     Kirigami.Theme.inherit: false
     Kirigami.Theme.backgroundColor: "#333"
     Kirigami.Theme.textColor: "#fafafa"
-    
+
     /**
      * template : function
      */
     property alias template : _template
-    
+
     /**
      * images : function
      */
     property var images : []
-    
+
     /**
      * label1 : function
      */
     property alias label1 : _template.label1
-    
+
     /**
      * label2 : function
      */
     property alias label2 : _template.label2
-    
+
     /**
      * label3 : function
      */
     property alias label3 : _template.label3
-    
+
     /**
      * label4 : function
      */
     property alias label4 : _template.label4
-    
+
     /**
      * iconSource : function
      */
     property alias iconSource : _template.iconSource
-    
+
     /**
      * iconSizeHint : function
      */
     property alias iconSizeHint: _template.iconSizeHint
-    
+
     /**
      * margins : function
      */
     property int margins : isWide ? Maui.Style.space.medium : Maui.Style.space.tiny
-    
+
     /**
      * cb : function
      */
-    property var cb 
-    
+    property var cb
+
     Component.onCompleted: _featuredTimer.start()
-    
+
     background: Item {}
-    
+
     Item
     {
         id: _cover
         anchors.fill: parent
         anchors.margins: control.margins
-        
+
         Rectangle
         {
             anchors.fill: parent
             color: Kirigami.Theme.backgroundColor
             radius: Maui.Style.radiusV
-            
+
             HoverHandler
             {
                 id: _hoverHandler
             }
-            
+
             Timer
             {
                 id: _featuredTimer
@@ -91,7 +91,7 @@ Maui.ItemDelegate
                 repeat: true
                 onTriggered: _featuredRoll.cycleSlideForward()
             }
-            
+
             ListView
             {
                 id: _featuredRoll
@@ -100,13 +100,13 @@ Maui.ItemDelegate
                 orientation: Qt.Horizontal
                 snapMode: ListView.SnapOneItem
                 clip: true
-                
+
                 model: control.images
-                
+
                 function cycleSlideForward()
                 {
                     _featuredTimer.restart()
-                    
+
                     if (_featuredRoll.currentIndex === _featuredRoll.count - 1)
                     {
                         _featuredRoll.currentIndex = 0
@@ -115,11 +115,11 @@ Maui.ItemDelegate
                         _featuredRoll.incrementCurrentIndex()
                     }
                 }
-                
+
                 function cycleSlideBackward()
                 {
                     _featuredTimer.restart()
-                    
+
                     if (_featuredRoll.currentIndex === 0)
                     {
                         _featuredRoll.currentIndex = _featuredRoll.count - 1;
@@ -128,23 +128,23 @@ Maui.ItemDelegate
                         _featuredRoll.decrementCurrentIndex();
                     }
                 }
-                
+
                 delegate: Item
                 {
                     width: ListView.view.width
                     height: ListView.view.height * (_hoverHandler.hovered ? 1.2 : 1)
-                    
+
                     Image
                     {
                         anchors.fill: parent
-                        sourceSize.width: 200
-                        sourceSize.height: 200
+                        sourceSize.width: 500
+                        sourceSize.height: 500
                         asynchronous: true
                         smooth: false
                         source: control.cb ? control.cb(modelData) : modelData
                         fillMode: Image.PreserveAspectCrop
-                    }                   
-                    
+                    }
+
                     Behavior on height
                     {
                         NumberAnimation
@@ -155,7 +155,7 @@ Maui.ItemDelegate
                     }
                 }
             }
-            
+
             LinearGradient
             {
                 anchors.fill: parent
@@ -166,7 +166,7 @@ Maui.ItemDelegate
                     GradientStop { position: 0.9; color: control.Kirigami.Theme.backgroundColor }
                 }
             }
-            
+
             Maui.ListItemTemplate
             {
                 id: _template
@@ -186,12 +186,12 @@ Maui.ItemDelegate
                 label4.font.pointSize: Maui.Style.fontSizes.small
                 label3.font.bold: true
                 label3.font.weight: Font.Bold
-                
+
                 //                label1.wrapMode: Text.WordWrap
                 //                label1.elide: Text.ElideRight
                 //            horizontalAlignment: Qt.AlignHCenter
             }
-            
+
             layer.enabled: true
             layer.effect: OpacityMask
             {
@@ -199,7 +199,7 @@ Maui.ItemDelegate
                 {
                     width: _cover.width
                     height: _cover.height
-                    
+
                     Rectangle
                     {
                         anchors.fill: parent
@@ -208,7 +208,7 @@ Maui.ItemDelegate
                 }
             }
         }
-        
+
         Rectangle
         {
             Kirigami.Theme.inherit: false
@@ -217,7 +217,7 @@ Maui.ItemDelegate
             radius: Maui.Style.radiusV
             border.color: control.isCurrentItem || control.hovered ? Kirigami.Theme.highlightColor : Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
             opacity: 0.6
-            
+
             Rectangle
             {
                 anchors.fill: parent
@@ -227,6 +227,6 @@ Maui.ItemDelegate
                 opacity: 0.8
                 anchors.margins: 1
             }
-        }        
-    }    
+        }
+    }
 }
