@@ -25,7 +25,12 @@ Loader
       *
       */
     property int position : Qt.Horizontal
-
+    
+    /**
+     * 
+     */
+    property int radius : 0
+    
     /**
       *
       */
@@ -46,6 +51,7 @@ Loader
                 opacity: 0.8
                 color: Qt.lighter(control.color, 2.5)
                 Layout.fillWidth: true
+                radius: control.radius
             }
 
             Kirigami.Separator
@@ -55,6 +61,7 @@ Loader
                 opacity: 0.9
                 color: Qt.darker(control.color, 2.5)
                 Layout.fillWidth: true
+                radius: control.radius
             }
         }
     }
@@ -75,6 +82,7 @@ Loader
                 opacity: 0.8
                 color: Qt.lighter(control.color, 2.5)
                 Layout.fillHeight: true
+                radius: control.radius
             }
 
             Kirigami.Separator
@@ -84,6 +92,7 @@ Loader
                 opacity: 0.9
                 color: Qt.darker(control.color, 2.5)
                 Layout.fillHeight: true
+                radius: control.radius
             }
         }
     }

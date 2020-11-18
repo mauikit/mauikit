@@ -319,6 +319,9 @@ Maui.Page
             acceptButton.text: i18n("Trash")
             acceptButton.visible: Maui.Handy.isLinux
             page.margins: Maui.Style.space.big
+            
+            spacing: Maui.Style.space.medium
+            
             template.iconSource: urls.length === 1 ? Maui.FM.getFileInfo(urls[0]).icon : "emblem-warning"
             template.imageSource: urls.length === 1 ? Maui.FM.getFileInfo(urls[0]).thumbnail : ""
 
@@ -326,6 +329,13 @@ Maui.Page
             {
                 text: i18n("Cancel")
                 onTriggered: _removeDialog.close()
+            }
+            
+            Maui.Separator
+            {
+                Layout.fillWidth: true
+                radius: Maui.Style.radiusV
+                Layout.margins: Maui.Style.space.medium
             }
 
             CheckBox
@@ -335,17 +345,22 @@ Maui.Page
 
                 text: i18n("List files")
             }
-
+            
+            Item {Layout.fillWidth: true}
+            
             Repeater
             {
                 model: urls
-
-                Label
+                Maui.ListItemTemplate
                 {
-                    visible: _removeDialogFilesCheckBox.checked
                     Layout.fillWidth: true
-                    text: modelData
-                    wrapMode: Text.WordWrap
+                    visible: _removeDialogFilesCheckBox.checked
+                    property var item : Maui.FM.getFileInfo(modelData)
+                    label1.text: item.label
+                    label2.text: item.url
+                    iconVisible: true
+                    iconSource: item.icon
+                    iconSizeHint: Maui.Style.iconSizes.medium
                 }
             }
 
