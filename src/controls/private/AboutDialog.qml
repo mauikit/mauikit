@@ -119,14 +119,24 @@ Maui.Dialog
                 model: Maui.App.about.authors
                 Maui.ListItemTemplate
                 {
+                    id: _credits
                     iconSource: "view-media-artist"
                     iconSizeHint: Maui.Style.iconSizes.medium
                     width: parent.width
                     height: implicitHeight
                     spacing: Maui.Style.space.medium
                     label1.text: modelData.name
-                    label2.text: modelData.emailAddress
+                    label2.text: String("<a href='mailto:%1'>%1</a>").arg(modelData.emailAddress)
                     label3.text: modelData.task
+                    
+                    Connections
+                    {
+                        target: _credits.label2
+                        function onLinkActivated(link)
+                        {
+                            Qt.openUrlExternally(link)
+                        }
+                    }
                 }
             }
         }
