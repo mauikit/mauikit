@@ -27,7 +27,7 @@ import org.kde.mauikit 1.2 as Maui
 
 /**
  * GridItemTemplate
- * A global sidebar for the application window that can be collapsed.
+ * A template with a icon or image and a bottom label..
  *
  *
  *
