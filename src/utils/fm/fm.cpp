@@ -108,16 +108,21 @@ void QDirLister::reviewChanges()
     qDebug( ) << "Doign the check" << m_checking;
 
     FMH::MODEL_LIST removedItems;
-    for(const auto &item : this->m_list)
+    const auto mlist = this->m_list; //use a copy to not affect the list indexes on the iterations
+    for(const auto &item : mlist)
     {
         const auto fileUrl = QUrl(item[FMH::MODEL_KEY::URL]);
+
         if(!FMH::fileExists(fileUrl))
         {
-            removedItems << item;
-            qDebug() << "FILE PATH CHANGED REMOVED" << fileUrl;
             const auto index = this->indexOf(FMH::MODEL_KEY::URL, fileUrl.toString());
-            this->m_list.remove(index);
-            this->m_watcher->removePath(fileUrl.toLocalFile());
+
+            if(index < this->m_list.count() && index >= 0)
+            {
+                removedItems << item;
+                this->m_list.remove(index);
+                this->m_watcher->removePath(fileUrl.toLocalFile());
+            }
         }
     }
 
@@ -171,20 +176,23 @@ bool QDirLister::includes(const QUrl &url)
 
 int QDirLister::indexOf(const FMH::MODEL_KEY &key, const QString &value) const
 {
-    const auto it = std::find_if(this->m_list.constBegin(), this->m_list.constEnd(), [&](const FMH::MODEL &item) -> bool { return item[key] == value; });
+    const auto items = this->m_list;
+    const auto it = std::find_if(items.constBegin(), items.constEnd(), [&](const FMH::MODEL &item) -> bool { return item[key] == value; });
 
-    if (it != this->m_list.constEnd())
-        return std::distance(this->m_list.constBegin(), it);
+    if (it != items.constEnd())
+        return std::distance(items.constBegin(), it);
     else
         return -1;
 }
 
-bool QDirLister::openUrl(QUrl url)
+bool QDirLister::openUrl(const QUrl &url)
 {
 //    if(this->m_url == url)
 //        return false;
 
+    qDebug() << "open URL" << url;
     this->m_url = url;
+    this->m_list.clear();
     this->m_watcher->removePaths(QStringList() << this->m_watcher->directories() << this->m_watcher->files());
 
     if (FMStatic::isDir(this->m_url)) {

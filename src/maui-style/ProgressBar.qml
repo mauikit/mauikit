@@ -20,8 +20,10 @@
  */
 
 
-import QtQuick 2.6
-import QtQuick.Templates 2.3 as T
+import QtQuick 2.14
+import QtQuick.Templates 2.14 as T
+
+import org.kde.mauikit 1.2 as Maui
 
 T.ProgressBar {
     id: controlRoot

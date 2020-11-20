@@ -69,13 +69,6 @@ public slots:
     void clearBadgeCount(const int &index);
 
     /**
-     * @brief addPlace
-     * Adds a new place to the bookmarks. How the file URL is stored depends on the platform
-     * @param path
-     */
-    void addPlace(const QUrl &path);
-
-    /**
      * @brief removePlace
      * Removes a place from the model and if the data at the given index is a file URL bookmark then it gets removed from the bookmarks.
      * @param index
@@ -93,15 +86,6 @@ public slots:
      */
     bool contains(const QUrl &path);
 
-    /**
-     * @brief indexOf
-     * The index of a file URL in the model
-     * @param path
-     * File url to be look up
-     * @return
-     * Index of the file URL or -1 if it doesnt exists
-     */
-    int indexOf(const QUrl &path);
 
 private:
     FM *fm;
@@ -115,7 +99,6 @@ private:
     void watchPath(const QString &path);
 
     void setCount();
-    int indexOf(const QString &path);
 
     static FMH::MODEL_LIST getGroup(const KFilePlacesModel &model, const FMH::PATHTYPE_KEY &type);
 

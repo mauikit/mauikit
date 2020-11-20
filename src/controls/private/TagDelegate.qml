@@ -54,7 +54,6 @@ ItemDelegate
             horizontalAlignment: Qt.AlignHCenter
             elide: Qt.ElideRight
             wrapMode: Text.NoWrap
-            font.pointSize: Maui.Style.fontSizes.medium
             color: Kirigami.Theme.textColor
             opacity: control.hovered ? 1 : 0.6
         }

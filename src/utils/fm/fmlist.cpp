@@ -83,7 +83,7 @@ FMList::FMList(QObject *parent)
 
         for (const auto &item : res.content) {
             const auto index = this->indexOf(FMH::MODEL_KEY::PATH, item[FMH::MODEL_KEY::PATH]);
-            qDebug() << "SUPOSSED TO REMOVED THIS FORM THE LIST" << index << item[FMH::MODEL_KEY::PATH] << this->list[index];
+            qDebug() << "SUPOSSED TO REMOVED THIS FORM THE LIST" << index << this->list.count() << item[FMH::MODEL_KEY::PATH];
 
             this->remove(index);
         }
@@ -109,8 +109,6 @@ FMList::FMList(QObject *parent)
             emit this->postItemAppended();
         }
     });
-
-    connect(this, &FMList::pathChanged, this, &FMList::reset);
 }
 
 void FMList::assignList(const FMH::MODEL_LIST &list)
@@ -379,7 +377,6 @@ void FMList::setFilters(const QStringList &filters)
     this->filters = filters;
 
     emit this->filtersChanged();
-    this->reset();
 }
 
 FMList::FILTER FMList::getFilterType() const
@@ -395,8 +392,6 @@ void FMList::setFilterType(const FMList::FILTER &type)
     this->filterType = type;
 
     emit this->filterTypeChanged();
-
-    this->reset();
 }
 
 bool FMList::getHidden() const
@@ -412,7 +407,6 @@ void FMList::setHidden(const bool &state)
     this->hidden = state;
 
     emit this->hiddenChanged();
-    this->reset();
 }
 
 bool FMList::getOnlyDirs() const
@@ -428,7 +422,6 @@ void FMList::setOnlyDirs(const bool &state)
     this->onlyDirs = state;
 
     emit this->onlyDirsChanged();
-    this->reset();
 }
 
 void FMList::refresh()
@@ -545,6 +538,17 @@ void FMList::search(const QString &query, const FMList *currentFMList)
     this->search(query, currentFMList->getPath(), currentFMList->getHidden(), currentFMList->getOnlyDirs(), currentFMList->getFilters());
 }
 
+void FMList::componentComplete()
+{
+    connect(this, &FMList::pathChanged, this, &FMList::setList);
+    connect(this, &FMList::filtersChanged, this, &FMList::setList);
+    connect(this, &FMList::filterTypeChanged, this, &FMList::setList);
+    connect(this, &FMList::hiddenChanged, this, &FMList::setList);
+    connect(this, &FMList::onlyDirsChanged, this, &FMList::setList);
+
+    this->setList();
+}
+
 void FMList::search(const QString &query, const QUrl &path, const bool &hidden, const bool &onlyDirs, const QStringList &filters)
 {
     qDebug() << "SEARCHING FOR" << query << path;
@@ -622,7 +626,6 @@ void FMList::setCloudDepth(const int &value)
     this->cloudDepth = value;
 
     emit this->cloudDepthChanged();
-    this->reset();
 }
 
 PathStatus FMList::getStatus() const
@@ -636,30 +639,10 @@ void FMList::setStatus(const PathStatus &status)
     emit this->statusChanged();
 }
 
-void FMList::deleteFile(const int &index)
-{
-    if (index >= this->list.size() || index < 0)
-        return;
-
-    FMStatic::removeFiles({this->list[index][FMH::MODEL_KEY::PATH]});
-    this->remove(index);
-}
-
-void FMList::moveFileToTrash(const int &index)
-{
-    if (index >= this->list.size() || index < 0)
-        return;
-
-    FMStatic::moveToTrash({this->list[index][FMH::MODEL_KEY::PATH]});
-    this->remove(index);
-}
-
 void FMList::remove(const int &index)
 {
     if (index >= this->list.size() || index < 0)
         return;
-
-//    const auto index_ = this->mappedIndex(index);
 
     emit this->preItemRemoved(index);
     this->list.remove(index);

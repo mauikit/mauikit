@@ -25,12 +25,7 @@ import org.kde.mauikit 1.2 as Maui
 
 /**
  * Style
- * A global sidebar for the application window that can be collapsed.
- *
- *
- *
- *
- *
+ * Preferred units and sizes to follow the Maui HIG
  *
  */
 QtObject
@@ -78,23 +73,15 @@ QtObject
     /**
       * fontSizes : var
       */
-    readonly property var fontSizes: ({
-        tiny: Math.round(defaultFontSize * 0.7),
-
-        small: Math.round(defaultFontSize * 0.8),
-
-        medium: Math.round(defaultFontSize * 0.9),
-
-        default: Math.round(defaultFontSize),
-
-            big: Math.round(defaultFontSize * 1.1),
-
-            large: Math.round(defaultFontSize * 1.2),
-
-            huge: Math.round(defaultFontSize * 1.3),
-
-            enormous: Math.round(defaultFontSize * 1.4)
-    })
+    property QtObject fontSizes : QtObject {
+        property int tiny: Math.round(defaultFontSize * 0.7)
+        property int small: Math.round(defaultFontSize * 0.8)
+        property int medium: defaultFontSize
+        property int big: Math.round(defaultFontSize * 1.1)
+        property int large: Math.round(defaultFontSize * 1.2)
+        property int huge: Math.round(defaultFontSize * 1.3)
+        property int enormous: Math.round(defaultFontSize * 1.4)
+    }
 
     /**
       * space : var

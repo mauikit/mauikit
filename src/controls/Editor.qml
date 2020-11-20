@@ -128,7 +128,6 @@ Maui.Page
             text: body.length + " / " + body.lineCount
             color: control.Kirigami.Theme.textColor
             opacity: 0.5
-            font.pointSize: Maui.Style.fontSizes.medium
         }
     }
 

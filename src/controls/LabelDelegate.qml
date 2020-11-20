@@ -80,8 +80,6 @@ ItemDelegate
         elide: Text.ElideRight
         wrapMode: Text.NoWrap
         color:  control.isCurrentListItem ? control.Kirigami.Theme.highlightedTextColor : control.Kirigami.Theme.textColor
-        font.pointSize: Maui.Style.fontSizes.default
-
         font.bold: control.isSection
         font.weight : control.isSection ? Font.Bold : Font.Normal
     }

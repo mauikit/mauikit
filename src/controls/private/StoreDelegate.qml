@@ -257,7 +257,6 @@ ItemDelegate
                 verticalAlignment: Qt.AlignVCenter
                 elide: Qt.ElideRight
                 wrapMode: Text.Wrap
-                font.pointSize: Maui.Style.fontSizes.default
                 color: labelColor
 
                 Rectangle
@@ -384,7 +383,6 @@ ItemDelegate
             id: detailsInfoLoader
             sourceComponent: isDetails && showDetailsInfo ? detailsComponent : undefined
             Layout.fillWidth: isDetails && showDetailsInfo
-            Layout.maximumHeight: isDetails ? (showDetailsInfo ? parent.height :  Maui.Style.fontSizes.default * 5) : undefined
             Layout.minimumHeight: isDetails ? ( showDetailsInfo ? parent.height :  control.height -  Maui.Style.space.tiny) : undefined
             Layout.preferredHeight:  isDetails ? (showDetailsInfo ? parent.height : control.height -  Maui.Style.space.tiny) : undefined
             Layout.maximumWidth: control.width * (isMobile ? 0.5 : 0.3)

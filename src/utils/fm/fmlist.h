@@ -23,6 +23,8 @@
 #include "mauilist.h"
 #include <QObject>
 
+class FM;
+
 enum STATUS_CODE : uint_fast8_t { LOADING, ERROR, READY };
 
 /**
@@ -49,7 +51,6 @@ public:
     bool m_exists = false;
 };
 Q_DECLARE_METATYPE(PathStatus)
-
 
 static inline struct {
     void appendPath(const QUrl &path)
@@ -84,8 +85,6 @@ private:
 
 } NavHistory;
 
-class FM;
-
 /**
  * @brief The FMList class
  * Model for listing the file system files and directories and perfom relevant actions upon it
@@ -93,6 +92,7 @@ class FM;
 class FMList : public MauiList
 {
     Q_OBJECT
+
     // writable
     Q_PROPERTY(QUrl path READ getPath WRITE setPath NOTIFY pathChanged)
     Q_PROPERTY(bool hidden READ getHidden WRITE setHidden NOTIFY hiddenChanged)
@@ -171,12 +171,34 @@ public:
 
     Q_ENUM(STATUS_CODE)
 
+    /**
+     * @brief FMList
+     * @param parent
+     */
     FMList(QObject *parent = nullptr);
 
+    /**
+     * @brief items
+     * @return
+     */
     FMH::MODEL_LIST items() const final override;
 
+    /**
+     * @brief getSortBy
+     * @return
+     */
     FMList::SORTBY getSortBy() const;
+
+    /**
+     * @brief setSortBy
+     * @param key
+     */
     void setSortBy(const FMList::SORTBY &key);
+
+    /**
+     * @brief componentComplete
+     */
+    void componentComplete() override final;
 
     /**
      * @brief getPath
@@ -416,21 +438,6 @@ public slots:
      * @param index
      */
     void remove(const int &index);
-
-    /**
-     * @brief moveFileToTrash
-     * Move an item at a index to the trash
-     * @param index
-     * index of the item
-     */
-    void moveFileToTrash(const int &index);
-
-    /**
-     * @brief deleteFile
-     * Delete a file from a index, this removes the item from the model and the file system
-     * @param index
-     */
-    void deleteFile(const int &index);
 
     /**
      * @brief search

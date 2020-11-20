@@ -69,7 +69,6 @@ Item
     Rectangle
     {
         anchors.fill: parent
-
         opacity: 0.5
         color: control.enabled ? Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9)) :  "transparent"
         radius: Maui.Style.radiusV
@@ -82,7 +81,6 @@ Item
         anchors.fill: parent
         rowSpacing: 0
         columnSpacing: 0
-
         rows: 2
         columns: 2
 
@@ -94,7 +92,6 @@ Item
             Layout.column: 0
             Layout.columnSpan: control.wide ? 1 : 2
             Layout.rowSpan: control.wide ? 2 : 1
-
             iconSizeHint: Maui.Style.iconSizes.medium
             label2.wrapMode: Text.WordWrap
             implicitHeight: Math.floor(label1.implicitHeight + label2.implicitHeight + Maui.Style.space.big)
@@ -104,7 +101,7 @@ Item
         {
             id: _content
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-            Layout.margins: Maui.Style.space.medium
+            Layout.margins: control.wide ? Maui.Style.space.medium : Maui.Style.space.tiny
             Layout.row: control.wide ? 0 : 1
             Layout.column: control.wide ? 1 : 0
 

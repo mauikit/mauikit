@@ -297,12 +297,14 @@ bool FMStatic::removeFiles(const QList<QUrl> &urls)
 
     qDebug() << "ASKED GTO DELETE FILES" << urls;
     for (const auto &url : urls) {
-        if (QFileInfo(url.toLocalFile()).isDir()) {
-            if (!FMStatic::removeDir(url))
-                continue;
+        qDebug() << "@ Want to remove files << " << url.toLocalFile();
+
+        if (isDir(url)) {
+            qDebug() << "Want to remove dir << " << url.toLocalFile();
+            FMStatic::removeDir(url);
         } else {
-            if (!QFile(url.toLocalFile()).remove())
-                continue;
+            qDebug() << "Want to remove files << " << url.toLocalFile();
+            QFile::remove(url.toLocalFile());
         }
     }
     return true;
@@ -561,6 +563,9 @@ void FMStatic::bookmark(const QUrl &url)
 {
 #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
     // do android stuff until cmake works with android
+    if(isDefaultPath(url.toString()))
+        return;
+
     auto bookmarks = UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, true).toStringList();
     bookmarks << url.toString();
     UTIL::saveSettings("BOOKMARKS", bookmarks, "PREFERENCES", true);

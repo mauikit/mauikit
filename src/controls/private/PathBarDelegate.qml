@@ -73,7 +73,6 @@ Rectangle
         verticalAlignment:  Qt.AlignVCenter
         elide: Qt.ElideRight
         wrapMode: Text.NoWrap
-        font.pointSize: Maui.Style.fontSizes.default
         color: control.checked ?Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
     }
 }

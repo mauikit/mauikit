@@ -142,8 +142,6 @@ Item
             width: Math.min(control.width * 0.7, implicitWidth)
             opacity: 0.5
             text: message ? qsTr(message) : "<h3>"+title+"</h3><p>"+body+"</p>"
-            font.pointSize: Maui.Style.fontSizes.default
-
             padding: Maui.Style.space.medium
             font.bold: true
             textFormat: Text.RichText

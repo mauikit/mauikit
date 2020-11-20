@@ -35,8 +35,8 @@ Maui.Dialog
     widthHint: 0.9
     heightHint: 0.8
 
-    maxWidth: Math.floor( 350 * Kirigami.Units.devicePixelRatio )
-    maxHeight: Math.floor( 250 * Kirigami.Units.devicePixelRatio )
+    maxWidth: 350
+    maxHeight: 250
 
     /**
       * mainHeader : AlternateListItem
@@ -95,7 +95,6 @@ Maui.Dialog
             label1.font.pointSize: Maui.Style.fontSizes.enormous * 1.3
 
             label2.text:  Maui.App.about.version + "\n" + Maui.App.about.shortDescription
-            label2.font.pointSize: Maui.Style.fontSizes.default
             label2.elide: Text.ElideRight
             label2.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         }

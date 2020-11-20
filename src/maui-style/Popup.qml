@@ -38,10 +38,10 @@ T.Popup
     contentWidth: contentItem.implicitWidth || (contentChildren.length === 1 ? contentChildren[0].implicitWidth : 0)
     contentHeight: contentItem.implicitHeight || (contentChildren.length === 1 ? contentChildren[0].implicitHeight : 0)
 
-    topPadding: Kirigami.Units.devicePixelRatio * 4
-    bottomPadding: Kirigami.Units.devicePixelRatio * 4
-    rightPadding: Kirigami.Units.devicePixelRatio * 2
-    leftPadding: Kirigami.Units.devicePixelRatio * 2
+//    topPadding: 4
+//    bottomPadding: 4
+//    rightPadding: 2
+//    leftPadding: 2
 
     enter: Transition {
         NumberAnimation {

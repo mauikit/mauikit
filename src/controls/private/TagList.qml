@@ -55,14 +55,12 @@ ListView
 
     Label
     {
-        height: parent.height
-        width: parent.width
+        anchors.fill: parent
         verticalAlignment: Qt.AlignVCenter
         text: qsTr(control.placeholderText)
         opacity: 0.7
         visible: count === 0 && control.showPlaceHolder
         color: Kirigami.Theme.textColor
-        font.pointSize: Maui.Style.fontSizes.default
     }
 
     delegate: Item

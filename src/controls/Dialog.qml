@@ -247,7 +247,6 @@ Maui.Popup
 
                             label2.text: message
                             label2.textFormat : TextEdit.AutoText
-                            label2.font.pointSize:Maui.Style.fontSizes.default
                             label2.wrapMode: TextEdit.WordWrap
 
                             iconSizeHint: Maui.Style.iconSizes.large

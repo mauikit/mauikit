@@ -421,7 +421,6 @@ Item
                 wrapMode: Text.NoWrap
                 color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
                 font.weight: Font.Normal
-                font.pointSize: Maui.Style.fontSizes.default
             }
 
             Label
@@ -439,7 +438,6 @@ Item
                 opacity: control.isCurrentItem ? 0.8 : 0.6
 
                 font.weight: Font.Normal
-                font.pointSize: Maui.Style.fontSizes.medium
             }
         }
 

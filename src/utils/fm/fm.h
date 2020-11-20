@@ -39,9 +39,29 @@ public:
     explicit QDirLister(QObject *parent = nullptr);
 
 public slots:
-    bool openUrl(QUrl url);
+    /**
+     * @brief openUrl
+     * @param url
+     * @return
+     */
+    bool openUrl(const QUrl &url);
+
+    /**
+     * @brief setNameFilter
+     * @param filters
+     */
     void setNameFilter(QString filters);
+
+    /**
+     * @brief setDirOnlyMode
+     * @param value
+     */
     void setDirOnlyMode(bool value);
+
+    /**
+     * @brief setShowingDotFiles
+     * @param value
+     */
     void setShowingDotFiles(bool value);
 
 signals:

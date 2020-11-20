@@ -614,9 +614,7 @@ Maui.Page
                 color: Kirigami.Theme.textColor
                 wrapMode: Text.Wrap
                 elide: Qt.ElideRight
-                font.pointSize: Maui.Style.fontSizes.default
             }
-
         }
 
         onOpened:
