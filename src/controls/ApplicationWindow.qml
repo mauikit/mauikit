@@ -351,7 +351,7 @@ Window
             {
                 id: _mainMenu
                 modal: true
-                width: Maui.Style.unit * 250
+                width: 250
 
                 Loader
                 {

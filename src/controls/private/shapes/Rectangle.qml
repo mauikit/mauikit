@@ -22,7 +22,7 @@ Shape
     /**
       * borderWidth : int
       */
-    property int borderWidth: Maui.Style.unit
+    property int borderWidth: 1
 
     /**
       * solidBorder : bool

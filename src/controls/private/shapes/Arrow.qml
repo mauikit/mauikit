@@ -27,7 +27,7 @@ Shape
     /**
       * borderWidth : int
       */
-    property int borderWidth: Maui.Style.unit
+    property int borderWidth: 1
 
     layer.enabled: _shape.smooth
     layer.samples: 4

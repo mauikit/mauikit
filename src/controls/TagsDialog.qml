@@ -40,7 +40,7 @@ Maui.Dialog
     signal tagsReady(var tags)
 
     defaultButtons: true
-    maxHeight: Maui.Style.unit * 500
+    maxHeight: 500
     maxWidth: 400
     page.margins: 0
 

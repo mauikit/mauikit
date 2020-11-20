@@ -18,7 +18,7 @@ import org.kde.mauikit 1.2 as Maui
 TabButton
 {
     id: control
-    implicitWidth:  150 * Maui.Style.unit
+    implicitWidth: 150
 
     /**
       * content : ListItemTemplate.data
@@ -38,7 +38,7 @@ TabButton
     Kirigami.Separator
     {
         color: Kirigami.Theme.highlightColor
-        height: Maui.Style.unit * 2
+        height: 2
         visible: checked
         anchors
         {

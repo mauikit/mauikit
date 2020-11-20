@@ -64,7 +64,7 @@ Maui.Dialog
       */
     property alias passwordField: passwordField
 
-    maxHeight: Maui.Style.unit * 350
+    maxHeight: 350
     maxWidth: 350
 
     footBar.leftContent: Button

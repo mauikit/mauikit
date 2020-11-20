@@ -160,7 +160,7 @@ Maui.Popup
 
     closePolicy: control.persistent ? Popup.NoAutoClose | Popup.CloseOnEscape : Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
-    maxWidth: Maui.Style.unit * 300
+    maxWidth: 300
     maxHeight: implicitHeight
     implicitHeight: _layout.implicitHeight
     widthHint: 0.9

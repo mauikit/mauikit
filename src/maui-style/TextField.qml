@@ -79,13 +79,13 @@ T.TextField
 
 	background: Rectangle 
 	{        
-        implicitWidth: Maui.Style.unit * 120
+        implicitWidth: 120
         implicitHeight: Math.floor(Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25))
         color: control.activeFocus ? Qt.lighter(Kirigami.Theme.backgroundColor, 1.4)
         : (control.hovered ? Qt.lighter(Kirigami.Theme.backgroundColor, 1.3) : Kirigami.Theme.backgroundColor)
         border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
 
         radius: Maui.Style.radiusV
-        border.width: Maui.Style.unit
+        border.width: 1
 	}
 }

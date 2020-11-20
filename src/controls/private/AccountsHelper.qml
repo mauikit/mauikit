@@ -9,7 +9,7 @@ Maui.Dialog
 {
     id: control
 
-    maxHeight: 350* Maui.Style.unit
+    maxHeight: 350
     maxWidth: maxHeight
     page.title: i18n("Accounts")
 
@@ -49,7 +49,7 @@ Maui.Dialog
     {
         id: _removeDialog
 
-        maxWidth: Maui.Style.unit * 400
+        maxWidth: 400
         title: i18n("Remove Account")
         message: i18n("Are you sure you want to remove this account?")
         page.margins: control.page.margins

@@ -38,8 +38,8 @@ import QtQuick.Layouts 1.3
 Maui.Dialog
 {
     id: control
-    maxHeight: Kirigami.Settings.isMobile ? parent.height * 0.95 : Maui.Style.unit * 500
-    maxWidth: Maui.Style.unit * 700
+    maxHeight: Kirigami.Settings.isMobile ? parent.height * 0.95 : 500
+    maxWidth: 700
     page.padding: 0
 
     /**
@@ -242,7 +242,7 @@ Maui.Dialog
 
         separatorVisible: wideMode
         initialPage: [sidebar, _browserLayout]
-        defaultColumnWidth:  Kirigami.Units.gridUnit * (Kirigami.Settings.isMobile? 15 : 8)
+        defaultColumnWidth: 160 * (Kirigami.Settings.isMobile? 2 : 1)
 
         Maui.PlacesListBrowser
         {

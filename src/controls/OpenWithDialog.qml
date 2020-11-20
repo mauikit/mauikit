@@ -44,7 +44,7 @@ Maui.Dialog
     widthHint: 0.9
     page.padding: 0
     maxHeight: _list.contentHeight + (page.padding * 2.5) + headBar.height + Maui.Style.space.huge
-    maxWidth: Maui.Style.unit * 500
+    maxWidth: 500
 
     verticalAlignment: Qt.AlignBottom
 
