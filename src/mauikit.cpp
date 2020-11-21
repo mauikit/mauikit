@@ -160,14 +160,17 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("labs/TabsBrowser.qml")), uri, 1, 1, "TabsBrowser");
     qmlRegisterType(componentUrl(QStringLiteral("labs/SettingsDialog.qml")), uri, 1, 1, "SettingsDialog");
     qmlRegisterType(componentUrl(QStringLiteral("labs/SettingsSection.qml")), uri, 1, 1, "SettingsSection");
-    qmlRegisterType(componentUrl(QStringLiteral("labs/SettingTemplate.qml")), uri, 1, 2, "SettingTemplate");
     qmlRegisterType(componentUrl(QStringLiteral("labs/Doodle.qml")), uri, 1, 1, "Doodle");
 
     /** 1.2 **/
+    qmlRegisterType(componentUrl(QStringLiteral("labs/SettingTemplate.qml")), uri, 1, 2, "SettingTemplate");
     qmlRegisterType(componentUrl(QStringLiteral("labs/AlternateListItem.qml")), uri, 1, 2, "AlternateListItem");
     qmlRegisterType(componentUrl(QStringLiteral("labs/Separator.qml")), uri, 1, 2, "Separator");
-    qmlRegisterType(componentUrl(QStringLiteral("labs/GalleryRollItem.qml")), uri, 1, 2, "GalleryRollItem");
-    qmlRegisterType(componentUrl(QStringLiteral("labs/CollageItem.qml")), uri, 1, 2, "CollageItem");
+    
+    /** 1.3 **/
+    qmlRegisterType(componentUrl(QStringLiteral("labs/GalleryRollItem.qml")), uri, 1, 3, "GalleryRollItem");
+    qmlRegisterType(componentUrl(QStringLiteral("labs/CollageItem.qml")), uri, 1, 3, "CollageItem");
+    qmlRegisterType(componentUrl(QStringLiteral("labs/FileListingDialog.qml")), uri, 1, 3, "FileListingDialog");
     
     /// NON UI CONTROLS
     qmlRegisterUncreatableType<AppView>(uri, 1, 1, "AppView", "Cannot be created App");

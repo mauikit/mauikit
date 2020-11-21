@@ -22,7 +22,7 @@ import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 
 import org.kde.kirigami 2.8 as Kirigami
-import org.kde.mauikit 1.2 as Maui
+import org.kde.mauikit 1.3 as Maui
 
 import "private" as Private
 
@@ -308,147 +308,20 @@ Maui.Page
     {
         id: removeDialogComponent
         
-        Maui.Dialog
+        Maui.FileListingDialog
         {
             id: _removeDialog
-            property var urls: []
-            readonly property var singleItem : Maui.FM.getFileInfo(_removeDialog.urls[0])
-            
-            maxWidth: 400
+           
             title:  i18n("Removing %1 files", urls.length)
             message: Maui.Handy.isAndroid ?  i18n("This action will completely remove your files from your system. This action can not be undone.") : i18n("You can move the file to the trash or delete it completely from your system. Which one do you prefer?")
             rejectButton.text: i18n("Delete")
             acceptButton.text: i18n("Trash")
-            acceptButton.visible: Maui.Handy.isLinux
-            page.margins: Maui.Style.space.big
-            
-            spacing: Maui.Style.space.medium
-            
-            template.iconSource: singleItem.icon
-            template.imageSource: singleItem.thumbnail
-            template.iconSizeHint: Maui.Style.iconSizes.huge
-            
-            template.iconComponent: Item
-            {
-                Item
-                {
-                    anchors.fill: parent
-                    layer.enabled: true
-                    
-                    Rectangle
-                    {
-                        visible: _removeDialog.urls.length > 1
-                        anchors.fill: parent
-                        anchors.leftMargin: Maui.Style.space.small
-                        anchors.rightMargin: Maui.Style.space.small
-                        radius: Maui.Style.radiusV
-                        color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
-                        border.color: Kirigami.Theme.backgroundColor
-                    }
-                    
-                    Rectangle
-                    {
-                        visible: _removeDialog.urls.length > 1
-                        anchors.fill: parent
-                        anchors.topMargin: Maui.Style.space.tiny
-                        anchors.leftMargin: Maui.Style.space.tiny
-                        anchors.rightMargin: Maui.Style.space.tiny
-                        radius: Maui.Style.radiusV
-                        color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
-                        border.color: Kirigami.Theme.backgroundColor                    
-                    }
-                    
-                    Rectangle
-                    {
-                        anchors.fill: parent
-                        anchors.topMargin:  _removeDialog.urls.length > 1 ? Maui.Style.space.small : 0
-                        border.color: Kirigami.Theme.backgroundColor
-                        
-                        radius: Maui.Style.radiusV
-                        color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))        
-                        
-                        Maui.GridItemTemplate
-                        {
-                            anchors.fill: parent
-                            anchors.margins: Maui.Style.space.tiny
-                            iconSizeHint: height
-                            
-                            iconSource: _removeDialog.template.iconSource
-                            imageSource:  _removeDialog.template.imageSource                 
-                        }
-                        
-                    }                  
-                    
-                }
-                
-            }
+            acceptButton.visible: Maui.Handy.isLinux            
             
             actions: Action
             {
                 text: i18n("Cancel")
                 onTriggered: _removeDialog.close()
-            }
-            
-            Maui.Separator
-            {
-                Layout.fillWidth: true
-                radius: Maui.Style.radiusV
-                Layout.margins: Maui.Style.space.medium
-            }
-            
-            CheckBox
-            {
-                id: _removeDialogFilesCheckBox
-                Layout.fillWidth: true
-                checked: true
-                text: i18n("List files")
-            }
-            
-            Item {Layout.fillWidth: true}
-            
-            Maui.ListBrowser
-            {
-                visible: _removeDialogFilesCheckBox.checked
-                
-                Layout.fillWidth: true
-                implicitHeight: Math.min(contentHeight + Maui.Style.space.big, 400)
-                model: urls
-                spacing: Maui.Style.space.big
-                
-                delegate: Maui.ListItemTemplate
-                {
-                    width: ListView.view.width
-                    property var item : Maui.FM.getFileInfo(modelData)
-                    label1.text: item.label
-                    label2.text: item.url
-                    iconVisible: true
-                    iconSource: item.icon
-                    imageSource: item.thumbnail
-                    iconSizeHint: Maui.Style.iconSizes.medium
-                    
-                    ToolButton
-                    {
-                        //text: i18n("Clear")
-                        icon.name: "edit-clear"
-                        icon.width: Maui.Style.iconSizes.small
-                        onClicked: 
-                        {
-                            var array = _removeDialog.urls
-                            const index = array.indexOf(modelData);
-                            if (index > -1) {
-                                array.splice(index, 1);
-                            }
-                            
-                            if(array.length === 0)
-                            {
-                                _removeDialog.close()
-                                return
-                            }
-                                
-                            _removeDialog.urls = array                            
-                        }
-                    }
-                }
             }
             
             onRejected:

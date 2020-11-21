@@ -90,6 +90,7 @@
         <file alias="labs/Separator.qml">controls/labs/Separator.qml</file>
         <file alias="labs/CollageItem.qml">controls/labs/CollageItem.qml</file>
         <file alias="labs/GalleryRollItem.qml">controls/labs/GalleryRollItem.qml</file>
+        <file alias="labs/FileListingDialog.qml">controls/labs/FileListingDialog.qml</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>
