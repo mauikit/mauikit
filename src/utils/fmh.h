@@ -92,8 +92,24 @@ bool isIOS();
 enum FILTER_TYPE : int { AUDIO, VIDEO, TEXT, IMAGE, DOCUMENT, COMPRESSED, FONT, NONE };
 
 
-static const QStringList AUDIO_MIMETYPES = {"audio/mpeg", "audio/mp4", "audio/flac", "audio/ogg", "audio/wav"};
-static const QStringList VIDEO_MIMETYPES = {"video/mp4", "video/x-matroska", "video/webm", "video/avi", "video/flv", "video/mpg", "video/wmv", "video/mov", "video/ogg", "video/mpeg", "video/jpeg"};
+static const QStringList AUDIO_MIMETYPES = {"audio/mpeg",
+                                            "audio/mp4",
+                                            "audio/flac",
+                                            "audio/ogg",
+                                            "audio/wav"};
+
+static const QStringList VIDEO_MIMETYPES = {"video/mp4",
+                                            "video/x-matroska",
+                                            "video/webm",
+                                            "video/avi",
+                                            "video/flv",
+                                            "video/mpg",
+                                            "video/wmv",
+                                            "video/mov",
+                                            "video/ogg",
+                                            "video/mpeg",
+                                            "video/jpeg"};
+
 static const QStringList TEXT_MIMETYPES = {"text/markdown",
                                            "text/x-chdr",
                                            "text/x-c++src",
@@ -114,10 +130,33 @@ static const QStringList TEXT_MIMETYPES = {"text/markdown",
                                            "application/x-shellscript",
                                            "application/x-cmakecache",
                                            "application/x-kicad-project"};
-static const QStringList IMAGE_MIMETYPES = {"image/bmp", "image/webp", "image/png", "image/gif", "image/jpeg", "image/web", "image/svg", "image/svg+xml"};
-static const QStringList DOCUMENT_MIMETYPES = {"application/pdf", "application/rtf", "application/doc", "application/odf"};
-static const QStringList COMPRESSED_MIMETYPES = {"application/x-compress","application/x-compressed", "application/x-xz-compressed-tar", "application/x-compressed-tar", "application/x-xz", "application/x-bzip", "application/x-gtar", "application/x-gzip", "application/zip"};
-static const QStringList FONT_MIMETYPES = {"font/ttf", "font/otf"};
+
+static const QStringList IMAGE_MIMETYPES = {"image/bmp",
+                                            "image/webp",
+                                            "image/png",
+                                            "image/gif",
+                                            "image/jpeg",
+                                            "image/web",
+                                            "image/svg",
+                                            "image/svg+xml"};
+
+static const QStringList DOCUMENT_MIMETYPES = {"application/pdf",
+                                               "application/rtf",
+                                               "application/doc",
+                                               "application/odf"};
+
+static const QStringList COMPRESSED_MIMETYPES = {"application/x-compress",
+                                                 "application/x-compressed",
+                                                 "application/x-xz-compressed-tar",
+                                                 "application/x-compressed-tar",
+                                                 "application/x-xz",
+                                                 "application/x-bzip",
+                                                 "application/x-gtar",
+                                                 "application/x-gzip",
+                                                 "application/zip"};
+
+static const QStringList FONT_MIMETYPES = {"font/ttf",
+                                           "font/otf"};
 
 static const QMap<FILTER_TYPE, QStringList> SUPPORTED_MIMETYPES {{FILTER_TYPE::AUDIO, AUDIO_MIMETYPES},
                                                                  {FILTER_TYPE::VIDEO, VIDEO_MIMETYPES},
@@ -126,7 +165,6 @@ static const QMap<FILTER_TYPE, QStringList> SUPPORTED_MIMETYPES {{FILTER_TYPE::A
                                                                  {FILTER_TYPE::DOCUMENT, DOCUMENT_MIMETYPES},
                                                                  {FILTER_TYPE::FONT, FONT_MIMETYPES},
                                                                  {FILTER_TYPE::COMPRESSED, COMPRESSED_MIMETYPES}};
-
 
 /**
  * @brief getMimeTypeSuffixes
