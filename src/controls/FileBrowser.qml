@@ -313,7 +313,7 @@ Maui.Page
             id: _removeDialog
            
             title:  i18n("Removing %1 files", urls.length)
-            message: Maui.Handy.isAndroid ?  i18n("This action will completely remove your files from your system. This action can not be undone.") : i18n("You can move the file to the trash or delete it completely from your system. Which one do you prefer?")
+            message: Maui.Handy.isLinux ? i18n("Delete or move to trash?") :  i18n("Delete files? This action can not be undone.")
             rejectButton.text: i18n("Delete")
             acceptButton.text: i18n("Trash")
             acceptButton.visible: Maui.Handy.isLinux            

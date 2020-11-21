@@ -28,6 +28,7 @@ Maui.Dialog
 {
     id: control
     
+    default property alias content : _content.data
     property var urls: []
     
     readonly property var singleItem : Maui.FM.getFileInfo(control.urls[0])
@@ -41,6 +42,7 @@ Maui.Dialog
     template.iconSource: singleItem.icon
     template.imageSource: singleItem.thumbnail
     template.iconSizeHint: Maui.Style.iconSizes.huge
+    template.implicitHeight: Math.max(template.leftLabels.implicitHeight, 64)
     
     template.iconComponent: Item
     {
@@ -96,14 +98,21 @@ Maui.Dialog
         }
         
     }
-    
+
+    Column
+    {
+        id: _content
+        Layout.fillWidth: true
+    }
+
     Maui.Separator
     {
-        Layout.fillWidth: true
-        radius: Maui.Style.radiusV
+        Layout.preferredWidth: 100
+        Layout.alignment: Qt.AlignCenter
+        radius: 1
         Layout.margins: Maui.Style.space.medium
     }
-    
+
     CheckBox
     {
         id: controlFilesCheckBox
