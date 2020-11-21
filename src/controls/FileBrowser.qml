@@ -40,183 +40,183 @@ import "private" as Private
 Maui.Page
 {
     id: control
-
+    
     /**
-      * currentPath : url
-      * The current path of the directory URL.
-      * To list a directory path, or other location, use the right schemas,
-      * some of them are file://, webdav://, trash:///, tags://
-      */
+     * currentPath : url
+     * The current path of the directory URL.
+     * To list a directory path, or other location, use the right schemas,
+     * some of them are file://, webdav://, trash:///, tags://
+     */
     property alias currentPath : _browser.path
     onCurrentPathChanged : _searchField.clear()
-
+    
     /**
-      * settings : BrowserSettings
-      * A group of properties for controlling the sorting, listing and behaviour of the file browser.
-      * For more details check the BrowserSettings documentation.
-      */
+     * settings : BrowserSettings
+     * A group of properties for controlling the sorting, listing and behaviour of the file browser.
+     * For more details check the BrowserSettings documentation.
+     */
     property alias settings : _browser.settings
-
+    
     /**
-      * view : Item
-      * The browser can be in two different view states: the file browsing or the search view, this
-      * property gives access to the current view in use.
-      * .
-      */
+     * view : Item
+     * The browser can be in two different view states: the file browsing or the search view, this
+     * property gives access to the current view in use.
+     * .
+     */
     property alias view : _stackView.currentItem
-
+    
     /**
-      * dropArea : DropArea
-      * Drop area component, for dropping files.
-      * By default sonme drop actions are handled, for other type of uris this property can be used to handle those.
-      */
+     * dropArea : DropArea
+     * Drop area component, for dropping files.
+     * By default sonme drop actions are handled, for other type of uris this property can be used to handle those.
+     */
     property alias dropArea : _dropArea
-
+    
     /**
-      * currentIndex : int
-      * Current index of the item selected in the file browser.
-      */
+     * currentIndex : int
+     * Current index of the item selected in the file browser.
+     */
     property alias currentIndex : _browser.currentIndex
-
+    
     /**
-      * currentView : Item
-      * Current view of the file browser. Possible views are List = ListBrowser
-      * Grid = GridView
-      * Miller = ListView
-      */
+     * currentView : Item
+     * Current view of the file browser. Possible views are List = ListBrowser
+     * Grid = GridView
+     * Miller = ListView
+     */
     readonly property QtObject currentView : _stackView.currentItem.currentView
-
+    
     /**
-      * currentFMList : FMList
-      * The file browser model list controller being used. The List and Grid views use the same FMList, the
-      * Miller columns use several different models, one for each column.
-      */
+     * currentFMList : FMList
+     * The file browser model list controller being used. The List and Grid views use the same FMList, the
+     * Miller columns use several different models, one for each column.
+     */
     readonly property Maui.FMList currentFMList : view.currentFMList
-
+    
     /**
-      * currentFMModel : BaseModel
-      * The file browser data model being used. The List and Grid views use the same model, the
-      * Miller columns use several different FMList controllers, one for each column.
-      */
+     * currentFMModel : BaseModel
+     * The file browser data model being used. The List and Grid views use the same model, the
+     * Miller columns use several different FMList controllers, one for each column.
+     */
     readonly property Maui.BaseModel currentFMModel : view.currentFMModel
-
+    
     /**
-      * isSearchView : bool
-      * If the file browser current view is the search view.
-      */
+     * isSearchView : bool
+     * If the file browser current view is the search view.
+     */
     readonly property bool isSearchView : _stackView.currentItem.objectName === "searchView"
-
+    
     /**
-      * selectionMode : bool
-      * If the file browser enters selection mode, allowing the selection of multiple items.
-      */
+     * selectionMode : bool
+     * If the file browser enters selection mode, allowing the selection of multiple items.
+     */
     property bool selectionMode: false
-
+    
     /**
-      * thumbnailsSize : int
-      * Size of the items in the grid view. The size is for the combined thumbnail/icon and the title label.
-      */
+     * thumbnailsSize : int
+     * Size of the items in the grid view. The size is for the combined thumbnail/icon and the title label.
+     */
     property int thumbnailsSize : Maui.Style.iconSizes.large * 1.7
-
+    
     /**
-      * indexHistory : var
-      * History of the items indexes.
-      */
+     * indexHistory : var
+     * History of the items indexes.
+     */
     property var indexHistory : []
-
+    
     // need to be set by the implementation as features
     /**
-      * selectionBar : SelectionBar
-      */
+     * selectionBar : SelectionBar
+     */
     property Maui.SelectionBar selectionBar : null //TODO remove
-
-
+    
+    
     //relevant menus to file item and the browserview
     /**
-      * browserMenu : BrowserMenu
-      * Gives access to the file browser menu to add new menu item actions.
-      */
+     * browserMenu : BrowserMenu
+     * Gives access to the file browser menu to add new menu item actions.
+     */
     property alias browserMenu: browserMenu
-
+    
     /**
-      * itemMenu : FileMenu
-      * Gives access to the file browser items menu to add new menu item actions,
-      * relevant to the file items.
-      * To get info about the current file item for the menu check the FileMenu documentation.
-      */
+     * itemMenu : FileMenu
+     * Gives access to the file browser items menu to add new menu item actions,
+     * relevant to the file items.
+     * To get info about the current file item for the menu check the FileMenu documentation.
+     */
     property alias itemMenu: itemMenu
-
+    
     //access to the loaded the dialog components
     /**
-      * dialog : Dialog
-      * The message and action dialogs are loaded when needed.
-      * This property gives access to the current dialog opened.
-      */
+     * dialog : Dialog
+     * The message and action dialogs are loaded when needed.
+     * This property gives access to the current dialog opened.
+     */
     property alias dialog : dialogLoader.item
-
+    
     //signals
     /**
-      * itemClicked :
-      * An item was clicked.
-      */
+     * itemClicked :
+     * An item was clicked.
+     */
     signal itemClicked(int index)
-
+    
     /**
-      * itemDoubleClicked :
-      * An item was double clicked.
-      */
+     * itemDoubleClicked :
+     * An item was double clicked.
+     */
     signal itemDoubleClicked(int index)
-
+    
     /**
-      * itemRightClicked :
-      * An item was right clicked, on mobile devices this is translated from a long press and relase.
-      */
+     * itemRightClicked :
+     * An item was right clicked, on mobile devices this is translated from a long press and relase.
+     */
     signal itemRightClicked(int index)
-
+    
     /**
-      * itemLeftEmblemClicked :
-      * The left emblem of the item was clicked.
-      */
+     * itemLeftEmblemClicked :
+     * The left emblem of the item was clicked.
+     */
     signal itemLeftEmblemClicked(int index)
-
+    
     /**
-      * itemRightEmblemClicked :
-      * The right emblem of the item was clicked.
-      */
+     * itemRightEmblemClicked :
+     * The right emblem of the item was clicked.
+     */
     signal itemRightEmblemClicked(int index)
-
+    
     /**
-      * rightClicked :
-      * The file browser empty area was right clicked.
-      */
+     * rightClicked :
+     * The file browser empty area was right clicked.
+     */
     signal rightClicked()
-
+    
     /**
-      * keyPress :
-      * A key, physical or not, was pressed.
-      * The event contains the relevant information.
-      */
+     * keyPress :
+     * A key, physical or not, was pressed.
+     * The event contains the relevant information.
+     */
     signal keyPress(var event)
-
+    
     /**
-      * urlsDropped :
-      * File URLS were dropped onto the file browser area.
-      */
+     * urlsDropped :
+     * File URLS were dropped onto the file browser area.
+     */
     signal urlsDropped(var urls)
-
+    
     //color scheme
     Kirigami.Theme.colorSet: Kirigami.Theme.View
     Kirigami.Theme.inherit: false
-
+    
     //catch inherited signals from page
     onGoBackTriggered: control.goBack()
     onGoForwardTriggered: control.goNext()
-
+    
     title: view.title
     focus: true
     flickable: control.currentView.flickable
     floatingFooter: false
-
+    
     showTitle: false
     headBar.visible: false
     headBar.leftContent: ToolButton
@@ -226,7 +226,7 @@ Maui.Page
         onClicked: control.quitSearch()
         visible: control.isSearchView
     }
-
+    
     headBar.middleContent: Maui.TextField
     {
         id: _searchField
@@ -234,7 +234,7 @@ Maui.Page
         Layout.maximumWidth: 500
         placeholderText: _filterButton.checked ? i18n("Filter") : ("Search")
         inputMethodHints: Qt.ImhNoAutoUppercase
-
+        
         onAccepted:
         {
             if(_filterButton.checked)
@@ -256,7 +256,7 @@ Maui.Page
         {
             if(_filterButton.checked)
                 _searchField.accepted()
-
+                
         }
         Keys.enabled: _filterButton.checked
         Keys.onPressed:
@@ -267,7 +267,7 @@ Maui.Page
                 control.currentView.forceActiveFocus()
             }
         }
-
+        
         actions.data: ToolButton
         {
             id: _filterButton
@@ -284,12 +284,12 @@ Maui.Page
             }
         }
     }
-
+    
     footBar.visible: String(control.currentPath).startsWith("trash:/")
-
+    
     footBar.leftSretch: false
     footerPositioning: ListView.InlineFooter
-
+    
     footBar.rightContent: ToolButton
     {
         visible: String(control.currentPath).startsWith("trash:/")
@@ -297,114 +297,166 @@ Maui.Page
         text: i18n("Empty Trash")
         onClicked: Maui.FM.emptyTrash()
     }
-
+    
     Loader
     {
         id: dialogLoader
         // 		active: item && item.visible
     }
-
+    
     Component
     {
         id: removeDialogComponent
-
+        
         Maui.Dialog
         {
             id: _removeDialog
             property var urls: []
-
+            readonly property var singleItem : Maui.FM.getFileInfo(_removeDialog.urls[0])
+            
+            maxWidth: 400
             title:  i18n("Removing %1 files", urls.length)
             message: Maui.Handy.isAndroid ?  i18n("This action will completely remove your files from your system. This action can not be undone.") : i18n("You can move the file to the trash or delete it completely from your system. Which one do you prefer?")
             rejectButton.text: i18n("Delete")
             acceptButton.text: i18n("Trash")
             acceptButton.visible: Maui.Handy.isLinux
             page.margins: Maui.Style.space.big
-
+            
             spacing: Maui.Style.space.medium
-
-            template.iconSource:  Maui.FM.getFileInfo(urls[0]).icon
-            template.imageSource: Maui.FM.getFileInfo(urls[0]).thumbnail
-
+            
+            template.iconSource: singleItem.icon
+            template.imageSource: singleItem.thumbnail
+            template.iconSizeHint: Maui.Style.iconSizes.huge
+            
             template.iconComponent: Item
             {
-               layer.enabled: true
-
-                Rectangle
-                {
-                    visible: _removeDialog.urls.length > 1
-                    anchors.fill: parent
-                    anchors.leftMargin: Maui.Style.space.small
-                    anchors.rightMargin: Maui.Style.space.small
-                    radius: Maui.Style.radiusV
-                    color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
-                }
-
-                Rectangle
+                Item
                 {
                     anchors.fill: parent
-                    anchors.topMargin:  _removeDialog.urls.length > 1 ? Maui.Style.space.small : 0
-
-                    radius: Maui.Style.radiusV
-                    color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
-
-                    Maui.GridItemTemplate
+                    layer.enabled: true
+                    
+                    Rectangle
+                    {
+                        visible: _removeDialog.urls.length > 1
+                        anchors.fill: parent
+                        anchors.leftMargin: Maui.Style.space.small
+                        anchors.rightMargin: Maui.Style.space.small
+                        radius: Maui.Style.radiusV
+                        color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
+                        border.color: Kirigami.Theme.backgroundColor
+                    }
+                    
+                    Rectangle
+                    {
+                        visible: _removeDialog.urls.length > 1
+                        anchors.fill: parent
+                        anchors.topMargin: Maui.Style.space.tiny
+                        anchors.leftMargin: Maui.Style.space.tiny
+                        anchors.rightMargin: Maui.Style.space.tiny
+                        radius: Maui.Style.radiusV
+                        color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
+                        border.color: Kirigami.Theme.backgroundColor                    
+                    }
+                    
+                    Rectangle
                     {
                         anchors.fill: parent
-                        anchors.margins: Maui.Style.space.tiny
-                        iconSizeHint: height
-
-                        iconSource: Maui.FM.getFileInfo(_removeDialog.urls[0]).icon
-                        imageSource: Maui.FM.getFileInfo(_removeDialog.urls[0]).thumbnail
-
-                    }
+                        anchors.topMargin:  _removeDialog.urls.length > 1 ? Maui.Style.space.small : 0
+                        border.color: Kirigami.Theme.backgroundColor
+                        
+                        radius: Maui.Style.radiusV
+                        color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))        
+                        
+                        Maui.GridItemTemplate
+                        {
+                            anchors.fill: parent
+                            anchors.margins: Maui.Style.space.tiny
+                            iconSizeHint: height
+                            
+                            iconSource: _removeDialog.template.iconSource
+                            imageSource:  _removeDialog.template.imageSource                 
+                        }
+                        
+                    }                  
+                    
                 }
+                
             }
-
+            
             actions: Action
             {
                 text: i18n("Cancel")
                 onTriggered: _removeDialog.close()
             }
-
+            
             Maui.Separator
             {
                 Layout.fillWidth: true
                 radius: Maui.Style.radiusV
                 Layout.margins: Maui.Style.space.medium
             }
-
+            
             CheckBox
             {
                 id: _removeDialogFilesCheckBox
                 Layout.fillWidth: true
-
+                checked: true
                 text: i18n("List files")
             }
-
+            
             Item {Layout.fillWidth: true}
-
-            Repeater
+            
+            Maui.ListBrowser
             {
+                visible: _removeDialogFilesCheckBox.checked
+                
+                Layout.fillWidth: true
+                implicitHeight: Math.min(contentHeight + Maui.Style.space.big, 400)
                 model: urls
-                Maui.ListItemTemplate
+                spacing: Maui.Style.space.big
+                
+                delegate: Maui.ListItemTemplate
                 {
-                    Layout.fillWidth: true
-                    visible: _removeDialogFilesCheckBox.checked
+                    width: ListView.view.width
                     property var item : Maui.FM.getFileInfo(modelData)
                     label1.text: item.label
                     label2.text: item.url
                     iconVisible: true
                     iconSource: item.icon
+                    imageSource: item.thumbnail
                     iconSizeHint: Maui.Style.iconSizes.medium
+                    
+                    ToolButton
+                    {
+                        //text: i18n("Clear")
+                        icon.name: "edit-clear"
+                        icon.width: Maui.Style.iconSizes.small
+                        onClicked: 
+                        {
+                            var array = _removeDialog.urls
+                            const index = array.indexOf(modelData);
+                            if (index > -1) {
+                                array.splice(index, 1);
+                            }
+                            
+                            if(array.length === 0)
+                            {
+                                _removeDialog.close()
+                                return
+                            }
+                                
+                            _removeDialog.urls = array                            
+                        }
+                    }
                 }
             }
-
+            
             onRejected:
             {
                 Maui.FM.removeFiles(urls)
                 close()
             }
-
+            
             onAccepted:
             {
                 Maui.FM.moveToTrash(urls)
@@ -412,11 +464,11 @@ Maui.Page
             }
         }
     }
-
+    
     Component
     {
         id: newDialogComponent
-
+        
         Maui.NewDialog
         {
             title: i18n("New %1", _newActions.currentIndex === 0 ? "folder" : "file" )
@@ -426,14 +478,14 @@ Maui.Page
             {
                 switch(_newActions.currentIndex)
                 {
-                case 0: control.currentFMList.createDir(text); break;
-                case 1: Maui.FM.createFile(control.currentPath, text); break;
-
+                    case 0: control.currentFMList.createDir(text); break;
+                    case 1: Maui.FM.createFile(control.currentPath, text); break;
+                    
                 }
             }
-
+            
             textEntry.placeholderText: i18n("Name")
-
+            
             Maui.ToolActions
             {
                 id: _newActions
@@ -441,13 +493,13 @@ Maui.Page
                 autoExclusive: true
                 display: ToolButton.TextBesideIcon
                 currentIndex: 0
-
+                
                 Action
                 {
                     icon.name: "folder-new"
                     text: i18n("Folder")
                 }
-
+                
                 Action
                 {
                     icon.name: "document-new"
@@ -456,7 +508,7 @@ Maui.Page
             }
         }
     }
-
+    
     Component
     {
         id: renameDialogComponent
@@ -474,9 +526,9 @@ Maui.Page
             rejectButton.text: i18n("Cancel")
         }
     }
-
+    
     Private.BrowserMenu { id: browserMenu }
-
+    
     Private.FileMenu
     {
         id: itemMenu
@@ -487,56 +539,56 @@ Maui.Page
             if(item)
                 control.copy([item.path])
         }
-
+        
         onCutClicked:
         {
             if(item)
                 control.cut([item.path])
         }
-
+        
         onRenameClicked:
         {
             dialogLoader.sourceComponent = renameDialogComponent
             dialog.open()
         }
-
+        
         onRemoveClicked:
         {
             console.log("REMOVE", item.path)
             control.remove([item.path])
         }
     }
-
+    
     Connections
     {
         enabled: control.currentView
         target: control.currentView
         ignoreUnknownSignals: true
-
+        
         function onKeyPress(event)
         {
             const index = control.currentIndex
             const item = control.currentFMList.get(index)
-
+            
             // Shortcuts for refreshing
             if((event.key === Qt.Key_F5))
             {
                 control.currentFMList.refresh()
             }
-
+            
             // Shortcuts for renaming
             if((event.key === Qt.Key_F2))
             {
                 dialogLoader.sourceComponent = renameDialogComponent
                 dialog.open()
             }
-
+            
             // Shortcuts for selecting file
             if((event.key === Qt.Key_A) && (event.modifiers & Qt.ControlModifier))
             {
                 control.selectAll()
             }
-
+            
             if((event.key === Qt.Key_Left || event.key === Qt.Key_Right || event.key === Qt.Key_Down || event.key === Qt.Key_Up) && (event.modifiers & Qt.ControlModifier) && (event.modifiers & Qt.ShiftModifier))
             {
                 if(control.selectionBar && control.selectionBar.contains(item.path))
@@ -547,41 +599,41 @@ Maui.Page
                     control.addToSelection(item)
                 }
             }
-
+            
             //shortcut for opening files
             if(event.key === Qt.Key_Return)
             {
                 indexHistory.push(index)
                 control.openItem(index)
             }
-
+            
             // Shortcut for pasting an item
             if((event.key == Qt.Key_V) && (event.modifiers & Qt.ControlModifier))
             {
                 control.paste(Maui.Handy.getClipboard().urls)
             }
-
+            
             // Shortcut for cutting an item
             if((event.key == Qt.Key_X) && (event.modifiers & Qt.ControlModifier))
             {
                 const urls = filterSelection(control.currentPath, item.path)
                 control.cut(urls)
             }
-
+            
             // Shortcut for copying an item
             if((event.key == Qt.Key_C) && (event.modifiers & Qt.ControlModifier))
             {
                 const urls = filterSelection(control.currentPath, item.path)
                 control.copy(urls)
             }
-
+            
             // Shortcut for removing an item
             if(event.key === Qt.Key_Delete)
             {
                 const urls = filterSelection(control.currentPath, item.path)
                 control.remove(urls)
             }
-
+            
             // Shortcut for going back in browsing history
             if(event.key === Qt.Key_Backspace || event.key == Qt.Key_Back)
             {
@@ -594,26 +646,26 @@ Maui.Page
                     control.goBack()
                 }
             }
-
+            
             // Shortcut for clearing selection and filtering
             if(event.key === Qt.Key_Escape) //TODO not working, the event is not catched or emitted or is being accepted else where?
             {
                 if(control.selectionBar && control.selectionBar.count > 0)
                     control.selectionBar.clear()
-
-                control.view.filter = ""
+                    
+                    control.view.filter = ""
             }
-
+            
             //Shortcut for opening filtering
             if((event.key === Qt.Key_F) && (event.modifiers & Qt.ControlModifier))
             {
                 control.headBar.visible = !control.headBar.visible
                 _searchField.forceActiveFocus()
             }
-
+            
             control.keyPress(event)
         }
-
+        
         function onItemsSelected(indexes)
         {
             if(indexes.length)
@@ -622,7 +674,7 @@ Maui.Page
                 control.selectIndexes(indexes)
             }
         }
-
+        
         function onItemClicked(index)
         {
             control.currentIndex = index
@@ -630,7 +682,7 @@ Maui.Page
             control.itemClicked(index)
             control.currentView.forceActiveFocus()
         }
-
+        
         function onItemDoubleClicked(index)
         {
             control.currentIndex = index
@@ -638,7 +690,7 @@ Maui.Page
             control.itemDoubleClicked(index)
             control.currentView.forceActiveFocus()
         }
-
+        
         function onItemRightClicked(index)
         {
             if(control.currentFMList.pathType !== Maui.FMList.TRASH_PATH && control.currentFMList.pathType !== Maui.FMList.REMOTE_PATH)
@@ -648,11 +700,11 @@ Maui.Page
             control.itemRightClicked(index)
             control.currentView.forceActiveFocus()
         }
-
+        
         function onItemToggled(index)
         {
             const item = control.currentFMList.get(index)
-
+            
             if(control.selectionBar && control.selectionBar.contains(item.path))
             {
                 control.selectionBar.removeAtUri(item.path)
@@ -663,30 +715,30 @@ Maui.Page
             control.itemLeftEmblemClicked(index)
             control.currentView.forceActiveFocus()
         }
-
+        
         function onAreaClicked(mouse)
         {
             if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
                 browserMenu.show(control)
-            else return
-
-            control.rightClicked()
-            control.currentView.forceActiveFocus()
+                else return
+                    
+                    control.rightClicked()
+                    control.currentView.forceActiveFocus()
         }
-
+        
         function onAreaRightClicked(mouse)
         {
             browserMenu.show(control)
         }
     }
-
+    
     StackView
     {
         id: _stackView
-
+        
         anchors.fill: parent
         clip: true
-
+        
         initialItem: DropArea
         {
             id: _dropArea
@@ -695,7 +747,7 @@ Maui.Page
             property alias currentFMModel: _browser.currentFMModel
             property alias filter: _browser.filter
             property alias title : _browser.title
-
+            
             onDropped:
             {
                 if(drop.urls)
@@ -705,22 +757,22 @@ Maui.Page
                     control.urlsDropped(drop.urls)
                 }
             }
-
+            
             opacity:  _dropArea.containsDrag ? 0.5 : 1
-
+            
             Private.BrowserView
             {
                 id: _browser
                 anchors.fill: parent
                 selectionMode: control.selectionMode
             }
-
+            
             Menu
             {
                 id: _dropMenu
                 property string urls
                 enabled: Maui.FM.getFileInfo(control.currentPath).isdir == "true"
-
+                
                 MenuItem
                 {
                     text: i18n("Copy here")
@@ -730,7 +782,7 @@ Maui.Page
                         Maui.FM.copy(urls, control.currentPath, false)
                     }
                 }
-
+                
                 MenuItem
                 {
                     text: i18n("Move here")
@@ -740,7 +792,7 @@ Maui.Page
                         Maui.FM.cut(urls, control.currentPath)
                     }
                 }
-
+                
                 MenuItem
                 {
                     text: i18n("Link here")
@@ -751,9 +803,9 @@ Maui.Page
                             Maui.FM.createSymlink(urls[i], control.currentPath)
                     }
                 }
-
+                
                 MenuSeparator {}
-
+                
                 MenuItem
                 {
                     text: i18n("Cancel")
@@ -761,11 +813,11 @@ Maui.Page
                 }
             }
         }
-
+        
         Component
         {
             id: _searchBrowserComponent
-
+            
             Private.BrowserView
             {
                 id: _searchBrowser
@@ -774,47 +826,47 @@ Maui.Page
             }
         }
     }
-
+    
     Component.onCompleted:
     {
         control.currentView.forceActiveFocus()
     }
-
-
+    
+    
     /**
-      *
-      **/
+     * 
+     **/
     function copy(urls)
     {
         if(urls.length <= 0)
         {
             return
         }
-
+        
         Maui.Handy.copyToClipboard({"urls": urls}, false)
     }
-
+    
     /**
-      *
-      **/
+     * 
+     **/
     function cut(urls)
     {
         if(urls.length <= 0)
         {
             return
         }
-
+        
         Maui.Handy.copyToClipboard({"urls": urls}, true)
     }
-
+    
     /**
-      *
-      **/
+     * 
+     **/
     function paste()
     {
         const data = Maui.Handy.getClipboard()
         const urls = data.urls
-
+        
         if(!urls)
         {
             return
@@ -827,162 +879,162 @@ Maui.Page
             control.currentFMList.copyInto(urls)
         }
     }
-
+    
     /**
-      *
-      **/
+     * 
+     **/
     function remove(urls)
     {
         if(urls.length <= 0)
         {
             return
         }
-
+        
         dialogLoader.sourceComponent= removeDialogComponent
         dialog.urls = urls
         dialog.open()
     }
-
+    
     /**
-      *
-      **/
+     * 
+     **/
     function openItem(index)
     {
         const item = control.currentFMList.get(index)
         const path = item.path
-
+        
         switch(control.currentFMList.pathType)
         {
-        case Maui.FMList.CLOUD_PATH: //TODO deprecrated and needs to be removed or clean up for 1.1
-            if(item.isdir === "true")
-            {
-                control.openFolder(path)
-            }
-            else
-            {
-                Maui.FM.openCloudItem(item)
-            }
-            break;
-        default:
-            if(control.selectionMode && item.isdir == "false")
-            {
-                if(control.selectionBar && control.selectionBar.contains(item.path))
-                {
-                    control.selectionBar.removeAtPath(item.path)
-                }else
-                {
-                    control.addToSelection(item)
-                }
-            }
-            else
-            {
-                if(item.isdir == "true")
+            case Maui.FMList.CLOUD_PATH: //TODO deprecrated and needs to be removed or clean up for 1.1
+                if(item.isdir === "true")
                 {
                     control.openFolder(path)
                 }
                 else
                 {
-                    control.openFile(path)
+                    Maui.FM.openCloudItem(item)
                 }
-            }
+                break;
+            default:
+                if(control.selectionMode && item.isdir == "false")
+                {
+                    if(control.selectionBar && control.selectionBar.contains(item.path))
+                    {
+                        control.selectionBar.removeAtPath(item.path)
+                    }else
+                    {
+                        control.addToSelection(item)
+                    }
+                }
+                else
+                {
+                    if(item.isdir == "true")
+                    {
+                        control.openFolder(path)
+                    }
+                    else
+                    {
+                        control.openFile(path)
+                    }
+                }
         }
     }
-
+    
     /**
-      *
-      **/
+     * 
+     **/
     function openFile(path)
     {
         Maui.FM.openUrl(path)
     }
-
+    
     /**
-      *
-      **/
+     * 
+     **/
     function openFolder(path)
     {
         if(!String(path).length)
         {
             return;
         }
-
+        
         if(control.isSearchView)
         {
             control.quitSearch()
         }
-
+        
         control.currentPath = path
     }
-
+    
     /**
-      *
-      **/
+     * 
+     **/
     function goBack()
     {
         openFolder(control.currentFMList.previousPath)
         //        control.currentIndex = indexHistory.pop()
     }
-
+    
     /**
-      *
-      **/
+     * 
+     **/
     function goNext()
     {
         openFolder(control.currentFMList.posteriorPath)
     }
-
+    
     /**
-      *
-      **/
+     * 
+     **/
     function goUp()
     {
         openFolder(control.currentFMList.parentPath)
     }
-
+    
     /**
-      * For this to work the implementation needs to have passed a selectionBar
-      **/
+     * For this to work the implementation needs to have passed a selectionBar
+     **/
     function addToSelection(item)
     {
         if(control.selectionBar == null || item.path.startsWith("tags://") || item.path.startsWith("applications://"))
         {
             return
         }
-
+        
         control.selectionBar.append(item.path, item)
     }
-
-
+    
+    
     /**
-      * Given a list of indexes add them to the selectionBar
-      **/
+     * Given a list of indexes add them to the selectionBar
+     **/
     function selectIndexes(indexes)
     {
         if(control.selectionBar == null)
         {
             return
         }
-
+        
         for(var i in indexes)
             addToSelection(control.currentFMList.get(indexes[i]))
     }
-
+    
     /**
-      *
-      **/
+     * 
+     **/
     function selectAll() //TODO for now dont select more than 100 items so things dont freeze or break
     {
         if(control.selectionBar == null)
         {
             return
         }
-
+        
         selectIndexes([...Array( Math.min(control.currentFMList.count, 100)).keys()])
     }
-
+    
     /**
-      *
-      **/
+     * 
+     **/
     function bookmarkFolder(paths) //multiple paths
     {
         for(var i in paths)
@@ -990,11 +1042,11 @@ Maui.Page
             Maui.FM.bookmark(paths[i])
         }
     }
-
-
+    
+    
     /**
-      *
-      **/
+     * 
+     **/
     function openSearch()
     {
         if(!control.isSearchView)
@@ -1003,42 +1055,42 @@ Maui.Page
         }
         _searchField.forceActiveFocus()
     }
-
+    
     /**
-      *
-      **/
+     * 
+     **/
     function quitSearch()
     {
         _stackView.pop(StackView.Immediate)
     }
-
+    
     /**
-      *
-      **/
+     * 
+     **/
     function search(query)
     {
         openSearch()
         _stackView.currentItem.title = i18n("Search: %1").arg(query)
         _stackView.currentItem.currentFMList.search(query, _browser.currentFMList)
     }
-
+    
     /**
-      *
-      **/
+     * 
+     **/
     function newItem()
     {
         dialogLoader.sourceComponent= newDialogComponent
         dialog.open()
         dialog.forceActiveFocus()
     }
-
+    
     /**
-      * Filters the content of the selection to the current path. The currentPath must be a directory, so the selection can be compared if it is its parent directory. The itemPath is a default item path in case the selectionBar is empty
-      **/
+     * Filters the content of the selection to the current path. The currentPath must be a directory, so the selection can be compared if it is its parent directory. The itemPath is a default item path in case the selectionBar is empty
+     **/
     function filterSelection(currentPath, itemPath)
     {
         var res = []
-
+        
         if(selectionBar && selectionBar.count > 0 && selectionBar.contains(itemPath))
         {
             const uris = selectionBar.uris
@@ -1049,12 +1101,12 @@ Maui.Page
                     res.push(uri)
                 }
             }
-
+            
         } else
         {
             res = [itemPath]
         }
-
+        
         return res
     }
 }
