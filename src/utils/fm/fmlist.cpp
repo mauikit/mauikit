@@ -116,20 +116,15 @@ void FMList::assignList(const FMH::MODEL_LIST &list)
     emit this->preListChanged();
     this->list = list;
     this->sortList();
-
     this->setStatus({STATUS_CODE::READY, this->list.isEmpty() ? "Nothing here!" : "", this->list.isEmpty() ? "This place seems to be empty" : "", this->list.isEmpty() ? "folder-add" : "", this->list.isEmpty(), true});
-
     emit this->postListChanged();
 }
 
 void FMList::appendToList(const FMH::MODEL_LIST &list)
 {
-    for (const auto &item : list) {
-        emit this->preItemAppended();
-        this->list << item;
-
-        emit this->postItemAppended();
-    }
+    emit this->preItemsAppended(list.size());
+    this->list << list;
+    emit this->postItemAppended();
 }
 
 void FMList::clear()

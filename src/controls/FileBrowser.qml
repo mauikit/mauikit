@@ -239,17 +239,17 @@ Maui.Page
         {
             if(_filterButton.checked)
             {
-                 control.view.filter = text
+                control.view.filter = text
             }else
             {
-                 control.search(text)
+                control.search(text)
             }
         }
         onCleared:
         {
             if(_filterButton.checked)
             {
-                 control.view.filter = ""
+                control.view.filter = ""
             }
         }
         onTextChanged:
@@ -272,7 +272,7 @@ Maui.Page
         {
             id: _filterButton
             icon.name: "view-filter"
-//             text: i18n("Filter")
+            //             text: i18n("Filter")
             checkable: true
             checked: true
             flat: true
@@ -319,18 +319,53 @@ Maui.Page
             acceptButton.text: i18n("Trash")
             acceptButton.visible: Maui.Handy.isLinux
             page.margins: Maui.Style.space.big
-            
+
             spacing: Maui.Style.space.medium
-            
-            template.iconSource: urls.length === 1 ? Maui.FM.getFileInfo(urls[0]).icon : "emblem-warning"
-            template.imageSource: urls.length === 1 ? Maui.FM.getFileInfo(urls[0]).thumbnail : ""
+
+            template.iconSource:  Maui.FM.getFileInfo(urls[0]).icon
+            template.imageSource: Maui.FM.getFileInfo(urls[0]).thumbnail
+
+            template.iconComponent: Item
+            {
+               layer.enabled: true
+
+                Rectangle
+                {
+                    visible: _removeDialog.urls.length > 1
+                    anchors.fill: parent
+                    anchors.leftMargin: Maui.Style.space.small
+                    anchors.rightMargin: Maui.Style.space.small
+                    radius: Maui.Style.radiusV
+                    color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
+                }
+
+                Rectangle
+                {
+                    anchors.fill: parent
+                    anchors.topMargin:  _removeDialog.urls.length > 1 ? Maui.Style.space.small : 0
+
+                    radius: Maui.Style.radiusV
+                    color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
+
+                    Maui.GridItemTemplate
+                    {
+                        anchors.fill: parent
+                        anchors.margins: Maui.Style.space.tiny
+                        iconSizeHint: height
+
+                        iconSource: Maui.FM.getFileInfo(_removeDialog.urls[0]).icon
+                        imageSource: Maui.FM.getFileInfo(_removeDialog.urls[0]).thumbnail
+
+                    }
+                }
+            }
 
             actions: Action
             {
                 text: i18n("Cancel")
                 onTriggered: _removeDialog.close()
             }
-            
+
             Maui.Separator
             {
                 Layout.fillWidth: true
@@ -345,9 +380,9 @@ Maui.Page
 
                 text: i18n("List files")
             }
-            
+
             Item {Layout.fillWidth: true}
-            
+
             Repeater
             {
                 model: urls
@@ -387,18 +422,18 @@ Maui.Page
             title: i18n("New %1", _newActions.currentIndex === 0 ? "folder" : "file" )
             message: i18n("Create a new folder or a file with a custom name")
             acceptButton.text: i18n("Create")
-            onFinished: 
+            onFinished:
             {
                 switch(_newActions.currentIndex)
                 {
-                    case 0: control.currentFMList.createDir(text); break;
-                    case 1: Maui.FM.createFile(control.currentPath, text); break;
+                case 0: control.currentFMList.createDir(text); break;
+                case 1: Maui.FM.createFile(control.currentPath, text); break;
 
                 }
             }
-            
+
             textEntry.placeholderText: i18n("Name")
-            
+
             Maui.ToolActions
             {
                 id: _newActions
@@ -406,13 +441,13 @@ Maui.Page
                 autoExclusive: true
                 display: ToolButton.TextBesideIcon
                 currentIndex: 0
-                
+
                 Action
                 {
                     icon.name: "folder-new"
                     text: i18n("Folder")
                 }
-                
+
                 Action
                 {
                     icon.name: "document-new"
@@ -421,7 +456,7 @@ Maui.Page
             }
         }
     }
-    
+
     Component
     {
         id: renameDialogComponent

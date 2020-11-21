@@ -133,7 +133,7 @@ Item
       * imageBorder : bool
       */
     property bool imageBorder: true
-    
+
      /**
       * iconComponent : Component
       */
@@ -346,7 +346,7 @@ Item
 
         Item
         {
-            visible: control.labelsVisible
+            visible: control.labelsVisible && _label1.text
             Layout.fillHeight: true
             Layout.preferredHeight: Math.min(_label1.implicitHeight, height)
             Layout.fillWidth: true
