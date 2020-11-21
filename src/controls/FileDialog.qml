@@ -120,6 +120,7 @@ Maui.Dialog
       */
     signal urlsSelected(var urls)
 
+    page.headerBackground.color: Kirigami.Theme.backgroundColor
     rejectButton.text: i18n("Cancel")
     acceptButton.text: control.mode === modes.SAVE ? i18n("Save") : i18n("Open")
 

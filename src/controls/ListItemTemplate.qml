@@ -287,11 +287,8 @@ Item
     {
         id: _iconComponent
 
-        Rectangle
+        Item
         {
-            radius: Maui.Style.radiusV
-            color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
-
             Kirigami.Icon
             {
                 source: control.iconSource
