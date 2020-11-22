@@ -390,7 +390,7 @@ Maui.Page
         {
             property var item : control.currentFMList ? control.currentFMList.get(control.currentIndex) : ({})
             title: i18n("Rename")
-            message: i18n("Change the name of a file or folder")
+//             message: i18n("Change the name of a file or folder")
             template.iconSource: item.icon
             template.imageSource: item.thumbnail
             textEntry.text: item.label

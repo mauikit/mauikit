@@ -120,7 +120,7 @@ Maui.Popup
       * entryField : bool
       *  If a text entry should be visible under the dialog body message.
       */
-    property alias entryField: _textEntry.visible
+    property bool entryField: false
 
     /**
       * page : Page
@@ -241,27 +241,30 @@ Maui.Popup
                         Maui.ListItemTemplate
                         {
                             id: _template
-                            visible: control.message.length
+                            visible: control.message.length || control.entryField
                             Layout.fillWidth: true
-                            implicitHeight: label1.implicitHeight + label2.implicitHeight + Maui.Style.space.big
+                            implicitHeight: leftLabels.implicitHeight + Maui.Style.space.big
 
                             label2.text: message
                             label2.textFormat : TextEdit.AutoText
                             label2.wrapMode: TextEdit.WordWrap
+                            
+                            leftMargin: 0
+                            rightMargin: 0
 
                             iconSizeHint: Maui.Style.iconSizes.large
                             spacing: Maui.Style.space.big
-                        }
-
-                        Maui.TextField
-                        {
-                            id: _textEntry
-                            visible: false
-                            Layout.fillWidth: true
-                            Layout.alignment: Qt.AlignCenter
-                            focus: visible
-                            onAccepted: control.accepted()
-                        }
+                            
+                            leftLabels.spacing: control.spacing
+                            leftLabels.data:  Maui.TextField
+                            {
+                                id: _textEntry
+                                visible: control.entryField
+                                Layout.fillWidth: true
+                                focus: visible
+                                onAccepted: control.accepted()
+                            }
+                        }                       
 
                         Label
                         {
