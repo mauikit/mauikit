@@ -23,7 +23,7 @@ import QtQuick.Controls 2.14
 import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.2 as Maui
+import org.kde.mauikit 1.3 as Maui
 
 /**
  * GridItemTemplate
@@ -137,7 +137,7 @@ Item
      /**
       * iconComponent : Component
       */
-    property Component iconComponent :  _iconContainer.visible ? (control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : null) ): null
+    property Component iconComponent :  _iconContainer.visible ? _iconComponent : null
 
 
     /**
@@ -147,118 +147,25 @@ Item
 
     Component
     {
-        id: _imgComponent
-
-        Item
-        {
-            height: parent.height
-            width: parent.width
-
-            Image
-            {
-                id: img
-                source: control.imageSource
-                anchors.fill: parent
-                sourceSize.width: control.imageWidth
-                sourceSize.height: control.imageHeight
-                horizontalAlignment: Qt.AlignHCenter
-                verticalAlignment: Qt.AlignVCenter
-                fillMode: control.fillMode
-                cache: true
-                asynchronous: true
-                smooth: false
-
-                layer.enabled: control.maskRadius
-                layer.effect: OpacityMask
-                {
-                    maskSource: Item
-                    {
-                        width: img.width
-                        height: img.height
-
-                        Rectangle
-                        {
-                            anchors.centerIn: parent
-                            width: Math.min(parent.width, img.paintedWidth)
-                            height: Math.min(parent.height, img.paintedHeight)
-                            radius: control.maskRadius
-                        }
-                    }
-                }
-            }
-
-            Rectangle
-            {
-                Kirigami.Theme.inherit: false
-                visible: control.imageBorder
-                anchors.centerIn: parent
-
-                width: img.status === Image.Ready ? Math.min(parent.width, img.paintedWidth) : parent.width
-                height:  img.status === Image.Ready ? Math.min(parent.height, img.paintedHeight) : parent.height
-                border.color: control.isCurrentItem ? Kirigami.Theme.highlightColor : Qt.darker(Kirigami.Theme.backgroundColor, 2.2)
-                radius: control.maskRadius
-
-                border.width: control.isCurrentItem ? 2 : 1
-                color: "transparent"
-                opacity: 0.8
-
-                Rectangle
-                {
-                    anchors.fill: parent
-                    color: "transparent"
-                    anchors.margins: 1
-                    radius: parent.radius - 0.5
-                    border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
-                    opacity: 0.3
-                }
-            }
-
-            Kirigami.Icon
-            {
-                visible: img.status !== Image.Ready
-                anchors.centerIn: parent
-                height: Math.min(22, parent.height * 0.4)
-                width: height
-                source: "folder-images"
-                isMask: true
-                color: Kirigami.Theme.textColor
-                opacity: 0.5
-            }
-
-            ColorOverlay
-            {
-                anchors.fill: parent
-
-                visible: control.hovered || control.checked ||control.isCurrentItem
-                opacity: 0.3
-
-                source: parent
-                color: control.hovered || control.isCurrentItem  ? control.Kirigami.Theme.highlightColor : "#000"
-            }
-        }
-    }
-
-    Component
-    {
         id: _iconComponent
-
-        Kirigami.Icon
+        
+        Maui.IconItem
         {
-            anchors.centerIn: parent
-            source: control.iconSource
-            fallback: "application-x-zerosize"
-            height: Math.floor(Math.min(parent.height, control.iconSizeHint))
-            width: height
-            color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
-
-            ColorOverlay
-            {
-                visible: control.hovered || control.checked
-                opacity: 0.3
-                anchors.fill: parent
-                source: parent
-                color: control.hovered ? control.Kirigami.Theme.highlightColor : "#000"
-            }
+            iconSource: control.iconSource
+            imageSource: control.imageSource
+            
+            highlighted: control.isCurrentItem
+            hovered: control.hovered
+            
+            iconSizeHint: control.iconSizeHint
+            imageSizeHint: control.imageSizeHint
+            
+            imageWidth: control.imageWidth
+            imageHeight: control.imageHeight
+            
+            fillMode: control.fillMode
+            maskRadius: control.maskRadius
+            imageBorder: control.imageBorder
         }
     }
 

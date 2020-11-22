@@ -92,11 +92,8 @@ Maui.Dialog
                     iconSource: control.template.iconSource
                     imageSource:  control.template.imageSource                 
                 }
-                
-            }                  
-            
-        }
-        
+            }
+        }        
     }
 
     Column
@@ -113,19 +110,20 @@ Maui.Dialog
         Layout.margins: Maui.Style.space.medium
     }
 
-    CheckBox
+    Maui.SectionDropDown
     {
-        id: controlFilesCheckBox
+        id: _dropDown
         Layout.fillWidth: true
         checked: true
-        text: i18n("List files")
+        label1.text: i18n("List files")
+        label2.text: i18n("Review and edit selected files.")
     }
     
     Item {Layout.fillWidth: true}
     
     Maui.ListBrowser
     {
-        visible: controlFilesCheckBox.checked
+        visible: _dropDown.checked
         
         Layout.fillWidth: true
         implicitHeight: Math.min(contentHeight + Maui.Style.space.big, 400)
@@ -150,7 +148,7 @@ Maui.Dialog
             ToolButton
             {
                 //text: i18n("Clear")
-                icon.name: "edit-clear"
+                icon.name: "list-remove"
                 icon.width: Maui.Style.iconSizes.small
                 icon.height: Maui.Style.iconSizes.small
                 

@@ -20,10 +20,9 @@
 import QtQuick 2.14
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.14
-import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.2 as Maui
+import org.kde.mauikit 1.3 as Maui
 
 /**
  * ListItemTemplate
@@ -219,7 +218,7 @@ Item
     /**
       * iconComponent : Component
       */
-    property Component iconComponent :  _iconContainer.visible ? (control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : null) ): null
+    property Component iconComponent :  _iconContainer.visible ? _iconComponent : null
 
     /**
       * toggled
@@ -228,85 +227,25 @@ Item
 
     Component
     {
-        id: _imgComponent
-
-        Image
-        {
-            id: img
-            anchors.centerIn: parent
-            source: control.imageSource
-            height: Math.min(parent.height, control.imageSizeHint)
-            width: height
-            sourceSize.width:control.imageWidth
-            sourceSize.height: control.imageHeight
-            horizontalAlignment: Qt.AlignHCenter
-            verticalAlignment: Qt.AlignVCenter
-            fillMode: control.fillMode
-            cache: true
-            asynchronous: true
-            smooth: false
-
-            layer.enabled: control.maskRadius
-            layer.effect: OpacityMask
-            {
-                maskSource: Item
-                {
-                    width: img.width
-                    height: img.height
-                    Rectangle
-                    {
-                        anchors.fill: parent
-                        radius: control.maskRadius
-                    }
-                }
-            }
-
-            Rectangle
-            {
-                anchors.fill: parent
-                border.color: control.imageBorder ? Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.8) : "transparent"
-                radius: control.maskRadius
-                opacity: 0.2
-                color: control.hovered ? control.Kirigami.Theme.highlightColor : "transparent"
-
-                Kirigami.Icon
-                {
-                    anchors.centerIn: parent
-                    height: Math.min(22, parent.height * 0.7)
-                    width: height
-                    source: "folder-images"
-                    isMask: true
-                    color: parent.border.color
-                    opacity: 1 - img.progress
-                }
-            }
-        }
-    }
-
-    Component
-    {
         id: _iconComponent
 
-        Item
+        Maui.IconItem
         {
-            Kirigami.Icon
-            {
-                source: control.iconSource
-                anchors.centerIn: parent
-                fallback: "qrc:/assets/application-x-zerosize.svg"
-                height: Math.min(parent.height, control.iconSizeHint)
-                width: height
-                color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
-
-                ColorOverlay
-                {
-                    visible: control.hovered
-                    opacity: 0.3
-                    anchors.fill: parent
-                    source: parent
-                    color: control.Kirigami.Theme.highlightColor
-                }
-            }
+            iconSource: control.iconSource
+            imageSource: control.imageSource
+            
+            highlighted: control.isCurrentItem
+            hovered: control.hovered
+            
+            iconSizeHint: control.iconSizeHint
+            imageSizeHint: control.imageSizeHint
+            
+            imageWidth: control.imageWidth
+            imageHeight: control.imageHeight
+            
+            fillMode: control.fillMode
+            maskRadius: control.maskRadius
+            imageBorder: control.imageBorder
         }
     }
 
@@ -381,8 +320,7 @@ Item
                 }
             }
         }
-
-
+        
         Item
         {
             id: _iconContainer
