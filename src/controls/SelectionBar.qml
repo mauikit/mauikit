@@ -337,7 +337,7 @@ Item
                 }
             }
 
-            Maui.ToolBar
+            Kirigami.ActionToolBar
             {
                 id: _layout
                 clip: true
@@ -345,32 +345,11 @@ Item
                 spacing: Maui.Style.space.medium
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                preferredHeight: height
-                background: Item{}
-                leftSretch: false
-                rightSretch: false
-                middleContent: Repeater
-                {
-                    model: control.actions
-
-                    ToolButton
-                    {
-                        action: modelData
-                        display: control.display
-                        Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
-                        Kirigami.Theme.inherit: false
-                        ToolTip.delay: 1000
-                        ToolTip.timeout: 5000
-                        ToolTip.visible: hovered || pressed && action.text
-                        ToolTip.text: action.text
-                    }
-                }
-
-                rightContent: Maui.ToolButtonMenu
-                {
-                    visible: content.length > 0
-                    content: control.hiddenActions
-                }
+                actions: control.actions
+                hiddenActions: control.hiddenActions
+                
+                display: control.display
+                alignment: Qt.AlignHCenter
             }
 
             Maui.Badge
