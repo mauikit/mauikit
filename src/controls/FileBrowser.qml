@@ -948,6 +948,16 @@ Maui.Page
         _stackView.currentItem.title = i18n("Search: %1").arg(query)
         _stackView.currentItem.currentFMList.search(query, _browser.currentFMList)
     }
+
+    /**
+     *
+     **/
+    function openTerminal()
+    {
+        //TODO: @gadominguez Funcinalidad open terminal. Buscar forma de lanzar temrinal desde C++ en los distintos S.0
+        console.log("@gabridc File: FileBrowser.qml Function:openTerminal Path: "  + _browser.path)
+
+    }
     
     /**
      * 

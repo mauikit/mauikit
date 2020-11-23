@@ -28,6 +28,17 @@ Menu
 
     MenuItem
     {
+        icon.name: "utilities-terminal"
+        text: i18n("Open In Terminal")
+//         enabled: _optionsButton.enabled
+
+        onTriggered: openTerminal()
+    }
+
+    MenuSeparator {}
+
+    MenuItem
+    {
         text: i18n("Paste")
 //         enabled: _optionsButton.enabled
 
