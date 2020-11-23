@@ -63,25 +63,19 @@ ListView
         color: Kirigami.Theme.textColor
     }
 
-    delegate: Item
+    delegate: TagDelegate
     {
-        width: ListView.view.width
-        height: ListView.view.height
-
-        TagDelegate
+        showDeleteIcon: control.showDeleteIcon
+        Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
+        anchors.verticalCenter: parent.verticalCenter
+        
+        ListView.onAdd:
         {
-            id: delegate
-            showDeleteIcon: control.showDeleteIcon
-            Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
-            anchors.verticalCenter: parent.verticalCenter
-
-            ListView.onAdd:
-            {
-                control.positionViewAtEnd()
-            }
-
-            onRemoveTag: tagRemoved(index)
-            onClicked: tagClicked(index)
+            control.positionViewAtEnd()
         }
+        
+        onRemoveTag: tagRemoved(index)
+        onClicked: tagClicked(index)
     }
+    
 }

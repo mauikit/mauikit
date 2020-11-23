@@ -39,23 +39,6 @@ void TagsList::refresh()
     this->setList();
 }
 
-bool TagsList::contains(const QString &tag)
-{
-    return this->indexOf(tag) >= 0;
-}
-
-int TagsList::indexOf(const QString &tag)
-{
-    int i = 0;
-    for (const auto &item : this->list) {
-        if (item.value(FMH::MODEL_KEY::TAG) == tag)
-            return i;
-        i++;
-    }
-
-    return -1;
-}
-
 bool TagsList::insert(const QString &tag)
 {
     if (this->tag->tag(tag.trimmed()))
@@ -103,7 +86,7 @@ void TagsList::removeFromUrls(const int &index)
 
 void TagsList::removeFromUrls(const QString &tag)
 {
-    const auto index = indexOf(tag);
+    const auto index = indexOf(FMH::MODEL_KEY::TAG, tag);
     removeFromUrls(index);
 }
 
@@ -179,7 +162,7 @@ void TagsList::setUrls(const QStringList &value)
 
 void TagsList::append(const QString &tag)
 {
-    if (this->contains(tag))
+    if (this->exists(FMH::MODEL_KEY::TAG, tag))
         return;
 
     emit this->preItemAppended();
@@ -193,3 +176,9 @@ void TagsList::append(const QStringList &tags)
     for (const auto &tag : tags)
         this->append(tag);
 }
+
+bool TagsList::contains(const QString& tag)
+{
+    return this->exists(FMH::MODEL_KEY::TAG, tag);
+}
+

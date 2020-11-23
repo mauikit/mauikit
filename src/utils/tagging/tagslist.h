@@ -149,15 +149,6 @@ public slots:
      */
     bool contains(const QString &tag);
 
-    /**
-     * @brief indexOf
-     * Returns the index of a given tag name in the model list, if the tag is not present then -1 is returned.
-     * @param tag
-     * Tag name to be look up
-     * @return
-     * The index of the tag in the model or -1. This operation does not map the index to a fitered or sorted model, to get a matched index in such case use the mapping methods from the Maui Base Model
-     */
-    int indexOf(const QString &tag);
 };
 
 #endif // TAGSLIST_H
