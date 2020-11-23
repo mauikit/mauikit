@@ -6,7 +6,7 @@ import QtQuick.Layouts 1.3
 
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
-import "private"
+import "private" as Private
 
 /**
  * Terminal
@@ -270,6 +270,105 @@ Maui.Page
                     terminalMenu.popup()
             }
         }
+        
+        TerminalInputArea {
+        id: inputArea
+//         enabled: terminalPage.state != "SELECTION"
+enabled: true
+        anchors.fill: parent
+        // FIXME: should anchor to the bottom of the window to cater for the case when the OSK is up
+
+        // This is the minimum wheel event registered by the plugin (with the current settings).
+        property real wheelValue: 40
+
+        // This is needed to fake a "flickable" scrolling.
+        swipeDelta: kterminal.fontMetrics.height
+
+        // Mouse actions
+        onMouseMoveDetected: kterminal.simulateMouseMove(x, y, button, buttons, modifiers);
+        onDoubleClickDetected: kterminal.simulateMouseDoubleClick(x, y, button, buttons, modifiers);
+        onMousePressDetected: {
+            kterminal.forceActiveFocus();
+            kterminal.simulateMousePress(x, y, button, buttons, modifiers);
+        }
+        onMouseReleaseDetected: kterminal.simulateMouseRelease(x, y, button, buttons, modifiers);
+        onMouseWheelDetected: kterminal.simulateWheel(x, y, buttons, modifiers, angleDelta);
+
+        // Touch actions
+        onTouchPress: kterminal.forceActiveFocus()
+        onTouchClick: kterminal.simulateKeyPress(Qt.Key_Tab, Qt.NoModifier, true, 0, "");
+        onTouchPressAndHold: alternateAction(x, y);
+
+        // Swipe actions
+        onSwipeYDetected: {
+            if (steps > 0) {
+                simulateSwipeDown(steps);
+            } else {
+                simulateSwipeUp(-steps);
+            }
+        }
+        onSwipeXDetected: {
+            if (steps > 0) {
+                simulateSwipeRight(steps);
+            } else {
+                simulateSwipeLeft(-steps);
+            }
+        }
+        onTwoFingerSwipeYDetected: {
+            if (steps > 0) {
+                simulateDualSwipeDown(steps);
+            } else {
+                simulateDualSwipeUp(-steps);
+            }
+        }
+
+        function simulateSwipeUp(steps) {
+            while(steps > 0) {
+                kterminal.simulateKeyPress(Qt.Key_Up, Qt.NoModifier, true, 0, "");
+                steps--;
+            }
+        }
+        function simulateSwipeDown(steps) {
+            while(steps > 0) {
+                kterminal.simulateKeyPress(Qt.Key_Down, Qt.NoModifier, true, 0, "");
+                steps--;
+            }
+        }
+        function simulateSwipeLeft(steps) {
+            while(steps > 0) {
+                kterminal.simulateKeyPress(Qt.Key_Left, Qt.NoModifier, true, 0, "");
+                steps--;
+            }
+        }
+        function simulateSwipeRight(steps) {
+            while(steps > 0) {
+                kterminal.simulateKeyPress(Qt.Key_Right, Qt.NoModifier, true, 0, "");
+                steps--;
+            }
+        }
+        function simulateDualSwipeUp(steps) {
+            while(steps > 0) {
+                kterminal.simulateWheel(width * 0.5, height * 0.5, Qt.NoButton, Qt.NoModifier, Qt.point(0, -wheelValue));
+                steps--;
+            }
+        }
+        function simulateDualSwipeDown(steps) {
+            while(steps > 0) {
+                kterminal.simulateWheel(width * 0.5, height * 0.5, Qt.NoButton, Qt.NoModifier, Qt.point(0, wheelValue));
+                steps--;
+            }
+        }
+
+        // Semantic actions
+        onAlternateAction: {
+            // Force the hiddenButton in the event position.
+            hiddenButton.x = x;
+            hiddenButton.y = y;
+            PopupUtils.open(Qt.resolvedUrl("AlternateActionPopover.qml"),
+                            hiddenButton);
+        }
+    }
+
 
         QMLTermScrollbar
         {
