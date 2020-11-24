@@ -33,7 +33,7 @@ class PlacesList : public MauiList
 public:
     PlacesList(QObject *parent = nullptr);
 
-    FMH::MODEL_LIST items() const override;
+    const FMH::MODEL_LIST &items() const override;
 
     QList<int> getGroups() const;
     void setGroups(const QList<int> &value);

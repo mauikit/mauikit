@@ -181,7 +181,7 @@ public:
      * @brief items
      * @return
      */
-    FMH::MODEL_LIST items() const final override;
+    const FMH::MODEL_LIST &items() const final override;
 
     /**
      * @brief getSortBy

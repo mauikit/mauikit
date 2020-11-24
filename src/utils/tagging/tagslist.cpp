@@ -117,7 +117,7 @@ void TagsList::erase(const int &index)
     Q_UNUSED(index)
 }
 
-FMH::MODEL_LIST TagsList::items() const
+const FMH::MODEL_LIST &TagsList::items() const
 {
     return this->list;
 }

@@ -120,7 +120,7 @@ void PlacesList::componentComplete()
     this->setList();
 }
 
-FMH::MODEL_LIST PlacesList::items() const
+const FMH::MODEL_LIST &PlacesList::items() const
 {
     return this->list;
 }

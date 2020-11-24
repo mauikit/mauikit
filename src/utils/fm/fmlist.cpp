@@ -165,7 +165,7 @@ void FMList::reset()
     this->setList();
 }
 
-FMH::MODEL_LIST FMList::items() const
+const FMH::MODEL_LIST &FMList::items() const
 {
     return this->list;
 }

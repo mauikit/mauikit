@@ -32,7 +32,7 @@ class PathList : public MauiList
 public:
     PathList(QObject *parent = nullptr);
 
-    FMH::MODEL_LIST items() const override;
+    const FMH::MODEL_LIST &items() const override;
 
     /**
      * @brief setPath

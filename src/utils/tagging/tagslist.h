@@ -24,7 +24,7 @@ class TagsList : public MauiList
 public:
     explicit TagsList(QObject *parent = nullptr);
 
-    FMH::MODEL_LIST items() const override;
+    const FMH::MODEL_LIST &items() const override;
 
     bool getStrict() const;
     void setStrict(const bool &value);

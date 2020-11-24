@@ -50,7 +50,7 @@ public:
      */
     explicit MauiList(QObject *parent = nullptr);
 
-    virtual FMH::MODEL_LIST items() const = 0;
+    virtual const FMH::MODEL_LIST &items() const = 0;
     virtual void classBegin() override  {}
     virtual void componentComplete() override {}
     virtual void modelHooked() {};

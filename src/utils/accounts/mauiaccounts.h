@@ -58,7 +58,7 @@ public:
     MauiAccounts(MauiAccounts &&) = delete;
     MauiAccounts &operator=(MauiAccounts &&) = delete;
 
-    FMH::MODEL_LIST items() const final override;
+    const FMH::MODEL_LIST &items() const final override;
 
     /**
      * @brief setCurrentAccountIndex
