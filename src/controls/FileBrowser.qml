@@ -113,10 +113,16 @@ Maui.Page
     property bool selectionMode: false
     
     /**
-     * thumbnailsSize : int
+     * gridItemSize : int
      * Size of the items in the grid view. The size is for the combined thumbnail/icon and the title label.
      */
-    property int thumbnailsSize : Maui.Style.iconSizes.large * 1.7
+    property alias gridItemSize : _browser.gridItemSize
+    
+    /**
+     * listItemSize : int
+     * Size of the items in the grid view. The size is for the combined thumbnail/icon and the title label.
+     */
+    property alias listItemSize : _browser.listItemSize
     
     /**
      * indexHistory : var

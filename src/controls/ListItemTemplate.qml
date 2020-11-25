@@ -382,7 +382,7 @@ Item
         ColumnLayout
         {
             id: _rightLabels
-            visible: control.width >  Kirigami.Units.gridUnit * 15 && control.labelsVisible
+            visible: control.width >  Kirigami.Units.gridUnit * 15 && control.labelsVisible && control.height > 32
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.margins: Maui.Style.space.tiny

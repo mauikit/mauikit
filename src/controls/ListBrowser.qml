@@ -229,7 +229,7 @@ Item
 
             focus: true
             clip: true
-            spacing: control.enableLassoSelection ? Maui.Style.space.big : Maui.Style.space.medium
+            spacing: control.enableLassoSelection ? Maui.Style.space.medium : Maui.Style.space.small
             snapMode: ListView.NoSnap
             boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds :
                                                          Flickable.OvershootBounds

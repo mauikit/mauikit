@@ -20,6 +20,9 @@ Maui.Page
       */
     property bool selectionMode : false
 
+    property int gridItemSize :  Maui.Style.iconSizes.large * 1.7
+    property int listItemSize : Maui.Style.rowHeight
+    
     /**
       *
       */
@@ -269,6 +272,8 @@ Maui.Page
                 readonly property string path : model.path
 
                 width: ListView.view.width
+                height: control.listItemSize
+                
                 iconSource: model.icon
 
                 label1.text: model.label ? model.label : ""
@@ -399,7 +404,7 @@ Maui.Page
 
             property alias currentFMList : _browserModel.list
             property alias currentFMModel : _browserModel
-            itemSize : thumbnailsSize + Maui.Style.space.big
+            itemSize : control.gridItemSize
             itemHeight: itemSize * 1.3
             property bool checkable: control.selectionMode
             enableLassoSelection: true
