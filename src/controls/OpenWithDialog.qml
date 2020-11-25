@@ -24,9 +24,9 @@ import org.kde.kirigami 2.7 as Kirigami
 
 /**
  * OpenWithDialog
- * A global sidebar for the application window that can be collapsed.
+ * A dialog with a list of services associated to the list of URLs.
  *
- *
+ * The services listed can open the file type of the file URLs.
  *
  *
  *
@@ -38,6 +38,7 @@ Maui.Dialog
 
     /**
       * urls : var
+      * List of file URLs to look for associated services.
       */
     property var urls : []
 
@@ -60,7 +61,6 @@ Maui.Dialog
         Layout.fillHeight: true
         spacing: 0
         margins: 0
-        checkable: false
         model: ListModel {}
 
         delegate: Maui.AlternateListItem

@@ -25,11 +25,7 @@ import org.kde.kirigami 2.7 as Kirigami
 
 /**
  * Badge
- * Badge to show a counter or an icon as a notification.
- *
- *
- *
- *
+ * Badge to show a counter or an icon as a notification hint.
  *
  *
  */

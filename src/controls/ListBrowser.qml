@@ -41,11 +41,6 @@ Item
     implicitWidth: contentWidth + margins*2
 
     /**
-      * checkable : bool
-      */
-    property bool checkable : false
-
-    /**
       * model : var
       */
     property alias model : _listView.model
@@ -124,7 +119,7 @@ Item
       * atYEnd : bool
       */
     property alias atYEnd : _listView.atYEnd
-    
+
         /**
       * atYBeginning : bool
       */
@@ -189,26 +184,6 @@ Item
       * itemsSelected :
       */
     signal itemsSelected(var indexes)
-
-    /**
-      * itemClicked :
-      */
-    signal itemClicked(int index)
-
-    /**
-      * itemDoubleClicked :
-      */
-    signal itemDoubleClicked(int index)
-
-    /**
-      * itemRightClicked :
-      */
-    signal itemRightClicked(int index)
-
-    /**
-      *  itemToggled :
-      */
-    signal itemToggled(int index, bool state)
 
     /**
       * areaClicked :

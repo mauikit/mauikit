@@ -26,13 +26,11 @@ import QtGraphicalEffects 1.0
 
 /**
  * SelectionBar
- * A global sidebar for the application window that can be collapsed.
  *
- *
- *
- *
- *
- *
+ * A bar to group selected items with a list of actions to perform to the selection.
+ * The list of actions is  positioned into a Kirigami ActionToolBar.
+ * This control provides methods to append and query elements added to it. To add elements to it, it is necesary to map them,
+ * so an item is mapped to an unique id refered here as an URI.
  */
 Item
 {
@@ -49,80 +47,88 @@ Item
 
     /**
       * actions : list<Action>
+      * Default list of actions, the actions are positioned into a Kirigami ActionToolBar.
       */
     default property list<Action> actions
 
     /**
       * hiddenActions : list<Action>
+      * List of action that wont be shown, and instead will always hidden and listed in the overflow menu.
       */
     property list<Action> hiddenActions
 
     /**
       * padding : int
+      *
       */
     property int padding : 0
 
     /**
-      *  barHeight : int
+      * barHeight : int
+      * height of the selection bar withouh the padding.
       */
     property int barHeight: Maui.Style.toolBarHeightAlt
 
     /**
       * display : int
+      * Preferred display mode of the visible actions. As icons only, or text beside icons... etc.
       */
     property int display : root.isWide ? ToolButton.TextBesideIcon : ToolButton.IconOnly
 
     /**
       * maxListHeight : int
+      * The selectionbar can list the grouped items under a collapsable list. This property defines the maximum height the list can take.
+      * This can be changed to avoid overlapping the list with other components.
       */
     property int maxListHeight : 400
 
     /**
       * radius : int
+      * By default the selectionbar was designed to be floating and thus has a rounded border corners.
+      * This property allows to change the border radius.
       */
     property int radius: Maui.Style.radiusV
 
     /**
      * singleSelection : bool
-     * if singleSelection is set to true then only a single item is selected
-     * at time, and replaced with a newe item appended
+     * if singleSelection is set to true then only a single item can be appended,
+     * if another item is added then it replaces the previous one.
      **/
     property bool singleSelection: false
 
     /**
       * uris : var
+      * List of URIs associated to the grouped elements.
       */
     readonly property alias uris: _private._uris
 
     /**
       * items : var
+      * List of items grouped.
       */
     readonly property alias items: _private._items
 
     /**
       * selectionList : ListBrowser
+      * The component where the grouped items are listed.
       */
     readonly property alias selectionList : selectionList
 
     /**
       * count : int
+      * Size of the elements grouped.
       */
     readonly property alias count : selectionList.count
 
     /**
       * background : Rectangle
+      * The default style of the background. This can be customized by changing its properties.
       */
     property alias background : bg
 
-    property QtObject m_private : QtObject
-    {
-        id: _private
-        property var _uris : []
-        property var _items : []
-    }
-
     /**
       * listDelegate : Component
+      * Delegate to be used in the component where the grouped elements are listed.
       */
     property Component listDelegate: Maui.ItemDelegate
     {
@@ -151,64 +157,76 @@ Item
     }
 
     /**
-      * iconClicked :
-      */
-    signal iconClicked()
-
-    /**
       * cleared :
+      * Triggered when the selection is cleared by using the close button or calling the clear method.
       */
     signal cleared()
 
     /**
       * exitClicked :
+      * Triggered when the selection bar is closed by using the close button or the close method.
       */
     signal exitClicked()
 
     /**
       * itemClicked :
+      * Triggered when an item in the selection list view is clicked.
       */
     signal itemClicked(int index)
 
     /**
       * itemPressAndHold :
+      * Triggered when an item in the selection list view is pressed and hold.
       */
     signal itemPressAndHold(int index)
 
     /**
       * itemAdded :
+      * Triggered when an item newly added to the selection.
       */
     signal itemAdded(var item)
 
     /**
       * itemRemoved :
+      * Triggered when an item has been removed from the selection.
       */
     signal itemRemoved(var item)
 
     /**
       * uriAdded :
+      * Triggered when an item newly added to the selection. This signal only sends the refered URI of the item.
       */
     signal uriAdded(string uri)
 
-    /**
-      *
+    /** uriRemoved:
+      * Triggered when an item has been removed from the selection. This signal only sends the refered URI of the item.
       */
     signal uriRemoved(string uri)
 
     /**
-      * uriRemoved :
+      * clicked :
+      * Triggered when an empty area of the selectionbar has been clicked.
       */
     signal clicked(var mouse)
 
     /**
       * rightClicked :
+      * Triggered when an empty area of the selectionbar has been right clicked.
       */
     signal rightClicked(var mouse)
 
     /**
       * urisDropped :
+      * Triggered when a group of URIs has been dropped.
       */
     signal urisDropped(var uris)
+
+    property QtObject m_private : QtObject
+    {
+        id: _private
+        property var _uris : []
+        property var _items : []
+    }
 
     Item
     {
@@ -342,12 +360,12 @@ Item
                 id: _layout
                 clip: true
                 position: ToolBar.Footer
-                spacing: Maui.Style.space.medium
+//                spacing: Maui.Style.space.medium
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 actions: control.actions
                 hiddenActions: control.hiddenActions
-                
+
                 display: control.display
                 alignment: Qt.AlignHCenter
             }
@@ -488,7 +506,7 @@ Item
     }
 
     /**
-      *
+      * Removes all the items from the selection.
       */
     function clear()
     {
@@ -500,7 +518,7 @@ Item
     }
 
     /**
-      *
+      * Returns an item at a given index
       */
     function itemAt(index)
     {
@@ -510,7 +528,7 @@ Item
     }
 
     /**
-      *
+      * Remove a single item at a given index
       */
     function removeAtIndex(index)
     {
@@ -531,7 +549,7 @@ Item
     }
 
     /**
-      *
+      * Removes an item from thge selection at a given URI
       */
     function removeAtUri(uri)
     {
@@ -539,7 +557,7 @@ Item
     }
 
     /**
-      *
+      *  Return the index of an item in the selection given its URI
       */
     function indexOf(uri)
     {
@@ -547,7 +565,7 @@ Item
     }
 
     /**
-      *
+      * Append a new item to the selection associated to the given URI
       */
     function append(uri, item)
     {
@@ -578,7 +596,7 @@ Item
     }
 
     /**
-      *
+      * Animates the control to cath the attention.
       */
     function animate()
     {
@@ -586,7 +604,7 @@ Item
     }
 
     /**
-      *
+      * Returns a single string with all the URIs separated by a comma.
       */
     function getSelectedUrisString()
     {
@@ -594,7 +612,7 @@ Item
     }
 
     /**
-      *
+      * Returns true if the selection contains an item associated to a given URI.
       */
     function contains(uri)
     {
