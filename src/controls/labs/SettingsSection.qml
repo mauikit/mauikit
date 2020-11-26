@@ -38,7 +38,7 @@ Maui.AlternateListItem
          */
         property alias spacing: _mainData.spacing
         
-        alt: index % 2
+        alt: index % 2 === 0
         
         Layout.fillWidth: true
         implicitHeight: _layout.implicitHeight + (Maui.Style.space.big + _layout.spacing)

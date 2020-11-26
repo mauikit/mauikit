@@ -114,6 +114,7 @@ Maui.Dialog
     {
         id: _dropDown
         Layout.fillWidth: true
+        implicitHeight: Maui.Style.rowHeight
         checked: true
         label1.text: i18n("List files")
         label2.text: i18n("Review and edit selected files.")
@@ -126,17 +127,19 @@ Maui.Dialog
         visible: _dropDown.checked
         
         Layout.fillWidth: true
-        implicitHeight: Math.min(contentHeight + Maui.Style.space.big, 400)
+        implicitHeight: Math.min(contentHeight + Maui.Style.space.big, 300)
         model: urls
-        spacing: Maui.Style.space.big
+        spacing: Maui.Style.space.small
         margins: 0
+        verticalScrollBarPolicy: ScrollBar.AlwaysOff
         
         delegate: Maui.ListItemTemplate
         {
             width: ListView.view.width
+            height: 22
             property var item : Maui.FM.getFileInfo(modelData)
             label1.text: item.label
-            label2.text: item.url
+//             label2.text: item.url
             iconVisible: true
             iconSource: item.icon
             imageSource: item.thumbnail
