@@ -248,22 +248,30 @@ Flickable
         Component
         {
             id: _stillImageComponent
-            Image
-            {
-                id: img
-                fillMode: flick.fillMode
-                autoTransform: true
-                asynchronous: flick.asynchronous
-                source: flick.source
-                cache: flick.cache
-                sourceSize.width : Math.max(flick.imageWidth, img.implicitWidth)
-                sourceSize.height: Math.max(flick.imageHeight, img.implicitHeight)
-                BusyIndicator
+            Item {
+                Image
                 {
+                    id: img
                     anchors.centerIn: parent
-                    running: parent.status === Image.Loading
+//                    width: Math.min(parent.width, img.implicitWidth)
+//                    height: Math.min(parent.height, img.implicitHeight)
+                    fillMode: flick.fillMode
+                    autoTransform: true
+                    asynchronous: flick.asynchronous
+                    source: flick.source
+                    cache: flick.cache
+
+                    sourceSize.width : Math.min(flick.imageWidth, img.implicitWidth)
+                    sourceSize.height: Math.min(flick.imageHeight, img.implicitHeight)
+
+               BusyIndicator
+                    {
+                        anchors.centerIn: parent
+                        running: parent.status === Image.Loading
+                    }
                 }
             }
+
         }
     }
 
