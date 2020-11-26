@@ -317,9 +317,9 @@ Maui.Page
         Maui.FileListingDialog
         {
             id: _removeDialog
-           
+           property double freedSpace : calculateFreedSpace(urls)
             title:  i18n("Removing %1 files", urls.length)
-            message: Maui.Handy.isLinux ? i18n("Delete or move to trash?") :  i18n("Delete files? This action can not be undone.")
+            message: i18n("Delete %1  \nTotal freed space %2", (Maui.Handy.isLinux ? "or move to trash?" : "? This action can not be undone."),  Maui.FM.formatSize(freedSpace)) 
             rejectButton.text: i18n("Delete")
             acceptButton.text: i18n("Trash")
             acceptButton.visible: Maui.Handy.isLinux            
@@ -340,6 +340,17 @@ Maui.Page
             {
                 Maui.FM.moveToTrash(urls)
                 close()
+            }
+            
+            function calculateFreedSpace(urls)
+            {
+                var size = 0
+                for(var url of urls)
+                {
+                    size += parseFloat(Maui.FM.getFileInfo(url).size)
+                }
+                
+                return size
             }
         }
     }

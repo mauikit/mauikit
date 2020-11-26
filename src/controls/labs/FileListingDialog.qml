@@ -139,7 +139,8 @@ Maui.Dialog
             height: 22
             property var item : Maui.FM.getFileInfo(modelData)
             label1.text: item.label
-//             label2.text: item.url
+            label3.text: Maui.FM.formatSize(item.size)
+            rightLabels.visible: true
             iconVisible: true
             iconSource: item.icon
             imageSource: item.thumbnail
