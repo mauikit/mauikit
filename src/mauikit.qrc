@@ -91,6 +91,7 @@
         <file alias="labs/FileListingDialog.qml">controls/labs/FileListingDialog.qml</file>
         <file alias="labs/SectionDropDown.qml">controls/labs/SectionDropDown.qml</file>
         <file alias="labs/IconItem.qml">controls/labs/IconItem.qml</file>
+        <file alias="labs/DoodleCanvas.qml">controls/labs/DoodleCanvas.qml</file>
         <file alias="private/TerminalInputArea.qml">controls/private/TerminalInputArea.qml</file>
     </qresource>
     <qresource prefix="/"/>

@@ -361,6 +361,7 @@ Maui.Page
         
         Maui.NewDialog
         {
+            id: _newDialog
             title: i18n("New %1", _newActions.currentIndex === 0 ? "folder" : "file" )
             message: i18n("Create a new folder or a file with a custom name")
             acceptButton.text: i18n("Create")
@@ -382,7 +383,7 @@ Maui.Page
                 expanded: true
                 autoExclusive: true
                 display: ToolButton.TextBesideIcon
-                currentIndex: 0
+                currentIndex: String(_newDialog.textEntry.text).indexOf(".") > 0 ? 1 : 0
                 
                 Action
                 {
