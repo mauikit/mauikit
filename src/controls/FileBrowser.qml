@@ -724,8 +724,7 @@ Maui.Page
     {
         control.currentView.forceActiveFocus()
     }
-    
-    
+
     /**
      * 
      **/

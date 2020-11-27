@@ -68,6 +68,14 @@ public slots:
     static FMH::MODEL_LIST packItems(const QStringList &items, const QString &type);
 
     /**
+     * @brief openTerminal
+     * Open Terminal Windows
+     * @param url
+     * Path in which terminal should open
+     */
+    static void openTerminal(const QUrl &url);
+
+    /**
      * @brief copy
      * Perfom a copy of the files to the passed destination
      * @param urls

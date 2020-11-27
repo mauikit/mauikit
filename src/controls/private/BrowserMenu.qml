@@ -24,15 +24,17 @@ Menu
         onTriggered: newItem()        
     }
 
-    MenuSeparator {}
+    MenuSeparator{}
 
     MenuItem
     {
+        text: i18n("Open Terminal")
         icon.name: "utilities-terminal"
-        text: i18n("Open In Terminal")
-//         enabled: _optionsButton.enabled
-
-        onTriggered: openTerminal()
+        onTriggered:
+        {
+            console.log("@gadominguez File: main.qml Path: " + currentPath)
+            Maui.FM.openTerminal(currentPath)
+        }
     }
 
     MenuSeparator {}
