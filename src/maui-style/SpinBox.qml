@@ -106,6 +106,13 @@ T.SpinBox {
             height: width
             color: enabled ? Kirigami.Theme.textColor : Kirigami.Theme.disabledTextColor
         }
+        
+        Kirigami.Separator
+        {
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+        }
     }
 
     down.indicator: Item {
@@ -120,6 +127,13 @@ T.SpinBox {
             width: Maui.Style.iconSizes.small
             height: width
             color: enabled ? Kirigami.Theme.textColor : Kirigami.Theme.disabledTextColor
+        }
+        
+        Kirigami.Separator
+        {
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
         }
     }
 

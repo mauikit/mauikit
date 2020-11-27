@@ -31,7 +31,14 @@ Rectangle
     
     color: "transparent"
     
+    /**
+     * iconSizeHint : int
+     */
     property bool highlighted: false
+    
+    /**
+     * iconSizeHint : int
+     */
     property bool hovered: false
     
     /**
@@ -63,7 +70,6 @@ Rectangle
      * iconSource : string
      */
     property string iconSource
-    
     
     /**
      * fillMode : Image.fillMode
@@ -160,7 +166,7 @@ Rectangle
                 {
                     visible: img.status !== Image.Ready
                     anchors.centerIn: parent
-                    height: Math.min(22, parent.height * 0.7)
+                    height: Math.min(22, Math.floor( parent.height * 0.7))
                     width: height
                     source: "folder-images"
                     isMask: true

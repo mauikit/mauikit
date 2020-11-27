@@ -20,6 +20,9 @@ Maui.Page
       */
     property bool selectionMode : false
 
+    property int gridItemSize :  Maui.Style.iconSizes.large * 1.7
+    property int listItemSize : Maui.Style.rowHeight
+    
     /**
       *
       */
@@ -220,9 +223,14 @@ Maui.Page
             property alias currentFMList : _browserModel.list
             property alias currentFMModel : _browserModel
             selectionMode: control.selectionMode
-            checkable: control.selectionMode
+            property bool checkable: control.selectionMode
             enableLassoSelection: true
             currentIndex: control.currentIndex
+
+            signal itemClicked(int index)
+            signal itemDoubleClicked(int index)
+            signal itemRightClicked(int index)
+            signal itemToggled(int index, bool state)
 
             BrowserHolder
             {
@@ -264,6 +272,8 @@ Maui.Page
                 readonly property string path : model.path
 
                 width: ListView.view.width
+                height: control.listItemSize
+                
                 iconSource: model.icon
 
                 label1.text: model.label ? model.label : ""
@@ -387,19 +397,25 @@ Maui.Page
     {
         id: gridViewBrowser
 
-        Maui.GridBrowser
+        Maui.GridView
         {
             id: _gridViewBrowser
             objectName: "FM GridBrowser"
 
             property alias currentFMList : _browserModel.list
             property alias currentFMModel : _browserModel
-            itemSize : thumbnailsSize + Maui.Style.space.big
+            itemSize : control.gridItemSize
             itemHeight: itemSize * 1.3
-            checkable: control.selectionMode
+            property bool checkable: control.selectionMode
             enableLassoSelection: true
             currentIndex: control.currentIndex
 //            selectionMode: control.selectionMode
+
+            signal itemClicked(int index)
+            signal itemDoubleClicked(int index)
+            signal itemRightClicked(int index)
+            signal itemToggled(int index, bool state)
+
             BrowserHolder
             {
                 id: _holder
@@ -664,7 +680,7 @@ Maui.Page
                         id: _millerListView
                         anchors.fill: parent
                         selectionMode: control.selectionMode
-                        checkable: control.selectionMode
+                        property bool checkable: control.selectionMode
                         onKeyPress: _millerControl.keyPress(event)
                         currentIndex : -1
                         onCurrentIndexChanged: _millerControl.currentIndex = currentIndex

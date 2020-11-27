@@ -41,9 +41,8 @@ ItemDelegate
     RowLayout
     {
         id: _layout
-        //         anchors.fill: parent
-        //         anchors.margins: Maui.Style.space.small
         height: parent.height
+
         Label
         {
             id: tagLabel

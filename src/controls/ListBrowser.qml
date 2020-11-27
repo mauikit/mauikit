@@ -41,11 +41,6 @@ Item
     implicitWidth: contentWidth + margins*2
 
     /**
-      * checkable : bool
-      */
-    property bool checkable : false
-
-    /**
       * model : var
       */
     property alias model : _listView.model
@@ -124,7 +119,7 @@ Item
       * atYEnd : bool
       */
     property alias atYEnd : _listView.atYEnd
-    
+
         /**
       * atYBeginning : bool
       */
@@ -191,26 +186,6 @@ Item
     signal itemsSelected(var indexes)
 
     /**
-      * itemClicked :
-      */
-    signal itemClicked(int index)
-
-    /**
-      * itemDoubleClicked :
-      */
-    signal itemDoubleClicked(int index)
-
-    /**
-      * itemRightClicked :
-      */
-    signal itemRightClicked(int index)
-
-    /**
-      *  itemToggled :
-      */
-    signal itemToggled(int index, bool state)
-
-    /**
       * areaClicked :
       */
     signal areaClicked(var mouse)
@@ -254,7 +229,7 @@ Item
 
             focus: true
             clip: true
-            spacing: control.enableLassoSelection ? Maui.Style.space.big : Maui.Style.space.medium
+            spacing: control.enableLassoSelection ? Maui.Style.space.medium : Maui.Style.space.small
             snapMode: ListView.NoSnap
             boundsBehavior: !Kirigami.Settings.isMobile? Flickable.StopAtBounds :
                                                          Flickable.OvershootBounds

@@ -54,6 +54,8 @@ AbstractButton
 //    Kirigami.Theme.inherit: false
 //    Kirigami.Theme.colorSet: Kirigami.Theme.Button
 
+focusPolicy: Qt.NoFocus
+
     hoverEnabled: !Kirigami.Settings.isMobile
     implicitHeight: Math.floor(Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25))
     implicitWidth: Math.floor(_layoutButton.implicitWidth + (Maui.Style.space.medium *  2))

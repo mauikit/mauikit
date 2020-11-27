@@ -33,7 +33,7 @@ MauiAccounts::~MauiAccounts()
     this->db = nullptr;
 }
 
-FMH::MODEL_LIST MauiAccounts::items() const
+const FMH::MODEL_LIST &MauiAccounts::items() const
 {
     return this->m_data;
 }

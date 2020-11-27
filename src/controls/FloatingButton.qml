@@ -28,11 +28,6 @@ import QtGraphicalEffects 1.0
  * FloatingButton
  * A styled button to be used above other elements.
  *
- *
- *
- *
- *
- *
  */
 MouseArea
 {

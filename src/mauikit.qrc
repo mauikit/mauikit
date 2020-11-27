@@ -27,7 +27,6 @@
         <file alias="SwipeBrowserDelegate.qml">controls/SwipeBrowserDelegate.qml</file>
         <file alias="GridBrowserDelegate.qml">controls/GridBrowserDelegate.qml</file>
         <file alias="ListBrowserDelegate.qml">controls/ListBrowserDelegate.qml</file>
-        <file alias="GlobalDrawer.qml">controls/GlobalDrawer.qml</file>
         <file alias="SelectionBar.qml">controls/SelectionBar.qml</file>
         <file alias="LabelDelegate.qml">controls/LabelDelegate.qml</file>
         <file alias="NewDialog.qml">controls/NewDialog.qml</file>
@@ -39,7 +38,6 @@
         <file alias="FileDialog.qml">controls/FileDialog.qml</file>
         <file alias="ListBrowser.qml">controls/ListBrowser.qml</file>
         <file alias="PathBar.qml">controls/PathBar.qml</file>
-        <file alias="GridBrowser.qml">controls/GridBrowser.qml</file>
         <file alias="Dialog.qml">controls/Dialog.qml</file>
         <file alias="private/AboutDialog.qml">controls/private/AboutDialog.qml</file>
         <file alias="Popup.qml">controls/Popup.qml</file>
@@ -93,6 +91,7 @@
         <file alias="labs/FileListingDialog.qml">controls/labs/FileListingDialog.qml</file>
         <file alias="labs/SectionDropDown.qml">controls/labs/SectionDropDown.qml</file>
         <file alias="labs/IconItem.qml">controls/labs/IconItem.qml</file>
+        <file alias="labs/DoodleCanvas.qml">controls/labs/DoodleCanvas.qml</file>
         <file alias="private/TerminalInputArea.qml">controls/private/TerminalInputArea.qml</file>
     </qresource>
     <qresource prefix="/"/>

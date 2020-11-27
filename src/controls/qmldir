@@ -77,7 +77,6 @@ TabsBrowser 1.1 labs/TabsBrowser.qml
 SettingsDialog 1.1 labs/SettingsDialog.qml
 SettingsSection 1.1 labs/SettingsSection.qml
 SettingTemplate 1.2 labs/SettingTemplate.qml
-Doodle 1.1 labs/Doodle.qml
 
 AlternateListItem 1.2 labs/AlternateListItem.qml
 Separator 1.2 labs/Separator.qml
@@ -89,4 +88,6 @@ GalleryRollItem 1.3 labs/GalleryRollItem
 FileListingDialog 1.3 labs/FileListingDialog.qml
 SectionDropDown 1.3 labs/SectionDropDown.qml
 IconItem 1.3 labs/IconItem.qml
+DoodleCanvas 1.3 labs/DoodleCanvas.qml
+Doodle 1.3 labs/Doodle.qml
 

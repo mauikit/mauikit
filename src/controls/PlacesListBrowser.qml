@@ -38,7 +38,10 @@ Maui.ListBrowser
       * placeClicked :
       */
     signal placeClicked (string path)
-
+    signal itemClicked(int index)
+    signal itemDoubleClicked(int index)
+    signal itemRightClicked(int index)
+    
     focus: true
     model: Maui.BaseModel
     {
