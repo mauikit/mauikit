@@ -119,7 +119,8 @@ public:
     void requestToggleKeepAbove() override;
     void requestToggleKeepBelow() override;
     void requestToggleShade() override;
-#if KDECORATION2_VERSION_MINOR >= 77
+
+#if KDECORATION2_VERSION_MINOR >= 20
     void requestShowWindowMenu(const QRect &rect) override;
 #else
     void requestShowWindowMenu() override;
