@@ -246,12 +246,11 @@ Flickable
         }
 
         Component
-        {
-            id: _stillImageComponent
-            Item {
-                Image
-                {
-                  id: img
+		{
+			id: _stillImageComponent
+			Image
+			{			
+                id: img
 				fillMode: flick.fillMode
 				autoTransform: true
 				asynchronous: flick.asynchronous
@@ -259,16 +258,14 @@ Flickable
 				cache: flick.cache
                 sourceSize.width : Math.max(flick.imageWidth, img.implicitWidth)
                 sourceSize.height: Math.max(flick.imageHeight, img.implicitHeight)
-
-               BusyIndicator
-                    {
-                        anchors.centerIn: parent
-                        running: parent.status === Image.Loading
-                    }
+                BusyIndicator
+                {
+                    anchors.centerIn: parent
+                    running: parent.status === Image.Loading
                 }
-            }
+			}
+		}	
 
-        }
     }
 
     /**
