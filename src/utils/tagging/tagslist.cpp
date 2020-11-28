@@ -6,11 +6,11 @@ TagsList::TagsList(QObject *parent) : MauiList(parent)
     this->tag = Tagging::getInstance();
 
     connect(this->tag, &Tagging::tagged, [&](QVariantMap tag)
-    {         
-        emit this->preItemAppended();
-        this->list << FMH::toModel(tag);
-        emit this->postItemAppended();
-        
+    {   
+        if (this->urls.isEmpty())    
+        {
+            this->append(FMH::toModel(tag));  
+        }   
     });
 
     this->setList();
@@ -162,13 +162,18 @@ void TagsList::setUrls(const QStringList &value)
 
 void TagsList::append(const QString &tag)
 {
-    if (this->exists(FMH::MODEL_KEY::TAG, tag))
-        return;
+    this->append(FMH::MODEL {{FMH::MODEL_KEY::TAG, tag}});
+}
 
+void TagsList::append(const FMH::MODEL &tag)
+{
+    if (this->exists(FMH::MODEL_KEY::TAG, tag[FMH::MODEL_KEY::TAG]))
+        return;
+    
     emit this->preItemAppended();
-    this->list << FMH::MODEL {{FMH::MODEL_KEY::TAG, tag}};
-    emit this->tagsChanged();
+    this->list << tag;
     emit this->postItemAppended();
+    emit this->tagsChanged();
 }
 
 void TagsList::append(const QStringList &tags)

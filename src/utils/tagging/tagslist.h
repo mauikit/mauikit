@@ -41,6 +41,14 @@ private:
 
     bool strict = true;
     QStringList urls = QStringList();
+    
+    /**
+     * @brief append
+     * Adds a given list of tags to the model. Tags that already exists in the model are ignored
+     * @param tags
+     * List of tags to be added to the model
+     */
+    void append(const FMH::MODEL &tags);
 
 signals:
     void strictChanged();
