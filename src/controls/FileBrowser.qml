@@ -48,6 +48,7 @@ Maui.Page
      * some of them are file://, webdav://, trash:///, tags://
      */
     property alias currentPath : _browser.path
+    property alias openWithDialog : _openWithDialog
     onCurrentPathChanged : _searchField.clear()
     
     /**
@@ -303,6 +304,8 @@ Maui.Page
         text: i18n("Empty Trash")
         onClicked: Maui.FM.emptyTrash()
     }
+
+    Maui.OpenWithDialog {id: _openWithDialog}
     
     Loader
     {
@@ -894,6 +897,20 @@ Maui.Page
         }
         
         control.selectionBar.append(item.path, item)
+    }
+
+    /**
+     * For this to work the implementation needs to have passed a selectionBar
+     **/
+    function openWith(urls)
+    {
+        if(urls.length <= 0)
+        {
+            return
+        }
+
+        openWithDialog.urls = urls
+        openWithDialog.open()
     }
     
     
