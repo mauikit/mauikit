@@ -217,7 +217,7 @@ if(ANDROID OR IS_APPIMAGE_PACKAGE)
 endif()
 
 if (ANDROID)
-    add_subdirectory(android)
+    add_subdirectory(platforms/android)
 
     set(mauikit_Android_SRCS
         platforms/android/mauiandroid.cpp
