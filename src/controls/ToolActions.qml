@@ -3,6 +3,7 @@ import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import QtQml.Models 2.3
 import QtQml 2.14
+import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.2 as Maui
@@ -152,7 +153,7 @@ Rectangle
                     id: _buttonMouseArea
                     action : modelData
                     checkable: control.checkable
-                    rec.radius: index <= _repeater.count-1 || index > 0 ? 0 : Maui.Style.radiusV
+                    rec.radius: 0
                     Binding on checked
                     {
                         when: autoExclusive
@@ -313,6 +314,22 @@ Rectangle
                         height:  width
                     }
                 }
+            }
+        }
+    }
+
+    layer.enabled: true
+    layer.effect: OpacityMask
+    {
+        maskSource: Item
+        {
+            width: control.width
+            height: control.height
+
+            Rectangle
+            {
+                anchors.fill: parent
+                radius: control.radius
             }
         }
     }

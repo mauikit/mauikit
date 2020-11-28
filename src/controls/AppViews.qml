@@ -63,7 +63,7 @@ SwipeView
       * actionGroup : ActionGroup
       * Access to the view port component where the app view buttons is added.
       */
-    readonly property QtObject actionGroup : Private.ActionGroup
+    property QtObject actionGroup : Private.ActionGroup
     {
         id: _actionGroup
         currentIndex : control.currentIndex

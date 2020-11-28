@@ -215,8 +215,7 @@ Maui.ItemDelegate
             anchors.fill: parent
             color: "transparent"
             radius: Maui.Style.radiusV
-            border.color: control.isCurrentItem || control.hovered ? Kirigami.Theme.highlightColor : Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
-            opacity: 0.6
+            border.color: control.isCurrentItem || control.hovered ? Kirigami.Theme.highlightColor : Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.2)
 
             Rectangle
             {
@@ -224,7 +223,7 @@ Maui.ItemDelegate
                 color: "transparent"
                 radius: parent.radius - 0.5
                 border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
-                opacity: 0.8
+                opacity: 0.2
                 anchors.margins: 1
             }
         }
