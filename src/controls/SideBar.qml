@@ -85,6 +85,8 @@ Maui.AbstractSideBar
       * stick : bool
       */
     property bool stick : true
+    
+    property alias listView : _listBrowser
 
     property QtObject privateProperties : QtObject
     {

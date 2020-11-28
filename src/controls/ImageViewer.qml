@@ -251,18 +251,14 @@ Flickable
             Item {
                 Image
                 {
-                    id: img
-                    anchors.centerIn: parent
-//                    width: Math.min(parent.width, img.implicitWidth)
-//                    height: Math.min(parent.height, img.implicitHeight)
-                    fillMode: flick.fillMode
-                    autoTransform: true
-                    asynchronous: flick.asynchronous
-                    source: flick.source
-                    cache: flick.cache
-
-                    sourceSize.width : Math.min(flick.imageWidth, img.implicitWidth)
-                    sourceSize.height: Math.min(flick.imageHeight, img.implicitHeight)
+                  id: img
+				fillMode: flick.fillMode
+				autoTransform: true
+				asynchronous: flick.asynchronous
+				source: flick.source
+				cache: flick.cache
+                sourceSize.width : Math.max(flick.imageWidth, img.implicitWidth)
+                sourceSize.height: Math.max(flick.imageHeight, img.implicitHeight)
 
                BusyIndicator
                     {
