@@ -13,6 +13,7 @@
 #include <KIO/EmptyTrashJob>
 #include <KIO/MkdirJob>
 #include <KIO/SimpleJob>
+#include <KToolInvocation>
 #include <QIcon>
 #endif
 
@@ -194,7 +195,7 @@ static bool copyRecursively(QString sourceFolder, QString destFolder)
     for (int i = 0; i < files.count(); i++) {
         QString srcName = sourceFolder + QDir::separator() + files[i];
         QString destName = destFolder + QDir::separator() + files[i];
-        success = QFile::copy(srcName, destName);
+        success = QFKToolInvocationile::copy(srcName, destName);
         if (!success)
             return false;
     }
@@ -212,6 +213,18 @@ static bool copyRecursively(QString sourceFolder, QString destFolder)
     return true;
 }
 #endif
+
+void FMStatic::openTerminal(const QUrl &url)
+{
+    if (url.isLocalFile()) {
+        KToolInvocation::invokeTerminal(QString(), url.toLocalFile());
+        return;
+    }
+
+    // Nothing worked, just use $HOME
+    KToolInvocation::invokeTerminal(QString(), QDir::homePath());
+}
+
 
 bool FMStatic::copy(const QList<QUrl> &urls, const QUrl &destinationDir)
 {
