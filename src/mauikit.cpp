@@ -45,11 +45,6 @@
 #include "tagslist.h"
 #endif
 
-#ifdef COMPONENT_STORE
-#include "storelist.h"
-#include "storemodel.h"
-#endif
-
 #ifdef COMPONENT_EDITOR
 #include "documenthandler.h"
 #endif
@@ -196,14 +191,6 @@ void MauiKit::registerTypes(const char *uri)
 #elif defined Q_OS_LINUX && !defined Q_OS_ANDROID
     qmlRegisterType(componentUrl(QStringLiteral("labs/CSDControls.qml")), uri, 1, 1, "CSDControls");
     qmlRegisterType(componentUrl(QStringLiteral("labs/WindowControlsWindows.qml")), uri, 1, 1, "WindowControls");
-#endif
-
-    /** STORE CONTROLS, MODELS AND INTERFACES **/
-#ifdef COMPONENT_STORE
-    qmlRegisterType<StoreList>("StoreList", 1, 0, "StoreList");
-    qmlRegisterType<StoreModel>("StoreModel", 1, 0, "StoreModel");
-    qmlRegisterType(componentUrl(QStringLiteral("private/StoreDelegate.qml")), uri, 1, 0, "StoreDelegate");
-    qmlRegisterType(componentUrl(QStringLiteral("Store.qml")), uri, 1, 0, "Store");
 #endif
 
     /** BROWSING CONTROLS **/

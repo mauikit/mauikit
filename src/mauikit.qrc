@@ -48,13 +48,11 @@
         <file alias="Terminal.qml">controls/Terminal.qml</file>
         <file alias="Editor.qml">controls/Editor.qml</file>
         <file alias="PlacesListBrowser.qml">controls/PlacesListBrowser.qml</file>
-        <file alias="Store.qml">controls/Store.qml</file>
         <file alias="ImageViewer.qml">controls/ImageViewer.qml</file>
         <file alias="TabBar.qml">controls/TabBar.qml</file>
         <file alias="TabButton.qml">controls/TabButton.qml</file>
         <file alias="private/ActionGroup.qml">controls/private/ActionGroup.qml</file>
         <file alias="ActionSideBar.qml">controls/ActionSideBar.qml</file>
-        <file alias="private/StoreDelegate.qml">controls/private/StoreDelegate.qml</file>
         <file alias="ToolActions.qml">controls/ToolActions.qml</file>
         <file alias="ToolButtonMenu.qml">controls/ToolButtonMenu.qml</file>
         <file alias="ListItemTemplate.qml">controls/ListItemTemplate.qml</file>

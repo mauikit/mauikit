@@ -166,27 +166,6 @@ if(${COMPONENT_SYNCING})
     add_definitions(-DCOMPONENT_SYNCING)
 endif()
 
-if(${COMPONENT_STORE})
-    message(STATUS "INCLUDING STORE COMPONENT")
-    set(store_SRCS
-        utils/store/store.cpp
-        utils/store/storemodel.cpp
-        utils/store/storelist.cpp
-        utils/store/store.qrc
-        )
-
-    set(store_HDRS
-        utils/store/store.h
-        utils/store/storemodel.h
-        utils/store/storelist.h
-        )
-
-    include_directories(
-        ${CMAKE_CURRENT_SOURCE_DIR}/utils/store
-        ${CMAKE_CURRENT_BINARY_DIR}/utils/store
-        )
-    add_definitions(-DCOMPONENT_STORE)
-endif()
 #use dbus on linux, bsd etc, but not andoid and apple stuff
 
 if(${SUPPORT_PLUGINS})
@@ -251,10 +230,7 @@ add_library(MauiKit
 
     ${syncing_HDRS}
     ${syncing_SRCS}
-
-    ${store_SRCS}
-    ${store_HDRS}
-
+    
     ${tagging_HDRS}
     ${tagging_SRCS}
 
@@ -307,17 +283,11 @@ target_link_libraries(MauiKit
     KF5::I18n
     KF5::Service
     KF5::KIONTLM
-    KF5::ConfigWidgets
     )
 
 if(${COMPONENT_EDITOR})
     find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS SyntaxHighlighting)
     target_link_libraries(MauiKit PRIVATE KF5::SyntaxHighlighting)
-endif()
-
-if(${COMPONENT_STORE})
-    find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS Attica)
-    target_link_libraries(MauiKit PUBLIC KF5::Attica)
 endif()
 
 if(IS_APPIMAGE_PACKAGE)
@@ -351,7 +321,6 @@ install(FILES
     ${tagging_HDRS}
     ${fm_HDRS}
     ${syncing_HDRS}
-    ${store_HDRS}
     ${editor_HDRS}
     ${accounts_HDRS}
     ${CMAKE_CURRENT_BINARY_DIR}/mauikit_export.h
