@@ -204,7 +204,7 @@ if (ANDROID)
 
     kde_enable_exceptions(MauiKit PRIVATE)
 else()
-    #add_subdirectory(csd/libappletdecoration)
+    add_subdirectory(csd/libappletdecoration)
 
     set(mauikit_KDE_SRCS
         platforms/linux/mauilinux.cpp
