@@ -72,6 +72,19 @@ Menu
         }
     }
 
+    MenuSeparator {}
+    MenuItem
+    {
+        visible: !control.isExec && openWithDialog
+        text: i18n("Open with")
+        icon.name: "document-open"
+        onTriggered:
+        {
+            openWith([item.path])
+        }
+    }
+
+
     MenuSeparator{visible: selectionBar}
 
 
