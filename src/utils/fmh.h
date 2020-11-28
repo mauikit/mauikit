@@ -45,46 +45,44 @@
 
 #ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
+#else
+#define MAUIKIT_EXPORT
 #endif
 
 /**
  * A set of helpers related to file management and modeling of data
  */
-#ifdef STATIC_MAUIKIT
 namespace FMH
-#else
-namespace MAUIKIT_EXPORT FMH
-#endif
 {
 /**
  * @brief isAndroid
  * @return
  */
-bool isAndroid();
+bool MAUIKIT_EXPORT isAndroid();
 
 /**
  * @brief isWindows
  * @return
  */
-bool isWindows();
+bool MAUIKIT_EXPORT isWindows();
 
 /**
  * @brief isLinux
  * @return
  */
-bool isLinux();
+bool MAUIKIT_EXPORT isLinux();
 
 /**
  * @brief isMac
  * @return
  */
-bool isMac();
+bool MAUIKIT_EXPORT isMac();
 
 /**
  * @brief isIOS
  * @return
  */
-bool isIOS();
+bool MAUIKIT_EXPORT isIOS();
 
 /**
  * @brief The FILTER_TYPE enum
@@ -171,7 +169,7 @@ static const QMap<FILTER_TYPE, QStringList> SUPPORTED_MIMETYPES {{FILTER_TYPE::A
  * @param type
  * @return
  */
-static QStringList getMimeTypeSuffixes(const FMH::FILTER_TYPE &type, QString (*cb)(QString))
+static QStringList MAUIKIT_EXPORT getMimeTypeSuffixes(const FMH::FILTER_TYPE &type, QString (*cb)(QString))
 {
     QStringList res;
     QMimeDatabase mimedb;
@@ -492,7 +490,7 @@ static const QHash<MODEL_KEY, QString> MODEL_NAME = {{MODEL_KEY::ICON, "icon"},
                                                      {MODEL_KEY::LASTSYNC, "lastsync"}
                                                     };
 
-static const QHash<QString, MODEL_KEY> MODEL_NAME_KEY = {{MODEL_NAME[MODEL_KEY::ICON], MODEL_KEY::ICON},
+static const QHash<QString, MODEL_KEY> MAUIKIT_EXPORT MODEL_NAME_KEY = {{MODEL_NAME[MODEL_KEY::ICON], MODEL_KEY::ICON},
                                                          {MODEL_NAME[MODEL_KEY::LABEL], MODEL_KEY::LABEL},
                                                          {MODEL_NAME[MODEL_KEY::PATH], MODEL_KEY::PATH},
                                                          {MODEL_NAME[MODEL_KEY::URL], MODEL_KEY::URL},
@@ -655,7 +653,7 @@ typedef QVector<MODEL> MODEL_LIST;
  * @param model
  * @return
  */
-const QVector<int> modelRoles(const MODEL &model);
+const QVector<int> MAUIKIT_EXPORT modelRoles(const MODEL &model);
 
 /**
  * @brief mapValue
@@ -663,21 +661,21 @@ const QVector<int> modelRoles(const MODEL &model);
  * @param key
  * @return
  */
-const QString mapValue(const QVariantMap &map, const MODEL_KEY &key);
+const QString MAUIKIT_EXPORT mapValue(const QVariantMap &map, const MODEL_KEY &key);
 
 /**
  * @brief toMap
  * @param model
  * @return
  */
-const QVariantMap toMap(const MODEL &model);
+const QVariantMap MAUIKIT_EXPORT toMap(const MODEL &model);
 
 /**
  * @brief toModel
  * @param map
  * @return
  */
-const MODEL toModel(const QVariantMap &map);
+const MODEL MAUIKIT_EXPORT toModel(const QVariantMap &map);
 
 /**
          * Creates a MODEL_LIST from a QVariantList
@@ -687,7 +685,7 @@ const MODEL toModel(const QVariantMap &map);
  * @param list
  * @return
  */
-const MODEL_LIST toModelList(const QVariantList &list);
+const MODEL_LIST MAUIKIT_EXPORT toModelList(const QVariantList &list);
 
 /**
          * Creates a QVariantList from a MODEL_LIST
@@ -697,7 +695,7 @@ const MODEL_LIST toModelList(const QVariantList &list);
  * @param list
  * @return
  */
-const QVariantList toMapList(const MODEL_LIST &list);
+const QVariantList MAUIKIT_EXPORT toMapList(const MODEL_LIST &list);
 
 /**
          * Creates a new MODEL from another filtered by the given array of MODEL_KEY
@@ -708,7 +706,7 @@ const QVariantList toMapList(const MODEL_LIST &list);
  * @param keys
  * @return
  */
-const MODEL filterModel(const MODEL &model, const QVector<MODEL_KEY> &keys);
+const MODEL MAUIKIT_EXPORT filterModel(const MODEL &model, const QVector<MODEL_KEY> &keys);
 
 /**
          * Extracts from a MODEL_LIST the values from a given MODEL::KEY into a QStringList
@@ -720,7 +718,7 @@ const MODEL filterModel(const MODEL &model, const QVector<MODEL_KEY> &keys);
  * @param key
  * @return
  */
-const QStringList modelToList(const MODEL_LIST &list, const MODEL_KEY &key);
+const QStringList MAUIKIT_EXPORT modelToList(const MODEL_LIST &list, const MODEL_KEY &key);
 
 /**
  * @brief The PATH_CONTENT struct
@@ -771,7 +769,7 @@ enum PATHTYPE_KEY : int {
 };
 #endif
 
-static const QHash<PATHTYPE_KEY, QString> PATHTYPE_SCHEME = {{PATHTYPE_KEY::PLACES_PATH, "file"},
+static const QHash<PATHTYPE_KEY, QString> MAUIKIT_EXPORT PATHTYPE_SCHEME = {{PATHTYPE_KEY::PLACES_PATH, "file"},
                                                              {PATHTYPE_KEY::BOOKMARKS_PATH, "file"},
                                                              {PATHTYPE_KEY::DRIVES_PATH, "drives"},
                                                              {PATHTYPE_KEY::APPS_PATH, "applications"},
@@ -785,7 +783,7 @@ static const QHash<PATHTYPE_KEY, QString> PATHTYPE_SCHEME = {{PATHTYPE_KEY::PLAC
                                                              {PATHTYPE_KEY::FISH_PATH, "fish"},
                                                              {PATHTYPE_KEY::MTP_PATH, "mtp"}};
 
-static const QHash<QString, PATHTYPE_KEY> PATHTYPE_SCHEME_NAME ={{PATHTYPE_SCHEME[PATHTYPE_KEY::PLACES_PATH], PATHTYPE_KEY::PLACES_PATH},
+static const QHash<QString, PATHTYPE_KEY> MAUIKIT_EXPORT PATHTYPE_SCHEME_NAME ={{PATHTYPE_SCHEME[PATHTYPE_KEY::PLACES_PATH], PATHTYPE_KEY::PLACES_PATH},
                                                                  {PATHTYPE_SCHEME[PATHTYPE_KEY::BOOKMARKS_PATH], PATHTYPE_KEY::BOOKMARKS_PATH},
                                                                  {PATHTYPE_SCHEME[PATHTYPE_KEY::DRIVES_PATH], PATHTYPE_KEY::DRIVES_PATH},
                                                                  {PATHTYPE_SCHEME[PATHTYPE_KEY::APPS_PATH], PATHTYPE_KEY::APPS_PATH},
@@ -799,7 +797,7 @@ static const QHash<QString, PATHTYPE_KEY> PATHTYPE_SCHEME_NAME ={{PATHTYPE_SCHEM
                                                                  {PATHTYPE_SCHEME[PATHTYPE_KEY::FISH_PATH], PATHTYPE_KEY::FISH_PATH},
                                                                  {PATHTYPE_SCHEME[PATHTYPE_KEY::MTP_PATH], PATHTYPE_KEY::MTP_PATH}};
 
-static const QHash<PATHTYPE_KEY, QString> PATHTYPE_URI = {{PATHTYPE_KEY::PLACES_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::PLACES_PATH] + "://"},
+static const QHash<PATHTYPE_KEY, QString> MAUIKIT_EXPORT PATHTYPE_URI = {{PATHTYPE_KEY::PLACES_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::PLACES_PATH] + "://"},
                                                           {PATHTYPE_KEY::BOOKMARKS_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::BOOKMARKS_PATH] + "://"},
                                                           {PATHTYPE_KEY::DRIVES_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::DRIVES_PATH] + "://"},
                                                           {PATHTYPE_KEY::APPS_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::APPS_PATH] + ":///"},
@@ -813,7 +811,7 @@ static const QHash<PATHTYPE_KEY, QString> PATHTYPE_URI = {{PATHTYPE_KEY::PLACES_
                                                           {PATHTYPE_KEY::FISH_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::FISH_PATH] + "://"},
                                                           {PATHTYPE_KEY::MTP_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::MTP_PATH] + "://"}};
 
-static const QHash<PATHTYPE_KEY, QString> PATHTYPE_LABEL = {{PATHTYPE_KEY::PLACES_PATH, ("Places")},
+static const QHash<PATHTYPE_KEY, QString> MAUIKIT_EXPORT PATHTYPE_LABEL = {{PATHTYPE_KEY::PLACES_PATH, ("Places")},
                                                             {PATHTYPE_KEY::BOOKMARKS_PATH, ("Bookmarks")},
                                                             {PATHTYPE_KEY::DRIVES_PATH, ("Drives")},
                                                             {PATHTYPE_KEY::APPS_PATH, ("Apps")},
@@ -911,14 +909,14 @@ static const QMap<QString, QString> folderIcon {{PicturesPath, "folder-pictures"
  * @param path
  * @return
  */
-bool fileExists(const QUrl &path);
+bool MAUIKIT_EXPORT fileExists(const QUrl &path);
 
 /**
  * @brief fileDir
  * @param path
  * @return
  */
-const QString fileDir(const QUrl &path);
+const MAUIKIT_EXPORT QString fileDir(const QUrl &path);
 
 /**
  * @brief parentDir
@@ -937,7 +935,7 @@ const QUrl parentDir(const QUrl &path);
  * @param path
  * @return
  */
-const QVariantMap dirConf(const QUrl &path);
+const MAUIKIT_EXPORT QVariantMap dirConf(const QUrl &path);
 
 /**
  * @brief setDirConf
@@ -946,7 +944,7 @@ const QVariantMap dirConf(const QUrl &path);
  * @param key
  * @param value
  */
-void setDirConf(const QUrl &path, const QString &group, const QString &key, const QVariant &value);
+void MAUIKIT_EXPORT setDirConf(const QUrl &path, const QString &group, const QString &key, const QVariant &value);
 
 
 
@@ -958,14 +956,14 @@ void setDirConf(const QUrl &path, const QString &group, const QString &key, cons
  * @param path
  * @return
  */
-const QString getIconName(const QUrl &path);
+const QString MAUIKIT_EXPORT getIconName(const QUrl &path);
 
 /**
  * @brief getMime
  * @param path
  * @return
  */
-const QString getMime(const QUrl &path);
+const QString MAUIKIT_EXPORT getMime(const QUrl &path);
 
 /**
  * @brief checkFileType
@@ -973,7 +971,7 @@ const QString getMime(const QUrl &path);
  * @param mimeTypeName
  * @return
  */
-bool checkFileType(const FILTER_TYPE &type, const QString &mimeTypeName);
+bool MAUIKIT_EXPORT checkFileType(const FILTER_TYPE &type, const QString &mimeTypeName);
 
 /**
  * @brief thumbnailUrl
@@ -981,7 +979,7 @@ bool checkFileType(const FILTER_TYPE &type, const QString &mimeTypeName);
  * @param url
  * @return
  */
-const QUrl thumbnailUrl(const QUrl &url, const QString &mimetype);
+const QUrl MAUIKIT_EXPORT thumbnailUrl(const QUrl &url, const QString &mimetype);
 
 #if !defined Q_OS_ANDROID && defined Q_OS_LINUX
 /**
@@ -989,7 +987,7 @@ const QUrl thumbnailUrl(const QUrl &url, const QString &mimetype);
  * @param item
  * @return
  */
-const MODEL getFileInfo(const KFileItem &kfile);
+const MODEL MAUIKIT_EXPORT getFileInfo(const KFileItem &kfile);
 #endif
 
 /**
@@ -997,14 +995,14 @@ const MODEL getFileInfo(const KFileItem &kfile);
  * @param path
  * @return
  */
-const MODEL getFileInfoModel(const QUrl &path);
+const MODEL MAUIKIT_EXPORT getFileInfoModel(const QUrl &path);
 
 /**
  * @brief getFileInfo
  * @param path
  * @return
  */
-const QVariantMap getFileInfo(const QUrl &path);
+const QVariantMap MAUIKIT_EXPORT getFileInfo(const QUrl &path);
 
 /**
 * @brief getDirInfoModel
@@ -1012,7 +1010,7 @@ const QVariantMap getFileInfo(const QUrl &path);
  * @param type
  * @return
  */
-const MODEL getDirInfoModel(const QUrl &path, const QString &type = QString());
+const MODEL MAUIKIT_EXPORT getDirInfoModel(const QUrl &path, const QString &type = QString());
 
 /**
  * @brief getDirInfo
@@ -1020,14 +1018,14 @@ const MODEL getDirInfoModel(const QUrl &path, const QString &type = QString());
  * @param type
  * @return
  */
-const QVariantMap getDirInfo(const QUrl &path);
+const QVariantMap MAUIKIT_EXPORT getDirInfo(const QUrl &path);
 
 /**
  * @brief getPathType
  * @param url
  * @return
  */
-PATHTYPE_KEY getPathType(const QUrl &url);
+PATHTYPE_KEY MAUIKIT_EXPORT getPathType(const QUrl &url);
 }
 
 

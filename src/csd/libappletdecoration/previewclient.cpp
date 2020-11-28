@@ -426,8 +426,14 @@ void PreviewClient::requestToggleKeepBelow()
     setKeepBelow(!isKeepBelow());
 }
 
+#if KDECORATION2_VERSION_MINOR >= 20
+void PreviewClient::requestShowWindowMenu(const QRect &rect)
+{
+    Q_UNUSED(rect);
+#else
 void PreviewClient::requestShowWindowMenu()
 {
+#endif
     emit showWindowMenuRequested();
 }
 

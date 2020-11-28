@@ -196,7 +196,7 @@ if(ANDROID OR IS_APPIMAGE_PACKAGE)
 endif()
 
 if (ANDROID)
-    add_subdirectory(android)
+    add_subdirectory(platforms/android)
 
     set(mauikit_Android_SRCS
         platforms/android/mauiandroid.cpp
@@ -250,7 +250,7 @@ add_library(MauiKit
 if(ANDROID)
     target_link_libraries(MauiKit PRIVATE Qt5::AndroidExtras jnigraphics)
 
-    target_include_directories(MauiKit PRIVATE android)
+    target_include_directories(MauiKit PRIVATE platforms/android)
     install(FILES platforms/android/mauiandroid.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit COMPONENT Devel)
 
     install(DIRECTORY platforms/android/ DESTINATION ${KDE_INSTALL_DATAROOTDIR}/MauiKitAndroid COMPONENT Devel)
