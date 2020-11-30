@@ -923,7 +923,7 @@ const MAUIKIT_EXPORT QString fileDir(const QUrl &path);
  * @param path
  * @return
  */
-const QUrl parentDir(const QUrl &path);
+const MAUIKIT_EXPORT QUrl parentDir(const QUrl &path);
 
 /**
          * Return the configuration of a single directory represented
