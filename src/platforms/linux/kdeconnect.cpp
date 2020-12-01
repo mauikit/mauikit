@@ -54,11 +54,8 @@ QVariantList KdeConnect::getDevices()
     return devices;
 }
 
-bool KdeConnect::sendToDevice(const QString &device, const QString &id, const QString &url)
+bool KdeConnect::sendToDevice(const QString &device, const QString &deviceKey, const QString &url)
 {
-    QString deviceName = device;
-    QString deviceKey = id;
-
     auto process = new QProcess();
     connect(process, static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), [=](int exitCode, QProcess::ExitStatus exitStatus) {
         //        BabeWindow::nof->notify("Song sent to " + deviceName,title +" by "+ artist);

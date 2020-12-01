@@ -58,26 +58,6 @@ public:
      */
     MauiList *getList() const;
 
-    /**
-     * @brief setList
-     * For the model to work you need to set a MauiList, by subclassing it and exposing it to the QML engine
-     * @param value
-     */
-    void setList(MauiList *value);
-
-protected:
-    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
-
-private:
-    class PrivateAbstractListModel;
-    PrivateAbstractListModel *m_model;
-    QString m_filter;
-    Qt::SortOrder m_sortOrder;
-    QString m_sort;
-
-public slots:
-    void setFilterString(const QString &string); // deprecrated
-    void setSortOrder(const int &sortOrder);     // deprecrated
 
     /**
      * @brief get
@@ -97,26 +77,11 @@ public slots:
     QVariantList getAll() const;
 
     /**
-     * @brief setFilter
-     * Filter the model using a simple string, to clear the filter just set it to a empty string
-     * @param filter
-     * Simple filter string
+     * @brief setList
+     * For the model to work you need to set a MauiList, by subclassing it and exposing it to the QML engine
+     * @param value
      */
-    void setFilter(const QString &filter);
-
-    /**
-     * @brief getFilter
-     * The filter being applied to the model
-     * @return
-     */
-    const QString getFilter() const;
-
-    /**
-     * @brief setSortOrder
-     * Set the sort order, asc or dec
-     * @param sortOrder
-     */
-    void setSortOrder(const Qt::SortOrder &sortOrder);
+    void setList(MauiList *value);
 
     /**
      * @brief getSortOrder
@@ -124,13 +89,6 @@ public slots:
      * @return
      */
     Qt::SortOrder getSortOrder() const;
-
-    /**
-     * @brief setSort
-     * Set the sort key. The sort keys can be found in the FMH::MODEL_KEY keys
-     * @param sort
-     */
-    void setSort(const QString &sort);
 
     /**
      * @brief getSort
@@ -155,6 +113,51 @@ public slots:
      */
     int mappedToSource(const int &index) const;
 
+    /**
+     * @brief getFilter
+     * The filter being applied to the model
+     * @return
+     */
+    const QString getFilter() const;
+
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+
+private:
+    class PrivateAbstractListModel;
+    PrivateAbstractListModel *m_model;
+    QString m_filter;
+    Qt::SortOrder m_sortOrder;
+    QString m_sort;
+
+    [[deprecated]]
+    void setFilterString(const QString &string);
+
+    [[deprecated]]
+    void setSortOrder(const int &sortOrder);
+
+public slots:
+    /**
+     * @brief setFilter
+     * Filter the model using a simple string, to clear the filter just set it to a empty string
+     * @param filter
+     * Simple filter string
+     */
+    void setFilter(const QString &filter);
+
+    /**
+     * @brief setSortOrder
+     * Set the sort order, asc or dec
+     * @param sortOrder
+     */
+    void setSortOrder(const Qt::SortOrder &sortOrder);
+
+    /**
+     * @brief setSort
+     * Set the sort key. The sort keys can be found in the FMH::MODEL_KEY keys
+     * @param sort
+     */
+    void setSort(const QString &sort);
 signals:
     void listChanged();
     void filterChanged(QString filter);

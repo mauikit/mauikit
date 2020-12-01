@@ -249,7 +249,7 @@ bool FMStatic::cut(const QList<QUrl> &urls, const QUrl &where)
 bool FMStatic::cut(const QList<QUrl> &urls, const QUrl &where, const QString &name)
 {
 #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
-    for (const auto &url : urls) {
+    for (const auto &url : qAsConst(urls)) {
         QUrl _where;
         if (name.isEmpty())
             _where = QUrl(where.toString() + "/" + FMH::getFileInfoModel(url)[FMH::MODEL_KEY::LABEL]);
@@ -288,7 +288,7 @@ bool FMStatic::cut(const QList<QUrl> &urls, const QUrl &where, const QString &na
 bool FMStatic::removeFiles(const QList<QUrl> &urls)
 {
 #ifdef COMPONENT_TAGGING
-    for (const auto &url : urls) {
+    for (const auto &url : qAsConst(urls)) {
         Tagging::getInstance()->removeUrl(url.toString());
     }
 #endif
@@ -296,7 +296,7 @@ bool FMStatic::removeFiles(const QList<QUrl> &urls)
 #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
 
     qDebug() << "ASKED GTO DELETE FILES" << urls;
-    for (const auto &url : urls) {
+    for (const auto &url : qAsConst(urls)) {
         qDebug() << "@ Want to remove files << " << url.toLocalFile();
 
         if (isDir(url)) {
@@ -412,7 +412,7 @@ bool FMStatic::openUrl(const QUrl &url)
 
 void FMStatic::openLocation(const QStringList &urls)
 {
-    for (const auto &url : urls)
+    for (const auto &url : qAsConst(urls))
         QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(url).dir().absolutePath()));
 }
 
@@ -462,10 +462,12 @@ bool FMStatic::isFav(const QUrl &url, const bool &strict)
 
 static bool doNameFilter(const QString &name, const QStringList &filters)
 {
-    for (const auto &filter : std::accumulate(filters.constBegin(), filters.constEnd(), QVector<QRegExp> {}, [](QVector<QRegExp> &res, const QString &filter) -> QVector<QRegExp> {
-             res.append(QRegExp(filter, Qt::CaseInsensitive, QRegExp::Wildcard));
-             return res;
-         })) {
+    const auto filtersAccumulate = std::accumulate(filters.constBegin(), filters.constEnd(), QVector<QRegExp> {}, [](QVector<QRegExp> &res, const QString &filter) -> QVector<QRegExp> {
+         res.append(QRegExp(filter, Qt::CaseInsensitive, QRegExp::Wildcard));
+         return res;
+     });
+
+    for (const auto &filter : filtersAccumulate) {
         if (filter.exactMatch(name)) {
             return true;
         }
@@ -483,7 +485,8 @@ QList<QUrl> FMStatic::getTagUrls(const QString &tag, const QStringList &filters,
     if(!filters.isEmpty())
         filter = [filters](QVariantMap &item) -> bool { return doNameFilter(FMH::mapValue(item, FMH::MODEL_KEY::URL), filters); };
 
-    for (const auto &data : Tagging::getInstance()->getUrls(tag, strict, limit, mime, filter)) {
+    const auto tagUrls = Tagging::getInstance()->getUrls(tag, strict, limit, mime, filter);
+    for (const auto &data : tagUrls) {
         const auto url = QUrl(data.toMap()[FMH::MODEL_NAME[FMH::MODEL_KEY::URL]].toString());
         if (url.isLocalFile() && !FMH::fileExists(url))
             continue;
@@ -498,7 +501,8 @@ FMH::MODEL_LIST FMStatic::getTags(const int &limit)
     Q_UNUSED(limit);
     FMH::MODEL_LIST data;
 #ifdef COMPONENT_TAGGING
-        for (const auto &tag : Tagging::getInstance()->getAllTags(false)) {
+        const auto tags = Tagging::getInstance()->getAllTags(false);
+        for (const auto &tag : tags) {
             const QVariantMap item = tag.toMap();
             const auto label = item.value(FMH::MODEL_NAME[FMH::MODEL_KEY::TAG]).toString();
 
@@ -521,7 +525,8 @@ FMH::MODEL_LIST FMStatic::getTagContent(const QString &tag, const QStringList &f
     if (tag.isEmpty()) {
         return FMStatic::getTags();
     } else {
-        for (const auto &url : FMStatic::getTagUrls(tag, filters, false)) {
+        const auto urls = FMStatic::getTagUrls(tag, filters, false);
+        for (const auto &url : urls) {
             content << FMH::getFileInfoModel(url);
         }
     }

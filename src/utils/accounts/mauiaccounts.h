@@ -84,7 +84,6 @@ public:
      */
     uint getCount() const;
 
-public slots:
     /**
      * @brief get
      * @param index
@@ -92,6 +91,7 @@ public slots:
      */
     QVariantMap get(const int &index) const;
 
+public slots:
     /**
      * @brief getCloudAccountsList
      * @return

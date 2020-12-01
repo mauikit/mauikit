@@ -189,7 +189,7 @@ void PlacesList::setList()
 {
     this->list.clear();
 
-    for (const auto &group : this->groups) {
+    for (const auto &group : qAsConst(this->groups)) {
         switch (group) {
         case FMH::PATHTYPE_KEY::PLACES_PATH:
             this->list << getGroup(*this->model, FMH::PATHTYPE_KEY::PLACES_PATH);

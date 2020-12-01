@@ -109,7 +109,7 @@ void QDirLister::reviewChanges()
 
     FMH::MODEL_LIST removedItems;
     const auto mlist = this->m_list; //use a copy to not affect the list indexes on the iterations
-    for(const auto &item : mlist)
+    for(const auto &item : qAsConst(mlist))
     {
         const auto fileUrl = QUrl(item[FMH::MODEL_KEY::URL]);
 
@@ -134,7 +134,7 @@ void QDirLister::reviewChanges()
         if(urls.first() == this->m_url)
         {
             FMH::MODEL_LIST newItems;
-            for(const auto &item : items)
+            for(const auto &item : qAsConst(items))
             {
                 const auto fileUrl = QUrl(item[FMH::MODEL_KEY::URL]);
                 if(!this->includes(fileUrl))
@@ -328,7 +328,8 @@ FM::FM(QObject *parent)
 
         case Syncing::SIGNAL_TYPE::COPY: {
             QVariantMap data;
-            for (auto key : item.keys())
+            const auto keys = item.keys();
+            for (auto key : keys)
                 data.insert(FMH::MODEL_NAME[key], item[key]);
 
             //                         this->copy(QVariantList {data}, this->sync->getCopyTo());
@@ -416,7 +417,8 @@ void FM::openCloudItem(const QVariantMap &item)
 {
 #ifdef COMPONENT_SYNCING
     FMH::MODEL data;
-    for (const auto &key : item.keys())
+    const auto keys = item.keys();
+    for (const auto &key : keys)
         data.insert(FMH::MODEL_NAME_KEY[key], item[key].toString());
 
     this->sync->resolveFile(data, Syncing::SIGNAL_TYPE::OPEN);

@@ -30,11 +30,11 @@ public:
     QString key() const;
     QString group() const;
     QVariant defaultValue() const;
+    QVariant value() const;
 
 public slots:
     void setKey(QString key);
     void setGroup(QString group);
-    QVariant value() const;
     void setValue(QVariant value);
     void setDefaultValue(QVariant defaultValue);
 

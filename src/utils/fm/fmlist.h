@@ -110,12 +110,12 @@ class FMList : public MauiList
 
     Q_PROPERTY(PathStatus status READ getStatus NOTIFY statusChanged FINAL)
 
-    Q_PROPERTY(QList<QUrl> previousPathHistory READ getPreviousPathHistory)  // interface for NavHistory
-    Q_PROPERTY(QList<QUrl> posteriorPathHistory READ getPreviousPathHistory) // interface for NavHistory
-    Q_PROPERTY(QUrl previousPath READ getPreviousPath)                       // interface for NavHistory
-    Q_PROPERTY(QUrl posteriorPath READ getPosteriorPath)                     // interface for NavHistory
+    Q_PROPERTY(QList<QUrl> previousPathHistory READ getPreviousPathHistory NOTIFY pathChanged)  // interface for NavHistory
+    Q_PROPERTY(QList<QUrl> posteriorPathHistory READ getPreviousPathHistory NOTIFY pathChanged) // interface for NavHistory
+    Q_PROPERTY(QUrl previousPath READ getPreviousPath NOTIFY pathChanged)                       // interface for NavHistory
+    Q_PROPERTY(QUrl posteriorPath READ getPosteriorPath NOTIFY pathChanged)                     // interface for NavHistory
 
-    Q_PROPERTY(QUrl parentPath READ getParentPath)
+    Q_PROPERTY(QUrl parentPath READ getParentPath NOTIFY pathChanged)
 
 public:
     enum SORTBY : uint_fast8_t {

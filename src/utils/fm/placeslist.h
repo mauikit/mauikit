@@ -40,11 +40,6 @@ public:
 
     void componentComplete() override final;
 
-protected:
-    void setList();
-    void reset();
-
-public slots:
     /**
      * @brief get
      * Gets a item in the model.
@@ -55,6 +50,11 @@ public slots:
      */
     QVariantMap get(const int &index) const;
 
+protected:
+    void setList();
+    void reset();
+
+public slots:
     /**
      * @brief refresh
      * Refreshes the model list of all the places, like bookmarks, default places, devices, etc..

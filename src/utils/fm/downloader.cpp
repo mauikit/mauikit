@@ -53,8 +53,8 @@ void FMH::Downloader::downloadFile(const QUrl &source, const QUrl &destination)
     if (!file->open(QIODevice::WriteOnly))
         emit this->warning("Can not open file to write download");
 
-    connect(reply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(onDownloadProgress(qint64, qint64)));
-    connect(manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(onFinished(QNetworkReply *)));
+    connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(onDownloadProgress(qint64,qint64)));
+    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onFinished(QNetworkReply*)));
     connect(reply, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
     connect(reply, SIGNAL(finished()), this, SLOT(onReplyFinished()));
 #endif
@@ -68,7 +68,8 @@ void FMH::Downloader::getArray(const QUrl &fileURL, const QMap<QString, QString>
     QNetworkRequest request;
     request.setUrl(fileURL);
     if (!headers.isEmpty()) {
-        for (const auto &key : headers.keys())
+        const auto keys = headers.keys();
+        for (const auto &key : keys)
             request.setRawHeader(key.toLocal8Bit(), headers[key].toLocal8Bit());
     }
 
