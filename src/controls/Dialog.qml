@@ -416,7 +416,13 @@ Maui.Popup
             }
         }
     }
-
+    
+    onOpened: 
+    {
+        if(control.entryField)
+            control.textEntry.forceActiveFocus()
+    }
+    
     /**
       * Send an alert message that is shown inline in the dialog.
       * Depending on the level the color may differ.
