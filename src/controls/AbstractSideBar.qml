@@ -65,12 +65,6 @@ Drawer
     property bool collapsed: false
 
     /**
-      * collapsedSize : int
-      * Size hint for the width of the sidebar in the collapsed state.
-      */
-    property int collapsedSize: 0
-
-    /**
       * preferredWidth : int
       * The preferred width of the sidebar in the expanded state.
       */
@@ -89,7 +83,7 @@ Drawer
       */
     signal contentDropped(var drop)
 
-    onCollapsedChanged: position = (collapsed && collapsedSize < 1) ? 0 : 1
+    onCollapsedChanged: position = (collapsed) ? 0 : 1
 
     MouseArea
     {

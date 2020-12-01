@@ -57,8 +57,6 @@ Maui.SideBar
 
         readonly property QtObject action : modelData
         // 					action : modelData
-        iconSize: control.iconSize
-        labelVisible: control.showLabels
         iconName: action.icon.name
         label: action.text
         leftPadding:  Maui.Style.space.tiny

@@ -39,12 +39,12 @@ Maui.AbstractSideBar
 {
     id: control
 
-    implicitWidth: privateProperties.isCollapsed && collapsed && collapsible && stick ? collapsedSize : preferredWidth
+    implicitWidth: preferredWidth
     width: implicitWidth
     position: 1
-    interactive: !stick && (modal || collapsed || !visible)
+    interactive: (modal || collapsed || !visible)
     visible: true
-    overlay.visible: stick ? (control.collapsed && control.collapsible && !privateProperties.isCollapsed) : (collapsed && position > 0 && visible)
+    overlay.visible: (collapsed && position > 0 && visible)
 
     /**
       * content : ColumnLayout.data
@@ -72,40 +72,22 @@ Maui.AbstractSideBar
     property alias currentIndex: _listBrowser.currentIndex
 
     /**
-      * iconSize : int
-      */
-    property int iconSize : Maui.Style.iconSizes.small
-
-    /**
-      * showLabels : bool
-      */
-    property bool showLabels: control.width > collapsedSize
-
-    /**
-      * stick : bool
-      */
-    property bool stick : true
-    
+     * 
+     */
     property alias listView : _listBrowser
 
-    property QtObject privateProperties : QtObject
-    {
-        property bool isCollapsed: control.collapsed
-    }
-
-    /**
+       /**
       * delegate : Component
       */
     property Component delegate : Maui.ListDelegate
     {
         id: itemDelegate
-        iconSize: control.iconSize
-        labelVisible: control.showLabels
+        iconSize: Maui.Style.iconSizes.small
         label: model.label
         count: model.count > 0 ? model.count : ""
         iconName: model.icon +  (Qt.platform.os == "android" || Qt.platform.os == "osx" ? ("-sidebar") : "")
         iconVisible: true
-        template.leftMargin: privateProperties.isCollapsed && stick ? 0 : Maui.Style.space.medium
+        template.leftMargin: Maui.Style.space.medium
 
         onClicked:
         {
@@ -142,25 +124,13 @@ Maui.AbstractSideBar
         ignoreUnknownSignals: true
         function onClicked()
         {
-            if(control.stick)
-                control.collapse()
-            else
-                control.close()
+            //if(control.stick)
+                //control.collapse()
+            //else
+                //control.close()
         }
     }
-
-    //     onModalChanged: visible = true
-    onStickChanged:
-    {
-        if(stick && collapsed)
-        {
-            control.collapse()
-        }else
-        {
-            control.expand()
-        }
-    }
-
+  
     onCollapsedChanged :
     {
         if(!collapsible)
@@ -213,117 +183,10 @@ Maui.AbstractSideBar
                     control.itemClicked(control.currentIndex)
                 }
             }
-        }
-
-        MouseArea
-        {
-            id: _handle
-            visible: control.collapsed && control.stick
-            Layout.preferredHeight: Maui.Style.toolBarHeight
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignBottom
-            hoverEnabled: true
-            preventStealing: true
-            propagateComposedEvents: false
-            property int startX
-            property int startY
-
-            ToolTip.delay: 1000
-            ToolTip.timeout: 5000
-            ToolTip.visible: _handle.containsMouse || _handle.containsPress
-            ToolTip.text: i18n("Toogle SideBar")
-
-            Rectangle
-            {
-                anchors.centerIn: parent
-                radius: 2
-                height: 18
-                width: 16
-
-                color: _handle.containsMouse || _handle.containsPress || !privateProperties.isCollapsed  ?  Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
-                border.color: Qt.darker(color, 1.2)
-
-                Rectangle
-                {
-                    radius: 1
-                    height: 10
-                    width: 3
-
-                    anchors.left: parent.left
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.margins: 4
-
-                    color: _handle.containsMouse || _handle.containsPress || !privateProperties.isCollapsed  ?  Kirigami.Theme.highlightedTextColor : Kirigami.Theme.backgroundColor
-                }
-            }
-
-            onClicked:
-            {
-                if(privateProperties.isCollapsed)
-                    control.expand()
-                else control.collapse()
-            }
-        }
+        }       
     }
 
-    MouseArea
-    {
-        z: control.background.parent.z + 1
-        preventStealing: true
-        anchors.horizontalCenter: parent.right
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        visible: Maui.Handy.isTouch
-        enabled: Maui.Handy.isTouch
-        width: Maui.Style.space.large
-        property int startX
-        property int startY
-
-        onPressed:
-        {
-            startY = mouse.y
-            startX = mouse.x
-            _widthAnim.enabled = false
-        }
-
-        onPositionChanged:
-        {
-            if (!pressed || !control.collapsible || !control.collapsed)
-                return
-
-            var value = control.width + (mouse.x-startX)
-            control.width = value > control.preferredWidth ? control.preferredWidth : (value < control.collapsedSize ? collapsedSize : value)
-
-        }
-
-        onReleased:
-        {
-            _widthAnim.enabled = true
-            if( privateProperties.isCollapsed)
-            {
-                if(control.width >= control.collapsedSize * 1.2)
-                {
-                    expand()
-
-                } else
-                {
-                    collapse()
-                }
-
-            }else
-            {
-                if(control.width <= control.preferredWidth * 0.75)
-                {
-                    collapse()
-
-                } else
-                {
-                    expand()
-                }
-            }
-        }
-    }
-
+   
     /**
       *
       */
@@ -331,8 +194,7 @@ Maui.AbstractSideBar
     {
         if(collapsible)
         {
-            privateProperties.isCollapsed  = true
-            control.width = control.stick ? control.collapsedSize : control.preferredWidth
+            control.width = control.preferredWidth
         }
     }
 
@@ -343,7 +205,6 @@ Maui.AbstractSideBar
     {
         if(collapsible)
         {
-            privateProperties.isCollapsed = false
             control.width = control.preferredWidth
         }
     }
