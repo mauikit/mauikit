@@ -53,7 +53,7 @@ Maui.Dialog
             
             Rectangle
             {
-                visible: control.urls.length > 1
+                visible: control.urls ? control.urls.length > 1 : false
                 anchors.fill: parent
                 anchors.leftMargin: Maui.Style.space.small
                 anchors.rightMargin: Maui.Style.space.small
@@ -64,7 +64,7 @@ Maui.Dialog
             
             Rectangle
             {
-                visible: control.urls.length > 1
+                visible: control.urls ? control.urls.length > 1 : false
                 anchors.fill: parent
                 anchors.topMargin: Maui.Style.space.tiny
                 anchors.leftMargin: Maui.Style.space.tiny
