@@ -1,28 +1,41 @@
-
-import QtQuick 2.14
-import QtQuick 2.14
-import QtQuick.Controls 2.2
-import QtGraphicalEffects 1.0
-import org.kde.kirigami 2.7 as Kirigami
-
-/**
- * ImageViewer
- * A global sidebar for the application window that can be collapsed.
+/*
+ * SPDX-FileCopyrightText: (C) 2015 Vishesh Handa <vhanda@kde.org>
+ * SPDX-FileCopyrightText: (C) 2017 Atul Sharma <atulsharma406@gmail.com>
+ * SPDX-FileCopyrightText: (C) 2017 Marco Martin <mart@kde.org>
  *
- *
- *
- *
- *
- *
+ * SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
  */
+
+import QtQuick 2.12
+import QtQuick.Window 2.2
+import QtQuick.Controls 2.10 as Controls
+import QtGraphicalEffects 1.0 as Effects
+import QtQuick.Layouts 1.3
+import org.kde.kirigami 2.9 as Kirigami
+
 Flickable
 {
     id: flick
+    property string currentImageSource
+
+    contentWidth: width
+    contentHeight: height
+    boundsBehavior: Flickable.StopAtBounds
+    boundsMovement: Flickable.StopAtBounds
+    interactive: contentWidth > width || contentHeight > height
+    clip: true
+
+    Controls.ScrollBar.vertical: Controls.ScrollBar {
+        visible: false
+    }
+    Controls.ScrollBar.horizontal: Controls.ScrollBar {
+        visible: false
+    }
 
     /**
       * image : Image
       */
-    property alias image: _imageLoader.item
+//    property alias image: _imageLoader.item
 
     /**
       * fillMode : Image.fillMode
@@ -69,64 +82,48 @@ Flickable
       */
     signal pressAndHold()
 
-    contentWidth: flick.width
-    contentHeight: flick.height
-
-    interactive: contentWidth > width || contentHeight > height
-    z: 1000
-
-    ScrollBar.vertical: ScrollBar {}
-    ScrollBar.horizontal: ScrollBar {}
-
-    PinchArea
-    {
+    PinchArea {
         width: Math.max(flick.contentWidth, flick.width)
         height: Math.max(flick.contentHeight, flick.height)
 
         property real initialWidth
         property real initialHeight
 
-        onPinchStarted:
-        {
+        onPinchStarted: {
             initialWidth = flick.contentWidth
             initialHeight = flick.contentHeight
         }
 
-        onPinchUpdated:
-        {
+        onPinchUpdated: {
             // adjust content pos due to drag
             flick.contentX += pinch.previousCenter.x - pinch.center.x
             flick.contentY += pinch.previousCenter.y - pinch.center.y
 
             // resize content
-            flick.resizeContent(Math.max(flick.width*0.7, initialWidth * pinch.scale), Math.max(flick.height*0.7, initialHeight * pinch.scale), pinch.center)
+            flick.resizeContent(Math.max(root.width*0.7, initialWidth * pinch.scale), Math.max(root.height*0.7, initialHeight * pinch.scale), pinch.center)
         }
 
-        onPinchFinished:
-        {
+        onPinchFinished: {
             // Move its content within bounds.
-            if (flick.contentWidth < flick.width || flick.contentHeight < flick.height)
-            {
+            if (flick.contentWidth < root.width ||
+                flick.contentHeight < root.height) {
                 zoomAnim.x = 0;
                 zoomAnim.y = 0;
-                zoomAnim.width = flick.width;
-                zoomAnim.height = flick.height;
+                zoomAnim.width = root.width;
+                zoomAnim.height = root.height;
                 zoomAnim.running = true;
             } else {
                 flick.returnToBounds();
             }
         }
 
-        ParallelAnimation
-        {
+        ParallelAnimation {
             id: zoomAnim
             property real x: 0
             property real y: 0
-            property real width: flick.width
-            property real height: flick.height
-
-            NumberAnimation
-            {
+            property real width: root.width
+            property real height: root.height
+            NumberAnimation {
                 target: flick
                 property: "contentWidth"
                 from: flick.contentWidth
@@ -134,9 +131,7 @@ Flickable
                 duration: Kirigami.Units.longDuration
                 easing.type: Easing.InOutQuad
             }
-
-            NumberAnimation
-            {
+            NumberAnimation {
                 target: flick
                 property: "contentHeight"
                 from: flick.contentHeight
@@ -144,9 +139,7 @@ Flickable
                 duration: Kirigami.Units.longDuration
                 easing.type: Easing.InOutQuad
             }
-
-            NumberAnimation
-            {
+            NumberAnimation {
                 target: flick
                 property: "contentY"
                 from: flick.contentY
@@ -154,9 +147,7 @@ Flickable
                 duration: Kirigami.Units.longDuration
                 easing.type: Easing.InOutQuad
             }
-
-            NumberAnimation
-            {
+            NumberAnimation {
                 target: flick
                 property: "contentX"
                 from: flick.contentX
@@ -166,51 +157,51 @@ Flickable
             }
         }
 
-        Loader
-        {
-            id: _imageLoader
+        Image {
+            id: image
             width: flick.contentWidth
             height: flick.contentHeight
+            fillMode: Image.PreserveAspectFit
+            source: flick.source
+            autoTransform: true
+            asynchronous: true
 
-            sourceComponent: flick.animated ? _animatedImageComponent : _stillImageComponent
-
-            MouseArea
+            Controls.BusyIndicator
             {
-                anchors.fill: parent
+                anchors.centerIn: parent
+                running: parent.status === Image.Loading
+            }
 
+            MouseArea {
+                anchors.fill: parent
                 acceptedButtons:  Qt.RightButton | Qt.LeftButton
                 onClicked:  if(!Kirigami.Settings.isMobile && mouse.button === Qt.RightButton)
-                rightClicked()
+                flick.rightClicked()
 
                 onPressAndHold: flick.pressAndHold()
-
-                onDoubleClicked:
-                {
+                onDoubleClicked: {
                     if (flick.interactive) {
                         zoomAnim.x = 0;
                         zoomAnim.y = 0;
-                        zoomAnim.width = flick.width;
-                        zoomAnim.height = flick.height;
+                        zoomAnim.width = root.width;
+                        zoomAnim.height = root.height;
                         zoomAnim.running = true;
                     } else {
                         zoomAnim.x = mouse.x * 2;
                         zoomAnim.y = mouse.y *2;
-                        zoomAnim.width = flick.width * 3;
-                        zoomAnim.height = flick.height * 3;
+                        zoomAnim.width = root.width * 3;
+                        zoomAnim.height = root.height * 3;
                         zoomAnim.running = true;
                     }
                 }
-
-                onWheel:
-                {
-                    if (wheel.modifiers & Qt.ControlModifier)
-                    {
+                onWheel: {
+                    if (wheel.modifiers & Qt.ControlModifier) {
                         if (wheel.angleDelta.y != 0) {
                             var factor = 1 + wheel.angleDelta.y / 600;
                             zoomAnim.running = false;
 
-                            zoomAnim.width = Math.min(Math.max(flick.width, zoomAnim.width * factor), flick.width * 4);
-                            zoomAnim.height = Math.min(Math.max(flick.height, zoomAnim.height * factor), flick.height * 4);
+                            zoomAnim.width = Math.min(Math.max(root.width, zoomAnim.width * factor), root.width * 4);
+                            zoomAnim.height = Math.min(Math.max(root.height, zoomAnim.height * factor), root.height * 4);
 
                             //actual factors, may be less than factor
                             var xFactor = zoomAnim.width / flick.contentWidth;
@@ -221,52 +212,19 @@ Flickable
                             zoomAnim.running = true;
 
                         } else if (wheel.pixelDelta.y != 0) {
-                            flick.resizeContent(Math.min(Math.max(flick.width, flick.contentWidth + wheel.pixelDelta.y), flick.width * 4),
-                                                Math.min(Math.max(flick.height, flick.contentHeight + wheel.pixelDelta.y), flick.height * 4),
+                            flick.resizeContent(Math.min(Math.max(root.width, flick.contentWidth + wheel.pixelDelta.y), root.width * 4),
+                                                Math.min(Math.max(root.height, flick.contentHeight + wheel.pixelDelta.y), root.height * 4),
                                                 wheel);
                         }
+                    } else {
+                        flick.contentX += wheel.pixelDelta.x;
+                        flick.contentY += wheel.pixelDelta.y;
                     }
                 }
             }
         }
-
-        Component
-        {
-            id: _animatedImageComponent
-            AnimatedImage
-            {
-                fillMode: flick.fillMode
-                autoTransform: true
-                asynchronous: flick.asynchronous
-                source: flick.source
-                playing: true
-// 				onStatusChanged: playing = (status == AnimatedImage.Ready)
-                cache: flick.cache
-            }
-        }
-
-        Component
-		{
-			id: _stillImageComponent
-			Image
-			{			
-                id: img
-				fillMode: flick.fillMode
-				autoTransform: true
-				asynchronous: flick.asynchronous
-				source: flick.source
-				cache: flick.cache
-                sourceSize.width : Math.max(flick.imageWidth, img.implicitWidth)
-                sourceSize.height: Math.max(flick.imageHeight, img.implicitHeight)
-                BusyIndicator
-                {
-                    anchors.centerIn: parent
-                    running: parent.status === Image.Loading
-                }
-			}
-		}	
-
     }
+
 
     /**
       *
