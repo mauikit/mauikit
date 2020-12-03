@@ -80,11 +80,6 @@
 #include <KF5/KSyntaxHighlighting/Repository>
 #include <KF5/KSyntaxHighlighting/SyntaxHighlighter>
 #include <KF5/KSyntaxHighlighting/Theme>
-#elif defined Q_OS_ANDROID
-#include <KSyntaxHighlighting/KSyntaxHighlighting/Definition>
-#include <KSyntaxHighlighting/KSyntaxHighlighting/Repository>
-#include <KSyntaxHighlighting/KSyntaxHighlighting/SyntaxHighlighter>
-#include <KSyntaxHighlighting/KSyntaxHighlighting/Theme>
 #else
 #include <KSyntaxHighlighting/Definition>
 #include <KSyntaxHighlighting/Repository>
