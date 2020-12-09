@@ -93,6 +93,8 @@ void MauiKit::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String(MAUIKIT_URI));
 
+    this->initResources();
+
     qmlRegisterSingletonType(componentUrl(QStringLiteral("Style.qml")), uri, 1, 0, "Style");
     qmlRegisterType(componentUrl(QStringLiteral("ToolBar.qml")), uri, 1, 0, "ToolBar");
     qmlRegisterType(componentUrl(QStringLiteral("ApplicationWindow.qml")), uri, 1, 0, "ApplicationWindow");
@@ -268,13 +270,12 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("PluginsInfo.qml")), uri, 1, 2, "PluginsInfo");
 #endif
 
-    this->initResources();
     qmlProtectModule(uri, 1);
 }
 
 void MauiKit::initResources()
 {
-#ifdef Q_OS_ANDROID
+#if defined Q_OS_ANDROID || defined Q_OS_MACOS || defined Q_OS_WIN
     Q_INIT_RESOURCE(mauikit);
     Q_INIT_RESOURCE(style);
     QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
