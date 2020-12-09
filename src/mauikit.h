@@ -32,9 +32,9 @@ static constexpr const char* MAUIKIT_URI = "org.kde.mauikit";
 class MauiAccounts;
 #ifdef STATIC_MAUIKIT
 class MauiKit : public QQmlExtensionPlugin
-#else
+        #else
 class MAUIKIT_EXPORT MauiKit : public QQmlExtensionPlugin
-#endif
+        #endif
 {
     Q_OBJECT
 
@@ -64,16 +64,19 @@ private:
     QUrl componentUrl(const QString &fileName) const;
     QString resolveFilePath(const QString &path) const
     {
-#ifdef STATIC_MAUIKIT
+#if defined(Q_OS_ANDROID) && QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        return QStringLiteral(":/android_rcc_bundle/qml/org/kde/mauikit/") + path;
+#elif defined(STATIC_MAUIKIT)
         return QStringLiteral(":/org/kde/mauikit/") + path;
 #else
         return baseUrl().toLocalFile() + QLatin1Char('/') + path;
 #endif
     }
-
     QString resolveFileUrl(const QString &filePath) const
     {
-#ifdef STATIC_MAUIKIT
+#if defined(Q_OS_ANDROID) && QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        return QStringLiteral("qrc:/android_rcc_bundle/qml/org/kde/mauikit/") + filePath;
+#elif defined(STATIC_MAUIKIT)
         return filePath;
 #else
         return baseUrl().toString() + QLatin1Char('/') + filePath;

@@ -74,11 +74,7 @@
 
 QUrl MauiKit::componentUrl(const QString &fileName) const
 {
-#ifdef MAUI_APP
-    return QUrl(QStringLiteral("qrc:/maui/kit/") + fileName);
-#else
     return QUrl(resolveFileUrl(fileName));
-#endif
 }
 
 void MauiKit::initializeEngine(QQmlEngine *engine, const char *uri)

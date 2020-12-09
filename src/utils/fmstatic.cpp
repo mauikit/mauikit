@@ -320,6 +320,8 @@ void FMStatic::moveToTrash(const QList<QUrl> &urls)
 #if defined Q_OS_LINUX && !defined Q_OS_ANDROID
     auto job = KIO::trash(urls);
     job->start();
+#else
+    Q_UNUSED(urls)
 #endif
 }
 

@@ -166,8 +166,6 @@ if(${COMPONENT_SYNCING})
     add_definitions(-DCOMPONENT_SYNCING)
 endif()
 
-#use dbus on linux, bsd etc, but not andoid and apple stuff
-
 if(${SUPPORT_PLUGINS})
        message(STATUS "INCLUDING PLUGINS SUPPORT")
     set(mauikitplugin_SRCS
@@ -192,7 +190,7 @@ if(ANDROID OR IS_APPIMAGE_PACKAGE)
         execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/milohr/luv-icon-theme.git ${CMAKE_CURRENT_SOURCE_DIR}/maui-style/icons/luv-icon-theme)
     endif()
 
-    list(APPEND mauikit_SRCS maui-style/icons.qrc)
+#    list(APPEND mauikit_SRCS maui-style/icons.qrc)
 endif()
 
 if (ANDROID)
@@ -260,6 +258,10 @@ if(ANDROID)
     else()
         install(FILES MauiKit-android-dependencies.xml DESTINATION ${KDE_INSTALL_LIBDIR} RENAME MauiKit_${CMAKE_ANDROID_ARCH_ABI}-android-dependencies.xml)
     endif()
+elseif(UNIX)
+    target_link_libraries(MauiKit PRIVATE KF5::Service KF5::ConfigCore KF5::KIOCore KF5::KIOFileWidgets KF5::KIONTLM KF5::KIOWidgets)
+    target_include_directories(MauiKit PRIVATE platforms/linux)
+
 endif()
 
 target_link_libraries(MauiKit
@@ -267,11 +269,9 @@ target_link_libraries(MauiKit
     Qt5::Core
     Qt5::Sql
     Qt5::Gui
+    Qt5::Concurrent
     KF5::I18n
-    KF5::ConfigCore
-    KF5::KIOCore
-    KF5::KIOWidgets
-    KF5::KIOFileWidgets
+    KF5::CoreAddons
 
     PRIVATE
     Qt5::Qml
@@ -280,9 +280,6 @@ target_link_libraries(MauiKit
     Qt5::Svg
     Qt5::Network
     Qt5::Xml
-    KF5::I18n
-    KF5::Service
-    KF5::KIONTLM
     )
 
 if(${COMPONENT_EDITOR})
