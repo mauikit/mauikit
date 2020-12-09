@@ -7,9 +7,7 @@
 #include <QObject>
 #include <QString>
 
-#ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
-#endif
 
 namespace FMH
 {
@@ -17,11 +15,7 @@ namespace FMH
  * @brief The Downloader class
  * This is a quick helper to download and save files. Allows to make get request using optional headers.
  */
-#ifdef STATIC_MAUIKIT
-class Downloader : public QObject
-#else
 class MAUIKIT_EXPORT Downloader : public QObject
-#endif
 {
     Q_OBJECT
 public:

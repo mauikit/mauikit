@@ -8,10 +8,7 @@
 #include <QUrl>
 
 #include <QCoreApplication>
-
-#ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
-#endif
 
 class SettingSection : public QObject
 {
@@ -47,11 +44,8 @@ signals:
 /**
  * @brief The AppSettings class
  */
-#ifdef STATIC_MAUIKIT
-class AppSettings : public QObject
-#else
+
 class MAUIKIT_EXPORT AppSettings : public QObject
-#endif
 {
     Q_OBJECT
 public:

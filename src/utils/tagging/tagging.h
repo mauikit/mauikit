@@ -27,9 +27,7 @@
 #include <QCoreApplication>
 #include <QThread>
 
-#ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
-#endif
 
 #define MAX_LIMIT 9999
 
@@ -38,12 +36,7 @@
  * Provides quick methods to access and modify the tags associated to files.
  * This class follows a singleton pattern and it is not thread safe, so only the main thread can have access to it.
  */
-
-#ifdef STATIC_MAUIKIT
-class Tagging : public TAGDB
-#else
 class MAUIKIT_EXPORT Tagging : public TAGDB
-#endif
 {
     Q_OBJECT
 public:

@@ -187,10 +187,10 @@ option(IS_APPIMAGE_PACKAGE "If set to true then the icons and styled is packaged
 if(ANDROID OR IS_APPIMAGE_PACKAGE)
     if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/maui-style/icons/luv-icon-theme/.git)
         find_package(Git REQUIRED)
-        execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/milohr/luv-icon-theme.git ${CMAKE_CURRENT_SOURCE_DIR}/maui-style/icons/luv-icon-theme)
+        execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/Nitrux/luv-icon-theme.git ${CMAKE_CURRENT_SOURCE_DIR}/maui-style/icons/luv-icon-theme)
     endif()
 
-#    list(APPEND mauikit_SRCS maui-style/icons.qrc)
+    list(APPEND mauikit_SRCS maui-style/icons.qrc)
 endif()
 
 if (ANDROID)

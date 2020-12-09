@@ -24,11 +24,9 @@
 #include <QObject>
 #include <QSortFilterProxyModel>
 
-class MauiList;
-
-#ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
-#endif
+
+class MauiList;
 
 /**
  * @brief The MauiModel class
@@ -36,11 +34,7 @@ class MauiList;
  *
  * This type is exposed to QML to quickly create a modle that can be filtered, sorted and has another usefull functionalities.
  */
-#ifdef STATIC_MAUIKIT
-class MauiModel : public QSortFilterProxyModel
-#else
 class MAUIKIT_EXPORT MauiModel : public QSortFilterProxyModel
-#endif
 {
     Q_OBJECT
     Q_PROPERTY(MauiList *list READ getList WRITE setList NOTIFY listChanged)

@@ -43,11 +43,7 @@
 #include <KFilePlacesModel>
 #endif
 
-#ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
-#else
-#define MAUIKIT_EXPORT
-#endif
 
 /**
  * A set of helpers related to file management and modeling of data

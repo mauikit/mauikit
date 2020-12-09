@@ -4,19 +4,13 @@
 #include "fmh.h"
 #include <QObject>
 
-#ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
-#endif
 
 /**
  * @brief The FMStatic class
  * STatic file management methods, this class has a constructor only to register to QML, however all methods are static.
  */
-#ifdef STATIC_MAUIKIT
-class FMStatic : public QObject
-#else
 class MAUIKIT_EXPORT FMStatic : public QObject
-#endif
 {
     Q_OBJECT
 public:

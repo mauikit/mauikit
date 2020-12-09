@@ -57,7 +57,7 @@
 
 #include "platform.h"
 
-#ifdef MAUIKIT_STYLE
+#ifdef Q_OS_ANDROID
 #include <QIcon>
 #include <QQuickStyle>
 #endif
@@ -269,19 +269,13 @@ void MauiKit::registerTypes(const char *uri)
 #endif
 
     this->initResources();
-
     qmlProtectModule(uri, 1);
 }
 
 void MauiKit::initResources()
 {
-#ifdef MAUIKIT_STYLE
+#ifdef Q_OS_ANDROID
     Q_INIT_RESOURCE(mauikit);
-#ifdef ICONS_PNG
-    Q_INIT_RESOURCE(icons_png);
-#else
-    Q_INIT_RESOURCE(icons);
-#endif
     Q_INIT_RESOURCE(style);
     QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
     QIcon::setThemeName("Luv");

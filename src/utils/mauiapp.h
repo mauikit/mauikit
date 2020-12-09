@@ -23,9 +23,7 @@
 
 #include "fmh.h"
 
-#ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
-#endif
 
 #include <QColor>
 #include <QSettings>
@@ -52,11 +50,7 @@ class MauiAccounts;
  * }
  */
 
-#ifdef STATIC_MAUIKIT
-class MauiApp : public QObject
-#else
 class MAUIKIT_EXPORT MauiApp : public QObject
-#endif
 {
     Q_OBJECT
     Q_PROPERTY(KAboutData about READ getAbout CONSTANT FINAL)

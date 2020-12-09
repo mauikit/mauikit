@@ -60,9 +60,7 @@
 #include <QUrl>
 #include <QTimer>
 
-#ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
-#endif
 
 QT_BEGIN_NAMESPACE
 class QFileSystemWatcher;
@@ -237,11 +235,7 @@ signals:
 /**
  * @brief The DocumentHandler class
  */
-#ifdef STATIC_MAUIKIT
-class DocumentHandler : public QObject
-#else
 class MAUIKIT_EXPORT DocumentHandler : public QObject
-#endif
 {
     Q_OBJECT
 

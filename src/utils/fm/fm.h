@@ -11,9 +11,7 @@
 #include "fmh.h"
 #include "fmstatic.h"
 
-#ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
-#endif
 
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
@@ -98,11 +96,7 @@ class Tagging;
  * @brief The FM class
  * File management methods with syncing and tagging integration if such components were enabled with COMPONENT_SYNCING and COMPONENT_TAGGING
  */
-#ifdef STATIC_MAUIKIT
-class FM : public QObject
-#else
 class MAUIKIT_EXPORT FM : public QObject
-#endif
 {
     Q_OBJECT
 

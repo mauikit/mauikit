@@ -21,9 +21,7 @@
 
 #include "fmh.h"
 
-#ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
-#endif
 
 #include <QQmlParserStatus>
 
@@ -33,11 +31,7 @@
 #include <QObject>
 
 class MauiModel;
-#ifdef STATIC_MAUIKIT
-class MauiList : public QObject, public QQmlParserStatus
-#else
 class MAUIKIT_EXPORT MauiList : public QObject, public QQmlParserStatus
-#endif
 {
     Q_INTERFACES(QQmlParserStatus)
 

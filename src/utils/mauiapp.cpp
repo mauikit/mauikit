@@ -32,9 +32,7 @@
 #include <QFileSystemWatcher>
 #endif
 
-#ifndef STATIC_MAUIKIT
 #include "../mauikit_version.h"
-#endif
 
 static const QUrl CONF_FILE = FMH::ConfigPath + "/kwinrc";
 
