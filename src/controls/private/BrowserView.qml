@@ -457,7 +457,7 @@ Maui.Page
                     id: delegate
                     readonly property string path : model.path
 
-                    iconSizeHint: height * 0.5
+                    iconSizeHint: height * 0.4
                     imageSource: settings.showThumbnails ? model.thumbnail : ""
                     template.fillMode: Image.PreserveAspectFit
                     iconSource: model.icon
