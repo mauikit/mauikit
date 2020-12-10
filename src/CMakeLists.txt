@@ -259,9 +259,17 @@ if(ANDROID)
         install(FILES MauiKit-android-dependencies.xml DESTINATION ${KDE_INSTALL_LIBDIR} RENAME MauiKit_${CMAKE_ANDROID_ARCH_ABI}-android-dependencies.xml)
     endif()
 elseif(UNIX)
-    target_link_libraries(MauiKit PRIVATE KF5::Service KF5::ConfigCore KF5::KIOCore KF5::KIOFileWidgets KF5::KIONTLM KF5::KIOWidgets)
-    target_include_directories(MauiKit PRIVATE platforms/linux)
+    target_link_libraries(MauiKit 
+    PUBLIC 
+    KF5::ConfigCore
+    KF5::KIOCore
+    KF5::KIOWidgets
+    KF5::KIOFileWidgets
 
+    PRIVATE 
+    KF5::Service 
+    KF5::KIONTLM)
+    target_include_directories(MauiKit PRIVATE platforms/linux)
 endif()
 
 target_link_libraries(MauiKit
@@ -271,7 +279,7 @@ target_link_libraries(MauiKit
     Qt5::Gui
     Qt5::Concurrent
     KF5::I18n
-    KF5::CoreAddons
+    KF5::CoreAddons    
 
     PRIVATE
     Qt5::Qml

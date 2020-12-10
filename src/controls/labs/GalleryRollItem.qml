@@ -154,12 +154,29 @@ Maui.ItemDelegate
                         }
                     }
                 }
+                
+                OpacityMask
+                {
+                    source: mask
+                    maskSource: _featuredRoll
+                }
+                
+                LinearGradient 
+                {
+                    id: mask
+                    anchors.fill: parent
+                    gradient: Gradient 
+                    {
+                        GradientStop { position: 0.2; color: "transparent"}
+                        GradientStop { position: 0.9; color: control.Kirigami.Theme.backgroundColor}
+                    }                    
+                }
             }
 
             LinearGradient
             {
                 anchors.fill: parent
-                start: Qt.point(0, 0)
+                start: Qt.point(0, parent.height* 0.6)
                 end: Qt.point(0, parent.height)
                 gradient: Gradient {
                     GradientStop { position: 0.0; color: "transparent" }
