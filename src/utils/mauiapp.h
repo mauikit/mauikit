@@ -192,12 +192,7 @@ private:
     QStringList m_rightWindowControls;
 
     void getWindowControlsSettings();
-
-#ifdef COMPONENT_ACCOUNTS
-    bool handleAccounts = true;
-#else
     bool handleAccounts = false;
-#endif
 
 signals:
     void iconNameChanged();

@@ -8,6 +8,7 @@ import org.kde.mauikit 1.0 as Maui
 Maui.Page
 {
     id: control
+    headBar.visible: false
     title: currentFMList.pathName
 
     /**
