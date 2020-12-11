@@ -68,10 +68,6 @@ PlacesList::PlacesList(QObject *parent)
         }
     });
 
-#ifdef COMPONENT_TAGGING
-    connect(Tagging::getInstance(), &Tagging::tagged, this, &PlacesList::reset);
-#endif
-
 #ifdef COMPONENT_ACCOUNTS
     connect(MauiAccounts::instance(), &MauiAccounts::accountAdded, this, &PlacesList::reset);
     connect(MauiAccounts::instance(), &MauiAccounts::accountRemoved, this, &PlacesList::reset);
@@ -104,7 +100,6 @@ PlacesList::PlacesList(QObject *parent)
     });
 #endif
 
-    connect(this, &PlacesList::groupsChanged, this, &PlacesList::reset);
 }
 
 void PlacesList::watchPath(const QString &path)
@@ -117,6 +112,7 @@ void PlacesList::watchPath(const QString &path)
 
 void PlacesList::componentComplete()
 {
+    connect(this, &PlacesList::groupsChanged, this, &PlacesList::reset);
     this->setList();
 }
 
@@ -161,7 +157,6 @@ switch (type) {
         break;
 }
 #else
-
 const auto group = model.groupIndexes(static_cast<KFilePlacesModel::GroupType>(type));
 res << std::accumulate(group.constBegin(), group.constEnd(), FMH::MODEL_LIST(), [&model, &type](FMH::MODEL_LIST &list, const QModelIndex &index) -> FMH::MODEL_LIST {
     const QUrl url = model.url(index);
@@ -187,6 +182,10 @@ return res;
 
 void PlacesList::setList()
 {
+    if(this->groups.isEmpty())
+        return;
+
+    qDebug() << "Setting PlacesList model" << groups;
     this->list.clear();
 
     for (const auto &group : this->groups) {
@@ -263,7 +262,6 @@ void PlacesList::setGroups(const QList<int> &value)
         return;
 
     this->groups = value;
-
     emit this->groupsChanged();
 }
 

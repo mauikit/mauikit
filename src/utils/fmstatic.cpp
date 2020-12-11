@@ -1,6 +1,7 @@
 #include "fmstatic.h"
 #include "utils.h"
 #include "platform.h"
+#include "platforms/android/mauiandroid.h"
 
 #include <QDesktopServices>
 
@@ -80,7 +81,7 @@ FMH::MODEL_LIST FMStatic::getDevices()
 {
     FMH::MODEL_LIST drives;
 
-#if defined(Q_OS_ANDROID)
+#ifdef Q_OS_ANDROID
     drives << packItems(MAUIAndroid::sdDirs(), FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::DRIVES_PATH]);
     return drives;
 #endif
