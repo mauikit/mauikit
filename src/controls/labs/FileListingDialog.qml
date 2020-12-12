@@ -44,6 +44,12 @@ Maui.Dialog
     template.iconSizeHint: Maui.Style.iconSizes.huge
     template.implicitHeight: Math.max(template.leftLabels.implicitHeight, 64)
     
+    template.leftLabels.data:  Column
+    {
+        id: _content
+        Layout.fillWidth: true
+    }
+    
     template.iconComponent: Item
     {
         Item
@@ -96,11 +102,7 @@ Maui.Dialog
         }        
     }
 
-    Column
-    {
-        id: _content
-        Layout.fillWidth: true
-    }
+ 
 
     Maui.Separator
     {
@@ -109,7 +111,7 @@ Maui.Dialog
         radius: 1
         Layout.margins: Maui.Style.space.medium
     }
-
+/*
     Maui.SectionDropDown
     {
         id: _dropDown
@@ -119,12 +121,12 @@ Maui.Dialog
         label1.text: i18n("List files")
         label2.text: i18n("Review and edit selected files.")
     }
-    
+    */
     Item {Layout.fillWidth: true}
     
     Maui.ListBrowser
     {
-        visible: _dropDown.checked
+        //visible: _dropDown.checked
         
         Layout.fillWidth: true
         implicitHeight: Math.min(contentHeight + Maui.Style.space.big, 300)

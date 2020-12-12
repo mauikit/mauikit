@@ -1,7 +1,6 @@
 #include "fmstatic.h"
 #include "utils.h"
 #include "platform.h"
-#include "platforms/android/mauiandroid.h"
 
 #include <QDesktopServices>
 
@@ -19,6 +18,10 @@
 
 #ifdef COMPONENT_TAGGING
 #include "tagging.h"
+#endif
+
+#ifdef Q_OS_ANDROID
+#include "platforms/android/mauiandroid.h"
 #endif
 
 FMStatic::FMStatic(QObject *parent)

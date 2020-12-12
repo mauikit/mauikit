@@ -89,6 +89,7 @@ Maui.Dialog
             imageSizeHint: imageWidth
 
             spacing: Maui.Style.space.big
+            label1.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             label1.text: Maui.App.about.displayName
             label1.font.weight: Font.Bold
             label1.font.bold: true
