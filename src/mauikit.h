@@ -34,20 +34,6 @@ class MAUIKIT_EXPORT MauiKit : public QQmlExtensionPlugin
 
 public:
     void registerTypes(const char *uri) Q_DECL_OVERRIDE;
-
-    static MauiKit &getInstance()
-    {
-        static MauiKit instance;
-        return instance;
-    }
-
-    static void registerTypes(QQmlEngine *engine, const char *uri = MAUIKIT_URI)
-    {
-        static MauiKit instance;
-        instance.registerTypes(MAUIKIT_URI);
-        instance.initializeEngine(engine, uri);
-    }
-
     void initResources();
 
 private:

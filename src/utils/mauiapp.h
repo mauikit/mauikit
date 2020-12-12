@@ -74,8 +74,11 @@ public:
 
     static MauiApp *instance()
     {
-        static MauiApp app;
-        return &app;
+        if(m_instance)
+            return m_instance;
+
+        m_instance = new MauiApp;
+        return m_instance;
     }
 
     MauiApp(const MauiApp &) = delete;
@@ -174,17 +177,15 @@ public:
     MauiAccounts *getAccounts() const;
 #endif
 
+    static void setDefaultMauiStyle();
+
 private:
+    static MauiApp*m_instance;
     MauiApp();
     MauiAccounts *m_accounts;
 
-    QString description;
-    QString iconName;
-
-    QString webPage;
-    QString donationPage;
-    QString reportPage;
-    QVariantList m_credits;
+    QString m_iconName;
+    QString m_donationPage;
 
     // CSD support
     bool m_enableCSD = false;

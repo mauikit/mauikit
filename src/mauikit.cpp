@@ -57,11 +57,6 @@
 
 #include "platform.h"
 
-#ifdef Q_OS_ANDROID
-#include <QIcon>
-#include <QQuickStyle>
-#endif
-
 #if defined Q_OS_MACOS || defined Q_OS_WIN
 #include <KF5/KI18n/KLocalizedContext>
 #include <KF5/KI18n/KLocalizedString>
@@ -278,9 +273,6 @@ void MauiKit::initResources()
 #if defined Q_OS_ANDROID || defined Q_OS_MACOS || defined Q_OS_WIN
     Q_INIT_RESOURCE(mauikit);
     Q_INIT_RESOURCE(style);
-    QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
-    QIcon::setThemeName("Luv");
-    QQuickStyle::setStyle(":/style");
 #endif
 }
 

@@ -20,7 +20,7 @@
 #include "fmh.h"
 #include "handy.h"
 #include "utils.h"
-#include <QIcon>
+
 #ifdef COMPONENT_ACCOUNTS
 #include "mauiaccounts.h"
 #endif
@@ -32,9 +32,16 @@
 #include <QFileSystemWatcher>
 #endif
 
+#if defined Q_OS_ANDROID || defined Q_OS_MACOS || defined Q_OS_WIN
+#include <QIcon>
+#include <QQuickStyle>
+#endif
+
 #include "../mauikit_version.h"
 
 static const QUrl CONF_FILE = FMH::ConfigPath + "/kwinrc";
+
+MauiApp * MauiApp::m_instance = nullptr;
 
 MauiApp::MauiApp()
     : QObject(nullptr)
@@ -51,9 +58,14 @@ MauiApp::MauiApp()
     connect(configWatcher, &QFileSystemWatcher::fileChanged, [&](QString) { getWindowControlsSettings(); });
 #endif
 
-    getWindowControlsSettings();
-}
+    connect(qApp, &QCoreApplication::aboutToQuit, this, &MauiApp::deleteLater);
 
+    getWindowControlsSettings();
+
+#if defined Q_OS_ANDROID || defined Q_OS_MACOS || defined Q_OS_WIN
+    setDefaultMauiStyle();
+#endif
+}
 
 QString MauiApp::getMauikitVersion()
 {
@@ -67,29 +79,30 @@ QString MauiApp::getQtVersion()
 
 QString MauiApp::getIconName() const
 {
-    return iconName;
+    qDebug() << "REQUESTING ICONNAME" << m_iconName << this;
+    return m_iconName;
 }
 
 void MauiApp::setIconName(const QString &value)
 {
-    if (iconName == value)
+    if (m_iconName == value)
         return;
 
-    iconName = value;
+    m_iconName = value;
     emit this->iconNameChanged();
 }
 
 QString MauiApp::getDonationPage() const
 {
-    return donationPage;
+    return m_donationPage;
 }
 
 void MauiApp::setDonationPage(const QString &value)
 {
-    if (donationPage == value)
+    if (m_donationPage == value)
         return;
 
-    donationPage = value;
+    m_donationPage = value;
     emit this->donationPageChanged();
 }
 
@@ -115,6 +128,15 @@ MauiAccounts *MauiApp::getAccounts() const
     return this->m_accounts;
 }
 #endif
+
+void MauiApp::setDefaultMauiStyle()
+{
+#if defined QICON_H && defined QQUICKSTYLE_H
+    QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
+    QIcon::setThemeName("Luv");
+    QQuickStyle::setStyle("maui-style");
+#endif
+}
 
 MauiApp *MauiApp::qmlAttachedProperties(QObject *object)
 {
