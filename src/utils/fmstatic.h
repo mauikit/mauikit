@@ -493,6 +493,14 @@ public slots:
      * The file URL to be bookmarked
      */
     static void bookmark(const QUrl &url);
+
+    /**
+     * @brief nameFilters
+     * Given a filter type return a list of associated name filters, as in suffixes.
+     * @param type
+     * The filter type to be mapped to a FMH::FILTER_TYPE
+     */
+    static QStringList nameFilters(const int &type);
 };
 
 #endif // FMSTATIC_H

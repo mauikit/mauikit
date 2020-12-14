@@ -78,7 +78,7 @@ Maui.Dialog
         {
             id: _div1
 
-            width: parent.width * 0.95
+            width: parent.width 
             height: label2.implicitHeight + label1.implicitHeight
             anchors.centerIn: parent
             imageBorder: false

@@ -69,13 +69,13 @@ PlacesList::PlacesList(QObject *parent)
     });
 
 #ifdef COMPONENT_ACCOUNTS
-    connect(MauiAccounts::instance(), &MauiAccounts::accountAdded, this, &PlacesList::reset);
-    connect(MauiAccounts::instance(), &MauiAccounts::accountRemoved, this, &PlacesList::reset);
+    connect(MauiAccounts::instance(), &MauiAccounts::accountAdded, this, &PlacesList::setList);
+    connect(MauiAccounts::instance(), &MauiAccounts::accountRemoved, this, &PlacesList::setList);
 #endif
 
 #if defined Q_OS_LINUX && !defined Q_OS_ANDROID
     connect(this->model, &KFilePlacesModel::rowsInserted, [this](const QModelIndex, int, int) {
-        this->reset();
+        this->setList();
         emit this->bookmarksChanged();
 
         /*emit this->preListChanged();
@@ -94,7 +94,7 @@ PlacesList::PlacesList(QObject *parent)
 #else
     connect(&AppSettings::global(), &AppSettings::settingChanged, [&](const QUrl, const QString &key, const QVariant, const QString &group) {
         if (key == "BOOKMARKS" && group == "PREFERENCES") {
-            this->reset();
+            this->setList();
             emit this->bookmarksChanged();
         }
     });
@@ -112,7 +112,7 @@ void PlacesList::watchPath(const QString &path)
 
 void PlacesList::componentComplete()
 {
-    connect(this, &PlacesList::groupsChanged, this, &PlacesList::reset);
+    connect(this, &PlacesList::groupsChanged, this, &PlacesList::setList);
     this->setList();
 }
 
@@ -186,6 +186,8 @@ void PlacesList::setList()
         return;
 
     qDebug() << "Setting PlacesList model" << groups;
+    emit this->preListChanged();
+    
     this->list.clear();
 
     for (const auto &group : this->groups) {
@@ -227,6 +229,7 @@ void PlacesList::setList()
     }
 
     this->setCount();
+    emit this->postListChanged();
 }
 
 void PlacesList::setCount()
@@ -242,13 +245,6 @@ void PlacesList::setCount()
             this->watchPath(path);
         }
     }
-}
-
-void PlacesList::reset()
-{
-    emit this->preListChanged();
-    this->setList();
-    emit this->postListChanged();
 }
 
 QList<int> PlacesList::getGroups() const
@@ -272,11 +268,6 @@ QVariantMap PlacesList::get(const int &index) const
 
     const auto model = this->list.at(index);
     return FMH::toMap(model);
-}
-
-void PlacesList::refresh()
-{
-    this->reset();
 }
 
 void PlacesList::clearBadgeCount(const int &index)

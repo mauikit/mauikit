@@ -580,3 +580,8 @@ void FMStatic::bookmark(const QUrl &url)
     model.addPlace(QDir(url.toLocalFile()).dirName(), url, FMH::getIconName(url));
 #endif
 }
+
+QStringList FMStatic::nameFilters(const int &type)
+{
+    return FMH::FILTER_LIST[static_cast<FMH::FILTER_TYPE>(type)];
+}

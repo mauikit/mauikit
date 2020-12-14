@@ -42,7 +42,6 @@ public:
 
 protected:
     void setList();
-    void reset();
 
 public slots:
     /**
@@ -54,12 +53,6 @@ public slots:
      * The data of the place
      */
     QVariantMap get(const int &index) const;
-
-    /**
-     * @brief refresh
-     * Refreshes the model list of all the places, like bookmarks, default places, devices, etc..
-     */
-    void refresh();
 
     /**
      * @brief clearBadgeCount
