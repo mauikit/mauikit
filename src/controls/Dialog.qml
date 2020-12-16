@@ -243,8 +243,6 @@ Maui.Popup
                             id: _template
                             visible: control.message.length || control.entryField
                             Layout.fillWidth: true
-                            implicitHeight: leftLabels.implicitHeight + Maui.Style.space.big
-
                             label2.text: message
                             label2.textFormat : TextEdit.AutoText
                             label2.wrapMode: TextEdit.WordWrap

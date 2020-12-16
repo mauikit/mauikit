@@ -193,7 +193,6 @@ Maui.ItemDelegate
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
                 anchors.margins: Maui.Style.space.medium
-                implicitHeight: leftLabels.implicitHeight + Maui.Style.space.medium
                 //            color: Kirigami.Theme.textColor
                 label1.font.bold: true
                 label1.font.weight: Font.Bold

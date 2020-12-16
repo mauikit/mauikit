@@ -43,7 +43,7 @@ Item
       */
     default property alias content: _layout.data
 
-    implicitHeight: Maui.Style.rowHeight
+    implicitHeight: _layout.implicitHeight
 
     /**
       * text1 : string
@@ -270,7 +270,7 @@ Item
 
         Item
         {
-            Layout.fillHeight: true
+            Layout.preferredHeight: _emblem.height
             visible: _emblem.visible
         }
 
@@ -325,16 +325,22 @@ Item
         {
             id: _iconContainer
             visible: (control.width > Kirigami.Units.gridUnit * 10) && (iconSource.length > 0 || imageSource.length > 0)
+            Layout.alignment: Qt.AlignCenter
             Layout.fillHeight: true
             Layout.fillWidth: !control.labelsVisible
-            Layout.preferredWidth: Math.min(parent.height, Math.max(control.iconSizeHint, imageSizeHint) + Maui.Style.space.medium)
+            Layout.preferredWidth: Math.max(control.iconSizeHint, control.imageSizeHint) + Maui.Style.space.medium
+
+            Layout.preferredHeight: Math.max(control.iconSizeHint, control.imageSizeHint) + Maui.Style.space.medium
 
             Loader
             {
                 id: _iconLoader
-                width: Math.min(parent.height, Math.max(control.iconSizeHint, imageSizeHint) )
-                height: width
                 anchors.centerIn: parent
+
+                width: Math.min(parent.height, Math.max(control.iconSizeHint, control.imageSizeHint))
+
+                height: width
+
                 sourceComponent: control.iconComponent
             }
         }

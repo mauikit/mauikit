@@ -90,4 +90,4 @@ SectionDropDown 1.3 labs/SectionDropDown.qml
 IconItem 1.3 labs/IconItem.qml
 DoodleCanvas 1.3 labs/DoodleCanvas.qml
 Doodle 1.3 labs/Doodle.qml
-
+FlexListItem 1.3 labs/FlexListItem.qml

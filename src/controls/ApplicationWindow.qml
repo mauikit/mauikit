@@ -650,7 +650,6 @@ Window
         stack: MouseArea
         {
             id: _mouseArea
-            implicitHeight: _notifyTemplate.label1.implicitHeight + _notifyTemplate.label2.implicitHeight + Maui.Style.space.medium
             Layout.fillHeight: true
             Layout.fillWidth: true
             hoverEnabled: true
