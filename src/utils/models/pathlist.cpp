@@ -53,7 +53,7 @@ void PathList::setList()
     } else {
         const int index = [&]() -> int {
             int i = 0;
-            for (const auto &item : this->list) {
+            for (const auto &item : qAsConst(list)) {
                 if (i < paths.size()) {
                     if (item[FMH::MODEL_KEY::PATH] != paths[i][FMH::MODEL_KEY::PATH]) {
                         break;

@@ -40,10 +40,6 @@ public:
 
     void componentComplete() override final;
 
-protected:
-    void setList();
-
-public slots:
     /**
      * @brief get
      * Gets a item in the model.
@@ -54,6 +50,11 @@ public slots:
      */
     QVariantMap get(const int &index) const;
 
+protected:
+    void setList();
+    void reset();
+
+public slots:
     /**
      * @brief clearBadgeCount
      * Clears the count associated to a place at a given index in the model

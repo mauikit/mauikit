@@ -53,7 +53,7 @@ FMH::MODEL_LIST MauiAccounts::getCloudAccounts()
 {
     auto accounts = this->get("select * from cloud");
     FMH::MODEL_LIST res;
-    for (const auto &account : accounts) {
+    for (const auto &account : qAsConst(accounts)) {
         auto map = account.toMap();
         res << FMH::MODEL {{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::CLOUD_PATH] + map[FMH::MODEL_NAME[FMH::MODEL_KEY::USER]].toString()},
                            {FMH::MODEL_KEY::ICON, "folder-cloud"},
@@ -102,7 +102,8 @@ QVariantList MauiAccounts::get(const QString &queryTxt)
     if (query.exec()) {
         while (query.next()) {
             QVariantMap data;
-            for (auto key : FMH::MODEL_NAME.keys())
+            const auto keys = FMH::MODEL_NAME.keys();
+            for (auto key : keys)
                 if (query.record().indexOf(FMH::MODEL_NAME[key]) > -1)
                     data[FMH::MODEL_NAME[key]] = query.value(FMH::MODEL_NAME[key]).toString();
 

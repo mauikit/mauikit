@@ -53,14 +53,14 @@ FMList::FMList(QObject *parent)
     });
 
     connect(this->fm, &FM::pathContentItemsChanged, [&](QVector<QPair<FMH::MODEL, FMH::MODEL>> res) {
-        for (const auto &item : res) {
+        for (const auto &item : qAsConst(res)) {
             const auto index = this->indexOf(FMH::MODEL_KEY::PATH, item.first[FMH::MODEL_KEY::PATH]);
 
             if (index >= this->list.size() || index < 0)
                 return;
 
             this->list[index] = item.second;
-            this->updateModel(index, FMH::modelRoles(item.second));
+            emit this->updateModel(index, FMH::modelRoles(item.second));
         }
     });
 
@@ -81,7 +81,7 @@ FMList::FMList(QObject *parent)
             return;
         }
 
-        for (const auto &item : res.content) {
+        for (const auto &item : qAsConst(res.content)) {
             const auto index = this->indexOf(FMH::MODEL_KEY::PATH, item[FMH::MODEL_KEY::PATH]);
             qDebug() << "SUPOSSED TO REMOVED THIS FORM THE LIST" << index << this->list.count() << item[FMH::MODEL_KEY::PATH];
 
@@ -195,16 +195,13 @@ void FMList::sortList()
     auto index = 0;
 
     if (this->foldersFirst) {
-        qSort(this->list.begin(), this->list.end(), [](const FMH::MODEL &e1, const FMH::MODEL &e2) -> bool {
+        std::sort(this->list.begin(), this->list.end(), [](const FMH::MODEL &e1, const FMH::MODEL &e2) -> bool {
             Q_UNUSED(e2)
             const auto key = FMH::MODEL_KEY::MIME;
-            if (e1[key] == "inode/directory")
-                return true;
-
-            return false;
+            return e1[key] == "inode/directory";
         });
 
-        for (const auto &item : this->list)
+        for (const auto &item : qAsConst(this->list))
             if (item[FMH::MODEL_KEY::MIME] == "inode/directory")
                 index++;
             else
@@ -594,7 +591,7 @@ void FMList::filterContent(const QString &query, const QUrl &path)
         FMH::MODEL_LIST m_content;
         FMH::PATH_CONTENT res;
 
-        for (const auto &item : this->list) {
+        for (const auto &item : qAsConst(this->list)) {
             if (item[FMH::MODEL_KEY::LABEL].contains(query, Qt::CaseInsensitive) || item[FMH::MODEL_KEY::SUFFIX].contains(query, Qt::CaseInsensitive) || item[FMH::MODEL_KEY::MIME].contains(query, Qt::CaseInsensitive)) {
 
                 m_content << item;

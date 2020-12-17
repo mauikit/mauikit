@@ -214,7 +214,7 @@ bool TAGDB::remove(const QString &tableName, const FMH::MODEL &removeData)
         strValues.append(QString("%1 = \"%2\"").arg(FMH::MODEL_NAME[key], removeData[key]));
         i++;
 
-        if (removeData.keys().size() > 1 && i < removeData.keys().size())
+        if (removeData.size() > 1 && i < removeData.size())
             strValues.append(" AND ");
     }
 
