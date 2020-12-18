@@ -49,10 +49,10 @@ bool TagsList::insert(const QString &tag)
 
 void TagsList::insertToUrls(const QString &tag)
 {
-    if (this->urls.isEmpty())
+    if (urls.isEmpty())
         return;
 
-    for (const auto &url : this->urls)
+    for (const auto &url : qAsConst(urls))
         this->tag->tagUrl(url, tag);
 
     this->refresh();
@@ -63,7 +63,7 @@ void TagsList::updateToUrls(const QStringList &tags)
     if (this->urls.isEmpty())
         return;
 
-    for (const auto &url : this->urls)
+    for (const auto &url : qAsConst(urls))
         this->tag->updateUrlTags(url, tags);
 
     this->refresh();
@@ -78,7 +78,7 @@ void TagsList::removeFromUrls(const int &index)
         return;
 
     const auto tag = this->list[index][FMH::MODEL_KEY::TAG];
-    for (const auto &url : this->urls)
+    for (const auto &url : qAsConst(urls))
         this->tag->removeUrlTag(url, tag);
 
     this->remove(index);
@@ -178,7 +178,7 @@ void TagsList::append(const FMH::MODEL &tag)
 
 void TagsList::append(const QStringList &tags)
 {
-    for (const auto &tag : tags)
+    for (const auto &tag : qAsConst(tags))
         this->append(tag);
 }
 

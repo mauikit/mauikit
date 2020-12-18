@@ -53,7 +53,6 @@ linux:unix:!android {
     message(Building Maui helpers for Android or Windows or Mac or iOS)
 
     android {
-
         contains(DEFINES, ANDROID_OPENSSL):{
             exists($$PWD/src/utils/syncing/openssl/openssl.pri) {
                 message("Using OpenSSL for Android")

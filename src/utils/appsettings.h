@@ -8,10 +8,7 @@
 #include <QUrl>
 
 #include <QCoreApplication>
-
-#ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
-#endif
 
 class SettingSection : public QObject
 {
@@ -30,11 +27,11 @@ public:
     QString key() const;
     QString group() const;
     QVariant defaultValue() const;
+    QVariant value() const;
 
 public slots:
     void setKey(QString key);
     void setGroup(QString group);
-    QVariant value() const;
     void setValue(QVariant value);
     void setDefaultValue(QVariant defaultValue);
 
@@ -47,11 +44,8 @@ signals:
 /**
  * @brief The AppSettings class
  */
-#ifdef STATIC_MAUIKIT
-class AppSettings : public QObject
-#else
+
 class MAUIKIT_EXPORT AppSettings : public QObject
-#endif
 {
     Q_OBJECT
 public:

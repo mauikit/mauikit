@@ -70,7 +70,8 @@ QVariantList MAUIKDE::services(const QUrl &url)
     if (url.isValid()) {
         KFileItem fileItem(url);
 
-        for (const auto &service : KApplicationTrader::queryByMimeType(fileItem.mimetype()))
+        const auto services = KApplicationTrader::queryByMimeType(fileItem.mimetype());
+        for (const auto &service : services)
         {
             const QString text = service->name().replace('&', "&&");
             QVariantMap item = createActionItem(text, "_kicker_fileItem_openWith", service->entryPath());

@@ -60,9 +60,7 @@
 #include <QUrl>
 #include <QTimer>
 
-#ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
-#endif
 
 QT_BEGIN_NAMESPACE
 class QFileSystemWatcher;
@@ -144,16 +142,6 @@ public:
         return other.getId() == other2.getId();
     }
 
-private:
-    QString m_title;
-    QString m_body;
-    uint m_level;
-    int m_index = -1;
-    int m_id = -1;
-
-    QVector<AlertAction> m_actions;
-
-public slots:
     /**
      * @brief actionLabels
      * @return
@@ -165,7 +153,16 @@ public slots:
             return labels;
         });
     }
+private:
+    QString m_title;
+    QString m_body;
+    uint m_level;
+    int m_index = -1;
+    int m_id = -1;
 
+    QVector<AlertAction> m_actions;
+
+public slots:
     /**
      * @brief triggerAction
      * @param actionIndex
@@ -237,11 +234,7 @@ signals:
 /**
  * @brief The DocumentHandler class
  */
-#ifdef STATIC_MAUIKIT
-class DocumentHandler : public QObject
-#else
 class MAUIKIT_EXPORT DocumentHandler : public QObject
-#endif
 {
     Q_OBJECT
 

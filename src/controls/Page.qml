@@ -354,7 +354,7 @@ Pane
     property Item header : Maui.ToolBar
     {
         id: _headBar
-        visible: visibleCount > 0
+        visible: count > 0
         width: visible ? parent.width : 0
         height: visible ? implicitHeight : 0
 
@@ -457,7 +457,7 @@ Pane
     property Item footer : Maui.ToolBar
     {
         id: _footBar
-        visible: visibleCount > 0
+        visible: count > 0
         width: visible ? parent.width : 0
         height: visible ? implicitHeight : 0
 

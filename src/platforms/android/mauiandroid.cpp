@@ -28,6 +28,7 @@
 #include <QUrl>
 #include <QFileInfo>
 #include <QCoreApplication>
+#include <QProcess>
 
 #include <android/bitmap.h>
 // WindowManager.LayoutParams
@@ -254,25 +255,18 @@ QString MAUIAndroid::homePath()
 }
 
 QStringList MAUIAndroid::sdDirs()
-{
-    //    QAndroidJniObject mediaDir = QAndroidJniObject::callStaticObjectMethod("android/os/Environment", "getExternalStorageDirectory", "()Ljava/io/File;");
-    //    QAndroidJniObject mediaPath = mediaDir.callObjectMethod( "getAbsolutePath", "()Ljava/lang/String;" );
-    //    QString dataAbsPath = mediaPath.toString()+"/Download/";
-    //    QAndroidJniEnvironment env;
-    //    if (env->ExceptionCheck()) {
-    //            // Handle exception here.
-    //            env->ExceptionClear();
-    //    }
-
-    //    qbDebug::Instance()->msg()<<"TESTED SDPATH"<<QProcessEnvironment::systemEnvironment().value("EXTERNAL_SDCARD_STORAGE",dataAbsPath);
-
+{    
     QStringList res;
-    if (QFileInfo::exists("file:///mnt/extSdCard"))
-        res << "file:///mnt/extSdCard";
 
-    if (QFileInfo::exists("file:///mnt/ext_sdcard"))
-        res << "file:///mnt/ext_sdcard";
+    QAndroidJniObject mediaDir = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/SDCard", "findSdCardPath", "(Landroid/content/Context;)Ljava/io/File;", QtAndroid::androidActivity().object<jobject>());
 
+    if(mediaDir == NULL)
+        return res;
+
+    QAndroidJniObject mediaPath = mediaDir.callObjectMethod( "getAbsolutePath", "()Ljava/lang/String;" );
+    QString dataAbsPath = mediaPath.toString();
+
+    res << QUrl::fromLocalFile(dataAbsPath).toString();
     return res;
 }
 
@@ -437,13 +431,6 @@ bool MAUIAndroid::checkRunTimePermissions(const QStringList &permissions)
 
     qDebug() << "Permissions granted!";
     return true;
-
-    // C++
-    //    QAndroidJniObject::callStaticMethod<void>("com/kde/maui/tools/SDCard",
-    //                                              "getStorageNames",
-    //                                              "(Landroid/app/Activity;)V",
-    //                                              QtAndroid::androidActivity().object<jobject>());
-    //    return (true);
 }
 
 bool MAUIAndroid::hasKeyboard()
@@ -456,7 +443,7 @@ bool MAUIAndroid::hasKeyboard()
         QAndroidJniObject resources = context.callObjectMethod("getResources", "()Landroid/content/res/Resources;");
         QAndroidJniObject config = resources.callObjectMethod("getConfiguration", "()Landroid/content/res/Configuration;");
         int value = config.getField<jint>("keyboard");
-//        QVariant v = value.toString();
+        //        QVariant v = value.toString();
         qDebug() << "KEYBOARD" << value;
 
         return value == 2 || value == 3; // KEYBOARD_12KEY || KEYBOARD_QWERTY
@@ -481,3 +468,4 @@ void MAUIAndroid::handleActivityResult(int receiverRequestCode, int resultCode, 
         emit folderPicked(url);
     }
 }
+

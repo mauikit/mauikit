@@ -50,7 +50,7 @@ public slots:
      */
     virtual bool hasMouse() = 0;
 
-    virtual void notify(const QString &title, const QString &message, const QString &icon, const QString &imageUrl) {}
+    virtual void notify(const QString &title, const QString &message, const QString &icon, const QString &imageUrl);
 
 signals:
     void hasKeyboardChanged();

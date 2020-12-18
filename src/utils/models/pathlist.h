@@ -46,20 +46,18 @@ public:
      */
     QString getPath() const;
 
-private:
-    FMH::MODEL_LIST list;
-    QString m_path;
-
-    static FMH::MODEL_LIST splitPath(const QString &path);
-    void setList();
-
-public slots:
     /**
      * @brief get
      * @param index
      * @return
      */
     QVariantMap get(const int &index) const;
+private:
+    FMH::MODEL_LIST list;
+    QString m_path;
+
+    static FMH::MODEL_LIST splitPath(const QString &path);
+    void setList();
 
 signals:
     /**

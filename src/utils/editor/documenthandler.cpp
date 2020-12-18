@@ -80,11 +80,6 @@
 #include <KF5/KSyntaxHighlighting/Repository>
 #include <KF5/KSyntaxHighlighting/SyntaxHighlighter>
 #include <KF5/KSyntaxHighlighting/Theme>
-#elif defined Q_OS_ANDROID
-#include <KSyntaxHighlighting/KSyntaxHighlighting/Definition>
-#include <KSyntaxHighlighting/KSyntaxHighlighting/Repository>
-#include <KSyntaxHighlighting/KSyntaxHighlighting/SyntaxHighlighter>
-#include <KSyntaxHighlighting/KSyntaxHighlighting/Theme>
 #else
 #include <KSyntaxHighlighting/Definition>
 #include <KSyntaxHighlighting/Repository>
@@ -108,7 +103,7 @@ Alerts::Alerts(QObject *parent)
 Alerts::~Alerts()
 {
     qDebug() << "REMOVING ALL DOCUMENTS ALERTS" << this->m_alerts.size();
-    for (auto *alert : this->m_alerts) {
+    for (auto *alert : qAsConst(m_alerts)) {
         delete alert;
         alert = nullptr;
     }
@@ -137,7 +132,7 @@ QHash<int, QByteArray> Alerts::roleNames() const
 
 bool Alerts::contains(DocumentAlert *const alert)
 {
-    for (const auto &alert_ : this->m_alerts) {
+    for (const auto &alert_ : qAsConst(m_alerts)) {
         if (alert_->getId() == alert->getId())
             return true;
     }

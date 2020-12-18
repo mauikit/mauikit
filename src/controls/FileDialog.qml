@@ -25,14 +25,14 @@ import QtQuick.Layouts 1.3
 
 /**
  * FileDialog
- * A file dialog to quickly open or saved files.
+ * A file dialog to quickly open or save files.
  *
- * This component make use of the FileBrowser.
+ * This component makes use of the FileBrowser.
  *
- * The FileDialog can be in two states, one for Opening and other for Saving files.
+ * The FileDialog can be in two modes, one for Opening and other for Saving files.
  *
  * The file dialog allows to have multiple or single selection,
- * and filtering content specific to a file type of arbitrary filters.
+ * and filtering content specific to a file type or arbitrary name filters.
  *
  */
 Maui.Dialog
@@ -101,14 +101,7 @@ Maui.Dialog
       */
     property int mode : modes.OPEN
 
-    /**
-      * callback : var
-      * When the operations finished by clicking the accept button this function is called.
-      * The callback signature should take as its argument a variable list, representing the list of selected file URLs.
-      */
-    property var callback : ({})
-
-    /**
+       /**
       * textField : TextField
       * On Save mode a text field is visible, this property gives access to it.
       */
@@ -120,9 +113,29 @@ Maui.Dialog
       */
     signal urlsSelected(var urls)
 
+    /**
+      * finished :
+      * The selection has been done
+      */
+    signal finished(var urls)
+
     page.headerBackground.color: Kirigami.Theme.backgroundColor
     rejectButton.text: i18n("Cancel")
     acceptButton.text: control.mode === modes.SAVE ? i18n("Save") : i18n("Open")
+
+    onRejected: control.close()
+
+    onAccepted:
+    {
+        console.log("CURRENT PATHb", browser.currentPath+"/"+textField.text)
+        if(control.mode === modes.SAVE && Maui.FM.fileExists(browser.currentPath+"/"+textField.text))
+        {
+            _confirmationDialog.open()
+        }else
+        {
+            done()
+        }
+    }
 
     page.footerColumn: [
 
@@ -154,19 +167,6 @@ Maui.Dialog
         Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
     }
     ]
-    onRejected: control.close()
-
-    onAccepted:
-    {
-        console.log("CURRENT PATHb", browser.currentPath+"/"+textField.text)
-        if(control.mode === modes.SAVE && Maui.FM.fileExists(browser.currentPath+"/"+textField.text))
-        {
-            _confirmationDialog.open()
-        }else
-        {
-            done()
-        }
-    }
 
     Component
     {
@@ -254,15 +254,10 @@ Maui.Dialog
                 browser.openFolder(path)
             }
 
-            list.groups: control.mode === modes.OPEN ? [
-                                                           Maui.FMList.PLACES_PATH,
-                                                           Maui.FMList.CLOUD_PATH,
-                                                           Maui.FMList.REMOTE_PATH,
-                                                           Maui.FMList.DRIVES_PATH] :
-                                                       [Maui.FMList.PLACES_PATH,
-                                                        Maui.FMList.REMOTE_PATH,
-                                                        Maui.FMList.CLOUD_PATH,
-                                                        Maui.FMList.DRIVES_PATH]
+            list.groups:  [Maui.FMList.PLACES_PATH,
+                Maui.FMList.REMOTE_PATH,
+                Maui.FMList.CLOUD_PATH,
+                Maui.FMList.DRIVES_PATH]
         }
 
         ColumnLayout
@@ -385,41 +380,6 @@ Maui.Dialog
                             icon.name: "go-next"
                             onTriggered: browser.goNext()
                         }
-                    },
-
-                    Maui.ToolActions
-                    {
-                        id: _viewTypeGroup
-                        expanded: false
-                        currentIndex: browser.settings.viewType
-                        onCurrentIndexChanged:
-                        {
-                            if(browser)
-                            browser.settings.viewType = currentIndex
-
-                            Maui.FM.saveSettings("VIEW_TYPE", currentIndex, "BROWSER")
-                        }
-
-                        Action
-                        {
-                            icon.name: "view-list-icons"
-                            text: i18n("Grid")
-                            shortcut: "Ctrl+G"
-                        }
-
-                        Action
-                        {
-                            icon.name: "view-list-details"
-                            text: i18n("List")
-                            shortcut: "Ctrl+L"
-                        }
-
-                        Action
-                        {
-                            icon.name: "view-file-columns"
-                            text: i18n("Columns")
-                            shortcut: "Ctrl+M"
-                        }
                     }
                 ]
 
@@ -429,7 +389,7 @@ Maui.Dialog
                     anchors.fill: parent
 
                     selectionBar: _selectionBar
-
+                    settings.viewType: Maui.FMList.LIST_VIEW
                     currentPath: Maui.FM.homePath()
                     selectionMode: control.mode === modes.OPEN
                     onItemClicked:
@@ -483,17 +443,6 @@ Maui.Dialog
         }
     }
 
-    /**
-      *
-      */
-    function show(cb)
-    {
-        if(cb)
-        {
-            callback = cb
-        }
-        open()
-    }
 
     /**
       *
@@ -522,12 +471,9 @@ Maui.Dialog
             _tagsBar.list.updateToUrls(_tagsBar.getTags())
         }
 
-        if(callback instanceof Function)
-        {
-            callback(paths)
-        }
+        control.finished(paths)
 
-        if(control.mode === modes.SAVE) //do it after callback in cas ethe files need to be saved aka exists, before tryign to insert tags
+        if(control.mode === modes.SAVE) //do it after finished in cas ethe files need to be saved aka exists, before tryign to insert tags
         {
             _tagsBar.list.urls = paths
             _tagsBar.list.updateToUrls(_tagsBar.getTags())

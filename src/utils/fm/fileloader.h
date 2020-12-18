@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QUrl>
 
 #include "fmh.h"
+#include "mauikit_export.h"
 
 namespace FMH
 {
@@ -34,12 +35,7 @@ namespace FMH
  * @brief The FileLoader class
  * Allows to asyncronously load files from a given list of directories, allowing to filter by mimetype
  */
-#ifdef STATIC_MAUIKIT
-class FileLoader : public QObject
-        #else
-#include "mauikit_export.h"
 class MAUIKIT_EXPORT FileLoader : public QObject
-        #endif
 {
     Q_OBJECT
 public:

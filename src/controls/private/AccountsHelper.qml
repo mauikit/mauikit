@@ -11,6 +11,7 @@ Maui.Dialog
 
     maxHeight: 350
     maxWidth: maxHeight
+    footBar.visible: false
     page.title: i18n("Accounts")
 
     /**
@@ -37,13 +38,11 @@ Maui.Dialog
     acceptButton.text: i18n("Add account...")
     onAccepted: _syncDialog.open()
 
-    footBar.leftContent: ToolButton
+    headBar.rightContent: ToolButton
     {
         icon.name: "documentinfo"
         onClicked: Qt.openUrlExternally("https://mauikit.org/cloud")
     }
-
-
 
     Maui.Dialog
     {

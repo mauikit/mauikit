@@ -21,10 +21,7 @@
 #define HANDY_H
 
 #include <QObject>
-
-#ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
-#endif
 
 #include <QVariantMap>
 
@@ -32,11 +29,7 @@
  * \brief The Handy class
  * Contains useful static methods to be used as an attached property to the Maui application
  */
-#ifdef STATIC_MAUIKIT
-class Handy : public QObject
-#else
 class MAUIKIT_EXPORT Handy : public QObject
-#endif
 {
     Q_OBJECT
     Q_PROPERTY(bool isTouch MEMBER m_isTouch CONSTANT FINAL)
