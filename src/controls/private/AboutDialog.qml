@@ -247,7 +247,7 @@ Maui.Dialog
             iconSizeHint: Maui.Style.iconSizes.medium
             spacing: Maui.Style.space.medium
             label1.text: Maui.App.about.copyrightStatement
-            label1.horizontalAlignment: Qt.AlignCenter
+            label1.horizontalAlignment: Qt.AlignHCenter
         }
     }
 }
