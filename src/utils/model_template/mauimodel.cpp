@@ -45,7 +45,8 @@ QVariantMap MauiModel::get(const int &index) const
     if (index >= this->rowCount() || index < 0)
         return res;
 
-    for (const auto &role : this->roleNames())
+    const auto roleNames = this->roleNames();
+    for (const auto &role : roleNames)
         res.insert(role, this->index(index, 0).data(FMH::MODEL_NAME_KEY[role]).toString());
 
     return res;
@@ -124,7 +125,8 @@ bool MauiModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent)
         return data.contains(this->filterRegExp());
     }
 
-    for (const auto &role : this->sourceModel()->roleNames()) {
+    const auto roleNames = this->sourceModel()->roleNames();
+    for (const auto &role : roleNames) {
         QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
         const auto data = this->sourceModel()->data(index, FMH::MODEL_NAME_KEY[role]).toString();
         if (data.contains(this->filterRegExp()))

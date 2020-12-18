@@ -28,17 +28,11 @@
  * This properties and functions are exposed to
  * all the Maui Applications that might want to use the accounts
  */
-#ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
-#endif
 
 class AccountsDB;
-#ifdef STATIC_MAUIKIT
-class MauiAccounts : public MauiList
-#else
-class MAUIKIT_EXPORT MauiAccounts : public MauiList
 
-#endif
+class MAUIKIT_EXPORT MauiAccounts : public MauiList
 {
     Q_OBJECT
     Q_PROPERTY(int currentAccountIndex READ getCurrentAccountIndex WRITE setCurrentAccountIndex NOTIFY currentAccountIndexChanged)
@@ -84,7 +78,6 @@ public:
      */
     uint getCount() const;
 
-public slots:
     /**
      * @brief get
      * @param index
@@ -92,6 +85,7 @@ public slots:
      */
     QVariantMap get(const int &index) const;
 
+public slots:
     /**
      * @brief getCloudAccountsList
      * @return

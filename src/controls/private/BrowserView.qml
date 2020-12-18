@@ -8,6 +8,7 @@ import org.kde.mauikit 1.0 as Maui
 Maui.Page
 {
     id: control
+    headBar.visible: false
     title: currentFMList.pathName
 
     /**
@@ -457,7 +458,7 @@ Maui.Page
                     id: delegate
                     readonly property string path : model.path
 
-                    iconSizeHint: height * 0.5
+                    iconSizeHint: height * 0.4
                     imageSource: settings.showThumbnails ? model.thumbnail : ""
                     template.fillMode: Image.PreserveAspectFit
                     iconSource: model.icon

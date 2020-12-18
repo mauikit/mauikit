@@ -64,14 +64,15 @@ Maui.Dialog
       */
     property alias passwordField: passwordField
 
+    footBar.visible: false
     maxHeight: 350
     maxWidth: 350
 
-    footBar.leftContent: Button
+    actions: Action
     {
         text: i18n("Sign up")
-        visible: !customServer
-        onClicked: Qt.openUrlExternally("https://www.opendesktop.org/register")
+        enabled: !customServer
+        onTriggered: Qt.openUrlExternally("https://www.opendesktop.org/register")
     }
 
     onRejected:	close()

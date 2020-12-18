@@ -356,11 +356,11 @@ Window
                 Loader
                 {
                     id: _accountsMenuLoader
+                    visible: active
                     width: parent.width - (Maui.Style.space.medium*2)
                     anchors.horizontalCenter: parent.horizontalCenter
                     active: Maui.App.handleAccounts
-                    sourceComponent: Maui.App.handleAccounts ?
-                                         _accountsComponent : null
+                    sourceComponent: _accountsComponent
                 }
 
                 MenuSeparator {visible: _accountsMenuLoader.active}
@@ -553,7 +553,6 @@ Window
 
                     delegate: Maui.ListBrowserDelegate
                     {
-                        visible: _accountsListing.count > 0
                         Layout.fillWidth: true
                         Kirigami.Theme.backgroundColor: "transparent"
 
@@ -651,7 +650,6 @@ Window
         stack: MouseArea
         {
             id: _mouseArea
-            implicitHeight: _notifyTemplate.label1.implicitHeight + _notifyTemplate.label2.implicitHeight + Maui.Style.space.medium
             Layout.fillHeight: true
             Layout.fillWidth: true
             hoverEnabled: true

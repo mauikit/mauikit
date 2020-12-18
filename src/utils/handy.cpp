@@ -210,7 +210,8 @@ bool Handy::isIOS()
 
 bool Handy::isTouch()
 {
-    for (const auto &device : QTouchDevice::devices()) {
+    const auto devices = QTouchDevice::devices();
+    for (const auto &device : devices) {
         if (device->type() == QTouchDevice::TouchScreen)
             return true;
         qDebug() << "DEVICE CAPABILITIES" << device->capabilities() << device->name();

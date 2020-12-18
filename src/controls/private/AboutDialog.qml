@@ -78,7 +78,7 @@ Maui.Dialog
         {
             id: _div1
 
-            width: parent.width * 0.95
+            width: parent.width 
             height: label2.implicitHeight + label1.implicitHeight
             anchors.centerIn: parent
             imageBorder: false
@@ -89,6 +89,7 @@ Maui.Dialog
             imageSizeHint: imageWidth
 
             spacing: Maui.Style.space.big
+            label1.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             label1.text: Maui.App.about.displayName
             label1.font.weight: Font.Bold
             label1.font.bold: true
@@ -246,7 +247,7 @@ Maui.Dialog
             iconSizeHint: Maui.Style.iconSizes.medium
             spacing: Maui.Style.space.medium
             label1.text: Maui.App.about.copyrightStatement
-            label1.horizontalAlignment: Qt.AlignCenter
+            label1.horizontalAlignment: Qt.AlignHCenter
         }
     }
 }

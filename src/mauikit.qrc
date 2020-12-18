@@ -92,5 +92,7 @@
         <file alias="labs/DoodleCanvas.qml">controls/labs/DoodleCanvas.qml</file>
         <file alias="private/TerminalInputArea.qml">controls/private/TerminalInputArea.qml</file>
     </qresource>
-    <qresource prefix="/"/>
+    <qresource prefix="/">
+        <file>controls/labs/FlexListItem.qml</file>
+    </qresource>
 </RCC>

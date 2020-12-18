@@ -7,7 +7,7 @@ import org.kde.kirigami 2.2 as Kirigami
 Menu
 {
     id: control
-    implicitWidth: colorBar.implicitWidth + Maui.Style.space.big
+    implicitWidth: 200
 
     /**
       *

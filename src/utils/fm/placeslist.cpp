@@ -68,18 +68,14 @@ PlacesList::PlacesList(QObject *parent)
         }
     });
 
-#ifdef COMPONENT_TAGGING
-    connect(Tagging::getInstance(), &Tagging::tagged, this, &PlacesList::reset);
-#endif
-
 #ifdef COMPONENT_ACCOUNTS
-    connect(MauiAccounts::instance(), &MauiAccounts::accountAdded, this, &PlacesList::reset);
-    connect(MauiAccounts::instance(), &MauiAccounts::accountRemoved, this, &PlacesList::reset);
+    connect(MauiAccounts::instance(), &MauiAccounts::accountAdded, this, &PlacesList::setList);
+    connect(MauiAccounts::instance(), &MauiAccounts::accountRemoved, this, &PlacesList::setList);
 #endif
 
 #if defined Q_OS_LINUX && !defined Q_OS_ANDROID
     connect(this->model, &KFilePlacesModel::rowsInserted, [this](const QModelIndex, int, int) {
-        this->reset();
+        this->setList();
         emit this->bookmarksChanged();
 
         /*emit this->preListChanged();
@@ -98,13 +94,12 @@ PlacesList::PlacesList(QObject *parent)
 #else
     connect(&AppSettings::global(), &AppSettings::settingChanged, [&](const QUrl, const QString &key, const QVariant, const QString &group) {
         if (key == "BOOKMARKS" && group == "PREFERENCES") {
-            this->reset();
+            this->setList();
             emit this->bookmarksChanged();
         }
     });
 #endif
 
-    connect(this, &PlacesList::groupsChanged, this, &PlacesList::reset);
 }
 
 void PlacesList::watchPath(const QString &path)
@@ -117,6 +112,7 @@ void PlacesList::watchPath(const QString &path)
 
 void PlacesList::componentComplete()
 {
+    connect(this, &PlacesList::groupsChanged, this, &PlacesList::setList);
     this->setList();
 }
 
@@ -161,7 +157,6 @@ switch (type) {
         break;
 }
 #else
-
 const auto group = model.groupIndexes(static_cast<KFilePlacesModel::GroupType>(type));
 res << std::accumulate(group.constBegin(), group.constEnd(), FMH::MODEL_LIST(), [&model, &type](FMH::MODEL_LIST &list, const QModelIndex &index) -> FMH::MODEL_LIST {
     const QUrl url = model.url(index);
@@ -187,9 +182,15 @@ return res;
 
 void PlacesList::setList()
 {
+    if(this->groups.isEmpty())
+        return;
+
+    qDebug() << "Setting PlacesList model" << groups;
+    emit this->preListChanged();
+    
     this->list.clear();
 
-    for (const auto &group : this->groups) {
+    for (const auto &group : qAsConst(this->groups)) {
         switch (group) {
         case FMH::PATHTYPE_KEY::PLACES_PATH:
             this->list << getGroup(*this->model, FMH::PATHTYPE_KEY::PLACES_PATH);
@@ -228,6 +229,7 @@ void PlacesList::setList()
     }
 
     this->setCount();
+    emit this->postListChanged();
 }
 
 void PlacesList::setCount()
@@ -245,13 +247,6 @@ void PlacesList::setCount()
     }
 }
 
-void PlacesList::reset()
-{
-    emit this->preListChanged();
-    this->setList();
-    emit this->postListChanged();
-}
-
 QList<int> PlacesList::getGroups() const
 {
     return this->groups;
@@ -263,7 +258,6 @@ void PlacesList::setGroups(const QList<int> &value)
         return;
 
     this->groups = value;
-
     emit this->groupsChanged();
 }
 
@@ -274,11 +268,6 @@ QVariantMap PlacesList::get(const int &index) const
 
     const auto model = this->list.at(index);
     return FMH::toMap(model);
-}
-
-void PlacesList::refresh()
-{
-    this->reset();
 }
 
 void PlacesList::clearBadgeCount(const int &index)

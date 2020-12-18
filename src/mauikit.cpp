@@ -57,11 +57,6 @@
 
 #include "platform.h"
 
-#ifdef MAUIKIT_STYLE
-#include <QIcon>
-#include <QQuickStyle>
-#endif
-
 #if defined Q_OS_MACOS || defined Q_OS_WIN
 #include <KF5/KI18n/KLocalizedContext>
 #include <KF5/KI18n/KLocalizedString>
@@ -74,11 +69,7 @@
 
 QUrl MauiKit::componentUrl(const QString &fileName) const
 {
-#ifdef MAUI_APP
-    return QUrl(QStringLiteral("qrc:/maui/kit/") + fileName);
-#else
     return QUrl(resolveFileUrl(fileName));
-#endif
 }
 
 void MauiKit::initializeEngine(QQmlEngine *engine, const char *uri)
@@ -96,6 +87,8 @@ void MauiKit::initializeEngine(QQmlEngine *engine, const char *uri)
 void MauiKit::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String(MAUIKIT_URI));
+
+    this->initResources();
 
     qmlRegisterSingletonType(componentUrl(QStringLiteral("Style.qml")), uri, 1, 0, "Style");
     qmlRegisterType(componentUrl(QStringLiteral("ToolBar.qml")), uri, 1, 0, "ToolBar");
@@ -169,7 +162,8 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("labs/IconItem.qml")), uri, 1, 3, "IconItem");
     qmlRegisterType(componentUrl(QStringLiteral("labs/DoodleCanvas.qml")), uri, 1, 3, "DoodleCanvas");
     qmlRegisterType(componentUrl(QStringLiteral("labs/Doodle.qml")), uri, 1, 3, "Doodle");
-    
+    qmlRegisterType(componentUrl(QStringLiteral("labs/FlexListItem.qml")), uri, 1, 3, "FlexListItem");
+
     /// NON UI CONTROLS
     qmlRegisterUncreatableType<AppView>(uri, 1, 1, "AppView", "Cannot be created App");
     qmlRegisterType<SettingSection>(uri, 1, 2, "SettingSection");
@@ -272,24 +266,14 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("PluginsInfo.qml")), uri, 1, 2, "PluginsInfo");
 #endif
 
-    this->initResources();
-
     qmlProtectModule(uri, 1);
 }
 
 void MauiKit::initResources()
 {
-#ifdef MAUIKIT_STYLE
+#if defined Q_OS_ANDROID || defined Q_OS_MACOS || defined Q_OS_WIN
     Q_INIT_RESOURCE(mauikit);
-#ifdef ICONS_PNG
-    Q_INIT_RESOURCE(icons_png);
-#else
-    Q_INIT_RESOURCE(icons);
-#endif
     Q_INIT_RESOURCE(style);
-    QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
-    QIcon::setThemeName("Luv");
-    QQuickStyle::setStyle(":/style");
 #endif
 }
 

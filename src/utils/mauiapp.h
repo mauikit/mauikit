@@ -23,9 +23,7 @@
 
 #include "fmh.h"
 
-#ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
-#endif
 
 #include <QColor>
 #include <QSettings>
@@ -52,11 +50,7 @@ class MauiAccounts;
  * }
  */
 
-#ifdef STATIC_MAUIKIT
-class MauiApp : public QObject
-#else
 class MAUIKIT_EXPORT MauiApp : public QObject
-#endif
 {
     Q_OBJECT
     Q_PROPERTY(KAboutData about READ getAbout CONSTANT FINAL)
@@ -80,8 +74,11 @@ public:
 
     static MauiApp *instance()
     {
-        static MauiApp app;
-        return &app;
+        if(m_instance)
+            return m_instance;
+
+        m_instance = new MauiApp;
+        return m_instance;
     }
 
     MauiApp(const MauiApp &) = delete;
@@ -180,17 +177,15 @@ public:
     MauiAccounts *getAccounts() const;
 #endif
 
+    static void setDefaultMauiStyle();
+
 private:
+    static MauiApp*m_instance;
     MauiApp();
     MauiAccounts *m_accounts;
 
-    QString description;
-    QString iconName;
-
-    QString webPage;
-    QString donationPage;
-    QString reportPage;
-    QVariantList m_credits;
+    QString m_iconName;
+    QString m_donationPage;
 
     // CSD support
     bool m_enableCSD = false;
@@ -198,12 +193,7 @@ private:
     QStringList m_rightWindowControls;
 
     void getWindowControlsSettings();
-
-#ifdef COMPONENT_ACCOUNTS
-    bool handleAccounts = true;
-#else
     bool handleAccounts = false;
-#endif
 
 signals:
     void iconNameChanged();

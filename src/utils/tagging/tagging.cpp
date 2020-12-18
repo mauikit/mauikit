@@ -37,7 +37,8 @@ const QVariantList Tagging::get(const QString &queryTxt, std::function<bool(QVar
     if (query.exec()) {
         while (query.next()) {
             QVariantMap data;
-            for (const auto &key : FMH::MODEL_NAME.keys()) {
+            const auto keys = FMH::MODEL_NAME.keys();
+            for (const auto &key : keys) {
                 if (query.record().indexOf(FMH::MODEL_NAME[key]) > -1)
                     data[FMH::MODEL_NAME[key]] = query.value(FMH::MODEL_NAME[key]).toString();
             }
@@ -128,7 +129,7 @@ bool Tagging::tagUrl(const QString &url, const QString &tag, const QString &colo
 bool Tagging::updateUrlTags(const QString &url, const QStringList &tags)
 {
     this->removeUrlTags(url);
-    for (const auto &tag : tags)
+    for (const auto &tag : qAsConst(tags))
         this->tagUrl(url, tag);
 
     return true;
@@ -186,7 +187,8 @@ QVariantList Tagging::getUrlTags(const QString &url, const bool &strict)
 
 bool Tagging::removeUrlTags(const QString &url)
 {
-    for (const auto &map : this->getUrlTags(url)) {
+    const auto tags = getUrlTags(url);
+    for (const auto &map : tags) {
         auto tag = map.toMap().value(FMH::MODEL_NAME[FMH::MODEL_KEY::TAG]).toString();
         this->removeUrlTag(url, tag);
     }

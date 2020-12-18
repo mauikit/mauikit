@@ -43,11 +43,7 @@
 #include <KFilePlacesModel>
 #endif
 
-#ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
-#else
-#define MAUIKIT_EXPORT
-#endif
 
 /**
  * A set of helpers related to file management and modeling of data
@@ -174,11 +170,14 @@ static QStringList MAUIKIT_EXPORT getMimeTypeSuffixes(const FMH::FILTER_TYPE &ty
     QStringList res;
     QMimeDatabase mimedb;
     for (const auto &mime : SUPPORTED_MIMETYPES[type]) {
-        if (cb)
-            for (const QString &_suffix : mimedb.mimeTypeForName(mime).suffixes())
+        if (cb) {
+            const auto suffixes = mimedb.mimeTypeForName(mime).suffixes();
+            for (const QString &_suffix : suffixes) {
                 res << cb(_suffix);
-        else
+            }
+        } else {
             res << mimedb.mimeTypeForName(mime).suffixes();
+        }
     }
     return res;
 }

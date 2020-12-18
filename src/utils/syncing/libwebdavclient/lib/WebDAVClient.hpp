@@ -8,9 +8,7 @@
 #include <QSslError>
 #include <QString>
 
-#ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
-#endif
 
 #include "utils/NetworkHelper.hpp"
 #include "utils/WebDAVReply.hpp"
@@ -18,11 +16,7 @@
 
 enum ListDepthEnum { Zero, One, Two, Infinity };
 
-#ifdef STATIC_MAUIKIT
-class WebDAVClient : public QObject
-#else
 class MAUIKIT_EXPORT WebDAVClient : public QObject
-#endif 
 {
   Q_OBJECT
 
