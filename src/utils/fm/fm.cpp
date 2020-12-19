@@ -256,24 +256,24 @@ FM::FM(QObject *parent)
         });
     };
 
-    connect(dirLister, static_cast<void (KCoreDirLister::*)(const QUrl &)>(&KCoreDirLister::completed), this, [&](QUrl url) {
-        qDebug() << "PATH CONTENT READY" << url;
-        emit this->pathContentReady(url);
-    });
+   connect(dirLister, static_cast<void (KCoreDirLister::*)(const QUrl &)>(&KCoreDirLister::completed), this, [&](QUrl url) {
+       qDebug() << "PATH CONTENT READY" << url;
+       emit this->pathContentReady(url);
+   });
 
-    connect(dirLister, static_cast<void (KCoreDirLister::*)(const QUrl &, const KFileItemList &items)>(&KCoreDirLister::itemsAdded), this, [&](QUrl dirUrl, KFileItemList items) {
-        qDebug() << "MORE ITEMS WERE ADDED";
-        emit this->pathContentItemsReady({dirUrl, packItems(items)});
-    });
+   connect(dirLister, static_cast<void (KCoreDirLister::*)(const QUrl &, const KFileItemList &items)>(&KCoreDirLister::itemsAdded), this, [&](QUrl dirUrl, KFileItemList items) {
+       qDebug() << "MORE ITEMS WERE ADDED";
+       emit this->pathContentItemsReady({dirUrl, packItems(items)});
+   });
 
-    // 			connect(dirLister, static_cast<void (KCoreDirLister::*)(const KFileItemList &items)>(&KCoreDirLister::newItems), [&](KFileItemList items)
-    //             {
-    //                 qDebug()<< "MORE NEW ITEMS WERE ADDED";
-    // 				for(const auto &item : items)
-    // 					qDebug()<< "MORE <<" << item.url();
-    //
-    //                 emit this->pathContentChanged(dirLister->url());
-    //             });
+//    connect(dirLister, static_cast<void (KCoreDirLister::*)(const KFileItemList &items)>(&KCoreDirLister::newItems), [&](KFileItemList items)
+//    {
+//        qDebug()<< "MORE NEW ITEMS WERE ADDED";
+//        for(const auto &item : items)
+//            qDebug()<< "MORE <<" << item.url();
+//        
+//        emit this->pathContentChanged(dirLister->url());
+//    });
 
     connect(dirLister, static_cast<void (KCoreDirLister::*)(const KFileItemList &items)>(&KCoreDirLister::itemsDeleted), this, [&](KFileItemList items) {
         qDebug() << "ITEMS WERE DELETED";

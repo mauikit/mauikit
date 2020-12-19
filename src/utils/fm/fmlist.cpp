@@ -195,7 +195,7 @@ void FMList::sortList()
     auto index = 0;
 
     if (this->foldersFirst) {
-        std::sort(this->list.begin(), this->list.end(), [](const FMH::MODEL &e1, const FMH::MODEL &e2) -> bool {
+        qSort(this->list.begin(), this->list.end(), [](const FMH::MODEL &e1, const FMH::MODEL &e2) -> bool {
             Q_UNUSED(e2)
             const auto key = FMH::MODEL_KEY::MIME;
             return e1[key] == "inode/directory";
