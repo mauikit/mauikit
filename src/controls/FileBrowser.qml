@@ -406,7 +406,7 @@ Maui.Page
         
         Maui.NewDialog
         {
-            property var item : control.currentFMList ? control.currentFMList.get(control.currentIndex) : ({})
+            property var item : control.currentFMList ? control.currentFMModel.get(control.currentIndex) : ({})
             title: i18n("Rename")
 //             message: i18n("Change the name of a file or folder")
             template.iconSource: item.icon
@@ -461,7 +461,7 @@ Maui.Page
         function onKeyPress(event)
         {
             const index = control.currentIndex
-            const item = control.currentFMList.get(index)
+            const item = control.currentFMModel.get(index)
             
             // Shortcuts for refreshing
             if((event.key === Qt.Key_F5))
@@ -596,7 +596,7 @@ Maui.Page
         
         function onItemToggled(index)
         {
-            const item = control.currentFMList.get(index)
+            const item = control.currentFMModel.get(index)
             
             if(control.selectionBar && control.selectionBar.contains(item.path))
             {
@@ -793,7 +793,7 @@ Maui.Page
      **/
     function openItem(index)
     {
-        const item = control.currentFMList.get(index)
+        const item = control.currentFMModel.get(index)
         const path = item.path
         
         switch(control.currentFMList.pathType)
@@ -909,7 +909,7 @@ Maui.Page
         }
         
         for(var i in indexes)
-            addToSelection(control.currentFMList.get(indexes[i]))
+            addToSelection(control.currentFMModel.get(indexes[i]))
     }
     
     /**

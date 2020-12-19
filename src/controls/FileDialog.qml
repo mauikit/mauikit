@@ -394,7 +394,7 @@ Maui.Dialog
                     selectionMode: control.mode === modes.OPEN
                     onItemClicked:
                     {
-                        if(currentFMList.get(index).isdir == "true")
+                        if(currentFMModel.get(index).isdir == "true")
                         {
                             openItem(index)
                         }
@@ -403,12 +403,12 @@ Maui.Dialog
                         {
                         case modes.OPEN :
                         {
-                            addToSelection(currentFMList.get(index))
+                            addToSelection(currentFMModel.get(index))
                             break
                         }
                         case modes.SAVE:
                         {
-                            textField.text = currentFMList.get(index).label
+                            textField.text = currentFMModel.get(index).label
                             break
                         }
                         }

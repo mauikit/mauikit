@@ -66,7 +66,7 @@ Menu
         icon.name: "edit-select"
         onTriggered:
         {
-            addToSelection(currentFMList.get(index))
+            addToSelection(currentFMModel.get(index))
             if(Maui.Handy.isTouch)
                 selectionMode = true
         }
@@ -150,7 +150,7 @@ Menu
 
     function show(index)
     {
-        control.item = currentFMList.get(index)
+        control.item = currentFMModel.get(index)
 
         if(item.path.startsWith("tags://") || item.path.startsWith("applications://") )
             return
