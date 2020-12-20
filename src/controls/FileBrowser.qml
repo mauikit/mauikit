@@ -216,7 +216,7 @@ Maui.Page
     
     //catch inherited signals from page
     onGoBackTriggered: control.goBack()
-    onGoForwardTriggered: control.goNext()
+    onGoForwardTriggered: control.goForward()
     
     title: view.title
     focus: true
@@ -864,16 +864,16 @@ Maui.Page
      **/
     function goBack()
     {
-        openFolder(control.currentFMList.previousPath)
+        openFolder(control.currentFMList.previousPath())
         //        control.currentIndex = indexHistory.pop()
     }
     
     /**
      * 
      **/
-    function goNext()
+    function goForward()
     {
-        openFolder(control.currentFMList.posteriorPath)
+        openFolder(control.currentFMList.posteriorPath())
     }
     
     /**

@@ -52,7 +52,7 @@ public:
 };
 Q_DECLARE_METATYPE(PathStatus)
 
-static inline struct {
+struct NavHistory {
     void appendPath(const QUrl &path)
     {
         this->prev_history.append(path);
@@ -83,7 +83,7 @@ private:
     QVector<QUrl> prev_history;
     QVector<QUrl> post_history;
 
-} NavHistory;
+};
 
 /**
  * @brief The FMList class
@@ -109,11 +109,6 @@ class FMList : public MauiList
     Q_PROPERTY(FMList::PATHTYPE pathType READ getPathType NOTIFY pathTypeChanged FINAL)
 
     Q_PROPERTY(PathStatus status READ getStatus NOTIFY statusChanged FINAL)
-
-    Q_PROPERTY(QList<QUrl> previousPathHistory READ getPreviousPathHistory NOTIFY pathChanged)  // interface for NavHistory
-    Q_PROPERTY(QList<QUrl> posteriorPathHistory READ getPreviousPathHistory NOTIFY pathChanged) // interface for NavHistory
-    Q_PROPERTY(QUrl previousPath READ getPreviousPath NOTIFY pathChanged)                       // interface for NavHistory
-    Q_PROPERTY(QUrl posteriorPath READ getPosteriorPath NOTIFY pathChanged)                     // interface for NavHistory
 
     Q_PROPERTY(QUrl parentPath READ getParentPath NOTIFY pathChanged)
 
@@ -296,34 +291,6 @@ public:
     const QUrl getParentPath();
 
     /**
-     * @brief getPreviousPathHistory
-     * A list of the previous paths being navigated and modeled
-     * @return
-     */
-    static QList<QUrl> getPreviousPathHistory();
-
-    /**
-     * @brief getPosteriorPathHistory
-     * A list of posteriors paths in the navigation history
-     * @return
-     */
-    static QList<QUrl> getPosteriorPathHistory();
-
-    /**
-     * @brief getPreviousPath
-     * Inmediate previous path
-     * @return
-     */
-    const QUrl getPreviousPath();
-
-    /**
-     * @brief getPosteriorPath
-     * Inmediate posterior path
-     * @return
-     */
-    const QUrl getPosteriorPath();
-
-    /**
      * @brief getFoldersFirst
      * Returns whether directories are listed first before other files
      * @return
@@ -387,9 +354,8 @@ private:
     FMList::FILTER filterType = FMList::FILTER::NONE;
     FMList::PATHTYPE pathType = FMList::PATHTYPE::PLACES_PATH;
 
-    QList<QUrl> prevHistory = {};
-    QList<QUrl> postHistory = {};
-
+    NavHistory m_navHistory;
+    
 public slots:
 
     /**
@@ -448,6 +414,20 @@ public slots:
      * The information of the model where the search is going to be performed
      */
     void search(const QString &query, const FMList *currentFMList);
+    
+    /**
+     * @brief previousPath
+     * Inmediate previous path
+     * @return
+     */
+    const QUrl previousPath();
+    
+    /**
+     * @brief posteriorPath
+     * Inmediate posterior path
+     * @return
+     */
+    const QUrl posteriorPath();
 
 signals:
     void pathChanged();

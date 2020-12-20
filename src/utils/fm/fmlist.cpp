@@ -307,7 +307,7 @@ void FMList::setPath(const QUrl &path)
         return;
 
     this->path = path_;
-    NavHistory.appendPath(this->path);
+    m_navHistory.appendPath(this->path);
 
     this->setStatus({STATUS_CODE::LOADING, "Loading content", "Almost ready!", "view-refresh", true, false});
 
@@ -470,23 +470,13 @@ const QUrl FMList::getParentPath()
     case FMList::PATHTYPE::PLACES_PATH:
         return FMStatic::parentDir(this->path).toString();
     default:
-        return this->getPreviousPath();
+        return this->previousPath();
     }
 }
 
-QList<QUrl> FMList::getPosteriorPathHistory()
+const QUrl FMList::posteriorPath()
 {
-    return QList<QUrl>(); // todo : implement signal
-}
-
-QList<QUrl> FMList::getPreviousPathHistory()
-{
-    return QList<QUrl>(); // todo : implement signal
-}
-
-const QUrl FMList::getPosteriorPath()
-{
-    const auto url = NavHistory.getPosteriorPath();
+    const auto url = m_navHistory.getPosteriorPath();
 
     if (url.isEmpty())
         return this->path;
@@ -494,9 +484,9 @@ const QUrl FMList::getPosteriorPath()
     return url;
 }
 
-const QUrl FMList::getPreviousPath()
+const QUrl FMList::previousPath()
 {
-    const auto url = NavHistory.getPreviousPath();
+    const auto url = m_navHistory.getPreviousPath();
 
     if (url.isEmpty())
         return this->path;
