@@ -25,7 +25,7 @@ ItemDelegate
     background: Rectangle
     {
         id: _background
-        radius: Maui.Style.radiusV
+        radius: control.height/2
         opacity: 0.5
         color: Qt.darker(Kirigami.Theme.backgroundColor, 1.1)
     }
@@ -35,21 +35,27 @@ ItemDelegate
         id: _layout
         height: parent.height
         anchors.centerIn: parent
-
-        Kirigami.Icon
+        spacing: Maui.Style.space.medium
+        
+        Item
         {
-            id: _icon
-            implicitWidth: Maui.Style.iconSizes.small
-            implicitHeight: implicitWidth
-            color: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(_background.color.r, _background.color.g, _background.color.b, control.hovered ?  0.4 : 0.7))
+            Layout.fillHeight: true
+            implicitWidth: Maui.Style.iconSizes.medium
+            
+            Kirigami.Icon
+            {
+                id: _icon
+                anchors.centerIn: parent
+                implicitWidth: Maui.Style.iconSizes.small
+                implicitHeight: implicitWidth
+            }            
         }
-
+    
         Label
         {
             id: _label1
             Layout.fillHeight: true
             verticalAlignment: Qt.AlignVCenter
-
         }
 
         MouseArea
