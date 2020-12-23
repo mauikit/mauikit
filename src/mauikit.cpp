@@ -163,6 +163,7 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("labs/DoodleCanvas.qml")), uri, 1, 3, "DoodleCanvas");
     qmlRegisterType(componentUrl(QStringLiteral("labs/Doodle.qml")), uri, 1, 3, "Doodle");
     qmlRegisterType(componentUrl(QStringLiteral("labs/FlexListItem.qml")), uri, 1, 3, "FlexListItem");
+    qmlRegisterType(componentUrl(QStringLiteral("labs/Chip.qml")), uri, 1, 3, "Chip");
 
     /// NON UI CONTROLS
     qmlRegisterUncreatableType<AppView>(uri, 1, 1, "AppView", "Cannot be created App");

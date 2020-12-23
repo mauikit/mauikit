@@ -44,6 +44,7 @@ Item
     default property alias content: _layout.data
 
     implicitHeight: _layout.implicitHeight
+    implicitWidth: _layout.implicitWidth
 
     /**
       * text1 : string

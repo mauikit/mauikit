@@ -590,3 +590,8 @@ QStringList FMStatic::nameFilters(const int &type)
 {
     return FMH::FILTER_LIST[static_cast<FMH::FILTER_TYPE>(type)];
 }
+
+QString FMStatic::iconName(const QString& value)
+{
+    return FMH::getIconName(value);
+}

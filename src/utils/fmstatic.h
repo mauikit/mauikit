@@ -501,6 +501,14 @@ public slots:
      * The filter type to be mapped to a FMH::FILTER_TYPE
      */
     static QStringList nameFilters(const int &type);
+    
+    /**
+     * @brief iconName
+     * Get the icon name associated to the file or name.
+     * @param value
+     * The file path or file name
+     */
+    static QString iconName(const QString &value);
 };
 
 #endif // FMSTATIC_H
