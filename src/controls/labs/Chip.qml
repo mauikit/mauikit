@@ -25,7 +25,7 @@ ItemDelegate
     background: Rectangle
     {
         id: _background
-        radius: control.height/2
+        radius: Maui.Style.radiusV
         opacity: 0.5
         color: Qt.darker(Kirigami.Theme.backgroundColor, 1.1)
     }
