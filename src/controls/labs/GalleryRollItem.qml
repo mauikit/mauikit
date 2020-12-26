@@ -14,47 +14,52 @@ Maui.ItemDelegate
     Kirigami.Theme.textColor: "#fafafa"
 
     /**
-     * template : function
+     * cached
+     */
+    property bool cache : true
+
+    /**
+     * template :
      */
     property alias template : _template
 
     /**
-     * images : function
+     * images :
      */
     property var images : []
 
     /**
-     * label1 : function
+     * label1 :
      */
     property alias label1 : _template.label1
 
     /**
-     * label2 : function
+     * label2 :
      */
     property alias label2 : _template.label2
 
     /**
-     * label3 : function
+     * label3 :
      */
     property alias label3 : _template.label3
 
     /**
-     * label4 : function
+     * label4 :
      */
     property alias label4 : _template.label4
 
     /**
-     * iconSource : function
+     * iconSource :
      */
     property alias iconSource : _template.iconSource
 
     /**
-     * iconSizeHint : function
+     * iconSizeHint :
      */
     property alias iconSizeHint: _template.iconSizeHint
 
     /**
-     * margins : function
+     * margins :
      */
     property int margins : isWide ? Maui.Style.space.medium : Maui.Style.space.tiny
 
@@ -62,6 +67,7 @@ Maui.ItemDelegate
      * cb : function
      */
     property var cb
+
 
     Component.onCompleted: _featuredTimer.start()
 
@@ -141,6 +147,7 @@ Maui.ItemDelegate
                         sourceSize.height: 500
                         asynchronous: true
                         smooth: false
+                        cache: control.cache
                         source: control.cb ? control.cb(modelData) : modelData
                         fillMode: Image.PreserveAspectCrop
                     }
