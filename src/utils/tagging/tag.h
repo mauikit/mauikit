@@ -45,12 +45,12 @@ static const QMap<TABLE, QString> TABLEMAP = {{TABLE::TAGS, "tags"},
                                               {TABLE::TAGS_ABSTRACT, "tags_abstract"},
                                               {TABLE::APPS_USERS, "apps_users"}};
 
-//enum KEYS : uint_fast8_t { URL, ICON, APP, URI, MAC, LAST_SYNC, NAME, VERSION, LOT, TAG, COLOR, ADD_DATE, COMMENT, MIME, TITLE, DEVICE, KEY }; /* Q_ENUM_NS(KEYS);*/
+// enum KEYS : uint_fast8_t { URL, ICON, APP, URI, MAC, LAST_SYNC, NAME, VERSION, LOT, TAG, COLOR, ADD_DATE, COMMENT, MIME, TITLE, DEVICE, KEY }; /* Q_ENUM_NS(KEYS);*/
 
-//typedef QMap<TAG::KEYS, QString> DB;
-//typedef QList<DB> DB_LIST;
+// typedef QMap<TAG::KEYS, QString> DB;
+// typedef QList<DB> DB_LIST;
 
-//static const DB KEYMAP = {{TAG::KEYS::URL, "url"},
+// static const DB KEYMAP = {{TAG::KEYS::URL, "url"},
 //                          {TAG::KEYS::TAG, "tag"},
 //                          {TAG::KEYS::ICON, "icon"},
 //                          {TAG::KEYS::COLOR, "color"},
@@ -68,7 +68,7 @@ static const QMap<TABLE, QString> TABLEMAP = {{TABLE::TAGS, "tags"},
 //                          {TAG::KEYS::URI, "uri"},
 //                          {TAG::KEYS::VERSION, "version"}};
 
-//static const QMap<QString, TAG::KEYS> MAPKEY = {{TAG::KEYMAP[KEYS::URL], KEYS::URL},
+// static const QMap<QString, TAG::KEYS> MAPKEY = {{TAG::KEYMAP[KEYS::URL], KEYS::URL},
 //                                                {TAG::KEYMAP[KEYS::TAG], KEYS::TAG},
 //                                                {TAG::KEYMAP[KEYS::ICON], KEYS::ICON},
 //                                                {TAG::KEYMAP[KEYS::COLOR], KEYS::COLOR},

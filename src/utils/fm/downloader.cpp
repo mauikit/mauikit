@@ -33,7 +33,9 @@ void FMH::Downloader::downloadFile(const QUrl &source, const QUrl &destination)
         emit this->warning(message);
     });
 
-    connect(downloadJob, &KIO::CopyJob::processedSize, [=](KJob *job, qulonglong size) { emit this->progress(size, job->percent()); });
+    connect(downloadJob, &KIO::CopyJob::processedSize, [=](KJob *job, qulonglong size) {
+        emit this->progress(size, job->percent());
+    });
 
     connect(downloadJob, &KIO::CopyJob::finished, [=](KJob *job) {
         emit this->downloadReady();
@@ -53,8 +55,8 @@ void FMH::Downloader::downloadFile(const QUrl &source, const QUrl &destination)
     if (!file->open(QIODevice::WriteOnly))
         emit this->warning("Can not open file to write download");
 
-    connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(onDownloadProgress(qint64,qint64)));
-    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onFinished(QNetworkReply*)));
+    connect(reply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(onDownloadProgress(qint64, qint64)));
+    connect(manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(onFinished(QNetworkReply *)));
     connect(reply, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
     connect(reply, SIGNAL(finished()), this, SLOT(onReplyFinished()));
 #endif

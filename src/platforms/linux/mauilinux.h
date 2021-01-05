@@ -119,7 +119,7 @@ public slots:
      * @param fg
      */
     static void setColorScheme(const QString &schemeName, const QString &bg = QString(), const QString &fg = QString());
-    
+
     /**
      * @brief appsList
      * @return
@@ -144,7 +144,7 @@ public slots:
      * @param app
      */
     static void launchApp(const QString &app);
-    
+
     void shareFiles(const QList<QUrl> &urls) override final;
     void shareText(const QString &text) override final;
     void openUrl(const QUrl &url) override final;

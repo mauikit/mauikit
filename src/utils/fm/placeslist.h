@@ -80,7 +80,6 @@ public slots:
      */
     bool contains(const QUrl &path);
 
-
 private:
     FM *fm;
     FMH::MODEL_LIST list;

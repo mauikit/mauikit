@@ -52,6 +52,7 @@ public:
      * @return
      */
     QVariantMap get(const int &index) const;
+
 private:
     FMH::MODEL_LIST list;
     QString m_path;

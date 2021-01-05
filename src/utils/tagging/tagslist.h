@@ -41,7 +41,7 @@ private:
 
     bool strict = true;
     QStringList urls = QStringList();
-    
+
     /**
      * @brief append
      * Adds a given list of tags to the model. Tags that already exists in the model are ignored
@@ -136,7 +136,8 @@ public slots:
 
     /**
      * @brief erase
-     * Removes a tag from the tagging data base. This operation will remove the association of the tag to the current application making the request, meaning that if the tag is also associated to another application then the tag will still exists
+     * Removes a tag from the tagging data base. This operation will remove the association of the tag to the current application making the request, meaning that if the tag is also associated to another application then the tag will still
+     * exists
      * @param index
      */
     void erase(const int &index);
@@ -156,7 +157,6 @@ public slots:
      * True if the tag exists false otherwise
      */
     bool contains(const QString &tag);
-
 };
 
 #endif // TAGSLIST_H

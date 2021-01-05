@@ -1,19 +1,17 @@
 #include "mauiwindows.h"
 #include <QDesktopServices>
 
-MAUIWindows::MAUIWindows(QObject *parent) : AbstractPlatform(parent)
+MAUIWindows::MAUIWindows(QObject *parent)
+    : AbstractPlatform(parent)
 {
-
 }
 
 void MAUIWindows::shareFiles(const QList<QUrl> &urls)
 {
-
 }
 
 void MAUIWindows::shareText(const QString &urls)
 {
-
 }
 
 void MAUIWindows::openUrl(const QUrl &url)
@@ -33,5 +31,4 @@ bool MAUIWindows::hasMouse()
 
 void MAUIWindows::notify(const QString &title, const QString &message, const QString &icon, const QString &imageUrl)
 {
-
 }

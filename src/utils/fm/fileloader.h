@@ -20,10 +20,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef FILELOADER_H
 #define FILELOADER_H
 
-#include <QObject>
-#include <QDirIterator>
-#include <QThread>
 #include <QDir>
+#include <QDirIterator>
+#include <QObject>
+#include <QThread>
 #include <QUrl>
 
 #include "fmh.h"
@@ -100,7 +100,6 @@ signals:
 private:
     QThread *m_thread;
     uint m_batchCount = 1500;
-
 };
 }
 

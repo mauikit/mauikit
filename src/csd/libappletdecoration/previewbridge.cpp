@@ -81,7 +81,9 @@ void PreviewBridge::update(KDecoration2::Decoration *decoration, const QRect &ge
 {
     Q_UNUSED(geometry)
 
-    auto it = std::find_if(m_previewButtons.constBegin(), m_previewButtons.constEnd(), [decoration, geometry](PreviewButtonItem *item) { return (item->decoration() == decoration) && (item->visualGeometry().contains(geometry.center())); });
+    auto it = std::find_if(m_previewButtons.constBegin(), m_previewButtons.constEnd(), [decoration, geometry](PreviewButtonItem *item) {
+        return (item->decoration() == decoration) && (item->visualGeometry().contains(geometry.center()));
+    });
 
     if (it != m_previewButtons.constEnd()) {
         (*it)->update();
