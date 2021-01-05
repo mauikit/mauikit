@@ -120,7 +120,9 @@ void Syncing::download(const QUrl &path)
         emit this->progress(percent);
     });
 
-    connect(reply, &WebDAVReply::error, this, [=](QNetworkReply::NetworkError err) { qDebug() << "ERROR" << err; });
+    connect(reply, &WebDAVReply::error, this, [=](QNetworkReply::NetworkError err) {
+        qDebug() << "ERROR" << err;
+    });
 }
 
 void Syncing::upload(const QUrl &path, const QUrl &filePath)

@@ -59,37 +59,30 @@ QDirLister::QDirLister(QObject *parent)
 {
     m_loader->setBatchCount(20);
     m_loader->informer = &FMH::getFileInfoModel;
-    connect(m_loader, &FMH::FileLoader::itemsReady, [this](FMH::MODEL_LIST items, QList<QUrl> urls)
-    {
+    connect(m_loader, &FMH::FileLoader::itemsReady, [this](FMH::MODEL_LIST items, QList<QUrl> urls) {
         emit this->itemsReady(items, urls.first());
     });
 
-    connect(m_loader, &FMH::FileLoader::itemReady, [this](FMH::MODEL item, QList<QUrl> urls)
-    {
+    connect(m_loader, &FMH::FileLoader::itemReady, [this](FMH::MODEL item, QList<QUrl> urls) {
         this->m_list << item;
         this->m_watcher->addPath(QUrl(item[FMH::MODEL_KEY::URL]).toLocalFile());
         emit this->itemReady(item, urls.first());
     });
 
-    connect(m_loader, &FMH::FileLoader::finished, [this](FMH::MODEL_LIST, QList<QUrl> urls)
-    {
+    connect(m_loader, &FMH::FileLoader::finished, [this](FMH::MODEL_LIST, QList<QUrl> urls) {
         emit this->completed(urls.first());
     });
 
     connect(this->m_watcher, &QFileSystemWatcher::directoryChanged, [&](const QString &path) {
-        if(path == this->m_url.toLocalFile())
-        {
+        if (path == this->m_url.toLocalFile()) {
             this->reviewChanges();
         }
     });
 
     connect(this->m_watcher, &QFileSystemWatcher::fileChanged, [&](const QString &path) {
-
         const auto fileUrl = QUrl::fromLocalFile(path);
-        if(this->includes(fileUrl))
-        {
-            if(FMH::fileExists(fileUrl))
-            {
+        if (this->includes(fileUrl)) {
+            if (FMH::fileExists(fileUrl)) {
                 emit this->refreshItems({{this->m_list.at(this->indexOf(FMH::MODEL_KEY::URL, fileUrl.toString())), FMH::getFileInfoModel(fileUrl)}}, this->m_url);
             }
         }
@@ -98,27 +91,24 @@ QDirLister::QDirLister(QObject *parent)
 
 void QDirLister::reviewChanges()
 {
-    if(this->m_checking)
+    if (this->m_checking)
         return;
 
     this->m_checking = true;
     auto checkLoader = new FMH::FileLoader;
     checkLoader->informer = &FMH::getFileInfoModel;
 
-    qDebug( ) << "Doign the check" << m_checking;
+    qDebug() << "Doign the check" << m_checking;
 
     FMH::MODEL_LIST removedItems;
-    const auto mlist = this->m_list; //use a copy to not affect the list indexes on the iterations
-    for(const auto &item : qAsConst(mlist))
-    {
+    const auto mlist = this->m_list; // use a copy to not affect the list indexes on the iterations
+    for (const auto &item : qAsConst(mlist)) {
         const auto fileUrl = QUrl(item[FMH::MODEL_KEY::URL]);
 
-        if(!FMH::fileExists(fileUrl))
-        {
+        if (!FMH::fileExists(fileUrl)) {
             const auto index = this->indexOf(FMH::MODEL_KEY::URL, fileUrl.toString());
 
-            if(index < this->m_list.count() && index >= 0)
-            {
+            if (index < this->m_list.count() && index >= 0) {
                 removedItems << item;
                 this->m_list.remove(index);
                 this->m_watcher->removePath(fileUrl.toLocalFile());
@@ -126,19 +116,15 @@ void QDirLister::reviewChanges()
         }
     }
 
-    if(!removedItems.isEmpty())
+    if (!removedItems.isEmpty())
         emit this->itemsDeleted(removedItems, this->m_url);
 
-    connect(checkLoader, &FMH::FileLoader::itemsReady, [=](FMH::MODEL_LIST items, QList<QUrl> urls)
-    {
-        if(urls.first() == this->m_url)
-        {
+    connect(checkLoader, &FMH::FileLoader::itemsReady, [=](FMH::MODEL_LIST items, QList<QUrl> urls) {
+        if (urls.first() == this->m_url) {
             FMH::MODEL_LIST newItems;
-            for(const auto &item : qAsConst(items))
-            {
+            for (const auto &item : qAsConst(items)) {
                 const auto fileUrl = QUrl(item[FMH::MODEL_KEY::URL]);
-                if(!this->includes(fileUrl))
-                {
+                if (!this->includes(fileUrl)) {
                     newItems << item;
 
                     this->m_list << item;
@@ -146,17 +132,15 @@ void QDirLister::reviewChanges()
                 }
             }
 
-            if(!newItems.isEmpty())
+            if (!newItems.isEmpty())
                 emit this->itemsAdded(newItems, this->m_url);
         }
 
         checkLoader->deleteLater();
         this->m_checking = false;
-
     });
 
-    connect(checkLoader, &FMH::FileLoader::finished, [=](FMH::MODEL_LIST, QList<QUrl>)
-    {
+    connect(checkLoader, &FMH::FileLoader::finished, [=](FMH::MODEL_LIST, QList<QUrl>) {
         checkLoader->deleteLater();
         this->m_checking = false;
     });
@@ -177,7 +161,9 @@ bool QDirLister::includes(const QUrl &url)
 int QDirLister::indexOf(const FMH::MODEL_KEY &key, const QString &value) const
 {
     const auto items = this->m_list;
-    const auto it = std::find_if(items.constBegin(), items.constEnd(), [&](const FMH::MODEL &item) -> bool { return item[key] == value; });
+    const auto it = std::find_if(items.constBegin(), items.constEnd(), [&](const FMH::MODEL &item) -> bool {
+        return item[key] == value;
+    });
 
     if (it != items.constEnd())
         return std::distance(items.constBegin(), it);
@@ -187,8 +173,8 @@ int QDirLister::indexOf(const FMH::MODEL_KEY &key, const QString &value) const
 
 bool QDirLister::openUrl(const QUrl &url)
 {
-//    if(this->m_url == url)
-//        return false;
+    //    if(this->m_url == url)
+    //        return false;
 
     qDebug() << "open URL" << url;
     this->m_url = url;
@@ -196,7 +182,6 @@ bool QDirLister::openUrl(const QUrl &url)
     this->m_watcher->removePaths(QStringList() << this->m_watcher->directories() << this->m_watcher->files());
 
     if (FMStatic::isDir(this->m_url)) {
-
         this->m_watcher->addPath(this->m_url.toLocalFile());
 
         QDir::Filters dirFilter = (m_dirOnly ? QDir::AllDirs | QDir::NoDotDot | QDir::NoDot : QDir::Files | QDir::AllDirs | QDir::NoDotDot | QDir::NoDot);
@@ -256,24 +241,24 @@ FM::FM(QObject *parent)
         });
     };
 
-   connect(dirLister, static_cast<void (KCoreDirLister::*)(const QUrl &)>(&KCoreDirLister::completed), this, [&](QUrl url) {
-       qDebug() << "PATH CONTENT READY" << url;
-       emit this->pathContentReady(url);
-   });
+    connect(dirLister, static_cast<void (KCoreDirLister::*)(const QUrl &)>(&KCoreDirLister::completed), this, [&](QUrl url) {
+        qDebug() << "PATH CONTENT READY" << url;
+        emit this->pathContentReady(url);
+    });
 
-   connect(dirLister, static_cast<void (KCoreDirLister::*)(const QUrl &, const KFileItemList &items)>(&KCoreDirLister::itemsAdded), this, [&](QUrl dirUrl, KFileItemList items) {
-       qDebug() << "MORE ITEMS WERE ADDED";
-       emit this->pathContentItemsReady({dirUrl, packItems(items)});
-   });
+    connect(dirLister, static_cast<void (KCoreDirLister::*)(const QUrl &, const KFileItemList &items)>(&KCoreDirLister::itemsAdded), this, [&](QUrl dirUrl, KFileItemList items) {
+        qDebug() << "MORE ITEMS WERE ADDED";
+        emit this->pathContentItemsReady({dirUrl, packItems(items)});
+    });
 
-//    connect(dirLister, static_cast<void (KCoreDirLister::*)(const KFileItemList &items)>(&KCoreDirLister::newItems), [&](KFileItemList items)
-//    {
-//        qDebug()<< "MORE NEW ITEMS WERE ADDED";
-//        for(const auto &item : items)
-//            qDebug()<< "MORE <<" << item.url();
-//        
-//        emit this->pathContentChanged(dirLister->url());
-//    });
+    //    connect(dirLister, static_cast<void (KCoreDirLister::*)(const KFileItemList &items)>(&KCoreDirLister::newItems), [&](KFileItemList items)
+    //    {
+    //        qDebug()<< "MORE NEW ITEMS WERE ADDED";
+    //        for(const auto &item : items)
+    //            qDebug()<< "MORE <<" << item.url();
+    //
+    //        emit this->pathContentChanged(dirLister->url());
+    //    });
 
     connect(dirLister, static_cast<void (KCoreDirLister::*)(const KFileItemList &items)>(&KCoreDirLister::itemsDeleted), this, [&](KFileItemList items) {
         qDebug() << "ITEMS WERE DELETED";
@@ -292,9 +277,13 @@ FM::FM(QObject *parent)
         emit this->pathContentItemsChanged(res);
     });
 #else
-    connect(dirLister, &QDirLister::itemsReady, this, [&](FMH::MODEL_LIST items, QUrl url) { emit this->pathContentItemsReady({url, items}); });
+    connect(dirLister, &QDirLister::itemsReady, this, [&](FMH::MODEL_LIST items, QUrl url) {
+        emit this->pathContentItemsReady({url, items});
+    });
 
-    connect(dirLister, &QDirLister::completed, this, [&](QUrl url) { emit this->pathContentReady(url);});
+    connect(dirLister, &QDirLister::completed, this, [&](QUrl url) {
+        emit this->pathContentReady(url);
+    });
 
     connect(dirLister, &QDirLister::refreshItems, this, [&](QVector<QPair<FMH::MODEL, FMH::MODEL>> items, QUrl) {
         qDebug() << "ITEMS WERE REFRESHED";
@@ -314,7 +303,9 @@ FM::FM(QObject *parent)
 #endif
 
 #ifdef COMPONENT_SYNCING
-    connect(this->sync, &Syncing::listReady, [this](const FMH::MODEL_LIST &list, const QUrl &url) { emit this->cloudServerContentReady(list, url); });
+    connect(this->sync, &Syncing::listReady, [this](const FMH::MODEL_LIST &list, const QUrl &url) {
+        emit this->cloudServerContentReady(list, url);
+    });
 
     connect(this->sync, &Syncing::itemReady, [this](const FMH::MODEL &item, const QUrl &url, const Syncing::SIGNAL_TYPE &signalType) {
         switch (signalType) {
@@ -340,13 +331,21 @@ FM::FM(QObject *parent)
         }
     });
 
-    connect(this->sync, &Syncing::error, [this](const QString &message) { emit this->warningMessage(message); });
+    connect(this->sync, &Syncing::error, [this](const QString &message) {
+        emit this->warningMessage(message);
+    });
 
-    connect(this->sync, &Syncing::progress, [this](const int &percent) { emit this->loadProgress(percent); });
+    connect(this->sync, &Syncing::progress, [this](const int &percent) {
+        emit this->loadProgress(percent);
+    });
 
-    connect(this->sync, &Syncing::dirCreated, [this](const FMH::MODEL &dir, const QUrl &url) { emit this->newItem(dir, url); });
+    connect(this->sync, &Syncing::dirCreated, [this](const FMH::MODEL &dir, const QUrl &url) {
+        emit this->newItem(dir, url);
+    });
 
-    connect(this->sync, &Syncing::uploadReady, [this](const FMH::MODEL &item, const QUrl &url) { emit this->newItem(item, url); });
+    connect(this->sync, &Syncing::uploadReady, [this](const FMH::MODEL &item, const QUrl &url) {
+        emit this->newItem(item, url);
+    });
 #endif
 }
 

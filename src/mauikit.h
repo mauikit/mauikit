@@ -20,11 +20,11 @@
 #ifndef MAUIKIT_H
 #define MAUIKIT_H
 
+#include "mauikit_export.h"
 #include <QQmlEngine>
 #include <QQmlExtensionPlugin>
-#include "mauikit_export.h"
 
-static constexpr const char* MAUIKIT_URI = "org.kde.mauikit";
+static constexpr const char *MAUIKIT_URI = "org.kde.mauikit";
 
 class MauiAccounts;
 class MAUIKIT_EXPORT MauiKit : public QQmlExtensionPlugin

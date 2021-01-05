@@ -85,24 +85,9 @@ bool MAUIKIT_EXPORT isIOS();
  */
 enum FILTER_TYPE : int { AUDIO, VIDEO, TEXT, IMAGE, DOCUMENT, COMPRESSED, FONT, NONE };
 
+static const QStringList AUDIO_MIMETYPES = {"audio/mpeg", "audio/mp4", "audio/flac", "audio/ogg", "audio/wav"};
 
-static const QStringList AUDIO_MIMETYPES = {"audio/mpeg",
-                                            "audio/mp4",
-                                            "audio/flac",
-                                            "audio/ogg",
-                                            "audio/wav"};
-
-static const QStringList VIDEO_MIMETYPES = {"video/mp4",
-                                            "video/x-matroska",
-                                            "video/webm",
-                                            "video/avi",
-                                            "video/flv",
-                                            "video/mpg",
-                                            "video/wmv",
-                                            "video/mov",
-                                            "video/ogg",
-                                            "video/mpeg",
-                                            "video/jpeg"};
+static const QStringList VIDEO_MIMETYPES = {"video/mp4", "video/x-matroska", "video/webm", "video/avi", "video/flv", "video/mpg", "video/wmv", "video/mov", "video/ogg", "video/mpeg", "video/jpeg"};
 
 static const QStringList TEXT_MIMETYPES = {"text/markdown",
                                            "text/x-chdr",
@@ -125,32 +110,14 @@ static const QStringList TEXT_MIMETYPES = {"text/markdown",
                                            "application/x-cmakecache",
                                            "application/x-kicad-project"};
 
-static const QStringList IMAGE_MIMETYPES = {"image/bmp",
-                                            "image/webp",
-                                            "image/png",
-                                            "image/gif",
-                                            "image/jpeg",
-                                            "image/web",
-                                            "image/svg",
-                                            "image/svg+xml"};
+static const QStringList IMAGE_MIMETYPES = {"image/bmp", "image/webp", "image/png", "image/gif", "image/jpeg", "image/web", "image/svg", "image/svg+xml"};
 
-static const QStringList DOCUMENT_MIMETYPES = {"application/pdf",
-                                               "application/rtf",
-                                               "application/doc",
-                                               "application/odf"};
+static const QStringList DOCUMENT_MIMETYPES = {"application/pdf", "application/rtf", "application/doc", "application/odf"};
 
-static const QStringList COMPRESSED_MIMETYPES = {"application/x-compress",
-                                                 "application/x-compressed",
-                                                 "application/x-xz-compressed-tar",
-                                                 "application/x-compressed-tar",
-                                                 "application/x-xz",
-                                                 "application/x-bzip",
-                                                 "application/x-gtar",
-                                                 "application/x-gzip",
-                                                 "application/zip"};
+static const QStringList COMPRESSED_MIMETYPES =
+    {"application/x-compress", "application/x-compressed", "application/x-xz-compressed-tar", "application/x-compressed-tar", "application/x-xz", "application/x-bzip", "application/x-gtar", "application/x-gzip", "application/zip"};
 
-static const QStringList FONT_MIMETYPES = {"font/ttf",
-                                           "font/otf"};
+static const QStringList FONT_MIMETYPES = {"font/ttf", "font/otf"};
 
 static const QMap<FILTER_TYPE, QStringList> SUPPORTED_MIMETYPES {{FILTER_TYPE::AUDIO, AUDIO_MIMETYPES},
                                                                  {FILTER_TYPE::VIDEO, VIDEO_MIMETYPES},
@@ -182,14 +149,42 @@ static QStringList MAUIKIT_EXPORT getMimeTypeSuffixes(const FMH::FILTER_TYPE &ty
     return res;
 }
 
-static QHash<FILTER_TYPE, QStringList> FILTER_LIST = {{FILTER_TYPE::AUDIO, getMimeTypeSuffixes(FILTER_TYPE::AUDIO, [](QString suffix) -> QString { return "*." + suffix; })},
-{FILTER_TYPE::VIDEO, getMimeTypeSuffixes(FILTER_TYPE::VIDEO, [](QString suffix) -> QString { return "*." + suffix; })},
-{FILTER_TYPE::TEXT, getMimeTypeSuffixes(FILTER_TYPE::TEXT, [](QString suffix) -> QString { return "*." + suffix; })},
-{FILTER_TYPE::DOCUMENT, getMimeTypeSuffixes(FILTER_TYPE::DOCUMENT, [](QString suffix) -> QString { return "*." + suffix; })},
-{FILTER_TYPE::COMPRESSED, getMimeTypeSuffixes(FILTER_TYPE::COMPRESSED, [](QString suffix) -> QString { return "*." + suffix; })},
-{FILTER_TYPE::FONT, getMimeTypeSuffixes(FILTER_TYPE::FONT, [](QString suffix) -> QString { return "*." + suffix; })},
-{FILTER_TYPE::IMAGE, getMimeTypeSuffixes(FILTER_TYPE::IMAGE, [](QString suffix) -> QString { return "*." + suffix; })},
-{FILTER_TYPE::NONE, QStringList()}};
+static QHash<FILTER_TYPE, QStringList> FILTER_LIST = {{FILTER_TYPE::AUDIO,
+                                                       getMimeTypeSuffixes(FILTER_TYPE::AUDIO,
+                                                                           [](QString suffix) -> QString {
+                                                                               return "*." + suffix;
+                                                                           })},
+                                                      {FILTER_TYPE::VIDEO,
+                                                       getMimeTypeSuffixes(FILTER_TYPE::VIDEO,
+                                                                           [](QString suffix) -> QString {
+                                                                               return "*." + suffix;
+                                                                           })},
+                                                      {FILTER_TYPE::TEXT,
+                                                       getMimeTypeSuffixes(FILTER_TYPE::TEXT,
+                                                                           [](QString suffix) -> QString {
+                                                                               return "*." + suffix;
+                                                                           })},
+                                                      {FILTER_TYPE::DOCUMENT,
+                                                       getMimeTypeSuffixes(FILTER_TYPE::DOCUMENT,
+                                                                           [](QString suffix) -> QString {
+                                                                               return "*." + suffix;
+                                                                           })},
+                                                      {FILTER_TYPE::COMPRESSED,
+                                                       getMimeTypeSuffixes(FILTER_TYPE::COMPRESSED,
+                                                                           [](QString suffix) -> QString {
+                                                                               return "*." + suffix;
+                                                                           })},
+                                                      {FILTER_TYPE::FONT,
+                                                       getMimeTypeSuffixes(FILTER_TYPE::FONT,
+                                                                           [](QString suffix) -> QString {
+                                                                               return "*." + suffix;
+                                                                           })},
+                                                      {FILTER_TYPE::IMAGE,
+                                                       getMimeTypeSuffixes(FILTER_TYPE::IMAGE,
+                                                                           [](QString suffix) -> QString {
+                                                                               return "*." + suffix;
+                                                                           })},
+                                                      {FILTER_TYPE::NONE, QStringList()}};
 
 /**
  * @brief The MODEL_KEY enum
@@ -486,157 +481,155 @@ static const QHash<MODEL_KEY, QString> MODEL_NAME = {{MODEL_KEY::ICON, "icon"},
                                                      {MODEL_KEY::APP, "app"},
                                                      {MODEL_KEY::URI, "uri"},
                                                      {MODEL_KEY::DEVICE, "device"},
-                                                     {MODEL_KEY::LASTSYNC, "lastsync"}
-                                                    };
+                                                     {MODEL_KEY::LASTSYNC, "lastsync"}};
 
 static const QHash<QString, MODEL_KEY> MAUIKIT_EXPORT MODEL_NAME_KEY = {{MODEL_NAME[MODEL_KEY::ICON], MODEL_KEY::ICON},
-                                                         {MODEL_NAME[MODEL_KEY::LABEL], MODEL_KEY::LABEL},
-                                                         {MODEL_NAME[MODEL_KEY::PATH], MODEL_KEY::PATH},
-                                                         {MODEL_NAME[MODEL_KEY::URL], MODEL_KEY::URL},
-                                                         {MODEL_NAME[MODEL_KEY::TYPE], MODEL_KEY::TYPE},
-                                                         {MODEL_NAME[MODEL_KEY::GROUP], MODEL_KEY::GROUP},
-                                                         {MODEL_NAME[MODEL_KEY::OWNER], MODEL_KEY::OWNER},
-                                                         {MODEL_NAME[MODEL_KEY::SUFFIX], MODEL_KEY::SUFFIX},
-                                                         {MODEL_NAME[MODEL_KEY::NAME], MODEL_KEY::NAME},
-                                                         {MODEL_NAME[MODEL_KEY::DATE], MODEL_KEY::DATE},
-                                                         {MODEL_NAME[MODEL_KEY::MODIFIED], MODEL_KEY::MODIFIED},
-                                                         {MODEL_NAME[MODEL_KEY::MIME], MODEL_KEY::MIME},
-                                                         {
-                                                             MODEL_NAME[MODEL_KEY::SIZE],
-                                                             MODEL_KEY::SIZE,
-                                                         },
-                                                         {MODEL_NAME[MODEL_KEY::TAG], MODEL_KEY::TAG},
-                                                         {MODEL_NAME[MODEL_KEY::PERMISSIONS], MODEL_KEY::PERMISSIONS},
-                                                         {MODEL_NAME[MODEL_KEY::THUMBNAIL], MODEL_KEY::THUMBNAIL},
-                                                         {MODEL_NAME[MODEL_KEY::THUMBNAIL_1], MODEL_KEY::THUMBNAIL_1},
-                                                         {MODEL_NAME[MODEL_KEY::THUMBNAIL_2], MODEL_KEY::THUMBNAIL_2},
-                                                         {MODEL_NAME[MODEL_KEY::THUMBNAIL_3], MODEL_KEY::THUMBNAIL_3},
-                                                         {MODEL_NAME[MODEL_KEY::ICONSIZE], MODEL_KEY::ICONSIZE},
-                                                         {MODEL_NAME[MODEL_KEY::HIDDEN], MODEL_KEY::HIDDEN},
-                                                         {MODEL_NAME[MODEL_KEY::DETAILVIEW], MODEL_KEY::DETAILVIEW},
-                                                         {MODEL_NAME[MODEL_KEY::SHOWTERMINAL], MODEL_KEY::SHOWTERMINAL},
-                                                         {MODEL_NAME[MODEL_KEY::SHOWTHUMBNAIL], MODEL_KEY::SHOWTHUMBNAIL},
-                                                         {MODEL_NAME[MODEL_KEY::COUNT], MODEL_KEY::COUNT},
-                                                         {MODEL_NAME[MODEL_KEY::SORTBY], MODEL_KEY::SORTBY},
-                                                         {MODEL_NAME[MODEL_KEY::USER], MODEL_KEY::USER},
-                                                         {MODEL_NAME[MODEL_KEY::PASSWORD], MODEL_KEY::PASSWORD},
-                                                         {MODEL_NAME[MODEL_KEY::SERVER], MODEL_KEY::SERVER},
-                                                         {MODEL_NAME[MODEL_KEY::VIEWTYPE], MODEL_KEY::VIEWTYPE},
-                                                         {MODEL_NAME[MODEL_KEY::ADDDATE], MODEL_KEY::ADDDATE},
-                                                         {MODEL_NAME[MODEL_KEY::FAV], MODEL_KEY::FAV},
-                                                         {MODEL_NAME[MODEL_KEY::FAVORITE], MODEL_KEY::FAVORITE},
-                                                         {MODEL_NAME[MODEL_KEY::COLOR], MODEL_KEY::COLOR},
-                                                         {MODEL_NAME[MODEL_KEY::RATE], MODEL_KEY::RATE},
-                                                         {MODEL_NAME[MODEL_KEY::FORMAT], MODEL_KEY::FORMAT},
-                                                         {MODEL_NAME[MODEL_KEY::PLACE], MODEL_KEY::PLACE},
-                                                         {MODEL_NAME[MODEL_KEY::LOCATION], MODEL_KEY::LOCATION},
-                                                         {MODEL_NAME[MODEL_KEY::ALBUM], MODEL_KEY::ALBUM},
-                                                         {MODEL_NAME[MODEL_KEY::ARTIST], MODEL_KEY::ARTIST},
-                                                         {MODEL_NAME[MODEL_KEY::DURATION], MODEL_KEY::DURATION},
-                                                         {MODEL_NAME[MODEL_KEY::TRACK], MODEL_KEY::TRACK},
-                                                         {MODEL_NAME[MODEL_KEY::GENRE], MODEL_KEY::GENRE},
-                                                         {MODEL_NAME[MODEL_KEY::LYRICS], MODEL_KEY::LYRICS},
-                                                         {MODEL_NAME[MODEL_KEY::RELEASEDATE], MODEL_KEY::RELEASEDATE},
-                                                         {MODEL_NAME[MODEL_KEY::FORMAT], MODEL_KEY::FORMAT},
-                                                         {MODEL_NAME[MODEL_KEY::WIKI], MODEL_KEY::WIKI},
-                                                         {MODEL_NAME[MODEL_KEY::SOURCETYPE], MODEL_KEY::SOURCETYPE},
-                                                         {MODEL_NAME[MODEL_KEY::ARTWORK], MODEL_KEY::ARTWORK},
-                                                         {MODEL_NAME[MODEL_KEY::NOTE], MODEL_KEY::NOTE},
-                                                         {MODEL_NAME[MODEL_KEY::MOOD], MODEL_KEY::MOOD},
-                                                         {MODEL_NAME[MODEL_KEY::COMMENT], MODEL_KEY::COMMENT},
-                                                         {MODEL_NAME[MODEL_KEY::CONTEXT], MODEL_KEY::CONTEXT},
-                                                         {MODEL_NAME[MODEL_KEY::SOURCE], MODEL_KEY::SOURCE},
-                                                         {MODEL_NAME[MODEL_KEY::PLAYLIST], MODEL_KEY::PLAYLIST},
-                                                         {MODEL_NAME[MODEL_KEY::TITLE], MODEL_KEY::TITLE},
-                                                         {MODEL_NAME[MODEL_KEY::ID], MODEL_KEY::ID},
-                                                         {MODEL_NAME[MODEL_KEY::PARENT_ID], MODEL_KEY::PARENT_ID},
-                                                         {MODEL_NAME[MODEL_KEY::LICENSE], MODEL_KEY::LICENSE},
-                                                         {MODEL_NAME[MODEL_KEY::DESCRIPTION], MODEL_KEY::DESCRIPTION},
-                                                         {MODEL_NAME[MODEL_KEY::BOOKMARK], MODEL_KEY::BOOKMARK},
-                                                         {MODEL_NAME[MODEL_KEY::ACCOUNT], MODEL_KEY::ACCOUNT},
-                                                         {MODEL_NAME[MODEL_KEY::ACCOUNTTYPE], MODEL_KEY::ACCOUNTTYPE},
-                                                         {MODEL_NAME[MODEL_KEY::VERSION], MODEL_KEY::VERSION},
-                                                         {MODEL_NAME[MODEL_KEY::DOMAIN_M], MODEL_KEY::DOMAIN_M},
-                                                         {MODEL_NAME[MODEL_KEY::CATEGORY], MODEL_KEY::CATEGORY},
-                                                         {MODEL_NAME[MODEL_KEY::CONTENT], MODEL_KEY::CONTENT},
-                                                         {MODEL_NAME[MODEL_KEY::PIN], MODEL_KEY::PIN},
-                                                         {MODEL_NAME[MODEL_KEY::IMG], MODEL_KEY::IMG},
-                                                         {MODEL_NAME[MODEL_KEY::PREVIEW], MODEL_KEY::PREVIEW},
-                                                         {MODEL_NAME[MODEL_KEY::LINK], MODEL_KEY::LINK},
-                                                         {MODEL_NAME[MODEL_KEY::STAMP], MODEL_KEY::STAMP},
-                                                         {MODEL_NAME[MODEL_KEY::BOOK], MODEL_KEY::BOOK},
+                                                                        {MODEL_NAME[MODEL_KEY::LABEL], MODEL_KEY::LABEL},
+                                                                        {MODEL_NAME[MODEL_KEY::PATH], MODEL_KEY::PATH},
+                                                                        {MODEL_NAME[MODEL_KEY::URL], MODEL_KEY::URL},
+                                                                        {MODEL_NAME[MODEL_KEY::TYPE], MODEL_KEY::TYPE},
+                                                                        {MODEL_NAME[MODEL_KEY::GROUP], MODEL_KEY::GROUP},
+                                                                        {MODEL_NAME[MODEL_KEY::OWNER], MODEL_KEY::OWNER},
+                                                                        {MODEL_NAME[MODEL_KEY::SUFFIX], MODEL_KEY::SUFFIX},
+                                                                        {MODEL_NAME[MODEL_KEY::NAME], MODEL_KEY::NAME},
+                                                                        {MODEL_NAME[MODEL_KEY::DATE], MODEL_KEY::DATE},
+                                                                        {MODEL_NAME[MODEL_KEY::MODIFIED], MODEL_KEY::MODIFIED},
+                                                                        {MODEL_NAME[MODEL_KEY::MIME], MODEL_KEY::MIME},
+                                                                        {
+                                                                            MODEL_NAME[MODEL_KEY::SIZE],
+                                                                            MODEL_KEY::SIZE,
+                                                                        },
+                                                                        {MODEL_NAME[MODEL_KEY::TAG], MODEL_KEY::TAG},
+                                                                        {MODEL_NAME[MODEL_KEY::PERMISSIONS], MODEL_KEY::PERMISSIONS},
+                                                                        {MODEL_NAME[MODEL_KEY::THUMBNAIL], MODEL_KEY::THUMBNAIL},
+                                                                        {MODEL_NAME[MODEL_KEY::THUMBNAIL_1], MODEL_KEY::THUMBNAIL_1},
+                                                                        {MODEL_NAME[MODEL_KEY::THUMBNAIL_2], MODEL_KEY::THUMBNAIL_2},
+                                                                        {MODEL_NAME[MODEL_KEY::THUMBNAIL_3], MODEL_KEY::THUMBNAIL_3},
+                                                                        {MODEL_NAME[MODEL_KEY::ICONSIZE], MODEL_KEY::ICONSIZE},
+                                                                        {MODEL_NAME[MODEL_KEY::HIDDEN], MODEL_KEY::HIDDEN},
+                                                                        {MODEL_NAME[MODEL_KEY::DETAILVIEW], MODEL_KEY::DETAILVIEW},
+                                                                        {MODEL_NAME[MODEL_KEY::SHOWTERMINAL], MODEL_KEY::SHOWTERMINAL},
+                                                                        {MODEL_NAME[MODEL_KEY::SHOWTHUMBNAIL], MODEL_KEY::SHOWTHUMBNAIL},
+                                                                        {MODEL_NAME[MODEL_KEY::COUNT], MODEL_KEY::COUNT},
+                                                                        {MODEL_NAME[MODEL_KEY::SORTBY], MODEL_KEY::SORTBY},
+                                                                        {MODEL_NAME[MODEL_KEY::USER], MODEL_KEY::USER},
+                                                                        {MODEL_NAME[MODEL_KEY::PASSWORD], MODEL_KEY::PASSWORD},
+                                                                        {MODEL_NAME[MODEL_KEY::SERVER], MODEL_KEY::SERVER},
+                                                                        {MODEL_NAME[MODEL_KEY::VIEWTYPE], MODEL_KEY::VIEWTYPE},
+                                                                        {MODEL_NAME[MODEL_KEY::ADDDATE], MODEL_KEY::ADDDATE},
+                                                                        {MODEL_NAME[MODEL_KEY::FAV], MODEL_KEY::FAV},
+                                                                        {MODEL_NAME[MODEL_KEY::FAVORITE], MODEL_KEY::FAVORITE},
+                                                                        {MODEL_NAME[MODEL_KEY::COLOR], MODEL_KEY::COLOR},
+                                                                        {MODEL_NAME[MODEL_KEY::RATE], MODEL_KEY::RATE},
+                                                                        {MODEL_NAME[MODEL_KEY::FORMAT], MODEL_KEY::FORMAT},
+                                                                        {MODEL_NAME[MODEL_KEY::PLACE], MODEL_KEY::PLACE},
+                                                                        {MODEL_NAME[MODEL_KEY::LOCATION], MODEL_KEY::LOCATION},
+                                                                        {MODEL_NAME[MODEL_KEY::ALBUM], MODEL_KEY::ALBUM},
+                                                                        {MODEL_NAME[MODEL_KEY::ARTIST], MODEL_KEY::ARTIST},
+                                                                        {MODEL_NAME[MODEL_KEY::DURATION], MODEL_KEY::DURATION},
+                                                                        {MODEL_NAME[MODEL_KEY::TRACK], MODEL_KEY::TRACK},
+                                                                        {MODEL_NAME[MODEL_KEY::GENRE], MODEL_KEY::GENRE},
+                                                                        {MODEL_NAME[MODEL_KEY::LYRICS], MODEL_KEY::LYRICS},
+                                                                        {MODEL_NAME[MODEL_KEY::RELEASEDATE], MODEL_KEY::RELEASEDATE},
+                                                                        {MODEL_NAME[MODEL_KEY::FORMAT], MODEL_KEY::FORMAT},
+                                                                        {MODEL_NAME[MODEL_KEY::WIKI], MODEL_KEY::WIKI},
+                                                                        {MODEL_NAME[MODEL_KEY::SOURCETYPE], MODEL_KEY::SOURCETYPE},
+                                                                        {MODEL_NAME[MODEL_KEY::ARTWORK], MODEL_KEY::ARTWORK},
+                                                                        {MODEL_NAME[MODEL_KEY::NOTE], MODEL_KEY::NOTE},
+                                                                        {MODEL_NAME[MODEL_KEY::MOOD], MODEL_KEY::MOOD},
+                                                                        {MODEL_NAME[MODEL_KEY::COMMENT], MODEL_KEY::COMMENT},
+                                                                        {MODEL_NAME[MODEL_KEY::CONTEXT], MODEL_KEY::CONTEXT},
+                                                                        {MODEL_NAME[MODEL_KEY::SOURCE], MODEL_KEY::SOURCE},
+                                                                        {MODEL_NAME[MODEL_KEY::PLAYLIST], MODEL_KEY::PLAYLIST},
+                                                                        {MODEL_NAME[MODEL_KEY::TITLE], MODEL_KEY::TITLE},
+                                                                        {MODEL_NAME[MODEL_KEY::ID], MODEL_KEY::ID},
+                                                                        {MODEL_NAME[MODEL_KEY::PARENT_ID], MODEL_KEY::PARENT_ID},
+                                                                        {MODEL_NAME[MODEL_KEY::LICENSE], MODEL_KEY::LICENSE},
+                                                                        {MODEL_NAME[MODEL_KEY::DESCRIPTION], MODEL_KEY::DESCRIPTION},
+                                                                        {MODEL_NAME[MODEL_KEY::BOOKMARK], MODEL_KEY::BOOKMARK},
+                                                                        {MODEL_NAME[MODEL_KEY::ACCOUNT], MODEL_KEY::ACCOUNT},
+                                                                        {MODEL_NAME[MODEL_KEY::ACCOUNTTYPE], MODEL_KEY::ACCOUNTTYPE},
+                                                                        {MODEL_NAME[MODEL_KEY::VERSION], MODEL_KEY::VERSION},
+                                                                        {MODEL_NAME[MODEL_KEY::DOMAIN_M], MODEL_KEY::DOMAIN_M},
+                                                                        {MODEL_NAME[MODEL_KEY::CATEGORY], MODEL_KEY::CATEGORY},
+                                                                        {MODEL_NAME[MODEL_KEY::CONTENT], MODEL_KEY::CONTENT},
+                                                                        {MODEL_NAME[MODEL_KEY::PIN], MODEL_KEY::PIN},
+                                                                        {MODEL_NAME[MODEL_KEY::IMG], MODEL_KEY::IMG},
+                                                                        {MODEL_NAME[MODEL_KEY::PREVIEW], MODEL_KEY::PREVIEW},
+                                                                        {MODEL_NAME[MODEL_KEY::LINK], MODEL_KEY::LINK},
+                                                                        {MODEL_NAME[MODEL_KEY::STAMP], MODEL_KEY::STAMP},
+                                                                        {MODEL_NAME[MODEL_KEY::BOOK], MODEL_KEY::BOOK},
 
-                                                         /** ccdav keys **/
-                                                         {MODEL_NAME[MODEL_KEY::N], MODEL_KEY::N},
-                                                         {MODEL_NAME[MODEL_KEY::IM], MODEL_KEY::IM},
-                                                         {MODEL_NAME[MODEL_KEY::PHOTO], MODEL_KEY::PHOTO},
-                                                         {MODEL_NAME[MODEL_KEY::GENDER], MODEL_KEY::GENDER},
-                                                         {MODEL_NAME[MODEL_KEY::ADR], MODEL_KEY::ADR},
-                                                         {MODEL_NAME[MODEL_KEY::ADR_2], MODEL_KEY::ADR_2},
-                                                         {MODEL_NAME[MODEL_KEY::ADR_3], MODEL_KEY::ADR_3},
-                                                         {MODEL_NAME[MODEL_KEY::EMAIL], MODEL_KEY::EMAIL},
-                                                         {MODEL_NAME[MODEL_KEY::EMAIL_2], MODEL_KEY::EMAIL_2},
-                                                         {MODEL_NAME[MODEL_KEY::EMAIL_3], MODEL_KEY::EMAIL_3},
-                                                         {MODEL_NAME[MODEL_KEY::LANG], MODEL_KEY::LANG},
-                                                         {MODEL_NAME[MODEL_KEY::NICKNAME], MODEL_KEY::NICKNAME},
-                                                         {MODEL_NAME[MODEL_KEY::ORG], MODEL_KEY::ORG},
-                                                         {MODEL_NAME[MODEL_KEY::PROFILE], MODEL_KEY::PROFILE},
-                                                         {MODEL_NAME[MODEL_KEY::TZ], MODEL_KEY::TZ},
-                                                         {MODEL_NAME[MODEL_KEY::TEL], MODEL_KEY::TEL},
-                                                         {MODEL_NAME[MODEL_KEY::TEL_2], MODEL_KEY::TEL_2},
-                                                         {MODEL_NAME[MODEL_KEY::TEL_3], MODEL_KEY::TEL_3},
+                                                                        /** ccdav keys **/
+                                                                        {MODEL_NAME[MODEL_KEY::N], MODEL_KEY::N},
+                                                                        {MODEL_NAME[MODEL_KEY::IM], MODEL_KEY::IM},
+                                                                        {MODEL_NAME[MODEL_KEY::PHOTO], MODEL_KEY::PHOTO},
+                                                                        {MODEL_NAME[MODEL_KEY::GENDER], MODEL_KEY::GENDER},
+                                                                        {MODEL_NAME[MODEL_KEY::ADR], MODEL_KEY::ADR},
+                                                                        {MODEL_NAME[MODEL_KEY::ADR_2], MODEL_KEY::ADR_2},
+                                                                        {MODEL_NAME[MODEL_KEY::ADR_3], MODEL_KEY::ADR_3},
+                                                                        {MODEL_NAME[MODEL_KEY::EMAIL], MODEL_KEY::EMAIL},
+                                                                        {MODEL_NAME[MODEL_KEY::EMAIL_2], MODEL_KEY::EMAIL_2},
+                                                                        {MODEL_NAME[MODEL_KEY::EMAIL_3], MODEL_KEY::EMAIL_3},
+                                                                        {MODEL_NAME[MODEL_KEY::LANG], MODEL_KEY::LANG},
+                                                                        {MODEL_NAME[MODEL_KEY::NICKNAME], MODEL_KEY::NICKNAME},
+                                                                        {MODEL_NAME[MODEL_KEY::ORG], MODEL_KEY::ORG},
+                                                                        {MODEL_NAME[MODEL_KEY::PROFILE], MODEL_KEY::PROFILE},
+                                                                        {MODEL_NAME[MODEL_KEY::TZ], MODEL_KEY::TZ},
+                                                                        {MODEL_NAME[MODEL_KEY::TEL], MODEL_KEY::TEL},
+                                                                        {MODEL_NAME[MODEL_KEY::TEL_2], MODEL_KEY::TEL_2},
+                                                                        {MODEL_NAME[MODEL_KEY::TEL_3], MODEL_KEY::TEL_3},
 
-                                                         {MODEL_NAME[MODEL_KEY::CITY], MODEL_KEY::CITY},
-                                                         {MODEL_NAME[MODEL_KEY::STATE], MODEL_KEY::STATE},
-                                                         {MODEL_NAME[MODEL_KEY::COUNTRY], MODEL_KEY::COUNTRY},
+                                                                        {MODEL_NAME[MODEL_KEY::CITY], MODEL_KEY::CITY},
+                                                                        {MODEL_NAME[MODEL_KEY::STATE], MODEL_KEY::STATE},
+                                                                        {MODEL_NAME[MODEL_KEY::COUNTRY], MODEL_KEY::COUNTRY},
 
-                                                         // opendesktop store keys
-                                                         {MODEL_NAME[MODEL_KEY::PACKAGE_ARCH], MODEL_KEY::PACKAGE_ARCH},
-                                                         {MODEL_NAME[MODEL_KEY::PACKAGE_TYPE], MODEL_KEY::PACKAGE_TYPE},
-                                                         {MODEL_NAME[MODEL_KEY::GPG_FINGERPRINT], MODEL_KEY::GPG_FINGERPRINT},
-                                                         {MODEL_NAME[MODEL_KEY::GPG_SIGNATURE], MODEL_KEY::GPG_SIGNATURE},
-                                                         {MODEL_NAME[MODEL_KEY::PACKAGE_NAME], MODEL_KEY::PACKAGE_NAME},
-                                                         {MODEL_NAME[MODEL_KEY::PRICE], MODEL_KEY::PRICE},
-                                                         {MODEL_NAME[MODEL_KEY::REPOSITORY], MODEL_KEY::REPOSITORY},
-                                                         {MODEL_NAME[MODEL_KEY::TAGS], MODEL_KEY::TAGS},
-                                                         {MODEL_NAME[MODEL_KEY::WAY], MODEL_KEY::WAY},
-                                                         {MODEL_NAME[MODEL_KEY::PIC], MODEL_KEY::PIC},
-                                                         {MODEL_NAME[MODEL_KEY::SMALL_PIC], MODEL_KEY::SMALL_PIC},
-                                                         {MODEL_NAME[MODEL_KEY::CHANGED], MODEL_KEY::CHANGED},
-                                                         {MODEL_NAME[MODEL_KEY::COMMENTS], MODEL_KEY::COMMENTS},
-                                                         {MODEL_NAME[MODEL_KEY::CREATED], MODEL_KEY::CREATED},
-                                                         {MODEL_NAME[MODEL_KEY::DETAIL_PAGE], MODEL_KEY::DETAIL_PAGE},
-                                                         {MODEL_NAME[MODEL_KEY::DETAILS], MODEL_KEY::DETAILS},
-                                                         {MODEL_NAME[MODEL_KEY::TOTAL_DOWNLOADS], MODEL_KEY::TOTAL_DOWNLOADS},
-                                                         {MODEL_NAME[MODEL_KEY::GHNS_EXCLUDED], MODEL_KEY::GHNS_EXCLUDED},
-                                                         {MODEL_NAME[MODEL_KEY::LANGUAGE], MODEL_KEY::LANGUAGE},
-                                                         {MODEL_NAME[MODEL_KEY::PERSON_ID], MODEL_KEY::PERSON_ID},
-                                                         {MODEL_NAME[MODEL_KEY::SCORE], MODEL_KEY::SCORE},
-                                                         {MODEL_NAME[MODEL_KEY::SUMMARY], MODEL_KEY::SUMMARY},
-                                                         {MODEL_NAME[MODEL_KEY::TYPE_ID], MODEL_KEY::TYPE_ID},
-                                                         {MODEL_NAME[MODEL_KEY::TYPE_NAME], MODEL_KEY::TYPE_NAME},
-                                                         {MODEL_NAME[MODEL_KEY::XDG_TYPE], MODEL_KEY::XDG_TYPE},
+                                                                        // opendesktop store keys
+                                                                        {MODEL_NAME[MODEL_KEY::PACKAGE_ARCH], MODEL_KEY::PACKAGE_ARCH},
+                                                                        {MODEL_NAME[MODEL_KEY::PACKAGE_TYPE], MODEL_KEY::PACKAGE_TYPE},
+                                                                        {MODEL_NAME[MODEL_KEY::GPG_FINGERPRINT], MODEL_KEY::GPG_FINGERPRINT},
+                                                                        {MODEL_NAME[MODEL_KEY::GPG_SIGNATURE], MODEL_KEY::GPG_SIGNATURE},
+                                                                        {MODEL_NAME[MODEL_KEY::PACKAGE_NAME], MODEL_KEY::PACKAGE_NAME},
+                                                                        {MODEL_NAME[MODEL_KEY::PRICE], MODEL_KEY::PRICE},
+                                                                        {MODEL_NAME[MODEL_KEY::REPOSITORY], MODEL_KEY::REPOSITORY},
+                                                                        {MODEL_NAME[MODEL_KEY::TAGS], MODEL_KEY::TAGS},
+                                                                        {MODEL_NAME[MODEL_KEY::WAY], MODEL_KEY::WAY},
+                                                                        {MODEL_NAME[MODEL_KEY::PIC], MODEL_KEY::PIC},
+                                                                        {MODEL_NAME[MODEL_KEY::SMALL_PIC], MODEL_KEY::SMALL_PIC},
+                                                                        {MODEL_NAME[MODEL_KEY::CHANGED], MODEL_KEY::CHANGED},
+                                                                        {MODEL_NAME[MODEL_KEY::COMMENTS], MODEL_KEY::COMMENTS},
+                                                                        {MODEL_NAME[MODEL_KEY::CREATED], MODEL_KEY::CREATED},
+                                                                        {MODEL_NAME[MODEL_KEY::DETAIL_PAGE], MODEL_KEY::DETAIL_PAGE},
+                                                                        {MODEL_NAME[MODEL_KEY::DETAILS], MODEL_KEY::DETAILS},
+                                                                        {MODEL_NAME[MODEL_KEY::TOTAL_DOWNLOADS], MODEL_KEY::TOTAL_DOWNLOADS},
+                                                                        {MODEL_NAME[MODEL_KEY::GHNS_EXCLUDED], MODEL_KEY::GHNS_EXCLUDED},
+                                                                        {MODEL_NAME[MODEL_KEY::LANGUAGE], MODEL_KEY::LANGUAGE},
+                                                                        {MODEL_NAME[MODEL_KEY::PERSON_ID], MODEL_KEY::PERSON_ID},
+                                                                        {MODEL_NAME[MODEL_KEY::SCORE], MODEL_KEY::SCORE},
+                                                                        {MODEL_NAME[MODEL_KEY::SUMMARY], MODEL_KEY::SUMMARY},
+                                                                        {MODEL_NAME[MODEL_KEY::TYPE_ID], MODEL_KEY::TYPE_ID},
+                                                                        {MODEL_NAME[MODEL_KEY::TYPE_NAME], MODEL_KEY::TYPE_NAME},
+                                                                        {MODEL_NAME[MODEL_KEY::XDG_TYPE], MODEL_KEY::XDG_TYPE},
 
-                                                         // file props
-                                                         {MODEL_NAME[MODEL_KEY::SYMLINK], MODEL_KEY::SYMLINK},
-                                                         {MODEL_NAME[MODEL_KEY::IS_SYMLINK], MODEL_KEY::IS_SYMLINK},
-                                                         {MODEL_NAME[MODEL_KEY::LAST_READ], MODEL_KEY::LAST_READ},
-                                                         {MODEL_NAME[MODEL_KEY::READABLE], MODEL_KEY::READABLE},
-                                                         {MODEL_NAME[MODEL_KEY::WRITABLE], MODEL_KEY::WRITABLE},
-                                                         {MODEL_NAME[MODEL_KEY::IS_DIR], MODEL_KEY::IS_DIR},
-                                                         {MODEL_NAME[MODEL_KEY::IS_FILE], MODEL_KEY::IS_FILE},
-                                                         {MODEL_NAME[MODEL_KEY::IS_REMOTE], MODEL_KEY::IS_REMOTE},
-                                                         {MODEL_NAME[MODEL_KEY::EXECUTABLE], MODEL_KEY::EXECUTABLE},
-                                                         {MODEL_NAME[MODEL_KEY::VALUE], MODEL_KEY::VALUE},
-                                                         {MODEL_NAME[MODEL_KEY::KEY], MODEL_KEY::KEY},
+                                                                        // file props
+                                                                        {MODEL_NAME[MODEL_KEY::SYMLINK], MODEL_KEY::SYMLINK},
+                                                                        {MODEL_NAME[MODEL_KEY::IS_SYMLINK], MODEL_KEY::IS_SYMLINK},
+                                                                        {MODEL_NAME[MODEL_KEY::LAST_READ], MODEL_KEY::LAST_READ},
+                                                                        {MODEL_NAME[MODEL_KEY::READABLE], MODEL_KEY::READABLE},
+                                                                        {MODEL_NAME[MODEL_KEY::WRITABLE], MODEL_KEY::WRITABLE},
+                                                                        {MODEL_NAME[MODEL_KEY::IS_DIR], MODEL_KEY::IS_DIR},
+                                                                        {MODEL_NAME[MODEL_KEY::IS_FILE], MODEL_KEY::IS_FILE},
+                                                                        {MODEL_NAME[MODEL_KEY::IS_REMOTE], MODEL_KEY::IS_REMOTE},
+                                                                        {MODEL_NAME[MODEL_KEY::EXECUTABLE], MODEL_KEY::EXECUTABLE},
+                                                                        {MODEL_NAME[MODEL_KEY::VALUE], MODEL_KEY::VALUE},
+                                                                        {MODEL_NAME[MODEL_KEY::KEY], MODEL_KEY::KEY},
 
-                                                         {MODEL_NAME[MODEL_KEY::MAC], MODEL_KEY::MAC},
-                                                         {MODEL_NAME[MODEL_KEY::LOT], MODEL_KEY::LOT},
-                                                         {MODEL_NAME[MODEL_KEY::APP], MODEL_KEY::APP},
-                                                         {MODEL_NAME[MODEL_KEY::URI], MODEL_KEY::URI},
-                                                         {MODEL_NAME[MODEL_KEY::DEVICE], MODEL_KEY::DEVICE},
-                                                         {MODEL_NAME[MODEL_KEY::LASTSYNC], MODEL_KEY::LASTSYNC}
-                                                        };
+                                                                        {MODEL_NAME[MODEL_KEY::MAC], MODEL_KEY::MAC},
+                                                                        {MODEL_NAME[MODEL_KEY::LOT], MODEL_KEY::LOT},
+                                                                        {MODEL_NAME[MODEL_KEY::APP], MODEL_KEY::APP},
+                                                                        {MODEL_NAME[MODEL_KEY::URI], MODEL_KEY::URI},
+                                                                        {MODEL_NAME[MODEL_KEY::DEVICE], MODEL_KEY::DEVICE},
+                                                                        {MODEL_NAME[MODEL_KEY::LASTSYNC], MODEL_KEY::LASTSYNC}};
 /**
  * @brief MODEL
  */
@@ -677,8 +670,8 @@ const QVariantMap MAUIKIT_EXPORT toMap(const MODEL &model);
 const MODEL MAUIKIT_EXPORT toModel(const QVariantMap &map);
 
 /**
-         * Creates a MODEL_LIST from a QVariantList
-         * */
+ * Creates a MODEL_LIST from a QVariantList
+ * */
 /**
  * @brief toModelList
  * @param list
@@ -687,8 +680,8 @@ const MODEL MAUIKIT_EXPORT toModel(const QVariantMap &map);
 const MODEL_LIST MAUIKIT_EXPORT toModelList(const QVariantList &list);
 
 /**
-         * Creates a QVariantList from a MODEL_LIST
-         * */
+ * Creates a QVariantList from a MODEL_LIST
+ * */
 /**
  * @brief toMapList
  * @param list
@@ -697,8 +690,8 @@ const MODEL_LIST MAUIKIT_EXPORT toModelList(const QVariantList &list);
 const QVariantList MAUIKIT_EXPORT toMapList(const MODEL_LIST &list);
 
 /**
-         * Creates a new MODEL from another filtered by the given array of MODEL_KEY
-         * */
+ * Creates a new MODEL from another filtered by the given array of MODEL_KEY
+ * */
 /**
  * @brief filterModel
  * @param model
@@ -708,8 +701,8 @@ const QVariantList MAUIKIT_EXPORT toMapList(const MODEL_LIST &list);
 const MODEL MAUIKIT_EXPORT filterModel(const MODEL &model, const QVector<MODEL_KEY> &keys);
 
 /**
-         * Extracts from a MODEL_LIST the values from a given MODEL::KEY into a QStringList
-         * */
+ * Extracts from a MODEL_LIST the values from a given MODEL::KEY into a QStringList
+ * */
 
 /**
  * @brief modelToList
@@ -723,7 +716,7 @@ const QStringList MAUIKIT_EXPORT modelToList(const MODEL_LIST &list, const MODEL
  * @brief The PATH_CONTENT struct
  */
 struct PATH_CONTENT {
-    QUrl path;               // the url holding all the content
+    QUrl path; // the url holding all the content
     MODEL_LIST content; // the content from the url
 };
 
@@ -769,62 +762,62 @@ enum PATHTYPE_KEY : int {
 #endif
 
 static const QHash<PATHTYPE_KEY, QString> MAUIKIT_EXPORT PATHTYPE_SCHEME = {{PATHTYPE_KEY::PLACES_PATH, "file"},
-                                                             {PATHTYPE_KEY::BOOKMARKS_PATH, "file"},
-                                                             {PATHTYPE_KEY::DRIVES_PATH, "drives"},
-                                                             {PATHTYPE_KEY::APPS_PATH, "applications"},
-                                                             {PATHTYPE_KEY::REMOTE_PATH, "remote"},
-                                                             {PATHTYPE_KEY::REMOVABLE_PATH, "removable"},
-                                                             {PATHTYPE_KEY::UNKNOWN_TYPE, "Unkown"},
-                                                             {PATHTYPE_KEY::TRASH_PATH, "trash"},
-                                                             {PATHTYPE_KEY::TAGS_PATH, "tags"},
-                                                             {PATHTYPE_KEY::SEARCH_PATH, "search"},
-                                                             {PATHTYPE_KEY::CLOUD_PATH, "cloud"},
-                                                             {PATHTYPE_KEY::FISH_PATH, "fish"},
-                                                             {PATHTYPE_KEY::MTP_PATH, "mtp"}};
+                                                                            {PATHTYPE_KEY::BOOKMARKS_PATH, "file"},
+                                                                            {PATHTYPE_KEY::DRIVES_PATH, "drives"},
+                                                                            {PATHTYPE_KEY::APPS_PATH, "applications"},
+                                                                            {PATHTYPE_KEY::REMOTE_PATH, "remote"},
+                                                                            {PATHTYPE_KEY::REMOVABLE_PATH, "removable"},
+                                                                            {PATHTYPE_KEY::UNKNOWN_TYPE, "Unkown"},
+                                                                            {PATHTYPE_KEY::TRASH_PATH, "trash"},
+                                                                            {PATHTYPE_KEY::TAGS_PATH, "tags"},
+                                                                            {PATHTYPE_KEY::SEARCH_PATH, "search"},
+                                                                            {PATHTYPE_KEY::CLOUD_PATH, "cloud"},
+                                                                            {PATHTYPE_KEY::FISH_PATH, "fish"},
+                                                                            {PATHTYPE_KEY::MTP_PATH, "mtp"}};
 
-static const QHash<QString, PATHTYPE_KEY> MAUIKIT_EXPORT PATHTYPE_SCHEME_NAME ={{PATHTYPE_SCHEME[PATHTYPE_KEY::PLACES_PATH], PATHTYPE_KEY::PLACES_PATH},
-                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::BOOKMARKS_PATH], PATHTYPE_KEY::BOOKMARKS_PATH},
-                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::DRIVES_PATH], PATHTYPE_KEY::DRIVES_PATH},
-                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::APPS_PATH], PATHTYPE_KEY::APPS_PATH},
-                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::REMOTE_PATH], PATHTYPE_KEY::REMOTE_PATH},
-                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::REMOVABLE_PATH], PATHTYPE_KEY::REMOVABLE_PATH},
-                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::UNKNOWN_TYPE], PATHTYPE_KEY::UNKNOWN_TYPE},
-                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::TRASH_PATH], PATHTYPE_KEY::TRASH_PATH},
-                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::TAGS_PATH], PATHTYPE_KEY::TAGS_PATH},
-                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::SEARCH_PATH], PATHTYPE_KEY::SEARCH_PATH},
-                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::CLOUD_PATH], PATHTYPE_KEY::CLOUD_PATH},
-                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::FISH_PATH], PATHTYPE_KEY::FISH_PATH},
-                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::MTP_PATH], PATHTYPE_KEY::MTP_PATH}};
+static const QHash<QString, PATHTYPE_KEY> MAUIKIT_EXPORT PATHTYPE_SCHEME_NAME = {{PATHTYPE_SCHEME[PATHTYPE_KEY::PLACES_PATH], PATHTYPE_KEY::PLACES_PATH},
+                                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::BOOKMARKS_PATH], PATHTYPE_KEY::BOOKMARKS_PATH},
+                                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::DRIVES_PATH], PATHTYPE_KEY::DRIVES_PATH},
+                                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::APPS_PATH], PATHTYPE_KEY::APPS_PATH},
+                                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::REMOTE_PATH], PATHTYPE_KEY::REMOTE_PATH},
+                                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::REMOVABLE_PATH], PATHTYPE_KEY::REMOVABLE_PATH},
+                                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::UNKNOWN_TYPE], PATHTYPE_KEY::UNKNOWN_TYPE},
+                                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::TRASH_PATH], PATHTYPE_KEY::TRASH_PATH},
+                                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::TAGS_PATH], PATHTYPE_KEY::TAGS_PATH},
+                                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::SEARCH_PATH], PATHTYPE_KEY::SEARCH_PATH},
+                                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::CLOUD_PATH], PATHTYPE_KEY::CLOUD_PATH},
+                                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::FISH_PATH], PATHTYPE_KEY::FISH_PATH},
+                                                                                 {PATHTYPE_SCHEME[PATHTYPE_KEY::MTP_PATH], PATHTYPE_KEY::MTP_PATH}};
 
 static const QHash<PATHTYPE_KEY, QString> MAUIKIT_EXPORT PATHTYPE_URI = {{PATHTYPE_KEY::PLACES_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::PLACES_PATH] + "://"},
-                                                          {PATHTYPE_KEY::BOOKMARKS_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::BOOKMARKS_PATH] + "://"},
-                                                          {PATHTYPE_KEY::DRIVES_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::DRIVES_PATH] + "://"},
-                                                          {PATHTYPE_KEY::APPS_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::APPS_PATH] + ":///"},
-                                                          {PATHTYPE_KEY::REMOTE_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::REMOTE_PATH] + "://"},
-                                                          {PATHTYPE_KEY::REMOVABLE_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::REMOVABLE_PATH] + "://"},
-                                                          {PATHTYPE_KEY::UNKNOWN_TYPE, PATHTYPE_SCHEME[PATHTYPE_KEY::UNKNOWN_TYPE] + "://"},
-                                                          {PATHTYPE_KEY::TRASH_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::TRASH_PATH] + "://"},
-                                                          {PATHTYPE_KEY::TAGS_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::TAGS_PATH] + ":///"},
-                                                          {PATHTYPE_KEY::SEARCH_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::SEARCH_PATH] + "://"},
-                                                          {PATHTYPE_KEY::CLOUD_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::CLOUD_PATH] + ":///"},
-                                                          {PATHTYPE_KEY::FISH_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::FISH_PATH] + "://"},
-                                                          {PATHTYPE_KEY::MTP_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::MTP_PATH] + "://"}};
+                                                                         {PATHTYPE_KEY::BOOKMARKS_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::BOOKMARKS_PATH] + "://"},
+                                                                         {PATHTYPE_KEY::DRIVES_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::DRIVES_PATH] + "://"},
+                                                                         {PATHTYPE_KEY::APPS_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::APPS_PATH] + ":///"},
+                                                                         {PATHTYPE_KEY::REMOTE_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::REMOTE_PATH] + "://"},
+                                                                         {PATHTYPE_KEY::REMOVABLE_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::REMOVABLE_PATH] + "://"},
+                                                                         {PATHTYPE_KEY::UNKNOWN_TYPE, PATHTYPE_SCHEME[PATHTYPE_KEY::UNKNOWN_TYPE] + "://"},
+                                                                         {PATHTYPE_KEY::TRASH_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::TRASH_PATH] + "://"},
+                                                                         {PATHTYPE_KEY::TAGS_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::TAGS_PATH] + ":///"},
+                                                                         {PATHTYPE_KEY::SEARCH_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::SEARCH_PATH] + "://"},
+                                                                         {PATHTYPE_KEY::CLOUD_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::CLOUD_PATH] + ":///"},
+                                                                         {PATHTYPE_KEY::FISH_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::FISH_PATH] + "://"},
+                                                                         {PATHTYPE_KEY::MTP_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::MTP_PATH] + "://"}};
 
 static const QHash<PATHTYPE_KEY, QString> MAUIKIT_EXPORT PATHTYPE_LABEL = {{PATHTYPE_KEY::PLACES_PATH, ("Places")},
-                                                            {PATHTYPE_KEY::BOOKMARKS_PATH, ("Bookmarks")},
-                                                            {PATHTYPE_KEY::DRIVES_PATH, ("Drives")},
-                                                            {PATHTYPE_KEY::APPS_PATH, ("Apps")},
-                                                            {PATHTYPE_KEY::REMOTE_PATH, ("Remote")},
-                                                            {PATHTYPE_KEY::REMOVABLE_PATH, ("Removable")},
-                                                            {PATHTYPE_KEY::UNKNOWN_TYPE, ("Unknown")},
-                                                            {PATHTYPE_KEY::TRASH_PATH, ("Trash")},
-                                                            {PATHTYPE_KEY::TAGS_PATH, ("Tags")},
-                                                            {PATHTYPE_KEY::SEARCH_PATH, ("Search")},
-                                                            {PATHTYPE_KEY::CLOUD_PATH, ("Cloud")},
-                                                            {PATHTYPE_KEY::FISH_PATH, ("Remote")},
-                                                            {PATHTYPE_KEY::MTP_PATH, ("Drives")},
-                                                            {PATHTYPE_KEY::OTHER_PATH, ("Others")},
-                                                            {PATHTYPE_KEY::QUICK_PATH, ("Quick")}};
+                                                                           {PATHTYPE_KEY::BOOKMARKS_PATH, ("Bookmarks")},
+                                                                           {PATHTYPE_KEY::DRIVES_PATH, ("Drives")},
+                                                                           {PATHTYPE_KEY::APPS_PATH, ("Apps")},
+                                                                           {PATHTYPE_KEY::REMOTE_PATH, ("Remote")},
+                                                                           {PATHTYPE_KEY::REMOVABLE_PATH, ("Removable")},
+                                                                           {PATHTYPE_KEY::UNKNOWN_TYPE, ("Unknown")},
+                                                                           {PATHTYPE_KEY::TRASH_PATH, ("Trash")},
+                                                                           {PATHTYPE_KEY::TAGS_PATH, ("Tags")},
+                                                                           {PATHTYPE_KEY::SEARCH_PATH, ("Search")},
+                                                                           {PATHTYPE_KEY::CLOUD_PATH, ("Cloud")},
+                                                                           {PATHTYPE_KEY::FISH_PATH, ("Remote")},
+                                                                           {PATHTYPE_KEY::MTP_PATH, ("Drives")},
+                                                                           {PATHTYPE_KEY::OTHER_PATH, ("Others")},
+                                                                           {PATHTYPE_KEY::QUICK_PATH, ("Quick")}};
 
 /**
  * @brief DataPath
@@ -882,9 +875,9 @@ static const QStringList defaultPaths = {
     PicturesPath,
     MusicPath,
     VideosPath,
-    DownloadsPath/*,
-    RootPath,
-    TrashPath*/
+    DownloadsPath /*,
+     RootPath,
+     TrashPath*/
 };
 
 #endif
@@ -900,9 +893,9 @@ static const QMap<QString, QString> folderIcon {{PicturesPath, "folder-pictures"
                                                 {RootPath, "folder-root"}};
 
 /**
-         * Checks if a local file exists.
-         * The URL must represent a local file path, by using the scheme file://
-         **/
+ * Checks if a local file exists.
+ * The URL must represent a local file path, by using the scheme file://
+ **/
 /**
  * @brief fileExists
  * @param path
@@ -925,10 +918,10 @@ const MAUIKIT_EXPORT QString fileDir(const QUrl &path);
 const MAUIKIT_EXPORT QUrl parentDir(const QUrl &path);
 
 /**
-         * Return the configuration of a single directory represented
-         * by a QVariantMap.
-         * The passed path must be a local file URL.
-         **/
+ * Return the configuration of a single directory represented
+ * by a QVariantMap.
+ * The passed path must be a local file URL.
+ **/
 /**
  * @brief dirConf
  * @param path
@@ -945,13 +938,11 @@ const MAUIKIT_EXPORT QVariantMap dirConf(const QUrl &path);
  */
 void MAUIKIT_EXPORT setDirConf(const QUrl &path, const QString &group, const QString &key, const QVariant &value);
 
-
-
 /**
  * @brief getIconName
  * Returns the icon name for certain file.
-         * The file path must be represented as a local file URL.
-         * It also looks into the directory config file to get custom set icons
+ * The file path must be represented as a local file URL.
+ * It also looks into the directory config file to get custom set icons
  * @param path
  * @return
  */
@@ -1004,7 +995,7 @@ const MODEL MAUIKIT_EXPORT getFileInfoModel(const QUrl &path);
 const QVariantMap MAUIKIT_EXPORT getFileInfo(const QUrl &path);
 
 /**
-* @brief getDirInfoModel
+ * @brief getDirInfoModel
  * @param path
  * @param type
  * @return
@@ -1026,6 +1017,5 @@ const QVariantMap MAUIKIT_EXPORT getDirInfo(const QUrl &path);
  */
 PATHTYPE_KEY MAUIKIT_EXPORT getPathType(const QUrl &url);
 }
-
 
 #endif // FMH_H

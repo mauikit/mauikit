@@ -103,8 +103,12 @@ PreviewSettings::PreviewSettings(KDecoration2::DecorationSettings *parent)
     connect(this, &PreviewSettings::onAllDesktopsAvailableChanged, parent, &KDecoration2::DecorationSettings::onAllDesktopsAvailableChanged);
     connect(this, &PreviewSettings::closeOnDoubleClickOnMenuChanged, parent, &KDecoration2::DecorationSettings::closeOnDoubleClickOnMenuChanged);
     connect(this, &PreviewSettings::fontChanged, parent, &KDecoration2::DecorationSettings::fontChanged);
-    auto updateLeft = [this, parent]() { parent->decorationButtonsLeftChanged(decorationButtonsLeft()); };
-    auto updateRight = [this, parent]() { parent->decorationButtonsRightChanged(decorationButtonsRight()); };
+    auto updateLeft = [this, parent]() {
+        parent->decorationButtonsLeftChanged(decorationButtonsLeft());
+    };
+    auto updateRight = [this, parent]() {
+        parent->decorationButtonsRightChanged(decorationButtonsRight());
+    };
     connect(m_leftButtons, &QAbstractItemModel::rowsRemoved, this, updateLeft);
     connect(m_leftButtons, &QAbstractItemModel::rowsMoved, this, updateLeft);
     connect(m_leftButtons, &QAbstractItemModel::rowsInserted, this, updateLeft);

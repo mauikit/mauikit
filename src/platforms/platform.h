@@ -21,10 +21,9 @@ public:
     Platform &operator=(const Platform &) = delete;
     Platform(Platform &&) = delete;
     Platform &operator=(Platform &&) = delete;
-    
 
     // AbstractPlatform interface
-public slots:    
+public slots:
     void shareFiles(const QList<QUrl> &urls) override final;
     void shareText(const QString &text) override final;
     void openUrl(const QUrl &url) override final;
@@ -37,4 +36,4 @@ private:
 };
 
 QML_DECLARE_TYPEINFO(Platform, QML_HAS_ATTACHED_PROPERTIES)
-#endif //PLATFORM_H
+#endif // PLATFORM_H

@@ -158,43 +158,88 @@ void MauiModel::PrivateAbstractListModel::setList(MauiList *value)
     this->list = value;
 
     if (this->list) {
-        connect(this->list, &MauiList::preItemAppendedAt, this, [=](int index) {
-            beginInsertRows(QModelIndex(), index, index);
-        },  Qt::DirectConnection);
+        connect(
+            this->list,
+            &MauiList::preItemAppendedAt,
+            this,
+            [=](int index) {
+                beginInsertRows(QModelIndex(), index, index);
+            },
+            Qt::DirectConnection);
 
-        connect(this->list, &MauiList::preItemAppended, this, [=]() {
-            const int index = this->list->items().size();
-            beginInsertRows(QModelIndex(), index, index);
-        },  Qt::DirectConnection);
+        connect(
+            this->list,
+            &MauiList::preItemAppended,
+            this,
+            [=]() {
+                const int index = this->list->items().size();
+                beginInsertRows(QModelIndex(), index, index);
+            },
+            Qt::DirectConnection);
 
-        connect(this->list, &MauiList::preItemsAppended, this, [=](uint count) {
-            const int index = this->list->items().size();
-            beginInsertRows(QModelIndex(), index, index+count-1);
-        }, Qt::DirectConnection);
+        connect(
+            this->list,
+            &MauiList::preItemsAppended,
+            this,
+            [=](uint count) {
+                const int index = this->list->items().size();
+                beginInsertRows(QModelIndex(), index, index + count - 1);
+            },
+            Qt::DirectConnection);
 
-        connect(this->list, &MauiList::postItemAppended, this, [=]() {
-            endInsertRows();
-        }, Qt::DirectConnection);
+        connect(
+            this->list,
+            &MauiList::postItemAppended,
+            this,
+            [=]() {
+                endInsertRows();
+            },
+            Qt::DirectConnection);
 
-        connect(this->list, &MauiList::preItemRemoved, this, [=](int index) {
-            beginRemoveRows(QModelIndex(), index, index);
-        }, Qt::DirectConnection);
+        connect(
+            this->list,
+            &MauiList::preItemRemoved,
+            this,
+            [=](int index) {
+                beginRemoveRows(QModelIndex(), index, index);
+            },
+            Qt::DirectConnection);
 
-        connect(this->list, &MauiList::postItemRemoved, this, [=]() {
-            endRemoveRows();
-        }, Qt::DirectConnection);
+        connect(
+            this->list,
+            &MauiList::postItemRemoved,
+            this,
+            [=]() {
+                endRemoveRows();
+            },
+            Qt::DirectConnection);
 
-        connect(this->list, &MauiList::updateModel, this, [=](int index, QVector<int> roles) {
-            emit this->dataChanged(this->index(index), this->index(index), roles);
-        }, Qt::DirectConnection);
+        connect(
+            this->list,
+            &MauiList::updateModel,
+            this,
+            [=](int index, QVector<int> roles) {
+                emit this->dataChanged(this->index(index), this->index(index), roles);
+            },
+            Qt::DirectConnection);
 
-        connect(this->list, &MauiList::preListChanged, this, [=]() {
-            beginResetModel();
-        }, Qt::DirectConnection);
+        connect(
+            this->list,
+            &MauiList::preListChanged,
+            this,
+            [=]() {
+                beginResetModel();
+            },
+            Qt::DirectConnection);
 
-        connect(this->list, &MauiList::postListChanged, this, [=]() {
-            endResetModel();
-        }, Qt::DirectConnection);
+        connect(
+            this->list,
+            &MauiList::postListChanged,
+            this,
+            [=]() {
+                endResetModel();
+            },
+            Qt::DirectConnection);
     }
 
     endResetModel();
@@ -213,21 +258,27 @@ MauiModel::PrivateAbstractListModel::PrivateAbstractListModel(MauiModel *model)
     , list(nullptr)
     , m_model(model)
 {
-    connect(this, &QAbstractListModel::rowsInserted, this, [this](QModelIndex, int, int)
-    {
-        if(this->list)
-        {
-            emit this->list->countChanged();
-        }
-    }, Qt::DirectConnection);
+    connect(
+        this,
+        &QAbstractListModel::rowsInserted,
+        this,
+        [this](QModelIndex, int, int) {
+            if (this->list) {
+                emit this->list->countChanged();
+            }
+        },
+        Qt::DirectConnection);
 
-    connect(this, &QAbstractListModel::rowsRemoved, this, [this](QModelIndex, int, int)
-    {
-        if(this->list)
-        {
-            emit this->list->countChanged();
-        }
-    }, Qt::DirectConnection);
+    connect(
+        this,
+        &QAbstractListModel::rowsRemoved,
+        this,
+        [this](QModelIndex, int, int) {
+            if (this->list) {
+                emit this->list->countChanged();
+            }
+        },
+        Qt::DirectConnection);
 }
 
 int MauiModel::PrivateAbstractListModel::rowCount(const QModelIndex &parent) const

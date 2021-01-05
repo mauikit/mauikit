@@ -222,7 +222,7 @@ bool Handy::isTouch()
 
 bool Handy::hasKeyboard()
 {
-   return Platform::instance()->hasKeyboard();
+    return Platform::instance()->hasKeyboard();
 }
 
 bool Handy::hasMouse()

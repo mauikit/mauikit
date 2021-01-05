@@ -41,7 +41,7 @@
 
 static const QUrl CONF_FILE = FMH::ConfigPath + "/kwinrc";
 
-MauiApp * MauiApp::m_instance = nullptr;
+MauiApp *MauiApp::m_instance = nullptr;
 
 MauiApp::MauiApp()
     : QObject(nullptr)
@@ -55,7 +55,9 @@ MauiApp::MauiApp()
 
 #if defined Q_OS_LINUX && !defined Q_OS_ANDROID
     auto configWatcher = new QFileSystemWatcher({CONF_FILE.toLocalFile()}, this);
-    connect(configWatcher, &QFileSystemWatcher::fileChanged, [&](QString) { getWindowControlsSettings(); });
+    connect(configWatcher, &QFileSystemWatcher::fileChanged, [&](QString) {
+        getWindowControlsSettings();
+    });
 #endif
 
     connect(qApp, &QCoreApplication::aboutToQuit, this, &MauiApp::deleteLater);
@@ -159,12 +161,11 @@ void MauiApp::setEnableCSD(const bool &value)
 #if defined Q_OS_ANDROID || defined Q_OS_IOS // ignore csd for those
     return;
 #else
-    
-    if (qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE")) 
-    {
-        if(QByteArrayList{"1", "true"}.contains(qgetenv("QT_QUICK_CONTROLS_MOBILE")))
+
+    if (qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE")) {
+        if (QByteArrayList {"1", "true"}.contains(qgetenv("QT_QUICK_CONTROLS_MOBILE")))
             return;
-    } 
+    }
 
     if (m_enableCSD == value)
         return;

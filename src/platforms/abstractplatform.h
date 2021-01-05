@@ -1,10 +1,10 @@
 #ifndef ABSTRACTPLATFORM_H
 #define ABSTRACTPLATFORM_H
 
-#include <QObject>
-#include <QUrl>
 #include <QList>
+#include <QObject>
 #include <QString>
+#include <QUrl>
 
 /**
  * @brief The AbstractPlatform class
@@ -16,33 +16,33 @@ class AbstractPlatform : public QObject
     Q_OBJECT
 
 public:
-    explicit AbstractPlatform(QObject * parent= nullptr);
-    
+    explicit AbstractPlatform(QObject *parent = nullptr);
+
 public slots:
 
     /**
      * @brief shareFiles
      * @param urls
      */
-   virtual void shareFiles(const QList<QUrl> &urls) = 0;
+    virtual void shareFiles(const QList<QUrl> &urls) = 0;
 
     /**
      * @brief shareText
      * @param urls
      */
-   virtual void shareText(const QString &urls) = 0;
+    virtual void shareText(const QString &urls) = 0;
 
     /**
      * @brief openUrl
      * @param url
      */
-   virtual void openUrl(const QUrl &url) = 0;
+    virtual void openUrl(const QUrl &url) = 0;
 
     /**
      * @brief hasKeyboard
      * @return
      */
-   virtual bool hasKeyboard() = 0;
+    virtual bool hasKeyboard() = 0;
 
     /**
      * @brief hasMouse
@@ -56,7 +56,6 @@ signals:
     void hasKeyboardChanged();
     void hasMouseChanged();
     void shareFilesRequest(QStringList urls);
-
 };
 
-#endif //ABSTRACTPLATFORM_H
+#endif // ABSTRACTPLATFORM_H

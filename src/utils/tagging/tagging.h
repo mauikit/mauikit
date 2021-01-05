@@ -40,7 +40,6 @@ class MAUIKIT_EXPORT Tagging : public TAGDB
 {
     Q_OBJECT
 public:
-
     /**
      * @brief getInstance
      * Returns an instance to the tagging object. This instance can only be accessed from the main thread, otherwise it will return a nullptr and segfault
@@ -169,7 +168,8 @@ public:
 
     /**
      * @brief getUrls
-     * Returns a model of all the file URLs associated to a tag, the result can be strictly enforced to only file URLs associated to a tag created by the application making the request, restrinct it to a maximum limit, filter by the mimetype or just add a modifier function
+     * Returns a model of all the file URLs associated to a tag, the result can be strictly enforced to only file URLs associated to a tag created by the application making the request, restrinct it to a maximum limit, filter by the
+     * mimetype or just add a modifier function
      * @param tag
      * Tag name to perfrom the search
      * @param strict
@@ -267,7 +267,7 @@ private:
 
 protected:
     static bool setTagIconName(QVariantMap &item);
-    
+
 signals:
     void urlTagged(const QString &url, const QString &tag);
     void tagged(const QVariantMap &tag);

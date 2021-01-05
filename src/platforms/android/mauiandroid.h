@@ -53,7 +53,6 @@ private:
 
     void handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data);
 
-
 public slots:
     /**
      * @brief getAccounts
@@ -153,7 +152,6 @@ signals:
      */
     void folderPicked(QString path);
 };
-
 
 namespace PATHS
 {
