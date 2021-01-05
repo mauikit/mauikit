@@ -159,7 +159,6 @@ Maui.AbstractSideBar
         }
     }
 
-
     ColumnLayout
     {
         id: _content
