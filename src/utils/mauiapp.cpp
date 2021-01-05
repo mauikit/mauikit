@@ -20,7 +20,7 @@
 #include "fmh.h"
 #include "handy.h"
 #include "utils.h"
-#include <QIcon>
+
 #ifdef COMPONENT_ACCOUNTS
 #include "mauiaccounts.h"
 #endif
@@ -32,11 +32,16 @@
 #include <QFileSystemWatcher>
 #endif
 
-#ifndef STATIC_MAUIKIT
-#include "../mauikit_version.h"
+#if defined Q_OS_ANDROID || defined Q_OS_MACOS || defined Q_OS_WIN
+#include <QIcon>
+#include <QQuickStyle>
 #endif
 
+#include "../mauikit_version.h"
+
 static const QUrl CONF_FILE = FMH::ConfigPath + "/kwinrc";
+
+MauiApp * MauiApp::m_instance = nullptr;
 
 MauiApp::MauiApp()
     : QObject(nullptr)
@@ -46,8 +51,6 @@ MauiApp::MauiApp()
     , m_accounts(nullptr)
 #endif
 {
-    m_theme.path = QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString("/maui/csd/%1").arg("Nitrux"), QStandardPaths::LocateDirectory));
-
     this->setEnableCSD(UTIL::loadSettings("CSD", "GLOBAL", m_enableCSD, true).toBool());
 
 #if defined Q_OS_LINUX && !defined Q_OS_ANDROID
@@ -55,32 +58,13 @@ MauiApp::MauiApp()
     connect(configWatcher, &QFileSystemWatcher::fileChanged, [&](QString) { getWindowControlsSettings(); });
 #endif
 
+    connect(qApp, &QCoreApplication::aboutToQuit, this, &MauiApp::deleteLater);
+
     getWindowControlsSettings();
-}
 
-QString MauiApp::getName()
-{
-    return qApp->applicationName();
-}
-
-QString MauiApp::getDisplayName()
-{
-    return qApp->applicationDisplayName();
-}
-
-QString MauiApp::getVersion()
-{
-    return qApp->applicationVersion();
-}
-
-QString MauiApp::getOrg()
-{
-    return qApp->organizationName();
-}
-
-QString MauiApp::getDomain()
-{
-    return qApp->organizationDomain();
+#if defined Q_OS_ANDROID || defined Q_OS_MACOS || defined Q_OS_WIN
+    setDefaultMauiStyle();
+#endif
 }
 
 QString MauiApp::getMauikitVersion()
@@ -90,77 +74,36 @@ QString MauiApp::getMauikitVersion()
 
 QString MauiApp::getQtVersion()
 {
-    return Handy::appInfo().value("qt_version").toString();
-}
-
-QString MauiApp::getDescription() const
-{
-    return description;
-}
-
-void MauiApp::setDescription(const QString &value)
-{
-    if (description == value)
-        return;
-
-    description = value;
-    emit this->descriptionChanged(description);
+    return QT_VERSION_STR;
 }
 
 QString MauiApp::getIconName() const
 {
-    return iconName;
+    qDebug() << "REQUESTING ICONNAME" << m_iconName << this;
+    return m_iconName;
 }
 
 void MauiApp::setIconName(const QString &value)
 {
-    if (iconName == value)
+    if (m_iconName == value)
         return;
 
-    iconName = value;
-    emit this->iconNameChanged(iconName);
-}
-
-QString MauiApp::getWebPage() const
-{
-    return webPage;
-}
-
-void MauiApp::setWebPage(const QString &value)
-{
-    if (webPage == value)
-        return;
-
-    webPage = value;
-    emit this->webPageChanged(webPage);
+    m_iconName = value;
+    emit this->iconNameChanged();
 }
 
 QString MauiApp::getDonationPage() const
 {
-    return donationPage;
+    return m_donationPage;
 }
 
 void MauiApp::setDonationPage(const QString &value)
 {
-    if (donationPage == value)
+    if (m_donationPage == value)
         return;
 
-    donationPage = value;
-    emit this->donationPageChanged(donationPage);
-}
-
-QString MauiApp::getReportPage() const
-{
-    return reportPage;
-}
-
-void MauiApp::setReportPage(const QString &value)
-{
-    if (reportPage == value)
-        return;
-
-    reportPage = value;
-    emit this->reportPageChanged(reportPage);
+    m_donationPage = value;
+    emit this->donationPageChanged();
 }
 
 bool MauiApp::getHandleAccounts() const
@@ -186,6 +129,15 @@ MauiAccounts *MauiApp::getAccounts() const
 }
 #endif
 
+void MauiApp::setDefaultMauiStyle()
+{
+#if defined QICON_H && defined QQUICKSTYLE_H
+    QIcon::setThemeSearchPaths({":/icons/luv-icon-theme"});
+    QIcon::setThemeName("Luv");
+    QQuickStyle::setStyle("maui-style");
+#endif
+}
+
 MauiApp *MauiApp::qmlAttachedProperties(QObject *object)
 {
     Q_UNUSED(object)
@@ -207,6 +159,12 @@ void MauiApp::setEnableCSD(const bool &value)
 #if defined Q_OS_ANDROID || defined Q_OS_IOS // ignore csd for those
     return;
 #else
+    
+    if (qEnvironmentVariableIsSet("QT_QUICK_CONTROLS_MOBILE")) 
+    {
+        if(QByteArrayList{"1", "true"}.contains(qgetenv("QT_QUICK_CONTROLS_MOBILE")))
+            return;
+    } 
 
     if (m_enableCSD == value)
         return;
@@ -229,25 +187,14 @@ void MauiApp::getWindowControlsSettings()
     const auto group = kconf->group("org.kde.kdecoration2");
 
     if (group.hasKey("ButtonsOnLeft")) {
-        m_leftWindowControls = group.readEntry("ButtonsOnLeft", "").split("", QString::SkipEmptyParts);
+        m_leftWindowControls = group.readEntry("ButtonsOnLeft", "").split("", Qt::SkipEmptyParts);
         emit this->leftWindowControlsChanged();
     }
 
     if (group.hasKey("ButtonsOnRight")) {
-        m_rightWindowControls = group.readEntry("ButtonsOnRight", "").split("", QString::SkipEmptyParts);
+        m_rightWindowControls = group.readEntry("ButtonsOnRight", "").split("", Qt::SkipEmptyParts);
         emit this->rightWindowControlsChanged();
     }
-
-    /*if( group.hasKey("Theme"))
-    {
-        const auto path = QUrl(FMH::DataPath+"/maui/csd/Default");
-        if(FMH::fileExists(path))
-        {
-            m_theme.path = path;
-        }
-    }*/
-
-    // 	m_theme.path = QUrl(FMH::DataPath+"/maui/csd/Default");
 
 #elif defined Q_OS_MACOS || defined Q_OS_ANDROID
     m_leftWindowControls = QStringList {"X", "I", "A"};

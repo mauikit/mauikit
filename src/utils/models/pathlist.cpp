@@ -20,8 +20,7 @@
 
 PathList::PathList(QObject *parent)
     : MauiList(parent)
-{
-}
+{}
 
 QVariantMap PathList::get(const int &index) const
 {
@@ -38,7 +37,7 @@ QString PathList::getPath() const
     return this->m_path;
 }
 
-FMH::MODEL_LIST PathList::items() const
+const FMH::MODEL_LIST &PathList::items() const
 {
     return this->list;
 }
@@ -52,9 +51,9 @@ void PathList::setList()
         this->list << paths;
         emit this->postListChanged();
     } else {
-        const int index = [&]() -> const int {
+        const int index = [&]() -> int {
             int i = 0;
-            for (const auto &item : this->list) {
+            for (const auto &item : qAsConst(list)) {
                 if (i < paths.size()) {
                     if (item[FMH::MODEL_KEY::PATH] != paths[i][FMH::MODEL_KEY::PATH]) {
                         break;

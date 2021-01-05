@@ -7,61 +7,85 @@ import org.kde.kirigami 2.2 as Kirigami
 Menu
 {
     id: control
-    implicitWidth: colorBar.implicitWidth + Maui.Style.space.big
-    
+    implicitWidth: 200
+
+    /**
+      *
+      */
     property var item : ({})
+
+    /**
+      *
+      */
     property int index : -1
+
+    /**
+      *
+      */
     property bool isDir : false
+
+    /**
+      *
+      */
     property bool isExec : false
+
+    /**
+      *
+      */
     property bool isFav: false
-    
+
+    /**
+      *
+      */
     signal bookmarkClicked(var item)
+
+    /**
+      *
+      */
     signal removeClicked(var item)
-    signal shareClicked(var item)
+
+    /**
+      *
+      */
     signal copyClicked(var item)
+
+    /**
+      *
+      */
     signal cutClicked(var item)
+
+    /**
+      *
+      */
     signal renameClicked(var item)
-    signal tagsClicked(var item)	
-    signal openWithClicked(var item)
-                      
+
     MenuItem
     {
         visible: !control.isExec && selectionBar
         text: i18n("Select")
-        icon.name: "edit-select"		
+        icon.name: "edit-select"
         onTriggered:
-        {			
-            addToSelection(currentFMList.get(index))
+        {
+            addToSelection(currentFMModel.get(index))
             if(Maui.Handy.isTouch)
                 selectionMode = true
         }
     }
-       
-    MenuSeparator{visible: selectionBar}    
-    
-    MenuItem
-    {
-        visible: !control.isExec && tagsDialog
-        text: i18n("Add Tags")
-        icon.name: "tag"
-        onTriggered:
-        {
-            tagsClicked(control.item)
-            close()
-        }
-    }  
-    
+
+    MenuSeparator{visible: selectionBar}
+
+
     MenuItem
     {
         text: control.isFav ? i18n("Remove from Favorites") : i18n("Add to Favorites")
-        icon.name: "love"		
+        icon.name: "love"
         onTriggered:
-        {			
-            if(currentFMList.favItem(item.path))
+        {
+            if(Maui.FM.toggleFav(item.path))
                 control.isFav = !control.isFav
         }
-    }    
-    
+    }
+
     MenuItem
     {
         visible: !control.isExec && control.isDir
@@ -72,48 +96,10 @@ Menu
             bookmarkClicked(control.item)
             close()
         }
-    }    
-    
-    MenuSeparator{}    
-    
-    MenuItem
-    {
-        visible: !control.isExec && shareDialog	
-        text: i18n("Share")
-        icon.name: "document-share"
-        onTriggered:
-        {
-            shareClicked(control.item)
-            close()
-        }
     }
-    
-    MenuItem
-    {
-		visible: !control.isExec && previewer
-		text: i18n("Preview")
-		icon.name: "view-preview"
-		onTriggered:
-		{
-			previewer.show(currentFMModel, control.index)
-			close()
-		}
-	}
-    
-    MenuItem
-    {
-        visible: !control.isExec && openWithDialog	
-        text: i18n("Open with")
-        icon.name: "document-open"
-        onTriggered:
-        {
-            openWithClicked(control.item)
-            close()
-        }
-    }
-    
-    MenuSeparator{visible: tagsDialog  || shareDialog || previewer}
-        
+
+    MenuSeparator{}
+
     MenuItem
     {
         visible: !control.isExec
@@ -125,7 +111,7 @@ Menu
             close()
         }
     }
-    
+
     MenuItem
     {
         visible: !control.isExec
@@ -137,7 +123,7 @@ Menu
             close()
         }
     }
-    
+
     MenuItem
     {
         visible: !control.isExec
@@ -148,10 +134,8 @@ Menu
             renameClicked(control.item)
             close()
         }
-    }     
-    
-    MenuSeparator{}
-    
+    }
+
     MenuItem
     {
         text: i18n("Remove")
@@ -163,39 +147,21 @@ Menu
             close()
         }
     }
-    
-    MenuSeparator{ visible: colorBar.visible }	
-    
-    MenuItem
-    {		
-        width: parent.width
-        height: visible ? Maui.Style.iconSizes.medium + Maui.Style.space.big : 0
-        visible: control.isDir
-        Maui.ColorsBar
-        {
-            id: colorBar
-            
-            visible: parent.visible
-            anchors.centerIn: parent
-            size: Maui.Style.iconSizes.medium
-            onColorPicked: currentFMList.setDirIcon(index, color)
-        }
-    }	
-    
+
     function show(index)
-    {		
-        control.item = currentFMList.get(index)
-        
+    {
+        control.item = currentFMModel.get(index)
+
         if(item.path.startsWith("tags://") || item.path.startsWith("applications://") )
             return
-            
+
             if(item)
             {
                 console.log("GOT ITEM FILE", index, item.path)
                 control.index = index
                 control.isDir = item.isdir == true || item.isdir == "true"
                 control.isExec = item.executable == true || item.executable == "true"
-                control.isFav = currentFMList.itemIsFav(item.path)
+                control.isFav = Maui.FM.isFav(item.path)
                 popup()
             }
     }

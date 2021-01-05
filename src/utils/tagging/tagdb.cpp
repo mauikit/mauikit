@@ -166,7 +166,7 @@ bool TAGDB::insert(const QString &tableName, const QVariantMap &insertData)
     return query.exec();
 }
 
-bool TAGDB::update(const QString &tableName, const TAG::DB &updateData, const QVariantMap &where)
+bool TAGDB::update(const QString &tableName, const FMH::MODEL &updateData, const QVariantMap &where)
 {
     if (tableName.isEmpty()) {
         qDebug() << QStringLiteral("Fatal error on insert! The table name is empty!");
@@ -178,7 +178,7 @@ bool TAGDB::update(const QString &tableName, const TAG::DB &updateData, const QV
 
     QStringList set;
     for (auto key : updateData.keys())
-        set.append(TAG::KEYMAP[key] + " = '" + updateData[key] + "'");
+        set.append(FMH::MODEL_NAME[key] + " = '" + updateData[key] + "'");
 
     QStringList condition;
     for (auto key : where.keys())
@@ -197,7 +197,7 @@ bool TAGDB::update(const QString &table, const QString &column, const QVariant &
     return query.exec();
 }
 
-bool TAGDB::remove(const QString &tableName, const TAG::DB &removeData)
+bool TAGDB::remove(const QString &tableName, const FMH::MODEL &removeData)
 {
     if (tableName.isEmpty()) {
         qDebug() << QStringLiteral("Fatal error on removing! The table name is empty!");
@@ -211,10 +211,10 @@ bool TAGDB::remove(const QString &tableName, const TAG::DB &removeData)
     QString strValues;
     auto i = 0;
     for (auto key : removeData.keys()) {
-        strValues.append(QString("%1 = \"%2\"").arg(TAG::KEYMAP[key], removeData[key]));
+        strValues.append(QString("%1 = \"%2\"").arg(FMH::MODEL_NAME[key], removeData[key]));
         i++;
 
-        if (removeData.keys().size() > 1 && i < removeData.keys().size())
+        if (removeData.size() > 1 && i < removeData.size())
             strValues.append(" AND ");
     }
 

@@ -1,27 +1,8 @@
 ---
+# SPDX-FileCopyrightText: 2019 Christoph Cullmann <cullmann@kde.org>
+# SPDX-FileCopyrightText: 2019 Gernot Gebhard <gebhard@absint.com>
+#
 # SPDX-License-Identifier: MIT
-#
-# Copyright (C) 2019 Christoph Cullmann <cullmann@kde.org>
-# Copyright (C) 2019 Gernot Gebhard <gebhard@absint.com>
-#
-# Permission is hereby granted, free of charge, to any person obtaining
-# a copy of this software and associated documentation files (the
-# "Software"), to deal in the Software without restriction, including
-# without limitation the rights to use, copy, modify, merge, publish,
-# distribute, sublicense, and/or sell copies of the Software, and to
-# permit persons to whom the Software is furnished to do so, subject to
-# the following conditions:
-#
-# The above copyright notice and this permission notice shall be included
-# in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-# IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-# CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-# TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 # Style for C++
 Language: Cpp
@@ -51,9 +32,6 @@ PointerAlignment: Right
 # horizontally aligns arguments after an open bracket.
 AlignAfterOpenBracket: Align
 
-# align trailing comments
-AlignTrailingComments: true
-
 # don't move all parameters to new line
 AllowAllParametersOfDeclarationOnNextLine: false
 
@@ -75,6 +53,9 @@ BreakBeforeBinaryOperators: None
 # format C++11 braced lists like function calls
 Cpp11BracedListStyle: true
 
+# do not put a space before C++11 braced lists
+SpaceBeforeCpp11BracedList: false
+
 # remove empty lines
 KeepEmptyLinesAtTheStartOfBlocks: false
 
@@ -86,3 +67,6 @@ SpaceAfterTemplateKeyword: false
 
 # macros for which the opening brace stays attached.
 ForEachMacros: [ foreach, Q_FOREACH, BOOST_FOREACH, forever, Q_FOREVER, QBENCHMARK, QBENCHMARK_ONCE ]
+
+# keep lambda formatting multi-line if not empty
+AllowShortLambdasOnASingleLine: Empty

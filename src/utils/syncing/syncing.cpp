@@ -34,7 +34,7 @@ void Syncing::setCredentials(const QString &server, const QString &user, const Q
 
 void Syncing::listDirOutputHandler(WebDAVReply *reply, const QStringList &filters)
 {
-    connect(reply, &WebDAVReply::listDirResponse, [=](QNetworkReply *listDirReply, QList<WebDAVItem> items) {
+    connect(reply, &WebDAVReply::listDirResponse, this, [=](QNetworkReply *, QList<WebDAVItem> items) {
         // 		qDebug() << "URL :" << listDirReply->url();
         // 		qDebug() << "Received List of" << items.length() << "items";
         // 		qDebug() << endl << "---------------------------------------";
@@ -68,7 +68,7 @@ void Syncing::listDirOutputHandler(WebDAVReply *reply, const QStringList &filter
         }
         emit this->listReady(list, this->currentPath);
     });
-    connect(reply, &WebDAVReply::error, [=](QNetworkReply::NetworkError err) {
+    connect(reply, &WebDAVReply::error, this, [=](QNetworkReply::NetworkError err) {
         // 		qDebug() << "ERROR" << err;
         this->emitError(err);
     });
@@ -93,7 +93,7 @@ void Syncing::download(const QUrl &path)
 
     WebDAVReply *reply = this->client->downloadFrom(url);
     qDebug() << "CURRENT CREDENTIALS" << this->host << this->user;
-    connect(reply, &WebDAVReply::downloadResponse, [=](QNetworkReply *reply) {
+    connect(reply, &WebDAVReply::downloadResponse, this, [=](QNetworkReply *reply) {
         if (!reply->error()) {
             qDebug() << "\nDownload Success"
                      << "\nURL  :" << reply->url() << "\nSize :" << reply->size();
@@ -112,7 +112,7 @@ void Syncing::download(const QUrl &path)
         }
     });
 
-    connect(reply, &WebDAVReply::downloadProgressResponse, [=](qint64 bytesReceived, qint64 bytesTotal) {
+    connect(reply, &WebDAVReply::downloadProgressResponse, this, [=](qint64 bytesReceived, qint64 bytesTotal) {
         int percent = ((float)bytesReceived / bytesTotal) * 100;
 
         qDebug() << "\nReceived : " << bytesReceived << "\nTotal    : " << bytesTotal << "\nPercent  : " << percent;
@@ -120,7 +120,7 @@ void Syncing::download(const QUrl &path)
         emit this->progress(percent);
     });
 
-    connect(reply, &WebDAVReply::error, [=](QNetworkReply::NetworkError err) { qDebug() << "ERROR" << err; });
+    connect(reply, &WebDAVReply::error, this, [=](QNetworkReply::NetworkError err) { qDebug() << "ERROR" << err; });
 }
 
 void Syncing::upload(const QUrl &path, const QUrl &filePath)
@@ -137,7 +137,7 @@ void Syncing::upload(const QUrl &path, const QUrl &filePath)
 
         WebDAVReply *reply = this->client->uploadTo(path.toString(), QFileInfo(filePath.toString()).fileName(), &this->mFile);
 
-        connect(reply, &WebDAVReply::uploadFinished, [=](QNetworkReply *reply) {
+        connect(reply, &WebDAVReply::uploadFinished, this, [=](QNetworkReply *reply) {
             if (!reply->error()) {
                 qDebug() << "\nUpload Success"
                          << "\nURL  :" << reply->url() << "\nSize :" << reply->size();
@@ -159,7 +159,7 @@ void Syncing::upload(const QUrl &path, const QUrl &filePath)
             }
         });
 
-        connect(reply, &WebDAVReply::error, [=](QNetworkReply::NetworkError err) {
+        connect(reply, &WebDAVReply::error, this, [=](QNetworkReply::NetworkError err) {
             qDebug() << "ERROR" << err;
             this->emitError(err);
         });
@@ -170,7 +170,7 @@ void Syncing::createDir(const QUrl &path, const QString &name)
 {
     WebDAVReply *reply = this->client->createDir(path.toString(), name);
 
-    connect(reply, &WebDAVReply::createDirFinished, [=](QNetworkReply *reply) {
+    connect(reply, &WebDAVReply::createDirFinished, this, [=](QNetworkReply *reply) {
         if (!reply->error()) {
             qDebug() << "\nDir Created"
                      << "\nURL  :" << reply->url();
@@ -186,7 +186,7 @@ void Syncing::createDir(const QUrl &path, const QString &name)
         }
     });
 
-    connect(reply, &WebDAVReply::error, [=](QNetworkReply::NetworkError err) {
+    connect(reply, &WebDAVReply::error, this, [=](QNetworkReply::NetworkError err) {
         qDebug() << "ERROR" << err;
         this->emitError(err);
     });

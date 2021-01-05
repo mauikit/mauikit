@@ -54,15 +54,15 @@ T.MenuItem
                                        implicitContentHeight + topPadding + bottomPadding,
                                        implicitIndicatorHeight + topPadding + bottomPadding) : 0
                                        
-                                       padding: Kirigami.Settings.isMobile ? Maui.Style.space.small : Maui.Style.space.tiny
-    verticalPadding: Kirigami.Settings.isMobile ? Maui.Style.space.small : Maui.Style.space.tiny
+    padding: Maui.Style.space.small
+    verticalPadding: Maui.Style.space.small
     spacing: Maui.Style.space.small
 
-    icon.width: Kirigami.Settings.isMobile ? Maui.Style.iconSizes.medium : Maui.Style.iconSizes.small
-    icon.height: Kirigami.Settings.isMobile ? Maui.Style.iconSizes.medium : Maui.Style.iconSizes.small
+    icon.width: Maui.Style.iconSizes.small
+    icon.height: Maui.Style.iconSizes.small
 
-    icon.color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor) :
-                             control.Kirigami.Theme.disabledTextColor
+    icon.color: control.enabled ? (control.checked || control.down ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor) :
+                                 control.Kirigami.Theme.disabledTextColor
 
     indicator: CheckIndicator
     {
@@ -79,8 +79,7 @@ T.MenuItem
 
         visible: control.subMenu
 //        mirror: control.mirrored
-        color: control.enabled ? (control.highlighted ? control.Kirigami.Theme.highlightedTextColor : control.Kirigami.Theme.textColor) :
-                                 control.Kirigami.Theme.disabledTextColor
+        color: control.icon.color
         source: "qrc:/qt-project.org/imports/QtQuick/Controls.2/Material/images/arrow-indicator.png"
     }
 
@@ -90,7 +89,7 @@ T.MenuItem
         readonly property real indicatorPadding: control.checkable && control.indicator ? control.indicator.width + control.spacing : 0
         leftPadding: !control.mirrored ? indicatorPadding + Maui.Style.space.small : arrowPadding
         rightPadding: control.mirrored ? indicatorPadding : arrowPadding + Maui.Style.space.small
-
+        opacity: control.enabled ? 1 : 0.5
         spacing: control.spacing
         mirrored: control.mirrored
         display: control.display
@@ -99,8 +98,7 @@ T.MenuItem
         icon: control.icon
         text: control.text
         font: control.font
-        color: control.enabled ? (control.highlighted || control.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor) :
-                                 control.Kirigami.Theme.disabledTextColor
+        color: control.icon.color
     }
 
     background: Rectangle
@@ -109,7 +107,6 @@ T.MenuItem
         implicitHeight: control.visible ? Maui.Style.rowHeightAlt : 0
         radius: Maui.Style.radiusV
 
-        opacity: 0.5
         anchors
         {
             fill: parent
@@ -127,6 +124,6 @@ T.MenuItem
         }
 
         color: control.highlighted || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
-        border.color: control.highlighted || control.hovered ? control.Kirigami.Theme.highlightColor : "transparent"
+        border.color: control.checked || control.down ? control.Kirigami.Theme.highlightColor : "transparent"
     }
 }

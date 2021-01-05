@@ -40,9 +40,8 @@ import QtQuick.Controls 2.12
 import QtQuick.Controls.impl 2.12
 import QtQuick.Templates 2.12 as T
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 import QtGraphicalEffects 1.0
-import org.kde.mauikit 1.0 as Maui
 
 T.ComboBox
 {
@@ -60,7 +59,6 @@ T.ComboBox
     spacing: Maui.Style.space.small
     leftPadding: padding + (!control.mirrored || !indicator || !indicator.visible ? 0 : indicator.width + spacing)
     rightPadding: padding + (control.mirrored || !indicator || !indicator.visible ? 0 : indicator.width + spacing)
-
 
     delegate: MenuItem
     {
@@ -106,10 +104,10 @@ T.ComboBox
 
     background: Rectangle
     {
-        implicitWidth:  (Maui.Style.iconSizes.medium * 3) + Maui.Style.space.big
-        implicitHeight: Maui.Style.iconSizes.medium + Maui.Style.space.small
+        implicitWidth:  (Maui.Style.iconSizes.medium * 6) + Maui.Style.space.big
+        implicitHeight: Math.floor(Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25))
 
-        radius: height * 0.07
+        radius: Maui.Style.radiusV
 
         color: !control.editable ? control.Kirigami.Theme.backgroundColor : "transparent"
 
@@ -127,13 +125,16 @@ T.ComboBox
 
     popup: T.Popup
     {
-//        y: control.editable ? control.height - 5 : 0
-//        x: control.x - width
+        y: control.editable ? control.height - 5 : 0
+
         width: Math.max(control.width, 150)
         implicitHeight: Math.min(contentItem.implicitHeight, control.Window.height - topMargin - bottomMargin)
         transformOrigin: Item.Top
-        topMargin: Maui.Style.space.small
-        bottomMargin: Maui.Style.space.small
+        padding: 0
+    //    topPadding: 0
+    //    bottomPadding: 0
+        verticalPadding: 8
+
         enter: Transition {
             // grow_fade_in
             NumberAnimation { property: "scale"; from: 0.9; to: 1.0; easing.type: Easing.OutQuint; duration: 220 }
@@ -149,27 +150,55 @@ T.ComboBox
         contentItem: ListView
         {
             clip: true
-            implicitHeight: contentHeight
+            implicitHeight: contentHeight + 16
             model: control.delegateModel
             currentIndex: control.highlightedIndex
             highlightMoveDuration: 0
+            spacing: control.spacing
+            keyNavigationEnabled: true
+            keyNavigationWraps: true
 
             T.ScrollIndicator.vertical: ScrollIndicator { }
         }
 
         background: Rectangle
         {
-            radius: Maui.Style.radiusV
-            color: parent.Kirigami.Theme.backgroundColor
-            border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
-            layer.enabled: true
+            implicitWidth: 200
+            implicitHeight: Maui.Style.rowHeight
 
-            layer.effect: DropShadow {
+            radius: Maui.Style.radiusV
+            color: control.Kirigami.Theme.backgroundColor
+            border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+
+            Rectangle
+             {
+                 anchors.fill: parent
+                 radius: Maui.Style.radiusV
+                 color: "transparent"
+                 border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.7)
+                 opacity: 0.8
+
+                 Rectangle
+                 {
+                     anchors.fill: parent
+                     anchors.margins: 1
+                     color: "transparent"
+                     radius: parent.radius - 0.5
+                     border.color: Qt.lighter(Kirigami.Theme.backgroundColor, 2)
+                     opacity: 0.8
+                 }
+
+             }
+
+
+            layer.enabled: true
+            layer.effect: DropShadow
+            {
                 transparentBorder: true
                 radius: 8
                 samples: 16
                 horizontalOffset: 0
-                verticalOffset: 4
+                verticalOffset: 0
                 color: Qt.rgba(0, 0, 0, 0.3)
             }
         }

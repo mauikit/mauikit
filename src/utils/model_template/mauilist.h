@@ -21,9 +21,7 @@
 
 #include "fmh.h"
 
-#ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
-#endif
 
 #include <QQmlParserStatus>
 
@@ -33,11 +31,7 @@
 #include <QObject>
 
 class MauiModel;
-#ifdef STATIC_MAUIKIT
-class MauiList : public QObject, public QQmlParserStatus
-#else
 class MAUIKIT_EXPORT MauiList : public QObject, public QQmlParserStatus
-#endif
 {
     Q_INTERFACES(QQmlParserStatus)
 
@@ -50,22 +44,26 @@ public:
      */
     explicit MauiList(QObject *parent = nullptr);
 
-    virtual FMH::MODEL_LIST items() const = 0;
-    virtual void classBegin() override
-    {
-    }
-    virtual void componentComplete() override
-    {
-    }
-    int getCount() const
-    {
-        return items().size();
-    }
+    virtual const FMH::MODEL_LIST &items() const = 0;
+    virtual void classBegin() override  {}
+    virtual void componentComplete() override {}
+    virtual void modelHooked() {};
+
+    int getCount() const;
+
+    /**
+     * @brief getItems
+     * Get all the items in the list model. If the model has been filtered or sorted those are the items that are returned
+     * @param index
+     * @return
+     */
+    FMH::MODEL_LIST getItems() const;
 
     const MauiModel *m_model; // becarefull this is owned by qml engine, this is only supossed to be a viewer
-public slots:
+
     int mappedIndex(const int &index) const;
     int mappedIndexFromSource(const int &index) const;
+    QVariantMap get(const int &index) const;
 
 protected:
     bool exists(const FMH::MODEL_KEY &key, const QString &value) const;
@@ -73,6 +71,7 @@ protected:
 
 signals:
     void preItemAppended();
+    void preItemsAppended(uint count);
     void postItemAppended();
     void preItemAppendedAt(int index);
     void preItemRemoved(int index);

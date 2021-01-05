@@ -9,6 +9,10 @@ import org.kde.mauikit 1.1 as MauiLab
 Kirigami.ActionToolBar
 {
     id: control
+
+    /**
+      *
+      */
     default property list<MauiLab.ToolButtonAction> mauiActions
     actions:  mauiActions
-}    
+}

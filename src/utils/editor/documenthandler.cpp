@@ -50,7 +50,12 @@
 
 #include "documenthandler.h"
 
-#include <KLocalizedString>
+#if defined Q_OS_MACOS || defined Q_OS_WIN
+#include <KF5/KI18n/KLocalizedString>
+#else
+#include <KI18n/KLocalizedString>
+#endif
+
 #include <QAbstractTextDocumentLayout>
 #include <QDebug>
 #include <QFile>
@@ -75,17 +80,14 @@
 #include <KF5/KSyntaxHighlighting/Repository>
 #include <KF5/KSyntaxHighlighting/SyntaxHighlighter>
 #include <KF5/KSyntaxHighlighting/Theme>
-#elif defined Q_OS_ANDROID
-#include <KSyntaxHighlighting/KSyntaxHighlighting/Definition>
-#include <KSyntaxHighlighting/KSyntaxHighlighting/Repository>
-#include <KSyntaxHighlighting/KSyntaxHighlighting/SyntaxHighlighter>
-#include <KSyntaxHighlighting/KSyntaxHighlighting/Theme>
 #else
 #include <KSyntaxHighlighting/Definition>
 #include <KSyntaxHighlighting/Repository>
 #include <KSyntaxHighlighting/SyntaxHighlighter>
 #include <KSyntaxHighlighting/Theme>
 #endif
+
+#define AUTOSAVE_TIMEOUT 5000
 
 /**
  * Global Variables
@@ -101,7 +103,7 @@ Alerts::Alerts(QObject *parent)
 Alerts::~Alerts()
 {
     qDebug() << "REMOVING ALL DOCUMENTS ALERTS" << this->m_alerts.size();
-    for (auto *alert : this->m_alerts) {
+    for (auto *alert : qAsConst(m_alerts)) {
         delete alert;
         alert = nullptr;
     }
@@ -130,7 +132,7 @@ QHash<int, QByteArray> Alerts::roleNames() const
 
 bool Alerts::contains(DocumentAlert *const alert)
 {
-    for (const auto &alert_ : this->m_alerts) {
+    for (const auto &alert_ : qAsConst(m_alerts)) {
         if (alert_->getId() == alert->getId())
             return true;
     }
@@ -227,11 +229,14 @@ DocumentHandler::DocumentHandler(QObject *parent)
         connect(this, &DocumentHandler::loadFile, m_loader, &FileLoader::loadFile);
         connect(m_loader, &FileLoader::fileReady, [&](QString array, QUrl url) {
             this->setText(array);
-            this->isRich = Qt::mightBeRichText(this->text());
-            emit this->isRichChanged();
-
+            
             if (this->textDocument())
+            {
                 this->textDocument()->setModified(false);
+                
+                this->isRich = Qt::mightBeRichText(this->text());
+                emit this->isRichChanged();                
+            }
 
             emit this->loaded(url);
 
@@ -240,6 +245,19 @@ DocumentHandler::DocumentHandler(QObject *parent)
         m_worker.start();
     }
     // end file loader thread implementation
+    
+    connect(&m_autoSaveTimer, &QTimer::timeout, [this]()
+    {
+        if(m_autoSave && getModified() && !m_fileUrl.isEmpty())
+        {
+            qDebug() << "Autosaving file" << m_fileUrl;
+            saveAs(m_fileUrl);   
+            m_autoSaveTimer.start(AUTOSAVE_TIMEOUT);
+        }            
+    });
+    
+    if(m_autoSave)
+        m_autoSaveTimer.start(AUTOSAVE_TIMEOUT);
 
     connect(this, &DocumentHandler::cursorPositionChanged, [&]() { emit this->currentLineIndexChanged(); });
 
@@ -302,6 +320,26 @@ void DocumentHandler::setAutoReload(const bool &value)
 
     this->m_autoReload = value;
     emit this->autoReloadChanged();
+}
+
+bool DocumentHandler::autoSave() const
+{
+    return m_autoSave;
+}
+
+void DocumentHandler::setAutoSave(const bool &value)
+{
+    if(m_autoSave == value)
+        return;
+    
+    m_autoSave = value;
+    emit autoSaveChanged();
+    
+    if(m_autoSave)
+    {
+        if(!m_autoSaveTimer.isActive())
+            m_autoSaveTimer.start(AUTOSAVE_TIMEOUT);       
+    }else m_autoSaveTimer.stop();
 }
 
 bool DocumentHandler::getModified() const
@@ -367,6 +405,18 @@ void DocumentHandler::setStyle()
         this->m_highlighter->setTheme(style);
         this->m_highlighter->rehighlight();
     }
+    
+    refreshAllBlocks();
+}
+
+void DocumentHandler::refreshAllBlocks()
+{   
+    
+    if(textDocument())
+    {        
+        for (QTextBlock it = textDocument()->begin(); it != textDocument()->end(); it = it.next())
+            textDocument()->documentLayout()->updateBlock(it);
+    }
 }
 
 QString DocumentHandler::formatName() const
@@ -376,11 +426,12 @@ QString DocumentHandler::formatName() const
 
 void DocumentHandler::setFormatName(const QString &formatName)
 {
-    if (this->m_formatName == formatName)
-        return;
-
-    this->m_formatName = formatName;
-    emit this->formatNameChanged();
+    if (this->m_formatName != formatName)
+    {
+        this->m_formatName = formatName;
+        emit this->formatNameChanged();
+    }    
+  
     this->setStyle();
 }
 
@@ -419,10 +470,13 @@ void DocumentHandler::setDocument(QQuickTextDocument *document)
     if (this->textDocument()) {
         this->textDocument()->setModified(false);
         connect(this->textDocument(), &QTextDocument::modificationChanged, this, &DocumentHandler::modifiedChanged);
+        
+        this->load(m_fileUrl);        
+        
+        QTextOption textOptions = this->textDocument()->defaultTextOption();     
+        textOptions.setTabStopDistance(m_tabSpace);
+        textDocument()->setDefaultTextOption(textOptions);        
     }
-
-    // 	connect(this->textDocument(), &QTextDocument::blockCountChanged, [](){});
-    //     connect(this->textDocument(), &QTextDocument::updateRequest, [](){});
 }
 
 int DocumentHandler::cursorPosition() const
@@ -618,6 +672,29 @@ void DocumentHandler::setFontSize(int size)
     emit fontSizeChanged();
 }
 
+void DocumentHandler::setTabSpace(qreal value)
+{
+    if(m_tabSpace == value)
+        return;
+    
+    m_tabSpace = value;
+    
+    if(textDocument())
+    {
+        QTextOption textOptions = this->textDocument()->defaultTextOption();     
+        textOptions.setTabStopDistance(m_tabSpace);
+        textDocument()->setDefaultTextOption(textOptions);
+    }
+    
+    emit tabSpaceChanged();
+    refreshAllBlocks();
+}
+
+qreal DocumentHandler::tabSpace() const
+{
+    return m_tabSpace;
+}
+
 QString DocumentHandler::fileName() const
 {
     const QString filePath = QQmlFile::urlToLocalFileOrQrc(m_fileUrl);
@@ -639,17 +716,27 @@ QUrl DocumentHandler::fileUrl() const
 
 void DocumentHandler::setFileUrl(const QUrl &url)
 {
-    this->load(url);
+ if (url == m_fileUrl)
+        return;
+
+    m_fileUrl = url;
+ 
+    load(m_fileUrl);
+ 
+    emit fileUrlChanged();
+    emit fileInfoChanged();
+}
+
+QVariantMap DocumentHandler::fileInfo() const
+{
+    return FMH::getFileInfo(m_fileUrl);
 }
 
 void DocumentHandler::load(const QUrl &url)
 {
     qDebug() << "TRYING TO LOAD FILE << " << url << url.isEmpty();
-    if (url == m_fileUrl)
+    if(!textDocument())
         return;
-
-    m_fileUrl = url;
-    emit fileUrlChanged();
 
     if (m_fileUrl.isLocalFile() && !FMH::fileExists(m_fileUrl))
         return;
@@ -701,6 +788,7 @@ void DocumentHandler::saveAs(const QUrl &url)
     }
     file.write((isHtml ? doc->toHtml() : doc->toPlainText()).toUtf8());
     file.close();
+    emit fileSaved();
 
     doc->setModified(false);
 
@@ -709,10 +797,6 @@ void DocumentHandler::saveAs(const QUrl &url)
 
     m_fileUrl = url;
     emit fileUrlChanged();
-
-    if (m_enableSyntaxHighlighting) {
-        this->setFormatName(DocumentHandler::getLanguageNameFromFileName(m_fileUrl));
-    }
 }
 
 const QString DocumentHandler::getLanguageNameFromFileName(const QUrl &fileName)

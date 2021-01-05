@@ -17,82 +17,51 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.9
-import QtQuick.Controls 2.10
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 
-Maui.GridView
+/**
+ * GridBrowser
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+Maui.GridView // TODO remove
 {
-	id: control
-	Kirigami.Theme.colorSet: Kirigami.Theme.View
-	
-	itemSize : Maui.Style.iconSizes.large * 2	
-	adaptContent: true
-	
-	property bool showPreviewThumbnails: true
-	property bool checkable : false
-	
-	signal itemClicked(int index)
-	signal itemDoubleClicked(int index)	
-	signal itemToggled(int index, bool state)	
-	signal itemRightClicked(int index)	
-	
-	delegate: Item
-	{
-		property bool isCurrentItem : GridView.isCurrentItem
-		height: control.cellHeight
-		width: control.cellWidth
-		
-		Maui.GridBrowserDelegate
-		{
-			id: delegate
-			
-			iconSizeHint: height * 0.5
-			
-			anchors.centerIn: parent
-			height: control.cellHeight - 5
-			width: control.itemSize
-			padding: Maui.Style.space.tiny
-			isCurrentItem: parent.isCurrentItem
-			
-			checkable: control.checkable
-			showThumbnails: control.showPreviewThumbnails
-			
-			Connections
-			{
-				target: delegate
-				onClicked:
-				{
-					control.currentIndex = index
-					itemClicked(index)
-				}
-				
-				onDoubleClicked:
-				{
-					control.currentIndex = index
-					itemDoubleClicked(index)
-				}
-				
-				onPressAndHold:
-				{
-					control.currentIndex = index
-					control.itemRightClicked(index)
-				}
-				
-				onRightClicked:
-				{
-					control.currentIndex = index
-					control.itemRightClicked(index)
-				}
-				
-				onToggled:
-				{
-					control.currentIndex = index
-					control.itemToggled(index, state)
-				}
-			}
-		}
-	}
+    id: control
+
+    itemSize : Maui.Style.iconSizes.large * 2
+    adaptContent: true
+
+    /**
+      * checkable :
+      */
+    property bool checkable : false
+
+    /**
+      * itemClicked :
+      */
+    signal itemClicked(int index)
+
+    /**
+      * itemDoubleClicked :
+      */
+    signal itemDoubleClicked(int index)
+
+    /**
+      * itemToggled :
+      */
+    signal itemToggled(int index, bool state)
+
+    /**
+      *
+      */
+    signal itemRightClicked(int index)
 }

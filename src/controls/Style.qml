@@ -19,80 +19,107 @@
 
 pragma Singleton
 
-import QtQuick 2.4
+import QtQuick 2.14
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 
+/**
+ * Style
+ * Preferred units and sizes to follow the Maui HIG
+ *
+ */
 QtObject
 {
-	id: style
-	readonly property bool isAndroid: Qt.platform.os == "android"
-	readonly property bool isMobile : Kirigami.Settings.isMobile
+    /**
+      * unit : int
+      */
+    property int unit : Kirigami.Units.devicePixelRatio
 
-	property int unit : Kirigami.Units.devicePixelRatio
+    /**
+      * radiusV : int
+      */
     property int radiusV : Maui.Handy.isWindows ? 2 : 4
-	
-	readonly property int rowHeight: iconSizes.big * 0.95
-	readonly property int rowHeightAlt: rowHeight * 0.8
-	readonly property int contentMargins: space.medium
-	
-    readonly property int toolBarHeight: (iconSizes.medium * 2)
-	readonly property int toolBarHeightAlt: toolBarHeight * 0.9
-	
-	readonly property int defaultFontSize: Kirigami.Theme.defaultFont.pointSize
-	readonly property var fontSizes: ({
-		tiny: defaultFontSize * 0.7,
-		
-		small: (isMobile ? defaultFontSize * 0.7 :
-		defaultFontSize * 0.8),
-		
-		medium: (isMobile ? defaultFontSize * 0.8 :
-		defaultFontSize * 0.9),
-		
-		default: (isMobile ? defaultFontSize * 0.9 :
-			defaultFontSize),
-			
-			big: (isMobile ? defaultFontSize :
-			defaultFontSize * 1.1),
-			
-			large: (isMobile ? defaultFontSize * 1.1 :
-			defaultFontSize * 1.2),
-			
-			huge: (isMobile ? defaultFontSize * 1.2 :
-			defaultFontSize * 1.3),
-			
-			enormous: (isMobile ? defaultFontSize * 1.3 :
-			defaultFontSize * 1.4)
-	})
-	
-	readonly property var space : ({
-		tiny: Kirigami.Units.smallSpacing,
-		small: Kirigami.Units.smallSpacing*2,
-		medium: Kirigami.Units.largeSpacing,
-		big: Kirigami.Units.largeSpacing*2,
-		large: Kirigami.Units.largeSpacing*3,
-		huge: Kirigami.Units.largeSpacing*4,
-		enormous: Kirigami.Units.largeSpacing*5
-	})
-	
-	readonly property var iconSizes : ({
-		tiny : 8,
-        small :  Kirigami.Units.iconSizes.small / (isMobile ? 1.5 : 1),
-        medium : Kirigami.Units.iconSizes.smallMedium / (isMobile ? 1.5 : 1),
-        big:  Kirigami.Units.iconSizes.medium / (isMobile ? 1.5 : 1),
-        large: Kirigami.Units.iconSizes.large / (isMobile ? 1.5 : 1),
-        huge: Kirigami.Units.iconSizes.huge / (isMobile ? 1.5 : 1),
-        enormous: Kirigami.Units.iconSizes.enormous / (isMobile ? 1.5 : 1)		
-	})	
-    
+
+    /**
+      * rowHeight : int
+      */
+    readonly property int rowHeight: Math.round(iconSizes.big)
+
+    /**
+      * rowHeightAlt : int
+      */
+    readonly property int rowHeightAlt: Math.round(rowHeight * 0.8)
+
+    /**
+      * contentMargins : int
+      */
+    readonly property int contentMargins: space.medium
+
+    /**
+      * toolBarHeight : int
+      */
+    readonly property int toolBarHeight: Math.round(iconSizes.medium * 2)
+
+    /**
+      * toolBarHeightAlt : int
+      */
+    readonly property int toolBarHeightAlt: Math.round(toolBarHeight * 0.9)
+
+    /**
+      * defaultFontSize : int
+      */
+    readonly property int defaultFontSize: Kirigami.Theme.defaultFont.pointSize
+
+    /**
+      * fontSizes : var
+      */
+    property QtObject fontSizes : QtObject {
+        property int tiny: Math.round(defaultFontSize * 0.7)
+        property int small: Math.round(defaultFontSize * 0.8)
+        property int medium: defaultFontSize
+        property int big: Math.round(defaultFontSize * 1.1)
+        property int large: Math.round(defaultFontSize * 1.2)
+        property int huge: Math.round(defaultFontSize * 1.3)
+        property int enormous: Math.round(defaultFontSize * 1.4)
+    }
+
+    /**
+      * space : var
+      */
+    property QtObject space: QtObject {
+        property int tiny: Kirigami.Units.smallSpacing
+        property int small: Kirigami.Units.smallSpacing*2
+        property int medium: Kirigami.Units.largeSpacing
+        property int big: Kirigami.Units.largeSpacing*2
+        property int large: Kirigami.Units.largeSpacing*3
+        property int huge: Kirigami.Units.largeSpacing*4
+        property int enormous: Kirigami.Units.largeSpacing*5
+    }
+
+    /**
+      * iconSizes : QtObject
+      */    
+    property QtObject iconSizes: QtObject {
+        property int tiny : 8
+        property int small: Math.floor(Kirigami.Units.fontMetrics.roundedIconSize(16 * Kirigami.Units.devicePixelRatio))
+        property int medium: Math.floor(Kirigami.Units.fontMetrics.roundedIconSize(22 * Kirigami.Units.devicePixelRatio))
+        property int big: Math.floor(Kirigami.Units.fontMetrics.roundedIconSize(32 * Kirigami.Units.devicePixelRatio))
+        property int large: Math.floor(Kirigami.Units.fontMetrics.roundedIconSize(48 * Kirigami.Units.devicePixelRatio))
+        property int huge: Math.floor(Kirigami.Units.fontMetrics.roundedIconSize(64 * Kirigami.Units.devicePixelRatio))
+        property int enormous: Math.floor(128 * Kirigami.Units.devicePixelRatio)
+    }
+
+    /**
+      *
+      */
     function mapToIconSizes(size)
     {
         const values = Object.values(iconSizes);
-        
+
         var closest = values.reduce(function(prev, curr) {
             return (Math.abs(curr - size) < Math.abs(prev - size) ? curr : prev);
         });
         console.log(size, closest, values)
         return closest;
-    }
+    }  
 }

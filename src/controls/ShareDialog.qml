@@ -23,15 +23,29 @@ import QtQuick.Controls 2.2
 import org.kde.mauikit 1.0 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 
+/**
+ * ShareDialog
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 Maui.Dialog
 {
     id: control
+
+    /**
+      * itemUrls : var
+      */
     property var itemUrls : []
 
     widthHint: 0.9
 
     maxHeight: Math.max(_layout.contentHeight, maxWidth) + (page.padding * 2.5) + headBar.height
-    maxWidth: Maui.Style.unit * 500
+    maxWidth: 500
 
     verticalAlignment: Qt.AlignBottom
 
@@ -46,24 +60,27 @@ Maui.Dialog
         anchors.fill: parent
         leftPadding: 0
         rightPadding: 0
-        
+
         Maui.GridBrowser
         {
-			id: grid
-			width: parent.width
-			showEmblem: false
-			model: ListModel {}
-			onItemClicked:
-			{
-				grid.currentIndex = index
-				triggerService(index)
-			}
-		}
+            id: grid
+            width: parent.width
+            showEmblem: false
+            model: ListModel {}
+            onItemClicked:
+            {
+                grid.currentIndex = index
+                triggerService(index)
+            }
+        }
     }
 
 
     onOpened: populate()
 
+    /**
+      *
+      */
     function show(urls)
     {
         if(urls.length > 0)
@@ -73,6 +90,9 @@ Maui.Dialog
         }
     }
 
+    /**
+      *
+      */
     function populate()
     {
         grid.model.clear()
@@ -94,6 +114,9 @@ Maui.Dialog
                 grid.model.append(services[i])
     }
 
+    /**
+      *
+      */
     function triggerService(index)
     {
         var obj = grid.model.get(index)

@@ -36,15 +36,12 @@
 
 #include "tag.h"
 
-#ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
-#endif
 
-#ifdef STATIC_MAUIKIT
-class TAGDB : public QObject
-#else
+/**
+ * @brief The TAGDB class
+ */
 class MAUIKIT_EXPORT TAGDB : public QObject
-#endif
 {
     Q_OBJECT
 private:
@@ -53,21 +50,79 @@ private:
 
 public:
     /* utils*/
+    /**
+     * @brief checkExistance
+     * @param tableName
+     * @param searchId
+     * @param search
+     * @return
+     */
     bool checkExistance(const QString &tableName, const QString &searchId, const QString &search);
+
+    /**
+     * @brief checkExistance
+     * @param queryStr
+     * @return
+     */
     bool checkExistance(const QString &queryStr);
 
 protected:
     TAGDB();
     ~TAGDB();
 
+    /**
+     * @brief getQuery
+     * @param queryTxt
+     * @return
+     */
     QSqlQuery getQuery(const QString &queryTxt);
+
+    /**
+     * @brief openDB
+     * @param name
+     */
     void openDB(const QString &name);
+
+    /**
+     * @brief prepareCollectionDB
+     */
     void prepareCollectionDB() const;
 
+    /**
+     * @brief insert
+     * @param tableName
+     * @param insertData
+     * @return
+     */
     bool insert(const QString &tableName, const QVariantMap &insertData);
-    bool update(const QString &tableName, const TAG::DB &updateData, const QVariantMap &where);
+
+    /**
+     * @brief update
+     * @param tableName
+     * @param updateData
+     * @param where
+     * @return
+     */
+    bool update(const QString &tableName, const FMH::MODEL &updateData, const QVariantMap &where);
+
+    /**
+     * @brief update
+     * @param table
+     * @param column
+     * @param newValue
+     * @param op
+     * @param id
+     * @return
+     */
     bool update(const QString &table, const QString &column, const QVariant &newValue, const QVariant &op, const QString &id);
-    bool remove(const QString &tableName, const TAG::DB &removeData);
+
+    /**
+     * @brief remove
+     * @param tableName
+     * @param removeData
+     * @return
+     */
+    bool remove(const QString &tableName, const FMH::MODEL &removeData);
 };
 
 #endif // DB_H

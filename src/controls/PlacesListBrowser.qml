@@ -1,21 +1,62 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.14
+import QtQuick.Controls 2.14
+
 import QtQuick.Layouts 1.3
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.6 as Kirigami
 
+/**
+ * PlacesListBrowser
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 Maui.ListBrowser
 {
     id: control
 
+    /**
+      * list : PlacesList
+      */
     property alias list : placesList
+
+    /**
+      * itemMenu : Menu
+      */
     property alias itemMenu : _menu
 
+    /**
+      * iconSize : int
+      */
     property int iconSize : Maui.Style.iconSizes.small
 
+    /**
+      * placeClicked :
+      */
     signal placeClicked (string path)
+    signal itemClicked(int index)
+    signal itemDoubleClicked(int index)
+    signal itemRightClicked(int index)
+    
     focus: true
-    model: placesModel
+    model: Maui.BaseModel
+    {
+        id: placesModel
+        list: Maui.PlacesList
+        {
+            id: placesList
+            groups: [
+                Maui.FMList.PLACES_PATH,
+                Maui.FMList.APPS_PATH,
+                Maui.FMList.BOOKMARKS_PATH,
+                Maui.FMList.DRIVES_PATH]
+        }
+    }
+
     section.property: "type"
     section.criteria: ViewSection.FullString
     section.delegate: Maui.LabelDelegate
@@ -31,7 +72,7 @@ Maui.ListBrowser
 
     onItemClicked:
     {
-        var item = list.get(index)
+        var item = placesModel.get(index)
         var path = item.path
 
         placesList.clearBadgeCount(index)
@@ -64,23 +105,6 @@ Maui.ListBrowser
         }
     }
 
-    Maui.BaseModel
-    {
-        id: placesModel
-        list: placesList
-    }
-
-    Maui.PlacesList
-    {
-        id: placesList
-        groups: [
-            Maui.FMList.PLACES_PATH,
-            Maui.FMList.APPS_PATH,
-            Maui.FMList.BOOKMARKS_PATH,
-            Maui.FMList.DRIVES_PATH,
-            Maui.FMList.TAGS_PATH]
-    }
-
     Rectangle
     {
         anchors.fill: parent
@@ -91,6 +115,7 @@ Maui.ListBrowser
     delegate: Maui.ListDelegate
     {
         id: itemDelegate
+        width: ListView.view.width
         iconSize: control.iconSize
         labelVisible: true
         iconVisible: true
@@ -98,31 +123,23 @@ Maui.ListBrowser
         iconName: model.icon
         count: model.count > 0 ? model.count : ""
 
-        leftPadding:  Maui.Style.space.tiny
-        rightPadding: Maui.Style.space.tiny
         radius : Maui.Style.radiusV
-
-        Connections
+        onClicked:
         {
-            target: itemDelegate
-            onClicked:
-            {
-                control.currentIndex = index
-                itemClicked(index)
-            }
+            control.currentIndex = index
+            itemClicked(index)
+        }
 
-            onRightClicked:
-            {
-                control.currentIndex = index
-                itemRightClicked(index)
-            }
+        onRightClicked:
+        {
+            control.currentIndex = index
+            itemRightClicked(index)
+        }
 
-            onPressAndHold:
-            {
-                control.currentIndex = index
-                itemRightClicked(index)
-            }
+        onPressAndHold:
+        {
+            control.currentIndex = index
+            itemRightClicked(index)
         }
     }
-
 }

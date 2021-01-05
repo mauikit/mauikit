@@ -17,278 +17,277 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.9
+import QtQuick 2.14
 import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.3
+import QtQuick.Controls 2.14
 import QtGraphicalEffects 1.0
 
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
-import org.kde.mauikit 1.1 as MauiLab
+import org.kde.mauikit 1.3 as Maui
 
+/**
+ * GridItemTemplate
+ * A template with a icon or image and a bottom label..
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 Item
 {
     id: control
-    
+
+    /**
+      * content : data
+      */
     default property alias content: _layout.data
+
+    /**
+      * text1 : string
+      */
+    property alias text1 : _label1.text
+
+    /**
+      * label1 : Label
+      */
+    property alias label1 : _label1
+
+    /**
+      * iconItem : Item
+      */
+    property alias iconItem : _iconLoader.item
+
+    /**
+      * iconVisible : bool
+      */
+    property alias iconVisible : _iconContainer.visible
+
+    /**
+      * iconSizeHint : int
+      */
+    property int iconSizeHint : Maui.Style.iconSizes.big
+
+    /**
+      * imageSizeHint : int
+      */
+    property int imageSizeHint : iconSizeHint
+
+    /**
+      * imageWidth : int
+      */
+    property int imageWidth : iconSizeHint
+
+    /**
+      * imageHeight : int
+      */
+    property int imageHeight : iconSizeHint
+
+    /**
+      * imageSource : string
+      */
+    property string imageSource
+
+    /**
+      * iconSource : string
+      */
+    property string iconSource
+
+    /**
+      * checkable : bool
+      */
+    property bool checkable : false
+
+    /**
+      * checked : bool
+      */
+    property bool checked : false
+
+    /**
+      * isCurrentItem : bool
+      */
+    property bool isCurrentItem: false
+
+    /**
+      * labelsVisible : bool
+      */
+    property bool labelsVisible: true
+
+    /**
+      * fillMode : Image.fillMode
+      */
+    property int fillMode : Image.PreserveAspectCrop
+
+    /**
+      * maskRadius : int
+      */
+    property int maskRadius: Maui.Style.radiusV
+
+    /**
+      * hovered : bool
+      */
+    property bool hovered: false
+
+    /**
+      * imageBorder : bool
+      */
+    property bool imageBorder: true
+
+     /**
+      * iconComponent : Component
+      */
+    property Component iconComponent :  _iconContainer.visible ? _iconComponent : null
+
+
+    /**
+      * toggled :
+      */
+    signal toggled(bool state)
+
+    Component
+    {
+        id: _iconComponent
         
-        //     implicitHeight: _layout.implicitHeight
-//         implicitWidth: _layout.implicitWidth
-        
-        property alias text1 : _label1.text
-        
-        property alias label1 : _label1
-        
-        property alias iconItem : _iconLoader.item
-        property alias iconVisible : _iconContainer.visible
-        
-        property int iconSizeHint : Maui.Style.iconSizes.big
-        property int imageSizeHint : iconSizeHint
-        
-        property int imageWidth : iconSizeHint
-        property int imageHeight : iconSizeHint
-        
-        property string imageSource
-        property string iconSource
-        
-        property bool checkable : false
-        property bool checked : false
-                
-        property bool isCurrentItem: false
-        property bool labelsVisible: true
-        
-        property int fillMode : Image.PreserveAspectCrop
-        property int maskRadius: Maui.Style.radiusV
-        
-        property bool hovered: false
-        
-        signal toggled(bool state)		
-        
-        Component
+        Maui.IconItem
         {
-            id: _imgComponent
+            iconSource: control.iconSource
+            imageSource: control.imageSource
             
-            Image
+            highlighted: control.isCurrentItem
+            hovered: control.hovered
+            
+            iconSizeHint: control.iconSizeHint
+            imageSizeHint: control.imageSizeHint
+            
+            imageWidth: control.imageWidth
+            imageHeight: control.imageHeight
+            
+            fillMode: control.fillMode
+            maskRadius: control.maskRadius
+            imageBorder: control.imageBorder
+        }
+    }
+
+    ColumnLayout
+    {
+        id: _layout
+        anchors.fill: parent
+        spacing: Maui.Style.space.tiny
+
+        Item
+        {
+            id: _iconContainer
+            Layout.fillWidth: true
+            Layout.preferredHeight: control.imageSource ? control.imageSizeHint : control.iconSizeHint
+
+            Loader
             {
-                id: img
-                anchors.centerIn: parent
-                source: control.imageSource
-                height: parent.height
+                id: _iconLoader
+                anchors.fill: parent
+                sourceComponent: control.iconComponent
+
+                Maui.Badge
+                {
+                    id: _emblem
+
+                    visible: control.checkable || control.checked
+                    size: Maui.Style.iconSizes.medium
+                    anchors.margins: Maui.Style.space.medium
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottom: parent.bottom
+
+                    color: control.checked ? Kirigami.Theme.highlightColor : Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.5)
+
+                    border.color: Kirigami.Theme.textColor
+
+                    onClicked:
+                    {
+                        control.checked = !control.checked
+                        control.toggled(control.checked)
+                    }
+
+                    Maui.CheckMark
+                    {
+                        visible: opacity > 0
+                        color: Kirigami.Theme.highlightedTextColor
+                        anchors.centerIn: parent
+                        height: control.checked ? 10 : 0
+                        width: height
+                        opacity: control.checked ? 1 : 0
+
+                        Behavior on height
+                        {
+                            NumberAnimation
+                            {
+                                duration: Kirigami.Units.shortDuration
+                                easing.type: Easing.InOutQuad
+                            }
+                        }
+
+                        Behavior on opacity
+                        {
+                            NumberAnimation
+                            {
+                                duration: Kirigami.Units.shortDuration
+                                easing.type: Easing.InOutQuad
+                            }
+                        }
+                    }
+                }
+
+                DropShadow
+                {
+                    anchors.fill: _emblem
+                    z: _emblem.z
+                    visible: _emblem.visible
+                    horizontalOffset: 0
+                    verticalOffset: 0
+                    radius: 9.0
+                    samples: 18
+                    color: "#80000000"
+                    source: _emblem
+                }
+            }
+        }
+
+        Item
+        {
+            visible: control.labelsVisible && _label1.text
+            Layout.fillHeight: true
+            Layout.preferredHeight: Math.min(_label1.implicitHeight, height)
+            Layout.fillWidth: true
+
+            Rectangle
+            {
                 width: parent.width
-                sourceSize.width:control.imageWidth
-                sourceSize.height: control.imageHeight
+                height: Math.min(_label1.implicitHeight + Maui.Style.space.tiny, parent.height)
+                anchors.centerIn: parent
+                Behavior on color
+                {
+                    ColorAnimation
+                    {
+                        duration: Kirigami.Units.longDuration
+                    }
+                }
+
+                color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.9))
+
+                radius: Maui.Style.radiusV
+                border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"
+            }
+
+            Label
+            {
+                id: _label1
                 horizontalAlignment: Qt.AlignHCenter
                 verticalAlignment: Qt.AlignVCenter
-                fillMode: control.fillMode
-                cache: true
-                asynchronous: true
-                smooth: false
-                
-                layer.enabled: control.maskRadius
-                layer.effect: OpacityMask
-                {
-                    maskSource: Item
-                    {
-                        width: img.width
-                        height: img.height
-                        Rectangle
-                        {
-                            anchors.fill: parent
-                            radius: control.maskRadius                          
-                        }
-                    }
-                }
-                
-                Rectangle
-                {
-                    anchors.fill: parent
-                    border.color: Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.8)   
-                    radius: control.maskRadius
-                    opacity: 0.2
-                    color: control.hovered ? control.Kirigami.Theme.highlightColor : "transparent"
-                    
-                    Kirigami.Icon
-                    {
-                        anchors.centerIn: parent
-                        height: Math.min(22, parent.height * 0.4)
-                        width: height
-                        source: "folder-images"
-                        isMask: true
-                        color: parent.border.color
-                        opacity: 1 - img.progress
-                    }
-                }               
-            }
-        }
-        
-        Component
-        {
-            id: _iconComponent
-            
-            Kirigami.Icon
-            {
-                anchors.centerIn: parent
-                source: control.iconSource
-                fallback: "application-x-zerosize"
-                height: Math.min(parent.height, control.iconSizeHint)
-                width: height
+                anchors.fill: parent
+                anchors.margins: Maui.Style.space.tiny
+                elide: Qt.ElideRight
+                wrapMode: Text.Wrap
                 color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
-                
-                ColorOverlay
-                {
-                    visible: control.hovered
-                    opacity: 0.3
-                    anchors.fill: parent
-                    source: parent
-                    color: control.Kirigami.Theme.highlightColor
-                } 
-            }            
-        }
-        
-        ColumnLayout
-        {
-            id: _layout
-            anchors.fill: parent
-            spacing: Maui.Style.space.tiny
-            
-            Item
-            {
-                id: _iconContainer
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.maximumHeight: control.imageSource ? control.imageSizeHint : control.iconSizeHint
-                Layout.minimumHeight: control.imageSource ? control.imageSizeHint : control.iconSizeHint 
-                
-                Loader
-                {
-                    id: _iconLoader
-                    anchors.fill: parent
-                    sourceComponent: _iconContainer.visible ? (control.imageSource ? _imgComponent : (control.iconSource ?  _iconComponent : null) ): null                    
-
-                    Maui.Badge
-                    {
-                        id: _emblem
-                        
-                        visible: control.checkable || control.checked
-                        
-                        size: Maui.Style.iconSizes.medium        
-                        anchors.margins: Maui.Style.space.medium
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.bottom: parent.bottom
-                        
-                        color: control.checked ? Kirigami.Theme.highlightColor : Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.5)
-                        
-                        border.color: Kirigami.Theme.textColor
-                        
-                        onClicked: 
-                        {
-							control.checked = !control.checked
-							control.toggled(control.checked)
-						}
-						
-                        MauiLab.CheckMark
-                        {
-							visible: opacity > 0
-							color: Kirigami.Theme.highlightedTextColor
-							anchors.centerIn: parent
-							height: control.checked ? 10 : 0
-							width: height
-							opacity: control.checked ? 1 : 0
-							
-							Behavior on height
-							{
-								NumberAnimation
-								{
-									duration: Kirigami.Units.shortDuration
-									easing.type: Easing.InOutQuad
-								}
-							}
-							
-							Behavior on opacity
-							{
-								NumberAnimation
-								{
-									duration: Kirigami.Units.shortDuration
-									easing.type: Easing.InOutQuad
-								}
-							}
-						}
-                    } 
-                    
-                    DropShadow
-                    {
-                        anchors.fill: _emblem
-                        z: _emblem.z
-                        visible: _emblem.visible
-                        horizontalOffset: 0
-                        verticalOffset: 0
-                        radius: 9.0
-                        samples: 18
-                        color: "#80000000"
-                        source: _emblem
-                    }
-                }
-                
-                Rectangle
-                {
-                    visible: !control.labelsVisible 
-                    anchors.fill: parent
-                    
-                    Behavior on color
-                    {
-                        ColorAnimation
-                        {
-                            duration: Kirigami.Units.longDuration
-                        }
-                    }
-                    
-                    color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
-                    
-                    radius: Maui.Style.radiusV
-                    border.width: 2
-                    border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"                    
-                }                  
-            }
-            
-            
-            Item
-            {
-                visible: control.labelsVisible
-                
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                
-                Rectangle
-                {
-                    width: parent.width
-                    height: Math.min(_label1.height + Maui.Style.space.small, parent.height)
-                    anchors.centerIn: parent
-                    Behavior on color
-                    {
-                        ColorAnimation
-                        {
-                            duration: Kirigami.Units.longDuration
-                        }
-                    }
-                    
-                    color: control.isCurrentItem || control.hovered ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.2) : control.Kirigami.Theme.backgroundColor
-                    
-                    radius: Maui.Style.radiusV
-                    border.color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : "transparent"                    
-                }  
- 
-                Label
-                {
-                    id: _label1
-                    horizontalAlignment: Qt.AlignHCenter
-                    verticalAlignment: Qt.AlignVCenter
-                    width: control.width
-                    height: Math.min(parent.height, implicitHeight)
-                    anchors.centerIn: parent
-                    elide: Qt.ElideRight
-                    wrapMode: Text.Wrap
-                    color: control.isCurrentItem ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor                }
-                
             }
         }
+    }
 }

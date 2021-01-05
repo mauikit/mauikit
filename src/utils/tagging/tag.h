@@ -30,6 +30,8 @@
 #include <QTime>
 #include <QVariantList>
 
+#include "fmh.h"
+
 namespace TAG
 {
 enum class TABLE : uint8_t { USERS, TAGS_USERS, APPS_USERS, TAGS, TAGS_URLS, APPS, ABSTRACT, TAGS_ABSTRACT, NONE };
@@ -43,46 +45,46 @@ static const QMap<TABLE, QString> TABLEMAP = {{TABLE::TAGS, "tags"},
                                               {TABLE::TAGS_ABSTRACT, "tags_abstract"},
                                               {TABLE::APPS_USERS, "apps_users"}};
 
-enum KEYS : uint_fast8_t { URL, ICON, APP, URI, MAC, LAST_SYNC, NAME, VERSION, LOT, TAG, COLOR, ADD_DATE, COMMENT, MIME, TITLE, DEVICE, KEY }; /* Q_ENUM_NS(KEYS);*/
+//enum KEYS : uint_fast8_t { URL, ICON, APP, URI, MAC, LAST_SYNC, NAME, VERSION, LOT, TAG, COLOR, ADD_DATE, COMMENT, MIME, TITLE, DEVICE, KEY }; /* Q_ENUM_NS(KEYS);*/
 
-typedef QMap<TAG::KEYS, QString> DB;
-typedef QList<DB> DB_LIST;
+//typedef QMap<TAG::KEYS, QString> DB;
+//typedef QList<DB> DB_LIST;
 
-static const DB KEYMAP = {{TAG::KEYS::URL, "url"},
-                          {TAG::KEYS::TAG, "tag"},
-                          {TAG::KEYS::ICON, "icon"},
-                          {TAG::KEYS::COLOR, "color"},
-                          {TAG::KEYS::ADD_DATE, "addDate"},
-                          {TAG::KEYS::COMMENT, "comment"},
-                          {TAG::KEYS::MIME, "mime"},
-                          {TAG::KEYS::TITLE, "title"},
-                          {TAG::KEYS::NAME, "name"},
-                          {TAG::KEYS::DEVICE, "device"},
-                          {TAG::KEYS::MAC, "mac"},
-                          {TAG::KEYS::LAST_SYNC, "lastSync"},
-                          {TAG::KEYS::LOT, "lot"},
-                          {TAG::KEYS::KEY, "key"},
-                          {TAG::KEYS::APP, "app"},
-                          {TAG::KEYS::URI, "uri"},
-                          {TAG::KEYS::VERSION, "version"}};
+//static const DB KEYMAP = {{TAG::KEYS::URL, "url"},
+//                          {TAG::KEYS::TAG, "tag"},
+//                          {TAG::KEYS::ICON, "icon"},
+//                          {TAG::KEYS::COLOR, "color"},
+//                          {TAG::KEYS::ADD_DATE, "addDate"},
+//                          {TAG::KEYS::COMMENT, "comment"},
+//                          {TAG::KEYS::MIME, "mime"},
+//                          {TAG::KEYS::TITLE, "title"},
+//                          {TAG::KEYS::NAME, "name"},
+//                          {TAG::KEYS::DEVICE, "device"},
+//                          {TAG::KEYS::MAC, "mac"},
+//                          {TAG::KEYS::LAST_SYNC, "lastSync"},
+//                          {TAG::KEYS::LOT, "lot"},
+//                          {TAG::KEYS::KEY, "key"},
+//                          {TAG::KEYS::APP, "app"},
+//                          {TAG::KEYS::URI, "uri"},
+//                          {TAG::KEYS::VERSION, "version"}};
 
-static const QMap<QString, TAG::KEYS> MAPKEY = {{TAG::KEYMAP[KEYS::URL], KEYS::URL},
-                                                {TAG::KEYMAP[KEYS::TAG], KEYS::TAG},
-                                                {TAG::KEYMAP[KEYS::ICON], KEYS::ICON},
-                                                {TAG::KEYMAP[KEYS::COLOR], KEYS::COLOR},
-                                                {TAG::KEYMAP[KEYS::ADD_DATE], KEYS::ADD_DATE},
-                                                {TAG::KEYMAP[KEYS::COMMENT], KEYS::COMMENT},
-                                                {TAG::KEYMAP[KEYS::MIME], KEYS::MIME},
-                                                {TAG::KEYMAP[KEYS::TITLE], KEYS::TITLE},
-                                                {TAG::KEYMAP[KEYS::NAME], KEYS::NAME},
-                                                {TAG::KEYMAP[KEYS::DEVICE], KEYS::DEVICE},
-                                                {TAG::KEYMAP[KEYS::MAC], KEYS::MAC},
-                                                {TAG::KEYMAP[KEYS::LAST_SYNC], KEYS::LAST_SYNC},
-                                                {TAG::KEYMAP[KEYS::LOT], KEYS::LOT},
-                                                {TAG::KEYMAP[KEYS::KEY], KEYS::KEY},
-                                                {TAG::KEYMAP[KEYS::APP], KEYS::APP},
-                                                {TAG::KEYMAP[KEYS::URI], KEYS::URI},
-                                                {TAG::KEYMAP[KEYS::VERSION], KEYS::VERSION}};
+//static const QMap<QString, TAG::KEYS> MAPKEY = {{TAG::KEYMAP[KEYS::URL], KEYS::URL},
+//                                                {TAG::KEYMAP[KEYS::TAG], KEYS::TAG},
+//                                                {TAG::KEYMAP[KEYS::ICON], KEYS::ICON},
+//                                                {TAG::KEYMAP[KEYS::COLOR], KEYS::COLOR},
+//                                                {TAG::KEYMAP[KEYS::ADD_DATE], KEYS::ADD_DATE},
+//                                                {TAG::KEYMAP[KEYS::COMMENT], KEYS::COMMENT},
+//                                                {TAG::KEYMAP[KEYS::MIME], KEYS::MIME},
+//                                                {TAG::KEYMAP[KEYS::TITLE], KEYS::TITLE},
+//                                                {TAG::KEYMAP[KEYS::NAME], KEYS::NAME},
+//                                                {TAG::KEYMAP[KEYS::DEVICE], KEYS::DEVICE},
+//                                                {TAG::KEYMAP[KEYS::MAC], KEYS::MAC},
+//                                                {TAG::KEYMAP[KEYS::LAST_SYNC], KEYS::LAST_SYNC},
+//                                                {TAG::KEYMAP[KEYS::LOT], KEYS::LOT},
+//                                                {TAG::KEYMAP[KEYS::KEY], KEYS::KEY},
+//                                                {TAG::KEYMAP[KEYS::APP], KEYS::APP},
+//                                                {TAG::KEYMAP[KEYS::URI], KEYS::URI},
+//                                                {TAG::KEYMAP[KEYS::VERSION], KEYS::VERSION}};
 
 const QString TaggingPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/maui/tagging/";
 const QString DBName = "tagging.db";

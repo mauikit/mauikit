@@ -40,5 +40,7 @@
         <file>ToolTip.qml</file>
         <file>private/DefaultListItemBackground.qml</file>
         <file>CheckIndicator.qml</file>
+        <file>MenuSeparator.qml</file>
     </qresource>
+    <qresource prefix="/"/>
 </RCC>

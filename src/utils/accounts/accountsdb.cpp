@@ -17,7 +17,6 @@ AccountsDB::AccountsDB(QObject *parent)
     MAUIAndroid::checkRunTimePermissions({"android.permission.WRITE_EXTERNAL_STORAGE"});
 #endif
 
-    qDebug() << "TRY TO CREATE ACCOUNTS DB";
     QDir collectionDBPath_dir(FMPath.toLocalFile());
     if (!collectionDBPath_dir.exists())
         collectionDBPath_dir.mkpath(".");
@@ -176,11 +175,13 @@ bool AccountsDB::update(const QString &tableName, const FMH::MODEL &updateData, 
     }
 
     QStringList set;
-    for (auto key : updateData.keys())
+    const auto updateKeys = updateData.keys();
+    for (const auto &key : updateKeys)
         set.append(FMH::MODEL_NAME[key] + " = '" + updateData[key] + "'");
 
     QStringList condition;
-    for (auto key : where.keys())
+    const auto keys = where.keys();
+    for (const auto &key : keys)
         condition.append(key + " = '" + where[key].toString() + "'");
 
     QString sqlQueryString = "UPDATE " + tableName + " SET " + QString(set.join(",")) + " WHERE " + QString(condition.join(","));
@@ -209,7 +210,8 @@ bool AccountsDB::remove(const QString &tableName, const FMH::MODEL &removeData)
 
     QString strValues;
     auto i = 0;
-    for (auto key : removeData.keys()) {
+    const auto keys = removeData.keys();
+    for (const auto &key : keys) {
         strValues.append(QString("%1 = \"%2\"").arg(FMH::MODEL_NAME[key], removeData[key]));
         i++;
 

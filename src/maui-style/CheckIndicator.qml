@@ -35,63 +35,83 @@
 ****************************************************************************/
 
 import QtQuick 2.12
-import QtQuick.Controls.Material 2.12
-import QtQuick.Controls.Material.impl 2.12
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 
-Rectangle {
+Rectangle
+{
     id: indicatorItem
     implicitWidth: 18
     implicitHeight: 18
-    color: !control.enabled ? control.Kirigami.Theme.backgroundColor
-                            : checked ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.6) : control.Kirigami.Theme.backgroundColor
+    color: !control.enabled ? "transparent"
+                            :(checked ? Qt.rgba(control.Kirigami.Theme.highlightColor.r, control.Kirigami.Theme.highlightColor.g, control.Kirigami.Theme.highlightColor.b, 0.4) : control.Kirigami.Theme.backgroundColor)
     border.color: !control.enabled ? control.Kirigami.Theme.disabledTextColor
-        : checked ? control.Kirigami.Theme.highlightColor: control.Kirigami.Theme.textColor
-    border.width: 2
-    radius: control.autoExclusive ? Math.min(height, width) : 2
+                                   : checked ? control.Kirigami.Theme.highlightColor: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.9))
+    border.width: control.checked ? 1 : 1
+    radius: control.autoExclusive ? Math.min(height, width) : Maui.Style.radiusV
 
     property Item control
     property bool checked : control.checked
 
-    Behavior on border.width {
-        NumberAnimation {
+    Behavior on border.width
+    {
+        NumberAnimation
+        {
             duration: 100
             easing.type: Easing.OutCubic
         }
     }
 
-    Behavior on border.color {
-        ColorAnimation {
+    Behavior on border.color
+    {
+        ColorAnimation
+        {
             duration: 100
             easing.type: Easing.OutCubic
         }
-    }   
+    }
 
-    Image
+    Kirigami.Icon
     {
-           id: checkImage
-           x: (parent.width - width) / 2
-           y: (parent.height - height) / 2
-           width: 14
-           height: 14
-           source: "qrc:/qt-project.org/imports/QtQuick/Controls.2/Material/images/check.png"
-           fillMode: Image.PreserveAspectFit
+        visible: !control.autoExclusive
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+        width: 14
+        height: 16
+        source: "qrc:/qt-project.org/imports/QtQuick/Controls.2/Material/images/check.png"
+        color: control.checked ? Kirigami.Theme.highlightColor : "transparent"
 
-           scale: checked ? 1 : 0
-           Behavior on scale { NumberAnimation { duration: 100 } }
-       }
+        scale: checked ? 1 : 0
+        Behavior on scale { NumberAnimation { duration: 100 } }
+    }
 
-    transitions: Transition {
-        SequentialAnimation {
-            NumberAnimation {
+    Rectangle
+    {
+        visible: control.autoExclusive
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+        width: 10
+        height: 10
+        color: control.checked ? Kirigami.Theme.highlightColor : "transparent"
+        radius: height
+        scale: checked ? 1 : 0
+        Behavior on scale { NumberAnimation { duration: 100 } }
+    }
+
+    transitions: Transition
+    {
+        SequentialAnimation
+        {
+            NumberAnimation
+            {
                 target: indicatorItem
                 property: "scale"
                 // Go down 2 pixels in size.
                 to: 1 - 2 / indicatorItem.width
                 duration: 120
             }
-            NumberAnimation {
+            NumberAnimation
+            {
                 target: indicatorItem
                 property: "scale"
                 to: 1

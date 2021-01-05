@@ -34,7 +34,6 @@ Taglist 1.0 private/TagList.qml
 GridBrowser 1.0 GridBrowser.qml
 ListBrowser 1.0 ListBrowser.qml
 FileBrowser 1.0 FileBrowser.qml
-FilePreviewer 1.0 FilePreviewer.qml
 FileDialog 1.0 FileDialog.qml
 PlacesListBrowser 1.0 PlacesListBrowser.qml
 PathBar 1.0 PathBar.qml
@@ -47,14 +46,12 @@ Terminal 1.0 Terminal.qml
 SyncDialog 1.0 SyncDialog.qml
 SyncDialog 1.0 SyncDialogA.qml
 Editor 1.0 Editor.qml
-ColorsBar 1.0 ColorsBar.qml
 Holder 1.0 Holder.qml
 ImageViewer 1.0 ImageViewer.qml
 TabBar 1.0 TabBar.qml
 TabButton 1.0 TabButton.qml
 ActionSideBar 1.0 ActionSideBar.qml
 ToolActions 1.0 ToolActions.qml
-DocumentPreview 1.0 DocumentPreview.qml
 ToolButtonMenu 1.0 ToolButtonMenu.qml
 ListItemTemplate 1.0 ListItemTemplate.qml
 GridItemTemplate 1.0 GridItemTemplate.qml
@@ -79,6 +76,20 @@ ToolButtonAction 1.1 labs/ToolButtonAction.qml
 TabsBrowser 1.1 labs/TabsBrowser.qml
 SettingsDialog 1.1 labs/SettingsDialog.qml
 SettingsSection 1.1 labs/SettingsSection.qml
-Doodle 1.1 labs/Doodle.qml
+SettingTemplate 1.2 labs/SettingTemplate.qml
 
 AlternateListItem 1.2 labs/AlternateListItem.qml
+Separator 1.2 labs/Separator.qml
+
+TerminalInputArea 1.3 private/TerminalInputArea.qml
+
+CollageItem 1.3 labs/CollageItem.qml
+GalleryRollItem 1.3 labs/GalleryRollItem
+FileListingDialog 1.3 labs/FileListingDialog.qml
+SectionDropDown 1.3 labs/SectionDropDown.qml
+IconItem 1.3 labs/IconItem.qml
+DoodleCanvas 1.3 labs/DoodleCanvas.qml
+Doodle 1.3 labs/Doodle.qml
+FlexListItem 1.3 labs/FlexListItem.qml
+IconItem 1.3 labs/IconItem.qml
+Chip 1.3 labs/Chip.qml

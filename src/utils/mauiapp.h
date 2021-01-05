@@ -23,98 +23,38 @@
 
 #include "fmh.h"
 
-#ifndef STATIC_MAUIKIT
 #include "mauikit_export.h"
-#endif
 
 #include <QColor>
 #include <QSettings>
 
-struct MauiTheme {
-    Q_GADGET
-    Q_PROPERTY(int borderRadius READ getRadius CONSTANT FINAL)
-    Q_PROPERTY(bool maskButtons READ getMaskButtons CONSTANT FINAL)
-
-    static QUrl confFile(const QUrl &path)
-    {
-        const auto conf = QUrl(path.toString() + "/config.conf");
-        qDebug() << "LOOKING FOR STYLE IMAGE" << conf;
-
-        if (FMH::fileExists(conf)) {
-            return conf;
-        }
-
-        return path;
-    }
-
-    QVariant getSettings(const QString &group, const QString &key, const QVariant &defaultValue) const
-    {
-        const auto conf = confFile(path);
-
-        if (conf.isValid()) {
-            QSettings settings(conf.toLocalFile(), QSettings::IniFormat);
-            QVariant res;
-            settings.setDefaultFormat(QSettings::IniFormat);
-            settings.beginGroup(group);
-            res = settings.value(key, defaultValue);
-            settings.endGroup();
-
-            return res;
-        }
-
-        return defaultValue;
-    }
-
-public:
-    QUrl path;
-    Q_INVOKABLE QUrl buttonAsset(const QString &key, const QString &state) const
-    {
-        auto res = getSettings(key, state, QString());
-
-        if (!res.toString().isEmpty()) {
-            auto imageUrl = QUrl(path.toString() + "/" + res.toString());
-            if (FMH::fileExists(imageUrl)) {
-                return imageUrl;
-            }
-        }
-
-        return QUrl();
-    }
-
-    int getRadius() const
-    {
-        auto res = getSettings("Decoration", "BorderRadius", 6);
-        return res.toInt();
-    }
-
-    bool getMaskButtons() const
-    {
-        auto res = getSettings("Decoration", "MaskButtons", true);
-        return res.toBool();
-    }
-};
-Q_DECLARE_METATYPE(MauiTheme)
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
+#include <KAboutData>
+#elif defined Q_OS_WIN
+#include <KF5/KCoreAddons/KAboutData>
+#else
+#include <KCoreAddons/KAboutData>
+#endif
 
 class MauiAccounts;
-#ifdef STATIC_MAUIKIT
-class MauiApp : public QObject
-#else
+
+/**
+ * @brief The MauiApp class
+ * The MauiApp is a global instance and is declared to QML as an attached property, so it can be used widely by importing the org.kde.maui namespace
+ * Example:
+ * import org.kde.mauikit 1.2 as Maui
+ *
+ * Maui.ApplicationWindow
+ * {
+ *      title: Maui.App.name
+ * }
+ */
+
 class MAUIKIT_EXPORT MauiApp : public QObject
-#endif
 {
     Q_OBJECT
-    Q_PROPERTY(QString name READ getName CONSTANT FINAL)
-    Q_PROPERTY(QString displayName READ getDisplayName CONSTANT FINAL)
-    Q_PROPERTY(QString version READ getVersion CONSTANT FINAL)
-    Q_PROPERTY(QString org READ getOrg CONSTANT FINAL)
-    Q_PROPERTY(QString domain READ getDomain CONSTANT FINAL)
-
-    Q_PROPERTY(QVariantList credits READ getCredits CONSTANT FINAL)
-
-    Q_PROPERTY(QString iconName READ getIconName WRITE setIconName NOTIFY iconNameChanged)
-    Q_PROPERTY(QString description READ getDescription WRITE setDescription NOTIFY descriptionChanged)
-    Q_PROPERTY(QString webPage READ getWebPage WRITE setWebPage NOTIFY webPageChanged)
-    Q_PROPERTY(QString reportPage READ getReportPage WRITE setReportPage NOTIFY reportPageChanged)
+    Q_PROPERTY(KAboutData about READ getAbout CONSTANT FINAL)
+    Q_PROPERTY(QString iconName READ getIconName WRITE setIconName NOTIFY iconNameChanged)   
     Q_PROPERTY(QString donationPage READ getDonationPage WRITE setDonationPage NOTIFY donationPageChanged)
 
     Q_PROPERTY(QString mauikitVersion READ getMauikitVersion CONSTANT FINAL)
@@ -129,16 +69,16 @@ class MAUIKIT_EXPORT MauiApp : public QObject
     Q_PROPERTY(QStringList leftWindowControls MEMBER m_leftWindowControls NOTIFY leftWindowControlsChanged FINAL)
     Q_PROPERTY(QStringList rightWindowControls MEMBER m_rightWindowControls NOTIFY rightWindowControlsChanged FINAL)
 
-    // Theming and branding support
-    Q_PROPERTY(MauiTheme theme READ theme NOTIFY themeChanged FINAL)
-
 public:
     static MauiApp *qmlAttachedProperties(QObject *object);
 
     static MauiApp *instance()
     {
-        static MauiApp app;
-        return &app;
+        if(m_instance)
+            return m_instance;
+
+        m_instance = new MauiApp;
+        return m_instance;
     }
 
     MauiApp(const MauiApp &) = delete;
@@ -146,80 +86,106 @@ public:
     MauiApp(MauiApp &&) = delete;
     MauiApp &operator=(MauiApp &&) = delete;
 
-    static QString getName();
-
-    static QString getDisplayName();
-
-    static QString getVersion();
-
-    static QString getOrg();
-
-    static QString getDomain();
-
+    /**
+     * @brief getMauikitVersion
+     * MauiKit string version
+     * @return
+     */
     static QString getMauikitVersion();
 
+    /**
+     * @brief getQtVersion
+     * Qt string version
+     * @return
+     */
     static QString getQtVersion();
 
-    QString getDescription() const;
-
-    void setDescription(const QString &value);
-
+      /**
+     * @brief getIconName
+     * Application icon name as a URL to the image asset
+     * @return
+     */
     QString getIconName() const;
 
+    /**
+     * @brief setIconName
+     * Set URL to the image asset to be set as the application icon
+     * @param value
+     */
     void setIconName(const QString &value);
 
-    QString getWebPage() const;
-
-    void setWebPage(const QString &value);
-
+    /**
+     * @brief getDonationPage
+     * Application donation web page link
+     * @return
+     */
     QString getDonationPage() const;
 
+    /**
+     * @brief setDonationPage
+     * Set application web page link
+     * @param value
+     */
     void setDonationPage(const QString &value);
 
-    QString getReportPage() const;
-
-    void setReportPage(const QString &value);
-
+    /**
+     * @brief getHandleAccounts
+     * If the application is meant to support online accounts
+     * @return
+     * True if the application supports online account
+     */
     bool getHandleAccounts() const;
+
+    /**
+     * @brief setHandleAccounts
+     * Set if the application is meant to support online accounts, if it supports online accounts a list of avaliable accounts is shown in the main application menu
+     * @param value
+     */
     void setHandleAccounts(const bool &value);
 
-    QVariantList getCredits() const
+    /**
+     * @brief getCredits
+     * Returns a model of the credits represented as a QVariantList, some of the fields used are: name, email, year.
+     * @return
+     */
+    KAboutData getAbout() const
     {
-        return m_credits;
-    }
-    void setCredits(const QVariantList &credits)
-    {
-        m_credits = credits;
-    }
-
-    // Theming and branding support
-    MauiTheme theme()
-    {
-        return m_theme;
+        return KAboutData::applicationData();
     }
 
-    // CSD support
+    /**
+     * @brief enableCSD
+     * If the apps supports CSD (client side decorations) the window controls are drawn within the app main header, following the system buttons order, and allows to drag to move windows and resizing.
+     * @return
+     * If the application has been marked manually to use CSD or if in the mauiproject.conf file the CSD field has been set
+     */
     bool enableCSD() const;
+
+    /**
+     * @brief setEnableCSD
+     * Manually enable CSD for this single application ignoreing the system wide mauiproject.conf CSD field value
+     * @param value
+     */
     void setEnableCSD(const bool &value);
 
 #ifdef COMPONENT_ACCOUNTS
+    /**
+     * @brief getAccounts
+     * Model of the avaliable accounts in the system. This feature can be skipped on building time making use of the variable COMPONENT_ACCOUNTS, if such variable has been set to false then this method doesn't exists.
+     * @return
+     */
     MauiAccounts *getAccounts() const;
 #endif
 
+    static void setDefaultMauiStyle();
+
 private:
+    static MauiApp*m_instance;
     MauiApp();
     MauiAccounts *m_accounts;
 
-    QString description;
-    QString iconName;
-
-    QString webPage;
-    QString donationPage;
-    QString reportPage;
-    QVariantList m_credits;
-
-    // Theming and branding support
-    MauiTheme m_theme;
+    QString m_iconName;
+    QString m_donationPage;
 
     // CSD support
     bool m_enableCSD = false;
@@ -227,19 +193,11 @@ private:
     QStringList m_rightWindowControls;
 
     void getWindowControlsSettings();
-
-#ifdef COMPONENT_ACCOUNTS
-    bool handleAccounts = true;
-#else
     bool handleAccounts = false;
-#endif
 
 signals:
-    void iconNameChanged(QString iconName);
-    void descriptionChanged(QString description);
-    void webPageChanged(QString webPage);
-    void donationPageChanged(QString donationPage);
-    void reportPageChanged(QString reportPage);
+    void iconNameChanged();
+    void donationPageChanged();
     void handleAccountsChanged();
     void sendNotification(QString iconName, QString title, QString body, QJSValue callback, int timeout, QString buttonText);
 
@@ -247,7 +205,6 @@ signals:
     void enableCSDChanged();
     void leftWindowControlsChanged();
     void rightWindowControlsChanged();
-    void themeChanged();
 
 public slots:
     void notify(const QString &icon = "emblem-warning", const QString &title = "Oops", const QString &body = "Something needs your attention", const QJSValue &callback = {}, const int &timeout = 2500, const QString &buttonText = "Ok");

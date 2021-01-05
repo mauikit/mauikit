@@ -17,13 +17,22 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.12
-import QtQuick.Controls 2.12
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
-import "private"
+import org.kde.mauikit 1.2 as Maui
 
+/**
+ * AbstractSideBar
+ * A global sidebar for the application window that can be collapsed.
+ *
+ * To use a collapsable sidebar is a better idea to make use of the SideBar or ActionSideBar components
+ * which are ready for it and are handled by a ListView, you only need a data model or list of actions to be used.
+ *
+ *
+ *
+ */
 Drawer
 {
     id: control
@@ -31,21 +40,50 @@ Drawer
     implicitHeight: window().internalHeight
     height: implicitHeight
     y: (window().header && !window().altHeader ? window().header.height : 0)
-//    closePolicy: modal || collapsed ?  Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
+    //    closePolicy: modal || collapsed ?  Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
     interactive: modal || collapsed || !visible
-    dragMargin: Maui.Style.space.big    
+    dragMargin: Maui.Style.space.big
     modal: false
+
+    /**
+      * content : Item.data
+      * The main content is added to an Item contents, it can anchored or sized normally.
+      */
+    default property alias content : _content.data
+
+    /**
+      * collapsible : bool
+      * If the sidebar can be collapsed into a slimmer bar with a width defined by the collapsedSize hint.
+      */
     property bool collapsible: false
+
+    /**
+      * collapsed : bool
+      * If the sidebar should be collapsed or not, this property can be used to dynamically collapse
+      * the sidebar on constrained spaces.
+      */
     property bool collapsed: false
-    property int collapsedSize: 0
+
+    /**
+      * preferredWidth : int
+      * The preferred width of the sidebar in the expanded state.
+      */
     property int preferredWidth : Kirigami.Units.gridUnit * 12
+
+    /**
+      * overlay : MouseArea
+      * When the application has a constrained width to fit the sidebar and main contain,
+      * the sidebar is in a constrained state, and the app main content gets dimmed by an overlay.
+      * This property gives access to such ovelay element drawn on top of the app contents.
+      */
     readonly property alias overlay : _overlay
 
-    onCollapsedChanged: position = (collapsed && collapsedSize < 1) ? 0 : 1
-	default property alias content : _content.data
-    
+    /**
+      * contentDropped
+      */
     signal contentDropped(var drop)
-// 	background: null
+
+    onCollapsedChanged: position = (collapsed) ? 0 : 1
 
     MouseArea
     {
@@ -54,7 +92,7 @@ Drawer
         anchors.fill: parent
         anchors.margins: 0
         anchors.leftMargin: (control.width * control.position)
-        parent: window().contentItem
+        parent: window().pageContent
         preventStealing: true
         propagateComposedEvents: false
         visible: false
@@ -71,19 +109,24 @@ Drawer
     //		if(control.visible && !control.modal)
     //			control.position = 1
     //	}
-    
-    contentItem: Item
+
+    contentItem: null
+
+    Item
     {
-		id: _content
-		Kirigami.Separator
-		{
-			z: parent.z + 999		
-			anchors.right: parent.right
-			anchors.top: parent.top
-			anchors.bottom: parent.bottom
-		}
-	}   
-	
+        id: _content
+        anchors.fill: parent
+
+        Maui.Separator
+        {
+            z: 9999
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            position: Qt.Vertical
+        }
+    }
+
     Component.onCompleted:
     {
         if(!control.collapsed && control.visible)
@@ -98,7 +141,7 @@ Drawer
         enabled: control.collapsible && control.position === 1
         NumberAnimation
         {
-            duration: Kirigami.Units.longDuration
+            duration: Kirigami.Units.shortDuration
             easing.type: Easing.InOutQuad
         }
     }
@@ -113,6 +156,11 @@ Drawer
         {
             control.contentDropped(drop)
         }
+    }
+
+    background: Rectangle
+    {
+        color: Kirigami.Theme.backgroundColor
     }
 }
 

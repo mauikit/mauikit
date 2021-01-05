@@ -17,43 +17,103 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 2.2
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui
-import QtGraphicalEffects 1.0
-import "private"
+import org.kde.mauikit 1.2 as Maui
 
+/**
+ * GridBrowserDelegate
+ * A GridItemTemplate wrapped into a ItemDelegate to make it clickable and draggable.
+ *
+ * For more details check the ItemDelegate and GridItemTemplate documentation.
+ *
+ * This mix adds a drop area, tooltip information and a custom styling.
+ *
+ *
+ */
 Maui.ItemDelegate
 {
     id: control
 
-    property bool showThumbnails : false
-
-    property string tooltipText  
-    
-    property alias label1 : _template.label1
-
-    property alias iconItem : _template.iconItem
-    property alias iconVisible : _template.iconVisible
-    
-    property alias iconSizeHint : _template.iconSizeHint
-    property alias imageSizeHint : _template.imageSizeHint
-    
-    property alias imageSource : _template.imageSource
-    property alias iconSource : _template.iconSource
-    property alias checkable : _template.checkable
-    property alias checked : _template.checked
-    property alias showLabel : _template.labelsVisible
-    
-    property alias dropArea : _dropArea
-
     isCurrentItem : GridView.isCurrentItem || checked
 
+    /**
+      * tooltipText : string
+      */
+    property string tooltipText
+
+    /**
+      * template : GridItemTemplate
+      */
+    property alias template : _template
+
+    /**
+      * label1 : Label
+      */
+    property alias label1 : _template.label1
+
+    /**
+      * iconItem : Item
+      */
+    property alias iconItem : _template.iconItem
+
+    /**
+      * iconVisible : bool
+      */
+    property alias iconVisible : _template.iconVisible
+
+    /**
+      * iconSizeHint : int
+      */
+    property alias iconSizeHint : _template.iconSizeHint
+
+    /**
+      * imageSizeHint : int
+      */
+    property alias imageSizeHint : _template.imageSizeHint
+
+    /**
+      * imageSource : string
+      */
+    property alias imageSource : _template.imageSource
+
+    /**
+      * iconSource : string
+      */
+    property alias iconSource : _template.iconSource
+
+    /**
+      * showLabel : bool
+      */
+    property alias showLabel : _template.labelsVisible
+
+    /**
+      * checked : bool
+      */
+    property alias checked : _template.checked
+
+    /**
+      * checkable : bool
+      */
+    property alias checkable: _template.checkable
+
+    /**
+      * dropArea : DropArea
+      */
+    property alias dropArea : _dropArea
+
+    /**
+      * contentDropped :
+      */
     signal contentDropped(var drop)
-	signal toggled(bool state)		
-	
+
+    /**
+      * toggled :
+      */
+    signal toggled(bool state)
+
     ToolTip.delay: 1000
     ToolTip.timeout: 5000
     ToolTip.visible: control.hovered && control.tooltipText
@@ -67,14 +127,6 @@ Maui.ItemDelegate
         anchors.fill: parent
         enabled: control.draggable
 
-        Rectangle
-        {
-            anchors.fill: parent
-            radius: Maui.Style.radiusV
-            color: control.Kirigami.Theme.highlightColor
-            visible: parent.containsDrag
-        }
-
         onDropped:
         {
             control.contentDropped(drop)
@@ -85,12 +137,12 @@ Maui.ItemDelegate
     {
         id: _template
         anchors.fill: parent
-        iconSource: model.icon
-        hovered: control.hovered || control.containsPress
-        imageSource : model.mime ? (Maui.FM.checkFileType(Maui.FMList.IMAGE, model.mime) && control.showThumbnails && model.thumbnail && model.thumbnail.length? model.thumbnail : "") : ""
-        label1.text: model.label
+
+        hovered: control.hovered || control.containsPress || _dropArea.containsDrag
+        checkable : control.checkable
+        checked : control.checked
 //        label1.elide: Text.ElideMiddle // TODO this is broken ???
         isCurrentItem: control.isCurrentItem
-        onToggled: control.toggled(state)		
+        onToggled: control.toggled(state)
     }
 }

@@ -1,71 +1,81 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.2
-import "."
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import org.kde.kirigami 2.7 as Kirigami
-import org.kde.mauikit 1.0 as Maui 
+import org.kde.mauikit 1.2 as Maui
 
-import TagsList 1.0 
-import TagsModel 1.0
+import TagsList 1.0
+import "."
 
 ListView
 {
-    id: control 
+    id: control
     orientation: ListView.Horizontal
     clip: true
-    spacing: Maui.Style.contentMargins   
+    spacing: Maui.Style.contentMargins
     boundsBehavior: Kirigami.Settings.isMobile ?  Flickable.DragOverBounds : Flickable.StopAtBounds
 
+    /**
+      *
+      */
     property string placeholderText: i18n("Add tags...")
+
+    /**
+      *
+      */
     property alias list : _tagsList
+
+    /**
+      *
+      */
     property bool showPlaceHolder:  true
+
+    /**
+      *
+      */
     property bool showDeleteIcon: true
-    
+
+    /**
+      *
+      */
     signal tagRemoved(int index)
-	signal tagClicked(int index)
-    
-    TagsModel
+
+    /**
+      *
+      */
+    signal tagClicked(int index)
+
+    model: Maui.BaseModel
     {
-		id: _tagsModel
-		list: _tagsList
-	}
-	
-	TagsList
-	{
-		id: _tagsList
-	}
-	
-	model: _tagsModel
-	
+        id: _tagsModel
+        list: TagsList
+        {
+            id: _tagsList
+        }
+    }
+
     Label
     {
-        height: parent.height
-        width: parent.width
+        anchors.fill: parent
         verticalAlignment: Qt.AlignVCenter
         text: qsTr(control.placeholderText)
         opacity: 0.7
         visible: count === 0 && control.showPlaceHolder
         color: Kirigami.Theme.textColor
-        font.pointSize: Maui.Style.fontSizes.default
     }
 
     delegate: TagDelegate
     {
-        id: delegate
         showDeleteIcon: control.showDeleteIcon
         Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
-        height: implicitHeight
-        width: implicitWidth
+        anchors.verticalCenter: parent.verticalCenter
         
         ListView.onAdd:
         {
-			control.positionViewAtEnd()
-		}
-        
-        Connections
-        {
-            target: delegate
-            onRemoveTag: tagRemoved(index)
-            onClicked: tagClicked(index)
+            control.positionViewAtEnd()
         }
+        
+        onRemoveTag: tagRemoved(index)
+        onClicked: tagClicked(index)
     }
+    
 }

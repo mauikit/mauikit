@@ -17,118 +17,127 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 2.2
+import QtQuick 2.14
+import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
-import org.kde.mauikit 1.0 as Maui
+import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 
+/**
+ * SyncDialog
+ * A global sidebar for the application window that can be collapsed.
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 Maui.Dialog
 {
     id: control
 
-    property bool customServer: false
-    acceptText: i18n("Sign In")
-    rejectText: i18n("Cancel")
+    acceptButton.text: i18n("Sign In")
+    rejectButton.text: i18n("Cancel")
     rejectButton.visible: false
     page.margins: Maui.Style.space.medium
-    
+    page.title: i18n("New Account")
+    spacing: Maui.Style.space.medium
+
+    /**
+      * customServer : bool
+      */
+    property bool customServer: false
+
+    /**
+      * serverField : TextField
+      */
     property alias serverField: serverField
+
+    /**
+      * userField : TextField
+      */
     property alias userField: userField
+
+    /**
+      * passwordField : TextField
+      */
     property alias passwordField: passwordField
 
-    maxHeight: Maui.Style.unit * 350
+    footBar.visible: false
+    maxHeight: 350
     maxWidth: 350
 
-    
-    footBar.leftContent: Button
+    actions: Action
     {
         text: i18n("Sign up")
-        visible: !customServer
-        onClicked: Qt.openUrlExternally("https://www.opendesktop.org/register")
+        enabled: !customServer
+        onTriggered: Qt.openUrlExternally("https://www.opendesktop.org/register")
     }
 
     onRejected:	close()
 
-    Kirigami.ScrollablePage
+    Image
     {
-        Layout.fillHeight: true
+        visible: !customServer
+        Layout.alignment: Qt.AlignCenter
+        Layout.preferredWidth:  Maui.Style.iconSizes.huge
+        Layout.preferredHeight: Maui.Style.iconSizes.huge
+        Layout.margins: Maui.Style.space.medium
+
+        sourceSize.width: width
+        sourceSize.height: height
+
+        source: "qrc:/assets/opendesktop.png"
+    }
+
+    Label
+    {
+        visible: !customServer
         Layout.fillWidth: true
-        padding: 0
-        rightPadding: 0
-        leftPadding: 0
-        topPadding: 0
-        bottomPadding: 0
+        horizontalAlignment: Qt.AlignHCenter
+        Layout.preferredHeight: Maui.Style.rowHeight
+        text: "opendesktop.org"
+        elide: Text.ElideNone
+        wrapMode: Text.NoWrap
+        font.weight: Font.Bold
+        font.bold: true
+        font.pointSize: Maui.Style.fontSizes.big
+    }
 
-        ColumnLayout
-        {
-            spacing: Maui.Style.space.small
-            width: parent.width
+    Maui.TextField
+    {
+        id: userField
+        Layout.fillWidth: true
+        placeholderText: i18n("Username")
+        inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhSensitiveData
+    }
 
-            Image
-            {
-                visible: !customServer
-                Layout.alignment: Qt.AlignCenter
-                Layout.preferredWidth:  Maui.Style.iconSizes.huge
-                Layout.preferredHeight: Maui.Style.iconSizes.huge
-                Layout.margins: Maui.Style.space.medium
+    Maui.TextField
+    {
+        id: passwordField
+        Layout.fillWidth: true
+        placeholderText: i18n("Password")
+        echoMode: TextInput.Password
+        passwordMaskDelay: 300
+        inputMethodHints: Qt.ImhNoAutoUppercase
+    }
 
-                sourceSize.width: width
-                sourceSize.height: height
+    Maui.TextField
+    {
+        id: serverField
+        visible: customServer
+        Layout.fillWidth: true
+        placeholderText: i18n("Server address")
+        inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoAutoUppercase
+        text: customServer ? "" : "https://cloud.opendesktop.cc/cloud/remote.php/webdav/"
+    }
 
-                source: "qrc:/assets/opendesktop.png"
-            }
-            
-            Label
-            {
-                visible: !customServer
-                Layout.fillWidth: true
-                horizontalAlignment: Qt.AlignHCenter
-                Layout.preferredHeight: Maui.Style.rowHeight
-                text: "opendesktop.org"
-                elide: Text.ElideNone
-                wrapMode: Text.NoWrap
-                font.weight: Font.Bold
-                font.bold: true
-                font.pointSize: Maui.Style.fontSizes.big
-            }
-            
-            Maui.TextField
-            {
-                id: userField
-                Layout.fillWidth: true
-                placeholderText: i18n("Username")
-				inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhSensitiveData
-            }
-
-            Maui.TextField
-            {
-                id: passwordField
-                Layout.fillWidth: true
-                placeholderText: i18n("Password")
-				echoMode: TextInput.Password
-                passwordMaskDelay: 300
-                inputMethodHints: Qt.ImhNoAutoUppercase
-            }
-            
-                     
-            Maui.TextField
-            {
-                id: serverField
-                visible: customServer
-                Layout.fillWidth: true
-                placeholderText: i18n("Server address")
-				inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoAutoUppercase
-                text: customServer ? "" : "https://cloud.opendesktop.cc/cloud/remote.php/webdav/"
-            }            
-            
-            Button
-            {
-                Layout.fillWidth: true
-                icon.name: "filename-space-amarok"
-                text: customServer ? i18n("opendesktop") : i18n("Custom server")
-                onClicked: customServer = !customServer
-            }
-        }
+    Button
+    {
+        Layout.fillWidth: true
+        icon.name: "filename-space-amarok"
+        text: customServer ? i18n("opendesktop") : i18n("Custom server")
+        onClicked: customServer = !customServer
     }
 }

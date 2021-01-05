@@ -24,51 +24,66 @@ import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.0 as Maui
 import "private"
 
+/**
+ * ActionSideBar
+ * A global sidebar for the application window that can be collapsed.
+ *
+ * The ActionSideBar is hanlded by a ListView, by default you would only need to declare
+ * a list of Actions and those will be used as the model to populate the ListView.
+ *
+ * By default the Actions delegate is a ListDelegate, you can use any other component.
+ * For reference on how the collapsed sidebar is implemented for the delegate check
+ * the default implementation as an exmaple.
+ */
 Maui.SideBar
 {
-	id: control	
-	interactive: !collapsible	
-	default property list<Action> actions 
-	
-	model: control.actions	
-	delegate: Maui.ListDelegate
-	{
-		id: itemDelegate
-		Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
-		Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
+    id: control
+    interactive: !collapsible
 
-		readonly property QtObject action : modelData
-		// 					action : modelData
-		iconSize: control.iconSize
-		labelVisible: control.showLabels
-		iconName: action.icon.name
-		label: action.text
-		leftPadding:  Maui.Style.space.tiny
-		rightPadding:  Maui.Style.space.tiny
-		
-		Connections
-		{
-			target: itemDelegate
-			onClicked:
-			{
-				control.currentIndex = index
-				target.action.triggered()
-				control.itemClicked(index)
-			}
-			
-			onRightClicked:
-			{
-				control.currentIndex = index
-				control.itemRightClicked(index)
-			}
-			
-			onPressAndHold:
-			{
-				control.currentIndex = index
-				control.itemRightClicked(index)
-			}
-		}
-	}
-	
+    /**
+      * actions : list<Action>
+      * List of actions to be used to populate the ListView.
+      * This is the default property, so declaring the actions is staright forward.
+      *
+      */
+    default property list<Action> actions
+
+    model: control.actions
+    delegate: Maui.ListDelegate
+    {
+        id: itemDelegate
+        Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
+        Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
+
+        readonly property QtObject action : modelData
+        // 					action : modelData
+        iconName: action.icon.name
+        label: action.text
+        leftPadding:  Maui.Style.space.tiny
+        rightPadding:  Maui.Style.space.tiny
+
+        Connections
+        {
+            target: itemDelegate
+            onClicked:
+            {
+                control.currentIndex = index
+                target.action.triggered()
+                control.itemClicked(index)
+            }
+
+            onRightClicked:
+            {
+                control.currentIndex = index
+                control.itemRightClicked(index)
+            }
+
+            onPressAndHold:
+            {
+                control.currentIndex = index
+                control.itemRightClicked(index)
+            }
+        }
+    }
 }
 
