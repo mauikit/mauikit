@@ -41,8 +41,6 @@
 
 static const QUrl CONF_FILE = FMH::ConfigPath + "/kwinrc";
 
-MauiApp *MauiApp::m_instance = nullptr;
-
 MauiApp::MauiApp()
     : QObject(nullptr)
 #ifdef COMPONENT_ACCOUNTS

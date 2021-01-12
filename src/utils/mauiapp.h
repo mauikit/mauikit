@@ -180,7 +180,7 @@ public:
     static void setDefaultMauiStyle();
 
 private:
-    static MauiApp *m_instance;
+    inline static MauiApp *m_instance = nullptr;
     MauiApp();
     MauiAccounts *m_accounts;
 
