@@ -65,6 +65,7 @@ public:
 
     const MauiModel *m_model; // becarefull this is owned by qml engine, this is only supossed to be a viewer
 
+public slots:
     int mappedIndex(const int &index) const;
     int mappedIndexFromSource(const int &index) const;
     QVariantMap get(const int &index) const;
