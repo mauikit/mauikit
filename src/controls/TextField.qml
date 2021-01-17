@@ -68,7 +68,7 @@ TextField
       */
     signal contentDropped(var drop)
 
-    Layout.maximumWidth: 500
+    //Layout.maximumWidth: 500
 
     rightPadding: _actions.implicitWidth + Maui.Style.space.small
 

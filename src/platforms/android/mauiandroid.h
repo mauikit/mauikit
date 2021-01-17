@@ -47,10 +47,10 @@ public:
      */
     static void fileChooser();
 
-private:
     static QVariantList transform(const QAndroidJniObject &obj);
     static QVariantMap createVariantMap(jobject data);
 
+private:
     void handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data);
 
 public slots:

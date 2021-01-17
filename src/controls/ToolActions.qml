@@ -54,6 +54,11 @@ Rectangle
     property bool cyclic: false
     
     /**
+     * flat : bool
+     */
+    property bool flat : false
+    
+    /**
      * count : int
      */
     readonly property int count : actions.length
@@ -85,9 +90,9 @@ Rectangle
      */
     property string defaultIconName: "application-menu"
     
-    border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
+    border.color: control.flat ? "transparent" : Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.7))
     radius: Maui.Style.radiusV
-    color: enabled ? Kirigami.Theme.backgroundColor : "transparent"
+    color: !control.enabled || control.flat ? "transparent" : Kirigami.Theme.backgroundColor
     //    Kirigami.Theme.colorSet: Kirigami.Theme.View
     //    Kirigami.Theme.inherit: false
     
@@ -126,7 +131,7 @@ Rectangle
             sourceComponent: control.expanded ? _rowComponent : _menuComponent
         } 
         
-        layer.enabled: true
+        layer.enabled: !control.flat
         layer.effect: OpacityMask
         {
             maskSource: Item
@@ -205,7 +210,7 @@ Rectangle
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
                         anchors.right: parent.right
-                        visible: index < _repeater.count-1
+                        visible: index < _repeater.count-1 && !control.flat
                         anchors.topMargin:1
                         anchors.bottomMargin: 1
                     }
@@ -293,7 +298,7 @@ Rectangle
                     
                     onClicked: triggerAction()
                     
-                    icon.width: Maui.Style.iconSizes.small
+                    icon.width:  Maui.Style.iconSizes.small
                     icon.height: Maui.Style.iconSizes.small
                     icon.color: buttonAction() ? (buttonAction().icon.color && buttonAction().icon.color.length ? buttonAction().icon.color : ( _defaultButtonMouseArea.containsPress ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor)) :  control.Kirigami.Theme.textColor
                     
@@ -316,7 +321,7 @@ Rectangle
                 
                 Kirigami.Separator
                 {
-                    visible: !control.cyclic
+                    visible: !control.cyclic && !control.flat
                     color: control.border.color
                     Layout.fillHeight: true
                 }
