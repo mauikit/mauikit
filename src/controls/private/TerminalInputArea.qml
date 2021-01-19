@@ -210,7 +210,7 @@ Item{
         }
         onPressed: {
             // Do not handle the right click if the terminal needs them.
-            if (mouse.button === Qt.RightButton && !terminal.terminalUsesMouse) {
+            if (mouse.button === Qt.RightButton ) {
                 alternateAction(mouse.x, mouse.y);
             } else {
                 mousePressDetected(mouse.x, mouse.y, mouse.button, mouse.buttons, mouse.modifiers);

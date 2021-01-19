@@ -448,7 +448,7 @@ public slots:
      * @return
      * Modle of the tags
      */
-   static FMH::MODEL_LIST getUrlTags(const QUrl &url);
+    static FMH::MODEL_LIST getUrlTags(const QUrl &url);
 
     /**
      * @brief urlTagExists
@@ -501,7 +501,7 @@ public slots:
      * The filter type to be mapped to a FMH::FILTER_TYPE
      */
     static QStringList nameFilters(const int &type);
-    
+
     /**
      * @brief iconName
      * Get the icon name associated to the file or name.

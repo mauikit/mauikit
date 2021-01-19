@@ -19,16 +19,16 @@
 
 #include "mauiandroid.h"
 #include <QColor>
+#include <QCoreApplication>
 #include <QDebug>
 #include <QException>
 #include <QFile>
+#include <QFileInfo>
 #include <QImage>
 #include <QMimeData>
 #include <QMimeDatabase>
-#include <QUrl>
-#include <QFileInfo>
-#include <QCoreApplication>
 #include <QProcess>
+#include <QUrl>
 
 #include <android/bitmap.h>
 // WindowManager.LayoutParams
@@ -255,22 +255,22 @@ QString MAUIAndroid::homePath()
 }
 
 QStringList MAUIAndroid::sdDirs()
-{    
+{
     QStringList res;
 
     QAndroidJniObject mediaDir = QAndroidJniObject::callStaticObjectMethod("com/kde/maui/tools/SDCard", "findSdCardPath", "(Landroid/content/Context;)Ljava/io/File;", QtAndroid::androidActivity().object<jobject>());
 
-    if(mediaDir == NULL)
+    if (mediaDir == NULL)
         return res;
 
-    QAndroidJniObject mediaPath = mediaDir.callObjectMethod( "getAbsolutePath", "()Ljava/lang/String;" );
+    QAndroidJniObject mediaPath = mediaDir.callObjectMethod("getAbsolutePath", "()Ljava/lang/String;");
     QString dataAbsPath = mediaPath.toString();
 
     res << QUrl::fromLocalFile(dataAbsPath).toString();
     return res;
 }
 
-//void MAUIAndroid::handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data)
+// void MAUIAndroid::handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data)
 //{
 //    qDebug() << "ACTIVITY RESULTS";
 //    jint RESULT_OK = QAndroidJniObject::getStaticField<jint>("android/app/Activity", "RESULT_OK");
@@ -435,11 +435,9 @@ bool MAUIAndroid::checkRunTimePermissions(const QStringList &permissions)
 
 bool MAUIAndroid::hasKeyboard()
 {
-
-    QAndroidJniObject context =QtAndroid::androidContext().object<jobject>();
+    QAndroidJniObject context = QtAndroid::androidContext().object<jobject>();
 
     if (context.isValid()) {
-
         QAndroidJniObject resources = context.callObjectMethod("getResources", "()Landroid/content/res/Resources;");
         QAndroidJniObject config = resources.callObjectMethod("getConfiguration", "()Landroid/content/res/Configuration;");
         int value = config.getField<jint>("keyboard");
@@ -468,4 +466,3 @@ void MAUIAndroid::handleActivityResult(int receiverRequestCode, int resultCode, 
         emit folderPicked(url);
     }
 }
-

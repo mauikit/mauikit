@@ -148,7 +148,7 @@ Maui.ItemDelegate
         Item
         {
             Layout.fillWidth: true
-            Layout.preferredHeight: Maui.Style.rowHeight
+            Layout.preferredHeight: Math.min( _template.implicitHeight + Maui.Style.space.big, Maui.Style.rowHeight * 2)
             
             Rectangle
             {
@@ -174,7 +174,10 @@ Maui.ItemDelegate
             {
                 id: _template
                 isCurrentItem: control.isCurrentItem
-                anchors.fill: parent
+                width: parent.width
+                height: Math.min(parent.height, implicitHeight)
+                anchors.centerIn: parent
+                label1.wrapMode: Text.WordWrap
                 rightLabels.visible: control.width >= 200
                 iconSizeHint: Maui.Style.iconSizes.small
             }

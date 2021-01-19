@@ -27,7 +27,8 @@ import org.kde.kirigami 2.7 as Kirigami
 Maui.FlexListItem
 {
     id: control
-    background:  Rectangle
+    padding: Maui.Style.space.big
+    background: Rectangle
     {
         anchors.fill: parent
         opacity: 0.5

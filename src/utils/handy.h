@@ -20,8 +20,8 @@
 #ifndef HANDY_H
 #define HANDY_H
 
-#include <QObject>
 #include "mauikit_export.h"
+#include <QObject>
 
 #include <QVariantMap>
 

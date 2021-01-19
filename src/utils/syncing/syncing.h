@@ -21,8 +21,8 @@ public:
     enum SIGNAL_TYPE : uint_fast8_t { OPEN, DOWNLOAD, COPY, SAVE, CUT, DELETE, RENAME, MOVE, UPLOAD };
 
     /**
-    *  @brief uploadQueue
-    */
+     *  @brief uploadQueue
+     */
     QStringList uploadQueue;
 
     /**
@@ -166,7 +166,6 @@ signals:
      * @param percent
      */
     void progress(int percent);
-
 };
 
 #endif // SYNCING_H

@@ -2,13 +2,13 @@
 #define APPSETTINGS_H
 
 #include <QObject>
-#include <QVariant>
 #include <QSettings>
 #include <QString>
 #include <QUrl>
+#include <QVariant>
 
-#include <QCoreApplication>
 #include "mauikit_export.h"
+#include <QCoreApplication>
 
 class SettingSection : public QObject
 {
@@ -23,7 +23,7 @@ private:
     QVariant m_defaultValue;
 
 public:
-    explicit SettingSection(QObject * parent = nullptr);
+    explicit SettingSection(QObject *parent = nullptr);
     QString key() const;
     QString group() const;
     QVariant defaultValue() const;

@@ -153,7 +153,7 @@ void MauiKit::registerTypes(const char *uri)
     qmlRegisterType(componentUrl(QStringLiteral("labs/SettingTemplate.qml")), uri, 1, 2, "SettingTemplate");
     qmlRegisterType(componentUrl(QStringLiteral("labs/AlternateListItem.qml")), uri, 1, 2, "AlternateListItem");
     qmlRegisterType(componentUrl(QStringLiteral("labs/Separator.qml")), uri, 1, 2, "Separator");
-    
+
     /** 1.3 **/
     qmlRegisterType(componentUrl(QStringLiteral("labs/GalleryRollItem.qml")), uri, 1, 3, "GalleryRollItem");
     qmlRegisterType(componentUrl(QStringLiteral("labs/CollageItem.qml")), uri, 1, 3, "CollageItem");
@@ -234,7 +234,7 @@ void MauiKit::registerTypes(const char *uri)
 #endif
 
     /** DATA MODELING TEMPLATED INTERFACES **/
-    qmlRegisterAnonymousType<MauiList>(uri, 1);         // ABSTRACT BASE LIST
+    qmlRegisterAnonymousType<MauiList>(uri, 1); // ABSTRACT BASE LIST
     qmlRegisterType<MauiModel>(uri, 1, 0, "BaseModel"); // BASE MODEL
 
 #ifdef COMPONENT_TAGGING

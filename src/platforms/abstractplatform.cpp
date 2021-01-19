@@ -1,8 +1,8 @@
 #include "abstractplatform.h"
 
-AbstractPlatform::AbstractPlatform(QObject *parent) : QObject(parent)
+AbstractPlatform::AbstractPlatform(QObject *parent)
+    : QObject(parent)
 {
-
 }
 
 void AbstractPlatform::notify(const QString &title, const QString &message, const QString &icon, const QString &imageUrl)

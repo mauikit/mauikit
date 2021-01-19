@@ -28,8 +28,8 @@
 #include <KIO/EmptyTrashJob>
 #endif
 
-#include <QObject>
 #include <QFuture>
+#include <QObject>
 #include <QThread>
 #include <QtConcurrent/QtConcurrentRun>
 #include <QtConcurrent>
@@ -38,7 +38,7 @@ FMList::FMList(QObject *parent)
     : MauiList(parent)
     , fm(new FM(this))
 {
-    qRegisterMetaType<FMList*>("const FMList*"); //this is needed for QML to know of FMList in the search method
+    qRegisterMetaType<FMList *>("const FMList*"); // this is needed for QML to know of FMList in the search method
     connect(this->fm, &FM::cloudServerContentReady, [&](const FMH::MODEL_LIST &list, const QUrl &url) {
         if (this->path == url) {
             this->assignList(list);
@@ -64,9 +64,8 @@ FMList::FMList(QObject *parent)
         }
     });
 
-    connect(this->fm, &FM::pathContentItemsReady, [&](FMH::PATH_CONTENT res)
-    {
-        if(res.path != this->path)
+    connect(this->fm, &FM::pathContentItemsReady, [&](FMH::PATH_CONTENT res) {
+        if (res.path != this->path)
             return;
 
         this->appendToList(res.content);
@@ -91,9 +90,13 @@ FMList::FMList(QObject *parent)
         this->setStatus({STATUS_CODE::READY, this->list.isEmpty() ? "Nothing here!" : "", this->list.isEmpty() ? "This place seems to be empty" : "", this->list.isEmpty() ? "folder-add" : "", this->list.isEmpty(), true});
     });
 
-    connect(this->fm, &FM::warningMessage, [&](const QString &message) { emit this->warning(message); });
+    connect(this->fm, &FM::warningMessage, [&](const QString &message) {
+        emit this->warning(message);
+    });
 
-    connect(this->fm, &FM::loadProgress, [&](const int &percent) { emit this->progress(percent); });
+    connect(this->fm, &FM::loadProgress, [&](const int &percent) {
+        emit this->progress(percent);
+    });
 
     connect(this->fm, &FM::pathContentChanged, [&](const QUrl &path) {
         qDebug() << "FOLDER PATH CHANGED" << path;
@@ -451,7 +454,7 @@ void FMList::setDirIcon(const int &index, const QString &iconName)
     if (index >= this->list.size() || index < 0)
         return;
 
-//    const auto index_ = this->mappedIndex(index);
+    //    const auto index_ = this->mappedIndex(index);
 
     const auto path = QUrl(this->list.at(index)[FMH::MODEL_KEY::PATH]);
 
@@ -583,7 +586,6 @@ void FMList::filterContent(const QString &query, const QUrl &path)
 
         for (const auto &item : qAsConst(this->list)) {
             if (item[FMH::MODEL_KEY::LABEL].contains(query, Qt::CaseInsensitive) || item[FMH::MODEL_KEY::SUFFIX].contains(query, Qt::CaseInsensitive) || item[FMH::MODEL_KEY::MIME].contains(query, Qt::CaseInsensitive)) {
-
                 m_content << item;
             }
         }

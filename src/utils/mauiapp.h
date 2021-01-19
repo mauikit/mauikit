@@ -54,7 +54,7 @@ class MAUIKIT_EXPORT MauiApp : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(KAboutData about READ getAbout CONSTANT FINAL)
-    Q_PROPERTY(QString iconName READ getIconName WRITE setIconName NOTIFY iconNameChanged)   
+    Q_PROPERTY(QString iconName READ getIconName WRITE setIconName NOTIFY iconNameChanged)
     Q_PROPERTY(QString donationPage READ getDonationPage WRITE setDonationPage NOTIFY donationPageChanged)
 
     Q_PROPERTY(QString mauikitVersion READ getMauikitVersion CONSTANT FINAL)
@@ -74,7 +74,7 @@ public:
 
     static MauiApp *instance()
     {
-        if(m_instance)
+        if (m_instance)
             return m_instance;
 
         m_instance = new MauiApp;
@@ -100,7 +100,7 @@ public:
      */
     static QString getQtVersion();
 
-      /**
+    /**
      * @brief getIconName
      * Application icon name as a URL to the image asset
      * @return
@@ -180,7 +180,7 @@ public:
     static void setDefaultMauiStyle();
 
 private:
-    static MauiApp*m_instance;
+    inline static MauiApp *m_instance = nullptr;
     MauiApp();
     MauiAccounts *m_accounts;
 

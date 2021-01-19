@@ -18,19 +18,21 @@ Platform *Platform::qmlAttachedProperties(QObject *object)
     return Platform::instance();
 }
 
-Platform::Platform(QObject *parent) : AbstractPlatform(parent),
-    #ifdef Q_OS_ANDROID
+Platform::Platform(QObject *parent)
+    : AbstractPlatform(parent)
+    ,
+#ifdef Q_OS_ANDROID
     m_platform(new MAUIAndroid(this))
-    #elif defined Q_OS_MAC
-      m_platform(new MAUIMacOS(this))
-    #elif defined Q_OS_WIN
-      m_platform(new MAUIWindows(this))
-    #elif defined Q_OS_IOS
-      m_platform(new MAUIIOS(this))
-    #else
-      m_platform(MAUIKDE::instance())
-    #endif
-{    
+#elif defined Q_OS_MAC
+    m_platform(new MAUIMacOS(this))
+#elif defined Q_OS_WIN
+    m_platform(new MAUIWindows(this))
+#elif defined Q_OS_IOS
+    m_platform(new MAUIIOS(this))
+#else
+    m_platform(MAUIKDE::instance())
+#endif
+{
     connect(m_platform, &AbstractPlatform::shareFilesRequest, this, &Platform::shareFilesRequest);
 }
 

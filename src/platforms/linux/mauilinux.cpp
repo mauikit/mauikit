@@ -19,13 +19,13 @@
 
 #include "mauilinux.h"
 
+#include <KApplicationTrader>
 #include <KColorScheme>
 #include <KColorSchemeManager>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KFileItem>
 #include <KLocalizedString>
-#include <KApplicationTrader>
 #include <KRun>
 #include <KService>
 #include <KServiceGroup>
@@ -71,8 +71,7 @@ QVariantList MAUIKDE::services(const QUrl &url)
         KFileItem fileItem(url);
 
         const auto services = KApplicationTrader::queryByMimeType(fileItem.mimetype());
-        for (const auto &service : services)
-        {
+        for (const auto &service : services) {
             const QString text = service->name().replace('&', "&&");
             QVariantMap item = createActionItem(text, "_kicker_fileItem_openWith", service->entryPath());
             item["icon"] = service->icon();
@@ -285,7 +284,7 @@ bool MAUIKDE::hasMouse()
     return true;
 }
 
-void MAUIKDE::openUrl(const QUrl& url)
+void MAUIKDE::openUrl(const QUrl &url)
 {
     //    //     return QDesktopServices::openUrl(QUrl::fromUserInput(url));
     KRun::runUrl(url, FMH::getFileInfoModel(url)[FMH::MODEL_KEY::MIME], nullptr, false, KRun::RunFlag::DeleteTemporaryFiles);
@@ -296,12 +295,6 @@ void MAUIKDE::shareFiles(const QList<QUrl> &urls)
     emit this->shareFilesRequest(QUrl::toStringList(urls));
 }
 
-void MAUIKDE::shareText(const QString&)
+void MAUIKDE::shareText(const QString &)
 {
-    
 }
-
-
-
-
-

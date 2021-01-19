@@ -82,7 +82,6 @@ struct NavHistory {
 private:
     QVector<QUrl> prev_history;
     QVector<QUrl> post_history;
-
 };
 
 /**
@@ -316,7 +315,7 @@ public:
      */
     void setCloudDepth(const int &value);
 
-       /**
+    /**
      * @brief getStatus
      * Get the current status of the current path
      * @return
@@ -355,7 +354,7 @@ private:
     FMList::PATHTYPE pathType = FMList::PATHTYPE::PLACES_PATH;
 
     NavHistory m_navHistory;
-    
+
 public slots:
 
     /**
@@ -414,14 +413,14 @@ public slots:
      * The information of the model where the search is going to be performed
      */
     void search(const QString &query, const FMList *currentFMList);
-    
+
     /**
      * @brief previousPath
      * Inmediate previous path
      * @return
      */
     const QUrl previousPath();
-    
+
     /**
      * @brief posteriorPath
      * Inmediate posterior path

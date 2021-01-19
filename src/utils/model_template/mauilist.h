@@ -45,8 +45,12 @@ public:
     explicit MauiList(QObject *parent = nullptr);
 
     virtual const FMH::MODEL_LIST &items() const = 0;
-    virtual void classBegin() override  {}
-    virtual void componentComplete() override {}
+    virtual void classBegin() override
+    {
+    }
+    virtual void componentComplete() override
+    {
+    }
     virtual void modelHooked() {};
 
     int getCount() const;
@@ -61,6 +65,7 @@ public:
 
     const MauiModel *m_model; // becarefull this is owned by qml engine, this is only supossed to be a viewer
 
+public slots:
     int mappedIndex(const int &index) const;
     int mappedIndexFromSource(const int &index) const;
     QVariantMap get(const int &index) const;

@@ -260,7 +260,7 @@ Item
 
             Rectangle
             {
-                width: parent.width
+                width: Math.min(_label1.implicitWidth + Maui.Style.space.big, parent.width)
                 height: Math.min(_label1.implicitHeight + Maui.Style.space.tiny, parent.height)
                 anchors.centerIn: parent
                 Behavior on color

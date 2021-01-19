@@ -755,7 +755,7 @@ Maui.Page
                             readonly property string path : model.path
 
                             width: ListView.view.width
-                            height: implicitHeight
+                            height: control.listItemSize
 
                             iconSource: model.icon
 

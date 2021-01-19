@@ -180,7 +180,9 @@ DocumentAlert *DocumentHandler::externallyModifiedAlert()
 {
     auto alert = new DocumentAlert(i18n("File changed externally"), i18n("You can reload the file or save your changes now"), DocumentAlert::WARNING_LEVEL, Alerts::MODIFIED);
 
-    const auto reloadAction = [&]() { emit this->loadFile(this->fileUrl()); };
+    const auto reloadAction = [&]() {
+        emit this->loadFile(this->fileUrl());
+    };
 
     const auto autoReloadAction = [&]() {
         this->setAutoReload(true);
@@ -203,7 +205,9 @@ DocumentAlert *DocumentHandler::missingAlert()
 {
     auto alert = new DocumentAlert(i18n("Your file was removed"), i18n("This file does not longer exists in your local storage, however you can save it again"), DocumentAlert::DANGER_LEVEL, Alerts::MISSING);
 
-    const auto saveAction = [&]() { this->saveAs(this->fileUrl()); };
+    const auto saveAction = [&]() {
+        this->saveAs(this->fileUrl());
+    };
 
     alert->setActions({{i18n("Save"), saveAction}});
     return alert;
@@ -229,13 +233,12 @@ DocumentHandler::DocumentHandler(QObject *parent)
         connect(this, &DocumentHandler::loadFile, m_loader, &FileLoader::loadFile);
         connect(m_loader, &FileLoader::fileReady, [&](QString array, QUrl url) {
             this->setText(array);
-            
-            if (this->textDocument())
-            {
+
+            if (this->textDocument()) {
                 this->textDocument()->setModified(false);
-                
+
                 this->isRich = Qt::mightBeRichText(this->text());
-                emit this->isRichChanged();                
+                emit this->isRichChanged();
             }
 
             emit this->loaded(url);
@@ -245,21 +248,21 @@ DocumentHandler::DocumentHandler(QObject *parent)
         m_worker.start();
     }
     // end file loader thread implementation
-    
-    connect(&m_autoSaveTimer, &QTimer::timeout, [this]()
-    {
-        if(m_autoSave && getModified() && !m_fileUrl.isEmpty())
-        {
+
+    connect(&m_autoSaveTimer, &QTimer::timeout, [this]() {
+        if (m_autoSave && getModified() && !m_fileUrl.isEmpty()) {
             qDebug() << "Autosaving file" << m_fileUrl;
-            saveAs(m_fileUrl);   
+            saveAs(m_fileUrl);
             m_autoSaveTimer.start(AUTOSAVE_TIMEOUT);
-        }            
+        }
     });
-    
-    if(m_autoSave)
+
+    if (m_autoSave)
         m_autoSaveTimer.start(AUTOSAVE_TIMEOUT);
 
-    connect(this, &DocumentHandler::cursorPositionChanged, [&]() { emit this->currentLineIndexChanged(); });
+    connect(this, &DocumentHandler::cursorPositionChanged, [&]() {
+        emit this->currentLineIndexChanged();
+    });
 
     connect(this->m_watcher, &QFileSystemWatcher::fileChanged, [&](QString url) {
         if (this->fileUrl() == QUrl::fromLocalFile(url)) {
@@ -329,17 +332,17 @@ bool DocumentHandler::autoSave() const
 
 void DocumentHandler::setAutoSave(const bool &value)
 {
-    if(m_autoSave == value)
+    if (m_autoSave == value)
         return;
-    
+
     m_autoSave = value;
     emit autoSaveChanged();
-    
-    if(m_autoSave)
-    {
-        if(!m_autoSaveTimer.isActive())
-            m_autoSaveTimer.start(AUTOSAVE_TIMEOUT);       
-    }else m_autoSaveTimer.stop();
+
+    if (m_autoSave) {
+        if (!m_autoSaveTimer.isActive())
+            m_autoSaveTimer.start(AUTOSAVE_TIMEOUT);
+    } else
+        m_autoSaveTimer.stop();
 }
 
 bool DocumentHandler::getModified() const
@@ -405,15 +408,13 @@ void DocumentHandler::setStyle()
         this->m_highlighter->setTheme(style);
         this->m_highlighter->rehighlight();
     }
-    
+
     refreshAllBlocks();
 }
 
 void DocumentHandler::refreshAllBlocks()
-{   
-    
-    if(textDocument())
-    {        
+{
+    if (textDocument()) {
         for (QTextBlock it = textDocument()->begin(); it != textDocument()->end(); it = it.next())
             textDocument()->documentLayout()->updateBlock(it);
     }
@@ -426,12 +427,11 @@ QString DocumentHandler::formatName() const
 
 void DocumentHandler::setFormatName(const QString &formatName)
 {
-    if (this->m_formatName != formatName)
-    {
+    if (this->m_formatName != formatName) {
         this->m_formatName = formatName;
         emit this->formatNameChanged();
-    }    
-  
+    }
+
     this->setStyle();
 }
 
@@ -470,12 +470,12 @@ void DocumentHandler::setDocument(QQuickTextDocument *document)
     if (this->textDocument()) {
         this->textDocument()->setModified(false);
         connect(this->textDocument(), &QTextDocument::modificationChanged, this, &DocumentHandler::modifiedChanged);
-        
-        this->load(m_fileUrl);        
-        
-        QTextOption textOptions = this->textDocument()->defaultTextOption();     
+
+        this->load(m_fileUrl);
+
+        QTextOption textOptions = this->textDocument()->defaultTextOption();
         textOptions.setTabStopDistance(m_tabSpace);
-        textDocument()->setDefaultTextOption(textOptions);        
+        textDocument()->setDefaultTextOption(textOptions);
     }
 }
 
@@ -674,18 +674,17 @@ void DocumentHandler::setFontSize(int size)
 
 void DocumentHandler::setTabSpace(qreal value)
 {
-    if(m_tabSpace == value)
+    if (m_tabSpace == value)
         return;
-    
+
     m_tabSpace = value;
-    
-    if(textDocument())
-    {
-        QTextOption textOptions = this->textDocument()->defaultTextOption();     
+
+    if (textDocument()) {
+        QTextOption textOptions = this->textDocument()->defaultTextOption();
         textOptions.setTabStopDistance(m_tabSpace);
         textDocument()->setDefaultTextOption(textOptions);
     }
-    
+
     emit tabSpaceChanged();
     refreshAllBlocks();
 }
@@ -716,13 +715,13 @@ QUrl DocumentHandler::fileUrl() const
 
 void DocumentHandler::setFileUrl(const QUrl &url)
 {
- if (url == m_fileUrl)
+    if (url == m_fileUrl)
         return;
 
     m_fileUrl = url;
- 
+
     load(m_fileUrl);
- 
+
     emit fileUrlChanged();
     emit fileInfoChanged();
 }
@@ -735,7 +734,7 @@ QVariantMap DocumentHandler::fileInfo() const
 void DocumentHandler::load(const QUrl &url)
 {
     qDebug() << "TRYING TO LOAD FILE << " << url << url.isEmpty();
-    if(!textDocument())
+    if (!textDocument())
         return;
 
     if (m_fileUrl.isLocalFile() && !FMH::fileExists(m_fileUrl))
