@@ -87,7 +87,7 @@ Control
 
     property alias columnSpacing: _layout.columnSpacing
 
-    implicitHeight: _layout.implicitHeight
+    implicitHeight: _layout.implicitHeight + padding
     Layout.fillWidth: true
 
 
