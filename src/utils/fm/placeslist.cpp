@@ -73,6 +73,9 @@ PlacesList::PlacesList(QObject *parent)
 #endif
 
 #if defined Q_OS_LINUX && !defined Q_OS_ANDROID
+    connect(this->model, &KFilePlacesModel::reloaded, [this]() {
+        this->setList();
+    });
     connect(this->model, &KFilePlacesModel::rowsInserted, [this](const QModelIndex, int, int) {
         this->setList();
         emit this->bookmarksChanged();
@@ -111,6 +114,7 @@ void PlacesList::watchPath(const QString &path)
 void PlacesList::componentComplete()
 {
     connect(this, &PlacesList::groupsChanged, this, &PlacesList::setList);
+
     this->setList();
 }
 
@@ -138,6 +142,7 @@ FMH::MODEL_LIST PlacesList::getGroup(const KFilePlacesModel &model, const FMH::P
     }
 
     if (type == FMH::PATHTYPE_KEY::PLACES_PATH) {
+
         res << FMStatic::getDefaultPaths();
     }
 
@@ -209,10 +214,12 @@ void PlacesList::setList()
             this->list << getGroup(*this->model, FMH::PATHTYPE_KEY::REMOTE_PATH);
             break;
 
-        case FMH::PATHTYPE_KEY::REMOVABLE_PATH:
+        case FMH::PATHTYPE_KEY::REMOVABLE_PATH: {
+            qDebug() << "@gadominguez File: placelist.cpp Func: setList " <<  getGroup(*this->model, FMH::PATHTYPE_KEY::REMOVABLE_PATH);
             this->list << getGroup(*this->model, FMH::PATHTYPE_KEY::REMOVABLE_PATH);
-            break;
 
+        }
+        break;
         case FMH::PATHTYPE_KEY::TAGS_PATH:
             this->list << FMStatic::getTags();
             break;
@@ -293,4 +300,9 @@ void PlacesList::removePlace(const int &index)
 bool PlacesList::contains(const QUrl &path)
 {
     return this->exists(FMH::MODEL_KEY::PATH, path.toString());
+}
+
+void PlacesList::updateMountPoint(void)
+{
+    setList();
 }
