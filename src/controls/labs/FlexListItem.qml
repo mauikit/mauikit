@@ -90,6 +90,7 @@ ItemDelegate
     implicitHeight: _layout.implicitHeight + padding
     Layout.fillWidth: true
 
+    background: Item {}
 
     GridLayout
     {

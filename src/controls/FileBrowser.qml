@@ -946,6 +946,7 @@ Maui.Page
         {
             _stackView.push(_searchBrowserComponent, StackView.Immediate)
         }
+        control.headBar.visible= true
         _searchField.forceActiveFocus()
     }
     
@@ -963,6 +964,7 @@ Maui.Page
     function search(query)
     {
         openSearch()
+        _searchField.text = query
         _stackView.currentItem.title = i18n("Search: %1").arg(query)
         _stackView.currentItem.currentFMList.search(query, _browser.currentFMList)
     }
