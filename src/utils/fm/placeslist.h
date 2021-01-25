@@ -23,9 +23,27 @@
 #include <QObject>
 
 class FM;
-class KFilePlacesModel;
 class QFileSystemWatcher;
-class PlacesList : public MauiList
+
+
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
+#include <KFilePlacesModel>
+
+class PlacesModel : public KFilePlacesModel
+{
+    Q_OBJECT
+    
+public:
+    using KFilePlacesModel::KFilePlacesModel;
+};
+
+#else
+#include <QAbstractListModel>
+class PlacesModel : public QAbstractListModel {};
+
+#endif
+
+class PlacesList : public PlacesModel
 {
     Q_OBJECT
     Q_PROPERTY(QList<int> groups READ getGroups WRITE setGroups NOTIFY groupsChanged)
@@ -33,12 +51,12 @@ class PlacesList : public MauiList
 public:
     PlacesList(QObject *parent = nullptr);
 
-    const FMH::MODEL_LIST &items() const override;
+//     const FMH::MODEL_LIST &items() const override;
 
     QList<int> getGroups() const;
     void setGroups(const QList<int> &value);
 
-    void componentComplete() override final;
+//     void componentComplete() override final;
 
     /**
      * @brief get
@@ -49,6 +67,8 @@ public:
      * The data of the place
      */
     QVariantMap get(const int &index) const;
+    
+    virtual QHash<int, QByteArray> roleNames() const override;
 
 protected:
     void setList();
@@ -79,11 +99,11 @@ public slots:
      * True if it exists otherwise false
      */
     bool contains(const QUrl &path);
+    
 
 private:
     FM *fm;
     FMH::MODEL_LIST list;
-    KFilePlacesModel *model;
     QHash<QString, int> count;
 
     QList<int> groups;
