@@ -29,7 +29,7 @@ import org.kde.mauikit 1.2 as Maui
   * A template to position text besides an icon or image with a flex content side, that flexes under constrained spaces.
   *
   */
-Control
+ItemDelegate
 {
     id: control
 
@@ -90,6 +90,7 @@ Control
     implicitHeight: _layout.implicitHeight + padding
     Layout.fillWidth: true
 
+    background: Item {}
 
     GridLayout
     {
