@@ -101,6 +101,8 @@ Maui.Dialog
       */
     property int mode : modes.OPEN
 
+    property var callback
+
        /**
       * textField : TextField
       * On Save mode a text field is visible, this property gives access to it.
@@ -477,6 +479,11 @@ Maui.Dialog
         {
             _tagsBar.list.urls = paths
             _tagsBar.list.updateToUrls(_tagsBar.getTags())
+        }
+
+        if(control.callback)
+        {
+            control.callback(paths)
         }
 
         control.urlsSelected(paths)
