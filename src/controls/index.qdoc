@@ -5,3 +5,21 @@
 \brief Collection of Maui-style UI components
 
 */
+
+/*!
+
+\page index.html
+\title MauiKit
+
+MauiKit is a UI framework built on top of Kirigami providing a set of convergent
+QtQuick components.
+
+MauiKit offers the following components:
+
+\generatelist{qmltypesbymodule org.kde.mauikit}
+
+There are also experimental components in the MauiKit Labs collection of components:
+
+\generatelist{qmltypesbymodule org.kde.mauikit.labs}
+
+*/
