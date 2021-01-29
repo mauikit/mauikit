@@ -23,16 +23,13 @@ import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.2 as Maui
 
-/**
- * AbstractSideBar
- * A global sidebar for the application window that can be collapsed.
- *
- * To use a collapsable sidebar is a better idea to make use of the SideBar or ActionSideBar components
- * which are ready for it and are handled by a ListView, you only need a data model or list of actions to be used.
- *
- *
- *
- */
+/*!
+\since org.kde.mauikit 1.0
+\inqmlmodule org.kde.mauikit
+
+A global sidebar for the application window that can be collapsed.
+To use a collapsable sidebar is a better idea to make use of the SideBar or ActionSideBar components which are ready for it and are handled by a ListView, you only need a data model or list of actions to be used.
+*/
 Drawer
 {
     id: control
@@ -45,42 +42,39 @@ Drawer
     dragMargin: Maui.Style.space.big
     modal: false
 
-    /**
-      * content : Item.data
-      * The main content is added to an Item contents, it can anchored or sized normally.
-      */
+    /*!
+      \qmlproperty Item AbstractSideBar::content
+
+      The main content is added to an Item contents, it can anchored or sized normally.
+    */
     default property alias content : _content.data
 
-    /**
-      * collapsible : bool
-      * If the sidebar can be collapsed into a slimmer bar with a width defined by the collapsedSize hint.
-      */
+    /*!
+      If the sidebar can be collapsed into a slimmer bar with a width defined by the collapsedSize hint.
+    */
     property bool collapsible: false
 
-    /**
-      * collapsed : bool
-      * If the sidebar should be collapsed or not, this property can be used to dynamically collapse
-      * the sidebar on constrained spaces.
-      */
+    /*!
+      If the sidebar should be collapsed or not, this property can be used to dynamically collapse
+      the sidebar on constrained spaces.
+    */
     property bool collapsed: false
 
-    /**
-      * preferredWidth : int
-      * The preferred width of the sidebar in the expanded state.
-      */
+    /*!
+      preferredWidth : int
+      The preferred width of the sidebar in the expanded state.
+    */
     property int preferredWidth : Kirigami.Units.gridUnit * 12
 
-    /**
-      * overlay : MouseArea
-      * When the application has a constrained width to fit the sidebar and main contain,
-      * the sidebar is in a constrained state, and the app main content gets dimmed by an overlay.
-      * This property gives access to such ovelay element drawn on top of the app contents.
-      */
+    /*!
+      \qmlproperty MouseArea AbstractSideBar::overlay
+
+      When the application has a constrained width to fit the sidebar and main contain,
+      the sidebar is in a constrained state, and the app main content gets dimmed by an overlay.
+      This property gives access to such ovelay element drawn on top of the app contents.
+    */
     readonly property alias overlay : _overlay
 
-    /**
-      * contentDropped
-      */
     signal contentDropped(var drop)
 
     onCollapsedChanged: position = (collapsed) ? 0 : 1

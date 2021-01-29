@@ -26,136 +26,144 @@ import org.kde.kirigami 2.9 as Kirigami
 
 import QtGraphicalEffects 1.0
 
-/**
- * Dialog
- * A scrollable dialog popup, with a Page as its main content.
- * With default buttons styled, a close button and a predefiend layout.
- *
- * The dialog can be used with its main default ColumnLayout or with an Item stacked.
- *
- * The dialog contents will be hanlded by a ColumnLayout, so the positioning of its child elements should use the attached property
- * Layout.fillheight layout.fillWidth, etc.
- *
- *
+/*!
+\since org.kde.mauikit 1.0
+\inqmlmodule org.kde.mauikit
+
+A scrollable dialog popup, with a Page as its main content.
+With default buttons styled, a close button and a predefiend layout.
+
+The dialog can be used with its main default ColumnLayout or with an Item stacked.
+
+The dialog contents will be hanlded by a ColumnLayout, so the positioning of its child elements should use the attached property
+Layout.fillheight layout.fillWidth, etc.
  */
 Maui.Popup
 {
     id: control
 
-    /**
-      * scrollable : ColumnLayout.data
-      * Default content will be added to a scrollable ColumnLayout.
-      * When adding a item keep on mind that to correctly have the scrollable behavior
-      * the item must have an implicit height. And the positioning should be done via the Layout attached properties.
-      */
+    /*!
+      \qmlproperty list<Item> ApplicationWindow::scrollable
+
+      Default content will be added to a scrollable ColumnLayout.
+      When adding a item keep on mind that to correctly have the scrollable behavior
+      the item must have an implicit height. And the positioning should be done via the Layout attached properties.
+    */
     default property alias scrollable : _pageContent.data
 
-    /**
-      * stack : ColumnLayout.data
-      * To skip the scrollable behavior there is a stacked component to which items can be added, this is also
-      * controlled by a ColumnLayout
-      */
+    /*!
+      \qmlproperty list<Item> ApplicationWindow::stack
+
+      To skip the scrollable behavior there is a stacked component to which items can be added, this is also
+      controlled by a ColumnLayout
+    */
     property alias stack : _stack.data
 
-    /**
-      * message : string
-      * Default message text inside the scrollable layout.
-      */
+    /*!
+      Default message text inside the scrollable layout.
+    */
     property string message : ""
 
-    /**
-      * title : string
-      * Default title text or title of the dialog page.
-      */
+    /*!
+      \qmlproperty string ApplicationWindow::title
+
+      Default title text or title of the dialog page.
+    */
     property alias title : _page.title
 
-    /**
-      * template : ListItemTemplate
-      * The templated item used for the default dialog message, holding the icon emblem and the message body.
-      * This property gives access to the template for more detailed tweaking, by adding items or changing its properties.
-      */
+    /*!
+      \qmlproperty ListItemTemplate ApplicationWindow::template
+
+      The templated item used for the default dialog message, holding the icon emblem and the message body.
+      This property gives access to the template for more detailed tweaking, by adding items or changing its properties.
+    */
     property alias template : _template
 
-    /**
-      * actions : list<Action>
-      * List of actions to be added to the dialog footer bar as styled buttons.
-      */
+    /*!
+      List of actions to be added to the dialog footer bar as styled buttons.
+    */
     property list<Action> actions
 
-    /**
-      * defaultButtons : bool
-      * If the Accept and Reject buttons should by displayed in the footer bar.
-      */
+    /*!
+      \qmlproperty bool ApplicationWindow::defaultButtons
+
+      If the Accept and Reject buttons should by displayed in the footer bar.
+    */
     property bool defaultButtons: true
 
-    /**
-      * persistent : bool
-      * If the dialog should be closed when it loses focus or not.
-      * If it is marked as persistent a close button is shown in the header bar, other wise the header bar is
-      * hidden if there is not more elements on it.
-      */
+    /*!
+      \qmlproperty bool ApplicationWindow::persistent
+
+      If the dialog should be closed when it loses focus or not.
+      If it is marked as persistent a close button is shown in the header bar, other wise the header bar is
+      hidden if there is not more elements on it.
+    */
     property bool persistent : true
 
-    /**
-      * acceptButton : Button
-      * Access to the accepted button.
-      * This button is styled to hint about a positive feedback.
-      */
+    /*!
+      \qmlproperty Button ApplicationWindow::acceptButton
+
+      Access to the accepted button.
+      This button is styled to hint about a positive feedback.
+    */
     property alias acceptButton : _acceptButton
 
-    /**
-      * rejectButton : Button
-      * Access to the accepted button.
-      * This button is styled to hint about a negative feedback.
-      */
+    /*!
+      \qmlproperty Button ApplicationWindow::rejectButton
+
+      Access to the accepted button.
+      This button is styled to hint about a negative feedback.
+    */
     property alias rejectButton : _rejectButton
 
-    /**
-      * textEntry : TextEntry
-      * Access to the optional text entry.
-      */
+    /*!
+      \qmlproperty TextEntry ApplicationWindow::textEntry
+
+      Access to the optional text entry.
+    */
     property alias textEntry : _textEntry
 
-    /**
-      * entryField : bool
-      *  If a text entry should be visible under the dialog body message.
-      */
+    /*!
+      If a text entry should be visible under the dialog body message.
+    */
     property bool entryField: false
 
-    /**
-      * page : Page
-      * Access to the default dialog content.
-      */
+    /*!
+      \qmlproperty Page ApplicationWindow::page
+
+      Access to the default dialog content.
+    */
     property alias page : _page
 
-    /**
-      * footBar : ToolBar
-      * Dialog footer bar.
-      */
+    /*!
+      \qmlproperty ToolBar ApplicationWindow::footBar
+
+      Dialog footer bar.
+    */
     property alias footBar : _page.footBar
 
-    /**
-      * headBar : ToolBar
-      * Dialog header bar.
-      */
+    /*!
+      \qmlproperty ToolBar ApplicationWindow::headBar
+
+      Dialog header bar.
+    */
     property alias headBar: _page.headBar
 
-    /**
-      * closeButton : MouseArea
-      * MouseArea for the close button when the dialog is marked as persistent.
-      */
+    /*!
+      \qmlproperty MouseArea ApplicationWindow::closeButton
+
+      MouseArea for the close button when the dialog is marked as persistent.
+    */
     property alias closeButton: _closeButton
 
-    /**
-      * accepted :
+    /*!
       * Triggered when the accepted button is clicked.
-      */
+    */
     signal accepted()
 
-    /**
-      * rejected :
+    /*!
       * Triggered when the rejected button is clicked.
-      */
+    */
     signal rejected()
 
     closePolicy: control.persistent ? Popup.NoAutoClose | Popup.CloseOnEscape : Popup.CloseOnEscape | Popup.CloseOnPressOutside

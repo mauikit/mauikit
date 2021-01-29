@@ -1,0 +1,33 @@
+maintainer: milohr
+description: QtQuick plugins to build user interfaces based on the Maui style
+platforms:
+    - name: Linux
+    - name: FreeBSD
+    - name: Android
+    - name: iOS
+      note: maintainer needed
+    - name: Windows
+    - name: macOS
+public_lib: true
+deprecated: false
+release: true
+logo: logo.png
+irc: '' # do we have one?
+mailinglist: '' # do we have one?
+group: Maui
+qdoc: true
+group_info:
+    name: maui
+    fancyname: Maui Libraries
+    maintainer: milohr
+    mailinglist: '' # doesn't exist?
+    platforms:
+      - Linux
+      - FreeBSD (partial)
+      - Windows
+      - macOS
+      - Android
+    description: Provides utilities to build applications according to the Maui style
+    long_description:
+        - The Maui libraries build on top of the KDE frameworks to provide tools for building
+          convergent applications according to the Maui guidelines.

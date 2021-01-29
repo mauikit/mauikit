@@ -25,18 +25,18 @@ import org.kde.kirigami 2.9 as Kirigami
 
 import "private" as Private
 
-/**
- * AppViews
- * Lists the different views declared into a swipe view, that does not jump around
- * when resizing the application window and that takes care of different gestures for switching the views.
- *
- * This component takes care of creating the app views port as buttons in the application main header
- * for switching the views.
- *
- * By default this component is not interactive when using touch gesture, to not steal fcous from other horizontal
- * flickable gestures.
- *
- *
+/*!
+\since org.kde.mauikit 1.0
+\inqmlmodule org.kde.mauikit
+
+Lists the different views declared into a swipe view, that does not jump around
+when resizing the application window and that takes care of different gestures for switching the views.
+
+This component takes care of creating the app views port as buttons in the application main header
+for switching the views.
+
+By default this component is not interactive when using touch gesture, to not steal fcous from other horizontal
+flickable gestures.
  */
 SwipeView
 {
@@ -46,23 +46,21 @@ SwipeView
     clip: true
     focus: true
 
-    /**
-      * maxViews : int
-      * Maximum number of views to be shown in the app view port in the header.
-      * The rest of views buttons will be collapsed into a menu button.
-      */
+    /*!
+      Maximum number of views to be shown in the app view port in the header.
+      The rest of views buttons will be collapsed into a menu button.
+    */
     property int maxViews : 4
 
-    /**
-      * toolbar : ToolBar
-      * The toolbar where the app view buttons will be added.
-      */
+    /*!
+      The toolbar where the app view buttons will be added.
+    */
     property Maui.ToolBar toolbar : window().headBar
 
-    /**
-      * actionGroup : ActionGroup
-      * Access to the view port component where the app view buttons is added.
-      */
+    //TODO: grouped property docs
+    /*!
+      Access to the view port component where the app view buttons is added.
+    */
     property QtObject actionGroup : Private.ActionGroup
     {
         id: _actionGroup

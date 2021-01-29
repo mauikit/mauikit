@@ -23,12 +23,11 @@ import QtQuick.Layouts 1.3
 import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 
-/**
- * Badge
- * Badge to show a counter or an icon as a notification hint.
- *
- *
- */
+/*!
+\since org.kde.mauikit 1.0
+\inqmlmodule org.kde.mauikit
+\brief Badge to show a counter or an icon as a notification hint.
+*/
 Rectangle
 {
     id: control
@@ -36,45 +35,45 @@ Rectangle
     Kirigami.Theme.inherit: false
     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
 
-    /**
-      * item : Item
-      * The current item being used, a label or an icon
-      */
+    /*!
+      \qmlproperty bool ApplicationWindow::item
+
+      The current item being used, a label or an icon
+    */
     property alias item : loader.item
 
-    /**
-      * hovered : bool
-      * If the badge is hovered by a cursor
-      */
+    /*!
+      \qmlproperty bool ApplicationWindow::hovered
+
+      If the badge is hovered by a cursor
+    */
     readonly property alias hovered : mouseArea.containsMouse
 
-    /**
-      * pressed : bool
-      * If the badge is pressed
-      */
+    /*!
+      \qmlproperty bool ApplicationWindow::pressed
+
+      If the badge is pressed
+    */
     readonly property alias pressed : mouseArea.pressed
 
-    /**
-      * mouseArea : MouseArea
-      */
+    /*!
+      \qmlproperty MouseArea ApplicationWindow::mouseArea
+    */
     property alias mouseArea : mouseArea
 
-    /**
-      * size : int
-      * Size of the badge. Can be used as width and height, unless the implicitWidth is wider.
-      */
+    /*!
+      Size of the badge. Can be used as width and height, unless the implicitWidth is wider.
+    */
     property int size: Maui.Style.iconSizes.medium
 
-    /**
-      * iconName : string
-      * Name of the icon to be used by the badge
-      */
+    /*!
+      Name of the icon to be used by the badge
+    */
     property string iconName : ""
 
-    /**
-      * text : string
-      * Text to be used by the badge
-      */
+    /*!
+      Text to be used by the badge
+    */
     property string text : ""
 
     /**

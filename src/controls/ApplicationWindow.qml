@@ -29,29 +29,31 @@ import org.kde.mauikit 1.2 as Maui
 
 import "private" as Private
 
-/**
- * A window that provides some basic features needed for all apps
- *
- * It's usually used as a root QML component for the application.
- * By default it makes usage of the Maui Page control, so it packs a header and footer bar.
- * The header can be moved to the bottom for better reachability in hand held devices.
- * The Application window has some components already built in like an AboutDialog, a main application menu,
- * and an optional property to add a global sidebar.
+/*!
+\since org.kde.mauikit 1.0
+\inqmlmodule org.kde.mauikit
+\brief A window that provides some basic features needed for all apps
 
- * The application can have client side decorations CSD by setting the attached property Maui.App.enabledCSD  to true,
- * or globally by editing the configuration file located at /.config/Maui/mauiproject.conf.
+It's usually used as a root QML component for the application.
+By default it makes usage of the Maui Page control, so it packs a header and footer bar.
+The header can be moved to the bottom for better reachability in hand held devices.
+The Application window has some components already built in like an AboutDialog, a main application menu,
+and an optional property to add a global sidebar.
 
- * For more details you can refer to the Maui Page documentation for fine tweaking the application window main content.
- * @code
- * ApplicationWindow {
- *     id: root
- *     //The rectangle will automatically bescrollable
- *     AppViews {
- *         anchors.fill: parent
- *     }
- * }
- * @endcode
- */
+The application can have client side decorations CSD by setting the attached property Maui.App.enabledCSD  to true,
+or globally by editing the configuration file located at /.config/Maui/mauiproject.conf.
+
+For more details you can refer to the Maui Page documentation for fine tweaking the application window main content.
+\code
+ApplicationWindow {
+    id: root
+    //The rectangle will automatically bescrollable
+    AppViews {
+        anchors.fill: parent
+    }
+}
+\endcode
+*/
 Window
 {
     id: root
@@ -66,242 +68,255 @@ Window
     /*************************************************/
     Kirigami.Theme.colorSet: Kirigami.Theme.View
 
-    /**
-      * content: Item.data
-      * Any item to be placed inside the ApplicationWindow Page.
-      */
+    /*!
+      \qmlproperty Item ApplicationWindow::content
+
+      Items to be placed inside the ApplicationWindow Page.
+    */
     default property alias content : _content.data
 
-    /**
-      * sideBar : AbstractSideBar
-      * A global sidebar that is reponsive and can be collapsable.
-      *
-      */
+    /*!
+      A global sidebar that is reponsive and can be collapsable.
+    */
     property Maui.AbstractSideBar sideBar
 
     /***************************************************/
     /******************** ALIASES *********************/
     /*************************************************/
 
-    /**
-      * page : Page
-      * The page used as the main content of the application window.
-      * Via this property more fine tuning can be done to the behavior and look of the application window.
-      */
+    /*!
+      \qmlproperty Page ApplicationWindow::page
+
+      The page used as the main content of the application window.
+      Via this property more fine tuning can be done to the behavior and look of the application window.
+    */
     readonly property alias page : _page
 
-    /**
-      * flickable : Flickable
-      * The apps page flickable. This is exposed to setting any flickable so the main header can
-      * react to floating header or footer properties, or to different header or footer bars positioning.
-      */
+    /*!
+      \qmlproperty Flickable ApplicationWindow::flickable
+      The apps page flickable. This is exposed to setting any flickable so the main header can
+      react to floating header or footer properties, or to different header or footer bars positioning.
+    */
     property alias flickable : _page.flickable
 
-    /**
-      * headBar : ToolBar
-      * The main header bar. This is controlled by a ToolBar and a list of amny number of components can be added to it.
-      * For better understaning of its properties check the ToolBar documentation.
-      */
+    /*!
+      \qmlproperty ToolBar ApplicationWindow::headBar
+      The main header bar. This is controlled by a ToolBar and a list of amny number of components can be added to it.
+      For better understaning of its properties check the ToolBar documentation.
+    */
     property alias headBar : _page.headBar
 
-    /**
-      * footBar : ToolBar
-      * The main footer bar. This is controlled by a ToolBar and a list of amny number of components can be added to it.
-      * For better understaning of its properties check the ToolBar documentation.
-      */
+    /*!
+      \qmlproperty ToolBar ApplicationWindow::footBar
+
+      The main footer bar. This is controlled by a ToolBar and a list of amny number of components can be added to it.
+      For better understaning of its properties check the ToolBar documentation.
+    */
     property alias footBar : _page.footBar
 
-    /**
-      * footer : Item
+    /*!
+      \qmlproperty Item ApplicationWindow::footer
+
       * The Item containing the page footBar.
       * This property allows to change the default ToolBar footer to any other item.
-      */
+    */
     property alias footer : _page.footer
 
-    /**
-      * header : Item
-      * The Item containing the page headBar.
-      * This property allows to change the default ToolBar header to any other item.
-      */
+    /*!
+      \qmlproperty Item ApplicationWindow::header
+
+      The Item containing the page headBar.
+      This property allows to change the default ToolBar header to any other item.
+    */
     property alias header :_page.header
 
-    /**
-      * floatingHeader : bool
-      * If the main header should float above the page contents.
-      */
+    /*!
+      \qmlproperty bool ApplicationWindow::floatingHeader
+      If the main header should float above the page contents.
+    */
     property alias floatingHeader: _page.floatingHeader
 
-    /**
-      * floatingFooter : bool
-      * If the main footer should float above the page contents.
-      */
+    /*!
+      \qmlproperty bool ApplicationWindow::floatingFooter
+
+      If the main footer should float above the page contents.
+    */
     property alias floatingFooter: _page.floatingFooter
 
-    /**
-      * autoHideHeader : bool
-      * If the main header should auto hide after the autoHideHeaderDelay timeouts of the content loses focus.
-      */
+    /*!
+      \qmlproperty bool ApplicationWindow::autoHideHeader
+
+      If the main header should auto hide after the autoHideHeaderDelay timeouts of the content loses focus.
+    */
     property alias autoHideHeader: _page.autoHideHeader
 
-    /**
-      * autoHideFooter : bool
-      * If the main footer should auto hide after the autoHideHeaderDelay timeouts of the content loses focus.
-      */
+    /*!
+      \qmlproperty bool ApplicationWindow::autoHideFooter
+
+      If the main footer should auto hide after the autoHideHeaderDelay timeouts of the content loses focus.
+    */
     property alias autoHideFooter: _page.autoHideFooter
 
-    /**
-      * autoHideHeaderDelay : int
-      * Time in milliseconds to wait before the header autohides if it is enabled.
-      */
+    /*!
+      \qmlproperty int ApplicationWindow::autoHideHeaderDelay
+
+      Time in milliseconds to wait before the header autohides if it is enabled.
+    */
     property alias autoHideHeaderDelay: _page.autoHideHeaderDelay
 
-    /**
-      * autoHideFooterDelay : int
-      * Time in milliseconds to wait before the footer autohides if it is enabled.
-      */
+    /*!
+      \qmlproperty int ApplicationWindow::autoHideFooterDelay
+      Time in milliseconds to wait before the footer autohides if it is enabled.
+    */
     property alias autoHideFooterDelay: _page.autoHideFooterDelay
 
-    /**
-      * autoHideHeaderMargins : int
-      * Threshold out of where the header autohides if enabled.
-      */
+    /*!
+      autoHideHeaderMargins : int
+
+      Threshold out of where the header autohides if enabled.
+    */
     property alias autoHideHeaderMargins: _page.autoHideHeaderMargins
 
-    /**
-      * autoHideFooterMargins : int
-      * Threshold out of where the footer autohides if enabled.
-      */
+    /*!
+      \qmlproperty bool ApplicationWindow::autoHideFooterMargins
+
+      Threshold out of where the footer autohides if enabled.
+    */
     property alias autoHideFooterMargins: _page.autoHideFooterMargins
 
-    /**
-      * altHeader : bool
-      * If the main header should be moved to the bottom of the page contents under the footer.
-      * This property can be dynamically changed on mobile devices for better reachability.
-      */
+    /*!
+      \qmlproperty bool ApplicationWindow::altHeader
+
+      If the main header should be moved to the bottom of the page contents under the footer.
+      This property can be dynamically changed on mobile devices for better reachability.
+    */
     property alias altHeader: _page.altHeader
 
-    /**
-      * margins : int
-      * The app page content margins.
-      */
+    /*!
+      \qmlproperty int ApplicationWindow::margins
+      The app page content margins.
+    */
     property alias margins : _page.margins
 
-    /**
-      * leftMargin : int
-      * The app page content margins.
-      */
+    /*!
+      \qmlproperty int ApplicationWindow::leftMargin
+
+      The app page content margins.
+    */
     property alias leftMargin : _page.leftMargin
 
-    /**
-      * rightMargin : int
-      * The app page content margins.
-      */
+    /*!
+      \qmlproperty int ApplicationWindow::rightMargin
+
+      The app page content margins.
+    */
     property alias rightMargin: _page.rightMargin
 
-    /**
-      * topMargin : int
-      * The app page content margins.
-      */
+    /*!
+      \qmlproperty int ApplicationWindow::topMargin
+
+      The app page content margins.
+    */
     property alias topMargin: _page.topMargin
 
-    /**
-      * bottomMargin : int
-      * The app page content margins.
-      */
+    /*!
+      \qmlproperty int ApplicationWindow::bottomMargin
+
+      The app page content margins.
+    */
     property alias bottomMargin: _page.bottomMargin
 
-    /**
-      * footerPositioning : ListView.footerPositioning
-      * The page footer bar positioning. It can be sticked or can be scrolled with the page content if a flickable is provided.
-      */
+    /*!
+      The page footer bar positioning. It can be sticked or can be scrolled with the page content if a flickable is provided.
+    */
     property alias footerPositioning : _page.footerPositioning
 
-    /**
-      * headerPositioning : ListView.headerPositioning
-      * The page header bar positioning. It can be sticked or can be scrolled with the page content if a flickable is provided.
-      */
+    /*!
+      The page header bar positioning. It can be sticked or can be scrolled with the page content if a flickable is provided.
+    */
     property alias headerPositioning : _page.headerPositioning
 
-    /**
-      * dialog : Dialog
-      * The internal dialogs used in the ApplicationWindow are loaded dynamically, so the current loaded dialog can be accessed
-      * via this property.
-      */
+    /*!
+      \qmlproperty Dialog ApplicationWindow::dialog
+
+      The internal dialogs used in the ApplicationWindow are loaded dynamically, so the current loaded dialog can be accessed
+      via this property.
+    */
     property alias dialog: dialogLoader.item
 
-    /**
-      * menuButton : ToolButton
-      * The main application hamburguer menu. This property can be used to customize the button look and feel.
-      */
+    /*!
+      \qmlproperty ToolButton ApplicationWindow::menuButton
+
+      The main application hamburguer menu. This property can be used to customize the button look and feel.
+    */
     property alias menuButton : menuBtn
 
-    /**
-      * mainMenu : list<Action>
-      * A list of actions to be added to the application main menu.
-      * The actions are listed under the application accounts, if used, and above the default actions menu entries: About and Quit.
-      */
+    /*!
+      A list of actions to be added to the application main menu.
+      The actions are listed under the application accounts, if used, and above the default actions menu entries: About and Quit.
+    */
     property list<Action> mainMenu
 
-    /**
-      * accounts : AccountsDialog
-      * The accounts dialog, with access to the current accounts listed.
-      * This is only avaliable if the app makes usage of online accounts.
-      */
+    /*!
+      \qmlproperty AccountsDialog ApplicationWindow::accounts
+
+      The accounts dialog, with access to the current accounts listed.
+      This is only avaliable if the app makes usage of online accounts.
+    */
     property alias accounts: _accountsDialogLoader.item
 
-    /**
-      * currentAccount : var
-      * The current account selected.
-      * Only avaliable if the app makes usage of online accounts.
-      */
+    /*!
+      The current account selected.
+      Only avaliable if the app makes usage of online accounts.
+    */
     property var currentAccount: Maui.App.handleAccounts ? Maui.App.accounts.currentAccount : ({})
 
-    /**
-      * notifyDialog : Dialog
-      * The inline notification dialog.
-      * To trigger an inline notification use the function notify()
-      * This only gives access to the dialog interface properties.
-      */
+    /*!
+      \qmlproperty Dialog ApplicationWindow::notifyDialog
+
+      The inline notification dialog.
+      To trigger an inline notification use the function notify()
+      This only gives access to the dialog interface properties.
+    */
     property alias notifyDialog: _notify
 
-    /**
-      * aboutDialog : AboutDialog
-      * The about dialog with information about the application.
-      * Can be used to append more sections to the dialog or modify existing ones.
-      */
+    /*!
+      \qmlproperty AboutDialog ApplicationWindow::aboutDialog
+
+      The about dialog with information about the application.
+      Can be used to append more sections to the dialog or modify existing ones.
+    */
     property alias aboutDialog: aboutDialog
 
-    /**
-      * background : Component
-      * The application main page background.
-      */
+    /*!
+      \qmlproperty Component ApplicationWindow::background
+
+      The application main page background.
+    */
     property alias background : _page.background
 
-    /**
-      * isWide : bool
-      * If the application window size is wide enough.
-      * This property can be changed to any random condition.
-      * Keep in mind this property is widely used in other MauiKit components to determined if items shoudl be hidden or collapsed, etc.
-      */
+    /*!
+      If the application window size is wide enough.
+      This property can be changed to any random condition.
+      Keep in mind this property is widely used in other MauiKit components to determined if items shoudl be hidden or collapsed, etc.
+    */
     property bool isWide : root.width >= Kirigami.Units.gridUnit * 30
 
     /***************************************************/
     /**************** READONLY PROPS ******************/
     /*************************************************/
-    /**
-      * isPortrait : bool
-      * If the screen where the application is drawn is in portrait mode or not,
-      * other wise it is in landscape mode.
-      */
+    /*!
+      If the screen where the application is drawn is in portrait mode or not,
+      other wise it is in landscape mode.
+    */
     readonly property bool isPortrait: Screen.primaryOrientation === Qt.PortraitOrientation || Screen.primaryOrientation === Qt.InvertedPortraitOrientation
 
     /***************************************************/
     /******************** SIGNALS *********************/
     /*************************************************/
-    /**
-      * menuButtonClicked : signal
-      * Triggered when the main menu button has been clicked.
-      */
+    /*!
+      Triggered when the main menu button has been clicked.
+    */
     signal menuButtonClicked();
 
     onClosing:
