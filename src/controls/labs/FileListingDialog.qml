@@ -24,6 +24,10 @@ import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.8 as Kirigami
 import org.kde.mauikit 1.3 as Maui
 
+/*!
+  \since org.kde.mauikit.labs 1.0
+  \inqmlmodule org.kde.mauikit.labs
+*/
 Maui.Dialog
 {
     id: control

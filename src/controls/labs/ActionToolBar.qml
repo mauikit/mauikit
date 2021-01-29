@@ -14,9 +14,9 @@ Kirigami.ActionToolBar
 {
     id: control
 
-    /**
-      *
-      */
+    /*!
+      List of actions on this toolbar.
+    */
     default property list<MauiLab.ToolButtonAction> mauiActions
     actions:  mauiActions
 }

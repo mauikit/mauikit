@@ -2,14 +2,12 @@ import QtQuick 2.14
 import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.8 as Kirigami
 
-/**
- * A visual separator
- *
- * Useful for splitting one set of items from another.
- *
- * @inherit QtQuick.Rectangle
- */
+/*!
+  \since org.kde.mauikit.labs 1.0
+  \inqmlmodule org.kde.mauikit.labs
 
+  A visual separator.
+*/
 Loader
 {
     id: control

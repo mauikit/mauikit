@@ -9,6 +9,10 @@ import org.kde.kirigami 2.7 as Kirigami
 import org.kde.appletdecoration 0.1 as AppletDecoration
 // import org.kde.plasma.plasmoid 2.0
 
+/*!
+  \since org.kde.mauikit.labs 1.0
+  \inqmlmodule org.kde.mauikit.labs
+*/
 Item
 {
     id: control

@@ -5,6 +5,10 @@
        import org.kde.mauikit 1.0 as Maui
        import org.kde.kirigami 2.7 as Kirigami
        
+       /*!
+           \since org.kde.mauikit.labs 1.0
+           \inqmlmodule org.kde.mauikit.labs
+       */
        Item
        {
            id: control

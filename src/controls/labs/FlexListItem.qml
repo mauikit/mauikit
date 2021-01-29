@@ -25,10 +25,12 @@ import org.kde.kirigami 2.8 as Kirigami
 import org.kde.mauikit 1.2 as Maui
 
 
-/**
-  * A template to position text besides an icon or image with a flex content side, that flexes under constrained spaces.
-  *
-  */
+/*!
+  \since org.kde.mauikit.labs 1.0
+  \inqmlmodule org.kde.mauikit.labs
+
+  A template to position text besides an icon or image with a flex content side, that flexes under constrained spaces.
+*/
 ItemDelegate
 {
     id: control

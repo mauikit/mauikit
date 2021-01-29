@@ -4,18 +4,24 @@ import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.9 as Kirigami
 import org.kde.mauikit 1.2 as Maui
 
+/*!
+  \since org.kde.mauikit.labs 1.0
+  \inqmlmodule org.kde.mauikit.labs
+
+  An alternate style of list item.
+*/
 Maui.ItemDelegate
 {
     id: control
 
-    /**
-      *
-      */
+    /*!
+      Whether or not this list item should use an alternate background colour.
+    */
     property bool alt : index ? index % 2 === 0 : false
 
-    /**
-      *
-      */
+    /*!
+      Whether or not this list item is the last list item in the view.
+    */
     property bool lastOne : false
 
     leftPadding: Maui.Style.space.big
