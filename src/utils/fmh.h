@@ -132,7 +132,7 @@ static const QMap<FILTER_TYPE, QStringList> SUPPORTED_MIMETYPES {{FILTER_TYPE::A
  * @param type
  * @return
  */
-static QStringList MAUIKIT_EXPORT getMimeTypeSuffixes(const FMH::FILTER_TYPE &type, QString (*cb)(QString))
+static QStringList getMimeTypeSuffixes(const FMH::FILTER_TYPE &type, QString (*cb)(QString))
 {
     QStringList res;
     QMimeDatabase mimedb;
@@ -483,7 +483,7 @@ static const QHash<MODEL_KEY, QString> MODEL_NAME = {{MODEL_KEY::ICON, "icon"},
                                                      {MODEL_KEY::DEVICE, "device"},
                                                      {MODEL_KEY::LASTSYNC, "lastsync"}};
 
-static const QHash<QString, MODEL_KEY> MAUIKIT_EXPORT MODEL_NAME_KEY = {{MODEL_NAME[MODEL_KEY::ICON], MODEL_KEY::ICON},
+static const QHash<QString, MODEL_KEY> MODEL_NAME_KEY = {{MODEL_NAME[MODEL_KEY::ICON], MODEL_KEY::ICON},
                                                                         {MODEL_NAME[MODEL_KEY::LABEL], MODEL_KEY::LABEL},
                                                                         {MODEL_NAME[MODEL_KEY::PATH], MODEL_KEY::PATH},
                                                                         {MODEL_NAME[MODEL_KEY::URL], MODEL_KEY::URL},
@@ -761,7 +761,7 @@ enum PATHTYPE_KEY : int {
 };
 #endif
 
-static const QHash<PATHTYPE_KEY, QString> MAUIKIT_EXPORT PATHTYPE_SCHEME = {{PATHTYPE_KEY::PLACES_PATH, "file"},
+static const QHash<PATHTYPE_KEY, QString> PATHTYPE_SCHEME = {{PATHTYPE_KEY::PLACES_PATH, "file"},
                                                                             {PATHTYPE_KEY::BOOKMARKS_PATH, "file"},
                                                                             {PATHTYPE_KEY::DRIVES_PATH, "drives"},
                                                                             {PATHTYPE_KEY::APPS_PATH, "applications"},
@@ -775,7 +775,7 @@ static const QHash<PATHTYPE_KEY, QString> MAUIKIT_EXPORT PATHTYPE_SCHEME = {{PAT
                                                                             {PATHTYPE_KEY::FISH_PATH, "fish"},
                                                                             {PATHTYPE_KEY::MTP_PATH, "mtp"}};
 
-static const QHash<QString, PATHTYPE_KEY> MAUIKIT_EXPORT PATHTYPE_SCHEME_NAME = {{PATHTYPE_SCHEME[PATHTYPE_KEY::PLACES_PATH], PATHTYPE_KEY::PLACES_PATH},
+static const QHash<QString, PATHTYPE_KEY> PATHTYPE_SCHEME_NAME = {{PATHTYPE_SCHEME[PATHTYPE_KEY::PLACES_PATH], PATHTYPE_KEY::PLACES_PATH},
                                                                                  {PATHTYPE_SCHEME[PATHTYPE_KEY::BOOKMARKS_PATH], PATHTYPE_KEY::BOOKMARKS_PATH},
                                                                                  {PATHTYPE_SCHEME[PATHTYPE_KEY::DRIVES_PATH], PATHTYPE_KEY::DRIVES_PATH},
                                                                                  {PATHTYPE_SCHEME[PATHTYPE_KEY::APPS_PATH], PATHTYPE_KEY::APPS_PATH},
@@ -789,7 +789,7 @@ static const QHash<QString, PATHTYPE_KEY> MAUIKIT_EXPORT PATHTYPE_SCHEME_NAME = 
                                                                                  {PATHTYPE_SCHEME[PATHTYPE_KEY::FISH_PATH], PATHTYPE_KEY::FISH_PATH},
                                                                                  {PATHTYPE_SCHEME[PATHTYPE_KEY::MTP_PATH], PATHTYPE_KEY::MTP_PATH}};
 
-static const QHash<PATHTYPE_KEY, QString> MAUIKIT_EXPORT PATHTYPE_URI = {{PATHTYPE_KEY::PLACES_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::PLACES_PATH] + "://"},
+static const QHash<PATHTYPE_KEY, QString> PATHTYPE_URI = {{PATHTYPE_KEY::PLACES_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::PLACES_PATH] + "://"},
                                                                          {PATHTYPE_KEY::BOOKMARKS_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::BOOKMARKS_PATH] + "://"},
                                                                          {PATHTYPE_KEY::DRIVES_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::DRIVES_PATH] + "://"},
                                                                          {PATHTYPE_KEY::APPS_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::APPS_PATH] + ":///"},
@@ -803,7 +803,7 @@ static const QHash<PATHTYPE_KEY, QString> MAUIKIT_EXPORT PATHTYPE_URI = {{PATHTY
                                                                          {PATHTYPE_KEY::FISH_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::FISH_PATH] + "://"},
                                                                          {PATHTYPE_KEY::MTP_PATH, PATHTYPE_SCHEME[PATHTYPE_KEY::MTP_PATH] + "://"}};
 
-static const QHash<PATHTYPE_KEY, QString> MAUIKIT_EXPORT PATHTYPE_LABEL = {{PATHTYPE_KEY::PLACES_PATH, ("Places")},
+static const QHash<PATHTYPE_KEY, QString> PATHTYPE_LABEL = {{PATHTYPE_KEY::PLACES_PATH, ("Places")},
                                                                            {PATHTYPE_KEY::BOOKMARKS_PATH, ("Bookmarks")},
                                                                            {PATHTYPE_KEY::DRIVES_PATH, ("Drives")},
                                                                            {PATHTYPE_KEY::APPS_PATH, ("Apps")},
@@ -908,14 +908,14 @@ bool MAUIKIT_EXPORT fileExists(const QUrl &path);
  * @param path
  * @return
  */
-const MAUIKIT_EXPORT QString fileDir(const QUrl &path);
+const QString MAUIKIT_EXPORT fileDir(const QUrl &path);
 
 /**
  * @brief parentDir
  * @param path
  * @return
  */
-const MAUIKIT_EXPORT QUrl parentDir(const QUrl &path);
+const QUrl MAUIKIT_EXPORT parentDir(const QUrl &path);
 
 /**
  * Return the configuration of a single directory represented
@@ -927,7 +927,7 @@ const MAUIKIT_EXPORT QUrl parentDir(const QUrl &path);
  * @param path
  * @return
  */
-const MAUIKIT_EXPORT QVariantMap dirConf(const QUrl &path);
+const QVariantMap MAUIKIT_EXPORT dirConf(const QUrl &path);
 
 /**
  * @brief setDirConf
@@ -977,7 +977,7 @@ const QUrl MAUIKIT_EXPORT thumbnailUrl(const QUrl &url, const QString &mimetype)
  * @param item
  * @return
  */
-const MODEL MAUIKIT_EXPORT getFileInfo(const KFileItem &kfile);
+const MODEL getFileInfo(const KFileItem &kfile);
 #endif
 
 /**

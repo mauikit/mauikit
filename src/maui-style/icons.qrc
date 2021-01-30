@@ -130,7 +130,6 @@
         <file>icons/luv-icon-theme/Luv/actions/16/application-exit.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/16/bookmark-new.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/16/configure.svg</file>
-        <file>icons/luv-icon-theme/Luv/actions/16/dialog-ok-apply.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/16/dialog-ok.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/16/document-import.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/16/document-new.svg</file>
@@ -147,7 +146,6 @@
         <file>icons/luv-icon-theme/Luv/actions/16/edit-redo.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/16/edit-undo.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/16/filename-bpm-amarok.svg</file>
-        <file>icons/luv-icon-theme/Luv/actions/16/filename-title-amarok.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/16/get-hot-new-stuff.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/16/go-jump-today.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/16/help-contents.svg</file>
@@ -646,12 +644,9 @@
         <file>icons/luv-icon-theme/Luv/actions/16/tab-duplicate.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/16/project-open.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/16/process-stop.svg</file>
-        <file>icons/luv-icon-theme/Luv/actions/16/handle-sort.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/16/go-jump.svg</file>
-        <file>icons/luv-icon-theme/Luv/actions/16/folder-new.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/16/folder-add.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/16/edit-rename.svg</file>
-        <file>icons/luv-icon-theme/Luv/actions/16/edit-link.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/16/edit-clear.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/16/document-open-recent.svg</file>
         <file>icons/luv-icon-theme/Luv/actions/16/document-edit.svg</file>
