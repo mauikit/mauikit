@@ -36,7 +36,7 @@
 
 #if defined(Q_OS_ANDROID)
 #include "mauiandroid.h"
-#elif defined(Q_OS_LINUX)
+#elif defined Q_OS_LINUX || defined Q_OS_WIN
 #include <KConfig>
 #include <KConfigGroup>
 #include <KFileItem>
@@ -723,7 +723,7 @@ struct PATH_CONTENT {
 /**
  * @brief The PATHTYPE_KEY enum
  */
-#if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS // for android, windows and mac use this for now
+#if defined Q_OS_ANDROID || defined Q_OS_WIN || defined Q_OS_MACOS || defined Q_OS_IOS // for android, windows and mac use this for now
 enum PATHTYPE_KEY : int {
     PLACES_PATH,
     REMOTE_PATH,
@@ -971,13 +971,13 @@ bool MAUIKIT_EXPORT checkFileType(const FILTER_TYPE &type, const QString &mimeTy
  */
 const QUrl MAUIKIT_EXPORT thumbnailUrl(const QUrl &url, const QString &mimetype);
 
-#if !defined Q_OS_ANDROID && defined Q_OS_LINUX
+#if (!defined Q_OS_ANDROID && defined Q_OS_LINUX) || defined Q_OS_WIN
 /**
  * @brief packFileInfo
  * @param item
  * @return
  */
-const MODEL getFileInfo(const KFileItem &kfile);
+const MODEL MAUIKIT_EXPORT getFileInfo(const KFileItem &kfile);
 #endif
 
 /**

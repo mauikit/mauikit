@@ -188,12 +188,12 @@ endif()
 option(IS_APPIMAGE_PACKAGE "If set to true then the icons and styled is packaged as well" OFF)
 
 if(ANDROID OR WIN32 OR IS_APPIMAGE_PACKAGE)
-    if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/maui-style/icons/luv-icon-theme/.git)
+    if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/icons/luv-icon-theme/.git)
         find_package(Git REQUIRED)
-        execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/Nitrux/luv-icon-theme.git ${CMAKE_CURRENT_SOURCE_DIR}/maui-style/icons/luv-icon-theme)
+        execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/Nitrux/luv-icon-theme.git ${CMAKE_CURRENT_SOURCE_DIR}/icons/luv-icon-theme)
     endif()
 
-    list(APPEND mauikit_SRCS maui-style/icons.qrc)
+    list(APPEND mauikit_SRCS icons.qrc)
 endif()
 
 if (ANDROID)
@@ -255,9 +255,16 @@ add_library(MauiKit
 )
 
 if(ANDROID)
+    target_include_directories(MauiKit PRIVATE platforms/android)
+elseif(WIN32)
+    target_include_directories(MauiKit PRIVATE platforms/windows)
+elseif(UNIX)
+    target_include_directories(MauiKit PRIVATE platforms/linux)
+endif()
+
+if(ANDROID)
     target_link_libraries(MauiKit PRIVATE Qt5::AndroidExtras jnigraphics)
 
-    target_include_directories(MauiKit PRIVATE platforms/android)
     install(FILES platforms/android/mauiandroid.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit COMPONENT Devel)
 
     install(DIRECTORY platforms/android/ DESTINATION ${KDE_INSTALL_DATAROOTDIR}/MauiKitAndroid COMPONENT Devel)
@@ -267,7 +274,7 @@ if(ANDROID)
     else()
         install(FILES MauiKit-android-dependencies.xml DESTINATION ${KDE_INSTALL_LIBDIR} RENAME MauiKit_${CMAKE_ANDROID_ARCH_ABI}-android-dependencies.xml)
     endif()
-elseif(UNIX)
+else()
     target_link_libraries(MauiKit 
     PUBLIC 
     KF5::ConfigCore
@@ -278,7 +285,6 @@ elseif(UNIX)
     PRIVATE 
     KF5::Service 
     KF5::KIONTLM)
-    target_include_directories(MauiKit PRIVATE platforms/linux)
 endif()
 
 target_link_libraries(MauiKit
