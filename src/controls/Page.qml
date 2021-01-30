@@ -26,16 +26,19 @@ import QtGraphicalEffects 1.0
 import org.kde.mauikit 1.2 as Maui
 import org.kde.kirigami 2.7 as Kirigami
 
-/**
- * Page
- * A global sidebar for the application window that can be collapsed.
- *
- *
- *
- *
- *
- *
- */
+/*!
+\since org.kde.mauikit 1.0
+\inqmlmodule org.kde.mauikit
+\brief A page with a header and footer bar, that can be switched among many other features.
+
+This page has a header and footer bar that by default are a MauiKit ToolBar,
+the header bar can be dinamically moved to the bottom under the footer for better
+reachability on hand held devices like phones.
+
+Among other features, the page can have a reference to a flickable element to allow to have pull back
+toolbar behaviour, floating toolbars, etc.
+
+*/
 Pane
 {
     id: control
@@ -49,155 +52,199 @@ Pane
 
     Kirigami.Theme.colorSet: Kirigami.Theme.View
 
-    /**
-      * content : Item.data
-      */
+    /*!
+      \qmlproperty Item Item::data
+
+      The default content of the page.
+      To position child elements use anchors or do it manually.
+    */
     default property alias content: _content.data
 
-    /**
-      * pageContent : Item
-      */
+    /*!
+      \qmlproperty Item Page::item
+
+      An alias to the actual Item that contains the page children.
+    */
     readonly property alias pageContent : _content
 
-    /**
-      * headerBackground : Rectangle
-      */
+    /*!
+      \qmlproperty Rectangle
+
+      An alias to the background of the default header bar toolbar.
+      This can be modified to achive a different look and feel.
+    */
     property alias headerBackground : _headerBackground
 
-    /**
-      * footerBackground : Rectangle
-      */
+    /*!
+      \qmlproperty Rectangle
+
+      An alias to the background of the default footer bar toolbar.
+      This can be modified to achive a different look and feel.
+    */
     property alias footerBackground : _footerBackground
 
-    /**
-      * internalHeight : int
-      */
+    /*!
+      \qmlproperty Item Item::height
+
+      The actual height of the page contents withouth the header or footer bars.
+    */
     readonly property alias internalHeight : _content.height
 
-    /**
-      * flickable : Flickable
-      */
+    /*!
+      A flickable element can be referenced in order to support the header and footer positioning options
+        such as Inline, Pullback or floating.
+        If a flickable is set, the page will modify its top or bottom margins properties.
+        And watch for changes in properties such a contentX and contentY in order to support the former mentioned features.
+    */
     property Flickable flickable : null
 
-    /**
-      * footerPositioning : ListView.positioning
-      */
+    /*!
+      The footer bar can be place static and always visible with the InlineFooter value, or move with the flickable contents when using the PullBackFooter value.
+      This is only supported if a flickable element has been set.
+      By default this is set to InlineFooter.
+    */
     property int footerPositioning : ListView.InlineFooter
 
-    /**
-      * headerPositioning : ListView.positioning
-      */
+    /*!
+      The header bar can be place static and always visible with the InlineHeader value, or move with the flickable contents when using the PullBackHeader value.
+      This is only supported if a flickable element has been set.
+      By default this is set to InlineHeader unless it is a Mobile device, in which case it is PullBackHeader.
+    */
     property int headerPositioning : Kirigami.Settings.isMobile && flickable ? ListView.PullBackHeader : ListView.InlineHeader
 
-    /**
-      * title : string
-      */
+    /*!
+      A title for the page.
+      This title is shown in the middle of the default header bar if the showTitle property is set to true.
+      The displayed title in the header bar wont wrap and will elide in the middle.
+    */
     property string title
 
-    /**
-      * showTitle : bool
+    /*!
+      If a title is set and this is set to true, such title will be displayed in the default header bar in the middle.
       */
     property bool showTitle : true
 
-    /**
-      * headBar : ToolBar
+    /*!
+      \qmlproperty int Page::ToolBar
+      An alias to the default header bar toolbar.
+      The toolbar is a MauiKit ToolBar.
       */
     property alias headBar : _headBar
 
-    /**
-      * footBar : ToolBar
+    /*!
+      \qmlproperty int Page::ToolBar
+      An alias to the default footer bar toolbar.
+      The toolbar is a MauiKit ToolBar.
       */
     property alias footBar: _footBar
 
-    /**
-      * footerColumn : ColumnLayout.data
+    /*!
+      \qmlproperty int Page::ColumnLayout::data
+      Quick way to add more children to the footer bar.
+      The footer bar is handled by a ColumnLayout so any elements to be added need to be postioned using the Layout attached properties.
+      Layout.fillWidth can be set, but an implicit or preferredHeight must be given.
       */
     property alias footerColumn : _footerContent.data
 
-    /**
-      * headerColumn : ColumnLayout.data
+
+    /*!
+      \qmlproperty int Page::ColumnLayout::data
+      Quick way to add more children to the header bar.
+      The header bar is handled by a ColumnLayout so any elements to be added need to be postioned using the Layout attached properties.
+      Layout.fillWidth can be set, but an implicit or preferredHeight must be given.
       */
     property alias headerColumn : _headerContent.data
 
-    /**
-      * margins : int
+    /*!
+      The page margins between the children contents and the actual container.
+      This margins do not affect the header or footer bars.
+      By default this is set to 0
       */
     property int margins: 0
 
-    /**
-      * leftMargin : int
+    /*!
+      Page left margins
       */
     property int leftMargin : margins
 
-    /**
-      * rightMargin : int
+    /*!
+      Page right margins
       */
     property int rightMargin: margins
 
-    /**
-      * topMargin : int
+    /*!
+      Page top margins
       */
     property int topMargin: margins
 
-    /**
-      * bottomMargin : int
+    /*!
+      Page bottom margins
       */
     property int bottomMargin: margins
 
-    /**
-      * altHeader : bool
+    /*!
+      If set to true the header bar will be positioned to the bottom under the footer bar.
+      This makes sense in some cases for better reachability, or custom design patterns.
       */
     property bool altHeader : false
 
-    /**
-      * autoHideHeader : bool
+    /*!
+      If the header bar should hide under certain conditions.
+      To fine tune a threshold margin can be set, and a time delay.
       */
     property bool autoHideHeader : false
 
-    /**
-      * autoHideFooter : bool
-      */
+    /*!
+      If the footer bar should hide under certain conditions.
+      To fine tune a threshold margin can be set, and a time delay.
+    */
     property bool autoHideFooter : false
 
-    /**
-      * autoHideHeaderMargins : int
+    /*!
+      Pixels threshold for when the header should auto hide.
+      The default value is set to Maui.Style.toolBarHeight, which is the double distance of the default header bar toolbar.
       */
     property int autoHideHeaderMargins : Maui.Style.toolBarHeight
 
-    /**
-      * autoHideFooterMargins : int
+    /*!
+      Pixels threshold for when the footer should auto hide.
+      The default value is set to Maui.Style.toolBarHeight, which is the double distance of the default footer bar toolbar.
       */
     property int autoHideFooterMargins : Maui.Style.toolBarHeight
 
-    /**
-      * autoHideFooterDelay : int
+    /*!
+      Span of time to hide the footer bar after the conditions have been met.
+      If within the span of time the conditions changed then the timer gets reseted.
       */
     property int autoHideFooterDelay : Maui.Handy.isTouch ? 0 : 1000
 
-    /**
-      * autoHideHeaderDelay : int
+    /*!
+      Span of time to hide the header bar after the conditions have been met.
+      If within the span of time the conditions changed then the timer gets reseted.
       */
     property int autoHideHeaderDelay : Maui.Handy.isTouch ? 0 : 1000
 
     //    property bool floatingHeader : control.flickable && !control.flickable.atYBeginning
 
-    /**
-      * floatingHeader : bool
+    /*!
+      If the footer bar should float over the page contents, if a flickable has been set then the default header bar will have a translucent ShaderEffect
+      to hint about the content under it.
       */
     property bool floatingHeader : false
 
-    /**
-      * floatingFooter : bool
+    /*!
+      If the header bar should float over the page contents, if a flickable has been set then the default header bar will have a translucent ShaderEffect
+      to hint about the content under it.
       */
     property bool floatingFooter: false
 
-    /**
-      * goBackTriggered :
+    /*!
+      The page has requested to go back by a gesture or keyboard shortcut
       */
     signal goBackTriggered()
 
-    /**
-      * goForwardTriggered :
+    /*!
+      The page has requested to go forward by a gesture or keyboard shortcut
       */
     signal goForwardTriggered()
 
@@ -348,7 +395,7 @@ Pane
         }
     }
 
-    /**
+    /*!
       *
       */
     property Item header : Maui.ToolBar
@@ -451,7 +498,7 @@ Pane
     //text: _footBar.visibleCount + " / " + _footBar.count + " - " + _footBar.height + " / " + footer.height + " - " + _footBar.visible + " / " + footer.visible + " / " + footer.height + " / " + _footerContent.implicitHeight  + " / " + _footerContent.implicitHeight
     //}
 
-    /**
+    /*!
       *
       */
     property Item footer : Maui.ToolBar
@@ -867,7 +914,7 @@ Pane
         }
     }
 
-    /**
+    /*!
       *
       */
     function returnToBounds()
@@ -883,7 +930,7 @@ Pane
         }
     }
 
-    /**
+    /*!
       *
       */
     function pullBackHeader()
@@ -892,7 +939,7 @@ Pane
         header.height = 0
     }
 
-    /**
+    /*!
       *
       */
     function pullDownHeader()
@@ -901,7 +948,7 @@ Pane
         header.height = header.implicitHeight
     }
 
-    /**
+    /*!
       *
       */
     function pullBackFooter()
@@ -910,7 +957,7 @@ Pane
         footer.height= 0
     }
 
-    /**
+    /*!
       *
       */
     function pullDownFooter()
