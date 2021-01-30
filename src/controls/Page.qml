@@ -53,7 +53,7 @@ Pane
     Kirigami.Theme.colorSet: Kirigami.Theme.View
 
     /*!
-      \qmlproperty Item Item::data
+      \qmlproperty list<Object> Item::content
 
       The default content of the page.
       To position child elements use anchors or do it manually.
@@ -61,14 +61,14 @@ Pane
     default property alias content: _content.data
 
     /*!
-      \qmlproperty Item Page::item
+      \qmlproperty Item Page::pageContent
 
       An alias to the actual Item that contains the page children.
     */
     readonly property alias pageContent : _content
 
     /*!
-      \qmlproperty Rectangle
+      \qmlproperty Rectangle Page::headerBackground
 
       An alias to the background of the default header bar toolbar.
       This can be modified to achive a different look and feel.
@@ -76,7 +76,7 @@ Pane
     property alias headerBackground : _headerBackground
 
     /*!
-      \qmlproperty Rectangle
+      \qmlproperty Rectangle Page::footerBackground
 
       An alias to the background of the default footer bar toolbar.
       This can be modified to achive a different look and feel.
@@ -84,7 +84,7 @@ Pane
     property alias footerBackground : _footerBackground
 
     /*!
-      \qmlproperty Item Item::height
+      \qmlproperty int Page::internalHeight
 
       The actual height of the page contents withouth the header or footer bars.
     */
@@ -125,21 +125,21 @@ Pane
     property bool showTitle : true
 
     /*!
-      \qmlproperty int Page::ToolBar
+      \qmlproperty ToolBar Page::headBar
       An alias to the default header bar toolbar.
       The toolbar is a MauiKit ToolBar.
       */
     property alias headBar : _headBar
 
     /*!
-      \qmlproperty int Page::ToolBar
+      \qmlproperty ToolBar Page::footBar
       An alias to the default footer bar toolbar.
       The toolbar is a MauiKit ToolBar.
       */
     property alias footBar: _footBar
 
     /*!
-      \qmlproperty int Page::ColumnLayout::data
+      \qmlproperty list<Object> Page::footerColumn
       Quick way to add more children to the footer bar.
       The footer bar is handled by a ColumnLayout so any elements to be added need to be postioned using the Layout attached properties.
       Layout.fillWidth can be set, but an implicit or preferredHeight must be given.
@@ -148,7 +148,7 @@ Pane
 
 
     /*!
-      \qmlproperty int Page::ColumnLayout::data
+      \qmlproperty list<Object> Page::headerColumn
       Quick way to add more children to the header bar.
       The header bar is handled by a ColumnLayout so any elements to be added need to be postioned using the Layout attached properties.
       Layout.fillWidth can be set, but an implicit or preferredHeight must be given.
