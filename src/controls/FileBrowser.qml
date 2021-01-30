@@ -26,188 +26,185 @@ import org.kde.mauikit 1.3 as Maui
 
 import "private" as Private
 
-/**
- * FileBrowser
- * A control to list and browse the file system, with convinient properties
- * for filtering and sorting its contents
- *
- * There are three different possible ways to display the contents: Grid, List and Miller views.
- * Some basic file item actions are implemented by default, like copy, cut, rename and remove.
- *
- * This component functionality can be easily expanded to be more feature rich.
- *
- */
+/*!
+A control to list and browse the file system, with convinient properties
+for filtering and sorting its contents
+
+There are three different possible ways to display the contents: Grid, List and Miller views.
+Some basic file item actions are implemented by default, like copy, cut, rename and remove.
+
+This component functionality can be easily expanded to be more feature rich.
+*/
 Maui.Page
 {
     id: control
     
-    /**
-     * currentPath : url
-     * The current path of the directory URL.
-     * To list a directory path, or other location, use the right schemas,
-     * some of them are file://, webdav://, trash:///, tags://
-     */
+    /*!
+      \qmlproperty FileBrowser::currentPath
+
+      The current path of the directory URL.
+      To list a directory path, or other location, use the right schemas,
+      some of them are file://, webdav://, trash:///, tags://
+    */
     property alias currentPath : _browser.path
     onCurrentPathChanged : _searchField.clear()
     
-    /**
-     * settings : BrowserSettings
-     * A group of properties for controlling the sorting, listing and behaviour of the file browser.
-     * For more details check the BrowserSettings documentation.
-     */
+    /*!
+      \qmlproperty BrowserSettings FileBrowser::settings
+
+      A group of properties for controlling the sorting, listing and behaviour of the file browser.
+      For more details check the BrowserSettings documentation.
+    */
     property alias settings : _browser.settings
     
-    /**
-     * view : Item
-     * The browser can be in two different view states: the file browsing or the search view, this
-     * property gives access to the current view in use.
-     * .
-     */
+    /*!
+      \qmlproperty Item FileBrowser::view
+
+      The browser can be in two different view states: the file browsing or the search view, this
+      property gives access to the current view in use.
+    */
     property alias view : _stackView.currentItem
     
-    /**
-     * dropArea : DropArea
-     * Drop area component, for dropping files.
-     * By default sonme drop actions are handled, for other type of uris this property can be used to handle those.
-     */
+    /*!
+      \qmlproperty DropArea FileBrowser::dropArea
+
+      Drop area component, for dropping files.
+      By default sonme drop actions are handled, for other type of uris this property can be used to handle those.
+    */
     property alias dropArea : _dropArea
     
-    /**
-     * currentIndex : int
-     * Current index of the item selected in the file browser.
-     */
+    /*!
+      \qmlproperty int FileBrowser::currentIndex
+
+      Current index of the item selected in the file browser.
+    */
     property alias currentIndex : _browser.currentIndex
     
-    /**
-     * currentView : Item
-     * Current view of the file browser. Possible views are List = ListBrowser
-     * Grid = GridView
-     * Miller = ListView
-     */
+    /*!
+      \qmlproperty Item FileBrowser::currentView
+
+      Current view of the file browser. Possible views are List = ListBrowser
+      Grid = GridView
+      Miller = ListView
+    */
     readonly property QtObject currentView : _stackView.currentItem.currentView
     
-    /**
-     * currentFMList : FMList
-     * The file browser model list controller being used. The List and Grid views use the same FMList, the
-     * Miller columns use several different models, one for each column.
-     */
+    /*!
+      The file browser model list controller being used. The List and Grid views use the same FMList, the
+      Miller columns use several different models, one for each column.
+    */
     readonly property Maui.FMList currentFMList : view.currentFMList
     
-    /**
-     * currentFMModel : BaseModel
-     * The file browser data model being used. The List and Grid views use the same model, the
-     * Miller columns use several different FMList controllers, one for each column.
-     */
+    /*!
+      The file browser data model being used. The List and Grid views use the same model, the
+      Miller columns use several different FMList controllers, one for each column.
+    */
     readonly property Maui.BaseModel currentFMModel : view.currentFMModel
     
-    /**
-     * isSearchView : bool
-     * If the file browser current view is the search view.
-     */
+    /*!
+      isSearchView : bool
+      If the file browser current view is the search view.
+    */
     readonly property bool isSearchView : _stackView.currentItem.objectName === "searchView"
     
-    /**
-     * selectionMode : bool
-     * If the file browser enters selection mode, allowing the selection of multiple items.
-     */
+    /*!
+      If the file browser enters selection mode, allowing the selection of multiple items.
+    */
     property bool selectionMode: false
     
-    /**
-     * gridItemSize : int
-     * Size of the items in the grid view. The size is for the combined thumbnail/icon and the title label.
-     */
+    /*!
+      \qmlproperty int FileBrowser::gridItemSize
+
+      Size of the items in the grid view. The size is for the combined thumbnail/icon and the title label.
+    */
     property alias gridItemSize : _browser.gridItemSize
     
-    /**
-     * listItemSize : int
-     * Size of the items in the grid view. The size is for the combined thumbnail/icon and the title label.
-     */
+    /*!
+      \qmlproperty int FileBrowser::listItemSize
+
+      Size of the items in the grid view. The size is for the combined thumbnail/icon and the title label.
+    */
     property alias listItemSize : _browser.listItemSize
     
-    /**
-     * indexHistory : var
-     * History of the items indexes.
-     */
+    /*!
+     \qmlproperty var FileBrowser::indexHistory
+
+     History of the items indexes.
+    */
     property var indexHistory : []
     
     // need to be set by the implementation as features
-    /**
-     * selectionBar : SelectionBar
-     */
+    /*!
+
+    */
     property Maui.SelectionBar selectionBar : null //TODO remove
     
     
     //relevant menus to file item and the browserview
-    /**
-     * browserMenu : BrowserMenu
-     * Gives access to the file browser menu to add new menu item actions.
-     */
+    /*!
+     \qmlproperty BrowserMenu FileBrowser::browserMenu
+
+     Gives access to the file browser menu to add new menu item actions.
+    */
     property alias browserMenu: browserMenu
     
-    /**
-     * itemMenu : FileMenu
-     * Gives access to the file browser items menu to add new menu item actions,
-     * relevant to the file items.
-     * To get info about the current file item for the menu check the FileMenu documentation.
-     */
+    /*!
+     \qmlproperty FileMenu FileBrowser::itemMenu
+
+     Gives access to the file browser items menu to add new menu item actions,
+     relevant to the file items.
+     To get info about the current file item for the menu check the FileMenu documentation.
+    */
     property alias itemMenu: itemMenu
     
     //access to the loaded the dialog components
-    /**
-     * dialog : Dialog
-     * The message and action dialogs are loaded when needed.
-     * This property gives access to the current dialog opened.
-     */
+    /*!
+      \qmlproperty Dialog FileBrowser::dialog
+      The message and action dialogs are loaded when needed.
+      This property gives access to the current dialog opened.
+    */
     property alias dialog : dialogLoader.item
     
     //signals
-    /**
-     * itemClicked :
-     * An item was clicked.
-     */
+    /*!
+      An item was clicked.
+    */
     signal itemClicked(int index)
     
     /**
-     * itemDoubleClicked :
-     * An item was double clicked.
-     */
+     An item was double clicked.
+    */
     signal itemDoubleClicked(int index)
     
-    /**
-     * itemRightClicked :
-     * An item was right clicked, on mobile devices this is translated from a long press and relase.
-     */
+    /*!
+      An item was right clicked, on mobile devices this is translated from a long press and relase.
+    */
     signal itemRightClicked(int index)
     
-    /**
-     * itemLeftEmblemClicked :
-     * The left emblem of the item was clicked.
-     */
+    /*!
+      The left emblem of the item was clicked.
+    */
     signal itemLeftEmblemClicked(int index)
     
-    /**
-     * itemRightEmblemClicked :
-     * The right emblem of the item was clicked.
-     */
+    /*!
+      The right emblem of the item was clicked.
+    */
     signal itemRightEmblemClicked(int index)
     
-    /**
-     * rightClicked :
-     * The file browser empty area was right clicked.
-     */
+    /*!
+      The file browser empty area was right clicked.
+    */
     signal rightClicked()
     
-    /**
-     * keyPress :
-     * A key, physical or not, was pressed.
-     * The event contains the relevant information.
-     */
+    /*!
+      A key, physical or not, was pressed.
+      The event contains the relevant information.
+    */
     signal keyPress(var event)
     
-    /**
-     * urlsDropped :
-     * File URLS were dropped onto the file browser area.
-     */
+    /*!
+      File URLS were dropped onto the file browser area.
+    */
     signal urlsDropped(var urls)
     
     //color scheme
