@@ -83,7 +83,19 @@ Drawer
       */
     signal contentDropped(var drop)
 
-    onCollapsedChanged: position = (collapsed) ? 0 : 1
+    onCollapsedChanged:
+    {
+        if(collapsed)
+        {
+            control.position = 0
+            control.close()
+        }
+        else
+        {
+            control.position = 1
+            control.open()
+        }
+    }
 
     MouseArea
     {

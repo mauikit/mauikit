@@ -127,23 +127,23 @@ Maui.AbstractSideBar
             control.close()
         }
     }
-  
-    onCollapsedChanged :
-    {
-        if(!collapsible)
-        {
-            return
-        }
 
-        if(!collapsed)
-        {
-            control.visible = true
-            expand()
-        }else
-        {
-            collapse()
-        }
-    }
+//    onCollapsedChanged :
+//    {
+//        if(!collapsible)
+//        {
+//            return
+//        }
+
+//        if(!collapsed)
+//        {
+//            control.visible = true
+//            expand()
+//        }else
+//        {
+//            collapse()
+//        }
+//    }
 
     Behavior on width
     {
@@ -182,27 +182,5 @@ Maui.AbstractSideBar
         }       
     }
 
-   
-    /**
-      *
-      */
-    function collapse()
-    {
-        if(collapsible)
-        {
-            control.close()
-        }
-    }
-
-    /**
-      *
-      */
-    function expand()
-    {
-        if(collapsible)
-        {
-            control.open()
-        }
-    }
 }
 
