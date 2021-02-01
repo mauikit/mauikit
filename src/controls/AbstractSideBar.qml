@@ -139,7 +139,7 @@ Drawer
 
     Component.onCompleted:
     {
-        if(!control.collapsed && control.visible)
+        if(control.visible)
         {
             control.open()
             control.position = 1;
