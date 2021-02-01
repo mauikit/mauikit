@@ -124,10 +124,7 @@ Maui.AbstractSideBar
         ignoreUnknownSignals: true
         function onClicked()
         {
-            //if(control.stick)
-                //control.collapse()
-            //else
-                //control.close()
+            control.close()
         }
     }
   
@@ -193,7 +190,7 @@ Maui.AbstractSideBar
     {
         if(collapsible)
         {
-            control.width = control.preferredWidth
+            control.close()
         }
     }
 
@@ -204,7 +201,7 @@ Maui.AbstractSideBar
     {
         if(collapsible)
         {
-            control.width = control.preferredWidth
+            control.open()
         }
     }
 }
