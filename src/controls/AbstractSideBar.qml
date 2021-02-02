@@ -143,8 +143,8 @@ Drawer
     {
         if(control.visible)
         {
+            control.position = 1
             control.open()
-            control.position = 1;
         }
     }
 

@@ -314,7 +314,7 @@ const FMH::MODEL getFileInfo(const KFileItem &kfile)
                   {MODEL_KEY::ICON, kfile.iconName()},
                   {MODEL_KEY::SIZE, QString::number(kfile.size())},
                   {MODEL_KEY::OWNER, kfile.user()},
-                  {MODEL_KEY::COUNT, kfile.isLocalFile() && kfile.isDir() ? QString::number(QDir(kfile.localPath()).count() - 2) : "0"}};
+                  {MODEL_KEY::COUNT, kfile.isLocalFile() && kfile.isDir() ? QString::number(QDir(kfile.localPath()).count()) : "0"}};
 }
 #endif
 
@@ -349,9 +349,7 @@ const FMH::MODEL getFileInfoModel(const QUrl &path)
                  {MODEL_KEY::PATH, path.toString()},
                  {MODEL_KEY::URL, path.toString()},
                  {MODEL_KEY::THUMBNAIL, thumbnailUrl(path, mime).toString()},
-                 {MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path.toLocalFile()).count() - 2) : "0"}};
-
-            qDebug() << "GOT MODEL IFNO" << getIconName(path);
+                 {MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path.toLocalFile()).count()) : "0"}};
 #else
     res = getFileInfo(KFileItem(path, KFileItem::MimeTypeDetermination::NormalMimeTypeDetermination));
 #endif
