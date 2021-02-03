@@ -322,9 +322,6 @@ ToolBar
                     spacing: visibleChildren.length > 1 ? control.spacing : 0
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-//                    Layout.preferredWidth: implicitWidth
-//                    Layout.maximumWidth: implicitWidth
-//                    Layout.minimumWidth: implicitWidth
                     Layout.minimumWidth: implicitWidth
                 }
 
