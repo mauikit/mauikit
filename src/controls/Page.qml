@@ -382,21 +382,19 @@ Pane
         Component
         {
             id: _titleComponent
-            Item
+
+            Label
             {
-                Label
-                {
-                    anchors.fill: parent
-                    text: control.title
-                    elide : Text.ElideRight
-                    font.bold : true
-                    font.weight: Font.Bold
-                    color : Kirigami.Theme.textColor
-                    font.pointSize: Maui.Style.fontSizes.big
-                    horizontalAlignment : Text.AlignHCenter
-                    verticalAlignment :  Text.AlignVCenter
-                }
+                text: control.title
+                elide : Text.ElideRight
+                font.bold : true
+                font.weight: Font.Bold
+                color : Kirigami.Theme.textColor
+                font.pointSize: Maui.Style.fontSizes.big
+                horizontalAlignment : Text.AlignHCenter
+                verticalAlignment :  Text.AlignVCenter
             }
+
         }
 
         middleContent: Loader

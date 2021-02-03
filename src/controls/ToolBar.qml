@@ -276,7 +276,6 @@ ToolBar
                 Row
                 {
                     id: _leftContent
-                    readonly property int alignment : Qt.AlignLeft
                     Layout.fillHeight: true
 
                     Layout.preferredWidth: implicitWidth
@@ -290,7 +289,6 @@ ToolBar
                     RowLayout
                     {
                         id: farLeftRowContent
-                        readonly property int alignment : Qt.AlignLeft
                         height: parent.height
                         spacing: control.spacing
                     }
@@ -298,8 +296,6 @@ ToolBar
                     RowLayout
                     {
                         id: leftRowContent
-                        readonly property int alignment : Qt.AlignLeft
-
                         spacing: control.spacing
                         height: parent.height
                     }
@@ -316,12 +312,13 @@ ToolBar
                 RowLayout
                 {
                     id: middleRowContent
-                    readonly property int alignment : Qt.AlignCenter
-
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     spacing: visibleChildren.length > 1 ? control.spacing : 0
                     Layout.fillHeight: true
                     Layout.fillWidth: true
+//                    Layout.preferredWidth: implicitWidth
+//                    Layout.maximumWidth: implicitWidth
+//                    Layout.minimumWidth: implicitWidth
                     Layout.minimumWidth: implicitWidth
                 }
 
@@ -336,7 +333,6 @@ ToolBar
                 Row
                 {
                     id: _rightContent
-                    readonly property int alignment : Qt.AlignRight
                     Layout.fillHeight: true
 
                     Layout.preferredWidth: implicitWidth
@@ -350,7 +346,6 @@ ToolBar
                     RowLayout
                     {
                         id: rightRowContent
-                        readonly property int alignment : Qt.AlignRight
                         spacing: control.spacing
                         height: parent.height
                     }
@@ -358,7 +353,6 @@ ToolBar
                     RowLayout
                     {
                         id: farRightRowContent
-                        readonly property int alignment : Qt.AlignRight
                         spacing: control.spacing
                         height: parent.height
                     }

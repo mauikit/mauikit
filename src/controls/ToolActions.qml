@@ -23,7 +23,7 @@ import "private" as Private
 Rectangle
 {
     id: control
-    implicitWidth: _loader.item ? _loader.item.implicitWidth : 0
+    implicitWidth: _container.implicitWidth
     implicitHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.12)
     
     Kirigami.Theme.colorSet: Kirigami.Theme.View
@@ -120,7 +120,7 @@ Rectangle
         }
     }
     
-    Item
+    Row
     {
         id: _container
         anchors.fill: parent
@@ -157,7 +157,6 @@ Rectangle
         {
             id: _row
             spacing: 0
-            height: parent.height
             
             clip: true
             
