@@ -343,8 +343,8 @@ Window
             checked: _mainMenu.visible
             onClicked:
             {
+                _mainMenu.popup(parent, 0 , root.headBar.height)
                 menuButtonClicked()
-                _mainMenu.visible ? _mainMenu.close() : _mainMenu.popup(parent, 0 , root.headBar.height )
             }
 
             Menu
