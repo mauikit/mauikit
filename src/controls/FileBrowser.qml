@@ -293,7 +293,6 @@ Maui.Page
     
     footBar.visible: String(control.currentPath).startsWith("trash:/")
     
-    footBar.leftSretch: false
     footerPositioning: ListView.InlineFooter
     
     footBar.rightContent: ToolButton

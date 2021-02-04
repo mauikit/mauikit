@@ -131,26 +131,6 @@ ToolBar
       */
     property bool flickable: true
 
-    /**
-      * strech : bool
-      */
-    property bool strech : true
-
-    /**
-      * leftSretch : bool
-      */
-    property bool leftSretch: strech
-
-    /**
-      * rightSretch : bool
-      */
-    property bool rightSretch: strech
-
-    /**
-      * middleStrech : bool
-      */
-    property bool middleStrech: strech
-
     EdgeShadow
     {
         width: Maui.Style.iconSizes.medium

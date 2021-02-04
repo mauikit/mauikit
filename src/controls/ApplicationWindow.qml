@@ -396,8 +396,8 @@ Window
             id: _rightControlsLoader
             visible: active
             active: Maui.App.enableCSD && Maui.App.rightWindowControls.length
-            Layout.preferredWidth: active ? implicitWidth : 0
-            Layout.fillHeight: true
+            width: active ? implicitWidth : 0
+            height: parent.height
             sourceComponent: Maui.WindowControls
             {
                 order: Maui.App.rightWindowControls
