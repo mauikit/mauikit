@@ -275,87 +275,81 @@ ToolBar
 
                 Row
                 {
-                    id: _leftContent
-                    Layout.fillHeight: true
-
+                    id: farLeftRowContent
                     Layout.preferredWidth: implicitWidth
                     Layout.maximumWidth: implicitWidth
                     Layout.minimumWidth: implicitWidth
-
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-
-                    spacing: farLeftRowContent.visibleChildren.length > 0 ? control.spacing : 0
-
-                    RowLayout
-                    {
-                        id: farLeftRowContent
-                        height: parent.height
-                        spacing: control.spacing
-                    }
-
-                    RowLayout
-                    {
-                        id: leftRowContent
-                        spacing: control.spacing
-                        height: parent.height
-                    }
+                    spacing: control.spacing
                 }
 
-                Item //helper to force center middle content
+                Row
                 {
-                    visible: control.forceCenterMiddleContent && control.leftSretch
-                    Layout.minimumWidth: 0
-                    Layout.fillWidth: visible
-                    Layout.maximumWidth: visible ? Math.max(_rightContent.implicitWidth - _leftContent.implicitWidth, 0) : 0
+                    id: leftRowContent
+                    spacing: control.spacing
+                    Layout.preferredWidth: implicitWidth
+                    Layout.maximumWidth: implicitWidth
+                    Layout.minimumWidth: implicitWidth
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
                 }
+
+                Item
+                {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.minimumWidth: 0
+                }
+
+                //                Item //helper to force center middle content
+                //                {
+                ////                    visible: control.forceCenterMiddleContent && control.leftSretch
+                //                    Layout.minimumWidth: 0
+                //                    Layout.fillWidth: visible
+                //                    Layout.maximumWidth: visible ? Math.max(_rightContent.implicitWidth - _leftContent.implicitWidth, 0) : 0
+                //                }
 
                 RowLayout
                 {
                     id: middleRowContent
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    spacing: visibleChildren.length > 1 ? control.spacing : 0
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-//                    Layout.preferredWidth: implicitWidth
-//                    Layout.maximumWidth: implicitWidth
-//                    Layout.minimumWidth: implicitWidth
-                    Layout.minimumWidth: implicitWidth
+                    spacing: visibleChildren.length > 1 ? control.spacing : 0
                 }
 
-                Item //helper to force center middle content
+                //                Item //helper to force center middle content
+                //                {
+                ////                    visible: control.forceCenterMiddleContent && control.rightSretch
+                //                    Layout.minimumWidth: 0
+                //                    Layout.fillWidth: visible
+                //                    Layout.maximumWidth: visible ? Math.max(_leftContent.implicitWidth-_rightContent.implicitWidth, 0) : 0
+                //                }
+
+                Item
                 {
-                    visible: control.forceCenterMiddleContent && control.rightSretch
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
                     Layout.minimumWidth: 0
-                    Layout.fillWidth: visible
-                    Layout.maximumWidth: visible ? Math.max(_leftContent.implicitWidth-_rightContent.implicitWidth, 0) : 0
                 }
 
                 Row
                 {
-                    id: _rightContent
-                    Layout.fillHeight: true
-
+                    id: rightRowContent
+                    spacing: control.spacing
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                     Layout.preferredWidth: implicitWidth
                     Layout.maximumWidth: implicitWidth
                     Layout.minimumWidth: implicitWidth
+                }
 
+                Row
+                {
+                    id: farRightRowContent
+                    spacing: control.spacing
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
-
-                    spacing: farRightRowContent.visibleChildren.length > 0 ? control.spacing : 0
-
-                    RowLayout
-                    {
-                        id: rightRowContent
-                        spacing: control.spacing
-                        height: parent.height
-                    }
-
-                    RowLayout
-                    {
-                        id: farRightRowContent
-                        spacing: control.spacing
-                        height: parent.height
-                    }
+                    Layout.preferredWidth: implicitWidth
+                    Layout.maximumWidth: implicitWidth
+                    Layout.minimumWidth: implicitWidth
                 }
             }
         }
