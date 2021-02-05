@@ -653,6 +653,8 @@ Window
             Layout.fillHeight: true
             Layout.fillWidth: true
             hoverEnabled: true
+            implicitHeight: _notifyTemplate.implicitHeight
+
             Maui.ListItemTemplate
             {
                 id: _notifyTemplate
@@ -660,6 +662,7 @@ Window
                 anchors.fill: parent
 
                 iconSizeHint: Maui.Style.iconSizes.big
+                label2.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 label1.font.bold: true
                 label1.font.weight: Font.Bold
                 label1.font.pointSize: Maui.Style.fontSizes.big
