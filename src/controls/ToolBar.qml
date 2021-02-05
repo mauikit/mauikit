@@ -273,20 +273,20 @@ ToolBar
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
                 }
 
-                Item
-                {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    Layout.minimumWidth: 0
-                }
-
-                //                Item //helper to force center middle content
+                //                Item
                 //                {
-                ////                    visible: control.forceCenterMiddleContent && control.leftSretch
+                //                    Layout.fillWidth: true
+                //                    Layout.fillHeight: true
                 //                    Layout.minimumWidth: 0
-                //                    Layout.fillWidth: visible
-                //                    Layout.maximumWidth: visible ? Math.max(_rightContent.implicitWidth - _leftContent.implicitWidth, 0) : 0
                 //                }
+
+                Item //helper to force center middle content
+                {
+                    visible: control.forceCenterMiddleContent
+                    Layout.minimumWidth: 0
+                    Layout.fillWidth: visible
+                    Layout.maximumWidth: visible ? Math.max((rightRowContent.implicitWidth + farRightRowContent.implicitWidth) -( leftRowContent.implicitWidth + farLeftRowContent.implicitWidth), 0) : 0
+                }
 
                 RowLayout
                 {
@@ -297,20 +297,20 @@ ToolBar
                     spacing: visibleChildren.length > 1 ? control.spacing : 0
                 }
 
-                //                Item //helper to force center middle content
-                //                {
-                ////                    visible: control.forceCenterMiddleContent && control.rightSretch
-                //                    Layout.minimumWidth: 0
-                //                    Layout.fillWidth: visible
-                //                    Layout.maximumWidth: visible ? Math.max(_leftContent.implicitWidth-_rightContent.implicitWidth, 0) : 0
-                //                }
-
-                Item
+                Item //helper to force center middle content
                 {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
+                    visible: control.forceCenterMiddleContent
                     Layout.minimumWidth: 0
+                    Layout.fillWidth: visible
+                    Layout.maximumWidth: visible ? Math.max(( leftRowContent.implicitWidth + farLeftRowContent.implicitWidth) - (rightRowContent.implicitWidth + farRightRowContent.implicitWidth), 0) : 0
                 }
+
+                //                Item
+                //                {
+                //                    Layout.fillWidth: true
+                //                    Layout.fillHeight: true
+                //                    Layout.minimumWidth: 0
+                //                }
 
                 Row
                 {
