@@ -22,6 +22,11 @@
 #include "mauilist.h"
 #include <QObject>
 
+namespace Solid
+{
+class Device;
+}
+
 class FM;
 class KFilePlacesModel;
 class QFileSystemWatcher;
@@ -80,6 +85,14 @@ public slots:
      */
     bool contains(const QUrl &path);
 
+    bool isDevice(const int &index);
+
+    bool setupNeeded(const int &index);
+
+    void requestEject (const int &index);
+
+    void requestSetup (const int &index);
+
 private:
     FM *fm;
     FMH::MODEL_LIST list;
@@ -88,12 +101,14 @@ private:
 
     QList<int> groups;
 
+    QHash<QString, QModelIndex> m_devices;
+
     QFileSystemWatcher *watcher;
     void watchPath(const QString &path);
 
     void setCount();
 
-    static FMH::MODEL_LIST getGroup(const KFilePlacesModel &model, const FMH::PATHTYPE_KEY &type);
+    FMH::MODEL_LIST getGroup(const KFilePlacesModel &model, const FMH::PATHTYPE_KEY &type);
 
 signals:
     void groupsChanged();
