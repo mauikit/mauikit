@@ -30,6 +30,7 @@
 
 #if defined Q_OS_LINUX && !defined Q_OS_ANDROID
 #include <KFilePlacesModel>
+#include <Solid/Device>
 #endif
 
 #ifdef COMPONENT_TAGGING
@@ -42,13 +43,13 @@ PlacesList::PlacesList(QObject *parent)
     , fm(new FM(this))
     , model(nullptr)
     , watcher(new QFileSystemWatcher(this))
-#else
+    #else
 PlacesList::PlacesList(QObject *parent)
     : MauiList(parent)
     , fm(new FM(this))
     , model(new KFilePlacesModel(this))
     , watcher(new QFileSystemWatcher(this))
-#endif
+    #endif
 {
     /*
      *  The watcher signal returns a local file URL withouth a scheme, and the model is using a local file URL with file:// scheme.
@@ -74,9 +75,9 @@ PlacesList::PlacesList(QObject *parent)
 
 #if defined Q_OS_LINUX && !defined Q_OS_ANDROID
     
-    connect(this->model, &KFilePlacesModel::reloaded, [this]() {
-        this->setList();
-    });
+    connect(this->model, &KFilePlacesModel::reloaded, this, &PlacesList::setList);
+
+    connect(this->model, &KFilePlacesModel::setupDone, this, &PlacesList::setList);
     
     connect(this->model, &KFilePlacesModel::rowsInserted, [this](const QModelIndex, int, int) {
         this->setList();
@@ -132,23 +133,23 @@ FMH::MODEL_LIST PlacesList::getGroup(const KFilePlacesModel &model, const FMH::P
         res << FMH::MODEL {{FMH::MODEL_KEY::PATH, FMH::PATHTYPE_URI[FMH::PATHTYPE_KEY::TAGS_PATH] + "fav"}, {FMH::MODEL_KEY::ICON, "love"}, {FMH::MODEL_KEY::LABEL, "Favorite"}, {FMH::MODEL_KEY::TYPE, "Quick"}};
 
 #if defined Q_OS_LINUX && !defined Q_OS_ANDROID
-        res << FMH::MODEL {{FMH::MODEL_KEY::PATH, "recentdocuments:///"}, {FMH::MODEL_KEY::ICON, "view-media-recent"}, {FMH::MODEL_KEY::LABEL, "Recent"}, {FMH::MODEL_KEY::TYPE, "Quick"}};
+    res << FMH::MODEL {{FMH::MODEL_KEY::PATH, "recentdocuments:///"}, {FMH::MODEL_KEY::ICON, "view-media-recent"}, {FMH::MODEL_KEY::LABEL, "Recent"}, {FMH::MODEL_KEY::TYPE, "Quick"}};
 #endif
 
 #ifdef COMPONENT_TAGGING
-        res << FMH::MODEL {{FMH::MODEL_KEY::PATH, "tags:///"}, {FMH::MODEL_KEY::ICON, "tag"}, {FMH::MODEL_KEY::LABEL, "Tags"}, {FMH::MODEL_KEY::TYPE, "Quick"}};
+    res << FMH::MODEL {{FMH::MODEL_KEY::PATH, "tags:///"}, {FMH::MODEL_KEY::ICON, "tag"}, {FMH::MODEL_KEY::LABEL, "Tags"}, {FMH::MODEL_KEY::TYPE, "Quick"}};
 #endif
 
-        return res;
-    }
+    return res;
+}
 
-    if (type == FMH::PATHTYPE_KEY::PLACES_PATH) {
-        res << FMStatic::getDefaultPaths();
-    }
+if (type == FMH::PATHTYPE_KEY::PLACES_PATH) {
+    res << FMStatic::getDefaultPaths();
+}
 
 #if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
-    Q_UNUSED(model)
-    switch (type) {
+Q_UNUSED(model)
+switch (type) {
     case (FMH::PATHTYPE_KEY::PLACES_PATH):
         res << FMStatic::packItems(UTIL::loadSettings("BOOKMARKS", "PREFERENCES", {}, true).toStringList(), FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::BOOKMARKS_PATH]);
         break;
@@ -157,29 +158,39 @@ FMH::MODEL_LIST PlacesList::getGroup(const KFilePlacesModel &model, const FMH::P
         break;
     default:
         break;
-    }
+}
 #else
-    const auto group = model.groupIndexes(static_cast<KFilePlacesModel::GroupType>(type));
-    res << std::accumulate(group.constBegin(), group.constEnd(), FMH::MODEL_LIST(), [&model, &type](FMH::MODEL_LIST &list, const QModelIndex &index) -> FMH::MODEL_LIST {
-        const QUrl url = model.url(index);
-        if (type == FMH::PATHTYPE_KEY::PLACES_PATH && FMH::defaultPaths.contains(url.toString()))
-            return list;
-
-        if (type == FMH::PATHTYPE_KEY::PLACES_PATH && url.isLocalFile() && !FMH::fileExists(url))
-            return list;
-
-        list << FMH::MODEL {{FMH::MODEL_KEY::PATH, url.toString()},
-                            {FMH::MODEL_KEY::URL, url.toString()},
-                            {FMH::MODEL_KEY::ICON, model.icon(index).name()},
-                            {FMH::MODEL_KEY::LABEL, model.text(index)},
-                            {FMH::MODEL_KEY::NAME, model.text(index)},
-                            {FMH::MODEL_KEY::TYPE, type == FMH::PATHTYPE_KEY::PLACES_PATH ? FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::BOOKMARKS_PATH] : FMH::PATHTYPE_LABEL[type]}};
-
+const auto group = model.groupIndexes(static_cast<KFilePlacesModel::GroupType>(type));
+res << std::accumulate(group.constBegin(), group.constEnd(), FMH::MODEL_LIST(), [&model, &type, this](FMH::MODEL_LIST &list, const QModelIndex &index) -> FMH::MODEL_LIST {
+    const QUrl url = model.url(index);
+    if (type == FMH::PATHTYPE_KEY::PLACES_PATH && FMH::defaultPaths.contains(url.toString()))
         return list;
-    });
+
+    if (type == FMH::PATHTYPE_KEY::PLACES_PATH && url.isLocalFile() && !FMH::fileExists(url))
+        return list;
+
+    auto data = FMH::MODEL {{FMH::MODEL_KEY::PATH, url.toString()},
+    {FMH::MODEL_KEY::URL, url.toString()},
+    {FMH::MODEL_KEY::ICON, model.icon(index).name()},
+    {FMH::MODEL_KEY::LABEL, model.text(index)},
+    {FMH::MODEL_KEY::NAME, model.text(index)},
+    {FMH::MODEL_KEY::TYPE, type == FMH::PATHTYPE_KEY::PLACES_PATH ? FMH::PATHTYPE_LABEL[FMH::PATHTYPE_KEY::BOOKMARKS_PATH] : FMH::PATHTYPE_LABEL[type]}};
+
+    if(model.isDevice(index))
+    {
+        const auto udi =  model.deviceForIndex(index).udi();
+        qDebug() << "DEVICE" << udi;
+
+        data.insert(FMH::MODEL_KEY::UDI, udi);
+        m_devices.insert(udi, index);
+    }
+
+    list << data;
+    return list;
+});
 #endif
 
-    return res;
+return res;
 }
 
 void PlacesList::setList()
@@ -298,4 +309,51 @@ void PlacesList::removePlace(const int &index)
 bool PlacesList::contains(const QUrl &path)
 {
     return this->exists(FMH::MODEL_KEY::PATH, path.toString());
+}
+
+bool PlacesList::isDevice(const int &index)
+{
+    if (index >= this->list.size() || index < 0)
+        return false;
+
+    const auto item = this->list.at(index);
+    return m_devices.contains(item[FMH::MODEL_KEY::UDI]);
+}
+
+bool PlacesList::setupNeeded(const int &index)
+{
+    if (index >= this->list.size() || index < 0)
+        return false;
+
+    const auto item = this->list.at(index);
+    if(m_devices.contains(item[FMH::MODEL_KEY::UDI]))
+    {
+        return this->model->setupNeeded(m_devices.value(item[FMH::MODEL_KEY::UDI]));
+    }
+
+    return false;
+}
+
+void PlacesList::requestEject(const int &index)
+{
+    if (index >= this->list.size() || index < 0)
+        return;
+
+    const auto item = this->list.at(index);
+    if(m_devices.contains(item[FMH::MODEL_KEY::UDI]))
+    {
+       this->model->requestEject(m_devices.value(item[FMH::MODEL_KEY::UDI]));
+    }
+}
+
+void PlacesList::requestSetup(const int &index)
+{
+    if (index >= this->list.size() || index < 0)
+        return;
+
+    const auto item = this->list.at(index);
+    if(m_devices.contains(item[FMH::MODEL_KEY::UDI]))
+    {
+       this->model->requestSetup(m_devices.value(item[FMH::MODEL_KEY::UDI]));
+    }
 }
