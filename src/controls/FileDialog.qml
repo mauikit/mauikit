@@ -101,7 +101,9 @@ Maui.Dialog
       */
     property int mode : modes.OPEN
 
-       /**
+    property var callback
+
+    /**
       * textField : TextField
       * On Save mode a text field is visible, this property gives access to it.
       */
@@ -139,33 +141,33 @@ Maui.Dialog
 
     page.footerColumn: [
 
-    Maui.ToolBar
-    {
-        visible: control.mode === modes.SAVE
-        width: parent.width
-        position: ToolBar.Footer
-
-        middleContent: Maui.TextField
+        Maui.ToolBar
         {
-            id: _textField
-            Layout.fillWidth: true
-            placeholderText: i18n("File name...")
-            text: suggestedFileName
-        }
-    },
+            visible: control.mode === modes.SAVE
+            width: parent.width
+            position: ToolBar.Footer
 
-    Maui.TagsBar
-    {
-        id: _tagsBar
-        visible: control.mode === modes.SAVE
-        position: ToolBar.Footer
-        width: parent.width
-        list.urls: [""]
-        list.strict: false
-        allowEditMode: true
-        Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
-        Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
-    }
+            middleContent: Maui.TextField
+            {
+                id: _textField
+                Layout.fillWidth: true
+                placeholderText: i18n("File name...")
+                text: suggestedFileName
+            }
+        },
+
+        Maui.TagsBar
+        {
+            id: _tagsBar
+            visible: control.mode === modes.SAVE
+            position: ToolBar.Footer
+            width: parent.width
+            list.urls: [""]
+            list.strict: false
+            allowEditMode: true
+            Kirigami.Theme.textColor: control.Kirigami.Theme.textColor
+            Kirigami.Theme.backgroundColor: control.Kirigami.Theme.backgroundColor
+        }
     ]
 
     Component
@@ -209,6 +211,8 @@ Maui.Dialog
     headBar.middleContent: Loader
     {
         Layout.fillWidth: true
+        Layout.minimumWidth: 100
+        Layout.maximumWidth: 500
         Layout.preferredHeight: Maui.Style.iconSizes.big
         sourceComponent: searchBar ? _searchFieldComponent : _pathBarComponent
     }
@@ -271,7 +275,8 @@ Maui.Dialog
                 Layout.fillHeight: true
 
                 headBar.visible: true
-                headBar.rightContent:[ Maui.ToolButtonMenu
+                headBar.rightContent:[
+                    Maui.ToolButtonMenu
                     {
                         icon.name: "view-sort"
 
@@ -477,6 +482,11 @@ Maui.Dialog
         {
             _tagsBar.list.urls = paths
             _tagsBar.list.updateToUrls(_tagsBar.getTags())
+        }
+
+        if(control.callback)
+        {
+            control.callback(paths)
         }
 
         control.urlsSelected(paths)

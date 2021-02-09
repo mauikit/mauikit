@@ -19,6 +19,7 @@
 
 import QtQuick 2.14
 import QtQuick.Controls 2.14
+import QtQuick.Window 2.15
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.7 as Kirigami
 import org.kde.mauikit 1.2 as Maui
@@ -37,13 +38,30 @@ Drawer
 {
     id: control
     edge: Qt.LeftEdge
+
+    implicitWidth: Math.min(preferredWidth, window().width)
+    width: implicitWidth
+
     implicitHeight: window().internalHeight
-    height: implicitHeight
+    height: window().internalHeight
+
     y: (window().header && !window().altHeader ? window().header.height : 0)
     //    closePolicy: modal || collapsed ?  Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
+
     interactive: modal || collapsed || !visible
+
     dragMargin: Maui.Style.space.big
+
     modal: false
+
+    opacity: _dropArea.containsDrag ? 0.5 : 1
+
+    contentItem: null
+
+    background: Rectangle
+    {
+        color: Kirigami.Theme.backgroundColor
+    }
 
     /**
       * content : Item.data
@@ -83,7 +101,19 @@ Drawer
       */
     signal contentDropped(var drop)
 
-    onCollapsedChanged: position = (collapsed) ? 0 : 1
+    onCollapsedChanged:
+    {
+        if(collapsed)
+        {
+            control.position = 0
+            control.close()
+        }
+        else
+        {
+            control.position = 1
+            control.open()
+        }
+    }
 
     MouseArea
     {
@@ -95,22 +125,16 @@ Drawer
         parent: window().pageContent
         preventStealing: true
         propagateComposedEvents: false
-        visible: false
+        visible: (control.collapsed && control.position > 0 && control.visible)
         Rectangle
         {
             color: Qt.rgba(control.Kirigami.Theme.backgroundColor.r,control.Kirigami.Theme.backgroundColor.g,control.Kirigami.Theme.backgroundColor.b, 0.5)
             opacity: control.position
             anchors.fill: parent
         }
+
+        onClicked: control.close()
     }
-
-    //	onVisibleChanged:
-    //	{
-    //		if(control.visible && !control.modal)
-    //			control.position = 1
-    //	}
-
-    contentItem: null
 
     Item
     {
@@ -129,10 +153,10 @@ Drawer
 
     Component.onCompleted:
     {
-        if(!control.collapsed && control.visible)
+        if(control.visible)
         {
+            control.position = 1
             control.open()
-            control.position = 1;
         }
     }
 
@@ -146,8 +170,6 @@ Drawer
         }
     }
 
-    opacity: _dropArea.containsDrag ? 0.5 : 1
-
     DropArea
     {
         id: _dropArea
@@ -156,11 +178,6 @@ Drawer
         {
             control.contentDropped(drop)
         }
-    }
-
-    background: Rectangle
-    {
-        color: Kirigami.Theme.backgroundColor
     }
 }
 

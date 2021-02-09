@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.14)
 
 set(REQUIRED_QT_VERSION 5.14.0)
-set(REQUIRED_KF5_VERSION 5.68.0)
+set(REQUIRED_KF5_VERSION 5.40.0)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -11,7 +11,7 @@ set(AUTOMOC_MOC_OPTIONS -Muri=org.kde.maui)
 
 project(mauikit VERSION ${MAUIKIT_VERSION})
 
-find_package(ECM 5.45.0 NO_MODULE)
+find_package(ECM ${REQUIRED_KF5_VERSION} NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} 
     ${ECM_KDE_MODULE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
@@ -45,7 +45,7 @@ ecm_find_qmlmodule(QtQuick.Shapes 1.0)
 if(ANDROID)
     find_package(Qt5 REQUIRED COMPONENTS AndroidExtras)
     find_package(Gradle REQUIRED)
-elseif(UNIX)
+else()
     find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS Notifications Config Service KIO)
 endif()
 

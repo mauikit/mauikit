@@ -39,12 +39,8 @@ Maui.AbstractSideBar
 {
     id: control
 
-    implicitWidth: preferredWidth
-    width: implicitWidth
     position: 1
-    interactive: (modal || collapsed || !visible)
     visible: true
-    overlay.visible: (collapsed && position > 0 && visible)
 
     /**
       * content : ColumnLayout.data
@@ -118,46 +114,6 @@ Maui.AbstractSideBar
       */
     signal itemRightClicked(int index)
 
-    Connections
-    {
-        target: control.overlay
-        ignoreUnknownSignals: true
-        function onClicked()
-        {
-            //if(control.stick)
-                //control.collapse()
-            //else
-                //control.close()
-        }
-    }
-  
-    onCollapsedChanged :
-    {
-        if(!collapsible)
-        {
-            return
-        }
-
-        if(!collapsed)
-        {
-            control.visible = true
-            expand()
-        }else
-        {
-            collapse()
-        }
-    }
-
-    Behavior on width
-    {
-        id: _widthAnim
-
-        NumberAnimation
-        {
-            duration: Kirigami.Units.shortDuration
-            easing.type: Easing.InOutQuad
-        }
-    }
 
     ColumnLayout
     {
@@ -183,29 +139,6 @@ Maui.AbstractSideBar
                 }
             }
         }       
-    }
-
-   
-    /**
-      *
-      */
-    function collapse()
-    {
-        if(collapsible)
-        {
-            control.width = control.preferredWidth
-        }
-    }
-
-    /**
-      *
-      */
-    function expand()
-    {
-        if(collapsible)
-        {
-            control.width = control.preferredWidth
-        }
     }
 }
 

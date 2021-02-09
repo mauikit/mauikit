@@ -173,7 +173,7 @@ const QVariantMap dirConf(const QUrl &path)
 
     bool foldersFirst = false;
 
-#if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
+#if defined Q_OS_ANDROID || defined Q_OS_WIN || defined Q_OS_MACOS || defined Q_OS_IOS
     QSettings file(path.toLocalFile(), QSettings::Format::NativeFormat);
     file.beginGroup(QString("Desktop Entry"));
     icon = file.value("Icon").toString();
@@ -227,7 +227,7 @@ void setDirConf(const QUrl &path, const QString &group, const QString &key, cons
         return;
     }
 
-#if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
+#if defined Q_OS_ANDROID || defined Q_OS_WIN || defined Q_OS_MACOS || defined Q_OS_IOS
     QSettings file(path.toLocalFile(), QSettings::Format::IniFormat);
     file.beginGroup(group);
     file.setValue(key, value);
@@ -253,7 +253,7 @@ const QString getIconName(const QUrl &path)
         }
 
     } else {
-#if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
+#if defined Q_OS_ANDROID || defined Q_OS_MACOS || defined Q_OS_IOS
         QMimeDatabase mime;
         const auto type = mime.mimeTypeForFile(path.toString());
         return type.iconName();
@@ -290,7 +290,7 @@ const QUrl thumbnailUrl(const QUrl &url, const QString &mimetype)
     return QUrl();
 }
 
-#if !defined Q_OS_ANDROID && defined Q_OS_LINUX
+#if (!defined Q_OS_ANDROID && defined Q_OS_LINUX) || defined Q_OS_WIN
 const FMH::MODEL getFileInfo(const KFileItem &kfile)
 {
     return MODEL {{MODEL_KEY::LABEL, kfile.name()},
@@ -314,14 +314,14 @@ const FMH::MODEL getFileInfo(const KFileItem &kfile)
                   {MODEL_KEY::ICON, kfile.iconName()},
                   {MODEL_KEY::SIZE, QString::number(kfile.size())},
                   {MODEL_KEY::OWNER, kfile.user()},
-                  {MODEL_KEY::COUNT, kfile.isLocalFile() && kfile.isDir() ? QString::number(QDir(kfile.localPath()).count() - 2) : "0"}};
+                  {MODEL_KEY::COUNT, kfile.isLocalFile() && kfile.isDir() ? QString::number(QDir(kfile.localPath()).count()) : "0"}};
 }
 #endif
 
 const FMH::MODEL getFileInfoModel(const QUrl &path)
 {
     MODEL res;
-#if defined Q_OS_ANDROID || defined Q_OS_WIN32 || defined Q_OS_MACOS || defined Q_OS_IOS
+#if defined Q_OS_ANDROID || defined Q_OS_MACOS || defined Q_OS_IOS || defined Q_OS_WIN
     const QFileInfo file(path.toLocalFile());
     if (!file.exists())
         return MODEL();
@@ -349,9 +349,8 @@ const FMH::MODEL getFileInfoModel(const QUrl &path)
                  {MODEL_KEY::PATH, path.toString()},
                  {MODEL_KEY::URL, path.toString()},
                  {MODEL_KEY::THUMBNAIL, thumbnailUrl(path, mime).toString()},
-                 {MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path.toLocalFile()).count() - 2) : "0"}};
+                 {MODEL_KEY::COUNT, file.isDir() ? QString::number(QDir(path.toLocalFile()).count()) : "0"}};
 #else
-
     res = getFileInfo(KFileItem(path, KFileItem::MimeTypeDetermination::NormalMimeTypeDetermination));
 #endif
     return res;

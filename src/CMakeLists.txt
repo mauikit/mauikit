@@ -8,7 +8,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/model_template
     ${CMAKE_CURRENT_BINARY_DIR}/utils/model_template
     
-	${CMAKE_CURRENT_SOURCE_DIR}/controls/libs
+    ${CMAKE_CURRENT_SOURCE_DIR}/controls/libs
     ${CMAKE_CURRENT_BINARY_DIR}/controls/libs
 
     ${CMAKE_CURRENT_SOURCE_DIR}/platforms
@@ -16,6 +16,9 @@ include_directories(
     
     ${CMAKE_CURRENT_SOURCE_DIR}/platforms/linux
     ${CMAKE_CURRENT_BINARY_DIR}/platforms/linux
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/platforms/windows
+    ${CMAKE_CURRENT_BINARY_DIR}/platforms/windows
     )
 
 set(mauikit_SRCS
@@ -184,34 +187,42 @@ endif()
 #options - for the appimage
 option(IS_APPIMAGE_PACKAGE "If set to true then the icons and styled is packaged as well" OFF)
 
-if(ANDROID OR IS_APPIMAGE_PACKAGE)
-    if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/maui-style/icons/luv-icon-theme/.git)
+if(ANDROID OR WIN32 OR IS_APPIMAGE_PACKAGE)
+    if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/icons/luv-icon-theme/.git)
         find_package(Git REQUIRED)
-        execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/Nitrux/luv-icon-theme.git ${CMAKE_CURRENT_SOURCE_DIR}/maui-style/icons/luv-icon-theme)
+        execute_process(COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/Nitrux/luv-icon-theme.git ${CMAKE_CURRENT_SOURCE_DIR}/icons/luv-icon-theme)
     endif()
 
-    list(APPEND mauikit_SRCS maui-style/icons.qrc)
+    list(APPEND mauikit_SRCS icons.qrc)
 endif()
 
 if (ANDROID)
     add_subdirectory(platforms/android)
 
-    set(mauikit_Android_SRCS
+    set(mauikit_PLATFORM_SRCS
         platforms/android/mauiandroid.cpp
     )
 
     kde_enable_exceptions(MauiKit PRIVATE)
-else()
+elseif(UNIX)
     #add_subdirectory(csd/libappletdecoration)
 
-    set(mauikit_KDE_SRCS
+    set(mauikit_PLATFORM_SRCS
         platforms/linux/mauilinux.cpp
         platforms/linux/kdeconnect.cpp
         )
 
-    set(mauikit_KDE_HDRS
+    set(mauikit_PLATFORM_HDRS
         platforms/linux/mauilinux.h
         platforms/linux/kdeconnect.h
+        )
+elseif(WIN32)
+    set(mauikit_PLATFORM_SRCS
+        platforms/windows/mauiwindows.cpp
+        )
+
+    set(mauikit_PLATFORM_HDRS
+        platforms/windows/mauiwindows.h
         )
 endif()
 
@@ -235,10 +246,8 @@ add_library(MauiKit
     ${mauikit_HDRS}
     ${mauikit_SRCS}
 
-    ${mauikit_Android_SRCS}
-
-    ${mauikit_KDE_HDRS}
-    ${mauikit_KDE_SRCS}
+    ${mauikit_PLATFORM_HDRS}
+    ${mauikit_PLATFORM_SRCS}
 
     maui-style/style.qrc
     assets.qrc
@@ -246,9 +255,16 @@ add_library(MauiKit
 )
 
 if(ANDROID)
+    target_include_directories(MauiKit PRIVATE platforms/android)
+elseif(WIN32)
+    target_include_directories(MauiKit PRIVATE platforms/windows)
+elseif(UNIX)
+    target_include_directories(MauiKit PRIVATE platforms/linux)
+endif()
+
+if(ANDROID)
     target_link_libraries(MauiKit PRIVATE Qt5::AndroidExtras jnigraphics)
 
-    target_include_directories(MauiKit PRIVATE platforms/android)
     install(FILES platforms/android/mauiandroid.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiKit COMPONENT Devel)
 
     install(DIRECTORY platforms/android/ DESTINATION ${KDE_INSTALL_DATAROOTDIR}/MauiKitAndroid COMPONENT Devel)
@@ -258,7 +274,7 @@ if(ANDROID)
     else()
         install(FILES MauiKit-android-dependencies.xml DESTINATION ${KDE_INSTALL_LIBDIR} RENAME MauiKit_${CMAKE_ANDROID_ARCH_ABI}-android-dependencies.xml)
     endif()
-elseif(UNIX)
+else()
     target_link_libraries(MauiKit 
     PUBLIC 
     KF5::ConfigCore
@@ -269,7 +285,6 @@ elseif(UNIX)
     PRIVATE 
     KF5::Service 
     KF5::KIONTLM)
-    target_include_directories(MauiKit PRIVATE platforms/linux)
 endif()
 
 target_link_libraries(MauiKit
@@ -322,7 +337,7 @@ install(TARGETS MauiKit DESTINATION
 
 install(FILES
     ${mauikit_HDRS}
-    ${mauikit_KDE_HDRS}
+    ${mauikit_PLATFORM_HDRS}
     ${tagging_HDRS}
     ${fm_HDRS}
     ${syncing_HDRS}

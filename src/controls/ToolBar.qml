@@ -131,26 +131,6 @@ ToolBar
       */
     property bool flickable: true
 
-    /**
-      * strech : bool
-      */
-    property bool strech : true
-
-    /**
-      * leftSretch : bool
-      */
-    property bool leftSretch: strech
-
-    /**
-      * rightSretch : bool
-      */
-    property bool rightSretch: strech
-
-    /**
-      * middleStrech : bool
-      */
-    property bool middleStrech: strech
-
     EdgeShadow
     {
         width: Maui.Style.iconSizes.medium
@@ -275,96 +255,81 @@ ToolBar
 
                 Row
                 {
-                    id: _leftContent
-                    readonly property int alignment : Qt.AlignLeft
-                    Layout.fillHeight: true
-
+                    id: farLeftRowContent
                     Layout.preferredWidth: implicitWidth
                     Layout.maximumWidth: implicitWidth
                     Layout.minimumWidth: implicitWidth
-
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-
-                    spacing: farLeftRowContent.visibleChildren.length > 0 ? control.spacing : 0
-
-                    RowLayout
-                    {
-                        id: farLeftRowContent
-                        readonly property int alignment : Qt.AlignLeft
-                        height: parent.height
-                        spacing: control.spacing
-                    }
-
-                    RowLayout
-                    {
-                        id: leftRowContent
-                        readonly property int alignment : Qt.AlignLeft
-
-                        spacing: control.spacing
-                        height: parent.height
-                    }
+                    spacing: control.spacing
                 }
+
+                Row
+                {
+                    id: leftRowContent
+                    spacing: control.spacing
+                    Layout.preferredWidth: implicitWidth
+                    Layout.maximumWidth: implicitWidth
+                    Layout.minimumWidth: implicitWidth
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                }
+
+                //                Item
+                //                {
+                //                    Layout.fillWidth: true
+                //                    Layout.fillHeight: true
+                //                    Layout.minimumWidth: 0
+                //                }
 
                 Item //helper to force center middle content
                 {
-                    visible: control.forceCenterMiddleContent && control.leftSretch
+                    visible: control.forceCenterMiddleContent
                     Layout.minimumWidth: 0
                     Layout.fillWidth: visible
-                    Layout.maximumWidth: visible ? Math.max(_rightContent.implicitWidth - _leftContent.implicitWidth, 0) : 0
+                    Layout.maximumWidth: visible ? Math.max((rightRowContent.implicitWidth + farRightRowContent.implicitWidth) -( leftRowContent.implicitWidth + farLeftRowContent.implicitWidth), 0) : 0
                 }
 
                 RowLayout
                 {
                     id: middleRowContent
-                    readonly property int alignment : Qt.AlignCenter
-
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    spacing: visibleChildren.length > 1 ? control.spacing : 0
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-//                    Layout.preferredWidth: implicitWidth
-//                    Layout.maximumWidth: implicitWidth
-//                    Layout.minimumWidth: implicitWidth
-                    Layout.minimumWidth: implicitWidth
+                    spacing: visibleChildren.length > 1 ? control.spacing : 0
                 }
 
                 Item //helper to force center middle content
                 {
-                    visible: control.forceCenterMiddleContent && control.rightSretch
+                    visible: control.forceCenterMiddleContent
                     Layout.minimumWidth: 0
                     Layout.fillWidth: visible
-                    Layout.maximumWidth: visible ? Math.max(_leftContent.implicitWidth-_rightContent.implicitWidth, 0) : 0
+                    Layout.maximumWidth: visible ? Math.max(( leftRowContent.implicitWidth + farLeftRowContent.implicitWidth) - (rightRowContent.implicitWidth + farRightRowContent.implicitWidth), 0) : 0
+                }
+
+                //                Item
+                //                {
+                //                    Layout.fillWidth: true
+                //                    Layout.fillHeight: true
+                //                    Layout.minimumWidth: 0
+                //                }
+
+                Row
+                {
+                    id: rightRowContent
+                    spacing: control.spacing
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+                    Layout.preferredWidth: implicitWidth
+                    Layout.maximumWidth: implicitWidth
+                    Layout.minimumWidth: implicitWidth
                 }
 
                 Row
                 {
-                    id: _rightContent
-                    readonly property int alignment : Qt.AlignRight
-                    Layout.fillHeight: true
-
+                    id: farRightRowContent
+                    spacing: control.spacing
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                     Layout.preferredWidth: implicitWidth
                     Layout.maximumWidth: implicitWidth
                     Layout.minimumWidth: implicitWidth
-
-                    Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
-
-                    spacing: farRightRowContent.visibleChildren.length > 0 ? control.spacing : 0
-
-                    RowLayout
-                    {
-                        id: rightRowContent
-                        readonly property int alignment : Qt.AlignRight
-                        spacing: control.spacing
-                        height: parent.height
-                    }
-
-                    RowLayout
-                    {
-                        id: farRightRowContent
-                        readonly property int alignment : Qt.AlignRight
-                        spacing: control.spacing
-                        height: parent.height
-                    }
                 }
             }
         }
