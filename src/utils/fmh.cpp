@@ -278,7 +278,7 @@ const QString getMime(const QUrl &path)
 const QUrl thumbnailUrl(const QUrl &url, const QString &mimetype)
 {
 #if defined Q_OS_LINUX && !defined Q_OS_ANDROID
-    if (checkFileType(FILTER_TYPE::DOCUMENT, mimetype) || checkFileType(FILTER_TYPE::VIDEO, mimetype)) {
+    if (checkFileType(FILTER_TYPE::DOCUMENT, mimetype) || checkFileType(FILTER_TYPE::VIDEO, mimetype) || url.toString().endsWith(".appimage", Qt::CaseInsensitive)) {
         return QUrl("image://thumbnailer/" + url.toString());
     }
 #endif
