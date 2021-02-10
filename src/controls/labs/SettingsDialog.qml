@@ -14,15 +14,15 @@ Maui.Dialog
     page.title: i18n("Settings")
     headBar.visible: true
 
-    Component.onCompleted:
-    {
-        for(var i = 0; i < control.scrollable.length; i++)
-        {
-            if(control.scrollable[i] instanceof Maui.SettingsSection)
-            {
-                console.log("Setting dialog section", i)
-                control.scrollable[i].index = i
-            }
-        }
-    }
+//     Component.onCompleted:
+//     {
+//         for(var i = 0; i < control.scrollable.length; i++)
+//         {
+//             if(control.scrollable[i] instanceof Maui.SettingsSection)
+//             {
+//                 console.log("Setting dialog section", i)
+//                 control.scrollable[i].index = i
+//             }
+//         }
+//     }
 }

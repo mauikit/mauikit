@@ -41,7 +41,7 @@ import "private"
 ToolBar
 {
     id: control
-    implicitHeight: preferredHeight
+    implicitHeight: Math.max(preferredHeight, layout.implicitHeight)
     implicitWidth: mainFlickable.contentWidth
     spacing: Maui.Style.space.small
     padding: 0

@@ -23,7 +23,7 @@ Maui.ItemDelegate
 
     background: Rectangle
     {
-        color: alt ? Kirigami.Theme.backgroundColor : Qt.darker(Kirigami.Theme.backgroundColor, 1.02)
+        color: Kirigami.Theme.backgroundColor 
 
         Maui.Separator
         {
