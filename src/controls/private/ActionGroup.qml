@@ -85,7 +85,8 @@ Item
         Kirigami.Theme.highlightColor: modelData.Kirigami.Theme.highlightColor
         icon.name: modelData.Maui.AppView.iconName
         text: modelData.Maui.AppView.title
-        display: checked ? (!isWide ? ToolButton.TextUnderIcon : ToolButton.TextBesideIcon) : ToolButton.IconOnly
+        display: checked ? (!isWide ? ToolButton.IconOnly : ToolButton.TextBesideIcon) : ToolButton.IconOnly
+        flat: true
         
         onClicked:
         {
@@ -131,8 +132,9 @@ Item
             icon.name: obj ? obj.Maui.AppView.iconName : ""
             icon.width: Maui.Style.iconSizes.medium
             icon.height: Maui.Style.iconSizes.medium
+            flat: true
             
-            display: checked ? (!isWide ? ToolButton.TextUnderIcon : ToolButton.TextBesideIcon) : ToolButton.IconOnly
+            display: checked ? (!isWide ? ToolButton.IconOnly : ToolButton.TextBesideIcon) : ToolButton.IconOnly
             
             text: obj ? obj.Maui.AppView.title : ""
             
