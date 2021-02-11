@@ -57,7 +57,7 @@ AbstractButton
 focusPolicy: Qt.NoFocus
 
     hoverEnabled: !Kirigami.Settings.isMobile
-    implicitHeight: Math.floor(Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25))
+    implicitHeight: _layoutButton.implicitHeight
     implicitWidth: Math.floor(_layoutButton.implicitWidth + (Maui.Style.space.medium *  2))
 
     icon.width: Maui.Style.iconSizes.medium
@@ -66,7 +66,6 @@ focusPolicy: Qt.NoFocus
     background: Rectangle
     {
         id: _background
-        implicitHeight: Math.floor(Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25))
 
         radius: Maui.Style.radiusV
         color: control.down || control.checked || control.hovered || control.pressed ? Qt.rgba(control.Kirigami.Theme.highlightColor.r,  control.Kirigami.Theme.highlightColor.g,  control.Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
@@ -81,20 +80,25 @@ focusPolicy: Qt.NoFocus
         }
     }
 
-    RowLayout
+    GridLayout
     {
         id: _layoutButton
         anchors.centerIn: parent
-        height: parent.height
-        spacing: 0
+     
+        rowSpacing: 0
+        columnSpacing: 0
         clip: true
-
+               
         Item
         {
             implicitWidth: visible ? _icon.width + Maui.Style.space.medium : 0
+            implicitHeight: Math.floor(Maui.Style.iconSizes.medium + (Maui.Style.space.medium))
+
+            Layout.column: 0
+            Layout.row: 0
             Layout.alignment: Qt.AlignCenter
 
-            visible: _icon.source && _icon.source.length && (control.display === ToolButton.TextBesideIcon || control.display === ToolButton.IconOnly)
+            visible: _icon.source && _icon.source.length && (control.display === ToolButton.TextBesideIcon || control.display === ToolButton.TextUnderIcon || control.display === ToolButton.IconOnly)            
 
             Kirigami.Icon
             {
@@ -113,14 +117,18 @@ focusPolicy: Qt.NoFocus
         Label
         {
             id: _label
+            Layout.column: control.display === ToolButton.TextUnderIcon? 0 : 1 
+            Layout.row: control.display === ToolButton.TextUnderIcon ? 1 : 0
             text: control.text
-            visible: text.length && (control.display === ToolButton.TextOnly || control.display === ToolButton.TextBesideIcon || !_icon.visible)
+            visible: text.length && (control.display === ToolButton.TextOnly || control.display === ToolButton.TextBesideIcon || control.display === ToolButton.TextUnderIcon || !_icon.visible)
             opacity: visible ? ( enabled ? 1 : 0.5) : 0
             horizontalAlignment: Qt.AlignHCenter
             Layout.fillWidth: visible
             Layout.preferredWidth: visible ? implicitWidth + Maui.Style.space.medium : 0
             color: control.down || control.pressed || control.checked || control.hovered ? control.Kirigami.Theme.highlightColor : control.Kirigami.Theme.textColor
 
+            font.pointSize: control.display === ToolButton.TextUnderIcon ? Maui.Style.fontSizes.small : Maui.Style.fontSizes.medium
+            
             Behavior on Layout.preferredWidth
             {
                 NumberAnimation

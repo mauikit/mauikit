@@ -77,7 +77,6 @@ Item
     {
         Layout.alignment: Qt.AlignVCenter
         Layout.fillWidth: control.strech
-        //         Layout.preferredHeight: Maui.Style.iconSizes.medium + (Maui.Style.space.medium * 1.25)
         autoExclusive: true
         visible: modelData.visible
         checked:  index == control.currentIndex
@@ -85,8 +84,9 @@ Item
         Kirigami.Theme.highlightColor: modelData.Kirigami.Theme.highlightColor
         icon.name: modelData.Maui.AppView.iconName
         text: modelData.Maui.AppView.title
-        display: checked ? (!isWide ? ToolButton.IconOnly : ToolButton.TextBesideIcon) : ToolButton.IconOnly
         flat: true
+        
+        display: checked ? (!isWide ? ToolButton.IconOnly : ToolButton.TextBesideIcon) : ToolButton.IconOnly
         
         onClicked:
         {
@@ -105,7 +105,7 @@ Item
             onEntered: control.currentIndex = index
         }
     }
- 
+    
     RowLayout
     {
         id: _layout
