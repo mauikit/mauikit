@@ -44,7 +44,6 @@ Maui.AlternateListItem
     Layout.fillWidth: true
     implicitHeight: _layout.implicitHeight + (Maui.Style.space.big * 2)
 
-
     ColumnLayout
     {
         id: _layout

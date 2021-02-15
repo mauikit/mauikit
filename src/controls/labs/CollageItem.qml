@@ -21,15 +21,10 @@ Maui.ItemDelegate
     property alias template : _template
     
     /**
-     * contentWidth : function
+     * margins :
      */
-    property int contentWidth: Maui.Style.iconSizes.huge
-    
-    /**
-     * contentHeight : function
-     */
-    property int contentHeight: Maui.Style.iconSizes.huge
-    
+    property int margins : isWide ? Maui.Style.space.medium : Maui.Style.space.tiny
+        
     /**
      * randomHexColor : function
      */
@@ -49,9 +44,8 @@ Maui.ItemDelegate
     
     ColumnLayout
     {
-        width: control.contentWidth
-        height: control.contentHeight
-        anchors.centerIn: parent
+        anchors.fill: parent
+        anchors.margins: control.margins
         spacing: Maui.Style.space.small
         
         Item

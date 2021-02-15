@@ -88,7 +88,6 @@ ItemDelegate
     property alias columnSpacing: _layout.columnSpacing
 
     implicitHeight: _layout.implicitHeight + padding
-    Layout.fillWidth: true
 
     background: Item {}
 
@@ -105,7 +104,6 @@ ItemDelegate
         {
             id: _template
             Layout.fillWidth: true
-//            Layout.fillHeight: true
             Layout.row: 0
             Layout.column: 0
             Layout.columnSpan: control.wide ? 1 : 2
@@ -126,7 +124,6 @@ ItemDelegate
             Layout.rowSpan: control.wide ? 2 : 1
 
             Layout.fillWidth: !control.wide
-//            Layout.fillHeight: true
         }
     }
 }
