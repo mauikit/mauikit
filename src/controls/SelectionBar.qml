@@ -268,44 +268,31 @@ Item
                 }
             }
 
-
+            
             Maui.ListBrowser
             {
-                anchors.fill: parent
-                anchors.topMargin: Maui.Style.space.medium
-                anchors.bottomMargin: _container.height
                 id: selectionList
-                visible: _listContainer.height > 10
+                
+                anchors.fill: parent
+                anchors.bottomMargin: _container.height
+                visible: _listContainer.height > control.height
                 spacing: Maui.Style.space.small
                 model: ListModel{}
 
                 delegate: control.listDelegate
             }
+            
+                            
         }
 
-        DropShadow
-        {
-            id: rectShadow
-            anchors.fill: _listContainer
-            cached: true
-            horizontalOffset: 0
-            verticalOffset: 0
-            radius: 8.0
-            samples: 16
-            color: "#333"
-            smooth: true
-            source: _listContainer
-        }
-
-
+    
         Rectangle
         {
             id: bg
             anchors.fill: parent
             color: Kirigami.Theme.backgroundColor
             radius: control.radius
-            border.color: Qt.darker(Kirigami.Theme.backgroundColor, 2.2)
-
+            border.color: Qt.tint(Kirigami.Theme.textColor, Qt.rgba(Kirigami.Theme.backgroundColor.r, Kirigami.Theme.backgroundColor.g, Kirigami.Theme.backgroundColor.b, 0.5))            
 
             MouseArea
             {
@@ -327,6 +314,20 @@ Item
                 }
             }
         }
+        
+        DropShadow
+        {
+        id: rectShadow
+        anchors.fill: bg
+        cached: true
+        horizontalOffset: 0
+        verticalOffset: 0
+        radius: 8.0
+        samples: 16
+        color:  "#80000000"
+        smooth: true
+        source: bg
+        }      
 
         RowLayout
         {
@@ -335,24 +336,31 @@ Item
             clip: true
             spacing: 0
 
-            Maui.Badge
+//             Maui.Badge
+//             {
+//                 Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
+//                 Layout.fillHeight: true
+//                 Layout.preferredWidth: height
+//                 Layout.margins: Maui.Style.space.tiny
+//                 radius: Maui.Style.radiusV
+//                 onClicked: control.exitClicked()
+//                 Kirigami.Theme.backgroundColor: Qt.darker(bg.color)
+//                 border.color: "transparent"
+// 
+//                 Maui.X
+//                 {
+//                     height: Maui.Style.iconSizes.medium - 10
+//                     width: height
+//                     anchors.centerIn: parent
+//                     color: parent.hovered ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
+//                 }
+//             }
+            
+            ToolButton
             {
-                Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
-                Layout.fillHeight: true
-                Layout.preferredWidth: height
-                Layout.margins: Maui.Style.space.tiny
-                radius: Maui.Style.radiusV
+                icon.name: "go-previous"
                 onClicked: control.exitClicked()
-                Kirigami.Theme.backgroundColor: Qt.darker(bg.color)
-                border.color: "transparent"
-
-                Maui.X
-                {
-                    height: Maui.Style.iconSizes.medium - 10
-                    width: height
-                    anchors.centerIn: parent
-                    color: parent.hovered ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
-                }
+                
             }
 
             Kirigami.ActionToolBar
@@ -379,8 +387,9 @@ Item
                 text: selectionList.count
                 radius: Maui.Style.radiusV
 
+                Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
                 Kirigami.Theme.backgroundColor: _listContainer.showList ?
-                Kirigami.Theme.highlightColor : Qt.darker(bg.color)
+                Kirigami.Theme.highlightColor : Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
                 border.color: "transparent"
 
                 onClicked:

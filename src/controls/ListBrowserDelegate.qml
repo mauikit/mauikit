@@ -39,7 +39,7 @@ Maui.ItemDelegate
 {
     id: control
 
-    implicitHeight: label4.visible || label2.visible ?  Maui.Style.rowHeight + (Maui.Style.space.medium * 1.5) : Maui.Style.rowHeight
+    implicitHeight: label4.visible || label2.visible ? Maui.Style.rowHeight + (Maui.Style.space.medium * 1.5) : Maui.Style.rowHeight
     isCurrentItem : ListView.isCurrentItem || checked
 
     ToolTip.delay: 1000
