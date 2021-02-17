@@ -30,7 +30,8 @@ ToolButton
       * menu : Menu
       */
     property alias menu : _menu
-
+    
+    focusPolicy: Qt.NoFocus
     checked: _menu.visible
     display: ToolButton.IconOnly
     

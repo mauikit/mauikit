@@ -341,6 +341,8 @@ Window
             id: menuBtn
             icon.name: "application-menu"
             checked: _mainMenu.visible
+            focusPolicy: Qt.NoFocus
+            
             onClicked:
             {
                 _mainMenu.popup(parent, 0 , root.headBar.height)

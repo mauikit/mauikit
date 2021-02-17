@@ -30,6 +30,8 @@ import org.kde.mauikit 1.1 as MauiLab
 AbstractButton
 {
     id: control
+    
+    property bool flat : false
 
     /**
       *
@@ -67,6 +69,7 @@ focusPolicy: Qt.NoFocus
     {
         id: _background
 
+        visible: !control.flat
         radius: Maui.Style.radiusV
         color: control.down || control.checked || control.hovered || control.pressed ? Qt.rgba(control.Kirigami.Theme.highlightColor.r,  control.Kirigami.Theme.highlightColor.g,  control.Kirigami.Theme.highlightColor.b, 0.2) : "transparent"
         border.color:  checked ?  control.Kirigami.Theme.highlightColor : "transparent"

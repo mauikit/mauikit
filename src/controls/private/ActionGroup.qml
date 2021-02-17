@@ -73,7 +73,7 @@ Item
      */
     signal doubleClicked(int index)
     
-    property Component delegate : ToolButton
+    property Component delegate : BasicToolButton
     {
         Layout.alignment: Qt.AlignVCenter
         Layout.fillWidth: control.strech
@@ -84,7 +84,7 @@ Item
         Kirigami.Theme.highlightColor: modelData.Kirigami.Theme.highlightColor
         icon.name: modelData.Maui.AppView.iconName
         text: modelData.Maui.AppView.title
-        flat: true
+        flat: display === ToolButton.IconOnly
         
         display: checked ? (!isWide ? ToolButton.IconOnly : ToolButton.TextBesideIcon) : ToolButton.IconOnly
         
@@ -120,7 +120,7 @@ Item
             delegate: control.delegate
         }
         
-        ToolButton
+        BasicToolButton
         {
             readonly property QtObject obj : control.currentIndex >= control.items.length && control.currentIndex < control.count? control.hiddenItems[control.currentIndex - control.items.length] : null
             
