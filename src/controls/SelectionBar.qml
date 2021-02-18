@@ -334,32 +334,35 @@ Item
             clip: true
             spacing: 0
             
-            //             Maui.Badge
-            //             {
-            //                 Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
-            //                 Layout.fillHeight: true
-            //                 Layout.preferredWidth: height
-            //                 Layout.margins: Maui.Style.space.tiny
-            //                 radius: Maui.Style.radiusV
-            //                 onClicked: control.exitClicked()
-            //                 Kirigami.Theme.backgroundColor: Qt.darker(bg.color)
-            //                 border.color: "transparent"
-            // 
-            //                 Maui.X
-            //                 {
-            //                     height: Maui.Style.iconSizes.medium - 10
-            //                     width: height
-            //                     anchors.centerIn: parent
-            //                     color: parent.hovered ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
-            //                 }
-            //             }
-            
-            ToolButton
+            Maui.Badge
             {
-                icon.name: "go-previous"
+                Kirigami.Theme.colorSet: control.Kirigami.Theme.colorSet
+                Layout.fillHeight: true
+                Layout.preferredWidth: height
+                Layout.margins: Maui.Style.space.tiny
+                radius: Maui.Style.radiusV
+                
                 onClicked: control.exitClicked()
                 
+                Kirigami.Theme.backgroundColor: Qt.tint(control.Kirigami.Theme.textColor, Qt.rgba(control.Kirigami.Theme.backgroundColor.r, control.Kirigami.Theme.backgroundColor.g, control.Kirigami.Theme.backgroundColor.b, 0.9))
+                
+                border.color: "transparent"
+                
+                Maui.X
+                {
+                    height: Maui.Style.iconSizes.medium - 10
+                    width: height
+                    anchors.centerIn: parent
+                    color: parent.hovered ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
+                }
             }
+            
+//             ToolButton
+//             {
+//                 icon.name: "go-previous"
+//                 onClicked: control.exitClicked()
+//                 
+//             }
             
             Maui.ToolBar
             {
