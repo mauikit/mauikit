@@ -316,8 +316,12 @@ bool PlacesList::isDevice(const int &index)
     if (index >= this->list.size() || index < 0)
         return false;
 
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
     const auto item = this->list.at(index);
     return m_devices.contains(item[FMH::MODEL_KEY::UDI]);
+#endif
+
+    return false;
 }
 
 bool PlacesList::setupNeeded(const int &index)
@@ -325,11 +329,13 @@ bool PlacesList::setupNeeded(const int &index)
     if (index >= this->list.size() || index < 0)
         return false;
 
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
     const auto item = this->list.at(index);
     if(m_devices.contains(item[FMH::MODEL_KEY::UDI]))
     {
         return this->model->setupNeeded(m_devices.value(item[FMH::MODEL_KEY::UDI]));
     }
+#endif
 
     return false;
 }
@@ -339,11 +345,13 @@ void PlacesList::requestEject(const int &index)
     if (index >= this->list.size() || index < 0)
         return;
 
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
     const auto item = this->list.at(index);
     if(m_devices.contains(item[FMH::MODEL_KEY::UDI]))
     {
        this->model->requestEject(m_devices.value(item[FMH::MODEL_KEY::UDI]));
     }
+#endif
 }
 
 void PlacesList::requestSetup(const int &index)
@@ -351,9 +359,11 @@ void PlacesList::requestSetup(const int &index)
     if (index >= this->list.size() || index < 0)
         return;
 
+#if defined Q_OS_LINUX && !defined Q_OS_ANDROID
     const auto item = this->list.at(index);
     if(m_devices.contains(item[FMH::MODEL_KEY::UDI]))
     {
        this->model->requestSetup(m_devices.value(item[FMH::MODEL_KEY::UDI]));
     }
+#endif
 }

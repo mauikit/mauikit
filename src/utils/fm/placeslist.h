@@ -21,11 +21,7 @@
 
 #include "mauilist.h"
 #include <QObject>
-
-namespace Solid
-{
-class Device;
-}
+#include <QModelIndex>
 
 class FM;
 class KFilePlacesModel;

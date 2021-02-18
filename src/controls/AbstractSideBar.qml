@@ -50,7 +50,7 @@ Drawer
 
     interactive: modal || collapsed || !visible
 
-    dragMargin: Maui.Style.space.big
+//     dragMargin: Maui.Style.iconSizes.huge
 
     modal: false
 
