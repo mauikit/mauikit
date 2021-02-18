@@ -42,8 +42,8 @@ Item
     visible: control.count > 0
     focus: true
     
-    //     Kirigami.Theme.inherit: false
-    //     Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
+    Kirigami.Theme.inherit: false
+    Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
     
     /**
      * actions : list<Action>
